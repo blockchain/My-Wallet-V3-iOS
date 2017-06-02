@@ -22,24 +22,24 @@ struct Constants {
         static let DarkGray = UIColorFromRGB(0x4c4c4c)
     }
     struct Measurements {
-        static let DefaultHeaderHeight : CGFloat = 65
-        static let BackupButtonCornerRadius : CGFloat = 4
-        static let BusyViewLabelWidth : CGFloat = 230
-        static let BusyViewLabelHeight : CGFloat = 30
-        static let BusyViewLabelAlpha : CGFloat = 0.75
-        static let BusyViewLabelFontSystemSize : CGFloat = 14.0
+        static let DefaultHeaderHeight: CGFloat = 65
+        static let BackupButtonCornerRadius: CGFloat = 4
+        static let BusyViewLabelWidth: CGFloat = 230
+        static let BusyViewLabelHeight: CGFloat = 30
+        static let BusyViewLabelAlpha: CGFloat = 0.75
+        static let BusyViewLabelFontSystemSize: CGFloat = 14.0
         
-        static let ScreenHeightIphone4S : CGFloat = 480
-        static let ScreenHeightIphone5S : CGFloat = 568
+        static let ScreenHeightIphone4S: CGFloat = 480
+        static let ScreenHeightIphone5S: CGFloat = 568
     }
     struct FontSizes {
-        static let Small : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 16.0 : 13.0
-        static let SmallMedium : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 17.0 : 14.0
-        static let Medium : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 18.0 : 15.0
-        static let MediumLarge : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 19.0 : 16.0
-        static let Large : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 20.0 : 17.0
-        static let ExtraLarge : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 21.0 : 18.0
-        static let ExtraExtraLarge : CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 23.0 : 20.0
+        static let Small: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 16.0 : 13.0
+        static let SmallMedium: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 17.0 : 14.0
+        static let Medium: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 18.0 : 15.0
+        static let MediumLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 19.0 : 16.0
+        static let Large: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 20.0 : 17.0
+        static let ExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 21.0 : 18.0
+        static let ExtraExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 23.0 : 20.0
     }
     struct Defaults {
         static let NumberOfRecoveryPhraseWords = 12

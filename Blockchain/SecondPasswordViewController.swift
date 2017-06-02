@@ -112,5 +112,4 @@ class SecondPasswordViewController: UIViewController, UITextFieldDelegate {
 		checkSecondPassword()
 		return true
 	}
-	
 }
