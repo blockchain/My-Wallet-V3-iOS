@@ -16,7 +16,6 @@ protocol SecondPasswordDelegate {
 
 class SecondPasswordViewController: UIViewController, UITextFieldDelegate {
 	
-	@IBOutlet weak var navigationBar: UINavigationBar?
 	@IBOutlet weak var password: BCSecureTextField?
 	@IBOutlet var continueButton: UIButton!
 	@IBOutlet var descriptionLabel: UILabel!
