@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="fU5-Zh-AHZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="fU5-Zh-AHZ">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -255,7 +255,6 @@
                     <connections>
                         <outlet property="continueButton" destination="nuD-nb-tAt" id="r46-hm-2Xs"/>
                         <outlet property="descriptionLabel" destination="9WK-My-5CL" id="5l4-d3-3d8"/>
-                        <outlet property="navigationBar" destination="J4J-Gw-Zau" id="z3K-7A-TJh"/>
                         <outlet property="password" destination="CBl-1W-VP8" id="VTt-HH-4gG"/>
                     </connections>
                 </viewController>
