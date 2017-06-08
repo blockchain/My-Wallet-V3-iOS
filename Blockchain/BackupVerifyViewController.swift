@@ -10,11 +10,12 @@ import UIKit
 
 class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondPasswordDelegate {
     
-    var wallet : Wallet?
+    var wallet: Wallet?
     var isVerifying = false
-    var verifyButton : UIButton?
-    var randomizedIndexes : [Int] = []
-    var indexDictionary = [0:NSLocalizedString("first word", comment:""),
+    var verifyButton: UIButton!
+    var randomizedIndexes: [Int] = []
+    var indexDictionary = [
+		0:NSLocalizedString("first word", comment:""),
         1:NSLocalizedString("second word", comment:""),
         2:NSLocalizedString("third word", comment:""),
         3:NSLocalizedString("fourth word", comment:""),
@@ -25,36 +26,37 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
         8:NSLocalizedString("ninth word", comment:""),
         9:NSLocalizedString("tenth word", comment:""),
         10:NSLocalizedString("eleventh word", comment:""),
-        11:NSLocalizedString("twelfth word", comment:"")]
+        11:NSLocalizedString("twelfth word", comment:"")
+	]
     
     @IBOutlet weak var instructions: UILabel!
-    @IBOutlet weak var word1: UITextField?
-    @IBOutlet weak var word2: UITextField?
-    @IBOutlet weak var word3: UITextField?
+    @IBOutlet weak var word1: UITextField!
+    @IBOutlet weak var word2: UITextField!
+    @IBOutlet weak var word3: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if UIScreen.main.bounds.size.height > Constants.Measurements.ScreenHeightIphone4S {
-            instructions?.frame = CGRect(x: instructions!.frame.origin.x, y: 16, width: instructions!.frame.size.width, height: instructions!.frame.size.height)
-            word1?.frame = CGRect(x: word1!.frame.origin.x, y: instructions!.frame.origin.y + instructions!.frame.size.height + 8, width: word1!.frame.size.width, height: word1!.frame.size.height + 16)
-            word2?.frame = CGRect(x: word2!.frame.origin.x, y: word1!.frame.origin.y + word1!.frame.size.height + 8, width: word2!.frame.size.width, height: word2!.frame.size.height + 16)
-            word3?.frame = CGRect(x: word3!.frame.origin.x, y: word2!.frame.origin.y + word2!.frame.size.height + 8, width: word3!.frame.size.width, height: word3!.frame.size.height + 16)
+            instructions.frame = CGRect(x: instructions.frame.origin.x, y: 16, width: instructions.frame.size.width, height: instructions.frame.size.height)
+            word1.frame = CGRect(x: word1.frame.origin.x, y: instructions.frame.origin.y + instructions.frame.size.height + 8, width: word1.frame.size.width, height: word1.frame.size.height + 16)
+            word2.frame = CGRect(x: word2.frame.origin.x, y: word1.frame.origin.y + word1.frame.size.height + 8, width: word2.frame.size.width, height: word2.frame.size.height + 16)
+            word3.frame = CGRect(x: word3.frame.origin.x, y: word2.frame.origin.y + word2.frame.size.height + 8, width: word3.frame.size.width, height: word3.frame.size.height + 16)
             
-            word1?.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
-            word2?.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
-            word3?.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
+            word1.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
+            word2.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
+            word3.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraLarge)
         }
         
         instructions.font = UIFont(name: "GillSans", size: Constants.FontSizes.MediumLarge)
         
-        word1?.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
-        word2?.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
-        word3?.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
+        word1.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
+        word2.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
+        word3.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
         
-        if (!wallet!.needsSecondPassword() && isVerifying) {
+        if !wallet!.needsSecondPassword() && isVerifying {
             
             // if you don't need a second password but you are verifying, get recovery phrase
             
@@ -75,29 +77,29 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
     
     override func viewDidAppear(_ animated: Bool) {
         verifyButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 46))
-        verifyButton?.setTitle(NSLocalizedString("Verify", comment:""), for: UIControlState())
-        verifyButton?.setTitle(NSLocalizedString("Verify", comment:""), for: .disabled)
-        verifyButton?.backgroundColor = Constants.Colors.SecondaryGray
-        verifyButton?.setTitleColor(UIColor.lightGray, for: .disabled)
-        verifyButton?.titleLabel!.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.Medium)
+        verifyButton.setTitle(NSLocalizedString("Verify", comment:""), for: UIControlState())
+        verifyButton.setTitle(NSLocalizedString("Verify", comment:""), for: .disabled)
+        verifyButton.backgroundColor = Constants.Colors.SecondaryGray
+        verifyButton.setTitleColor(UIColor.lightGray, for: .disabled)
+        verifyButton.titleLabel!.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.Medium)
 
-        verifyButton?.isEnabled = true
-        verifyButton?.addTarget(self, action: #selector(BackupVerifyViewController.done), for: .touchUpInside)
-        verifyButton?.isEnabled = false
-        word1?.inputAccessoryView = verifyButton
-        word2?.inputAccessoryView = verifyButton
-        word3?.inputAccessoryView = verifyButton
-        if (randomizedIndexes.count >= 3) {
-            word1?.placeholder = indexDictionary[randomizedIndexes[0]]
-            word2?.placeholder = indexDictionary[randomizedIndexes[1]]
-            word3?.placeholder = indexDictionary[randomizedIndexes[2]]
+        verifyButton.isEnabled = true
+        verifyButton.addTarget(self, action: #selector(done), for: .touchUpInside)
+        verifyButton.isEnabled = false
+        word1.inputAccessoryView = verifyButton
+        word2.inputAccessoryView = verifyButton
+        word3.inputAccessoryView = verifyButton
+        if randomizedIndexes.count >= 3 {
+            word1.placeholder = indexDictionary[randomizedIndexes[0]]
+            word2.placeholder = indexDictionary[randomizedIndexes[1]]
+            word3.placeholder = indexDictionary[randomizedIndexes[2]]
         }
-        word1?.becomeFirstResponder()
+        word1.becomeFirstResponder()
     }
     
     func randomizeCheckIndexes() {
-        var wordIndexes: [Int] = [];
-        var index = 0;
+        var wordIndexes: [Int] = []
+        var index = 0
         for _ in 0..<Constants.Defaults.NumberOfRecoveryPhraseWords {
             wordIndexes.append(index)
             index += 1
@@ -114,32 +116,32 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
         
         let words = wallet!.recoveryPhrase.components(separatedBy: " ")
 
-        var randomWord1 : String
-        var randomWord2 : String
-        var randomWord3 : String
+        var randomWord1: String
+        var randomWord2: String
+        var randomWord3: String
         
-        if (randomizedIndexes.count >= 3) {
+        if randomizedIndexes.count >= 3 {
             randomWord1 = words[randomizedIndexes[0]]
             randomWord2 = words[randomizedIndexes[1]]
             randomWord3 = words[randomizedIndexes[2]]
-            
-            if word1!.text!.isEmpty || word2!.text!.isEmpty || word3!.text!.isEmpty {
+			
+            if word1.text!.isEmpty || word2.text!.isEmpty || word3.text!.isEmpty {
                 valid = false
             } else { // Don't mark words as invalid until the user has entered all three
-                if word1!.text != randomWord1 {
-                    word1?.textColor = Constants.Colors.WarningRed
+                if word1.text != randomWord1 {
+                    word1.textColor = Constants.Colors.WarningRed
                     valid = false
                 }
-                if word2!.text != randomWord2 {
-                    word2?.textColor = Constants.Colors.WarningRed
+                if word2.text != randomWord2 {
+                    word2.textColor = Constants.Colors.WarningRed
                     valid = false
                 }
-                if word3!.text != randomWord3 {
-                    word3?.textColor = Constants.Colors.WarningRed
+                if word3.text != randomWord3 {
+                    word3.textColor = Constants.Colors.WarningRed
                     valid = false
                 }
                 
-                if (!valid) {
+                if !valid {
                     pleaseTryAgain()
                     return
                 }
@@ -147,12 +149,12 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
             
             if valid {
                 let backupNavigation = self.navigationController as? BackupNavigationViewController
-                backupNavigation?.busyView?.fadeIn()
-                backupNavigation?.markIsVerifying()
+                backupNavigation!.busyView.fadeIn()
+                backupNavigation!.markIsVerifying()
 
-                word1?.resignFirstResponder()
-                word2?.resignFirstResponder()
-                word3?.resignFirstResponder()
+                word1.resignFirstResponder()
+                word2.resignFirstResponder()
+                word3.resignFirstResponder()
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.wallet!.markRecoveryPhraseVerified()
@@ -174,25 +176,25 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
     }
     
     func textFieldDidChange() {
-        if !word1!.text!.isEmpty && !word2!.text!.isEmpty && !word3!.text!.isEmpty {
-            verifyButton?.backgroundColor = Constants.Colors.BlockchainLightBlue
-            verifyButton?.isEnabled = true
-            verifyButton?.setTitleColor(UIColor.white, for: UIControlState())
-        } else if word1!.text!.isEmpty || word2!.text!.isEmpty || word3!.text!.isEmpty {
-            verifyButton?.backgroundColor = Constants.Colors.SecondaryGray
-            verifyButton?.isEnabled = false
-            verifyButton?.setTitleColor(UIColor.lightGray, for: .disabled)
+        if !word1.text!.isEmpty && !word2.text!.isEmpty && !word3.text!.isEmpty {
+            verifyButton.backgroundColor = Constants.Colors.BlockchainLightBlue
+            verifyButton.isEnabled = true
+            verifyButton.setTitleColor(UIColor.white, for: UIControlState())
+        } else if word1.text!.isEmpty || word2.text!.isEmpty || word3.text!.isEmpty {
+            verifyButton.backgroundColor = Constants.Colors.SecondaryGray
+            verifyButton.isEnabled = false
+            verifyButton.setTitleColor(UIColor.lightGray, for: .disabled)
         }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if (word1!.isFirstResponder) {
+        if word1.isFirstResponder {
             textField.resignFirstResponder()
-            word2?.becomeFirstResponder()
-        } else if (word2!.isFirstResponder) {
+            word2.becomeFirstResponder()
+        } else if word2.isFirstResponder {
             textField.resignFirstResponder()
-            word3?.becomeFirstResponder()
-        } else if (word3!.isFirstResponder) {
+            word3.becomeFirstResponder()
+        } else if word3.isFirstResponder {
             checkWords()
         }
         return true
