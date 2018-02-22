@@ -885,5 +885,5 @@
 #define BC_STRING_FAILED_TO_LOAD_EXCHANGE_DATA NSLocalizedString(@"Failed to load exchange data", nil)
 
 #define BC_STRING_BUY_SELL_CARD_TITLE NSLocalizedString(@"The wait is over", nil)
-#define BC_STRING_BUY_SELL_CARD_DESCRIPTION NSLocalizedString(@"Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.", nil)
-#define BC_STRING_BUY_SELL_CARD_ACTION_TITLE NSLocalizedString(@"Start trading", nil)
+#define BC_STRING_BUY_SELL_CARD_DESCRIPTION NSLocalizedString(@"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.", nil)
+#define BC_STRING_BUY_SELL_CARD_ACTION_TITLE BC_STRING_GET_STARTED

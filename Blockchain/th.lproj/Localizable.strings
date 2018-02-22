@@ -2129,3 +2129,6 @@
 
 /* (No Commment) */
 "Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "เคลื่อนที่ซื้อของ&ขายคือการรองรับสำหรับ iOS 9 แล้ว ได้โปรดไปโปรแกรมปรับปรุงหรือล็อกอินที่ blockchain.info/wallet/login บนคอมพิวเตอร์ของคุณ.";
+
+/* (No Commment) */
+"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "ซื้อและขาย bitcoin โดยตรงจากของคุณ Blockchain กระเป๋าคุมข้อมูลนะ เริ่มด้วยการสร้างบัญชีในการซื้อ-ขา&ขายแท็บอก";

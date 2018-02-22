@@ -243,8 +243,6 @@ void (^secondPasswordSuccess)(NSString *);
     secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     
-    [self setupBuyWebView];
-    
     return YES;
 }
 
@@ -372,7 +370,7 @@ void (^secondPasswordSuccess)(NSString *);
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP];
     }
     
-    [self setupBuyWebView];
+    [self setupBuySellWebview];
     
     [self.wallet.webSocket closeWithCode:WEBSOCKET_CODE_BACKGROUNDED_APP reason:WEBSOCKET_CLOSE_REASON_USER_BACKGROUNDED];
     [self.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_BACKGROUNDED_APP reason:WEBSOCKET_CLOSE_REASON_USER_BACKGROUNDED];
@@ -676,7 +674,12 @@ void (^secondPasswordSuccess)(NSString *);
     curtainImageView.alpha = 0;
 }
 
-- (void)setupBuyWebView
+- (void)setupBuySellWebview
+{
+    [app.wallet setupBuySellWebview];
+}
+
+- (void)initializeWebview
 {
     self.buyBitcoinViewController = [[BuyBitcoinViewController alloc] init];
 }
@@ -1768,7 +1771,7 @@ void (^secondPasswordSuccess)(NSString *);
     
     [self transitionToIndex:TAB_DASHBOARD];
     
-    [self setupBuyWebView];
+    [self setupBuySellWebview];
 }
 
 - (void)didImportKey:(NSString *)address

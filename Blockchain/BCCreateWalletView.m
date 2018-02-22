@@ -49,6 +49,8 @@
 - (void)createBlankWallet
 {
     [app.wallet loadBlankWallet];
+    
+    [app.wallet setupBuySellWebview];
 }
 
 // Make sure keyboard comes back if use is returning from TOS

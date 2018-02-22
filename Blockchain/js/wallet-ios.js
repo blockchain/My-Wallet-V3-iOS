@@ -2295,6 +2295,22 @@ MyWalletPhone.isBuyFeatureEnabled = function () {
   return userHasAccess && wallet.external && canBuy(wallet.accountInfo, options)
 }
 
+MyWalletPhone.setupBuySellWebview = function() {
+    walletOptions.fetch().then(function() {
+        objc_initialize_webview();
+    });
+}
+
+MyWalletPhone.getBuySellWebviewRootURL = function() {
+    var options = walletOptions.getValue();
+    var mobile = options.mobile;
+    var rootURL = null;
+    if (mobile) {
+        rootURL = mobile.walletRoot;
+    }
+    return rootURL;
+}
+
 MyWalletPhone.getNetworks = function() {
     return Networks;
 }

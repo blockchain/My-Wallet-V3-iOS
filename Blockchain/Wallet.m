@@ -673,7 +673,7 @@
         [weakSelf on_error_recover_with_passphrase:error];
     };
     
-#pragma mark Buy
+#pragma mark Buy/Sell
     
     self.context[@"objc_get_whitelisted_guids"] = ^(JSValue *trade) {
         return WHITELISTED_GUIDS;
@@ -685,6 +685,10 @@
     
     self.context[@"objc_on_get_pending_trades_error"] = ^(JSValue *error) {
         [weakSelf on_get_pending_trades_error:error];
+    };
+    
+    self.context[@"objc_initialize_webview"] = ^() {
+        [weakSelf initialize_webview];
     };
     
 #pragma mark Settings
@@ -2308,6 +2312,17 @@
 - (BOOL)isBuyEnabled
 {
     return [[self.context evaluateScript:@"MyWalletPhone.isBuyFeatureEnabled()"] toBool];
+}
+
+- (void)setupBuySellWebview
+{
+    [self.context evaluateScript:@"MyWalletPhone.setupBuySellWebview()"];
+}
+
+- (NSString *)buySellWebviewRootURLString
+{
+    JSValue *result = [self.context evaluateScript:@"MyWalletPhone.getBuySellWebviewRootURL()"];
+    return [result isNull] ? nil : [result toString];
 }
 
 - (void)watchPendingTrades:(BOOL)shouldSync
@@ -4272,6 +4287,11 @@
 - (void)on_get_pending_trades_error:(JSValue *)error
 {
     [app standardNotify:[error toString]];
+}
+
+- (void)initialize_webview
+{
+    [app initializeWebview];
 }
 
 - (void)on_fetch_eth_history_success
