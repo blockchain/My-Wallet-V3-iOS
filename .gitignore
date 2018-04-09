@@ -24,5 +24,4 @@ profile
 Pods/
 Podfile.lock
 Blockchain/APIDefines.h
-Artwork/node_modules
 External/*
