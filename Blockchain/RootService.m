@@ -7,7 +7,7 @@
 //
 
 #import "RootService.h"
-
+#import "Blockchain-Swift.h"
 #import <QuartzCore/QuartzCore.h>
 
 #import "ExchangeOverviewViewController.h"
@@ -42,7 +42,6 @@
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "NSString+SHA256.h"
-#import "Blockchain-Swift.h"
 #import "ContactsViewController.h"
 #import "ContactTransaction.h"
 #import "BuyBitcoinNavigationController.h"
@@ -59,6 +58,7 @@
 @implementation RootService
 
 RootService * app;
+RootServiceSwift *rootService;
 
 @synthesize wallet;
 @synthesize modalView;
@@ -84,7 +84,6 @@ typedef NSInteger ShowReminderType;
 ShowReminderType showReminderType;
 
 SideMenuViewController *sideMenuViewController;
-UIImageView *curtainImageView;
 
 UNNotification *pushNotificationPendingAction;
 
@@ -99,6 +98,8 @@ void (^secondPasswordSuccess)(NSString *);
         
         self.modalChain = [[NSMutableArray alloc] init];
         app = self;
+
+        rootService = [[RootServiceSwift alloc] init];
     }
     
     return self;
@@ -172,8 +173,6 @@ void (^secondPasswordSuccess)(NSString *);
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_ZERO_TICKER];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_SURGE];
-
-    [[NSUserDefaults standardUserDefaults] synchronize];
 #endif
     
     SharedSessionDelegate *sharedSessionDelegate = [[SharedSessionDelegate alloc] initWithCertificatePinner:self.certificatePinner];
@@ -241,9 +240,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    if (!curtainImageView) {
-        [self setupCurtainView];
-    }
+    // TODO: call Swift instance method directly from AppDelegate after refactor
+    [rootService applicationWillResignActive:application];
     
     [self hideSendAndReceiveKeyboards];
     
@@ -258,24 +256,26 @@ void (^secondPasswordSuccess)(NSString *);
     if ([mainPasswordTextField isFirstResponder]) {
         [mainPasswordTextField resignFirstResponder];
     }
-    
-    // Show the LaunchImage so the list of running apps does not show the user's information
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // Small delay so we don't change the view while it's zooming out
-        
-        [self.window addSubview:curtainImageView];
-        [self.window bringSubviewToFront:curtainImageView];
-        
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            curtainImageView.alpha = 1;
-        } completion:^(BOOL finished) {
-            // Dismiss any ViewControllers that are used modally, except for the MerchantViewController
-            if (self.tabControllerManager.tabViewController.presentedViewController == _bcWebViewController) {
-                [_bcWebViewController dismissViewControllerAnimated:NO completion:nil];
-            }
-        }];
-    });
-    
+
+//    if (!rootService.isPromptingForBiometricAuthentication) {
+//        // Show the LaunchImage so the list of running apps does not show the user's information
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            // Small delay so we don't change the view while it's zooming out
+//
+//            [self.window addSubview:curtainImageView];
+//            [self.window bringSubviewToFront:curtainImageView];
+//
+//            [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+//                curtainImageView.alpha = 1; // 0?
+//            } completion:^(BOOL finished) {
+//                // Dismiss any ViewControllers that are used modally, except for the MerchantViewController
+//                if (self.tabControllerManager.tabViewController.presentedViewController == _bcWebViewController) {
+//                    [_bcWebViewController dismissViewControllerAnimated:NO completion:nil];
+//                }
+//            }];
+//        });
+//    }
+
     if (self.pinEntryViewController.verifyOnly) {
         [self.pinEntryViewController reset];
     }
@@ -283,6 +283,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    // TODO: call Swift instance method directly from AppDelegate after refactor
+    [rootService applicationDidEnterBackground:application];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED] &&
         [self.wallet isInitialized] &&
         [self.wallet didUpgradeToHd]) {
@@ -378,13 +380,9 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // The PIN modal is shown on EnterBackground, but we don't want to override the modal with the welcome screen
+    // Cannot be refactored any further until more code is migrated to RootServiceSwift
     if ([self isPinSet]) {
-#ifdef ENABLE_TOUCH_ID
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
-            [self authenticateWithTouchID];
-        }
-#endif
+        [rootService authenticateWithBiometrics];
         return;
     }
     
@@ -399,12 +397,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Fade out the LaunchImage
-    [UIView animateWithDuration:0.25 animations:^{
-        curtainImageView.alpha = 0;
-    } completion:^(BOOL finished) {
-        [curtainImageView removeFromSuperview];
-    }];
+    // TODO: call Swift instance method directly from AppDelegate after refactor
+    [rootService applicationDidBecomeActive:application];
     
 #ifdef ENABLE_SWIPE_TO_RECEIVE
     if (self.pinEntryViewController.verifyOnly) {
@@ -622,9 +616,10 @@ void (^secondPasswordSuccess)(NSString *);
         if ([self isPinSet]) {
             [self showPinModalAsView:YES];
 #ifdef ENABLE_TOUCH_ID
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
-                [self authenticateWithTouchID];
-            }
+            //: 👇 storing this value is unnecessary
+            // if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
+                [rootService authenticateWithBiometrics];
+            // }
 #endif
         } else {
             // No PIN set we need to ask for the main password
@@ -636,9 +631,6 @@ void (^secondPasswordSuccess)(NSString *);
         
         [self migratePasswordAndPinFromNSUserDefaults];
     }
-    
-    // TODO create BCCurtainView. There shouldn't be any view code, etc in the appdelegate..
-    [self setupCurtainView];
 }
 
 - (void)migratePasswordAndPinFromNSUserDefaults
@@ -656,24 +648,6 @@ void (^secondPasswordSuccess)(NSString *);
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PIN];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-}
-
-- (void)setupCurtainView
-{
-    // Curtain view setup
-    curtainImageView = [[UIImageView alloc] initWithFrame:self.window.bounds];
-    
-    // Select the correct image depending on the screen size. The names used are the default names that LaunchImage assets get after processing. See @http://stackoverflow.com/questions/19107543/xcode-5-asset-catalog-how-to-reference-the-launchimage
-    // This works for iPhone 4/4S, 5/5S, 6 and 6Plus in Portrait
-    // TODO need to add new screen sizes with new iPhones ... ugly
-    // TODO we're currently using the scaled version of the app on iPhone 6 and 6 Plus
-    //        NSDictionary *dict = @{@"320x480" : @"LaunchImage-700", @"320x568" : @"LaunchImage-700-568h", @"375x667" : @"LaunchImage-800-667h", @"414x736" : @"LaunchImage-800-Portrait-736h"};
-    NSDictionary *dict = @{@"320x480" : @"LaunchImage-700", @"320x568" : @"LaunchImage-700-568h", @"375x667" : @"LaunchImage-800-667h", @"414x736" : @"LaunchImage-800-Portrait-736h"};
-    NSString *key = [NSString stringWithFormat:@"%dx%d", (int)[UIScreen mainScreen].bounds.size.width, (int)[UIScreen mainScreen].bounds.size.height];
-    UIImage *launchImage = [UIImage imageNamed:dict[key]];
-    
-    curtainImageView.image = launchImage;
-    curtainImageView.alpha = 0;
 }
 
 - (void)setupBuySellWebview
@@ -3135,90 +3109,6 @@ void (^secondPasswordSuccess)(NSString *);
     }
     
     mainPasswordTextField.text = nil;
-}
-
-- (void)authenticateWithTouchID
-{
-    self.pinEntryViewController.view.userInteractionEnabled = NO;
-    
-    LAContext *context = [[LAContext alloc] init];
-    context.localizedFallbackTitle = @"";
-    
-    NSError *error = nil;
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
-                localizedReason:BC_STRING_TOUCH_ID_AUTHENTICATE
-                          reply:^(BOOL success, NSError *error) {
-                              
-                              self.pinEntryViewController.view.userInteractionEnabled = YES;
-                              
-                              if (error) {
-                                  if (error.code != kLAErrorUserCancel &&
-                                      error.code != kLAErrorSystemCancel &&
-                                      error.code != kLAErrorUserFallback) {
-                                      
-                                      UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_TOUCH_ID_ERROR_VERIFYING_IDENTITY preferredStyle:UIAlertControllerStyleAlert];
-                                      [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                          [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-                                      });
-                                  }
-                                  return;
-                              }
-                              
-                              if (success) {
-                                  
-                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                      // Fade out the LaunchImage
-                                      [UIView animateWithDuration:0.25 animations:^{
-                                          curtainImageView.alpha = 0;
-                                      } completion:^(BOOL finished) {
-                                          [curtainImageView removeFromSuperview];
-                                      }];
-                                      [self showVerifyingBusyViewWithTimer:30.0];
-                                  });
-                                  NSString * pinKey = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PIN_KEY];
-                                  NSString * pin = [KeychainItemWrapper pinFromKeychain];
-                                  if (!pin) {
-                                      [self failedToObtainValuesFromKeychain];
-                                      return;
-                                  }
-                                  // DLog(@"touch ID is using PIN %@", pin);
-                                  [app.wallet apiGetPINValue:pinKey pin:pin];
-                                  
-                              } else {
-                                  UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_TOUCH_ID_ERROR_WRONG_USER preferredStyle:UIAlertControllerStyleAlert];
-                                  [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                      [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-                                  });
-                                  return;
-                              }
-                              
-                          }];
-        
-    } else {
-        
-        self.pinEntryViewController.view.userInteractionEnabled = YES;
-        
-        NSString *errorString;
-        if (error.code == LAErrorTouchIDNotAvailable) {
-            errorString = BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE;
-        } else if (error.code == LAErrorTouchIDNotEnrolled) {
-            errorString = BC_STRING_TOUCH_ID_ERROR_MUST_ENABLE;
-        } else if (error.code == LAErrorTouchIDLockout) {
-            errorString = BC_STRING_TOUCH_ID_ERROR_LOCKED;
-        }
-        
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED];
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorString preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        });
-        return;
-    }
 }
 
 - (NSString *)checkForTouchIDAvailablility
