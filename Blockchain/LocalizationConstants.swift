@@ -30,9 +30,7 @@ let LCStringAuthPasscodeNotSet = NSLocalizedString("Failed to Authenticate becau
 //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
 let LCStringAuthTouchIDLockout = NSLocalizedString("Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID", comment: "")
 let LCStringAuthTouchIDNotAvailable = NSLocalizedString("Unable to Authenticate because Touch ID is not available on the device.", comment: "")
-let LCStringAuthTouchIDNotEnrolled = NSLocalizedString("Unable to Authenticate because Touch ID has no enrolled fingers.", comment: "")
 
 //: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)
 let LCStringAuthBiometryLockout = NSLocalizedString("Unable to Authenticate due to failing Authentication too many times.", comment: "")
 let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate because the device does not support biometric Authentication.", comment: "")
-let LCStringAuthBiometryNotEnrolled = NSLocalizedString("Unable to Authenticate because biometric Authentication is not enrolled.", comment: "")
