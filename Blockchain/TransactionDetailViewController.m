@@ -210,6 +210,7 @@ const CGFloat rowHeightValueReceived = 80;
     
     for (Transaction *transaction in newTransactions) {
         if ([transaction.myHash isEqualToString:self.transactionModel.myHash]) {
+            if (self.transactionModel.assetType == AssetTypeBitcoin || self.transactionModel.assetType == AssetTypeEther) self.transactionModel.note = transaction.note;
             self.transactionModel.fiatAmountsAtTime = transaction.fiatAmountsAtTime;
             didFindTransaction = YES;
             break;

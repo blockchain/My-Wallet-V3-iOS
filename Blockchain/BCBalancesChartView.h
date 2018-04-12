@@ -26,5 +26,6 @@
 - (void)updateFiatSymbol:(NSString *)symbol;
 
 - (void)updateChart;
+- (void)hideChartMarker;
 
 @end

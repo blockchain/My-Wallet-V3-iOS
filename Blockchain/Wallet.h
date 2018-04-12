@@ -147,6 +147,7 @@
 - (void)didGetBitcoinCashExchangeRates;
 - (void)didFetchBitcoinCashHistory;
 - (void)initializeWebView;
+- (void)reloadEthTransactions;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {

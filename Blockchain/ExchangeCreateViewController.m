@@ -1185,7 +1185,7 @@
 
 - (NSString *)etherLabelText
 {
-    return [app.wallet getActiveAccountsCount:AssetTypeEther] > 1 ? [app.wallet getLabelForAccount:0 assetType:AssetTypeEther] : BC_STRING_ETHER;
+    return [app.wallet getActiveAccountsCount:AssetTypeBitcoin] > 1 ? [app.wallet getLabelForAccount:0 assetType:AssetTypeEther] : BC_STRING_ETHER;
 }
 
 - (void)didChangeFrom

@@ -93,6 +93,11 @@
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
 }
 
+- (void)hideChartMarker
+{
+    [self.chartView highlightValue:nil callDelegate:NO];
+}
+
 - (void)updateFiatSymbol:(NSString *)fiatSymbol
 {
     self.fiatSymbol = fiatSymbol;

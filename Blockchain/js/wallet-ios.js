@@ -28,35 +28,6 @@ if (typeof Buffer.prototype.reverse !== 'function') {
     }
 }
 
-function NativeEthSocket () {
-  this.handlers = []
-}
-
-NativeEthSocket.prototype.on = function (type, callback) {
-}
-
-NativeEthSocket.prototype.onMessage = function (msg) {
-  this.handlers.forEach(function (handler) {
-    handler(msg)
-  })
-}
-
-NativeEthSocket.prototype.subscribeToAccount = function (account) {
-  var accountMsg = EthSocket.accountSub(account)
-  objc_eth_socket_send(accountMsg)
-  var handler = EthSocket.accountMessageHandler(account)
-  this.handlers.push(handler)
-}
-
-NativeEthSocket.prototype.subscribeToBlocks = function (ethWallet) {
-  var blockMsg = EthSocket.blocksSub(ethWallet)
-  objc_eth_socket_send(blockMsg)
-  var handler = EthSocket.blockMessageHandler(ethWallet)
-  this.handlers.push(handler)
-}
-
-var ethSocketInstance = new NativeEthSocket();
-
 APP_NAME = 'javascript_iphone_app';
 APP_VERSION = '3.0';
 API_CODE = '35e77459-723f-48b0-8c9e-6e9e8f54fbd3';
@@ -708,8 +679,6 @@ MyWalletPhone.login = function(user_guid, shared_key, resend_code, inputedPasswo
         objc_loading_stop();
 
         objc_did_load_wallet();
-
-        MyWallet.wallet.useEthSocket(ethSocketInstance);
     };
 
     var history_error = function(error) {console.log(error);
@@ -2355,6 +2324,14 @@ function WalletOptions (api) {
 
 // MARK: - Ethereum
 
+MyWalletPhone.getEthAccountMessage = function () {
+    return EthSocket.accountSub(MyWallet.wallet.eth.defaultAccount);
+}
+
+MyWalletPhone.getEthBlockMessage = function () {
+    return EthSocket.blocksSub(MyWallet.wallet.eth);
+}
+
 MyWalletPhone.getEthExchangeRate = function(currencyCode) {
 
     var success = function(result) {
@@ -2521,8 +2498,16 @@ MyWalletPhone.saveEtherNote = function(txHash, note) {
     MyWalletPhone.getEthHistory();
 }
 
-MyWalletPhone.didReceiveEthSocketMessage = function(msg) {
-    ethSocketInstance.onMessage(msg);
+MyWalletPhone.didReceiveEthSocketMessageBlock = function(msg) {
+    var blockMessageHandler = EthSocket.blockMessageHandler(MyWallet.wallet.eth);
+    blockMessageHandler(msg);
+    objc_reload_eth_transactions();
+}
+
+MyWalletPhone.didReceiveEthSocketMessageAccount = function(msg) {
+    var accountMessageHandler = EthSocket.accountMessageHandler(MyWallet.wallet.eth, MyWallet.wallet.eth.defaultAccount);
+    accountMessageHandler(msg);
+    objc_reload();
 }
 
 MyWalletPhone.getEtherAddress = function(helperText) {
