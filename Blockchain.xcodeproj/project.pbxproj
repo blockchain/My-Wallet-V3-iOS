@@ -2149,7 +2149,6 @@
 				9FB3636D14B60128004BEA02 /* Sources */,
 				9FB3636E14B60128004BEA02 /* Frameworks */,
 				23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */,
-				23321D7B1BB084320005624F /* Build Image Assets from PSDs */,
 				23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */,
 				9FB3636F14B60128004BEA02 /* Resources */,
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
@@ -2380,20 +2379,6 @@
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && ./node_modules/karma/bin/karma start karma.conf.js --single-run";
-		};
-		23321D7B1BB084320005624F /* Build Image Assets from PSDs */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Build Image Assets from PSDs";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "# Install dependencies\nbrew install imagemagick\ncd ${SRCROOT}/Artwork\nnpm install -g grunt-cli\nnpm install\nnpm install -g svgexport\n\n# Build images\ngrunt";
 		};
 		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
 			isa = PBXShellScriptBuildPhase;
