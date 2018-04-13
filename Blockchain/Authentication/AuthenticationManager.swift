@@ -10,29 +10,10 @@ import Foundation
 import LocalAuthentication
 
 /**
- Represents an authentication error.
-
- Set **description** to `nil` to indicate that the error should be handled silently.
- */
-internal struct AuthenticationError {
-    let code: Int
-    let description: String?
-    /**
-     - Parameters:
-        - code: The error code associated with the object.
-        - description: An optional description associated with the object.
-     */
-    init(code: Int, description: String?) {
-        self.code = code
-        self.description = description
-    }
-}
-
-/**
- The authentication manager handles biometric and passcode authentication.
+ Handles biometric and passcode authentication.
  # Usage
- Call either `biometricAuthentication(withReply:)` or `passcodeAuthentication(withReply:)`
- to request authentication from users through passcodes or biometrics, respectively.
+ Call either `authenticateUsingBiometrics(andReply:)` or `authenticate(using:andReply:)`
+ to request authentication using biometrics or passcode, respectively.
  - Author: Maurice Achtenhagen
  - Copyright: Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 */
@@ -46,8 +27,8 @@ final class AuthenticationManager: NSObject {
 
     /**
      The type alias for the closure used in:
-     * `biometricAuthentication(withReply:)`
-     * `passcodeAuthentication(withReply:)`
+     * `authenticateUsingBiometrics(andReply:)`
+     * `authenticate(using:andReply:)`
      */
     typealias Handler = (_ authenticated: Bool, _ error: AuthenticationError?) -> Void
 
@@ -91,7 +72,7 @@ final class AuthenticationManager: NSObject {
      Authenticates the user using biometrics.
      - Parameter handler: The closure for the authentication reply.
      */
-    func biometricAuthentication(withReply handler: @escaping Handler) {
+    func authenticateUsingBiometrics(andReply handler: @escaping Handler) {
         context = LAContext()
         context.localizedFallbackTitle = LCStringAuthUsePasscode
         if #available(iOS 10.0, *) {
@@ -109,7 +90,7 @@ final class AuthenticationManager: NSObject {
     }
 
     /**
-     Evaluate whether the device owner can authenticate using biometrics.
+     Evaluates whether the device owner can authenticate using biometrics.
      - Returns: A Boolean value that determines whether the policy can be evaluated.
      */
     private func canAuthenticateUsingBiometry() -> Bool {
@@ -120,16 +101,18 @@ final class AuthenticationManager: NSObject {
 
     /**
      The function used to authenticate the user using a provided passcode.
-     - Parameter handler: The completion handler for the authentication reply.
+     - Parameters:
+        - passcode: The passcode used for authenticating the user.
+        - handler: The completion handler for the authentication reply.
      */
-    func passcodeAuthentication(withReply handler: @escaping Handler) {
+    func authenticate(using passcode: Passcode, andReply handler: @escaping Handler) {
         // TODO: authenticate user with passcode
     }
 
     // MARK: - Authentication Errors
 
     /**
-     Preflight errors occur prior to policy evaluation.
+     Preflight errors occur **prior** to policy evaluation.
      - Parameter code: The preflight error code.
      - Returns: An object of type `AuthenticationError` associated with the error code.
      - Important: When the description is nil, the error should be handled silently.
@@ -142,7 +125,7 @@ final class AuthenticationManager: NSObject {
     }
 
     /**
-     Biometric preflight errors occur prior to policy evaluation.
+     Biometric preflight errors occur **prior** to policy evaluation.
      - Parameter code: The preflight error code.
      - Returns: An object of type `AuthenticationError` associated with the error code.
      - Important: When the description is nil, the error should be handled silently.
@@ -164,7 +147,7 @@ final class AuthenticationManager: NSObject {
     }
 
     /**
-     Deprecated preflight errors occur prior to policy evaluation.
+     Deprecated preflight errors occur **prior** to policy evaluation.
      - Parameter code: The preflight error code.
      - Returns: An object of type `AuthenticationError` associated with the error code.
      - Important: When the description is nil, the error should be handled silently.
@@ -183,7 +166,7 @@ final class AuthenticationManager: NSObject {
     }
 
     /**
-     Inflight error codes that can be returned when evaluating a policy.
+     Inflight error codes that can be returned **during** policy evaluation.
      - Parameter code: The preflight error code.
      - Returns: An object of type `AuthenticationError` associated with the error code.
      - Important: When the description is nil, the error should be handled silently.
