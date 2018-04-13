@@ -62,7 +62,7 @@ import Foundation
     @objc func authenticateWithBiometrics() {
         isPromptingForBiometricAuthentication = true
         app.pinEntryViewController.view.isUserInteractionEnabled = false
-        AuthenticationManager.shared.biometricAuthentication { authenticated, authenticationError in
+        AuthenticationManager.shared.authenticateUsingBiometrics { authenticated, authenticationError in
             self.isPromptingForBiometricAuthentication = false
             if let error = authenticationError {
                 self.handleBiometricAuthenticationError(withError: error)
