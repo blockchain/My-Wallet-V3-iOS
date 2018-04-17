@@ -98,7 +98,7 @@
     if (app.topViewControllerDelegate) {
         [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
     } else {
-        [app.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

@@ -35,8 +35,12 @@ import Foundation
 
     // MARK: - UIApplicationDelegate methods
     
-    func applicationDidFinishLaunching(_ application: UIApplication) {
-        print("applicationDidFinishLaunching")
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        print("didFinishLaunchingWithOptions")
+        
+        AppCoordinator.shared.start()
+        
+        return true
     }
 
     @objc func applicationDidBecomeActive(_ application: UIApplication) {
@@ -96,7 +100,8 @@ import Foundation
             let action = UIAlertAction(title: LCStringOK, style: .default, handler: nil)
             alert.addAction(action)
             DispatchQueue.main.async {
-                app.window.rootViewController?.present(alert, animated: true, completion: nil)
+                let window = UIApplication.shared.keyWindow
+                window?.rootViewController?.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -113,7 +118,7 @@ import Foundation
 
     func showPrivacyScreen() {
         privacyScreen?.alpha = 1
-        app.window.addSubview(privacyScreen!)
+        UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
     }
 
     func failedToObtainValuesFromKeychain() {
@@ -123,7 +128,7 @@ import Foundation
             // perform suspend selector
         })
         alert.addAction(action)
-        app.window.rootViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
     func showVerifyingBusyView(withTime time: Int) {
         app.showBusyView(withLoadingText: LCStringLoadingVerifying)

@@ -36,7 +36,7 @@
 {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0, 0, app.window.frame.size.width, app.window.frame.size.height - DEFAULT_HEADER_HEIGHT);
+    self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height - DEFAULT_HEADER_HEIGHT);
     
     UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
     topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
@@ -94,7 +94,7 @@
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
     
-    CGRect frame = CGRectMake(0, DEFAULT_HEADER_HEIGHT, app.window.frame.size.width, app.window.frame.size.height - DEFAULT_HEADER_HEIGHT);
+    CGRect frame = CGRectMake(0, DEFAULT_HEADER_HEIGHT, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height - DEFAULT_HEADER_HEIGHT);
     
     [_videoPreviewLayer setFrame:frame];
     

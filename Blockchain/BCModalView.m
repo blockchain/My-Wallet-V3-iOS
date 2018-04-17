@@ -14,7 +14,7 @@
 
 - (id)initWithCloseType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)];
     
