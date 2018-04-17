@@ -22,5 +22,7 @@ extension UserDefaults {
         case assetType = "assetType"
         case environment = "environment"
         case swipeToReceiveEnabled = "swipeToReceive"
+        case pinKey = "pinKey"
+        case encryptedPinPassword = "encryptedPINPassword"
     }
 }

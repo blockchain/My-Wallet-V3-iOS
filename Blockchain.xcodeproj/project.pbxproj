@@ -201,6 +201,7 @@
 		A2599BAA1B0B762400C2EA81 /* Backup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2599BAC1B0B762400C2EA81 /* Backup.storyboard */; };
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
+		AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -1103,6 +1104,7 @@
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A2AADC041B0B98720085144B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Backup.strings; sourceTree = "<group>"; };
 		A2AADC071B0B999F0085144B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Backup.strings; sourceTree = "<group>"; };
+		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -1122,7 +1124,7 @@
 		C72D6CBE1EC0B4AB0000F922 /* BCFeeSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCFeeSelectionView.m; sourceTree = "<group>"; };
 		C72D6CC01EC0B7F80000F922 /* FeeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeeTableCell.h; sourceTree = "<group>"; };
 		C72D6CC11EC0B7F80000F922 /* FeeTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeeTableCell.m; sourceTree = "<group>"; };
-		C72D6CC31EC646F30000F922 /* staging.der */ = {isa = PBXFileReference; lastKnownFileType = file; name = staging.der; path = ../staging.der; sourceTree = "<group>"; };
+		C72D6CC31EC646F30000F922 /* staging.der */ = {isa = PBXFileReference; lastKnownFileType = text; name = staging.der; path = ../staging.der; sourceTree = "<group>"; };
 		C72D6CC51EC647090000F922 /* dev.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = dev.der; sourceTree = SOURCE_ROOT; };
 		C72D6CC61EC647090000F922 /* testnet.der */ = {isa = PBXFileReference; lastKnownFileType = text; path = testnet.der; sourceTree = SOURCE_ROOT; };
 		C72D6CC91ED3472D0000F922 /* FeeTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeeTypes.h; sourceTree = "<group>"; };
@@ -1813,6 +1815,7 @@
 				9F0CBAAB15135DF200CD945D /* JavaScript */,
 				9F765F3A14BC7C3100048EFB /* Models */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
+				AA69F65C2086A7330054EFCE /* Settings */,
 				9FB3637C14B60128004BEA02 /* Supporting Files */,
 				9FCA4D18151494A300ECDFBE /* View Controllers */,
 				C9D4B2B2193E032200EDA9EA /* Views */,
@@ -1945,6 +1948,14 @@
 				23FDEF991D6CBC7000FC80D6 /* TransactionDetailViewController.m */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		AA69F65C2086A7330054EFCE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -2587,6 +2598,7 @@
 				231A66EE1DB9434B0043F862 /* HDNode.m in Sources */,
 				23256A591DF1CFF7002B7A04 /* Invitation.m in Sources */,
 				9F765F3914BC7BAC00048EFB /* TransactionTableCell.m in Sources */,
+				AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */,
 				23B731D31E01AC1100129770 /* ReminderModalViewController.m in Sources */,
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
 				84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */,

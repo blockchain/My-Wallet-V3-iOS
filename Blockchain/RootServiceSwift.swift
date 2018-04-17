@@ -150,9 +150,7 @@ final class RootServiceSwift {
                 DispatchQueue.main.async {
                     self.showVerifyingBusyView(withTimeout: 30)
                 }
-                guard
-                    // TODO: read pinKey from UserDefaults extension
-                    let pinKey = UserDefaults.standard.object(forKey: "pinKey") as? String,
+                guard let pinKey = BlockchainSettings.App.shared.pinKey,
                     let pin = KeychainItemWrapper.pinFromKeychain() else {
                         self.failedToObtainValuesFromKeychain(); return
                 }
