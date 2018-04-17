@@ -10,6 +10,7 @@
 #import "RootService.h"
 #import "LocalizationConstants.h"
 #import "DebugTableViewController.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCWelcomeView
 
@@ -18,7 +19,7 @@ Boolean shouldShowAnimation;
 
 -(id)init
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     shouldShowAnimation = true;
     
@@ -96,7 +97,7 @@ Boolean shouldShowAnimation;
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan) {
-        [app showDebugMenu:DEBUG_PRESENTER_WELCOME_VIEW];
+        [[AppCoordinator sharedInstance] showDebugViewWithPresenter: DEBUG_PRESENTER_WELCOME_VIEW];
     }
 }
 

@@ -9,6 +9,7 @@
 #import "TabViewController.h"
 #import "RootService.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface TabViewcontroller () <AssetSelectorViewDelegate>
 @end
@@ -46,7 +47,7 @@
     if (!_menuSwipeRecognizerView) {
         _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, 20, self.view.frame.size.height)];
         
-        ECSlidingViewController *sideMenu = app.slidingViewController;
+        ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         [_menuSwipeRecognizerView addGestureRecognizer:sideMenu.panGesture];
         
         [self.view addSubview:_menuSwipeRecognizerView];

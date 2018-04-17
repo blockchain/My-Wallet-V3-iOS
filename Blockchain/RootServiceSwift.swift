@@ -15,9 +15,6 @@ final class RootServiceSwift {
 
     // MARK: - Properties
 
-    /// Grants the Root Service access to the application delegate
-    fileprivate let appDelegate: AppDelegate!
-
     /// Flag used to indicate whether the device is prompting for biometric authentication.
     @objc public private(set) var isPromptingForBiometricAuthentication = false
 
@@ -58,10 +55,6 @@ final class RootServiceSwift {
 
     //: Prevent outside objects from creating their own instances of this class.
     private init() {
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("No application delegate found!")
-        }
-        appDelegate = delegate
     }
 
     // MARK: - Application Lifecycle
@@ -102,6 +95,8 @@ final class RootServiceSwift {
         let simulateSurgeKey = UserDefaults.DebugKeys.simulateSurge.rawValue
         UserDefaults.standard.set(false, forKey: simulateSurgeKey)
         #endif
+
+        AppCoordinator.shared.start()
 
         //: ...
 
@@ -165,7 +160,7 @@ final class RootServiceSwift {
             let action = UIAlertAction(title: LCStringOK, style: .default, handler: nil)
             alert.addAction(action)
             DispatchQueue.main.async {
-                app.window.rootViewController?.present(alert, animated: true, completion: nil)
+                UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -187,7 +182,7 @@ final class RootServiceSwift {
 
     func showPrivacyScreen() {
         privacyScreen?.alpha = 1
-        app.window.addSubview(privacyScreen!)
+        UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
     }
 
     func failedToObtainValuesFromKeychain() {
@@ -197,7 +192,7 @@ final class RootServiceSwift {
             // perform suspend selector
         })
         alert.addAction(action)
-        app.window.rootViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
     func showVerifyingBusyView(withTimeout seconds: Int) {

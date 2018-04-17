@@ -28,6 +28,7 @@
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "BCSwipeAddressViewModel.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 #define PS_VERIFY	0
 #define PS_ENTER1	1
@@ -336,7 +337,7 @@ static PEViewController *VerifyController()
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan) {
-        [app showDebugMenu:DEBUG_PRESENTER_PIN_VERIFY];
+        [[AppCoordinator sharedInstance] showDebugViewWithPresenter:DEBUG_PRESENTER_PIN_VERIFY];
     }
 }
 

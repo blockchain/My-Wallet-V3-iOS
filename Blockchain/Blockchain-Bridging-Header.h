@@ -2,14 +2,18 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
+#import <openssl/x509.h>
 #import <UIKit/UIKit.h>
-#import "Wallet.h"
-#import "RootService.h"
-#import "KeychainItemWrapper.h"
+#import "BCFadeView.h"
+#import "BCNavigationController.h"
+#import "BCWelcomeView.h"
+#import "DebugTableViewController.h"
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
-#import "BCFadeView.h"
-#import "UIViewController+AutoDismiss.h"
+#import "KeychainItemWrapper.h"
+#import "RootService.h"
+#import "SideMenuViewController.h"
 #import "TransferAllFundsViewController.h"
-#import "BCNavigationController.h"
-#import <openssl/x509.h>
+#import "UIDevice+Hardware.h"
+#import "UIViewController+AutoDismiss.h"
+#import "Wallet.h"

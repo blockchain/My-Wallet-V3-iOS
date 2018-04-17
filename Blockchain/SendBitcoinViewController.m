@@ -573,12 +573,12 @@ BOOL displayingLocalSymbolSend;
                              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT];
                          }]];
 
-                         [app.window.rootViewController presentViewController:appReviewAlert animated:YES completion:nil];
+                         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:appReviewAlert animated:YES completion:nil];
                      }
                  }
              }]];
              
-             [app.window.rootViewController presentViewController:paymentSentAlert animated:YES completion:nil];
+             [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:paymentSentAlert animated:YES completion:nil];
              
              [sendProgressActivityIndicator stopAnimating];
              
@@ -840,7 +840,7 @@ BOOL displayingLocalSymbolSend;
                                                       surge:surgePresent];
         }
         
-        self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithWindow:app.window viewModel:confirmPaymentViewModel sendButtonFrame:continuePaymentButton.frame];
+        self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithWindow:[UIApplication sharedApplication].keyWindow viewModel:confirmPaymentViewModel sendButtonFrame:continuePaymentButton.frame];
         
         self.confirmPaymentView.confirmDelegate = self;
         
@@ -1396,7 +1396,7 @@ BOOL displayingLocalSymbolSend;
             [app.wallet sendCancellation:self.contactTransaction];
         }
     }]];
-    [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Asset Agnostic Methods
@@ -2204,7 +2204,7 @@ BOOL displayingLocalSymbolSend;
 
 - (IBAction)feeOptionsClicked:(UIButton *)sender
 {
-    BCFeeSelectionView *feeSelectionView = [[BCFeeSelectionView alloc] initWithFrame:app.window.frame];
+    BCFeeSelectionView *feeSelectionView = [[BCFeeSelectionView alloc] initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
     feeSelectionView.delegate = self;
     [app showModalWithContent:feeSelectionView closeType:ModalCloseTypeBack headerText:BC_STRING_FEE];
 }

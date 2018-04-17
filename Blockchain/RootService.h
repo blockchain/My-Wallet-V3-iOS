@@ -189,8 +189,8 @@
 
 - (void)showSendCoins;
 - (void)showAccountsAndAddresses;
-- (void)showDebugMenu:(int)presenter;
 - (void)showHdUpgrade;
+//- (void)showDebugMenu:(int)presenter;
 - (void)showBackupReminder:(BOOL)firstReceive;
 
 - (IBAction)webLoginClicked:(id)sender;

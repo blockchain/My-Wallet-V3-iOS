@@ -42,7 +42,7 @@ NSMutableArray *visitedPages;
 {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0, 0, app.window.frame.size.width, app.window.frame.size.height);
+    self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
     
     UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
     topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
