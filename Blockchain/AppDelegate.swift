@@ -9,7 +9,8 @@
 
 import Foundation
 
-@objc final class RootServiceSwift: NSObject {
+@UIApplicationMain
+@objc final class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc public private(set) var isPromptingForBiometricAuthentication = false
     @objc public private(set) var applicationCameFromBackground = false
     fileprivate var loginTimer: Timer?
@@ -33,6 +34,10 @@ import Foundation
     }()
 
     // MARK: - UIApplicationDelegate methods
+    
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        print("applicationDidFinishLaunching")
+    }
 
     @objc func applicationDidBecomeActive(_ application: UIApplication) {
         print("applicationDidBecomeActive")

@@ -14,7 +14,6 @@
 #import "BuyBitcoinViewController.h"
 #import "SessionManager.h"
 #import "SharedSessionDelegate.h"
-#import "AppDelegate.h"
 #import "MultiAddressResponse.h"
 #import "Wallet.h"
 #import "BCFadeView.h"
@@ -58,7 +57,6 @@
 @implementation RootService
 
 RootService * app;
-RootServiceSwift *rootService;
 
 @synthesize wallet;
 @synthesize modalView;
@@ -98,8 +96,6 @@ void (^secondPasswordSuccess)(NSString *);
 
         self.modalChain = [[NSMutableArray alloc] init];
         app = self;
-
-        rootService = [[RootServiceSwift alloc] init];
     }
 
     return self;
@@ -241,8 +237,6 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // TODO: call Swift instance method directly from AppDelegate after refactor
-    [rootService applicationWillResignActive:application];
-
     [self hideSendAndReceiveKeyboards];
 
     if (createWalletView) {
@@ -284,7 +278,6 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     // TODO: call Swift instance method directly from AppDelegate after refactor
-    [rootService applicationDidEnterBackground:application];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED] &&
         [self.wallet isInitialized] &&
         [self.wallet didUpgradeToHd]) {
@@ -385,7 +378,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     // Cannot be refactored any further until more code is migrated to RootServiceSwift
     if ([self isPinSet]) {
-        [rootService authenticateWithBiometrics];
+//        [rootService authenticateWithBiometrics];
         return;
     }
 
@@ -401,8 +394,6 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // TODO: call Swift instance method directly from AppDelegate after refactor
-    [rootService applicationDidBecomeActive:application];
-
 #ifdef ENABLE_SWIPE_TO_RECEIVE
     if (self.pinEntryViewController.verifyOnly) {
         [self.pinEntryViewController setupQRCode];
@@ -621,7 +612,7 @@ void (^secondPasswordSuccess)(NSString *);
 #ifdef ENABLE_TOUCH_ID
             //: 👇 storing this value is unnecessary
             // if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
-                [rootService authenticateWithBiometrics];
+//                [rootService authenticateWithBiometrics];
             // }
 #endif
         } else {

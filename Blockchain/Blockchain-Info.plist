@@ -63,8 +63,6 @@
 	<string>Enabling Face ID allows you to securely access your wallet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Blockchain needs access to your location to show you nearby businesses that accept Bitcoin</string>
-	<key>NSMainNibFile</key>
-	<string>MainWindow</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Your permission is needed in order to upload documents from your photo library</string>
 	<key>UIAppFonts</key>
