@@ -118,6 +118,7 @@
 		5164E4D320584D2800FC706A /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5164E4CF20584D0700FC706A /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5164E4D72059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
 		5164E4D82059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
+		51A665C2207FCB1D0040EE7C /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C1207FCB1D0040EE7C /* BCPriceMarker.swift */; };
 		51A665C72080EBD80040EE7C /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
 		51A665C82080EBD80040EE7C /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
 		51C0C7542076B05E00684C52 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
@@ -937,6 +938,7 @@
 		516594A6204F1C0400C50E78 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
+		51A665C1207FCB1D0040EE7C /* BCPriceMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCPriceMarker.swift; sourceTree = "<group>"; };
 		51A665C62080EBD80040EE7C /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthenticationError.swift; path = Authentication/Models/AuthenticationError.swift; sourceTree = "<group>"; };
 		51E5C72D20741A120000A7FD /* RootServiceSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootServiceSwift.swift; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationManager.swift; path = Authentication/AuthenticationManager.swift; sourceTree = "<group>"; };
@@ -2057,6 +2059,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				51A665C1207FCB1D0040EE7C /* BCPriceMarker.swift */,
 				C799B278205383DD00CC522D /* BCSwipeAddressView.h */,
 				C799B279205383DD00CC522D /* BCSwipeAddressView.m */,
 				C7448A9A2034DDF80041947E /* AssetSelectorView.h */,
@@ -2082,7 +2085,6 @@
 				C7A0E9241FA89FE9004F4267 /* ExchangeModalView.h */,
 				C7A0E9251FA89FE9004F4267 /* ExchangeModalView.m */,
 				C7A0E90D1FA796EC004F4267 /* BCChartMarkerView.swift */,
-				51E5C73A2076936B0000A7FD /* BCPriceMarker.swift */,
 				C7559CB51F570602005B2375 /* TransactionEtherTableViewCell.h */,
 				C7559CB61F570602005B2375 /* TransactionEtherTableViewCell.m */,
 				C7CE34BC1F4E128900032806 /* BCAmountInputView.h */,
@@ -2487,6 +2489,7 @@
 				51E5C73120741A130000A7FD /* RootServiceSwift.swift in Sources */,
 				678AD5E919D4610000E9A778 /* BCModalContentView.m in Sources */,
 				84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */,
+				51A665C2207FCB1D0040EE7C /* BCPriceMarker.swift in Sources */,
 				23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */,
 				2322DCBC1D771831000E5AC1 /* SRHash.m in Sources */,
 				9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */,
@@ -2658,7 +2661,6 @@
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
-				51E5C73C2076936C0000A7FD /* BCPriceMarker.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
 				2322DCBF1D771831000E5AC1 /* SRMutex.m in Sources */,
 				C7559CB71F570602005B2375 /* TransactionEtherTableViewCell.m in Sources */,
