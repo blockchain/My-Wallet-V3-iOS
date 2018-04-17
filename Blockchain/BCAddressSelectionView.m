@@ -213,7 +213,7 @@ typedef enum {
         
         [self addSubview:mainView];
         
-        mainView.frame = CGRectMake(0, 0, app.window.frame.size.width, app.window.frame.size.height);
+        mainView.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
         
         [tableView layoutIfNeeded];
         float tableHeight = [tableView contentSize].height;

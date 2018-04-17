@@ -189,7 +189,6 @@
 
 - (void)showSendCoins;
 - (void)showAccountsAndAddresses;
-- (void)showDebugMenu:(int)presenter;
 - (void)showHdUpgrade;
 - (void)showBackupReminder:(BOOL)firstReceive;
 

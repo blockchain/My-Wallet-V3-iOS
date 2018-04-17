@@ -57,7 +57,6 @@
  i386, x86_64 -> iPhone Simulator
  */
 
-
 #pragma mark sysctlbyname utils
 - (NSString *) getSysInfoByName:(char *)typeSpecifier
 {

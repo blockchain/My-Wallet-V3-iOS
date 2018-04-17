@@ -19,7 +19,7 @@
     self = [super init];
     
     if (self) {
-        ECSlidingViewController *sideMenu = app.slidingViewController;
+        ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         
         _iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(18, 10, 22, 22)];
         [self addSubview:_iconImage];

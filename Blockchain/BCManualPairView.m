@@ -38,7 +38,7 @@
     passwordTextField.delegate = self;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (![app.window.rootViewController presentedViewController]) {
+        if (![[UIApplication sharedApplication].keyWindow.rootViewController presentedViewController]) {
             [walletIdentifierTextField becomeFirstResponder];
         }
     });
@@ -81,7 +81,7 @@
         [passwordTextField becomeFirstResponder];
     }
     else if (textField == verifyTwoFactorTextField) {
-        [app.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
         app.wallet.twoFactorInput = [textField.text uppercaseString];
         [self continueClicked:textField];
     } else {
@@ -147,7 +147,7 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [app.window.rootViewController presentViewController:alertForVerifyingMobileNumber animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifyingMobileNumber animated:YES completion:nil];
 }
 
 - (void)verifyTwoFactorGoogle
@@ -176,7 +176,7 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [app.window.rootViewController presentViewController:alertForVerifying animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifying animated:YES completion:nil];
 }
 
 @end

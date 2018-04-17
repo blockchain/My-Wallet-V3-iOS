@@ -717,7 +717,7 @@
         
     }]];
     
-    [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)alertUserOfWatchOnlyAddress:(NSString *)address
@@ -832,7 +832,7 @@
     descriptionLabelBottom.center = CGPointMake(introducingContactsView.center.x, descriptionLabelBottom.center.y);
     [introducingContactsView addSubview:descriptionLabelBottom];
 
-    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(15, app.window.frame.size.height - BUTTON_HEIGHT - 16, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
+    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(15, [UIApplication sharedApplication].keyWindow.frame.size.height - BUTTON_HEIGHT - 16, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
     [dismissButton setTitle:BC_STRING_ILL_DO_THIS_LATER forState:UIControlStateNormal];
     [dismissButton setTitleColor:COLOR_MEDIUM_GRAY forState:UIControlStateNormal];
     dismissButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -853,7 +853,7 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIBarStyleDefault;
     
-    [app.window.rootViewController presentViewController:modalViewController animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:modalViewController animated:YES completion:nil];
 }
 
 - (void)selectFromClicked
@@ -933,14 +933,14 @@
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [app.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showContacts
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [app.window.rootViewController dismissViewControllerAnimated:YES completion:^{
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:^{
         [app contactsClicked:nil];
     }];
 }
@@ -973,7 +973,7 @@
         return NO;
     }
     
-    if (app.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
+    if ([AppCoordinator sharedInstance].slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
         return NO;
     }
     

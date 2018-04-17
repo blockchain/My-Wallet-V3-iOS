@@ -206,17 +206,11 @@ void (^secondPasswordSuccess)(NSString *);
         self.loadingText = [notification object];
     }];
 
-    app.window.backgroundColor = [UIColor whiteColor];
-
-    [self setupSideMenu];
-
-    [app.window makeKeyAndVisible];
-
-    // TODO: Migrate elsewhere
-    [self.tabControllerManager dashBoardClicked:nil];
-
     // Add busy view to root vc
     [app.window.rootViewController.view addSubview:busyView];
+
+    // Default view in TabViewController: dashboard
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:busyView];
 
     // Load settings
     symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
@@ -230,17 +224,6 @@ void (^secondPasswordSuccess)(NSString *);
     secondPasswordDescriptionLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-
-    // Show welcome screen if guid or sharedKey are not set
-    if (![KeychainItemWrapper guid] || ![KeychainItemWrapper sharedKey]) {
-        [self showWelcomeScreen];
-        [self checkAndWarnOnJailbrokenPhones];
-        return YES;
-    }
-
-    // ... Otherwise show the pin screen
-    //: This step should happen as the app delegate instantiates the login screen from the storyboard
-    [self showPinScreen];
 
     return YES;
 }
@@ -349,7 +332,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     [self.loginTimer invalidate];
 
-    [app.window.rootViewController dismissViewControllerAnimated:NO completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:NO completion:nil];
 
     [self hideSendAndReceiveKeyboards];
 
@@ -625,14 +608,14 @@ void (^secondPasswordSuccess)(NSString *);
     [NSURLCache setSharedURLCache:sharedCache];
 }
 
-- (void)setupSideMenu
-{
-    _slidingViewController = [[ECSlidingViewController alloc] init];
-    _slidingViewController.topViewController = self.tabControllerManager.tabViewController;
-    sideMenuViewController = [[SideMenuViewController alloc] init];
-    _slidingViewController.underLeftViewController = sideMenuViewController;
-    _window.rootViewController = _slidingViewController;
-}
+//- (void)setupSideMenu
+//{
+//    _slidingViewController = [[ECSlidingViewController alloc] init];
+//    _slidingViewController.topViewController = self.tabControllerManager.tabViewController;
+//    sideMenuViewController = [[SideMenuViewController alloc] init];
+//    _slidingViewController.underLeftViewController = sideMenuViewController;
+//    _window.rootViewController = _slidingViewController;
+//}
 
 //- (void)showWelcomeOrPinScreen
 //{
@@ -798,7 +781,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     [busyLabel setText:text];
 
-    [app.window.rootViewController.view bringSubviewToFront:busyView];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
 
     if (busyView.alpha < 1.0) {
         [busyView fadeIn];
@@ -1458,7 +1441,7 @@ void (^secondPasswordSuccess)(NSString *);
     [animation setType:kCATransitionFade];
 
     [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-    [[app.window layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
+    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
 
     if (self.modalView.onDismiss) {
         self.modalView.onDismiss();
@@ -1501,7 +1484,7 @@ void (^secondPasswordSuccess)(NSString *);
     }
 
     [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-    [[app.window layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
+    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
 
     if (self.modalView.onDismiss) {
         self.modalView.onDismiss();
@@ -1511,11 +1494,11 @@ void (^secondPasswordSuccess)(NSString *);
     if ([self.modalChain count] > 0) {
         BCModalView * previousModalView = [self.modalChain objectAtIndex:[self.modalChain count]-1];
 
-        [app.window.rootViewController.view addSubview:previousModalView];
+        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:previousModalView];
 
-        [app.window.rootViewController.view bringSubviewToFront:busyView];
+        [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
 
-        [app.window.rootViewController.view endEditing:TRUE];
+        [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
 
         if (self.modalView.onResume) {
             self.modalView.onResume();
@@ -1574,8 +1557,8 @@ void (^secondPasswordSuccess)(NSString *);
 
     contentView.frame = CGRectMake(0, 0, modalView.myHolderView.frame.size.width, modalView.myHolderView.frame.size.height);
 
-    [app.window.rootViewController.view addSubview:modalView];
-    [app.window.rootViewController.view endEditing:TRUE];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:modalView];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
 
     @try {
         CATransition *animation = [CATransition animation];
@@ -1590,7 +1573,7 @@ void (^secondPasswordSuccess)(NSString *);
         }
 
         [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-        [[app.window.rootViewController.view layer] addAnimation:animation forKey:ANIMATION_KEY_SHOW_MODAL];
+        [[[UIApplication sharedApplication].keyWindow.rootViewController.view layer] addAnimation:animation forKey:ANIMATION_KEY_SHOW_MODAL];
     } @catch (NSException * e) {
         DLog(@"Animation Exception %@", e);
     }
@@ -1678,7 +1661,7 @@ void (^secondPasswordSuccess)(NSString *);
     if (self.topViewControllerDelegate) {
         [self.topViewControllerDelegate presentViewController:reader animated:YES completion:nil];
     } else {
-        [app.window.rootViewController presentViewController:reader animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:reader animated:YES completion:nil];
     }
 
     app.wallet.lastScannedWatchOnlyAddress = address;
@@ -1697,7 +1680,7 @@ void (^secondPasswordSuccess)(NSString *);
     if (self.topViewControllerDelegate) {
         [self.topViewControllerDelegate presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
     } else {
-        [app.window.rootViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
     }
 }
 
@@ -1800,7 +1783,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.topViewControllerDelegate presentAlertController:alert];
         }
     } else {
-        [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -1826,7 +1809,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.topViewControllerDelegate presentAlertController:alert];
         }
     } else {
-        [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -1850,7 +1833,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.topViewControllerDelegate presentAlertController:alert];
         }
     } else {
-        [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -1880,7 +1863,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.topViewControllerDelegate presentAlertController:errorAlert];
         }
     } else {
-        [app.window.rootViewController presentViewController:errorAlert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:errorAlert animated:YES completion:nil];
     }
 }
 
@@ -1912,7 +1895,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.topViewControllerDelegate presentAlertController:errorAlert];
         }
     } else {
-        [app.window.rootViewController presentViewController:errorAlert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:errorAlert animated:YES completion:nil];
     }
 }
 
@@ -2632,10 +2615,10 @@ void (^secondPasswordSuccess)(NSString *);
         [app performSelector:@selector(suspend)];
     }]];
 
-    if (app.window.rootViewController.presentedViewController) {
-        [app.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+    if ([UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController) {
+        [[UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
     } else {
-        [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -2717,16 +2700,6 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager showSendCoinsAnimated:YES];
 }
 
-- (void)showDebugMenu:(int)presenter
-{
-    DebugTableViewController *debugViewController = [[DebugTableViewController alloc] init];
-    debugViewController.presenter = presenter;
-
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:debugViewController];
-
-    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
-}
-
 - (void)showPinModalAsView:(BOOL)asView
 {
     BOOL walletIsNew = self.wallet.isNew;
@@ -2741,7 +2714,7 @@ void (^secondPasswordSuccess)(NSString *);
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 
     // Don't show a new one if we already show it
-    if ([self.pinEntryViewController.view isDescendantOfView:app.window.rootViewController.view] ||
+    if ([self.pinEntryViewController.view isDescendantOfView:[UIApplication sharedApplication].keyWindow.rootViewController.view] ||
         (self.tabControllerManager.tabViewController.presentedViewController != nil && self.tabControllerManager.tabViewController.presentedViewController == self.pinEntryViewController && !_pinEntryViewController.isBeingDismissed)) {
         return;
     }
@@ -2762,10 +2735,10 @@ void (^secondPasswordSuccess)(NSString *);
     if (asView) {
         if ([_settingsNavigationController isBeingPresented]) {
             // Immediately after enabling touch ID, backgrounding the app while the Settings scren is still being presented results in failure to add the PIN screen back. Using a delay to allow animation to complete fixes this
-            [app.window.rootViewController.view performSelector:@selector(addSubview:) withObject:self.pinEntryViewController.view afterDelay:DELAY_KEYBOARD_DISMISSAL];
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view performSelector:@selector(addSubview:) withObject:self.pinEntryViewController.view afterDelay:DELAY_KEYBOARD_DISMISSAL];
             [self performSelector:@selector(showStatusBar) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
         } else {
-            [app.window.rootViewController.view addSubview:self.pinEntryViewController.view];
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
         }
     }
     else {
@@ -3015,7 +2988,7 @@ void (^secondPasswordSuccess)(NSString *);
         [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
 
-    [app.window.rootViewController.view addSubview:self.pinEntryViewController.view];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
@@ -3035,7 +3008,7 @@ void (^secondPasswordSuccess)(NSString *);
     peViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
 
-    [app.window.rootViewController.view addSubview:self.pinEntryViewController.view];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
@@ -3053,7 +3026,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)closePINModal:(BOOL)animated
 {
     // There are two different ways the pinModal is displayed: as a subview of tabViewController (on start) and as a viewController. This checks which one it is and dismisses accordingly
-    if ([self.pinEntryViewController.view isDescendantOfView:app.window.rootViewController.view]) {
+    if ([self.pinEntryViewController.view isDescendantOfView:[UIApplication sharedApplication].keyWindow.rootViewController.view]) {
 
         [self.pinEntryViewController.view removeFromSuperview];
 
@@ -3083,7 +3056,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
 
-    [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)logoutAndShowPasswordModal
@@ -3120,13 +3093,13 @@ void (^secondPasswordSuccess)(NSString *);
         [mainPasswordTextField resignFirstResponder];
         [self performSelector:@selector(presentViewControllerAnimated:) withObject:forgetWalletAlert afterDelay:DELAY_KEYBOARD_DISMISSAL];
     } else {
-        [app.window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
     }
 }
 
 - (void)presentViewControllerAnimated:(UIViewController *)viewController
 {
-    [app.window.rootViewController presentViewController:viewController animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
 }
 
 - (IBAction)webLoginClicked:(id)sender
@@ -3632,7 +3605,7 @@ void (^secondPasswordSuccess)(NSString *);
         self.pinEntryViewController.inSettings = YES;
     }
 
-    [app.window.rootViewController.view addSubview:self.pinEntryViewController.view];
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
 }
 
 - (void)didPutPinSuccess:(NSDictionary*)dictionary
@@ -3778,7 +3751,7 @@ void (^secondPasswordSuccess)(NSString *);
         [app performSelector:@selector(suspend)];
     }]];
 
-    [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Setup Delegate
@@ -3858,43 +3831,10 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)checkAndWarnOnJailbrokenPhones
 {
-    if ([RootService isUnsafe]) {
-        [self alertUserOfCompromisedSecurity];
+    if (![UIDevice currentDevice].isUnsafe) {
+        return;
     }
-}
-
-+ (BOOL)isUnsafe
-{
-#if !(TARGET_IPHONE_SIMULATOR)
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_CYDIA]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_MOBILE_SUBSTRATE]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_BIN_BASH]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_USR_SBIN_SSHD]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_ETC_APT]){
-        return YES;
-    }
-
-    NSError *error;
-    NSString *stringToBeWritten = @"TEST";
-    [stringToBeWritten writeToFile:UNSAFE_CHECK_PATH_WRITE_TEST atomically:YES
-                          encoding:NSUTF8StringEncoding error:&error];
-    if(error == nil){
-        return YES;
-    } else {
-        [[NSFileManager defaultManager] removeItemAtPath:UNSAFE_CHECK_PATH_WRITE_TEST error:nil];
-    }
-
-    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:UNSAFE_CHECK_CYDIA_URL]]){
-        return YES;
-    }
-#endif
-
-    return NO;
+    [self alertUserOfCompromisedSecurity];
 }
 
 - (BOOL)checkInternetConnection
@@ -3940,7 +3880,7 @@ void (^secondPasswordSuccess)(NSString *);
             } else if (self.topViewControllerDelegate) {
                 [self.topViewControllerDelegate presentViewController:alert animated:YES completion:nil];
             } else {
-                [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
             }
         }
     }

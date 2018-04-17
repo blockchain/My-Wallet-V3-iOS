@@ -29,7 +29,7 @@
     [super viewDidLoad];
     
     UIButton *createButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    createButton.frame = CGRectMake(0, 0, app.window.frame.size.width, 46);
+    createButton.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, 46);
     createButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
     [createButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
     [createButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -132,7 +132,7 @@
         [app closeSideMenu];
         [app showPasswordModal];
         app.changedPassword = YES;
-        [app.window.rootViewController presentViewController:alertForChangePasswordSuccess animated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForChangePasswordSuccess animated:YES completion:nil];
     }];
 
     [self clearTextFields];
