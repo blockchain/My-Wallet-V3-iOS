@@ -289,7 +289,7 @@
 
 - (void)showError:(NSString *)error
 {
-    if ([app isPinSet] &&
+    if ([BlockchainSettings sharedInstance].isPinSet &&
         !app.pinEntryViewController &&
         [app.wallet isInitialized] &&
         app.tabControllerManager.tabViewController.selectedIndex == TAB_DASHBOARD

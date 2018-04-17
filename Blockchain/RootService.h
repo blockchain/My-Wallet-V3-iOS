@@ -218,7 +218,6 @@
 
 - (void)clearPin;
 - (void)showPinModalAsView:(BOOL)asView;
-- (BOOL)isPinSet;
 - (void)validatePINOptionally;
 - (void)changePIN;
 

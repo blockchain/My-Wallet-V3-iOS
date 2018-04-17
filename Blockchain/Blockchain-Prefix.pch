@@ -588,8 +588,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_SYMBOL_LOCAL @"symbolLocal"
 #define USER_DEFAULTS_KEY_PASSWORD @"password"
 #define USER_DEFAULTS_KEY_PIN @"pin"
-#define USER_DEFAULTS_KEY_ENCRYPTED_PIN_PASSWORD @"encryptedPINPassword"
-#define USER_DEFAULTS_KEY_PIN_KEY @"pinKey"
 #define USER_DEFAULTS_KEY_PASSWORD_PART_HASH @"passwordPartHash"
 #define USER_DEFAULTS_KEY_HAS_SEEN_UPGRADE_TO_HD_SCREEN @"hasSeenUpgradeToHdScreen"
 #define USER_DEFAULTS_KEY_TOUCH_ID_ENABLED @"touchIDEnabled"
