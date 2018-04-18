@@ -147,6 +147,28 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    [Fabric with:@[[Crashlytics class]]];
+//
+//    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    app.window = appDelegate.window;
+//
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//
+//    [userDefaults registerDefaults:@{USER_DEFAULTS_KEY_ASSET_TYPE : [NSNumber numberWithInt:AssetTypeBitcoin]}];
+//
+//    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING : @YES}];
+//    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED : @YES}];
+//#ifndef DEBUG
+//    [[NSUserDefaults standardUserDefaults] setObject:ENV_INDEX_PRODUCTION forKey:USER_DEFAULTS_KEY_ENV];
+//    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING];
+//
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER];
+//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_ZERO_TICKER];
+//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_SURGE];
+//
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+
     // TODO: migrate all code below to RootServiceSwift
 
 //    SharedSessionDelegate *sharedSessionDelegate = [[SharedSessionDelegate alloc] initWithCertificatePinner:self.certificatePinner];
