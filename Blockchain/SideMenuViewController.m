@@ -17,6 +17,7 @@
 #import "PrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "Blockchain-Swift.h"
 
 @interface SideMenuViewController ()
 
@@ -48,7 +49,7 @@ int accountEntries = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    sideMenu = app.slidingViewController;
+    sideMenu = [AppCoordinator sharedInstance].slidingViewController;
     
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - sideMenu.anchorLeftPeekAmount, MENU_ENTRY_HEIGHT * self.menuEntriesCount) style:UITableViewStylePlain];
@@ -152,7 +153,7 @@ int accountEntries = 0;
     
     // Enable Pan gesture and tap gesture to close sideMenu
     [tabViewController.activeViewController.view setUserInteractionEnabled:YES];
-    ECSlidingViewController *sideMenu = app.slidingViewController;
+    ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
     [tabViewController.activeViewController.view addGestureRecognizer:sideMenu.panGesture];
     
     [tabViewController.activeViewController.view addGestureRecognizer:tapToCloseGestureRecognizerViewController];
@@ -160,7 +161,7 @@ int accountEntries = 0;
     [tabViewController addTapGestureRecognizerToTabBar:tapToCloseGestureRecognizerTabBar];
     
     // Show shadow on current viewController in tabBarView
-    UIView *castsShadowView = app.slidingViewController.topViewController.view;
+    UIView *castsShadowView = [AppCoordinator sharedInstance].slidingViewController.topViewController.view;
     castsShadowView.layer.shadowOpacity = 0.3f;
     castsShadowView.layer.shadowRadius = 10.0f;
     castsShadowView.layer.shadowColor = [UIColor blackColor].CGColor;

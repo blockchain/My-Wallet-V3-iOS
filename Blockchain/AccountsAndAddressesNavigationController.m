@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0, 0, app.window.frame.size.width, app.window.frame.size.height);
+    self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
     
     UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT)];
     topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
@@ -150,7 +150,7 @@
 
 - (void)setupBusyView
 {
-    BCFadeView *busyView = [[BCFadeView alloc] initWithFrame:app.window.rootViewController.view.frame];
+    BCFadeView *busyView = [[BCFadeView alloc] initWithFrame:[UIApplication sharedApplication].keyWindow.rootViewController.view.frame];
     busyView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.5];
     UIView *textWithSpinnerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 110)];
     textWithSpinnerView.backgroundColor = [UIColor whiteColor];

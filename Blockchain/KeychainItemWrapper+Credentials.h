@@ -9,12 +9,12 @@
 #import "KeychainItemWrapper.h"
 
 @interface KeychainItemWrapper (Credentials)
-+ (NSString *)guid;
++ (nullable NSString *)guid;
 + (NSString *)hashedGuid;
 + (void)setGuidInKeychain:(NSString *)guid;
 + (void)removeGuidFromKeychain;
 
-+ (NSString *)sharedKey;
++ (nullable NSString *)sharedKey;
 + (void)setSharedKeyInKeychain:(NSString *)sharedKey;
 + (void)removeSharedKeyFromKeychain;
 

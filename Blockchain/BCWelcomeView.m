@@ -7,9 +7,9 @@
 //
 
 #import "BCWelcomeView.h"
-#import "RootService.h"
 #import "LocalizationConstants.h"
 #import "DebugTableViewController.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCWelcomeView
 
@@ -18,7 +18,7 @@ Boolean shouldShowAnimation;
 
 -(id)init
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     shouldShowAnimation = true;
     
@@ -88,15 +88,35 @@ Boolean shouldShowAnimation;
 #endif
         // Version
         [self setupVersionLabel];
+        
+        // Add touch handlers to buttons
+        [self.createWalletButton addTarget:self action:@selector(showCreateWallet:) forControlEvents:UIControlEventTouchUpInside];
+        [self.existingWalletButton addTarget:self action:@selector(showPairWallet:) forControlEvents:UIControlEventTouchUpInside];
+        [self.recoverWalletButton addTarget:self action:@selector(showRecoverWallet:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return self;
 }
 
+- (void)showCreateWallet:(id)sender
+{
+    [self.delegate showCreateWallet];
+}
+
+- (void)showPairWallet:(id)sender
+{
+    [self.delegate showPairWallet];
+}
+
+- (void)showRecoverWallet:(id)sender
+{
+    [self.delegate showRecoverWallet];
+}
+
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan) {
-        [app showDebugMenu:DEBUG_PRESENTER_WELCOME_VIEW];
+        [[AppCoordinator sharedInstance] showDebugViewWithPresenter: DEBUG_PRESENTER_WELCOME_VIEW];
     }
 }
 

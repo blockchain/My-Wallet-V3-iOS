@@ -57,6 +57,39 @@
  i386, x86_64 -> iPhone Simulator
  */
 
+- (BOOL)isUnsafe
+{
+#if !(TARGET_IPHONE_SIMULATOR)
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_CYDIA]){
+        return YES;
+    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_MOBILE_SUBSTRATE]){
+        return YES;
+    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_BIN_BASH]){
+        return YES;
+    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_USR_SBIN_SSHD]){
+        return YES;
+    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_ETC_APT]){
+        return YES;
+    }
+    
+    NSError *error;
+    NSString *stringToBeWritten = @"TEST";
+    [stringToBeWritten writeToFile:UNSAFE_CHECK_PATH_WRITE_TEST atomically:YES
+                          encoding:NSUTF8StringEncoding error:&error];
+    if(error == nil){
+        return YES;
+    } else {
+        [[NSFileManager defaultManager] removeItemAtPath:UNSAFE_CHECK_PATH_WRITE_TEST error:nil];
+    }
+    
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:UNSAFE_CHECK_CYDIA_URL]]){
+        return YES;
+    }
+#endif
+    
+    return NO;
+}
 
 #pragma mark sysctlbyname utils
 - (NSString *) getSysInfoByName:(char *)typeSpecifier

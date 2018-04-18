@@ -42,7 +42,7 @@ const float qrSize = 230;
 {
     [super viewDidLoad];
 
-    CGSize size = app.window.frame.size;
+    CGSize size = [UIApplication sharedApplication].keyWindow.frame.size;
     self.view.frame = CGRectMake(0, DEFAULT_HEADER_HEIGHT, size.width, size.height - DEFAULT_HEADER_HEIGHT);
     self.view.backgroundColor = [UIColor whiteColor];
     
