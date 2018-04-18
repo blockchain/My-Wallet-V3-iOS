@@ -115,8 +115,6 @@
 		511646C9208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646CC208509F900C43522 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646CB208509F900C43522 /* API.swift */; };
 		511646CD208509F900C43522 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646CB208509F900C43522 /* API.swift */; };
-		511646DC208519DF00C43522 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DB208519DF00C43522 /* UserAgent.swift */; };
-		511646DD208519DF00C43522 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DB208519DF00C43522 /* UserAgent.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E020851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E2208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
@@ -138,8 +136,6 @@
 		5164E4D72059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
 		5164E4D82059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
 		5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185B189208697F1003C9AC2 /* BCPriceMarker.swift */; };
-		51A665C4207FF5B00040EE7C /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C3207FF5B00040EE7C /* LoadingView.swift */; };
-		51A665C5207FF5B00040EE7C /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C3207FF5B00040EE7C /* LoadingView.swift */; };
 		51A665C72080EBD80040EE7C /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
 		51A665C82080EBD80040EE7C /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
 		51C0C7542076B05E00684C52 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
@@ -946,7 +942,6 @@
 		511646C4208124E200C43522 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetType.swift; path = Assets/AssetType.swift; sourceTree = "<group>"; };
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646CB208509F900C43522 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = API.swift; path = Network/API.swift; sourceTree = "<group>"; };
-		511646DB208519DF00C43522 /* UserAgent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserAgent.swift; path = Network/Extensions/UserAgent.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
 		511646E1208523E300C43522 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIDevice.swift; path = Extensions/UIDevice.swift; sourceTree = "<group>"; };
 		511646E4208527EE00C43522 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkManager.swift; path = Network/NetworkManager.swift; sourceTree = "<group>"; };
@@ -966,7 +961,6 @@
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
 		5185B189208697F1003C9AC2 /* BCPriceMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BCPriceMarker.swift; path = Views/BCPriceMarker.swift; sourceTree = "<group>"; };
-		51A665C3207FF5B00040EE7C /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = Views/LoadingView.swift; sourceTree = "<group>"; };
 		51A665C62080EBD80040EE7C /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthenticationError.swift; path = Authentication/Models/AuthenticationError.swift; sourceTree = "<group>"; };
 		51E5C72D20741A120000A7FD /* RootServiceSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootServiceSwift.swift; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationManager.swift; path = Authentication/AuthenticationManager.swift; sourceTree = "<group>"; };
@@ -1547,7 +1541,6 @@
 		511646D62085199000C43522 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				511646DB208519DF00C43522 /* UserAgent.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -2235,7 +2228,6 @@
 				5185B189208697F1003C9AC2 /* BCPriceMarker.swift */,
 				237827191B7E472D00E9EE03 /* BCSecureTextField.swift */,
 				67D95A251B3DD86B0012EBB1 /* BCTextField.swift */,
-				51A665C3207FF5B00040EE7C /* LoadingView.swift */,
 				678AD5EC19D4731C00E9A778 /* Modal Content Views */,
 			);
 			name = Views;
@@ -2552,9 +2544,7 @@
 				511646E920852C3C00C43522 /* CertificatePinner.swift in Sources */,
 				511646E020851BC600C43522 /* Bundle.swift in Sources */,
 				51C0C7542076B05E00684C52 /* AuthenticationManager.swift in Sources */,
-				51A665C5207FF5B00040EE7C /* LoadingView.swift in Sources */,
 				515902342049AF5000A4C2D8 /* WalletTests.swift in Sources */,
-				511646DD208519DF00C43522 /* UserAgent.swift in Sources */,
 				510EA1712080F16100A63AB8 /* Passcode.swift in Sources */,
 				513913F12081206C002578FD /* UserDefaults.swift in Sources */,
 				511646C6208124E200C43522 /* AssetType.swift in Sources */,
@@ -2758,7 +2748,6 @@
 				C75F70E41E241D69005B4EAF /* BCContactRequestView.m in Sources */,
 				9F4A5092152F585E00F9ED9D /* UIDevice+Hardware.m in Sources */,
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
-				511646DC208519DF00C43522 /* UserAgent.swift in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
@@ -2795,7 +2784,6 @@
 				23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */,
 				23DEF96E1DB11C98004AAAB6 /* TransferAllFundsBuilder.m in Sources */,
 				C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */,
-				51A665C4207FF5B00040EE7C /* LoadingView.swift in Sources */,
 				A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
