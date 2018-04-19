@@ -155,7 +155,7 @@
     
     [self resetFrame];
     
-    [self reload];
+    [self getHistory];
 }
 
 - (void)resetFrame
@@ -220,6 +220,11 @@
 - (void)setAddress:(NSString *)address
 {
     [self selectToAddress:address];
+}
+
+- (void)getHistory
+{
+    [app.wallet getEthHistory];
 }
 
 - (void)updateExchangeRate:(NSDecimalNumber *)rate

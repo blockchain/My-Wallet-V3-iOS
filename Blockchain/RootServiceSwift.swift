@@ -75,7 +75,7 @@ final class RootServiceSwift {
         //: Was initialized with `NSNumber numberWithInt:AssetTypeBitcoin` before, could cause side unwanted effects...
         // TODO: test for potential side effects
         let assetTypekey = UserDefaults.Keys.assetType.rawValue
-        UserDefaults.standard.register(defaults: [assetTypekey: [AssetType.bitcoin]])
+        UserDefaults.standard.register(defaults: [assetTypekey: AssetType.bitcoin.rawValue])
 
         let certPinningkey = UserDefaults.DebugKeys.enableCertificatePinning.rawValue
         UserDefaults.standard.register(defaults: [certPinningkey: true])
@@ -150,9 +150,7 @@ final class RootServiceSwift {
                 DispatchQueue.main.async {
                     self.showVerifyingBusyView(withTimeout: 30)
                 }
-                guard
-                    // TODO: read pinKey from UserDefaults extension
-                    let pinKey = UserDefaults.standard.object(forKey: "pinKey") as? String,
+                guard let pinKey = BlockchainSettings.App.shared.pinKey,
                     let pin = KeychainItemWrapper.pinFromKeychain() else {
                         self.failedToObtainValuesFromKeychain(); return
                 }

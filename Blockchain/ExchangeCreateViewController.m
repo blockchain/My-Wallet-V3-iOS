@@ -40,6 +40,8 @@
 @property (nonatomic) BCSecureTextField *btcField;
 @property (nonatomic) BCSecureTextField *ethField;
 @property (nonatomic) BCSecureTextField *bchField;
+    
+@property (nonatomic) UITextField *lastChangedField;
 
 // Fiat input
 @property (nonatomic) BCSecureTextField *bottomLeftField;
@@ -550,6 +552,8 @@
         }
     }
     
+    self.lastChangedField = textField;
+    
     NSString *amountString = [NSNumberFormatter convertedDecimalString:newString];
     
     [self saveAmount:amountString fromField:textField];
@@ -1014,7 +1018,7 @@
         [self.spinner stopAnimating];
     }
     
-    BOOL usingFromField = ![self.topRightField isFirstResponder] && ![self.bottomRightField isFirstResponder];
+    BOOL usingFromField = self.lastChangedField != self.topRightField && self.lastChangedField != self.bottomRightField;
 
     NSString *amount;
     if ([self hasAmountGreaterThanZero:self.amount]) {

@@ -239,7 +239,7 @@ BOOL displayingLocalSymbolSend;
 
     [app.wallet createNewPayment:self.assetType];
     [self resetFromAddress];
-    if (app.tabControllerManager.tabViewController.activeViewController == self) {
+    if (app.tabControllerManager.tabViewController.activeViewController == self && !app.tabControllerManager.tabViewController.presentedViewController) {
         [app closeModalWithTransition:kCATransitionPush];
     }
     

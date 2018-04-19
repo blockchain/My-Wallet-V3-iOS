@@ -41,9 +41,6 @@
 #import "NSData+BTCData.h"
 
 #define DICTIONARY_KEY_CURRENCY @"currency"
-#define DICTIONARY_KEY_BLOCK_SUB @"block_sub"
-#define DICTIONARY_KEY_ACCOUNT_SUB @"account_sub"
-#define DICTIONARY_KEY_OP @"op"
 
 @interface Wallet ()
 @property (nonatomic) JSContext *context;
@@ -918,10 +915,6 @@
         [weakSelf did_get_ether_address_with_second_password];
     };
     
-    self.context[@"objc_reload_eth_transactions"] = ^() {
-        [weakSelf reload_eth_transactions];
-    };
-    
 #pragma mark Bitcoin Cash
     
     self.context[@"objc_on_fetch_bch_history_success"] = ^() {
@@ -998,7 +991,6 @@
 {
     _ethSocket = [[SRWebSocket alloc] initWithURLRequest:[self getWebSocketRequest:AssetTypeEther]];
     _ethSocket.delegate = self;
-    [_ethSocket open];
 }
 
 - (void)setupSocket:(AssetType)assetType
@@ -1217,10 +1209,10 @@
 {
     if (webSocket == self.ethSocket) {
         DLog(@"eth websocket opened");
-        NSString *blocksSub = [[self.context evaluateScript:@"MyWalletPhone.getEthBlockMessage()"] toString];
-        NSString *accountSub = [[self.context evaluateScript:@"MyWalletPhone.getEthAccountMessage()"] toString];
-        [self sendEthSocketMessage:blocksSub];
-        [self sendEthSocketMessage:accountSub];
+        for (NSString *message in [self.pendingEthSocketMessages reverseObjectEnumerator]) {
+            DLog(@"Sending queued eth socket message %@", message);
+            [self sendEthSocketMessage:message];
+        }
         [self.pendingEthSocketMessages removeAllObjects];
     } else if (webSocket == self.btcSocket) {
         DLog(@"btc websocket opened");
@@ -1248,17 +1240,14 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    if (code == WEBSOCKET_CODE_BACKGROUNDED_APP || code == WEBSOCKET_CODE_LOGGED_OUT || code == WEBSOCKET_CODE_RECEIVED_TO_SWIPE_ADDRESS) {
-        // Socket will reopen when app becomes active and after decryption
-        return;
-    }
-    
     if (webSocket == self.ethSocket) {
         DLog(@"eth websocket closed: code %li, reason: %@", code, reason);
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            [self setupEthSocket];
-        }
     } else if (webSocket == self.btcSocket || webSocket == self.bchSocket) {
+        if (code == WEBSOCKET_CODE_BACKGROUNDED_APP || code == WEBSOCKET_CODE_LOGGED_OUT || code == WEBSOCKET_CODE_RECEIVED_TO_SWIPE_ADDRESS) {
+            // Socket will reopen when app becomes active and after decryption
+            return;
+        }
+        
         DLog(@"websocket closed: code %li, reason: %@", code, reason);
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
             if (self.btcSocket.readyState != 1) {
@@ -1276,14 +1265,8 @@
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithString:(NSString *)string
 {
     if (webSocket == self.ethSocket) {
-        DLog(@"received eth socket message string %@", string);
-        NSDictionary *message = [string getJSONObject];
-        NSString *op = [message objectForKey:DICTIONARY_KEY_OP];
-        if ([op isEqualToString:DICTIONARY_KEY_BLOCK_SUB]) {
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.didReceiveEthSocketMessageBlock(\"%@\")", [string escapeStringForJS]]];
-        } else if ([op isEqualToString:DICTIONARY_KEY_ACCOUNT_SUB]) {
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.didReceiveEthSocketMessageAccount(\"%@\")", [string escapeStringForJS]]];
-        }
+        DLog(@"received eth socket message string");
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.didReceiveEthSocketMessage(\"%@\")", [string escapeStringForJS]]];
     } else {
         DLog(@"received websocket message string");
         
@@ -4695,15 +4678,6 @@
         [self.delegate didGetEtherAddressWithSecondPassword];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didGetEtherAddressWithSecondPassword!", [delegate class]);
-    }
-}
-
-- (void)reload_eth_transactions
-{
-    if ([self.delegate respondsToSelector:@selector(reloadEthTransactions)]) {
-        [self.delegate reloadEthTransactions];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector reloadEthTransactions!", [delegate class]);
     }
 }
 

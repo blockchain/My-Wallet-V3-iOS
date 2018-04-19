@@ -147,6 +147,28 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    [Fabric with:@[[Crashlytics class]]];
+//
+//    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    app.window = appDelegate.window;
+//
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//
+//    [userDefaults registerDefaults:@{USER_DEFAULTS_KEY_ASSET_TYPE : [NSNumber numberWithInt:AssetTypeBitcoin]}];
+//
+//    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING : @YES}];
+//    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED : @YES}];
+//#ifndef DEBUG
+//    [[NSUserDefaults standardUserDefaults] setObject:ENV_INDEX_PRODUCTION forKey:USER_DEFAULTS_KEY_ENV];
+//    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING];
+//
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER];
+//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_ZERO_TICKER];
+//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_SURGE];
+//
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+
     // TODO: migrate all code below to RootServiceSwift
 
 //    SharedSessionDelegate *sharedSessionDelegate = [[SharedSessionDelegate alloc] initWithCertificatePinner:self.certificatePinner];
@@ -242,7 +264,7 @@ void (^secondPasswordSuccess)(NSString *);
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
 
-    if ([self isPinSet]) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
         [self showPinModalAsView:YES];
         // [rootService authenticateWithBiometrics];
     } else {
@@ -361,7 +383,7 @@ void (^secondPasswordSuccess)(NSString *);
     }
 
     // Show pin modal before we close the app so the PIN verify modal gets shown in the list of running apps and immediately after we restart
-    if ([self isPinSet]) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
         [self showPinModalAsView:YES];
         [self.pinEntryViewController reset];
     }
@@ -402,8 +424,8 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Cannot be refactored any further until more code is migrated to RootServiceSwift
-    if ([self isPinSet]) {
-        // [rootService authenticateWithBiometrics];
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//        [rootService authenticateWithBiometrics];
         return;
     }
 
@@ -424,7 +446,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-    if (![self isPinSet]) {
+    if (![BlockchainSettings sharedAppInstance].isPinSet) {
         if ([[url absoluteString] isEqualToString:[NSString stringWithFormat:@"%@%@", PREFIX_BLOCKCHAIN_WALLET_URI, @"loginAuthorized"]]) {
             [self manualPairClicked:nil];
             return YES;
@@ -962,7 +984,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     DLog(@"walletDidDecrypt");
 
-    if ([self isPinSet]) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
         [self forceHDUpgradeForLegacyWallets];
     }
 
@@ -991,7 +1013,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     [app closeAllModals];
 
-    if (![app isPinSet]) {
+    if (![BlockchainSettings sharedAppInstance].isPinSet) {
         if (app.wallet.isNew) {
             [self showNewWalletSetup];
         } else {
@@ -1042,7 +1064,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     showType = ShowTypeNone;
 
-    if ([self isPinSet]) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
 
         if (self.topViewControllerDelegate == self.settingsNavigationController && self.settingsNavigationController) return;
 
@@ -2518,11 +2540,6 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager didGetEtherAddressWithSecondPassword];
 }
 
-- (void)reloadEthTransactions
-{
-    [self.tabControllerManager.transactionsEtherViewController reload];
-}
-
 - (void)didGetExchangeTrades:(NSArray *)trades
 {
     [self.tabControllerManager didGetExchangeTrades:trades];
@@ -2725,7 +2742,7 @@ void (^secondPasswordSuccess)(NSString *);
     }
 
     // if pin exists - verify
-    if ([self isPinSet]) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
         self.pinEntryViewController = [PEPinEntryController pinVerifyController];
     }
     // no pin - create
@@ -3020,9 +3037,10 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)clearPin
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_ENCRYPTED_PIN_PASSWORD];
+    App *settings = [BlockchainSettings sharedAppInstance];
+    settings.encryptedPinPassword = nil;
+    settings.pinKey = nil;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PASSWORD_PART_HASH];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PIN_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     self.lastEnteredPIN = 0000;
@@ -3395,7 +3413,7 @@ void (^secondPasswordSuccess)(NSString *);
         return;
     }
 
-    NSString * pinKey = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PIN_KEY];
+    NSString * pinKey = [BlockchainSettings sharedAppInstance].pinKey;
     NSString * pin = [NSString stringWithFormat:@"%lu", (unsigned long)_pin];
 
     [self showVerifyingBusyViewWithTimer:30.0];
@@ -3475,7 +3493,7 @@ void (^secondPasswordSuccess)(NSString *);
     NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
     NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
     NSString * success = [dictionary objectForKey:DICTIONARY_KEY_SUCCESS]; //The PIN decryption value from the server
-    NSString * encryptedPINPassword = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ENCRYPTED_PIN_PASSWORD];
+    NSString * encryptedPINPassword = [BlockchainSettings sharedAppInstance].encryptedPinPassword;
 
     BOOL pinSuccess = FALSE;
 
@@ -3606,7 +3624,7 @@ void (^secondPasswordSuccess)(NSString *);
     self.pinEntryViewController.navigationBarHidden = YES;
     self.pinEntryViewController.pinDelegate = self;
 
-    if (self.isPinSet) {
+    if ([BlockchainSettings sharedAppInstance].isPinSet) {
         self.pinEntryViewController.inSettings = YES;
     }
 
@@ -3651,9 +3669,10 @@ void (^secondPasswordSuccess)(NSString *);
             return;
         }
 
-        [[NSUserDefaults standardUserDefaults] setObject:encrypted forKey:USER_DEFAULTS_KEY_ENCRYPTED_PIN_PASSWORD];
         [[NSUserDefaults standardUserDefaults] setObject:[[app.wallet.password SHA256] substringToIndex:MIN([app.wallet.password length], 5)] forKey:USER_DEFAULTS_KEY_PASSWORD_PART_HASH];
-        [[NSUserDefaults standardUserDefaults] setObject:key forKey:USER_DEFAULTS_KEY_PIN_KEY];
+        App *appSettings = [BlockchainSettings sharedAppInstance];
+        appSettings.encryptedPinPassword = encrypted;
+        appSettings.pinKey = key;
         [[NSUserDefaults standardUserDefaults] synchronize];
 
         // Update your info to new pin code
@@ -3801,7 +3820,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_FIRST_RUN]) {
 
-        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey] && ![self isPinSet]) {
+        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey] && ![BlockchainSettings sharedAppInstance].isPinSet) {
             [self alertUserAskingToUseOldKeychain];
         }
 
@@ -3884,11 +3903,6 @@ void (^secondPasswordSuccess)(NSString *);
         return NO;
     }
     return YES;
-}
-
-- (BOOL)isPinSet
-{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PIN_KEY] != nil && [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ENCRYPTED_PIN_PASSWORD] != nil;
 }
 
 - (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController
