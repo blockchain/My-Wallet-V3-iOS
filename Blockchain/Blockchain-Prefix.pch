@@ -284,6 +284,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define ERROR_FIRST_ARGUMENT_MUST_BE_STRING @"TypeError: First argument must be a string"
 #define ERROR_INVALID_PAIRING_VERSION_CODE @"Invalid Pairing Version Code"
 
+// TODO: Move these in Constants.NotificationKeys
 #define NOTIFICATION_KEY_RELOAD_TO_DISMISS_VIEWS @"reloadToDismissViews"
 #define NOTIFICATION_KEY_LOADING_TEXT @"SetLoadingText"
 #define NOTIFICATION_KEY_NEW_ADDRESS @"newAddress"
@@ -295,8 +296,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define NOTIFICATION_KEY_SHARE_CONTACT_LINK @"shareContactLink"
 
 #define NOTIFICATION_KEY_SYNC_ERROR @"syncError"
-
-#define NOTIFICATION_KEY_MODAL_VIEW_DISMISSED @"modalViewDismissed"
 
 // Notifications used in settings
 #define NOTIFICATION_KEY_RELOAD_SETTINGS @"reloadSettings"
@@ -389,9 +388,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define URL_INFORMATION_RECEIVE @"https://support.blockchain.com/hc/en-us/articles/210353663-Why-is-my-bitcoin-address-changing"
 
 #define SOUND_FORMAT @"wav"
-
-#define ANIMATION_KEY_HIDE_MODAL @"HideModal"
-#define ANIMATION_KEY_SHOW_MODAL @"ShowModal"
 
 #define TRANSACTION_FILTER_IMPORTED @"imported"
 

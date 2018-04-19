@@ -122,8 +122,8 @@
     };
     
     [self hideKeyboard];
-    
-    [app showModalWithContent:self.recoveryPhraseView closeType:ModalCloseTypeBack headerText:BC_STRING_RECOVER_FUNDS onDismiss:^{
+
+    [[ModalPresenter sharedInstance] showModalWithContent:self.recoveryPhraseView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_RECOVER_FUNDS onDismiss:^{
         [self.createButton removeTarget:self action:@selector(recoverWalletClicked:) forControlEvents:UIControlEventTouchUpInside];
     } onResume:^{
         [self.recoveryPhraseView.recoveryPassphraseTextField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.3f];

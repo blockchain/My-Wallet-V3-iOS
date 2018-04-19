@@ -9,6 +9,10 @@
 import UIKit
 
 struct Constants {
+    struct Animation {
+        static let duration = 0.2
+        static let durationLong = 0.5
+    }
     struct Colors {
         static let TextFieldBorderGray = UIColorFromRGB(0xcdcdcd)
         static let BlockchainBlue = UIColorFromRGB(0x004a7c)
@@ -46,6 +50,21 @@ struct Constants {
     }
     struct Booleans {
         static let IsUsingScreenSizeLargerThan5s = UIScreen.main.bounds.size.height > Measurements.ScreenHeightIphone5S
+    }
+    struct NotificationKeys {
+        static let modalViewDismissed = NSNotification.Name("modalViewDismissed")
+    }
+}
+
+/// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this
+/// once Obj-C is no longer using this
+@objc class ConstantsObjcBridge: NSObject {
+    @objc class func animationDuration() -> Double { return Constants.Animation.duration }
+
+    @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }
+
+    @objc class func notificationKeyModalViewDismissed() -> String {
+        return Constants.NotificationKeys.modalViewDismissed.rawValue
     }
 }
 

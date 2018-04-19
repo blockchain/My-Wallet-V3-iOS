@@ -83,7 +83,7 @@
         [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     [self performSelector:@selector(changeAccountName:) withObject:label afterDelay:ANIMATION_DURATION];
 }

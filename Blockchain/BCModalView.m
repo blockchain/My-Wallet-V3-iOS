@@ -9,6 +9,7 @@
 #import "BCModalView.h"
 #import "RootService.h"
 #import "LocalizationConstants.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCModalView
 
@@ -95,11 +96,11 @@
         }
         
         if (self.closeType == ModalCloseTypeBack) {
-            [app closeModalWithTransition:kCATransitionFromLeft];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
         }
         else {
             [self endEditing:YES];
-            [app closeModalWithTransition:kCATransitionFade];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
         }
     }
 }

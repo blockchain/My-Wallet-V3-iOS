@@ -76,8 +76,8 @@
         if (![app.wallet isAccountNameValid:label]) {
             return;
         }
-        
-        [app closeModalWithTransition:kCATransitionFade];
+
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
         
         [app.wallet createAccountWithLabel:label];
     }

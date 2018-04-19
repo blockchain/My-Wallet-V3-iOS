@@ -1444,92 +1444,93 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)closeAllModals
 {
-    [self hideBusyView];
-
-    secondPasswordSuccess = nil;
-    secondPasswordTextField.text = nil;
-
-    self.wallet.isSyncing = NO;
-
-    [modalView endEditing:YES];
-
-    [modalView removeFromSuperview];
-
-    CATransition *animation = [CATransition animation];
-    [animation setDuration:ANIMATION_DURATION];
-    [animation setType:kCATransitionFade];
-
-    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
-
-    if (self.modalView.onDismiss) {
-        self.modalView.onDismiss();
-        self.modalView.onDismiss = nil;
-    }
-
-    self.modalView = nil;
-
-    for (BCModalView *modalChainView in self.modalChain) {
-
-        for (UIView *subView in [modalChainView.myHolderView subviews]) {
-            [subView removeFromSuperview];
-        }
-
-        [modalChainView.myHolderView removeFromSuperview];
-
-        if (modalChainView.onDismiss) {
-            modalChainView.onDismiss();
-        }
-    }
-
-    [self.modalChain removeAllObjects];
+//    [self hideBusyView];
+//
+//    secondPasswordSuccess = nil;
+//    secondPasswordTextField.text = nil;
+//
+//    self.wallet.isSyncing = NO;
+//
+//    [modalView endEditing:YES];
+//
+//    [modalView removeFromSuperview];
+//
+//    CATransition *animation = [CATransition animation];
+//    [animation setDuration:ANIMATION_DURATION];
+//    [animation setType:kCATransitionFade];
+//
+//    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
+//
+//    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
+//
+//    if (self.modalView.onDismiss) {
+//        self.modalView.onDismiss();
+//        self.modalView.onDismiss = nil;
+//    }
+//
+//    self.modalView = nil;
+//
+//    for (BCModalView *modalChainView in self.modalChain) {
+//
+//        for (UIView *subView in [modalChainView.myHolderView subviews]) {
+//            [subView removeFromSuperview];
+//        }
+//
+//        [modalChainView.myHolderView removeFromSuperview];
+//
+//        if (modalChainView.onDismiss) {
+//            modalChainView.onDismiss();
+//        }
+//    }
+//
+//    [self.modalChain removeAllObjects];
 }
 
 - (void)closeModalWithTransition:(NSString *)transition
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MODAL_VIEW_DISMISSED object:nil];
-
-    [modalView removeFromSuperview];
-
-    CATransition *animation = [CATransition animation];
-    // There are two types of transitions: movement based and fade in/out. The movement based ones can have a subType to set which direction the movement is in. In case the transition parameter is a direction, we use the MoveIn transition and the transition parameter as the direction, otherwise we use the transition parameter as the transition type.
-    [animation setDuration:ANIMATION_DURATION];
-    if (transition != kCATransitionFade) {
-        [animation setType:kCATransitionMoveIn];
-        [animation setSubtype:transition];
-    }
-    else {
-        [animation setType:transition];
-    }
-
-    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
-
-    if (self.modalView.onDismiss) {
-        self.modalView.onDismiss();
-        self.modalView.onDismiss = nil;
-    }
-
-    if ([self.modalChain count] > 0) {
-        BCModalView * previousModalView = [self.modalChain objectAtIndex:[self.modalChain count]-1];
-
-        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:previousModalView];
-
-        [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
-
-        [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
-
-        if (self.modalView.onResume) {
-            self.modalView.onResume();
-        }
-
-        self.modalView = previousModalView;
-
-        [self.modalChain removeObjectAtIndex:[self.modalChain count]-1];
-    }
-    else {
-        self.modalView = nil;
-    }
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MODAL_VIEW_DISMISSED object:nil];
+//
+//    [modalView removeFromSuperview];
+//
+//    CATransition *animation = [CATransition animation];
+//    // There are two types of transitions: movement based and fade in/out. The movement based ones can have a subType to set which direction the movement is in. In case the transition parameter is a direction, we use the MoveIn transition and the transition parameter as the direction, otherwise we use the transition parameter as the transition type.
+//    [animation setDuration:ANIMATION_DURATION];
+//    if (transition != kCATransitionFade) {
+//        [animation setType:kCATransitionMoveIn];
+//        [animation setSubtype:transition];
+//    }
+//    else {
+//        [animation setType:transition];
+//    }
+//
+//    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
+//    [[[UIApplication sharedApplication].keyWindow layer] addAnimation:animation forKey:ANIMATION_KEY_HIDE_MODAL];
+//
+//    if (self.modalView.onDismiss) {
+//        self.modalView.onDismiss();
+//        self.modalView.onDismiss = nil;
+//    }
+//
+//    if ([self.modalChain count] > 0) {
+//        BCModalView * previousModalView = [self.modalChain objectAtIndex:[self.modalChain count]-1];
+//
+//        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:previousModalView];
+//
+//        [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
+//
+//        [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
+//
+//        if (self.modalView.onResume) {
+//            self.modalView.onResume();
+//        }
+//
+//        self.modalView = previousModalView;
+//
+//        [self.modalChain removeObjectAtIndex:[self.modalChain count]-1];
+//    }
+//    else {
+//        self.modalView = nil;
+//    }
 }
 
 - (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText
@@ -1544,60 +1545,60 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume
 {
-    // Remove the modal if we have one
-    if (modalView) {
-        [modalView removeFromSuperview];
-
-        if (modalView.closeType != ModalCloseTypeNone) {
-            if (modalView.onDismiss) {
-                modalView.onDismiss();
-                modalView.onDismiss = nil;
-            }
-        } else {
-            [self.modalChain addObject:modalView];
-        }
-
-        self.modalView = nil;
-    }
-
-    // Show modal
-    modalView = [[BCModalView alloc] initWithCloseType:closeType showHeader:showHeader headerText:headerText];
-    self.modalView.onDismiss = onDismiss;
-    self.modalView.onResume = onResume;
-    if (onResume) {
-        onResume();
-    }
-
-    if ([contentView respondsToSelector:@selector(prepareForModalPresentation)]) {
-        [(BCModalContentView *)contentView prepareForModalPresentation];
-    }
-
-    [modalView.myHolderView addSubview:contentView];
-
-    contentView.frame = CGRectMake(0, 0, modalView.myHolderView.frame.size.width, modalView.myHolderView.frame.size.height);
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:modalView];
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
-
-    @try {
-        CATransition *animation = [CATransition animation];
-        [animation setDuration:ANIMATION_DURATION];
-
-        if (closeType == ModalCloseTypeBack) {
-            [animation setType:kCATransitionMoveIn];
-            [animation setSubtype:kCATransitionFromRight];
-        }
-        else {
-            [animation setType:kCATransitionFade];
-        }
-
-        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-        [[[UIApplication sharedApplication].keyWindow.rootViewController.view layer] addAnimation:animation forKey:ANIMATION_KEY_SHOW_MODAL];
-    } @catch (NSException * e) {
-        DLog(@"Animation Exception %@", e);
-    }
-
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    // Remove the modal if we have one
+//    if (modalView) {
+//        [modalView removeFromSuperview];
+//
+//        if (modalView.closeType != ModalCloseTypeNone) {
+//            if (modalView.onDismiss) {
+//                modalView.onDismiss();
+//                modalView.onDismiss = nil;
+//            }
+//        } else {
+//            [self.modalChain addObject:modalView];
+//        }
+//
+//        self.modalView = nil;
+//    }
+//
+//    // Show modal
+//    modalView = [[BCModalView alloc] initWithCloseType:closeType showHeader:showHeader headerText:headerText];
+//    self.modalView.onDismiss = onDismiss;
+//    self.modalView.onResume = onResume;
+//    if (onResume) {
+//        onResume();
+//    }
+//
+//    if ([contentView respondsToSelector:@selector(prepareForModalPresentation)]) {
+//        [(BCModalContentView *)contentView prepareForModalPresentation];
+//    }
+//
+//    [modalView.myHolderView addSubview:contentView];
+//
+//    contentView.frame = CGRectMake(0, 0, modalView.myHolderView.frame.size.width, modalView.myHolderView.frame.size.height);
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:modalView];
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view endEditing:TRUE];
+//
+//    @try {
+//        CATransition *animation = [CATransition animation];
+//        [animation setDuration:ANIMATION_DURATION];
+//
+//        if (closeType == ModalCloseTypeBack) {
+//            [animation setType:kCATransitionMoveIn];
+//            [animation setSubtype:kCATransitionFromRight];
+//        }
+//        else {
+//            [animation setType:kCATransitionFade];
+//        }
+//
+//        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
+//        [[[UIApplication sharedApplication].keyWindow.rootViewController.view layer] addAnimation:animation forKey:ANIMATION_KEY_SHOW_MODAL];
+//    } @catch (NSException * e) {
+//        DLog(@"Animation Exception %@", e);
+//    }
+//
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)didFailBackupWallet

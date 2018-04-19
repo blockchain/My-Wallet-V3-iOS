@@ -23,6 +23,7 @@
 #import "BCDescriptionView.h"
 #import "BCAmountInputView.h"
 #import "UILabel+Animations.h"
+#import "Blockchain-Swift.h"
 
 #ifdef ENABLE_CONTACTS
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 151
@@ -630,7 +631,7 @@
     
     [self reload];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     if (app.wallet.isSyncing) {
         [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
@@ -671,7 +672,7 @@
     else {
         // Need at least one active address
         if (activeKeys.count == 1 && ![app.wallet hasAccount]) {
-            [app closeModalWithTransition:kCATransitionFade];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
             
             [app standardNotifyAutoDismissingController:BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS];
             
@@ -683,7 +684,7 @@
     
     [self reload];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
 }
 
 - (void)hideKeyboardForced
@@ -725,12 +726,12 @@
     UIAlertController *alertForWatchOnly = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING_TITLE message:BC_STRING_WATCH_ONLY_RECEIVE_WARNING preferredStyle:UIAlertControllerStyleAlert];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self didSelectFromAddress:address];
-        [app closeModalWithTransition:kCATransitionFromLeft];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }]];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING];
         [self didSelectFromAddress:address];
-        [app closeModalWithTransition:kCATransitionFromLeft];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }]];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
     
@@ -785,8 +786,8 @@
     SelectMode selectMode = self.fromContact ? SelectModeReceiveFromContact : SelectModeReceiveTo;
     
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:selectMode delegate:self];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_RECEIVE_TO onDismiss:nil onResume:nil];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_RECEIVE_TO onDismiss:nil onResume:nil];
 }
 
 - (void)whatsThisButtonClicked
@@ -866,8 +867,8 @@
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeContact delegate:self];
     addressSelectionView.previouslySelectedContact = self.fromContact;
     [addressSelectionView reloadTableView];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
 }
 
 - (void)requestButtonClicked
@@ -1185,7 +1186,7 @@
         [self changeTopView:YES];
         
     } else {
-        [app closeAllModals];
+        [[ModalPresenter sharedInstance] closeAllModals];
         
         self.descriptionField.placeholder = [NSString stringWithFormat:BC_STRING_SHARED_WITH_CONTACT_NAME_ARGUMENT, contact.name];
         self.fromContact = contact;

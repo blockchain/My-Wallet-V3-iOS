@@ -375,8 +375,7 @@
         self.confirmPaymentView.confirmDelegate = self;
         
         [self.confirmPaymentView.reallyDoPaymentButton addTarget:self action:@selector(reallyDoPayment) forControlEvents:UIControlEventTouchUpInside];
-        
-        [app showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack headerText:BC_STRING_CONFIRM_PAYMENT];
+        [[ModalPresenter sharedInstance] showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_CONFIRM_PAYMENT onDismiss:nil onResume:nil];
     }];
 }
 
@@ -421,8 +420,8 @@
     sendLabel.text = BC_STRING_SENDING;
     [sendView addSubview:sendLabel];
     
-    [app showModalWithContent:sendView closeType:ModalCloseTypeNone headerText:BC_STRING_SENDING_TRANSACTION];
-    
+    [[ModalPresenter sharedInstance] showModalWithContent:sendView closeType:ModalCloseTypeNone showHeader:true headerText:BC_STRING_SENDING_TRANSACTION onDismiss:nil onResume:nil];
+
     [app.wallet sendEtherPaymentWithNote:self.noteToSet];
 }
 

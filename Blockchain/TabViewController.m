@@ -246,7 +246,7 @@
 
 - (void)didSendEther
 {
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     
     UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:BC_STRING_PAYMENT_SENT_ETHER preferredStyle:UIAlertControllerStyleAlert];
     [successAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
@@ -255,7 +255,7 @@
 
 - (void)didErrorDuringEtherSend:(NSString *)error
 {
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     
     UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
     [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];

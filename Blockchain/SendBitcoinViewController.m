@@ -26,6 +26,7 @@
 #import "BCFeeSelectionView.h"
 #import "StoreKit/StoreKit.h"
 #import "BCConfirmPaymentViewModel.h"
+#import "Blockchain-Swift.h"
 
 typedef enum {
     TransactionTypeRegular = 100,
@@ -240,7 +241,7 @@ BOOL displayingLocalSymbolSend;
     [app.wallet createNewPayment:self.assetType];
     [self resetFromAddress];
     if (app.tabControllerManager.tabViewController.activeViewController == self && !app.tabControllerManager.tabViewController.presentedViewController) {
-        [app closeModalWithTransition:kCATransitionPush];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionPush];
     }
     
     self.transactionType = TransactionTypeRegular;
@@ -506,8 +507,8 @@ BOOL displayingLocalSymbolSend;
     [sendProgressActivityIndicator startAnimating];
     
     sendProgressModalText.text = BC_STRING_SENDING_TRANSACTION;
-    
-    [app showModalWithContent:sendProgressModal closeType:ModalCloseTypeNone headerText:BC_STRING_SENDING_TRANSACTION];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:sendProgressModal closeType:ModalCloseTypeNone showHeader:true headerText:BC_STRING_SENDING_TRANSACTION onDismiss:nil onResume:nil];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
@@ -592,7 +593,7 @@ BOOL displayingLocalSymbolSend;
              }
              
              // Close transaction modal, go to transactions view, scroll to top and animate new transaction
-             [app closeModalWithTransition:kCATransitionFade];
+             [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
              [app.tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [app.tabControllerManager transactionsClicked:nil];
@@ -625,7 +626,7 @@ BOOL displayingLocalSymbolSend;
              
              [self enablePaymentButtons];
              
-             [app closeModalWithTransition:kCATransitionFade];
+             [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
              
              [self reload];
              
@@ -678,8 +679,8 @@ BOOL displayingLocalSymbolSend;
         if (weakSelf.transferAllPaymentBuilder.transferAllAddressesInitialCount - [weakSelf.transferAllPaymentBuilder.transferAllAddressesToTransfer count] <= weakSelf.transferAllPaymentBuilder.transferAllAddressesInitialCount) {
             strongSelf->sendProgressModalText.text = [NSString stringWithFormat:BC_STRING_TRANSFER_ALL_FROM_ADDRESS_ARGUMENT_ARGUMENT, weakSelf.transferAllPaymentBuilder.transferAllAddressesInitialCount - [weakSelf.transferAllPaymentBuilder.transferAllAddressesToTransfer count] + 1, weakSelf.transferAllPaymentBuilder.transferAllAddressesInitialCount];
         }
-        
-        [app showModalWithContent:strongSelf->sendProgressModal closeType:ModalCloseTypeNone headerText:BC_STRING_SENDING_TRANSACTION];
+
+        [[ModalPresenter sharedInstance] showModalWithContent:strongSelf->sendProgressModal closeType:ModalCloseTypeNone showHeader:true headerText:BC_STRING_SENDING_TRANSACTION onDismiss:nil onResume:nil];
         
         [UIView animateWithDuration:0.3f animations:^{
             UIButton *cancelButton = strongSelf->sendProgressCancelButton;
@@ -701,7 +702,7 @@ BOOL displayingLocalSymbolSend;
         
         SendBitcoinViewController *strongSelf = weakSelf;
 
-        [app closeAllModals];
+        [[ModalPresenter sharedInstance] closeAllModals];
 
         [strongSelf->sendProgressActivityIndicator stopAnimating];
         
@@ -742,7 +743,7 @@ BOOL displayingLocalSymbolSend;
     }
     
     // Close transaction modal, go to transactions view, scroll to top and animate new transaction
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     [app.tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [app.tabControllerManager transactionsClicked:nil];
@@ -761,7 +762,7 @@ BOOL displayingLocalSymbolSend;
 
 - (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *)secondPassword
 {
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     [self reload];
     
     [self showErrorBeforeSending:error];
@@ -849,8 +850,8 @@ BOOL displayingLocalSymbolSend;
         } else {
             [self.confirmPaymentView.reallyDoPaymentButton addTarget:self action:@selector(reallyDoPayment:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
-        [app showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack headerText:BC_STRING_CONFIRM_PAYMENT onDismiss:^{
+
+        [[ModalPresenter sharedInstance] showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_CONFIRM_PAYMENT onDismiss:^{
             [self enablePaymentButtons];
         } onResume:nil];
         
@@ -889,7 +890,7 @@ BOOL displayingLocalSymbolSend;
 {
     if (self.isSending && [sendProgressModalText.text isEqualToString:BC_STRING_CANCELLING]) {
         [self reload];
-        [app closeAllModals];
+        [[ModalPresenter sharedInstance] closeAllModals];
     }
 }
 
@@ -1082,7 +1083,7 @@ BOOL displayingLocalSymbolSend;
     PrivateKeyReader *privateKeyScanner = [[PrivateKeyReader alloc] initWithAssetType:self.assetType success:^(NSString *privateKeyString) {
         [app.wallet sendFromWatchOnlyAddress:self.fromAddress privateKey:privateKeyString];
     } error:^(NSString *error) {
-        [app closeAllModals];
+        [[ModalPresenter sharedInstance] closeAllModals];
     } acceptPublicKeys:NO busyViewText:BC_STRING_LOADING_PROCESSING_KEY];
     
     [app.tabControllerManager.tabViewController presentViewController:privateKeyScanner animated:YES completion:nil];
@@ -1827,8 +1828,8 @@ BOOL displayingLocalSymbolSend;
     
     BCContactRequestView *contactRequestView = [[BCContactRequestView alloc] initWithContact:contact amount:amountInSatoshi willSend:YES accountOrAddress:accountOrAddress];
     contactRequestView.delegate = self;
-    
-    [app showModalWithContent:contactRequestView closeType:ModalCloseTypeBack headerText:BC_STRING_SEND_TO_CONTACT];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:contactRequestView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_SEND_TO_CONTACT onDismiss:nil onResume:nil];
 }
 
 #pragma mark - Contact Request Delegate
@@ -2051,7 +2052,7 @@ BOOL displayingLocalSymbolSend;
     
     [self updateSatoshiPerByteWithUpdateType:FeeUpdateTypeNoAction];
 
-    [app closeModalWithTransition:kCATransitionFromLeft];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
 }
 
 #pragma mark - Fee Selection Delegate
@@ -2111,7 +2112,7 @@ BOOL displayingLocalSymbolSend;
 - (void)finishedArchivingTransferredAddresses
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
 }
 
 - (IBAction)selectFromAddressClicked:(id)sender
@@ -2122,8 +2123,7 @@ BOOL displayingLocalSymbolSend;
     }
     
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeSendFrom delegate:self];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_SEND_FROM onDismiss:nil onResume:nil];
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_SEND_FROM onDismiss:nil onResume:nil];
 }
 
 - (IBAction)addressBookClicked:(id)sender
@@ -2134,8 +2134,7 @@ BOOL displayingLocalSymbolSend;
     }
     
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeSendTo delegate:self];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_SEND_TO onDismiss:nil onResume:nil];
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_SEND_TO onDismiss:nil onResume:nil];
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
@@ -2206,14 +2205,14 @@ BOOL displayingLocalSymbolSend;
 {
     BCFeeSelectionView *feeSelectionView = [[BCFeeSelectionView alloc] initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
     feeSelectionView.delegate = self;
-    [app showModalWithContent:feeSelectionView closeType:ModalCloseTypeBack headerText:BC_STRING_FEE];
+    [[ModalPresenter sharedInstance] showModalWithContent:feeSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_FEE onDismiss:nil onResume:nil];
 }
 
 - (IBAction)labelAddressClicked:(id)sender
 {
     [app.wallet addToAddressBook:toField.text label:labelAddressTextField.text];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     labelAddressTextField.text = @"";
     
     // Complete payment

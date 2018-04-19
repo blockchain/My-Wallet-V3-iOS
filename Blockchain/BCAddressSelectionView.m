@@ -12,6 +12,7 @@
 #import "ReceiveTableCell.h"
 #import "SendBitcoinViewController.h"
 #import "Contact.h"
+#import "Blockchain-Swift.h"
 
 #define DICTIONARY_KEY_ACCOUNTS @"accounts"
 #define DICTIONARY_KEY_ACCOUNT_LABELS @"accountLabels"
@@ -343,7 +344,7 @@ typedef enum {
     }
     
     if (shouldCloseModal && !app.topViewControllerDelegate) {
-        [app closeModalWithTransition:kCATransitionFromLeft];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }
 }
 
