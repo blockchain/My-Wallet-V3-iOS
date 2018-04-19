@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "BCModalContentView.h"
 
+@protocol BCWelcomeViewDelegate
+- (void) showCreateWallet;
+- (void) showPairWallet;
+- (void) showRecoverWallet;
+@end
+
 @interface BCWelcomeView : BCModalContentView
 
+@property (weak, nonatomic) id <BCWelcomeViewDelegate> delegate;
 @property (nonatomic, strong) UIButton *createWalletButton, *existingWalletButton, *recoverWalletButton;
+
 
 @end

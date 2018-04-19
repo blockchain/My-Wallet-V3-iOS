@@ -19,8 +19,8 @@ typedef enum {
 
 @interface BCModalView : UIView
 
-@property(nonatomic, copy) void (^onDismiss)();
-@property(nonatomic, copy) void (^onResume)();
+@property(nullable, nonatomic, copy) void (^onDismiss)();
+@property(nullable, nonatomic, copy) void (^onResume)();
 @property(nonatomic, strong) IBOutlet UIView *myHolderView;
 @property(nonatomic, strong) IBOutlet UIButton *closeButton;
 @property(nonatomic, strong) IBOutlet UIButton *backButton;

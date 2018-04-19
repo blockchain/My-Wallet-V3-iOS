@@ -58,7 +58,7 @@ import Foundation
 
         // Display welcome screen if no wallet is authenticated
         if KeychainItemWrapper.guid() == nil || KeychainItemWrapper.sharedKey() == nil {
-            // TODO start onboarding coordinator
+            OnboardingCoordinator.shared.start()
         } else {
             // TODO otherwise, show pin screen
         }

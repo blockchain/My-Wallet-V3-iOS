@@ -82,4 +82,6 @@ typedef enum {
 - (NSNumber *) freeDiskSpace;
 
 - (NSString *) macaddress;
+
+- (BOOL) isUnsafe;
 @end
