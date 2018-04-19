@@ -459,7 +459,7 @@ const int sectionContacts = 0;
     UIAlertAction *submitAction = [UIAlertAction actionWithTitle:BC_STRING_CONFIRM style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *senderName = [[userNameAlert textFields] firstObject].text;
         if ([app checkInternetConnection]) {
-            [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_INVITATION];
+            [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_INVITATION];
             [app.wallet createContactWithName:senderName ID:contactName];
         }
     }];
@@ -669,7 +669,7 @@ const int sectionContacts = 0;
 
 - (void)didCreateInvitation:(NSDictionary *)invitationDict
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     self.lastCreatedInvitation = invitationDict;
     

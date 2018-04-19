@@ -15,7 +15,7 @@
 #import "BCLine.h"
 #import "ExchangeTableViewCell.h"
 #import "RootService.h"
-
+#import "Blockchain-Swift.h"
 #import "ExchangeDetailView.h"
 
 #define EXCHANGE_VIEW_HEIGHT 70
@@ -45,7 +45,7 @@
     if (availableStates.count > 0) {
         [self showStates:availableStates];
     } else {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_EXCHANGE];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_EXCHANGE];
         [app.wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
     }
 }
@@ -180,7 +180,7 @@
 
 - (void)didGetExchangeTrades:(NSArray *)trades
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     [navigationController hideBusyView];

@@ -2525,7 +2525,7 @@
 - (void)watchPendingTrades:(BOOL)shouldSync
 {
     if (shouldSync) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
     
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getPendingTrades(%d)", shouldSync]];
@@ -3250,73 +3250,73 @@
 
 - (void)loading_start_download_wallet
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_DOWNLOADING_WALLET];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_DOWNLOADING_WALLET];
 }
 
 - (void)loading_start_decrypt_wallet
 {
-    [app updateBusyViewLoadingText:BC_STRING_LOADING_DECRYPTING_WALLET];
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_DECRYPTING_WALLET];
 }
 
 - (void)loading_start_build_wallet
 {
-    [app updateBusyViewLoadingText:BC_STRING_LOADING_LOADING_BUILD_HD_WALLET];
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_BUILD_HD_WALLET];
 }
 
 - (void)loading_start_multiaddr
 {
-    [app updateBusyViewLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
 }
 
 - (void)loading_start_get_history
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
 }
 
 - (void)loading_start_get_wallet_and_history
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CHECKING_WALLET_UPDATES];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CHECKING_WALLET_UPDATES];
 }
 
 - (void)loading_start_upgrade_to_hd
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_V3_WALLET];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_V3_WALLET];
 }
 
 - (void)loading_start_create_account
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING];
 }
 
 - (void)loading_start_new_account
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_WALLET];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_WALLET];
 }
 
 - (void)loading_start_create_new_address
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_NEW_ADDRESS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_NEW_ADDRESS];
 }
 
 - (void)loading_start_generate_uuids
 {
-    [app updateBusyViewLoadingText:BC_STRING_LOADING_RECOVERY_CREATING_WALLET];
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_RECOVERY_CREATING_WALLET];
 }
 
 - (void)loading_start_recover_wallet
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_RECOVERING_WALLET];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_RECOVERING_WALLET];
 }
 
 - (void)loading_start_transfer_all:(NSNumber *)addressIndex totalAddresses:(NSNumber *)totalAddresses
 {
-    [app showBusyViewWithLoadingText:[NSString stringWithFormat:BC_STRING_TRANSFER_ALL_CALCULATING_AMOUNTS_AND_FEES_ARGUMENT_OF_ARGUMENT, addressIndex, totalAddresses]];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[NSString stringWithFormat:BC_STRING_TRANSFER_ALL_CALCULATING_AMOUNTS_AND_FEES_ARGUMENT_OF_ARGUMENT, addressIndex, totalAddresses]];
 }
 
 - (void)loading_stop
 {
     DLog(@"Stop loading");
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
 }
 
 - (void)upgrade_success
@@ -3649,8 +3649,8 @@
 {
     DLog(@"on_add_private_key_start");
     self.isSyncing = YES;
-    
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_IMPORT_KEY];
+
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_IMPORT_KEY];
 }
 
 - (void)on_add_key:(NSString*)address
@@ -4086,8 +4086,8 @@
     DLog(@"on_add_new_account");
     
     [self subscribeToXPub:[self getXpubForAccount:[self getActiveAccountsCount:AssetTypeBitcoin] - 1 assetType:AssetTypeBitcoin] assetType:AssetTypeBitcoin];
-    
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
 }
 
 - (void)on_error_add_new_account:(NSString*)error
@@ -4141,11 +4141,11 @@
     
     if ([totalReceived longLongValue] == 0) {
         self.emptyAccountIndex++;
-        [app updateBusyViewLoadingText:[NSString stringWithFormat:BC_STRING_LOADING_RECOVERING_WALLET_CHECKING_ARGUMENT_OF_ARGUMENT, self.emptyAccountIndex, self.emptyAccountIndex > RECOVERY_ACCOUNT_DEFAULT_NUMBER ? self.emptyAccountIndex : RECOVERY_ACCOUNT_DEFAULT_NUMBER]];
+        [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:[NSString stringWithFormat:BC_STRING_LOADING_RECOVERING_WALLET_CHECKING_ARGUMENT_OF_ARGUMENT, self.emptyAccountIndex, self.emptyAccountIndex > RECOVERY_ACCOUNT_DEFAULT_NUMBER ? self.emptyAccountIndex : RECOVERY_ACCOUNT_DEFAULT_NUMBER]];
     } else {
         self.emptyAccountIndex = 0;
         self.recoveredAccountIndex++;
-        [app updateBusyViewLoadingText:[NSString stringWithFormat:BC_STRING_LOADING_RECOVERING_WALLET_ARGUMENT_FUNDS_ARGUMENT, self.recoveredAccountIndex, [NSNumberFormatter formatMoney:fundsInAccount]]];
+        [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:[NSString stringWithFormat:BC_STRING_LOADING_RECOVERING_WALLET_ARGUMENT_FUNDS_ARGUMENT, self.recoveredAccountIndex, [NSNumberFormatter formatMoney:fundsInAccount]]];
     }
 }
 
@@ -4334,8 +4334,8 @@
 - (void)on_create_invitation_error:(JSValue *)error
 {
     DLog(@"on_create_invitation_error");
-    
-    [app hideBusyView];
+
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
 
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR];
 }
@@ -4431,8 +4431,8 @@
 - (void)on_send_payment_request_error:(JSValue *)error
 {
     DLog(@"on_send_payment_request_error");
-    
-    [app hideBusyView];
+
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     NSString *message = [error toString];
     
@@ -4459,8 +4459,8 @@
 - (void)on_send_payment_request_response_error:(JSValue *)error
 {
     DLog(@"on_send_payment_request_response_error");
-    
-    [app hideBusyView];
+
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR];
 }
 
@@ -4786,8 +4786,8 @@
 
 - (void)on_shift_payment_error:(NSDictionary *)result
 {
-    [app hideBusyView];
-    
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
+
     NSString *errorMessage = [result objectForKey:DICTIONARY_KEY_MESSAGE];
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:errorMessage title:BC_STRING_ERROR];
 }
@@ -5145,7 +5145,7 @@
 
 - (void)crypto_scrypt:(id)_password salt:(id)salt n:(NSNumber*)N r:(NSNumber*)r p:(NSNumber*)p dkLen:(NSNumber*)derivedKeyLen success:(JSValue *)_success error:(JSValue *)_error
 {
-    [app showBusyViewWithLoadingText:BC_STRING_DECRYPTING_PRIVATE_KEY];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_DECRYPTING_PRIVATE_KEY];
     
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSData * data = [self _internal_crypto_scrypt:_password salt:salt n:[N unsignedLongLongValue] r:[r unsignedIntValue] p:[p unsignedIntValue] dkLen:[derivedKeyLen unsignedIntValue]];
@@ -5154,7 +5154,7 @@
             if (data) {
                 [_success callWithArguments:@[[data hexadecimalString]]];
             } else {
-                [app hideBusyView];
+                [[LoadingViewPresenter sharedInstance] hideBusyView];
                 [_error callWithArguments:@[@"Scrypt Error"]];
             }
         });

@@ -634,7 +634,7 @@
     [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     if (app.wallet.isSyncing) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
 }
 
@@ -889,8 +889,8 @@
             accountOrAddress = self.clickedAddress;
 
         }
-        
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
+
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
         [app.wallet sendPaymentRequest:self.fromContact.identifier amount:amount requestId:nil note:self.view.note initiatorSource:accountOrAddress];
     } else {
         [self share];

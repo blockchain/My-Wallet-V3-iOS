@@ -173,8 +173,8 @@
     // Continue in walletJSReady callback
     app.wallet.delegate = self;
 
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_WALLET];
-
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_WALLET];
+ 
     // Load the JS without a wallet
     [app.wallet performSelector:@selector(loadBlankWallet) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 }

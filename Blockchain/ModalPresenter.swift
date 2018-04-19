@@ -15,7 +15,7 @@ typealias OnModalResumed = (() -> Void)
 @objc class ModalPresenter: NSObject {
     static let shared = ModalPresenter()
 
-    private var modalView: BCModalView?
+    private(set) var modalView: BCModalView?
 
     private var modalChain: [BCModalView] = []
 

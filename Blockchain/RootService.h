@@ -92,7 +92,6 @@
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 @property (strong, nonatomic) Wallet *wallet;
 @property (strong, nonatomic) MultiAddressResponse *latestResponse;
-@property (nonatomic, strong) NSString *loadingText;
 
 @property (strong, nonatomic) IBOutlet BCModalView *modalView;
 @property (strong, nonatomic) NSMutableArray *modalChain;
@@ -164,9 +163,9 @@
 //- (void)standardNotify:(NSString*)message title:(NSString*)title;
 
 // Busy view with loading text
-- (void)showBusyViewWithLoadingText:(NSString *)text;
-- (void)updateBusyViewLoadingText:(NSString *)text;
-- (void)hideBusyView;
+//- (void)showBusyViewWithLoadingText:(NSString *)text;
+//- (void)updateBusyViewLoadingText:(NSString *)text;
+//- (void)hideBusyView;
 
 // Request Second Password From User
 - (void)getSecondPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error helperText:(NSString *)helperText;

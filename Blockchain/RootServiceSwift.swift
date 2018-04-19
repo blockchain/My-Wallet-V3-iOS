@@ -196,7 +196,7 @@ final class RootServiceSwift {
     }
 
     func showVerifyingBusyView(withTimeout seconds: Int) {
-        app.showBusyView(withLoadingText: LCStringLoadingVerifying)
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
         // TODO: refactor showVerifyingBusyView with newer iOS 10+ method
         loginTimeout = Timer.scheduledTimer(
             timeInterval: TimeInterval(seconds),
@@ -207,7 +207,7 @@ final class RootServiceSwift {
         )
     }
     @objc func showErrorLoading() {
-        // TODO: complete showErrorLoading implementation
+        // TODO: put this in AuthenticationManager
         if let timer = loginTimeout {
             timer.invalidate()
         }

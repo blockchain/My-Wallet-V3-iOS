@@ -191,8 +191,6 @@ void (^secondPasswordSuccess)(NSString *);
 
     [self disableUIWebViewCaching];
 
-    busyLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-
     // Allocate the global wallet
     self.wallet = [[Wallet alloc] init];
     self.wallet.delegate = self;
@@ -202,9 +200,9 @@ void (^secondPasswordSuccess)(NSString *);
     NSSetUncaughtExceptionHandler(&HandleException);
 #endif
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_KEY_LOADING_TEXT object:nil queue:nil usingBlock:^(NSNotification * notification) {
-        self.loadingText = [notification object];
-    }];
+//    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_KEY_LOADING_TEXT object:nil queue:nil usingBlock:^(NSNotification * notification) {
+//        self.loadingText = [notification object];
+//    }];
 
 //    app.window.backgroundColor = [UIColor whiteColor];
 //
@@ -215,11 +213,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self.tabControllerManager dashBoardClicked:nil];
 
     // Add busy view to root vc
-    [app.window.rootViewController.view addSubview:busyView];
-
-    // Default view in TabViewController: dashboard
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:busyView];
-
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:busyView];
 //    busyView.frame = app.window.frame;
 //    busyView.alpha = 0.0f;
 
@@ -773,55 +767,55 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showBusyViewWithLoadingText:(NSString *)text
 {
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(showBusyViewWithLoadingText:)]) {
-            [self.topViewControllerDelegate showBusyViewWithLoadingText:text];
-        }
-        return;
-    }
-
-    if (self.pinEntryViewController.inSettings &&
-        ![text isEqualToString:BC_STRING_LOADING_SYNCING_WALLET] &&
-        ![text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
-        DLog(@"Verify optional PIN view is presented - will not update busy views unless verifying or syncing");
-        return;
-    }
-
-    if ([self.tabControllerManager isSending] && modalView) {
-        DLog(@"Send progress modal is presented - will not show busy view");
-        return;
-    }
-
-    [busyLabel setText:text];
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
-
-    if (busyView.alpha < 1.0) {
-        [busyView fadeIn];
-    }
+//    if (self.topViewControllerDelegate) {
+//        if ([self.topViewControllerDelegate respondsToSelector:@selector(showBusyViewWithLoadingText:)]) {
+//            [self.topViewControllerDelegate showBusyViewWithLoadingText:text];
+//        }
+//        return;
+//    }
+//
+//    if (self.pinEntryViewController.inSettings &&
+//        ![text isEqualToString:BC_STRING_LOADING_SYNCING_WALLET] &&
+//        ![text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
+//        DLog(@"Verify optional PIN view is presented - will not update busy views unless verifying or syncing");
+//        return;
+//    }
+//
+//    if ([self.tabControllerManager isSending] && modalView) {
+//        DLog(@"Send progress modal is presented - will not show busy view");
+//        return;
+//    }
+//
+//    [busyLabel setText:text];
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
+//
+//    if (busyView.alpha < 1.0) {
+//        [busyView fadeIn];
+//    }
 }
 
 - (void)updateBusyViewLoadingText:(NSString *)text
 {
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(updateBusyViewLoadingText:)]) {
-            [self.topViewControllerDelegate updateBusyViewLoadingText:text];
-        }
-        return;
-    }
-
-    if (self.pinEntryViewController.inSettings &&
-        ![text isEqualToString:BC_STRING_LOADING_SYNCING_WALLET] &&
-        ![text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
-        DLog(@"Verify optional PIN view is presented - will not update busy views unless verifying or syncing");
-        return;
-    }
-
-    if (busyView.alpha == 1.0) {
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            [busyLabel setText:text];
-        }];
-    }
+//    if (self.topViewControllerDelegate) {
+//        if ([self.topViewControllerDelegate respondsToSelector:@selector(updateBusyViewLoadingText:)]) {
+//            [self.topViewControllerDelegate updateBusyViewLoadingText:text];
+//        }
+//        return;
+//    }
+//
+//    if (self.pinEntryViewController.inSettings &&
+//        ![text isEqualToString:BC_STRING_LOADING_SYNCING_WALLET] &&
+//        ![text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
+//        DLog(@"Verify optional PIN view is presented - will not update busy views unless verifying or syncing");
+//        return;
+//    }
+//
+//    if (busyView.alpha == 1.0) {
+//        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+//            [busyLabel setText:text];
+//        }];
+//    }
 }
 
 - (void)showVerifyingBusyViewWithTimer:(NSInteger)timeInSeconds
@@ -843,15 +837,15 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)hideBusyView
 {
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(hideBusyView)]) {
-            [self.topViewControllerDelegate hideBusyView];
-        }
-    }
-
-    if (busyView.alpha == 1.0) {
-        [busyView fadeOut];
-    }
+//    if (self.topViewControllerDelegate) {
+//        if ([self.topViewControllerDelegate respondsToSelector:@selector(hideBusyView)]) {
+//            [self.topViewControllerDelegate hideBusyView];
+//        }
+//    }
+//
+//    if (busyView.alpha == 1.0) {
+//        [busyView fadeOut];
+//    }
 }
 
 - (void)hideSendAndReceiveKeyboards
@@ -2384,7 +2378,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)didSendPaymentRequest:(NSDictionary *)info amount:(uint64_t)amount name:(NSString *)name requestId:(NSString *)requestId
 {
     if (!requestId) {
-        [app hideBusyView];
+        [self hideBusyView];
         [self.tabControllerManager clearReceiveAmounts];
 
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"success_large"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -2405,7 +2399,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didRequestPaymentRequest:(NSDictionary *)info name:(NSString *)name
 {
-    [app hideBusyView];
+    [self hideBusyView];
 
     [self.tabControllerManager reloadSendController];
 

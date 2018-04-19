@@ -9,8 +9,6 @@
 
 import Foundation
 
-let LCStringLoadingVerifying = NSLocalizedString("Verifying", comment: "")
-
 //: Local Authentication - Face ID & Touch ID
 
 let LCStringAuthCancel = NSLocalizedString("Cancel", comment: "")
@@ -40,6 +38,8 @@ struct LocalizationConstants {
     static let ok = NSLocalizedString("OK", comment: "")
     static let warning = NSLocalizedString("Warning", comment: "")
     static let unsafeDeviceWarningMessage = NSLocalizedString("Your device appears to be jailbroken. The security of your wallet may be compromised.", comment: "")
+    static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
+    static let verifying = NSLocalizedString ("Verifying", comment: "")
 
     struct Onboarding {
         static let createNewWallet = NSLocalizedString("Create New Wallet", comment: "")

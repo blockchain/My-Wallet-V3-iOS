@@ -474,7 +474,7 @@
         }
     }
 #else
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
     
     [app.wallet performSelector:@selector(getHistory) withObject:nil afterDelay:0.1f];
 #endif

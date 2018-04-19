@@ -10,6 +10,7 @@
 #import "RootService.h"
 #import "TransactionEtherTableViewCell.h"
 #import "EtherTransaction.h"
+#import "Blockchain-Swift.h"
 
 @interface TransactionsViewController ()
 @property (nonatomic) UILabel *noTransactionsTitle;
@@ -98,7 +99,7 @@
 
 - (void)getHistory
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
     
     [app.wallet performSelector:@selector(getEthHistory) withObject:nil afterDelay:0.1f];
 }

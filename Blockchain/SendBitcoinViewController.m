@@ -480,8 +480,8 @@ BOOL displayingLocalSymbolSend;
 - (void)getInfoForTransferAllFundsToDefaultAccount
 {
     app.topViewControllerDelegate = nil;
-    
-    [app showBusyViewWithLoadingText:BC_STRING_TRANSFER_ALL_PREPARING_TRANSFER];
+
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_TRANSFER_ALL_PREPARING_TRANSFER];
     
     [app.wallet getInfoForTransferAllFundsToAccount];
 }
@@ -1165,7 +1165,7 @@ BOOL displayingLocalSymbolSend;
     if ([addressesUsed count] == 0) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self showErrorBeforeSending:BC_STRING_NO_ADDRESSES_WITH_SPENDABLE_BALANCE_ABOVE_OR_EQUAL_TO_DUST];
-            [app hideBusyView];
+            [[LoadingViewPresenter sharedInstance] hideBusyView];
         });
         return;
     }
@@ -1173,7 +1173,7 @@ BOOL displayingLocalSymbolSend;
     if ([amount longLongValue] + [fee longLongValue] > [app.wallet getTotalBalanceForSpendableActiveLegacyAddresses]) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOME_FUNDS_CANNOT_BE_TRANSFERRED_AUTOMATICALLY title:BC_STRING_WARNING_TITLE];
-            [app hideBusyView];
+            [[LoadingViewPresenter sharedInstance] hideBusyView];
         });
     }
     
@@ -1195,7 +1195,7 @@ BOOL displayingLocalSymbolSend;
 
 - (void)showSummaryForTransferAll
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     [self showSummaryForTransferAllWithCustomFromLabel:selectAddressTextField.text];
     
@@ -1845,7 +1845,7 @@ BOOL displayingLocalSymbolSend;
 {
     DLog(@"Creating send request with reason: %@, amount: %lld", reason, amount);
     [textField resignFirstResponder];
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.45 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [app.wallet requestPaymentRequest:contact.identifier amount:amount requestId:nil note:reason initiatorSource:accountOrAddress];
     });
@@ -2104,7 +2104,7 @@ BOOL displayingLocalSymbolSend;
 
 - (void)archiveTransferredAddresses
 {
-    [app showBusyViewWithLoadingText:[NSString stringWithFormat:BC_STRING_ARCHIVING_ADDRESSES]];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[NSString stringWithFormat:BC_STRING_ARCHIVING_ADDRESSES]];
                                       
     [app.wallet archiveTransferredAddresses:self.transferAllPaymentBuilder.transferAllAddressesTransferred];
     

@@ -8,6 +8,7 @@
 
 #import "PairingCodeParser.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @implementation PairingCodeParser
 
@@ -117,8 +118,7 @@
                 
                 [self dismissViewControllerAnimated:YES completion:nil];
 
-                [app showBusyViewWithLoadingText:BC_STRING_PARSING_PAIRING_CODE];
-                
+                [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_PARSING_PAIRING_CODE];
             });
             
             [app.wallet loadBlankWallet];
@@ -132,7 +132,7 @@
 
 - (void)errorParsingPairingCode:(NSString *)message
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
 
     if (self.error) {
         if ([message containsString:ERROR_INVALID_PAIRING_VERSION_CODE]) {
@@ -147,7 +147,7 @@
 
 -(void)didParsePairingCode:(NSDictionary *)dict
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
 
     if (self.success) {
         self.success(dict);

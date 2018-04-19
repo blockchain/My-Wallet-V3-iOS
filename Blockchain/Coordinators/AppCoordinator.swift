@@ -53,8 +53,10 @@ import Foundation
         // Set rootViewController
         window.rootViewController = slidingViewController
         window.makeKeyAndVisible()
-
         tabControllerManager.dashBoardClicked(nil)
+
+        // Add busy view
+        LoadingViewPresenter.shared.initialize()
 
         // Display welcome screen if no wallet is authenticated
         if KeychainItemWrapper.guid() == nil || KeychainItemWrapper.sharedKey() == nil {

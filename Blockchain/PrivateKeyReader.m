@@ -131,8 +131,8 @@
             // Close the QR code reader
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [self stopReadingQRCode];
-                
-                [app showBusyViewWithLoadingText:self.busyViewText];
+
+                [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:self.busyViewText];
             });
             
             // Check the format of the privateKey and if it's valid, pass it back via the success callback
@@ -150,7 +150,7 @@
                         self.success(scannedString);
                     }
                 } else {
-                    [app hideBusyView];
+                    [[LoadingViewPresenter sharedInstance] hideBusyView];
                     
                     if (self.acceptsPublicKeys) {
                         if ([app.wallet isValidAddress:scannedString assetType:self.assetType]) {

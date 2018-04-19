@@ -80,7 +80,7 @@
     [self.labelTextField resignFirstResponder];
     
     if (self.assetType == AssetTypeBitcoin) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
     
     [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
