@@ -220,8 +220,13 @@ void (^secondPasswordSuccess)(NSString *);
     // Default view in TabViewController: dashboard
     [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:busyView];
 
+//    busyView.frame = app.window.frame;
+//    busyView.alpha = 0.0f;
+
     // Load settings
     symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
+
+//    [self showWelcomeOrPinScreen];
 
     [self requestAuthorizationForPushNotifications];
 
@@ -233,17 +238,6 @@ void (^secondPasswordSuccess)(NSString *);
     secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
 
-//    // Show welcome screen if guid or sharedKey are not set
-//    if (![KeychainItemWrapper guid] || ![KeychainItemWrapper sharedKey]) {
-//        [self showWelcomeScreen];
-//        [self checkAndWarnOnJailbrokenPhones];
-//        return YES;
-//    }
-//
-//    // ... Otherwise show the pin screen
-//    //: This step should happen as the app delegate instantiates the login screen from the storyboard
-//    [self showPinScreen];
-
     return YES;
 }
 
@@ -251,14 +245,14 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [self checkForMaintenance];
 
-    BCWelcomeView *welcomeView = [[BCWelcomeView alloc] init];
-    [welcomeView.createWalletButton addTarget:self action:@selector(showCreateWallet:) forControlEvents:UIControlEventTouchUpInside];
-    [welcomeView.existingWalletButton addTarget:self action:@selector(showPairWallet:) forControlEvents:UIControlEventTouchUpInside];
-    [welcomeView.recoverWalletButton addTarget:self action:@selector(showRecoverWallet:) forControlEvents:UIControlEventTouchUpInside];
+//    BCWelcomeView *welcomeView = [[BCWelcomeView alloc] init];
+//    [welcomeView.createWalletButton addTarget:self action:@selector(showCreateWallet:) forControlEvents:UIControlEventTouchUpInside];
+//    [welcomeView.existingWalletButton addTarget:self action:@selector(showPairWallet:) forControlEvents:UIControlEventTouchUpInside];
+//    [welcomeView.recoverWalletButton addTarget:self action:@selector(showRecoverWallet:) forControlEvents:UIControlEventTouchUpInside];
 
-    [app showModalWithContent:welcomeView closeType:ModalCloseTypeNone showHeader:NO headerText:nil onDismiss:nil onResume:nil];
+//    [app showModalWithContent:welcomeView closeType:ModalCloseTypeNone showHeader:NO headerText:nil onDismiss:nil onResume:nil];
 
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (void)showPinScreen
@@ -2908,38 +2902,38 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager.tabViewController presentViewController:upgradeViewController animated:YES completion:nil];
 }
 
-- (void)showCreateWallet:(id)sender
-{
-    [app showModalWithContent:createWalletView closeType:ModalCloseTypeBack headerText:BC_STRING_CREATE_NEW_WALLET];
-    createWalletView.isRecoveringWallet = NO;
-}
+//- (void)showCreateWallet:(id)sender
+//{
+//    [app showModalWithContent:createWalletView closeType:ModalCloseTypeBack headerText:BC_STRING_CREATE_NEW_WALLET];
+//    createWalletView.isRecoveringWallet = NO;
+//}
 
-- (void)showPairWallet:(id)sender
-{
-    manualPairStepOneTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
-    manualPairStepTwoTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
-    manualPairStepThreeTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
-
-    [app showModalWithContent:pairingInstructionsView closeType:ModalCloseTypeBack headerText:BC_STRING_AUTOMATIC_PAIRING];
-    scanPairingCodeButton.titleEdgeInsets = WELCOME_VIEW_BUTTON_EDGE_INSETS;
-    scanPairingCodeButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    scanPairingCodeButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-
-    manualPairButton.titleEdgeInsets = WELCOME_VIEW_BUTTON_EDGE_INSETS;
-    manualPairButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    manualPairButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
-}
-
-- (void)showRecoverWallet:(id)sender
-{
-    UIAlertController *recoveryWarningAlert = [UIAlertController alertControllerWithTitle:BC_STRING_RECOVER_FUNDS message:BC_STRING_RECOVER_FUNDS_ONLY_IF_FORGOT_CREDENTIALS preferredStyle:UIAlertControllerStyleAlert];
-    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [app showModalWithContent:createWalletView closeType:ModalCloseTypeBack headerText:BC_STRING_RECOVER_FUNDS];
-        createWalletView.isRecoveringWallet = YES;
-    }]];
-    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [self.window.rootViewController presentViewController:recoveryWarningAlert animated:YES completion:nil];
-}
+//- (void)showPairWallet:(id)sender
+//{
+//    manualPairStepOneTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
+//    manualPairStepTwoTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
+//    manualPairStepThreeTextView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
+//
+//    [app showModalWithContent:pairingInstructionsView closeType:ModalCloseTypeBack headerText:BC_STRING_AUTOMATIC_PAIRING];
+//    scanPairingCodeButton.titleEdgeInsets = WELCOME_VIEW_BUTTON_EDGE_INSETS;
+//    scanPairingCodeButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+//    scanPairingCodeButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
+//
+//    manualPairButton.titleEdgeInsets = WELCOME_VIEW_BUTTON_EDGE_INSETS;
+//    manualPairButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+//    manualPairButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
+//}
+//
+//- (void)showRecoverWallet:(id)sender
+//{
+//    UIAlertController *recoveryWarningAlert = [UIAlertController alertControllerWithTitle:BC_STRING_RECOVER_FUNDS message:BC_STRING_RECOVER_FUNDS_ONLY_IF_FORGOT_CREDENTIALS preferredStyle:UIAlertControllerStyleAlert];
+//    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [app showModalWithContent:createWalletView closeType:ModalCloseTypeBack headerText:BC_STRING_RECOVER_FUNDS];
+//        createWalletView.isRecoveringWallet = YES;
+//    }]];
+//    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//    [self.window.rootViewController presentViewController:recoveryWarningAlert animated:YES completion:nil];
+//}
 
 - (IBAction)manualPairClicked:(id)sender
 {

@@ -199,12 +199,15 @@
 		A2599BAA1B0B762400C2EA81 /* Backup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2599BAC1B0B762400C2EA81 /* Backup.storyboard */; };
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
-		AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		AA69F6592086A2720054EFCE /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F6582086A2720054EFCE /* AppCoordinator.swift */; };
+		AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
+		AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
+		AAA3315120893DCA00BBD292 /* PairingInstructionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAA3315020893DCA00BBD292 /* PairingInstructionsView.xib */; };
 		AAA3333320880A2C0019AD55 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333220880A2B0019AD55 /* AppDelegate.swift */; };
 		AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333A2088115C0019AD55 /* Coordinator.swift */; };
 		AAA3333D208813040019AD55 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */; };
 		AAA3333F2088131D0019AD55 /* ModalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333E2088131D0019AD55 /* ModalPresenter.swift */; };
+		AAA33345208846110019AD55 /* BCCreateWalletView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAA33344208846110019AD55 /* BCCreateWalletView.xib */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -1106,12 +1109,15 @@
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A2AADC041B0B98720085144B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Backup.strings; sourceTree = "<group>"; };
 		A2AADC071B0B999F0085144B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Backup.strings; sourceTree = "<group>"; };
-		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
 		AA69F6582086A2720054EFCE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
+		AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingInstructionsView.swift; sourceTree = "<group>"; };
+		AAA3315020893DCA00BBD292 /* PairingInstructionsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PairingInstructionsView.xib; sourceTree = "<group>"; };
 		AAA3333220880A2B0019AD55 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAA3333A2088115C0019AD55 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		AAA3333E2088131D0019AD55 /* ModalPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalPresenter.swift; sourceTree = "<group>"; };
+		AAA33344208846110019AD55 /* BCCreateWalletView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BCCreateWalletView.xib; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -1823,6 +1829,7 @@
 				510EA19620811FF100A63AB8 /* Extensions */,
 				9F0CBAAB15135DF200CD945D /* JavaScript */,
 				9F765F3A14BC7C3100048EFB /* Models */,
+				AAA333402088450D0019AD55 /* Onboarding */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
 				AA69F65C2086A7330054EFCE /* Settings */,
 				9FB3637C14B60128004BEA02 /* Supporting Files */,
@@ -1975,6 +1982,24 @@
 				AAA3333A2088115C0019AD55 /* Coordinator.swift */,
 			);
 			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		AAA333402088450D0019AD55 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				AAA33343208845F40019AD55 /* Views */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		AAA33343208845F40019AD55 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AAA33344208846110019AD55 /* BCCreateWalletView.xib */,
+				AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */,
+				AAA3315020893DCA00BBD292 /* PairingInstructionsView.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -2431,6 +2456,7 @@
 				C790E1131E52061B0063D141 /* Montserrat-ExtraLight.ttf in Resources */,
 				ECD244EF19A8AC45004B1F40 /* PEKeyboard-3.png in Resources */,
 				C790E11E1E52061B0063D141 /* Montserrat-ThinItalic.ttf in Resources */,
+				AAA3315120893DCA00BBD292 /* PairingInstructionsView.xib in Resources */,
 				CFD602B11E64AC2D006F6208 /* wallet-ios.js in Resources */,
 				C9BE918A1945D8F600FD516D /* PEPin-on.png in Resources */,
 				C790E1171E52061B0063D141 /* Montserrat-LightItalic.ttf in Resources */,
@@ -2442,6 +2468,7 @@
 				C9BE91881945D8F600FD516D /* PEKeyboard-2.png in Resources */,
 				67EEE7731A8E547900288753 /* PEPin-on@3x.png in Resources */,
 				C9BE91821945D8F600FD516D /* PEKeyboard-1-next.png in Resources */,
+				AAA33345208846110019AD55 /* BCCreateWalletView.xib in Resources */,
 				ECD244ED19A8AC45004B1F40 /* PEKeyboard-3-edit.png in Resources */,
 				C71859591F4B791600745A87 /* TabController.xib in Resources */,
 				C790E1111E52061B0063D141 /* Montserrat-ExtraBold.ttf in Resources */,
@@ -2580,6 +2607,7 @@
 				2322DCBC1D771831000E5AC1 /* SRHash.m in Sources */,
 				9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */,
 				9F7480E315140EF200BC4292 /* TabViewController.m in Sources */,
+				AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */,
 				23444FA81DD1177E00573C8C /* SettingsAboutUsViewController.m in Sources */,
 				2322DCC71D771831000E5AC1 /* SRWebSocket.m in Sources */,
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,

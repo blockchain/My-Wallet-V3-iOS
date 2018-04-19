@@ -114,19 +114,19 @@ typealias OnModalResumed = (() -> Void)
     }
 
     @objc func showModal(
-    withContent content: UIView,
-    closeType: ModalCloseType,
-    showHeader: Bool,
-    headerText: String,
-    onDismiss: OnModalDismissed? = nil,
-    onResume: OnModalResumed? = nil
+        withContent content: UIView,
+        closeType: ModalCloseType,
+        showHeader: Bool,
+        headerText: String,
+        onDismiss: OnModalDismissed? = nil,
+        onResume: OnModalResumed? = nil
     ) {
 
         // Remove the modal if we have one
         if let modalView = modalView {
             modalView.removeFromSuperview()
 
-            if modalView.closeType != .none {
+            if modalView.closeType != ModalCloseTypeNone {
                 modalView.onDismiss?()
                 modalView.onDismiss = nil
             } else {

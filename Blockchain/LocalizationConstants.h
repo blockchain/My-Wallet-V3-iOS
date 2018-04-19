@@ -299,8 +299,6 @@
 #define BC_STRING_FORGOT_PASSWORD NSLocalizedString(@"Forgot Password?", nil)
 #define BC_STRING_OR_START_OVER_AND NSLocalizedString(@"Or start over and ", nil)
 #define BC_STRING_LOGIN_EXISTING_WALLET NSLocalizedString(@"Login existing Wallet", nil)
-#define BC_STRING_RECOVER_FUNDS NSLocalizedString(@"Recover Funds", nil)
-#define BC_STRING_RECOVER_FUNDS_ONLY_IF_FORGOT_CREDENTIALS NSLocalizedString(@"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", nil)
 
 #define BC_STRING_COPY_ADDRESS NSLocalizedString(@"Copy Address", nil)
 #define BC_STRING_ARCHIVE_ADDRESS NSLocalizedString(@"Archive Address", nil)

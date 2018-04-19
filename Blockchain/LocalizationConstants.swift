@@ -34,3 +34,24 @@ let LCStringAuthTouchIDNotAvailable = NSLocalizedString("Unable to Authenticate 
 //: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)
 let LCStringAuthBiometryLockout = NSLocalizedString("Unable to Authenticate due to failing Authentication too many times.", comment: "")
 let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate because the device does not support biometric Authentication.", comment: "")
+
+//: Onboarding
+struct LocalizationConstants {
+    static let cancel = NSLocalizedString("Cancel", comment: "")
+    static let continueString = NSLocalizedString("Continue", comment: "")
+
+    struct Onboarding {
+        static let createNewWallet = NSLocalizedString("Create New Wallet", comment: "")
+        static let automaticPairing = NSLocalizedString("Automatic Pairing", comment: "")
+        static let recoverFunds = NSLocalizedString("Recover Funds", comment: "")
+        static let recoverFundsOnlyIfForgotCredentials = NSLocalizedString("You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", comment: "")
+    }
+}
+
+/// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
+/// Should deprecate this once Obj-C is no longer using this
+@objc class LocalizationConstantsObjcBridge: NSObject {
+
+    @objc class func onboardingRecoverFunds() -> String { return LocalizationConstants.Onboarding.recoverFunds }
+}
+

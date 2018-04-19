@@ -44,14 +44,49 @@ class OnboardingCoordinator: Coordinator {
 
 extension OnboardingCoordinator: BCWelcomeViewDelegate {
     func showCreateWallet() {
-        // TODO
+        _showCreateWallet()
+    }
+
+    private func _showCreateWallet(isRecoveringWallet: Bool = false, title: String = LocalizationConstants.Onboarding.createNewWallet) {
+        let createWallet = BCCreateWalletView.instanceFromNib()
+        createWallet.isRecoveringWallet = isRecoveringWallet
+        ModalPresenter.shared.showModal(
+            withContent: createWallet,
+            closeType: ModalCloseTypeBack,
+            showHeader: true,
+            headerText: LocalizationConstants.Onboarding.createNewWallet
+        )
     }
 
     func showPairWallet() {
-        // TODO
+        let pairingInstructionsView = PairingInstructionsView.instanceFromNib()
+        ModalPresenter.shared.showModal(
+            withContent: pairingInstructionsView,
+            closeType: ModalCloseTypeBack,
+            showHeader: true,
+            headerText: LocalizationConstants.Onboarding.automaticPairing
+        )
     }
 
     func showRecoverWallet() {
-        // TODO
+        let recoveryWarningAlert = UIAlertController(
+            title: LocalizationConstants.Onboarding.recoverFunds,
+            message: LocalizationConstants.Onboarding.recoverFundsOnlyIfForgotCredentials,
+            preferredStyle: .alert
+        )
+        recoveryWarningAlert.addAction(
+            UIAlertAction(
+                title: LocalizationConstants.continueString,
+                style: .default,
+                handler: { [weak self] _ in
+                    guard let strongSelf = self else { return }
+                    strongSelf._showCreateWallet(
+                        isRecoveringWallet: true,
+                        title: LocalizationConstants.Onboarding.recoverFunds
+                    )
+            })
+        )
+        recoveryWarningAlert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
+        UIApplication.shared.keyWindow?.rootViewController?.present(recoveryWarningAlert, animated: true)
     }
 }

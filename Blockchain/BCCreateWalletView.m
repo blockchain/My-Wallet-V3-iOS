@@ -14,6 +14,12 @@
 
 @implementation BCCreateWalletView
 
++ (BCCreateWalletView *)instanceFromNib
+{
+    UINib *nib = [UINib nibWithNibName:@"BCCreateWalletView" bundle:[NSBundle mainBundle]];
+    return (BCCreateWalletView *) [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+}
+
 #pragma mark - Lifecycle
 
 - (void)awakeFromNib
@@ -123,7 +129,7 @@
     
     [self hideKeyboard];
 
-    [[ModalPresenter sharedInstance] showModalWithContent:self.recoveryPhraseView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_RECOVER_FUNDS onDismiss:^{
+    [[ModalPresenter sharedInstance] showModalWithContent:self.recoveryPhraseView closeType:ModalCloseTypeBack showHeader:true headerText:[LocalizationConstantsObjcBridge onboardingRecoverFunds] onDismiss:^{
         [self.createButton removeTarget:self action:@selector(recoverWalletClicked:) forControlEvents:UIControlEventTouchUpInside];
     } onResume:^{
         [self.recoveryPhraseView.recoveryPassphraseTextField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.3f];
@@ -244,7 +250,7 @@
     }
     else if (textField == password2TextField) {
         if (self.isRecoveringWallet) {
-            [self.createButton setTitle:BC_STRING_RECOVER_FUNDS forState:UIControlStateNormal];
+            [self.createButton setTitle:[LocalizationConstantsObjcBridge onboardingRecoverFunds] forState:UIControlStateNormal];
             [self showRecoveryPhraseView:nil];
         } else {
             [self createAccountClicked:textField];

@@ -4,6 +4,7 @@
 
 #import <openssl/x509.h>
 #import <UIKit/UIKit.h>
+#import "BCCreateWalletView.h"
 #import "BCFadeView.h"
 #import "BCNavigationController.h"
 #import "BCWelcomeView.h"

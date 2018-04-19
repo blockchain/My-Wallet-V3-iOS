@@ -248,16 +248,16 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define TX_TYPE_SENT @"sent"
 #define TX_TYPE_RECEIVED @"received"
 
+// TODO Start - Deprecate these in favor of Constants.FontNames
 #define FONT_MONTSERRAT_REGULAR @"Montserrat-Regular"
 #define FONT_MONTSERRAT_SEMIBOLD @"Montserrat-SemiBold"
 #define FONT_MONTSERRAT_LIGHT @"Montserrat-Light"
 #define FONT_MONTSERRAT_EXTRALIGHT @"Montserrat-ExtraLight"
-
 #define FONT_GILL_SANS_REGULAR @"GillSans"
 #define FONT_GILL_SANS_LIGHT @"GillSans-Light"
-
 #define FONT_HELVETICA_NUEUE @"Helvetica Neue"
 #define FONT_HELVETICA_NUEUE_MEDIUM @"HelveticaNeue-Medium"
+// TODO End
 
 #define NUMBER_KEYPAD_CHARACTER_SET_STRING @"1234567890"
 

@@ -45,6 +45,16 @@ struct Constants {
         static let ExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 21.0 : 18.0
         static let ExtraExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 23.0 : 20.0
     }
+    struct FontNames {
+        static let montserratRegular = "Montserrat-Regular"
+        static let montserratSemiBold = "Montserrat-SemiBold"
+        static let montserratSemiLight = "Montserrat-Light"
+        static let montserratSemiExtraLight = "Montserrat-ExtraLight"
+        static let gillSans = "GillSans"
+        static let gillSansLight = "GillSans-Light"
+        static let helveticaNueue = "Helvetica Neue"
+        static let helveticaNueueMedium = "HelveticaNeue-Medium"
+    }
     struct Defaults {
         static let NumberOfRecoveryPhraseWords = 12
     }
