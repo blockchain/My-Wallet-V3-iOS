@@ -620,7 +620,7 @@
         [allowedCharSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         
         if ([label rangeOfCharacterFromSet:[allowedCharSet invertedSet]].location != NSNotFound) {
-            [app standardNotify:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC title:BC_STRING_ERROR];
             return;
         }
     }
@@ -644,7 +644,7 @@
         [UIPasteboard generalPasteboard].string = self.mainAddressLabel.text;
         [self.mainAddressLabel animateFromText:[[self.mainAddress componentsSeparatedByString:@":"] lastObject] toIntermediateText:BC_STRING_COPIED_TO_CLIPBOARD speed:1 gestureReceiver:qrCodeMainImageView];
     } else {
-        [app standardNotifyAutoDismissingController:BC_STRING_ERROR_COPYING_TO_CLIPBOARD];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR];
     }
 }
 
@@ -673,8 +673,8 @@
         // Need at least one active address
         if (activeKeys.count == 1 && ![app.wallet hasAccount]) {
             [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
-            
-            [app standardNotifyAutoDismissingController:BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS];
+
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS title:BC_STRING_ERROR];
             
             return;
         }
@@ -878,7 +878,7 @@
         uint64_t amount = [self getInputAmountInSatoshi];
         
         if (amount == 0) {
-            [app standardNotify:BC_STRING_INVALID_SEND_VALUE];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR];
             return;
         }
         

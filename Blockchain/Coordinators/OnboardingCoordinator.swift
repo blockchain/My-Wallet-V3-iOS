@@ -19,7 +19,7 @@ class OnboardingCoordinator: Coordinator {
 
     func start() {
         showWelcomeScreen()
-        checkAndWarnOnJailbrokenPhones()
+        AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
     }
 
     // MARK: Private Methods
@@ -32,13 +32,6 @@ class OnboardingCoordinator: Coordinator {
         ModalPresenter.shared.showModal(withContent: welcomeView, closeType: ModalCloseTypeNone, showHeader: false, headerText: "")
 
         UIApplication.shared.statusBarStyle = .default
-    }
-
-    private func checkAndWarnOnJailbrokenPhones() {
-        guard UIDevice.current.isUnsafe() else {
-            return
-        }
-        // TODO: display alert
     }
 }
 

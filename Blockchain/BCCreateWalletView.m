@@ -227,13 +227,15 @@
 - (void)errorCreatingNewAccount:(NSString*)message
 {
     if ([message isEqualToString:@""]) {
-        [app standardNotify:BC_STRING_NO_INTERNET_CONNECTION title:BC_STRING_ERROR];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_INTERNET_CONNECTION title:BC_STRING_ERROR];
     } else if ([message isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [app standardNotify:BC_STRING_TIMED_OUT];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_TIMED_OUT title:BC_STRING_ERROR];
     } else if ([message isEqualToString:ERROR_FAILED_NETWORK_REQUEST] || [message containsString:ERROR_TIMEOUT_ERROR] || [[message stringByReplacingOccurrencesOfString:@" " withString:@""] containsString:ERROR_STATUS_ZERO]){
-        [app performSelector:@selector(standardNotify:) withObject:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION afterDelay:DELAY_KEYBOARD_DISMISSAL];
+        dispatch_after(DELAY_KEYBOARD_DISMISSAL, dispatch_get_main_queue(), ^{
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR];
+        });
     } else {
-        [app standardNotify:message];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR];
     }
 }
 
@@ -358,7 +360,7 @@
 - (BOOL)isReadyToSubmitForm
 {
     if ([emailTextField.text length] == 0) {
-        [app standardNotify:BC_STRING_PLEASE_PROVIDE_AN_EMAIL_ADDRESS];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PLEASE_PROVIDE_AN_EMAIL_ADDRESS title:BC_STRING_ERROR];
         [emailTextField becomeFirstResponder];
         return NO;
     }
@@ -366,7 +368,7 @@
     if ([emailTextField.text hasPrefix:@"@"] ||
         [emailTextField.text hasSuffix:@"@"] ||
         [[emailTextField.text componentsSeparatedByString:@"@"] count] != 2) {
-        [app standardNotify:BC_STRING_INVALID_EMAIL_ADDRESS];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR];
         [emailTextField becomeFirstResponder];
         return NO;
     }
@@ -374,31 +376,31 @@
     self.tmpPassword = passwordTextField.text;
     
     if (!self.tmpPassword || [self.tmpPassword length] == 0) {
-        [app standardNotify:BC_STRING_NO_PASSWORD_ENTERED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if ([self.tmpPassword isEqualToString:emailTextField.text]) {
-        [app standardNotify:BC_STRING_PASSWORD_MUST_BE_DIFFERENT_FROM_YOUR_EMAIL];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_DIFFERENT_FROM_YOUR_EMAIL title:BC_STRING_ERROR];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if (self.passwordStrength < 25) {
-        [app standardNotify:BC_STRING_PASSWORD_NOT_STRONG_ENOUGH];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_NOT_STRONG_ENOUGH title:BC_STRING_ERROR];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if ([self.tmpPassword length] > 255) {
-        [app standardNotify:BC_STRING_PASSWORD_MUST_BE_LESS_THAN_OR_EQUAL_TO_255_CHARACTERS];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_LESS_THAN_OR_EQUAL_TO_255_CHARACTERS title:BC_STRING_ERROR];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if (![self.tmpPassword isEqualToString:[password2TextField text]]) {
-        [app standardNotify:BC_STRING_PASSWORDS_DO_NOT_MATCH];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORDS_DO_NOT_MATCH title:BC_STRING_ERROR];
         [password2TextField becomeFirstResponder];
         return NO;
     }

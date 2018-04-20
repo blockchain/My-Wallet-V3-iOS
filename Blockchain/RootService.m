@@ -266,7 +266,7 @@ void (^secondPasswordSuccess)(NSString *);
     } else {
         [self checkForMaintenance];
         [self showPasswordModal];
-        [self checkAndWarnOnJailbrokenPhones];
+        [[AlertViewPresenter sharedInstance] checkAndWarnOnJailbrokenPhones];
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
@@ -837,7 +837,7 @@ void (^secondPasswordSuccess)(NSString *);
     if (!self.wallet.guid && busyView.alpha == 1.0 && [busyLabel.text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
         [self.pinEntryViewController reset];
         [self hideBusyView];
-        [self standardNotifyAutoDismissingController:BC_STRING_ERROR_LOADING_WALLET];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_LOADING_WALLET title:BC_STRING_ERROR];
     }
 }
 
@@ -893,50 +893,50 @@ void (^secondPasswordSuccess)(NSString *);
     return isWaiting;
 }
 
-#pragma mark - AlertView Helpers
-
-- (void)standardNotifyAutoDismissingController:(NSString *)message
-{
-    [self standardNotifyAutoDismissingController:message title:BC_STRING_ERROR];
-}
-
-- (void)standardNotifyAutoDismissingController:(NSString*)message title:(NSString*)title
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-
-    if (!self.pinEntryViewController) {
-        [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    }
-
-    if (self.topViewControllerDelegate) {
-        if (self.pinEntryViewController) {
-            [self.pinEntryViewController.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        } else if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:alert];
-        }
-    } else if (self.pinEntryViewController) {
-        [self.pinEntryViewController.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    } else if (self.tabControllerManager.tabViewController.presentedViewController) {
-        [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
-    } else {
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
-}
-
-- (void)standardNotify:(NSString*)message
-{
-    [self standardNotifyAutoDismissingController:message];
-}
-
-- (void)standardNotify:(NSString*)message title:(NSString*)title
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            [self standardNotifyAutoDismissingController:message title:title];
-        }
-    });
-}
+//#pragma mark - AlertView Helpers
+//
+//- (void)standardNotifyAutoDismissingController:(NSString *)message
+//{
+//    [self standardNotifyAutoDismissingController:message title:BC_STRING_ERROR];
+//}
+//
+//- (void)standardNotifyAutoDismissingController:(NSString*)message title:(NSString*)title
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//
+//    if (!self.pinEntryViewController) {
+//        [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//    }
+//
+//    if (self.topViewControllerDelegate) {
+//        if (self.pinEntryViewController) {
+//            [self.pinEntryViewController.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//        } else if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
+//            [self.topViewControllerDelegate presentAlertController:alert];
+//        }
+//    } else if (self.pinEntryViewController) {
+//        [self.pinEntryViewController.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//    } else if (self.tabControllerManager.tabViewController.presentedViewController) {
+//        [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+//    } else {
+//        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//    }
+//}
+//
+//- (void)standardNotify:(NSString*)message
+//{
+//    [self standardNotifyAutoDismissingController:message];
+//}
+//
+//- (void)standardNotify:(NSString*)message title:(NSString*)title
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+//            [self standardNotifyAutoDismissingController:message title:title];
+//        }
+//    });
+//}
 
 # pragma mark - Wallet.js callbacks
 
@@ -1361,7 +1361,7 @@ void (^secondPasswordSuccess)(NSString *);
     NSString * password = secondPasswordTextField.text;
 
     if ([password length] == 0) {
-        [self standardNotifyAutoDismissingController:BC_STRING_NO_PASSWORD_ENTERED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR];
     } else {
         if (self.tabControllerManager.tabViewController.presentedViewController) {
             [self.tabControllerManager.tabViewController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
@@ -1379,9 +1379,9 @@ void (^secondPasswordSuccess)(NSString *);
     NSString *password = secondPasswordTextField.text;
 
     if ([password length] == 0) {
-        [app standardNotifyAutoDismissingController:BC_STRING_NO_PASSWORD_ENTERED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR];
     } else if(validateSecondPassword && ![wallet validateSecondPassword:password]) {
-        [app standardNotifyAutoDismissingController:BC_STRING_SECOND_PASSWORD_INCORRECT];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SECOND_PASSWORD_INCORRECT title:BC_STRING_ERROR];
     } else {
         if (secondPasswordSuccess) {
             // It takes ANIMATION_DURATION to dismiss the second password view, then a little extra to make sure any wait spinners start spinning before we execute the success function.
@@ -1622,7 +1622,7 @@ void (^secondPasswordSuccess)(NSString *);
     }
 
     if ([sharedKey length] != 36) {
-        [app standardNotify:BC_STRING_INVALID_SHARED_KEY];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SHARED_KEY title:BC_STRING_ERROR];
         return;
     }
 
@@ -1650,7 +1650,7 @@ void (^secondPasswordSuccess)(NSString *);
         wallet.didPairAutomatically = YES;
 
     } error:^(NSString*error) {
-        [app standardNotify:error];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
     }];
 
     [self.slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
@@ -1947,7 +1947,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)alertUserOfInvalidAccountName
 {
-    [self standardNotifyAutoDismissingController:BC_STRING_NAME_ALREADY_IN_USE];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NAME_ALREADY_IN_USE title:BC_STRING_ERROR];
 
     [self hideBusyView];
 }
@@ -1955,7 +1955,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)alertUserOfInvalidPrivateKey
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self standardNotifyAutoDismissingController:BC_STRING_INCORRECT_PRIVATE_KEY];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PRIVATE_KEY title:BC_STRING_ERROR];
     });
 }
 
@@ -2041,7 +2041,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)didReceivePaymentNotice:(NSString *)notice
 {
     if (self.tabControllerManager.tabViewController.selectedIndex == TAB_SEND && busyView.alpha == 0 && !self.pinEntryViewController && !self.tabControllerManager.tabViewController.presentedViewController) {
-        [app standardNotifyAutoDismissingController:notice title:BC_STRING_INFORMATION];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:BC_STRING_INFORMATION];
     }
 }
 
@@ -3149,7 +3149,7 @@ void (^secondPasswordSuccess)(NSString *);
     NSString *password = [mainPasswordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
     if (password.length == 0) {
-        [app standardNotify:BC_STRING_NO_PASSWORD_ENTERED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR];
         [self hideBusyView];
         return;
     }
@@ -3496,12 +3496,12 @@ void (^secondPasswordSuccess)(NSString *);
 
     // Incorrect pin
     if (code == nil) {
-        [app standardNotify:[NSString stringWithFormat:BC_STRING_INCORRECT_PIN_RETRY]];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PIN_RETRY title:BC_STRING_ERROR];
     }
     // Pin retry limit exceeded
     else if ([code intValue] == PIN_API_STATUS_CODE_DELETED) {
 
-        [app standardNotify:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED title:BC_STRING_ERROR];
 
         [self clearPin];
 
@@ -3520,7 +3520,7 @@ void (^secondPasswordSuccess)(NSString *);
             error = @"PIN Code Incorrect. Unknown Error Message.";
         }
 
-        [app standardNotify:error];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
     }
     // Pin was accepted
     else if ([code intValue] == PIN_API_STATUS_OK) {
@@ -3546,7 +3546,7 @@ void (^secondPasswordSuccess)(NSString *);
 
         // Initial PIN setup ?
         if ([success length] == 0) {
-            [app standardNotify:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 title:BC_STRING_ERROR];
             [self askIfUserWantsToResetPIN];
             return;
         }
@@ -3554,7 +3554,7 @@ void (^secondPasswordSuccess)(NSString *);
         NSString *decrypted = [app.wallet decrypt:encryptedPINPassword password:success pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
 
         if ([decrypted length] == 0) {
-            [app standardNotify:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 title:BC_STRING_ERROR];
             [self askIfUserWantsToResetPIN];
             return;
         }
@@ -3607,7 +3607,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [self hideBusyView];
 
-    [app standardNotify:value];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:value title:BC_STRING_ERROR];
 
     [self reopenChangePIN];
 }
@@ -3845,17 +3845,17 @@ void (^secondPasswordSuccess)(NSString *);
     });
 }
 
-- (void)alertUserOfCompromisedSecurity
-{
-    [self standardNotifyAutoDismissingController:BC_STRING_UNSAFE_DEVICE_MESSAGE title:BC_STRING_UNSAFE_DEVICE_TITLE];
-}
+//- (void)alertUserOfCompromisedSecurity
+//{
+//    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_UNSAFE_DEVICE_MESSAGE title:BC_STRING_UNSAFE_DEVICE_TITLE];
+//}
 
-- (void)checkAndWarnOnJailbrokenPhones
-{
-    if ([RootService isUnsafe]) {
-        [self alertUserOfCompromisedSecurity];
-    }
-}
+//- (void)checkAndWarnOnJailbrokenPhones
+//{
+//    if ([RootService isUnsafe]) {
+//        [self alertUserOfCompromisedSecurity];
+//    }
+//}
 
 + (BOOL)isUnsafe
 {
@@ -3914,7 +3914,7 @@ void (^secondPasswordSuccess)(NSString *);
         DLog(@"QR code scanner problem: %@", [error localizedDescription]);
 
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] ==  AVAuthorizationStatusAuthorized) {
-            [app standardNotifyAutoDismissingController:[error localizedDescription]];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error localizedDescription] title:BC_STRING_ERROR];
         }
         else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_TITLE message:BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];

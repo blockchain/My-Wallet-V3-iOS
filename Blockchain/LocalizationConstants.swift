@@ -9,9 +9,6 @@
 
 import Foundation
 
-let LCStringError = NSLocalizedString("Error", comment: "")
-let LCStringOK = NSLocalizedString("OK", comment: "")
-
 let LCStringLoadingVerifying = NSLocalizedString("Verifying", comment: "")
 
 //: Local Authentication - Face ID & Touch ID
@@ -39,6 +36,10 @@ let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate
 struct LocalizationConstants {
     static let cancel = NSLocalizedString("Cancel", comment: "")
     static let continueString = NSLocalizedString("Continue", comment: "")
+    static let error = NSLocalizedString("Error", comment: "")
+    static let ok = NSLocalizedString("OK", comment: "")
+    static let warning = NSLocalizedString("Warning", comment: "")
+    static let unsafeDeviceWarningMessage = NSLocalizedString("Your device appears to be jailbroken. The security of your wallet may be compromised.", comment: "")
 
     struct Onboarding {
         static let createNewWallet = NSLocalizedString("Create New Wallet", comment: "")

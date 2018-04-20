@@ -8,6 +8,7 @@
 
 #import "BCWebViewController.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface BCWebViewController ()
 
@@ -126,7 +127,7 @@ NSMutableArray *visitedPages;
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if ([error code] != NSURLErrorCancelled) {
-        [app standardNotify:[error localizedDescription]];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error localizedDescription] title:BC_STRING_ERROR];
     }
     
     [activityIndicatorView stopAnimating];

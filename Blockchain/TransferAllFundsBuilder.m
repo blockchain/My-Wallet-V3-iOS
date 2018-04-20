@@ -8,6 +8,7 @@
 
 #import "TransferAllFundsBuilder.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface TransferAllFundsBuilder()
 @property (nonatomic) NSString *temporarySecondPassword;
@@ -111,11 +112,11 @@
         }
                 
         if ([error isEqualToString:ERROR_UNDEFINED]) {
-            [app standardNotify:BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION title:BC_STRING_ERROR];
         } else if ([error isEqualToString:ERROR_FAILED_NETWORK_REQUEST]) {
-            [app standardNotify:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR];
         } else if (error && error.length != 0)  {
-            [app standardNotify:error];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
         }
         
         if (self.on_error) self.on_error(error, secondPassword);

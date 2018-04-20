@@ -12,6 +12,7 @@
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "KeychainItemWrapper.h"
+#import "PEPinEntryController.h"
 #import "RootService.h"
 #import "SideMenuViewController.h"
 #import "TransferAllFundsViewController.h"

@@ -13,6 +13,7 @@
 #import "Wallet.h"
 #import "NSString+SHA256.h"
 #import "NSString+URLEncode.h"
+#import "Blockchain-Swift.h"
 
 @implementation CurrencySymbol
 @synthesize code;
@@ -32,7 +33,7 @@
 #endif
     if (!last || [last isEqualToNumber:@0]) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2*ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [app standardNotify:BC_STRING_ERROR_TICKER];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_TICKER title:BC_STRING_ERROR];
         });
         return nil;
     }

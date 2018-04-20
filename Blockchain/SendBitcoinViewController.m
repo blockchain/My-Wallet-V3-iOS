@@ -613,13 +613,13 @@ BOOL displayingLocalSymbolSend;
              DLog(@"Send error: %@", error);
                           
              if ([error isEqualToString:ERROR_UNDEFINED]) {
-                 [app standardNotify:BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION];
+                 [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION title:BC_STRING_ERROR];
              } else if ([error isEqualToString:ERROR_FEE_TOO_LOW]) {
-                 [app standardNotify:BC_STRING_SEND_ERROR_FEE_TOO_LOW];
+                 [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SEND_ERROR_FEE_TOO_LOW title:BC_STRING_ERROR];
              } else if ([error isEqualToString:ERROR_FAILED_NETWORK_REQUEST]) {
-                 [app standardNotify:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+                 [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR];
              } else if (error && error.length != 0)  {
-                 [app standardNotify:error];
+                 [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
              }
              
              [sendProgressActivityIndicator stopAnimating];
@@ -1058,9 +1058,11 @@ BOOL displayingLocalSymbolSend;
 {
     if ([self isKeyboardVisible]) {
         [self hideKeyboard];
-        [app performSelector:@selector(standardNotifyAutoDismissingController:) withObject:error afterDelay:DELAY_KEYBOARD_DISMISSAL];
+        dispatch_after(DELAY_KEYBOARD_DISMISSAL, dispatch_get_main_queue(), ^{
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
+        });
     } else {
-        [app standardNotifyAutoDismissingController:error];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
     }
 }
 
@@ -1170,7 +1172,7 @@ BOOL displayingLocalSymbolSend;
     
     if ([amount longLongValue] + [fee longLongValue] > [app.wallet getTotalBalanceForSpendableActiveLegacyAddresses]) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [app standardNotifyAutoDismissingController:BC_STRING_SOME_FUNDS_CANNOT_BE_TRANSFERRED_AUTOMATICALLY title:BC_STRING_WARNING_TITLE];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOME_FUNDS_CANNOT_BE_TRANSFERRED_AUTOMATICALLY title:BC_STRING_WARNING_TITLE];
             [app hideBusyView];
         });
     }
@@ -2152,7 +2154,7 @@ BOOL displayingLocalSymbolSend;
                 NSString *address = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
                 
                 if (address == nil || ![app.wallet isValidAddress:address assetType:self.assetType]) {
-                    [app standardNotify:[NSString stringWithFormat:BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT, address]];
+                    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR];
                     return;
                 }
                 
@@ -2259,9 +2261,9 @@ BOOL displayingLocalSymbolSend;
         uint64_t dust = [self dust];
         
         if (amountInSatoshi == 0) {
-            [app standardNotify:BC_STRING_INVALID_SEND_VALUE];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR];
         } else if (amountInSatoshi < dust) {
-            [app standardNotify:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, dust]];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, dust] title:BC_STRING_ERROR];
         } else {
             [self createSendRequest:RequestTypeSendReason forContact:self.toContact reason:nil];
         }

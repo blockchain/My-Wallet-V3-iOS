@@ -156,8 +156,8 @@ final class RootServiceSwift {
 
     func handleBiometricAuthenticationError(with error: AuthenticationError) {
         if let description = error.description {
-            let alert = UIAlertController(title: LCStringError, message: description, preferredStyle: .alert)
-            let action = UIAlertAction(title: LCStringOK, style: .default, handler: nil)
+            let alert = UIAlertController(title: LocalizationConstants.error, message: description, preferredStyle: .alert)
+            let action = UIAlertAction(title: LocalizationConstants.ok, style: .default, handler: nil)
             alert.addAction(action)
             DispatchQueue.main.async {
                 UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)

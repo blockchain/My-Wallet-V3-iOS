@@ -16,6 +16,7 @@
 #import "ContactDetailViewController.h"
 #import "ContactTableViewCell.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 #define VIEW_NAME_NEW_CONTACT @"newContact"
 
@@ -662,8 +663,8 @@ const int sectionContacts = 0;
 - (void)didFailAcceptRelation:(NSString *)name
 {
     DLog(@"Accept relation failure");
-    
-    [app standardNotify:[NSString stringWithFormat:BC_STRING_ACCEPT_RELATION_ERROR_ALERT_MESSAGE_NAME_ARGUMENT, name]];
+
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ACCEPT_RELATION_ERROR_ALERT_MESSAGE_NAME_ARGUMENT, name] title:BC_STRING_ERROR];
 }
 
 - (void)didCreateInvitation:(NSDictionary *)invitationDict

@@ -22,6 +22,7 @@
 #import "BCWebViewController.h"
 #import "TransactionRecipientsViewController.h"
 #import <SafariServices/SafariServices.h>
+#import "Blockchain-Swift.h"
 
 #ifdef DEBUG
 #import "UITextView+AssertionFailureFix.h"
@@ -219,7 +220,7 @@ const CGFloat rowHeightValueReceived = 80;
 
     if (!didFindTransaction) {
         [self dismissViewControllerAnimated:YES completion:^{
-            [app standardNotify:[NSString stringWithFormat:BC_STRING_COULD_NOT_FIND_TRANSACTION_ARGUMENT, self.transactionModel.myHash]];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_COULD_NOT_FIND_TRANSACTION_ARGUMENT, self.transactionModel.myHash] title:BC_STRING_ERROR];
         }];
     }
 }
@@ -412,7 +413,7 @@ const CGFloat rowHeightValueReceived = 80;
         if (address) {
             [UIPasteboard generalPasteboard].string = address;
         } else {
-            [app standardNotify:BC_STRING_ERROR_COPYING_TO_CLIPBOARD];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR];
         }
     }]];
     [copyAddressController addAction:[UIAlertAction actionWithTitle:BC_STRING_SEND_TO_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

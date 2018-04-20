@@ -322,9 +322,6 @@
 #define BC_STRING_SURVEY_ALERT_TITLE NSLocalizedString(@"Would you like to tell us about your experience with Blockchain?", nil)
 #define BC_STRING_SURVEY_ALERT_MESSAGE NSLocalizedString(@"You will be leaving the app.", nil)
 
-#define BC_STRING_UNSAFE_DEVICE_TITLE NSLocalizedString(@"Warning", nil)
-#define BC_STRING_UNSAFE_DEVICE_MESSAGE NSLocalizedString(@"Your device appears to be jailbroken. The security of your wallet may be compromised.", nil)
-
 #define BC_STRING_ASK_TO_USE_OLD_WALLET_TITLE NSLocalizedString(@"We’ve detected a previous installation of Blockchain Wallet on your phone.", nil)
 #define BC_STRING_ASK_TO_USE_OLD_WALLET_MESSAGE NSLocalizedString(@"Please choose from the options below.", nil)
 

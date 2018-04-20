@@ -8,6 +8,8 @@
 
 #import "PrivateKeyReader.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
+
 @interface PrivateKeyReader()
 @property (nonatomic, copy) void (^onClose)();
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
@@ -155,12 +157,12 @@
                             [app askUserToAddWatchOnlyAddress:scannedString success:self.success];
                         } else {
                             self.onClose = ^(){
-                                [app standardNotifyAutoDismissingController:BC_STRING_UNKNOWN_KEY_FORMAT];
+                                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_UNKNOWN_KEY_FORMAT title:BC_STRING_ERROR];
                             };
                         }
                     } else {
                         self.onClose = ^(){
-                            [app standardNotifyAutoDismissingController:BC_STRING_UNSUPPORTED_PRIVATE_KEY_FORMAT];
+                            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_UNSUPPORTED_PRIVATE_KEY_FORMAT title:BC_STRING_ERROR];
                         };
                     }
                 }
