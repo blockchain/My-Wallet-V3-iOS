@@ -344,7 +344,7 @@ void (^secondPasswordSuccess)(NSString *);
     // Close all modals
     [app closeAllModals];
 
-    self.topViewControllerDelegate = nil;
+//    self.topViewControllerDelegate = nil;
 
     // Close screens that shouldn't be in the foreground when returning to the wallet
     if (_backupNavigationViewController) {
@@ -1054,7 +1054,8 @@ void (^secondPasswordSuccess)(NSString *);
 
     if ([BlockchainSettings sharedAppInstance].isPinSet) {
 
-        if (self.topViewControllerDelegate == self.settingsNavigationController && self.settingsNavigationController) return;
+        UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+        if (topViewController == self.settingsNavigationController && self.settingsNavigationController) return;
 
         [self showMobileNotice];
     }
@@ -1315,12 +1316,13 @@ void (^secondPasswordSuccess)(NSString *);
 
     secondPasswordDescriptionLabel.text = BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION;
 
-    if (self.topViewControllerDelegate) {
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    if (topViewController) {
         BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_PASSWORD_REQUIRED view:secondPasswordView];
 
         addPrivateKeySuccess = success;
 
-        [self.topViewControllerDelegate presentViewController:bcModalViewController animated:YES completion:^{
+        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
             UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
             [bcModalViewController.view addSubview:secondPasswordOverlayButton];
             [secondPasswordOverlayButton addTarget:self action:@selector(privateKeyPasswordClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -1398,10 +1400,11 @@ void (^secondPasswordSuccess)(NSString *);
 
     secondPasswordSuccess = success;
 
-    if (self.topViewControllerDelegate) {
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    if (topViewController) {
         BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_SECOND_PASSWORD_REQUIRED view:secondPasswordView];
 
-        [self.topViewControllerDelegate presentViewController:bcModalViewController animated:YES completion:^{
+        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
             UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
             [bcModalViewController.view addSubview:secondPasswordOverlayButton];
             [secondPasswordOverlayButton addTarget:self action:@selector(secondPasswordClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -1664,11 +1667,8 @@ void (^secondPasswordSuccess)(NSString *);
 
     [[NSNotificationCenter defaultCenter] addObserver:reader selector:@selector(autoDismiss) name:NOTIFICATION_KEY_RELOAD_TO_DISMISS_VIEWS object:nil];
 
-    if (self.topViewControllerDelegate) {
-        [self.topViewControllerDelegate presentViewController:reader animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:reader animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:reader animated:YES completion:nil];
 
     app.wallet.lastScannedWatchOnlyAddress = address;
 }
@@ -1683,11 +1683,8 @@ void (^secondPasswordSuccess)(NSString *);
     }]];
     [alertToWarnAboutWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
 
-    if (self.topViewControllerDelegate) {
-        [self.topViewControllerDelegate presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
 }
 
 - (void)logout
@@ -1784,13 +1781,9 @@ void (^secondPasswordSuccess)(NSString *);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:[NSString stringWithFormat:messageWithArgument, self.wallet.lastImportedAddress] preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:alert];
-        }
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
+
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didImportIncorrectPrivateKey:(NSString *)address
@@ -1810,13 +1803,8 @@ void (^secondPasswordSuccess)(NSString *);
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:alert];
-        }
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didImportPrivateKeyToLegacyAddress
@@ -1834,13 +1822,8 @@ void (^secondPasswordSuccess)(NSString *);
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:alert];
-        }
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didFailToImportPrivateKey:(NSString *)error
@@ -1864,13 +1847,8 @@ void (^secondPasswordSuccess)(NSString *);
     [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:errorAlert];
-        }
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:errorAlert animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:errorAlert animated:YES completion:nil];
 }
 
 - (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error
@@ -1896,13 +1874,8 @@ void (^secondPasswordSuccess)(NSString *);
 
     [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:errorAlert];
-        }
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:errorAlert animated:YES completion:nil];
-    }
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:errorAlert animated:YES completion:nil];
 }
 
 - (void)didFailRecovery
@@ -2156,7 +2129,8 @@ void (^secondPasswordSuccess)(NSString *);
 
             UIAlertController *alert;
 
-            if (self.topViewControllerDelegate) {
+            UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+            if ([topViewController conformsToProtocol:@protocol(TopViewController)]) {
 
                 if (self.contactsViewController.view.window) {
 
@@ -2211,11 +2185,7 @@ void (^secondPasswordSuccess)(NSString *);
                 }
 
                 if (alert) {
-                    if (self.topViewControllerDelegate && [self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-                        [self.topViewControllerDelegate presentAlertController:alert];
-                    } else {
-                        [self.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
-                    }
+                    [topViewController presentViewController:alert animated:YES completion:nil];
                 }
 
             } else if (self.pinEntryViewController) {
@@ -2318,11 +2288,8 @@ void (^secondPasswordSuccess)(NSString *);
         [self.tabControllerManager showTransactionDetailForHash:hash];
     }]];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (app.topViewControllerDelegate) {
-            [app.topViewControllerDelegate presentViewController:alert animated:YES completion:nil];
-        } else {
-            [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
-        }
+        UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+        [topViewController presentViewController:alert animated:YES completion:nil];
     });
 }
 
@@ -2630,7 +2597,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:self.contactsViewController title:BC_STRING_CONTACTS];
 
-    self.topViewControllerDelegate = navigationController;
+//    self.topViewControllerDelegate = navigationController;
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
     [self.tabControllerManager.tabViewController presentViewController:navigationController animated:YES completion:nil];
@@ -2643,7 +2610,7 @@ void (^secondPasswordSuccess)(NSString *);
         self.accountsAndAddressesNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_ACCOUNTS_AND_ADDRESSES];
     }
 
-    self.topViewControllerDelegate = self.accountsAndAddressesNavigationController;
+//    self.topViewControllerDelegate = self.accountsAndAddressesNavigationController;
     self.accountsAndAddressesNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
     [self.tabControllerManager.tabViewController presentViewController:self.accountsAndAddressesNavigationController animated:YES completion:^{
@@ -2669,7 +2636,7 @@ void (^secondPasswordSuccess)(NSString *);
         self.settingsNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_SETTINGS];
     }
 
-    self.topViewControllerDelegate = self.settingsNavigationController;
+//    self.topViewControllerDelegate = self.settingsNavigationController;
     [self.settingsNavigationController showSettings];
 
     self.settingsNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
@@ -2887,7 +2854,7 @@ void (^secondPasswordSuccess)(NSString *);
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_UPGRADE bundle: nil];
     UpgradeViewController *upgradeViewController = [storyboard instantiateViewControllerWithIdentifier:VIEW_CONTROLLER_NAME_UPGRADE];
     upgradeViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    app.topViewControllerDelegate = upgradeViewController;
+//    app.topViewControllerDelegate = upgradeViewController;
     [self.tabControllerManager.tabViewController presentViewController:upgradeViewController animated:YES completion:nil];
 }
 
@@ -3128,7 +3095,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)setupTransferAllFunds
 {
     self.transferAllFundsModalController = nil;
-    app.topViewControllerDelegate = nil;
+//    app.topViewControllerDelegate = nil;
 
     [self.tabControllerManager setupTransferAllFunds];
 }
@@ -3430,13 +3397,8 @@ void (^secondPasswordSuccess)(NSString *);
         [self.pinEntryViewController reset];
     }]];
 
-    if (self.topViewControllerDelegate) {
-        if ([self.topViewControllerDelegate respondsToSelector:@selector(presentAlertController:)]) {
-            [self.topViewControllerDelegate presentAlertController:alert];
-        }
-    } else {
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)askIfUserWantsToResetPIN
@@ -3911,10 +3873,8 @@ void (^secondPasswordSuccess)(NSString *);
 
             if (viewController) {
                 [viewController presentViewController:alert animated:YES completion:nil];
-            } else if (self.topViewControllerDelegate) {
-                [self.topViewControllerDelegate presentViewController:alert animated:YES completion:nil];
             } else {
-                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+                [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:alert animated:YES completion:nil];
             }
         }
     }

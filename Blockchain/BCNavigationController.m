@@ -29,8 +29,6 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    app.topViewControllerDelegate = self;
-    
     self.topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
     self.topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
     [self.view addSubview:self.topBar];
@@ -141,7 +139,6 @@
 - (void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    app.topViewControllerDelegate = nil;
 }
 
 #pragma mark - Busy View Delegate
@@ -169,17 +166,6 @@
     if (self.busyView.alpha == 1.0 && self.shouldHideBusyView) {
         [self.busyView fadeOut];
     }
-}
-
-- (void)presentAlertController:(UIAlertController *)alertController
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION_LONG * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.presentedViewController) {
-            [self.presentedViewController presentViewController:alertController animated:YES completion:nil];
-        } else {
-            [self presentViewController:alertController animated:YES completion:nil];
-        }
-    });
 }
 
 @end

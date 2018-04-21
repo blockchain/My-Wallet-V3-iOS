@@ -12,6 +12,7 @@
 #import "TransactionDetailViewController.h"
 #import "TransactionDetailNavigationController.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionEtherTableViewCell
 
@@ -94,12 +95,9 @@
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     app.tabControllerManager.transactionsEtherViewController.detailViewController = detailViewController;
-    
-    if (app.topViewControllerDelegate) {
-        [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
-    }
+
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)ethButtonClicked

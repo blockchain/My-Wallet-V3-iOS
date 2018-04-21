@@ -23,7 +23,6 @@
 - (void)showBusyViewWithLoadingText:(NSString *)text;
 - (void)updateBusyViewLoadingText:(NSString *)text;
 - (void)hideBusyView;
-- (void)presentAlertController:(UIAlertController *)alertController;
 @end
 
 @interface BCFadeView : UIView

@@ -342,8 +342,9 @@ typedef enum {
             [delegate didSelectToAddress:[bchAddresses objectAtIndex:[indexPath row]]];
         }
     }
-    
-    if (shouldCloseModal && !app.topViewControllerDelegate) {
+
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    if (shouldCloseModal && ![topViewController conformsToProtocol:@protocol(TopViewController)]) {
         [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }
 }

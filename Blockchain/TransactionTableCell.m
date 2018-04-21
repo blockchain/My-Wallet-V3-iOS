@@ -13,6 +13,7 @@
 #import "TransactionDetailViewController.h"
 #import "TransactionDetailNavigationController.h"
 #import "NSDateFormatter+TimeAgoString.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionTableCell
 
@@ -130,12 +131,9 @@
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
-    
-    if (app.topViewControllerDelegate) {
-        [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
-    }
+
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)bitcoinCashTransactionClicked
@@ -152,12 +150,9 @@
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     app.tabControllerManager.transactionsBitcoinCashViewController.detailViewController = detailViewController;
-    
-    if (app.topViewControllerDelegate) {
-        [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
-    }
+
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (IBAction)btcbuttonclicked:(id)sender
