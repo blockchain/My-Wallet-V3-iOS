@@ -474,7 +474,7 @@ const int sectionContacts = 0;
     NSString *sharedInfo = [self.lastCreatedInvitation objectForKey:DICTIONARY_KEY_NAME];
     
     NSString *helperText = [NSString stringWithFormat:BC_STRING_INVITE_HELPER_TEXT, sharedInfo];
-    NSString *shareLink = [[NSBundle walletUrl] stringByAppendingFormat:@"/invite#id=%@&name=%@", [identifier stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]], [sharedInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]];
+    NSString *shareLink = [[[API sharedInstance] walletUrl] stringByAppendingFormat:@"/invite#id=%@&name=%@", [identifier stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]], [sharedInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]];
     NSArray *items = @[[NSString stringWithFormat:@"%@\n%@", helperText, shareLink]];
     
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];

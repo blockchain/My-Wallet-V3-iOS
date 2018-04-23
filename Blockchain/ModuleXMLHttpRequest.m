@@ -1,7 +1,7 @@
 #import "ModuleXMLHttpRequest.h"
 #import "RootService.h"
 #import "NSURLSession+SendSynchronousRequest.h"
-#import "SessionManager.h"
+#import "Blockchain-Swift.h"
 
 @implementation ModuleXMLHttpRequest
 {
@@ -56,7 +56,7 @@
 
     NSHTTPURLResponse* response;
     NSError* error;
-    NSData* data = [NSURLSession sendSynchronousRequest:req session:[SessionManager sharedSession] returningResponse:&response error:&error sessionDescription:req.URL.host];
+    NSData* data = [NSURLSession sendSynchronousRequest:req session:[[NetworkManager sharedInstance] session] returningResponse:&response error:&error sessionDescription:req.URL.host];
     status = [response statusCode];
     self.responseText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     _responseHeaders = response.allHeaderFields;

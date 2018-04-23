@@ -69,8 +69,8 @@
             self.reason = contactTransaction.reason;
         };
         self.contactName = transaction.contactName;
-        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, HOST_NAME_WALLET_SERVER] uppercaseString];
-        self.detailButtonLink = [[NSBundle walletUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];
+        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[API sharedInstance] blockchainWallet]] uppercaseString];
+        self.detailButtonLink = [[[API sharedInstance] walletUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];
     }
     return self;
 }
@@ -92,8 +92,8 @@
         self.note = etherTransaction.note;
         self.time = etherTransaction.time;
         self.dateString = [NSDateFormatter verboseStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.time]];
-        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, HOST_NAME_ETHERSCAN] uppercaseString];
-        self.detailButtonLink = [URL_ETHERSCAN stringByAppendingFormat:@"/tx/%@", self.myHash];
+        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[API sharedInstance] etherscan]] uppercaseString];
+        self.detailButtonLink = [[[API sharedInstance] etherscanUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];
         self.ethExchangeRate = exchangeRate;
         self.confirmations = [NSString stringWithFormat:@"%lld/%u", etherTransaction.confirmations, kConfirmationEtherThreshold];
         self.confirmed = etherTransaction.confirmations >= kConfirmationEtherThreshold;
@@ -112,8 +112,8 @@
     model.toString = convertedAddress ? : model.toString;
     model.assetType = AssetTypeBitcoinCash;
     model.hideNote = YES;
-    model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", URL_BLOCKCHAIR] uppercaseString];
-    model.detailButtonLink = [URL_PREFIX_VIEW_TRANSACTION_BITCOIN_CASH stringByAppendingString:model.myHash];
+    model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", [[API sharedInstance] blockchairUrl]] uppercaseString];
+    model.detailButtonLink = [[[API sharedInstance] blockchairBchTransactionUrl] stringByAppendingString:model.myHash];
     return model;
 }
 

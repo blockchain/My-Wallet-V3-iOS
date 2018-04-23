@@ -9,7 +9,6 @@
 
 
 #import "DashboardViewController.h"
-#import "SessionManager.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "RootService.h"
@@ -192,11 +191,10 @@
         [self showError:BC_STRING_ERROR_CHARTS];
         return;
     }
-    
-    NSURL *URL = [NSURL URLWithString:[[NSBundle apiUrl] stringByAppendingString:[NSString stringWithFormat:CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE, base, quote, [NSString stringWithFormat:@"%lu", startDate], scale]]];
+    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE, base, quote, [NSString stringWithFormat:@"%lu", startDate], scale]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
-    NSURLSessionDataTask *task = [[SessionManager sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
             DLog(@"Error getting chart data - %@", [error localizedDescription]);
             [self showError:[error localizedDescription]];

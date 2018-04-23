@@ -8,6 +8,7 @@
 
 #import "BCWebViewController.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface BCWebViewController ()
 
@@ -136,9 +137,8 @@ NSMutableArray *visitedPages;
 {
     // External sites open in the system browser
     NSString *hostname = [[request URL] host];
-    if ([hostname rangeOfString:HOST_NAME_WALLET_SERVER].location == NSNotFound) {
+    if ([hostname rangeOfString:[[API sharedInstance] blockchainWallet]].location == NSNotFound) {
         [[UIApplication sharedApplication] openURL:[request URL]];
-
         return NO;
     }
     

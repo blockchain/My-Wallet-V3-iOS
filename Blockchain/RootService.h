@@ -24,7 +24,6 @@
 #import "AccountsAndAddressesNavigationController.h"
 #import "TransferAllFundsViewController.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "CertificatePinner.h"
 #import <UserNotifications/UserNotifications.h>
 #import "ReminderModalViewController.h"
 #import "WalletSetupViewController.h"
@@ -35,7 +34,7 @@
 
 @class TransactionsBitcoinViewController, BCFadeView, ReceiveCoinsViewController, SendBitcoinViewController, BCCreateWalletView, BCManualPairView, MultiAddressResponse, PairingCodeParser, BCWebViewController, BackupNavigationViewController, ContactsViewController, ContactTransaction, BuyBitcoinViewController;
 
-@interface RootService : NSObject <UIApplicationDelegate, WalletDelegate, PEPinEntryControllerDelegate, MFMailComposeViewControllerDelegate, CertificatePinnerDelegate, UNUserNotificationCenterDelegate, ReminderModalDelegate, SetupDelegate, TabControllerDelegate> {
+@interface RootService : NSObject <UIApplicationDelegate, WalletDelegate, PEPinEntryControllerDelegate, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate, ReminderModalDelegate, SetupDelegate, TabControllerDelegate> {
 
     Wallet *wallet;
     
@@ -116,9 +115,6 @@
 @property (nonatomic) BOOL isVerifyingMobileNumber;
 
 @property (nonatomic) ContactTransaction *pendingPaymentRequestTransaction;
-
-// Certificate Pinning
-@property (nonatomic) CertificatePinner *certificatePinner;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 - (void)applicationDidBecomeActive:(UIApplication *)application;

@@ -21,7 +21,7 @@
 #import "NSString+URLEncode.h"
 #import "RootService.h"
 #import "NSURLSession+SendSynchronousRequest.h"
-#import "SessionManager.h"
+#import "Blockchain-Swift.h"
 
 NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
 NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
@@ -118,7 +118,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     NSHTTPURLResponse * repsonse = NULL;
     NSError * error = NULL;
     
-    [NSURLSession sendSynchronousRequest:[NSURLRequest requestWithURL:url] session:[SessionManager sharedSession] returningResponse:&repsonse error:&error sessionDescription:nil];
+    [NSURLSession sendSynchronousRequest:[NSURLRequest requestWithURL:url] session:[[NetworkManager sharedInstance] session] returningResponse:&repsonse error:&error sessionDescription:nil];
 }
 
 - (void)handleException:(NSException *)exception

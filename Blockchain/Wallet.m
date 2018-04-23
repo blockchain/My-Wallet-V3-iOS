@@ -26,7 +26,6 @@
 #import "ModuleXMLHttpRequest.h"
 #import "KeychainItemWrapper+Credentials.h"
 #import <openssl/evp.h>
-#import "SessionManager.h"
 #import "NSURLRequest+SRWebSocket.h"
 #import <CommonCrypto/CommonKeyDerivation.h>
 #import "HDNode.h"
@@ -1029,18 +1028,19 @@
     NSString *websocketURL;
     
     if (assetType == AssetTypeBitcoin) {
-        websocketURL = [NSBundle webSocketUri];
+        websocketURL = [[API sharedInstance] webSocketUri];
     } else if (assetType == AssetTypeEther) {
-        websocketURL = [NSBundle ethereumWebSocketUri];
+        websocketURL = [[API sharedInstance] ethereumWebSocketUri];
     } else if (assetType == AssetTypeBitcoinCash) {
-        websocketURL = [NSBundle bitcoinCashWebSocketUri];
+        websocketURL = [[API sharedInstance] bitcoinCashWebSocketUri];
     }
     
     NSMutableURLRequest *webSocketRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:websocketURL]];
-    [webSocketRequest addValue:[NSBundle walletUrl] forHTTPHeaderField:@"Origin"];
+    [webSocketRequest addValue:[[API sharedInstance] walletUrl] forHTTPHeaderField:@"Origin"];
 
+    // TODO: migrate to CertificatePinner class
 #if CERTIFICATE_PINNING == YES
-    NSString *cerPath = [NSBundle localCertificatePath];
+    NSString *cerPath = [[CertificatePinner sharedInstance] localCertificatePath];
     NSData *certData = [[NSData alloc] initWithContentsOfFile:cerPath];
     CFDataRef certDataRef = (__bridge CFDataRef)certData;
     SecCertificateRef certRef = SecCertificateCreateWithData(NULL, certDataRef);
@@ -1234,7 +1234,8 @@
 {
     DLog(@"%@ failed with error: %@", webSocket == self.ethSocket ? @"eth socket" : @"web socket", [error localizedDescription]);
     if ([error.localizedDescription isEqualToString:WEBSOCKET_ERROR_INVALID_SERVER_CERTIFICATE]) {
-        [app failedToValidateCertificate:[error localizedDescription]];
+        // TODO: add failedToValidateCertificate function
+        // [app failedToValidateCertificate:[error localizedDescription]];
     }
 }
 
@@ -1310,10 +1311,10 @@
 
 - (void)getAmountReceivedForTransactionHash:(NSString *)txHash socket:(SRWebSocket *)webSocket
 {
-    NSURL *URL = [NSURL URLWithString:[[NSBundle walletUrl] stringByAppendingString:[NSString stringWithFormat:TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, txHash, self.btcSwipeAddressToSubscribe]]];
+    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, txHash, self.btcSwipeAddressToSubscribe]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
-    NSURLSessionDataTask *task = [[SessionManager sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -2458,10 +2459,10 @@
         symbol = CURRENCY_SYMBOL_BCH;
     }
     
-    NSURL *URL = [NSURL URLWithString:[[NSBundle apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME, symbol, currencyCode, time]]];
+    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME, symbol, currencyCode, time]]];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-    NSURLSessionDataTask *task = [[SessionManager sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 [self on_get_fiat_at_time_error:[error localizedDescription]];
@@ -2633,7 +2634,7 @@
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:postData];
 
-        NSURLSessionDataTask *task = [[SessionManager sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error) {
                 DLog(@"Error getting approximate quote: %@", error);
                 NSInteger cancelledErrorCode = -999;
@@ -3014,9 +3015,9 @@
 
 - (void)isEtherContractAddress:(NSString *)address completion:(void (^ _Nullable)(NSData *, NSURLResponse *, NSError *))completion
 {
-    NSURL *URL = [NSURL URLWithString:[[NSBundle apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT, address]]];
+    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT, address]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-    NSURLSessionDataTask *task = [[SessionManager sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) completion(data, response, error);
         });
@@ -5281,11 +5282,11 @@
 - (void)useDebugSettingsIfSet
 {
 #ifdef DEBUG
-    [self updateServerURL:[NSBundle walletUrl]];
+    [self updateServerURL:[[API sharedInstance] walletUrl]];
     
-    [self updateWebSocketURL:[NSBundle webSocketUri]];
+    [self updateWebSocketURL:[[API sharedInstance] webSocketUri]];
     
-    [self updateAPIURL:[NSBundle apiUrl]];
+    [self updateAPIURL:[[API sharedInstance] apiUrl]];
     
     BOOL testnetOn = [[[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ENV] isEqual:ENV_INDEX_TESTNET];
     NSString *network;
