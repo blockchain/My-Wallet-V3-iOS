@@ -124,8 +124,6 @@
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
 		5164E4D220584D2800FC706A /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5164E4CF20584D0700FC706A /* Charts.framework */; };
 		5164E4D320584D2800FC706A /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5164E4CF20584D0700FC706A /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5164E4D72059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
-		5164E4D82059734800FC706A /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164E4D62059734800FC706A /* Config.swift */; };
 		5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185B189208697F1003C9AC2 /* BCPriceMarker.swift */; };
 		51943596208E3005001EF882 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* URL.swift */; };
 		519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519435A0208E61F3001EF882 /* BlockchainTests.swift */; };
@@ -946,7 +944,6 @@
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		5164E4C920584D0700FC706A /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Submodules/Charts/Charts.xcodeproj; sourceTree = "<group>"; };
-		5164E4D62059734800FC706A /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		516594A5204F1A7400C50E78 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		516594A6204F1C0400C50E78 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
@@ -1830,7 +1827,6 @@
 				84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */,
 				673107F119F6D49F00BE6899 /* PrivateKeyReader.m */,
 				510EA17520810EF600A63AB8 /* AppDelegate.swift */,
-				5164E4D62059734800FC706A /* Config.swift */,
 				67D95A271B3DDC900012EBB1 /* Constants.swift */,
 				511646C7208129D800C43522 /* Environment.swift */,
 				51E5C73020741A130000A7FD /* LocalizationConstants.swift */,
@@ -2674,7 +2670,6 @@
 				C7E2750B1F589C8D0054EFA5 /* ReceiveEtherViewController.m in Sources */,
 				9FCA4D1B151494BF00ECDFBE /* SendBitcoinViewController.m in Sources */,
 				237451C91D624C1C00CF7049 /* RootService.m in Sources */,
-				5164E4D72059734800FC706A /* Config.swift in Sources */,
 				511646E2208523E300C43522 /* UIDevice.swift in Sources */,
 				C7CE34BE1F4E128900032806 /* BCAmountInputView.m in Sources */,
 				23964C001DC93882001323BE /* ContactsViewController.m in Sources */,
