@@ -104,20 +104,13 @@
 		23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */; };
 		23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */; };
 		510EA1702080F16100A63AB8 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* Passcode.swift */; };
-		510EA1712080F16100A63AB8 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* Passcode.swift */; };
 		510EA17620810EF600A63AB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA17520810EF600A63AB8 /* AppDelegate.swift */; };
-		510EA17720810EF600A63AB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA17520810EF600A63AB8 /* AppDelegate.swift */; };
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
-		511646C6208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
-		511646C9208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
-		511646E020851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E2208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
-		511646E3208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
 		513913F02081206C002578FD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
-		513913F12081206C002578FD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
 		51392046205C60520025EE33 /* Cert in Resources */ = {isa = PBXBuildFile; fileRef = 51392045205C60520025EE33 /* Cert */; };
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
@@ -133,6 +126,17 @@
 		519435AF208E62E8001EF882 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
 		519435B0208E62EB001EF882 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348F20891EB3009727D5 /* UserAgent.swift */; };
 		519435B1208E62F6001EF882 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* URL.swift */; };
+		519435B2208E630A001EF882 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
+		519435B3208E630C001EF882 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
+		519435B4208E630F001EF882 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
+		519435B5208E6356001EF882 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
+		519435B6208E635A001EF882 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
+		519435B7208E6364001EF882 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
+		519435B8208E6366001EF882 /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
+		519435B9208E63CA001EF882 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
+		519435BA208E63CE001EF882 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* Passcode.swift */; };
+		519435BB208E64DD001EF882 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA17520810EF600A63AB8 /* AppDelegate.swift */; };
+		519435BC208E64E0001EF882 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D95A271B3DDC900012EBB1 /* Constants.swift */; };
 		51A665C72080EBD80040EE7C /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
 		51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
 		51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
@@ -322,13 +326,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		515902362049AF5000A4C2D8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9FB3637014B60128004BEA02;
-			remoteInfo = Blockchain;
-		};
 		5164E4CE20584D0700FC706A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
@@ -349,6 +346,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A58A4ED274A941CA248EA921;
 			remoteInfo = Charts;
+		};
+		519435A3208E61F3001EF882 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FB3637014B60128004BEA02;
+			remoteInfo = Blockchain;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1295,7 +1299,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		5159022E2049AF5000A4C2D8 /* Frameworks */ = {
+		5194359B208E61F3001EF882 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1727,60 +1731,54 @@
 		9F765F3A14BC7C3100048EFB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C7640FBD2056B70E00D14D51 /* BCSwipeAddressViewModel.h */,
-				C7640FBE2056B70E00D14D51 /* BCSwipeAddressViewModel.m */,
-				C7442E351FBA448200695E4C /* ExchangeTrade.h */,
-				C7442E361FBA448200695E4C /* ExchangeTrade.m */,
-				C7A923EB1F8531FD003D9DAF /* GraphTimeFrame.h */,
-				C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */,
-				C723F3441F61D35300A858A9 /* TransactionDetailViewModel.h */,
-				C723F3451F61D35300A858A9 /* TransactionDetailViewModel.m */,
-				C7559CB81F573763005B2375 /* EtherTransaction.h */,
-				C7559CB91F573763005B2375 /* EtherTransaction.m */,
-				C7559CAD1F55E874005B2375 /* BCConfirmPaymentViewModel.h */,
-				C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */,
-				C7CE34B51F4DB8C100032806 /* Assets.h */,
-				C71859551F4B695700745A87 /* TabControllerManager.h */,
-				C71859561F4B695700745A87 /* TabControllerManager.m */,
-				C75F70E81E2685CA005B4EAF /* ContactTransaction.h */,
-				C75F70E91E2685CA005B4EAF /* ContactTransaction.m */,
-				237356B41DF894CF003940A7 /* Contact.h */,
-				237356B51DF894CF003940A7 /* Contact.m */,
-				23256A571DF1CFF7002B7A04 /* Invitation.h */,
-				23256A581DF1CFF7002B7A04 /* Invitation.m */,
-				C780DF6A1EEF082300D48698 /* SharedSessionDelegate.h */,
-				C780DF6B1EEF082300D48698 /* SharedSessionDelegate.m */,
-				C72D6CC91ED3472D0000F922 /* FeeTypes.h */,
-				23964C011DCA3F19001323BE /* KeyPair.h */,
-				23964C021DCA3F19001323BE /* KeyPair.m */,
-				231A66EC1DB9434B0043F862 /* HDNode.h */,
-				231A66ED1DB9434B0043F862 /* HDNode.m */,
-				2322D38F1D75CEEF000E5AC1 /* SessionManager.h */,
-				2322D3901D75CEEF000E5AC1 /* SessionManager.m */,
-				23FDEF9B1D6E180100FC80D6 /* CertificatePinner.h */,
-				23FDEF9C1D6E180100FC80D6 /* CertificatePinner.m */,
-				237451C71D624C1C00CF7049 /* RootService.h */,
-				237451C81D624C1C00CF7049 /* RootService.m */,
-				23D423971D0878BE000054AA /* ModuleXMLHttpRequest.h */,
-				23D423981D0878BE000054AA /* ModuleXMLHttpRequest.m */,
-				230FD2DA1C5BFB4300336683 /* QRCodeGenerator.h */,
-				230FD2DB1C5BFB4300336683 /* QRCodeGenerator.m */,
 				6780DB961A40BDF40048EED2 /* AccountInOut.h */,
 				6780DB971A40BDF40048EED2 /* AccountInOut.m */,
 				9F2D934814C05DD00053F0FF /* Address.h */,
 				9F2D934914C05DD00053F0FF /* Address.m */,
 				6780DB901A40BDA70048EED2 /* AddressInOut.h */,
 				6780DB911A40BDA70048EED2 /* AddressInOut.m */,
+				C7CE34B51F4DB8C100032806 /* Assets.h */,
+				C7559CAD1F55E874005B2375 /* BCConfirmPaymentViewModel.h */,
+				C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */,
+				C7640FBD2056B70E00D14D51 /* BCSwipeAddressViewModel.h */,
+				C7640FBE2056B70E00D14D51 /* BCSwipeAddressViewModel.m */,
+				237356B41DF894CF003940A7 /* Contact.h */,
+				237356B51DF894CF003940A7 /* Contact.m */,
+				C75F70E81E2685CA005B4EAF /* ContactTransaction.h */,
+				C75F70E91E2685CA005B4EAF /* ContactTransaction.m */,
+				C7559CB81F573763005B2375 /* EtherTransaction.h */,
+				C7559CB91F573763005B2375 /* EtherTransaction.m */,
+				C7442E351FBA448200695E4C /* ExchangeTrade.h */,
+				C7442E361FBA448200695E4C /* ExchangeTrade.m */,
+				C72D6CC91ED3472D0000F922 /* FeeTypes.h */,
+				C7A923EB1F8531FD003D9DAF /* GraphTimeFrame.h */,
+				C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */,
+				231A66EC1DB9434B0043F862 /* HDNode.h */,
+				231A66ED1DB9434B0043F862 /* HDNode.m */,
 				6780DB931A40BDCF0048EED2 /* InOut.h */,
 				6780DB941A40BDCF0048EED2 /* InOut.m */,
+				23256A571DF1CFF7002B7A04 /* Invitation.h */,
+				23256A581DF1CFF7002B7A04 /* Invitation.m */,
+				23964C011DCA3F19001323BE /* KeyPair.h */,
+				23964C021DCA3F19001323BE /* KeyPair.m */,
+				23D423971D0878BE000054AA /* ModuleXMLHttpRequest.h */,
+				23D423981D0878BE000054AA /* ModuleXMLHttpRequest.m */,
 				9F765F4514BC8AEF00048EFB /* MultiAddressResponse.h */,
 				9F765F4614BC8AEF00048EFB /* MultiAddressResponse.m */,
+				230FD2DA1C5BFB4300336683 /* QRCodeGenerator.h */,
+				230FD2DB1C5BFB4300336683 /* QRCodeGenerator.m */,
+				237451C71D624C1C00CF7049 /* RootService.h */,
+				237451C81D624C1C00CF7049 /* RootService.m */,
+				C71859551F4B695700745A87 /* TabControllerManager.h */,
+				C71859561F4B695700745A87 /* TabControllerManager.m */,
 				9F765F3B14BC7C4F00048EFB /* Transaction.h */,
 				9F765F3C14BC7C4F00048EFB /* Transaction.m */,
-				9F0CBAA8151351F400CD945D /* Wallet.h */,
-				9F0CBAA9151351F400CD945D /* Wallet.m */,
+				C723F3441F61D35300A858A9 /* TransactionDetailViewModel.h */,
+				C723F3451F61D35300A858A9 /* TransactionDetailViewModel.m */,
 				23DEF96C1DB11C98004AAAB6 /* TransferAllFundsBuilder.h */,
 				23DEF96D1DB11C98004AAAB6 /* TransferAllFundsBuilder.m */,
+				9F0CBAA8151351F400CD945D /* Wallet.h */,
+				9F0CBAA9151351F400CD945D /* Wallet.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -2291,12 +2289,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0920;
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Blockchain Luxembourg S.A";
 				TargetAttributes = {
-					515902302049AF5000A4C2D8 = {
-						CreatedOnToolsVersion = 9.2;
+					5194359D208E61F3001EF882 = {
+						CreatedOnToolsVersion = 9.3;
 						DevelopmentTeam = NZ6PH75U7K;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 9FB3637014B60128004BEA02;
@@ -2398,7 +2396,7 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		5159022F2049AF5000A4C2D8 /* Resources */ = {
+		5194359C208E61F3001EF882 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2801,15 +2799,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		515902372049AF5000A4C2D8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9FB3637014B60128004BEA02 /* Blockchain */;
-			targetProxy = 515902362049AF5000A4C2D8 /* PBXContainerItemProxy */;
-		};
 		5164E4D520584D2800FC706A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Charts;
 			targetProxy = 5164E4D420584D2800FC706A /* PBXContainerItemProxy */;
+		};
+		519435A4208E61F3001EF882 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FB3637014B60128004BEA02 /* Blockchain */;
+			targetProxy = 519435A3208E61F3001EF882 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
