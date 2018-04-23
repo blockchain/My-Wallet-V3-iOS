@@ -325,14 +325,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT @"/eth/account/%@/isContract"
 #define URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME @"/price/index?base=%@&quote=%@&time=%lld"
 
-#define URL_API_COINIFY @"app-api.coinify.com"
-#define URL_API_SFOX @"api.sfox.com"
-#define URL_QUOTES_SFOX @"quotes.sfox.com"
-#define URL_KYC_SFOX @"sfox-kyc.s3.amazonaws.com"
-#define URL_API_ISIGNTHIS @"verify.isignthis.com"
-#define URL_GOOGLE_ANALYTICS @"www.google-analytics.com"
-#define URL_SHAPESHIFT @"shapeshift.io"
-
 #define SEGUE_IDENTIFIER_CURRENCY @"currency"
 #define SEGUE_IDENTIFIER_ABOUT @"about"
 #define SEGUE_IDENTIFIER_CHANGE_PASSWORD @"changePassword"
@@ -344,15 +336,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define SEGUE_SENDER_TERMS_OF_SERVICE @"termsOfService"
 #define SEGUE_SENDER_PRIVACY_POLICY @"privacyPolicy"
 #define SEGUE_IDENTIFIER_DEBUG_MENU @"debugMenu"
-
-#define HOST_NAME_WALLET_SERVER @"blockchain.info"
-#define HOST_NAME_API @"api.blockchain.info"
-
-#define HOST_NAME_ETHERSCAN @"etherscan.io"
-#define URL_ETHERSCAN @"https://etherscan.io"
-
-#define URL_BLOCKCHAIR @"blockchair.com"
-#define URL_PREFIX_VIEW_TRANSACTION_BITCOIN_CASH @"https://blockchair.com/bitcoin-cash/transaction/"
 
 #define NETWORK_MAINNET @"bitcoin"
 #define NETWORK_TESTNET @"testnet"
