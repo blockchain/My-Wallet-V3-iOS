@@ -74,7 +74,7 @@
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeModalClicked) name:[ConstantsObjcBridge notificationKeyModalViewDismissed] object:nil];
-    
+
     return self;
 }
 

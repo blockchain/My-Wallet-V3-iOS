@@ -522,13 +522,15 @@
     
     TransactionDetailNavigationController *navigationController = [[TransactionDetailNavigationController alloc] initWithRootViewController:detailViewController];
     navigationController.transactionHash = transaction.myHash;
-    
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
     detailViewController.busyViewDelegate = navigationController;
     navigationController.onDismiss = ^() {
-        app.tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
+        tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
+    tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
 
     UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
     [topViewController presentViewController:navigationController animated:YES completion:nil];
@@ -640,7 +642,8 @@
         [app.wallet sendDeclination:transaction];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)promptDeclinePayment:(ContactTransaction *)transaction forContact:(Contact *)contact
@@ -652,7 +655,8 @@
         [app.wallet sendDeclination:transaction];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)promptCancelPayment:(ContactTransaction *)transaction forContact:(Contact *)contact
@@ -664,7 +668,8 @@
         [app.wallet sendCancellation:transaction];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)sendPayment:(ContactTransaction *)transaction toContact:(Contact *)contact
@@ -842,7 +847,8 @@
     if ([app.wallet isBuyEnabled]) {
         [app buyBitcoinClicked:nil];
     } else {
-        [app.tabControllerManager receiveCoinClicked:nil];
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager receiveCoinClicked:nil];
     }
 }
 

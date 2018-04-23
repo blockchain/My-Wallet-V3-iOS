@@ -72,8 +72,9 @@
 - (void)updateBalance
 {
     NSString *balance = [app.wallet getEthBalanceTruncated];
-    
-    self.balance = app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:balance exchangeRate:app.tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:balance];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    self.balance = app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:balance exchangeRate:tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:balance];
 }
 
 - (void)reloadSymbols
@@ -116,7 +117,8 @@
 
 - (void)getAssetButtonClicked
 {
-    [app.tabControllerManager receiveCoinClicked:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager receiveCoinClicked:nil];
 }
 
 #pragma mark - Table View Data Source

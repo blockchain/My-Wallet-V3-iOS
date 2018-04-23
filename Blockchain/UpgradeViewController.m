@@ -10,6 +10,7 @@
 #import "RootService.h"
 #import "LocalizationConstants.h"
 #import "UILabel+MultiLineAutoSize.h"
+#import "Blockchain-Swift.h"
 
 @interface UpgradeViewController ()
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
@@ -40,7 +41,7 @@
     [app.wallet loading_start_upgrade_to_hd];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [app closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
         [app.wallet performSelector:@selector(upgradeToV3Wallet) withObject:nil afterDelay:0.1f];
     });
     

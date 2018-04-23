@@ -129,7 +129,7 @@
     [alertForChangePasswordSuccess addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         app.settingsNavigationController = nil;
-        [app closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
         [app showPasswordModal];
         app.changedPassword = YES;
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForChangePasswordSuccess animated:YES completion:nil];

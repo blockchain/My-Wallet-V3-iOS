@@ -64,6 +64,7 @@
 - (void)transactionsClicked:(UITabBarItem *)sender;
 - (void)sendCoinsClicked:(UITabBarItem *)sender;
 - (void)qrCodeButtonClicked;
+- (void)transitionToIndex:(NSInteger)index;
 
 - (void)showReceiveBitcoinCash;
 - (void)showTransactionsBitcoin;

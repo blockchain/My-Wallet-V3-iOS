@@ -13,6 +13,7 @@
 #import "PrivateKeyReader.h"
 #import "SendBitcoinViewController.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface AccountsAndAddressesNavigationController () <AssetSelectorViewDelegate>
 @property (nonatomic, readwrite) AssetSelectorView *assetSelectorView;
@@ -210,7 +211,7 @@
 - (void)transferAllFundsClicked
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [app closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
     }];
     
     [app setupTransferAllFunds];

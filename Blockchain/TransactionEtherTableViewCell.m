@@ -36,10 +36,11 @@
         self.ethButton.alpha = 0.5;
         self.actionLabel.alpha = 0.5;
     }
-    
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     self.ethButton.titleLabel.minimumScaleFactor = 0.75f;
     self.ethButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.ethButton setTitle:app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:self.transaction.amount exchangeRate:app.tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth: self.transaction.amountTruncated] forState:UIControlStateNormal];
+    [self.ethButton setTitle:app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:self.transaction.amount exchangeRate:tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth: self.transaction.amountTruncated] forState:UIControlStateNormal];
     [self.ethButton addTarget:self action:@selector(ethButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     if ([self.transaction.txType isEqualToString:TX_TYPE_TRANSFER]) {
@@ -82,8 +83,9 @@
 
 - (void)transactionClicked
 {
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     TransactionDetailViewController *detailViewController = [TransactionDetailViewController new];
-    TransactionDetailViewModel *model = [[TransactionDetailViewModel alloc] initWithEtherTransaction:self.transaction exchangeRate:app.tabControllerManager.latestEthExchangeRate defaultAddress:[app.wallet getEtherAddress]];
+    TransactionDetailViewModel *model = [[TransactionDetailViewModel alloc] initWithEtherTransaction:self.transaction exchangeRate:tabControllerManager.latestEthExchangeRate defaultAddress:[app.wallet getEtherAddress]];
     detailViewController.transactionModel = model;
 
     TransactionDetailNavigationController *navigationController = [[TransactionDetailNavigationController alloc] initWithRootViewController:detailViewController];
@@ -91,10 +93,10 @@
     
     detailViewController.busyViewDelegate = navigationController;
     navigationController.onDismiss = ^() {
-        app.tabControllerManager.transactionsEtherViewController.detailViewController = nil;
+        tabControllerManager.transactionsEtherViewController.detailViewController = nil;
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    app.tabControllerManager.transactionsEtherViewController.detailViewController = detailViewController;
+    tabControllerManager.transactionsEtherViewController.detailViewController = detailViewController;
 
     UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
     [topViewController presentViewController:navigationController animated:YES completion:nil];

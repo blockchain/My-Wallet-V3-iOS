@@ -152,14 +152,13 @@ typedef enum {
 - (void)transferFundsFromAddressClicked
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [app closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
     }];
-    
-    [app closeSideMenu];
     
     [app showSendCoins];
 
-    [app.tabControllerManager transferFundsToDefaultAccountFromAddress:self.address];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager transferFundsToDefaultAccountFromAddress:self.address];
     
     [self.navigationController popToRootViewControllerAnimated:NO];
 }

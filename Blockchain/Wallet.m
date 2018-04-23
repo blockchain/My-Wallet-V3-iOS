@@ -1194,8 +1194,9 @@
 {
     NSLocale *currentLocale = app.localCurrencyFormatter.locale;
     app.localCurrencyFormatter.locale = [NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US];
-    
-    NSString *fiatString = [NSNumberFormatter formatEthToFiat:[app.wallet getEthBalance] exchangeRate:app.tabControllerManager.latestEthExchangeRate];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    NSString *fiatString = [NSNumberFormatter formatEthToFiat:[app.wallet getEthBalance] exchangeRate:tabControllerManager.latestEthExchangeRate];
     NSString *separator = [app.localCurrencyFormatter.locale objectForKey:NSLocaleGroupingSeparator];
     fiatString = [fiatString stringByReplacingOccurrencesOfString:separator withString:@""];
     NSDecimalNumber *balance = [NSDecimalNumber decimalNumberWithString:fiatString ? : @"0"];
@@ -3410,10 +3411,11 @@
     [self getFinalBalance];
     
     NSString *filter = @"";
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    TransactionsBitcoinViewController *transactionsBitcoinViewController = tabControllerManager.transactionsBitcoinViewController;
     
-    TransactionsBitcoinViewController *transactionsBitcoinViewController = app.tabControllerManager.transactionsBitcoinViewController;
-    
-    int filterIndex = transactionsBitcoinViewController ? (int)app.tabControllerManager.transactionsBitcoinViewController.filterIndex : FILTER_INDEX_ALL;
+    int filterIndex = transactionsBitcoinViewController ? (int)transactionsBitcoinViewController.filterIndex : FILTER_INDEX_ALL;
     
     if (filterIndex == FILTER_INDEX_ALL) {
         filter = @"";

@@ -231,7 +231,8 @@
         self.chartContainerViewController = [[BCPriceChartContainerViewController alloc] init];
         self.chartContainerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.chartContainerViewController.delegate = self;
-        [app.tabControllerManager.tabViewController presentViewController:self.chartContainerViewController animated:YES completion:nil];
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager.tabViewController presentViewController:self.chartContainerViewController animated:YES completion:nil];
     }
 }
 
@@ -270,28 +271,32 @@
 
 - (void)bitcoinLegendTapped
 {
-    [app.tabControllerManager showTransactionsBitcoin];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager showTransactionsBitcoin];
 }
 
 - (void)etherLegendTapped
 {
-    [app.tabControllerManager showTransactionsEther];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager showTransactionsEther];
 }
 
 - (void)bitcoinCashLegendTapped
 {
-    [app.tabControllerManager showTransactionsBitcoinCash];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager showTransactionsBitcoinCash];
 }
 
 #pragma mark - View Helpers
 
 - (void)showError:(NSString *)error
 {
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     if ([BlockchainSettings sharedAppInstance].isPinSet &&
         !app.pinEntryViewController &&
         [app.wallet isInitialized] &&
-        app.tabControllerManager.tabViewController.selectedIndex == TAB_DASHBOARD
-        && !app.modalView) {
+        tabControllerManager.tabViewController.selectedIndex == TAB_DASHBOARD
+        && ![ModalPresenter sharedInstance].modalView) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
         dispatch_async(dispatch_get_main_queue(), ^{
