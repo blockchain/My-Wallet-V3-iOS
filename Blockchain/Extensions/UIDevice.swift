@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc
 public extension UIDevice {
     var modelName: String {
         var systemInfo = utsname()
