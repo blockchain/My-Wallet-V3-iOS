@@ -106,10 +106,14 @@ final class CertificatePinner: NSObject {
                 let credential = URLCredential(trust: serverTrust)
                 completion(.useCredential, credential)
             } else {
-                // TODO: add failed to validate certificate handler
-                // [self.delegate failedToValidateCertificate:challenge.protectionSpace.host];
+                didFailToValidate()
                 completion(.cancelAuthenticationChallenge, nil)
             }
         }
+    }
+
+    // TODO: implement when required changes are merged into `swift` branch.
+    func didFailToValidate() {
+
     }
 }
