@@ -355,7 +355,10 @@
 
 - (double)getEthBalance
 {
-    return [self doubleFromString:[NSNumberFormatter formatEthToFiat:[app.wallet getEthBalance] exchangeRate:app.wallet.latestEthExchangeRate]];
+    app.localCurrencyFormatter.usesGroupingSeparator = NO;
+    double result = [self doubleFromString:[NSNumberFormatter formatEthToFiat:[app.wallet getEthBalance] exchangeRate:app.wallet.latestEthExchangeRate]];
+    app.localCurrencyFormatter.usesGroupingSeparator = YES;
+    return result;
 }
 
 - (double)getBchBalance
