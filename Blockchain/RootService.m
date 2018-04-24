@@ -3930,30 +3930,30 @@ void (^secondPasswordSuccess)(NSString *);
     return input;
 }
 
-#pragma mark - Certificate Pinner Delegate
-
-- (void)failedToValidateCertificate:(NSString *)hostName
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_VALIDATION_CERTIFICATE_TITLE message:[NSString stringWithFormat:@"%@\n\n%@\n\n%@", hostName, BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE, [NSString stringWithFormat:BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE_CONTACT_SUPPORT_ARGUMENT, URL_SUPPORT]] preferredStyle:UIAlertControllerStyleAlert];
-    alert.view.tag = TAG_CERTIFICATE_VALIDATION_FAILURE_ALERT;
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        // Close App
-        UIApplication *app = [UIApplication sharedApplication];
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.window.rootViewController.presentedViewController) {
-            if (self.window.rootViewController.presentedViewController.view.tag != TAG_CERTIFICATE_VALIDATION_FAILURE_ALERT) {
-                [self.window.rootViewController dismissViewControllerAnimated:NO completion:^{
-                    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-                }];
-            }
-        } else {
-            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        }
-    });
-
-}
+//#pragma mark - Certificate Pinner Delegate
+//
+//- (void)failedToValidateCertificate:(NSString *)hostName
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_VALIDATION_CERTIFICATE_TITLE message:[NSString stringWithFormat:@"%@\n\n%@\n\n%@", hostName, BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE, [NSString stringWithFormat:BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE_CONTACT_SUPPORT_ARGUMENT, URL_SUPPORT]] preferredStyle:UIAlertControllerStyleAlert];
+//    alert.view.tag = TAG_CERTIFICATE_VALIDATION_FAILURE_ALERT;
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        // Close App
+//        UIApplication *app = [UIApplication sharedApplication];
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.window.rootViewController.presentedViewController) {
+//            if (self.window.rootViewController.presentedViewController.view.tag != TAG_CERTIFICATE_VALIDATION_FAILURE_ALERT) {
+//                [self.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+//                    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//                }];
+//            }
+//        } else {
+//            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//        }
+//    });
+//
+//}
 
 @end
