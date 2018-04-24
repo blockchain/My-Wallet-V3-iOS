@@ -149,7 +149,7 @@
         [self.balancesChartView updateBitcoinFiatBalance:btcBalance];
         [self.balancesChartView updateEtherFiatBalance:ethBalance];
         [self.balancesChartView updateBitcoinCashFiatBalance:bchBalance];
-        [self.balancesChartView updateTotalFiatBalance:[NSNumberFormatter appendStringToFiatSymbol:[NSString stringWithFormat:@"%.2f", totalFiatBalance]]];
+        [self.balancesChartView updateTotalFiatBalance:[NSNumberFormatter appendStringToFiatSymbol:[NSNumberFormatter fiatStringFromDouble:totalFiatBalance]]];
         // Balances
         [self.balancesChartView updateBitcoinBalance:[NSNumberFormatter formatAmount:[app.wallet getTotalActiveBalance] localCurrency:NO]];
         [self.balancesChartView updateEtherBalance:[app.wallet getEthBalanceTruncated]];
