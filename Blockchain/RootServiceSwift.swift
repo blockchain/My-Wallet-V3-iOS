@@ -103,7 +103,9 @@ final class RootServiceSwift {
         UserDefaults.standard.set(false, forKey: simulateSurgeKey)
         #endif
 
-        //: ...
+        CertificatePinner.shared.pinCertificate()
+
+        checkForNewInstall()
 
         return true
     }
@@ -159,6 +161,7 @@ final class RootServiceSwift {
         }
     }
 
+    // TODO: migrate to the responsible controller that prompts for authentication
     func handleBiometricAuthenticationError(with error: AuthenticationError) {
         if let description = error.description {
             let alert = UIAlertController(title: LCStringError, message: description, preferredStyle: .alert)
@@ -170,6 +173,7 @@ final class RootServiceSwift {
         }
     }
 
+    // TODO: migrate to the responsible controller that prompts for authentication
     func handlePasscodeAuthenticationError(with error: AuthenticationError) {
         // TODO: implement handlePasscodeAuthenticationError
     }
@@ -221,5 +225,25 @@ final class RootServiceSwift {
 //            [self hideBusyView];
 //            [self standardNotifyAutoDismissingController:BC_STRING_ERROR_LOADING_WALLET];
 //        }
+    }
+
+    // MARK: - State Checks
+
+    // TODO: move to BlockchainSettings
+    func checkForNewInstall() {
+        if !UserDefaults.standard.bool(forKey: UserDefaults.Keys.firstRun.rawValue) {
+            if KeychainItemWrapper.guid() != nil && KeychainItemWrapper.sharedKey() != nil && !BlockchainSettings.sharedAppInstance().isPinSet {
+                alertUserAskingToUseOldKeychain()
+            }
+            UserDefaults.standard.set(true, forKey: UserDefaults.Keys.firstRun.rawValue)
+        }
+        let upgradeKey = UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue
+        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
+            UserDefaults.standard.removeObject(forKey: upgradeKey)
+        }
+    }
+
+    func alertUserAskingToUseOldKeychain() {
+
     }
 }

@@ -183,7 +183,7 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //    [self.certificatePinner pinCertificate];
 
-    [self checkForNewInstall];
+//    [self checkForNewInstall];
 
     [self persistServerSessionIDForNewUIWebViews];
 
@@ -3807,22 +3807,22 @@ void (^secondPasswordSuccess)(NSString *);
 
 #pragma mark - State Checks
 
-- (void)checkForNewInstall
-{
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_FIRST_RUN]) {
-
-        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey] && ![BlockchainSettings sharedAppInstance].isPinSet) {
-            [self alertUserAskingToUseOldKeychain];
-        }
-
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:USER_DEFAULTS_KEY_FIRST_RUN];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_HAS_SEEN_UPGRADE_TO_HD_SCREEN]) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_HAS_SEEN_UPGRADE_TO_HD_SCREEN];
-    }
-}
+//- (void)checkForNewInstall
+//{
+//    if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_FIRST_RUN]) {
+//
+//        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey] && ![BlockchainSettings sharedAppInstance].isPinSet) {
+//            [self alertUserAskingToUseOldKeychain];
+//        }
+//
+//        [[NSUserDefaults standardUserDefaults] setBool:true forKey:USER_DEFAULTS_KEY_FIRST_RUN];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
+//
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_HAS_SEEN_UPGRADE_TO_HD_SCREEN]) {
+//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_HAS_SEEN_UPGRADE_TO_HD_SCREEN];
+//    }
+//}
 
 - (void)alertUserAskingToUseOldKeychain
 {
