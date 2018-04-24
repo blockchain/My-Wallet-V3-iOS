@@ -120,14 +120,20 @@
 		5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185B189208697F1003C9AC2 /* BCPriceMarker.swift */; };
 		5185E11B208E7F2100A26B64 /* RootServiceSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72D20741A120000A7FD /* RootServiceSwift.swift */; };
 		5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
-		51943596208E3005001EF882 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* URL.swift */; };
+		5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
+		5185E125208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
+		5185E127208F6E9900A26B64 /* Enum+Enumerable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E126208F6E9900A26B64 /* Enum+Enumerable.swift */; };
+		5185E128208F6E9900A26B64 /* Enum+Enumerable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E126208F6E9900A26B64 /* Enum+Enumerable.swift */; };
+		5185E12A208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */; };
+		5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */; };
+		51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* BlockchainAPI+URL.swift */; };
 		519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519435A0208E61F3001EF882 /* BlockchainTests.swift */; };
 		519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519435AB208E6279001EF882 /* CertificatePinnerTests.swift */; };
 		519435AD208E62E0001EF882 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
-		519435AE208E62E3001EF882 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* API.swift */; };
+		519435AE208E62E3001EF882 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
 		519435AF208E62E8001EF882 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
 		519435B0208E62EB001EF882 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348F20891EB3009727D5 /* UserAgent.swift */; };
-		519435B1208E62F6001EF882 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* URL.swift */; };
+		519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* BlockchainAPI+URL.swift */; };
 		519435B2208E630A001EF882 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		519435B3208E630C001EF882 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
 		519435B4208E630F001EF882 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
@@ -143,7 +149,7 @@
 		51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
 		51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
 		51A7349520891EB3009727D5 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348F20891EB3009727D5 /* UserAgent.swift */; };
-		51A7349720891EB3009727D5 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* API.swift */; };
+		51A7349720891EB3009727D5 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
 		51E5C73120741A130000A7FD /* RootServiceSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72D20741A120000A7FD /* RootServiceSwift.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
@@ -955,7 +961,10 @@
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
 		5185B189208697F1003C9AC2 /* BCPriceMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BCPriceMarker.swift; path = Views/BCPriceMarker.swift; sourceTree = "<group>"; };
-		51943595208E3005001EF882 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Enum+RawValued.swift"; path = "Extensions/Enum+RawValued.swift"; sourceTree = "<group>"; };
+		5185E126208F6E9900A26B64 /* Enum+Enumerable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Enum+Enumerable.swift"; path = "Extensions/Enum+Enumerable.swift"; sourceTree = "<group>"; };
+		5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URI.swift"; sourceTree = "<group>"; };
+		51943595208E3005001EF882 /* BlockchainAPI+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URL.swift"; sourceTree = "<group>"; };
 		5194359E208E61F3001EF882 /* BlockchainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockchainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		519435A0208E61F3001EF882 /* BlockchainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainTests.swift; sourceTree = "<group>"; };
 		519435A2208E61F3001EF882 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -964,7 +973,7 @@
 		51A7348C20891EB3009727D5 /* CertificatePinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatePinner.swift; sourceTree = "<group>"; };
 		51A7348D20891EB3009727D5 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		51A7348F20891EB3009727D5 /* UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAgent.swift; sourceTree = "<group>"; };
-		51A7349020891EB3009727D5 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		51A7349020891EB3009727D5 /* BlockchainAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockchainAPI.swift; sourceTree = "<group>"; };
 		51E5C72D20741A120000A7FD /* RootServiceSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootServiceSwift.swift; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationManager.swift; path = Authentication/AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
@@ -1493,6 +1502,8 @@
 				511646DE20851BC600C43522 /* Bundle.swift */,
 				511646E1208523E300C43522 /* UIDevice.swift */,
 				513913EF2081206C002578FD /* UserDefaults.swift */,
+				5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */,
+				5185E126208F6E9900A26B64 /* Enum+Enumerable.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1563,7 +1574,7 @@
 		51A7348B20891EB3009727D5 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				51A7349020891EB3009727D5 /* API.swift */,
+				51A7349020891EB3009727D5 /* BlockchainAPI.swift */,
 				51A7348C20891EB3009727D5 /* CertificatePinner.swift */,
 				51A7348D20891EB3009727D5 /* NetworkManager.swift */,
 				51A7348E20891EB3009727D5 /* Extensions */,
@@ -1575,7 +1586,8 @@
 			isa = PBXGroup;
 			children = (
 				51A7348F20891EB3009727D5 /* UserAgent.swift */,
-				51943595208E3005001EF882 /* URL.swift */,
+				51943595208E3005001EF882 /* BlockchainAPI+URL.swift */,
+				5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2548,21 +2560,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				519435AD208E62E0001EF882 /* CertificatePinner.swift in Sources */,
+				5185E125208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
 				519435B3208E630C001EF882 /* UIDevice.swift in Sources */,
 				519435B5208E6356001EF882 /* AuthenticationManager.swift in Sources */,
 				519435B2208E630A001EF882 /* Bundle.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				519435AF208E62E8001EF882 /* NetworkManager.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
-				519435B1208E62F6001EF882 /* URL.swift in Sources */,
+				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				519435B4208E630F001EF882 /* UserDefaults.swift in Sources */,
 				5185E11B208E7F2100A26B64 /* RootServiceSwift.swift in Sources */,
 				519435B8208E6366001EF882 /* LocalizationConstants.swift in Sources */,
 				519435B7208E6364001EF882 /* Environment.swift in Sources */,
 				519435B6208E635A001EF882 /* AssetType.swift in Sources */,
+				5185E128208F6E9900A26B64 /* Enum+Enumerable.swift in Sources */,
 				519435BA208E63CE001EF882 /* Passcode.swift in Sources */,
-				519435AE208E62E3001EF882 /* API.swift in Sources */,
+				519435AE208E62E3001EF882 /* BlockchainAPI.swift in Sources */,
 				519435B0208E62EB001EF882 /* UserAgent.swift in Sources */,
+				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				519435B9208E63CA001EF882 /* AuthenticationError.swift in Sources */,
 				519435BB208E64DD001EF882 /* AppDelegate.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
@@ -2637,6 +2652,7 @@
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
 				84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */,
 				9F765F3D14BC7C4F00048EFB /* Transaction.m in Sources */,
+				5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
 				2322DCC31D771831000E5AC1 /* NSRunLoop+SRWebSocket.m in Sources */,
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,
 				9F765F4714BC8AEF00048EFB /* MultiAddressResponse.m in Sources */,
@@ -2684,6 +2700,7 @@
 				23FB5C131D9ABB8B0008C6AB /* TransactionDetailStatusCell.m in Sources */,
 				CFA0671F1E65D426008456C1 /* WebLoginViewController.m in Sources */,
 				A2599BA51B0B725400C2EA81 /* BackupWordsViewController.swift in Sources */,
+				5185E12A208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */,
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
@@ -2734,7 +2751,7 @@
 				67EE1DCE19E3325900DBBFC9 /* ECSlidingViewController.m in Sources */,
 				FCB33B721FC36EA200317E6B /* ExchangeProgressViewController.m in Sources */,
 				6780DB981A40BDF40048EED2 /* AccountInOut.m in Sources */,
-				51943596208E3005001EF882 /* URL.swift in Sources */,
+				51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				23BF733C1C455DDB00204503 /* AccountsAndAddressesViewController.m in Sources */,
 				2322DCB41D771831000E5AC1 /* SRDelegateController.m in Sources */,
 				9F1831E51516A45700FB3D52 /* NSString+SHA256.m in Sources */,
@@ -2745,6 +2762,7 @@
 				230FD2D91C5BF1A700336683 /* BCQRCodeView.m in Sources */,
 				2322321A1B44D4CB00E5DF26 /* UpgradeViewController.m in Sources */,
 				6750389B1B4D832F00F7B488 /* SideMenuViewCell.m in Sources */,
+				5185E127208F6E9900A26B64 /* Enum+Enumerable.swift in Sources */,
 				9F1831EE151744EB00FB3D52 /* ReceiveTableCell.m in Sources */,
 				C72D6CBF1EC0B4AB0000F922 /* BCFeeSelectionView.m in Sources */,
 				67EE1DCB19E3325900DBBFC9 /* ECSlidingAnimationController.m in Sources */,
@@ -2755,7 +2773,7 @@
 				C9BE917C1945D8F600FD516D /* PEPinEntryController.m in Sources */,
 				239539831B486C7100989667 /* UILabel+MultiLineAutoSize.m in Sources */,
 				C7414E531FD72574001A89FA /* StateSelectorViewController.m in Sources */,
-				51A7349720891EB3009727D5 /* API.swift in Sources */,
+				51A7349720891EB3009727D5 /* BlockchainAPI.swift in Sources */,
 				51A7349520891EB3009727D5 /* UserAgent.swift in Sources */,
 				A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */,
 				C75F70E41E241D69005B4EAF /* BCContactRequestView.m in Sources */,
