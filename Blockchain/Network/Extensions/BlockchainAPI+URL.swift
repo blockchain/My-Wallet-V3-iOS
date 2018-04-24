@@ -9,7 +9,7 @@
 import Foundation
 
 @objc
-extension API {
+extension URL: BlockchainAPI {
     var apiUrl: String? {
         guard let host = Bundle.main.infoDictionary!["API_URL"] as? String else {
             return nil
@@ -47,12 +47,12 @@ extension API {
         return "https://\(hostAndPath)"
     }
     var blockchairUrl: String {
-        return "https://\(Endpoints.blockchair.rawValue)"
+        return "https://\(PartnerEndpoints.blockchair.rawValue)"
     }
     var blockchairBchTransactionUrl: String {
         return  "\(blockchairUrl)/bitcoin-cash/transaction/"
     }
     var etherscanUrl: String {
-        return "https://\(Endpoints.etherscan.rawValue)"
+        return "https://\(PartnerEndpoints.etherscan.rawValue)"
     }
 }
