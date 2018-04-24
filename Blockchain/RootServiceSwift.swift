@@ -231,19 +231,22 @@ final class RootServiceSwift {
 
     // TODO: move to BlockchainSettings
     func checkForNewInstall() {
-        if !UserDefaults.standard.bool(forKey: UserDefaults.Keys.firstRun.rawValue) {
+        if !BlockchainSettings.App.shared.firstRun {
             if KeychainItemWrapper.guid() != nil && KeychainItemWrapper.sharedKey() != nil && !BlockchainSettings.sharedAppInstance().isPinSet {
                 alertUserAskingToUseOldKeychain()
             }
-            UserDefaults.standard.set(true, forKey: UserDefaults.Keys.firstRun.rawValue)
+            BlockchainSettings.App.shared.firstRun = true
         }
-        let upgradeKey = UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue
-        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
-            UserDefaults.standard.removeObject(forKey: upgradeKey)
+//        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
+//            UserDefaults.standard.removeObject(forKey: upgradeKey)
+//        }
+        // TODO: investigate this further
+        if BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen {
+            BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen = false
         }
     }
 
     func alertUserAskingToUseOldKeychain() {
-
+        // TODO: implement alertUserAskingToUseOldKeychain
     }
 }
