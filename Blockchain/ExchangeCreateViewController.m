@@ -33,6 +33,9 @@
 
 @property (nonatomic) UIButton *assetToggleButton;
 
+@property (nonatomic) NSTimer *quoteTimer;
+@property (nonatomic) NSDate *lastTypedDate;
+
 // Digital asset input
 @property (nonatomic) BCSecureTextField *topLeftField;
 @property (nonatomic) BCSecureTextField *topRightField;
@@ -111,6 +114,21 @@
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     navigationController.headerTitle = BC_STRING_EXCHANGE;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(getQuoteAfterTypingHasStopped) userInfo:nil repeats:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self.quoteTimer invalidate];
+    self.quoteTimer = nil;
 }
 
 - (void)setupViews
@@ -448,6 +466,8 @@
             self.amount = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:depositAmountString]];
         }
         
+        self.lastChangedField = self.bottomLeftField;
+        
         NSString *toSymbol = self.toSymbol;
         if ([toSymbol isEqualToString:CURRENCY_SYMBOL_ETH]) {
             self.bottomRightField.text = ethResult;
@@ -677,7 +697,7 @@
     
     [self disablePaymentButtons];
     
-    [self performSelector:@selector(getApproximateQuote) withObject:nil afterDelay:0.5];
+    self.lastTypedDate = [NSDate date];
 }
 
 - (void)doCurrencyConversion
@@ -1081,6 +1101,15 @@
 }
 
 #pragma mark - Helpers
+
+- (void)getQuoteAfterTypingHasStopped
+{
+    if (self.lastTypedDate && [self.lastTypedDate timeIntervalSinceNow] < -0.8) {
+        [self disablePaymentButtons];
+        [self getApproximateQuote];
+        self.lastTypedDate = nil;
+    }
+}
 
 - (void)hideKeyboard
 {
