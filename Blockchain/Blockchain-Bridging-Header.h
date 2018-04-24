@@ -9,3 +9,4 @@
 #import "UIViewController+AutoDismiss.h"
 #import "TransferAllFundsViewController.h"
 #import "BCNavigationController.h"
+#import "NSNumberFormatter+Currencies.h"
