@@ -18,6 +18,7 @@
 #import "BCAddressSelectionView.h"
 #import "TransactionDetailNavigationController.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface TransactionsViewController ()
 @property (nonatomic) UILabel *noTransactionsTitle;
@@ -473,7 +474,7 @@
         }
     }
 #else
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
     
     [app.wallet performSelector:@selector(getHistory) withObject:nil afterDelay:0.1f];
 #endif
@@ -723,7 +724,7 @@
 - (void)showFilterMenu
 {
     BCAddressSelectionView *filterView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeFilter delegate:self];
-    [app showModalWithContent:filterView closeType:ModalCloseTypeBack headerText:BC_STRING_BALANCES];
+    [[ModalPresenter sharedInstance] showModalWithContent:filterView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_BALANCES onDismiss:nil onResume:nil];
 }
 
 #pragma mark - Address Selection Delegate

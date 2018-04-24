@@ -199,7 +199,7 @@ typedef enum {
         NSArray *activeLegacyAddresses = [app.wallet activeLegacyAddresses:self.assetType];
         
         if (![app.wallet didUpgradeToHd] && [activeLegacyAddresses count] == 1 && [[activeLegacyAddresses firstObject] isEqualToString:self.address]) {
-            [app standardNotifyAutoDismissingController:BC_STRING_AT_LEAST_ONE_ADDRESS_REQUIRED];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_AT_LEAST_ONE_ADDRESS_REQUIRED title:BC_STRING_ERROR];
         } else {
             [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
             [self performSelector:@selector(toggleArchiveLegacyAddress) withObject:nil afterDelay:ANIMATION_DURATION];

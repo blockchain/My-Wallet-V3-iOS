@@ -15,9 +15,6 @@ final class RootServiceSwift {
 
     // MARK: - Properties
 
-    /// Grants the Root Service access to the application delegate
-    fileprivate let appDelegate: AppDelegate!
-
     /// Flag used to indicate whether the device is prompting for biometric authentication.
     @objc public private(set) var isPromptingForBiometricAuthentication = false
 
@@ -58,10 +55,6 @@ final class RootServiceSwift {
 
     //: Prevent outside objects from creating their own instances of this class.
     private init() {
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("No application delegate found!")
-        }
-        appDelegate = delegate
     }
 
     // MARK: - Application Lifecycle
@@ -106,6 +99,10 @@ final class RootServiceSwift {
         CertificatePinner.shared.pinCertificate()
 
         checkForNewInstall()
+
+        AppCoordinator.shared.start()
+
+        //: ...
 
         return true
     }
@@ -164,11 +161,11 @@ final class RootServiceSwift {
     // TODO: migrate to the responsible controller that prompts for authentication
     func handleBiometricAuthenticationError(with error: AuthenticationError) {
         if let description = error.description {
-            let alert = UIAlertController(title: LCStringError, message: description, preferredStyle: .alert)
-            let action = UIAlertAction(title: LCStringOK, style: .default, handler: nil)
+            let alert = UIAlertController(title: LocalizationConstants.error, message: description, preferredStyle: .alert)
+            let action = UIAlertAction(title: LocalizationConstants.ok, style: .default, handler: nil)
             alert.addAction(action)
             DispatchQueue.main.async {
-                app.window.rootViewController?.present(alert, animated: true, completion: nil)
+                UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -191,7 +188,7 @@ final class RootServiceSwift {
 
     func showPrivacyScreen() {
         privacyScreen?.alpha = 1
-        app.window.addSubview(privacyScreen!)
+        UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
     }
 
     func failedToObtainValuesFromKeychain() {
@@ -201,11 +198,11 @@ final class RootServiceSwift {
             // perform suspend selector
         })
         alert.addAction(action)
-        app.window.rootViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
     func showVerifyingBusyView(withTimeout seconds: Int) {
-        app.showBusyView(withLoadingText: LCStringLoadingVerifying)
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
         // TODO: refactor showVerifyingBusyView with newer iOS 10+ method
         loginTimeout = Timer.scheduledTimer(
             timeInterval: TimeInterval(seconds),
@@ -216,7 +213,7 @@ final class RootServiceSwift {
         )
     }
     @objc func showErrorLoading() {
-        // TODO: complete showErrorLoading implementation
+        // TODO: put this in AuthenticationManager
         if let timer = loginTimeout {
             timer.invalidate()
         }

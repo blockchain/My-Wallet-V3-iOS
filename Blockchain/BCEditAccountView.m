@@ -14,7 +14,7 @@
 
 -(id)initWithAssetType:(AssetType)assetType
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     self = [super initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, window.frame.size.width, window.frame.size.height - DEFAULT_HEADER_HEIGHT)];
     
@@ -63,13 +63,13 @@
     NSString *label = [self.labelTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if (label.length == 0) {
-        [app standardNotify:BC_STRING_YOU_MUST_ENTER_A_LABEL];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_YOU_MUST_ENTER_A_LABEL title:BC_STRING_ERROR];
         return;
     }
     
     if (label.length > 17) {
         // TODO i18n
-        [app standardNotify:BC_STRING_LABEL_MUST_HAVE_LESS_THAN_18_CHAR];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_LABEL_MUST_HAVE_LESS_THAN_18_CHAR title:BC_STRING_ERROR];
         return;
     }
     
@@ -80,10 +80,10 @@
     [self.labelTextField resignFirstResponder];
     
     if (self.assetType == AssetTypeBitcoin) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     [self performSelector:@selector(changeAccountName:) withObject:label afterDelay:ANIMATION_DURATION];
 }

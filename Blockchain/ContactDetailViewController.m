@@ -322,7 +322,7 @@ const int maxFindAttempts = 2;
     
     [self.tableView reloadData];
     [self.transactionDetailViewController didGetHistory];
-    
+
     if (self.refreshControl && self.refreshControl.isRefreshing) {
         [self.refreshControl endRefreshing];
     }

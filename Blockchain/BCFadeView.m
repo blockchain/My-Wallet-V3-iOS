@@ -10,6 +10,18 @@
 
 @implementation BCFadeView
 
++ (nonnull BCFadeView *)instanceFromNib
+{
+    UINib *nib = [UINib nibWithNibName:@"BCFadeView" bundle:[NSBundle mainBundle]];
+    return (BCFadeView *) [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.labelBusy.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+}
+
 - (void)fadeIn {
     self.containerView.layer.cornerRadius = 5;
     

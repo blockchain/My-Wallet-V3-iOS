@@ -7,9 +7,9 @@
 //
 
 #import "BCWelcomeView.h"
-#import "RootService.h"
 #import "LocalizationConstants.h"
 #import "DebugTableViewController.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCWelcomeView
 
@@ -18,7 +18,7 @@ Boolean shouldShowAnimation;
 
 -(id)init
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     shouldShowAnimation = true;
     
@@ -67,7 +67,7 @@ Boolean shouldShowAnimation;
         self.recoverWalletButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
         self.recoverWalletButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [self.recoverWalletButton setTitleColor:COLOR_BLOCKCHAIN_BLUE forState:UIControlStateNormal];
-        [self.recoverWalletButton setTitle:[BC_STRING_RECOVER_FUNDS uppercaseString] forState:UIControlStateNormal];
+        [self.recoverWalletButton setTitle:[[LocalizationConstantsObjcBridge onboardingRecoverFunds] uppercaseString] forState:UIControlStateNormal];
         self.recoverWalletButton.frame = CGRectMake(0, self.frame.size.height - 90, 240, BUTTON_HEIGHT);
         self.recoverWalletButton.center = CGPointMake(self.center.x, self.recoverWalletButton.center.y);
         [self.recoverWalletButton setBackgroundColor:[UIColor clearColor]];
@@ -88,15 +88,35 @@ Boolean shouldShowAnimation;
 #endif
         // Version
         [self setupVersionLabel];
+        
+        // Add touch handlers to buttons
+        [self.createWalletButton addTarget:self action:@selector(showCreateWallet:) forControlEvents:UIControlEventTouchUpInside];
+        [self.existingWalletButton addTarget:self action:@selector(showPairWallet:) forControlEvents:UIControlEventTouchUpInside];
+        [self.recoverWalletButton addTarget:self action:@selector(showRecoverWallet:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return self;
 }
 
+- (void)showCreateWallet:(id)sender
+{
+    [self.delegate showCreateWallet];
+}
+
+- (void)showPairWallet:(id)sender
+{
+    [self.delegate showPairWallet];
+}
+
+- (void)showRecoverWallet:(id)sender
+{
+    [self.delegate showRecoverWallet];
+}
+
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan) {
-        [app showDebugMenu:DEBUG_PRESENTER_WELCOME_VIEW];
+        [[AppCoordinator sharedInstance] showDebugViewWithPresenter: DEBUG_PRESENTER_WELCOME_VIEW];
     }
 }
 

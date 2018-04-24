@@ -9,12 +9,13 @@
 #import "BCModalView.h"
 #import "RootService.h"
 #import "LocalizationConstants.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCModalView
 
 - (id)initWithCloseType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)];
     
@@ -95,11 +96,11 @@
         }
         
         if (self.closeType == ModalCloseTypeBack) {
-            [app closeModalWithTransition:kCATransitionFromLeft];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
         }
         else {
             [self endEditing:YES];
-            [app closeModalWithTransition:kCATransitionFade];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
         }
     }
 }

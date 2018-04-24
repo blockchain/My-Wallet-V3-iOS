@@ -12,6 +12,7 @@
 #import "TransactionTableCell.h"
 #import "Transaction.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface TransactionsViewController () <AddressSelectionDelegate>
 @property (nonatomic) UILabel *noTransactionsTitle;
@@ -127,7 +128,7 @@
 
 - (void)getHistoryAndRates
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
 
     [app.wallet performSelector:@selector(getBitcoinCashHistoryAndRates) withObject:nil afterDelay:0.1f];
 }
@@ -221,7 +222,7 @@
 - (void)showFilterMenu
 {
     BCAddressSelectionView *filterView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeFilter delegate:self];
-    [app showModalWithContent:filterView closeType:ModalCloseTypeBack headerText:BC_STRING_BALANCES];
+    [[ModalPresenter sharedInstance] showModalWithContent:filterView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_BALANCES onDismiss:nil onResume:nil];
 }
 
 #pragma mark - Address Selection Delegate

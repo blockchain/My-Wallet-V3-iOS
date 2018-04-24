@@ -91,7 +91,6 @@
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 @property (strong, nonatomic) Wallet *wallet;
 @property (strong, nonatomic) MultiAddressResponse *latestResponse;
-@property (nonatomic, strong) NSString *loadingText;
 
 @property (strong, nonatomic) IBOutlet BCModalView *modalView;
 @property (strong, nonatomic) NSMutableArray *modalChain;
@@ -141,11 +140,11 @@
 - (void)swipeRight;
 
 // BC Modal
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText;
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume;
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume;
-- (void)closeModalWithTransition:(NSString *)transition;
-- (void)closeAllModals;
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText;
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume;
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume;
+//- (void)closeModalWithTransition:(NSString *)transition;
+//- (void)closeAllModals;
 
 - (NSDictionary*)parseURI:(NSString*)urlString prefix:(NSString *)urlPrefix;
 
@@ -154,15 +153,15 @@
 - (void)walletFailedToDecrypt;
 
 // Display a message
-- (void)standardNotifyAutoDismissingController:(NSString *)message;
-- (void)standardNotifyAutoDismissingController:(NSString *)message title:(NSString *)title;
-- (void)standardNotify:(NSString*)message;
-- (void)standardNotify:(NSString*)message title:(NSString*)title;
+//- (void)standardNotifyAutoDismissingController:(NSString *)message;
+//- (void)standardNotifyAutoDismissingController:(NSString *)message title:(NSString *)title;
+//- (void)standardNotify:(NSString*)message;
+//- (void)standardNotify:(NSString*)message title:(NSString*)title;
 
 // Busy view with loading text
-- (void)showBusyViewWithLoadingText:(NSString *)text;
-- (void)updateBusyViewLoadingText:(NSString *)text;
-- (void)hideBusyView;
+//- (void)showBusyViewWithLoadingText:(NSString *)text;
+//- (void)updateBusyViewLoadingText:(NSString *)text;
+//- (void)hideBusyView;
 
 // Request Second Password From User
 - (void)getSecondPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error helperText:(NSString *)helperText;
@@ -185,8 +184,8 @@
 
 - (void)showSendCoins;
 - (void)showAccountsAndAddresses;
-- (void)showDebugMenu:(int)presenter;
 - (void)showHdUpgrade;
+//- (void)showDebugMenu:(int)presenter;
 - (void)showBackupReminder:(BOOL)firstReceive;
 
 - (IBAction)webLoginClicked:(id)sender;

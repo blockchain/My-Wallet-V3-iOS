@@ -7,6 +7,7 @@
 //
 
 #import "BCModalViewController.h"
+#import "Blockchain-Swift.h"
 
 @interface BCModalViewController ()
 @property (nonatomic) UIView *modalView;
@@ -71,8 +72,8 @@
         }
 
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeModalClicked) name:NOTIFICATION_KEY_MODAL_VIEW_DISMISSED object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeModalClicked) name:[ConstantsObjcBridge notificationKeyModalViewDismissed] object:nil];
     
     return self;
 }

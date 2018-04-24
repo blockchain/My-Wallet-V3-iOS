@@ -19,7 +19,7 @@
     self = [super init];
     
     if (self) {
-        ECSlidingViewController *sideMenu = app.slidingViewController;
+        ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         
         _iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(18, 10, 22, 22)];
         [self addSubview:_iconImage];
@@ -51,8 +51,8 @@
     
     editAccountView.accountIdx = self.accountIdx;
     editAccountView.labelTextField.text = [app.wallet getLabelForAccount:self.accountIdx assetType:self.assetType];
-    
-    [app showModalWithContent:editAccountView closeType:ModalCloseTypeClose headerText:BC_STRING_EDIT onDismiss:^{
+
+    [[ModalPresenter sharedInstance] showModalWithContent:editAccountView closeType:ModalCloseTypeClose showHeader:true headerText:BC_STRING_EDIT onDismiss:^{
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:YES];
     } onResume:^{
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];

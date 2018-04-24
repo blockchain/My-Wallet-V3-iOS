@@ -16,6 +16,7 @@
 #import "ContactDetailViewController.h"
 #import "ContactTableViewCell.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 #define VIEW_NAME_NEW_CONTACT @"newContact"
 
@@ -458,7 +459,7 @@ const int sectionContacts = 0;
     UIAlertAction *submitAction = [UIAlertAction actionWithTitle:BC_STRING_CONFIRM style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *senderName = [[userNameAlert textFields] firstObject].text;
         if ([app checkInternetConnection]) {
-            [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_INVITATION];
+            [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_INVITATION];
             [app.wallet createContactWithName:senderName ID:contactName];
         }
     }];
@@ -662,13 +663,13 @@ const int sectionContacts = 0;
 - (void)didFailAcceptRelation:(NSString *)name
 {
     DLog(@"Accept relation failure");
-    
-    [app standardNotify:[NSString stringWithFormat:BC_STRING_ACCEPT_RELATION_ERROR_ALERT_MESSAGE_NAME_ARGUMENT, name]];
+
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ACCEPT_RELATION_ERROR_ALERT_MESSAGE_NAME_ARGUMENT, name] title:BC_STRING_ERROR];
 }
 
 - (void)didCreateInvitation:(NSDictionary *)invitationDict
 {
-    [app hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     self.lastCreatedInvitation = invitationDict;
     

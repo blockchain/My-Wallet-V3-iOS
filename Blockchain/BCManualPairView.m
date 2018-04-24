@@ -38,7 +38,7 @@
     passwordTextField.delegate = self;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (![app.window.rootViewController presentedViewController]) {
+        if (![[UIApplication sharedApplication].keyWindow.rootViewController presentedViewController]) {
             [walletIdentifierTextField becomeFirstResponder];
         }
     });
@@ -81,7 +81,7 @@
         [passwordTextField becomeFirstResponder];
     }
     else if (textField == verifyTwoFactorTextField) {
-        [app.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
         app.wallet.twoFactorInput = [textField.text uppercaseString];
         [self continueClicked:textField];
     } else {
@@ -97,7 +97,7 @@
     NSString *password = passwordTextField.text;
     
     if ([guid length] != 36) {
-        [app standardNotify:BC_STRING_ENTER_YOUR_CHARACTER_WALLET_IDENTIFIER title:BC_STRING_INVALID_IDENTIFIER];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ENTER_YOUR_CHARACTER_WALLET_IDENTIFIER title:BC_STRING_INVALID_IDENTIFIER];
         
         [walletIdentifierTextField becomeFirstResponder];
         
@@ -105,7 +105,7 @@
     }
     
     if (password.length == 0) {
-        [app standardNotify:BC_STRING_NO_PASSWORD_ENTERED];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR];
         
         [passwordTextField becomeFirstResponder];
         
@@ -147,7 +147,7 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [app.window.rootViewController presentViewController:alertForVerifyingMobileNumber animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifyingMobileNumber animated:YES completion:nil];
 }
 
 - (void)verifyTwoFactorGoogle
@@ -176,7 +176,7 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [app.window.rootViewController presentViewController:alertForVerifying animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifying animated:YES completion:nil];
 }
 
 @end

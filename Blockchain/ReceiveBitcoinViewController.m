@@ -23,6 +23,7 @@
 #import "BCDescriptionView.h"
 #import "BCAmountInputView.h"
 #import "UILabel+Animations.h"
+#import "Blockchain-Swift.h"
 
 #ifdef ENABLE_CONTACTS
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 151
@@ -619,7 +620,7 @@
         [allowedCharSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         
         if ([label rangeOfCharacterFromSet:[allowedCharSet invertedSet]].location != NSNotFound) {
-            [app standardNotify:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC title:BC_STRING_ERROR];
             return;
         }
     }
@@ -630,10 +631,10 @@
     
     [self reload];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     if (app.wallet.isSyncing) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
 }
 
@@ -643,7 +644,7 @@
         [UIPasteboard generalPasteboard].string = self.mainAddressLabel.text;
         [self.mainAddressLabel animateFromText:[[self.mainAddress componentsSeparatedByString:@":"] lastObject] toIntermediateText:BC_STRING_COPIED_TO_CLIPBOARD speed:1 gestureReceiver:qrCodeMainImageView];
     } else {
-        [app standardNotifyAutoDismissingController:BC_STRING_ERROR_COPYING_TO_CLIPBOARD];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR];
     }
 }
 
@@ -671,9 +672,9 @@
     else {
         // Need at least one active address
         if (activeKeys.count == 1 && ![app.wallet hasAccount]) {
-            [app closeModalWithTransition:kCATransitionFade];
-            
-            [app standardNotifyAutoDismissingController:BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS];
+            [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
+
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS title:BC_STRING_ERROR];
             
             return;
         }
@@ -683,7 +684,7 @@
     
     [self reload];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
 }
 
 - (void)hideKeyboardForced
@@ -717,7 +718,7 @@
         
     }]];
     
-    [app.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)alertUserOfWatchOnlyAddress:(NSString *)address
@@ -725,12 +726,12 @@
     UIAlertController *alertForWatchOnly = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING_TITLE message:BC_STRING_WATCH_ONLY_RECEIVE_WARNING preferredStyle:UIAlertControllerStyleAlert];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self didSelectFromAddress:address];
-        [app closeModalWithTransition:kCATransitionFromLeft];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }]];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING];
         [self didSelectFromAddress:address];
-        [app closeModalWithTransition:kCATransitionFromLeft];
+        [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }]];
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
     
@@ -785,8 +786,8 @@
     SelectMode selectMode = self.fromContact ? SelectModeReceiveFromContact : SelectModeReceiveTo;
     
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:selectMode delegate:self];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_RECEIVE_TO onDismiss:nil onResume:nil];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_RECEIVE_TO onDismiss:nil onResume:nil];
 }
 
 - (void)whatsThisButtonClicked
@@ -832,7 +833,7 @@
     descriptionLabelBottom.center = CGPointMake(introducingContactsView.center.x, descriptionLabelBottom.center.y);
     [introducingContactsView addSubview:descriptionLabelBottom];
 
-    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(15, app.window.frame.size.height - BUTTON_HEIGHT - 16, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
+    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(15, [UIApplication sharedApplication].keyWindow.frame.size.height - BUTTON_HEIGHT - 16, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
     [dismissButton setTitle:BC_STRING_ILL_DO_THIS_LATER forState:UIControlStateNormal];
     [dismissButton setTitleColor:COLOR_MEDIUM_GRAY forState:UIControlStateNormal];
     dismissButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -853,7 +854,7 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIBarStyleDefault;
     
-    [app.window.rootViewController presentViewController:modalViewController animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:modalViewController animated:YES completion:nil];
 }
 
 - (void)selectFromClicked
@@ -866,8 +867,8 @@
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:app.wallet selectMode:SelectModeContact delegate:self];
     addressSelectionView.previouslySelectedContact = self.fromContact;
     [addressSelectionView reloadTableView];
-    
-    [app showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
+
+    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
 }
 
 - (void)requestButtonClicked
@@ -877,7 +878,7 @@
         uint64_t amount = [self getInputAmountInSatoshi];
         
         if (amount == 0) {
-            [app standardNotify:BC_STRING_INVALID_SEND_VALUE];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR];
             return;
         }
         
@@ -888,8 +889,8 @@
             accountOrAddress = self.clickedAddress;
 
         }
-        
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
+
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
         [app.wallet sendPaymentRequest:self.fromContact.identifier amount:amount requestId:nil note:self.view.note initiatorSource:accountOrAddress];
     } else {
         [self share];
@@ -933,14 +934,14 @@
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [app.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showContacts
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [app.window.rootViewController dismissViewControllerAnimated:YES completion:^{
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:^{
         [app contactsClicked:nil];
     }];
 }
@@ -973,7 +974,7 @@
         return NO;
     }
     
-    if (app.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
+    if ([AppCoordinator sharedInstance].slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
         return NO;
     }
     
@@ -1185,7 +1186,7 @@
         [self changeTopView:YES];
         
     } else {
-        [app closeAllModals];
+        [[ModalPresenter sharedInstance] closeAllModals];
         
         self.descriptionField.placeholder = [NSString stringWithFormat:BC_STRING_SHARED_WITH_CONTACT_NAME_ARGUMENT, contact.name];
         self.fromContact = contact;

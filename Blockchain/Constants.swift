@@ -9,6 +9,10 @@
 import UIKit
 
 struct Constants {
+    struct Animation {
+        static let duration = 0.2
+        static let durationLong = 0.5
+    }
     struct Colors {
         static let TextFieldBorderGray = UIColorFromRGB(0xcdcdcd)
         static let BlockchainBlue = UIColorFromRGB(0x004a7c)
@@ -41,11 +45,36 @@ struct Constants {
         static let ExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 21.0 : 18.0
         static let ExtraExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 23.0 : 20.0
     }
+    struct FontNames {
+        static let montserratRegular = "Montserrat-Regular"
+        static let montserratSemiBold = "Montserrat-SemiBold"
+        static let montserratSemiLight = "Montserrat-Light"
+        static let montserratSemiExtraLight = "Montserrat-ExtraLight"
+        static let gillSans = "GillSans"
+        static let gillSansLight = "GillSans-Light"
+        static let helveticaNueue = "Helvetica Neue"
+        static let helveticaNueueMedium = "HelveticaNeue-Medium"
+    }
     struct Defaults {
         static let NumberOfRecoveryPhraseWords = 12
     }
     struct Booleans {
         static let IsUsingScreenSizeLargerThan5s = UIScreen.main.bounds.size.height > Measurements.ScreenHeightIphone5S
+    }
+    struct NotificationKeys {
+        static let modalViewDismissed = NSNotification.Name("modalViewDismissed")
+    }
+}
+
+/// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this
+/// once Obj-C is no longer using this
+@objc class ConstantsObjcBridge: NSObject {
+    @objc class func animationDuration() -> Double { return Constants.Animation.duration }
+
+    @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }
+
+    @objc class func notificationKeyModalViewDismissed() -> String {
+        return Constants.NotificationKeys.modalViewDismissed.rawValue
     }
 }
 

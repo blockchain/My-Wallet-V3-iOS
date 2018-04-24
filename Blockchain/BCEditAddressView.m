@@ -14,7 +14,7 @@
 
 -(id)initWithAddress:(NSString *)address
 {
-    UIWindow *window = app.window;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     self = [super initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, window.frame.size.width, window.frame.size.height - DEFAULT_HEADER_HEIGHT)];
     
@@ -63,7 +63,7 @@
         [allowedCharSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         
         if ([label rangeOfCharacterFromSet:[allowedCharSet invertedSet]].location != NSNotFound) {
-            [app standardNotify:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_LABEL_MUST_BE_ALPHANUMERIC title:BC_STRING_ERROR];
             return;
         }
     }
@@ -74,10 +74,10 @@
     
     [self.labelTextField resignFirstResponder];
     
-    [app closeModalWithTransition:kCATransitionFade];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     if (app.wallet.isSyncing) {
-        [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
 }
 

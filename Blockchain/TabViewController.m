@@ -9,6 +9,7 @@
 #import "TabViewController.h"
 #import "RootService.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface TabViewcontroller () <AssetSelectorViewDelegate>
 @end
@@ -46,7 +47,7 @@
     if (!_menuSwipeRecognizerView) {
         _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, 20, self.view.frame.size.height)];
         
-        ECSlidingViewController *sideMenu = app.slidingViewController;
+        ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         [_menuSwipeRecognizerView addGestureRecognizer:sideMenu.panGesture];
         
         [self.view addSubview:_menuSwipeRecognizerView];
@@ -245,7 +246,7 @@
 
 - (void)didSendEther
 {
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     
     UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:BC_STRING_PAYMENT_SENT_ETHER preferredStyle:UIAlertControllerStyleAlert];
     [successAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
@@ -254,7 +255,7 @@
 
 - (void)didErrorDuringEtherSend:(NSString *)error
 {
-    [app closeAllModals];
+    [[ModalPresenter sharedInstance] closeAllModals];
     
     UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
     [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];

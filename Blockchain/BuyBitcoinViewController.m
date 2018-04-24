@@ -137,7 +137,7 @@ NSString* loginWithJsonScript(NSString* json, NSString* externalJson, NSString* 
             if (app.topViewControllerDelegate) {
                 targetController = app.topViewControllerDelegate;
             } else {
-                targetController = app.window.rootViewController;
+                targetController = [UIApplication sharedApplication].keyWindow.rootViewController;
             }
             
             UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_BUY_WEBVIEW_ERROR_MESSAGE preferredStyle:UIAlertControllerStyleAlert];

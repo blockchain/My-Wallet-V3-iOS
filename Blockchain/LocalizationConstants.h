@@ -299,8 +299,6 @@
 #define BC_STRING_FORGOT_PASSWORD NSLocalizedString(@"Forgot Password?", nil)
 #define BC_STRING_OR_START_OVER_AND NSLocalizedString(@"Or start over and ", nil)
 #define BC_STRING_LOGIN_EXISTING_WALLET NSLocalizedString(@"Login existing Wallet", nil)
-#define BC_STRING_RECOVER_FUNDS NSLocalizedString(@"Recover Funds", nil)
-#define BC_STRING_RECOVER_FUNDS_ONLY_IF_FORGOT_CREDENTIALS NSLocalizedString(@"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", nil)
 
 #define BC_STRING_COPY_ADDRESS NSLocalizedString(@"Copy Address", nil)
 #define BC_STRING_ARCHIVE_ADDRESS NSLocalizedString(@"Archive Address", nil)
@@ -323,9 +321,6 @@
 
 #define BC_STRING_SURVEY_ALERT_TITLE NSLocalizedString(@"Would you like to tell us about your experience with Blockchain?", nil)
 #define BC_STRING_SURVEY_ALERT_MESSAGE NSLocalizedString(@"You will be leaving the app.", nil)
-
-#define BC_STRING_UNSAFE_DEVICE_TITLE NSLocalizedString(@"Warning", nil)
-#define BC_STRING_UNSAFE_DEVICE_MESSAGE NSLocalizedString(@"Your device appears to be jailbroken. The security of your wallet may be compromised.", nil)
 
 #define BC_STRING_ASK_TO_USE_OLD_WALLET_TITLE NSLocalizedString(@"We’ve detected a previous installation of Blockchain Wallet on your phone.", nil)
 #define BC_STRING_ASK_TO_USE_OLD_WALLET_MESSAGE NSLocalizedString(@"Please choose from the options below.", nil)

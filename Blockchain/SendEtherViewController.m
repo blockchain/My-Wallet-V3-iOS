@@ -15,6 +15,7 @@
 #import "BCConfirmPaymentView.h"
 #import "BCConfirmPaymentViewModel.h"
 #import "ContinueButtonInputAccessoryView.h"
+#import "Blockchain-Swift.h"
 
 @interface QRCodeScannerSendViewController ()
 - (void)stopReadingQRCode;
@@ -344,15 +345,15 @@
     self.toAddress = self.toField.text;
     
     if (self.toAddress == nil || self.toAddress.length == 0) {
-        [app standardNotify:BC_STRING_YOU_MUST_ENTER_DESTINATION_ADDRESS];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_YOU_MUST_ENTER_DESTINATION_ADDRESS title:BC_STRING_ERROR];
         return;
     } else if (![self isEtherAddress:self.toAddress]) {
-        [app standardNotify:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, self.toAddress]];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, self.toAddress] title:BC_STRING_ERROR];
         return;
     }
     
     if ([self.ethAmount isEqualToNumber:@0]) {
-        [app standardNotify:BC_STRING_INVALID_SEND_VALUE];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR];
         return;
     }
     
@@ -375,8 +376,7 @@
         self.confirmPaymentView.confirmDelegate = self;
         
         [self.confirmPaymentView.reallyDoPaymentButton addTarget:self action:@selector(reallyDoPayment) forControlEvents:UIControlEventTouchUpInside];
-        
-        [app showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack headerText:BC_STRING_CONFIRM_PAYMENT];
+        [[ModalPresenter sharedInstance] showModalWithContent:self.confirmPaymentView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_CONFIRM_PAYMENT onDismiss:nil onResume:nil];
     }];
 }
 
@@ -421,8 +421,8 @@
     sendLabel.text = BC_STRING_SENDING;
     [sendView addSubview:sendLabel];
     
-    [app showModalWithContent:sendView closeType:ModalCloseTypeNone headerText:BC_STRING_SENDING_TRANSACTION];
-    
+    [[ModalPresenter sharedInstance] showModalWithContent:sendView closeType:ModalCloseTypeNone showHeader:true headerText:BC_STRING_SENDING_TRANSACTION onDismiss:nil onResume:nil];
+
     [app.wallet sendEtherPaymentWithNote:self.noteToSet];
 }
 
@@ -481,7 +481,7 @@
 - (void)selectToAddress:(NSString *)address
 {
     if (address == nil || ![self isEtherAddress:address]) {
-        [app standardNotify:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, address]];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR];
         return;
     }
     

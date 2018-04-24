@@ -33,6 +33,8 @@
     IBOutlet UIButton *termsOfServiceButton;
 }
 
++ (nonnull BCCreateWalletView *)instanceFromNib;
+
 - (IBAction)termsOfServiceClicked:(id)sender;
 
 - (void)showPassphraseTextField;
