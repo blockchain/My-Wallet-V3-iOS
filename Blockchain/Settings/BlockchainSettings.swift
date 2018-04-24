@@ -34,6 +34,24 @@ final class BlockchainSettings: NSObject {
             return App.shared
         }
 
+        @objc var firstRun: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.firstRun.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.firstRun.rawValue)
+            }
+        }
+
+        @objc var hasSeenUpgradeToHdScreen: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+            }
+        }
+
         @objc var isPinSet: Bool {
             return pinKey != nil && encryptedPinPassword != nil
         }
