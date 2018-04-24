@@ -42,6 +42,9 @@ final class NetworkManager: NSObject, URLSessionDelegate {
     private override init() {
         super.init()
         sessionConfiguration = URLSessionConfiguration.default
+        if let userAgent = NetworkManager.userAgent {
+            sessionConfiguration.httpAdditionalHeaders = ["User-Agent": userAgent]
+        }
         if #available(iOS 11.0, *) {
             sessionConfiguration.waitsForConnectivity = true
         }
