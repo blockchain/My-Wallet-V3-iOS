@@ -1028,15 +1028,15 @@
     NSString *websocketURL;
     
     if (assetType == AssetTypeBitcoin) {
-        websocketURL = [[API sharedInstance] webSocketUri];
+        websocketURL = [[BlockchainAPI sharedInstance] webSocketUri];
     } else if (assetType == AssetTypeEther) {
-        websocketURL = [[API sharedInstance] ethereumWebSocketUri];
+        websocketURL = [[BlockchainAPI sharedInstance] ethereumWebSocketUri];
     } else if (assetType == AssetTypeBitcoinCash) {
-        websocketURL = [[API sharedInstance] bitcoinCashWebSocketUri];
+        websocketURL = [[BlockchainAPI sharedInstance] bitcoinCashWebSocketUri];
     }
     
     NSMutableURLRequest *webSocketRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:websocketURL]];
-    [webSocketRequest addValue:[[API sharedInstance] walletUrl] forHTTPHeaderField:@"Origin"];
+    [webSocketRequest addValue:[[BlockchainAPI sharedInstance] walletUrl] forHTTPHeaderField:@"Origin"];
 
     // TODO: migrate to CertificatePinner class
 #if CERTIFICATE_PINNING == YES
@@ -1311,7 +1311,7 @@
 
 - (void)getAmountReceivedForTransactionHash:(NSString *)txHash socket:(SRWebSocket *)webSocket
 {
-    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, txHash, self.btcSwipeAddressToSubscribe]]];
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, txHash, self.btcSwipeAddressToSubscribe]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -2459,7 +2459,7 @@
         symbol = CURRENCY_SYMBOL_BCH;
     }
     
-    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME, symbol, currencyCode, time]]];
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME, symbol, currencyCode, time]]];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -3015,7 +3015,7 @@
 
 - (void)isEtherContractAddress:(NSString *)address completion:(void (^ _Nullable)(NSData *, NSURLResponse *, NSError *))completion
 {
-    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT, address]]];
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT, address]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -5282,11 +5282,11 @@
 - (void)useDebugSettingsIfSet
 {
 #ifdef DEBUG
-    [self updateServerURL:[[API sharedInstance] walletUrl]];
+    [self updateServerURL:[[BlockchainAPI sharedInstance] walletUrl]];
     
-    [self updateWebSocketURL:[[API sharedInstance] webSocketUri]];
+    [self updateWebSocketURL:[[BlockchainAPI sharedInstance] webSocketUri]];
     
-    [self updateAPIURL:[[API sharedInstance] apiUrl]];
+    [self updateAPIURL:[[BlockchainAPI sharedInstance] apiUrl]];
     
     BOOL testnetOn = [[[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ENV] isEqual:ENV_INDEX_TESTNET];
     NSString *network;

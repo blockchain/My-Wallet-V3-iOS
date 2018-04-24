@@ -191,7 +191,7 @@
         [self showError:BC_STRING_ERROR_CHARTS];
         return;
     }
-    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE, base, quote, [NSString stringWithFormat:@"%lu", startDate], scale]]];
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE, base, quote, [NSString stringWithFormat:@"%lu", startDate], scale]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

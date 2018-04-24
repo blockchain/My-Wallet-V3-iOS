@@ -49,7 +49,7 @@ final class CertificatePinner: NSObject {
 
     func pinCertificate() {
         guard
-            let walletUrl = API.shared.walletUrl,
+            let walletUrl = BlockchainAPI.shared.walletUrl,
             let url = URL(string: walletUrl) else {
                 fatalError("Failed to get wallet url from Bundle.")
         }

@@ -55,7 +55,7 @@ final class NetworkManager: NSObject, URLSessionDelegate {
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping AuthChallengeHandler) {
         let host = challenge.protectionSpace.host
         print("Received challenge from \(host)")
-        if API.Endpoints.rawValues.contains(host) {
+        if BlockchainAPI.Endpoints.rawValues.contains(host) {
             completionHandler(.performDefaultHandling, nil)
         } else {
             CertificatePinner.shared.didReceive(challenge, completion: completionHandler)

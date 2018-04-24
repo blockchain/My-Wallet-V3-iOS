@@ -51,7 +51,7 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
         self.automaticallyAdjustsScrollViewInsets = NO;
         
         NSString *walletOptionsRootURL = [app.wallet buySellWebviewRootURLString];
-        NSString *urlString = walletOptionsRootURL ? [walletOptionsRootURL stringByAppendingString:URL_BUY_WEBVIEW_SUFFIX] : [[API sharedInstance] buyWebViewUrl];
+        NSString *urlString = walletOptionsRootURL ? [walletOptionsRootURL stringByAppendingString:URL_BUY_WEBVIEW_SUFFIX] : [[BlockchainAPI sharedInstance] buyWebViewUrl];
         NSURL *login = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:login cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval: 10.0];
         [self.webView loadRequest:request];
@@ -96,7 +96,7 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
 }
 
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
-    if ([challenge.protectionSpace.host hasSuffix:[[API sharedInstance] blockchainWallet]]) {
+    if ([challenge.protectionSpace.host hasSuffix:[[BlockchainAPI sharedInstance] blockchainWallet]]) {
         [[CertificatePinner sharedInstance] didReceive:challenge completion:completionHandler];
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);

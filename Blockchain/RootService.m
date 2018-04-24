@@ -577,7 +577,7 @@ void (^secondPasswordSuccess)(NSString *);
     NSString *preferredLanguage = [[NSLocale preferredLanguages] firstObject];
     const char *languageString = [preferredLanguage UTF8String];
 
-    NSMutableURLRequest *notificationsRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT, [[API sharedInstance] walletUrl], [self.wallet guid], [self.wallet sharedKey], self.deviceToken, (unsigned long)[self.deviceToken length], languageString]]];
+    NSMutableURLRequest *notificationsRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT, [[BlockchainAPI sharedInstance] walletUrl], [self.wallet guid], [self.wallet sharedKey], self.deviceToken, (unsigned long)[self.deviceToken length], languageString]]];
     [notificationsRequest setHTTPMethod:@"POST"];
 
     NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:notificationsRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -2367,7 +2367,7 @@ void (^secondPasswordSuccess)(NSString *);
         return;
     }
 
-    NSURL *URL = [NSURL URLWithString:[[[API sharedInstance] walletUrl] stringByAppendingFormat:URL_SUFFIX_EVENT_NAME_ARGUMENT, eventName]];
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:URL_SUFFIX_EVENT_NAME_ARGUMENT, eventName]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
     request.HTTPMethod = @"POST";
 
@@ -2578,7 +2578,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)checkForMaintenanceWithPinKey:(NSString *)pinKey pin:(NSString *)pin
 {
-    NSURL *url = [NSURL URLWithString:[[[API sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_WALLET_OPTIONS]];
+    NSURL *url = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_WALLET_OPTIONS]];
     // session.sessionDescription = url.host;
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -3276,17 +3276,17 @@ void (^secondPasswordSuccess)(NSString *);
     NSString *URLString;
 
     if (assetType == AssetTypeBitcoin) {
-        URLString = [[[API sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, address]];
+        URLString = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, address]];
     } else if (assetType == AssetTypeBitcoinCash) {
         NSString *addressToCheck = [app.wallet fromBitcoinCash:address];
-        URLString = [[[API sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT, addressToCheck]];
+        URLString = [[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT, addressToCheck]];
     } else {
         DLog(@"checking for unused address: unsupported asset type!");
     }
 
     NSURL *URL = [NSURL URLWithString:URLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-    NSURL *url = [NSURL URLWithString:[[API sharedInstance] walletUrl]];
+    NSURL *url = [NSURL URLWithString:[[BlockchainAPI sharedInstance] walletUrl]];
     // session.sessionDescription = url.host;
     NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
