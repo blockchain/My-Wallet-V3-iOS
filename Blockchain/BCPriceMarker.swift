@@ -108,7 +108,8 @@ open class BCPriceMarker: MarkerImage {
                 fatalError("Chart data entry has bad data")
         }
         guard let number = NumberFormatter.fiatString(from: entry.y) else {
-            fatalError("Could not generate number string from chart data entry")
+            print("Could not generate number string from chart data entry")
+            return
         }
         let labelText = String(format: "%@\n%@%@", currency, symbol, number)
         setLabel(labelText)
