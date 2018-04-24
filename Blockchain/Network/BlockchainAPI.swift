@@ -17,31 +17,31 @@ import Foundation
  */
 
 @objc
-class BlockchainAPI: NSObject {
+final class BlockchainAPI: NSObject {
 
     // MARK: - Properties
 
     /// The instance variable used to access functions of the `API` class.
-    static let shared = API()
+    static let shared = BlockchainAPI()
 
     // TODO: remove once migration is complete
     /// Objective-C compatible class function
-    @objc class func sharedInstance() -> API {
-        return API.shared
+    @objc class func sharedInstance() -> BlockchainAPI {
+        return BlockchainAPI.shared
     }
 
     /**
-     Stores public endpoints used for API calls.
+     Public endpoints used for Blockchain API calls.
      - Important: Do not use `blockchainAPI` and `blockchainWallet` for API calls.
      Instead, retrieve the wallet and API hostname from the main Bundle in the URL
      extension of this class.
      */
-
     enum Endpoints: String, RawValued {
         case blockchainAPI  = "api.blockchain.info"
         case blockchainWallet = "blockchain.info"
     }
 
+    /// Public endpoints used for partner API calls.
     enum PartnerEndpoints: String, RawValued {
         case blockchair = "blockchair.com"
         case coinify = "app-api.coinify.com"
@@ -71,30 +71,30 @@ class BlockchainAPI: NSObject {
         return Endpoints.blockchainWallet.rawValue
     }
     @objc func blockchair() -> String {
-        return Endpoints.blockchair.rawValue
+        return PartnerEndpoints.blockchair.rawValue
     }
     @objc func coinify() -> String {
-        return Endpoints.coinify.rawValue
+        return PartnerEndpoints.coinify.rawValue
     }
     @objc func etherscan() -> String {
-        return Endpoints.etherscan.rawValue
+        return PartnerEndpoints.etherscan.rawValue
     }
     @objc func googleAnalytics() -> String {
-        return Endpoints.googleAnalytics.rawValue
+        return PartnerEndpoints.googleAnalytics.rawValue
     }
     @objc func iSignThis() -> String {
-        return Endpoints.iSignThis.rawValue
+        return PartnerEndpoints.iSignThis.rawValue
     }
     @objc func sfox() -> String {
-        return Endpoints.sfox.rawValue
+        return PartnerEndpoints.sfox.rawValue
     }
     @objc func sfoxKYC() -> String {
-        return Endpoints.sfoxKYC.rawValue
+        return PartnerEndpoints.sfoxKYC.rawValue
     }
     @objc func sfoxQuotes() -> String {
-        return Endpoints.sfoxQuotes.rawValue
+        return PartnerEndpoints.sfoxQuotes.rawValue
     }
     @objc func shapeshift() -> String {
-        return Endpoints.shapeshift.rawValue
+        return PartnerEndpoints.shapeshift.rawValue
     }
 }
