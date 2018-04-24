@@ -21,6 +21,8 @@ extension UserDefaults {
     enum Keys: String {
         case assetType = "assetType"
         case environment = "environment"
+        case firstRun = "firstRun"
+        case hasSeenUpgradeToHdScreen = "hasSeenUpgradeToHdScreen"
         case swipeToReceiveEnabled = "swipeToReceive"
         case pinKey = "pinKey"
         case encryptedPinPassword = "encryptedPINPassword"
