@@ -148,6 +148,14 @@
 		51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
 		51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
 		51A7349720891EB3009727D5 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
+		51A862B72090DB5000B338E0 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */; };
+		51A862B82090DB5200B338E0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F6582086A2720054EFCE /* AppCoordinator.swift */; };
+		51A862B92090DB5400B338E0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333A2088115C0019AD55 /* Coordinator.swift */; };
+		51A862BA2090DB8400B338E0 /* LoadingViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */; };
+		51A862BB2090DB8800B338E0 /* ModalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333E2088131D0019AD55 /* ModalPresenter.swift */; };
+		51A862BC2090DBD900B338E0 /* AlertViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316A2089650B00BBD292 /* AlertViewPresenter.swift */; };
+		51A862BD2090DD4500B338E0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED3F208A6E8D002D8BAC /* UIViewController.swift */; };
+		51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
 		51E5C73120741A130000A7FD /* RootServiceSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72D20741A120000A7FD /* RootServiceSwift.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
@@ -2634,10 +2642,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51A862BD2090DD4500B338E0 /* UIViewController.swift in Sources */,
 				519435AD208E62E0001EF882 /* CertificatePinner.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
+				51A862BA2090DB8400B338E0 /* LoadingViewPresenter.swift in Sources */,
 				5185E125208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
 				519435B3208E630C001EF882 /* UIDevice.swift in Sources */,
+				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				519435B5208E6356001EF882 /* AuthenticationManager.swift in Sources */,
 				519435B2208E630A001EF882 /* Bundle.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
@@ -2645,6 +2656,9 @@
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				519435B4208E630F001EF882 /* UserDefaults.swift in Sources */,
+				51A862B72090DB5000B338E0 /* OnboardingCoordinator.swift in Sources */,
+				51A862B82090DB5200B338E0 /* AppCoordinator.swift in Sources */,
+				51A862BC2090DBD900B338E0 /* AlertViewPresenter.swift in Sources */,
 				5185E11B208E7F2100A26B64 /* RootServiceSwift.swift in Sources */,
 				519435B8208E6366001EF882 /* LocalizationConstants.swift in Sources */,
 				519435B7208E6364001EF882 /* Environment.swift in Sources */,
@@ -2652,9 +2666,10 @@
 				519435BA208E63CE001EF882 /* Passcode.swift in Sources */,
 				519435AE208E62E3001EF882 /* BlockchainAPI.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
+				51A862BB2090DB8800B338E0 /* ModalPresenter.swift in Sources */,
 				519435B9208E63CA001EF882 /* AuthenticationError.swift in Sources */,
-				519435BB208E64DD001EF882 /* (null) in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
+				51A862B92090DB5400B338E0 /* Coordinator.swift in Sources */,
 				519435BC208E64E0001EF882 /* Constants.swift in Sources */,
 				516546F9208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */,
 			);
@@ -3908,6 +3923,10 @@
 				INFOPLIST_FILE = BlockchainTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Submodules/OpenSSL-for-iPhone/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchain.BlockchainTests;
@@ -3979,6 +3998,10 @@
 				INFOPLIST_FILE = BlockchainTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Submodules/OpenSSL-for-iPhone/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchain.BlockchainTests;
@@ -4050,6 +4073,10 @@
 				INFOPLIST_FILE = BlockchainTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Submodules/OpenSSL-for-iPhone/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchain.BlockchainTests;
@@ -4121,6 +4148,10 @@
 				INFOPLIST_FILE = BlockchainTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Submodules/OpenSSL-for-iPhone/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchain.BlockchainTests;
@@ -4159,6 +4190,10 @@
 				INFOPLIST_FILE = BlockchainTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Submodules/OpenSSL-for-iPhone/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchain.BlockchainTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
