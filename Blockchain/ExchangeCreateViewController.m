@@ -34,7 +34,6 @@
 @property (nonatomic) UIButton *assetToggleButton;
 
 @property (nonatomic) NSTimer *quoteTimer;
-@property (nonatomic) NSDate *lastTypedDate;
 
 // Digital asset input
 @property (nonatomic) BCSecureTextField *topLeftField;
@@ -114,13 +113,6 @@
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     navigationController.headerTitle = BC_STRING_EXCHANGE;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(getQuoteAfterTypingHasStopped) userInfo:nil repeats:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -697,7 +689,14 @@
     
     [self disablePaymentButtons];
     
-    self.lastTypedDate = [NSDate date];
+    [self.quoteTimer invalidate];
+    
+    __weak ExchangeCreateViewController *weakSelf = self;
+    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
+        [weakSelf disablePaymentButtons];
+        [weakSelf getApproximateQuote];
+        weakSelf.quoteTimer = nil;
+    }];
 }
 
 - (void)doCurrencyConversion
@@ -1101,15 +1100,6 @@
 }
 
 #pragma mark - Helpers
-
-- (void)getQuoteAfterTypingHasStopped
-{
-    if (self.lastTypedDate && [self.lastTypedDate timeIntervalSinceNow] < -0.8) {
-        [self disablePaymentButtons];
-        [self getApproximateQuote];
-        self.lastTypedDate = nil;
-    }
-}
 
 - (void)hideKeyboard
 {
