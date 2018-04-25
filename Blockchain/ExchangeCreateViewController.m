@@ -572,6 +572,10 @@
     
     [self clearOppositeFields];
     
+    [self cancelCurrentDataTask];
+    
+    [self.quoteTimer invalidate];
+    
     [self performSelector:@selector(doCurrencyConversionAfterTyping) withObject:nil afterDelay:0.1f];
     return YES;
 }
@@ -688,8 +692,6 @@
     }
     
     [self disablePaymentButtons];
-    
-    [self.quoteTimer invalidate];
     
     __weak ExchangeCreateViewController *weakSelf = self;
     self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
@@ -1031,11 +1033,7 @@
         return;
     }
     
-    if (self.currentDataTask) {
-        [self.currentDataTask cancel];
-        self.currentDataTask = nil;
-        [self.spinner stopAnimating];
-    }
+    [self cancelCurrentDataTask];
     
     BOOL usingFromField = self.lastChangedField != self.topRightField && self.lastChangedField != self.bottomRightField;
 
@@ -1100,6 +1098,15 @@
 }
 
 #pragma mark - Helpers
+
+- (void)cancelCurrentDataTask
+{
+    if (self.currentDataTask) {
+        [self.currentDataTask cancel];
+        self.currentDataTask = nil;
+        [self.spinner stopAnimating];
+    }
+}
 
 - (void)hideKeyboard
 {
