@@ -5,6 +5,7 @@
 //  Created by Maurice A. on 4/13/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
+// Please keep the keys sorted alphabetically (:
 
 import Foundation
 
@@ -20,11 +21,12 @@ extension UserDefaults {
 
     enum Keys: String {
         case assetType = "assetType"
+        case encryptedPinPassword = "encryptedPINPassword"
         case environment = "environment"
         case firstRun = "firstRun"
         case hasSeenUpgradeToHdScreen = "hasSeenUpgradeToHdScreen"
         case swipeToReceiveEnabled = "swipeToReceive"
+        case symbolLocal = "symbolLocal"
         case pinKey = "pinKey"
-        case encryptedPinPassword = "encryptedPINPassword"
     }
 }

@@ -49,6 +49,8 @@ final class NetworkManager: NSObject, URLSessionDelegate {
             sessionConfiguration.waitsForConnectivity = true
         }
         session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
+        disableUIWebViewCaching()
+        persistServerSessionIDForNewUIWebViews()
     }
 
     // MARK: - URLSessionDelegate
@@ -66,4 +68,13 @@ final class NetworkManager: NSObject, URLSessionDelegate {
     }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
+
+    fileprivate func persistServerSessionIDForNewUIWebViews() {
+        let cookieStorage = HTTPCookieStorage.shared
+        cookieStorage.cookieAcceptPolicy = .always
+    }
+
+    fileprivate func disableUIWebViewCaching() {
+        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
+    }
 }

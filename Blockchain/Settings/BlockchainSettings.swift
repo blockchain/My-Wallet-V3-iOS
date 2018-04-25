@@ -74,6 +74,15 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        @objc var symbolLocal: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.symbolLocal.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.symbolLocal.rawValue)
+            }
+        }
+
         private override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.

@@ -563,7 +563,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT @"hideAppReviewPrompt"
 #define USER_DEFAULTS_KEY_SHARED_KEY @"sharedKey"
 #define USER_DEFAULTS_KEY_GUID @"guid"
-#define USER_DEFAULTS_KEY_SYMBOL_LOCAL @"symbolLocal"
 #define USER_DEFAULTS_KEY_PASSWORD @"password"
 #define USER_DEFAULTS_KEY_PIN @"pin"
 #define USER_DEFAULTS_KEY_PASSWORD_PART_HASH @"passwordPartHash"

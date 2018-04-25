@@ -185,9 +185,9 @@ void (^secondPasswordSuccess)(NSString *);
 
 //    [self checkForNewInstall];
 
-    [self persistServerSessionIDForNewUIWebViews];
+//    [self persistServerSessionIDForNewUIWebViews];
 
-    [self disableUIWebViewCaching];
+//    [self disableUIWebViewCaching];
 
     // Allocate the global wallet
     self.wallet = [[Wallet alloc] init];
@@ -216,7 +216,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    busyView.alpha = 0.0f;
 
     // Load settings
-    symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
+//    symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
 
 //    [self showWelcomeOrPinScreen];
 
@@ -601,17 +601,17 @@ void (^secondPasswordSuccess)(NSString *);
     [_localCurrencyFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
 }
 
-- (void)persistServerSessionIDForNewUIWebViews
-{
-    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-}
+//- (void)persistServerSessionIDForNewUIWebViews
+//{
+//    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+//}
 
-- (void)disableUIWebViewCaching
-{
-    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
-    [NSURLCache setSharedURLCache:sharedCache];
-}
+//- (void)disableUIWebViewCaching
+//{
+//    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+//    [NSURLCache setSharedURLCache:sharedCache];
+//}
 
 //- (void)setupSideMenu
 //{
@@ -720,13 +720,13 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)toggleSymbol
 {
-    symbolLocal = !symbolLocal;
-
-    // Save this setting here and load it on start
-    [[NSUserDefaults standardUserDefaults] setBool:symbolLocal forKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [self reloadSymbols];
+//    symbolLocal = !symbolLocal;
+//
+//    // Save this setting here and load it on start
+//    [[NSUserDefaults standardUserDefaults] setBool:symbolLocal forKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//    [self reloadSymbols];
 }
 
 - (NSInteger)filterIndex
@@ -756,11 +756,11 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)reloadSymbols
 {
-    [self.tabControllerManager reloadSymbols];
-
-    [_contactsViewController reloadSymbols];
-    [_accountsAndAddressesNavigationController reload];
-    [sideMenuViewController reload];
+//    [self.tabControllerManager reloadSymbols];
+//
+//    [_contactsViewController reloadSymbols];
+//    [_accountsAndAddressesNavigationController reload];
+//    [sideMenuViewController reload];
 }
 
 - (void)showBusyViewWithLoadingText:(NSString *)text
