@@ -94,12 +94,12 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 
 + (void)logException:(NSException*)exception walletIsLoaded:(BOOL)walletIsLoaded walletIsInitialized:(BOOL)walletIsInitialized
 {
-    
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     NSString * message = [NSString stringWithFormat:@"<pre>App Version: %@\nSystem Name: %@ -  System Version : %@\nActive View Controller: %@\nWallet State: JSLoaded = %@, isInitialized = %@\nDevice: %@ Language: %@\nGUID Hash: %@\n\nReason: %@\n\nStacktrace:%@</pre>",
                           [self appNameAndVersionNumberDisplayString],
                           [[UIDevice currentDevice] systemName],
                           [[UIDevice currentDevice] systemVersion],
-                          [app.tabControllerManager.tabViewController.activeViewController class],
+                          [tabControllerManager.tabViewController.activeViewController class],
                           walletIsLoaded ? @"TRUE" : @"FALSE",
                           walletIsInitialized? @"TRUE" : @"FALSE",
                           @"",//[DeviceIdentifier deviceName],

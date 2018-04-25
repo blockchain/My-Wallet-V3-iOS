@@ -10,6 +10,7 @@
 #import "RootService.h"
 #import "BCCardView.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 #define ANNOUNCEMENT_CARD_HEIGHT 208
 
@@ -308,16 +309,17 @@
 
 - (void)cardActionClicked:(ActionType)actionType
 {
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     if (actionType == ActionTypeBuyBitcoin) {
         [app buyBitcoinClicked:nil];
     } else if (actionType == ActionTypeShowReceive) {
-        [app.tabControllerManager receiveCoinClicked:nil];
+        [tabControllerManager receiveCoinClicked:nil];
     } else if (actionType == ActionTypeScanQR) {
-        [app.tabControllerManager qrCodeButtonClicked];
+        [tabControllerManager qrCodeButtonClicked];
     } else if (actionType == ActionTypeBuySell) {
         [app buyBitcoinClicked:nil];
     } else if (actionType == ActionTypeBitcoinCash) {
-        [app.tabControllerManager showReceiveBitcoinCash];
+        [tabControllerManager showReceiveBitcoinCash];
     }
 }
 

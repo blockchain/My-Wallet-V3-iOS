@@ -173,10 +173,12 @@ typedef enum {
                     [bchAccountLabels addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNT_LABELS]];
                     
                 } else if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
+                    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
                     // Show the address book
                     for (NSString * addr in [_wallet.addressBook allKeys]) {
                         [addressBookAddresses addObject:addr];
-                        [addressBookAddressLabels addObject:[app.tabControllerManager.sendBitcoinViewController labelForLegacyAddress:addr]];
+                        [addressBookAddressLabels addObject:[tabControllerManager.sendBitcoinViewController labelForLegacyAddress:addr]];
                     }
                     
                     // Then show the HD accounts
@@ -609,7 +611,8 @@ typedef enum {
                 NSDecimalNumber *ethBalance = [[NSDecimalNumber alloc] initWithString:[app.wallet getEthBalance]];
                 NSComparisonResult result = [ethBalance compare:[NSDecimalNumber numberWithInt:0]];
                 zeroBalance = result == NSOrderedDescending || result == NSOrderedSame;
-                cell.balanceLabel.text = app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:[ethBalance stringValue] exchangeRate:app.tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:[NSNumberFormatter localFormattedString:[ethBalance stringValue]]];
+                TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+                cell.balanceLabel.text = app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:[ethBalance stringValue] exchangeRate:tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:[NSNumberFormatter localFormattedString:[ethBalance stringValue]]];
             } else {
                 uint64_t bchBalance = 0;
                 if (section == bchAccountsSectionNumber) {

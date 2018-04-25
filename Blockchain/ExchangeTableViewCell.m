@@ -10,6 +10,7 @@
 #import "NSDateFormatter+TimeAgoString.h"
 #import "RootService.h"
 #import "NSNumberFormatter+Currencies.h"
+#import "Blockchain-Swift.h"
 
 @implementation ExchangeTableViewCell
 
@@ -50,7 +51,8 @@
         if ([lowercaseWithdrawalCurrencySymbol isEqualToString:[CURRENCY_SYMBOL_BTC lowercaseString]]) {
             amountString = [NSNumberFormatter formatMoney:ABS([NSNumberFormatter parseBtcValueFromString:[trade.withdrawalAmount stringValue]])];
         } else if ([lowercaseWithdrawalCurrencySymbol isEqualToString:[CURRENCY_SYMBOL_ETH lowercaseString]]) {
-            amountString = [NSNumberFormatter formatEthWithLocalSymbol:[trade.withdrawalAmount stringValue] exchangeRate:app.tabControllerManager.latestEthExchangeRate];
+            TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+            amountString = [NSNumberFormatter formatEthWithLocalSymbol:[trade.withdrawalAmount stringValue] exchangeRate:tabControllerManager.latestEthExchangeRate];
         } else if ([lowercaseWithdrawalCurrencySymbol isEqualToString:[CURRENCY_SYMBOL_BCH lowercaseString]]) {
             amountString = [NSNumberFormatter formatBchWithSymbol:ABS([NSNumberFormatter parseBtcValueFromString:[trade.withdrawalAmount stringValue]])];
         } else {

@@ -72,6 +72,13 @@ import Foundation
         let navigationController = UINavigationController(rootViewController: debugViewController)
         window.rootViewController?.present(navigationController, animated: true)
     }
+
+    @objc func closeSideMenu() {
+        guard slidingViewController.currentTopViewPosition != .centered else {
+            return
+        }
+        slidingViewController.resetTopView(animated: true)
+    }
 }
 
 extension AppCoordinator: TabControllerDelegate {

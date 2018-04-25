@@ -147,8 +147,9 @@ BOOL displayingLocalSymbolSend;
 {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_LOADING_TEXT object:nil];
-    
-    if (self.addressSource == DestinationAddressSourceContact && app.tabControllerManager.tabViewController.selectedIndex != TAB_SEND) [self reload];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    if (self.addressSource == DestinationAddressSourceContact && tabControllerManager.tabViewController.selectedIndex != TAB_SEND) [self reload];
 }
 
 - (void)viewDidLoad
@@ -240,7 +241,9 @@ BOOL displayingLocalSymbolSend;
 
     [app.wallet createNewPayment:self.assetType];
     [self resetFromAddress];
-    if (app.tabControllerManager.tabViewController.activeViewController == self && !app.tabControllerManager.tabViewController.presentedViewController) {
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    if (tabControllerManager.tabViewController.activeViewController == self && !tabControllerManager.tabViewController.presentedViewController) {
         [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionPush];
     }
     
@@ -592,12 +595,13 @@ BOOL displayingLocalSymbolSend;
              
              // Close transaction modal, go to transactions view, scroll to top and animate new transaction
              [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
-             [app.tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
+             TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+             [tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [app.tabControllerManager transactionsClicked:nil];
+                 [tabControllerManager transactionsClicked:nil];
              });
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [app.tabControllerManager.transactionsBitcoinViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+                 [tabControllerManager.transactionsBitcoinViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
              });
              
              if (self.noteToSet) {
@@ -726,8 +730,9 @@ BOOL displayingLocalSymbolSend;
     } else {
         [alertForPaymentsSent addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     }
-    
-    [app.tabControllerManager.tabViewController presentViewController:alertForPaymentsSent animated:YES completion:nil];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alertForPaymentsSent animated:YES completion:nil];
     
     [sendProgressActivityIndicator stopAnimating];
     
@@ -742,12 +747,12 @@ BOOL displayingLocalSymbolSend;
     
     // Close transaction modal, go to transactions view, scroll to top and animate new transaction
     [[ModalPresenter sharedInstance] closeAllModals];
-    [app.tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
+    [tabControllerManager.transactionsBitcoinViewController didReceiveTransactionMessage];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [app.tabControllerManager transactionsClicked:nil];
+        [tabControllerManager transactionsClicked:nil];
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [app.tabControllerManager.transactionsBitcoinViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        [tabControllerManager.transactionsBitcoinViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     });
     
     [self reload];
@@ -779,7 +784,7 @@ BOOL displayingLocalSymbolSend;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         if ([self transferAllMode] || self.addressSource == DestinationAddressSourceContact) {
-            [app.modalView.backButton addTarget:self action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
+            [[ModalPresenter sharedInstance].modalView.backButton addTarget:self action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
         }
         
         uint64_t amountTotal = amountInSatoshi + self.feeFromTransactionProposal + self.dust;
@@ -873,7 +878,8 @@ BOOL displayingLocalSymbolSend;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_NO_AVAILABLE_FUNDS message:BC_STRING_PLEASE_SELECT_DIFFERENT_ADDRESS preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:NOTIFICATION_KEY_RELOAD_TO_DISMISS_VIEWS object:nil];
-    [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
     [self enablePaymentButtons];
 }
 
@@ -1071,7 +1077,8 @@ BOOL displayingLocalSymbolSend;
         [self scanPrivateKeyToSendFromWatchOnlyAddress];
     }]];
     [alertForSpendingFromWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [app.tabControllerManager.tabViewController presentViewController:alertForSpendingFromWatchOnly animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alertForSpendingFromWatchOnly animated:YES completion:nil];
 }
 
 - (void)scanPrivateKeyToSendFromWatchOnlyAddress
@@ -1085,8 +1092,9 @@ BOOL displayingLocalSymbolSend;
     } error:^(NSString *error) {
         [[ModalPresenter sharedInstance] closeAllModals];
     } acceptPublicKeys:NO busyViewText:BC_STRING_LOADING_PROCESSING_KEY];
-    
-    [app.tabControllerManager.tabViewController presentViewController:privateKeyScanner animated:YES completion:nil];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:privateKeyScanner animated:YES completion:nil];
 }
 
 - (void)setupFees
@@ -1809,7 +1817,8 @@ BOOL displayingLocalSymbolSend;
     if (!contact.mdid) {
         UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_HAS_NOT_ACCEPTED_INVITATION_YET, contact.name] message:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_MUST_ACCEPT_INVITATION, contact.name] preferredStyle:UIAlertControllerStyleAlert];
         [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        [app.tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
     } else {
         [self selectToContact:contact];
     }
@@ -2068,7 +2077,8 @@ BOOL displayingLocalSymbolSend;
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_CUSTOM_FEE_WARNING];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-            [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+            TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+            [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
         } else {
             [self selectFeeType:feeType];
         }
@@ -2249,7 +2259,8 @@ BOOL displayingLocalSymbolSend;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:NOTIFICATION_KEY_RELOAD_TO_DISMISS_VIEWS object:nil];
-    [app.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)sendPaymentClicked:(id)sender

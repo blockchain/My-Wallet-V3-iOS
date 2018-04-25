@@ -162,13 +162,15 @@
         detailViewController.transactionModel = [[TransactionDetailViewModel alloc] initWithTransaction:self.transaction];
         
         TransactionDetailNavigationController *navigationController = [[TransactionDetailNavigationController alloc] initWithRootViewController:detailViewController];
-        
+
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
         detailViewController.busyViewDelegate = navigationController;
         navigationController.onDismiss = ^() {
-            app.tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
+            tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
         };
         navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
+        tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
 
         UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
         [topViewController presentViewController:navigationController animated:YES completion:nil];

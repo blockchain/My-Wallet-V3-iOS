@@ -156,7 +156,8 @@
 
 - (void)getAssetButtonClicked
 {
-    [app.tabControllerManager receiveCoinClicked:nil];
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager receiveCoinClicked:nil];
 }
 
 #pragma mark - Table View Data Source

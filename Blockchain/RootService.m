@@ -54,7 +54,7 @@
 RootService * app;
 
 @synthesize wallet;
-@synthesize modalView;
+//@synthesize modalView;
 @synthesize latestResponse;
 
 typedef enum {
@@ -89,46 +89,46 @@ void (^secondPasswordSuccess)(NSString *);
         [self setupBtcFormatter];
         [self setupLocalCurrencyFormatter];
 
-        self.modalChain = [[NSMutableArray alloc] init];
+//        self.modalChain = [[NSMutableArray alloc] init];
         app = self;
     }
 
     return self;
 }
 
-- (void)transitionToIndex:(NSInteger)newIndex
-{
-    if (newIndex == TAB_SEND)
-    [self.tabControllerManager sendCoinsClicked:nil];
-    else if (newIndex == TAB_DASHBOARD)
-    [self.tabControllerManager dashBoardClicked:nil];
-    else if (newIndex == TAB_TRANSACTIONS)
-    [self.tabControllerManager transactionsClicked:nil];
-    else if (newIndex == TAB_RECEIVE)
-    [self.tabControllerManager receiveCoinClicked:nil];
-}
+//- (void)transitionToIndex:(NSInteger)newIndex
+//{
+//    if (newIndex == TAB_SEND)
+//    [self.tabControllerManager sendCoinsClicked:nil];
+//    else if (newIndex == TAB_DASHBOARD)
+//    [self.tabControllerManager dashBoardClicked:nil];
+//    else if (newIndex == TAB_TRANSACTIONS)
+//    [self.tabControllerManager transactionsClicked:nil];
+//    else if (newIndex == TAB_RECEIVE)
+//    [self.tabControllerManager receiveCoinClicked:nil];
+//}
 
-- (void)swipeLeft
-{
-    TabViewcontroller *tabViewController = self.tabControllerManager.tabViewController;
-
-    if (tabViewController.selectedIndex < 2)
-    {
-        NSInteger newIndex = tabViewController.selectedIndex + 1;
-        [self transitionToIndex:newIndex];
-    }
-}
-
-- (void)swipeRight
-{
-    TabViewcontroller *tabViewController = self.tabControllerManager.tabViewController;
-
-    if (tabViewController.selectedIndex)
-    {
-        NSInteger newIndex = tabViewController.selectedIndex - 1;
-        [self transitionToIndex:newIndex];
-    }
-}
+//- (void)swipeLeft
+//{
+//    TabViewcontroller *tabViewController = self.tabControllerManager.tabViewController;
+//
+//    if (tabViewController.selectedIndex < 2)
+//    {
+//        NSInteger newIndex = tabViewController.selectedIndex + 1;
+//        [self transitionToIndex:newIndex];
+//    }
+//}
+//
+//- (void)swipeRight
+//{
+//    TabViewcontroller *tabViewController = self.tabControllerManager.tabViewController;
+//
+//    if (tabViewController.selectedIndex)
+//    {
+//        NSInteger newIndex = tabViewController.selectedIndex - 1;
+//        [self transitionToIndex:newIndex];
+//    }
+//}
 
 //- (CertificatePinner *)certificatePinner
 //{
@@ -355,15 +355,15 @@ void (^secondPasswordSuccess)(NSString *);
         [_settingsNavigationController dismissViewControllerAnimated:NO completion:nil];
     }
 
-    app.tabControllerManager.transactionsBitcoinViewController.loadedAllTransactions = NO;
-    app.tabControllerManager.transactionsBitcoinViewController.messageIdentifier = nil;
+    self.tabControllerManager.transactionsBitcoinViewController.loadedAllTransactions = NO;
+    self.tabControllerManager.transactionsBitcoinViewController.messageIdentifier = nil;
     app.wallet.isFetchingTransactions = NO;
     app.wallet.isFilteringTransactions = NO;
     app.wallet.didReceiveMessageForLastTransaction = NO;
 
     [createWalletView showPassphraseTextField];
 
-    [self closeSideMenu];
+    [[AppCoordinator sharedInstance] closeSideMenu];
 
     // Close PIN Modal in case we are setting it (after login or when changing the PIN)
     if (self.pinEntryViewController.verifyOnly == NO || self.pinEntryViewController.inSettings == NO) {
@@ -418,7 +418,7 @@ void (^secondPasswordSuccess)(NSString *);
     }
 
     if (![wallet isInitialized]) {
-        [app showWelcome];
+        [self showWelcomeScreen];
 
         if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey]) {
             [self showPasswordModal];
@@ -532,9 +532,10 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (TabControllerManager *)tabControllerManager
 {
-    if (!_tabControllerManager) _tabControllerManager = [TabControllerManager new];
-    _tabControllerManager.delegate = self;
-    return _tabControllerManager;
+    return [AppCoordinator sharedInstance].tabControllerManager;
+//    if (!_tabControllerManager) _tabControllerManager = [TabControllerManager new];
+//    _tabControllerManager.delegate = self;
+//    return _tabControllerManager;
 }
 
 - (void)requestAuthorizationForPushNotifications
@@ -954,7 +955,7 @@ void (^secondPasswordSuccess)(NSString *);
         }]];
         [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self forgetWallet];
-            [app showWelcome];
+            [self showWelcomeScreen];
         }]];
         [_window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
     }]];
@@ -1342,6 +1343,7 @@ void (^secondPasswordSuccess)(NSString *);
             secondPasswordTextField.text = nil;
         } onResume:nil];
 
+        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
         [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
 
         [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
@@ -1417,6 +1419,7 @@ void (^secondPasswordSuccess)(NSString *);
             [self.tabControllerManager enableSendPaymentButtons];
         } onResume:nil];
 
+        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
         [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
 
         [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
@@ -1648,7 +1651,8 @@ void (^secondPasswordSuccess)(NSString *);
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR];
     }];
 
-    [self.slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
+    ECSlidingViewController *slidingViewController = [AppCoordinator sharedInstance].slidingViewController;
+    [slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
 }
 
 - (void)scanPrivateKeyForWatchOnlyAddress:(NSString *)address
@@ -1758,7 +1762,7 @@ void (^secondPasswordSuccess)(NSString *);
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    [self transitionToIndex:TAB_DASHBOARD];
+    [[AppCoordinator sharedInstance].tabControllerManager transitionToIndex:TAB_DASHBOARD];
 
     [self setupBuySellWebview];
 }
@@ -2048,7 +2052,7 @@ void (^secondPasswordSuccess)(NSString *);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_ERROR_GETTING_FIAT_AT_TIME preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
 
-    [app.tabControllerManager.tabViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+    [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didSetDefaultAccount
@@ -2141,7 +2145,7 @@ void (^secondPasswordSuccess)(NSString *);
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_TRANSACTIONS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:^{
-                                [app closeSideMenu];
+                                [[AppCoordinator sharedInstance] closeSideMenu];
                                 [app closeAllModals];
                                 [self showTransactions];
                                 [self.tabControllerManager selectPayment:identifier];
@@ -2164,7 +2168,7 @@ void (^secondPasswordSuccess)(NSString *);
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_CONTACTS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:^{
-                                [app closeSideMenu];
+                                [[AppCoordinator sharedInstance] closeSideMenu];
                                 [app closeAllModals];
                                 _contactsViewController = [[ContactsViewController alloc] initWithAcceptedInvitation:identifier];
                                 [self showContacts];
@@ -2175,7 +2179,7 @@ void (^secondPasswordSuccess)(NSString *);
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_TRANSACTIONS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:^{
-                                [app closeSideMenu];
+                                [[AppCoordinator sharedInstance] closeSideMenu];
                                 [app closeAllModals];
                                 [self showTransactions];
                                 [self.tabControllerManager selectPayment:identifier];
@@ -2209,7 +2213,7 @@ void (^secondPasswordSuccess)(NSString *);
                     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
                     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_CONTACTS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [app closeAllModals];
-                        [app closeSideMenu];
+                        [[AppCoordinator sharedInstance] closeSideMenu];
                         _contactsViewController = [[ContactsViewController alloc] initWithAcceptedInvitation:identifier];
                         [self showContacts];
                     }]];
@@ -2220,13 +2224,13 @@ void (^secondPasswordSuccess)(NSString *);
                     if (self.tabControllerManager.tabViewController.activeViewController == self.tabControllerManager.transactionsBitcoinViewController) {
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_REQUEST style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [app closeAllModals];
-                            [app closeSideMenu];
+                            [[AppCoordinator sharedInstance] closeSideMenu];
                             [self.tabControllerManager selectPayment:identifier];
                         }]];
                     } else {
                         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_TRANSACTIONS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                             [app closeAllModals];
-                            [app closeSideMenu];
+                            [[AppCoordinator sharedInstance] closeSideMenu];
                             [self showTransactions];
                             [self.tabControllerManager selectPayment:identifier];
                         }]];
@@ -2295,7 +2299,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showCompletedTrade:(NSString *)txHash
 {
-    [self closeSideMenu];
+    [[AppCoordinator sharedInstance] closeSideMenu];
 
     [self showTransactions];
 
@@ -2746,27 +2750,27 @@ void (^secondPasswordSuccess)(NSString *);
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 }
 
-- (void)toggleSideMenu
-{
-    // If the sideMenu is not shown, show it
-    if (_slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionCentered) {
-        [_slidingViewController anchorTopViewToRightAnimated:YES];
-    }
-    // If the sideMenu is shown, dismiss it
-    else {
-        [_slidingViewController resetTopViewAnimated:YES];
-    }
-
-    app.wallet.isFetchingTransactions = NO;
-}
-
-- (void)closeSideMenu
-{
-    // If the sideMenu is shown, dismiss it
-    if (_slidingViewController.currentTopViewPosition != ECSlidingViewControllerTopViewPositionCentered) {
-        [_slidingViewController resetTopViewAnimated:YES];
-    }
-}
+//- (void)toggleSideMenu
+//{
+//    // If the sideMenu is not shown, show it
+//    if (_slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionCentered) {
+//        [_slidingViewController anchorTopViewToRightAnimated:YES];
+//    }
+//    // If the sideMenu is shown, dismiss it
+//    else {
+//        [_slidingViewController resetTopViewAnimated:YES];
+//    }
+//
+//    app.wallet.isFetchingTransactions = NO;
+//}
+//
+//- (void)closeSideMenu
+//{
+//    // If the sideMenu is shown, dismiss it
+//    if (_slidingViewController.currentTopViewPosition != ECSlidingViewControllerTopViewPositionCentered) {
+//        [_slidingViewController resetTopViewAnimated:YES];
+//    }
+//}
 
 - (void)showSecurityReminder
 {
@@ -3026,7 +3030,7 @@ void (^secondPasswordSuccess)(NSString *);
         [self clearPin];
         [self.tabControllerManager clearSendToAddressAndAmountFields];
         [self logout];
-        [self closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
         [self showPasswordModal];
     }]];
 
@@ -3040,7 +3044,7 @@ void (^secondPasswordSuccess)(NSString *);
     [self clearPin];
     [self.tabControllerManager clearSendToAddressAndAmountFields];
     [self logout];
-    [self closeSideMenu];
+    [[AppCoordinator sharedInstance] closeSideMenu];
     [self showPasswordModal];
 }
 
@@ -3062,7 +3066,7 @@ void (^secondPasswordSuccess)(NSString *);
         DLog(@"forgetting wallet");
         [app closeModalWithTransition:kCATransitionFade];
         [self forgetWallet];
-        [app showWelcome];
+        [self showWelcomeScreen];
     }]];
 
     if ([mainPasswordTextField isFirstResponder]) {
@@ -3308,7 +3312,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)setupPaymentRequest:(ContactTransaction *)transaction
 {
-    [self closeSideMenu];
+    [[AppCoordinator sharedInstance] closeSideMenu];
 
     self.pendingPaymentRequestTransaction = transaction;
 

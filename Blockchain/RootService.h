@@ -76,8 +76,8 @@
 
 //@property (nonatomic, weak) UIViewController <TopViewController> *topViewControllerDelegate;
 
-@property (strong, nonatomic) IBOutlet ECSlidingViewController *slidingViewController;
-@property (nonatomic) TabControllerManager *tabControllerManager;
+//@property (strong, nonatomic) IBOutlet ECSlidingViewController *slidingViewController;
+//@property (nonatomic) TabControllerManager *tabControllerManager;
 @property (strong, nonatomic) IBOutlet BCWebViewController *bcWebViewController;
 @property (strong, nonatomic) IBOutlet BackupNavigationViewController *backupNavigationViewController;
 @property (strong, nonatomic) SettingsNavigationController *settingsNavigationController;
@@ -92,8 +92,8 @@
 @property (strong, nonatomic) Wallet *wallet;
 @property (strong, nonatomic) MultiAddressResponse *latestResponse;
 
-@property (strong, nonatomic) IBOutlet BCModalView *modalView;
-@property (strong, nonatomic) NSMutableArray *modalChain;
+//@property (strong, nonatomic) IBOutlet BCModalView *modalView;
+//@property (strong, nonatomic) NSMutableArray *modalChain;
 
 @property (strong, nonatomic) TransferAllFundsViewController *transferAllFundsModalController;
 
@@ -128,16 +128,16 @@
 - (void)playAlertSound;
 
 
-- (void)showWelcome;
+//- (void)showWelcome;
 - (void)logout;
 - (void)forgetWallet;
 - (void)showPasswordModal;
 
-- (void)toggleSideMenu;
-- (void)closeSideMenu;
+//- (void)toggleSideMenu;
+//- (void)closeSideMenu;
 
-- (void)swipeLeft;
-- (void)swipeRight;
+//- (void)swipeLeft;
+//- (void)swipeRight;
 
 // BC Modal
 //- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText;

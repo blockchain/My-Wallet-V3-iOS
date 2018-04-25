@@ -9,6 +9,7 @@
 #import "TabControllerManager.h"
 #import "BCNavigationController.h"
 #import "Transaction.h"
+#import "Blockchain-Swift.h"
 
 @implementation TabControllerManager
 
@@ -538,6 +539,19 @@
 
 #pragma mark - Navigation
 
+- (void)transitionToIndex:(NSInteger)index
+{
+    if (index == TAB_SEND) {
+        [self sendCoinsClicked:nil];
+    } else if (index == TAB_DASHBOARD) {
+        [self dashBoardClicked:nil];
+    } else if (index == TAB_TRANSACTIONS) {
+        [self transactionsClicked:nil];
+    } else if (index == TAB_RECEIVE) {
+        [self receiveCoinClicked:nil];
+    }
+}
+
 - (IBAction)menuButtonClicked:(UIButton *)sender
 {
     if (self.sendBitcoinViewController) {
@@ -727,7 +741,7 @@
             if ([app.wallet isBuyEnabled]) {
                 [app buyBitcoinClicked:nil];
             } else {
-                [app closeSideMenu];
+                [[AppCoordinator sharedInstance] closeSideMenu];
                 [self changeAssetSelectorAsset:AssetTypeBitcoin];
                 [self receiveCoinClicked:nil];
             }
@@ -735,20 +749,20 @@
     }]];
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_GET_ETHER style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.tabViewController dismissViewControllerAnimated:YES completion:^{
-            [app closeSideMenu];
+            [[AppCoordinator sharedInstance] closeSideMenu];
             [self changeAssetSelectorAsset:AssetTypeEther];
             [self receiveCoinClicked:nil];
         }];
     }]];
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_GET_BITCOIN_CASH style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.tabViewController dismissViewControllerAnimated:YES completion:^{
-            [app closeSideMenu];
+            [[AppCoordinator sharedInstance] closeSideMenu];
             [self changeAssetSelectorAsset:AssetTypeBitcoinCash];
             [self receiveCoinClicked:nil];
         }];
     }]];
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [app closeSideMenu];
+        [[AppCoordinator sharedInstance] closeSideMenu];
         [self.tabViewController dismissViewControllerAnimated:YES completion:nil];
         [self showDashboardAnimated:YES];
     }]];

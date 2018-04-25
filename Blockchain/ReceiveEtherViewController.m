@@ -11,6 +11,7 @@
 #import "QRCodeGenerator.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "UITextView+Animations.h"
+#import "Blockchain-Swift.h"
 
 @interface ReceiveEtherViewController ()
 @property (nonatomic) QRCodeGenerator *qrCodeGenerator;
@@ -131,8 +132,9 @@
     activityViewController.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypePostToFacebook];
     
     [activityViewController setValue:BC_STRING_PAYMENT_REQUEST_ETHER_SUBJECT forKey:@"subject"];
-    
-    [app.tabControllerManager.tabViewController presentViewController:activityViewController animated:YES completion:nil];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:activityViewController animated:YES completion:nil];
 }
 
 @end

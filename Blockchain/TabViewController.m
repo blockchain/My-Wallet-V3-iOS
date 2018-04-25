@@ -193,13 +193,13 @@
     [self.assetSelectorView close];
     
     if (item == sendButton) {
-        [app.tabControllerManager sendCoinsClicked:item];
+        [[AppCoordinator sharedInstance].tabControllerManager sendCoinsClicked:item];
     } else if (item == homeButton) {
-        [app.tabControllerManager transactionsClicked:item];
+        [[AppCoordinator sharedInstance].tabControllerManager transactionsClicked:item];
     } else if (item == receiveButton) {
-        [app.tabControllerManager receiveCoinClicked:item];
+        [[AppCoordinator sharedInstance].tabControllerManager receiveCoinClicked:item];
     } else if (item == dashBoardButton) {
-        [app.tabControllerManager dashBoardClicked:item];
+        [[AppCoordinator sharedInstance].tabControllerManager dashBoardClicked:item];
     }
 }
 

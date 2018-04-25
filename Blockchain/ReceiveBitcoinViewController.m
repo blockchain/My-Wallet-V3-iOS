@@ -574,7 +574,8 @@
 {
     UIView *viewToHide = shouldShowQR ? self.view.topView : self.headerView;
     UIView *viewToShow = shouldShowQR ? self.headerView : self.view.topView;
-    CGFloat newContainerYPosition = shouldShowQR ? self.view.frame.origin.y + self.view.frame.size.height - (IS_USING_SCREEN_SIZE_4S ? BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S : BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_DEFAULT) - app.tabControllerManager.tabViewController.assetControlContainer.frame.size.height : self.view.topView.frame.size.height;
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    CGFloat newContainerYPosition = shouldShowQR ? self.view.frame.origin.y + self.view.frame.size.height - (IS_USING_SCREEN_SIZE_4S ? BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S : BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_DEFAULT) - tabControllerManager.tabViewController.assetControlContainer.frame.size.height : self.view.topView.frame.size.height;
     
     viewToShow.alpha = 0;
     viewToShow.hidden = NO;
@@ -736,8 +737,9 @@
     [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
     
     [[NSNotificationCenter defaultCenter] addObserver:alertForWatchOnly selector:@selector(autoDismiss) name:NOTIFICATION_KEY_RELOAD_TO_DISMISS_VIEWS object:nil];
-    
-    [app.tabControllerManager.tabViewController presentViewController:alertForWatchOnly animated:YES completion:nil];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:alertForWatchOnly animated:YES completion:nil];
 }
 
 - (void)storeRequestedAmount
@@ -920,8 +922,9 @@
     
     [self.amountInputView.btcField resignFirstResponder];
     [self.amountInputView.fiatField resignFirstResponder];
-    
-    [app.tabControllerManager.tabViewController presentViewController:activityViewController animated:YES completion:nil];
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    [tabControllerManager.tabViewController presentViewController:activityViewController animated:YES completion:nil];
 }
 
 - (void)clearAmounts
@@ -1177,7 +1180,8 @@
     if (contact && !contact.mdid) {
         UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_HAS_NOT_ACCEPTED_INVITATION_YET, contact.name] message:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_MUST_ACCEPT_INVITATION, contact.name] preferredStyle:UIAlertControllerStyleAlert];
         [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        [app.tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
     } else if (contact == self.fromContact || contact == nil) {
         self.fromContact = nil;
         self.receiveFromLabel.text = BC_STRING_SELECT_CONTACT_OPTIONAL;

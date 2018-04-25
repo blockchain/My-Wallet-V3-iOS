@@ -12,6 +12,7 @@
 #import "Transaction.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface TransactionsViewController ()
 @property (nonatomic) UILabel *noTransactionsTitle;
@@ -171,7 +172,7 @@
 
 - (void)updateBalanceLabel
 {
-    TabViewcontroller *tabViewController = app.tabControllerManager.tabViewController;
+    TabViewcontroller *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
     if (tabViewController.activeViewController == self) {
         [tabViewController updateBalanceLabelText:self.balance];
     }

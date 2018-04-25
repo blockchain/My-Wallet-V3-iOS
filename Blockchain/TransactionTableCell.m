@@ -124,13 +124,15 @@
     
     TransactionDetailNavigationController *navigationController = [[TransactionDetailNavigationController alloc] initWithRootViewController:detailViewController];
     navigationController.transactionHash = transaction.myHash;
-    
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
     detailViewController.busyViewDelegate = navigationController;
     navigationController.onDismiss = ^() {
-        app.tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
+        tabControllerManager.transactionsBitcoinViewController.detailViewController = nil;
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
+    tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
 
     UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
     [topViewController presentViewController:navigationController animated:YES completion:nil];
@@ -143,13 +145,15 @@
     
     TransactionDetailNavigationController *navigationController = [[TransactionDetailNavigationController alloc] initWithRootViewController:detailViewController];
     navigationController.transactionHash = transaction.myHash;
-    
+
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
     detailViewController.busyViewDelegate = navigationController;
     navigationController.onDismiss = ^() {
-        app.tabControllerManager.transactionsBitcoinCashViewController.detailViewController = nil;
+        tabControllerManager.transactionsBitcoinCashViewController.detailViewController = nil;
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    app.tabControllerManager.transactionsBitcoinCashViewController.detailViewController = detailViewController;
+    tabControllerManager.transactionsBitcoinCashViewController.detailViewController = detailViewController;
 
     UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
     [topViewController presentViewController:navigationController animated:YES completion:nil];

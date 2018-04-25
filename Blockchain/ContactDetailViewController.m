@@ -184,7 +184,8 @@ const int maxFindAttempts = 2;
 {
     TransactionTableCell *cell = (TransactionTableCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell transactionClicked:nil];
-    self.transactionDetailViewController = app.tabControllerManager.transactionsBitcoinViewController.detailViewController;
+    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    self.transactionDetailViewController = tabControllerManager.transactionsBitcoinViewController.detailViewController;
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
