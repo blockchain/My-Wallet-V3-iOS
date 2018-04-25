@@ -100,6 +100,10 @@ final class RootServiceSwift {
 
         checkForNewInstall()
 
+        persistServerSessionIDForNewUIWebViews()
+
+        disableUIWebViewCaching()
+
         AppCoordinator.shared.start()
 
         //: ...
@@ -245,5 +249,14 @@ final class RootServiceSwift {
 
     func alertUserAskingToUseOldKeychain() {
         // TODO: implement alertUserAskingToUseOldKeychain
+    }
+
+    func persistServerSessionIDForNewUIWebViews() {
+        let cookieStorage = HTTPCookieStorage.shared
+        cookieStorage.cookieAcceptPolicy = .always
+    }
+
+    func disableUIWebViewCaching() {
+        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
     }
 }
