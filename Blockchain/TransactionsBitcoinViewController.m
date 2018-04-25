@@ -529,12 +529,9 @@
     };
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
-    
-    if (app.topViewControllerDelegate) {
-        [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        [app.tabControllerManager.tabViewController presentViewController:navigationController animated:YES completion:nil];
-    }
+
+    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+    [topViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (uint64_t)getBalance

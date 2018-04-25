@@ -269,6 +269,7 @@
 + (NSString *)fiatStringFromDouble:(double)fiatBalance
 {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.minimumIntegerDigits = 1;
     NSUInteger decimalPlaces = 2;
     numberFormatter.minimumFractionDigits = decimalPlaces;
     numberFormatter.maximumFractionDigits = decimalPlaces;

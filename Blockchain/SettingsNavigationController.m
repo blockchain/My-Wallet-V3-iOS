@@ -100,7 +100,6 @@
 {
     if ([self.visibleViewController isMemberOfClass:[SettingsTableViewController class]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
-        app.topViewControllerDelegate = nil;
     } else {
         [self popViewControllerAnimated:YES];
     }
@@ -163,11 +162,6 @@
 {
     //TODO: use this delegate method instead of handling busy views manually from view controllers
     return;
-}
-
-- (void)presentAlertController:(UIAlertController *)alertController
-{
-    [self.visibleViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion

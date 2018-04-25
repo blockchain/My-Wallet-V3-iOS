@@ -132,13 +132,7 @@ NSString* loginWithJsonScript(NSString* json, NSString* externalJson, NSString* 
         DLog(@"Ran script with result %@, error %@", result, error);
         if (error != nil) {
             
-            UIViewController *targetController;
-            
-            if (app.topViewControllerDelegate) {
-                targetController = app.topViewControllerDelegate;
-            } else {
-                targetController = [UIApplication sharedApplication].keyWindow.rootViewController;
-            }
+            UIViewController *targetController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
             
             UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_BUY_WEBVIEW_ERROR_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
             [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
@@ -181,7 +175,6 @@ NSString* loginWithJsonScript(NSString* json, NSString* externalJson, NSString* 
 
     if ([message.name isEqual:WEBKIT_HANDLER_SHOW_TX]) {
         [self dismissViewControllerAnimated:YES completion:^(){
-            app.topViewControllerDelegate = nil;
             [self.delegate showCompletedTrade:message.body];
         }];
     }

@@ -15,6 +15,7 @@
 #import "TransactionDetailViewModel.h"
 #import "RootService.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface ContactTransactionTableViewCell()
 @property (nonatomic) BOOL isSetup;
@@ -168,12 +169,9 @@
         };
         navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         app.tabControllerManager.transactionsBitcoinViewController.detailViewController = detailViewController;
-        
-        if (app.topViewControllerDelegate) {
-            [app.topViewControllerDelegate presentViewController:navigationController animated:YES completion:nil];
-        } else {
-            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
-        }
+
+        UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+        [topViewController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

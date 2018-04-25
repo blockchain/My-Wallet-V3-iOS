@@ -155,8 +155,6 @@ typedef enum {
         [app closeSideMenu];
     }];
     
-    app.topViewControllerDelegate = nil;
-    
     [app closeSideMenu];
     
     [app showSendCoins];

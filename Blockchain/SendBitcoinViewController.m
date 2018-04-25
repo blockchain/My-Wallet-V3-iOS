@@ -479,8 +479,6 @@ BOOL displayingLocalSymbolSend;
 
 - (void)getInfoForTransferAllFundsToDefaultAccount
 {
-    app.topViewControllerDelegate = nil;
-
     [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_TRANSFER_ALL_PREPARING_TRANSFER];
     
     [app.wallet getInfoForTransferAllFundsToAccount];

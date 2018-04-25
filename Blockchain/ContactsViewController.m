@@ -119,8 +119,6 @@ const int sectionContacts = 0;
     self.invitationSentIdentifier = nil;
     
     self.lastCreatedInvitation = nil;
-    
-    app.topViewControllerDelegate = (BCNavigationController *)self.navigationController;
 }
 
 - (void)setContactsToDisplay:(NSArray *)contactsToDisplay
@@ -222,7 +220,7 @@ const int sectionContacts = 0;
 
 - (void)refreshControlActivated
 {
-    [app.topViewControllerDelegate showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
     [app.wallet performSelector:@selector(getHistory) withObject:nil afterDelay:0.1f];
 }
 

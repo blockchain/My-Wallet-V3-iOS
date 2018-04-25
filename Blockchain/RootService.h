@@ -49,12 +49,12 @@
     IBOutlet BCModalContentView *pairingInstructionsView;
     IBOutlet BCManualPairView *manualPairView;
     
-    IBOutlet UIButton *scanPairingCodeButton;
-    IBOutlet UIButton *manualPairButton;
-    IBOutlet UITextView *manualPairStepOneTextView;
-    IBOutlet UITextView *manualPairStepTwoTextView;
-    IBOutlet UITextView *manualPairStepThreeTextView;
-    
+//    IBOutlet UIButton *scanPairingCodeButton;
+//    IBOutlet UIButton *manualPairButton;
+//    IBOutlet UITextView *manualPairStepOneTextView;
+//    IBOutlet UITextView *manualPairStepTwoTextView;
+//    IBOutlet UITextView *manualPairStepThreeTextView;
+
     BOOL validateSecondPassword;
     IBOutlet UILabel *secondPasswordDescriptionLabel;
     IBOutlet UIView *secondPasswordView;
@@ -74,7 +74,7 @@
     BOOL symbolLocal;
 }
 
-@property (nonatomic, weak) UIViewController <TopViewController> *topViewControllerDelegate;
+//@property (nonatomic, weak) UIViewController <TopViewController> *topViewControllerDelegate;
 
 @property (strong, nonatomic) IBOutlet ECSlidingViewController *slidingViewController;
 @property (nonatomic) TabControllerManager *tabControllerManager;
