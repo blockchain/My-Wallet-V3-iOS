@@ -216,7 +216,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    busyView.alpha = 0.0f;
 
     // Load settings
-    symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
+//    symbolLocal = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
 
 //    [self showWelcomeOrPinScreen];
 
@@ -718,16 +718,16 @@ void (^secondPasswordSuccess)(NSString *);
     [sideMenuViewController reloadTableView];
 }
 
-- (void)toggleSymbol
-{
-    symbolLocal = !symbolLocal;
-
-    // Save this setting here and load it on start
-    [[NSUserDefaults standardUserDefaults] setBool:symbolLocal forKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [self reloadSymbols];
-}
+//- (void)toggleSymbol
+//{
+//    symbolLocal = !symbolLocal;
+//
+//    // Save this setting here and load it on start
+//    [[NSUserDefaults standardUserDefaults] setBool:symbolLocal forKey:USER_DEFAULTS_KEY_SYMBOL_LOCAL];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//    [self reloadSymbols];
+//}
 
 - (NSInteger)filterIndex
 {
@@ -754,14 +754,14 @@ void (^secondPasswordSuccess)(NSString *);
     [self.wallet reloadFilter];
 }
 
-- (void)reloadSymbols
-{
-    [self.tabControllerManager reloadSymbols];
-
-    [_contactsViewController reloadSymbols];
-    [_accountsAndAddressesNavigationController reload];
-    [sideMenuViewController reload];
-}
+//- (void)reloadSymbols
+//{
+//    [self.tabControllerManager reloadSymbols];
+//
+//    [_contactsViewController reloadSymbols];
+//    [_accountsAndAddressesNavigationController reload];
+//    [sideMenuViewController reload];
+//}
 
 - (void)showBusyViewWithLoadingText:(NSString *)text
 {

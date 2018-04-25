@@ -106,8 +106,6 @@ final class RootServiceSwift {
 
         AppCoordinator.shared.start()
 
-        //: ...
-
         return true
     }
 
@@ -228,6 +226,21 @@ final class RootServiceSwift {
 //        }
     }
 
+    // TODO: move to appropriate module
+    func toggleSymbol() {
+        let symbolLocal = BlockchainSettings.App.shared.symbolLocal
+        BlockchainSettings.App.shared.symbolLocal = !symbolLocal
+        reloadSymbols()
+    }
+
+    // TODO: don't keep a reference to each contoller, instead allow them to subscribe to value changes
+    func reloadSymbols() {
+//    [self.tabControllerManager reloadSymbols];
+//    [_contactsViewController reloadSymbols];
+//    [_accountsAndAddressesNavigationController reload];
+//    [sideMenuViewController reload];
+    }
+
     // MARK: - State Checks
 
     // TODO: move to BlockchainSettings
@@ -251,11 +264,13 @@ final class RootServiceSwift {
         // TODO: implement alertUserAskingToUseOldKeychain
     }
 
+    // TODO: move to web view wrapper
     func persistServerSessionIDForNewUIWebViews() {
         let cookieStorage = HTTPCookieStorage.shared
         cookieStorage.cookieAcceptPolicy = .always
     }
 
+    // TODO: move to web view wrapper
     func disableUIWebViewCaching() {
         URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
     }
