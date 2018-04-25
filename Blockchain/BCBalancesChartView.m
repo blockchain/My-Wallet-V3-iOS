@@ -148,6 +148,8 @@
 
 - (void)updateChart
 {
+    [self hideChartMarker];
+    
     BOOL hasZeroBalances = !self.bitcoinFiatBalance && !self.etherFiatBalance && !self.bitcoinCashFiatBalance;
 
     PieChartDataSet *dataSet;

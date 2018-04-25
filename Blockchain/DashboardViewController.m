@@ -66,13 +66,6 @@
     self.contentView.frame = contentViewFrame;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self.balancesChartView hideChartMarker];
-}
-
 - (void)resetScrollView
 {
     [self.scrollView setContentOffset:CGPointZero animated:NO];
