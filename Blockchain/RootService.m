@@ -718,8 +718,8 @@ void (^secondPasswordSuccess)(NSString *);
     [sideMenuViewController reloadTableView];
 }
 
-//- (void)toggleSymbol
-//{
+- (void)toggleSymbol
+{
 //    symbolLocal = !symbolLocal;
 //
 //    // Save this setting here and load it on start
@@ -727,7 +727,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    [[NSUserDefaults standardUserDefaults] synchronize];
 //
 //    [self reloadSymbols];
-//}
+}
 
 - (NSInteger)filterIndex
 {
@@ -754,14 +754,14 @@ void (^secondPasswordSuccess)(NSString *);
     [self.wallet reloadFilter];
 }
 
-//- (void)reloadSymbols
-//{
+- (void)reloadSymbols
+{
 //    [self.tabControllerManager reloadSymbols];
 //
 //    [_contactsViewController reloadSymbols];
 //    [_accountsAndAddressesNavigationController reload];
 //    [sideMenuViewController reload];
-//}
+}
 
 - (void)showBusyViewWithLoadingText:(NSString *)text
 {
