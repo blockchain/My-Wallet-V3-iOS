@@ -34,17 +34,30 @@ let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate
 struct LocalizationConstants {
     static let cancel = NSLocalizedString("Cancel", comment: "")
     static let continueString = NSLocalizedString("Continue", comment: "")
-    static let error = NSLocalizedString("Error", comment: "")
     static let ok = NSLocalizedString("OK", comment: "")
-    static let warning = NSLocalizedString("Warning", comment: "")
-    static let unsafeDeviceWarningMessage = NSLocalizedString("Your device appears to be jailbroken. The security of your wallet may be compromised.", comment: "")
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
+    static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
-    static let noInternetConnection = NSLocalizedString("No internet connection.", comment: "")
+
+    struct Errors {
+        static let error = NSLocalizedString("Error", comment: "")
+        static let errorLoadingWallet = NSLocalizedString("Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.", comment: "")
+        static let cannotOpenURLArg = NSLocalizedString("Cannot open URL %@", comment: "")
+        static let unsafeDeviceWarningMessage = NSLocalizedString("Your device appears to be jailbroken. The security of your wallet may be compromised.", comment: "")
+        static let noInternetConnection = NSLocalizedString("No internet connection.", comment: "")
+        static let warning = NSLocalizedString("Warning", comment: "")
+    }
 
     struct Authentication {
         static let errorDecryptingWallet = NSLocalizedString("An error occurred due to interruptions during PIN verification. Please close the app and try again.", comment: "")
         static let invalidSharedKey = NSLocalizedString("Invalid Shared Key", comment: "")
+        static let didCreateNewWalletTitle = NSLocalizedString("Your wallet was successfully created.", comment: "")
+        static let didCreateNewWalletMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
+        static let walletPairedSuccessfullyTitle = NSLocalizedString("Wallet Paired Successfully.", comment: "")
+        static let walletPairedSuccessfullyMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
+        static let newPinMustBeDifferent = NSLocalizedString("New PIN must be different", comment: "")
+        static let chooseAnotherPin = NSLocalizedString("Please choose another PIN", comment: "")
+        static let pinCodeCommonMessage = NSLocalizedString("The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?", comment: "")
     }
 
     struct Onboarding {
@@ -59,8 +72,10 @@ struct LocalizationConstants {
 /// Should deprecate this once Obj-C is no longer using this
 @objc class LocalizationConstantsObjcBridge: NSObject {
 
-    @objc class func noInternetConnection() -> String { return LocalizationConstants.noInternetConnection }
+    @objc class func noInternetConnection() -> String { return LocalizationConstants.Errors.noInternetConnection }
 
     @objc class func onboardingRecoverFunds() -> String { return LocalizationConstants.Onboarding.recoverFunds }
+
+    @objc class func tryAgain() -> String { return LocalizationConstants.tryAgain }
 }
 

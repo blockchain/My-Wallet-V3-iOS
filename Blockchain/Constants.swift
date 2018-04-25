@@ -71,6 +71,9 @@ struct Constants {
         static let userInfoId = "id"
         static let typePayment = "payment"
     }
+    struct Schemas {
+        static let mail = "message://"
+    }
 }
 
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this

@@ -11,6 +11,7 @@
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "KeychainItemWrapper.h"
+#import "NSData+Hex.h"
 #import "NSString+SHA256.h"
 #import "PEPinEntryController.h"
 #import "Reachability.h"

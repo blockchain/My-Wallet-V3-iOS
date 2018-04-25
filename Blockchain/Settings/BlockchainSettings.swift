@@ -243,6 +243,7 @@ final class BlockchainSettings: NSObject {
             encryptedPinPassword = nil
             pinKey = nil
             passwordPartHash = nil
+            AuthenticationCoordinator.shared.lastEnteredPIN = Pin.Invalid
         }
     }
 

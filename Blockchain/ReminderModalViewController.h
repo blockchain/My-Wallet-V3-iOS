@@ -18,7 +18,6 @@ enum {
 typedef NSInteger ReminderType;
 
 @protocol ReminderModalDelegate
-- (void)openMail;
 - (void)showBackup;
 - (void)showTwoStep;
 @end

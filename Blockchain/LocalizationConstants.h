@@ -96,8 +96,6 @@
 #define BC_STRING_PLEASE_VERIFY_EMAIL_ADDRESS_FIRST NSLocalizedString(@"Please verify your email address first.", nil)
 #define BC_STRING_PLEASE_VERIFY_MOBILE_NUMBER_FIRST NSLocalizedString(@"Please verify your mobile number first.", nil)
 #define BC_STRING_INVALID_EMAIL_ADDRESS NSLocalizedString(@"Invalid email address.", nil)
-#define BC_STRING_DID_CREATE_NEW_WALLET_DETAIL NSLocalizedString(@"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", nil)
-#define BC_STRING_DID_CREATE_NEW_WALLET_TITLE NSLocalizedString(@"Your wallet was successfully created.", nil)
 #define BC_STRING_MY_BITCOIN_WALLET NSLocalizedString(@"My Bitcoin Wallet", nil)
 #define BC_STRING_PASSWORD_STRENGTH_WEAK NSLocalizedString(@"Weak", nil)
 #define BC_STRING_PASSWORD_STRENGTH_REGULAR NSLocalizedString(@"Regular", nil)
@@ -115,7 +113,6 @@
 #define BC_STRING_ERROR NSLocalizedString(@"Error", nil)
 #define BC_STRING_INVALID_AUTHENTICATION_TYPE NSLocalizedString(@"Invalid two-factor authentication type", nil)
 #define BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN NSLocalizedString(@"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", nil)
-#define BC_STRING_ERROR_LOADING_WALLET NSLocalizedString(@"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.", nil)
 
 #define BC_STRING_INFORMATION NSLocalizedString(@"Information", nil)
 #define BC_STRING_LEARN_MORE NSLocalizedString(@"Learn More", nil)
@@ -134,7 +131,6 @@
 #define BC_STRING_OK NSLocalizedString(@"OK", nil)
 #define BC_STRING_OPEN_MAIL_APP NSLocalizedString(@"Open Mail App", nil)
 #define BC_STRING_CANNOT_OPEN_MAIL_APP NSLocalizedString(@"Cannot open Mail App", nil)
-#define BC_STRING_CANNOT_OPEN_MAIL_APP_URL_ARGUMENT NSLocalizedString(@"Cannot open URL %@", nil)
 #define BC_STRING_FAILED_TO_LOAD_WALLET_TITLE NSLocalizedString(@"Failed To Load Wallet", nil)
 
 #define BC_STRING_FAILED_VALIDATION_CERTIFICATE_TITLE NSLocalizedString(@"Failed to validate server certificate", nil)
@@ -164,8 +160,6 @@
 #define BC_STRING_INVALID_IDENTIFIER NSLocalizedString(@"Invalid Identifier", nil)
 
 #define BC_STRING_DISABLE_TWO_FACTOR NSLocalizedString(@"You must have two-factor authentication disabled to pair manually.", nil)
-#define BC_STRING_WALLET_PAIRED_SUCCESSFULLY_DETAIL NSLocalizedString(@"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", nil)
-#define BC_STRING_WALLET_PAIRED_SUCCESSFULLY_TITLE NSLocalizedString(@"Wallet Paired Successfully.", nil)
 #define BC_STRING_WATCH_ONLY NSLocalizedString(@"Watch Only", nil)
 #define BC_STRING_WATCH_ONLY_RECEIVE_WARNING NSLocalizedString(@"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?", nil)
 #define BC_STRING_USER_DECLINED NSLocalizedString(@"User Declined", nil)
@@ -195,8 +189,6 @@
 #define BC_STRING_MANUALLY NSLocalizedString(@"Manually", nil)
 #define BC_STRING_AUTOMATICALLY NSLocalizedString(@"Automatically", nil)
 #define BC_STRING_PIN_VALIDATION_ERROR NSLocalizedString(@"PIN Validation Error", nil)
-#define BC_STRING_PLEASE_CHOOSE_ANOTHER_PIN NSLocalizedString(@"Please choose another PIN", nil)
-#define BC_STRING_NEW_PIN_MUST_BE_DIFFERENT NSLocalizedString(@"New PIN must be different", nil)
 #define BC_PIN_NO_MATCH NSLocalizedString(@"PINs do not match", nil)
 
 #define BC_STRING_PIN_VALIDATION_ERROR_DETAIL NSLocalizedString(@"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", nil)
@@ -215,8 +207,6 @@
 #define BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0 NSLocalizedString(@"PIN Response Object key or value length 0", nil)
 #define BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL NSLocalizedString(@"PIN Encrypted String is nil", nil)
 #define BC_STRING_WARNING_TITLE NSLocalizedString(@"Warning", nil)
-#define BC_STRING_PIN_COMMON_CODE_WARNING_MESSAGE NSLocalizedString(@"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?", nil)
-#define BC_STRING_TRY_AGAIN NSLocalizedString(@"Try again", nil)
 
 #define BC_STRING_PAYMENT_REQUEST_BITCOIN_ARGUMENT_ARGUMENT NSLocalizedString(@"Please send %@ to bitcoin address.\n%@", nil)
 #define BC_STRING_PAYMENT_REQUEST_BITCOIN_CASH_ARGUMENT NSLocalizedString(@"Please send BCH to the Bitcoin Cash address\n%@", nil)

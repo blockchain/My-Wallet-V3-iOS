@@ -7,6 +7,7 @@
 //
 
 #import "WalletSetupViewController.h"
+#import "Blockchain-Swift.h"
 
 @interface WalletSetupViewController ()
 @property (nonatomic) UIScrollView *scrollView;
@@ -25,7 +26,7 @@
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:[self.delegate getFrame]];
+    self.view = [[UIView alloc] initWithFrame:UIApplication.sharedApplication.keyWindow.frame];
     self.view.backgroundColor = [UIColor whiteColor];
     
     if (self.view == nil) {
@@ -107,7 +108,7 @@
     
     self.emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, emailView.frame.size.width - 50, 30)];
     self.emailLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_SEMIBOLD size:FONT_SIZE_SMALL_MEDIUM];
-    self.emailLabel.text = [self.delegate getEmail];
+    self.emailLabel.text = [WalletManager.sharedInstance.wallet getEmail];
     self.emailLabel.textColor = COLOR_TEXT_DARK_GRAY;
     self.emailLabel.center = CGPointMake(emailView.center.x - self.view.frame.size.width, self.emailLabel.center.y);
     self.emailLabel.textAlignment = NSTextAlignmentCenter;
@@ -185,7 +186,7 @@
 
 - (void)openMail
 {
-    [self.delegate openMailClicked];
+    [UIApplication.sharedApplication openMailApplication];
 }
 
 - (void)enableTouchID:(UIButton *)sender

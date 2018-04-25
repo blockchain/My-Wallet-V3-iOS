@@ -79,7 +79,7 @@ extension WalletManager: WalletDelegate {
         guard let guid = wallet.guid, guid.count == 36 else {
             AlertViewPresenter.shared.standardNotify(
                 message: LocalizationConstants.Authentication.errorDecryptingWallet,
-                title: LocalizationConstants.error) { _ in
+                title: LocalizationConstants.Errors.error) { _ in
                     UIApplication.shared.suspend()
             }
             return
@@ -88,7 +88,7 @@ extension WalletManager: WalletDelegate {
         guard let sharedKey = wallet.sharedKey, sharedKey.count == 36 else {
             AlertViewPresenter.shared.standardNotify(
                 message: LocalizationConstants.Authentication.invalidSharedKey,
-                title: LocalizationConstants.error
+                title: LocalizationConstants.Errors.error
             )
             return
         }
@@ -109,5 +109,22 @@ extension WalletManager: WalletDelegate {
             BlockchainSettings.App.shared.clearPin()
         }
     }
-    
+
+    func walletDidFinishLoad() {
+        print("walletDidFinishLoad()")
+
+        wallet.btcSwipeAddressToSubscribe = nil
+        wallet.bchSwipeAddressToSubscribe = nil
+
+        wallet.twoFactorInput = nil
+
+        // TODO move this
+        // [manualPairView clearTextFields];
+
+        ModalPresenter.shared.closeAllModals()
+
+        AuthenticationCoordinator.shared.start()
+
+        // TODO move other methods from RootService to here
+    }
 }

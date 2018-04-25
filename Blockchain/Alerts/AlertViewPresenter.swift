@@ -24,13 +24,16 @@ import Foundation
             return
         }
         AlertViewPresenter.shared.standardNotify(
-            message: LocalizationConstants.warning,
-            title: LocalizationConstants.unsafeDeviceWarningMessage
+            message: LocalizationConstants.Errors.warning,
+            title: LocalizationConstants.Errors.unsafeDeviceWarningMessage
         )
     }
 
     @objc func showNoInternetConnectionAlert() {
-        standardNotify(message: LocalizationConstants.noInternetConnection, title: LocalizationConstants.error) { _ in
+        standardNotify(
+        message: LocalizationConstants.Errors.noInternetConnection,
+        title: LocalizationConstants.Errors.error
+        ) { _ in
             LoadingViewPresenter.shared.hideBusyView()
             // TODO: this should not be in here. Figure out all areas where pin
             // should be reset and explicitly reset pin entry there
@@ -40,7 +43,7 @@ import Foundation
 
     @objc func standardNotify(
         message: String,
-        title: String = LocalizationConstants.error,
+        title: String = LocalizationConstants.Errors.error,
         handler: AlertConfirmHandler? = nil
     ) {
         DispatchQueue.main.async {

@@ -41,7 +41,7 @@ static PEViewController *EnterController()
 	c.prompt = BC_STRING_PLEASE_ENTER_PIN;
 	c.title = @"";
 
-    c.versionLabel.text = [app getVersionLabelString];
+    c.versionLabel.text = [NSBundle applicationVersion];
     c.versionLabel.hidden = NO;
     
 	return c;
@@ -53,7 +53,7 @@ static PEViewController *NewController()
 	c.prompt = BC_STRING_PLEASE_ENTER_NEW_PIN;
 	c.title = @"";
 
-    c.versionLabel.text = [app getVersionLabelString];
+    c.versionLabel.text = [NSBundle applicationVersion];
 
     return c;
 }
@@ -64,7 +64,7 @@ static PEViewController *VerifyController()
 	c.prompt = BC_STRING_CONFIRM_PIN;
 	c.title = @"";
 
-    c.versionLabel.text = [app getVersionLabelString];
+    c.versionLabel.text = [NSBundle applicationVersion];
 
 	return c;
 }

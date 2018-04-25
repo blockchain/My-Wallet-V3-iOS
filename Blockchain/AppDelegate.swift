@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// Flag used to indicate whether the device is prompting for biometric authentication.
     @objc public private(set) var isPromptingForBiometricAuthentication = false
 
-    fileprivate var loginTimeout: Timer?
-
     lazy var busyView: BCFadeView? = {
         guard let windowFrame = UIApplication.shared.keyWindow?.frame else {
             return BCFadeView(frame: UIScreen.main.bounds)
@@ -140,7 +138,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             if authenticated {
                 DispatchQueue.main.async {
-                    self.showVerifyingBusyView(withTimeout: 30)
+                    // TODO move this method to AuthenticatioCoordinator
+//                    self.showVerifyingBusyView(withTimeout: 30)
                 }
                 guard let pinKey = BlockchainSettings.App.shared.pinKey,
                     let pin = KeychainItemWrapper.pinFromKeychain() else {
@@ -154,7 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // TODO: migrate to the responsible controller that prompts for authentication
     func handleBiometricAuthenticationError(with error: AuthenticationError) {
         if let description = error.description {
-            let alert = UIAlertController(title: LocalizationConstants.error, message: description, preferredStyle: .alert)
+            let alert = UIAlertController(title: LocalizationConstants.Errors.error, message: description, preferredStyle: .alert)
             let action = UIAlertAction(title: LocalizationConstants.ok, style: .default, handler: nil)
             alert.addAction(action)
             DispatchQueue.main.async {
@@ -171,29 +170,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         // TODO: migrate code from RootService.m...
         return false
-    }
-
-    func showVerifyingBusyView(withTimeout seconds: Int) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-        // TODO: refactor showVerifyingBusyView with newer iOS 10+ method
-        loginTimeout = Timer.scheduledTimer(
-            timeInterval: TimeInterval(seconds),
-            target: self,
-            selector: #selector(showErrorLoading),
-            userInfo: nil,
-            repeats: false
-        )
-    }
-    @objc func showErrorLoading() {
-        // TODO: put this in AuthenticationManager
-        if let timer = loginTimeout {
-            timer.invalidate()
-        }
-        //        if (!self.wallet.guid && busyView.alpha == 1.0 && [busyLabel.text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
-        //            [self.pinEntryViewController reset];
-        //            [self hideBusyView];
-        //            [self standardNotifyAutoDismissingController:BC_STRING_ERROR_LOADING_WALLET];
-        //        }
     }
 
     // TODO: move to appropriate module

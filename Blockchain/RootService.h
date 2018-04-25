@@ -230,7 +230,7 @@
 
 - (void)endBackgroundUpdateTask;
 
-- (NSString *)getVersionLabelString;
+//- (NSString *)getVersionLabelString;
 - (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType;
 
 - (BOOL)checkIfWaitingOnEtherTransaction;

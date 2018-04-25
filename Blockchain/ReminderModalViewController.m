@@ -7,6 +7,7 @@
 //
 
 #import "ReminderModalViewController.h"
+#import "Blockchain-Swift.h"
 
 @interface ReminderModalViewController ()
 @property (nonatomic, readonly) ReminderType reminderType;
@@ -134,7 +135,7 @@
 
 - (void)openMail
 {
-    [self.delegate openMail];
+    [UIApplication.sharedApplication openMailApplication];
 }
 
 - (void)showBackup

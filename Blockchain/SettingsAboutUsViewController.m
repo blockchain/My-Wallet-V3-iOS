@@ -8,6 +8,7 @@
 
 #import "SettingsAboutUsViewController.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface SettingsAboutUsViewController ()
 @end
@@ -38,7 +39,7 @@
     infoLabel.textAlignment = NSTextAlignmentCenter;
     infoLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
     infoLabel.numberOfLines = 3;
-    infoLabel.text = [NSString stringWithFormat:@"%@ %@\n%@\n%@", ABOUT_STRING_BLOCKCHAIN_WALLET, [app getVersionLabelString], [NSString stringWithFormat:@"%@ %@ %@", ABOUT_STRING_COPYRIGHT_LOGO, COPYRIGHT_YEAR, ABOUT_STRING_BLOCKCHAIN_LUXEMBOURG_SA], BC_STRING_BLOCKCHAIN_ALL_RIGHTS_RESERVED];
+    infoLabel.text = [NSString stringWithFormat:@"%@ %@\n%@\n%@", ABOUT_STRING_BLOCKCHAIN_WALLET, [NSBundle applicationVersion], [NSString stringWithFormat:@"%@ %@ %@", ABOUT_STRING_COPYRIGHT_LOGO, COPYRIGHT_YEAR, ABOUT_STRING_BLOCKCHAIN_LUXEMBOURG_SA], BC_STRING_BLOCKCHAIN_ALL_RIGHTS_RESERVED];
     infoLabel.center = self.view.center;
     [self.view addSubview:infoLabel];
 
