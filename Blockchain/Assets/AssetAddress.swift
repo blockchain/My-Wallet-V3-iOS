@@ -9,7 +9,7 @@
 import Foundation
 
 /// Blueprint for creating and validating asset addresses.
-protocol AssetAddress {
+public protocol AssetAddress {
     /// String representation of the address.
     var address: String? { get }
     init(string: String)
