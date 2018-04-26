@@ -693,12 +693,7 @@
     
     [self disablePaymentButtons];
     
-    __weak ExchangeCreateViewController *weakSelf = self;
-    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
-        [weakSelf disablePaymentButtons];
-        [weakSelf getApproximateQuote];
-        weakSelf.quoteTimer = nil;
-    }];
+    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(getApproximateQuoteAfterTimer) userInfo:nil repeats:NO];
 }
 
 - (void)doCurrencyConversion
@@ -1098,6 +1093,13 @@
 }
 
 #pragma mark - Helpers
+
+- (void)getApproximateQuoteAfterTimer
+{
+    [self disablePaymentButtons];
+    [self getApproximateQuote];
+    self.quoteTimer = nil;
+}
 
 - (void)cancelCurrentDataTask
 {
