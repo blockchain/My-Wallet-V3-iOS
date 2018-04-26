@@ -2593,6 +2593,7 @@ void (^secondPasswordSuccess)(NSString *);
                 [self hideBusyView];
                 [self.pinEntryViewController reset];
                 [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+                return;
             }
             NSError *jsonError;
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
