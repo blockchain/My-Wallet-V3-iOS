@@ -69,6 +69,8 @@ final class NetworkManager: NSObject, URLSessionDelegate {
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
 
+    // MARK: - Private Functions
+
     fileprivate func persistServerSessionIDForNewUIWebViews() {
         let cookieStorage = HTTPCookieStorage.shared
         cookieStorage.cookieAcceptPolicy = .always
