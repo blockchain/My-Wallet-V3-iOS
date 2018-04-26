@@ -9,21 +9,17 @@
 import Foundation
 
 extension BlockchainAPI {
-    static func suffixURL(btcAddress: BitcoinAddress) -> String? {
-        guard
-            let address = btcAddress.address,
-            let walletUrl = shared.walletUrl else {
+    func suffixURL(address: AssetAddress) -> String? {
+        guard let description = address.description else { return nil }
+        switch address.assetType {
+        case .bitcoin:
+            guard let url = walletUrl else { return nil }
+            return String(format: "%@/address/%@?format=json", url, description)
+        case .bitcoinCash:
+            guard let url = apiUrl else { return nil }
+            return String(format: "/bch/multiaddr?active=%@", url, description)
+        default:
             return nil
         }
-        return String(format: "%@/address/%@?format=json", walletUrl, address)
-    }
-
-    static func suffixURL(bchAddress: BitcoinCashAddress) -> String? {
-        guard
-            let address = bchAddress.address,
-            let apiUrl = shared.apiUrl else {
-                return nil
-        }
-        return String(format: "/bch/multiaddr?active=%@", apiUrl, address)
     }
 }

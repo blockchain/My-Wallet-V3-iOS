@@ -269,39 +269,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     typealias UnusedAddressError = ((_ error: Error) -> Void)
 
     // TODO: move to appropriate controller
-    func checkForUnusedAddress(_ address: BitcoinAddress,
-                               successHandler: @escaping UnusedAddressSuccess,
-                               errorHandler: @escaping UnusedAddressError) {
+    func checkForUnusedAddress(_ address: AssetAddress, successHandler: @escaping UnusedAddressSuccess, errorHandler: @escaping UnusedAddressError) {
         guard
-            let urlString = BlockchainAPI.suffixURL(btcAddress: address),
-            let url = URL(string: urlString) else {
-                return
-        }
-        NetworkManager.shared.session.sessionDescription = url.host
-        let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
-            if let error = error {
-                DispatchQueue.main.async { errorHandler(error) }; return
-            }
-            guard
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
-                let transactions = json!["txs"] as? [NSDictionary] else {
-                    // TODO: call error handler
-                    return
-            }
-            DispatchQueue.main.async {
-                let isUnused = transactions.count == 0
-                successHandler(isUnused)
-            }
-        })
-        task.resume()
-    }
-
-    // TODO: move to appropriate controller
-    func checkForUnusedAddress(_ address: BitcoinCashAddress,
-                               successHandler: @escaping UnusedAddressSuccess,
-                               errorHandler: @escaping UnusedAddressError) {
-        guard
-            let urlString = BlockchainAPI.suffixURL(bchAddress: address),
+            let urlString = BlockchainAPI.shared.suffixURL(address: address),
             let url = URL(string: urlString) else {
                 return
         }
