@@ -155,6 +155,17 @@
 		51A862BC2090DBD900B338E0 /* AlertViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316A2089650B00BBD292 /* AlertViewPresenter.swift */; };
 		51A862BD2090DD4500B338E0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED3F208A6E8D002D8BAC /* UIViewController.swift */; };
 		51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
+		51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */; };
+		51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */; };
+		51A862D920921E7600B338E0 /* BitcoinAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D820921E7600B338E0 /* BitcoinAddress.swift */; };
+		51A862DA20921E7600B338E0 /* BitcoinAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D820921E7600B338E0 /* BitcoinAddress.swift */; };
+		51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */; };
+		51A862DD20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */; };
+		51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */; };
+		51A862E12092506600B338E0 /* AssetAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862E02092506600B338E0 /* AssetAddress.swift */; };
+		51A862E22092506600B338E0 /* AssetAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862E02092506600B338E0 /* AssetAddress.swift */; };
+		51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */; };
+		51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */ = {isa = PBXBuildFile; fileRef = 51A862E6209268D300B338E0 /* sample-unused-address.json */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
@@ -989,6 +1000,13 @@
 		51A7348C20891EB3009727D5 /* CertificatePinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatePinner.swift; sourceTree = "<group>"; };
 		51A7348D20891EB3009727D5 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		51A7349020891EB3009727D5 /* BlockchainAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockchainAPI.swift; sourceTree = "<group>"; };
+		51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URLSuffix.swift"; sourceTree = "<group>"; };
+		51A862D820921E7600B338E0 /* BitcoinAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BitcoinAddress.swift; path = Assets/Bitcoin/BitcoinAddress.swift; sourceTree = "<group>"; };
+		51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BitcoinCashAddress.swift; path = Assets/BitcoinCash/BitcoinCashAddress.swift; sourceTree = "<group>"; };
+		51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URLSuffixTests.swift"; sourceTree = "<group>"; };
+		51A862E02092506600B338E0 /* AssetAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetAddress.swift; path = Assets/AssetAddress.swift; sourceTree = "<group>"; };
+		51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUnusedAddressTests.swift; sourceTree = "<group>"; };
+		51A862E6209268D300B338E0 /* sample-unused-address.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "sample-unused-address.json"; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationManager.swift; path = Authentication/AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -1538,6 +1556,7 @@
 		511646C02081247700C43522 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				51A862E02092506600B338E0 /* AssetAddress.swift */,
 				511646C4208124E200C43522 /* AssetType.swift */,
 				511646C12081248600C43522 /* Bitcoin */,
 				511646C22081248C00C43522 /* Bitcoin Cash */,
@@ -1549,6 +1568,7 @@
 		511646C12081248600C43522 /* Bitcoin */ = {
 			isa = PBXGroup;
 			children = (
+				51A862D820921E7600B338E0 /* BitcoinAddress.swift */,
 			);
 			name = Bitcoin;
 			sourceTree = "<group>";
@@ -1556,6 +1576,7 @@
 		511646C22081248C00C43522 /* Bitcoin Cash */ = {
 			isa = PBXGroup;
 			children = (
+				51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */,
 			);
 			name = "Bitcoin Cash";
 			sourceTree = "<group>";
@@ -1591,9 +1612,12 @@
 		5194359F208E61F3001EF882 /* BlockchainTests */ = {
 			isa = PBXGroup;
 			children = (
+				51A862E52092689500B338E0 /* Mock Data */,
 				519435A2208E61F3001EF882 /* Info.plist */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
 				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
+				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
+				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
 			);
 			path = BlockchainTests;
 			sourceTree = "<group>";
@@ -1615,8 +1639,17 @@
 				516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */,
 				51943595208E3005001EF882 /* BlockchainAPI+URL.swift */,
 				5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */,
+				51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		51A862E52092689500B338E0 /* Mock Data */ = {
+			isa = PBXGroup;
+			children = (
+				51A862E6209268D300B338E0 /* sample-unused-address.json */,
+			);
+			path = "Mock Data";
 			sourceTree = "<group>";
 		};
 		670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */ = {
@@ -2490,6 +2523,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2638,15 +2672,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51A862DD20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
 				51A862BD2090DD4500B338E0 /* UIViewController.swift in Sources */,
 				519435AD208E62E0001EF882 /* CertificatePinner.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
 				51A862BA2090DB8400B338E0 /* LoadingViewPresenter.swift in Sources */,
 				5185E125208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
+				51A862DA20921E7600B338E0 /* BitcoinAddress.swift in Sources */,
 				519435B3208E630C001EF882 /* UIDevice.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
+				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				519435B5208E6356001EF882 /* AuthenticationManager.swift in Sources */,
+				51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */,
 				519435B2208E630A001EF882 /* Bundle.swift in Sources */,
+				51A862E22092506600B338E0 /* AssetAddress.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				519435AF208E62E8001EF882 /* NetworkManager.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
@@ -2659,6 +2698,7 @@
 				519435B7208E6364001EF882 /* Environment.swift in Sources */,
 				519435B6208E635A001EF882 /* AssetType.swift in Sources */,
 				519435BA208E63CE001EF882 /* Passcode.swift in Sources */,
+				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				519435AE208E62E3001EF882 /* BlockchainAPI.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				51A862BB2090DB8800B338E0 /* ModalPresenter.swift in Sources */,
@@ -2685,6 +2725,7 @@
 				23EA61CB1B5591260032B907 /* SettingsSelectorTableViewController.m in Sources */,
 				23BA22111D6B736900D0472B /* NSNumberFormatter+Currencies.m in Sources */,
 				23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */,
+				51A862D920921E7600B338E0 /* BitcoinAddress.swift in Sources */,
 				2322DCB51D771831000E5AC1 /* SRIOConsumer.m in Sources */,
 				23BD046D1D79F1EC00DB69E6 /* TransactionDetailNavigationController.m in Sources */,
 				678AD5E919D4610000E9A778 /* BCModalContentView.m in Sources */,
@@ -2749,6 +2790,7 @@
 				FA6323391A433B1C00EB3974 /* Foundation-Utility.m in Sources */,
 				239CD5681C122BDE00997DF5 /* SettingsTwoStepViewController.m in Sources */,
 				23BF73391C454B8C00204503 /* AccountsAndAddressesNavigationController.m in Sources */,
+				51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */,
 				9F2D934A14C05DD00053F0FF /* Address.m in Sources */,
 				235BD5661C58216000969B31 /* BCModalViewController.m in Sources */,
@@ -2774,6 +2816,7 @@
 				FCB33B6F1FC369D700317E6B /* ExchangeDetailView.m in Sources */,
 				C7E2750B1F589C8D0054EFA5 /* ReceiveEtherViewController.m in Sources */,
 				AAA3333F2088131D0019AD55 /* ModalPresenter.swift in Sources */,
+				51A862E12092506600B338E0 /* AssetAddress.swift in Sources */,
 				9FCA4D1B151494BF00ECDFBE /* SendBitcoinViewController.m in Sources */,
 				237451C91D624C1C00CF7049 /* RootService.m in Sources */,
 				511646E2208523E300C43522 /* UIDevice.swift in Sources */,
@@ -2884,6 +2927,7 @@
 				C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */,
 				AAA3333320880A2C0019AD55 /* AppDelegate.swift in Sources */,
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
+				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
 				23F601A41D09C931009102BF /* Reachability.m in Sources */,
 				510EA1702080F16100A63AB8 /* Passcode.swift in Sources */,
 				23444F931DCD21B700573C8C /* BTCBase58.m in Sources */,
