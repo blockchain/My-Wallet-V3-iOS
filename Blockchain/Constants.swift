@@ -64,6 +64,12 @@ struct Constants {
     struct NotificationKeys {
         static let modalViewDismissed = NSNotification.Name("modalViewDismissed")
     }
+    struct PushNotificationKeys {
+        static let userInfoType = "type"
+        static let userInfoId = "id"
+        static let typePayment = "payment"
+        static let typeContactRequest = "contact_request"
+    }
 }
 
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this

@@ -78,7 +78,7 @@ ShowReminderType showReminderType;
 
 SideMenuViewController *sideMenuViewController;
 
-UNNotification *pushNotificationPendingAction;
+//UNNotification *pushNotificationPendingAction;
 
 void (^addPrivateKeySuccess)(NSString *);
 void (^secondPasswordSuccess)(NSString *);
@@ -220,7 +220,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 //    [self showWelcomeOrPinScreen];
 
-    [self requestAuthorizationForPushNotifications];
+//    [self requestAuthorizationForPushNotifications];
 
     // TODO: Set Montserrat font globally
     app.mainTitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
@@ -476,27 +476,27 @@ void (^secondPasswordSuccess)(NSString *);
     return YES;
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
-{
-    pushNotificationPendingAction = notification;
+//- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+//{
+//    pushNotificationPendingAction = notification;
+//
+//    [self.wallet getMessages];
+//}
 
-    [self.wallet getMessages];
-}
-
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
-{
-    DLog(@"User received remote notification");
-    NSString *type = [response.notification.request.content.userInfo objectForKey:DICTIONARY_KEY_TYPE];
-    NSString *invitationSent = [response.notification.request.content.userInfo objectForKey:DICTIONARY_KEY_ID];
-
-    if ([type isEqualToString:PUSH_NOTIFICATION_TYPE_CONTACT_REQUEST]) {
-        showType = ShowTypeNewContact;
-        _contactsViewController = [[ContactsViewController alloc] initWithAcceptedInvitation:invitationSent];
-    } else if ([type isEqualToString:PUSH_NOTIFICATION_TYPE_PAYMENT]) {
-        showType = ShowTypeNewPayment;
-        [self.tabControllerManager setTransactionsViewControllerMessageIdentifier:invitationSent];
-    }
-}
+//- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+//{
+//    DLog(@"User received remote notification");
+//    NSString *type = [response.notification.request.content.userInfo objectForKey:DICTIONARY_KEY_TYPE];
+//    NSString *invitationSent = [response.notification.request.content.userInfo objectForKey:DICTIONARY_KEY_ID];
+//
+//    if ([type isEqualToString:PUSH_NOTIFICATION_TYPE_CONTACT_REQUEST]) {
+//        showType = ShowTypeNewContact;
+//        _contactsViewController = [[ContactsViewController alloc] initWithAcceptedInvitation:invitationSent];
+//    } else if ([type isEqualToString:PUSH_NOTIFICATION_TYPE_PAYMENT]) {
+//        showType = ShowTypeNewPayment;
+//        [self.tabControllerManager setTransactionsViewControllerMessageIdentifier:invitationSent];
+//    }
+//}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
@@ -538,28 +538,28 @@ void (^secondPasswordSuccess)(NSString *);
 //    return _tabControllerManager;
 }
 
-- (void)requestAuthorizationForPushNotifications
-{
-    if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    } else {
-        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        center.delegate = self;
-        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-             if (!error) {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     [[UIApplication sharedApplication] registerForRemoteNotifications];
-                 });
-                 DLog( @"Push registration success." );
-             } else {
-                 DLog( @"Push registration FAILED" );
-                 DLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
-                 DLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
-             }
-         }];
-    }
-}
+//- (void)requestAuthorizationForPushNotifications
+//{
+//    if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
+//        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+//        [[UIApplication sharedApplication] registerForRemoteNotifications];
+//    } else {
+//        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+//        center.delegate = self;
+//        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+//             if (!error) {
+//                 dispatch_async(dispatch_get_main_queue(), ^{
+//                     [[UIApplication sharedApplication] registerForRemoteNotifications];
+//                 });
+//                 DLog( @"Push registration success." );
+//             } else {
+//                 DLog( @"Push registration FAILED" );
+//                 DLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
+//                 DLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
+//             }
+//         }];
+//    }
+//}
 
 - (void)registerDeviceForPushNotifications
 {
@@ -2111,6 +2111,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didGetNewMessages:(NSArray *)newMessages
 {
+    UNNotification *pushNotificationPendingAction = PushNotificationManager.sharedInstace.presentingPushNotification;
     if (pushNotificationPendingAction) {
 
         NSString *type = [pushNotificationPendingAction.request.content.userInfo objectForKey:DICTIONARY_KEY_TYPE];
@@ -2261,7 +2262,7 @@ void (^secondPasswordSuccess)(NSString *);
         }
     }
 
-    pushNotificationPendingAction = nil;
+    PushNotificationManager.sharedInstace.presentingPushNotification = nil;
 
     [self reloadMessageViews];
 }
