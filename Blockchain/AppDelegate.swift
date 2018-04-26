@@ -265,11 +265,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //: These two functions are used to justify the regeneration of addresses in the swipe-to-receive screen.
     // NOTE: Ethereum does not apply here, because the address is currently not regenerated.
 
-    typealias UnusedAddressSuccess = ((_ isUnused: Bool) -> Void)
-    typealias UnusedAddressError = ((_ error: Error) -> Void)
-
     // TODO: move to appropriate controller
-    func checkForUnusedAddress(_ address: AssetAddress, successHandler: @escaping UnusedAddressSuccess, errorHandler: @escaping UnusedAddressError) {
+    func checkForUnusedAddress(_ address: AssetAddress,
+                               successHandler: @escaping ((_ isUnused: Bool) -> Void),
+                               errorHandler: @escaping ((_ error: Error) -> Void)) {
         guard
             let urlString = BlockchainAPI.shared.suffixURL(address: address),
             let url = URL(string: urlString) else {
