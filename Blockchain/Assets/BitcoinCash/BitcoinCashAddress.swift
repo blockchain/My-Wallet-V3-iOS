@@ -8,21 +8,21 @@
 
 import Foundation
 
-struct BitcoinCashAddress: AssetAddress {
+public struct BitcoinCashAddress: AssetAddress {
 
     // MARK: - Properties
 
-    let address: String?
+    public let address: String?
 
     // MARK: - Initialization
 
-    init(string: String) {
+    public init(string: String) {
         self.address = BitcoinCashAddress.isValid(string) ? string : nil
     }
 
     // MARK: Public Methods
 
-    static func isValid(_ address: String) -> Bool {
+    public static func isValid(_ address: String) -> Bool {
         // TODO: implement validation logic
         return true
     }
