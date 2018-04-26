@@ -13,5 +13,5 @@ public protocol AssetAddress {
     /// String representation of the address.
     var address: String? { get }
     init(string: String)
-    static func isValid(_ address: String) -> Bool
+    func isValid(_ address: String) -> Bool
 }

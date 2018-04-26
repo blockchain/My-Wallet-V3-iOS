@@ -12,17 +12,20 @@ public struct BitcoinAddress: AssetAddress {
 
     // MARK: - Properties
 
-    public let address: String?
+    public var address: String?
 
     // MARK: - Initialization
 
     public init(string: String) {
-        self.address = BitcoinAddress.isValid(string) ? string : nil
+        self.address = nil
+        if isValid(string) {
+            address = string
+        }
     }
 
     // MARK: Public Methods
 
-    public static func isValid(_ address: String) -> Bool {
+    public func isValid(_ address: String) -> Bool {
         // TODO: implement validation logic
         return true
     }
