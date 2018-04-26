@@ -12,17 +12,15 @@ public struct BitcoinAddress: AssetAddress {
 
     // MARK: - Properties
 
-    public var description: String?
+    public var description: String!
     public var assetType: AssetType
 
     // MARK: - Initialization
 
-    public init(string: String) {
-        self.description = nil
+    public init?(string: String) {
         self.assetType = .bitcoin
-        if isValid(string) {
-            description = string
-        }
+        if !isValid(string) { return nil }
+        description = string
     }
 
     // MARK: Public Methods
