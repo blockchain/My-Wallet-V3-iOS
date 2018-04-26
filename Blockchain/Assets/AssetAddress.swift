@@ -11,7 +11,8 @@ import Foundation
 /// Blueprint for creating and validating asset addresses.
 public protocol AssetAddress {
     /// String representation of the address.
-    var address: String? { get }
+    var description: String? { get }
+    var assetType: AssetType { get }
     init(string: String)
     func isValid(_ address: String) -> Bool
 }
