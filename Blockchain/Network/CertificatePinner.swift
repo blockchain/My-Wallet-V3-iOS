@@ -54,7 +54,7 @@ final class CertificatePinner: NSObject {
                 fatalError("Failed to get wallet url from Bundle.")
         }
         NetworkManager.shared.session.sessionDescription = url.host
-        let task = NetworkManager.shared.session.dataTask(with: url) { data, response, error in
+        let task = NetworkManager.shared.session.dataTask(with: url) { _, response, error in
             if let transportError = error {
                 self.handleClientError(transportError)
                 return

@@ -349,8 +349,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE @"/price/index-series?base=%@&quote=%@&start=%@&scale=%@&omitnull=true"
 #define TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT @"/q/txresult/%@/%@"
-#define ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT @"/address/%@?format=json"
-#define ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT @"/bch/multiaddr?active=%@"
 
 #define URL_SURVEY @"https://blockchain.co1.qualtrics.com/SE/?SID=SV_8c6uSMW5eBV9nal"
 

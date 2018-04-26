@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Properties
 
+    // TODO: move to authentication flow
     /// Flag used to indicate whether the device is prompting for biometric authentication.
     @objc public private(set) var isPromptingForBiometricAuthentication = false
 
@@ -85,6 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.set(false, forKey: simulateSurgeKey)
         #endif
 
+        // TODO: prevent any other data tasks from executing until cert is pinned
         CertificatePinner.shared.pinCertificate()
 
         checkForNewInstall()
@@ -258,5 +260,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         alert.addAction(action)
         UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+
+    //: These two functions are used to justify the regeneration of addresses in the swipe-to-receive screen.
+    // NOTE: Ethereum does not apply here, because the address is currently not regenerated.
+
+    // TODO: move to appropriate controller
+    func checkForUnusedAddress(_ address: AssetAddress,
+                               successHandler: @escaping ((_ isUnused: Bool) -> Void),
+                               errorHandler: @escaping ((_ error: Error) -> Void)) {
+        guard
+            let urlString = BlockchainAPI.shared.suffixURL(address: address),
+            let url = URL(string: urlString) else {
+                return
+        }
+        NetworkManager.shared.session.sessionDescription = url.host
+        let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
+            if let error = error {
+                DispatchQueue.main.async { errorHandler(error) }; return
+            }
+            guard
+                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+                let transactions = json!["txs"] as? [NSDictionary] else {
+                    // TODO: call error handler
+                    return
+            }
+            DispatchQueue.main.async {
+                let isUnused = transactions.count == 0
+                successHandler(isUnused)
+            }
+        })
+        task.resume()
     }
 }

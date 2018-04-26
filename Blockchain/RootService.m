@@ -3234,44 +3234,44 @@ void (^secondPasswordSuccess)(NSString *);
     [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType
-{
-    NSString *URLString;
-
-    if (assetType == AssetTypeBitcoin) {
-        URLString = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, address]];
-    } else if (assetType == AssetTypeBitcoinCash) {
-        NSString *addressToCheck = [app.wallet fromBitcoinCash:address];
-        URLString = [[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT, addressToCheck]];
-    } else {
-        DLog(@"checking for unused address: unsupported asset type!");
-    }
-
-    NSURL *URL = [NSURL URLWithString:URLString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-    NSURL *url = [NSURL URLWithString:[[BlockchainAPI sharedInstance] walletUrl]];
-    // session.sessionDescription = url.host;
-    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                DLog(@"Error checking for receive address %@: %@", address, error);
-                if (errorBlock) errorBlock();
-            });
-            return;
-        }
-
-        NSDictionary *addressInfo = [NSJSONSerialization JSONObjectWithData:data options: NSJSONReadingAllowFragments error: &error];
-        NSArray *transactions = addressInfo[@"txs"];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            BOOL isUnused = transactions.count == 0;
-            return successBlock(address, isUnused);
-        });
-
-    }];
-
-    [task resume];
-}
+//- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType
+//{
+//    NSString *URLString;
+//
+//    if (assetType == AssetTypeBitcoin) {
+//        URLString = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, address]];
+//    } else if (assetType == AssetTypeBitcoinCash) {
+//        NSString *addressToCheck = [app.wallet fromBitcoinCash:address];
+//        URLString = [[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT, addressToCheck]];
+//    } else {
+//        DLog(@"checking for unused address: unsupported asset type!");
+//    }
+//
+//    NSURL *URL = [NSURL URLWithString:URLString];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+//    NSURL *url = [NSURL URLWithString:[[BlockchainAPI sharedInstance] walletUrl]];
+//    // session.sessionDescription = url.host;
+//    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        if (error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                DLog(@"Error checking for receive address %@: %@", address, error);
+//                if (errorBlock) errorBlock();
+//            });
+//            return;
+//        }
+//
+//        NSDictionary *addressInfo = [NSJSONSerialization JSONObjectWithData:data options: NSJSONReadingAllowFragments error: &error];
+//        NSArray *transactions = addressInfo[@"txs"];
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            BOOL isUnused = transactions.count == 0;
+//            return successBlock(address, isUnused);
+//        });
+//
+//    }];
+//
+//    [task resume];
+//}
 
 - (void)openMail
 {
