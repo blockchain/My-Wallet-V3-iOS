@@ -63,32 +63,6 @@ extension PushNotificationManager: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-
         presentingPushNotification = notification
-
-        WalletManager.shared.wallet.getMessages()
-    }
-
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-
-        print("User received remote notification")
-
-        let notificationContent = response.notification.request.content
-        let type = notificationContent.userInfo[Constants.PushNotificationKeys.userInfoType] as? String
-        let invitationSent = notificationContent.userInfo[Constants.PushNotificationKeys.userInfoId] as? String
-
-        if type == Constants.PushNotificationKeys.typeContactRequest {
-            // TODO set show type & initialize ContactsViewController
-            //    showType = ShowTypeNewContact;
-            //    _contactsViewController = [[ContactsViewController alloc] initWithAcceptedInvitation:invitationSent];
-        } else if type == Constants.PushNotificationKeys.typePayment {
-            // TODO set show type
-            //    showType = ShowTypeNewPayment;
-            AppCoordinator.shared.tabControllerManager.setTransactionsViewControllerMessageIdentifier(invitationSent)
-        }
     }
 }
