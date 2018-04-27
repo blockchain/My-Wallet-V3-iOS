@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BCDescriptionView.h"
-@class ContactTransaction, BCConfirmPaymentViewModel;
+@class BCConfirmPaymentViewModel;
 
 @protocol ConfirmPaymentViewDelegate
 - (void)setupNoteForTransaction:(NSString *)note;
