@@ -571,8 +571,8 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER @"appReviewPromptTimer"
 #define USER_DEFAULTS_KEY_HAS_SEEN_SURVEY_PROMPT @"hasSeenSurveyPrompt"
-#define USER_DEFAULTS_KEY_REMINDER_MODAL_DATE @"reminderModalDate"
-#define USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION @"hasEndedFirstSession"
+//#define USER_DEFAULTS_KEY_REMINDER_MODAL_DATE @"reminderModalDate"
+//#define USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION @"hasEndedFirstSession"
 //#define USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS @"hasSeenAllCards"
 //#define USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS @"shouldHideAllCards"
 #define USER_DEFAULTS_KEY_LAST_CARD_OFFSET @"lastCardOffset"
@@ -580,7 +580,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_SHOULD_HIDE_BITCOIN_CASH_CARD @"shouldHideBitcoinCashNotificationCard"
 
 #define USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER @"securiterReminderTimer"
-#define USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER @"hasSeenEmailReminder"
+//#define USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER @"hasSeenEmailReminder"
 
 #define KEYCHAIN_KEY_SHARED_KEY @"sharedKey"
 #define KEYCHAIN_KEY_GUID @"guid"

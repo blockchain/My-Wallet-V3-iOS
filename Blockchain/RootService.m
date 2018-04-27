@@ -46,8 +46,8 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 #define URL_SUPPORT_FORGOT_PASSWORD @"https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
-#define USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP @"didFailTouchIDSetup"
-#define USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP @"shouldShowTouchIDSetup"
+//#define USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP @"didFailTouchIDSetup"
+//#define USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP @"shouldShowTouchIDSetup"
 
 @implementation RootService
 
@@ -312,7 +312,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     // TODO: call Swift instance method directly from AppDelegate after refactor
-    // [rootService applicationDidEnterBackground:application];().swip
+    // [rootService applicationDidEnterBackground:application];
     if (BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled &&
         [WalletManager.sharedInstance.wallet isInitialized] &&
         [WalletManager.sharedInstance.wallet didUpgradeToHd]) {
@@ -393,9 +393,9 @@ void (^secondPasswordSuccess)(NSString *);
         BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
     }
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP] &&
+    if (BlockchainSettings.sharedAppInstance.didFailTouchIDSetup &&
         !BlockchainSettings.sharedAppInstance.touchIDEnabled) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP];
+        BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = YES;
     }
 
     [WalletManager.sharedInstance.wallet setupBuySellWebview];
@@ -1012,7 +1012,7 @@ void (^secondPasswordSuccess)(NSString *);
             [app showPinModalAsView:NO];
         }
     } else {
-        NSDate *dateOfLastReminder = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_REMINDER_MODAL_DATE];
+        NSDate *dateOfLastReminder = BlockchainSettings.sharedAppInstance.reminderModalDate;
 
         NSTimeInterval timeIntervalBetweenPrompts = TIME_INTERVAL_SECURITY_REMINDER_PROMPT;
 
@@ -1028,7 +1028,7 @@ void (^secondPasswordSuccess)(NSString *);
                 [self showSecurityReminder];
             }
         } else {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER]) {
+            if (BlockchainSettings.sharedAppInstance.hasSeenEmailReminder) {
                 [self showSecurityReminder];
             } else {
                 [self checkIfSettingsLoadedAndShowEmailReminder];
@@ -2779,7 +2779,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showSecurityReminder
 {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:USER_DEFAULTS_KEY_REMINDER_MODAL_DATE];
+    BlockchainSettings.sharedAppInstance.reminderModalDate = [NSDate date];
 
     if ([WalletManager.sharedInstance.wallet getTotalActiveBalance] > 0) {
         if (![WalletManager.sharedInstance.wallet isRecoveryPhraseVerified]) {
@@ -2818,14 +2818,14 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showEmailVerificationReminder
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER];
+    BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = YES;
 
     WalletSetupViewController *setupViewController = [[WalletSetupViewController alloc] initWithSetupDelegate:self];
 
-    BOOL shouldShowTouchID = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP];
+    BOOL shouldShowTouchID = BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup;
     setupViewController.emailOnly = !shouldShowTouchID;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP];
+    BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = NO;
+    BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = NO;
 
     setupViewController.modalPresentationStyle = UIModalTransitionStyleCrossDissolve;
     [self.window.rootViewController presentViewController:setupViewController animated:NO completion:nil];
@@ -3752,7 +3752,7 @@ void (^secondPasswordSuccess)(NSString *);
         [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
         [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alertTouchIDError animated:YES completion:nil];
 
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP];
+        BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = YES;
 
         return NO;
     }

@@ -217,9 +217,9 @@
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = NO;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_LAST_CARD_OFFSET];
 
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER];
+    BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = NO;
     BlockchainSettings.sharedAppInstance.hasEndedFirstSession = NO;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_REMINDER_MODAL_DATE];
+    BlockchainSettings.sharedAppInstance.reminderModalDate = NULL;
     
     BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
     
