@@ -37,7 +37,6 @@ NSString *entryKeyUpgradeBackup = @"upgrade_backup";
 NSString *entryKeySettings = @"settings";
 NSString *entryKeyAccountsAndAddresses = @"accounts_and_addresses";
 NSString *entryKeyWebLogin = @"web_login";
-NSString *entryKeyContacts = @"contacts";
 NSString *entryKeySupport = @"support";
 NSString *entryKeyLogout = @"logout";
 NSString *entryKeyBuyBitcoin = @"buy_bitcoin";
@@ -118,9 +117,6 @@ int accountEntries = 0;
     }
 
     [self addMenuEntry:entryKeySettings text:BC_STRING_SETTINGS icon:@"settings"];
-#ifdef ENABLE_CONTACTS
-    [self addMenuEntry:entryKeyContacts text:BC_STRING_CONTACTS icon:@"icon_contact_small"];
-#endif
     [self addMenuEntry:entryKeyAccountsAndAddresses text:BC_STRING_ADDRESSES icon:@"wallet"];
     [self addMenuEntry:entryKeyWebLogin text:BC_STRING_LOG_IN_TO_WEB_WALLET icon:@"web"];
     [self addMenuEntry:entryKeySupport text:BC_STRING_SUPPORT icon:@"help"];
@@ -267,8 +263,6 @@ int accountEntries = 0;
         [app accountsAndAddressesClicked:nil];
     } else if (rowKey == entryKeySettings) {
         [app accountSettingsClicked:nil];
-    } else if (rowKey == entryKeyContacts) {
-        [app contactsClicked:nil];
     } else if (rowKey == entryKeyWebLogin) {
         [app webLoginClicked:nil];
     } else if (rowKey == entryKeySupport) {
