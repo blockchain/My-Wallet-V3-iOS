@@ -148,16 +148,6 @@
     return self.sendBitcoinViewController.addressSource;
 }
 
-- (void)setupPaymentRequest:(ContactTransaction *)transaction
-{
-    if (!_sendBitcoinViewController) {
-        _sendBitcoinViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
-    }
-    
-    [self showSendCoinsAnimated:YES];
-    [_sendBitcoinViewController setupPaymentRequest:transaction];
-}
-
 - (void)setupSendToAddress:(NSString *)address
 {
     [self showSendCoinsAnimated:YES];
@@ -490,12 +480,6 @@
     }
     
     [_sendBitcoinViewController transferFundsToDefaultAccountFromAddress:address];
-}
-
-- (void)didRejectContactTransaction
-{
-    [self.sendBitcoinViewController reload];
-    [self showTransactionsAnimated:YES];
 }
 
 - (void)hideSendAndReceiveKeyboards

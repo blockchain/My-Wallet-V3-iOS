@@ -97,7 +97,6 @@
 - (void)updateLoadedAllTransactions:(NSNumber *)loadedAll;
 - (void)receivedTransactionMessage;
 - (DestinationAddressSource)getSendAddressSource;
-- (void)setupPaymentRequest:(ContactTransaction *)transaction;
 - (void)setupSendToAddress:(NSString *)address;
 
 // Send Eth View Controller
@@ -123,8 +122,6 @@
 - (void)removeTransactionsFilter;
 - (void)reloadSymbols;
 - (void)didChangeLocalCurrency;
-
-- (void)didRejectContactTransaction;
 
 - (void)hideSendAndReceiveKeyboards;
 
