@@ -11,15 +11,12 @@
 #import "RootService.h"
 #import "ReceiveTableCell.h"
 #import "SendBitcoinViewController.h"
-#import "Contact.h"
 #import "Blockchain-Swift.h"
 
 #define DICTIONARY_KEY_ACCOUNTS @"accounts"
 #define DICTIONARY_KEY_ACCOUNT_LABELS @"accountLabels"
 
 @implementation BCAddressSelectionView
-
-@synthesize contacts;
 
 @synthesize addressBookAddresses;
 @synthesize addressBookAddressLabels;
@@ -44,7 +41,6 @@
 
 SelectMode selectMode;
 
-int contactsSectionNumber;
 int addressBookSectionNumber;
 int btcAccountsSectionNumber;
 int ethAccountsSectionNumber;
@@ -70,9 +66,7 @@ typedef enum {
         self.wallet = _wallet;
         // The From Address View shows accounts and legacy addresses with their balance. Entries with 0 balance are not selectable.
         // The To Address View shows address book entries, account and legacy addresses without a balance.
-        
-        contacts = [NSMutableArray new];
-        
+
         addressBookAddresses = [NSMutableArray array];
         addressBookAddressLabels = [NSMutableArray array];
         
@@ -143,8 +137,7 @@ typedef enum {
             }
 
             addressBookSectionNumber = -1;
-            contactsSectionNumber = contacts.count > 0 ? 0 : -1;
-            btcAccountsSectionNumber = btcAccounts.count > 0 ? contactsSectionNumber + 1 : -1;
+            btcAccountsSectionNumber = btcAccounts.count > 0 ? 0 : -1;
             ethAccountsSectionNumber = ethAccounts.count > 0 ? btcAccountsSectionNumber + 1 : -1;
             bchAccountsSectionNumber = bchAccounts.count > 0 ? ethAccountsSectionNumber + 1 : -1;
             legacyAddressesSectionNumber = (legacyAddresses.count > 0) ? btcAccountsSectionNumber + 1 : -1;
@@ -152,57 +145,45 @@ typedef enum {
         }
         // Select to address
         else {
-            
-            // Show contacts
-            if (selectMode != SelectModeReceiveFromContact) {
-                for (Contact *contact in [_wallet.contacts allValues]) {
-                    [contacts addObject:contact];
-                }
-            }
-            
-            if (selectMode != SelectModeContact) {
-                
-                if (selectMode == SelectModeExchangeAccountTo) {
-                    
-                    NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:AssetTypeBitcoin getAccountsType:GetAccountsAll];
-                    [btcAccounts addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNTS]];
-                    [btcAccountLabels addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNT_LABELS]];
-                    
-                    NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:AssetTypeBitcoinCash getAccountsType:GetAccountsAll];
-                    [bchAccounts addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNTS]];
-                    [bchAccountLabels addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNT_LABELS]];
-                    
-                } else if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
-                    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+            if (selectMode == SelectModeExchangeAccountTo) {
 
-                    // Show the address book
-                    for (NSString * addr in [_wallet.addressBook allKeys]) {
-                        [addressBookAddresses addObject:addr];
-                        [addressBookAddressLabels addObject:[tabControllerManager.sendBitcoinViewController labelForLegacyAddress:addr]];
-                    }
-                    
-                    // Then show the HD accounts
-                    NSDictionary *accountsAndLabels = [self getAccountsAndLabels:assetType getAccountsType:GetAccountsAll];
-                    [accounts addObjectsFromArray:accountsAndLabels[DICTIONARY_KEY_ACCOUNTS]];
-                    [accountLabels addObjectsFromArray:accountsAndLabels[DICTIONARY_KEY_ACCOUNT_LABELS]];
-                    
-                    // Finally show all the user's active legacy addresses
-                    if (![self accountsOnly] && assetType == AssetTypeBitcoin) {
-                        for (NSString * addr in [_wallet activeLegacyAddresses:assetType]) {
-                            [legacyAddresses addObject:addr];
-                            [legacyAddressLabels addObject:[_wallet labelForLegacyAddress:addr assetType:assetType]];
-                        }
-                    }
+                NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:AssetTypeBitcoin getAccountsType:GetAccountsAll];
+                [btcAccounts addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNTS]];
+                [btcAccountLabels addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNT_LABELS]];
+
+                NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:AssetTypeBitcoinCash getAccountsType:GetAccountsAll];
+                [bchAccounts addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNTS]];
+                [bchAccountLabels addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNT_LABELS]];
+
+            } else if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
+                TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+
+                // Show the address book
+                for (NSString * addr in [_wallet.addressBook allKeys]) {
+                    [addressBookAddresses addObject:addr];
+                    [addressBookAddressLabels addObject:[tabControllerManager.sendBitcoinViewController labelForLegacyAddress:addr]];
                 }
-                
-                if ([self.delegate getAssetType] == AssetTypeEther || (selectMode == SelectModeExchangeAccountTo && [WalletManager.sharedInstance.wallet hasEthAccount])) {
-                    [ethAccounts addObject:[NSNumber numberWithInt:0]];
-                    [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
+
+                // Then show the HD accounts
+                NSDictionary *accountsAndLabels = [self getAccountsAndLabels:assetType getAccountsType:GetAccountsAll];
+                [accounts addObjectsFromArray:accountsAndLabels[DICTIONARY_KEY_ACCOUNTS]];
+                [accountLabels addObjectsFromArray:accountsAndLabels[DICTIONARY_KEY_ACCOUNT_LABELS]];
+
+                // Finally show all the user's active legacy addresses
+                if (![self accountsOnly] && assetType == AssetTypeBitcoin) {
+                    for (NSString * addr in [_wallet activeLegacyAddresses:assetType]) {
+                        [legacyAddresses addObject:addr];
+                        [legacyAddressLabels addObject:[_wallet labelForLegacyAddress:addr assetType:assetType]];
+                    }
                 }
             }
-            
-            contactsSectionNumber = contacts.count > 0 ? 0 : -1;
-            btcAccountsSectionNumber = btcAccounts.count > 0 ? contactsSectionNumber + 1 : -1;
+
+            if ([self.delegate getAssetType] == AssetTypeEther || (selectMode == SelectModeExchangeAccountTo && [WalletManager.sharedInstance.wallet hasEthAccount])) {
+                [ethAccounts addObject:[NSNumber numberWithInt:0]];
+                [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
+            }
+
+            btcAccountsSectionNumber = btcAccounts.count > 0 ? 0 : -1;
             ethAccountsSectionNumber = ethAccounts.count > 0 ? btcAccountsSectionNumber + 1 : -1;
             bchAccountsSectionNumber = bchAccounts.count > 0 ? ethAccountsSectionNumber + 1 : -1;
             legacyAddressesSectionNumber = (legacyAddresses.count > 0) ? btcAccountsSectionNumber + 1 : -1;
@@ -235,16 +216,6 @@ typedef enum {
         }
         
         tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
-        
-        if (selectMode == SelectModeContact && contacts.count == 0) {
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, mainView.frame.size.width - 50, 40)];
-            label.textColor = COLOR_TEXT_DARK_GRAY;
-            label.textAlignment = NSTextAlignmentCenter;
-            label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:14];
-            label.text = BC_STRING_NO_CONTACTS_YET_TITLE;
-            [self addSubview:label];
-            label.center = CGPointMake(mainView.center.x, mainView.center.y - DEFAULT_HEADER_HEIGHT);
-        }
     }
     return self;
 }
@@ -261,7 +232,6 @@ typedef enum {
 - (BOOL)accountsOnly
 {
     return selectMode == SelectModeTransferTo ||
-    selectMode == SelectModeReceiveFromContact ||
     selectMode == SelectModeExchangeAccountFrom ||
     selectMode == SelectModeExchangeAccountTo;
 }
@@ -272,7 +242,6 @@ typedef enum {
     selectMode == SelectModeSendTo ||
     selectMode == SelectModeTransferTo ||
     selectMode == SelectModeFilter ||
-    selectMode == SelectModeReceiveFromContact ||
     selectMode == SelectModeExchangeAccountFrom ||
     selectMode == SelectModeExchangeAccountTo;
 }
@@ -336,10 +305,6 @@ typedef enum {
         }
         else if (indexPath.section == legacyAddressesSectionNumber) {
             [delegate didSelectToAddress:[legacyAddresses objectAtIndex:[indexPath row]]];
-        }
-        else if (indexPath.section == contactsSectionNumber) {
-            [delegate didSelectContact:[contacts objectAtIndex:[indexPath row]]];
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
         } else if (indexPath.section == bchAddressesSectionNumber) {
             [delegate didSelectToAddress:[bchAddresses objectAtIndex:[indexPath row]]];
         }
@@ -366,7 +331,6 @@ typedef enum {
     (ethAccounts.count > 0 ? 1 : 0) +
     (bchAccounts.count > 0 ? 1 : 0) +
     (legacyAddresses.count > 0 ? 1 : 0) +
-    (contacts.count > 0 ? 1 : 0) +
     (bchAddresses.count > 0 ? 1 : 0);
 }
 
@@ -393,9 +357,6 @@ typedef enum {
         else if (section == legacyAddressesSectionNumber) {
             labelString = BC_STRING_IMPORTED_ADDRESSES;
         }
-        else if (section == contactsSectionNumber) {
-            labelString = BC_STRING_CONTACTS;
-        }
     }
     else {
         if (section == addressBookSectionNumber) {
@@ -406,9 +367,6 @@ typedef enum {
         }
         else if (section == legacyAddressesSectionNumber) {
             labelString = BC_STRING_IMPORTED_ADDRESSES;
-        }
-        else if (section == contactsSectionNumber) {
-            labelString = BC_STRING_CONTACTS;
         }
     }
     
@@ -448,9 +406,6 @@ typedef enum {
         else if (section == legacyAddressesSectionNumber) {
             return legacyAddresses.count;
         }
-        else if (section == contactsSectionNumber) {
-            return contacts.count;
-        }
         else if (section == bchAddressesSectionNumber) {
             return bchAddresses.count;
         }
@@ -471,9 +426,6 @@ typedef enum {
         else if (section == legacyAddressesSectionNumber) {
             return legacyAddresses.count;
         }
-        else if (section == contactsSectionNumber) {
-            return contacts.count;
-        }
         else if (section == bchAddressesSectionNumber) {
             return bchAddresses.count;
         }
@@ -490,7 +442,7 @@ typedef enum {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == btcAccountsSectionNumber || indexPath.section == contactsSectionNumber || indexPath.section == ethAccountsSectionNumber || indexPath.section == bchAccountsSectionNumber) {
+    if (indexPath.section == btcAccountsSectionNumber || indexPath.section == ethAccountsSectionNumber || indexPath.section == bchAccountsSectionNumber) {
         return ROW_HEIGHT_ACCOUNT;
     }
     
@@ -551,23 +503,6 @@ typedef enum {
         } else if (section == bchAddressesSectionNumber) {
             label = [bchAddressLabels objectAtIndex:row];
             cell.addressLabel.text = nil;
-        }
-        else if (section == contactsSectionNumber) {
-            Contact *contact = [contacts objectAtIndex:row];
-            cell.addressLabel.text = nil;
-            cell.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
-            cell.accessoryType = contact == self.previouslySelectedContact ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            if (contact.mdid) {
-                label = contact.name;
-                cell.userInteractionEnabled = YES;
-                cell.labelLabel.alpha = 1.0;
-                cell.addressLabel.alpha = 1.0;
-            } else {
-                label = [NSString stringWithFormat:@"%@ (%@)", contact.name, BC_STRING_PENDING];
-                cell.userInteractionEnabled = NO;
-                cell.labelLabel.alpha = 0.5;
-                cell.addressLabel.alpha = 0.5;
-            }
         }
         
         if (label) {
