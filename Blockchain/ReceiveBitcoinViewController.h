@@ -46,7 +46,6 @@
 
 @property(nonatomic) UIView *bottomContainerView;
 @property(nonatomic) UILabel *receiveToLabel;
-@property(nonatomic) UILabel *receiveFromLabel;
 @property(nonatomic) UIButton *selectFromButton;
 @property(nonatomic) UIButton *whatsThisButton;
 @property(nonatomic) UIView *headerView;

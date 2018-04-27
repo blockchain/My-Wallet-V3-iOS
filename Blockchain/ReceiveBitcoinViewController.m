@@ -16,8 +16,6 @@
 #import "BCAddressSelectionView.h"
 #import "BCLine.h"
 #import "Blockchain-Swift.h"
-#import "BCContactRequestView.h"
-#import "Contact.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "BCTotalAmountView.h"
 #import "BCDescriptionView.h"
@@ -25,11 +23,7 @@
 #import "UILabel+Animations.h"
 #import "Blockchain-Swift.h"
 
-#ifdef ENABLE_CONTACTS
-#define BOTTOM_CONTAINER_HEIGHT_PARTIAL 151
-#else
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 101
-#endif
 #define BOTTOM_CONTAINER_HEIGHT_FULL 201
 #define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_DEFAULT 220
 #define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S 210
@@ -41,7 +35,6 @@
 @property (nonatomic) uint64_t lastRequestedAmount;
 @property (nonatomic) BOOL firstLoading;
 @property (nonatomic) BCNavigationController *contactRequestNavigationController;
-@property (nonatomic) Contact *fromContact;
 @property (nonatomic) BCLine *lineBelowFromField;
 @property (nonatomic) BCSecureTextField *descriptionField;
 @property (nonatomic) UIView *descriptionContainerView;
@@ -247,16 +240,7 @@
     fromLabel.text = BC_STRING_FROM;
     fromLabel.adjustsFontSizeToFitWidth = YES;
     [self.bottomContainerView addSubview:fromLabel];
-    
-    self.receiveFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(fromLabel.frame.origin.x + fromLabel.frame.size.width + 16, lineBelowToField.frame.origin.y + 15, selectDestinationButton.frame.origin.x - (fromLabel.frame.origin.x + fromLabel.frame.size.width + 16), 21)];
-    self.receiveFromLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.receiveFromLabel.textColor = COLOR_LIGHT_GRAY;
-    self.receiveFromLabel.text = BC_STRING_SELECT_CONTACT;
-    [self.bottomContainerView addSubview:self.receiveFromLabel];
-    UITapGestureRecognizer *tapGestureReceiveFrom = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectFromClicked)];
-    [self.receiveFromLabel addGestureRecognizer:tapGestureReceiveFrom];
-    self.receiveFromLabel.userInteractionEnabled = YES;
-    
+
     self.selectFromButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 35,  lineBelowToField.frame.origin.y + 10, 35, 30)];
     self.selectFromButton.adjustsImageWhenHighlighted = NO;
     [self.selectFromButton setImage:[UIImage imageNamed:@"disclosure"] forState:UIControlStateNormal];
@@ -341,9 +325,6 @@
 - (void)reload
 {
     [self reloadAddresses];
-#ifdef ENABLE_CONTACTS
-    [self resetContactInfo];
-#endif
     [self reloadLocalAndBtcSymbolsFromLatestResponse];
     
     if (!self.mainAddress) {
@@ -358,14 +339,6 @@
 - (void)reloadAddresses
 {
     self.activeKeys = [WalletManager.sharedInstance.wallet activeLegacyAddresses:self.assetType];
-}
-
-- (void)resetContactInfo
-{
-    [self didSelectContact:nil];
-    
-    self.view.note = nil;
-    self.descriptionField.text = nil;
 }
 
 - (void)reloadLocalAndBtcSymbolsFromLatestResponse
@@ -755,14 +728,14 @@
         [self.bottomContainerView changeYPosition:self.view.frame.size.height - BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S];
     }
     
-    if (WalletManager.sharedInstance.wallet.contacts.count > 0) {
-        self.selectFromButton.hidden = NO;
-        self.whatsThisButton.hidden = YES;
-    } else {
+//    if (WalletManager.sharedInstance.wallet.contacts.count > 0) {
+//        self.selectFromButton.hidden = NO;
+//        self.whatsThisButton.hidden = YES;
+//    } else {
         self.selectFromButton.hidden = YES;
         self.whatsThisButton.hidden = NO;
-    }
-    
+//    }
+
     self.receiveToLabel.text = self.mainLabel;
     self.mainAddressLabel.text = [[self.mainAddress componentsSeparatedByString:@":"] lastObject];
     
@@ -785,78 +758,11 @@
     
     [self hideKeyboard];
     
-    SelectMode selectMode = self.fromContact ? SelectModeReceiveFromContact : SelectModeReceiveTo;
+    SelectMode selectMode = SelectModeReceiveTo;
     
     BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:selectMode delegate:self];
 
     [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_RECEIVE_TO onDismiss:nil onResume:nil];
-}
-
-- (void)whatsThisButtonClicked
-{
-    UIView *introducingContactsView = [[UIView alloc] initWithFrame:self.view.frame];
-    introducingContactsView.backgroundColor = [UIColor whiteColor];
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_LARGE];
-    titleLabel.textColor = COLOR_BLOCKCHAIN_MEDIUM_BLUE;
-    titleLabel.text = BC_STRING_INTRODUCING_CONTACTS_TITLE;
-    [titleLabel sizeToFit];
-    titleLabel.center = introducingContactsView.center;
-    [introducingContactsView addSubview:titleLabel];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(25, titleLabel.frame.origin.y - 100, introducingContactsView.frame.size.width - 50, 100)];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.image = [UIImage imageNamed:@"contacts_splash"];
-    [introducingContactsView addSubview:imageView];
-    
-    float onePixelHeight = 1.0/[UIScreen mainScreen].scale;
-    UIView *onePixelLine = [[UIView alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 16, introducingContactsView.frame.size.width - 50, onePixelHeight)];
-    onePixelLine.center = CGPointMake(introducingContactsView.center.x, onePixelLine.center.y);
-    onePixelLine.backgroundColor = COLOR_LINE_GRAY;
-    [introducingContactsView addSubview:onePixelLine];
-    
-    UILabel *descriptionLabelTop = [[UILabel alloc] initWithFrame:CGRectMake(0, onePixelLine.frame.origin.y + 16, self.view.frame.size.width - 30, 0)];
-    descriptionLabelTop.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
-    descriptionLabelTop.textColor = COLOR_TEXT_GRAY;
-    descriptionLabelTop.textAlignment = NSTextAlignmentCenter;
-    descriptionLabelTop.numberOfLines = 0;
-    descriptionLabelTop.textColor = COLOR_LIGHT_GRAY;
-    descriptionLabelTop.text = BC_STRING_INTRODUCING_CONTACTS_DESCRIPTION_TOP;
-    [descriptionLabelTop sizeToFit];
-    descriptionLabelTop.center = CGPointMake(introducingContactsView.center.x, descriptionLabelTop.center.y);
-    [introducingContactsView addSubview:descriptionLabelTop];
-    
-    UILabel *descriptionLabelBottom = [[UILabel alloc] initWithFrame:CGRectMake(0, descriptionLabelTop.frame.origin.y + descriptionLabelTop.frame.size.height + 8, 0, 0)];
-    descriptionLabelBottom.font = descriptionLabelTop.font;
-    descriptionLabelBottom.textColor = COLOR_DARK_GRAY;
-    descriptionLabelBottom.text = BC_STRING_INTRODUCING_CONTACTS_DESCRIPTION_BOTTOM;
-    [descriptionLabelBottom sizeToFit];
-    descriptionLabelBottom.center = CGPointMake(introducingContactsView.center.x, descriptionLabelBottom.center.y);
-    [introducingContactsView addSubview:descriptionLabelBottom];
-
-    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(15, [UIApplication sharedApplication].keyWindow.frame.size.height - BUTTON_HEIGHT - 16, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
-    [dismissButton setTitle:BC_STRING_ILL_DO_THIS_LATER forState:UIControlStateNormal];
-    [dismissButton setTitleColor:COLOR_MEDIUM_GRAY forState:UIControlStateNormal];
-    dismissButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
-    dismissButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    [introducingContactsView addSubview:dismissButton];
-    
-    UIButton *getStartedButton = [[UIButton alloc] initWithFrame:CGRectMake(15, dismissButton.frame.origin.y - dismissButton.frame.size.height - 8, introducingContactsView.frame.size.width - 30, BUTTON_HEIGHT)];
-    getStartedButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
-    [getStartedButton setTitle:BC_STRING_GET_STARTED forState:UIControlStateNormal];
-    getStartedButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
-    getStartedButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-    [getStartedButton addTarget:self action:@selector(showContacts) forControlEvents:UIControlEventTouchUpInside];
-    [introducingContactsView addSubview:getStartedButton];
-    
-    BCModalViewController *modalViewController = [BCModalViewController new];
-    modalViewController.view = introducingContactsView;
-    
-    [UIApplication sharedApplication].statusBarStyle = UIBarStyleDefault;
-    
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:modalViewController animated:YES completion:nil];
 }
 
 - (void)selectFromClicked
@@ -866,37 +772,15 @@
         return;
     }
     
-    BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:SelectModeContact delegate:self];
-    addressSelectionView.previouslySelectedContact = self.fromContact;
-    [addressSelectionView reloadTableView];
+//    BCAddressSelectionView *addressSelectionView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:SelectModeContact delegate:self];
+//    [addressSelectionView reloadTableView];
 
-    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
+//    [[ModalPresenter sharedInstance] showModalWithContent:addressSelectionView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_REQUEST_FROM onDismiss:nil onResume:nil];
 }
 
 - (void)requestButtonClicked
 {
-    if (self.fromContact) {
-        
-        uint64_t amount = [self getInputAmountInSatoshi];
-        
-        if (amount == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR handler: nil];
-            return;
-        }
-        
-        id accountOrAddress;
-        if (self.didClickAccount) {
-            accountOrAddress = [NSNumber numberWithInt:self.clickedAccount];
-        } else {
-            accountOrAddress = self.clickedAddress;
-
-        }
-
-        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
-        [WalletManager.sharedInstance.wallet sendPaymentRequest:self.fromContact.identifier amount:amount requestId:nil note:self.view.note initiatorSource:accountOrAddress];
-    } else {
-        [self share];
-    }
+    [self share];
 }
 
 - (void)share
@@ -938,15 +822,6 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)showContacts
-{
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:^{
-        [app contactsClicked:nil];
-    }];
 }
 
 - (void)endEditingDescription
@@ -1173,36 +1048,6 @@
 - (void)didSelectWatchOnlyAddress:(NSString *)address
 {
     [self alertUserOfWatchOnlyAddress:address];
-}
-
-- (void)didSelectContact:(Contact *)contact
-{
-    if (contact && !contact.mdid) {
-        UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_HAS_NOT_ACCEPTED_INVITATION_YET, contact.name] message:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_MUST_ACCEPT_INVITATION, contact.name] preferredStyle:UIAlertControllerStyleAlert];
-        [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-        [tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
-    } else if (contact == self.fromContact || contact == nil) {
-        self.fromContact = nil;
-        self.receiveFromLabel.text = BC_STRING_SELECT_CONTACT_OPTIONAL;
-        self.receiveFromLabel.textColor = COLOR_LIGHT_GRAY;
-
-        [self changeTopView:YES];
-        
-    } else {
-        [[ModalPresenter sharedInstance] closeAllModals];
-        
-        self.descriptionField.placeholder = [NSString stringWithFormat:BC_STRING_SHARED_WITH_CONTACT_NAME_ARGUMENT, contact.name];
-        self.fromContact = contact;
-        self.receiveFromLabel.text = contact.name;
-        self.receiveFromLabel.textColor = COLOR_TEXT_DARK_GRAY;
-        
-        if (self.view.topView.hidden) {
-            [self changeTopView:NO];
-        }
-    }
-    
-    [self resetDescriptionContainerView];
 }
 
 @end
