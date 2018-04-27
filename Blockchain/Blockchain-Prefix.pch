@@ -406,9 +406,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define CURRENCY_CODE_BRL @"BRL"
 #define CURRENCY_CODE_RUB @"RUB"
 
-#define PUSH_NOTIFICATION_TYPE_PAYMENT @"payment"
-#define PUSH_NOTIFICATION_TYPE_CONTACT_REQUEST @"contact_request"
-
 #define DICTIONARY_KEY_SUCCESS @"success"
 #define DICTIONARY_KEY_ERROR @"error"
 
@@ -430,18 +427,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define DICTIONARY_KEY_PAYLOAD @"payload"
 
 #define DICTIONARY_KEY_ID @"id"
-#define DICTIONARY_KEY_COMPANY @"company"
-#define DICTIONARY_KEY_EMAIL @"email"
-#define DICTIONARY_KEY_INVITATION_RECEIVED @"invitationReceived"
-#define DICTIONARY_KEY_INVITATION_SENT @"invitationSent"
-#define DICTIONARY_KEY_MDID @"mdid"
 #define DICTIONARY_KEY_NOTE @"note"
-#define DICTIONARY_KEY_PUBKEY @"pubKey"
-#define DICTIONARY_KEY_SURNAME @"surname"
-#define DICTIONARY_KEY_TRUSTED @"trusted"
-#define DICTIONARY_KEY_XPUB @"xpub"
-#define DICTIONARY_KEY_SENDER_NAME @"senderName"
-#define DICTIONARY_KEY_TRANSACTION_LIST @"facilitatedTxList"
 
 #define DICTIONARY_KEY_FEE_REGULAR @"regular"
 #define DICTIONARY_KEY_FEE_PRIORITY @"priority"
