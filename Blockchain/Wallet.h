@@ -41,7 +41,7 @@
 @property(nonatomic, assign) int tag;
 @end
 
-@class Wallet, Transaction, JSValue, JSContext, Contact, ContactTransaction;
+@class Wallet, Transaction, JSValue, JSContext;
 
 @protocol ExchangeAccountDelegate
 - (void)watchPendingTrades:(BOOL)shouldSync;
@@ -122,10 +122,6 @@
 - (void)didSendPaymentRequest:(NSDictionary *)info amount:(uint64_t)amount name:(NSString *)name requestId:(NSString *)requestId;
 - (void)didRequestPaymentRequest:(NSDictionary *)info name:(NSString *)name;
 - (void)didSendPaymentRequestResponse;
-- (void)didChangeContactName:(NSDictionary *)info;
-- (void)didDeleteContact:(NSDictionary *)info;
-- (void)didDeleteContactAfterStoringInfo:(NSDictionary *)info;
-- (void)didRejectContactTransaction;
 - (void)didCompleteTrade:(NSDictionary *)trade;
 - (void)didPushTransaction;
 - (void)showCompletedTrade:(NSString *)txHash;
@@ -203,24 +199,10 @@
 
 @property (nonatomic) int lastLabelledAddressesCount;
 
-@property (nonatomic) NSDictionary<NSString *, Contact *> *contacts;
-@property (nonatomic) NSMutableArray<ContactTransaction *> *pendingContactTransactions;
-@property (nonatomic) NSMutableDictionary<NSString *, ContactTransaction *> *completedContactTransactions;
-@property (nonatomic) NSMutableArray<ContactTransaction *> *rejectedContactTransactions;
-@property (nonatomic) NSNumber *contactsActionCount;
-
 @property (nonatomic) NSArray *bitcoinCashTransactions;
 
 @property (nonatomic) NSArray *etherTransactions;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
-
-typedef enum {
-    ContactActionRequiredNone,
-    ContactActionRequiredSingleRequest,
-    ContactActionRequiredSinglePayment,
-    ContactActionRequiredMultiple,
-} ContactActionRequired;
-@property (nonatomic) ContactActionRequired contactsActionRequired;
 
 - (id)init;
 
@@ -245,7 +227,6 @@ typedef enum {
 - (void)sendFromWatchOnlyAddress:(NSString *)watchOnlyAddress privateKey:(NSString *)privateKeyString;
 
 - (NSString *)labelForLegacyAddress:(NSString *)address assetType:(AssetType)assetType;
-- (NSString *)labelForContactLegacyAddress:(NSString *)address contactTransaction:(ContactTransaction *)contactTransaction;
 
 - (Boolean)isAddressArchived:(NSString *)address;
 
@@ -426,25 +407,6 @@ typedef enum {
 - (NSString *)getNotePlaceholderForTransactionHash:(NSString *)myHash;
 
 - (JSValue *)executeJSSynchronous:(NSString *)command;
-
-// Contacts
-- (void)loadContacts;
-- (void)loadContactsThenGetMessages;
-- (void)getMessages;
-- (void)createContactWithName:(NSString *)name ID:(NSString *)idString;
-- (void)readInvitation:(NSString *)invitation;
-- (void)completeRelation:(NSString *)identifier;
-- (void)sendCancellation:(ContactTransaction *)transaction;
-- (void)sendDeclination:(ContactTransaction *)transaction;
-- (void)acceptRelation:(NSString *)invitation name:(NSString *)name identifier:(NSString *)identifier;
-- (void)fetchExtendedPublicKey:(NSString *)contactIdentifier;
-- (void)changeName:(NSString *)newName forContact:(NSString *)contactIdentifier;
-- (void)deleteContact:(NSString *)contactIdentifier;
-- (void)sendPaymentRequest:(NSString *)userId amount:(uint64_t)amount requestId:(NSString *)requestId note:(NSString *)note initiatorSource:(id)initiatorSource;
-- (void)requestPaymentRequest:(NSString *)userId amount:(uint64_t)amount requestId:(NSString *)requestId note:(NSString *)note initiatorSource:(id)initiatorSource; // from account (NSNumber) or address (NSString)
-- (void)sendPaymentRequestResponse:(NSString *)userId transactionHash:(NSString *)hash transactionIdentifier:(NSString *)transactionIdentifier;
-- (BOOL)actionRequiredForContact:(Contact *)contact;
-- (void)deleteContactAfterStoringInfo:(NSString *)contactIdentifier;
 
 // Ethereum
 - (NSString *)getEthBalance;
