@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -24,13 +25,6 @@
                 <outlet property="busyLabel" destination="263" id="Vi4-Sc-0HG"/>
                 <outlet property="busyView" destination="260" id="cbQ-Yl-2J6"/>
                 <outlet property="createWalletView" destination="355" id="dlW-nX-G8c"/>
-                <outlet property="forgetWalletButton" destination="5gL-FG-Zcc" id="cCs-KX-EOb"/>
-                <outlet property="forgetWalletLabel" destination="C0R-wB-wF1" id="Uqm-gA-xWb"/>
-                <outlet property="forgotPasswordButton" destination="kgi-aY-D6k" id="QqO-AZ-GnS"/>
-                <outlet property="mainPasswordButton" destination="625" id="IZP-fT-40G"/>
-                <outlet property="mainPasswordLabel" destination="624" id="DVU-8m-zoE"/>
-                <outlet property="mainPasswordTextField" destination="626" id="onb-8w-8q1"/>
-                <outlet property="mainPasswordView" destination="623" id="7Xu-al-CwC"/>
                 <outlet property="manualPairButton" destination="fI2-PD-Xwa" id="oka-mR-bc6"/>
                 <outlet property="manualPairStepOneTextView" destination="361" id="Sfo-Sl-PLA"/>
                 <outlet property="manualPairStepThreeTextView" destination="369" id="wz0-jn-Kq3"/>
@@ -350,9 +344,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
-                    <connections>
-                        <outlet property="delegate" destination="3" id="8uz-eX-K5b"/>
-                    </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="625">
                     <rect key="frame" x="85" y="127" width="150" height="40"/>
@@ -370,9 +361,6 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="mainPasswordClicked:" destination="3" eventType="touchUpInside" id="EwS-Lt-kgU"/>
-                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5gL-FG-Zcc">
                     <rect key="frame" x="84" y="279" width="150" height="40"/>
@@ -390,9 +378,6 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="forgetWalletClicked:" destination="3" eventType="touchUpInside" id="cxA-g7-nrO"/>
-                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="If you would like to forget this wallet and start over, press 'Forget Wallet'." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="C0R-wB-wF1">
                     <rect key="frame" x="15" y="229" width="290" height="42"/>
@@ -416,9 +401,6 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="forgotPasswordClicked:" destination="3" eventType="touchUpInside" id="L3L-jS-29Y"/>
-                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -456,9 +438,4 @@
             <point key="canvasLocation" x="500" y="-869"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>

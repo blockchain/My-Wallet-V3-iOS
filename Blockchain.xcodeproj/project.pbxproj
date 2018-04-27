@@ -98,7 +98,7 @@
 		23FDEF9A1D6CBC7000FC80D6 /* TransactionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEF991D6CBC7000FC80D6 /* TransactionDetailViewController.m */; };
 		23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */; };
 		23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */; };
-		510EA1702080F16100A63AB8 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* Passcode.swift */; };
+		510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
@@ -246,7 +246,7 @@
 		AACE31CE2092A99B00B7B806 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31472091430900B7B806 /* AuthenticationCoordinator.swift */; };
 		AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A665C62080EBD80040EE7C /* AuthenticationError.swift */; };
-		AACE31D12092A99B00B7B806 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* Passcode.swift */; };
+		AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
 		AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232E17F81C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift */; };
 		AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */; };
 		AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F6582086A2720054EFCE /* AppCoordinator.swift */; };
@@ -262,6 +262,11 @@
 		AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
 		AACE31DF2092A99B00B7B806 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
 		AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
+		AACE31EF2092B1CA00B7B806 /* PasswordRequiredView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AACE31EE2092B1CA00B7B806 /* PasswordRequiredView.xib */; };
+		AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */; };
+		AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */; };
+		AACE32002093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */; };
+		AACE32012093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -976,7 +981,7 @@
 		23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailTableCell.m; sourceTree = "<group>"; };
 		23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+SendSynchronousRequest.h"; sourceTree = "<group>"; };
 		23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+SendSynchronousRequest.m"; sourceTree = "<group>"; };
-		510EA16F2080F16100A63AB8 /* Passcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Passcode.swift; path = Authentication/Models/Passcode.swift; sourceTree = "<group>"; };
+		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PasscodePayload.swift; path = Authentication/Models/PasscodePayload.swift; sourceTree = "<group>"; };
 		511646C4208124E200C43522 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetType.swift; path = Assets/AssetType.swift; sourceTree = "<group>"; };
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
@@ -1184,6 +1189,9 @@
 		AACE314B209152D800B7B806 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIApplication.swift; path = Extensions/UIApplication.swift; sourceTree = "<group>"; };
 		AACE31802092794D00B7B806 /* Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		AACE31B72092A87900B7B806 /* PinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
+		AACE31EE2092B1CA00B7B806 /* PasswordRequiredView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordRequiredView.xib; path = Authentication/Views/PasswordRequiredView.xib; sourceTree = "<group>"; };
+		AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PasswordRequiredView.swift; path = Authentication/Views/PasswordRequiredView.swift; sourceTree = "<group>"; };
+		AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCoordinator.swift; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -1539,6 +1547,7 @@
 				AACE31472091430900B7B806 /* AuthenticationCoordinator.swift */,
 				51E5C72F20741A130000A7FD /* AuthenticationManager.swift */,
 				510EA1742080F59C00A63AB8 /* Models */,
+				AACE31ED2092B1BA00B7B806 /* Views */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1547,7 +1556,7 @@
 			isa = PBXGroup;
 			children = (
 				51A665C62080EBD80040EE7C /* AuthenticationError.swift */,
-				510EA16F2080F16100A63AB8 /* Passcode.swift */,
+				510EA16F2080F16100A63AB8 /* PasscodePayload.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1932,6 +1941,7 @@
 				AABDED66208EB4EA002D8BAC /* Notifications */,
 				AAA333402088450D0019AD55 /* Onboarding */,
 				AACE317E2092793300B7B806 /* Pin */,
+				AACE31FA2093F9F200B7B806 /* Reminder */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
 				AA69F65C2086A7330054EFCE /* Settings */,
 				9FB3637C14B60128004BEA02 /* Supporting Files */,
@@ -2138,6 +2148,23 @@
 				AACE31802092794D00B7B806 /* Pin.swift */,
 			);
 			path = Pin;
+			sourceTree = "<group>";
+		};
+		AACE31ED2092B1BA00B7B806 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AACE31EE2092B1CA00B7B806 /* PasswordRequiredView.xib */,
+				AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		AACE31FA2093F9F200B7B806 /* Reminder */ = {
+			isa = PBXGroup;
+			children = (
+				AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */,
+			);
+			path = Reminder;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -2626,6 +2653,7 @@
 				C790E11B1E52061B0063D141 /* Montserrat-SemiBold.ttf in Resources */,
 				ECD244EE19A8AC45004B1F40 /* PEKeyboard-3-next.png in Resources */,
 				ECD244F319A8AC45004B1F40 /* PEKeyboard-4-next.png in Resources */,
+				AACE31EF2092B1CA00B7B806 /* PasswordRequiredView.xib in Resources */,
 				67EEE76E1A8E547200288753 /* PEPin-off@2x.png in Resources */,
 				2357BA411D53979600BE0BFD /* InfoPlist.strings in Resources */,
 				220ADA6A19A3796200EB7599 /* Localizable.strings in Resources */,
@@ -2703,6 +2731,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AACE32012093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */,
 				AACE31DA2092A99B00B7B806 /* UIApplication.swift in Sources */,
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
@@ -2717,6 +2746,7 @@
 				AACE31D62092A99B00B7B806 /* Bundle.swift in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
 				51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */,
+				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
@@ -2743,7 +2773,7 @@
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
-				AACE31D12092A99B00B7B806 /* Passcode.swift in Sources */,
+				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
 				AACE31C52092A99B00B7B806 /* Environment.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
@@ -2911,6 +2941,7 @@
 				2322DCC61D771831000E5AC1 /* SRSecurityPolicy.m in Sources */,
 				9F61B89E151519EF0083C57A /* BCAddressSelectionView.m in Sources */,
 				23FB5C0A1D9ABB590008C6AB /* TransactionDetailToCell.m in Sources */,
+				AACE32002093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */,
 				9F91B607151666EC00ACB32D /* BCCreateWalletView.m in Sources */,
 				23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */,
 				C7442E3A1FBB636300695E4C /* FromToView.m in Sources */,
@@ -2980,7 +3011,7 @@
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
 				23F601A41D09C931009102BF /* Reachability.m in Sources */,
-				510EA1702080F16100A63AB8 /* Passcode.swift in Sources */,
+				510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */,
 				23444F931DCD21B700573C8C /* BTCBase58.m in Sources */,
 				23EA61C51B54258D0032B907 /* SettingsTableViewController.m in Sources */,
 				C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */,
@@ -2992,6 +3023,7 @@
 				C7448A962034BF2F0041947E /* AssetSelectionTableViewCell.m in Sources */,
 				C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */,
 				AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */,
+				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				84CCFAAF197D859C00DA4482 /* NSString+NSString_EscapeQuotes.m in Sources */,
 				2390C10B1D87376E00342C38 /* TransactionRecipientsViewController.m in Sources */,
 				C7618B611F66C817003E7589 /* QRCodeScannerSendViewController.m in Sources */,

@@ -7,6 +7,29 @@
 //
 
 import Foundation
+import JavaScriptCore
+
+
+/// Protocol definition for a delegate for authentication-related wallet callbacks
+protocol WalletAuthDelegate: class {
+    /// Callback invoked when the wallet successfully decrypts
+    func didDecryptWallet(guid: String?, sharedKey: String?, password: String?)
+
+    /// Callback invoked when 2 factor authorization is required
+    func requiresTwoFactorCode()
+
+    /// Callback invoked when the provided two factor code is incorrect
+    func incorrectTwoFactorCode()
+
+    /// Callback invoked when an email authorization is required (only for manual pairing)
+    func emailAuthorizationRequired()
+
+    /// Callback invoked when an error occurred with authenticating
+    func authenticationError()
+
+    /// Callback invoked when the user has successfully authenticated
+    func authenticationCompleted()
+}
 
 /**
  Manager object for operations to the Blockchain Wallet.
@@ -26,6 +49,8 @@ class WalletManager: NSObject {
     @objc var latestMultiAddressResponse: MultiAddressResponse?
 
     @objc var didChangePassword: Bool = false
+
+    weak var authDelegate: WalletAuthDelegate?
 
     private override init() {
         wallet = Wallet()!
@@ -69,45 +94,9 @@ extension WalletManager: WalletDelegate {
     func walletDidDecrypt() {
         print("walletDidDecrypt()")
 
-        if BlockchainSettings.App.shared.isPinSet {
-            AppCoordinator.shared.showHdUpgradeViewIfNeeded()
-        }
+        authDelegate?.didDecryptWallet(guid: wallet.guid, sharedKey: wallet.sharedKey, password: wallet.password)
 
         didChangePassword = false
-
-        // Verify valid GUID and sharedKey
-        guard let guid = wallet.guid, guid.count == 36 else {
-            AlertViewPresenter.shared.standardNotify(
-                message: LocalizationConstants.Authentication.errorDecryptingWallet,
-                title: LocalizationConstants.Errors.error) { _ in
-                    UIApplication.shared.suspend()
-            }
-            return
-        }
-
-        guard let sharedKey = wallet.sharedKey, sharedKey.count == 36 else {
-            AlertViewPresenter.shared.standardNotify(
-                message: LocalizationConstants.Authentication.invalidSharedKey,
-                title: LocalizationConstants.Errors.error
-            )
-            return
-        }
-
-        BlockchainSettings.App.shared.guid = guid
-        BlockchainSettings.App.shared.sharedKey = sharedKey
-
-        //Becuase we are not storing the password on the device. We record the first few letters of the hashed password.
-        //With the hash prefix we can then figure out if the password changed
-        guard let password = wallet.password,
-            let passwordSha256 = NSString(string: password).sha256(),
-            let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
-            return
-        }
-
-        let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
-        if passwordSha256[..<endIndex] != passwordPartHash {
-            BlockchainSettings.App.shared.clearPin()
-        }
     }
 
     func walletDidFinishLoad() {
@@ -115,16 +104,8 @@ extension WalletManager: WalletDelegate {
 
         wallet.btcSwipeAddressToSubscribe = nil
         wallet.bchSwipeAddressToSubscribe = nil
-
         wallet.twoFactorInput = nil
 
-        // TODO move this
-        // [manualPairView clearTextFields];
-
-        ModalPresenter.shared.closeAllModals()
-
-        AuthenticationCoordinator.shared.start()
-
-        // TODO move other methods from RootService to here
+        authDelegate?.authenticationCompleted()
     }
 }

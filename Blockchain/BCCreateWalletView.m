@@ -179,6 +179,13 @@
     [WalletManager.sharedInstance.wallet performSelector:@selector(loadBlankWallet) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 }
 
+- (IBAction)termsOfServiceClicked:(id)sender
+{
+    BCWebViewController *webViewController = [[BCWebViewController alloc] initWithTitle:BC_STRING_TERMS_OF_SERVICE];
+    webViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [webViewController loadURL:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_TERMS_OF_SERVICE]];
+    [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:webViewController animated:true completion:nil];
+}
 
 #pragma mark - Wallet Delegate method
 
@@ -186,14 +193,6 @@
 {
     // JS is loaded - now create the wallet
     [WalletManager.sharedInstance.wallet newAccount:self.tmpPassword email:emailTextField.text];
-}
-
-- (IBAction)termsOfServiceClicked:(id)sender
-{
-    BCWebViewController *webViewController = [[BCWebViewController alloc] initWithTitle:BC_STRING_TERMS_OF_SERVICE];
-    webViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [webViewController loadURL:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_TERMS_OF_SERVICE]];
-    [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:webViewController animated:true completion:nil];
 }
 
 - (void)didCreateNewAccount:(NSString*)guid sharedKey:(NSString*)sharedKey password:(NSString*)password

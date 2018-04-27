@@ -68,7 +68,7 @@
     IBOutlet UIButton *forgotPasswordButton;
     IBOutlet UITextField *mainPasswordTextField;
     IBOutlet UIButton *forgetWalletButton;
-    
+
 @public
     
     BOOL symbolLocal;
@@ -128,7 +128,7 @@
 //- (void)showWelcome;
 - (void)logout;
 //- (void)forgetWallet;
-- (void)showPasswordModal;
+//- (void)showPasswordModal;
 
 //- (void)toggleSideMenu;
 //- (void)closeSideMenu;

@@ -281,10 +281,10 @@ void (^secondPasswordSuccess)(NSString *);
         [manualPairView hideKeyboard];
     }
 
-    if ([mainPasswordTextField isFirstResponder]) {
-        [mainPasswordTextField resignFirstResponder];
-    }
-
+//    if ([mainPasswordTextField isFirstResponder]) {
+//        [mainPasswordTextField resignFirstResponder];
+//    }
+//
 //    if (!rootService.isPromptingForBiometricAuthentication) {
 //        // Show the LaunchImage so the list of running apps does not show the user's information
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1002,67 +1002,66 @@ void (^secondPasswordSuccess)(NSString *);
 //    [manualPairView clearTextFields];
 //
 //    [app closeAllModals];
-
-    if (![BlockchainSettings sharedAppInstance].isPinSet) {
+//
+//    if (![BlockchainSettings sharedAppInstance].isPinSet) {
 //        if (WalletManager.sharedInstance.wallet.isNew) {
 //            [self showNewWalletSetup];
 //        } else {
 //            [app showPinModalAsView:NO];
 //        }
-    } else {
-        NSDate *dateOfLastReminder = BlockchainSettings.sharedAppInstance.reminderModalDate;
-
-        NSTimeInterval timeIntervalBetweenPrompts = TIME_INTERVAL_SECURITY_REMINDER_PROMPT;
-
-#ifdef DEBUG
-        id customTimeValue = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER];
-        if (customTimeValue) {
-            timeIntervalBetweenPrompts = [customTimeValue doubleValue];
-        }
-#endif
-
-        if (dateOfLastReminder) {
-            if ([dateOfLastReminder timeIntervalSinceNow] < -timeIntervalBetweenPrompts) {
-                [self showSecurityReminder];
-            }
-        } else {
-            if (BlockchainSettings.sharedAppInstance.hasSeenEmailReminder) {
-                [self showSecurityReminder];
-            } else {
-                [self checkIfSettingsLoadedAndShowEmailReminder];
-            }
-        }
-    }
-
-    [self.tabControllerManager.sendBitcoinViewController reload];
-    [self.tabControllerManager.sendBitcoinCashViewController reload];
-
-    // Enabling touch ID and immediately backgrounding the app hides the status bar
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
-
-    [self registerDeviceForPushNotifications];
-
-    if (showType == ShowTypeSendCoins) {
-        [self showSendCoins];
-    } else if (showType == ShowTypeNewPayment) {
-        [self.tabControllerManager showTransactionsAnimated:YES];
-    }
-//     else if (showType == ShowTypeNewContact) {
+//    } else {
+//        NSDate *dateOfLastReminder = BlockchainSettings.sharedAppInstance.reminderModalDate;
+//
+//        NSTimeInterval timeIntervalBetweenPrompts = TIME_INTERVAL_SECURITY_REMINDER_PROMPT;
+//
+//#ifdef DEBUG
+//        id customTimeValue = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER];
+//        if (customTimeValue) {
+//            timeIntervalBetweenPrompts = [customTimeValue doubleValue];
+//        }
+//#endif
+//
+//        if (dateOfLastReminder) {
+//            if ([dateOfLastReminder timeIntervalSinceNow] < -timeIntervalBetweenPrompts) {
+//                [self showSecurityReminder];
+//            }
+//        } else {
+//            if (BlockchainSettings.sharedAppInstance.hasSeenEmailReminder) {
+//                [self showSecurityReminder];
+//            } else {
+//                [self checkIfSettingsLoadedAndShowEmailReminder];
+//            }
+//        }
+//    }
+//
+//    [self.tabControllerManager.sendBitcoinViewController reload];
+//    [self.tabControllerManager.sendBitcoinCashViewController reload];
+//
+//    // Enabling touch ID and immediately backgrounding the app hides the status bar
+//    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
+//
+//    [self registerDeviceForPushNotifications];
+//
+//    if (showType == ShowTypeSendCoins) {
+//        [self showSendCoins];
+//    } else if (showType == ShowTypeNewPayment) {
+//        [self.tabControllerManager showTransactionsAnimated:YES];
+//    } else if (showType == ShowTypeNewContact) {
 //        [WalletManager.sharedInstance.wallet loadContacts];
-////        [self showContacts];
+//        [self showContacts];
 //        return;
 //    }
-
-    showType = ShowTypeNone;
-
-    if ([BlockchainSettings sharedAppInstance].isPinSet) {
-
-        UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-        if (topViewController == self.settingsNavigationController && self.settingsNavigationController) return;
-
-        [self showMobileNotice];
-    }
-
+//
+//    showType = ShowTypeNone;
+//
+//    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//
+//        UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//        if (topViewController == self.settingsNavigationController && self.settingsNavigationController) return;
+//
+//        [self showMobileNotice];
+//    }
+//
 //    [WalletManager.sharedInstance.wallet loadContactsThenGetMessages];
 }
 
@@ -1184,30 +1183,30 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showPasswordModal
 {
-    mainPasswordLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-
-    mainPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    mainPasswordTextField.text = @"";
-
-    mainPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-
-    forgotPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-    forgotPasswordButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    forgotPasswordButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
-    forgotPasswordButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [forgotPasswordButton setTitle:BC_STRING_FORGOT_PASSWORD forState:UIControlStateNormal];
-
-    forgetWalletLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-
-    forgetWalletButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-    forgetWalletButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    forgetWalletButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
-    forgetWalletButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:mainPasswordTextField action:@selector(resignFirstResponder)];
-
-    [mainPasswordView addGestureRecognizer:tapGesture];
-
-    [self showModalWithContent:mainPasswordView closeType:ModalCloseTypeNone headerText:BC_STRING_PASSWORD_REQUIRED];
+//    mainPasswordLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+//
+//    mainPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
+//    mainPasswordTextField.text = @"";
+//
+//    mainPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
+//
+//    forgotPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
+//    forgotPasswordButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+//    forgotPasswordButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
+//    forgotPasswordButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+//    [forgotPasswordButton setTitle:BC_STRING_FORGOT_PASSWORD forState:UIControlStateNormal];
+//
+//    forgetWalletLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+//
+//    forgetWalletButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
+//    forgetWalletButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+//    forgetWalletButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
+//    forgetWalletButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:mainPasswordTextField action:@selector(resignFirstResponder)];
+//
+//    [mainPasswordView addGestureRecognizer:tapGesture];
+//
+//    [self showModalWithContent:mainPasswordView closeType:ModalCloseTypeNone headerText:BC_STRING_PASSWORD_REQUIRED];
 }
 
 - (void)beginBackgroundUpdateTask
@@ -1307,9 +1306,9 @@ void (^secondPasswordSuccess)(NSString *);
             [self privateKeyPasswordClicked];
         }
     }
-    else if (textField == mainPasswordTextField) {
-        [self mainPasswordClicked:textField];
-    }
+//    else if (textField == mainPasswordTextField) {
+//        [self mainPasswordClicked:textField];
+//    }
 
     return YES;
 }
@@ -1322,7 +1321,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
     if (topViewController) {
-        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_PASSWORD_REQUIRED view:secondPasswordView];
+        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:LocalizationConstantsObjcBridge.passwordRequired   view:secondPasswordView];
 
         addPrivateKeySuccess = success;
 
@@ -1334,7 +1333,7 @@ void (^secondPasswordSuccess)(NSString *);
 
         [bcModalViewController.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
     } else {
-        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:BC_STRING_PASSWORD_REQUIRED onDismiss:^() {
+        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:LocalizationConstantsObjcBridge.passwordRequired onDismiss:^() {
             NSString * password = secondPasswordTextField.text;
 
             if ([password length] == 0) {
@@ -3048,6 +3047,13 @@ void (^secondPasswordSuccess)(NSString *);
     }
 }
 
+//- (IBAction)mainPasswordClicked:(id)sender
+//{
+//    [self showBusyViewWithLoadingText:BC_STRING_LOADING_DOWNLOADING_WALLET];
+//    [mainPasswordTextField resignFirstResponder];
+//    [self performSelector:@selector(loginMainPassword) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
+//}
+
 - (void)presentViewControllerAnimated:(UIViewController *)viewController
 {
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
@@ -3060,12 +3066,6 @@ void (^secondPasswordSuccess)(NSString *);
     [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (IBAction)mainPasswordClicked:(id)sender
-{
-    [self showBusyViewWithLoadingText:BC_STRING_LOADING_DOWNLOADING_WALLET];
-    [mainPasswordTextField resignFirstResponder];
-    [self performSelector:@selector(loginMainPassword) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
-}
 
 - (void)setupTransferAllFunds
 {
@@ -3075,50 +3075,50 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager setupTransferAllFunds];
 }
 
-- (void)loginMainPassword
-{
-    NSString *password = [mainPasswordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-
-    if (password.length == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
-        [self hideBusyView];
-        return;
-    }
-
-    if (!Reachability.hasInternetConnection) {
-        [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
-        [self hideBusyView];
-        return;
-    }
-
-    NSString *guid = [KeychainItemWrapper guid];
-    NSString *sharedKey = [KeychainItemWrapper sharedKey];
-
-    if (guid && sharedKey && password) {
-        [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:password];
-
-        WalletManager.sharedInstance.wallet.delegate = self;
-    } else {
-
-        if (!guid) {
-            DLog(@"failed to retrieve GUID from Keychain");
-        }
-
-        if (!sharedKey) {
-            DLog(@"failed to retrieve sharedKey from Keychain");
-        }
-
-        if (guid && !sharedKey) {
-            DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
-        }
-
-        [self failedToObtainValuesFromKeychain];
-
-        [self hideBusyView];
-    }
-
-    mainPasswordTextField.text = nil;
-}
+//- (void)loginMainPassword
+//{
+//    NSString *password = [mainPasswordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//
+//    if (password.length == 0) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
+//        [self hideBusyView];
+//        return;
+//    }
+//
+//    if (!Reachability.hasInternetConnection) {
+//        [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
+//        [self hideBusyView];
+//        return;
+//    }
+//
+//    NSString *guid = [KeychainItemWrapper guid];
+//    NSString *sharedKey = [KeychainItemWrapper sharedKey];
+//
+//    if (guid && sharedKey && password) {
+//        [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:password];
+//
+//        WalletManager.sharedInstance.wallet.delegate = self;
+//    } else {
+//
+//        if (!guid) {
+//            DLog(@"failed to retrieve GUID from Keychain");
+//        }
+//
+//        if (!sharedKey) {
+//            DLog(@"failed to retrieve sharedKey from Keychain");
+//        }
+//
+//        if (guid && !sharedKey) {
+//            DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
+//        }
+//
+//        [self failedToObtainValuesFromKeychain];
+//
+//        [self hideBusyView];
+//    }
+//
+//    mainPasswordTextField.text = nil;
+//}
 
 - (NSString *)checkForTouchIDAvailablility
 {
@@ -3494,7 +3494,7 @@ void (^secondPasswordSuccess)(NSString *);
                 DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
             }
 
-            [self failedToObtainValuesFromKeychain];
+            [AlertViewPresenter.sharedInstance showKeychainReadError];
         }
 
         [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
@@ -3678,18 +3678,18 @@ void (^secondPasswordSuccess)(NSString *);
 //    DLog(@"Pin change cancelled!");
 //    [self closePINModal:YES];
 //}
-
-- (void)failedToObtainValuesFromKeychain
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        // Close App
-        UIApplication *app = [UIApplication sharedApplication];
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//
+//- (void)failedToObtainValuesFromKeychain
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        // Close App
+//        UIApplication *app = [UIApplication sharedApplication];
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 #pragma mark - Setup Delegate
 

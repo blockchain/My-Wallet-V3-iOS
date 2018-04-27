@@ -59,11 +59,20 @@ final class AuthenticationManager: NSObject {
     /// The error object used prior to policy evaluation.
     var preflightError: NSError?
 
+    private var authHandler: Handler?
+
     // MARK: Initialization
 
     //: Prevent outside objects from creating their own instances of this class.
     private override init() {
         genericAuthenticationError = AuthenticationError(code: Int.min, description: LCStringAuthGenericError)
+        super.init()
+        WalletManager.shared.authDelegate = self
+    }
+
+    /// Deprecate this method once the wallet creation process has been refactored
+    func setHandlerForWalletCreation(handler: @escaping Handler) {
+        self.authHandler = handler
     }
 
     // MARK: - Authentication with Biometrics
@@ -102,11 +111,27 @@ final class AuthenticationManager: NSObject {
     /**
      The function used to authenticate the user using a provided passcode.
      - Parameters:
-        - passcode: The passcode used for authenticating the user.
+        - payload: The passcode payload used for authenticating the user.
         - handler: The completion handler for the authentication reply.
      */
-    func authenticate(using passcode: Passcode, andReply handler: @escaping Handler) {
-        // TODO: authenticate user with passcode
+    func authenticate(using payload: PasscodePayload, andReply handler: @escaping Handler) {
+
+        guard Reachability.hasInternetConnection() else {
+            handler(false, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
+            return
+        }
+
+        guard payload.password.count != 0 else {
+            handler(false, AuthenticationError(
+                code: AuthenticationError.ErrorCode.noPassword.rawValue,
+                description: LocalizationConstants.Authentication.noPasswordEntered)
+            )
+            return
+        }
+
+        authHandler = handler
+
+        WalletManager.shared.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
     }
 
     // MARK: - Authentication Errors
@@ -188,5 +213,69 @@ final class AuthenticationManager: NSObject {
         default:
             return genericAuthenticationError
         }
+    }
+}
+
+extension AuthenticationManager: WalletAuthDelegate {
+    func didDecryptWallet(guid: String?, sharedKey: String?, password: String?) {
+
+        // Verify valid GUID and sharedKey
+        guard let guid = guid, guid.count == 36 else {
+            failAuth(withError: AuthenticationError(
+                code: AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue,
+                description: LocalizationConstants.Authentication.errorDecryptingWallet
+            ))
+            return
+        }
+
+        guard let sharedKey = sharedKey, sharedKey.count == 36 else {
+            failAuth(withError: AuthenticationError(
+                code: AuthenticationError.ErrorCode.invalidSharedKey.rawValue,
+                description: LocalizationConstants.Authentication.invalidSharedKey
+            ))
+            return
+        }
+
+        BlockchainSettings.App.shared.guid = guid
+        BlockchainSettings.App.shared.sharedKey = sharedKey
+
+        // Because we are not storing the password on the device. We record the first few letters of the hashed password.
+        // With the hash prefix we can then figure out if the password changed
+        guard let password = password,
+            let passwordSha256 = NSString(string: password).sha256(),
+            let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
+                return
+        }
+
+        let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
+        if passwordSha256[..<endIndex] != passwordPartHash {
+            BlockchainSettings.App.shared.clearPin()
+        }
+    }
+
+    func requiresTwoFactorCode() {
+        // TODO
+    }
+
+    func incorrectTwoFactorCode() {
+        // TODO
+    }
+
+    func emailAuthorizationRequired() {
+        // TODO
+    }
+
+    func authenticationError() {
+        failAuth()
+    }
+
+    func authenticationCompleted() {
+        authHandler?(true, nil)
+        authHandler = nil
+    }
+
+    private func failAuth(withError error: AuthenticationError? = nil) {
+        authHandler?(false, error)
+        authHandler = nil
     }
 }

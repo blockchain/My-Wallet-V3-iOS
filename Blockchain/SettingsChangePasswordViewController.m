@@ -130,7 +130,7 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         app.settingsNavigationController = nil;
         [[AppCoordinator sharedInstance] closeSideMenu];
-        [app showPasswordModal];
+        [AuthenticationCoordinator.sharedInstance showPasswordModal];
         WalletManager.sharedInstance.didChangePassword = YES;
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForChangePasswordSuccess animated:YES completion:nil];
     }];

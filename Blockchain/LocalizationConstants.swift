@@ -58,6 +58,10 @@ struct LocalizationConstants {
         static let newPinMustBeDifferent = NSLocalizedString("New PIN must be different", comment: "")
         static let chooseAnotherPin = NSLocalizedString("Please choose another PIN", comment: "")
         static let pinCodeCommonMessage = NSLocalizedString("The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?", comment: "")
+        static let forgotPassword = NSLocalizedString("Forgot Password?", comment: "")
+        static let passwordRequired = NSLocalizedString("Password Required", comment: "")
+        static let downloadingWallet = NSLocalizedString("Downloading Wallet", comment: "")
+        static let noPasswordEntered = NSLocalizedString("No Password Entered", comment: "")
     }
 
     struct Onboarding {
@@ -77,5 +81,8 @@ struct LocalizationConstants {
     @objc class func onboardingRecoverFunds() -> String { return LocalizationConstants.Onboarding.recoverFunds }
 
     @objc class func tryAgain() -> String { return LocalizationConstants.tryAgain }
-}
 
+    @objc class func passwordRequired() -> String { return LocalizationConstants.Authentication.passwordRequired }
+
+    @objc class func downloadingWallet() -> String { return LocalizationConstants.Authentication.downloadingWallet }
+}

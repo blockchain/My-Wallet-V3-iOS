@@ -62,7 +62,7 @@ import Foundation
         if BlockchainSettings.App.shared.guid == nil || BlockchainSettings.App.shared.sharedKey == nil {
             OnboardingCoordinator.shared.start()
         } else {
-            // TODO otherwise, show pin screen
+            AuthenticationCoordinator.shared.start()
         }
     }
 

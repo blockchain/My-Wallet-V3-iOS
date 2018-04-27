@@ -238,7 +238,6 @@
 #define BC_STRING_ADDRESS_BOOK NSLocalizedString(@"Address book", nil)
 
 #define BC_STRING_LOADING_VERIFYING NSLocalizedString (@"Verifying", nil)
-#define BC_STRING_LOADING_DOWNLOADING_WALLET NSLocalizedString(@"Downloading Wallet", nil)
 #define BC_STRING_LOADING_DECRYPTING_WALLET NSLocalizedString(@"Decrypting Wallet", nil)
 #define BC_STRING_LOADING_LOADING_TRANSACTIONS NSLocalizedString(@"Loading transactions", nil)
 #define BC_STRING_LOADING_LOADING_BUILD_HD_WALLET NSLocalizedString(@"Initializing Wallet", nil)
@@ -266,7 +265,6 @@
 #define BC_STRING_MANUAL_PAIRING NSLocalizedString(@"Manual Pairing", nil)
 #define BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE NSLocalizedString(@"Authorization Required", nil)
 #define BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE NSLocalizedString(@"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", nil)
-#define BC_STRING_PASSWORD_REQUIRED NSLocalizedString(@"Password Required", nil)
 #define BC_STRING_INCORRECT_PASSWORD NSLocalizedString(@"Incorrect password", nil)
 #define BC_STRING_SECOND_PASSWORD_REQUIRED NSLocalizedString(@"Second Password Required", nil)
 #define BC_STRING_CREATE_NEW_WALLET NSLocalizedString(@"Create New Wallet", nil)
@@ -282,7 +280,6 @@
 
 #define BC_STRING_LOG_IN NSLocalizedString(@"Log In", nil)
 #define BC_STRING_PASSWORD_MODAL_INSTRUCTIONS NSLocalizedString(@"Please enter your password to log into your Blockchain wallet.", nil)
-#define BC_STRING_FORGOT_PASSWORD NSLocalizedString(@"Forgot Password?", nil)
 #define BC_STRING_OR_START_OVER_AND NSLocalizedString(@"Or start over and ", nil)
 #define BC_STRING_LOGIN_EXISTING_WALLET NSLocalizedString(@"Login existing Wallet", nil)
 

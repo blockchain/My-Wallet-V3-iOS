@@ -12,7 +12,86 @@ import Foundation
 
     @objc static let shared = AuthenticationCoordinator()
 
+    @objc class func sharedInstance() -> AuthenticationCoordinator {
+        return shared
+    }
+
     var lastEnteredPIN: Pin?
+
+    /// Authentication handler - this should not be a property of AuthenticationCoordinator
+    /// but the current way wallet creation is designed, we need to share this handler
+    /// with that flow. Eventually, wallet creation should be moved with AuthenticationCoordinator
+    lazy var authHandler: AuthenticationManager.Handler = { [weak self] isAuthenticated, error in
+
+        LoadingViewPresenter.shared.hideBusyView()
+
+        // Error checking
+        guard error == nil, isAuthenticated else {
+            switch error!.code {
+            case AuthenticationError.ErrorCode.noInternet.rawValue:
+                AlertViewPresenter.shared.showNoInternetConnectionAlert()
+            default:
+                if let description = error!.description {
+                    AlertViewPresenter.shared.standardNotify(message: description)
+                }
+            }
+            return
+        }
+
+        ModalPresenter.shared.closeAllModals()
+
+        if BlockchainSettings.App.shared.isPinSet {
+            AppCoordinator.shared.showHdUpgradeViewIfNeeded()
+        }
+
+        // New wallet set-up. This will guide the user to create a pin & optionally
+        // enable touch ID and email
+        guard !WalletManager.shared.wallet.isNew else {
+            AuthenticationCoordinator.shared.startNewWalletSetUp()
+            return
+        }
+
+        // Show security reminder modal if needed
+        if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.reminderModalDate {
+
+            // TODO: hook up debug settings to show security reminder
+            let timeIntervalBetweenPrompts = Constants.Time.securityReminderModalTimeInterval
+
+            if dateOfLastSecurityReminder.timeIntervalSinceNow < -timeIntervalBetweenPrompts {
+                ReminderCoordinator.shared.showSecurityReminder()
+            }
+        } else {
+            if BlockchainSettings.App.shared.hasSeenEmailReminder {
+                ReminderCoordinator.shared.showSecurityReminder()
+            } else {
+                ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
+            }
+        }
+
+        // TODO
+//        let tabControllerManager = AppCoordinator.shared.tabControllerManager
+//        tabControllerManager.sendBitcoinViewController.reload()
+//        tabControllerManager.sendBitcoinCashViewController.reload()
+
+        // Enabling touch ID and immediately backgrounding the app hides the status bar
+        UIApplication.shared.setStatusBarHidden(false, with: .slide)
+
+        LegacyPushNotificationManager.shared.registerDeviceForPushNotifications()
+
+        // TODO
+        // if (showType == ShowTypeSendCoins) {
+        //     [self showSendCoins];
+        // } else if (showType == ShowTypeNewPayment) {
+        //     [self.tabControllerManager showTransactionsAnimated:YES];
+        // }
+        // showType = ShowTypeNone;
+
+        if let topViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController,
+            BlockchainSettings.App.shared.isPinSet,
+            topViewController is SettingsNavigationController {
+            AlertViewPresenter.shared.showMobileNotice()
+        }
+    }
 
     private(set) var pinEntryViewController: PEPinEntryController?
 
@@ -33,11 +112,31 @@ import Foundation
     // MARK: - Public
 
     @objc func start() {
-        if WalletManager.shared.wallet.isNew {
+        guard !WalletManager.shared.wallet.isNew else {
             startNewWalletSetUp()
-        } else {
-            showPinEntryView(asModal: false)
+            return
         }
+
+        // TODO migrate these
+        // [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
+        // [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+
+        if BlockchainSettings.App.shared.isPinSet {
+            showPinEntryView(asModal: true)
+            // TODO: handle touch ID
+            // [rootService authenticateWithBiometrics];
+        } else {
+            // TODO: check for maintenance
+//            [self checkForMaintenance];
+            showPasswordModal()
+            AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
+        }
+
+        // TODO
+        // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu)
+        // name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+        //
+        // [self migratePasswordAndPinFromNSUserDefaults];
     }
 
     @objc func startNewWalletSetUp() {
@@ -140,11 +239,19 @@ import Foundation
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
     }
 
-    // MARK: - Private
-
-    private func showPasswordModal() {
-        // TODO migrate this from RootService
+    // TODO: make private once migrated
+    @objc func showPasswordModal() {
+        let passwordRequestedView = PasswordRequiredView.instanceFromNib()
+        passwordRequestedView.delegate = self
+        ModalPresenter.shared.showModal(
+            withContent: passwordRequestedView,
+            closeType: ModalCloseTypeNone,
+            showHeader: true,
+            headerText: LocalizationConstants.Authentication.passwordRequired
+        )
     }
+
+    // MARK: - Private
 
     private func showVerifyingBusyView(withTimeout seconds: Int) {
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
@@ -175,6 +282,23 @@ import Foundation
         pinEntryViewController?.reset()
         LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Errors.errorLoadingWallet)
+    }
+}
+
+extension AuthenticationCoordinator: PasswordRequiredViewDelegate {
+    func didContinue(with password: String) {
+
+        // Guard checks before attempting to authenticate
+        guard let guid = BlockchainSettings.App.shared.guid,
+            let sharedKey = BlockchainSettings.App.shared.sharedKey else {
+            AlertViewPresenter.shared.showKeychainReadError()
+            return
+        }
+
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Authentication.downloadingWallet)
+
+        let payload = PasscodePayload(guid: guid, password: password, sharedKey: sharedKey)
+        AuthenticationManager.shared.authenticate(using: payload, andReply: authHandler)
     }
 }
 

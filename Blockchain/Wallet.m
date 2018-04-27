@@ -2940,7 +2940,7 @@
 
 - (void)loading_start_download_wallet
 {
-    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_DOWNLOADING_WALLET];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:LocalizationConstantsObjcBridge.downloadingWallet];
 }
 
 - (void)loading_start_decrypt_wallet

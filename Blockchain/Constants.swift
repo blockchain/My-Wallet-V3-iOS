@@ -74,6 +74,9 @@ struct Constants {
     struct Schemas {
         static let mail = "message://"
     }
+    struct Time {
+        static let securityReminderModalTimeInterval: TimeInterval = 60 * 60 * 24 * 30 // Seconds in thirty days
+    }
 }
 
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this

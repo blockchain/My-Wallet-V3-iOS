@@ -18,6 +18,10 @@ class LegacyPushNotificationManager {
         let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
         UIApplication.shared.registerUserNotificationSettings(notificationSettings)
     }
+
+    func registerDeviceForPushNotifications() {
+        // TODO
+    }
 }
 
 /**

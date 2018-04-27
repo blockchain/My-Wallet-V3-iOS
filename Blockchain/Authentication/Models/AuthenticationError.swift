@@ -14,14 +14,23 @@ import Foundation
  Set **description** to `nil` to indicate that the error should be handled silently.
  */
 internal struct AuthenticationError {
+    enum ErrorCode: Int {
+        case noInternet = 300
+        case noPassword
+        case errorDecryptingWallet
+        case invalidSharedKey
+        case unknown
+    }
+
     let code: Int
     let description: String?
+
     /**
      - Parameters:
-        - code: The numeric code associated with the error object.
+        - code: The code associated with the error object.
         - description: The description associated with the error object.
      */
-    init(code: Int, description: String?) {
+    init(code: Int, description: String? = nil) {
         self.code = code
         self.description = description
     }
