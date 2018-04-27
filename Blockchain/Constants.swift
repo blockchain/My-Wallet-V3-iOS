@@ -70,7 +70,6 @@ struct Constants {
         static let userInfoType = "type"
         static let userInfoId = "id"
         static let typePayment = "payment"
-        static let typeContactRequest = "contact_request"
     }
 }
 
