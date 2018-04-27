@@ -26,7 +26,7 @@
 #import "QRCodeScannerSendViewController.h"
 #import "Assets.h"
 
-@class Wallet, ContactTransaction;
+@class Wallet;
 
 @interface SendBitcoinViewController : QRCodeScannerSendViewController <AddressSelectionDelegate> {
     IBOutlet UIView *containerView;
@@ -96,7 +96,6 @@ typedef enum {
 
 @property(nonatomic, strong) NSString *fromAddress;
 @property(nonatomic, strong) NSString *toAddress;
-@property(nonatomic, strong) Contact *toContact;
 @property int fromAccount;
 @property int toAccount;
 @property BOOL sendFromAddress;
@@ -124,8 +123,6 @@ typedef enum {
 - (IBAction)sendPaymentClicked:(id)sender;
 - (IBAction)labelAddressClicked:(id)sender;
 - (IBAction)useAllClicked:(id)sender;
-
-- (void)setupPaymentRequest:(ContactTransaction *)transaction;
 
 - (void)setAmountStringFromUrlHandler:(NSString*)amountString withToAddress:(NSString*)string;
 

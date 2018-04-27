@@ -19,9 +19,6 @@
 #import "PrivateKeyReader.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "TransferAllFundsBuilder.h"
-#import "BCContactRequestView.h"
-#import "Contact.h"
-#import "ContactTransaction.h"
 #import "BCNavigationController.h"
 #import "BCFeeSelectionView.h"
 #import "StoreKit/StoreKit.h"
@@ -43,7 +40,7 @@ typedef enum {
 - (void)stopReadingQRCode;
 @end
 
-@interface SendBitcoinViewController () <UITextFieldDelegate, TransferAllFundsDelegate, FeeSelectionDelegate, ContactRequestDelegate, ConfirmPaymentViewDelegate>
+@interface SendBitcoinViewController () <UITextFieldDelegate, TransferAllFundsDelegate, FeeSelectionDelegate, ConfirmPaymentViewDelegate>
 
 @property (nonatomic) TransactionType transactionType;
 
@@ -56,7 +53,6 @@ typedef enum {
 @property (nonatomic) uint64_t txSize;
 
 @property (nonatomic) uint64_t amountFromURLHandler;
-@property (nonatomic) ContactTransaction *contactTransaction;
 
 @property (nonatomic) uint64_t upperRecommendedLimit;
 @property (nonatomic) uint64_t lowerRecommendedLimit;
@@ -236,8 +232,6 @@ BOOL displayingLocalSymbolSend;
 {
     self.surgeIsOccurring = NO;
     self.dust = 0;
-    
-    self.contactTransaction = nil;
 
     [WalletManager.sharedInstance.wallet createNewPayment:self.assetType];
     [self resetFromAddress];
@@ -366,7 +360,7 @@ BOOL displayingLocalSymbolSend;
         
         [selectFromButton setHidden:YES];
         
-        if ([WalletManager.sharedInstance.wallet addressBook].count == 0 && [[WalletManager.sharedInstance.wallet.contacts allValues] count] == 0) {
+        if ([WalletManager.sharedInstance.wallet addressBook].count == 0) {
             [addressBookButton setHidden:YES];
         } else {
             [addressBookButton setHidden:NO];
@@ -433,8 +427,6 @@ BOOL displayingLocalSymbolSend;
 
 - (void)reloadToField
 {
-    self.toContact = nil;
-    
     if (self.sendToAddress) {
         toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:self.toAddress assetType:self.assetType];
         if ([WalletManager.sharedInstance.wallet isValidAddress:self.toAddress assetType:self.assetType]) {
@@ -810,8 +802,7 @@ BOOL displayingLocalSymbolSend;
         NSString *toAddressLabel = self.sendToAddress ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:self.toAddress assetType:self.assetType] : [WalletManager.sharedInstance.wallet getLabelForAccount:self.toAccount assetType:self.assetType];
         
         BOOL shouldRemoveToAddress = NO;
-        NSString *contactName = self.contactTransaction.contactName;
-        shouldRemoveToAddress = contactName && ![contactName isEqualToString:@""];
+        shouldRemoveToAddress = NO;
         
         NSString *toAddressString = self.sendToAddress ? (shouldRemoveToAddress ? @"" : self.toAddress) : @"";
         
@@ -830,18 +821,17 @@ BOOL displayingLocalSymbolSend;
         if (self.assetType == AssetTypeBitcoinCash) {
             confirmPaymentViewModel = [[BCConfirmPaymentViewModel alloc] initWithFrom:from
                                                                                    To:to
-                                                                               bchAmount:amountInSatoshi
+                                                                            bchAmount:amountInSatoshi
                                                                                   fee:feeTotal
                                                                                 total:amountTotal
                                                                                 surge:surgePresent];
         } else {
             confirmPaymentViewModel = [[BCConfirmPaymentViewModel alloc] initWithFrom:from
-                                                         To:to
-                                                     amount:amountInSatoshi
-                                                        fee:feeTotal
-                                                      total:amountTotal
-                                         contactTransaction:self.contactTransaction
-                                                      surge:surgePresent];
+                                                                                   To:to
+                                                                               amount:amountInSatoshi
+                                                                                  fee:feeTotal
+                                                                                total:amountTotal
+                                                                                surge:surgePresent];
         }
         
         self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithWindow:[UIApplication sharedApplication].keyWindow viewModel:confirmPaymentViewModel sendButtonFrame:continuePaymentButton.frame];
@@ -972,44 +962,6 @@ BOOL displayingLocalSymbolSend;
     [continuePaymentAccessoryButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     continuePaymentAccessoryButton.enabled = YES;
     [continuePaymentAccessoryButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
-}
-
-- (void)setupPaymentRequest:(ContactTransaction *)transaction
-{
-    int fromAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:self.assetType];
-    
-    self.addressFromURLHandler = transaction.address;
-    self.amountFromURLHandler = transaction.intendedAmount;
-    
-    RejectionType rejectionType = [transaction.role isEqualToString:TRANSACTION_ROLE_RPR_INITIATOR] ? RejectionTypeCancel : RejectionTypeDecline;
-    
-    self.addressSource = DestinationAddressSourceContact;
-    
-    __weak SendBitcoinViewController *weakSelf = self;
-    
-    self.onViewDidLoad = ^(){
-        weakSelf.contactTransaction = transaction;
-        [weakSelf selectFromAccount:fromAccount];
-        [weakSelf disableToField];
-        [weakSelf disableAmountViews];
-        [weakSelf showRejectPaymentButtonWithRejectionType:rejectionType];
-        [weakSelf showContactLabelWithName:transaction.contactName reason:transaction.reason];
-    };
-    
-    // Call the getter for self.view to invoke viewDidLoad so that reload is called only once
-    if (self.view) {
-        // If onViewDidLoad block still exists, viewDidLoad was not called, so reload was not called.
-        if (self.onViewDidLoad) {
-            self.onViewDidLoad = nil;
-            [self reload];
-            self.contactTransaction = transaction;
-            [self selectFromAccount:fromAccount];
-            [self disableToField];
-            [self disableAmountViews];
-            [self showRejectPaymentButtonWithRejectionType:rejectionType];
-            [self showContactLabelWithName:transaction.contactName reason:transaction.reason];
-        }
-    }
 }
 
 - (void)showInsufficientFunds
@@ -1288,37 +1240,6 @@ BOOL displayingLocalSymbolSend;
     return IS_USING_SCREEN_SIZE_4S ? 76 : 112;
 }
 
-- (void)showRejectPaymentButtonWithRejectionType:(RejectionType)rejectionType
-{
-    [rejectPaymentButton removeTarget:nil action:nil forControlEvents:UIControlEventAllTouchEvents];
-    
-    NSString *buttonTitle;
-    UIColor *titleColor;
-    
-    if (rejectionType == RejectionTypeDecline) {
-        buttonTitle = BC_STRING_DECLINE;
-        titleColor = [UIColor whiteColor];
-        rejectPaymentButton.backgroundColor = COLOR_BLOCKCHAIN_RED;
-        [rejectPaymentButton addTarget:self action:@selector(declinePaymentClicked) forControlEvents:UIControlEventTouchUpInside];
-    } else if (rejectionType == RejectionTypeCancel) {
-        buttonTitle = BC_STRING_CANCEL_PAYMENT;
-        titleColor = COLOR_LIGHT_GRAY;
-        rejectPaymentButton.backgroundColor = [UIColor clearColor];
-        [rejectPaymentButton addTarget:self action:@selector(cancelPaymentClicked) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    [rejectPaymentButton setTitle:buttonTitle forState:UIControlStateNormal];
-    [rejectPaymentButton setTitleColor:titleColor forState:UIControlStateNormal];
-
-    rejectPaymentButton.alpha = 0.0;
-    rejectPaymentButton.hidden = NO;
-
-    [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [continuePaymentButton changeYPosition:[self continuePaymentButtonOriginY] - 8 - continuePaymentButton.frame.size.height];
-       rejectPaymentButton.alpha = 1.0;
-    }];
-}
-
 - (void)hideRejectPaymentButton
 {
     rejectPaymentButton.alpha = 1.0;
@@ -1390,22 +1311,6 @@ BOOL displayingLocalSymbolSend;
 {
     CGFloat spacing = 12;
     return self.view.frame.size.height - BUTTON_HEIGHT - spacing;
-}
-
-- (void)confirmRejectPayment:(RejectionType)rejectionType
-{
-    NSString *title = rejectionType == RejectionTypeDecline ? BC_STRING_DECLINE : BC_STRING_CANCEL_PAYMENT;
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:BC_STRING_REJECT_PAYMENT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        if (rejectionType == RejectionTypeDecline) {
-            [WalletManager.sharedInstance.wallet sendDeclination:self.contactTransaction];
-        } else {
-            [WalletManager.sharedInstance.wallet sendCancellation:self.contactTransaction];
-        }
-    }]];
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Asset Agnostic Methods
@@ -1724,15 +1629,12 @@ BOOL displayingLocalSymbolSend;
 - (void)selectToAddress:(NSString *)address
 {
     self.sendToAddress = true;
-    self.toContact = nil;
 
     toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:address assetType:self.assetType];
     self.toAddress = address;
     DLog(@"toAddress: %@", address);
     
     [WalletManager.sharedInstance.wallet changePaymentToAddress:address assetType:self.assetType];
-    
-    self.contactTransaction = nil;
     
     [self doCurrencyConversion];
 }
@@ -1757,7 +1659,6 @@ BOOL displayingLocalSymbolSend;
 - (void)selectToAccount:(int)account
 {
     self.sendToAddress = false;
-    self.toContact = nil;
 
     toField.text = [WalletManager.sharedInstance.wallet getLabelForAccount:account assetType:self.assetType];
     self.toAccount = account;
@@ -1766,18 +1667,6 @@ BOOL displayingLocalSymbolSend;
     
     [WalletManager.sharedInstance.wallet changePaymentToAccount:account assetType:self.assetType];
     
-    self.contactTransaction = nil;
-    
-    [self doCurrencyConversion];
-}
-
-- (void)selectToContact:(Contact *)contact
-{
-    self.toContact = contact;
-    
-    toField.text = contact.name;
-    DLog(@"toContact: %@", contact.name);
-
     [self doCurrencyConversion];
 }
 
@@ -1810,52 +1699,6 @@ BOOL displayingLocalSymbolSend;
     [self selectToAccount:account];
     
     self.addressSource = DestinationAddressSourceDropDown;
-}
-
-- (void)didSelectContact:(Contact *)contact
-{
-    if (!contact.mdid) {
-        UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_HAS_NOT_ACCEPTED_INVITATION_YET, contact.name] message:[NSString stringWithFormat:BC_STRING_CONTACT_ARGUMENT_MUST_ACCEPT_INVITATION, contact.name] preferredStyle:UIAlertControllerStyleAlert];
-        [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-        [tabControllerManager.tabViewController presentViewController:errorAlert animated:YES completion:nil];
-    } else {
-        [self selectToContact:contact];
-    }
-}
-
-#pragma mark - Contacts
-
-- (void)createSendRequest:(RequestType)requestType forContact:(Contact *)contact reason:(NSString *)reason
-{
-    id accountOrAddress;
-    if (self.sendFromAddress) {
-        accountOrAddress = self.fromAddress;
-    } else {
-        accountOrAddress = [NSNumber numberWithInt:self.fromAccount];
-    }
-    
-    BCContactRequestView *contactRequestView = [[BCContactRequestView alloc] initWithContact:contact amount:amountInSatoshi willSend:YES accountOrAddress:accountOrAddress];
-    contactRequestView.delegate = self;
-
-    [[ModalPresenter sharedInstance] showModalWithContent:contactRequestView closeType:ModalCloseTypeBack showHeader:true headerText:BC_STRING_SEND_TO_CONTACT onDismiss:nil onResume:nil];
-}
-
-#pragma mark - Contact Request Delegate
-
-- (void)createReceiveRequestForContact:(Contact *)contact withReason:(NSString *)reason amount:(uint64_t)amount lastSelectedField:(UITextField *)textField
-{
-    DLog(@"Send error: created receive request");
-}
-
-- (void)createSendRequestForContact:(Contact *)contact withReason:(NSString *)reason amount:(uint64_t)amount lastSelectedField:(UITextField *)textField accountOrAddress:(id)accountOrAddress
-{
-    DLog(@"Creating send request with reason: %@, amount: %lld", reason, amount);
-    [textField resignFirstResponder];
-    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_REQUEST];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.45 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [WalletManager.sharedInstance.wallet requestPaymentRequest:contact.identifier amount:amount requestId:nil note:reason initiatorSource:accountOrAddress];
-    });
 }
 
 #pragma mark - Transaction Description Delegate
@@ -2094,16 +1937,6 @@ BOOL displayingLocalSymbolSend;
 
 #pragma mark - Actions
 
-- (void)declinePaymentClicked
-{
-    [self confirmRejectPayment:RejectionTypeDecline];
-}
-
-- (void)cancelPaymentClicked
-{
-    [self confirmRejectPayment:RejectionTypeCancel];
-}
-
 - (void)setupTransferAll
 {
     self.transferAllPaymentBuilder = [[TransferAllFundsBuilder alloc] initWithAssetType:self.assetType usingSendScreen:YES];
@@ -2265,20 +2098,6 @@ BOOL displayingLocalSymbolSend;
 
 - (IBAction)sendPaymentClicked:(id)sender
 {
-    if (self.toContact) {
-        
-        uint64_t dust = [self dust];
-        
-        if (amountInSatoshi == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR handler: nil];
-        } else if (amountInSatoshi < dust) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, dust] title:BC_STRING_ERROR handler: nil];
-        } else {
-            [self createSendRequest:RequestTypeSendReason forContact:self.toContact reason:nil];
-        }
-        return;
-    }
-    
     if ([self.toAddress length] == 0) {
         self.toAddress = toField.text;
         DLog(@"toAddress: %@", self.toAddress);
