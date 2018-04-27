@@ -32,7 +32,7 @@
 
 @protocol TopViewController;
 
-@class TransactionsBitcoinViewController, BCFadeView, ReceiveCoinsViewController, SendBitcoinViewController, BCCreateWalletView, BCManualPairView, MultiAddressResponse, PairingCodeParser, BCWebViewController, BackupNavigationViewController, ContactsViewController, ContactTransaction, BuyBitcoinViewController;
+@class TransactionsBitcoinViewController, BCFadeView, ReceiveCoinsViewController, SendBitcoinViewController, BCCreateWalletView, BCManualPairView, MultiAddressResponse, PairingCodeParser, BCWebViewController, BackupNavigationViewController, BuyBitcoinViewController;
 
 @interface RootService : NSObject <UIApplicationDelegate, WalletDelegate, PEPinEntryControllerDelegate, MFMailComposeViewControllerDelegate, ReminderModalDelegate, SetupDelegate> {
 
@@ -82,7 +82,6 @@
 @property (strong, nonatomic) IBOutlet BackupNavigationViewController *backupNavigationViewController;
 @property (strong, nonatomic) SettingsNavigationController *settingsNavigationController;
 @property (strong, nonatomic) AccountsAndAddressesNavigationController *accountsAndAddressesNavigationController;
-@property (strong, nonatomic) ContactsViewController *contactsViewController;
 
 @property (strong, nonatomic) IBOutlet UILabel *mainTitleLabel;
 
@@ -112,8 +111,6 @@
 
 //@property (nonatomic) BOOL changedPassword;
 @property (nonatomic) BOOL isVerifyingMobileNumber; // TODO: Move this inside SettingsTableViewController
-
-@property (nonatomic) ContactTransaction *pendingPaymentRequestTransaction;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 - (void)applicationDidBecomeActive:(UIApplication *)application;
@@ -196,7 +193,6 @@
 - (IBAction)manualPairClicked:(id)sender;
 
 - (IBAction)accountsAndAddressesClicked:(id)sender;
-- (IBAction)contactsClicked:(id)sender;
 - (IBAction)accountSettingsClicked:(id)sender;
 - (IBAction)backupFundsClicked:(id)sender;
 - (IBAction)supportClicked:(id)sender;
@@ -205,7 +201,6 @@
 - (IBAction)exchangeClicked:(id)sender;
 
 - (void)setupTransferAllFunds;
-- (void)setupPaymentRequest:(ContactTransaction *)transaction;
 - (void)setupSendToAddress:(NSString *)address;
 
 - (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder;
