@@ -208,7 +208,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // TODO: don't keep a reference to each contoller, instead allow them to subscribe to value changes
     func reloadSymbols() {
         //    [self.tabControllerManager reloadSymbols];
-        //    [_contactsViewController reloadSymbols];
         //    [_accountsAndAddressesNavigationController reload];
         //    [sideMenuViewController reload];
     }
