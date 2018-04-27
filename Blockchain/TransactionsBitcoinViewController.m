@@ -12,9 +12,6 @@
 #import "MultiAddressResponse.h"
 #import "RootService.h"
 #import "TransactionDetailViewController.h"
-#import "Contact.h"
-#import "ContactTransaction.h"
-#import "ContactTransactionTableViewCell.h"
 #import "BCAddressSelectionView.h"
 #import "TransactionDetailNavigationController.h"
 #import "UIView+ChangeFrameAttribute.h"
@@ -33,10 +30,9 @@
 - (uint64_t)getAmountForReceivedTransaction:(Transaction *)transaction;
 @end
 
-@interface TransactionsBitcoinViewController () <AddressSelectionDelegate, UIScrollViewDelegate, ContactTransactionCellDelegate>
+@interface TransactionsBitcoinViewController () <AddressSelectionDelegate, UIScrollViewDelegate>
 
 @property (nonatomic) int sectionMain;
-@property (nonatomic) int sectionContactsPending;
 
 @property (nonatomic) UIView *bounceView;
 
@@ -62,17 +58,10 @@
     [self reload];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return WalletManager.sharedInstance.wallet.pendingContactTransactions.count > 0 ? 2 : 1;
-}
-
 - (NSInteger)tableView:(UITableView *)_tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == self.sectionContactsPending) {
-        return WalletManager.sharedInstance.wallet.pendingContactTransactions.count;
-    } else if (section == self.sectionMain) {
-        NSInteger transactionCount = [data.transactions count] + WalletManager.sharedInstance.wallet.rejectedContactTransactions.count;
+    if (section == self.sectionMain) {
+        NSInteger transactionCount = [data.transactions count];
 #ifdef ENABLE_TRANSACTION_FETCHING
         if (data != nil && transactionCount == 0 && !self.loadedAllTransactions && self.clickedFetchMore) {
             [WalletManager.sharedInstance.wallet fetchMoreTransactions];
@@ -87,73 +76,25 @@
 
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == self.sectionContactsPending) {
-        ContactTransaction *contactTransaction = [WalletManager.sharedInstance.wallet.pendingContactTransactions objectAtIndex:indexPath.row];
-        
-        ContactTransactionTableViewCell * cell = (ContactTransactionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_CONTACT_TRANSACTION];
-        
-        if (cell == nil) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"ContactTransactionTableCell" owner:nil options:nil] objectAtIndex:0];
-        }
-        
-        NSString *name = [WalletManager.sharedInstance.wallet.contacts objectForKey:contactTransaction.contactIdentifier].name;
-        [cell configureWithTransaction:contactTransaction contactName:name];
-        cell.delegate = self;
-        cell.selectedBackgroundView = [self selectedBackgroundViewForCell:cell];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-
-        return cell;
-    } else if (indexPath.section == self.sectionMain) {
+    if (indexPath.section == self.sectionMain) {
         
         Transaction * transaction = [self.finishedTransactions objectAtIndex:[indexPath row]];
-        
-        ContactTransaction *contactTransaction;
-        
-        if ([transaction isMemberOfClass:[ContactTransaction class]]) {
-            // Declined or cancelled
-            contactTransaction = (ContactTransaction *)transaction;
-        } else if (transaction.myHash) {
-            // Completed
-            contactTransaction = [WalletManager.sharedInstance.wallet.completedContactTransactions objectForKey:transaction.myHash];
-        }
-        
-        if (contactTransaction) {
-            ContactTransaction *newTransaction = [ContactTransaction transactionWithTransaction:contactTransaction existingTransaction:transaction];
-            newTransaction.contactName = [WalletManager.sharedInstance.wallet.contacts objectForKey:contactTransaction.contactIdentifier].name;
-            
-            ContactTransactionTableViewCell * cell = (ContactTransactionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_CONTACT_TRANSACTION];
-            
-            if (cell == nil) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:@"ContactTransactionTableCell" owner:nil options:nil] objectAtIndex:0];
-            }
-            
-            NSString *name = [WalletManager.sharedInstance.wallet.contacts objectForKey:contactTransaction.contactIdentifier].name;
-            [cell configureWithTransaction:contactTransaction contactName:name];
-            cell.delegate = self;
 
-            cell.selectedBackgroundView = [self selectedBackgroundViewForCell:cell];
-            
-            cell.selectionStyle = contactTransaction.transactionState == ContactTransactionStateCancelled || contactTransaction.transactionState == ContactTransactionStateDeclined ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-            
-            return cell;
-        } else {
-            TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"transaction"];
-            
-            if (cell == nil) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionCell" owner:nil options:nil] objectAtIndex:0];
-            }
-            
-            cell.transaction = transaction;
-            
-            [cell reload];
-            
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"transaction"];
 
-            cell.selectedBackgroundView = [self selectedBackgroundViewForCell:cell];
-            
-            return cell;
+        if (cell == nil) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionCell" owner:nil options:nil] objectAtIndex:0];
         }
+
+        cell.transaction = transaction;
+
+        [cell reload];
+
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+
+        cell.selectedBackgroundView = [self selectedBackgroundViewForCell:cell];
+
+        return cell;
     } else {
         DLog(@"Invalid section %lu", indexPath.section);
         return nil;
@@ -162,22 +103,9 @@
 
 - (void)tableView:(UITableView *)_tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == self.sectionContactsPending) {
-        
+    if (indexPath.section == self.sectionMain) {
         TransactionTableCell *cell = (TransactionTableCell *)[self.tableView cellForRowAtIndexPath:indexPath];
         cell.assetType = AssetTypeBitcoin;
-
-        [cell transactionClicked:nil];
-        
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    } else if (indexPath.section == self.sectionMain) {
-        TransactionTableCell *cell = (TransactionTableCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-        cell.assetType = AssetTypeBitcoin;
-        if ([cell.transaction isMemberOfClass:[ContactTransaction class]]) {
-            ContactTransaction *contactTransaction = (ContactTransaction *)cell.transaction;
-            if (contactTransaction.transactionState == ContactTransactionStateCancelled ||
-                contactTransaction.transactionState == ContactTransactionStateDeclined) return;
-        }
         [cell transactionClicked:nil];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     } else {
@@ -205,50 +133,16 @@
 
 - (CGFloat)tableView:(UITableView *)_tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat largerCellHeight = 85;
-    
-    if (indexPath.section == self.sectionContactsPending) {
-        return largerCellHeight;
-    } else {
-        Transaction *transaction = [self.finishedTransactions objectAtIndex:indexPath.row];
-        return ([transaction isMemberOfClass:[ContactTransaction class]] || [WalletManager.sharedInstance.wallet.completedContactTransactions objectForKey:transaction.myHash]) ? largerCellHeight : 65;
-    }
+    return 65;
 }
 
 - (CGFloat)tableView:(UITableView *)_tableView heightForHeaderInSection:(NSInteger)section
 {
-#ifdef ENABLE_CONTACTS
-    return self.noTransactionsView.hidden ? 30 : 0;
-#endif
     return 0;
 }
 
 - (UIView *)tableView:(UITableView *)_tableView viewForHeaderInSection:(NSInteger)section
 {
-#ifdef ENABLE_CONTACTS
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, self.view.frame.size.width, 14)];
-    label.textColor = COLOR_TEXT_DARK_GRAY;
-    label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    
-    [view addSubview:label];
-    
-    NSString *labelString;
-    
-    if (section == self.sectionContactsPending) {
-        labelString = BC_STRING_IN_PROGRESS;
-    } else if (section == self.sectionMain) {
-        labelString = BC_STRING_FINISHED;
-        
-    } else
-        @throw @"Unknown Section";
-    
-    label.text = [labelString uppercaseString];
-    
-    return view;
-#endif
     return nil;
 }
 
@@ -287,7 +181,7 @@
         [self changeFilterLabel:@""];
     }
     // Data loaded, but no transactions yet
-    else if (self.data.transactions.count == 0 && WalletManager.sharedInstance.wallet.pendingContactTransactions.count == 0 && WalletManager.sharedInstance.wallet.rejectedContactTransactions.count == 0) {
+    else if (self.data.transactions.count == 0) {
         self.noTransactionsView.hidden = NO;
         
 #ifdef ENABLE_TRANSACTION_FETCHING
@@ -367,10 +261,9 @@
 
 - (void)reloadData
 {
-    self.sectionContactsPending = WalletManager.sharedInstance.wallet.pendingContactTransactions.count > 0 ? 0 : -1;
-    self.sectionMain = WalletManager.sharedInstance.wallet.pendingContactTransactions.count > 0 ? 1 : 0;
+    self.sectionMain = 0;
     
-    NSArray *rejectedTransactions = WalletManager.sharedInstance.wallet.rejectedContactTransactions ? : @[];
+    NSArray *rejectedTransactions = @[];
     
     self.finishedTransactions = [[rejectedTransactions arrayByAddingObjectsFromArray:data.transactions] sortedArrayUsingSelector:@selector(reverseCompareLastUpdated:)];
     
@@ -393,11 +286,6 @@
 - (void)updateData:(MultiAddressResponse *)newData
 {
     data = newData;
-    
-    if (app.pendingPaymentRequestTransaction) {
-        Transaction *latestTransaction = [data.transactions firstObject];
-        [self completeSendRequestOptimisticallyForTransaction:latestTransaction];
-    }
 }
 
 - (void)reloadSymbols
@@ -485,16 +373,10 @@
     Transaction *transaction = [data.transactions firstObject];
     
     if ([transaction.txType isEqualToString:TX_TYPE_SENT]) {
-        if (app.pendingPaymentRequestTransaction) {
-            [app checkIfPaymentRequestFulfilled:transaction];
-        } else {
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:self.sectionMain]] withRowAnimation:UITableViewRowAnimationFade];
-        };
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:self.sectionMain]] withRowAnimation:UITableViewRowAnimationFade];
     } else if ([transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
         
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:self.sectionMain]] withRowAnimation:UITableViewRowAnimationFade];
-
-        [self completeReceiveRequestOptimisticallyForTransaction:transaction];
         
         BOOL shouldShowBackupReminder = (self.hasZeroTotalBalance && [WalletManager.sharedInstance.wallet getTotalActiveBalance] > 0 &&
                                          ![WalletManager.sharedInstance.wallet isRecoveryPhraseVerified]);
@@ -576,139 +458,6 @@
 - (int)sectionCountForIndex:(int)sectionNumber
 {
     return sectionNumber < 0 ? 0 : 1;
-}
-
-#pragma mark - Contacts
-
-- (void)selectPayment:(NSString *)payment
-{
-    NSArray *transactions = WalletManager.sharedInstance.wallet.pendingContactTransactions;
-    NSInteger rowToSelect = -1;
-    NSInteger section;
-    
-    for (int index = 0; index < [transactions count]; index++) {
-        ContactTransaction *transaction = transactions[index];
-        if ([transaction.identifier isEqualToString:payment]) {
-            rowToSelect = index;
-            section = self.sectionContactsPending;
-            break;
-        }
-    }
-    
-    if (rowToSelect < 0) {
-        transactions = self.finishedTransactions;
-        
-        for (int index = 0; index < [transactions count]; index++) {
-            ContactTransaction *transaction = transactions[index];
-            if ([transaction isMemberOfClass:[ContactTransaction class]]) {
-                // Declined or cancelled
-                transaction = (ContactTransaction *)transaction;
-            } else if (transaction.myHash) {
-                // Completed
-                transaction = [WalletManager.sharedInstance.wallet.completedContactTransactions objectForKey:transaction.myHash];
-            }
-            
-            if ([transaction isMemberOfClass:[ContactTransaction class]] && [transaction.identifier isEqualToString:payment]) {
-                rowToSelect = index;
-                section = self.sectionMain;
-                break;
-            }
-        }
-    }
-    
-    if (rowToSelect >= 0) {
-        [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:rowToSelect inSection:section]];
-    }
-
-    self.messageIdentifier = nil;
-}
-
-- (void)acceptOrDeclinePayment:(ContactTransaction *)transaction forContact:(Contact *)contact
-{
-    NSString *message;
-    NSString *reasonWithoutSpaces = [transaction.reason stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    if (reasonWithoutSpaces.length > 0) {
-        message = [NSString stringWithFormat:BC_STRING_ARGUMENT_WANTS_TO_SEND_YOU_ARGUMENT_FOR_ARGUMENT, contact.name, [NSNumberFormatter formatMoney:transaction.intendedAmount localCurrency:NO], transaction.reason];
-    } else {
-        message = [NSString stringWithFormat:BC_STRING_ARGUMENT_WANTS_TO_SEND_YOU_ARGUMENT, contact.name, [NSNumberFormatter formatMoney:transaction.intendedAmount localCurrency:NO]];
-    }
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_RECEIVING_PAYMENT message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_ACCEPT style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [WalletManager.sharedInstance.wallet sendPaymentRequest:contact.identifier amount:transaction.intendedAmount requestId:transaction.identifier note:transaction.note initiatorSource:nil];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_DECLINE style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [WalletManager.sharedInstance.wallet sendDeclination:transaction];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)promptDeclinePayment:(ContactTransaction *)transaction forContact:(Contact *)contact
-{
-    NSString *title = transaction.reason && transaction.reason.length > 0 ? [NSString stringWithFormat:BC_STRING_DECLINE_PAYMENT_FOR_ARGUMENT, transaction.reason] : BC_STRING_DECLINE_PAYMENT;
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:BC_STRING_REJECT_PAYMENT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_YES_DECLINE_PAYMENT style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [WalletManager.sharedInstance.wallet sendDeclination:transaction];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)promptCancelPayment:(ContactTransaction *)transaction forContact:(Contact *)contact
-{
-    NSString *title = transaction.reason && transaction.reason.length > 0 ? [NSString stringWithFormat:BC_STRING_CANCEL_PAYMENT_FOR_ARGUMENT, transaction.reason] : BC_STRING_CANCEL_PAYMENT;
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:BC_STRING_REJECT_PAYMENT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_YES_CANCEL_PAYMENT style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [WalletManager.sharedInstance.wallet sendCancellation:transaction];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_BACK style:UIAlertActionStyleCancel handler:nil]];
-    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    [tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)sendPayment:(ContactTransaction *)transaction toContact:(Contact *)contact
-{
-    transaction.contactName = contact.name;
-    
-    [app setupPaymentRequest:transaction];
-}
-
-- (void)completeReceiveRequestOptimisticallyForTransaction:(Transaction *)transaction
-{
-    if (WalletManager.sharedInstance.wallet.pendingContactTransactions.count > 0) {
-        for (ContactTransaction *contactTransaction in [WalletManager.sharedInstance.wallet.pendingContactTransactions reverseObjectEnumerator]) {
-            if (contactTransaction.transactionState == ContactTransactionStateReceiveWaitingForPayment &&
-                contactTransaction.intendedAmount == transaction.amount &&
-                [[[transaction.to firstObject] objectForKey:DICTIONARY_KEY_ADDRESS] isEqualToString: contactTransaction.address]) {
-                [WalletManager.sharedInstance.wallet.pendingContactTransactions removeObject:contactTransaction];
-                contactTransaction.transactionState = ContactTransactionStateCompletedReceive;
-                [WalletManager.sharedInstance.wallet.completedContactTransactions setObject:contactTransaction forKey:transaction.myHash];
-                [self reloadData];
-            }
-        }
-    };
-}
-
-- (void)completeSendRequestOptimisticallyForTransaction:(Transaction *)transaction
-{
-    if (WalletManager.sharedInstance.wallet.pendingContactTransactions.count > 0) {
-        for (ContactTransaction *contactTransaction in [WalletManager.sharedInstance.wallet.pendingContactTransactions reverseObjectEnumerator]) {
-            if (contactTransaction.transactionState == ContactTransactionStateSendReadyToSend &&
-                contactTransaction.intendedAmount == llabs(transaction.amount) - llabs(transaction.fee) &&
-                [[[transaction.to firstObject] objectForKey:DICTIONARY_KEY_ADDRESS] isEqualToString: contactTransaction.address]) {
-                [WalletManager.sharedInstance.wallet.pendingContactTransactions removeObject:contactTransaction];
-                contactTransaction.transactionState = ContactTransactionStateCompletedSend;
-                [WalletManager.sharedInstance.wallet.completedContactTransactions setObject:contactTransaction forKey:transaction.myHash];
-                [self reloadData];
-            }
-        }
-    };
 }
 
 #pragma mark - Filtering

@@ -7,7 +7,6 @@
 //
 
 #import "TransactionDetailDescriptionCell.h"
-#import "ContactTransaction.h"
 
 @implementation TransactionDetailDescriptionCell
 
@@ -61,7 +60,7 @@
     
     [self addEditButton];
 
-    self.editButton.enabled = !transactionModel.isContactTransaction;
+    self.editButton.enabled = YES;
     
     [self addPlaceholderLabel];
 
@@ -244,11 +243,7 @@
 
 - (NSString *)getNoteForTransaction:(TransactionDetailViewModel *)transactionModel
 {
-    if (transactionModel.isContactTransaction) {
-        return transactionModel.reason;
-    } else {
-        return transactionModel.note;
-    }
+    return transactionModel.note;
 }
 
 #pragma mark - TextView delegate

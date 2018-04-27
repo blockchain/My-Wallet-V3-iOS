@@ -30,9 +30,6 @@
 @property(nonatomic, strong) NSDictionary *from;
 @property(nonatomic, strong) NSArray *to;
 
-// For displaying contact names
-@property (nonatomic, strong) NSString *contactName;
-
 - (NSComparisonResult)reverseCompareLastUpdated:(Transaction *)transaction;
 
 @end

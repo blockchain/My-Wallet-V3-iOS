@@ -7,7 +7,6 @@
 //
 
 #import "TransactionDetailFromCell.h"
-#import "ContactTransaction.h"
 #import "UIView+ChangeFrameAttribute.h"
 
 @implementation TransactionDetailFromCell
@@ -45,7 +44,7 @@
     self.accessoryLabel.textAlignment = NSTextAlignmentRight;
     self.accessoryLabel.adjustsFontSizeToFitWidth = YES;
     self.accessoryLabel.minimumScaleFactor = 0.7;
-    self.accessoryLabel.text = transactionModel.isContactTransaction && [transactionModel.txType isEqualToString:TX_TYPE_RECEIVED] ? transactionModel.contactName : transactionModel.fromString;
+    self.accessoryLabel.text = transactionModel.fromString;
     
     CGFloat mainLabelHeight = self.mainLabel.frame.size.height;
     CGFloat accessoryLabelHeight = self.accessoryLabel.frame.size.height;

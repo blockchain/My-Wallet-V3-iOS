@@ -7,7 +7,6 @@
 //
 
 #import "TransactionDetailViewModel.h"
-#import "ContactTransaction.h"
 #import "Transaction.h"
 #import "EtherTransaction.h"
 #import "NSNumberFormatter+Currencies.h"
@@ -63,12 +62,6 @@
         WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = currentSymbol;
         app.btcFormatter.locale = currentLocale;
         
-        if ([transaction isMemberOfClass:[ContactTransaction class]]) {
-            ContactTransaction *contactTransaction = (ContactTransaction *)transaction;
-            self.isContactTransaction = YES;
-            self.reason = contactTransaction.reason;
-        };
-        self.contactName = transaction.contactName;
         self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[BlockchainAPI sharedInstance] blockchainWallet]] uppercaseString];
         self.detailButtonLink = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];
     }

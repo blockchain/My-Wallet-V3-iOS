@@ -33,13 +33,7 @@
 @property (nonatomic) NSString *confirmations;
 @property (nonatomic) BOOL confirmed;
 @property (nonatomic) BOOL hideNote;
-
-@property (nonatomic) BOOL isContactTransaction;
-@property (nonatomic) NSString *reason;
-@property (nonatomic) NSString *contactName;
-
 @property (nonatomic) NSDecimalNumber *ethExchangeRate;
-
 @property (nonatomic) NSDecimalNumber *decimalAmount;
 
 - (id)initWithTransaction:(Transaction *)transaction;
