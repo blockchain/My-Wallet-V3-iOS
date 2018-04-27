@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@class ContactTransaction;
 
 @interface BCConfirmPaymentViewModel : NSObject
 
@@ -16,7 +15,6 @@
               amount:(uint64_t)amount
                  fee:(uint64_t)fee
                total:(uint64_t)total
-  contactTransaction:(ContactTransaction *)contactTransaction
                surge:(BOOL)surgePresent;
 
 - (id)initWithTo:(NSString *)to

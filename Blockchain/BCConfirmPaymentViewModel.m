@@ -7,7 +7,6 @@
 //
 
 #import "BCConfirmPaymentViewModel.h"
-#import "ContactTransaction.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "RootService.h"
 #import "Blockchain-Swift.h"
@@ -21,7 +20,6 @@
             amount:(uint64_t)amount
                fee:(uint64_t)fee
              total:(uint64_t)total
-contactTransaction:(ContactTransaction *)contactTransaction
              surge:(BOOL)surgePresent
 {
     self = [super init];
@@ -30,14 +28,7 @@ contactTransaction:(ContactTransaction *)contactTransaction
         self.from = from;
         self.to = to;
         self.surgeIsOccurring = surgePresent;
-        
-        if (contactTransaction) {
-            self.buttonTitle = [contactTransaction.role isEqualToString:TRANSACTION_ROLE_RPR_INITIATOR] ? BC_STRING_SEND : BC_STRING_PAY;
-            self.noteText = contactTransaction.reason;
-        } else {
-            self.buttonTitle = BC_STRING_SEND;
-        }
-        
+        self.buttonTitle = BC_STRING_SEND;
         self.fiatTotalAmountText = [NSNumberFormatter formatMoney:total localCurrency:YES];
         self.btcTotalAmountText = [NSNumberFormatter formatBTC:total];
         self.btcWithFiatAmountText = [self formatAmountInBTCAndFiat:amount];
