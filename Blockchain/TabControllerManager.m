@@ -614,7 +614,7 @@
     [self showTransactionsAnimated:YES];
     
     if (sender &&
-        [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION] &&
+        BlockchainSettings.sharedAppInstance.hasEndedFirstSession &&
         ![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HAS_SEEN_SURVEY_PROMPT]) {
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];

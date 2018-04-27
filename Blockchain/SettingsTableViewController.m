@@ -532,12 +532,12 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)switchSwipeToReceiveTapped
 {
-    BOOL swipeToReceiveEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED];
+    BOOL swipeToReceiveEnabled = BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled;
 
     if (!swipeToReceiveEnabled) {
         UIAlertController *swipeToReceiveAlert = [UIAlertController alertControllerWithTitle:BC_STRING_SETTINGS_PIN_SWIPE_TO_RECEIVE message:BC_STRING_SETTINGS_SWIPE_TO_RECEIVE_IN_FIVES_FOOTER preferredStyle:UIAlertControllerStyleAlert];
         [swipeToReceiveAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_ENABLE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[NSUserDefaults standardUserDefaults] setBool:!swipeToReceiveEnabled forKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED];
+            BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled = !swipeToReceiveEnabled;
             // Clear all swipe addresses in case default account has changed
             if (!swipeToReceiveEnabled) {
                 [KeychainItemWrapper removeAllSwipeAddresses];
@@ -549,7 +549,7 @@ const int aboutPrivacyPolicy = 2;
         }]];
         [self presentViewController:swipeToReceiveAlert animated:YES completion:nil];
     } else {
-        [[NSUserDefaults standardUserDefaults] setBool:!swipeToReceiveEnabled forKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED];
+        BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled = !swipeToReceiveEnabled;
         // Clear all swipe addresses in case default account has changed
         if (!swipeToReceiveEnabled) {
             [KeychainItemWrapper removeAllSwipeAddresses];
@@ -1284,7 +1284,7 @@ const int aboutPrivacyPolicy = 2;
                 cell.textLabel.font = [SettingsTableViewController fontForCell];
                 cell.textLabel.text = BC_STRING_SETTINGS_PIN_SWIPE_TO_RECEIVE;
                 UISwitch *switchForSwipeToReceive = [[UISwitch alloc] init];
-                BOOL swipeToReceiveEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED];
+                BOOL swipeToReceiveEnabled = BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled;
                 switchForSwipeToReceive.on = swipeToReceiveEnabled;
                 [switchForSwipeToReceive addTarget:self action:@selector(switchSwipeToReceiveTapped) forControlEvents:UIControlEventTouchUpInside];
                 cell.accessoryView = switchForSwipeToReceive;

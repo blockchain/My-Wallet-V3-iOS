@@ -224,7 +224,7 @@ typedef enum {
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT];
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING];
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_HAS_SEEN_SURVEY_PROMPT];
-                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION];
+                BlockchainSettings.sharedAppInstance.hasEndedFirstSession = NO;
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];

@@ -51,11 +51,11 @@
 
 - (void)reloadCards
 {
-    self.showCards = ![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    self.showCards = !BlockchainSettings.sharedAppInstance.shouldHideAllCards;
     
     self.announcementCards = [NSMutableArray new];
     if (!self.showCards) {
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SHOULD_HIDE_BUY_SELL_CARD] && [WalletManager.sharedInstance.wallet canUseSfox]) {
+        if (!BlockchainSettings.sharedAppInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
             [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
         }
         if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SHOULD_HIDE_BITCOIN_CASH_CARD]) {
@@ -276,7 +276,7 @@
 
 - (void)closeBuySellCard
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_BUY_SELL_CARD];
+    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
     [self closeAnnouncementCard:CardConfigurationBuySell];
 }
 
@@ -329,7 +329,7 @@
         
         BOOL didSeeAllCards = scrollView.contentOffset.x > scrollView.contentSize.width - scrollView.frame.size.width * 1.5;
         if (didSeeAllCards) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
+            BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
         }
         
         if (!self.isUsingPageControl) {
@@ -411,7 +411,7 @@
         [self removeCardsView];
     }];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 }
 
 - (void)removeCardsView

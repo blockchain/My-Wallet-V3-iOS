@@ -137,7 +137,7 @@ static PEViewController *VerifyController()
 {
 #ifdef ENABLE_SWIPE_TO_RECEIVE
     if (self.verifyOnly &&
-        [[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED]) {
+        BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled) {
         
         for (NSNumber *key in self.swipeViews) {
             BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:key];

@@ -213,15 +213,15 @@
     WalletManager.sharedInstance.wallet.isNew = YES;
     app.buyBitcoinViewController.isNew = YES; // TODO: move this to a coordinator
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    BlockchainSettings.sharedAppInstance.hasSeenAllCards = NO;
+    BlockchainSettings.sharedAppInstance.shouldHideAllCards = NO;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_LAST_CARD_OFFSET];
 
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION];
+    BlockchainSettings.sharedAppInstance.hasEndedFirstSession = NO;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_REMINDER_MODAL_DATE];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_BUY_SELL_CARD];
+    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
     
     [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
 }

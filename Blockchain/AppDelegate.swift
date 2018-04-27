@@ -55,23 +55,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //: Global appearance customizations
         UIApplication.shared.statusBarStyle = .default
 
-        //: Was initialized with `NSNumber numberWithInt:AssetTypeBitcoin` before, could cause side unwanted effects...
-        // TODO: test for potential side effects
-        let assetTypekey = UserDefaults.Keys.assetType.rawValue
-        UserDefaults.standard.register(defaults: [assetTypekey: AssetType.bitcoin.rawValue])
+//        let assetTypekey = UserDefaults.Keys.assetType.rawValue
+//        UserDefaults.standard.register(defaults: [assetTypekey: AssetType.bitcoin.rawValue])
 
-        let certPinningkey = UserDefaults.DebugKeys.enableCertificatePinning.rawValue
-        UserDefaults.standard.register(defaults: [certPinningkey: true])
+//        let certPinningkey = UserDefaults.DebugKeys.enableCertificatePinning.rawValue
+//        UserDefaults.standard.register(defaults: [certPinningkey: true])
 
-        let swipeToReceiveEnabledKey = UserDefaults.Keys.swipeToReceiveEnabled.rawValue
-        UserDefaults.standard.register(defaults: [swipeToReceiveEnabledKey: true])
+//        let swipeToReceiveEnabledKey = UserDefaults.Keys.swipeToReceiveEnabled.rawValue
+//        UserDefaults.standard.register(defaults: [swipeToReceiveEnabledKey: true])
 
         #if DEBUG
         let envKey = UserDefaults.Keys.environment.rawValue
         let environment = Environment.production.rawValue
         UserDefaults.standard.set(environment, forKey: envKey)
 
-        UserDefaults.standard.set(true, forKey: certPinningkey)
+        BlockchainSettings.sharedAppInstance().enableCertificatePinning = true
 
         let securityReminderKey = UserDefaults.DebugKeys.securityReminderTimer.rawValue
         UserDefaults.standard.removeObject(forKey: securityReminderKey)

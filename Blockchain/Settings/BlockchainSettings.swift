@@ -33,6 +33,24 @@ final class BlockchainSettings: NSObject {
         @objc class func sharedInstance() -> App {
             return App.shared
         }
+        
+        @objc var encryptedPinPassword: String? {
+            get {
+                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+            }
+        }
+    
+        @objc var enableCertificatePinning: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.DebugKeys.enableCertificatePinning.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.DebugKeys.enableCertificatePinning.rawValue)
+            }
+        }
 
         @objc var firstRun: Bool {
             get {
@@ -40,6 +58,24 @@ final class BlockchainSettings: NSObject {
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.firstRun.rawValue)
+            }
+        }
+        
+        @objc var hasEndedFirstSession: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasEndedFirstSession.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasEndedFirstSession.rawValue)
+            }
+        }
+        
+        @objc var hasSeenAllCards: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
             }
         }
 
@@ -64,16 +100,7 @@ final class BlockchainSettings: NSObject {
                 defaults.set(newValue, forKey: UserDefaults.Keys.pinKey.rawValue)
             }
         }
-
-        @objc var encryptedPinPassword: String? {
-            get {
-                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
-            }
-        }
-
+        
         @objc var symbolLocal: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.symbolLocal.rawValue)
@@ -118,6 +145,8 @@ final class BlockchainSettings: NSObject {
             get {
                 return KeychainItemWrapper.sharedKey()
             }
+           
+            
             set {
                 guard let sharedKey = newValue else {
                     KeychainItemWrapper.removeSharedKeyFromKeychain()
@@ -126,11 +155,48 @@ final class BlockchainSettings: NSObject {
                 KeychainItemWrapper.setSharedKeyInKeychain(sharedKey)
             }
         }
+        
+        @objc var shouldHideAllCards: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
+            }
+        }
+        
+        @objc var shouldHideBuySellCard: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+            }
+        }
+        
+        @objc var swipeToReceiveEnabled: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.swipeToReceiveEnabled.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.swipeToReceiveEnabled.rawValue)
+            }
+        }
 
         private override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.
             super.init()
+            
+            defaults.register(defaults: [
+                UserDefaults.Keys.swipeToReceiveEnabled.rawValue    : true,
+                
+                //: Was initialized with `NSNumber numberWithInt:AssetTypeBitcoin` before, could cause side unwanted effects...
+                // TODO: test for potential side effects
+                UserDefaults.Keys.assetType.rawValue                : AssetType.bitcoin.rawValue,
+                
+                UserDefaults.DebugKeys.enableCertificatePinning.rawValue    : true
+                ])
         }
 
         func clearPin() {

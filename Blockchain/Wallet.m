@@ -1702,8 +1702,8 @@
 {
     [self useDebugSettingsIfSet];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
     
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.parsePairingCode(\"%@\");", [code escapeStringForJS]]];
 }

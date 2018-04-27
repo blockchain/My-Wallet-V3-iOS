@@ -249,8 +249,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showPinScreen
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 
     if ([BlockchainSettings sharedAppInstance].isPinSet) {
         [self showPinModalAsView:YES];
@@ -312,8 +312,8 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     // TODO: call Swift instance method directly from AppDelegate after refactor
-    // [rootService applicationDidEnterBackground:application];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED] &&
+    // [rootService applicationDidEnterBackground:application];().swip
+    if (BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled &&
         [WalletManager.sharedInstance.wallet isInitialized] &&
         [WalletManager.sharedInstance.wallet didUpgradeToHd]) {
 
@@ -380,15 +380,17 @@ void (^secondPasswordSuccess)(NSString *);
 
     if ([wallet isInitialized]) {
 
-        if (hasGuidAndSharedKey) [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION];
+        if (hasGuidAndSharedKey) {
+            BlockchainSettings.sharedAppInstance.hasEndedFirstSession = YES;
+        }
 
         [self beginBackgroundUpdateTask];
 
         [self logout];
     }
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+    if (BlockchainSettings.sharedAppInstance.hasSeenAllCards) {
+        BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
     }
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP] &&
@@ -523,9 +525,9 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_BUY_SELL_CARD];
+    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
 }
 
 #pragma mark - Setup
