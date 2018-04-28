@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let environment = Environment.production.rawValue
         UserDefaults.standard.set(environment, forKey: envKey)
 
-        BlockchainSettings.sharedAppInstance().enableCertificatePinning = true
+        BlockchainSettings.App.shared.enableCertificatePinning = true
 
         let securityReminderKey = UserDefaults.DebugKeys.securityReminderTimer.rawValue
         UserDefaults.standard.removeObject(forKey: securityReminderKey)
