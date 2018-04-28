@@ -128,6 +128,7 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /// The first 5 characters of SHA256 hash of the user's password
         @objc var passwordPartHash: String? {
             get {
                 return defaults.string(forKey: UserDefaults.Keys.passwordPartHash.rawValue)
@@ -236,7 +237,7 @@ final class BlockchainSettings: NSObject {
                 UserDefaults.Keys.assetType.rawValue                : AssetType.bitcoin.rawValue,
                 
                 UserDefaults.DebugKeys.enableCertificatePinning.rawValue    : true
-                ])
+            ])
         }
 
         func clearPin() {

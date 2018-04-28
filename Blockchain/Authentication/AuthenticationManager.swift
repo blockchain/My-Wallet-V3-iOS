@@ -239,8 +239,13 @@ extension AuthenticationManager: WalletAuthDelegate {
         BlockchainSettings.App.shared.guid = guid
         BlockchainSettings.App.shared.sharedKey = sharedKey
 
+        clearPinIfNeeded(for: password)
+    }
+
+    private func clearPinIfNeeded(for password: String?) {
         // Because we are not storing the password on the device. We record the first few letters of the hashed password.
-        // With the hash prefix we can then figure out if the password changed
+        // With the hash prefix we can then figure out if the password changed. If so, clear the pin
+        // so that the user can reset it
         guard let password = password,
             let passwordSha256 = NSString(string: password).sha256(),
             let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
@@ -248,9 +253,11 @@ extension AuthenticationManager: WalletAuthDelegate {
         }
 
         let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
-        if passwordSha256[..<endIndex] != passwordPartHash {
-            BlockchainSettings.App.shared.clearPin()
+        guard passwordSha256[..<endIndex] != passwordPartHash else {
+            return
         }
+
+        BlockchainSettings.App.shared.clearPin()
     }
 
     func requiresTwoFactorCode() {

@@ -60,12 +60,10 @@ import Foundation
             if dateOfLastSecurityReminder.timeIntervalSinceNow < -timeIntervalBetweenPrompts {
                 ReminderCoordinator.shared.showSecurityReminder()
             }
+        } else if BlockchainSettings.App.shared.hasSeenEmailReminder {
+            ReminderCoordinator.shared.showSecurityReminder()
         } else {
-            if BlockchainSettings.App.shared.hasSeenEmailReminder {
-                ReminderCoordinator.shared.showSecurityReminder()
-            } else {
-                ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
-            }
+            ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
         }
 
         // TODO
