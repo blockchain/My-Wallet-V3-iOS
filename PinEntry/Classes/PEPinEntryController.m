@@ -250,7 +250,7 @@ static PEViewController *VerifyController()
                         self.viewControllers = [NSArray arrayWithObject:c];
                     }
                 } else {
-                    controller.prompt = BC_STRING_INCORRECT_PIN_RETRY;
+                    controller.prompt = LocalizationConstantsObjcBridge.incorrectPin;
                     [controller resetPin];
                 }
             }];

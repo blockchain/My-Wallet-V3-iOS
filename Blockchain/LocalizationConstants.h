@@ -131,7 +131,6 @@
 #define BC_STRING_OK NSLocalizedString(@"OK", nil)
 #define BC_STRING_OPEN_MAIL_APP NSLocalizedString(@"Open Mail App", nil)
 #define BC_STRING_CANNOT_OPEN_MAIL_APP NSLocalizedString(@"Cannot open Mail App", nil)
-#define BC_STRING_FAILED_TO_LOAD_WALLET_TITLE NSLocalizedString(@"Failed To Load Wallet", nil)
 
 #define BC_STRING_FAILED_VALIDATION_CERTIFICATE_TITLE NSLocalizedString(@"Failed to validate server certificate", nil)
 #define BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE NSLocalizedString(@"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.", nil)
@@ -139,12 +138,9 @@
 
 #define BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION NSLocalizedString(@"Request failed. Please check your internet connection.", nil)
 #define BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION NSLocalizedString(@"An error occurred while updating your spendable balance. Please check your internet connection and try again.", nil)
-#define BC_STRING_TIMED_OUT NSLocalizedString(@"Connection timed out. Please check your internet connection.", nil)
 #define BC_STRING_EMPTY_RESPONSE NSLocalizedString(@"Empty response from server.", nil)
-#define BC_STRING_INVALID_RESPONSE NSLocalizedString(@"Invalid server response. Please check your internet connection.", nil)
 #define BC_STRING_MAINTENANCE_MODE NSLocalizedString(@"Blockchain is currently down for maintenance. Please try again later.", nil)
 
-#define BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL NSLocalizedString(@"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device.", nil)
 #define BC_STRING_FORGET_WALLET NSLocalizedString(@"Forget Wallet", nil)
 
 #define BC_STRING_CLOSE_APP NSLocalizedString(@"Close App", nil)
@@ -188,24 +184,11 @@
 #define BC_STRING_HOW_WOULD_YOU_LIKE_TO_PAIR NSLocalizedString(@"How would you like to pair?", nil)
 #define BC_STRING_MANUALLY NSLocalizedString(@"Manually", nil)
 #define BC_STRING_AUTOMATICALLY NSLocalizedString(@"Automatically", nil)
-#define BC_STRING_PIN_VALIDATION_ERROR NSLocalizedString(@"PIN Validation Error", nil)
 #define BC_PIN_NO_MATCH NSLocalizedString(@"PINs do not match", nil)
-
-#define BC_STRING_PIN_VALIDATION_ERROR_DETAIL NSLocalizedString(@"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", nil)
-#define BC_STRING_ENTER_PASSWORD NSLocalizedString(@"Enter Password", nil)
 #define BC_STRING_ENTER_PIN NSLocalizedString(@"Enter PIN", nil)
 #define BC_STRING_PLEASE_ENTER_PIN NSLocalizedString(@"Please enter your PIN", nil)
 #define BC_STRING_PLEASE_ENTER_NEW_PIN NSLocalizedString(@"Please enter a new PIN", nil)
 #define BC_STRING_CONFIRM_PIN NSLocalizedString(@"Confirm your PIN", nil)
-#define BC_STRING_INCORRECT_PIN_RETRY NSLocalizedString(@"Incorrect PIN. Please retry.", nil)
-#define RETRY_VALIDATION NSLocalizedString(@"Retry Validation", nil)
-#define BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED NSLocalizedString(@"PIN Validation cannot be completed. Please enter your wallet password manually.", nil)
-#define BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 NSLocalizedString(@"PIN Response Object success length 0", nil)
-#define BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 NSLocalizedString(@"Decrypted PIN Password length 0", nil)
-#define BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE NSLocalizedString(@"Cannot save PIN Code while wallet is not initialized or password is null", nil)
-#define BC_STRING_INVALID_STATUS_CODE_RETURNED NSLocalizedString(@"Invalid Status Code Returned %@", nil)
-#define BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0 NSLocalizedString(@"PIN Response Object key or value length 0", nil)
-#define BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL NSLocalizedString(@"PIN Encrypted String is nil", nil)
 #define BC_STRING_WARNING_TITLE NSLocalizedString(@"Warning", nil)
 
 #define BC_STRING_PAYMENT_REQUEST_BITCOIN_ARGUMENT_ARGUMENT NSLocalizedString(@"Please send %@ to bitcoin address.\n%@", nil)

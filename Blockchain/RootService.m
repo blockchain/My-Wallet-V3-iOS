@@ -247,24 +247,24 @@ void (^secondPasswordSuccess)(NSString *);
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
-- (void)showPinScreen
-{
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
-
-    if ([BlockchainSettings sharedAppInstance].isPinSet) {
-        [self showPinModalAsView:YES];
-        // [rootService authenticateWithBiometrics];
-    } else {
-        [self checkForMaintenance];
-        [self showPasswordModal];
-        [[AlertViewPresenter sharedInstance] checkAndWarnOnJailbrokenPhones];
-    }
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
-
-    [self migratePasswordAndPinFromNSUserDefaults];
-}
+//- (void)showPinScreen
+//{
+//    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+//    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+//
+//    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//        [self showPinModalAsView:YES];
+//        // [rootService authenticateWithBiometrics];
+//    } else {
+//        [self checkForMaintenance];
+//        [self showPasswordModal];
+//        [[AlertViewPresenter sharedInstance] checkAndWarnOnJailbrokenPhones];
+//    }
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+//
+//    [self migratePasswordAndPinFromNSUserDefaults];
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -948,26 +948,26 @@ void (^secondPasswordSuccess)(NSString *);
         return;
     }
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:[NSString stringWithFormat:BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
-        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self walletFailedToLoad];
-        }]];
-        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [WalletManager.sharedInstance forgetWallet];
-            [self showWelcomeScreen];
-        }]];
-        [_window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
-    }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        UIApplication *app = [UIApplication sharedApplication];
-
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    [_window.rootViewController presentViewController:alert animated:YES completion:nil];
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:[NSString stringWithFormat:BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL] preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
+//        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            [self walletFailedToLoad];
+//        }]];
+//        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            [WalletManager.sharedInstance forgetWallet];
+//            [self showWelcomeScreen];
+//        }]];
+//        [_window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
+//    }]];
+//
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        UIApplication *app = [UIApplication sharedApplication];
+//
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    [_window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 //
 //- (void)walletDidDecrypt
@@ -3355,181 +3355,181 @@ void (^secondPasswordSuccess)(NSString *);
 //    self.pinViewControllerCallback = callback;
 }
 
-- (void)showPinErrorWithMessage:(NSString *)message
-{
-    DLog(@"Pin error: %@", message);
+//- (void)showPinErrorWithMessage:(NSString *)message
+//{
+//    DLog(@"Pin error: %@", message);
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        // Reset the pin entry field
+//        [self hideBusyView];
+//        [self.pinEntryViewController reset];
+//    }]];
+//
+//    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alert animated:YES completion:nil];
+//}
+//
+//- (void)askIfUserWantsToResetPIN
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PIN_VALIDATION_ERROR message:BC_STRING_PIN_VALIDATION_ERROR_DETAIL preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_ENTER_PASSWORD style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//        [self showPasswordModal];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:RETRY_VALIDATION style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self pinEntryController:self.pinEntryViewController shouldAcceptPin:self.lastEnteredPIN callback:self.pinViewControllerCallback];
+//    }]];
+//
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
+//
+//- (void)didFailGetPinTimeout
+//{
+//    [self showPinErrorWithMessage:BC_STRING_TIMED_OUT];
+//}
+//
+//- (void)didFailGetPinNoResponse
+//{
+//    [self showPinErrorWithMessage:BC_STRING_INCORRECT_PIN_RETRY];
+//}
+//
+//- (void)didFailGetPinInvalidResponse
+//{
+//    [self showPinErrorWithMessage:BC_STRING_INVALID_RESPONSE];
+//}
+//
+//- (void)didGetPinResponse:(NSDictionary*)dictionary
+//{
+//    [self hideBusyView];
+//
+//    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
+//    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
+//    NSString * success = [dictionary objectForKey:DICTIONARY_KEY_SUCCESS]; //The PIN decryption value from the server
+//    NSString * encryptedPINPassword = [BlockchainSettings sharedAppInstance].encryptedPinPassword;
+//
+//    BOOL pinSuccess = FALSE;
+//
+//    // Incorrect pin
+//    if (code == nil) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.incorrectPin title:BC_STRING_ERROR handler: nil];
+//    }
+//    // Pin retry limit exceeded
+//    else if ([code intValue] == PIN_API_STATUS_CODE_DELETED) {
+//
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED title:BC_STRING_ERROR handler: nil];
+//
+//        [self clearPin];
+//
+//        [self logout];
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self showPasswordModal];
+//            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//        });
+//
+//    }
+//    // Incorrect pin
+//    else if ([code integerValue] == PIN_API_STATUS_PIN_INCORRECT) {
+//
+//        if (error == nil) {
+//            error = @"PIN Code Incorrect. Unknown Error Message.";
+//        }
+//
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+//    }
+//    // Pin was accepted
+//    else if ([code intValue] == PIN_API_STATUS_OK) {
+//
+//#ifdef ENABLE_TOUCH_ID
+//        if (self.pinEntryViewController.verifyOptional) {
+//            BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//            [self showSettings];
+//            return;
+//        }
+//#endif
+//        // This is for change PIN - verify the password first, then show the enter screens
+//        if (self.pinEntryViewController.verifyOnly == NO) {
+//            if (self.pinViewControllerCallback) {
+//                self.pinViewControllerCallback(YES);
+//                self.pinViewControllerCallback = nil;
+//            }
+//
+//            return;
+//        }
+//
+//        // Initial PIN setup ?
+//        if ([success length] == 0) {
+//            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 title:BC_STRING_ERROR handler: nil];
+//            [self askIfUserWantsToResetPIN];
+//            return;
+//        }
+//
+//        NSString *decrypted = [WalletManager.sharedInstance.wallet decrypt:encryptedPINPassword password:success pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
+//
+//        if ([decrypted length] == 0) {
+//            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 title:BC_STRING_ERROR handler: nil];
+//            [self askIfUserWantsToResetPIN];
+//            return;
+//        }
+//
+//        NSString *guid = [KeychainItemWrapper guid];
+//        NSString *sharedKey = [KeychainItemWrapper sharedKey];
+//
+//        if (guid && sharedKey) {
+//            [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:decrypted];
+//        } else {
+//
+//            if (!guid) {
+//                DLog(@"failed to retrieve GUID from Keychain");
+//            }
+//
+//            if (!sharedKey) {
+//                DLog(@"failed to retrieve sharedKey from Keychain");
+//            }
+//
+//            if (guid && !sharedKey) {
+//                DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
+//            }
+//
+//            [AlertViewPresenter.sharedInstance showKeychainReadError];
+//        }
+//
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//
+//        pinSuccess = TRUE;
+//
+//    }
+//    // Unknown error
+//    else {
+//        [self askIfUserWantsToResetPIN];
+//    }
+//
+//    if (self.pinViewControllerCallback) {
+//        self.pinViewControllerCallback(pinSuccess);
+//        self.pinViewControllerCallback = nil;
+//    }
+//
+//#ifdef ENABLE_TOUCH_ID
+//    if (!pinSuccess && self.pinEntryViewController.verifyOptional) {
+//        [KeychainItemWrapper removePinFromKeychain];
+//    }
+//#endif
+//}
+//
+//- (void)didFailPutPin:(NSString*)value
+//{
+//    [self hideBusyView];
+//
+//    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:value title:BC_STRING_ERROR handler: nil];
+//
+//    [self reopenChangePIN];
+//}
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        // Reset the pin entry field
-        [self hideBusyView];
-        [self.pinEntryViewController reset];
-    }]];
-
-    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)askIfUserWantsToResetPIN
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PIN_VALIDATION_ERROR message:BC_STRING_PIN_VALIDATION_ERROR_DETAIL preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_ENTER_PASSWORD style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-        [self showPasswordModal];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:RETRY_VALIDATION style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self pinEntryController:self.pinEntryViewController shouldAcceptPin:self.lastEnteredPIN callback:self.pinViewControllerCallback];
-    }]];
-
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)didFailGetPinTimeout
-{
-    [self showPinErrorWithMessage:BC_STRING_TIMED_OUT];
-}
-
-- (void)didFailGetPinNoResponse
-{
-    [self showPinErrorWithMessage:BC_STRING_INCORRECT_PIN_RETRY];
-}
-
-- (void)didFailGetPinInvalidResponse
-{
-    [self showPinErrorWithMessage:BC_STRING_INVALID_RESPONSE];
-}
-
-- (void)didGetPinResponse:(NSDictionary*)dictionary
-{
-    [self hideBusyView];
-
-    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
-    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
-    NSString * success = [dictionary objectForKey:DICTIONARY_KEY_SUCCESS]; //The PIN decryption value from the server
-    NSString * encryptedPINPassword = [BlockchainSettings sharedAppInstance].encryptedPinPassword;
-
-    BOOL pinSuccess = FALSE;
-
-    // Incorrect pin
-    if (code == nil) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PIN_RETRY title:BC_STRING_ERROR handler: nil];
-    }
-    // Pin retry limit exceeded
-    else if ([code intValue] == PIN_API_STATUS_CODE_DELETED) {
-
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED title:BC_STRING_ERROR handler: nil];
-
-        [self clearPin];
-
-        [self logout];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showPasswordModal];
-            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-        });
-
-    }
-    // Incorrect pin
-    else if ([code integerValue] == PIN_API_STATUS_PIN_INCORRECT) {
-
-        if (error == nil) {
-            error = @"PIN Code Incorrect. Unknown Error Message.";
-        }
-
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
-    }
-    // Pin was accepted
-    else if ([code intValue] == PIN_API_STATUS_OK) {
-
-#ifdef ENABLE_TOUCH_ID
-        if (self.pinEntryViewController.verifyOptional) {
-            BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-            [self showSettings];
-            return;
-        }
-#endif
-        // This is for change PIN - verify the password first, then show the enter screens
-        if (self.pinEntryViewController.verifyOnly == NO) {
-            if (self.pinViewControllerCallback) {
-                self.pinViewControllerCallback(YES);
-                self.pinViewControllerCallback = nil;
-            }
-
-            return;
-        }
-
-        // Initial PIN setup ?
-        if ([success length] == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 title:BC_STRING_ERROR handler: nil];
-            [self askIfUserWantsToResetPIN];
-            return;
-        }
-
-        NSString *decrypted = [WalletManager.sharedInstance.wallet decrypt:encryptedPINPassword password:success pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
-
-        if ([decrypted length] == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 title:BC_STRING_ERROR handler: nil];
-            [self askIfUserWantsToResetPIN];
-            return;
-        }
-
-        NSString *guid = [KeychainItemWrapper guid];
-        NSString *sharedKey = [KeychainItemWrapper sharedKey];
-
-        if (guid && sharedKey) {
-            [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:decrypted];
-        } else {
-
-            if (!guid) {
-                DLog(@"failed to retrieve GUID from Keychain");
-            }
-
-            if (!sharedKey) {
-                DLog(@"failed to retrieve sharedKey from Keychain");
-            }
-
-            if (guid && !sharedKey) {
-                DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
-            }
-
-            [AlertViewPresenter.sharedInstance showKeychainReadError];
-        }
-
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-
-        pinSuccess = TRUE;
-
-    }
-    // Unknown error
-    else {
-        [self askIfUserWantsToResetPIN];
-    }
-
-    if (self.pinViewControllerCallback) {
-        self.pinViewControllerCallback(pinSuccess);
-        self.pinViewControllerCallback = nil;
-    }
-
-#ifdef ENABLE_TOUCH_ID
-    if (!pinSuccess && self.pinEntryViewController.verifyOptional) {
-        [KeychainItemWrapper removePinFromKeychain];
-    }
-#endif
-}
-
-- (void)didFailPutPin:(NSString*)value
-{
-    [self hideBusyView];
-
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:value title:BC_STRING_ERROR handler: nil];
-
-    [self reopenChangePIN];
-}
-
-- (void)reopenChangePIN
-{
+//- (void)reopenChangePIN
+//{
 //    [AuthenticationCoordinator.shared closePinEntryModalWithAnimated:NO];
 //
 //    // Show the pin modal to enter a pin again
@@ -3542,64 +3542,64 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //
 //    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
-}
-
-- (void)didPutPinSuccess:(NSDictionary*)dictionary
-{
-    [self hideBusyView];
-
-    if (!WalletManager.sharedInstance.wallet.password) {
-        [self didFailPutPin:BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE];
-        return;
-    }
-
-    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
-    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
-    NSString * key = [dictionary objectForKey:DICTIONARY_KEY_KEY]; //This is our pin code lookup key
-    NSString * value = [dictionary objectForKey:DICTIONARY_KEY_VALUE]; //This is our encryption string
-
-    if (error != nil) {
-        [self didFailPutPin:error];
-    } else if (code == nil || [code intValue] != PIN_API_STATUS_OK) {
-        [self didFailPutPin:[NSString stringWithFormat:BC_STRING_INVALID_STATUS_CODE_RETURNED, code]];
-    } else if ([key length] == 0 || [value length] == 0) {
-        [self didFailPutPin:BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0];
-    } else {
-
-        BOOL inSettings = self.pinEntryViewController.inSettings;
-
-        if (inSettings) {
-            [self showSettings];
-        }
-        //Encrypt the wallet password with the random value
-        NSString * encrypted = [WalletManager.sharedInstance.wallet encrypt:WalletManager.sharedInstance.wallet.password password:value pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
-
-        //Store the encrypted result and discard the value
-        value = nil;
-
-        if (!encrypted) {
-            [self didFailPutPin:BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL];
-            return;
-        }
-
-        App *appSettings = [BlockchainSettings sharedAppInstance];
-        appSettings.encryptedPinPassword = encrypted;
-        appSettings.pinKey = key;
-        appSettings.passwordPartHash = [[WalletManager.sharedInstance.wallet.password SHA256] substringToIndex:MIN([WalletManager.sharedInstance.wallet.password length], 5)];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-
-        // Update your info to new pin code
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-
-        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [AlertViewPresenter.sharedInstance showMobileNoticeIfNeeded];
-
-        if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
-            [self forceHDUpgradeForLegacyWallets];
-        }
-    }
-
-    WalletManager.sharedInstance.wallet.isNew = NO;
-}
+//}
+//
+//- (void)didPutPinSuccess:(NSDictionary*)dictionary
+//{
+//    [self hideBusyView];
+//
+//    if (!WalletManager.sharedInstance.wallet.password) {
+//        [self didFailPutPin:BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE];
+//        return;
+//    }
+//
+//    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
+//    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
+//    NSString * key = [dictionary objectForKey:DICTIONARY_KEY_KEY]; //This is our pin code lookup key
+//    NSString * value = [dictionary objectForKey:DICTIONARY_KEY_VALUE]; //This is our encryption string
+//
+//    if (error != nil) {
+//        [self didFailPutPin:error];
+//    } else if (code == nil || [code intValue] != PIN_API_STATUS_OK) {
+//        [self didFailPutPin:[NSString stringWithFormat:BC_STRING_INVALID_STATUS_CODE_RETURNED, code]];
+//    } else if ([key length] == 0 || [value length] == 0) {
+//        [self didFailPutPin:BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0];
+//    } else {
+//
+//        BOOL inSettings = self.pinEntryViewController.inSettings;
+//
+//        if (inSettings) {
+//            [self showSettings];
+//        }
+//        //Encrypt the wallet password with the random value
+//        NSString * encrypted = [WalletManager.sharedInstance.wallet encrypt:WalletManager.sharedInstance.wallet.password password:value pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
+//
+//        //Store the encrypted result and discard the value
+//        value = nil;
+//
+//        if (!encrypted) {
+//            [self didFailPutPin:BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL];
+//            return;
+//        }
+//
+//        App *appSettings = [BlockchainSettings sharedAppInstance];
+//        appSettings.encryptedPinPassword = encrypted;
+//        appSettings.pinKey = key;
+//        appSettings.passwordPartHash = [[WalletManager.sharedInstance.wallet.password SHA256] substringToIndex:MIN([WalletManager.sharedInstance.wallet.password length], 5)];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//        // Update your info to new pin code
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//
+//        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [self showMobileNotice];
+//
+//        if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
+//            [self forceHDUpgradeForLegacyWallets];
+//        }
+//    }
+//
+//    WalletManager.sharedInstance.wallet.isNew = NO;
+//}
 
 - (void)pinEntryController:(PEPinEntryController *)c willChangeToNewPin:(NSUInteger)_pin
 {

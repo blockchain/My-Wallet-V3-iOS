@@ -3815,7 +3815,7 @@
     } else if ([error isEqualToString:@""]) {
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
     } else if ([error isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_TIMED_OUT title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR handler: nil];
     } else {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
     }

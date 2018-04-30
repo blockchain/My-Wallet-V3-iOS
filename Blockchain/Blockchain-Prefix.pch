@@ -679,8 +679,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define PIN_API_STATUS_CODE_DELETED 1
 #define PIN_API_STATUS_PIN_INCORRECT 2
 #define PIN_API_STATUS_OK 0
-#define PIN_API_STATUS_UNKNOWN 3
-#define PIN_API_STATUS_DUPLICATE_KEY 4
 
 // Most common pin codes: http://datagenetics.com/blog/september32012/index.html
 
@@ -693,8 +691,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define DELAY_KEYBOARD_DISMISSAL 0.6f
 #define DELAY_GET_HISTORY_BACKUP 3.0f
-
-#define PIN_PBKDF2_ITERATIONS 1 // This does not need to be large because the key is already 256 bits
 
 #define BTC_LIMIT_IN_SATOSHI 21e14 // 21,000,000 (Total possible Bitcoins) * 100,000,000 (Satoshi)
 #define ETH_DECIMAL_LIMIT 18
