@@ -52,10 +52,10 @@ class WalletManager: NSObject {
 
     weak var authDelegate: WalletAuthDelegate?
 
-    private override init() {
-        wallet = Wallet()!
+    init(wallet: Wallet = Wallet()!) {
+        self.wallet = wallet
         super.init()
-        wallet.delegate = self
+        self.wallet.delegate = self
     }
 
     @objc func forgetWallet() {
@@ -107,5 +107,13 @@ extension WalletManager: WalletDelegate {
         wallet.twoFactorInput = nil
 
         authDelegate?.authenticationCompleted()
+    }
+
+    func walletFailedToDecrypt() {
+        // TODO: handle this once manual pairing is ported away from RootService
+    }
+
+    func walletFailedToLoad() {
+        // TODO: handle this once manual pairing is ported away from RootService
     }
 }

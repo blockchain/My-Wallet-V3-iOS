@@ -24,7 +24,7 @@ import Foundation
     @objc func showKeychainReadError() {
         // TODO
 //        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE
-        // message:BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN preferredStyle:UIAlertControllerStyleAlert];
+        // message:Blockchain.xcodeproj/project.pbxproj preferredStyle:UIAlertControllerStyleAlert];
 //        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP
         // style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 //            // Close App

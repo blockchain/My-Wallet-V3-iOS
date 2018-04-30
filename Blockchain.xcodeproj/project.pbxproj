@@ -127,7 +127,6 @@
 		51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348C20891EB3009727D5 /* CertificatePinner.swift */; };
 		51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7348D20891EB3009727D5 /* NetworkManager.swift */; };
 		51A7349720891EB3009727D5 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
-		51A862BD2090DD4500B338E0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED3F208A6E8D002D8BAC /* UIViewController.swift */; };
 		51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
 		51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */; };
 		51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */; };
@@ -204,6 +203,8 @@
 		A2599BAA1B0B762400C2EA81 /* Backup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2599BAC1B0B762400C2EA81 /* Backup.storyboard */; };
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
+		AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
+		AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA69F6592086A2720054EFCE /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F6582086A2720054EFCE /* AppCoordinator.swift */; };
 		AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
@@ -223,8 +224,6 @@
 		AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED68208EB4FB002D8BAC /* PushNotificationManager.swift */; };
 		AACE3134209121B800B7B806 /* WalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6B208EC330002D8BAC /* WalletManager.swift */; };
 		AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */; };
-		AACE31572091680B00B7B806 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED68208EB4FB002D8BAC /* PushNotificationManager.swift */; };
-		AACE31582091681100B7B806 /* WalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6B208EC330002D8BAC /* WalletManager.swift */; };
 		AACE31482091430900B7B806 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31472091430900B7B806 /* AuthenticationCoordinator.swift */; };
 		AACE314C209152D800B7B806 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE314B209152D800B7B806 /* UIApplication.swift */; };
 		AACE31572091680B00B7B806 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED68208EB4FB002D8BAC /* PushNotificationManager.swift */; };
@@ -267,8 +266,8 @@
 		AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */; };
 		AACE32002093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */; };
 		AACE32012093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */; };
-		AACE3204209415D200B7B806 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE3203209415D200B7B806 /* AlertViewPresenter+Wallet.swift */; };
-		AACE3210209790EF00B7B806 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE3203209415D200B7B806 /* AlertViewPresenter+Wallet.swift */; };
+		AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */; };
+		AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE320A20978EB100B7B806 /* MockWallet.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -1168,6 +1167,7 @@
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A2AADC041B0B98720085144B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Backup.strings; sourceTree = "<group>"; };
 		A2AADC071B0B999F0085144B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Backup.strings; sourceTree = "<group>"; };
+		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA69F6582086A2720054EFCE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
 		AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingInstructionsView.swift; sourceTree = "<group>"; };
@@ -1194,7 +1194,8 @@
 		AACE31EE2092B1CA00B7B806 /* PasswordRequiredView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordRequiredView.xib; path = Authentication/Views/PasswordRequiredView.xib; sourceTree = "<group>"; };
 		AACE31F02092B1F800B7B806 /* PasswordRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PasswordRequiredView.swift; path = Authentication/Views/PasswordRequiredView.swift; sourceTree = "<group>"; };
 		AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCoordinator.swift; sourceTree = "<group>"; };
-		AACE3203209415D200B7B806 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
+		AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
+		AACE320A20978EB100B7B806 /* MockWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWallet.swift; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -1640,6 +1641,8 @@
 		5194359F208E61F3001EF882 /* BlockchainTests */ = {
 			isa = PBXGroup;
 			children = (
+				AACE3206209782DD00B7B806 /* Authentication */,
+				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				519435A2208E61F3001EF882 /* Info.plist */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
@@ -2096,7 +2099,7 @@
 			isa = PBXGroup;
 			children = (
 				AAA3316A2089650B00BBD292 /* AlertViewPresenter.swift */,
-				AACE3203209415D200B7B806 /* AlertViewPresenter+Wallet.swift */,
+				AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -2169,6 +2172,22 @@
 				AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */,
 			);
 			path = Reminder;
+			sourceTree = "<group>";
+		};
+		AACE3206209782DD00B7B806 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		AACE320920978E9900B7B806 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				AACE320A20978EB100B7B806 /* MockWallet.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -2746,6 +2765,7 @@
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
+				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				AACE31D62092A99B00B7B806 /* Bundle.swift in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
@@ -2753,6 +2773,7 @@
 				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
+				AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
 				AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */,
@@ -2768,12 +2789,8 @@
 				AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */,
 				AACE31CE2092A99B00B7B806 /* AuthenticationCoordinator.swift in Sources */,
 				AACE31DF2092A99B00B7B806 /* CertificatePinner.swift in Sources */,
+				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
-				519435B4208E630F001EF882 /* UserDefaults.swift in Sources */,
-				519435B8208E6366001EF882 /* LocalizationConstants.swift in Sources */,
-				519435B7208E6364001EF882 /* Environment.swift in Sources */,
-				519435B6208E635A001EF882 /* AssetType.swift in Sources */,
-				519435BA208E63CE001EF882 /* Passcode.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
@@ -2782,8 +2799,6 @@
 				AACE31C52092A99B00B7B806 /* Environment.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
-				519435B9208E63CA001EF882 /* AuthenticationError.swift in Sources */,
-				AACE3210209790EF00B7B806 /* AlertViewPresenter+Wallet.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
 				AACE31C62092A99B00B7B806 /* LoadingViewPresenter.swift in Sources */,
 				AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
@@ -3001,7 +3016,6 @@
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
-				AACE3204209415D200B7B806 /* AlertViewPresenter+Wallet.swift in Sources */,
 				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
@@ -3028,6 +3042,7 @@
 				C790E1241E5358540063D141 /* BCVerifyMobileNumberViewController.m in Sources */,
 				C7448A962034BF2F0041947E /* AssetSelectionTableViewCell.m in Sources */,
 				C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */,
+				AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */,
 				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				84CCFAAF197D859C00DA4482 /* NSString+NSString_EscapeQuotes.m in Sources */,
