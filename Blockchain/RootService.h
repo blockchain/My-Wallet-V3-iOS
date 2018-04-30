@@ -126,7 +126,7 @@
 
 
 //- (void)showWelcome;
-- (void)logout;
+//- (void)logout;
 //- (void)forgetWallet;
 //- (void)showPasswordModal;
 
