@@ -86,8 +86,8 @@ import Foundation
 
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController,
             BlockchainSettings.App.shared.isPinSet,
-            topViewController is SettingsNavigationController {
-            AlertViewPresenter.shared.showMobileNotice()
+            !(topViewController is SettingsNavigationController) {
+            AlertViewPresenter.shared.showMobileNoticeIfNeeded()
         }
     }
 

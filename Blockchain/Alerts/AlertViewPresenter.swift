@@ -58,10 +58,6 @@ import Foundation
         }
     }
 
-    func showMobileNotice() {
-        // TODO
-    }
-
     @objc func standardNotify(
         message: String,
         title: String = LocalizationConstants.Errors.error,
