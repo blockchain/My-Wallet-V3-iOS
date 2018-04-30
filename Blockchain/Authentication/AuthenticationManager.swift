@@ -44,7 +44,10 @@ final class AuthenticationManager: NSObject {
      * `preFlightError(forDeprecatedError:)`
      * `authenticationError(forError:)`
     */
-    private let genericAuthenticationError: AuthenticationError!
+    private let genericAuthenticationError: AuthenticationError = AuthenticationError(
+        code: Int.min,
+        description: LCStringAuthGenericError
+    )
 
     /// The app-provided reason for requesting authentication, which displays in the authentication dialog presented to the user.
     private lazy var authenticationReason: String = {
@@ -61,13 +64,14 @@ final class AuthenticationManager: NSObject {
 
     private var authHandler: Handler?
 
+    private let walletManager: WalletManager
+
     // MARK: Initialization
 
-    //: Prevent outside objects from creating their own instances of this class.
-    private override init() {
-        genericAuthenticationError = AuthenticationError(code: Int.min, description: LCStringAuthGenericError)
+    init(walletManager: WalletManager = WalletManager.shared) {
+        self.walletManager = walletManager
         super.init()
-        WalletManager.shared.authDelegate = self
+        self.walletManager.authDelegate = self
     }
 
     /// Deprecate this method once the wallet creation process has been refactored
@@ -131,7 +135,7 @@ final class AuthenticationManager: NSObject {
 
         authHandler = handler
 
-        WalletManager.shared.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
+        walletManager.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
     }
 
     // MARK: - Authentication Errors
