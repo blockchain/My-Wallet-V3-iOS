@@ -9,6 +9,8 @@
 import Foundation
 import JavaScriptCore
 
+/// JavaScriptCore is pure JavaScript - it lacks functions that are normally part of the DOM.
+/// This class is intended to define these missing functions in order to make it compatible with JS libraries that use them.
 class JSContextWithDOM: JSContext {
 
     override init() {
@@ -27,7 +29,12 @@ class JSContextWithDOM: JSContext {
         setObject(ModuleXMLHttpRequest.self, forKeyedSubscript: "XMLHttpRequest" as NSString)
     }
 
-    func setupConsoleFunctions() {
+    required override init!(virtualMachine: JSVirtualMachine!) {
+        super.init(virtualMachine: virtualMachine)
+    }
+
+    private func setupConsoleFunctions() {
+        // TODO: properly define console functions
         let consoleNames = ["log",
                             "debug",
                             "info",
@@ -46,15 +53,15 @@ class JSContextWithDOM: JSContext {
                             "profileEnd"]
 
         consoleNames.forEach { name in
-            let consoleLog: (String) -> Void = { message in
+            let consoleLog: @convention(block) (String) -> Void = { message in
                 print("Javascript \(name): \(message)")
             }
             self.objectForKeyedSubscript("console").setObject(consoleLog, forKeyedSubscript: name as NSString)
         }
     }
 
-    func setupExceptionHandler() {
-        let exceptionHandler: (JSContext?, JSValue?) -> Void = { context, exception in
+    private func setupExceptionHandler() {
+        self.exceptionHandler = { context, exception in
             guard let exception = exception else {
                 print("Exception handler error: could not get exception")
                 return
@@ -65,31 +72,34 @@ class JSContextWithDOM: JSContext {
             }
             guard let stackTrace = exception.objectForKeyedSubscript("stack").toString() else {
                 print("Exception handler error: could not get stack trace")
+                print("Message: \(message)")
                 return
             }
             guard let lineNumber = exception.objectForKeyedSubscript("line").toString() else {
                 print("Exception handler error: could not get line number")
+                print("Message: \(message) \nstack:\(stackTrace)")
                 return
             }
             print("\(message) \nstack: \(stackTrace)\nline number: \(lineNumber)")
         }
-        self.exceptionHandler = exceptionHandler
     }
 
-    var timers = [String: Timer]()
+    /// A dictionary containing the timeout/interval timers and their corresponding identifiers
+    private var timers = [String: Timer]()
 
-    lazy var removeTimer: (String) -> Void = { [unowned self] identifier in
+    private lazy var removeTimer: @convention(block) (String) -> Void = { [unowned self] identifier in
         if let timer = self.timers[identifier] {
             timer.invalidate()
             self.timers.removeValue(forKey: identifier)
         }
     }
 
-    func getAddTimer(repeats: Bool) -> (JSValue?, Double) -> String {
-        return { [unowned self] callback, timeout in
+    private func getAddTimer(repeats: Bool) -> @convention(block) (JSValue?, Double) -> String {
+        let addTimer: @convention(block) (JSValue?, Double) -> String = { [unowned self] callback, timeout in
+            let jsQueue = DispatchQueue(label: "jsqueue")
             let uuid = NSUUID().uuidString
-            let blockOperation = BlockOperation.init(block: {
-                DispatchQueue.main.async {
+            let blockOperation = BlockOperation(block: { [unowned self] in
+                jsQueue.async {
                     if self.timers[uuid] != nil {
                         _ = callback?.call(withArguments: nil)
                     }
@@ -101,24 +111,24 @@ class JSContextWithDOM: JSContext {
                                              userInfo: nil,
                                              repeats: repeats)
             self.timers[uuid] = timer
-            timer.fire()
             return uuid
         }
+        return addTimer
     }
 
-    func setupSetTimeout() {
+    private func setupSetTimeout() {
         self.setObject(getAddTimer(repeats: false), forKeyedSubscript: "setTimeout" as NSString)
     }
 
-    func setupClearTimeout() {
+    private func setupClearTimeout() {
         self.setObject(removeTimer, forKeyedSubscript: "clearTimeout" as NSString)
     }
 
-    func setupSetInterval() {
+    private func setupSetInterval() {
         self.setObject(getAddTimer(repeats: true), forKeyedSubscript: "setInterval" as NSString)
     }
 
-    func setupClearInterval() {
+    private func setupClearInterval() {
         self.setObject(removeTimer, forKeyedSubscript: "clearInterval" as NSString)
     }
 }

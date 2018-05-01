@@ -270,6 +270,7 @@
 		C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21C62024E6D700A9FBB1 /* BCPricePreviewView.m */; };
 		C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */; };
 		C74FEA232093B38A007CAB5D /* JSContextWithDOM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */; };
+		C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */; };
 		C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */; };
 		C7559CB21F56FE09005B2375 /* TransactionsEtherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7559CB11F56FE09005B2375 /* TransactionsEtherViewController.m */; };
 		C7559CB41F5705D5005B2375 /* TransactionEtherCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7559CB31F5705D5005B2375 /* TransactionEtherCell.xib */; };
@@ -1224,6 +1225,7 @@
 		C74E21CB2028A61F00A9FBB1 /* BCPriceChartContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartContainerViewController.h; sourceTree = "<group>"; };
 		C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartContainerViewController.m; sourceTree = "<group>"; };
 		C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOM.swift; sourceTree = "<group>"; };
+		C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOMTests.swift; sourceTree = "<group>"; };
 		C7559CAD1F55E874005B2375 /* BCConfirmPaymentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCConfirmPaymentViewModel.h; sourceTree = "<group>"; };
 		C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCConfirmPaymentViewModel.m; sourceTree = "<group>"; };
 		C7559CB01F56FE09005B2375 /* TransactionsEtherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionsEtherViewController.h; sourceTree = "<group>"; };
@@ -1629,6 +1631,7 @@
 				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
 				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
 				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
+				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
 			);
 			path = BlockchainTests;
 			sourceTree = "<group>";
@@ -2726,6 +2729,7 @@
 				519435B7208E6364001EF882 /* Environment.swift in Sources */,
 				519435B6208E635A001EF882 /* AssetType.swift in Sources */,
 				519435BA208E63CE001EF882 /* Passcode.swift in Sources */,
+				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				519435AE208E62E3001EF882 /* BlockchainAPI.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
