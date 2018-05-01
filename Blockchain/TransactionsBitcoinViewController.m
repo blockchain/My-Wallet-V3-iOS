@@ -36,7 +36,7 @@
 
 @property (nonatomic) UIView *bounceView;
 
-@property (nonatomic) NSArray *finishedTransactions;
+@property (nonatomic) NSArray *transactions;
 @property (nonatomic) BOOL receivedTransactionMessage;
 @property (nonatomic) BOOL hasZeroTotalBalance;
 
@@ -78,7 +78,7 @@
 {
     if (indexPath.section == self.sectionMain) {
         
-        Transaction * transaction = [self.finishedTransactions objectAtIndex:[indexPath row]];
+        Transaction * transaction = [self.transactions objectAtIndex:[indexPath row]];
 
         TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"transaction"];
 
@@ -263,9 +263,7 @@
 {
     self.sectionMain = 0;
     
-    NSArray *rejectedTransactions = @[];
-    
-    self.finishedTransactions = [[rejectedTransactions arrayByAddingObjectsFromArray:data.transactions] sortedArrayUsingSelector:@selector(reverseCompareLastUpdated:)];
+    self.transactions = data.transactions;
     
     [self setText];
     

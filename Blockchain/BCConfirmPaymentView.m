@@ -69,9 +69,7 @@
         
         self.tableView = summaryTableView;
         
-        NSString *buttonTitle;
-        
-        buttonTitle = BC_STRING_SEND;
+        NSString *buttonTitle = BC_STRING_SEND;
         
         self.reallyDoPaymentButton = [[UIButton alloc] initWithFrame:sendButtonFrame];
         self.reallyDoPaymentButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;

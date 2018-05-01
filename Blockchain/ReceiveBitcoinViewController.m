@@ -780,30 +780,25 @@
 
 - (void)requestButtonClicked
 {
-    [self share];
-}
-
-- (void)share
-{
     if (![WalletManager.sharedInstance.wallet isInitialized]) {
         DLog(@"Tried to access share button when not initialized!");
         return;
     }
-    
+
     uint64_t amount = [self getInputAmountInSatoshi];
     NSString *amountString = amount > 0 ? [NSNumberFormatter formatMoney:[self getInputAmountInSatoshi] localCurrency:NO] : [BC_STRING_AMOUNT lowercaseString];
     NSString *message = [self formatPaymentRequestWithAmount:amountString url:@""];
-    
+
     NSURL *url = [NSURL URLWithString:[self uriURL]];
 
     NSArray *activityItems = @[message, self, url];
-    
+
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-    
+
     activityViewController.excludedActivityTypes = @[UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypeOpenInIBooks, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo];
 
     [activityViewController setValue:BC_STRING_PAYMENT_REQUEST_BITCOIN_SUBJECT forKey:@"subject"];
-    
+
     [self.amountInputView.btcField resignFirstResponder];
     [self.amountInputView.fiatField resignFirstResponder];
 
