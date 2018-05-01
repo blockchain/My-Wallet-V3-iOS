@@ -25,7 +25,7 @@ class OnboardingCoordinator: Coordinator {
     // MARK: Private Methods
 
     private func showWelcomeScreen() {
-        // TODO check for maintenance
+        AuthenticationCoordinator.shared.checkForMaintenance()
 
         let welcomeView = BCWelcomeView()
         welcomeView.delegate = self

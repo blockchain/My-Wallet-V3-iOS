@@ -112,6 +112,9 @@ import Foundation
             tabControllerManager.tabViewController.presentedViewController != pinEntryViewController)
     }
 
+    /// Flag used to indicate whether the device is prompting for biometric authentication.
+    @objc internal(set) var isPromptingForBiometricAuthentication = false
+
     // MARK: - Initializer
 
     init(walletManager: WalletManager = WalletManager.shared) {
@@ -122,6 +125,8 @@ import Foundation
 
     // MARK: - Public
 
+    /// Starts the authentication flow. If the user has a pin set, it will trigger
+    /// present the pin entry screen, otherwise, it will show the password screen.
     @objc func start() {
         guard !walletManager.wallet.isNew else {
             startNewWalletSetUp()
@@ -133,11 +138,15 @@ import Foundation
 
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView(asModal: true)
-            // TODO: handle touch ID
-            // [rootService authenticateWithBiometrics];
+            // TODO enable touch ID
+//            #ifdef ENABLE_TOUCH_ID
+//            if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
+//                [self authenticateWithTouchID];
+//            }
+//            #endif
+            authenticateWithBiometrics()
         } else {
-            // TODO: check for maintenance
-//            [self checkForMaintenance];
+            checkForMaintenance()
             showPasswordModal()
             AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
         }
@@ -149,6 +158,30 @@ import Foundation
         // [self migratePasswordAndPinFromNSUserDefaults];
     }
 
+    /// Unauthenticates the user
+    @objc func logout() {
+        // TODO
+        //        [self.loginTimer invalidate];
+        //
+        //        [WalletManager.sharedInstance.wallet resetSyncStatus];
+        //
+        //        [WalletManager.sharedInstance.wallet loadBlankWallet];
+        //
+        //        WalletManager.sharedInstance.wallet.hasLoadedAccountInfo = NO;
+        //
+        //        WalletManager.sharedInstance.latestMultiAddressResponse = nil;
+        //
+        //        [self.tabControllerManager logout];
+        //
+        //        _settingsNavigationController = nil;
+        //
+        //        [AppCoordinator.sharedInstance reload];
+        //
+        //        [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+        //        [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+        //        [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+    }
+
     @objc func startNewWalletSetUp() {
         let setUpWalletViewController = WalletSetupViewController(setupDelegate: self)!
         let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
@@ -156,6 +189,46 @@ import Foundation
             self?.showPinEntryView(asModal: false)
         }
     }
+
+    func checkForMaintenance(withPinKey pinKey: String? = nil, pin: String? = nil) {
+        // TODO
+        //    NSURL *url = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_WALLET_OPTIONS]];
+        //    // session.sessionDescription = url.host;
+        //    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        //    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        //        dispatch_async(dispatch_get_main_queue(), ^{
+        //            if (error) {
+        //                DLog(@"Error checking for maintenance in wallet options: %@", [error localizedDescription]);
+        //                [self hideBusyView];
+        //                [self.pinEntryViewController reset];
+        //                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+        //            }
+        //            NSError *jsonError;
+        //            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+        //            if (jsonError) {
+        //                DLog(@"Error parsing response from checking for maintenance in wallet options: %@", [error localizedDescription]);
+        //                [self hideBusyView];
+        //                [self.pinEntryViewController reset];
+        //                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+        //            } else {
+        //                if ([[result objectForKey:DICTIONARY_KEY_MAINTENANCE] boolValue]) {
+        //                    NSDictionary *mobileInfo = [result objectForKey:DICTIONARY_KEY_MOBILE_INFO];
+        //                    NSString *message = [mobileInfo objectForKey:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]] ? : [mobileInfo objectForKey:@"en"];
+        //                    [self hideBusyView];
+        //                    [self.pinEntryViewController reset];
+        //                    [self showMaintenanceAlertWithTitle:BC_STRING_INFORMATION message:message];
+        //                } else {
+        //                    if (pinKey && pin) {
+        //                        [WalletManager.sharedInstance.wallet apiGetPINValue:pinKey pin:pin];
+        //                    }
+        //                }
+        //            }
+        //        });
+        //    }];
+        //    [task resume];
+    }
+
+    // MARK: - Pin Entry Presentation
 
     // Closes the pin entry modal, if presented
     @objc func closePinEntryView(animated: Bool) {
@@ -249,6 +322,8 @@ import Foundation
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
     }
 
+    // MARK: - Password Presentation
+
     // TODO: make private once migrated
     @objc func showPasswordModal() {
         let passwordRequestedView = PasswordRequiredView.instanceFromNib()
@@ -259,29 +334,6 @@ import Foundation
             showHeader: true,
             headerText: LocalizationConstants.Authentication.passwordRequired
         )
-    }
-
-    @objc func logout() {
-        // TODO
-        //        [self.loginTimer invalidate];
-        //
-        //        [WalletManager.sharedInstance.wallet resetSyncStatus];
-        //
-        //        [WalletManager.sharedInstance.wallet loadBlankWallet];
-        //
-        //        WalletManager.sharedInstance.wallet.hasLoadedAccountInfo = NO;
-        //
-        //        WalletManager.sharedInstance.latestMultiAddressResponse = nil;
-        //
-        //        [self.tabControllerManager logout];
-        //
-        //        _settingsNavigationController = nil;
-        //
-        //        [AppCoordinator.sharedInstance reload];
-        //
-        //        [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-        //        [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-        //        [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
     }
 
     // MARK: - Internal
