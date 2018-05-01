@@ -543,7 +543,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_PIN @"pin"
 //#define USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED @"swipeToReceive"
 #define USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING @"hideWatchOnlyReceiveWarning"
-#define USER_DEFAULTS_KEY_HIDE_TRANSFER_ALL_FUNDS_ALERT @"hideTransferAllFundsAlert"
 #define USER_DEFAULTS_KEY_HAS_SEEN_CUSTOM_FEE_WARNING @"hasSeenCustomFeeWarning"
 
 // TODO: - Migrate debug flags to DebugTableViewController
@@ -576,8 +575,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define QR_CODE_KEY_SHARED_KEY @"sharedKey"
 #define QR_CODE_KEY_PASSWORD @"password"
 
-#define STORYBOARD_NAME_ACCOUNTS_AND_ADDRESSES @"AccountsAndAddresses"
-#define STORYBOARD_NAME_SETTINGS @"Settings"
 #define STORYBOARD_NAME_BACKUP @"Backup"
 
 #define TRANSACTION_STATE_WAITING_PAYMENT @"waiting_payment"
@@ -591,7 +588,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define TRANSACTION_ROLE_RPR_INITIATOR @"rpr_initiator"
 #define TRANSACTION_ROLE_RPR_RECEIVER @"rpr_receiver"
 
-#define NAVIGATION_CONTROLLER_NAME_ACCOUNTS_AND_ADDRESSES @"AccountsAndAddressesNavigationController"
 #define NAVIGATION_CONTROLLER_NAME_SETTINGS @"SettingsNavigationController"
 #define NAVIGATION_CONTROLLER_NAME_BACKUP @"BackupNavigation"
 

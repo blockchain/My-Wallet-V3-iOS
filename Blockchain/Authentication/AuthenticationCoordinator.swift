@@ -162,27 +162,27 @@ import Foundation
     }
 
     /// Unauthenticates the user
-    @objc func logout() {
-        // TODO
-        //        [self.loginTimer invalidate];
-        //
-        //        [WalletManager.sharedInstance.wallet resetSyncStatus];
-        //
-        //        [WalletManager.sharedInstance.wallet loadBlankWallet];
-        //
-        //        WalletManager.sharedInstance.wallet.hasLoadedAccountInfo = NO;
-        //
-        //        WalletManager.sharedInstance.latestMultiAddressResponse = nil;
-        //
-        //        [self.tabControllerManager logout];
-        //
-        //        _settingsNavigationController = nil;
-        //
-        //        [AppCoordinator.sharedInstance reload];
-        //
-        //        [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-        //        [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-        //        [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+    @objc func logout(showPasswordView: Bool) {
+        loginTimeout?.invalidate()
+
+        BlockchainSettings.App.shared.clearPin()
+
+        walletManager.latestMultiAddressResponse = nil
+        walletManager.closeWebSockets(withCloseCode: .loggedOut)
+
+        let wallet = walletManager.wallet
+        wallet.resetSyncStatus()
+        wallet.loadBlankWallet()
+        wallet.hasLoadedAccountInfo = false
+
+        let appCoordinator = AppCoordinator.shared
+        appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
+        appCoordinator.closeSideMenu()
+        appCoordinator.reload()
+
+        if showPasswordView {
+            showPasswordModal()
+        }
     }
 
     @objc func startNewWalletSetUp() {
@@ -300,7 +300,7 @@ import Foundation
             headerText: LocalizationConstants.Authentication.passwordRequired
         )
     }
-  
+
     // MARK: - Internal
 
     @objc internal func showLoginError() {

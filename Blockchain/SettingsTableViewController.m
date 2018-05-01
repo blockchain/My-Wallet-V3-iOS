@@ -914,7 +914,6 @@ const int aboutPrivacyPolicy = 2;
     }
 
     self.backupController.wallet = WalletManager.sharedInstance.wallet;
-    self.backupController.app = app;
 
     self.backupController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:self.backupController animated:YES completion:nil];

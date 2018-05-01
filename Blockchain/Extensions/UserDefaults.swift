@@ -38,5 +38,6 @@ extension UserDefaults {
         case swipeToReceiveEnabled = "swipeToReceive"
         case symbolLocal = "symbolLocal"
         case touchIDEnabled = "touchIDEnabled"
+        case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
     }
 }

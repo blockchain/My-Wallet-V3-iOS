@@ -250,7 +250,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             // Pin retry limit exceeded
             AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.validationCannotBeCompleted)
             BlockchainSettings.App.shared.clearPin()
-            logout()
+            logout(showPasswordView: false)
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.showPasswordModal()

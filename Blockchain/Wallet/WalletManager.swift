@@ -30,11 +30,21 @@ class WalletManager: NSObject {
 
     weak var authDelegate: WalletAuthDelegate?
     weak var pinEntryDelegate: WalletPinEntryDelegate?
+    weak var buySellDelegate: WalletBuySellDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
         super.init()
         self.wallet.delegate = self
+    }
+
+    /// Closes all wallet websockets with the provided WebSocketCloseCode
+    ///
+    /// - Parameter closeCode: the WebSocketCloseCode
+    @objc func closeWebSockets(withCloseCode closeCode: WebSocketCloseCode) {
+        [wallet.ethSocket, wallet.bchSocket, wallet.btcSocket].forEach {
+            $0?.close(withCode: closeCode.rawValue, reason: closeCode.reason)
+        }
     }
 
     @objc func forgetWallet() {
@@ -68,6 +78,7 @@ class WalletManager: NSObject {
 extension WalletManager: WalletDelegate {
 
     // MARK: - Auth
+
     func walletDidLoad() {
         print("walletDidLoad()")
     }
@@ -100,7 +111,14 @@ extension WalletManager: WalletDelegate {
         )
     }
 
+    // MARK: - Buy/Sell
+
+    func initializeWebView() {
+        buySellDelegate?.initializeWebView()
+    }
+
     // MARK: - Pin Entry
+
     func didFailGetPinTimeout() {
         pinEntryDelegate?.errorGetPinValueTimeout()
     }

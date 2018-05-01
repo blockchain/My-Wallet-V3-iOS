@@ -167,9 +167,7 @@
 #define BC_STRING_START_BACKUP NSLocalizedString(@"START BACKUP", nil)
 #define BC_STRING_BACKUP_NEEDED NSLocalizedString(@"Backup Needed", nil)
 #define BC_STRING_ADD_EMAIL NSLocalizedString(@"Add Email", nil)
-#define BC_STRING_LOGOUT NSLocalizedString(@"Logout", nil)
 #define BC_STRING_BUY_AND_SELL_BITCOIN NSLocalizedString(@"Buy & Sell Bitcoin", nil)
-#define BC_STRING_REALLY_LOGOUT NSLocalizedString(@"Do you really want to log out?", nil)
 
 #define BC_STRING_WARNING NSLocalizedString(@"Warning!!!", nil)
 #define BC_STRING_FORGET_WALLET_DETAILS NSLocalizedString(@"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!", nil)
@@ -248,7 +246,6 @@
 #define BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE NSLocalizedString(@"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", nil)
 #define BC_STRING_INCORRECT_PASSWORD NSLocalizedString(@"Incorrect password", nil)
 #define BC_STRING_SECOND_PASSWORD_REQUIRED NSLocalizedString(@"Second Password Required", nil)
-#define BC_STRING_CREATE_NEW_WALLET NSLocalizedString(@"Create New Wallet", nil)
 #define BC_STRING_CREATE_A_WALLET NSLocalizedString(@"Create a Wallet", nil)
 #define BC_STRING_REQUEST_AMOUNT NSLocalizedString(@"Request Amount", nil)
 #define BC_STRING_REQUEST NSLocalizedString(@"Request", nil)
@@ -262,7 +259,6 @@
 #define BC_STRING_LOG_IN NSLocalizedString(@"Log In", nil)
 #define BC_STRING_PASSWORD_MODAL_INSTRUCTIONS NSLocalizedString(@"Please enter your password to log into your Blockchain wallet.", nil)
 #define BC_STRING_OR_START_OVER_AND NSLocalizedString(@"Or start over and ", nil)
-#define BC_STRING_LOGIN_EXISTING_WALLET NSLocalizedString(@"Login existing Wallet", nil)
 
 #define BC_STRING_COPY_ADDRESS NSLocalizedString(@"Copy Address", nil)
 #define BC_STRING_ARCHIVE_ADDRESS NSLocalizedString(@"Archive Address", nil)
@@ -285,9 +281,6 @@
 
 #define BC_STRING_SURVEY_ALERT_TITLE NSLocalizedString(@"Would you like to tell us about your experience with Blockchain?", nil)
 #define BC_STRING_SURVEY_ALERT_MESSAGE NSLocalizedString(@"You will be leaving the app.", nil)
-
-#define BC_STRING_ASK_TO_USE_OLD_WALLET_TITLE NSLocalizedString(@"We’ve detected a previous installation of Blockchain Wallet on your phone.", nil)
-#define BC_STRING_ASK_TO_USE_OLD_WALLET_MESSAGE NSLocalizedString(@"Please choose from the options below.", nil)
 
 #define BC_STRING_INVALID_ADDRESS NSLocalizedString(@"Address is not valid", nil)
 #define BC_STRING_INVALID_ADDRESS_ARGUMENT NSLocalizedString(@"Invalid address: %@", nil)

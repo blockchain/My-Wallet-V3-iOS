@@ -19,6 +19,29 @@ import Foundation
         super.init()
     }
 
+    /// Asks permission from the user to use values in the keychain. This is typically invoked
+    /// on a new installation of the app (meaning the user previously installed the app, deleted it,
+    /// and downloaded the app again).
+    ///
+    /// - Parameter handler: the AlertConfirmHandler invoked when the user **does not** grant permission
+    func alertUserAskingToUseOldKeychain(handler: @escaping AlertConfirmHandler) {
+        let alert = UIAlertController(
+            title: LocalizationConstants.Onboarding.askToUserOldWalletTitle,
+            message: LocalizationConstants.Onboarding.askToUserOldWalletMessage,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.Onboarding.createNewWallet, style: .cancel, handler: handler)
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.Onboarding.loginExistingWallet, style: .default)
+        )
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
+            animated: true
+        )
+    }
+
     /// Shows the user an alert that the app failed to read values from the keychain.
     /// Upon confirming on the presented alert, the app will terminate.
     @objc func showKeychainReadError() {

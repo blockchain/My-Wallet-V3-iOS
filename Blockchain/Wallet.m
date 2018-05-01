@@ -31,7 +31,6 @@
 #import "Assets.h"
 #import "ExchangeTrade.h"
 #import "Blockchain-Swift.h"
-
 #import "BTCKey.h"
 #import "BTCData.h"
 #import "KeyPair.h"
@@ -4050,7 +4049,11 @@
 
 - (void)initialize_webview
 {
-    [app initializeWebview];
+    if ([self.delegate respondsToSelector:@selector(initializeWebView)]) {
+        [self.delegate initializeWebView];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector initializeWebView!", [delegate class]);
+    }
 }
 
 - (void)on_fetch_eth_history_success
@@ -4565,8 +4568,8 @@
 - (void)logging_out
 {
     DLog(@"logging_out");
+
     
-    [app logoutAndShowPasswordModal];
 }
 
 #pragma mark - Callbacks from javascript localstorage

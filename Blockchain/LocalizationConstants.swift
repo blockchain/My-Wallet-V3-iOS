@@ -39,6 +39,8 @@ struct LocalizationConstants {
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
     static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
+    static let openArg = NSLocalizedString("Open %@", comment: "")
+    static let youWillBeLeavingTheApp = NSLocalizedString("You will be leaving the app.", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -94,6 +96,16 @@ struct LocalizationConstants {
         static let automaticPairing = NSLocalizedString("Automatic Pairing", comment: "")
         static let recoverFunds = NSLocalizedString("Recover Funds", comment: "")
         static let recoverFundsOnlyIfForgotCredentials = NSLocalizedString("You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", comment: "")
+        static let askToUserOldWalletTitle = NSLocalizedString("We’ve detected a previous installation of Blockchain Wallet on your phone.", comment: "")
+        static let askToUserOldWalletMessage = NSLocalizedString("Please choose from the options below.", comment: "")
+        static let loginExistingWallet = NSLocalizedString("Login existing Wallet", comment: "")
+    }
+
+    struct SideMenu {
+        static let loginToWebWallet = NSLocalizedString("Log in to Web Wallet", comment: "")
+        static let logout = NSLocalizedString("Logout", comment: "")
+        static let logoutConfirm = NSLocalizedString("Do you really want to log out?", comment: "")
+        static let buySellBitcoin = NSLocalizedString("Buy & Sell Bitcoin", comment: "")
     }
 }
 
@@ -118,4 +130,6 @@ struct LocalizationConstants {
     @objc class func timedOut() -> String { return LocalizationConstants.Errors.timedOut }
 
     @objc class func incorrectPin() -> String { return LocalizationConstants.Authentication.Pin.incorrect }
+
+    @objc class func logout() -> String { return LocalizationConstants.SideMenu.logout }
 }

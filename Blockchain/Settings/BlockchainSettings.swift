@@ -224,6 +224,15 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        @objc var hideTransferAllFundsAlert: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hideTransferAllFundsAlert.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hideTransferAllFundsAlert.rawValue)
+            }
+        }
+
         private override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.

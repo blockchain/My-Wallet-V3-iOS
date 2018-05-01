@@ -140,27 +140,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - State Checks
 
-    // TODO: move to BlockchainSettings
     func checkForNewInstall() {
-        if !BlockchainSettings.App.shared.firstRun {
-            if BlockchainSettings.App.shared.guid != nil &&
-                BlockchainSettings.App.shared.sharedKey != nil &&
-                !BlockchainSettings.sharedAppInstance().isPinSet {
-                alertUserAskingToUseOldKeychain()
-            }
-            BlockchainSettings.App.shared.firstRun = true
-        }
+
+        let appSettings = BlockchainSettings.App.shared
+
         //        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
         //            UserDefaults.standard.removeObject(forKey: upgradeKey)
         //        }
         // TODO: investigate this further
-        if BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen {
-            BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen = false
+        if appSettings.hasSeenUpgradeToHdScreen {
+            appSettings.hasSeenUpgradeToHdScreen = false
         }
-    }
 
-    func alertUserAskingToUseOldKeychain() {
-        // TODO: implement alertUserAskingToUseOldKeychain
+        guard !appSettings.firstRun else {
+            print("This is not the 1st time the user is running the app.")
+            return
+        }
+
+        appSettings.firstRun = true
+
+        if appSettings.guid != nil && appSettings.sharedKey != nil && !appSettings.isPinSet {
+            AlertViewPresenter.shared.alertUserAskingToUseOldKeychain { _ in
+                // TODO migrate this
+                app.forgetWalletClicked(nil)
+            }
+        }
     }
 
     // MARK: - Privacy screen

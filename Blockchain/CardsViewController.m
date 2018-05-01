@@ -311,13 +311,13 @@
 {
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     if (actionType == ActionTypeBuyBitcoin) {
-        [app buyBitcoinClicked:nil];
+        [AppCoordinator.sharedInstance showBuyBitcoinView];
     } else if (actionType == ActionTypeShowReceive) {
         [tabControllerManager receiveCoinClicked:nil];
     } else if (actionType == ActionTypeScanQR) {
         [tabControllerManager qrCodeButtonClicked];
     } else if (actionType == ActionTypeBuySell) {
-        [app buyBitcoinClicked:nil];
+        [AppCoordinator.sharedInstance showBuyBitcoinView];
     } else if (actionType == ActionTypeBitcoinCash) {
         [tabControllerManager showReceiveBitcoinCash];
     }
