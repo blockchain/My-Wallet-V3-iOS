@@ -22,18 +22,13 @@ import Foundation
     /// Shows the user an alert that the app failed to read values from the keychain.
     /// Upon confirming on the presented alert, the app will terminate.
     @objc func showKeychainReadError() {
-        // TODO
-//        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE
-        // message:BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN preferredStyle:UIAlertControllerStyleAlert];
-//        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP
-        // style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//            // Close App
-//            UIApplication *app = [UIApplication sharedApplication];
-//            [app performSelector:@selector(suspend)];
-//            }]];
-//
-//        [[UIApplication sharedApplication].keyWindow.rootViewController
-        //presentViewController:alert animated:YES completion:nil];
+        standardNotify(
+            message: LocalizationConstants.Errors.errorLoadingWalletIdentifierFromKeychain,
+            title: LocalizationConstants.Authentication.failedToLoadWallet
+        ) { _ in
+            // Close App
+            UIApplication.shared.suspend()
+        }
     }
 
     @objc func checkAndWarnOnJailbrokenPhones() {

@@ -50,6 +50,7 @@ struct LocalizationConstants {
         static let timedOut = NSLocalizedString("Connection timed out. Please check your internet connection.", comment: "")
         static let invalidServerResponse = NSLocalizedString("Invalid server response. Please check your internet connection.", comment: "")
         static let invalidStatusCodeReturned = NSLocalizedString("Invalid Status Code Returned %@", comment: "")
+        static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
     }
 
     struct Authentication {

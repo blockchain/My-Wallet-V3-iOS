@@ -112,7 +112,6 @@
 
 #define BC_STRING_ERROR NSLocalizedString(@"Error", nil)
 #define BC_STRING_INVALID_AUTHENTICATION_TYPE NSLocalizedString(@"Invalid two-factor authentication type", nil)
-#define BC_STRING_ERROR_LOADING_WALLET_IDENTIFIER_FROM_KEYCHAIN NSLocalizedString(@"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", nil)
 
 #define BC_STRING_INFORMATION NSLocalizedString(@"Information", nil)
 #define BC_STRING_LEARN_MORE NSLocalizedString(@"Learn More", nil)
