@@ -182,7 +182,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT @"%@/wallet?method=update-ios&guid=%@&sharedKey=%@&payload=%@&length=%lu&lang=%s"
 
-#define URL_SUFFIX_WALLET_OPTIONS @"/Resources/wallet-options.json"
+// #define URL_SUFFIX_WALLET_OPTIONS @"/Resources/wallet-options.json"
 
 #define COPYRIGHT_YEAR @"2018"
 
@@ -408,9 +408,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define DICTIONARY_KEY_SUCCESS @"success"
 #define DICTIONARY_KEY_ERROR @"error"
-
-#define DICTIONARY_KEY_MOBILE_INFO @"mobileInfo"
-#define DICTIONARY_KEY_MAINTENANCE @"maintenance"
 
 #define DICTIONARY_KEY_STATE @"state"
 #define DICTIONARY_KEY_INTENDED_AMOUNT @"intended_amount"
