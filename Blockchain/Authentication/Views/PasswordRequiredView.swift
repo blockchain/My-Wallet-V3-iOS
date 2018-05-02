@@ -49,7 +49,7 @@ class PasswordRequiredView: UIView {
         let tapGesture = UITapGestureRecognizer(target: textFieldPassword, action: #selector(resignFirstResponder))
         addGestureRecognizer(tapGesture)
     }
-    
+
     @IBAction func onForgotPasswordTapped(_ sender: Any) {
         // TODO
     }
@@ -85,7 +85,10 @@ extension PasswordRequiredView: UITextFieldDelegate {
 
 extension PasswordRequiredView {
     static func instanceFromNib() -> PasswordRequiredView {
-        let nib = UINib(nibName: "PasswordRequiredView", bundle: Bundle.main)
-        return nib.instantiate(withOwner: nil, options: nil)[0] as! PasswordRequiredView
+        let nib = UINib(nibName: "MainWindow", bundle: Bundle.main)
+        let contents = nib.instantiate(withOwner: nil, options: nil)
+        return contents.first { item -> Bool in
+            item is PasswordRequiredView
+        } as! PasswordRequiredView
     }
 }

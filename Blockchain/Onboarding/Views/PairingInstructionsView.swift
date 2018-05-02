@@ -8,6 +8,12 @@
 
 import Foundation
 
+protocol PairingInstructionsViewDelegate: class {
+    func onScanQRCodeClicked()
+
+    func onManualPairClicked()
+}
+
 /**
  View displaying instructions to the user on how to pair.
 */
@@ -17,6 +23,8 @@ class PairingInstructionsView: BCModalContentView {
     @IBOutlet weak var textViewStepThree: UITextView!
     @IBOutlet weak var buttonScanPairing: UIButton!
     @IBOutlet weak var buttonManualPair: UIButton!
+
+    weak var delegate: PairingInstructionsViewDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,17 +42,20 @@ class PairingInstructionsView: BCModalContentView {
     }
 
     @IBAction func scanAccountQRCodeClicked(_ sender: Any) {
-        // TODO: Handle
+        delegate?.onScanQRCodeClicked()
     }
 
     @IBAction func manualPairClicked(_ sender: Any) {
-        // TODO: Handle
+        delegate?.onManualPairClicked()
     }
 }
 
 extension PairingInstructionsView {
     static func instanceFromNib() -> PairingInstructionsView {
-        let nib = UINib(nibName: "PairingInstructionsView", bundle: Bundle.main)
-        return nib.instantiate(withOwner: nil, options: nil)[0] as! PairingInstructionsView
+        let nib = UINib(nibName: "MainWindow", bundle: Bundle.main)
+        let contents = nib.instantiate(withOwner: nil, options: nil)
+        return contents.first { item -> Bool in
+            item is PairingInstructionsView
+        } as! PairingInstructionsView
     }
 }

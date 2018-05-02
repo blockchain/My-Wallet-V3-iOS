@@ -16,8 +16,14 @@
 
 + (BCCreateWalletView *)instanceFromNib
 {
-    UINib *nib = [UINib nibWithNibName:@"BCCreateWalletView" bundle:[NSBundle mainBundle]];
-    return (BCCreateWalletView *) [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+    UINib *nib = [UINib nibWithNibName:@"MainWindow" bundle:[NSBundle mainBundle]];
+    NSArray *objs = [nib instantiateWithOwner:nil options:nil];
+    for (id object in objs) {
+        if ([object isKindOfClass:[BCCreateWalletView class]]) {
+            return (BCCreateWalletView *) object;
+        }
+    }
+    return (BCCreateWalletView *) [objs objectAtIndex:0];
 }
 
 #pragma mark - Lifecycle

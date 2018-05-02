@@ -57,6 +57,7 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
 
     func showPairWallet() {
         let pairingInstructionsView = PairingInstructionsView.instanceFromNib()
+        pairingInstructionsView.delegate = self
         ModalPresenter.shared.showModal(
             withContent: pairingInstructionsView,
             closeType: ModalCloseTypeBack,
@@ -85,5 +86,16 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
         )
         recoveryWarningAlert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
         UIApplication.shared.keyWindow?.rootViewController?.present(recoveryWarningAlert, animated: true)
+    }
+}
+
+extension OnboardingCoordinator: PairingInstructionsViewDelegate {
+    func onScanQRCodeClicked() {
+        // TODO
+    }
+
+    func onManualPairClicked() {
+        WalletManager.shared.wallet.twoFactorInput = nil
+        AuthenticationCoordinator.shared.startManualPairing()
     }
 }

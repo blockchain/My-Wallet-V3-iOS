@@ -5,6 +5,7 @@
 #import <UIKit/UIKit.h>
 #import "BCCreateWalletView.h"
 #import "BCFadeView.h"
+#import "BCManualPairView.h"
 #import "BCNavigationController.h"
 #import "BCWelcomeView.h"
 #import "BuyBitcoinViewController.h"

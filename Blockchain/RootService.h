@@ -41,12 +41,12 @@
     SystemSoundID alertSoundID;
     SystemSoundID beepSoundID;
     SystemSoundID dingSoundID;
-    
+
 //    IBOutlet BCFadeView *busyView;
-//    IBOutlet UILabel *busyLabel;
+//    IBOutlet UILabel *manualPairClicked;
 
     IBOutlet BCCreateWalletView *createWalletView;
-    IBOutlet BCModalContentView *pairingInstructionsView;
+//    IBOutlet BCModalContentView *pairingInstructionsView;
     IBOutlet BCManualPairView *manualPairView;
     
 //    IBOutlet UIButton *scanPairingCodeButton;

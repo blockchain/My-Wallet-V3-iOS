@@ -277,9 +277,9 @@ void (^secondPasswordSuccess)(NSString *);
         [createWalletView hideKeyboard];
     }
 
-    if (manualPairView) {
-        [manualPairView hideKeyboard];
-    }
+//    if (manualPairView) {
+//        [manualPairView hideKeyboard];
+//    }
 
 //    if ([mainPasswordTextField isFirstResponder]) {
 //        [mainPasswordTextField resignFirstResponder];
@@ -2863,12 +2863,12 @@ void (^secondPasswordSuccess)(NSString *);
 //    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
 //    [self.window.rootViewController presentViewController:recoveryWarningAlert animated:YES completion:nil];
 //}
-
+//
 - (IBAction)manualPairClicked:(id)sender
 {
-    [self showModalWithContent:manualPairView closeType:ModalCloseTypeBack headerText:BC_STRING_MANUAL_PAIRING];
-    WalletManager.sharedInstance.wallet.twoFactorInput = nil;
-    [manualPairView clearPasswordTextField];
+//    [self showModalWithContent:manualPairView closeType:ModalCloseTypeBack headerText:BC_STRING_MANUAL_PAIRING];
+//    WalletManager.sharedInstance.wallet.twoFactorInput = nil;
+//    [manualPairView clearPasswordTextField];
 }
 //
 //- (void)showNewWalletSetup
@@ -3148,16 +3148,16 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [manualPairView verifyTwoFactorSMS];
 }
-
-- (void)verifyTwoFactorGoogle
-{
-    [manualPairView verifyTwoFactorGoogle];
-}
-
-- (void)verifyTwoFactorYubiKey
-{
-    [manualPairView verifyTwoFactorYubiKey];
-}
+//
+//- (void)verifyTwoFactorGoogle
+//{
+//    [manualPairView verifyTwoFactorGoogle];
+//}
+//
+//- (void)verifyTwoFactorYubiKey
+//{
+//    [manualPairView verifyTwoFactorYubiKey];
+//}
 
 -(void)rateApp {
 
@@ -3193,15 +3193,15 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager receivedTransactionMessage];
 }
 
-- (void)authorizationRequired
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE message:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OPEN_MAIL_APP style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [UIApplication.sharedApplication openMailApplication];
-    }]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (void)authorizationRequired
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE message:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OPEN_MAIL_APP style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [UIApplication.sharedApplication openMailApplication];
+//    }]];
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 //- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType
 //{

@@ -111,7 +111,6 @@
 #define BC_STRING_SENT NSLocalizedString(@"Sent", nil)
 
 #define BC_STRING_ERROR NSLocalizedString(@"Error", nil)
-#define BC_STRING_INVALID_AUTHENTICATION_TYPE NSLocalizedString(@"Invalid two-factor authentication type", nil)
 
 #define BC_STRING_LEARN_MORE NSLocalizedString(@"Learn More", nil)
 #define BC_STRING_IMPORT_PRIVATE_KEY NSLocalizedString(@"Import Private Key", nil)
@@ -241,9 +240,6 @@
 #define BC_STRING_TERMS_OF_SERVICE NSLocalizedString(@"Terms of Service", nil)
 #define BC_STRING_TRANSACTION NSLocalizedString(@"Transaction", nil)
 #define BC_STRING_AUTOMATIC_PAIRING NSLocalizedString(@"Automatic Pairing", nil)
-#define BC_STRING_MANUAL_PAIRING NSLocalizedString(@"Manual Pairing", nil)
-#define BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE NSLocalizedString(@"Authorization Required", nil)
-#define BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE NSLocalizedString(@"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", nil)
 #define BC_STRING_INCORRECT_PASSWORD NSLocalizedString(@"Incorrect password", nil)
 #define BC_STRING_SECOND_PASSWORD_REQUIRED NSLocalizedString(@"Second Password Required", nil)
 #define BC_STRING_CREATE_A_WALLET NSLocalizedString(@"Create a Wallet", nil)
