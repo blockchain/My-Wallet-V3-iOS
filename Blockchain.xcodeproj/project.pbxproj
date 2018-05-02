@@ -268,6 +268,8 @@
 		AACE32012093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderCoordinator.swift */; };
 		AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */; };
 		AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE320A20978EB100B7B806 /* MockWallet.swift */; };
+		AAD279CA209A825500C0EAFC /* BCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D95A251B3DD86B0012EBB1 /* BCTextField.swift */; };
+		AAD279CC209A826900C0EAFC /* BCSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237827191B7E472D00E9EE03 /* BCSecureTextField.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -2764,6 +2766,7 @@
 				AACE31C42092A99B00B7B806 /* Constants.swift in Sources */,
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
+				AAD279CC209A826900C0EAFC /* BCSecureTextField.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
@@ -2784,6 +2787,7 @@
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
+				AAD279CA209A825500C0EAFC /* BCTextField.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */,
