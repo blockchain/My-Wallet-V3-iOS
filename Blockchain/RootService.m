@@ -86,8 +86,8 @@ void (^secondPasswordSuccess)(NSString *);
 - (id)init {
 
     if (self = [super init]) {
-        [self setupBtcFormatter];
-        [self setupLocalCurrencyFormatter];
+//        [self setupBtcFormatter];
+//        [self setupLocalCurrencyFormatter];
 
 //        self.modalChain = [[NSMutableArray alloc] init];
 //        app = self;
@@ -587,20 +587,20 @@ void (^secondPasswordSuccess)(NSString *);
     [dataTask resume];
 }
 
-- (void)setupBtcFormatter
-{
-    self.btcFormatter = [[NSNumberFormatter alloc] init];
-    [_btcFormatter setMaximumFractionDigits:8];
-    [_btcFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-}
-
-- (void)setupLocalCurrencyFormatter
-{
-    self.localCurrencyFormatter = [[NSNumberFormatter alloc] init];
-    [_localCurrencyFormatter setMinimumFractionDigits:2];
-    [_localCurrencyFormatter setMaximumFractionDigits:2];
-    [_localCurrencyFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-}
+//- (void)setupBtcFormatter
+//{
+//    self.btcFormatter = [[NSNumberFormatter alloc] init];
+//    [_btcFormatter setMaximumFractionDigits:8];
+//    [_btcFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//}
+//
+//- (void)setupLocalCurrencyFormatter
+//{
+//    self.localCurrencyFormatter = [[NSNumberFormatter alloc] init];
+//    [_localCurrencyFormatter setMinimumFractionDigits:2];
+//    [_localCurrencyFormatter setMaximumFractionDigits:2];
+//    [_localCurrencyFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//}
 
 //- (void)persistServerSessionIDForNewUIWebViews
 //{
@@ -2037,7 +2037,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     for (Transaction *transaction in transactions) {
         if ([transaction.myHash isEqualToString:targetHash]) {
-            [transaction.fiatAmountsAtTime setObject:[app.localCurrencyFormatter stringFromNumber:fiatAmount] forKey:currencyCode];
+            [transaction.fiatAmountsAtTime setObject:[[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:fiatAmount] forKey:currencyCode];
             didFindTransaction = YES;
             break;
         }

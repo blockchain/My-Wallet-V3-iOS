@@ -661,9 +661,7 @@
         DLog(@"Amount is not a string or number!");
     }
     
-    app.localCurrencyFormatter.usesGroupingSeparator = NO;
-    NSString *result = [NSNumberFormatter formatEthToFiat:amountArg exchangeRate:WalletManager.sharedInstance.wallet.latestEthExchangeRate];
-    app.localCurrencyFormatter.usesGroupingSeparator = YES;
+    NSString *result = [NSNumberFormatter formatEthToFiat:amountArg exchangeRate:WalletManager.sharedInstance.wallet.latestEthExchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatter]];
     return result;
 }
 

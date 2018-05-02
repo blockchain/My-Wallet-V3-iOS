@@ -44,17 +44,15 @@
         @try {
             NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithDouble:(double)WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion]];
             
-            return [WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol stringByAppendingString:[app.localCurrencyFormatter stringFromNumber:number]];
+            return [WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol stringByAppendingString:[[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:number]];
             
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
         }
     } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc) {
         NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]];
-        
-        [app.btcFormatter setMinimumFractionDigits:0];
-        
-        NSString * string = [app.btcFormatter stringFromNumber:number];
+
+        NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
         
         return [string stringByAppendingFormat:@" %@", WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.symbol];
     }
@@ -66,9 +64,7 @@
 {
     NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithDouble:SATOSHI]];
     
-    [app.btcFormatter setMinimumFractionDigits:0];
-    
-    NSString * string = [app.btcFormatter stringFromNumber:number];
+    NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
     
     return [string stringByAppendingString:@" BTC"];
 }
@@ -79,7 +75,7 @@
 }
 
 // Format amount in satoshi as NSString (without symbol)
-+ (NSString *)formatAmount:(uint64_t)amount localCurrency:(BOOL)localCurrency
++ (NSString *)internalFormatAmount:(uint64_t)amount localCurrency:(BOOL)localCurrency localCurrencyFormatter:(NSNumberFormatter *)localCurrencyFormatter
 {
     if (amount == 0) {
         return nil;
@@ -91,9 +87,7 @@
         @try {
             NSDecimalNumber *number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:amount] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithDouble:(double)WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion]];
             
-            app.localCurrencyFormatter.usesGroupingSeparator = NO;
-            returnValue = [app.localCurrencyFormatter stringFromNumber:number];
-            app.localCurrencyFormatter.usesGroupingSeparator = YES;
+            returnValue = [localCurrencyFormatter stringFromNumber:number];
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
         }
@@ -101,15 +95,23 @@
         @try {
             NSDecimalNumber *number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:amount] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]];
             
-            app.btcFormatter.usesGroupingSeparator = NO;
-            returnValue = [app.btcFormatter stringFromNumber:number];
-            app.btcFormatter.usesGroupingSeparator = YES;
+            returnValue = [localCurrencyFormatter stringFromNumber:number];
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
         }
     }
     
     return returnValue;
+}
+
++ (NSString *)formatAmountFromUSLocale:(uint64_t)amount localCurrency:(BOOL)localCurrency
+{
+    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:[NSNumberFormatter assetFormatterWithUSLocale]];
+}
+
++ (NSString *)formatAmount:(uint64_t)amount localCurrency:(BOOL)localCurrency
+{
+    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:[NSNumberFormatter assetFormatter]];
 }
 
 + (BOOL)stringHasBitcoinValue:(NSString *)string
@@ -141,13 +143,13 @@
     return [ethAmount decimalNumberByMultiplyingBy:exchangeRate];
 }
 
-+ (NSString *)formatEthToFiat:(NSString *)ethAmount exchangeRate:(NSDecimalNumber *)exchangeRate
++ (NSString *)formatEthToFiat:(NSString *)ethAmount exchangeRate:(NSDecimalNumber *)exchangeRate localCurrencyFormatter:(NSNumberFormatter *)localCurrencyFormatter
 {
     NSString *requestedAmountString = [NSNumberFormatter convertedDecimalString:ethAmount];
     
     if (requestedAmountString != nil && [requestedAmountString doubleValue] > 0) {
         NSDecimalNumber *ethAmountDecimalNumber = [NSDecimalNumber decimalNumberWithString:requestedAmountString];
-        NSString *result = [app.localCurrencyFormatter stringFromNumber:[NSNumberFormatter convertEthToFiat:ethAmountDecimalNumber exchangeRate:exchangeRate]];
+        NSString *result = [localCurrencyFormatter stringFromNumber:[NSNumberFormatter convertEthToFiat:ethAmountDecimalNumber exchangeRate:exchangeRate]];
         return result;
     } else {
         return nil;
@@ -156,7 +158,7 @@
 
 + (NSString *)formatEthToFiatWithSymbol:(NSString *)ethAmount exchangeRate:(NSDecimalNumber *)exchangeRate
 {
-    NSString *formatString = [NSNumberFormatter formatEthToFiat:ethAmount exchangeRate:exchangeRate];
+    NSString *formatString = [NSNumberFormatter formatEthToFiat:ethAmount exchangeRate:exchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator]];
     if (!formatString) {
         return [NSString stringWithFormat:@"%@0.00", WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol];
     } else {
@@ -293,9 +295,7 @@
 {
     NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithDouble:SATOSHI]];
     
-    [app.btcFormatter setMinimumFractionDigits:0];
-    
-    NSString * string = [app.btcFormatter stringFromNumber:number];
+    NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
     
     return [string stringByAppendingString:@" BCH"];
 }
@@ -317,7 +317,7 @@
             
             NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:conversion];
             
-            return [WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol stringByAppendingString:[app.localCurrencyFormatter stringFromNumber:number]];
+            return [WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol stringByAppendingString:[[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:number]];
             
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
@@ -325,9 +325,7 @@
     } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc) {
         NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]];
         
-        [app.btcFormatter setMinimumFractionDigits:0];
-        
-        NSString * string = [app.btcFormatter stringFromNumber:number];
+        NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
         
         NSString *currencyCode = CURRENCY_SYMBOL_BCH;
         
@@ -355,9 +353,7 @@
             
             NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:amount] decimalNumberByDividingBy:conversion];
             
-            app.localCurrencyFormatter.usesGroupingSeparator = NO;
-            returnValue = [app.localCurrencyFormatter stringFromNumber:number];
-            app.localCurrencyFormatter.usesGroupingSeparator = YES;
+            returnValue = [[NSNumberFormatter localCurrencyFormatter] stringFromNumber:number];
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
         }
@@ -365,9 +361,7 @@
         @try {
             NSDecimalNumber *number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:amount] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]];
             
-            app.btcFormatter.usesGroupingSeparator = NO;
-            returnValue = [app.btcFormatter stringFromNumber:number];
-            app.btcFormatter.usesGroupingSeparator = YES;
+            returnValue = [[NSNumberFormatter assetFormatter] stringFromNumber:number];
         } @catch (NSException * e) {
             DLog(@"Exception: %@", e);
         }

@@ -265,7 +265,7 @@
     
     if (dictSweep) {
         self.amountInputView.btcField.text = [amount compare:@0] == NSOrderedSame ? nil : [amount stringValue];
-        self.amountInputView.fiatField.text = [NSNumberFormatter formatEthToFiat:[amount stringValue] exchangeRate:self.latestExchangeRate];
+        self.amountInputView.fiatField.text = [NSNumberFormatter formatEthToFiat:[amount stringValue] exchangeRate:self.latestExchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator]];
     }
     
     self.ethAvailable = available;
