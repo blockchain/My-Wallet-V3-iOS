@@ -114,6 +114,8 @@
 		516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
 		516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
 		516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */; };
+		5168564C2098E5C00088FBEB /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5168564B2098E5C00088FBEB /* WalletOptions.swift */; };
+		5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5168564B2098E5C00088FBEB /* WalletOptions.swift */; };
 		5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185B189208697F1003C9AC2 /* BCPriceMarker.swift */; };
 		5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
@@ -1013,6 +1015,7 @@
 		516594A6204F1C0400C50E78 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
+		5168564B2098E5C00088FBEB /* WalletOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletOptions.swift; sourceTree = "<group>"; };
 		5185B189208697F1003C9AC2 /* BCPriceMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BCPriceMarker.swift; path = Views/BCPriceMarker.swift; sourceTree = "<group>"; };
 		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Enum+RawValued.swift"; path = "Extensions/Enum+RawValued.swift"; sourceTree = "<group>"; };
 		5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URI.swift"; sourceTree = "<group>"; };
@@ -1809,53 +1812,53 @@
 		9F1831F315176F2200FB3D52 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				C75EE7D6201BBA820067BA16 /* UITextView+Animations.h */,
-				C75EE7D7201BBA820067BA16 /* UITextView+Animations.m */,
-				C79672821FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.h */,
-				C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */,
-				C7A9E7A41FAB5FF600027F22 /* UILabel+CGRectForSubstring.h */,
-				C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */,
-				C7E2750C1F59C2D50054EFA5 /* UILabel+Animations.h */,
-				C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */,
-				C790E0F61E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.h */,
-				C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */,
-				C7EEB8431EA95505002F28B9 /* UIView+ChangeFrameAttribute.h */,
-				C7EEB8441EA95505002F28B9 /* UIView+ChangeFrameAttribute.m */,
-				23DF4EFA1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.h */,
-				23DF4EFB1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m */,
-				23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */,
-				23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */,
-				23BD04681D7761C000DB69E6 /* UITextView+AssertionFailureFix.h */,
-				23BD04691D7761C000DB69E6 /* UITextView+AssertionFailureFix.m */,
-				23BA220F1D6B736900D0472B /* NSNumberFormatter+Currencies.h */,
-				23BA22101D6B736900D0472B /* NSNumberFormatter+Currencies.m */,
+				FA6323371A433B1C00EB3974 /* Foundation-Utility.h */,
+				FA6323381A433B1C00EB3974 /* Foundation-Utility.m */,
 				23BA220C1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.h */,
 				23BA220D1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m */,
+				23DF4EFA1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.h */,
+				23DF4EFB1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m */,
 				2343E4011CB434BC008DC7D1 /* NSArray+EncodedJSONString.h */,
 				2343E4021CB434BC008DC7D1 /* NSArray+EncodedJSONString.m */,
-				232E17F81C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift */,
-				FA6323371A433B1C00EB3974 /* Foundation-Utility.h */,
-				2326C6C01BBD7A8100AB7C4D /* UIViewController+AutoDismiss.h */,
-				2326C6C11BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m */,
-				239539811B486C7100989667 /* UILabel+MultiLineAutoSize.h */,
-				239539821B486C7100989667 /* UILabel+MultiLineAutoSize.m */,
-				FA6323381A433B1C00EB3974 /* Foundation-Utility.m */,
-				ECD244F519A8B444004B1F40 /* UIImage+Utils.h */,
-				ECD244F619A8B444004B1F40 /* UIImage+Utils.m */,
 				9F1831E01516A39500FB3D52 /* NSData+Hex.h */,
 				9F1831E11516A39500FB3D52 /* NSData+Hex.m */,
+				C790E0F61E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.h */,
+				C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */,
+				C79672821FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.h */,
+				C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */,
+				23BA220F1D6B736900D0472B /* NSNumberFormatter+Currencies.h */,
+				23BA22101D6B736900D0472B /* NSNumberFormatter+Currencies.m */,
+				84FC02F81981452D00B97D5B /* NSString+JSONParser_NSString.h */,
+				84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */,
 				84CCFAAD197D859C00DA4482 /* NSString+NSString_EscapeQuotes.h */,
 				84CCFAAE197D859C00DA4482 /* NSString+NSString_EscapeQuotes.m */,
 				9F1831E31516A45700FB3D52 /* NSString+SHA256.h */,
 				9F1831E41516A45700FB3D52 /* NSString+SHA256.m */,
 				9F1831E91516ADDB00FB3D52 /* NSString+URLEncode.h */,
 				9F1831EA1516ADDB00FB3D52 /* NSString+URLEncode.m */,
+				23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */,
+				23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */,
 				9F4A5090152F585E00F9ED9D /* UIDevice+Hardware.h */,
 				9F4A5091152F585E00F9ED9D /* UIDevice+Hardware.m */,
+				ECD244F519A8B444004B1F40 /* UIImage+Utils.h */,
+				ECD244F619A8B444004B1F40 /* UIImage+Utils.m */,
+				C7E2750C1F59C2D50054EFA5 /* UILabel+Animations.h */,
+				C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */,
+				C7A9E7A41FAB5FF600027F22 /* UILabel+CGRectForSubstring.h */,
+				C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */,
+				239539811B486C7100989667 /* UILabel+MultiLineAutoSize.h */,
+				239539821B486C7100989667 /* UILabel+MultiLineAutoSize.m */,
+				232E17F81C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift */,
 				84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */,
 				84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */,
-				84FC02F81981452D00B97D5B /* NSString+JSONParser_NSString.h */,
-				84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */,
+				C75EE7D6201BBA820067BA16 /* UITextView+Animations.h */,
+				C75EE7D7201BBA820067BA16 /* UITextView+Animations.m */,
+				23BD04681D7761C000DB69E6 /* UITextView+AssertionFailureFix.h */,
+				23BD04691D7761C000DB69E6 /* UITextView+AssertionFailureFix.m */,
+				C7EEB8431EA95505002F28B9 /* UIView+ChangeFrameAttribute.h */,
+				C7EEB8441EA95505002F28B9 /* UIView+ChangeFrameAttribute.m */,
+				2326C6C01BBD7A8100AB7C4D /* UIViewController+AutoDismiss.h */,
+				2326C6C11BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -2179,6 +2182,7 @@
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */,
 				AABDED6B208EC330002D8BAC /* WalletManager.swift */,
+				5168564B2098E5C00088FBEB /* WalletOptions.swift */,
 				AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */,
 				AA1E52362097D3B20099BD10 /* Models */,
 			);
@@ -2846,6 +2850,7 @@
 				AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
+				5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3063,6 +3068,7 @@
 				A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */,
 				9F4A5092152F585E00F9ED9D /* UIDevice+Hardware.m in Sources */,
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
+				5168564C2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
