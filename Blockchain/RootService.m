@@ -2547,20 +2547,20 @@ void (^secondPasswordSuccess)(NSString *);
 //    [task resume];
 //}
 
-- (void)showMaintenanceAlertWithTitle:(NSString *)title message:(NSString *)message
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        UIApplication *app = [UIApplication sharedApplication];
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    if ([UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController) {
-        [[UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
-}
+//- (void)showMaintenanceAlertWithTitle:(NSString *)title message:(NSString *)message
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        UIApplication *app = [UIApplication sharedApplication];
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    if ([UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController) {
+//        [[UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+//    } else {
+//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+//    }
+//}
 
 #pragma mark - Show Screens
 

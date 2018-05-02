@@ -12,21 +12,24 @@ import Foundation
 class OnboardingCoordinator: Coordinator {
     static let shared = OnboardingCoordinator()
 
-    private init() {
-    }
+    private init() {}
 
     // MARK: Public Methods
 
     func start() {
-        showWelcomeScreen()
+        NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+            if let message = response {
+                print("Error checking for maintenance in wallet options: %@", message)
+                AlertViewPresenter.shared.showMaintenanceAlert(withTitle: LocalizationConstants.Errors.error, message)
+            }
+        })
+        self.showWelcomeScreen()
         AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
     }
 
     // MARK: Private Methods
 
     private func showWelcomeScreen() {
-        AuthenticationCoordinator.shared.checkForMaintenance()
-
         let welcomeView = BCWelcomeView()
         welcomeView.delegate = self
         ModalPresenter.shared.showModal(withContent: welcomeView, closeType: ModalCloseTypeNone, showHeader: false, headerText: "")

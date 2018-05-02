@@ -27,8 +27,8 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         showVerifyingBusyView(withTimeout: 30)
 
-        let pinKey = BlockchainSettings.App.shared.pinKey
-        let pinString = pin.toString
+        // let pinKey = BlockchainSettings.App.shared.pinKey
+        // let pinString = pin.toString
 
         // TODO: Handle touch ID
         //        #ifdef ENABLE_TOUCH_ID
@@ -37,8 +37,20 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         //        }
         //        #endif
 
-        checkForMaintenance(withPinKey: pinKey, pin: pinString)
+        guard let pinKey = BlockchainSettings.App.shared.pinKey else {
+            return
+        }
 
+        // Check for maintenance before allowing pin entry
+        NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+            LoadingViewPresenter.shared.hideBusyView()
+            guard let message = response else {
+                self.walletManager.wallet.apiGetPINValue(pinKey, pin: pin.toString); return
+            }
+            print("Error checking for maintenance in wallet options: %@", message)
+            self.pinEntryViewController?.reset()
+            AlertViewPresenter.shared.showMaintenanceAlert(withTitle: LocalizationConstants.Errors.error, message)
+        })
         self.pinViewControllerCallback = callback
     }
 

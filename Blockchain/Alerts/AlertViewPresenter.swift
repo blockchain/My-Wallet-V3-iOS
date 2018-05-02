@@ -53,6 +53,10 @@ import Foundation
         }
     }
 
+    func showMaintenanceAlert(withTitle title: String, _ message: String) {
+        standardNotify(message: message, title: title, handler: nil)
+    }
+
     @objc func standardNotify(
         message: String,
         title: String = LocalizationConstants.Errors.error,
