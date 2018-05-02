@@ -2013,7 +2013,7 @@ void (^secondPasswordSuccess)(NSString *);
 - (void)didReceivePaymentNotice:(NSString *)notice
 {
     if (self.tabControllerManager.tabViewController.selectedIndex == TAB_SEND && busyView.alpha == 0 && !self.pinEntryViewController && !self.tabControllerManager.tabViewController.presentedViewController) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:BC_STRING_INFORMATION handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] handler: nil];
     }
 }
 

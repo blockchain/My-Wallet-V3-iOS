@@ -32,13 +32,13 @@ let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate
 
 //: Onboarding
 struct LocalizationConstants {
+    static let information = NSLocalizedString("Information", comment: "")
     static let cancel = NSLocalizedString("Cancel", comment: "")
     static let continueString = NSLocalizedString("Continue", comment: "")
     static let ok = NSLocalizedString("OK", comment: "")
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
     static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
-    static let information = NSLocalizedString("Information", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -48,9 +48,10 @@ struct LocalizationConstants {
         static let noInternetConnection = NSLocalizedString("No internet connection.", comment: "")
         static let warning = NSLocalizedString("Warning", comment: "")
         static let timedOut = NSLocalizedString("Connection timed out. Please check your internet connection.", comment: "")
-        static let invalidServerResponse = NSLocalizedString("Invalid server response. Please check your internet connection.", comment: "")
+        static let invalidServerResponse = NSLocalizedString("Invalid server response. Please try again later.", comment: "")
         static let invalidStatusCodeReturned = NSLocalizedString("Invalid Status Code Returned %@", comment: "")
         static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
+        static let requestFailedCheckConnection = NSLocalizedString("Request failed. Please check your internet connection.", comment: "")
     }
 
     struct Authentication {
@@ -96,6 +97,10 @@ struct LocalizationConstants {
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 /// Should deprecate this once Obj-C is no longer using this
 @objc class LocalizationConstantsObjcBridge: NSObject {
+
+    @objc class func requestFailedCheckConnection() -> String { return LocalizationConstants.Errors.requestFailedCheckConnection }
+
+    @objc class func information() -> String { return LocalizationConstants.information }
 
     @objc class func noInternetConnection() -> String { return LocalizationConstants.Errors.noInternetConnection }
 

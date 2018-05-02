@@ -113,7 +113,6 @@
 #define BC_STRING_ERROR NSLocalizedString(@"Error", nil)
 #define BC_STRING_INVALID_AUTHENTICATION_TYPE NSLocalizedString(@"Invalid two-factor authentication type", nil)
 
-#define BC_STRING_INFORMATION NSLocalizedString(@"Information", nil)
 #define BC_STRING_LEARN_MORE NSLocalizedString(@"Learn More", nil)
 #define BC_STRING_IMPORT_PRIVATE_KEY NSLocalizedString(@"Import Private Key", nil)
 #define BC_STRING_DECRYPTING_PRIVATE_KEY NSLocalizedString(@"Decrypting Private Key", nil)
@@ -135,7 +134,7 @@
 #define BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE NSLocalizedString(@"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.", nil)
 #define BC_STRING_FAILED_VALIDATION_CERTIFICATE_MESSAGE_CONTACT_SUPPORT_ARGUMENT NSLocalizedString(@"Please contact support:\n%@", nil)
 
-#define BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION NSLocalizedString(@"Request failed. Please check your internet connection.", nil)
+//#define BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION NSLocalizedString(@"Request failed. Please check your internet connection.", nil)
 #define BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION NSLocalizedString(@"An error occurred while updating your spendable balance. Please check your internet connection and try again.", nil)
 #define BC_STRING_EMPTY_RESPONSE NSLocalizedString(@"Empty response from server.", nil)
 #define BC_STRING_MAINTENANCE_MODE NSLocalizedString(@"Blockchain is currently down for maintenance. Please try again later.", nil)

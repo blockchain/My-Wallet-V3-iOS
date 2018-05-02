@@ -3232,7 +3232,7 @@
     if ([type isEqualToString:@"error"]) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR title:BC_STRING_ERROR handler: nil];
     } else if ([type isEqualToString:@"info"]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INFORMATION title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge information] title:BC_STRING_ERROR handler: nil];
     }
 }
 
@@ -3251,7 +3251,7 @@
             return;
         } else if (connectivityErrorRange.location != NSNotFound) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION_LONG * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR handler: nil];
+                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR handler: nil];
             });
             [self error_restoring_wallet];
             return;
