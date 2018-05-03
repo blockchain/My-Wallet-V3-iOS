@@ -10,6 +10,8 @@ import Foundation
 
 protocol PasswordRequiredViewDelegate: class {
     func didContinue(with password: String)
+
+    func didTapForgetWallet()
 }
 
 class PasswordRequiredView: UIView {
@@ -55,7 +57,7 @@ class PasswordRequiredView: UIView {
     }
 
     @IBAction func onForgetWalletTapped(_ sender: Any) {
-        // TODO
+        delegate?.didTapForgetWallet()
     }
 
     @IBAction func onContinueTapped(_ sender: Any) {

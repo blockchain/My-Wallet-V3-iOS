@@ -143,15 +143,21 @@
             self.error(message);
         }
     }
+
+    WalletManager.sharedInstance.wallet.delegate = WalletManager.sharedInstance;
 }
 
 -(void)didParsePairingCode:(NSDictionary *)dict
 {
     [[LoadingViewPresenter sharedInstance] hideBusyView];
 
+    WalletManager.sharedInstance.wallet.didPairAutomatically = YES;
+
     if (self.success) {
         self.success(dict);
     }
+
+    WalletManager.sharedInstance.wallet.delegate = WalletManager.sharedInstance;
 }
 
 @end

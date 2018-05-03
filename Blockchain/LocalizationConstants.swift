@@ -42,6 +42,7 @@ struct LocalizationConstants {
     static let openArg = NSLocalizedString("Open %@", comment: "")
     static let youWillBeLeavingTheApp = NSLocalizedString("You will be leaving the app.", comment: "")
     static let openMailApp = NSLocalizedString("Open Mail App", comment: "")
+    static let goToSettings = NSLocalizedString("Go to Settings", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -55,6 +56,8 @@ struct LocalizationConstants {
         static let invalidStatusCodeReturned = NSLocalizedString("Invalid Status Code Returned %@", comment: "")
         static let requestFailedCheckConnection = NSLocalizedString("Request failed. Please check your internet connection.", comment: "")
         static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
+        static let cameraAccessDenied = NSLocalizedString("Camera Access Denied", comment: "")
+        static let cameraAccessDeniedMessage = NSLocalizedString("Blockchain does not have access to the camera. To enable access, go to your device Settings.", comment: "")
     }
 
     struct Authentication {
@@ -121,6 +124,8 @@ struct LocalizationConstants {
     @objc class func requestFailedCheckConnection() -> String { return LocalizationConstants.Errors.requestFailedCheckConnection }
 
     @objc class func information() -> String { return LocalizationConstants.information }
+
+    @objc class func error() -> String { return LocalizationConstants.Errors.error }
 
     @objc class func noInternetConnection() -> String { return LocalizationConstants.Errors.noInternetConnection }
 

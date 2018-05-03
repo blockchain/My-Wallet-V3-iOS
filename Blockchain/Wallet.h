@@ -144,6 +144,7 @@
 - (void)didFetchBitcoinCashHistory;
 - (void)initializeWebView;
 - (void)wallet:(Wallet *)wallet didRequireTwoFactorAuthentication:(NSInteger)type;
+- (void)walletDidResendTwoFactorSMS:(Wallet *)wallet;
 - (void)walletDidRequireEmailAuthorization:(Wallet *)wallet;
 @end
 

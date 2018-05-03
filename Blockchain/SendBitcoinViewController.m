@@ -1034,7 +1034,14 @@ BOOL displayingLocalSymbolSend;
 
 - (void)scanPrivateKeyToSendFromWatchOnlyAddress
 {
-    if (![app getCaptureDeviceInput:nil]) {
+    NSError *error;
+    AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
+    if (!deviceInput) {
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+            [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
+        } else {
+            [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
+        }
         return;
     }
     

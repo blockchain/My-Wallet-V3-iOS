@@ -91,7 +91,7 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
 
 extension OnboardingCoordinator: PairingInstructionsViewDelegate {
     func onScanQRCodeClicked() {
-        // TODO
+        AuthenticationCoordinator.shared.startQRCodePairing()
     }
 
     func onManualPairClicked() {

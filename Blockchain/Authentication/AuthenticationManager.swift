@@ -277,6 +277,10 @@ extension AuthenticationManager: WalletAuthDelegate {
         ))
     }
 
+    func didResendTwoFactorSMSCode() {
+        authHandler?(false, .sms, nil)
+    }
+
     func authenticationError(error: AuthenticationError?) {
         failAuth(withError: error)
     }

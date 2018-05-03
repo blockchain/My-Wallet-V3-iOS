@@ -7,6 +7,7 @@
 //
 
 #import "BuyBitcoinNavigationController.h"
+#import "Blockchain-Swift.h"
 
 typedef enum {
     DismissStateDefault,
@@ -24,7 +25,17 @@ typedef enum {
 {
     if ([viewControllerToPresent isMemberOfClass:[UIImagePickerController class]] && [(UIImagePickerController *)viewControllerToPresent sourceType] == UIImagePickerControllerSourceTypeCamera) {
         [super presentViewController:viewControllerToPresent animated:flag completion:^{
-            [app getCaptureDeviceInput:viewControllerToPresent];
+
+            NSError *error;
+            AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
+            if (!input) {
+                if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+                    [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
+                } else {
+                    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
+                }
+            }
+
             if (completion) completion();
         }];
     } else {

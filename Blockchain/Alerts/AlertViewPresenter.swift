@@ -19,6 +19,26 @@ import Foundation
         super.init()
     }
 
+    /// Displays an alert that the app requires permission to use the camera. The alert will display an
+    /// action which then leads the user to their settings so that they can grant this permission.
+    @objc func showNeedsCameraPermissionAlert() {
+        let alert = UIAlertController(
+            title: LocalizationConstants.Errors.cameraAccessDenied,
+            message: LocalizationConstants.Errors.cameraAccessDeniedMessage,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.goToSettings, style: .default) { _ in
+                guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else { return }
+                UIApplication.shared.openURL(settingsURL)
+            }
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+        )
+        present(alert: alert)
+    }
+
     /// Asks permission from the user to use values in the keychain. This is typically invoked
     /// on a new installation of the app (meaning the user previously installed the app, deleted it,
     /// and downloaded the app again).
@@ -36,10 +56,7 @@ import Foundation
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.Onboarding.loginExistingWallet, style: .default)
         )
-        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
-            alert,
-            animated: true
-        )
+        present(alert: alert)
     }
 
     /// Shows the user an alert that the app failed to read values from the keychain.
@@ -66,8 +83,8 @@ import Foundation
 
     @objc func showNoInternetConnectionAlert() {
         standardNotify(
-        message: LocalizationConstants.Errors.noInternetConnection,
-        title: LocalizationConstants.Errors.error
+            message: LocalizationConstants.Errors.noInternetConnection,
+            title: LocalizationConstants.Errors.error
         ) { _ in
             LoadingViewPresenter.shared.hideBusyView()
             // TODO: this should not be in here. Figure out all areas where pin
@@ -106,4 +123,10 @@ import Foundation
         }
     }
 
+    private func present(alert: UIAlertController) {
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
+            animated: true
+        )
+    }
 }
