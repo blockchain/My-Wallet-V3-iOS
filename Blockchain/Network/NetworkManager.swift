@@ -61,8 +61,9 @@ final class NetworkManager: NSObject, URLSessionDelegate {
         }
         NetworkManager.shared.session.sessionDescription = url.host
         let task = NetworkManager.shared.session.dataTask(with: url) { data, _, error in
-            if error != nil {
-                handler(LocalizationConstants.Errors.requestFailedCheckConnection); return
+            guard error == nil else {
+                handler(LocalizationConstants.Errors.requestFailedCheckConnection)
+                return
             }
             guard
                 let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
