@@ -2804,6 +2804,7 @@
 				AACE31C42092A99B00B7B806 /* Constants.swift in Sources */,
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
+				AAD279CC209A826900C0EAFC /* BCSecureTextField.swift in Sources */,
 				AA1E523B2097E2190099BD10 /* Strings.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
@@ -2827,7 +2828,7 @@
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
-
+				AAD279CA209A825500C0EAFC /* BCTextField.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* GetPinResponse.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
