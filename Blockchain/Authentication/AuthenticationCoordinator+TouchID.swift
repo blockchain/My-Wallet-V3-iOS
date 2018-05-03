@@ -37,11 +37,8 @@ extension AuthenticationCoordinator {
     // TODO: migrate to the responsible controller that prompts for authentication
     func handleBiometricAuthenticationError(with error: AuthenticationError) {
         if let description = error.description {
-            let alert = UIAlertController(title: LocalizationConstants.Errors.error, message: description, preferredStyle: .alert)
-            let action = UIAlertAction(title: LocalizationConstants.ok, style: .default, handler: nil)
-            alert.addAction(action)
             DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+                AlertViewPresenter.shared.standardNotify(message: description, title: LocalizationConstants.Errors.error, handler: nil)
             }
         }
     }

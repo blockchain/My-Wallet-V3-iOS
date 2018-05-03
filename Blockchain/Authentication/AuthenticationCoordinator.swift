@@ -145,18 +145,15 @@ import Foundation
 //            }
 //            #endif
             authenticateWithBiometrics()
-            //
         } else {
             NetworkManager.shared.checkForMaintenance(withCompletion: { response in
-                if let message = response {
-                    print("Error checking for maintenance in wallet options: %@", message)
-                    AlertViewPresenter.shared.showMaintenanceAlert(withTitle: LocalizationConstants.Errors.error, message)
-                }
+                guard let message = response else { return }
+                print("Error checking for maintenance in wallet options: %@", message)
+                AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error, handler: nil)
             })
             showPasswordModal()
             AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
         }
-
         // TODO
         // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu)
         // name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];

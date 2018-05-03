@@ -44,12 +44,13 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         // Check for maintenance before allowing pin entry
         NetworkManager.shared.checkForMaintenance(withCompletion: { response in
             LoadingViewPresenter.shared.hideBusyView()
-            guard let message = response else {
-                self.walletManager.wallet.apiGetPINValue(pinKey, pin: pin.toString); return
+            guard response == nil else {
+                print("Error checking for maintenance in wallet options: %@", response!)
+                self.pinEntryViewController?.reset()
+                AlertViewPresenter.shared.standardNotify(message: response!, title: LocalizationConstants.Errors.error, handler: nil)
+                return
             }
-            print("Error checking for maintenance in wallet options: %@", message)
-            self.pinEntryViewController?.reset()
-            AlertViewPresenter.shared.showMaintenanceAlert(withTitle: LocalizationConstants.Errors.error, message)
+            self.walletManager.wallet.apiGetPINValue(pinKey, pin: pin.toString)
         })
         self.pinViewControllerCallback = callback
     }
