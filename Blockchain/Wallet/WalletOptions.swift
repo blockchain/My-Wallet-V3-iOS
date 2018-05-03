@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum WalletOptions: String {
-    case maintenance = "maintenance"
-    case mobileInfo = "mobileInfo"
+struct WalletOptions {
+    static let maintenance = "maintenance"
+    static let mobileInfo = "mobileInfo"
 }

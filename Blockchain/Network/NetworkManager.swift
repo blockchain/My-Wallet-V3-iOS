@@ -67,13 +67,13 @@ final class NetworkManager: NSObject, URLSessionDelegate {
             }
             guard
                 let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
-                let downForMaintenance = json![WalletOptions.maintenance.rawValue] as? Bool else {
+                let downForMaintenance = json![WalletOptions.maintenance] as? Bool else {
                     handler(LocalizationConstants.Errors.invalidServerResponse); return
             }
             if downForMaintenance {
                 let languageCode = Locale.current.languageCode ?? "en"
                 guard
-                    let mobileInfo = json![WalletOptions.mobileInfo.rawValue] as? [String: String],
+                    let mobileInfo = json![WalletOptions.mobileInfo] as? [String: String],
                     let message = mobileInfo[languageCode] else {
                         handler(LocalizationConstants.Errors.invalidServerResponse); return
                 }
