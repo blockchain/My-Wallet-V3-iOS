@@ -126,6 +126,10 @@ extension WalletManager: WalletDelegate {
         authDelegate?.didRequireTwoFactorAuth(withType: twoFactorType)
     }
 
+    func walletDidResendTwoFactorSMS(_ wallet: Wallet!) {
+        authDelegate?.didResendTwoFactorSMSCode()
+    }
+
     // MARK: - Buy/Sell
 
     func initializeWebView() {

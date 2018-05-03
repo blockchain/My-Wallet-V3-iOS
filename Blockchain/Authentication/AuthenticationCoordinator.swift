@@ -45,16 +45,17 @@ import Foundation
 
         ModalPresenter.shared.closeAllModals()
 
-        if BlockchainSettings.App.shared.isPinSet {
-            AppCoordinator.shared.showHdUpgradeViewIfNeeded()
-        }
-
-        // New wallet set-up. This will guide the user to create a pin & optionally
-        // enable touch ID and email
-        guard !strongSelf.walletManager.wallet.isNew else {
-            AuthenticationCoordinator.shared.startNewWalletSetUp()
+        // Make user set up a pin if none is set. They can also optionally enable touch ID and link their email.
+        guard BlockchainSettings.App.shared.isPinSet else {
+            if strongSelf.walletManager.wallet.isNew {
+                AuthenticationCoordinator.shared.startNewWalletSetUp()
+            } else {
+                strongSelf.showPinEntryView(asModal: false)
+            }
             return
         }
+
+        AppCoordinator.shared.showHdUpgradeViewIfNeeded()
 
         // Show security reminder modal if needed
         if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.reminderModalDate {
@@ -212,6 +213,60 @@ import Foundation
         )
     }
 
+    /// Starts the wallet pairing flow by scanning a QR code
+    func startQRCodePairing() {
+        // Check that we have access to the camera
+        do {
+            _ = try AVCaptureDeviceInput.deviceInputForQRScanner()
+        } catch let error as AVCaptureDeviceError {
+            switch error.type {
+            case .notAuthorized:
+                AlertViewPresenter.shared.showNeedsCameraPermissionAlert()
+            default:
+                AlertViewPresenter.shared.standardNotify(message: error.localizedDescription)
+            }
+            return
+        } catch {
+            AlertViewPresenter.shared.standardNotify(message: error.localizedDescription)
+        }
+
+        let pairingCodeParserViewController = PairingCodeParser(success: { [weak self] response in
+            guard let strongSelf = self else { return }
+            guard let dictResponse = response else { return }
+
+            let payload = PasscodePayload(dictionary: dictResponse)
+            AuthenticationManager.shared.authenticate(using: payload, andReply: strongSelf.authHandler)
+        }, error: { error in
+            guard let errorMessage = error else { return }
+            AlertViewPresenter.shared.standardNotify(message: errorMessage)
+        })!
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            pairingCodeParserViewController,
+            animated: true
+        )
+    }
+
+    @objc func showForgetWalletConfirmAlert() {
+        let alert = UIAlertController(
+            title: LocalizationConstants.Errors.warning,
+            message: LocalizationConstants.Authentication.forgetWalletDetail,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel))
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { [unowned self] _ in
+                print("Forgetting wallet")
+                ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+                self.walletManager.forgetWallet()
+                OnboardingCoordinator.shared.start()
+            }
+        )
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
+            animated: true
+        )
+    }
+
     // MARK: - Pin Entry Presentation
 
     // Closes the pin entry modal, if presented
@@ -280,6 +335,7 @@ import Foundation
             topMostViewController?.present(pinViewController, animated: true) { [weak self] in
                 guard let strongSelf = self else { return }
 
+                // Can both of these alerts be moved elsewhere?
                 if strongSelf.walletManager.wallet.isNew {
                     AlertViewPresenter.shared.standardNotify(
                         message: LocalizationConstants.Authentication.didCreateNewWalletMessage,
@@ -293,17 +349,16 @@ import Foundation
                         message: LocalizationConstants.Authentication.walletPairedSuccessfullyMessage,
                         title: LocalizationConstants.Authentication.walletPairedSuccessfullyTitle
                     )
+                    strongSelf.walletManager.wallet.didPairAutomatically = false
                     return
                 }
             }
         }
         self.pinEntryViewController = pinViewController
 
-        walletManager.wallet.didPairAutomatically = false
-
         LoadingViewPresenter.shared.hideBusyView()
 
-        UIApplication.shared.setStatusBarStyle(.default, animated: false)
+        UIApplication.shared.statusBarStyle = .default
     }
 
     // MARK: - Password Presentation
@@ -407,6 +462,10 @@ extension AuthenticationCoordinator: ManualPairViewDelegate {
 }
 
 extension AuthenticationCoordinator: PasswordRequiredViewDelegate {
+    func didTapForgetWallet() {
+        showForgetWalletConfirmAlert()
+    }
+
     func didContinue(with password: String) {
 
         // Guard checks before attempting to authenticate

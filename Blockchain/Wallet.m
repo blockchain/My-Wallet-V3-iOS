@@ -3857,8 +3857,12 @@
 
 - (void)on_resend_two_factor_sms_success
 {
-    // TODO: Refactor
-    [app verifyTwoFactorSMS];
+    DLog(@"on_resend_two_factor_sms_success");
+    if ([self.delegate respondsToSelector:@selector(walletDidResendTwoFactorSMS:)]) {
+        [self.delegate walletDidResendTwoFactorSMS:self];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector walletDidResendTwoFactorSMS:!", [delegate class]);
+    }
 }
 
 - (void)on_resend_two_factor_sms_error:(NSString *)error

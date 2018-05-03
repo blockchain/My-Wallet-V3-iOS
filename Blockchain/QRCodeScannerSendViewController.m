@@ -26,9 +26,14 @@
 
 - (BOOL)startReadingQRCode
 {
-    AVCaptureDeviceInput *input = [app getCaptureDeviceInput:nil];
-    
+    NSError *error;
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
     if (!input) {
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+            [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
+        } else {
+            [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
+        }
         return NO;
     }
     

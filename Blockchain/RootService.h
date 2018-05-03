@@ -186,8 +186,8 @@
 - (void)showBackupReminder:(BOOL)firstReceive;
 
 //- (IBAction)webLoginClicked:(id)sender;
-- (IBAction)forgetWalletClicked:(id)sender;
-- (IBAction)scanAccountQRCodeclicked:(id)sender;
+//- (IBAction)forgetWalletClicked:(id)sender;
+//- (IBAction)scanAccountQRCodeclicked:(id)sender;
 - (IBAction)secondPasswordClicked:(id)sender;
 - (IBAction)mainPasswordClicked:(id)sender;
 - (IBAction)manualPairClicked:(id)sender;
@@ -216,7 +216,7 @@
 - (NSString *)checkForTouchIDAvailablility;
 - (void)disabledTouchID;
 
-- (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController;
+//- (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController;
 
 - (void)scanPrivateKeyForWatchOnlyAddress:(NSString *)address;
 - (void)askUserToAddWatchOnlyAddress:(NSString *)address success:(void (^)(NSString *))success;

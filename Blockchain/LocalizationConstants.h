@@ -169,7 +169,6 @@
 #define BC_STRING_BUY_AND_SELL_BITCOIN NSLocalizedString(@"Buy & Sell Bitcoin", nil)
 
 #define BC_STRING_WARNING NSLocalizedString(@"Warning!!!", nil)
-#define BC_STRING_FORGET_WALLET_DETAILS NSLocalizedString(@"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!", nil)
 #define BC_STRING_NEXT NSLocalizedString(@"Next", nil)
 #define BC_STRING_CANCEL NSLocalizedString(@"Cancel", nil)
 #define BC_STRING_DISMISS NSLocalizedString(@"Dismiss", nil)
@@ -230,8 +229,6 @@
 #define BC_STRING_LOADING_CREATING_REQUEST NSLocalizedString(@"Creating request", nil)
 #define BC_STRING_LOADING_CREATING_INVITATION NSLocalizedString(@"Creating invitation", nil)
 #define BC_STRING_IDENTIFIER NSLocalizedString(@"Identifier", nil)
-
-#define BC_STRING_GO_TO_SETTINGS NSLocalizedString(@"Go to Settings", nil)
 
 #define BC_STRING_SUPPORT NSLocalizedString(@"Support", nil)
 #define BC_STRING_OPEN_ARGUMENT NSLocalizedString(@"Open %@?", nil)
@@ -414,8 +411,6 @@
 #define BC_STRING_HIGH_FEE_WARNING_TITLE NSLocalizedString(@"Large Transaction", nil)
 #define BC_STRING_HIGH_FEE_WARNING_MESSAGE NSLocalizedString(@"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"", nil)
 #define BC_STRING_NO_EMAIL_CONFIGURED NSLocalizedString(@"You do not have an account set up for Mail. Please contact %@", nil)
-#define BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_TITLE NSLocalizedString(@"Camera Access Denied", nil)
-#define BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_MESSAGE NSLocalizedString(@"Blockchain does not have access to the camera. To enable access, go to your device Settings.", nil)
 
 //: Authentication - Face ID & Touch ID
 

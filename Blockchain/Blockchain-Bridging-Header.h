@@ -16,6 +16,7 @@
 #import "KeychainItemWrapper.h"
 #import "NSData+Hex.h"
 #import "NSString+SHA256.h"
+#import "PairingCodeParser.h"
 #import "PEPinEntryController.h"
 #import "Reachability.h"
 #import "RootService.h"

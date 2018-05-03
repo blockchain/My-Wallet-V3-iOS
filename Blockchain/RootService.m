@@ -1628,32 +1628,32 @@ void (^secondPasswordSuccess)(NSString *);
 //    [KeychainItemWrapper setSharedKeyInKeychain:sharedKey];
 //}
 
-- (IBAction)scanAccountQRCodeclicked:(id)sender
-{
-    if (![self getCaptureDeviceInput:nil]) {
-        return;
-    }
-
-    PairingCodeParser * pairingCodeParser = [[PairingCodeParser alloc] initWithSuccess:^(NSDictionary*code) {
-        DLog(@"scanAndParse success");
-
-        [WalletManager.sharedInstance forgetWallet];
-
-        [app clearPin];
-
-        [WalletManager.sharedInstance.wallet loadWalletWithGuid:[code objectForKey:QR_CODE_KEY_GUID] sharedKey:[code objectForKey:QR_CODE_KEY_SHARED_KEY] password:[code objectForKey:QR_CODE_KEY_PASSWORD]];
-
-        WalletManager.sharedInstance.wallet.delegate = self;
-
-        wallet.didPairAutomatically = YES;
-
-    } error:^(NSString*error) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
-    }];
-
-    ECSlidingViewController *slidingViewController = [AppCoordinator sharedInstance].slidingViewController;
-    [slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
-}
+//- (IBAction)scanAccountQRCodeclicked:(id)sender
+//{
+//    if (![self getCaptureDeviceInput:nil]) {
+//        return;
+//    }
+//
+//    PairingCodeParser * pairingCodeParser = [[PairingCodeParser alloc] initWithSuccess:^(NSDictionary*code) {
+//        DLog(@"scanAndParse success");
+//
+//        [WalletManager.sharedInstance forgetWallet];
+//
+//        [app clearPin];
+//
+//        [WalletManager.sharedInstance.wallet loadWalletWithGuid:[code objectForKey:QR_CODE_KEY_GUID] sharedKey:[code objectForKey:QR_CODE_KEY_SHARED_KEY] password:[code objectForKey:QR_CODE_KEY_PASSWORD]];
+//
+//        WalletManager.sharedInstance.wallet.delegate = self;
+//
+//        wallet.didPairAutomatically = YES;
+//
+//    } error:^(NSString*error) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+//    }];
+//
+//    ECSlidingViewController *slidingViewController = [AppCoordinator sharedInstance].slidingViewController;
+//    [slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
+//}
 
 - (void)scanPrivateKeyForWatchOnlyAddress:(NSString *)address
 {
@@ -3026,24 +3026,24 @@ void (^secondPasswordSuccess)(NSString *);
     [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
-- (IBAction)forgetWalletClicked:(id)sender
-{
-    UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
-    [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        DLog(@"forgetting wallet");
-        [app closeModalWithTransition:kCATransitionFade];
-        [WalletManager.sharedInstance forgetWallet];
-        [self showWelcomeScreen];
-    }]];
-
-    if ([mainPasswordTextField isFirstResponder]) {
-        [mainPasswordTextField resignFirstResponder];
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
-    }
-}
+//- (IBAction)forgetWalletClicked:(id)sender
+//{
+//    UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
+//    [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//    [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        DLog(@"forgetting wallet");
+//        [app closeModalWithTransition:kCATransitionFade];
+//        [WalletManager.sharedInstance forgetWallet];
+//        [self showWelcomeScreen];
+//    }]];
+//
+//    if ([mainPasswordTextField isFirstResponder]) {
+//        [mainPasswordTextField resignFirstResponder];
+//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
+//    } else {
+//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
+//    }
+//}
 
 //- (IBAction)mainPasswordClicked:(id)sender
 //{
@@ -3818,34 +3818,16 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController
 {
-    NSError *error;
-
-    AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&error];
-    if (!input) {
-        // This should never happen - all devices we support (iOS 7+) have cameras
-        DLog(@"QR code scanner problem: %@", [error localizedDescription]);
-
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] ==  AVAuthorizationStatusAuthorized) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error localizedDescription] title:BC_STRING_ERROR handler: nil];
-        }
-        else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_TITLE message:BC_STRING_ENABLE_CAMERA_PERMISSIONS_ALERT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_GO_TO_SETTINGS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:settingsURL];
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-
-            if (viewController) {
-                [viewController presentViewController:alert animated:YES completion:nil];
-            } else {
-                [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:alert animated:YES completion:nil];
-            }
-        }
-    }
-    return input;
+//    NSError *error;
+//    AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
+//    if (!deviceInput) {
+//        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+//            [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
+//        } else {
+//            [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
+//        }
+//    }
+//    return deviceInput;
 }
 
 //#pragma mark - Certificate Pinner Delegate

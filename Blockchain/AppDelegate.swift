@@ -155,8 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if appSettings.guid != nil && appSettings.sharedKey != nil && !appSettings.isPinSet {
             AlertViewPresenter.shared.alertUserAskingToUseOldKeychain { _ in
-                // TODO migrate this
-                app.forgetWalletClicked(nil)
+                AuthenticationCoordinator.shared.showForgetWalletConfirmAlert()
             }
         }
     }
