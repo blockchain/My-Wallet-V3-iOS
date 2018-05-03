@@ -39,7 +39,6 @@ struct LocalizationConstants {
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
     static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
-    static let information = NSLocalizedString("Information", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
