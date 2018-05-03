@@ -233,19 +233,31 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /// Ether address to be used for swipe to receive
+        @objc var swipeAddressForEther: String? {
+            get {
+                return KeychainItemWrapper.getSwipeEtherAddress()
+            }
+            set {
+                guard let etherAddress = newValue else {
+                    KeychainItemWrapper.removeSwipeEtherAddress()
+                    return
+                }
+                KeychainItemWrapper.setSwipeEtherAddress(etherAddress)
+            }
+        }
+
         private override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.
             super.init()
-            
+
             defaults.register(defaults: [
-                UserDefaults.Keys.swipeToReceiveEnabled.rawValue    : true,
-                
+                UserDefaults.Keys.swipeToReceiveEnabled.rawValue: true,
                 //: Was initialized with `NSNumber numberWithInt:AssetTypeBitcoin` before, could cause side unwanted effects...
                 // TODO: test for potential side effects
-                UserDefaults.Keys.assetType.rawValue                : AssetType.bitcoin.rawValue,
-                
-                UserDefaults.DebugKeys.enableCertificatePinning.rawValue    : true
+                UserDefaults.Keys.assetType.rawValue: AssetType.bitcoin.rawValue,
+                UserDefaults.DebugKeys.enableCertificatePinning.rawValue: true
             ])
         }
 

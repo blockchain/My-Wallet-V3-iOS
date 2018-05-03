@@ -49,15 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //: Global appearance customizations
         UIApplication.shared.statusBarStyle = .default
 
-//        let assetTypekey = UserDefaults.Keys.assetType.rawValue
-//        UserDefaults.standard.register(defaults: [assetTypekey: AssetType.bitcoin.rawValue])
-
-//        let certPinningkey = UserDefaults.DebugKeys.enableCertificatePinning.rawValue
-//        UserDefaults.standard.register(defaults: [certPinningkey: true])
-
-//        let swipeToReceiveEnabledKey = UserDefaults.Keys.swipeToReceiveEnabled.rawValue
-//        UserDefaults.standard.register(defaults: [swipeToReceiveEnabledKey: true])
-
         #if DEBUG
         let envKey = UserDefaults.Keys.environment.rawValue
         let environment = Environment.production.rawValue
@@ -76,6 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let simulateSurgeKey = UserDefaults.DebugKeys.simulateSurge.rawValue
         UserDefaults.standard.set(false, forKey: simulateSurgeKey)
+
+        // Send email when exceptions are caught
+        NSSetUncaughtExceptionHandler(HandleException)
         #endif
 
         // TODO: prevent any other data tasks from executing until cert is pinned
@@ -93,14 +87,88 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !AuthenticationCoordinator.shared.isPromptingForBiometricAuthentication {
             showPrivacyScreen()
         }
+        if let pinEntryViewController = AuthenticationCoordinator.shared.pinEntryViewController, pinEntryViewController.verifyOnly {
+            pinEntryViewController.reset()
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         print("applicationDidEnterBackground")
+
+        // Wallet-related background actions
+
+        // TODO: This should be moved into a component that performs actions to the wallet
+        // on different lifecycle events (e.g. "WalletAppLifecycleListener")
+        let appSettings = BlockchainSettings.App.shared
+        let wallet = WalletManager.shared.wallet
+
+        if appSettings.swipeToReceiveEnabled && wallet.isInitialized() && wallet.didUpgradeToHd() {
+
+            appSettings.swipeAddressForEther = wallet.getEtherAddress()
+
+            var numberOfBTCAddressesToDerive = Constants.Wallet.swipeToReceiveAddressCount
+            if let bitcoinSwipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: .bitcoin) {
+                numberOfBTCAddressesToDerive -= bitcoinSwipeAddresses.count
+            }
+            wallet.getSwipeAddresses(Int32(numberOfBTCAddressesToDerive), assetType: .bitcoin)
+            NotificationCenter.default.post(name: Constants.NotificationKeys.appEnteredBackground, object: nil)
+        }
+
+        wallet.isFetchingTransactions = false
+        wallet.isFilteringTransactions = false
+        wallet.didReceiveMessageForLastTransaction = false
+        wallet.setupBuySellWebview()
+
+        WalletManager.shared.closeWebSockets(withCloseCode: .backgroundedApp)
+
+        if wallet.isInitialized() {
+            if appSettings.guid != nil && appSettings.sharedKey != nil {
+                appSettings.hasEndedFirstSession = true
+            }
+            WalletManager.shared.close()
+        }
+
+        if appSettings.hasSeenAllCards {
+            appSettings.shouldHideAllCards = true
+        }
+
+        if appSettings.didFailTouchIDSetup && !appSettings.touchIDEnabled {
+            appSettings.shouldShowTouchIDSetup = true
+        }
+
+        // UI-related background actions
+        ModalPresenter.shared.closeAllModals()
+
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: false)
+
+        AppCoordinator.shared.cleanupOnAppBackgrounded()
+        AuthenticationCoordinator.shared.cleanupOnAppBackgrounded()
+
+        // Show pin modal before we close the app so the PIN verify modal gets shown in the list of running apps and immediately after we restart
+        if appSettings.isPinSet {
+            AuthenticationCoordinator.shared.showPinEntryView(asModal: true)
+        }
+
+        NetworkManager.shared.session.reset {
+            print("URLSession reset completed.")
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("applicationWillEnterForeground")
+
+        if BlockchainSettings.App.shared.isPinSet {
+            AuthenticationCoordinator.shared.authenticateWithBiometrics()
+            return
+        }
+
+        if !WalletManager.shared.wallet.isInitialized() {
+            if BlockchainSettings.App.shared.guid != nil && BlockchainSettings.App.shared.sharedKey != nil {
+                AuthenticationCoordinator.shared.start()
+            } else {
+                OnboardingCoordinator.shared.start()
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -110,7 +178,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-
+        let appSettings = BlockchainSettings.App.shared
+        appSettings.shouldHideAllCards = true
+        appSettings.hasSeenAllCards = true
+        appSettings.shouldHideBuySellCard = true
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {

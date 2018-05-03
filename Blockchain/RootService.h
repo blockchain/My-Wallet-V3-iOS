@@ -101,9 +101,9 @@
 
 // PIN Entry
 @property (nonatomic, strong) PEPinEntryController *pinEntryViewController;
-@property (nonatomic, copy) void (^pinViewControllerCallback)(BOOL);
+//@property (nonatomic, copy) void (^pinViewControllerCallback)(BOOL);
 @property (nonatomic, assign) NSUInteger lastEnteredPIN;
-@property (nonatomic) NSTimer *loginTimer;
+//@property (nonatomic) NSTimer *loginTimer;
 
 @property(nonatomic, strong) NSNumberFormatter *btcFormatter;
 @property(nonatomic, strong) NSNumberFormatter *ethFormatter;

@@ -194,10 +194,10 @@ void (^secondPasswordSuccess)(NSString *);
 //    WalletManager.sharedInstance.wallet.delegate = self;
 
     // Send email when exceptions are caught
-#ifndef DEBUG
-    NSSetUncaughtExceptionHandler(&HandleException);
-#endif
-
+//#ifndef DEBUG
+//    NSSetUncaughtExceptionHandler(&HandleException);
+//#endif
+//
 //    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_KEY_LOADING_TEXT object:nil queue:nil usingBlock:^(NSNotification * notification) {
 //        self.loadingText = [notification object];
 //    }];
@@ -233,8 +233,8 @@ void (^secondPasswordSuccess)(NSString *);
     return YES;
 }
 
-- (void)showWelcomeScreen
-{
+//- (void)showWelcomeScreen
+//{
 //    [self checkForMaintenance];
 //
 //    BCWelcomeView *welcomeView = [[BCWelcomeView alloc] init];
@@ -245,7 +245,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    [app showModalWithContent:welcomeView closeType:ModalCloseTypeNone showHeader:NO headerText:nil onDismiss:nil onResume:nil];
 
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-}
+//}
 
 //- (void)showPinScreen
 //{
@@ -266,16 +266,16 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self migratePasswordAndPinFromNSUserDefaults];
 //}
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
+//- (void)applicationWillResignActive:(UIApplication *)application
+//{
     // TODO: call Swift instance method directly from AppDelegate after refactor
     // [rootService applicationWillResignActive:application];
 
-    [self hideSendAndReceiveKeyboards];
+//    [self hideSendAndReceiveKeyboards];
 
-    if (createWalletView) {
-        [createWalletView hideKeyboard];
-    }
+//    if (createWalletView) {
+//        [createWalletView hideKeyboard];
+//    }
 
 //    if (manualPairView) {
 //        [manualPairView hideKeyboard];
@@ -303,134 +303,134 @@ void (^secondPasswordSuccess)(NSString *);
 //            }];
 //        });
 //    }
+//
+//    if (self.pinEntryViewController.verifyOnly) {
+//        [self.pinEntryViewController reset];
+//    }
+//}
 
-    if (self.pinEntryViewController.verifyOnly) {
-        [self.pinEntryViewController reset];
-    }
-}
+//- (void)applicationDidEnterBackground:(UIApplication *)application
+//{
+//    // TODO: call Swift instance method directly from AppDelegate after refactor
+//    // [rootService applicationDidEnterBackground:application];
+//    if (BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled &&
+//        [WalletManager.sharedInstance.wallet isInitialized] &&
+//        [WalletManager.sharedInstance.wallet didUpgradeToHd]) {
+//
+//        NSString *etherAddress = [WalletManager.sharedInstance.wallet getEtherAddress];
+//        if (etherAddress) {
+//            [KeychainItemWrapper setSwipeEtherAddress:etherAddress];
+//        } else {
+//            [KeychainItemWrapper removeSwipeEtherAddress];
+//        }
+//
+//        int numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
+//        NSArray *bitcoinSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:AssetTypeBitcoin];
+//        if (bitcoinSwipeAddresses) {
+//            numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinSwipeAddresses.count;
+//        }
+//
+//        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinAddressesToDerive assetType:AssetTypeBitcoin];
+//
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationDidEnterBackground" object:self];
+//    }
+//
+//    [self.loginTimer invalidate];
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:NO completion:nil];
+//
+//    [self hideSendAndReceiveKeyboards];
+//
+//    // Close all modals
+//    [app closeAllModals];
+//
+////    self.topViewControllerDelegate = nil;
+//
+//    // Close screens that shouldn't be in the foreground when returning to the wallet
+//    if (_backupNavigationViewController) {
+//        [_backupNavigationViewController dismissViewControllerAnimated:NO completion:nil];
+//    }
+//
+//    if (_settingsNavigationController) {
+//        [_settingsNavigationController dismissViewControllerAnimated:NO completion:nil];
+//    }
+//
+//    self.tabControllerManager.transactionsBitcoinViewController.loadedAllTransactions = NO;
+//    self.tabControllerManager.transactionsBitcoinViewController.messageIdentifier = nil;
+//    WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
+//    WalletManager.sharedInstance.wallet.isFilteringTransactions = NO;
+//    WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction = NO;
+//
+//    [createWalletView showPassphraseTextField];
+//
+//    [[AppCoordinator sharedInstance] closeSideMenu];
+//
+//    // Close PIN Modal in case we are setting it (after login or when changing the PIN)
+//    if (self.pinEntryViewController.verifyOnly == NO || self.pinEntryViewController.inSettings == NO) {
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:NO];
+//    }
+//
+//    // Show pin modal before we close the app so the PIN verify modal gets shown in the list of running apps and immediately after we restart
+//    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//        [self showPinModalAsView:YES];
+//        [self.pinEntryViewController reset];
+//    }
+//
+//    BOOL hasGuidAndSharedKey = [KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey];
+//
+//    if ([wallet isInitialized]) {
+//
+//        if (hasGuidAndSharedKey) {
+//            BlockchainSettings.sharedAppInstance.hasEndedFirstSession = YES;
+//        }
+//
+//        [self beginBackgroundUpdateTask];
+//
+//        [AuthenticationCoordinator.sharedInstance logoutWithShowPasswordView:false];
+//    }
+//
+//    if (BlockchainSettings.sharedAppInstance.hasSeenAllCards) {
+//        BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+//    }
+//
+//    if (BlockchainSettings.sharedAppInstance.didFailTouchIDSetup &&
+//        !BlockchainSettings.sharedAppInstance.touchIDEnabled) {
+//        BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = YES;
+//    }
+//
+//    [WalletManager.sharedInstance.wallet setupBuySellWebview];
+//
+//    [WalletManager.sharedInstance closeWebSocketsWithCloseCode:WebSocketCloseCodeBackgroundedApp];
+//
+//    if (hasGuidAndSharedKey) {
+//        [[[NetworkManager sharedInstance] session] resetWithCompletionHandler:^{
+//            // completion handler must be non-null
+//        }];
+//    }
+//}
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    // TODO: call Swift instance method directly from AppDelegate after refactor
-    // [rootService applicationDidEnterBackground:application];
-    if (BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled &&
-        [WalletManager.sharedInstance.wallet isInitialized] &&
-        [WalletManager.sharedInstance.wallet didUpgradeToHd]) {
+//- (void)applicationWillEnterForeground:(UIApplication *)application
+//{
+//    // Cannot be refactored any further until more code is migrated to RootServiceSwift
+//    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//        // [rootService authenticateWithBiometrics];
+//        return;
+//    }
+//
+//    if (![wallet isInitialized]) {
+//        [self showWelcomeScreen];
+//
+//        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey]) {
+//            [self showPasswordModal];
+//        }
+//    }
+//}
 
-        NSString *etherAddress = [WalletManager.sharedInstance.wallet getEtherAddress];
-        if (etherAddress) {
-            [KeychainItemWrapper setSwipeEtherAddress:etherAddress];
-        } else {
-            [KeychainItemWrapper removeSwipeEtherAddress];
-        }
-
-        int numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
-        NSArray *bitcoinSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:AssetTypeBitcoin];
-        if (bitcoinSwipeAddresses) {
-            numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinSwipeAddresses.count;
-        }
-
-        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinAddressesToDerive assetType:AssetTypeBitcoin];
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationDidEnterBackground" object:self];
-    }
-
-    [self.loginTimer invalidate];
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:NO completion:nil];
-
-    [self hideSendAndReceiveKeyboards];
-
-    // Close all modals
-    [app closeAllModals];
-
-//    self.topViewControllerDelegate = nil;
-
-    // Close screens that shouldn't be in the foreground when returning to the wallet
-    if (_backupNavigationViewController) {
-        [_backupNavigationViewController dismissViewControllerAnimated:NO completion:nil];
-    }
-
-    if (_settingsNavigationController) {
-        [_settingsNavigationController dismissViewControllerAnimated:NO completion:nil];
-    }
-
-    self.tabControllerManager.transactionsBitcoinViewController.loadedAllTransactions = NO;
-    self.tabControllerManager.transactionsBitcoinViewController.messageIdentifier = nil;
-    WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
-    WalletManager.sharedInstance.wallet.isFilteringTransactions = NO;
-    WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction = NO;
-
-    [createWalletView showPassphraseTextField];
-
-    [[AppCoordinator sharedInstance] closeSideMenu];
-
-    // Close PIN Modal in case we are setting it (after login or when changing the PIN)
-    if (self.pinEntryViewController.verifyOnly == NO || self.pinEntryViewController.inSettings == NO) {
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:NO];
-    }
-
-    // Show pin modal before we close the app so the PIN verify modal gets shown in the list of running apps and immediately after we restart
-    if ([BlockchainSettings sharedAppInstance].isPinSet) {
-        [self showPinModalAsView:YES];
-        [self.pinEntryViewController reset];
-    }
-
-    BOOL hasGuidAndSharedKey = [KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey];
-
-    if ([wallet isInitialized]) {
-
-        if (hasGuidAndSharedKey) {
-            BlockchainSettings.sharedAppInstance.hasEndedFirstSession = YES;
-        }
-
-        [self beginBackgroundUpdateTask];
-
-        [AuthenticationCoordinator.sharedInstance logoutWithShowPasswordView:false];
-    }
-
-    if (BlockchainSettings.sharedAppInstance.hasSeenAllCards) {
-        BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
-    }
-
-    if (BlockchainSettings.sharedAppInstance.didFailTouchIDSetup &&
-        !BlockchainSettings.sharedAppInstance.touchIDEnabled) {
-        BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = YES;
-    }
-
-    [WalletManager.sharedInstance.wallet setupBuySellWebview];
-
-    [WalletManager.sharedInstance closeWebSocketsWithCloseCode:WebSocketCloseCodeBackgroundedApp];
-
-    if (hasGuidAndSharedKey) {
-        [[[NetworkManager sharedInstance] session] resetWithCompletionHandler:^{
-            // completion handler must be non-null
-        }];
-    }
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Cannot be refactored any further until more code is migrated to RootServiceSwift
-    if ([BlockchainSettings sharedAppInstance].isPinSet) {
-        // [rootService authenticateWithBiometrics];
-        return;
-    }
-
-    if (![wallet isInitialized]) {
-        [self showWelcomeScreen];
-
-        if ([KeychainItemWrapper guid] && [KeychainItemWrapper sharedKey]) {
-            [self showPasswordModal];
-        }
-    }
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
+//- (void)applicationDidBecomeActive:(UIApplication *)application
+//{
     // TODO: call Swift instance method directly from AppDelegate after refactor
     // [rootService applicationDidBecomeActive:application];
-}
+//}
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
@@ -519,12 +519,12 @@ void (^secondPasswordSuccess)(NSString *);
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
-    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
-}
+//- (void)applicationWillTerminate:(UIApplication *)application
+//{
+//    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+//    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+//    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
+//}
 
 #pragma mark - Setup
 
@@ -931,13 +931,13 @@ void (^secondPasswordSuccess)(NSString *);
 
 # pragma mark - Wallet.js callbacks
 
-- (void)walletDidLoad
-{
-    // TODO move to WalletManager
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self endBackgroundUpdateTask];
-    });
-}
+//- (void)walletDidLoad
+//{
+//    // TODO move to WalletManager
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self endBackgroundUpdateTask];
+//    });
+//}
 - (void)walletFailedToLoad
 {
     DLog(@"walletFailedToLoad");
@@ -1207,24 +1207,24 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self showModalWithContent:mainPasswordView closeType:ModalCloseTypeNone headerText:BC_STRING_PASSWORD_REQUIRED];
 }
 
-- (void)beginBackgroundUpdateTask
-{
-    // We're using a background task to ensure we get enough time to sync. The bg task has to be ended before or when the timer expires, otherwise the app gets killed by the system.
-    // Always kill the old handler before starting a new one. In case the system starts a bg task when the app goes into background, comes to foreground and goes to background before the first background task was ended. In that case the first background task is never killed and the system kills the app when the maximum time is up.
-    [self endBackgroundUpdateTask];
-
-    self.backgroundUpdateTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        [self endBackgroundUpdateTask];
-    }];
-}
-
-- (void)endBackgroundUpdateTask
-{
-    if (self.backgroundUpdateTask != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundUpdateTask];
-        self.backgroundUpdateTask = UIBackgroundTaskInvalid;
-    }
-}
+//- (void)beginBackgroundUpdateTask
+//{
+//    // We're using a background task to ensure we get enough time to sync. The bg task has to be ended before or when the timer expires, otherwise the app gets killed by the system.
+//    // Always kill the old handler before starting a new one. In case the system starts a bg task when the app goes into background, comes to foreground and goes to background before the first background task was ended. In that case the first background task is never killed and the system kills the app when the maximum time is up.
+//    [self endBackgroundUpdateTask];
+//
+//    self.backgroundUpdateTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+//        [self endBackgroundUpdateTask];
+//    }];
+//}
+//
+//- (void)endBackgroundUpdateTask
+//{
+//    if (self.backgroundUpdateTask != UIBackgroundTaskInvalid) {
+//        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundUpdateTask];
+//        self.backgroundUpdateTask = UIBackgroundTaskInvalid;
+//    }
+//}
 
 - (void)playBeepSound
 {
@@ -3771,39 +3771,39 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-+ (BOOL)isUnsafe
-{
-#if !(TARGET_IPHONE_SIMULATOR)
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_CYDIA]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_MOBILE_SUBSTRATE]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_BIN_BASH]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_USR_SBIN_SSHD]){
-        return YES;
-    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_ETC_APT]){
-        return YES;
-    }
-
-    NSError *error;
-    NSString *stringToBeWritten = @"TEST";
-    [stringToBeWritten writeToFile:UNSAFE_CHECK_PATH_WRITE_TEST atomically:YES
-                          encoding:NSUTF8StringEncoding error:&error];
-    if(error == nil){
-        return YES;
-    } else {
-        [[NSFileManager defaultManager] removeItemAtPath:UNSAFE_CHECK_PATH_WRITE_TEST error:nil];
-    }
-
-    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:UNSAFE_CHECK_CYDIA_URL]]){
-        return YES;
-    }
-#endif
-
-    return NO;
-}
+//+ (BOOL)isUnsafe
+//{
+//#if !(TARGET_IPHONE_SIMULATOR)
+//
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_CYDIA]){
+//        return YES;
+//    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_MOBILE_SUBSTRATE]){
+//        return YES;
+//    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_BIN_BASH]){
+//        return YES;
+//    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_USR_SBIN_SSHD]){
+//        return YES;
+//    }else if([[NSFileManager defaultManager] fileExistsAtPath:UNSAFE_CHECK_PATH_ETC_APT]){
+//        return YES;
+//    }
+//
+//    NSError *error;
+//    NSString *stringToBeWritten = @"TEST";
+//    [stringToBeWritten writeToFile:UNSAFE_CHECK_PATH_WRITE_TEST atomically:YES
+//                          encoding:NSUTF8StringEncoding error:&error];
+//    if(error == nil){
+//        return YES;
+//    } else {
+//        [[NSFileManager defaultManager] removeItemAtPath:UNSAFE_CHECK_PATH_WRITE_TEST error:nil];
+//    }
+//
+//    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:UNSAFE_CHECK_CYDIA_URL]]){
+//        return YES;
+//    }
+//#endif
+//
+//    return NO;
+//}
 
 //- (BOOL)checkInternetConnection
 //{

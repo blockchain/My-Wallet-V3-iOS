@@ -211,6 +211,15 @@ import Foundation
         // Legacy code for generating new addresses
         NotificationCenter.default.post(name: Constants.NotificationKeys.newAddress, object: nil)
     }
+
+    /// Method to "cleanup" state when the app is backgrounded.
+    func cleanupOnAppBackgrounded() {
+        tabControllerManager.hideSendAndReceiveKeyboards()
+        tabControllerManager.transactionsBitcoinViewController?.loadedAllTransactions = false
+        tabControllerManager.transactionsBitcoinViewController?.messageIdentifier = nil
+
+        closeSideMenu()
+    }
 }
 
 extension AppCoordinator: SideMenuViewControllerDelegate {

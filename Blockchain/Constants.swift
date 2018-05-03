@@ -65,6 +65,7 @@ struct Constants {
         static let modalViewDismissed = NSNotification.Name("modalViewDismissed")
         static let reloadToDismissViews = NSNotification.Name("reloadToDismissViews")
         static let newAddress = NSNotification.Name("newAddress")
+        static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
     }
     struct PushNotificationKeys {
         static let userInfoType = "type"
@@ -82,6 +83,9 @@ struct Constants {
     }
     struct Url {
         static let blockchainSupport = "https://support.blockchain.com"
+    }
+    struct Wallet {
+        static let swipeToReceiveAddressCount = 5
     }
 }
 

@@ -169,30 +169,6 @@ import Foundation
         // [self migratePasswordAndPinFromNSUserDefaults];
     }
 
-    /// Unauthenticates the user
-    @objc func logout(showPasswordView: Bool) {
-        loginTimeout?.invalidate()
-
-        BlockchainSettings.App.shared.clearPin()
-
-        walletManager.latestMultiAddressResponse = nil
-        walletManager.closeWebSockets(withCloseCode: .loggedOut)
-
-        let wallet = walletManager.wallet
-        wallet.resetSyncStatus()
-        wallet.loadBlankWallet()
-        wallet.hasLoadedAccountInfo = false
-
-        let appCoordinator = AppCoordinator.shared
-        appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
-        appCoordinator.closeSideMenu()
-        appCoordinator.reload()
-
-        if showPasswordView {
-            showPasswordModal()
-        }
-    }
-
     @objc func startNewWalletSetUp() {
         let setUpWalletViewController = WalletSetupViewController(setupDelegate: self)!
         let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
@@ -245,6 +221,34 @@ import Foundation
             animated: true
         )
     }
+
+    /// Unauthenticates the user
+    @objc func logout(showPasswordView: Bool) {
+        loginTimeout?.invalidate()
+
+        BlockchainSettings.App.shared.clearPin()
+
+        WalletManager.shared.close()
+
+        let appCoordinator = AppCoordinator.shared
+        appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
+        appCoordinator.closeSideMenu()
+        appCoordinator.reload()
+
+        if showPasswordView {
+            showPasswordModal()
+        }
+    }
+
+    /// Method to "cleanup" state when the app is backgrounded.
+    func cleanupOnAppBackgrounded() {
+        guard let pinEntryViewController = pinEntryViewController else { return }
+        if !pinEntryViewController.verifyOnly || !pinEntryViewController.inSettings {
+            closePinEntryView(animated: false)
+        }
+    }
+
+    // MARK: - Forget Wallet Presentation
 
     @objc func showForgetWalletConfirmAlert() {
         let alert = UIAlertController(

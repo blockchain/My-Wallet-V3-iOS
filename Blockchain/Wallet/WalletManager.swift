@@ -38,6 +38,19 @@ class WalletManager: NSObject {
         self.wallet.delegate = self
     }
 
+    /// Performs closing operations on the wallet. This should be called on logout and
+    /// when the app is backgrounded
+    func close() {
+        latestMultiAddressResponse = nil
+        closeWebSockets(withCloseCode: .loggedOut)
+
+        wallet.resetSyncStatus()
+        wallet.loadBlankWallet()
+        wallet.hasLoadedAccountInfo = false
+
+        beginBackgroundUpdateTask()
+    }
+
     /// Closes all wallet websockets with the provided WebSocketCloseCode
     ///
     /// - Parameter closeCode: the WebSocketCloseCode
@@ -73,6 +86,25 @@ class WalletManager: NSObject {
 
         wallet.setupBuySellWebview()
     }
+
+    private var backgroundUpdateTaskIdentifer: UIBackgroundTaskIdentifier?
+
+    private func beginBackgroundUpdateTask() {
+        // We're using a background task to ensure we get enough time to sync. The bg task has to be ended before or when the timer expires,
+        // otherwise the app gets killed by the system. Always kill the old handler before starting a new one. In case the system starts a bg
+        // task when the app goes into background, comes to foreground and goes to background before the first background task was ended.
+        // In that case the first background task is never killed and the system kills the app when the maximum time is up.
+        endBackgroundUpdateTask()
+
+        backgroundUpdateTaskIdentifer = UIApplication.shared.beginBackgroundTask { [unowned self] in
+            self.endBackgroundUpdateTask()
+        }
+    }
+
+    private func endBackgroundUpdateTask() {
+        guard let backgroundUpdateTaskIdentifer = backgroundUpdateTaskIdentifer else { return }
+        UIApplication.shared.endBackgroundTask(backgroundUpdateTaskIdentifer)
+    }
 }
 
 extension WalletManager: WalletDelegate {
@@ -81,6 +113,7 @@ extension WalletManager: WalletDelegate {
 
     func walletDidLoad() {
         print("walletDidLoad()")
+        endBackgroundUpdateTask()
     }
 
     func walletDidDecrypt() {
