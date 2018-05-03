@@ -12,14 +12,14 @@ import XCTest
 class NumberFormatterAssetsTests: XCTestCase {
 
     let localCurrencyDecimalPlaces = 2
-    let localCurrencyInput: NSNumber = 1234.56
-
     let assetDecimalPlaces = 8
-    let assetInput: NSNumber = 1234.12345678
 
     let groupingAssertFormat = "Strings returned from %@ should have grouping separators"
     let noGroupingAssertFormat = "Strings returned from %@ should not have grouping separators"
-    let decimalAssertFormat = "Strings returned from %@ should always have %d decimal places"
+    let decimalAssertFormat = "String returned from %@ should have %d decimal places"
+
+    typealias ExpectDecimal = (expected: Int, assertStatement: String)
+    typealias ExpectGrouping = (expect: Bool, assertStatement: String)
 
     override func setUp() {
         super.setUp()
@@ -31,45 +31,100 @@ class NumberFormatterAssetsTests: XCTestCase {
 
     // MARK: Local Currency
     func testLocalCurrencyFormatter() {
+        // Setup test
         let name = "localCurrencyFormatter"
-        testFormatter(formatter: NumberFormatter.localCurrencyFormatter,
-                      inputAmount: localCurrencyInput,
-                      grouping: (false, String(format: noGroupingAssertFormat, name)),
-                      decimalPlaces: (localCurrencyDecimalPlaces, String(format: decimalAssertFormat, name, localCurrencyDecimalPlaces)))
+        let groupingTuple = self.expectGrouping(expect: false, functionName: name)
+        let decimalTuple = self.expectDecimalPlaces(expected: self.localCurrencyDecimalPlaces, functionName: name)
+
+        let testStringFromNumber = { (input: NSNumber) -> Void in
+            self.testFormatter(formatter: NumberFormatter.localCurrencyFormatter,
+                          inputAmount: input,
+                          grouping: groupingTuple,
+                          decimalPlaces: decimalTuple)
+        }
+
+        // Execute Tests
+        testStringFromNumber(1234.56)
+        testStringFromNumber(123.45)
+        testStringFromNumber(123.456)
+        testStringFromNumber(1.0)
+        testStringFromNumber(0)
     }
 
     func testLocalCurrencyFormatterWithGroupingSeparator() {
+        // Setup test
         let name = "localCurrencyFormatterWithGroupingSeparator"
-        testFormatter(formatter: NumberFormatter.localCurrencyFormatterWithGroupingSeparator,
-                      inputAmount: localCurrencyInput,
-                      grouping: (true, String(format: groupingAssertFormat, name)),
-                      decimalPlaces: (localCurrencyDecimalPlaces, String(format: decimalAssertFormat, name, localCurrencyDecimalPlaces)))
+        let decimalTuple = self.expectDecimalPlaces(expected: self.localCurrencyDecimalPlaces, functionName: name)
+
+        let testStringFromNumber = { (input: NSNumber, groupingTuple: ExpectGrouping) -> Void in
+            self.testFormatter(formatter: NumberFormatter.localCurrencyFormatterWithGroupingSeparator,
+                          inputAmount: input,
+                          grouping: groupingTuple,
+                          decimalPlaces: decimalTuple)
+        }
+
+        let grouping = expectGrouping(expect: true, functionName: name)
+        let noGrouping = expectGrouping(expect: false, functionName: name)
+
+        // Execute Tests
+        testStringFromNumber(1234.56, grouping)
+        testStringFromNumber(123.45, noGrouping)
+        testStringFromNumber(123.456, noGrouping)
+        testStringFromNumber(1.0, noGrouping)
+        testStringFromNumber(0, noGrouping)
     }
 
     // MARK: Digital Assets
     func testAssetFormatter() {
+        // Setup test
         let name = "assetFormatter"
-        let decimalPlaces = 8
-        testFormatter(formatter: NumberFormatter.assetFormatter,
-                      inputAmount: assetInput,
-                      grouping: (false, String(format: noGroupingAssertFormat, name)),
-                      decimalPlaces: (decimalPlaces, String(format: decimalAssertFormat, name, decimalPlaces)))
+        let groupingTuple = self.expectGrouping(expect: false, functionName: name)
+        let testStringFromNumber = { (input: NSNumber, decimalTuple: ExpectDecimal) -> Void in
+            self.testFormatter(formatter: NumberFormatter.assetFormatter,
+                          inputAmount: input,
+                          grouping: groupingTuple,
+                          decimalPlaces: decimalTuple)
+        }
+
+        let decimals = { (expected: Int) -> ExpectDecimal in return self.expectDecimalPlaces(expected: expected, functionName: name)}
+
+        // Execute tests
+        testStringFromNumber(1234.12345678, decimals(8))
+        testStringFromNumber(1234.123456, decimals(6))
+        testStringFromNumber(1234.1234, decimals(4))
+        testStringFromNumber(1234.1, decimals(1))
+        testStringFromNumber(1234, decimals(0))
+        testStringFromNumber(0, decimals(0))
     }
 
     func testAssetFormatterWithGroupingSeparator() {
         let name = "assetFormatterWithGroupingSeparator"
-        let decimalPlaces = 8
-        testFormatter(formatter: NumberFormatter.assetFormatterWithGroupingSeparator,
-                      inputAmount: assetInput,
-                      grouping: (true, String(format: groupingAssertFormat, name)),
-                      decimalPlaces: (decimalPlaces, String(format: decimalAssertFormat, name, decimalPlaces)))
+        let testStringFromNumber = { (input: NSNumber, groupingTuple: ExpectGrouping, decimalTuple: ExpectDecimal) -> Void in
+            self.testFormatter(formatter: NumberFormatter.assetFormatterWithGroupingSeparator,
+                               inputAmount: input,
+                               grouping: groupingTuple,
+                               decimalPlaces: decimalTuple)
+        }
+
+        let grouping = expectGrouping(expect: true, functionName: name)
+        let noGrouping = expectGrouping(expect: false, functionName: name)
+        let decimals = { (expected: Int) -> ExpectDecimal in return self.expectDecimalPlaces(expected: expected, functionName: name)}
+
+        // Execute tests
+        testStringFromNumber(1234.12345678, grouping, decimals(8))
+        testStringFromNumber(1234.123456, grouping, decimals(6))
+        testStringFromNumber(1234.1234, grouping, decimals(4))
+        testStringFromNumber(1234.1, grouping, decimals(1))
+        testStringFromNumber(1234, grouping, decimals(0))
+        testStringFromNumber(123.1234, noGrouping, decimals(4))
+        testStringFromNumber(0, noGrouping, decimals(0))
     }
 
     // MARK: Helpers
     private func testFormatter(formatter: NumberFormatter,
                                inputAmount: NSNumber,
-                               grouping: (expect: Bool, assertStatement: String),
-                               decimalPlaces: (expected: Int, assertStatement: String)) {
+                               grouping: ExpectGrouping,
+                               decimalPlaces: ExpectDecimal) {
         let formatted = testNumberFormatterOutput(formatter: formatter, inputAmount: inputAmount)
         let groupingSeparator = testNumberFormatterGroupingSeparator(formatter: formatter, inputAmount: inputAmount)
 
@@ -107,10 +162,26 @@ class NumberFormatterAssetsTests: XCTestCase {
     }
 
     private func testNumberFormatterNumbersAfterDecimal(formatted: String, inputAmount: NSNumber, decimalSeparator: String) -> Int {
-        guard let numbersAfterDecimal = formatted.components(separatedBy: decimalSeparator).last else {
-            XCTFail("Could not get numbers after decimal from formatter")
+        if !formatted.contains(decimalSeparator) {
             return 0
         }
-        return numbersAfterDecimal.count
+        let components = formatted.components(separatedBy: decimalSeparator)
+        if components.count == 2 {
+            guard let numbersAfterDecimal = formatted.components(separatedBy: decimalSeparator).last else {
+                XCTFail("Could not get numbers after decimal from formatter")
+                return 0
+            }
+            return numbersAfterDecimal.count
+        }
+        XCTFail("Unhandled decimal input")
+        return 0
+    }
+
+    private func expectGrouping(expect: Bool, functionName: String) -> ExpectGrouping {
+        return (expect, String(format: expect ? self.groupingAssertFormat : self.noGroupingAssertFormat, functionName))
+    }
+
+    private func expectDecimalPlaces(expected: Int, functionName: String) -> ExpectDecimal {
+        return (expected, String(format: self.decimalAssertFormat, functionName, expected))
     }
 }
