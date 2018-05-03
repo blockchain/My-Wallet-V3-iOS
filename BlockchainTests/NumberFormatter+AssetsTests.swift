@@ -73,6 +73,16 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(1.0, noGrouping)
         testStringFromNumber(0, noGrouping)
     }
+    
+    func testLocalCurrencyFormatterWithUSLocale() {
+        let testStringFromNumber = { (input: NSNumber) in
+            let formatter = NumberFormatter.localCurrencyFormatterWithUSLocale
+            self.testUSLocaleFormatter(formatter: formatter, input: input)
+        }
+
+        testStringFromNumber(1234.56)
+        testStringFromNumber(1234)
+    }
 
     // MARK: Digital Assets
     func testAssetFormatter() {
@@ -118,6 +128,16 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(1234, grouping, decimals(0))
         testStringFromNumber(123.1234, noGrouping, decimals(4))
         testStringFromNumber(0, noGrouping, decimals(0))
+    }
+
+    func testAssetFormatterWithUSLocale() {
+        let testStringFromNumber = { (input: NSNumber) in
+            let formatter = NumberFormatter.assetFormatterWithUSLocale
+            self.testUSLocaleFormatter(formatter: formatter, input: input)
+        }
+
+        testStringFromNumber(1234.56)
+        testStringFromNumber(1234)
     }
 
     // MARK: Helpers
@@ -183,5 +203,19 @@ class NumberFormatterAssetsTests: XCTestCase {
 
     private func expectDecimalPlaces(expected: Int, functionName: String) -> ExpectDecimal {
         return (expected, String(format: self.decimalAssertFormat, functionName, expected))
+    }
+
+    private func testUSLocaleFormatter(formatter: NumberFormatter, input: NSNumber) {
+        guard let decimalSeparator = formatter.locale.decimalSeparator else {
+            XCTFail("Could not get decimal separator from formatter")
+            return
+        }
+        guard let output = formatter.string(from: input) else {
+            XCTFail("Could not get string from formatter")
+            return
+        }
+        if output.contains(decimalSeparator) {
+            XCTAssert(decimalSeparator == ".")
+        }
     }
 }
