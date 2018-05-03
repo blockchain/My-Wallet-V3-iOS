@@ -27,9 +27,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         showVerifyingBusyView(withTimeout: 30)
 
-        // let pinKey = BlockchainSettings.App.shared.pinKey
-        // let pinString = pin.toString
-
         // TODO: Handle touch ID
         //        #ifdef ENABLE_TOUCH_ID
         //        if (self.pinEntryViewController.verifyOptional) {
