@@ -282,6 +282,7 @@
 		C72D6CBF1EC0B4AB0000F922 /* BCFeeSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72D6CBE1EC0B4AB0000F922 /* BCFeeSelectionView.m */; };
 		C72D6CC21EC0B7F80000F922 /* FeeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C72D6CC11EC0B7F80000F922 /* FeeTableCell.m */; };
 		C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C73406211F54791C00143100 /* EtherAmountInputViewController.m */; };
+		C7369223209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */; };
 		C7414E451FD7131C001A89FA /* ConfirmStateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */; };
 		C7414E531FD72574001A89FA /* StateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7414E521FD72574001A89FA /* StateSelectorViewController.m */; };
 		C7442E311FBA1E5700695E4C /* ExchangeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7442E301FBA1E5700695E4C /* ExchangeTableViewCell.xib */; };
@@ -1225,6 +1226,7 @@
 		C72D6CC91ED3472D0000F922 /* FeeTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeeTypes.h; sourceTree = "<group>"; };
 		C73406201F54791C00143100 /* EtherAmountInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtherAmountInputViewController.h; sourceTree = "<group>"; };
 		C73406211F54791C00143100 /* EtherAmountInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtherAmountInputViewController.m; sourceTree = "<group>"; };
+		C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+AssetsTests.swift"; sourceTree = "<group>"; };
 		C73CFBE81EA16B4A00C115F0 /* PrivateHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrivateHeaders.h; sourceTree = "<group>"; };
 		C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfirmStateViewController.h; sourceTree = "<group>"; };
 		C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfirmStateViewController.m; sourceTree = "<group>"; };
@@ -1650,6 +1652,7 @@
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				519435A2208E61F3001EF882 /* Info.plist */,
+				C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
 				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
 				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
@@ -2768,6 +2771,7 @@
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
 				AACE31C42092A99B00B7B806 /* Constants.swift in Sources */,
+				C7369223209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift in Sources */,
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AAD279CC209A826900C0EAFC /* BCSecureTextField.swift in Sources */,
