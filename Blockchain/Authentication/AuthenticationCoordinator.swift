@@ -300,7 +300,7 @@ import Foundation
             headerText: LocalizationConstants.Authentication.passwordRequired
         )
     }
-
+  
     // MARK: - Internal
 
     @objc internal func showLoginError() {
