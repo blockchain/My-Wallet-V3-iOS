@@ -71,18 +71,21 @@ struct LocalizationConstants {
         static let failedToLoadWalletDetail = NSLocalizedString("An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device.", comment: "")
         static let forgetWallet = NSLocalizedString("Forget Wallet", comment: "")
         static let forgetWalletDetail = NSLocalizedString("This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!", comment: "")
-        static let incorrectPin = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")
-        static let cannotSavePinInvalidWalletState = NSLocalizedString("Cannot save PIN Code while wallet is not initialized or password is null", comment: "")
-        static let pinResponseKeyOrValueLength0 = NSLocalizedString("PIN Response Object key or value length 0", comment: "")
-        static let pinEncryptedStringIsNil = NSLocalizedString("PIN Encrypted String is nil", comment: "")
-        static let pinValidationCannotBeCompleted = NSLocalizedString("PIN Validation cannot be completed. Please enter your wallet password manually.", comment: "")
-        static let pinCodeIncorrectUnknownError = NSLocalizedString("PIN Code Incorrect. Unknown Error Message.", comment: "")
-        static let pinResponseSuccessLength0 = NSLocalizedString("PIN Response Object success length 0", comment: "")
-        static let decryptedPinPasswordLength0 = NSLocalizedString("Decrypted PIN Password length 0", comment: "")
-        static let pinValidationError = NSLocalizedString("PIN Validation Error", comment: "")
-        static let pinValidationErrorMessage = NSLocalizedString("An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", comment: "")
         static let enterPassword = NSLocalizedString("Enter Password", comment: "")
         static let retryValidation = NSLocalizedString("Retry Validation", comment: "")
+
+        struct Pin {
+            static let incorrect = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")
+            static let cannotSaveInvalidWalletState = NSLocalizedString("Cannot save PIN Code while wallet is not initialized or password is null", comment: "")
+            static let responseKeyOrValueLengthZero = NSLocalizedString("PIN Response Object key or value length 0", comment: "")
+            static let encryptedStringIsNil = NSLocalizedString("PIN Encrypted String is nil", comment: "")
+            static let validationCannotBeCompleted = NSLocalizedString("PIN Validation cannot be completed. Please enter your wallet password manually.", comment: "")
+            static let incorrectUnknownError = NSLocalizedString("PIN Code Incorrect. Unknown Error Message.", comment: "")
+            static let responseSuccessLengthZero = NSLocalizedString("PIN Response Object success length 0", comment: "")
+            static let decryptedPasswordLengthZero = NSLocalizedString("Decrypted PIN Password length 0", comment: "")
+            static let validationError = NSLocalizedString("PIN Validation Error", comment: "")
+            static let validationErrorMessage = NSLocalizedString("An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", comment: "")
+        }
     }
 
     struct Onboarding {
@@ -109,5 +112,5 @@ struct LocalizationConstants {
 
     @objc class func timedOut() -> String { return LocalizationConstants.Errors.timedOut }
 
-    @objc class func incorrectPin() -> String { return LocalizationConstants.Authentication.incorrectPin }
+    @objc class func incorrectPin() -> String { return LocalizationConstants.Authentication.Pin.incorrect }
 }

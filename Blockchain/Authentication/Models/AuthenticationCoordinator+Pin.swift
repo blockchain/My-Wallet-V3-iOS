@@ -51,7 +51,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         self.lastEnteredPIN = pin
 
         guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.cannotSavePinInvalidWalletState)
+            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.Pin.cannotSaveInvalidWalletState)
             return
         }
 
@@ -155,7 +155,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
     }
 
     func errorGetPinEmptyResponse() {
-        showPinError(withMessage: LocalizationConstants.Authentication.incorrectPin)
+        showPinError(withMessage: LocalizationConstants.Authentication.Pin.incorrect)
     }
 
     func errorGetPinInvalidResponse() {
@@ -174,7 +174,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         LoadingViewPresenter.shared.hideBusyView()
 
         guard let password = walletManager.wallet.password else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.cannotSavePinInvalidWalletState)
+            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.Pin.cannotSaveInvalidWalletState)
             return
         }
 
@@ -195,7 +195,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         }
 
         guard response.key.count != 0 && response.value.count != 0 else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.pinResponseKeyOrValueLength0)
+            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.Pin.responseKeyOrValueLengthZero)
             return
         }
 
@@ -211,7 +211,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             password: response.value,
             pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
         ) else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.pinEncryptedStringIsNil)
+            errorDidFailPutPin(errorMessage: LocalizationConstants.Authentication.Pin.encryptedStringIsNil)
             return
         }
 
@@ -237,10 +237,10 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
         // Incorrect pin
         if response.code == nil {
-            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.incorrectPin)
+            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.incorrect)
         } else if response.code == GetPinResponse.StatusCode.deleted.rawValue {
             // Pin retry limit exceeded
-            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.pinValidationCannotBeCompleted)
+            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.validationCannotBeCompleted)
             BlockchainSettings.App.shared.clearPin()
             logout()
             DispatchQueue.main.async { [weak self] in
@@ -249,7 +249,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
                 strongSelf.closePinEntryView(animated: true)
             }
         } else if response.code == GetPinResponse.StatusCode.incorrect.rawValue {
-            let error = response.error ?? "PIN Code Incorrect. Unknown Error Message."
+            let error = response.error ?? LocalizationConstants.Authentication.Pin.incorrectUnknownError
             AlertViewPresenter.shared.standardNotify(message: error)
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
@@ -273,7 +273,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
             // Initial PIN setup ?
             if response.pinDecryptionValue?.count == 0 {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.pinResponseSuccessLength0)
+                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.responseSuccessLengthZero)
                 return
             }
 
@@ -284,7 +284,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
                 pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
             )
             if decryptedPassword?.count == 0 {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.decryptedPinPasswordLength0)
+                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.decryptedPasswordLengthZero)
                 askIfUserWantsToResetPIN()
                 return
             }
@@ -325,8 +325,8 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
     private func askIfUserWantsToResetPIN() {
         let alert = UIAlertController(
-            title: LocalizationConstants.Authentication.pinValidationError,
-            message: LocalizationConstants.Authentication.pinValidationErrorMessage,
+            title: LocalizationConstants.Authentication.Pin.validationError,
+            message: LocalizationConstants.Authentication.Pin.validationErrorMessage,
             preferredStyle: .alert
         )
         alert.addAction(
