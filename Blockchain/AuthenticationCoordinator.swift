@@ -60,12 +60,10 @@ import Foundation
             if dateOfLastSecurityReminder.timeIntervalSinceNow < -timeIntervalBetweenPrompts {
                 ReminderCoordinator.shared.showSecurityReminder()
             }
+        } else if BlockchainSettings.App.shared.hasSeenEmailReminder {
+            ReminderCoordinator.shared.showSecurityReminder()
         } else {
-            if BlockchainSettings.App.shared.hasSeenEmailReminder {
-                ReminderCoordinator.shared.showSecurityReminder()
-            } else {
-                ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
-            }
+            ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
         }
 
         // TODO
@@ -88,8 +86,8 @@ import Foundation
 
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController,
             BlockchainSettings.App.shared.isPinSet,
-            topViewController is SettingsNavigationController {
-            AlertViewPresenter.shared.showMobileNotice()
+            !(topViewController is SettingsNavigationController) {
+            AlertViewPresenter.shared.showMobileNoticeIfNeeded()
         }
     }
 

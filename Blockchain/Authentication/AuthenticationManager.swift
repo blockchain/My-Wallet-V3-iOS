@@ -44,7 +44,10 @@ final class AuthenticationManager: NSObject {
      * `preFlightError(forDeprecatedError:)`
      * `authenticationError(forError:)`
     */
-    private let genericAuthenticationError: AuthenticationError!
+    private let genericAuthenticationError: AuthenticationError = AuthenticationError(
+        code: Int.min,
+        description: LCStringAuthGenericError
+    )
 
     /// The app-provided reason for requesting authentication, which displays in the authentication dialog presented to the user.
     private lazy var authenticationReason: String = {
@@ -61,13 +64,14 @@ final class AuthenticationManager: NSObject {
 
     private var authHandler: Handler?
 
+    private let walletManager: WalletManager
+
     // MARK: Initialization
 
-    //: Prevent outside objects from creating their own instances of this class.
-    private override init() {
-        genericAuthenticationError = AuthenticationError(code: Int.min, description: LCStringAuthGenericError)
+    init(walletManager: WalletManager = WalletManager.shared) {
+        self.walletManager = walletManager
         super.init()
-        WalletManager.shared.authDelegate = self
+        self.walletManager.authDelegate = self
     }
 
     /// Deprecate this method once the wallet creation process has been refactored
@@ -131,7 +135,7 @@ final class AuthenticationManager: NSObject {
 
         authHandler = handler
 
-        WalletManager.shared.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
+        walletManager.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
     }
 
     // MARK: - Authentication Errors
@@ -239,8 +243,13 @@ extension AuthenticationManager: WalletAuthDelegate {
         BlockchainSettings.App.shared.guid = guid
         BlockchainSettings.App.shared.sharedKey = sharedKey
 
+        clearPinIfNeeded(for: password)
+    }
+
+    private func clearPinIfNeeded(for password: String?) {
         // Because we are not storing the password on the device. We record the first few letters of the hashed password.
-        // With the hash prefix we can then figure out if the password changed
+        // With the hash prefix we can then figure out if the password changed. If so, clear the pin
+        // so that the user can reset it
         guard let password = password,
             let passwordSha256 = NSString(string: password).sha256(),
             let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
@@ -248,9 +257,11 @@ extension AuthenticationManager: WalletAuthDelegate {
         }
 
         let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
-        if passwordSha256[..<endIndex] != passwordPartHash {
-            BlockchainSettings.App.shared.clearPin()
+        guard passwordSha256[..<endIndex] != passwordPartHash else {
+            return
         }
+
+        BlockchainSettings.App.shared.clearPin()
     }
 
     func requiresTwoFactorCode() {

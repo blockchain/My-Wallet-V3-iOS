@@ -852,21 +852,21 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager hideSendAndReceiveKeyboards];
 }
 
-- (void)showMobileNotice
-{
-    NSString *message = [WalletManager.sharedInstance.wallet getMobileMessage];
-
-    if (message) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_INFORMATION message:message preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-
-        if (self.window.rootViewController.presentedViewController) {
-            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
-        } else {
-            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        }
-    }
-}
+//- (void)showMobileNotice
+//{
+//    NSString *message = [WalletManager.sharedInstance.wallet getMobileMessage];
+//
+//    if (message) {
+//        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_INFORMATION message:message preferredStyle:UIAlertControllerStyleAlert];
+//        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//
+//        if (self.window.rootViewController.presentedViewController) {
+//            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+//        } else {
+//            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//        }
+//    }
+//}
 
 - (BOOL)checkIfWaitingOnEtherTransaction
 {
@@ -3591,7 +3591,7 @@ void (^secondPasswordSuccess)(NSString *);
         // Update your info to new pin code
         [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
 
-        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [self showMobileNotice];
+        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [AlertViewPresenter.sharedInstance showMobileNoticeIfNeeded];
 
         if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
             [self forceHDUpgradeForLegacyWallets];
