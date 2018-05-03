@@ -17,7 +17,7 @@ class OnboardingCoordinator: Coordinator {
     // MARK: Public Methods
 
     func start() {
-        NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+        NetworkManager.shared.checkForMaintenance(withCompletion: { [unowned self] response in
             if let message = response {
                 print("Error checking for maintenance in wallet options: %@", message)
                 AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error, handler: nil)

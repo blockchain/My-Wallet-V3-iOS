@@ -42,7 +42,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         }
 
         // Check for maintenance before allowing pin entry
-        NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+        NetworkManager.shared.checkForMaintenance(withCompletion: { [unowned self] response in
             LoadingViewPresenter.shared.hideBusyView()
             guard response == nil else {
                 print("Error checking for maintenance in wallet options: %@", response!)
