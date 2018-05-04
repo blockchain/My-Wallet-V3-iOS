@@ -496,17 +496,17 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    const char *data = [deviceToken bytes];
-    NSMutableString *token = [NSMutableString string];
-
-    for (NSUInteger i = 0; i < [deviceToken length]; i++) {
-        [token appendFormat:@"%02.2hhX", data[i]];
-    }
-
-    self.deviceToken = [token copy];
-}
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+//{
+//    const char *data = [deviceToken bytes];
+//    NSMutableString *token = [NSMutableString string];
+//
+//    for (NSUInteger i = 0; i < [deviceToken length]; i++) {
+//        [token appendFormat:@"%02.2hhX", data[i]];
+//    }
+//
+//    self.deviceToken = [token copy];
+//}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
