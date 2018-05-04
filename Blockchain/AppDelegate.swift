@@ -89,12 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         AppCoordinator.shared.start()
 
-        if #available(iOS 10.0, *) {
-            PushNotificationManager.shared.requestAuthorization()
-        } else {
-            LegacyPushNotificationManager.shared.requestAuthorization()
-        }
-
         return true
     }
 
@@ -121,6 +115,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
 
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let token = deviceToken.map { String(format: "%02x", $0) }.joined()
+        NetworkManager.registerDeviceForPushNotifications(withDeviceToken: token)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // TODO: handle registration failure
+        print(error.localizedDescription)
     }
 
     // MARK: - Authentication
