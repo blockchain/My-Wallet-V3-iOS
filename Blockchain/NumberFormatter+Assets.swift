@@ -24,50 +24,54 @@ extension NumberFormatter {
     }
 
     // MARK: Local Currency
-    private static var localCurrencyFractionDigits: Int { return 2 }
+    private static let localCurrencyFractionDigits: Int = { return 2 }()
 
     // Example: 1234.12
-    static var localCurrencyFormatter: NumberFormatter {
+    static let localCurrencyFormatter: NumberFormatter = {
         return decimalStyleFormatter(withMinfractionDigits: localCurrencyFractionDigits,
                                      maxfractionDigits: localCurrencyFractionDigits,
                                      usesGroupingSeparator: false)
-    }
+    }()
 
     // Example: 1,234.12
-    static var localCurrencyFormatterWithGroupingSeparator: NumberFormatter {
+    static let localCurrencyFormatterWithGroupingSeparator: NumberFormatter = {
         return decimalStyleFormatter(withMinfractionDigits: localCurrencyFractionDigits,
                                      maxfractionDigits: localCurrencyFractionDigits,
                                      usesGroupingSeparator: true)
-    }
+    }()
 
     // Used to create QR code string from amount
-    static var localCurrencyFormatterWithUSLocale: NumberFormatter {
-        let formatter = localCurrencyFormatter
+    static let localCurrencyFormatterWithUSLocale: NumberFormatter = {
+        let formatter = decimalStyleFormatter(withMinfractionDigits: localCurrencyFractionDigits,
+                                              maxfractionDigits: localCurrencyFractionDigits,
+                                              usesGroupingSeparator: false)
         formatter.locale = Locale(identifier: Constants.Locales.English.us)
         return formatter
-    }
+    }()
 
     // MARK: Digital Assets
-    private static var assetFractionDigits: Int { return 8 }
+    private static let assetFractionDigits: Int = { return 8 }()
 
     // Example: 1234.12345678
-    static var assetFormatter: NumberFormatter {
+    static let assetFormatter: NumberFormatter = {
         return decimalStyleFormatter(withMinfractionDigits: 0,
                                      maxfractionDigits: assetFractionDigits,
                                      usesGroupingSeparator: false)
-    }
+    }()
 
     // Example: 1,234.12345678
-    static var assetFormatterWithGroupingSeparator: NumberFormatter {
+    static let assetFormatterWithGroupingSeparator: NumberFormatter = {
         return decimalStyleFormatter(withMinfractionDigits: 0,
                                      maxfractionDigits: assetFractionDigits,
                                      usesGroupingSeparator: true)
-    }
+    }()
 
     // Used to create QR code string from amount
-    static var assetFormatterWithUSLocale: NumberFormatter {
-        let formatter = assetFormatter
+    static let assetFormatterWithUSLocale: NumberFormatter = {
+        let formatter = decimalStyleFormatter(withMinfractionDigits: 0,
+                                              maxfractionDigits: assetFractionDigits,
+                                              usesGroupingSeparator: false)
         formatter.locale = Locale(identifier: Constants.Locales.English.us)
         return formatter
-    }
+    }()
 }
