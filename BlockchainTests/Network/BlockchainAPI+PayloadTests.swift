@@ -24,27 +24,32 @@ class BlockchainAPIPayloadTests: XCTestCase {
     }
 
     func testRegisterDeviceForPushNotificationsPayloadWithEmptyArguments() {
-        let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload("", "", "")
-        XCTAssertNil(payload, "Expected the payload to be nil, but got \(payload!)")
+        let payload = PushNotificationAuthPayload(guid: "", sharedKey: "", deviceToken: "")
+        let result = BlockchainAPI.registerDeviceForPushNotifications(using: payload)
+        XCTAssertNil(payload, "Expected the payload to be nil, but got \(result!)")
     }
 
     func testRegisterDeviceForPushNotificationsPayloadWithEmptyGuid() {
-        let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload("", sharedKey, deviceToken)
-        XCTAssertNil(payload, "Expected the payload to be nil, but got \(payload!)")
+        let payload = PushNotificationAuthPayload(guid: "", sharedKey: sharedKey, deviceToken: deviceToken)
+        let result = BlockchainAPI.registerDeviceForPushNotifications(using: payload)
+        XCTAssertNil(payload, "Expected the payload to be nil, but got \(result!)")
     }
 
     func testRegisterDeviceForPushNotificationsPayloadWithEmptySharedKey() {
-        let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload(guid, "", deviceToken)
-        XCTAssertNil(payload, "Expected the payload to be nil, but got \(payload!)")
+        let payload = PushNotificationAuthPayload(guid: guid, sharedKey: "", deviceToken: deviceToken)
+        let result = BlockchainAPI.registerDeviceForPushNotifications(using: payload)
+        XCTAssertNil(payload, "Expected the payload to be nil, but got \(result!)")
     }
 
     func testRegisterDeviceForPushNotificationsPayloadWithEmptyDeviceToken() {
-        let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload(guid, sharedKey, "")
-        XCTAssertNil(payload, "Expected the payload to be nil, but got \(payload!)")
+        let payload = PushNotificationAuthPayload(guid: guid, sharedKey: sharedKey, deviceToken: "")
+        let result = BlockchainAPI.registerDeviceForPushNotifications(using: payload)
+        XCTAssertNil(payload, "Expected the payload to be nil, but got \(result!)")
     }
 
     func testRegisterDeviceForPushNotificationsPayload() {
-        let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload(guid, sharedKey, deviceToken)
-        XCTAssertNotNil(payload, "Expected payload to have a value, but instead got nil.")
+        let payload = PushNotificationAuthPayload(guid: guid, sharedKey: sharedKey, deviceToken: deviceToken)
+        let result = BlockchainAPI.registerDeviceForPushNotifications(using: payload)
+        XCTAssertNotNil(payload, "Expected payload to have a value, but instead got \(result!).")
     }
 }

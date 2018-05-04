@@ -16,12 +16,13 @@ extension NetworkManager {
             let url = URL(string: pushNotificationsUrl),
             let guid = WalletManager.shared.wallet.guid,
             let sharedKey = WalletManager.shared.wallet.sharedKey,
-            let payload = BlockchainAPI.registerDeviceForPushNotificationsPayload(guid, sharedKey, token) else {
+            let payload = PushNotificationAuthPayload(guid: guid, sharedKey: sharedKey, deviceToken: token),
+            let body = BlockchainAPI.registerDeviceForPushNotifications(using: payload) else {
                 return
         }
         var notificationRequest = URLRequest(url: url)
         notificationRequest.httpMethod = "POST"
-        notificationRequest.httpBody = payload
+        notificationRequest.httpBody = body
         notificationRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         notificationRequest.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = NetworkManager.shared.session.dataTask(with: notificationRequest, completionHandler: { data, response, error in

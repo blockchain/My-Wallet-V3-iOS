@@ -9,12 +9,12 @@
 import Foundation
 
 extension BlockchainAPI {
-    static func registerDeviceForPushNotificationsPayload(_ guid: String, _ sharedKey: String, _ deviceToken: String) -> Data? {
-        guard guid.count > 0 && sharedKey.count > 0 && deviceToken.count > 0 else { return nil }
+    static func registerDeviceForPushNotifications(using payload: PushNotificationAuthPayload?) -> Data? {
+        guard let payload = payload else { return nil }
         let language = Locale.preferredLanguages.first ?? "en"
-        let length = deviceToken.count
-        let payload = String(format: "guid=%@&sharedKey=%@&payload=%@&length=%d&lang=%@", guid, sharedKey, deviceToken, length, language)
-        guard let encodedData = payload.data(using: String.Encoding.utf8) else { return nil }
+        let length = payload.deviceToken.count
+        let body = String(format: "guid=%@&sharedKey=%@&payload=%@&length=%d&lang=%@", payload.guid, payload.sharedKey, payload.deviceToken, length, language)
+        guard let encodedData = body.data(using: String.Encoding.utf8) else { return nil }
         return encodedData
     }
 }
