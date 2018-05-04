@@ -11,6 +11,7 @@ import Foundation
 /**
  Manager object for push notifications for iOS versions < 10.0.
  */
+@available(iOS, deprecated: 10.0, message: "Use PushNotificationManager")
 class LegacyPushNotificationManager {
     static let shared = LegacyPushNotificationManager()
 
