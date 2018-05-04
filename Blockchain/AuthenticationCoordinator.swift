@@ -74,7 +74,12 @@ import Foundation
         // Enabling touch ID and immediately backgrounding the app hides the status bar
         UIApplication.shared.setStatusBarHidden(false, with: .slide)
 
-        LegacyPushNotificationManager.shared.registerDeviceForPushNotifications()
+        /// Prompt the user for push notification permission
+        if #available(iOS 10.0, *) {
+            PushNotificationManager.shared.requestAuthorization()
+        } else {
+            LegacyPushNotificationManager.shared.requestAuthorization()
+        }
 
         // TODO
         // if (showType == ShowTypeSendCoins) {
