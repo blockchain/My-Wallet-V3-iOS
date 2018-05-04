@@ -120,7 +120,7 @@ int accountEntries = 0;
     [self addMenuEntry:entryKeyAccountsAndAddresses text:BC_STRING_ADDRESSES icon:@"wallet"];
     [self addMenuEntry:entryKeyWebLogin text:BC_STRING_LOG_IN_TO_WEB_WALLET icon:@"web"];
     [self addMenuEntry:entryKeySupport text:BC_STRING_SUPPORT icon:@"help"];
-    [self addMenuEntry:entryKeyLogout text:BC_STRING_LOGOUT icon:@"logout"];
+    [self addMenuEntry:entryKeyLogout text:LocalizationConstantsObjcBridge.logout icon:@"logout"];
 
     [self setSideMenuGestures];
     [self reload];
@@ -252,28 +252,7 @@ int accountEntries = 0;
     
     NSString *rowKey = [self getMenuEntry:indexPath.row][@"key"];
 
-    if (rowKey == entryKeyUpgradeBackup) {
-        BOOL didUpgradeToHD = WalletManager.sharedInstance.wallet.didUpgradeToHd;
-        if (didUpgradeToHD) {
-            [app backupFundsClicked:nil];
-        } else {
-            [AppCoordinator.sharedInstance showHdUpgradeView];
-        }
-    } else if (rowKey == entryKeyAccountsAndAddresses) {
-        [app accountsAndAddressesClicked:nil];
-    } else if (rowKey == entryKeySettings) {
-        [app accountSettingsClicked:nil];
-    } else if (rowKey == entryKeyWebLogin) {
-        [app webLoginClicked:nil];
-    } else if (rowKey == entryKeySupport) {
-        [app supportClicked:nil];
-    } else if (rowKey == entryKeyLogout) {
-        [app logoutClicked:nil];
-    } else if (rowKey == entryKeyBuyBitcoin) {
-        [app buyBitcoinClicked:nil];
-    } else if (rowKey == entryKeyExchange) {
-        [app exchangeClicked:nil];
-    }
+    [self.delegate onSideMenuItemTapped:rowKey];
 }
 
 #pragma mark - UITableView Datasource

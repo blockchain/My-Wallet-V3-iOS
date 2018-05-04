@@ -22,6 +22,7 @@ import Foundation
     /// but the current way wallet creation is designed, we need to share this handler
     /// with that flow. Eventually, wallet creation should be moved with AuthenticationCoordinator
     lazy var authHandler: AuthenticationManager.Handler = { [weak self] isAuthenticated, error in
+        guard let strongSelf = self else { return }
 
         LoadingViewPresenter.shared.hideBusyView()
 
@@ -30,6 +31,8 @@ import Foundation
             switch error!.code {
             case AuthenticationError.ErrorCode.noInternet.rawValue:
                 AlertViewPresenter.shared.showNoInternetConnectionAlert()
+            case AuthenticationError.ErrorCode.failedToLoadWallet.rawValue:
+                strongSelf.handleFailedToLoadWallet()
             default:
                 if let description = error!.description {
                     AlertViewPresenter.shared.standardNotify(message: description)
@@ -46,7 +49,7 @@ import Foundation
 
         // New wallet set-up. This will guide the user to create a pin & optionally
         // enable touch ID and email
-        guard !WalletManager.shared.wallet.isNew else {
+        guard !strongSelf.walletManager.wallet.isNew else {
             AuthenticationCoordinator.shared.startNewWalletSetUp()
             return
         }
@@ -91,12 +94,14 @@ import Foundation
         }
     }
 
-    private(set) var pinEntryViewController: PEPinEntryController?
+    internal let walletManager: WalletManager
+
+    internal(set) var pinEntryViewController: PEPinEntryController?
 
     // TODO: loginTimout is never invalidated after a successful login
-    private var loginTimeout: Timer?
+    internal var loginTimeout: Timer?
 
-    private var pinViewControllerCallback: ((Bool) -> Void)?
+    internal var pinViewControllerCallback: ((Bool) -> Void)?
 
     private var isPinEntryModalPresented: Bool {
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
@@ -107,34 +112,77 @@ import Foundation
             tabControllerManager.tabViewController.presentedViewController != pinEntryViewController)
     }
 
+    /// Flag used to indicate whether the device is prompting for biometric authentication.
+    @objc internal(set) var isPromptingForBiometricAuthentication = false
+
+    // MARK: - Initializer
+
+    init(walletManager: WalletManager = WalletManager.shared) {
+        self.walletManager = walletManager
+        super.init()
+        self.walletManager.pinEntryDelegate = self
+    }
+
     // MARK: - Public
 
+    /// Starts the authentication flow. If the user has a pin set, it will trigger
+    /// present the pin entry screen, otherwise, it will show the password screen.
     @objc func start() {
-        guard !WalletManager.shared.wallet.isNew else {
+        guard !walletManager.wallet.isNew else {
             startNewWalletSetUp()
             return
         }
 
-        // TODO migrate these
-        // [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HAS_SEEN_ALL_CARDS];
-        // [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_SHOULD_HIDE_ALL_CARDS];
+        BlockchainSettings.App.shared.hasSeenAllCards = true
+        BlockchainSettings.App.shared.shouldHideAllCards = true
 
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView(asModal: true)
-            // TODO: handle touch ID
-            // [rootService authenticateWithBiometrics];
+            // TODO enable touch ID
+//            #ifdef ENABLE_TOUCH_ID
+//            if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
+//                [self authenticateWithTouchID];
+//            }
+//            #endif
+            authenticateWithBiometrics()
         } else {
-            // TODO: check for maintenance
-//            [self checkForMaintenance];
+            NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+                guard let message = response else { return }
+                print("Error checking for maintenance in wallet options: %@", message)
+                AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error, handler: nil)
+            })
             showPasswordModal()
             AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
         }
-
         // TODO
         // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu)
         // name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
         //
         // [self migratePasswordAndPinFromNSUserDefaults];
+    }
+
+    /// Unauthenticates the user
+    @objc func logout(showPasswordView: Bool) {
+        loginTimeout?.invalidate()
+
+        BlockchainSettings.App.shared.clearPin()
+
+        walletManager.latestMultiAddressResponse = nil
+        walletManager.closeWebSockets(withCloseCode: .loggedOut)
+
+        let wallet = walletManager.wallet
+        wallet.resetSyncStatus()
+        wallet.loadBlankWallet()
+        wallet.hasLoadedAccountInfo = false
+
+        let appCoordinator = AppCoordinator.shared
+        appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
+        appCoordinator.closeSideMenu()
+        appCoordinator.reload()
+
+        if showPasswordView {
+            showPasswordModal()
+        }
     }
 
     @objc func startNewWalletSetUp() {
@@ -144,6 +192,8 @@ import Foundation
             self?.showPinEntryView(asModal: false)
         }
     }
+
+    // MARK: - Pin Entry Presentation
 
     // Closes the pin entry modal, if presented
     @objc func closePinEntryView(animated: Bool) {
@@ -167,7 +217,7 @@ import Foundation
 
     @objc func showPinEntryView(asModal: Bool) {
 
-        guard !WalletManager.shared.didChangePassword else {
+        guard !walletManager.didChangePassword else {
             showPasswordModal()
             return
         }
@@ -209,9 +259,9 @@ import Foundation
         } else {
             let topMostViewController = rootViewController.topMostViewController
             topMostViewController?.present(pinViewController, animated: true) { [weak self] in
-                guard self != nil else { return }
+                guard let strongSelf = self else { return }
 
-                if WalletManager.shared.wallet.isNew {
+                if strongSelf.walletManager.wallet.isNew {
                     AlertViewPresenter.shared.standardNotify(
                         message: LocalizationConstants.Authentication.didCreateNewWalletMessage,
                         title: LocalizationConstants.Authentication.didCreateNewWalletTitle
@@ -219,7 +269,7 @@ import Foundation
                     return
                 }
 
-                if WalletManager.shared.wallet.didPairAutomatically {
+                if strongSelf.walletManager.wallet.didPairAutomatically {
                     AlertViewPresenter.shared.standardNotify(
                         message: LocalizationConstants.Authentication.walletPairedSuccessfullyMessage,
                         title: LocalizationConstants.Authentication.walletPairedSuccessfullyTitle
@@ -230,12 +280,14 @@ import Foundation
         }
         self.pinEntryViewController = pinViewController
 
-        WalletManager.shared.wallet.didPairAutomatically = false
+        walletManager.wallet.didPairAutomatically = false
 
         LoadingViewPresenter.shared.hideBusyView()
 
         UIApplication.shared.setStatusBarStyle(.default, animated: false)
     }
+
+    // MARK: - Password Presentation
 
     // TODO: make private once migrated
     @objc func showPasswordModal() {
@@ -249,37 +301,60 @@ import Foundation
         )
     }
 
-    // MARK: - Private
+    // MARK: - Internal
 
-    private func showVerifyingBusyView(withTimeout seconds: Int) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-
-        // TODO: this timeout approach should be deprecated in favor of checking actual success/error responses
-        if #available(iOS 10.0, *) {
-            loginTimeout = Timer.scheduledTimer(withTimeInterval: TimeInterval(seconds), repeats: false) { [weak self] _ in
-                self?.showLoginError()
-            }
-        } else {
-            loginTimeout = Timer.scheduledTimer(
-                timeInterval: TimeInterval(seconds),
-                target: self,
-                selector: #selector(showLoginError),
-                userInfo: nil,
-                repeats: false
-            )
-        }
-    }
-
-    @objc private func showLoginError() {
+    @objc internal func showLoginError() {
         loginTimeout?.invalidate()
         loginTimeout = nil
 
-        guard WalletManager.shared.wallet.guid == nil else {
+        guard walletManager.wallet.guid == nil else {
             return
         }
         pinEntryViewController?.reset()
         LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Errors.errorLoadingWallet)
+    }
+
+    // MARK: - Private
+
+    private func handleFailedToLoadWallet() {
+        guard let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController else {
+            return
+        }
+
+        let alertController = UIAlertController(
+            title: LocalizationConstants.Authentication.failedToLoadWallet,
+            message: LocalizationConstants.Authentication.failedToLoadWalletDetail,
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { _ in
+
+                let forgetWalletAlert = UIAlertController(
+                    title: LocalizationConstants.Errors.warning,
+                    message: LocalizationConstants.Authentication.forgetWalletDetail,
+                    preferredStyle: .alert
+                )
+                forgetWalletAlert.addAction(
+                    UIAlertAction(title: LocalizationConstants.cancel, style: .cancel) { [unowned self] _ in
+                        self.handleFailedToLoadWallet()
+                    }
+                )
+                forgetWalletAlert.addAction(
+                    UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { [unowned self] _ in
+                        self.walletManager.forgetWallet()
+                        OnboardingCoordinator.shared.start()
+                    }
+                )
+                topMostViewController.present(forgetWalletAlert, animated: true)
+            }
+        )
+        alertController.addAction(
+            UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { _ in
+                UIApplication.shared.suspend()
+            }
+        )
+        topMostViewController.present(alertController, animated: true)
     }
 }
 
@@ -297,127 +372,6 @@ extension AuthenticationCoordinator: PasswordRequiredViewDelegate {
 
         let payload = PasscodePayload(guid: guid, password: password, sharedKey: sharedKey)
         AuthenticationManager.shared.authenticate(using: payload, andReply: authHandler)
-    }
-}
-
-extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
-    func pinEntryController(
-        _ pinEntryController: PEPinEntryController!,
-        shouldAcceptPin pinInt: UInt,
-        callback: ((Bool) -> Void)!
-    ) {
-        let pin = Pin(code: pinInt)
-        self.lastEnteredPIN = pin
-
-        // Check if we have an internet connection
-        // This only checks if a network interface is up. All other errors (including timeouts)
-        // are handled by JavaScript callbacks in Wallet.m
-        guard Reachability.hasInternetConnection() else {
-            AlertViewPresenter.shared.showNoInternetConnectionAlert()
-            return
-        }
-
-        showVerifyingBusyView(withTimeout: 30)
-
-
-        let pinKey = BlockchainSettings.App.shared.pinKey
-        let pinString = pin.toString
-
-        // TODO: Handle touch ID
-//        #ifdef ENABLE_TOUCH_ID
-//        if (self.pinEntryViewController.verifyOptional) {
-//            [KeychainItemWrapper setPINInKeychain:pin];
-//        }
-//        #endif
-
-        // TODO: migrate check for maintenance
-
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self checkForMaintenanceWithPinKey:pinKey pin:pin];
-//        });
-
-        self.pinViewControllerCallback = callback
-    }
-
-    func pinEntryController(_ pinEntryController: PEPinEntryController!, changedPin pinInt: UInt) {
-        let pin = Pin(code: pinInt)
-        self.lastEnteredPIN = pin
-
-        guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
-            // TODO: migrate pin errors
-            // [self didFailPutPin:BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE];
-            return
-        }
-
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-
-        try? pin.save()
-    }
-
-    func pinEntryController(_ pinEntryController: PEPinEntryController!, willChangeToNewPin pinInt: UInt) {
-        let pin = Pin(code: pinInt)
-
-        // Check that the selected pin passes checks
-
-        guard pin.isValid else {
-            AlertViewPresenter.shared.standardNotify(
-                message: LocalizationConstants.Authentication.chooseAnotherPin,
-                title: LocalizationConstants.Errors.error
-            ) { [unowned self] _ in
-                self.reopenChangePin()
-            }
-            return
-        }
-
-        guard pin != self.lastEnteredPIN else {
-            AlertViewPresenter.shared.standardNotify(
-                message: LocalizationConstants.Authentication.newPinMustBeDifferent,
-                title: LocalizationConstants.Errors.error
-            ) { [unowned self] _ in
-                self.reopenChangePin()
-            }
-            return
-        }
-
-        guard !pin.isCommon else {
-            let alert = UIAlertController(
-                title: LocalizationConstants.Errors.warning,
-                message: LocalizationConstants.Authentication.pinCodeCommonMessage,
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default))
-            alert.addAction(
-                UIAlertAction(title: LocalizationConstants.tryAgain, style: .cancel) {  [unowned self] _ in
-                    self.reopenChangePin()
-                }
-            )
-            pinEntryController.present(alert, animated: true)
-            return
-        }
-    }
-
-    func pinEntryControllerDidCancel(_ pinEntryController: PEPinEntryController!) {
-        print("Pin change cancelled!")
-        closePinEntryView(animated: true)
-    }
-
-    private func reopenChangePin() {
-        closePinEntryView(animated: false)
-
-        guard let pinViewController = PEPinEntryController.pinCreate() else {
-            return
-        }
-
-        pinViewController.isNavigationBarHidden = true
-        pinViewController.pinDelegate = self
-
-        if BlockchainSettings.App.shared.isPinSet {
-            pinViewController.inSettings = true
-        }
-
-        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(pinViewController.view)
-
-        pinEntryViewController = pinViewController
     }
 }
 

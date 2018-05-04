@@ -42,9 +42,9 @@
     SystemSoundID beepSoundID;
     SystemSoundID dingSoundID;
     
-    IBOutlet BCFadeView *busyView;
-    IBOutlet UILabel *busyLabel;
-    
+//    IBOutlet BCFadeView *busyView;
+//    IBOutlet UILabel *busyLabel;
+
     IBOutlet BCCreateWalletView *createWalletView;
     IBOutlet BCModalContentView *pairingInstructionsView;
     IBOutlet BCManualPairView *manualPairView;
@@ -126,7 +126,7 @@
 
 
 //- (void)showWelcome;
-- (void)logout;
+//- (void)logout;
 //- (void)forgetWallet;
 //- (void)showPasswordModal;
 
@@ -168,14 +168,14 @@
 - (void)reloadAfterMultiAddressResponse;
 - (void)toggleSymbol;
 
-- (void)logoutAndShowPasswordModal;
+//- (void)logoutAndShowPasswordModal;
 
 - (NSInteger)filterIndex;
 - (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType;
 - (void)filterTransactionsByImportedAddresses;
 - (void)removeTransactionsFilter;
 
-- (void)initializeWebview;
+//- (void)initializeWebview;
 
 //- (void)pushWebViewController:(NSString*)url title:(NSString *)title;
 
@@ -185,20 +185,20 @@
 //- (void)showDebugMenu:(int)presenter;
 - (void)showBackupReminder:(BOOL)firstReceive;
 
-- (IBAction)webLoginClicked:(id)sender;
+//- (IBAction)webLoginClicked:(id)sender;
 - (IBAction)forgetWalletClicked:(id)sender;
 - (IBAction)scanAccountQRCodeclicked:(id)sender;
 - (IBAction)secondPasswordClicked:(id)sender;
 - (IBAction)mainPasswordClicked:(id)sender;
 - (IBAction)manualPairClicked:(id)sender;
 
-- (IBAction)accountsAndAddressesClicked:(id)sender;
-- (IBAction)accountSettingsClicked:(id)sender;
-- (IBAction)backupFundsClicked:(id)sender;
-- (IBAction)supportClicked:(id)sender;
-- (IBAction)logoutClicked:(id)sender;
-- (IBAction)buyBitcoinClicked:(id)sender;
-- (IBAction)exchangeClicked:(id)sender;
+//- (IBAction)accountsAndAddressesClicked:(id)sender;
+//- (IBAction)accountSettingsClicked:(id)sender;
+//- (IBAction)backupFundsClicked:(id)sender;
+//- (IBAction)supportClicked:(id)sender;
+//- (IBAction)logoutClicked:(id)sender;
+//- (IBAction)buyBitcoinClicked:(id)sender;
+//- (IBAction)exchangeClicked:(id)sender;
 
 - (void)setupTransferAllFunds;
 - (void)setupSendToAddress:(NSString *)address;

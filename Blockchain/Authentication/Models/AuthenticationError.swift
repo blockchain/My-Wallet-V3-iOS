@@ -19,6 +19,7 @@ internal struct AuthenticationError {
         case noPassword
         case errorDecryptingWallet
         case invalidSharedKey
+        case failedToLoadWallet
         case unknown
     }
 

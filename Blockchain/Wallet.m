@@ -31,7 +31,6 @@
 #import "Assets.h"
 #import "ExchangeTrade.h"
 #import "Blockchain-Swift.h"
-
 #import "BTCKey.h"
 #import "BTCData.h"
 #import "KeyPair.h"
@@ -3226,7 +3225,7 @@
     if ([type isEqualToString:@"error"]) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR title:BC_STRING_ERROR handler: nil];
     } else if ([type isEqualToString:@"info"]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INFORMATION title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge information] title:BC_STRING_ERROR handler: nil];
     }
 }
 
@@ -3245,7 +3244,7 @@
             return;
         } else if (connectivityErrorRange.location != NSNotFound) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION_LONG * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR handler: nil];
+                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR handler: nil];
             });
             [self error_restoring_wallet];
             return;
@@ -3809,7 +3808,7 @@
     } else if ([error isEqualToString:@""]) {
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
     } else if ([error isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_TIMED_OUT title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR handler: nil];
     } else {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
     }
@@ -4044,7 +4043,11 @@
 
 - (void)initialize_webview
 {
-    [app initializeWebview];
+    if ([self.delegate respondsToSelector:@selector(initializeWebView)]) {
+        [self.delegate initializeWebView];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector initializeWebView!", [delegate class]);
+    }
 }
 
 - (void)on_fetch_eth_history_success
@@ -4559,8 +4562,8 @@
 - (void)logging_out
 {
     DLog(@"logging_out");
+
     
-    [app logoutAndShowPasswordModal];
 }
 
 #pragma mark - Callbacks from javascript localstorage

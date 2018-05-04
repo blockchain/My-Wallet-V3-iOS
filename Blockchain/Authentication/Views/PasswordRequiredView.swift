@@ -14,7 +14,7 @@ protocol PasswordRequiredViewDelegate: class {
 
 class PasswordRequiredView: UIView {
     @IBOutlet weak var labelHeader: UILabel!
-    @IBOutlet weak var textFieldPassword: BCTextField!
+    @IBOutlet weak var textFieldPassword: UITextField!
     @IBOutlet weak var buttonContinue: UIButton!
     @IBOutlet weak var buttonForgetWallet: UIButton!
     @IBOutlet weak var buttonForgotPassword: UIButton!

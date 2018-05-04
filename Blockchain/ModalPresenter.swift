@@ -8,9 +8,9 @@
 
 import Foundation
 
-typealias OnModalDismissed = (() -> Void)
+typealias OnModalDismissed = () -> Void
 
-typealias OnModalResumed = (() -> Void)
+typealias OnModalResumed = () -> Void
 
 @objc class ModalPresenter: NSObject {
     static let shared = ModalPresenter()

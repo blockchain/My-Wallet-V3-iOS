@@ -14,7 +14,7 @@ struct SavePinError: Error {}
 class Pin {
     static let Invalid = Pin(code: 0000)
 
-    private var pinCode: UInt
+    private(set) var pinCode: UInt
 
     /// Checks if this pin is a valid
     var isValid: Bool {

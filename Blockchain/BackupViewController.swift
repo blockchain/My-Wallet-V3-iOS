@@ -16,7 +16,6 @@ import UIKit
     @IBOutlet weak var backupIconImageView: UIImageView!
 
     @objc var wallet: Wallet?
-    @objc var app: RootService?
     var transferredAll = false
 
     override func viewDidLoad() {
@@ -73,7 +72,7 @@ import UIKit
                         title: NSLocalizedString("Transfer All Funds",
                         comment: "")
                     )
-                    self.app?.transferAllFundsModalController = transferAllController
+                    app.transferAllFundsModalController = transferAllController
                     self.present(navigationController!, animated: true, completion: nil)
                 }))
                 present(alertToTransferAll, animated: true, completion: nil)

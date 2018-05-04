@@ -251,13 +251,12 @@ extension AuthenticationManager: WalletAuthDelegate {
         // With the hash prefix we can then figure out if the password changed. If so, clear the pin
         // so that the user can reset it
         guard let password = password,
-            let passwordSha256 = NSString(string: password).sha256(),
-            let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
+            let passwordPartHash = password.passwordPartHash,
+            let savedPasswordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
                 return
         }
 
-        let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
-        guard passwordSha256[..<endIndex] != passwordPartHash else {
+        guard passwordPartHash != savedPasswordPartHash else {
             return
         }
 
@@ -276,8 +275,8 @@ extension AuthenticationManager: WalletAuthDelegate {
         // TODO
     }
 
-    func authenticationError() {
-        failAuth()
+    func authenticationError(error: AuthenticationError?) {
+        failAuth(withError: error)
     }
 
     func authenticationCompleted() {
