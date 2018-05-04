@@ -85,12 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         AppCoordinator.shared.start()
 
-        if #available(iOS 10.0, *) {
-            PushNotificationManager.shared.requestAuthorization()
-        } else {
-            LegacyPushNotificationManager.shared.requestAuthorization()
-        }
-
         return true
     }
 

@@ -180,9 +180,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #pragma mark - Strings
 
-#define URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT @"%@/wallet?method=update-ios&guid=%@&sharedKey=%@&payload=%@&length=%lu&lang=%s"
-
-// #define URL_SUFFIX_WALLET_OPTIONS @"/Resources/wallet-options.json"
+#define URL_SUFFIX_WALLET_OPTIONS @"/Resources/wallet-options.json"
 
 #define COPYRIGHT_YEAR @"2018"
 

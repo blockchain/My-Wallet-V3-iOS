@@ -40,4 +40,8 @@ extension BlockchainAPI {
     var etherscanUrl: String {
         return "https://\(PartnerEndpoints.etherscan.rawValue)"
     }
+    var pushNotificationsUrl: String? {
+        guard let walletUrl = walletUrl else { return nil }
+        return "\(walletUrl)/wallet?method=update-ios"
+    }
 }

@@ -496,17 +496,17 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    const char *data = [deviceToken bytes];
-    NSMutableString *token = [NSMutableString string];
-
-    for (NSUInteger i = 0; i < [deviceToken length]; i++) {
-        [token appendFormat:@"%02.2hhX", data[i]];
-    }
-
-    self.deviceToken = [token copy];
-}
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+//{
+//    const char *data = [deviceToken bytes];
+//    NSMutableString *token = [NSMutableString string];
+//
+//    for (NSUInteger i = 0; i < [deviceToken length]; i++) {
+//        [token appendFormat:@"%02.2hhX", data[i]];
+//    }
+//
+//    self.deviceToken = [token copy];
+//}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
@@ -559,31 +559,31 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (void)registerDeviceForPushNotifications
-{
-    // TODO: test deregistering from the server
-
-    NSString *preferredLanguage = [[NSLocale preferredLanguages] firstObject];
-    const char *languageString = [preferredLanguage UTF8String];
-
-    NSMutableURLRequest *notificationsRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT, [[BlockchainAPI sharedInstance] walletUrl], [WalletManager.sharedInstance.wallet guid], [WalletManager.sharedInstance.wallet sharedKey], self.deviceToken, (unsigned long)[self.deviceToken length], languageString]]];
-    [notificationsRequest setHTTPMethod:@"POST"];
-
-    NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:notificationsRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error) {
-            DLog(@"Error registering device with backend: %@", [error localizedDescription]);
-        }
-        NSError *jsonError;
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-        if (jsonError) {
-            DLog(@"Error parsing response from registering device with backend: %@", [error localizedDescription]);
-        } else {
-            DLog(@"Register notifications result: %@", result);
-        }
-    }];
-
-    [dataTask resume];
-}
+//- (void)registerDeviceForPushNotifications
+//{
+//    // TODO: test deregistering from the server
+//
+//    NSString *preferredLanguage = [[NSLocale preferredLanguages] firstObject];
+//    const char *languageString = [preferredLanguage UTF8String];
+//
+//    NSMutableURLRequest *notificationsRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:URL_PUSH_NOTIFICATIONS_SERVER_ARGUMENT_GUID_ARGUMENT_SHAREDKEY_ARGUMENT_TOKEN_ARGUMENT_LENGTH_ARGUMENT_LANGUAGE_ARGUMENT, [[BlockchainAPI sharedInstance] walletUrl], [WalletManager.sharedInstance.wallet guid], [WalletManager.sharedInstance.wallet sharedKey], self.deviceToken, (unsigned long)[self.deviceToken length], languageString]]];
+//    [notificationsRequest setHTTPMethod:@"POST"];
+//
+//    NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:notificationsRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        if (error) {
+//            DLog(@"Error registering device with backend: %@", [error localizedDescription]);
+//        }
+//        NSError *jsonError;
+//        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+//        if (jsonError) {
+//            DLog(@"Error parsing response from registering device with backend: %@", [error localizedDescription]);
+//        } else {
+//            DLog(@"Register notifications result: %@", result);
+//        }
+//    }];
+//
+//    [dataTask resume];
+//}
 
 //- (void)setupBtcFormatter
 //{

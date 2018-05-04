@@ -11,16 +11,14 @@ import Foundation
 /**
  Manager object for push notifications for iOS versions < 10.0.
  */
+@available(iOS, deprecated: 10.0, message: "Use PushNotificationManager")
 class LegacyPushNotificationManager {
     static let shared = LegacyPushNotificationManager()
 
+    /// Requests permission from the user to grant access to receive push notifications
     func requestAuthorization() {
         let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
         UIApplication.shared.registerUserNotificationSettings(notificationSettings)
-    }
-
-    func registerDeviceForPushNotifications() {
-        // TODO
     }
 }
 
@@ -50,7 +48,6 @@ class PushNotificationManager: NSObject {
                 print("ERROR: \(error!.localizedDescription)")
                 return
             }
-
             print("Push registration success.")
             DispatchQueue.main.async {
                 UIApplication.shared.registerForRemoteNotifications()

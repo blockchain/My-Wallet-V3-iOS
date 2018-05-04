@@ -88,6 +88,8 @@ final class NetworkManager: NSObject, URLSessionDelegate {
 
     // MARK: - URLSessionDelegate
 
+    // TODO: find place to put UIApplication.shared.isNetworkActivityIndicatorVisible
+
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {}
 
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping AuthChallengeHandler) {

@@ -90,7 +90,7 @@ class AuthenticationManagerTests: XCTestCase {
             description: "Authentication should suceed."
         )
 
-        authenticationManager.authenticate(using: payload) { isAuthenticated, error in
+        authenticationManager.authenticate(using: payload) { isAuthenticated, _, error in
             XCTAssertTrue(isAuthenticated)
             XCTAssertNil(error)
             authResultExpectation.fulfill()
@@ -112,7 +112,7 @@ class AuthenticationManagerTests: XCTestCase {
         mockWallet.password = passcodePayload.password
         mockWallet.sharedKey = passcodePayload.sharedKey
 
-        authenticationManager.authenticate(using: passcodePayload) { isAuthenticated, error in
+        authenticationManager.authenticate(using: passcodePayload) { isAuthenticated, _, error in
             XCTAssertFalse(isAuthenticated)
             XCTAssertNotNil(error)
             XCTAssertEqual(expectedErrorCode, error!.code)
