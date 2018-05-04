@@ -107,8 +107,23 @@ extension WalletManager: WalletDelegate {
 
     func walletFailedToLoad() {
         authDelegate?.authenticationError(error: AuthenticationError(
-            code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue)
-        )
+            code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
+        ))
+    }
+
+    func walletDidRequireEmailAuthorization(_ wallet: Wallet!) {
+        authDelegate?.emailAuthorizationRequired()
+    }
+
+    func wallet(_ wallet: Wallet!, didRequireTwoFactorAuthentication type: Int) {
+        guard let twoFactorType = AuthenticationTwoFactorType(rawValue: type) else {
+            authDelegate?.authenticationError(error: AuthenticationError(
+                code: AuthenticationError.ErrorCode.invalidTwoFactorType.rawValue,
+                description: LocalizationConstants.Authentication.invalidTwoFactorAuthenticationType
+            ))
+            return
+        }
+        authDelegate?.didRequireTwoFactorAuth(withType: twoFactorType)
     }
 
     // MARK: - Buy/Sell

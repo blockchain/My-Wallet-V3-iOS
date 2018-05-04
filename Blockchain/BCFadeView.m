@@ -12,8 +12,14 @@
 
 + (nonnull BCFadeView *)instanceFromNib
 {
-    UINib *nib = [UINib nibWithNibName:@"BCFadeView" bundle:[NSBundle mainBundle]];
-    return (BCFadeView *) [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+    UINib *nib = [UINib nibWithNibName:@"MainWindow" bundle:[NSBundle mainBundle]];
+    NSArray *objs = [nib instantiateWithOwner:nil options:nil];
+    for (id object in objs) {
+        if ([object isKindOfClass:[BCFadeView class]]) {
+            return (BCFadeView *) object;
+        }
+    }
+    return (BCFadeView *) [objs objectAtIndex:0];
 }
 
 - (void)awakeFromNib

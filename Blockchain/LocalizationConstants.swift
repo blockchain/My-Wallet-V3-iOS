@@ -41,6 +41,7 @@ struct LocalizationConstants {
     static let verifying = NSLocalizedString ("Verifying", comment: "")
     static let openArg = NSLocalizedString("Open %@", comment: "")
     static let youWillBeLeavingTheApp = NSLocalizedString("You will be leaving the app.", comment: "")
+    static let openMailApp = NSLocalizedString("Open Mail App", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -76,6 +77,10 @@ struct LocalizationConstants {
         static let forgetWalletDetail = NSLocalizedString("This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!", comment: "")
         static let enterPassword = NSLocalizedString("Enter Password", comment: "")
         static let retryValidation = NSLocalizedString("Retry Validation", comment: "")
+        static let manualPairing = NSLocalizedString("Manual Pairing", comment: "")
+        static let invalidTwoFactorAuthenticationType = NSLocalizedString("Invalid two-factor authentication type", comment: "")
+        static let manualPairingAuthorizationRequiredTitle = NSLocalizedString("Authorization Required", comment: "")
+        static let manualPairingAuthorizationRequiredMessage = NSLocalizedString("Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", comment: "")
 
         struct Pin {
             static let incorrect = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")

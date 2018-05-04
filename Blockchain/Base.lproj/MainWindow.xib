@@ -14,31 +14,8 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIApplication">
-            <connections>
-                <outlet property="delegate" destination="3" id="nSo-4b-RF0"/>
-            </connections>
-        </placeholder>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIApplication"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <customObject id="3" customClass="RootService">
-            <connections>
-                <outlet property="busyLabel" destination="263" id="Vi4-Sc-0HG"/>
-                <outlet property="busyView" destination="260" id="cbQ-Yl-2J6"/>
-                <outlet property="createWalletView" destination="355" id="dlW-nX-G8c"/>
-                <outlet property="manualPairButton" destination="fI2-PD-Xwa" id="oka-mR-bc6"/>
-                <outlet property="manualPairStepOneTextView" destination="361" id="Sfo-Sl-PLA"/>
-                <outlet property="manualPairStepThreeTextView" destination="369" id="wz0-jn-Kq3"/>
-                <outlet property="manualPairStepTwoTextView" destination="1RS-t6-JqX" id="CAV-8B-KxA"/>
-                <outlet property="manualPairView" destination="585" id="Z19-6K-4FY"/>
-                <outlet property="pairingInstructionsView" destination="351" id="1eI-SB-ZdA"/>
-                <outlet property="scanPairingCodeButton" destination="370" id="UkN-oI-0Re"/>
-                <outlet property="secondPasswordButton" destination="471" id="H2J-Rk-XoH"/>
-                <outlet property="secondPasswordDescriptionLabel" destination="467" id="Yhk-8q-Q6W"/>
-                <outlet property="secondPasswordTextField" destination="469" id="475"/>
-                <outlet property="secondPasswordView" destination="463" id="ngv-dZ-g4I"/>
-                <outlet property="window" destination="2" id="8NX-MS-pxw"/>
-            </connections>
-        </customObject>
         <view contentMode="scaleToFill" id="260" userLabel="Busy View" customClass="BCFadeView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,18 +43,11 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="containerView" destination="5i0-zZ-Y4H" id="Tlp-St-X3z"/>
+                <outlet property="labelBusy" destination="263" id="pet-ay-CbR"/>
             </connections>
             <point key="canvasLocation" x="516" y="242"/>
         </view>
-        <window clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="893" y="242"/>
-        </window>
-        <view contentMode="scaleToFill" id="351" userLabel="Device Pairing" customClass="BCModalContentView">
+        <view contentMode="scaleToFill" id="351" userLabel="Device Pairing" customClass="PairingInstructionsView" customModule="Blockchain" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -114,7 +84,7 @@
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="scanAccountQRCodeclicked:" destination="3" eventType="touchUpInside" id="zrX-Er-ynq"/>
+                        <action selector="scanAccountQRCodeClicked:" destination="351" eventType="touchUpInside" id="xgz-oY-njX"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fI2-PD-Xwa">
@@ -130,7 +100,7 @@
                         <color key="titleColor" red="0.45901817083358765" green="0.45900446176528931" blue="0.45901218056678772" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="manualPairClicked:" destination="3" eventType="touchUpInside" id="Eeg-po-QYo"/>
+                        <action selector="manualPairClicked:" destination="351" eventType="touchUpInside" id="E7j-s5-XBq"/>
                     </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Log in" selectable="NO" id="361">
@@ -161,6 +131,13 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="buttonManualPair" destination="fI2-PD-Xwa" id="ItV-oY-HO4"/>
+                <outlet property="buttonScanPairing" destination="370" id="QCu-c2-m2h"/>
+                <outlet property="textViewStepOne" destination="361" id="OJh-BC-Pv4"/>
+                <outlet property="textViewStepThree" destination="369" id="Ebi-VW-iB4"/>
+                <outlet property="textViewStepTwo" destination="1RS-t6-JqX" id="Jxq-9D-0AF"/>
+            </connections>
             <point key="canvasLocation" x="-244" y="-869"/>
         </view>
         <view contentMode="scaleToFill" id="355" customClass="BCCreateWalletView">
@@ -173,9 +150,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" secureTextEntry="YES"/>
-                    <connections>
-                        <outlet property="delegate" destination="355" id="438"/>
-                    </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" minimumFontSize="17" id="397" customClass="BCTextField" customModule="Blockchain" customModuleProvider="target">
                     <rect key="frame" x="15" y="84" width="290" height="30"/>
@@ -183,9 +157,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
-                    <connections>
-                        <outlet property="delegate" destination="355" id="439"/>
-                    </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your email" minimumFontSize="17" id="LsW-69-Qon" customClass="BCTextField" customModule="Blockchain" customModuleProvider="target">
                     <rect key="frame" x="15" y="8" width="290" height="30"/>
@@ -193,9 +164,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
-                    <connections>
-                        <outlet property="delegate" destination="355" id="5U4-tq-7at"/>
-                    </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wfI-8F-dfm">
                     <rect key="frame" x="15" y="141" width="305" height="15"/>
@@ -263,9 +231,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
-                    <connections>
-                        <outlet property="delegate" destination="3" id="pmM-CL-Fro"/>
-                    </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="471">
                     <rect key="frame" x="85" y="127" width="150" height="40"/>
@@ -283,9 +248,6 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="secondPasswordClicked:" destination="3" eventType="touchUpInside" id="hy8-EN-gB9"/>
-                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -303,9 +265,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
-                    <connections>
-                        <outlet property="delegate" destination="3" id="599"/>
-                    </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" id="592" customClass="BCTextField" customModule="Blockchain" customModuleProvider="target">
                     <rect key="frame" x="15" y="46" width="290" height="30"/>
@@ -313,9 +272,6 @@
                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
-                    <connections>
-                        <outlet property="delegate" destination="3" id="601"/>
-                    </connections>
                 </textField>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -327,7 +283,7 @@
             </connections>
             <point key="canvasLocation" x="516" y="-869"/>
         </view>
-        <view contentMode="scaleToFill" id="623" userLabel="Please Login">
+        <view contentMode="scaleToFill" id="623" userLabel="Please Login" customClass="PasswordRequiredView" customModule="Blockchain" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -361,6 +317,9 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onContinueTapped:" destination="623" eventType="touchUpInside" id="iVZ-vm-q6Y"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5gL-FG-Zcc">
                     <rect key="frame" x="84" y="279" width="150" height="40"/>
@@ -378,6 +337,9 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onForgetWalletTapped:" destination="623" eventType="touchUpInside" id="iv6-jI-Y0a"/>
+                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="If you would like to forget this wallet and start over, press 'Forget Wallet'." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="C0R-wB-wF1">
                     <rect key="frame" x="15" y="229" width="290" height="42"/>
@@ -401,11 +363,22 @@
                             <integer key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onForgotPasswordTapped:" destination="623" eventType="touchUpInside" id="99r-FN-7sc"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="buttonContinue" destination="625" id="ffU-UA-vKE"/>
+                <outlet property="buttonForgetWallet" destination="5gL-FG-Zcc" id="gN8-NJ-Qn2"/>
+                <outlet property="buttonForgotPassword" destination="kgi-aY-D6k" id="hQo-1K-uL3"/>
+                <outlet property="labelForgetWallet" destination="C0R-wB-wF1" id="JvD-xi-6w1"/>
+                <outlet property="labelHeader" destination="624" id="pHN-Dy-Tzk"/>
+                <outlet property="textFieldPassword" destination="626" id="9iA-em-B11"/>
+            </connections>
             <point key="canvasLocation" x="-236" y="242"/>
         </view>
         <view contentMode="scaleToFill" id="0Sz-Ta-Xdw" userLabel="Recovery Phrase" customClass="BCRecoveryView">

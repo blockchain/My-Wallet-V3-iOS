@@ -3027,15 +3027,11 @@
 - (void)on_fetch_needs_two_factor_code
 {
     DLog(@"on_fetch_needs_two_factor_code");
-    int twoFactorType = [[WalletManager.sharedInstance.wallet get2FAType] intValue];
-    if (twoFactorType == TWO_STEP_AUTH_TYPE_GOOGLE) {
-        [app verifyTwoFactorGoogle];
-    } else if (twoFactorType == TWO_STEP_AUTH_TYPE_SMS) {
-        [app verifyTwoFactorSMS];
-    } else if (twoFactorType == TWO_STEP_AUTH_TYPE_YUBI_KEY) {
-        [app verifyTwoFactorYubiKey];
+    if ([delegate respondsToSelector:@selector(wallet:didRequireTwoFactorAuthentication:)]) {
+        NSInteger twoFactorType = [[WalletManager.sharedInstance.wallet get2FAType] integerValue];
+        [delegate wallet:self didRequireTwoFactorAuthentication:twoFactorType];
     } else {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_AUTHENTICATION_TYPE title:BC_STRING_ERROR handler: nil];
+        DLog(@"Error: delegate of class %@ does not respond to selector wallet:didRequireTwoFactorAuthentication::!", [delegate class]);
     }
 }
 
@@ -3855,6 +3851,7 @@
 
 - (void)on_resend_two_factor_sms_success
 {
+    // TODO: Refactor
     [app verifyTwoFactorSMS];
 }
 
@@ -3982,7 +3979,11 @@
 - (void)show_email_authorization_alert
 {
     DLog(@"show_email_authorization_alert");
-    [app authorizationRequired];
+    if ([self.delegate respondsToSelector:@selector(walletDidRequireEmailAuthorization:)]) {
+        [self.delegate walletDidRequireEmailAuthorization:self];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector walletDidRequireEmailAuthorization!", [delegate class]);
+    }
 }
 
 - (void)on_get_fiat_at_time_success:(NSNumber *)fiatAmount currencyCode:(NSString *)currencyCode assetType:(AssetType)assetType

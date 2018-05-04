@@ -21,7 +21,7 @@ import Foundation
     /// Authentication handler - this should not be a property of AuthenticationCoordinator
     /// but the current way wallet creation is designed, we need to share this handler
     /// with that flow. Eventually, wallet creation should be moved with AuthenticationCoordinator
-    lazy var authHandler: AuthenticationManager.Handler = { [weak self] isAuthenticated, error in
+    lazy var authHandler: AuthenticationManager.Handler = { [weak self] isAuthenticated, _, error in
         guard let strongSelf = self else { return }
 
         LoadingViewPresenter.shared.hideBusyView()
@@ -31,6 +31,8 @@ import Foundation
             switch error!.code {
             case AuthenticationError.ErrorCode.noInternet.rawValue:
                 AlertViewPresenter.shared.showNoInternetConnectionAlert()
+            case AuthenticationError.ErrorCode.emailAuthorizationRequired.rawValue:
+                AlertViewPresenter.shared.showEmailAuthorizationRequired()
             case AuthenticationError.ErrorCode.failedToLoadWallet.rawValue:
                 strongSelf.handleFailedToLoadWallet()
             default:
@@ -123,7 +125,7 @@ import Foundation
         self.walletManager.pinEntryDelegate = self
     }
 
-    // MARK: - Public
+    // MARK: - Start Flows
 
     /// Starts the authentication flow. If the user has a pin set, it will trigger
     /// present the pin entry screen, otherwise, it will show the password screen.
@@ -191,6 +193,18 @@ import Foundation
         topMostViewController?.present(setUpWalletViewController, animated: false) { [weak self] in
             self?.showPinEntryView(asModal: false)
         }
+    }
+
+    /// Starts the manual wallet pairing flow
+    func startManualPairing() {
+        let manualPairView = BCManualPairView.instanceFromNib()
+        manualPairView.delegate = self
+        ModalPresenter.shared.showModal(
+            withContent: manualPairView,
+            closeType: ModalCloseTypeBack,
+            showHeader: true,
+            headerText: LocalizationConstants.Authentication.manualPairing
+        )
     }
 
     // MARK: - Pin Entry Presentation
@@ -355,6 +369,35 @@ import Foundation
             }
         )
         topMostViewController.present(alertController, animated: true)
+    }
+}
+
+extension AuthenticationCoordinator: ManualPairViewDelegate {
+    func manualPairView(_ manualPairView: BCManualPairView!, didContinueWithGuid guid: String!, andPassword password: String!) {
+        let payload = PasscodePayload(guid: guid, password: password, sharedKey: "")
+        AuthenticationManager.shared.authenticate(using: payload, andReply: authHandler)
+
+        AuthenticationManager.shared.authenticate(using: payload) { [weak self] isAuthenticated, twoFAtype, error in
+            guard let strongSelf = self else { return }
+            guard twoFAtype == nil else {
+                strongSelf.handle(twoFactorAuthType: twoFAtype!, forManualPairView: manualPairView)
+                return
+            }
+            strongSelf.authHandler(isAuthenticated, twoFAtype, error)
+        }
+    }
+
+    private func handle(twoFactorAuthType: AuthenticationTwoFactorType, forManualPairView view: BCManualPairView) {
+        switch twoFactorAuthType {
+        case .google:
+            view.verifyTwoFactorGoogle()
+        case .yubiKey:
+            view.verifyTwoFactorYubiKey()
+        case .sms:
+            view.verifyTwoFactorSMS()
+        default:
+            print("Unhandled 2FA type: \(twoFactorAuthType)")
+        }
     }
 }
 

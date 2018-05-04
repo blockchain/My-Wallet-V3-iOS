@@ -12,7 +12,7 @@ extension AuthenticationCoordinator {
     @objc internal func authenticateWithBiometrics() {
         pinEntryViewController?.view.isUserInteractionEnabled = false
         isPromptingForBiometricAuthentication = true
-        AuthenticationManager.shared.authenticateUsingBiometrics { authenticated, authenticationError in
+        AuthenticationManager.shared.authenticateUsingBiometrics { authenticated, _, authenticationError in
             self.isPromptingForBiometricAuthentication = false
             if let error = authenticationError {
                 self.handleBiometricAuthenticationError(with: error)

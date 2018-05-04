@@ -143,6 +143,8 @@
 - (void)didGetBitcoinCashExchangeRates;
 - (void)didFetchBitcoinCashHistory;
 - (void)initializeWebView;
+- (void)wallet:(Wallet *)wallet didRequireTwoFactorAuthentication:(NSInteger)type;
+- (void)walletDidRequireEmailAuthorization:(Wallet *)wallet;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {
