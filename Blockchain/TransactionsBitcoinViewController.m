@@ -549,9 +549,6 @@
     [self setText];
     [self reloadData];
     
-    app.mainTitleLabel.hidden = YES;
-    app.mainTitleLabel.adjustsFontSizeToFitWidth = YES;
-    
     balanceBigButton.center = CGPointMake(headerView.center.x, balanceBigButton.center.y);
 }
 
@@ -560,8 +557,6 @@
     [super viewDidDisappear:animated];
 
     WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
-
-    app.mainTitleLabel.hidden = NO;
 }
 
 #pragma mark - Setup

@@ -143,9 +143,6 @@
 #define BC_STRING_CLOSE_APP NSLocalizedString(@"Close App", nil)
 #define BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION NSLocalizedString(@"The private key you are attempting to import is encrypted. Please enter the password below.", nil)
 
-#define BC_STRING_NO_PASSWORD_ENTERED NSLocalizedString(@"No Password Entered", nil)
-#define BC_STRING_SECOND_PASSWORD_INCORRECT NSLocalizedString(@"Second Password Incorrect", nil)
-
 #define BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD NSLocalizedString(@"This action requires the second password for your wallet. Please enter it below and press continue.", nil)
 #define BC_STRING_INVALID_GUID NSLocalizedString(@"Invalid Wallet ID", nil)
 
@@ -238,7 +235,6 @@
 #define BC_STRING_TRANSACTION NSLocalizedString(@"Transaction", nil)
 #define BC_STRING_AUTOMATIC_PAIRING NSLocalizedString(@"Automatic Pairing", nil)
 #define BC_STRING_INCORRECT_PASSWORD NSLocalizedString(@"Incorrect password", nil)
-#define BC_STRING_SECOND_PASSWORD_REQUIRED NSLocalizedString(@"Second Password Required", nil)
 #define BC_STRING_CREATE_A_WALLET NSLocalizedString(@"Create a Wallet", nil)
 #define BC_STRING_REQUEST_AMOUNT NSLocalizedString(@"Request Amount", nil)
 #define BC_STRING_REQUEST NSLocalizedString(@"Request", nil)

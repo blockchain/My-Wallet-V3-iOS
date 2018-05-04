@@ -34,6 +34,8 @@ final class BlockchainSettings: NSObject {
             return App.shared
         }
 
+        // MARK: - Properties
+
         @objc var didFailTouchIDSetup: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.didFailTouchIDSetup.rawValue)
@@ -259,13 +261,32 @@ final class BlockchainSettings: NSObject {
                 UserDefaults.Keys.assetType.rawValue: AssetType.bitcoin.rawValue,
                 UserDefaults.DebugKeys.enableCertificatePinning.rawValue: true
             ])
+            migratePasswordAndPinIfNeeded()
         }
+
+        // MARK: - Public
 
         func clearPin() {
             encryptedPinPassword = nil
             pinKey = nil
             passwordPartHash = nil
             AuthenticationCoordinator.shared.lastEnteredPIN = Pin.Invalid
+        }
+
+        /// Migrates pin and password from NSUserDefaults to the Keychain
+        func migratePasswordAndPinIfNeeded() {
+            guard let password = defaults.string(forKey: UserDefaults.Keys.password.rawValue),
+                let pinStr = defaults.string(forKey: UserDefaults.Keys.pin.rawValue),
+                let pinUInt = UInt(pinStr) else {
+                    return
+            }
+
+            WalletManager.shared.wallet.password = password
+
+            try? Pin(code: pinUInt).save()
+
+            defaults.removeObject(forKey: UserDefaults.Keys.password.rawValue)
+            defaults.removeObject(forKey: UserDefaults.Keys.pin.rawValue)
         }
     }
 

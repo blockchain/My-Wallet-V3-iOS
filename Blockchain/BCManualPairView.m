@@ -117,7 +117,7 @@
     }
     
     if (password.length == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.noPasswordEntered title:BC_STRING_ERROR handler: nil];
         
         [passwordTextField becomeFirstResponder];
         

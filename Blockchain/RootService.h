@@ -55,19 +55,19 @@
 //    IBOutlet UITextView *manualPairStepTwoTextView;
 //    IBOutlet UITextView *manualPairStepThreeTextView;
 
-    BOOL validateSecondPassword;
-    IBOutlet UILabel *secondPasswordDescriptionLabel;
-    IBOutlet UIView *secondPasswordView;
-    IBOutlet UITextField *secondPasswordTextField;
-    IBOutlet UIButton *secondPasswordButton;
+//    BOOL validateSecondPassword;
+//    IBOutlet UIView *secondPasswordView;
+//    IBOutlet UILabel *secondPasswordDescriptionLabel;
+//    IBOutlet UITextField *secondPasswordTextField;
+//    IBOutlet UIButton *secondPasswordButton;
     
-    IBOutlet UIView *mainPasswordView;
-    IBOutlet UILabel *mainPasswordLabel;
-    IBOutlet UIButton *mainPasswordButton;
-    IBOutlet UILabel *forgetWalletLabel;
-    IBOutlet UIButton *forgotPasswordButton;
-    IBOutlet UITextField *mainPasswordTextField;
-    IBOutlet UIButton *forgetWalletButton;
+//    IBOutlet UIView *mainPasswordView;
+//    IBOutlet UILabel *mainPasswordLabel;
+//    IBOutlet UIButton *mainPasswordButton;
+//    IBOutlet UILabel *forgetWalletLabel;
+//    IBOutlet UIButton *forgotPasswordButton;
+//    IBOutlet UITextField *mainPasswordTextField;
+//    IBOutlet UIButton *forgetWalletButton;
 
 @public
     
@@ -83,9 +83,9 @@
 @property (strong, nonatomic) SettingsNavigationController *settingsNavigationController;
 @property (strong, nonatomic) AccountsAndAddressesNavigationController *accountsAndAddressesNavigationController;
 
-@property (strong, nonatomic) IBOutlet UILabel *mainTitleLabel;
+//@property (strong, nonatomic) IBOutlet UILabel *mainTitleLabel;
 
-@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundUpdateTask;
+//@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundUpdateTask;
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 //@property (strong, nonatomic) Wallet *wallet;
