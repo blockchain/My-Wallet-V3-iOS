@@ -99,6 +99,11 @@
 		23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */; };
 		23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */; };
 		510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
+		511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
+		511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
+		511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */; };
+		511356E3209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */; };
+		511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */; };
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
@@ -985,6 +990,9 @@
 		23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+SendSynchronousRequest.h"; sourceTree = "<group>"; };
 		23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+SendSynchronousRequest.m"; sourceTree = "<group>"; };
 		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PasscodePayload.swift; path = Authentication/Models/PasscodePayload.swift; sourceTree = "<group>"; };
+		511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+Payload.swift"; sourceTree = "<group>"; };
+		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
+		511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+PushNotifications.swift"; sourceTree = "<group>"; };
 		511646C4208124E200C43522 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetType.swift; path = Assets/AssetType.swift; sourceTree = "<group>"; };
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
@@ -1584,6 +1592,16 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		511356DF209CA48F00056D65 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */,
+				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
+				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		511646C02081247700C43522 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1643,13 +1661,12 @@
 		5194359F208E61F3001EF882 /* BlockchainTests */ = {
 			isa = PBXGroup;
 			children = (
+				511356DF209CA48F00056D65 /* Network */,
 				AACE3206209782DD00B7B806 /* Authentication */,
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				519435A2208E61F3001EF882 /* Info.plist */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
-				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
-				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
 				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
 				AACE31B72092A87900B7B806 /* PinTests.swift */,
@@ -1671,11 +1688,13 @@
 		51A7348E20891EB3009727D5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */,
-				51943595208E3005001EF882 /* BlockchainAPI+URL.swift */,
+				511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */,
 				5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */,
-				AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */,
+				51943595208E3005001EF882 /* BlockchainAPI+URL.swift */,
 				51A862D420921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift */,
+				AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */,
+				516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */,
+				511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2767,6 +2786,7 @@
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AAD279CC209A826900C0EAFC /* BCSecureTextField.swift in Sources */,
+				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
@@ -2800,7 +2820,9 @@
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
+				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
 				AACE31C52092A99B00B7B806 /* Environment.swift in Sources */,
+				511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
@@ -2955,6 +2977,7 @@
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
 				C7442E341FBA1E7800695E4C /* ExchangeTableViewCell.m in Sources */,
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
+				511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */,
 				67EE1DCD19E3325900DBBFC9 /* ECSlidingSegue.m in Sources */,
 				AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */,
@@ -2982,6 +3005,7 @@
 				C7A0E92E1FA8FFBF004F4267 /* ExchangeConfirmViewController.m in Sources */,
 				C79261B51E8ADF0300C87CED /* BCCardView.m in Sources */,
 				ECD244F719A8B444004B1F40 /* UIImage+Utils.m in Sources */,
+				511356E3209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				23444F961DCD21C600573C8C /* BTCKeychain.m in Sources */,
 				2322DCB61D771831000E5AC1 /* SRIOConsumerPool.m in Sources */,
 				AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */,
