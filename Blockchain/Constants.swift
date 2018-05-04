@@ -84,6 +84,7 @@ struct Constants {
         struct English {
             static let us = "en_US"
         }
+    }
     struct Url {
         static let blockchainSupport = "https://support.blockchain.com"
     }
