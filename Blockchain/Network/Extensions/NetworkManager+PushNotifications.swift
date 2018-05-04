@@ -24,7 +24,7 @@ extension NetworkManager {
         notificationRequest.httpBody = payload
         notificationRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         notificationRequest.addValue("application/json", forHTTPHeaderField: "Accept")
-        let task = NetworkManager.shared.session.dataTask(with: notificationRequest, completionHandler: { _, response, error in
+        let task = NetworkManager.shared.session.dataTask(with: notificationRequest, completionHandler: { data, response, error in
             guard error == nil else {
                 print("Error registering device with backend: %@", error!.localizedDescription)
                 return
@@ -32,6 +32,11 @@ extension NetworkManager {
             guard
                 let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
+                    return
+            }
+            guard
+                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+                let success = json!["success"] as? Bool, success == true else {
                     return
             }
         })
