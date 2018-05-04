@@ -235,8 +235,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showWelcomeScreen
 {
-    [self checkForMaintenance];
-
+//    [self checkForMaintenance];
+//
 //    BCWelcomeView *welcomeView = [[BCWelcomeView alloc] init];
 //    [welcomeView.createWalletButton addTarget:self action:@selector(showCreateWallet:) forControlEvents:UIControlEventTouchUpInside];
 //    [welcomeView.existingWalletButton addTarget:self action:@selector(showPairWallet:) forControlEvents:UIControlEventTouchUpInside];
@@ -247,24 +247,24 @@ void (^secondPasswordSuccess)(NSString *);
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
-- (void)showPinScreen
-{
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
-
-    if ([BlockchainSettings sharedAppInstance].isPinSet) {
-        [self showPinModalAsView:YES];
-        // [rootService authenticateWithBiometrics];
-    } else {
-        [self checkForMaintenance];
-        [self showPasswordModal];
-        [[AlertViewPresenter sharedInstance] checkAndWarnOnJailbrokenPhones];
-    }
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
-
-    [self migratePasswordAndPinFromNSUserDefaults];
-}
+//- (void)showPinScreen
+//{
+//    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+//    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+//
+//    if ([BlockchainSettings sharedAppInstance].isPinSet) {
+//        [self showPinModalAsView:YES];
+//        // [rootService authenticateWithBiometrics];
+//    } else {
+//        [self checkForMaintenance];
+//        [self showPasswordModal];
+//        [[AlertViewPresenter sharedInstance] checkAndWarnOnJailbrokenPhones];
+//    }
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+//
+//    [self migratePasswordAndPinFromNSUserDefaults];
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -277,9 +277,9 @@ void (^secondPasswordSuccess)(NSString *);
         [createWalletView hideKeyboard];
     }
 
-    if (manualPairView) {
-        [manualPairView hideKeyboard];
-    }
+//    if (manualPairView) {
+//        [manualPairView hideKeyboard];
+//    }
 
 //    if ([mainPasswordTextField isFirstResponder]) {
 //        [mainPasswordTextField resignFirstResponder];
@@ -386,7 +386,7 @@ void (^secondPasswordSuccess)(NSString *);
 
         [self beginBackgroundUpdateTask];
 
-        [self logout];
+        [AuthenticationCoordinator.sharedInstance logoutWithShowPasswordView:false];
     }
 
     if (BlockchainSettings.sharedAppInstance.hasSeenAllCards) {
@@ -400,9 +400,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     [WalletManager.sharedInstance.wallet setupBuySellWebview];
 
-    [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_BACKGROUNDED_APP reason:WEBSOCKET_CLOSE_REASON_USER_BACKGROUNDED];
-    [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_BACKGROUNDED_APP reason:WEBSOCKET_CLOSE_REASON_USER_BACKGROUNDED];
-    [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_BACKGROUNDED_APP reason:WEBSOCKET_CLOSE_REASON_USER_BACKGROUNDED];
+    [WalletManager.sharedInstance closeWebSocketsWithCloseCode:WebSocketCloseCodeBackgroundedApp];
 
     if (hasGuidAndSharedKey) {
         [[[NetworkManager sharedInstance] session] resetWithCompletionHandler:^{
@@ -674,10 +672,10 @@ void (^secondPasswordSuccess)(NSString *);
 //    [WalletManager.sharedInstance.wallet setupBuySellWebview];
 //}
 
-- (void)initializeWebview
-{
-    self.buyBitcoinViewController = [[BuyBitcoinViewController alloc] init];
-}
+//- (void)initializeWebview
+//{
+//    self.buyBitcoinViewController = [[BuyBitcoinViewController alloc] init];
+//}
 
 #pragma mark - UI State
 //
@@ -764,8 +762,8 @@ void (^secondPasswordSuccess)(NSString *);
 //    [sideMenuViewController reload];
 }
 
-- (void)showBusyViewWithLoadingText:(NSString *)text
-{
+//- (void)showBusyViewWithLoadingText:(NSString *)text
+//{
 //    if (self.topViewControllerDelegate) {
 //        if ([self.topViewControllerDelegate respondsToSelector:@selector(showBusyViewWithLoadingText:)]) {
 //            [self.topViewControllerDelegate showBusyViewWithLoadingText:text];
@@ -792,7 +790,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    if (busyView.alpha < 1.0) {
 //        [busyView fadeIn];
 //    }
-}
+//}
 
 //- (void)updateBusyViewLoadingText:(NSString *)text
 //{
@@ -829,13 +827,13 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //    if (!WalletManager.sharedInstance.wallet.guid && busyView.alpha == 1.0 && [busyLabel.text isEqualToString:BC_STRING_LOADING_VERIFYING]) {
 //        [self.pinEntryViewController reset];
-//        [self hideBusyView];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
 //        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_LOADING_WALLET title:BC_STRING_ERROR handler: nil];
 //    }
 //}
 
-- (void)hideBusyView
-{
+//- (void)hideBusyView
+//{
 //    if (self.topViewControllerDelegate) {
 //        if ([self.topViewControllerDelegate respondsToSelector:@selector(hideBusyView)]) {
 //            [self.topViewControllerDelegate hideBusyView];
@@ -845,7 +843,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    if (busyView.alpha == 1.0) {
 //        [busyView fadeOut];
 //    }
-}
+//}
 
 - (void)hideSendAndReceiveKeyboards
 {
@@ -948,26 +946,26 @@ void (^secondPasswordSuccess)(NSString *);
         return;
     }
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:[NSString stringWithFormat:BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
-        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self walletFailedToLoad];
-        }]];
-        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [WalletManager.sharedInstance forgetWallet];
-            [self showWelcomeScreen];
-        }]];
-        [_window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
-    }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        UIApplication *app = [UIApplication sharedApplication];
-
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    [_window.rootViewController presentViewController:alert animated:YES completion:nil];
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:[NSString stringWithFormat:BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL] preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        UIAlertController *forgetWalletAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING message:BC_STRING_FORGET_WALLET_DETAILS preferredStyle:UIAlertControllerStyleAlert];
+//        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            [self walletFailedToLoad];
+//        }]];
+//        [forgetWalletAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            [WalletManager.sharedInstance forgetWallet];
+//            [self showWelcomeScreen];
+//        }]];
+//        [_window.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
+//    }]];
+//
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CLOSE_APP style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        UIApplication *app = [UIApplication sharedApplication];
+//
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    [_window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 //
 //- (void)walletDidDecrypt
@@ -1144,7 +1142,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didFetchBitcoinCashHistory
 {
-    [self hideBusyView];
+    [LoadingViewPresenter.sharedInstance hideBusyView];
 
     [AppCoordinator.sharedInstance reload];
 }
@@ -1438,7 +1436,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)closeAllModals
 {
-//    [self hideBusyView];
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
 //
 //    secondPasswordSuccess = nil;
 //    secondPasswordTextField.text = nil;
@@ -1696,43 +1694,43 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)logout
 {
-    [self.loginTimer invalidate];
-
-    [WalletManager.sharedInstance.wallet resetSyncStatus];
-
-    [WalletManager.sharedInstance.wallet loadBlankWallet];
-
-    WalletManager.sharedInstance.wallet.hasLoadedAccountInfo = NO;
-
-    WalletManager.sharedInstance.latestMultiAddressResponse = nil;
-
-    [self.tabControllerManager logout];
-
-    _settingsNavigationController = nil;
-
-    [AppCoordinator.sharedInstance reload];
-
-    [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-    [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-    [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+//    [self.loginTimer invalidate];
+//
+//    [WalletManager.sharedInstance.wallet resetSyncStatus];
+//
+//    [WalletManager.sharedInstance.wallet loadBlankWallet];
+//
+//    WalletManager.sharedInstance.wallet.hasLoadedAccountInfo = NO;
+//
+//    WalletManager.sharedInstance.latestMultiAddressResponse = nil;
+//
+//    [self.tabControllerManager logout];
+//
+//    _settingsNavigationController = nil;
+//
+//    [AppCoordinator.sharedInstance reload];
+//
+//    [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+//    [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
+//    [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
 }
 
-- (void)buyBitcoinClicked:(id)sender
-{
-    NSDictionary *loginData = [[WalletManager.sharedInstance.wallet executeJSSynchronous:@"MyWalletPhone.getWebViewLoginData()"] toDictionary];
-    NSString *walletJson = loginData[@"walletJson"];
-    NSString *externalJson = [loginData[@"externalJson"] isEqual:[NSNull null]] ? @"" : loginData[@"externalJson"];
-    NSString *magicHash = [loginData[@"magicHash"] isEqual:[NSNull null]] ? @"" : loginData[@"magicHash"];
-    [self.buyBitcoinViewController loginWithJson:walletJson externalJson:externalJson magicHash:magicHash password:WalletManager.sharedInstance.wallet.password];
-    self.buyBitcoinViewController.delegate = WalletManager.sharedInstance.wallet;
-    BuyBitcoinNavigationController *navigationController = [[BuyBitcoinNavigationController alloc] initWithRootViewController:self.buyBitcoinViewController title:BC_STRING_BUY_AND_SELL_BITCOIN];
-    [self.tabControllerManager.tabViewController presentViewController:navigationController animated:YES completion:nil];
-}
+//- (void)buyBitcoinClicked:(id)sender
+//{
+//    NSDictionary *loginData = [[WalletManager.sharedInstance.wallet executeJSSynchronous:@"MyWalletPhone.getWebViewLoginData()"] toDictionary];
+//    NSString *walletJson = loginData[@"walletJson"];
+//    NSString *externalJson = [loginData[@"externalJson"] isEqual:[NSNull null]] ? @"" : loginData[@"externalJson"];
+//    NSString *magicHash = [loginData[@"magicHash"] isEqual:[NSNull null]] ? @"" : loginData[@"magicHash"];
+//    [self.buyBitcoinViewController loginWithJson:walletJson externalJson:externalJson magicHash:magicHash password:WalletManager.sharedInstance.wallet.password];
+//    self.buyBitcoinViewController.delegate = WalletManager.sharedInstance.wallet;
+//    BuyBitcoinNavigationController *navigationController = [[BuyBitcoinNavigationController alloc] initWithRootViewController:self.buyBitcoinViewController title:BC_STRING_BUY_AND_SELL_BITCOIN];
+//    [self.tabControllerManager.tabViewController presentViewController:navigationController animated:YES completion:nil];
+//}
 
-- (void)exchangeClicked:(id)sender
-{
-    [self.tabControllerManager exchangeClicked];
-}
+//- (void)exchangeClicked:(id)sender
+//{
+//    [self.tabControllerManager exchangeClicked];
+//}
 
 //- (void)forgetWallet
 //{
@@ -1772,7 +1770,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didImportKey:(NSString *)address
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
 
     WalletManager.sharedInstance.wallet.lastImportedAddress = address;
 
@@ -1795,7 +1793,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didImportIncorrectPrivateKey:(NSString *)address
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedIncorrectPrivateKey) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
 }
@@ -1816,7 +1814,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didImportPrivateKeyToLegacyAddress
 {
-    [app showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedPrivateKeyIntoLegacyAddress) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
 }
@@ -1837,7 +1835,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self.tabControllerManager.receiveBitcoinViewController name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
 
-    [self hideBusyView];
+    [LoadingViewPresenter.sharedInstance hideBusyView];
     WalletManager.sharedInstance.wallet.isSyncing = NO;
 
     if ([error containsString:ERROR_PRESENT_IN_WALLET]) {
@@ -1860,7 +1858,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error
 {
-    [self hideBusyView];
+    [LoadingViewPresenter.sharedInstance hideBusyView];
     WalletManager.sharedInstance.wallet.isSyncing = NO;
     NSString *alertTitle = BC_STRING_ERROR;
     if ([error containsString:ERROR_NOT_PRESENT_IN_WALLET]) {
@@ -1921,7 +1919,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NAME_ALREADY_IN_USE title:BC_STRING_ERROR handler: nil];
 
-    [self hideBusyView];
+    [LoadingViewPresenter.sharedInstance hideBusyView];
 }
 
 - (void)alertUserOfInvalidPrivateKey
@@ -1975,7 +1973,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     if (self.transferAllFundsModalController) {
         [self.transferAllFundsModalController updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
-        [self hideBusyView];
+        [LoadingViewPresenter.sharedInstance hideBusyView];
     } else {
         [self.tabControllerManager updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
     }
@@ -1985,7 +1983,7 @@ void (^secondPasswordSuccess)(NSString *);
 {
     if (self.transferAllFundsModalController) {
         [self.transferAllFundsModalController showSummaryForTransferAll];
-        [self hideBusyView];
+        [LoadingViewPresenter.sharedInstance hideBusyView];
     } else {
         [self.tabControllerManager showSummaryForTransferAll];
     }
@@ -2012,8 +2010,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didReceivePaymentNotice:(NSString *)notice
 {
-    if (self.tabControllerManager.tabViewController.selectedIndex == TAB_SEND && busyView.alpha == 0 && !self.pinEntryViewController && !self.tabControllerManager.tabViewController.presentedViewController) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:BC_STRING_INFORMATION handler: nil];
+    if (self.tabControllerManager.tabViewController.selectedIndex == TAB_SEND && LoadingViewPresenter.sharedInstance.busyView.alpha == 0 && !self.pinEntryViewController && !self.tabControllerManager.tabViewController.presentedViewController) {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] handler: nil];
     }
 }
 
@@ -2316,7 +2314,7 @@ void (^secondPasswordSuccess)(NSString *);
 //- (void)didSendPaymentRequest:(NSDictionary *)info amount:(uint64_t)amount name:(NSString *)name requestId:(NSString *)requestId
 //{
 //    if (!requestId) {
-//        [self hideBusyView];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
 //        [self.tabControllerManager clearReceiveAmounts];
 //
 //        UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"success_large"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -2337,7 +2335,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 //- (void)didRequestPaymentRequest:(NSDictionary *)info name:(NSString *)name
 //{
-//    [self hideBusyView];
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
 //
 //    [self.tabControllerManager reloadSendController];
 //
@@ -2432,7 +2430,7 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)didFetchEthHistory
 {
-    [self hideBusyView];
+    [LoadingViewPresenter.sharedInstance hideBusyView];
 
     [AppCoordinator.sharedInstance reload];
 }
@@ -2504,63 +2502,63 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager showGetAssetsAlert];
 }
 
-- (void)checkForMaintenance
-{
-    [self checkForMaintenanceWithPinKey:nil pin:nil];
-}
+//- (void)checkForMaintenance
+//{
+//    [self checkForMaintenanceWithPinKey:nil pin:nil];
+//}
 
-- (void)checkForMaintenanceWithPinKey:(NSString *)pinKey pin:(NSString *)pin
-{
-    NSURL *url = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_WALLET_OPTIONS]];
-    // session.sessionDescription = url.host;
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (error) {
-                DLog(@"Error checking for maintenance in wallet options: %@", [error localizedDescription]);
-                [self hideBusyView];
-                [self.pinEntryViewController reset];
-                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
-            }
-            NSError *jsonError;
-            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-            if (jsonError) {
-                DLog(@"Error parsing response from checking for maintenance in wallet options: %@", [error localizedDescription]);
-                [self hideBusyView];
-                [self.pinEntryViewController reset];
-                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
-            } else {
-                if ([[result objectForKey:DICTIONARY_KEY_MAINTENANCE] boolValue]) {
-                    NSDictionary *mobileInfo = [result objectForKey:DICTIONARY_KEY_MOBILE_INFO];
-                    NSString *message = [mobileInfo objectForKey:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]] ? : [mobileInfo objectForKey:@"en"];
-                    [self hideBusyView];
-                    [self.pinEntryViewController reset];
-                    [self showMaintenanceAlertWithTitle:BC_STRING_INFORMATION message:message];
-                } else {
-                    if (pinKey && pin) {
-                        [WalletManager.sharedInstance.wallet apiGetPINValue:pinKey pin:pin];
-                    }
-                }
-            }
-        });
-    }];
-    [task resume];
-}
+//- (void)checkForMaintenanceWithPinKey:(NSString *)pinKey pin:(NSString *)pin
+//{
+//    NSURL *url = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_WALLET_OPTIONS]];
+//    // session.sessionDescription = url.host;
+//    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+//    NSURLSessionDataTask *task = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (error) {
+//                DLog(@"Error checking for maintenance in wallet options: %@", [error localizedDescription]);
+//                [self hideBusyView];
+//                [self.pinEntryViewController reset];
+//                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+//            }
+//            NSError *jsonError;
+//            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+//            if (jsonError) {
+//                DLog(@"Error parsing response from checking for maintenance in wallet options: %@", [error localizedDescription]);
+//                [self hideBusyView];
+//                [self.pinEntryViewController reset];
+//                [self showMaintenanceAlertWithTitle:BC_STRING_ERROR message:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+//            } else {
+//                if ([[result objectForKey:DICTIONARY_KEY_MAINTENANCE] boolValue]) {
+//                    NSDictionary *mobileInfo = [result objectForKey:DICTIONARY_KEY_MOBILE_INFO];
+//                    NSString *message = [mobileInfo objectForKey:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]] ? : [mobileInfo objectForKey:@"en"];
+//                    [self hideBusyView];
+//                    [self.pinEntryViewController reset];
+//                    [self showMaintenanceAlertWithTitle:BC_STRING_INFORMATION message:message];
+//                } else {
+//                    if (pinKey && pin) {
+//                        [WalletManager.sharedInstance.wallet apiGetPINValue:pinKey pin:pin];
+//                    }
+//                }
+//            }
+//        });
+//    }];
+//    [task resume];
+//}
 
-- (void)showMaintenanceAlertWithTitle:(NSString *)title message:(NSString *)message
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        UIApplication *app = [UIApplication sharedApplication];
-        [app performSelector:@selector(suspend)];
-    }]];
-
-    if ([UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController) {
-        [[UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
-    } else {
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    }
-}
+//- (void)showMaintenanceAlertWithTitle:(NSString *)title message:(NSString *)message
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        UIApplication *app = [UIApplication sharedApplication];
+//        [app performSelector:@selector(suspend)];
+//    }]];
+//
+//    if ([UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController) {
+//        [[UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+//    } else {
+//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+//    }
+//}
 
 #pragma mark - Show Screens
 
@@ -2577,27 +2575,27 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //    [self.tabControllerManager.tabViewController presentViewController:navigationController animated:YES completion:nil];
 //}
-
-- (void)showAccountsAndAddresses
-{
-    if (!_accountsAndAddressesNavigationController) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_ACCOUNTS_AND_ADDRESSES bundle:nil];
-        self.accountsAndAddressesNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_ACCOUNTS_AND_ADDRESSES];
-    }
-
-//    self.topViewControllerDelegate = self.accountsAndAddressesNavigationController;
-    self.accountsAndAddressesNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-
-    [self.tabControllerManager.tabViewController presentViewController:self.accountsAndAddressesNavigationController animated:YES completion:^{
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HIDE_TRANSFER_ALL_FUNDS_ALERT] &&
-            self.accountsAndAddressesNavigationController.viewControllers.count == 1 &&
-            [WalletManager.sharedInstance.wallet didUpgradeToHd] &&
-            [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] &&
-            self.accountsAndAddressesNavigationController.assetSelectorView.selectedAsset == AssetTypeBitcoin) {
-            [self.accountsAndAddressesNavigationController alertUserToTransferAllFunds:NO];
-        }
-    }];
-}
+//
+//- (void)showAccountsAndAddresses
+//{
+//    if (!_accountsAndAddressesNavigationController) {
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_ACCOUNTS_AND_ADDRESSES bundle:nil];
+//        self.accountsAndAddressesNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_ACCOUNTS_AND_ADDRESSES];
+//    }
+//
+////    self.topViewControllerDelegate = self.accountsAndAddressesNavigationController;
+//    self.accountsAndAddressesNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//
+//    [self.tabControllerManager.tabViewController presentViewController:self.accountsAndAddressesNavigationController animated:YES completion:^{
+//        if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HIDE_TRANSFER_ALL_FUNDS_ALERT] &&
+//            self.accountsAndAddressesNavigationController.viewControllers.count == 1 &&
+//            [WalletManager.sharedInstance.wallet didUpgradeToHd] &&
+//            [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] &&
+//            self.accountsAndAddressesNavigationController.assetSelectorView.selectedAsset == AssetTypeBitcoin) {
+//            [self.accountsAndAddressesNavigationController alertUserToTransferAllFunds:NO];
+//        }
+//    }];
+//}
 
 - (void)showSettings
 {
@@ -2606,29 +2604,29 @@ void (^secondPasswordSuccess)(NSString *);
 
 - (void)showSettings:(void (^)())completionBlock
 {
-    if (!_settingsNavigationController) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_SETTINGS bundle: nil];
-        self.settingsNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_SETTINGS];
-    }
+//    if (!_settingsNavigationController) {
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_SETTINGS bundle: nil];
+//        self.settingsNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_SETTINGS];
+//    }
 
 //    self.topViewControllerDelegate = self.settingsNavigationController;
-    [self.settingsNavigationController showSettings];
-
-    self.settingsNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self.tabControllerManager.tabViewController presentViewController:self.settingsNavigationController animated:YES completion:completionBlock];
-
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    [self.settingsNavigationController showSettings];
+//
+//    self.settingsNavigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [self.tabControllerManager.tabViewController presentViewController:self.settingsNavigationController animated:YES completion:completionBlock];
+//
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
-- (void)showSupport
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_OPEN_ARGUMENT, URL_SUPPORT] message:BC_STRING_LEAVE_APP preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URL_SUPPORT]];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (void)showSupport
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_OPEN_ARGUMENT, URL_SUPPORT] message:BC_STRING_LEAVE_APP preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URL_SUPPORT]];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 - (void)showTransactions
 {
@@ -2711,7 +2709,7 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //    WalletManager.sharedInstance.wallet.didPairAutomatically = NO;
 //
-//    [self hideBusyView];
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
 //
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
@@ -2865,12 +2863,12 @@ void (^secondPasswordSuccess)(NSString *);
 //    [recoveryWarningAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
 //    [self.window.rootViewController presentViewController:recoveryWarningAlert animated:YES completion:nil];
 //}
-
+//
 - (IBAction)manualPairClicked:(id)sender
 {
-    [self showModalWithContent:manualPairView closeType:ModalCloseTypeBack headerText:BC_STRING_MANUAL_PAIRING];
-    WalletManager.sharedInstance.wallet.twoFactorInput = nil;
-    [manualPairView clearPasswordTextField];
+//    [self showModalWithContent:manualPairView closeType:ModalCloseTypeBack headerText:BC_STRING_MANUAL_PAIRING];
+//    WalletManager.sharedInstance.wallet.twoFactorInput = nil;
+//    [manualPairView clearPasswordTextField];
 }
 //
 //- (void)showNewWalletSetup
@@ -2883,12 +2881,12 @@ void (^secondPasswordSuccess)(NSString *);
 //
 #pragma mark - Actions
 
-- (IBAction)accountsAndAddressesClicked:(id)sender
-{
-    if (!self.tabControllerManager.tabViewController.presentedViewController) {
-        [app showAccountsAndAddresses];
-    }
-}
+//- (IBAction)accountsAndAddressesClicked:(id)sender
+//{
+//    if (!self.tabControllerManager.tabViewController.presentedViewController) {
+//        [app showAccountsAndAddresses];
+//    }
+//}
 
 //- (IBAction)contactsClicked:(id)sender
 //{
@@ -2897,26 +2895,26 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (IBAction)accountSettingsClicked:(id)sender
-{
-    if (!self.tabControllerManager.tabViewController.presentedViewController) {
-        [self showSettings];
-    }
-}
+//- (IBAction)accountSettingsClicked:(id)sender
+//{
+//    if (!self.tabControllerManager.tabViewController.presentedViewController) {
+//        [self showSettings];
+//    }
+//}
 
-- (IBAction)backupFundsClicked:(id)sender
-{
-    if (!self.tabControllerManager.tabViewController.presentedViewController) {
-        [self showBackup];
-    }
-}
-
-- (IBAction)supportClicked:(id)sender
-{
-    if (!self.tabControllerManager.tabViewController.presentedViewController) {
-        [self showSupport];
-    }
-}
+//- (IBAction)backupFundsClicked:(id)sender
+//{
+//    if (!self.tabControllerManager.tabViewController.presentedViewController) {
+//        [self showBackup];
+//    }
+//}
+//
+//- (IBAction)supportClicked:(id)sender
+//{
+//    if (!self.tabControllerManager.tabViewController.presentedViewController) {
+//        [self showSupport];
+//    }
+//}
 
 - (void)validatePINOptionally
 {
@@ -2935,7 +2933,7 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
 
     if (WalletManager.sharedInstance.wallet.isSyncing) {
-        [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
 
     [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
@@ -2993,30 +2991,30 @@ void (^secondPasswordSuccess)(NSString *);
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //}
 
-- (IBAction)logoutClicked:(id)sender
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_LOGOUT message:BC_STRING_REALLY_LOGOUT preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self clearPin];
-        [self.tabControllerManager clearSendToAddressAndAmountFields];
-        [self logout];
-        [[AppCoordinator sharedInstance] closeSideMenu];
-        [self showPasswordModal];
-    }]];
+//- (IBAction)logoutClicked:(id)sender
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_LOGOUT message:BC_STRING_REALLY_LOGOUT preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self clearPin];
+//        [self.tabControllerManager clearSendToAddressAndAmountFields];
+//        [self logout];
+//        [[AppCoordinator sharedInstance] closeSideMenu];
+//        [self showPasswordModal];
+//    }]];
+//
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)logoutAndShowPasswordModal
-{
-    [self clearPin];
-    [self.tabControllerManager clearSendToAddressAndAmountFields];
-    [self logout];
-    [[AppCoordinator sharedInstance] closeSideMenu];
-    [self showPasswordModal];
-}
+//- (void)logoutAndShowPasswordModal
+//{
+//    [self clearPin];
+//    [self.tabControllerManager clearSendToAddressAndAmountFields];
+//    [AuthenticationCoordinator.sharedInstance logout];
+//    [[AppCoordinator sharedInstance] closeSideMenu];
+//    [self showPasswordModal];
+//}
 
 - (IBAction)forgotPasswordClicked:(id)sender
 {
@@ -3041,7 +3039,7 @@ void (^secondPasswordSuccess)(NSString *);
 
     if ([mainPasswordTextField isFirstResponder]) {
         [mainPasswordTextField resignFirstResponder];
-        [self performSelector:@selector(presentViewControllerAnimated:) withObject:forgetWalletAlert afterDelay:DELAY_KEYBOARD_DISMISSAL];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
     } else {
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:forgetWalletAlert animated:YES completion:nil];
     }
@@ -3054,17 +3052,17 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self performSelector:@selector(loginMainPassword) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 //}
 
-- (void)presentViewControllerAnimated:(UIViewController *)viewController
-{
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
-}
+//- (void)presentViewControllerAnimated:(UIViewController *)viewController
+//{
+//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
+//}
 
-- (IBAction)webLoginClicked:(id)sender
-{
-    WebLoginViewController *webLoginViewController = [[WebLoginViewController alloc] init];
-    BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:webLoginViewController title:BC_STRING_LOG_IN_TO_WEB_WALLET];
-    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
-}
+//- (IBAction)webLoginClicked:(id)sender
+//{
+//    WebLoginViewController *webLoginViewController = [[WebLoginViewController alloc] init];
+//    BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:webLoginViewController title:BC_STRING_LOG_IN_TO_WEB_WALLET];
+//    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
+//}
 
 
 - (void)setupTransferAllFunds
@@ -3081,13 +3079,13 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //    if (password.length == 0) {
 //        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
-//        [self hideBusyView];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
 //        return;
 //    }
 //
 //    if (!Reachability.hasInternetConnection) {
 //        [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
-//        [self hideBusyView];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
 //        return;
 //    }
 //
@@ -3114,7 +3112,7 @@ void (^secondPasswordSuccess)(NSString *);
 //
 //        [self failedToObtainValuesFromKeychain];
 //
-//        [self hideBusyView];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
 //    }
 //
 //    mainPasswordTextField.text = nil;
@@ -3150,16 +3148,16 @@ void (^secondPasswordSuccess)(NSString *);
 {
     [manualPairView verifyTwoFactorSMS];
 }
-
-- (void)verifyTwoFactorGoogle
-{
-    [manualPairView verifyTwoFactorGoogle];
-}
-
-- (void)verifyTwoFactorYubiKey
-{
-    [manualPairView verifyTwoFactorYubiKey];
-}
+//
+//- (void)verifyTwoFactorGoogle
+//{
+//    [manualPairView verifyTwoFactorGoogle];
+//}
+//
+//- (void)verifyTwoFactorYubiKey
+//{
+//    [manualPairView verifyTwoFactorYubiKey];
+//}
 
 -(void)rateApp {
 
@@ -3195,15 +3193,15 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager receivedTransactionMessage];
 }
 
-- (void)authorizationRequired
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE message:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OPEN_MAIL_APP style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [UIApplication.sharedApplication openMailApplication];
-    }]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (void)authorizationRequired
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_TITLE message:BC_STRING_MANUAL_PAIRING_AUTHORIZATION_REQUIRED_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OPEN_MAIL_APP style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [UIApplication.sharedApplication openMailApplication];
+//    }]];
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 //- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType
 //{
@@ -3244,8 +3242,8 @@ void (^secondPasswordSuccess)(NSString *);
 //    [task resume];
 //}
 
-- (void)openMail
-{
+//- (void)openMail
+//{
 //    NSURL *mailURL = [NSURL URLWithString:PREFIX_MAIL_URI];
 //    if ([[UIApplication sharedApplication] canOpenURL:mailURL]) {
 //        [[UIApplication sharedApplication] openURL:mailURL];
@@ -3259,19 +3257,19 @@ void (^secondPasswordSuccess)(NSString *);
 //            [self.tabControllerManager.tabViewController presentViewController:alert animated:YES completion:nil];
 //        }
 //    }
-}
-
-- (void)showBackup
-{
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_BACKUP bundle: nil];
-    BackupViewController *backupController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_BACKUP];
-
-    backupController.wallet = WalletManager.sharedInstance.wallet;
-    backupController.app = app;
-
-    backupController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self.tabControllerManager.tabViewController presentViewController:backupController animated:YES completion:nil];
-}
+//}
+//
+//- (void)showBackup
+//{
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_BACKUP bundle: nil];
+//    BackupViewController *backupController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_BACKUP];
+//
+//    backupController.wallet = WalletManager.sharedInstance.wallet;
+//    backupController.app = app;
+//
+//    backupController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [self.tabControllerManager.tabViewController presentViewController:backupController animated:YES completion:nil];
+//}
 
 - (void)showTwoStep
 {
@@ -3316,10 +3314,10 @@ void (^secondPasswordSuccess)(NSString *);
     [self.tabControllerManager setupSendToAddress:address];
 }
 
-#pragma mark - Pin Entry Delegates
+//#pragma mark - Pin Entry Delegates
 
-- (void)pinEntryController:(PEPinEntryController *)c shouldAcceptPin:(NSUInteger)_pin callback:(void(^)(BOOL))callback
-{
+//- (void)pinEntryController:(PEPinEntryController *)c shouldAcceptPin:(NSUInteger)_pin callback:(void(^)(BOOL))callback
+//{
 //    self.lastEnteredPIN = _pin;
 //
 //    // TODO does this ever happen?
@@ -3353,183 +3351,183 @@ void (^secondPasswordSuccess)(NSString *);
 //    });
 //
 //    self.pinViewControllerCallback = callback;
-}
+//}
 
-- (void)showPinErrorWithMessage:(NSString *)message
-{
-    DLog(@"Pin error: %@", message);
+//- (void)showPinErrorWithMessage:(NSString *)message
+//{
+//    DLog(@"Pin error: %@", message);
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        // Reset the pin entry field
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
+//        [self.pinEntryViewController reset];
+//    }]];
+//
+//    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alert animated:YES completion:nil];
+//}
+//
+//- (void)askIfUserWantsToResetPIN
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PIN_VALIDATION_ERROR message:BC_STRING_PIN_VALIDATION_ERROR_DETAIL preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_ENTER_PASSWORD style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//        [self showPasswordModal];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:RETRY_VALIDATION style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self pinEntryController:self.pinEntryViewController shouldAcceptPin:self.lastEnteredPIN callback:self.pinViewControllerCallback];
+//    }]];
+//
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
+//
+//- (void)didFailGetPinTimeout
+//{
+//    [self showPinErrorWithMessage:BC_STRING_TIMED_OUT];
+//}
+//
+//- (void)didFailGetPinNoResponse
+//{
+//    [self showPinErrorWithMessage:BC_STRING_INCORRECT_PIN_RETRY];
+//}
+//
+//- (void)didFailGetPinInvalidResponse
+//{
+//    [self showPinErrorWithMessage:BC_STRING_INVALID_RESPONSE];
+//}
+//
+//- (void)didGetPinResponse:(NSDictionary*)dictionary
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//
+//    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
+//    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
+//    NSString * success = [dictionary objectForKey:DICTIONARY_KEY_SUCCESS]; //The PIN decryption value from the server
+//    NSString * encryptedPINPassword = [BlockchainSettings sharedAppInstance].encryptedPinPassword;
+//
+//    BOOL pinSuccess = FALSE;
+//
+//    // Incorrect pin
+//    if (code == nil) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.incorrectPin title:BC_STRING_ERROR handler: nil];
+//    }
+//    // Pin retry limit exceeded
+//    else if ([code intValue] == PIN_API_STATUS_CODE_DELETED) {
+//
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED title:BC_STRING_ERROR handler: nil];
+//
+//        [self clearPin];
+//
+//        [self logout];
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self showPasswordModal];
+//            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//        });
+//
+//    }
+//    // Incorrect pin
+//    else if ([code integerValue] == PIN_API_STATUS_PIN_INCORRECT) {
+//
+//        if (error == nil) {
+//            error = @"PIN Code Incorrect. Unknown Error Message.";
+//        }
+//
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+//    }
+//    // Pin was accepted
+//    else if ([code intValue] == PIN_API_STATUS_OK) {
+//
+//#ifdef ENABLE_TOUCH_ID
+//        if (self.pinEntryViewController.verifyOptional) {
+//            BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//            [self showSettings];
+//            return;
+//        }
+//#endif
+//        // This is for change PIN - verify the password first, then show the enter screens
+//        if (self.pinEntryViewController.verifyOnly == NO) {
+//            if (self.pinViewControllerCallback) {
+//                self.pinViewControllerCallback(YES);
+//                self.pinViewControllerCallback = nil;
+//            }
+//
+//            return;
+//        }
+//
+//        // Initial PIN setup ?
+//        if ([success length] == 0) {
+//            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 title:BC_STRING_ERROR handler: nil];
+//            [self askIfUserWantsToResetPIN];
+//            return;
+//        }
+//
+//        NSString *decrypted = [WalletManager.sharedInstance.wallet decrypt:encryptedPINPassword password:success pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
+//
+//        if ([decrypted length] == 0) {
+//            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 title:BC_STRING_ERROR handler: nil];
+//            [self askIfUserWantsToResetPIN];
+//            return;
+//        }
+//
+//        NSString *guid = [KeychainItemWrapper guid];
+//        NSString *sharedKey = [KeychainItemWrapper sharedKey];
+//
+//        if (guid && sharedKey) {
+//            [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:decrypted];
+//        } else {
+//
+//            if (!guid) {
+//                DLog(@"failed to retrieve GUID from Keychain");
+//            }
+//
+//            if (!sharedKey) {
+//                DLog(@"failed to retrieve sharedKey from Keychain");
+//            }
+//
+//            if (guid && !sharedKey) {
+//                DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
+//            }
+//
+//            [AlertViewPresenter.sharedInstance showKeychainReadError];
+//        }
+//
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//
+//        pinSuccess = TRUE;
+//
+//    }
+//    // Unknown error
+//    else {
+//        [self askIfUserWantsToResetPIN];
+//    }
+//
+//    if (self.pinViewControllerCallback) {
+//        self.pinViewControllerCallback(pinSuccess);
+//        self.pinViewControllerCallback = nil;
+//    }
+//
+//#ifdef ENABLE_TOUCH_ID
+//    if (!pinSuccess && self.pinEntryViewController.verifyOptional) {
+//        [KeychainItemWrapper removePinFromKeychain];
+//    }
+//#endif
+//}
+//
+//- (void)didFailPutPin:(NSString*)value
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//
+//    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:value title:BC_STRING_ERROR handler: nil];
+//
+//    [self reopenChangePIN];
+//}
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        // Reset the pin entry field
-        [self hideBusyView];
-        [self.pinEntryViewController reset];
-    }]];
-
-    UIViewController *topViewController = UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)askIfUserWantsToResetPIN
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PIN_VALIDATION_ERROR message:BC_STRING_PIN_VALIDATION_ERROR_DETAIL preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_ENTER_PASSWORD style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-        [self showPasswordModal];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:RETRY_VALIDATION style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self pinEntryController:self.pinEntryViewController shouldAcceptPin:self.lastEnteredPIN callback:self.pinViewControllerCallback];
-    }]];
-
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)didFailGetPinTimeout
-{
-    [self showPinErrorWithMessage:BC_STRING_TIMED_OUT];
-}
-
-- (void)didFailGetPinNoResponse
-{
-    [self showPinErrorWithMessage:BC_STRING_INCORRECT_PIN_RETRY];
-}
-
-- (void)didFailGetPinInvalidResponse
-{
-    [self showPinErrorWithMessage:BC_STRING_INVALID_RESPONSE];
-}
-
-- (void)didGetPinResponse:(NSDictionary*)dictionary
-{
-    [self hideBusyView];
-
-    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
-    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
-    NSString * success = [dictionary objectForKey:DICTIONARY_KEY_SUCCESS]; //The PIN decryption value from the server
-    NSString * encryptedPINPassword = [BlockchainSettings sharedAppInstance].encryptedPinPassword;
-
-    BOOL pinSuccess = FALSE;
-
-    // Incorrect pin
-    if (code == nil) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PIN_RETRY title:BC_STRING_ERROR handler: nil];
-    }
-    // Pin retry limit exceeded
-    else if ([code intValue] == PIN_API_STATUS_CODE_DELETED) {
-
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_VALIDATION_CANNOT_BE_COMPLETED title:BC_STRING_ERROR handler: nil];
-
-        [self clearPin];
-
-        [self logout];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showPasswordModal];
-            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-        });
-
-    }
-    // Incorrect pin
-    else if ([code integerValue] == PIN_API_STATUS_PIN_INCORRECT) {
-
-        if (error == nil) {
-            error = @"PIN Code Incorrect. Unknown Error Message.";
-        }
-
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
-    }
-    // Pin was accepted
-    else if ([code intValue] == PIN_API_STATUS_OK) {
-
-#ifdef ENABLE_TOUCH_ID
-        if (self.pinEntryViewController.verifyOptional) {
-            BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-            [self showSettings];
-            return;
-        }
-#endif
-        // This is for change PIN - verify the password first, then show the enter screens
-        if (self.pinEntryViewController.verifyOnly == NO) {
-            if (self.pinViewControllerCallback) {
-                self.pinViewControllerCallback(YES);
-                self.pinViewControllerCallback = nil;
-            }
-
-            return;
-        }
-
-        // Initial PIN setup ?
-        if ([success length] == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PIN_RESPONSE_OBJECT_SUCCESS_LENGTH_0 title:BC_STRING_ERROR handler: nil];
-            [self askIfUserWantsToResetPIN];
-            return;
-        }
-
-        NSString *decrypted = [WalletManager.sharedInstance.wallet decrypt:encryptedPINPassword password:success pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
-
-        if ([decrypted length] == 0) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_DECRYPTED_PIN_PASSWORD_LENGTH_0 title:BC_STRING_ERROR handler: nil];
-            [self askIfUserWantsToResetPIN];
-            return;
-        }
-
-        NSString *guid = [KeychainItemWrapper guid];
-        NSString *sharedKey = [KeychainItemWrapper sharedKey];
-
-        if (guid && sharedKey) {
-            [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:decrypted];
-        } else {
-
-            if (!guid) {
-                DLog(@"failed to retrieve GUID from Keychain");
-            }
-
-            if (!sharedKey) {
-                DLog(@"failed to retrieve sharedKey from Keychain");
-            }
-
-            if (guid && !sharedKey) {
-                DLog(@"!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???");
-            }
-
-            [AlertViewPresenter.sharedInstance showKeychainReadError];
-        }
-
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-
-        pinSuccess = TRUE;
-
-    }
-    // Unknown error
-    else {
-        [self askIfUserWantsToResetPIN];
-    }
-
-    if (self.pinViewControllerCallback) {
-        self.pinViewControllerCallback(pinSuccess);
-        self.pinViewControllerCallback = nil;
-    }
-
-#ifdef ENABLE_TOUCH_ID
-    if (!pinSuccess && self.pinEntryViewController.verifyOptional) {
-        [KeychainItemWrapper removePinFromKeychain];
-    }
-#endif
-}
-
-- (void)didFailPutPin:(NSString*)value
-{
-    [self hideBusyView];
-
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:value title:BC_STRING_ERROR handler: nil];
-
-    [self reopenChangePIN];
-}
-
-- (void)reopenChangePIN
-{
+//- (void)reopenChangePIN
+//{
 //    [AuthenticationCoordinator.shared closePinEntryModalWithAnimated:NO];
 //
 //    // Show the pin modal to enter a pin again
@@ -3542,67 +3540,67 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //
 //    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
-}
+//}
+//
+//- (void)didPutPinSuccess:(NSDictionary*)dictionary
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//
+//    if (!WalletManager.sharedInstance.wallet.password) {
+//        [self didFailPutPin:BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE];
+//        return;
+//    }
+//
+//    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
+//    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
+//    NSString * key = [dictionary objectForKey:DICTIONARY_KEY_KEY]; //This is our pin code lookup key
+//    NSString * value = [dictionary objectForKey:DICTIONARY_KEY_VALUE]; //This is our encryption string
+//
+//    if (error != nil) {
+//        [self didFailPutPin:error];
+//    } else if (code == nil || [code intValue] != PIN_API_STATUS_OK) {
+//        [self didFailPutPin:[NSString stringWithFormat:BC_STRING_INVALID_STATUS_CODE_RETURNED, code]];
+//    } else if ([key length] == 0 || [value length] == 0) {
+//        [self didFailPutPin:BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0];
+//    } else {
+//
+//        BOOL inSettings = self.pinEntryViewController.inSettings;
+//
+//        if (inSettings) {
+//            [self showSettings];
+//        }
+//        //Encrypt the wallet password with the random value
+//        NSString * encrypted = [WalletManager.sharedInstance.wallet encrypt:WalletManager.sharedInstance.wallet.password password:value pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
+//
+//        //Store the encrypted result and discard the value
+//        value = nil;
+//
+//        if (!encrypted) {
+//            [self didFailPutPin:BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL];
+//            return;
+//        }
+//
+//        App *appSettings = [BlockchainSettings sharedAppInstance];
+//        appSettings.encryptedPinPassword = encrypted;
+//        appSettings.pinKey = key;
+//        appSettings.passwordPartHash = [[WalletManager.sharedInstance.wallet.password SHA256] substringToIndex:MIN([WalletManager.sharedInstance.wallet.password length], 5)];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//        // Update your info to new pin code
+//        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
+//
+//        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [self showMobileNotice];
+//
+//        if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
+//            [self forceHDUpgradeForLegacyWallets];
+//        }
+//    }
+//
+//    WalletManager.sharedInstance.wallet.isNew = NO;
+//}
 
-- (void)didPutPinSuccess:(NSDictionary*)dictionary
-{
-    [self hideBusyView];
-
-    if (!WalletManager.sharedInstance.wallet.password) {
-        [self didFailPutPin:BC_STRING_CANNOT_SAVE_PIN_CODE_WHILE];
-        return;
-    }
-
-    NSNumber * code = [dictionary objectForKey:DICTIONARY_KEY_CODE]; //This is a status code from the server
-    NSString * error = [dictionary objectForKey:DICTIONARY_KEY_ERROR]; //This is an error string from the server or nil
-    NSString * key = [dictionary objectForKey:DICTIONARY_KEY_KEY]; //This is our pin code lookup key
-    NSString * value = [dictionary objectForKey:DICTIONARY_KEY_VALUE]; //This is our encryption string
-
-    if (error != nil) {
-        [self didFailPutPin:error];
-    } else if (code == nil || [code intValue] != PIN_API_STATUS_OK) {
-        [self didFailPutPin:[NSString stringWithFormat:BC_STRING_INVALID_STATUS_CODE_RETURNED, code]];
-    } else if ([key length] == 0 || [value length] == 0) {
-        [self didFailPutPin:BC_STRING_PIN_RESPONSE_OBJECT_KEY_OR_VALUE_LENGTH_0];
-    } else {
-
-        BOOL inSettings = self.pinEntryViewController.inSettings;
-
-        if (inSettings) {
-            [self showSettings];
-        }
-        //Encrypt the wallet password with the random value
-        NSString * encrypted = [WalletManager.sharedInstance.wallet encrypt:WalletManager.sharedInstance.wallet.password password:value pbkdf2_iterations:PIN_PBKDF2_ITERATIONS];
-
-        //Store the encrypted result and discard the value
-        value = nil;
-
-        if (!encrypted) {
-            [self didFailPutPin:BC_STRING_PIN_ENCRYPTED_STRING_IS_NIL];
-            return;
-        }
-
-        App *appSettings = [BlockchainSettings sharedAppInstance];
-        appSettings.encryptedPinPassword = encrypted;
-        appSettings.pinKey = key;
-        appSettings.passwordPartHash = [[WalletManager.sharedInstance.wallet.password SHA256] substringToIndex:MIN([WalletManager.sharedInstance.wallet.password length], 5)];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-
-        // Update your info to new pin code
-        [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-
-        if ([WalletManager.sharedInstance.wallet isInitialized] && !inSettings) [AlertViewPresenter.sharedInstance showMobileNoticeIfNeeded];
-
-        if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
-            [self forceHDUpgradeForLegacyWallets];
-        }
-    }
-
-    WalletManager.sharedInstance.wallet.isNew = NO;
-}
-
-- (void)pinEntryController:(PEPinEntryController *)c willChangeToNewPin:(NSUInteger)_pin
-{
+//- (void)pinEntryController:(PEPinEntryController *)c willChangeToNewPin:(NSUInteger)_pin
+//{
 //    if (_pin == self.lastEnteredPIN && self.lastEnteredPIN != 0000) {
 //        UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_STRING_NEW_PIN_MUST_BE_DIFFERENT preferredStyle:UIAlertControllerStyleAlert];
 //        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -3628,10 +3626,10 @@ void (^secondPasswordSuccess)(NSString *);
 //        }]];
 //        [c presentViewController:alert animated:YES completion:nil];
 //    }
-}
+//}
 
-- (void)pinEntryController:(PEPinEntryController *)c changedPin:(NSUInteger)_pin
-{
+//- (void)pinEntryController:(PEPinEntryController *)c changedPin:(NSUInteger)_pin
+//{
 //    self.lastEnteredPIN = _pin;
 //
 //    if (![WalletManager.sharedInstance.wallet isInitialized] || !WalletManager.sharedInstance.wallet.password) {
@@ -3644,7 +3642,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self showBusyViewWithLoadingText:BC_STRING_LOADING_VERIFYING];
 //
 //    [self savePIN:pin];
-}
+//}
 
 - (void)savePIN:(NSString*)pin {
 //    uint8_t data[32];
@@ -3746,20 +3744,20 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (void)alertUserAskingToUseOldKeychain
-{
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ASK_TO_USE_OLD_WALLET_TITLE message:BC_STRING_ASK_TO_USE_OLD_WALLET_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CREATE_NEW_WALLET style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [self forgetWalletClicked:nil];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_LOGIN_EXISTING_WALLET style:UIAlertActionStyleDefault handler:nil]];
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    });
-}
+//- (void)alertUserAskingToUseOldKeychain
+//{
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ASK_TO_USE_OLD_WALLET_TITLE message:BC_STRING_ASK_TO_USE_OLD_WALLET_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CREATE_NEW_WALLET style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        [self forgetWalletClicked:nil];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_LOGIN_EXISTING_WALLET style:UIAlertActionStyleDefault handler:nil]];
+//
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//    });
+//}
 
 //- (void)alertUserOfCompromisedSecurity
 //{

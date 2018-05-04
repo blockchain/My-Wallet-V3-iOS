@@ -9,7 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "ECSlidingViewController.h"
 
+@protocol SideMenuViewControllerDelegate
+- (void) onSideMenuItemTapped:(NSString *)identifier;
+@end
+
 @interface SideMenuViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ECSlidingViewControllerDelegate>
+
+@property (weak, nonatomic) id <SideMenuViewControllerDelegate> delegate;
 
 - (void)reload;
 - (void)reloadTableView;

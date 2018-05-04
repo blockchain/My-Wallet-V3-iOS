@@ -196,7 +196,7 @@ static PEViewController *VerifyController()
             void (^error)(void) = ^() {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizationConstantsObjcBridge.noInternetConnection message:BC_STRING_SWIPE_TO_RECEIVE_NO_INTERNET_CONNECTION_WARNING preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [swipeView updateAddress:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION];
+                    [swipeView updateAddress:[LocalizationConstantsObjcBridge requestFailedCheckConnection]];
                 }]];
                 [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:nextAddress assetType:assetType];
@@ -250,7 +250,7 @@ static PEViewController *VerifyController()
                         self.viewControllers = [NSArray arrayWithObject:c];
                     }
                 } else {
-                    controller.prompt = BC_STRING_INCORRECT_PIN_RETRY;
+                    controller.prompt = LocalizationConstantsObjcBridge.incorrectPin;
                     [controller resetPin];
                 }
             }];

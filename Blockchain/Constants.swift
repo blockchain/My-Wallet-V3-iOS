@@ -74,8 +74,14 @@ struct Constants {
     struct Schemas {
         static let mail = "message://"
     }
+    struct Security {
+        static let pinPBKDF2Iterations = 1 // This does not need to be large because the key is already 256 bits
+    }
     struct Time {
         static let securityReminderModalTimeInterval: TimeInterval = 60 * 60 * 24 * 30 // Seconds in thirty days
+    }
+    struct Url {
+        static let blockchainSupport = "https://support.blockchain.com"
     }
 }
 

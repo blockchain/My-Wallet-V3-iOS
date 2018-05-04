@@ -30,7 +30,7 @@ final class AuthenticationManager: NSObject {
      * `authenticateUsingBiometrics(andReply:)`
      * `authenticate(using:andReply:)`
      */
-    typealias Handler = (_ authenticated: Bool, _ error: AuthenticationError?) -> Void
+    typealias Handler = (_ authenticated: Bool, _ twoFactorType: AuthenticationTwoFactorType?, _ error: AuthenticationError?) -> Void
 
     /**
      The local authentication context.
@@ -92,13 +92,13 @@ final class AuthenticationManager: NSObject {
             context.localizedCancelTitle = LCStringAuthCancel
         }
         if !canAuthenticateUsingBiometry() {
-            handler(false, preFlightError(forError: preflightError!.code)); return
+            handler(false, nil, preFlightError(forError: preflightError!.code)); return
         }
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: authenticationReason, reply: { authenticated, error in
             if let authError = error {
-                handler(false, self.authenticationError(forError: authError)); return
+                handler(false, nil, self.authenticationError(forError: authError)); return
             }
-            handler(authenticated, nil)
+            handler(authenticated, nil, nil)
         })
     }
 
@@ -121,15 +121,15 @@ final class AuthenticationManager: NSObject {
     func authenticate(using payload: PasscodePayload, andReply handler: @escaping Handler) {
 
         guard Reachability.hasInternetConnection() else {
-            handler(false, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
+            handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
             return
         }
 
         guard payload.password.count != 0 else {
-            handler(false, AuthenticationError(
+            handler(false, nil, AuthenticationError(
                 code: AuthenticationError.ErrorCode.noPassword.rawValue,
-                description: LocalizationConstants.Authentication.noPasswordEntered)
-            )
+                description: LocalizationConstants.Authentication.noPasswordEntered
+            ))
             return
         }
 
@@ -251,21 +251,20 @@ extension AuthenticationManager: WalletAuthDelegate {
         // With the hash prefix we can then figure out if the password changed. If so, clear the pin
         // so that the user can reset it
         guard let password = password,
-            let passwordSha256 = NSString(string: password).sha256(),
-            let passwordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
+            let passwordPartHash = password.passwordPartHash,
+            let savedPasswordPartHash = BlockchainSettings.App.shared.passwordPartHash else {
                 return
         }
 
-        let endIndex = passwordSha256.index(passwordSha256.startIndex, offsetBy: min(password.count, 5))
-        guard passwordSha256[..<endIndex] != passwordPartHash else {
+        guard passwordPartHash != savedPasswordPartHash else {
             return
         }
 
         BlockchainSettings.App.shared.clearPin()
     }
 
-    func requiresTwoFactorCode() {
-        // TODO
+    func didRequireTwoFactorAuth(withType type: AuthenticationTwoFactorType) {
+        authHandler?(false, type, nil)
     }
 
     func incorrectTwoFactorCode() {
@@ -273,20 +272,22 @@ extension AuthenticationManager: WalletAuthDelegate {
     }
 
     func emailAuthorizationRequired() {
-        // TODO
+        failAuth(withError: AuthenticationError(
+            code: AuthenticationError.ErrorCode.emailAuthorizationRequired.rawValue
+        ))
     }
 
-    func authenticationError() {
-        failAuth()
+    func authenticationError(error: AuthenticationError?) {
+        failAuth(withError: error)
     }
 
     func authenticationCompleted() {
-        authHandler?(true, nil)
+        authHandler?(true, nil, nil)
         authHandler = nil
     }
 
     private func failAuth(withError error: AuthenticationError? = nil) {
-        authHandler?(false, error)
+        authHandler?(false, nil, error)
         authHandler = nil
     }
 }

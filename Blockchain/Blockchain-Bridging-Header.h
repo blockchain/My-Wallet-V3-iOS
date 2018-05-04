@@ -5,8 +5,11 @@
 #import <UIKit/UIKit.h>
 #import "BCCreateWalletView.h"
 #import "BCFadeView.h"
+#import "BCManualPairView.h"
 #import "BCNavigationController.h"
 #import "BCWelcomeView.h"
+#import "BuyBitcoinViewController.h"
+#import "BuyBitcoinNavigationController.h"
 #import "DebugTableViewController.h"
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
@@ -23,4 +26,5 @@
 #import "UIDevice+Hardware.h"
 #import "UIViewController+AutoDismiss.h"
 #import "Wallet.h"
+#import "WebLoginViewController.h"
 #import "ModuleXMLHttpRequest.h"

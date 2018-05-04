@@ -15,10 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Properties
 
-    // TODO: move to authentication flow
-    /// Flag used to indicate whether the device is prompting for biometric authentication.
-    @objc public private(set) var isPromptingForBiometricAuthentication = false
-
     lazy var busyView: BCFadeView? = {
         guard let windowFrame = UIApplication.shared.keyWindow?.frame else {
             return BCFadeView(frame: UIScreen.main.bounds)
@@ -94,7 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         print("applicationWillResignActive")
-        if !isPromptingForBiometricAuthentication {
+        if !AuthenticationCoordinator.shared.isPromptingForBiometricAuthentication {
             showPrivacyScreen()
         }
     }
@@ -115,60 +111,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
 
-    }
-
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let token = deviceToken.map { String(format: "%02x", $0) }.joined()
-        NetworkManager.registerDeviceForPushNotifications(withDeviceToken: token)
-    }
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        // TODO: handle registration failure
-        print(error.localizedDescription)
-    }
-
-    // MARK: - Authentication
-
-    @objc func authenticateWithBiometrics() {
-        app.pinEntryViewController.view.isUserInteractionEnabled = false
-        isPromptingForBiometricAuthentication = true
-        AuthenticationManager.shared.authenticateUsingBiometrics { authenticated, authenticationError in
-            self.isPromptingForBiometricAuthentication = false
-            if let error = authenticationError {
-                self.handleBiometricAuthenticationError(with: error)
-            }
-            DispatchQueue.main.async {
-                app.pinEntryViewController.view.isUserInteractionEnabled = true
-            }
-            if authenticated {
-                DispatchQueue.main.async {
-                    // TODO move this method to AuthenticatioCoordinator
-//                    self.showVerifyingBusyView(withTimeout: 30)
-                }
-                guard let pinKey = BlockchainSettings.App.shared.pinKey,
-                    let pin = KeychainItemWrapper.pinFromKeychain() else {
-                        self.failedToObtainValuesFromKeychain(); return
-                }
-                WalletManager.shared.wallet.apiGetPINValue(pinKey, pin: pin)
-            }
-        }
-    }
-
-    // TODO: migrate to the responsible controller that prompts for authentication
-    func handleBiometricAuthenticationError(with error: AuthenticationError) {
-        if let description = error.description {
-            let alert = UIAlertController(title: LocalizationConstants.Errors.error, message: description, preferredStyle: .alert)
-            let action = UIAlertAction(title: LocalizationConstants.ok, style: .default, handler: nil)
-            alert.addAction(action)
-            DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
-
-    // TODO: migrate to the responsible controller that prompts for authentication
-    func handlePasscodeAuthenticationError(with error: AuthenticationError) {
-        // TODO: implement handlePasscodeAuthenticationError
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -192,27 +134,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - State Checks
 
-    // TODO: move to BlockchainSettings
     func checkForNewInstall() {
-        if !BlockchainSettings.App.shared.firstRun {
-            if BlockchainSettings.App.shared.guid != nil &&
-                BlockchainSettings.App.shared.sharedKey != nil &&
-                !BlockchainSettings.sharedAppInstance().isPinSet {
-                alertUserAskingToUseOldKeychain()
-            }
-            BlockchainSettings.App.shared.firstRun = true
-        }
+
+        let appSettings = BlockchainSettings.App.shared
+
         //        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
         //            UserDefaults.standard.removeObject(forKey: upgradeKey)
         //        }
         // TODO: investigate this further
-        if BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen {
-            BlockchainSettings.App.shared.hasSeenUpgradeToHdScreen = false
+        if appSettings.hasSeenUpgradeToHdScreen {
+            appSettings.hasSeenUpgradeToHdScreen = false
         }
-    }
 
-    func alertUserAskingToUseOldKeychain() {
-        // TODO: implement alertUserAskingToUseOldKeychain
+        guard !appSettings.firstRun else {
+            print("This is not the 1st time the user is running the app.")
+            return
+        }
+
+        appSettings.firstRun = true
+
+        if appSettings.guid != nil && appSettings.sharedKey != nil && !appSettings.isPinSet {
+            AlertViewPresenter.shared.alertUserAskingToUseOldKeychain { _ in
+                // TODO migrate this
+                app.forgetWalletClicked(nil)
+            }
+        }
     }
 
     // MARK: - Privacy screen
@@ -229,16 +175,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func showPrivacyScreen() {
         privacyScreen?.alpha = 1
         UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
-    }
-
-    func failedToObtainValuesFromKeychain() {
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "", style: .cancel, handler: { _ in
-            // let app = UIApplication.shared
-            // perform suspend selector
-        })
-        alert.addAction(action)
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
     //: These two functions are used to justify the regeneration of addresses in the swipe-to-receive screen.

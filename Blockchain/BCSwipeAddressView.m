@@ -9,6 +9,7 @@
 #import "BCSwipeAddressView.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "QRCodeGenerator.h"
+#import "Blockchain-Swift.h"
 
 #define ASSET_IMAGE_VIEW_Y_OFFSET 100
 #define ASSET_IMAGE_VIEW_HEIGHT 80
@@ -89,7 +90,7 @@
 - (void)updateQRCode
 {
     NSString *address = self.viewModel.address;
-    if ([address isEqualToString:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION]) {
+    if ([address isEqualToString:[LocalizationConstantsObjcBridge requestFailedCheckConnection]]) {
         self.qrCodeImageView.hidden = YES;
         self.addressLabel.text = address;
     } else if (address) {

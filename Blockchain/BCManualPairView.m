@@ -12,6 +12,18 @@
 
 @implementation BCManualPairView
 
++ (nonnull BCManualPairView *)instanceFromNib
+{
+    UINib *nib = [UINib nibWithNibName:@"MainWindow" bundle:[NSBundle mainBundle]];
+    NSArray *objs = [nib instantiateWithOwner:nil options:nil];
+    for (id object in objs) {
+        if ([object isKindOfClass:[BCManualPairView class]]) {
+            return (BCManualPairView *) object;
+        }
+    }
+    return (BCManualPairView *) [objs objectAtIndex:0];
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -122,10 +134,8 @@
     
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
-    
-    [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:nil password:password];
-    
-    WalletManager.sharedInstance.wallet.delegate = app;
+
+    [self.delegate manualPairView:self didContinueWithGuid:guid andPassword:password];
 }
 
 - (void)verifyTwoFactorSMS

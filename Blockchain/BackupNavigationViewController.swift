@@ -10,7 +10,6 @@ import UIKit
 
 @objc class BackupNavigationViewController: UINavigationController {
 
-    @objc var app: RootService?
     @objc var wallet: Wallet?
     var topBar: UIView!
     var closeButton: UIButton!
@@ -59,7 +58,6 @@ import UIKit
 
         let backupViewController = self.viewControllers.first as! BackupViewController
         backupViewController.wallet = self.wallet
-        backupViewController.app = self.app
 
         busyView = BCFadeView(frame: view.frame)
         busyView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)

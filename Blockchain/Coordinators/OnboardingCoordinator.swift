@@ -12,21 +12,24 @@ import Foundation
 class OnboardingCoordinator: Coordinator {
     static let shared = OnboardingCoordinator()
 
-    private init() {
-    }
+    private init() {}
 
     // MARK: Public Methods
 
     func start() {
-        showWelcomeScreen()
+        NetworkManager.shared.checkForMaintenance(withCompletion: { [unowned self] response in
+            if let message = response {
+                print("Error checking for maintenance in wallet options: %@", message)
+                AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error, handler: nil)
+            }
+        })
+        self.showWelcomeScreen()
         AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
     }
 
     // MARK: Private Methods
 
     private func showWelcomeScreen() {
-        // TODO check for maintenance
-
         let welcomeView = BCWelcomeView()
         welcomeView.delegate = self
         ModalPresenter.shared.showModal(withContent: welcomeView, closeType: ModalCloseTypeNone, showHeader: false, headerText: "")
@@ -54,6 +57,7 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
 
     func showPairWallet() {
         let pairingInstructionsView = PairingInstructionsView.instanceFromNib()
+        pairingInstructionsView.delegate = self
         ModalPresenter.shared.showModal(
             withContent: pairingInstructionsView,
             closeType: ModalCloseTypeBack,
@@ -82,5 +86,16 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
         )
         recoveryWarningAlert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
         UIApplication.shared.keyWindow?.rootViewController?.present(recoveryWarningAlert, animated: true)
+    }
+}
+
+extension OnboardingCoordinator: PairingInstructionsViewDelegate {
+    func onScanQRCodeClicked() {
+        // TODO
+    }
+
+    func onManualPairClicked() {
+        WalletManager.shared.wallet.twoFactorInput = nil
+        AuthenticationCoordinator.shared.startManualPairing()
     }
 }

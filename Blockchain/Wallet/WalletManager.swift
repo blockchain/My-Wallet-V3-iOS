@@ -9,28 +9,6 @@
 import Foundation
 import JavaScriptCore
 
-
-/// Protocol definition for a delegate for authentication-related wallet callbacks
-protocol WalletAuthDelegate: class {
-    /// Callback invoked when the wallet successfully decrypts
-    func didDecryptWallet(guid: String?, sharedKey: String?, password: String?)
-
-    /// Callback invoked when 2 factor authorization is required
-    func requiresTwoFactorCode()
-
-    /// Callback invoked when the provided two factor code is incorrect
-    func incorrectTwoFactorCode()
-
-    /// Callback invoked when an email authorization is required (only for manual pairing)
-    func emailAuthorizationRequired()
-
-    /// Callback invoked when an error occurred with authenticating
-    func authenticationError()
-
-    /// Callback invoked when the user has successfully authenticated
-    func authenticationCompleted()
-}
-
 /**
  Manager object for operations to the Blockchain Wallet.
  */
@@ -51,11 +29,22 @@ class WalletManager: NSObject {
     @objc var didChangePassword: Bool = false
 
     weak var authDelegate: WalletAuthDelegate?
+    weak var pinEntryDelegate: WalletPinEntryDelegate?
+    weak var buySellDelegate: WalletBuySellDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
         super.init()
         self.wallet.delegate = self
+    }
+
+    /// Closes all wallet websockets with the provided WebSocketCloseCode
+    ///
+    /// - Parameter closeCode: the WebSocketCloseCode
+    @objc func closeWebSockets(withCloseCode closeCode: WebSocketCloseCode) {
+        [wallet.ethSocket, wallet.bchSocket, wallet.btcSocket].forEach {
+            $0?.close(withCode: closeCode.rawValue, reason: closeCode.reason)
+        }
     }
 
     @objc func forgetWallet() {
@@ -87,6 +76,9 @@ class WalletManager: NSObject {
 }
 
 extension WalletManager: WalletDelegate {
+
+    // MARK: - Auth
+
     func walletDidLoad() {
         print("walletDidLoad()")
     }
@@ -114,6 +106,57 @@ extension WalletManager: WalletDelegate {
     }
 
     func walletFailedToLoad() {
-        // TODO: handle this once manual pairing is ported away from RootService
+        authDelegate?.authenticationError(error: AuthenticationError(
+            code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
+        ))
+    }
+
+    func walletDidRequireEmailAuthorization(_ wallet: Wallet!) {
+        authDelegate?.emailAuthorizationRequired()
+    }
+
+    func wallet(_ wallet: Wallet!, didRequireTwoFactorAuthentication type: Int) {
+        guard let twoFactorType = AuthenticationTwoFactorType(rawValue: type) else {
+            authDelegate?.authenticationError(error: AuthenticationError(
+                code: AuthenticationError.ErrorCode.invalidTwoFactorType.rawValue,
+                description: LocalizationConstants.Authentication.invalidTwoFactorAuthenticationType
+            ))
+            return
+        }
+        authDelegate?.didRequireTwoFactorAuth(withType: twoFactorType)
+    }
+
+    // MARK: - Buy/Sell
+
+    func initializeWebView() {
+        buySellDelegate?.initializeWebView()
+    }
+
+    // MARK: - Pin Entry
+
+    func didFailGetPinTimeout() {
+        pinEntryDelegate?.errorGetPinValueTimeout()
+    }
+
+    func didFailGetPinNoResponse() {
+        pinEntryDelegate?.errorGetPinEmptyResponse()
+    }
+
+    func didFailGetPinInvalidResponse() {
+        pinEntryDelegate?.errorGetPinInvalidResponse()
+    }
+
+    func didFailPutPin(_ value: String!) {
+        pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
+    }
+
+    func didPutPinSuccess(_ dictionary: [AnyHashable : Any]!) {
+        let response = PutPinResponse(response: dictionary)
+        pinEntryDelegate?.putPinSuccess(response: response)
+    }
+
+    func didGetPinResponse(_ dictionary: [AnyHashable : Any]!) {
+        let response = GetPinResponse(response: dictionary)
+        pinEntryDelegate?.getPinSuccess(response: response)
     }
 }

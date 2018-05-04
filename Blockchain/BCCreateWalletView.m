@@ -16,8 +16,14 @@
 
 + (BCCreateWalletView *)instanceFromNib
 {
-    UINib *nib = [UINib nibWithNibName:@"BCCreateWalletView" bundle:[NSBundle mainBundle]];
-    return (BCCreateWalletView *) [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+    UINib *nib = [UINib nibWithNibName:@"MainWindow" bundle:[NSBundle mainBundle]];
+    NSArray *objs = [nib instantiateWithOwner:nil options:nil];
+    for (id object in objs) {
+        if ([object isKindOfClass:[BCCreateWalletView class]]) {
+            return (BCCreateWalletView *) object;
+        }
+    }
+    return (BCCreateWalletView *) [objs objectAtIndex:0];
 }
 
 #pragma mark - Lifecycle
@@ -230,10 +236,10 @@
     if ([message isEqualToString:@""]) {
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
     } else if ([message isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_TIMED_OUT title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR handler: nil];
     } else if ([message isEqualToString:ERROR_FAILED_NETWORK_REQUEST] || [message containsString:ERROR_TIMEOUT_ERROR] || [[message stringByReplacingOccurrencesOfString:@" " withString:@""] containsString:ERROR_STATUS_ZERO]){
         dispatch_after(DELAY_KEYBOARD_DISMISSAL, dispatch_get_main_queue(), ^{
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR handler: nil];
         });
     } else {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];

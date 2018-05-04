@@ -21,7 +21,6 @@
 #import "BCDescriptionView.h"
 #import "BCAmountInputView.h"
 #import "UILabel+Animations.h"
-#import "Blockchain-Swift.h"
 
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 101
 #define BOTTOM_CONTAINER_HEIGHT_FULL 201

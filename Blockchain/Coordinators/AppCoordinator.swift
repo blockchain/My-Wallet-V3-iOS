@@ -22,13 +22,17 @@ import Foundation
         return AppCoordinator.shared
     }
 
-    // MARK: Properties
+    // MARK: - Properties
 
     private(set) var window: UIWindow
 
-    @objc lazy var slidingViewController: ECSlidingViewController = {
+    private let walletManager: WalletManager
+
+    // MARK: - UIViewController Properties
+
+    @objc lazy var slidingViewController: ECSlidingViewController = { [unowned self] in
         let viewController = ECSlidingViewController()
-        viewController.underLeftViewController = SideMenuViewController()
+        viewController.underLeftViewController = self.sideMenuViewController
         viewController.topViewController = tabControllerManager.tabViewController
         return viewController
     }()
@@ -39,12 +43,41 @@ import Foundation
         return tabControllerManager
     }()
 
+    private lazy var sideMenuViewController: SideMenuViewController = { [unowned self] in
+        let sideMenu = SideMenuViewController()
+        sideMenu.delegate = self
+        return sideMenu
+    }()
+
+    private lazy var accountsAndAddressesNavigationController: AccountsAndAddressesNavigationController = { [unowned self] in
+        let storyboard = UIStoryboard(name: "AccountsAndAddresses", bundle: nil)
+        let viewController = storyboard.instantiateViewController(
+            withIdentifier: "AccountsAndAddressesNavigationController"
+        ) as! AccountsAndAddressesNavigationController
+        viewController.modalTransitionStyle = .coverVertical
+        return viewController
+    }()
+
+    private lazy var settingsNavigationController: SettingsNavigationController = { [unowned self] in
+        let storyboard = UIStoryboard(name: "Settings", bundle: nil)
+        let viewController = storyboard.instantiateViewController(
+            withIdentifier: "SettingsNavigationController"
+        ) as! SettingsNavigationController
+        viewController.showSettings()
+        viewController.modalTransitionStyle = .coverVertical
+        return viewController
+    }()
+
+    private var buyBitcoinViewController: BuyBitcoinViewController?
+
     // MARK: NSObject
 
-    override private init() {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window.backgroundColor = UIColor.white
+    private init(walletManager: WalletManager = WalletManager.shared) {
+        self.walletManager = walletManager
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window.backgroundColor = UIColor.white
         super.init()
+        self.walletManager.buySellDelegate = self
     }
 
     // MARK: Public Methods
@@ -68,7 +101,7 @@ import Foundation
 
     /// Shows an upgrade to HD wallet prompt if the user has a legacy wallet
     @objc func showHdUpgradeViewIfNeeded() {
-        guard !WalletManager.shared.wallet.didUpgradeToHd() else { return }
+        guard !walletManager.wallet.didUpgradeToHd() else { return }
         showHdUpgradeView()
     }
 
@@ -90,6 +123,72 @@ import Foundation
         window.rootViewController?.present(navigationController, animated: true)
     }
 
+    @objc func showBackupView() {
+        let storyboard = UIStoryboard(name: "Backup", bundle: nil)
+        let backupController = storyboard.instantiateViewController(withIdentifier: "BackupNavigation") as! BackupNavigationViewController
+        backupController.wallet = walletManager.wallet
+        backupController.modalTransitionStyle = .coverVertical
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(backupController, animated: true)
+    }
+
+    @objc func showSettingsView(completion: (() -> Void)? = nil) {
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            settingsNavigationController,
+            animated: true,
+            completion: completion
+        )
+    }
+
+    @objc func showBuyBitcoinView() {
+        guard let buyBitcoinViewController = buyBitcoinViewController else {
+            print("buyBitcoinViewController not yet initialized")
+            return
+        }
+
+        // TODO convert this dictionary into a model
+        guard let loginDataDict = walletManager.wallet.executeJSSynchronous(
+            "MyWalletPhone.getWebViewLoginData()"
+            ).toDictionary() else {
+                print("loginData from wallet is empty")
+                return
+        }
+
+        guard let walletJson = loginDataDict["walletJson"] as? String else {
+            print("walletJson is nil")
+            return
+        }
+
+        guard let externalJson = loginDataDict["externalJson"] is NSNull ? "" : loginDataDict["externalJson"] as? String else {
+            print("externalJson is nil")
+            return
+        }
+
+        guard let magicHash = loginDataDict["magicHash"] is NSNull ? "" : loginDataDict["magicHash"] as? String else {
+            print("magicHash is nil")
+            return
+        }
+
+        buyBitcoinViewController.login(
+            withJson: walletJson,
+            externalJson: externalJson,
+            magicHash: magicHash,
+            password: walletManager.wallet.password
+        )
+        buyBitcoinViewController.delegate = walletManager.wallet // TODO fix this
+
+        guard let navigationController = BuyBitcoinNavigationController(
+            rootViewController: buyBitcoinViewController,
+            title: LocalizationConstants.SideMenu.buySellBitcoin
+            ) else {
+                return
+        }
+
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            navigationController,
+            animated: true
+        )
+    }
+
     @objc func closeSideMenu() {
         guard slidingViewController.currentTopViewPosition != .centered else {
             return
@@ -100,10 +199,8 @@ import Foundation
     /// Reloads contained view controllers
     @objc func reload() {
         tabControllerManager.reload()
-
-        // TODO: reload these view controllers as well
-//        [_settingsNavigationController reload];
-//        [_accountsAndAddressesNavigationController reload];
+        settingsNavigationController.reload()
+        accountsAndAddressesNavigationController.reload()
 
         if let sideMenuViewController = slidingViewController.underLeftViewController as? SideMenuViewController {
             sideMenuViewController.reload()
@@ -113,6 +210,133 @@ import Foundation
 
         // Legacy code for generating new addresses
         NotificationCenter.default.post(name: Constants.NotificationKeys.newAddress, object: nil)
+    }
+}
+
+extension AppCoordinator: SideMenuViewControllerDelegate {
+    func onSideMenuItemTapped(_ identifier: String!) {
+        guard let sideMenuItem = SideMenuItem(rawValue: identifier) else {
+            print("Unrecognized SideMenuItem with identifier: \(identifier)")
+            return
+        }
+
+        switch sideMenuItem {
+        case .upgradeBackup:
+            handleUpgradeBackup()
+        case .accountsAndAddresses:
+            handleAccountsAndAddresses()
+        case .settings:
+            handleSettings()
+        case .webLogin:
+            handleWebLogin()
+        case .support:
+            handleSupport()
+        case .logout:
+            handleLogout()
+        case .buyBitcoin:
+            handleBuyBitcoin()
+        case .exchange:
+            handleExchange()
+        }
+    }
+
+    private func handleUpgradeBackup() {
+        if walletManager.wallet.didUpgradeToHd() {
+            showBackupView()
+        } else {
+            AppCoordinator.shared.showHdUpgradeView()
+        }
+    }
+
+    private func handleAccountsAndAddresses() {
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            accountsAndAddressesNavigationController,
+            animated: true
+        ) { [weak self] in
+            guard let strongSelf = self else { return }
+
+            let wallet = strongSelf.walletManager.wallet
+
+            guard !BlockchainSettings.App.shared.hideTransferAllFundsAlert &&
+                strongSelf.accountsAndAddressesNavigationController.viewControllers.count == 1 &&
+                wallet.didUpgradeToHd() &&
+                wallet.getTotalBalanceForSpendableActiveLegacyAddresses() >= wallet.dust() &&
+                strongSelf.accountsAndAddressesNavigationController.assetSelectorView.selectedAsset == .bitcoin else {
+                    return
+            }
+
+            strongSelf.accountsAndAddressesNavigationController.alertUser(toTransferAllFunds: false)
+        }
+    }
+
+    private func handleSettings() {
+        showSettingsView()
+    }
+
+    private func handleWebLogin() {
+        let webLoginViewController = WebLoginViewController()
+        guard let navigationViewController = BCNavigationController(
+            rootViewController: webLoginViewController,
+            title: LocalizationConstants.SideMenu.loginToWebWallet
+        ) else { return }
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            navigationViewController,
+            animated: true
+        )
+    }
+
+    private func handleSupport() {
+        let title = String(format: LocalizationConstants.openArg, Constants.Url.blockchainSupport)
+        let alert = UIAlertController(
+            title: title,
+            message: LocalizationConstants.youWillBeLeavingTheApp,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
+                guard let url = URL(string: Constants.Url.blockchainSupport) else { return }
+                UIApplication.shared.openURL(url)
+            }
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+        )
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
+            animated: true
+        )
+    }
+
+    private func handleLogout() {
+        let alert = UIAlertController(
+            title: LocalizationConstants.SideMenu.logout,
+            message: LocalizationConstants.SideMenu.logoutConfirm,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.ok, style: .default) { _ in
+                AuthenticationCoordinator.shared.logout(showPasswordView: true)
+            }
+        )
+        alert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel))
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
+            animated: true
+        )
+    }
+
+    private func handleBuyBitcoin() {
+        showBuyBitcoinView()
+    }
+
+    private func handleExchange() {
+        tabControllerManager.exchangeClicked()
+    }
+}
+
+extension AppCoordinator: WalletBuySellDelegate {
+    func initializeWebView() {
+        buyBitcoinViewController = BuyBitcoinViewController()
     }
 }
 
@@ -126,6 +350,6 @@ extension AppCoordinator: TabControllerDelegate {
         }
 
         // TODO remove app reference and use wallet singleton.isFe
-        WalletManager.shared.wallet.isFetchingTransactions = false
+        walletManager.wallet.isFetchingTransactions = false
     }
 }

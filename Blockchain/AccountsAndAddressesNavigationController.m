@@ -193,7 +193,7 @@
     
     if (!userClicked) {
         [alertToTransfer addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_TRANSFER_ALL_FUNDS_ALERT];
+            BlockchainSettings.sharedAppInstance.hideTransferAllFundsAlert = YES;
         }]];
     }
     

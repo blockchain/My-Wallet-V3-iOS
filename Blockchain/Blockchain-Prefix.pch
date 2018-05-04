@@ -407,9 +407,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define DICTIONARY_KEY_SUCCESS @"success"
 #define DICTIONARY_KEY_ERROR @"error"
 
-#define DICTIONARY_KEY_MOBILE_INFO @"mobileInfo"
-#define DICTIONARY_KEY_MAINTENANCE @"maintenance"
-
 #define DICTIONARY_KEY_STATE @"state"
 #define DICTIONARY_KEY_INTENDED_AMOUNT @"intended_amount"
 #define DICTIONARY_KEY_ROLE @"role"
@@ -544,7 +541,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_PIN @"pin"
 //#define USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED @"swipeToReceive"
 #define USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING @"hideWatchOnlyReceiveWarning"
-#define USER_DEFAULTS_KEY_HIDE_TRANSFER_ALL_FUNDS_ALERT @"hideTransferAllFundsAlert"
 #define USER_DEFAULTS_KEY_HAS_SEEN_CUSTOM_FEE_WARNING @"hasSeenCustomFeeWarning"
 
 // TODO: - Migrate debug flags to DebugTableViewController
@@ -577,8 +573,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define QR_CODE_KEY_SHARED_KEY @"sharedKey"
 #define QR_CODE_KEY_PASSWORD @"password"
 
-#define STORYBOARD_NAME_ACCOUNTS_AND_ADDRESSES @"AccountsAndAddresses"
-#define STORYBOARD_NAME_SETTINGS @"Settings"
 #define STORYBOARD_NAME_BACKUP @"Backup"
 
 #define TRANSACTION_STATE_WAITING_PAYMENT @"waiting_payment"
@@ -592,7 +586,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define TRANSACTION_ROLE_RPR_INITIATOR @"rpr_initiator"
 #define TRANSACTION_ROLE_RPR_RECEIVER @"rpr_receiver"
 
-#define NAVIGATION_CONTROLLER_NAME_ACCOUNTS_AND_ADDRESSES @"AccountsAndAddressesNavigationController"
 #define NAVIGATION_CONTROLLER_NAME_SETTINGS @"SettingsNavigationController"
 #define NAVIGATION_CONTROLLER_NAME_BACKUP @"BackupNavigation"
 
@@ -677,8 +670,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define PIN_API_STATUS_CODE_DELETED 1
 #define PIN_API_STATUS_PIN_INCORRECT 2
 #define PIN_API_STATUS_OK 0
-#define PIN_API_STATUS_UNKNOWN 3
-#define PIN_API_STATUS_DUPLICATE_KEY 4
 
 // Most common pin codes: http://datagenetics.com/blog/september32012/index.html
 
@@ -691,8 +682,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define DELAY_KEYBOARD_DISMISSAL 0.6f
 #define DELAY_GET_HISTORY_BACKUP 3.0f
-
-#define PIN_PBKDF2_ITERATIONS 1 // This does not need to be large because the key is already 256 bits
 
 #define BTC_LIMIT_IN_SATOSHI 21e14 // 21,000,000 (Total possible Bitcoins) * 100,000,000 (Satoshi)
 #define ETH_DECIMAL_LIMIT 18
