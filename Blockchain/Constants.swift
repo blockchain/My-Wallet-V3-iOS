@@ -88,6 +88,7 @@ struct Constants {
     }
     struct Url {
         static let blockchainSupport = "https://support.blockchain.com"
+        static let forgotPassword = "https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
     }
     struct Wallet {
         static let swipeToReceiveAddressCount = 5

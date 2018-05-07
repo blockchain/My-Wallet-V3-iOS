@@ -69,12 +69,13 @@ typealias OnModalResumed = () -> Void
     }
 
     @objc func closeModal(withTransition transition: String) {
+
+        NotificationCenter.default.post(name: Constants.NotificationKeys.modalViewDismissed, object: nil)
+
         guard let modalView = modalView else {
             print("Cannot close modal. modalView is nil.")
             return
         }
-
-        NotificationCenter.default.post(name: Constants.NotificationKeys.modalViewDismissed, object: nil)
 
         modalView.removeFromSuperview()
 

@@ -3159,16 +3159,16 @@
 
 - (void)getPrivateKeyPassword:(NSString *)canDiscard success:(JSValue *)success error:(void(^)(id))_error
 {
-    [app getPrivateKeyPassword:^(NSString *privateKeyPassword) {
-        [success callWithArguments:@[privateKeyPassword]];
-    } error:_error];
+    [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION headerText:LocalizationConstantsObjcBridge.passwordRequired validateSecondPassword:NO confirmHandler:^(NSString * _Nonnull secondPassword) {
+        [success callWithArguments:@[secondPassword]];
+    }];
 }
 
 - (void)getSecondPassword:(NSString *)canDiscard success:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
 {
-    [app getSecondPassword:^(NSString *secondPassword) {
+    [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:helperText headerText:LocalizationConstantsObjcBridge.secondPasswordRequired validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPassword) {
         [success callWithArguments:@[secondPassword]];
-    } error:_error helperText:(NSString *)helperText];
+    }];
 }
 
 - (void)setLoadingText:(NSString*)message

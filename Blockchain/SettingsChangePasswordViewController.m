@@ -208,7 +208,7 @@
     
     if ([self.newerPasswordTextField.text length] == 0) {
         [self.newerPasswordTextField becomeFirstResponder];
-        [self alertUserOfError:BC_STRING_NO_PASSWORD_ENTERED];
+        [self alertUserOfError:LocalizationConstantsObjcBridge.noPasswordEntered];
         return NO;
     }
     

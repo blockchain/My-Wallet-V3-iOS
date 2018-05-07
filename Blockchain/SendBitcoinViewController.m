@@ -135,8 +135,6 @@ BOOL displayingLocalSymbolSend;
         
         sendProgressModalText.text = [notification object];
     }];
-    
-    app.mainTitleLabel.text = BC_STRING_SEND;
 }
 
 - (void)viewDidDisappear:(BOOL)animated

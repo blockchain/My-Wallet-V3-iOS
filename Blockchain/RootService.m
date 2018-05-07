@@ -27,7 +27,7 @@
 #import "PrivateKeyReader.h"
 #import "NSData+Hex.h"
 #import "Reachability.h"
-#import "SideMenuViewController.h"
+//#import "SideMenuViewController.h"
 #import "BCWelcomeView.h"
 #import "BCWebViewController.h"
 #import "KeychainItemWrapper.h"
@@ -45,7 +45,7 @@
 #import "WebLoginViewController.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 
-#define URL_SUPPORT_FORGOT_PASSWORD @"https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
+//#define URL_SUPPORT_FORGOT_PASSWORD @"https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
 //#define USER_DEFAULTS_KEY_DID_FAIL_TOUCH_ID_SETUP @"didFailTouchIDSetup"
 //#define USER_DEFAULTS_KEY_SHOULD_SHOW_TOUCH_ID_SETUP @"shouldShowTouchIDSetup"
 
@@ -80,8 +80,8 @@ SideMenuViewController *sideMenuViewController;
 
 //UNNotification *pushNotificationPendingAction;
 
-void (^addPrivateKeySuccess)(NSString *);
-void (^secondPasswordSuccess)(NSString *);
+//void (^addPrivateKeySuccess)(NSString *);
+//void (^secondPasswordSuccess)(NSString *);
 
 - (id)init {
 
@@ -143,8 +143,8 @@ void (^secondPasswordSuccess)(NSString *);
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+//- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+//{
 //    [Fabric with:@[[Crashlytics class]]];
 //
 //    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -223,15 +223,15 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self requestAuthorizationForPushNotifications];
 
     // TODO: Set Montserrat font globally
-    app.mainTitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
+//    app.mainTitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
 
     // TODO: Migrate elsewhere
-    secondPasswordDescriptionLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-    secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-
-    return YES;
-}
+//    secondPasswordDescriptionLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+//    secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
+//    secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
+//
+//    return YES;
+//}
 
 //- (void)showWelcomeScreen
 //{
@@ -650,22 +650,22 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //}
 
-- (void)migratePasswordAndPinFromNSUserDefaults
-{
-    NSString * password = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PASSWORD];
-    NSString * pin = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PIN];
-
-    if (password && pin) {
-        WalletManager.sharedInstance.wallet.password = password;
-
-        [self savePIN:pin];
-
-        // TODO only remove these if savePIN is successful (required JS modifications) (and synchronize)
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PASSWORD];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PIN];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
+//- (void)migratePasswordAndPinFromNSUserDefaults
+//{
+//    NSString * password = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PASSWORD];
+//    NSString * pin = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_PIN];
+//
+//    if (password && pin) {
+//        WalletManager.sharedInstance.wallet.password = password;
+//
+//        [self savePIN:pin];
+//
+//        // TODO only remove these if savePIN is successful (required JS modifications) (and synchronize)
+//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PASSWORD];
+//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_PIN];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
+//}
 
 //- (void)setupBuySellWebview
 //{
@@ -712,10 +712,10 @@ void (^secondPasswordSuccess)(NSString *);
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MULTIADDRESS_RESPONSE_RELOAD object:nil];
 }
 
-- (void)reloadSideMenu
-{
-    [sideMenuViewController reloadTableView];
-}
+//- (void)reloadSideMenu
+//{
+//    [sideMenuViewController reloadTableView];
+//}
 
 - (void)toggleSymbol
 {
@@ -1295,147 +1295,147 @@ void (^secondPasswordSuccess)(NSString *);
     return dict;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField*)textField
-{
-    if (textField == secondPasswordTextField) {
-        if (validateSecondPassword) {
-            [self secondPasswordClicked:textField];
-        } else {
-            [self privateKeyPasswordClicked];
-        }
-    }
+//- (BOOL)textFieldShouldReturn:(UITextField*)textField
+//{
+//    if (textField == secondPasswordTextField) {
+//        if (validateSecondPassword) {
+//            [self secondPasswordClicked:textField];
+//        } else {
+//            [self privateKeyPasswordClicked];
+//        }
+//    }
 //    else if (textField == mainPasswordTextField) {
 //        [self mainPasswordClicked:textField];
 //    }
+//
+//    return YES;
+//}
 
-    return YES;
-}
+//- (void)getPrivateKeyPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error
+//{
+//    validateSecondPassword = FALSE;
+//
+//    secondPasswordDescriptionLabel.text = BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION;
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    if (topViewController) {
+//        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:LocalizationConstantsObjcBridge.passwordRequired   view:secondPasswordView];
+//
+//        addPrivateKeySuccess = success;
+//
+//        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
+//            UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
+//            [bcModalViewController.view addSubview:secondPasswordOverlayButton];
+//            [secondPasswordOverlayButton addTarget:self action:@selector(privateKeyPasswordClicked) forControlEvents:UIControlEventTouchUpInside];
+//        }];
+//
+//        [bcModalViewController.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
+//    } else {
+//        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:LocalizationConstantsObjcBridge.passwordRequired onDismiss:^() {
+//            NSString * password = secondPasswordTextField.text;
+//
+//            if ([password length] == 0) {
+//                if (error) error(BC_STRING_NO_PASSWORD_ENTERED);
+//            } else {
+//                if (success) success(password);
+//            }
+//
+//            secondPasswordTextField.text = nil;
+//        } onResume:nil];
+//
+//        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
+//        [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
+//
+//        [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
+//    }
+//
+//    [secondPasswordTextField becomeFirstResponder];
+//}
 
-- (void)getPrivateKeyPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error
-{
-    validateSecondPassword = FALSE;
+//- (void)privateKeyPasswordClicked
+//{
+//    NSString * password = secondPasswordTextField.text;
+//
+//    if ([password length] == 0) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
+//    } else {
+//        if (self.tabControllerManager.tabViewController.presentedViewController) {
+//            [self.tabControllerManager.tabViewController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+//        } else {
+//            [self closeModalWithTransition:kCATransitionFade];
+//        }
+//        if (addPrivateKeySuccess) addPrivateKeySuccess(password);
+//    }
+//
+//    secondPasswordTextField.text = nil;
+//}
 
-    secondPasswordDescriptionLabel.text = BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION;
+//- (IBAction)secondPasswordClicked:(id)sender
+//{
+//    NSString *password = secondPasswordTextField.text;
+//
+//    if ([password length] == 0) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
+//    } else if(validateSecondPassword && ![wallet validateSecondPassword:password]) {
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SECOND_PASSWORD_INCORRECT title:BC_STRING_ERROR handler: nil];
+//    } else {
+//        if (secondPasswordSuccess) {
+//            // It takes ANIMATION_DURATION to dismiss the second password view, then a little extra to make sure any wait spinners start spinning before we execute the success function.
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5*ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                if (secondPasswordSuccess) {
+//                    secondPasswordSuccess(password);
+//                    secondPasswordSuccess = nil;
+//                }
+//            });
+//        }
+//        [app closeModalWithTransition:kCATransitionFade];
+//    }
+//
+//    secondPasswordTextField.text = nil;
+//}
 
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    if (topViewController) {
-        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:LocalizationConstantsObjcBridge.passwordRequired   view:secondPasswordView];
+//- (void)getSecondPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error helperText:(NSString *)helperText
+//{
+//    secondPasswordDescriptionLabel.text = helperText ? : BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD;
+//
+//    validateSecondPassword = TRUE;
+//
+//    secondPasswordSuccess = success;
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    if (topViewController) {
+//        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_SECOND_PASSWORD_REQUIRED view:secondPasswordView];
+//
+//        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
+//            UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
+//            [bcModalViewController.view addSubview:secondPasswordOverlayButton];
+//            [secondPasswordOverlayButton addTarget:self action:@selector(secondPasswordClicked:) forControlEvents:UIControlEventTouchUpInside];
+//        }];
+//
+//        [bcModalViewController.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
+//    } else {
+//        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:BC_STRING_SECOND_PASSWORD_REQUIRED onDismiss:^() {
+//            secondPasswordTextField.text = nil;
+//            [self.tabControllerManager enableSendPaymentButtons];
+//        } onResume:nil];
+//
+//        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
+//        [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
+//
+//        [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
+//
+//        [modalView.closeButton addTarget:self action:@selector(forceHDUpgradeForLegacyWallets) forControlEvents:UIControlEventAllTouchEvents];
+//
+//        if ([self.tabControllerManager isSendViewControllerTransferringAll]) {
+//            [modalView.closeButton addTarget:self.tabControllerManager action:@selector(reloadSendController) forControlEvents:UIControlEventAllTouchEvents];
+//        }
+//    }
+//
+//    [secondPasswordTextField becomeFirstResponder];
+//}
 
-        addPrivateKeySuccess = success;
-
-        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
-            UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
-            [bcModalViewController.view addSubview:secondPasswordOverlayButton];
-            [secondPasswordOverlayButton addTarget:self action:@selector(privateKeyPasswordClicked) forControlEvents:UIControlEventTouchUpInside];
-        }];
-
-        [bcModalViewController.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
-    } else {
-        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:LocalizationConstantsObjcBridge.passwordRequired onDismiss:^() {
-            NSString * password = secondPasswordTextField.text;
-
-            if ([password length] == 0) {
-                if (error) error(BC_STRING_NO_PASSWORD_ENTERED);
-            } else {
-                if (success) success(password);
-            }
-
-            secondPasswordTextField.text = nil;
-        } onResume:nil];
-
-        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
-        [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
-
-        [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
-    }
-
-    [secondPasswordTextField becomeFirstResponder];
-}
-
-- (void)privateKeyPasswordClicked
-{
-    NSString * password = secondPasswordTextField.text;
-
-    if ([password length] == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
-    } else {
-        if (self.tabControllerManager.tabViewController.presentedViewController) {
-            [self.tabControllerManager.tabViewController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [self closeModalWithTransition:kCATransitionFade];
-        }
-        if (addPrivateKeySuccess) addPrivateKeySuccess(password);
-    }
-
-    secondPasswordTextField.text = nil;
-}
-
-- (IBAction)secondPasswordClicked:(id)sender
-{
-    NSString *password = secondPasswordTextField.text;
-
-    if ([password length] == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_PASSWORD_ENTERED title:BC_STRING_ERROR handler: nil];
-    } else if(validateSecondPassword && ![wallet validateSecondPassword:password]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SECOND_PASSWORD_INCORRECT title:BC_STRING_ERROR handler: nil];
-    } else {
-        if (secondPasswordSuccess) {
-            // It takes ANIMATION_DURATION to dismiss the second password view, then a little extra to make sure any wait spinners start spinning before we execute the success function.
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5*ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (secondPasswordSuccess) {
-                    secondPasswordSuccess(password);
-                    secondPasswordSuccess = nil;
-                }
-            });
-        }
-        [app closeModalWithTransition:kCATransitionFade];
-    }
-
-    secondPasswordTextField.text = nil;
-}
-
-- (void)getSecondPassword:(void (^)(NSString *))success error:(void (^)(NSString *))error helperText:(NSString *)helperText
-{
-    secondPasswordDescriptionLabel.text = helperText ? : BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD;
-
-    validateSecondPassword = TRUE;
-
-    secondPasswordSuccess = success;
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    if (topViewController) {
-        BCModalViewController *bcModalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_SECOND_PASSWORD_REQUIRED view:secondPasswordView];
-
-        [topViewController presentViewController:bcModalViewController animated:YES completion:^{
-            UIButton *secondPasswordOverlayButton = [[UIButton alloc] initWithFrame:[secondPasswordView convertRect:secondPasswordButton.frame toView:bcModalViewController.view]];
-            [bcModalViewController.view addSubview:secondPasswordOverlayButton];
-            [secondPasswordOverlayButton addTarget:self action:@selector(secondPasswordClicked:) forControlEvents:UIControlEventTouchUpInside];
-        }];
-
-        [bcModalViewController.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
-    } else {
-        [app showModalWithContent:secondPasswordView closeType:ModalCloseTypeClose headerText:BC_STRING_SECOND_PASSWORD_REQUIRED onDismiss:^() {
-            secondPasswordTextField.text = nil;
-            [self.tabControllerManager enableSendPaymentButtons];
-        } onResume:nil];
-
-        BCModalView *modalView = [ModalPresenter sharedInstance].modalView;
-        [modalView.closeButton removeTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventAllTouchEvents];
-
-        [modalView.closeButton addTarget:self action:@selector(closeAllModals) forControlEvents:UIControlEventAllTouchEvents];
-
-        [modalView.closeButton addTarget:self action:@selector(forceHDUpgradeForLegacyWallets) forControlEvents:UIControlEventAllTouchEvents];
-
-        if ([self.tabControllerManager isSendViewControllerTransferringAll]) {
-            [modalView.closeButton addTarget:self.tabControllerManager action:@selector(reloadSendController) forControlEvents:UIControlEventAllTouchEvents];
-        }
-    }
-
-    [secondPasswordTextField becomeFirstResponder];
-}
-
-- (void)closeAllModals
-{
+//- (void)closeAllModals
+//{
 //    [LoadingViewPresenter.sharedInstance hideBusyView];
 //
 //    secondPasswordSuccess = nil;
@@ -1476,7 +1476,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    }
 //
 //    [self.modalChain removeAllObjects];
-}
+//}
 
 - (void)closeModalWithTransition:(NSString *)transition
 {
@@ -1692,8 +1692,8 @@ void (^secondPasswordSuccess)(NSString *);
     [topViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
 }
 
-- (void)logout
-{
+//- (void)logout
+//{
 //    [self.loginTimer invalidate];
 //
 //    [WalletManager.sharedInstance.wallet resetSyncStatus];
@@ -1713,7 +1713,7 @@ void (^secondPasswordSuccess)(NSString *);
 //    [WalletManager.sharedInstance.wallet.ethSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
 //    [WalletManager.sharedInstance.wallet.btcSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
 //    [WalletManager.sharedInstance.wallet.bchSocket closeWithCode:WEBSOCKET_CODE_LOGGED_OUT reason:WEBSOCKET_CLOSE_REASON_LOGGED_OUT];
-}
+//}
 
 //- (void)buyBitcoinClicked:(id)sender
 //{
@@ -1903,17 +1903,17 @@ void (^secondPasswordSuccess)(NSString *);
     [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)didGenerateNewAddress
-{
-    [app.accountsAndAddressesNavigationController didGenerateNewAddress];
-}
-
-- (void)returnToAddressesScreen
-{
-    if (self.accountsAndAddressesNavigationController) {
-        [self.accountsAndAddressesNavigationController popToRootViewControllerAnimated:YES];
-    }
-}
+//- (void)didGenerateNewAddress
+//{
+//    [app.accountsAndAddressesNavigationController didGenerateNewAddress];
+//}
+//
+//- (void)returnToAddressesScreen
+//{
+//    if (self.accountsAndAddressesNavigationController) {
+//        [self.accountsAndAddressesNavigationController popToRootViewControllerAnimated:YES];
+//    }
+//}
 
 - (void)alertUserOfInvalidAccountName
 {
@@ -3016,15 +3016,15 @@ void (^secondPasswordSuccess)(NSString *);
 //    [self showPasswordModal];
 //}
 
-- (IBAction)forgotPasswordClicked:(id)sender
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_OPEN_ARGUMENT, URL_SUPPORT] message:BC_STRING_LEAVE_APP preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URL_SUPPORT_FORGOT_PASSWORD]];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (IBAction)forgotPasswordClicked:(id)sender
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:BC_STRING_OPEN_ARGUMENT, URL_SUPPORT] message:BC_STRING_LEAVE_APP preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URL_SUPPORT_FORGOT_PASSWORD]];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 //- (IBAction)forgetWalletClicked:(id)sender
 //{

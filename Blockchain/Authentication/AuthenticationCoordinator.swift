@@ -165,8 +165,6 @@ import Foundation
         // TODO
         // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSideMenu)
         // name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
-        //
-        // [self migratePasswordAndPinFromNSUserDefaults];
     }
 
     @objc func startNewWalletSetUp() {
@@ -215,7 +213,7 @@ import Foundation
         }
     }
 
-    // MARK: - Forget Wallet Presentation
+    // MARK: - PasswordRequiredViewDelegate Presentation
 
     @objc func showForgetWalletConfirmAlert() {
         let alert = UIAlertController(
@@ -267,6 +265,28 @@ import Foundation
         })!
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             pairingCodeParserViewController,
+            animated: true
+        )
+    }
+
+    private func showForgotPasswordAlert() {
+        let title = String(format: LocalizationConstants.openArg, Constants.Url.blockchainSupport)
+        let alert = UIAlertController(
+            title: title,
+            message: LocalizationConstants.youWillBeLeavingTheApp,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
+                guard let url = URL(string: Constants.Url.forgotPassword) else { return }
+                UIApplication.shared.openURL(url)
+            }
+        )
+        alert.addAction(
+            UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+        )
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+            alert,
             animated: true
         )
     }
@@ -379,6 +399,44 @@ import Foundation
         )
     }
 
+    /// Displays a view (modal) requesting the user to enter their password.
+    ///
+    /// - Parameters:
+    ///   - displayText: the display/description text in the view presented to the user
+    ///   - headertext: the header text to display on the presented modal
+    ///   - validateSecondPassword: if the password should be validated against the wallet password
+    ///   - handler: completion handler invoked when the user confirms their password
+    @objc func showPasswordConfirm(
+        withDisplayText displayText: String,
+        headerText: String,
+        validateSecondPassword: Bool,
+        confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler
+    ) {
+        let passwordConfirmView = PasswordConfirmView.instanceFromNib()
+        passwordConfirmView.validateSecondPassword = validateSecondPassword
+        passwordConfirmView.confirmHandler = { [unowned self] password in
+            guard password.count > 0 else {
+                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.noPasswordEntered)
+                return
+            }
+
+            guard !passwordConfirmView.validateSecondPassword || self.walletManager.wallet.validateSecondPassword(password) else {
+                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.secondPasswordIncorrect)
+                return
+            }
+
+            confirmHandler(password)
+            
+            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+        }
+        ModalPresenter.shared.showModal(
+            withContent: passwordConfirmView,
+            closeType: ModalCloseTypeClose,
+            showHeader: true,
+            headerText: headerText
+        )
+    }
+
     // MARK: - Internal
 
     @objc internal func showLoginError() {
@@ -466,6 +524,10 @@ extension AuthenticationCoordinator: ManualPairViewDelegate {
 }
 
 extension AuthenticationCoordinator: PasswordRequiredViewDelegate {
+    func didTapForgotPassword() {
+        showForgotPasswordAlert()
+    }
+
     func didTapForgetWallet() {
         showForgetWalletConfirmAlert()
     }

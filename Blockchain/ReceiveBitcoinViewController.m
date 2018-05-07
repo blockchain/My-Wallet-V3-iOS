@@ -100,7 +100,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    app.mainTitleLabel.text = BC_STRING_REQUEST;
     
     self.view.frame = CGRectMake(0,
                                  DEFAULT_HEADER_HEIGHT_OFFSET,

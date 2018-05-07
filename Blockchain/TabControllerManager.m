@@ -672,9 +672,9 @@
         [self.tabViewController presentViewController:navigationController animated:YES completion:nil];
     } else {
         if ([WalletManager.sharedInstance.wallet needsSecondPassword]) {
-            [app getSecondPassword:^(NSString *secondPassword) {
+            [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT headerText:LocalizationConstantsObjcBridge.secondPasswordRequired validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPassword) {
                 [WalletManager.sharedInstance.wallet createEthAccountForExchange:secondPassword];
-            } error:nil helperText:BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT];
+            }];
         } else {
             [WalletManager.sharedInstance.wallet createEthAccountForExchange:nil];
         }

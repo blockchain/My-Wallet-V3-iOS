@@ -84,6 +84,8 @@ struct LocalizationConstants {
         static let invalidTwoFactorAuthenticationType = NSLocalizedString("Invalid two-factor authentication type", comment: "")
         static let manualPairingAuthorizationRequiredTitle = NSLocalizedString("Authorization Required", comment: "")
         static let manualPairingAuthorizationRequiredMessage = NSLocalizedString("Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", comment: "")
+        static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
+        static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
 
         struct Pin {
             static let incorrect = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")
@@ -142,4 +144,8 @@ struct LocalizationConstants {
     @objc class func incorrectPin() -> String { return LocalizationConstants.Authentication.Pin.incorrect }
 
     @objc class func logout() -> String { return LocalizationConstants.SideMenu.logout }
+
+    @objc class func noPasswordEntered() -> String { return LocalizationConstants.Authentication.noPasswordEntered }
+
+    @objc class func secondPasswordRequired() -> String { return LocalizationConstants.Authentication.secondPasswordRequired }
 }
