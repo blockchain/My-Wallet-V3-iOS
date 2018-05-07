@@ -19,8 +19,8 @@ typealias OnModalResumed = () -> Void
 
     private var modalChain: [BCModalView] = []
 
-    private var rootView: UIView? {
-        return UIApplication.shared.keyWindow?.rootViewController?.view
+    private var topMostView: UIView? {
+        return UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.view
     }
 
     // class function declared so that the ModalPresenter singleton can be accessed from obj-C
@@ -33,8 +33,7 @@ typealias OnModalResumed = () -> Void
     }
 
     @objc func closeAllModals() {
-        // TODO: handle busy view
-//        [self hideBusyView];
+        LoadingViewPresenter.shared.hideBusyView()
 
         // TODO: figure out why this is related to closing modals
 //        secondPasswordSuccess = nil;
@@ -57,7 +56,7 @@ typealias OnModalResumed = () -> Void
         modalView.onDismiss?()
         modalView.onDismiss = nil
 
-        self.modalView = nil;
+        self.modalView = nil
 
         for modalView in modalChain {
             modalView.myHolderView.subviews.forEach { $0.removeFromSuperview() }
@@ -85,7 +84,7 @@ typealias OnModalResumed = () -> Void
         // The movement based ones can have a subType to set which direction the movement is in.
         // In case the transition parameter is a direction, we use the MoveIn transition and the transition
         // parameter as the direction, otherwise we use the transition parameter as the transition type.
-        if (transition != kCATransitionFade) {
+        if transition != kCATransitionFade {
             animation.type = kCATransitionMoveIn
             animation.subtype = transition
         } else {
@@ -98,10 +97,10 @@ typealias OnModalResumed = () -> Void
         modalView.onDismiss = nil
 
         if let previousModalView = modalChain.last {
-            rootView?.addSubview(previousModalView)
+            topMostView?.addSubview(previousModalView)
             // TODO: handle busyView
             // [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
-            rootView?.endEditing(true)
+            topMostView?.endEditing(true)
 
             modalView.onResume?()
 
@@ -153,8 +152,8 @@ typealias OnModalResumed = () -> Void
             width: modalViewToShow.myHolderView.frame.size.width,
             height: modalViewToShow.myHolderView.frame.size.height
         )
-        rootView?.addSubview(modalViewToShow)
-        rootView?.endEditing(true)
+        topMostView?.addSubview(modalViewToShow)
+        topMostView?.endEditing(true)
 
         // Animate modal
         let animation = CATransition()
@@ -168,7 +167,7 @@ typealias OnModalResumed = () -> Void
         }
 
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-        rootView?.layer.add(animation, forKey: AnimationKeys.showModal)
+        topMostView?.layer.add(animation, forKey: AnimationKeys.showModal)
 
         modalView = modalViewToShow
 
