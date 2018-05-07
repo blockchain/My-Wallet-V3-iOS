@@ -35,7 +35,7 @@ struct LocalizationConstants {
     static let information = NSLocalizedString("Information", comment: "")
     static let cancel = NSLocalizedString("Cancel", comment: "")
     static let continueString = NSLocalizedString("Continue", comment: "")
-    static let ok = NSLocalizedString("OK", comment: "")
+    static let okString = NSLocalizedString("OK", comment: "")
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
     static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
@@ -86,6 +86,7 @@ struct LocalizationConstants {
         static let manualPairingAuthorizationRequiredMessage = NSLocalizedString("Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", comment: "")
         static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
         static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
+        static let password = NSLocalizedString("Password", comment: "")
 
         struct Pin {
             static let incorrect = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")

@@ -37,6 +37,7 @@
 
 - (IBAction)termsOfServiceClicked:(id)sender;
 
+- (void)createBlankWallet;
 - (void)showPassphraseTextField;
 - (void)didRecoverWallet;
 - (void)hideKeyboard;

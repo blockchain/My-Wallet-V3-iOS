@@ -323,7 +323,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: LocalizationConstants.ok, style: .default) { _ in
+            UIAlertAction(title: LocalizationConstants.okString, style: .default) { _ in
                 AuthenticationCoordinator.shared.logout(showPasswordView: true)
             }
         )

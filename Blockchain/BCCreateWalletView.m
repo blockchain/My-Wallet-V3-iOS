@@ -54,9 +54,6 @@
     
     termsOfServiceLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
     termsOfServiceButton.titleLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
-    
-    // If loadBlankWallet is called without a delay, WalletManager.sharedInstance.wallet will still be nil
-    [self performSelector:@selector(createBlankWallet) withObject:nil afterDelay:0.1f];
 }
 
 - (void)createBlankWallet

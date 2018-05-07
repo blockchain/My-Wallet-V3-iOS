@@ -18,7 +18,7 @@ extension AlertViewPresenter {
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: LocalizationConstants.ok, style: .cancel)
+            UIAlertAction(title: LocalizationConstants.okString, style: .cancel)
         )
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.openMailApp, style: .default) { _ in

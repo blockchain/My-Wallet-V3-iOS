@@ -24,8 +24,12 @@ class PasswordConfirmView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         labelDescription.font = UIFont(name: Constants.FontNames.gillSans, size: Constants.FontSizes.SmallMedium)
+
         textFieldPassword.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
+        textFieldPassword.placeholder = LocalizationConstants.Authentication.password
+
         buttonContinue.titleLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
+        buttonContinue.setTitle(LocalizationConstants.continueString, for: .normal)
 
         textFieldPassword.delegate = self
     }
@@ -45,7 +49,7 @@ class PasswordConfirmView: UIView {
 
 extension PasswordConfirmView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if (textFieldPassword == textFieldPassword) {
+        if textFieldPassword == textFieldPassword {
             confirmPassword()
         }
         return true
@@ -54,7 +58,7 @@ extension PasswordConfirmView: UITextFieldDelegate {
 
 extension PasswordConfirmView {
     static func instanceFromNib() -> PasswordConfirmView {
-        let nib = UINib(nibName: "MainWindow", bundle: Bundle.main)
+        let nib = UINib(nibName: "PasswordConfirmView", bundle: Bundle.main)
         let contents = nib.instantiate(withOwner: nil, options: nil)
         return contents.first { $0 is PasswordConfirmView } as! PasswordConfirmView
     }

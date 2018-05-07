@@ -45,6 +45,7 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
 
     private func _showCreateWallet(isRecoveringWallet: Bool = false, title: String = LocalizationConstants.Onboarding.createNewWallet) {
         let createWallet = BCCreateWalletView.instanceFromNib()
+        createWallet.createBlankWallet()
         createWallet.isRecoveringWallet = isRecoveringWallet
         AuthenticationManager.shared.setHandlerForWalletCreation(handler: AuthenticationCoordinator.shared.authHandler)
         ModalPresenter.shared.showModal(

@@ -102,7 +102,7 @@ import Foundation
             guard UIApplication.shared.applicationState == .active else { return }
 
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: LocalizationConstants.ok, style: .cancel, handler: handler))
+            alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler))
 
             let window = UIApplication.shared.keyWindow
             guard let topMostViewController = window?.rootViewController?.topMostViewController else {
