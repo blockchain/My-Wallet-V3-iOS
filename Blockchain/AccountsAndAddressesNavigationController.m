@@ -29,6 +29,8 @@
 {
     [super viewDidLoad];
     
+    WalletManager.sharedInstance.addressesDelegate = self;
+    
     self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
     
     UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT)];
@@ -228,14 +230,6 @@
     }
 }
 
-- (void)didGenerateNewAddress
-{
-    if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
-        AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
-        [accountsAndAddressesViewController didGenerateNewAddress];
-    }
-}
-
 - (void)resetAddressesViewControllerContainerFrame
 {
     if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
@@ -272,6 +266,21 @@
     } completion:^(BOOL finished) {
         self.isOpeningSelector = NO;
     }];
+}
+
+#pragma mark WalletAddressesDelegate
+
+- (void)didGenerateNewAddress
+{
+    if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
+        AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
+        [accountsAndAddressesViewController didGenerateNewAddress];
+    }
+}
+
+- (void)returnToAddressesScreen
+{
+    [self popToRootViewControllerAnimated:YES];
 }
 
 @end
