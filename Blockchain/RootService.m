@@ -1903,17 +1903,17 @@ SideMenuViewController *sideMenuViewController;
     [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)didGenerateNewAddress
-{
-    [app.accountsAndAddressesNavigationController didGenerateNewAddress];
-}
-
-- (void)returnToAddressesScreen
-{
-    if (self.accountsAndAddressesNavigationController) {
-        [self.accountsAndAddressesNavigationController popToRootViewControllerAnimated:YES];
-    }
-}
+//- (void)didGenerateNewAddress
+//{
+//    [app.accountsAndAddressesNavigationController didGenerateNewAddress];
+//}
+//
+//- (void)returnToAddressesScreen
+//{
+//    if (self.accountsAndAddressesNavigationController) {
+//        [self.accountsAndAddressesNavigationController popToRootViewControllerAnimated:YES];
+//    }
+//}
 
 - (void)alertUserOfInvalidAccountName
 {
