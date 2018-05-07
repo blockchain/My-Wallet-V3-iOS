@@ -1095,15 +1095,9 @@
 
 - (NSDecimalNumber *)ethDecimalBalance
 {
-    NSLocale *currentLocale = app.localCurrencyFormatter.locale;
-    app.localCurrencyFormatter.locale = [NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US];
-
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    NSString *fiatString = [NSNumberFormatter formatEthToFiat:[WalletManager.sharedInstance.wallet getEthBalance] exchangeRate:tabControllerManager.latestEthExchangeRate];
-    NSString *separator = [app.localCurrencyFormatter.locale objectForKey:NSLocaleGroupingSeparator];
-    fiatString = [fiatString stringByReplacingOccurrencesOfString:separator withString:@""];
+    NSString *fiatString = [NSNumberFormatter formatEthToFiat:[WalletManager.sharedInstance.wallet getEthBalance] exchangeRate:tabControllerManager.latestEthExchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatterWithUSLocale]];
     NSDecimalNumber *balance = [NSDecimalNumber decimalNumberWithString:fiatString ? : @"0"];
-    app.localCurrencyFormatter.locale = currentLocale;
     return balance;
 }
 
@@ -2662,7 +2656,7 @@
 {
     if ([self isInitialized] && [WalletManager.sharedInstance.wallet hasEthAccount]) {
         NSNumber *balanceNumber = [[self.context evaluateScript:@"MyWalletPhone.getEthBalance()"] toNumber];
-        return [app.btcFormatter stringFromNumber:balanceNumber];
+        return [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:balanceNumber];
     } else {
         DLog(@"Warning: getting eth balance when not initialized - returning 0");
         return @"0";

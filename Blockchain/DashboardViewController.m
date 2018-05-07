@@ -358,7 +358,7 @@
 
 - (double)getEthBalance
 {
-    return [self doubleFromString:[NSNumberFormatter formatEthToFiat:[WalletManager.sharedInstance.wallet getEthBalance] exchangeRate:WalletManager.sharedInstance.wallet.latestEthExchangeRate]];
+    return [self doubleFromString:[NSNumberFormatter formatEthToFiat:[WalletManager.sharedInstance.wallet getEthBalance] exchangeRate:WalletManager.sharedInstance.wallet.latestEthExchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatter]]];
 }
 
 - (double)getBchBalance

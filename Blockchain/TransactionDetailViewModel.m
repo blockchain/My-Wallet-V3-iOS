@@ -53,14 +53,11 @@
         self.dateString = [NSDateFormatter verboseStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.time]];
         self.myHash = transaction.myHash;
         
-        NSLocale *currentLocale = app.btcFormatter.locale;
-        app.btcFormatter.locale = [NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US];
         CurrencySymbol *currentSymbol = WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc;
         WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = [CurrencySymbol btcSymbolFromCode:CURRENCY_CODE_BTC];
-        NSString *decimalString = [NSNumberFormatter formatAmount:imaxabs(self.amountInSatoshi) localCurrency:NO] ? : @"0";
+        NSString *decimalString = [NSNumberFormatter formatAmountFromUSLocale:imaxabs(self.amountInSatoshi) localCurrency:NO] ? : @"0";
         self.decimalAmount = [NSDecimalNumber decimalNumberWithString:decimalString];
         WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = currentSymbol;
-        app.btcFormatter.locale = currentLocale;
         
         self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[BlockchainAPI sharedInstance] blockchainWallet]] uppercaseString];
         self.detailButtonLink = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];

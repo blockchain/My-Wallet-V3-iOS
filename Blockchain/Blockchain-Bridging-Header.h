@@ -18,6 +18,7 @@
 #import "ModuleXMLHttpRequest.h"
 #import "NSData+Hex.h"
 #import "NSString+SHA256.h"
+#import "PairingCodeParser.h"
 #import "PEPinEntryController.h"
 #import "PairingCodeParser.h"
 #import "Reachability.h"

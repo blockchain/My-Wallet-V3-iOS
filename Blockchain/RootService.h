@@ -105,9 +105,9 @@
 @property (nonatomic, assign) NSUInteger lastEnteredPIN;
 //@property (nonatomic) NSTimer *loginTimer;
 
-@property(nonatomic, strong) NSNumberFormatter *btcFormatter;
-@property(nonatomic, strong) NSNumberFormatter *ethFormatter;
-@property(nonatomic, strong) NSNumberFormatter *localCurrencyFormatter;
+//@property(nonatomic, strong) NSNumberFormatter *btcFormatter;
+//@property(nonatomic, strong) NSNumberFormatter *ethFormatter;
+//@property(nonatomic, strong) NSNumberFormatter *localCurrencyFormatter;
 
 //@property (nonatomic) BOOL changedPassword;
 @property (nonatomic) BOOL isVerifyingMobileNumber; // TODO: Move this inside SettingsTableViewController

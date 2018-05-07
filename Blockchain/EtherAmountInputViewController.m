@@ -10,6 +10,7 @@
 #import "BCAmountInputView.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "RootService.h"
+#import "Blockchain-Swift.h"
 
 @interface EtherAmountInputViewController ()
 @property (nonatomic) NSDecimalNumber *latestExchangeRate;
@@ -135,10 +136,7 @@
 
 - (void)convertToFiatField
 {
-    app.localCurrencyFormatter.usesGroupingSeparator = NO;
-    self.amountInputView.fiatField.text = [NSNumberFormatter formatEthToFiat:[self.ethAmount stringValue] exchangeRate:self.latestExchangeRate];
-    app.localCurrencyFormatter.usesGroupingSeparator = YES;
-
+    self.amountInputView.fiatField.text = [NSNumberFormatter formatEthToFiat:[self.ethAmount stringValue] exchangeRate:self.latestExchangeRate localCurrencyFormatter:[NSNumberFormatter localCurrencyFormatter]];
 }
 
 - (void)convertToBtcField
