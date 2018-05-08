@@ -347,6 +347,8 @@
 		C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
+		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
+		C787180220A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
 		C790E0F81E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */; };
 		C790E10D1E52061B0063D141 /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C790E0FB1E5206010063D141 /* Montserrat-Black.ttf */; };
 		C790E10E1E52061B0063D141 /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C790E0FC1E5206020063D141 /* Montserrat-BlackItalic.ttf */; };
@@ -1329,6 +1331,7 @@
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
 		C780A44B20235E9500E49274 /* BCBalancesChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCBalancesChartView.m; sourceTree = "<group>"; };
+		C787180020A22362000CC46E /* WalletAddressesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressesDelegate.swift; sourceTree = "<group>"; };
 		C790E0F21E4913F00063D141 /* Blockchain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blockchain.entitlements; sourceTree = "<group>"; };
 		C790E0F61E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+TimeAgoString.h"; sourceTree = "<group>"; };
 		C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+TimeAgoString.m"; sourceTree = "<group>"; };
@@ -2238,6 +2241,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C787180020A22362000CC46E /* WalletAddressesDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */,
 				AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */,
@@ -2864,6 +2868,7 @@
 				51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */,
 				AACE32012093FA1A00B7B806 /* ReminderCoordinator.swift in Sources */,
 				AACE31DA2092A99B00B7B806 /* UIApplication.swift in Sources */,
+				C787180220A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
 				AA31A7BC2098DFCF00FE6268 /* SideMenuItem.swift in Sources */,
 				AA63F85920A134DA002B719B /* BCTextField.swift in Sources */,
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
@@ -3040,6 +3045,7 @@
 				84B601CA197AD03800DA1829 /* BCModalView.m in Sources */,
 				9F0CBAAA151351F400CD945D /* Wallet.m in Sources */,
 				9F0CBAD81513CA2600CD945D /* BCFadeView.m in Sources */,
+				C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
 				511646C5208124E200C43522 /* AssetType.swift in Sources */,
 				67E9674E19DF285000305358 /* SideMenuViewController.m in Sources */,
 				C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */,

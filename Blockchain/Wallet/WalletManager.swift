@@ -31,6 +31,7 @@ class WalletManager: NSObject {
     weak var authDelegate: WalletAuthDelegate?
     weak var pinEntryDelegate: WalletPinEntryDelegate?
     weak var buySellDelegate: WalletBuySellDelegate?
+    @objc weak var addressesDelegate: WalletAddressesDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -195,5 +196,14 @@ extension WalletManager: WalletDelegate {
     func didGetPinResponse(_ dictionary: [AnyHashable : Any]!) {
         let response = GetPinResponse(response: dictionary)
         pinEntryDelegate?.getPinSuccess(response: response)
+    }
+
+    // MARK: - Addresses
+    func didGenerateNewAddress() {
+        addressesDelegate?.didGenerateNewAddress()
+    }
+
+    func returnToAddressesScreen() {
+        addressesDelegate?.didGenerateNewAddress()
     }
 }
