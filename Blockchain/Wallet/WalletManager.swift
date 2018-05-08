@@ -135,10 +135,14 @@ extension WalletManager: WalletDelegate {
     }
 
     func walletFailedToDecrypt() {
-        // TODO: handle this once manual pairing is ported away from RootService
+        print("walletFailedToDecrypt()")
+        authDelegate?.authenticationError(error:
+            AuthenticationError(code: AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue)
+        )
     }
 
     func walletFailedToLoad() {
+        print("walletFailedToLoad()")
         authDelegate?.authenticationError(error: AuthenticationError(
             code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
         ))

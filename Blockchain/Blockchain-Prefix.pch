@@ -237,9 +237,7 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define PREFIX_BITCOIN_URI @"bitcoin:"
 #define PREFIX_ETHEREUM_URI @"ethereum:"
 #define PREFIX_BITCOIN_CASH @"bitcoincash:"
-#define PREFIX_BLOCKCHAIN_WALLET_URI @"blockchain-wallet://"
 #define PREFIX_MAIL_URI @"message://"
-#define PREFIX_BLOCKCHAIN_URI @"blockchain://"
 
 #define TX_TYPE_TRANSFER @"transfer"
 #define TX_TYPE_SENT @"sent"
@@ -259,7 +257,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define NUMBER_KEYPAD_CHARACTER_SET_STRING @"1234567890"
 
 #define DICTIONARY_KEY_MESSAGE @"message"
-#define DICTIONARY_KEY_AMOUNT @"amount"
 #define DICTIONARY_KEY_FEE @"fee"
 
 #define ERROR_NO_FREE_OUTPUTS_TO_SPEND @"No free outputs to spend"

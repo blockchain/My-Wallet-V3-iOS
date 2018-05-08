@@ -16,4 +16,10 @@ extension String {
         let endIndex = hashedString.index(hashedString.startIndex, offsetBy: min(self.count, 5))
         return String(hashedString[..<endIndex])
     }
+
+    /// Provided a URL query string such as "field1=value1&field2=value2", this computed property
+    /// will return a dictionary in the format ["field1": "value1": "field2": "value2"]
+    var urlQueryKeyPairDictionary: [String: String] {
+        return [:]
+    }
 }

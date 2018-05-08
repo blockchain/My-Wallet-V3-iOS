@@ -83,18 +83,18 @@ SideMenuViewController *sideMenuViewController;
 //void (^addPrivateKeySuccess)(NSString *);
 //void (^secondPasswordSuccess)(NSString *);
 
-- (id)init {
-
-    if (self = [super init]) {
+//- (id)init {
+//
+//    if (self = [super init]) {
 //        [self setupBtcFormatter];
 //        [self setupLocalCurrencyFormatter];
 
 //        self.modalChain = [[NSMutableArray alloc] init];
 //        app = self;
-    }
-
-    return self;
-}
+//    }
+//
+//    return self;
+//}
 
 //- (void)transitionToIndex:(NSInteger)newIndex
 //{
@@ -166,9 +166,6 @@ SideMenuViewController *sideMenuViewController;
 //    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_SURGE];
 //
 //    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    // TODO: migrate all code below to RootServiceSwift
-
 //    SharedSessionDelegate *sharedSessionDelegate = [[SharedSessionDelegate alloc] initWithCertificatePinner:self.certificatePinner];
 //
 //    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -222,10 +219,8 @@ SideMenuViewController *sideMenuViewController;
 
 //    [self requestAuthorizationForPushNotifications];
 
-    // TODO: Set Montserrat font globally
 //    app.mainTitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
 
-    // TODO: Migrate elsewhere
 //    secondPasswordDescriptionLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
 //    secondPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
 //    secondPasswordButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
@@ -268,7 +263,6 @@ SideMenuViewController *sideMenuViewController;
 
 //- (void)applicationWillResignActive:(UIApplication *)application
 //{
-    // TODO: call Swift instance method directly from AppDelegate after refactor
     // [rootService applicationWillResignActive:application];
 
 //    [self hideSendAndReceiveKeyboards];
@@ -311,7 +305,6 @@ SideMenuViewController *sideMenuViewController;
 
 //- (void)applicationDidEnterBackground:(UIApplication *)application
 //{
-//    // TODO: call Swift instance method directly from AppDelegate after refactor
 //    // [rootService applicationDidEnterBackground:application];
 //    if (BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled &&
 //        [WalletManager.sharedInstance.wallet isInitialized] &&
@@ -428,50 +421,43 @@ SideMenuViewController *sideMenuViewController;
 
 //- (void)applicationDidBecomeActive:(UIApplication *)application
 //{
-    // TODO: call Swift instance method directly from AppDelegate after refactor
     // [rootService applicationDidBecomeActive:application];
 //}
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-    if (![BlockchainSettings sharedAppInstance].isPinSet) {
-        if ([[url absoluteString] isEqualToString:[NSString stringWithFormat:@"%@%@", PREFIX_BLOCKCHAIN_WALLET_URI, @"loginAuthorized"]]) {
-            [self manualPairClicked:nil];
-            return YES;
-        } else {
-            return NO;
-        }
-    }
-
-    NSString *absoluteURL = [url absoluteString];
-
-    if ([absoluteURL hasPrefix:PREFIX_BLOCKCHAIN_WALLET_URI]) {
-        // redirect from browser to app - do nothing.
-        return YES;
-    } else if ([absoluteURL hasPrefix:PREFIX_BLOCKCHAIN_URI]) {
-
-        [app closeModalWithTransition:kCATransitionFade];
+//    if (![BlockchainSettings sharedAppInstance].isPinSet) {
+//        if ([[url absoluteString] isEqualToString:[NSString stringWithFormat:@"%@%@", PREFIX_BLOCKCHAIN_WALLET_URI, @"loginAuthorized"]]) {
+//            [self manualPairClicked:nil];
+//            return YES;
+//        } else {
+//            return NO;
+//        }
+//    }
 //
-//        NSDictionary *dict = [self parseURI:absoluteURL prefix:PREFIX_BLOCKCHAIN_URI];
-//        NSString *identifier = [dict objectForKey:DICTIONARY_KEY_ID];
-//        NSString *name = [dict objectForKey:DICTIONARY_KEY_NAME];
-//        showType = ShowTypeNewContact;
-//        _contactsViewController = [[ContactsViewController alloc] initWithInvitation:identifier name:name];
-
-        return YES;
-    }
-
-    [app closeModalWithTransition:kCATransitionFade];
-
-    NSDictionary *dict = [self parseURI:absoluteURL prefix:PREFIX_BITCOIN_URI];
-    NSString * addr = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
-    NSString * amount = [dict objectForKey:DICTIONARY_KEY_AMOUNT];
-
+//    NSString *absoluteURL = [url absoluteString];
+//
+//    if ([absoluteURL hasPrefix:PREFIX_BLOCKCHAIN_WALLET_URI]) {
+//        // redirect from browser to app - do nothing.
+//        return YES;
+//    } else if ([absoluteURL hasPrefix:PREFIX_BLOCKCHAIN_URI]) {
+//
+//        [app closeModalWithTransition:kCATransitionFade];
+//
+//        return YES;
+//    }
+//
+//    [app closeModalWithTransition:kCATransitionFade];
+//
+//    NSDictionary *dict = [self parseURI:absoluteURL prefix:PREFIX_BITCOIN_URI];
+//    NSString * addr = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
+//    NSString * amount = [dict objectForKey:DICTIONARY_KEY_AMOUNT];
+//
     showType = ShowTypeSendCoins;
-
-    [self.tabControllerManager setupBitcoinPaymentFromURLHandlerWithAmountString:amount address:addr];
-
-    return YES;
+//
+//    [self.tabControllerManager setupBitcoinPaymentFromURLHandlerWithAmountString:amount address:addr];
+//
+//    return YES;
 }
 
 //- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
@@ -938,13 +924,13 @@ SideMenuViewController *sideMenuViewController;
 //        [self endBackgroundUpdateTask];
 //    });
 //}
-- (void)walletFailedToLoad
-{
-    DLog(@"walletFailedToLoad");
-    // When doing a manual pair the wallet fails to load the first time because the server needs to verify via email that the user grants access to this device. In that case we don't want to display any additional errors besides the server error telling the user to check his email.
-    if ([manualPairView isDescendantOfView:_window.rootViewController.view]) {
-        return;
-    }
+//- (void)walletFailedToLoad
+//{
+//    DLog(@"walletFailedToLoad");
+//    // When doing a manual pair the wallet fails to load the first time because the server needs to verify via email that the user grants access to this device. In that case we don't want to display any additional errors besides the server error telling the user to check his email.
+//    if ([manualPairView isDescendantOfView:_window.rootViewController.view]) {
+//        return;
+//    }
 
 //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_FAILED_TO_LOAD_WALLET_TITLE message:[NSString stringWithFormat:BC_STRING_FAILED_TO_LOAD_WALLET_DETAIL] preferredStyle:UIAlertControllerStyleAlert];
 //    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_FORGET_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -966,7 +952,7 @@ SideMenuViewController *sideMenuViewController;
 //    }]];
 //
 //    [_window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//}
 //
 //- (void)walletDidDecrypt
 //{
@@ -1166,21 +1152,21 @@ SideMenuViewController *sideMenuViewController;
     }
 }
 
-- (void)walletFailedToDecrypt
-{
-    DLog(@"walletFailedToDecrypt");
-    // In case we were on the manual pair screen, we want to go back there. The way to check for that is that the wallet has a guid, but it's not saved yet
-    if (wallet.guid && ![KeychainItemWrapper guid]) {
-        [self manualPairClicked:nil];
+//- (void)walletFailedToDecrypt
+//{
+//    DLog(@"walletFailedToDecrypt");
+//    // In case we were on the manual pair screen, we want to go back there. The way to check for that is that the wallet has a guid, but it's not saved yet
+//    if (wallet.guid && ![KeychainItemWrapper guid]) {
+//        [self manualPairClicked:nil];
+//
+//        return;
+//    }
+//
+//    [self showPasswordModal];
+//}
 
-        return;
-    }
-
-    [self showPasswordModal];
-}
-
-- (void)showPasswordModal
-{
+//- (void)showPasswordModal
+//{
 //    mainPasswordLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
 //
 //    mainPasswordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
@@ -1205,7 +1191,7 @@ SideMenuViewController *sideMenuViewController;
 //    [mainPasswordView addGestureRecognizer:tapGesture];
 //
 //    [self showModalWithContent:mainPasswordView closeType:ModalCloseTypeNone headerText:BC_STRING_PASSWORD_REQUIRED];
-}
+//}
 
 //- (void)beginBackgroundUpdateTask
 //{
@@ -1256,44 +1242,44 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager.tabViewController presentViewController:_bcWebViewController animated:YES completion:nil];
 //}
 
-- (NSMutableDictionary *)parseQueryString:(NSString *)query
-{
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:6];
-    NSArray *pairs = [query componentsSeparatedByString:@"&"];
-
-    for (NSString *pair in pairs) {
-        NSArray *elements = [pair componentsSeparatedByString:@"="];
-        if ([elements count] >= 2) {
-            NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-            [dict setObject:val forKey:key];
-        }
-    }
-    return dict;
-}
-
-- (NSDictionary*)parseURI:(NSString*)urlString prefix:(NSString *)urlPrefix
-{
-    if (!urlString) {
-        return nil;
-    }
-
-    if (![urlString hasPrefix:urlPrefix]) {
-        return [NSDictionary dictionaryWithObject:urlString forKey:DICTIONARY_KEY_ADDRESS];
-    }
-
-    NSString * replaced = [[urlString stringByReplacingOccurrencesOfString:PREFIX_BITCOIN_URI withString:[NSString stringWithFormat:@"%@//", PREFIX_BITCOIN_URI]] stringByReplacingOccurrencesOfString:@"////" withString:@"//"];
-
-    NSURL * url = [NSURL URLWithString:replaced];
-
-    NSMutableDictionary *dict = [self parseQueryString:[url query]];
-
-    if ([url host] != NULL)
-    [dict setObject:[url host] forKey:DICTIONARY_KEY_ADDRESS];
-
-    return dict;
-}
+//- (NSMutableDictionary *)parseQueryString:(NSString *)query
+//{
+//    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:6];
+//    NSArray *pairs = [query componentsSeparatedByString:@"&"];
+//
+//    for (NSString *pair in pairs) {
+//        NSArray *elements = [pair componentsSeparatedByString:@"="];
+//        if ([elements count] >= 2) {
+//            NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//            NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//
+//            [dict setObject:val forKey:key];
+//        }
+//    }
+//    return dict;
+//}
+//
+//- (NSDictionary*)parseURI:(NSString*)urlString prefix:(NSString *)urlPrefix
+//{
+//    if (!urlString) {
+//        return nil;
+//    }
+//
+//    if (![urlString hasPrefix:urlPrefix]) {
+//        return [NSDictionary dictionaryWithObject:urlString forKey:DICTIONARY_KEY_ADDRESS];
+//    }
+//
+//    NSString * replaced = [[urlString stringByReplacingOccurrencesOfString:PREFIX_BITCOIN_URI withString:[NSString stringWithFormat:@"%@//", PREFIX_BITCOIN_URI]] stringByReplacingOccurrencesOfString:@"////" withString:@"//"];
+//
+//    NSURL * url = [NSURL URLWithString:replaced];
+//
+//    NSMutableDictionary *dict = [self parseQueryString:[url query]];
+//
+//    if ([url host] != NULL)
+//    [dict setObject:[url host] forKey:DICTIONARY_KEY_ADDRESS];
+//
+//    return dict;
+//}
 
 //- (BOOL)textFieldShouldReturn:(UITextField*)textField
 //{
@@ -3144,10 +3130,10 @@ SideMenuViewController *sideMenuViewController;
     [KeychainItemWrapper removePinFromKeychain];
 }
 
-- (void)verifyTwoFactorSMS
-{
-    [manualPairView verifyTwoFactorSMS];
-}
+//- (void)verifyTwoFactorSMS
+//{
+//    [manualPairView verifyTwoFactorSMS];
+//}
 //
 //- (void)verifyTwoFactorGoogle
 //{

@@ -185,8 +185,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
-        // TODO: migrate code from RootService.m...
-        return false
+
+        let urlString = url.absoluteString
+
+        guard BlockchainSettings.App.shared.isPinSet else {
+            if "\(Constants.Schemes.blockchainWallet)loginAuthorized" == urlString {
+                AuthenticationCoordinator.shared.startManualPairing()
+                return true
+            }
+            return false
+        }
+
+        guard let urlScheme = url.scheme else {
+            return true
+        }
+
+        if urlScheme == Constants.Schemes.blockchainWallet {
+            // Redirect from browser to app - do nothing.
+            return true
+        }
+
+        if urlScheme == Constants.Schemes.blockchain {
+            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+            return true
+        }
+
+        // Handle "bitcoin://" scheme
+        if let bitcoinUrlPayload = BitcoinURLPayload(url: url) {
+
+            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+
+            // TODO handle show type
+            //        showType = ShowTypeSendCoins;
+
+            AppCoordinator.shared.tabControllerManager.setupBitcoinPaymentFromURLHandler(
+                withAmountString: bitcoinUrlPayload.amount,
+                address: bitcoinUrlPayload.address
+            )
+
+            return true
+        }
+
+        return true
     }
 
     // TODO: move to appropriate module

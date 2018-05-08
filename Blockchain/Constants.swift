@@ -72,8 +72,11 @@ struct Constants {
         static let userInfoId = "id"
         static let typePayment = "payment"
     }
-    struct Schemas {
+    struct Schemes {
         static let mail = "message://"
+        static let blockchainWallet = "blockchain-wallet"
+        static let blockchain = "blockchain"
+        static let bitcoin = "bitcoin"
     }
     struct Security {
         static let pinPBKDF2Iterations = 1 // This does not need to be large because the key is already 256 bits

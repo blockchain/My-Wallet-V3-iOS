@@ -35,6 +35,8 @@ import Foundation
                 AlertViewPresenter.shared.showEmailAuthorizationRequired()
             case AuthenticationError.ErrorCode.failedToLoadWallet.rawValue:
                 strongSelf.handleFailedToLoadWallet()
+            case AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue:
+                strongSelf.showPasswordModal()
             default:
                 if let description = error!.description {
                     AlertViewPresenter.shared.standardNotify(message: description)
