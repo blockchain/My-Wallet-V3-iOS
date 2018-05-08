@@ -93,17 +93,24 @@ import Foundation
         }
     }
 
-    @objc func standardNotify(
-        message: String,
-        title: String = LocalizationConstants.Errors.error,
-        handler: AlertConfirmHandler? = nil
-    ) {
+    @objc func standardNotify(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler))
+        standardNotify(alert: alert)
+    }
+
+    /// Allows custom actions to be included in the standard alert presentation
+    @objc func standardNotify(message: String, title: String, actions: [UIAlertAction]) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        actions.forEach { alert.addAction($0) }
+        if actions.isEmpty {
+            alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil))
+        }
+        standardNotify(alert: alert)
+    }
+
+    private func standardNotify(alert: UIAlertController) {
         DispatchQueue.main.async {
-            guard UIApplication.shared.applicationState == .active else { return }
-
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler))
-
             let window = UIApplication.shared.keyWindow
             guard let topMostViewController = window?.rootViewController?.topMostViewController else {
                 window?.rootViewController?.present(alert, animated: true)
