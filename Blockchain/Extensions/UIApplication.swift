@@ -13,7 +13,7 @@ extension UIApplication {
     // Opens the mail application, if possible, otherwise, displays an error
     @objc func openMailApplication() {
         guard let mailURL = URL(string: Constants.Schemas.mail), canOpenURL(mailURL) else {
-            AlertViewPresenter.shared.standardNotify(
+            AlertViewPresenter.shared.standardError(
                 message: NSString(
                     format: LocalizationConstants.Errors.cannotOpenURLArg as NSString,
                     Constants.Schemas.mail

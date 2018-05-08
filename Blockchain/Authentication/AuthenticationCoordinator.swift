@@ -37,7 +37,7 @@ import Foundation
                 strongSelf.handleFailedToLoadWallet()
             default:
                 if let description = error!.description {
-                    AlertViewPresenter.shared.standardNotify(message: description)
+                    AlertViewPresenter.shared.standardError(message: description)
                 }
             }
             return
@@ -246,11 +246,11 @@ import Foundation
             case .notAuthorized:
                 AlertViewPresenter.shared.showNeedsCameraPermissionAlert()
             default:
-                AlertViewPresenter.shared.standardNotify(message: error.localizedDescription)
+                AlertViewPresenter.shared.standardError(message: error.localizedDescription)
             }
             return
         } catch {
-            AlertViewPresenter.shared.standardNotify(message: error.localizedDescription)
+            AlertViewPresenter.shared.standardError(message: error.localizedDescription)
         }
 
         let pairingCodeParserViewController = PairingCodeParser(success: { [weak self] response in
@@ -261,7 +261,7 @@ import Foundation
             AuthenticationManager.shared.authenticate(using: payload, andReply: strongSelf.authHandler)
         }, error: { error in
             guard let errorMessage = error else { return }
-            AlertViewPresenter.shared.standardNotify(message: errorMessage)
+            AlertViewPresenter.shared.standardError(message: errorMessage)
         })!
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             pairingCodeParserViewController,
@@ -416,12 +416,12 @@ import Foundation
         passwordConfirmView.validateSecondPassword = validateSecondPassword
         passwordConfirmView.confirmHandler = { [unowned self] password in
             guard password.count > 0 else {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.noPasswordEntered)
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.noPasswordEntered)
                 return
             }
 
             guard !passwordConfirmView.validateSecondPassword || self.walletManager.wallet.validateSecondPassword(password) else {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.secondPasswordIncorrect)
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.secondPasswordIncorrect)
                 return
             }
 
@@ -448,7 +448,7 @@ import Foundation
         }
         pinEntryViewController?.reset()
         LoadingViewPresenter.shared.hideBusyView()
-        AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Errors.errorLoadingWallet)
+        AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.errorLoadingWallet)
     }
 
     // MARK: - Private

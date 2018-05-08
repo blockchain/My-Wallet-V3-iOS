@@ -93,7 +93,12 @@ import Foundation
         }
     }
 
-    @objc func standardNotify(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
+    /// Displays the standard error alert
+    @objc func standardError(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
+        standardNotify(message: message, title: title, handler: handler)
+    }
+
+    @objc func standardNotify(message: String, title: String, handler: AlertConfirmHandler? = nil) {
         let standardAction = UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler)
         standardNotify(message: message, title: title, actions: [standardAction])
     }

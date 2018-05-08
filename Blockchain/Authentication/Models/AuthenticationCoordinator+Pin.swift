@@ -173,7 +173,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
     func errorDidFailPutPin(errorMessage: String) {
         LoadingViewPresenter.shared.hideBusyView()
 
-        AlertViewPresenter.shared.standardNotify(message: errorMessage)
+        AlertViewPresenter.shared.standardError(message: errorMessage)
 
         reopenChangePin()
     }
@@ -245,10 +245,10 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
         // Incorrect pin
         if response.code == nil {
-            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.incorrect)
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.Pin.incorrect)
         } else if response.code == GetPinResponse.StatusCode.deleted.rawValue {
             // Pin retry limit exceeded
-            AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.validationCannotBeCompleted)
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.Pin.validationCannotBeCompleted)
             BlockchainSettings.App.shared.clearPin()
             logout(showPasswordView: false)
             DispatchQueue.main.async { [weak self] in
@@ -258,7 +258,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             }
         } else if response.code == GetPinResponse.StatusCode.incorrect.rawValue {
             let error = response.error ?? LocalizationConstants.Authentication.Pin.incorrectUnknownError
-            AlertViewPresenter.shared.standardNotify(message: error)
+            AlertViewPresenter.shared.standardError(message: error)
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
             // TODO handle touch ID
@@ -281,7 +281,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
             // Initial PIN setup ?
             if response.pinDecryptionValue?.count == 0 {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.responseSuccessLengthZero)
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.Pin.responseSuccessLengthZero)
                 return
             }
 
@@ -292,7 +292,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
                 pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
             )
             if decryptedPassword?.count == 0 {
-                AlertViewPresenter.shared.standardNotify(message: LocalizationConstants.Authentication.Pin.decryptedPasswordLengthZero)
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.Pin.decryptedPasswordLengthZero)
                 askIfUserWantsToResetPIN()
                 return
             }
