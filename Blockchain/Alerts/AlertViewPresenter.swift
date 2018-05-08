@@ -94,9 +94,8 @@ import Foundation
     }
 
     @objc func standardNotify(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler))
-        standardNotify(alert: alert)
+        let standardAction = UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler)
+        standardNotify(message: message, title: title, actions: [standardAction])
     }
 
     /// Allows custom actions to be included in the standard alert presentation
