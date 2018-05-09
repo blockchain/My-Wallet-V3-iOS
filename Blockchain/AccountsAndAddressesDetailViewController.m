@@ -136,15 +136,16 @@ typedef enum {
 
 - (BOOL)canTransferFromAddress
 {
-#ifdef ENABLE_TRANSFER_FUNDS
+    AppFeatureConfiguration *transferFundsConfiguration = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTransferFundsFromImportedAddress];
+    if (!transferFundsConfiguration.isEnabled) {
+        return NO;
+    }
+
     if (self.address) {
         return [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:self.address assetType:self.assetType] longLongValue] >= [WalletManager.sharedInstance.wallet dust] && ![WalletManager.sharedInstance.wallet isWatchOnlyLegacyAddress:self.address] && ![self isArchived] && [WalletManager.sharedInstance.wallet didUpgradeToHd];
     } else {
         return NO;
     }
-#else
-    return NO;
-#endif
 }
 
 #pragma mark - Actions

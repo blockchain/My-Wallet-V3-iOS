@@ -150,13 +150,11 @@ import Foundation
 
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView(asModal: true)
-            // TODO enable touch ID
-//            #ifdef ENABLE_TOUCH_ID
-//            if ([[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_TOUCH_ID_ENABLED]) {
-//                [self authenticateWithTouchID];
-//            }
-//            #endif
-            authenticateWithBiometrics()
+            if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
+                config.isEnabled,
+                BlockchainSettings.App.shared.touchIDEnabled {
+                authenticateWithBiometrics()
+            }
         } else {
             NetworkManager.shared.checkForMaintenance(withCompletion: { response in
                 guard let message = response else { return }

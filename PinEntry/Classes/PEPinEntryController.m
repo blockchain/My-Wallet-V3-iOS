@@ -135,7 +135,13 @@ static PEViewController *VerifyController()
 
 - (void)setupQRCode
 {
-#ifdef ENABLE_SWIPE_TO_RECEIVE
+    AppFeatureConfiguration *swipeToReceiveConfiguration = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
+    if (!swipeToReceiveConfiguration.isEnabled) {
+        pinController.swipeLabel.hidden = YES;
+        pinController.swipeLabelImageView.hidden = YES;
+        return;
+    }
+
     if (self.verifyOnly &&
         BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled) {
         
@@ -180,10 +186,6 @@ static PEViewController *VerifyController()
         pinController.swipeLabel.hidden = YES;
         pinController.swipeLabelImageView.hidden = YES;
     }
-#else
-    pinController.swipeLabel.hidden = YES;
-    pinController.swipeLabelImageView.hidden = YES;
-#endif
 }
 
 - (void)addAddressToSwipeView:(BCSwipeAddressView *)swipeView assetType:(AssetType)assetType

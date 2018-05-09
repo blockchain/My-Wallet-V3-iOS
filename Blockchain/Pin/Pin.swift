@@ -57,12 +57,13 @@ class Pin {
         let value = NSData(bytes: dataPointer, length: data.count).hexadecimalString()
 
         WalletManager.shared.wallet.pinServerPutKey(onPinServerServer: key, value: value, pin: self.toString)
-        // TODO handle touch ID
-        //    #ifdef ENABLE_TOUCH_ID
-        //    if (BlockchainSettings.sharedAppInstance.touchIDEnabled) {
-        //        [KeychainItemWrapper setPINInKeychain:pin];
-        //    }
-        //    #endif
+
+        // Optionally save PIN in keychain if touch ID is enabled
+        if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
+            config.isEnabled,
+            BlockchainSettings.App.shared.touchIDEnabled {
+            KeychainItemWrapper.setPINInKeychain(self.toString)
+        }
     }
 }
 

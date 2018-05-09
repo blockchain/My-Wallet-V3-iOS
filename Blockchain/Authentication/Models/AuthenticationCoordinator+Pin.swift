@@ -27,12 +27,11 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         showVerifyingBusyView(withTimeout: 30)
 
-        // TODO: Handle touch ID
-        //        #ifdef ENABLE_TOUCH_ID
-        //        if (self.pinEntryViewController.verifyOptional) {
-        //            [KeychainItemWrapper setPINInKeychain:pin];
-        //        }
-        //        #endif
+        if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
+            config.isEnabled,
+            pinEntryController.verifyOptional {
+                KeychainItemWrapper.setPINInKeychain(pin.toString)
+        }
 
         guard let pinKey = BlockchainSettings.App.shared.pinKey else {
             return
@@ -261,16 +260,14 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             AlertViewPresenter.shared.standardError(message: error)
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
-            // TODO handle touch ID
-            // #ifdef ENABLE_TOUCH_ID
-            // if (self.pinEntryViewController.verifyOptional) {
-            //     BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
-            //     [[NSUserDefaults standardUserDefaults] synchronize];
-            //     [AuthenticationCoordinator.shared closePinEntryViewWithAnimated:YES];
-            //     [self showSettings];
-            //     return;
-            // }
-            // #endif
+            // Handle touch ID
+            if let config = AppFeatureConfigurator.shared.configuration(for: .touchId), config.isEnabled,
+                pinEntryViewController?.verifyOptional ?? false {
+                BlockchainSettings.App.shared.touchIDEnabled = true
+                closePinEntryView(animated: true)
+                AppCoordinator.shared.showSettingsView()
+                return
+            }
 
             // This is for change PIN - verify the password first, then show the enter screens
             if !(pinEntryViewController?.verifyOnly ?? false) {
@@ -291,27 +288,13 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
                 password: response.pinDecryptionValue,
                 pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
             )
-            if decryptedPassword?.count == 0 {
+
+            if let decryptedPassword = decryptedPassword, decryptedPassword.count > 0 {
+                tryToLoadWallet(password: decryptedPassword)
+            } else {
                 AlertViewPresenter.shared.standardError(message: LocalizationConstants.Authentication.Pin.decryptedPasswordLengthZero)
                 askIfUserWantsToResetPIN()
                 return
-            }
-
-            let appSettings = BlockchainSettings.App.shared
-            if let guid = appSettings.guid,
-                let sharedKey = appSettings.sharedKey {
-                walletManager.wallet.load(withGuid: guid, sharedKey: sharedKey, password: decryptedPassword)
-            } else {
-                if appSettings.guid == nil {
-                    print("failed to retrieve GUID from Keychain")
-                }
-                if appSettings.sharedKey == nil {
-                    print("failed to retrieve sharedKey from Keychain")
-                }
-                if appSettings.guid != nil && appSettings.sharedKey == nil {
-                    print("!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???")
-                }
-                AlertViewPresenter.shared.showKeychainReadError()
             }
 
             closePinEntryView(animated: true)
@@ -323,12 +306,29 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         pinViewControllerCallback?(pinSuccess)
         pinViewControllerCallback = nil
 
-        // TODO handle touch ID
-//        #ifdef ENABLE_TOUCH_ID
-//        if (!pinSuccess && self.pinEntryViewController.verifyOptional) {
-//            [KeychainItemWrapper removePinFromKeychain];
-//        }
-//        #endif
+        // Remove pin from keychain if needed
+        if !pinSuccess && pinEntryViewController?.verifyOptional ?? false {
+            KeychainItemWrapper.removePinFromKeychain()
+        }
+    }
+
+    private func tryToLoadWallet(password: String) {
+        let appSettings = BlockchainSettings.App.shared
+        if let guid = appSettings.guid,
+            let sharedKey = appSettings.sharedKey {
+            walletManager.wallet.load(withGuid: guid, sharedKey: sharedKey, password: password)
+        } else {
+            if appSettings.guid == nil {
+                print("failed to retrieve GUID from Keychain")
+            }
+            if appSettings.sharedKey == nil {
+                print("failed to retrieve sharedKey from Keychain")
+            }
+            if appSettings.guid != nil && appSettings.sharedKey == nil {
+                print("!!! Failed to retrieve sharedKey from Keychain but was able to retreive GUID ???")
+            }
+            AlertViewPresenter.shared.showKeychainReadError()
+        }
     }
 
     private func askIfUserWantsToResetPIN() {

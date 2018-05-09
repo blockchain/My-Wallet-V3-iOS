@@ -1,5 +1,5 @@
 //
-//  AuthenticationCoordinator+TouchID.swift
+//  AuthenticationCoordinator+Biometrics.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 4/30/18.

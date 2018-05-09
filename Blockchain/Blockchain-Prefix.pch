@@ -14,12 +14,6 @@
     #import "LocalizationConstants.h"
 #endif
 
-#define ENABLE_TRANSFER_FUNDS 1
-// #define ENABLE_TRANSACTION_FETCHING 1
-#define ENABLE_SWIPE_TO_RECEIVE 1
-#define ENABLE_TOUCH_ID 1
-// #define ENABLE_CONTACTS 1
-
 #define APP_STORE_LINK_PREFIX @"itms-apps://itunes.apple.com/app/"
 #define APP_STORE_ID @"id493253309"
 

@@ -37,16 +37,6 @@ const int securityTwoStep = 0;
 const int securityPasswordChange = 1;
 const int securityWalletRecoveryPhrase = 2;
 const int PINChangePIN = 3;
-#if defined(ENABLE_TOUCH_ID) && defined(ENABLE_SWIPE_TO_RECEIVE)
-const int PINTouchID = 4;
-const int PINSwipeToReceive = 5;
-#elif ENABLE_TOUCH_ID
-const int PINTouchID = 4;
-const int PINSwipeToReceive = -1;
-#elif ENABLE_SWIPE_TO_RECEIVE
-const int PINSwipeToReceive = 4;
-const int PINTouchID = -1;
-#endif
 
 const int aboutSection = 3;
 const int aboutUs = 0;
@@ -70,9 +60,36 @@ const int aboutPrivacyPolicy = 2;
 @property (nonatomic) BOOL isEnablingTwoStepSMS;
 @property (nonatomic) BackupNavigationViewController *backupController;
 
+@property (readonly, nonatomic) int PINTouchID;
+@property (readonly, nonatomic) int PINSwipeToReceive;
+
 @end
 
 @implementation SettingsTableViewController
+
+- (int)PINTouchID
+{
+    AppFeatureConfiguration *touchIDConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTouchId];
+    AppFeatureConfiguration *swipeToReceiveConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
+    if (touchIDConfig.isEnabled && swipeToReceiveConfig.isEnabled) {
+        return 4;
+    } else if (touchIDConfig.isEnabled) {
+        return 4;
+    }
+    return -1;
+}
+
+- (int)PINSwipeToReceive
+{
+    AppFeatureConfiguration *touchIDConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTouchId];
+    AppFeatureConfiguration *swipeToReceiveConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
+    if (touchIDConfig.isEnabled && swipeToReceiveConfig.isEnabled) {
+        return 5;
+    } else if (touchIDConfig.isEnabled) {
+        return -1;
+    }
+    return 4;
+}
 
 - (void)viewDidLoad
 {
@@ -544,7 +561,7 @@ const int aboutPrivacyPolicy = 2;
             }
         }]];
         [swipeToReceiveAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:PINSwipeToReceive inSection:sectionSecurity];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINSwipeToReceive inSection:sectionSecurity];
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
         [self presentViewController:swipeToReceiveAlert animated:YES completion:nil];
@@ -569,7 +586,7 @@ const int aboutPrivacyPolicy = 2;
 
         UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorString preferredStyle:UIAlertControllerStyleAlert];
         [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:PINTouchID inSection:sectionSecurity];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
         [self presentViewController:alertTouchIDError animated:YES completion:nil];
@@ -583,7 +600,7 @@ const int aboutPrivacyPolicy = 2;
     if (!(touchIDEnabled == YES)) {
         UIAlertController *alertForTogglingTouchID = [UIAlertController alertControllerWithTitle:BC_STRING_SETTINGS_PIN_USE_TOUCH_ID_AS_PIN message:BC_STRING_TOUCH_ID_WARNING preferredStyle:UIAlertControllerStyleAlert];
         [alertForTogglingTouchID addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:PINTouchID inSection:sectionSecurity];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
         [alertForTogglingTouchID addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -1097,9 +1114,9 @@ const int aboutPrivacyPolicy = 2;
         case sectionSecurity: {
             NSInteger numberOfRows = 0;
 
-            if (PINTouchID > 0 && PINSwipeToReceive > 0) {
+            if (self.PINTouchID > 0 && self.PINSwipeToReceive > 0) {
                 numberOfRows = 5;
-            } else if (PINTouchID > 0 || PINSwipeToReceive > 0) {
+            } else if (self.PINTouchID > 0 || self.PINSwipeToReceive > 0) {
                 numberOfRows = 4;
             } else {
                 numberOfRows = 3;
@@ -1264,7 +1281,7 @@ const int aboutPrivacyPolicy = 2;
                 cell.textLabel.text = BC_STRING_CHANGE_PIN;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 return cell;
-            } else if (indexPath.row == PINTouchID) {
+            } else if (indexPath.row == self.PINTouchID) {
                 cell.textLabel.adjustsFontSizeToFitWidth = YES;
                 cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1276,7 +1293,7 @@ const int aboutPrivacyPolicy = 2;
                 [switchForTouchID addTarget:self action:@selector(switchTouchIDTapped) forControlEvents:UIControlEventTouchUpInside];
                 cell.accessoryView = switchForTouchID;
                 return cell;
-            } else if (indexPath.row == PINSwipeToReceive) {
+            } else if (indexPath.row == self.PINSwipeToReceive) {
                 cell.textLabel.adjustsFontSizeToFitWidth = YES;
                 cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;

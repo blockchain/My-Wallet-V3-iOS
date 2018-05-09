@@ -56,17 +56,19 @@
     [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topBar addSubview:backButton];
     self.backButton = backButton;
-#ifdef ENABLE_TRANSFER_FUNDS
-    UIButton *warningButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    warningButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    warningButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-    [warningButton.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE_MEDIUM]];
-    [warningButton setImage:[UIImage imageNamed:@"warning"] forState:UIControlStateNormal];
-    [warningButton addTarget:self action:@selector(transferAllFundsWarningClicked) forControlEvents:UIControlEventTouchUpInside];
-    [topBar addSubview:warningButton];
-    warningButton.hidden = YES;
-    self.warningButton = warningButton;
-#endif
+
+    AppFeatureConfiguration *transferFundsConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTransferFundsFromImportedAddress];
+    if (transferFundsConfig.isEnabled) {
+        UIButton *warningButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        warningButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        warningButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
+        [warningButton.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE_MEDIUM]];
+        [warningButton setImage:[UIImage imageNamed:@"warning"] forState:UIControlStateNormal];
+        [warningButton addTarget:self action:@selector(transferAllFundsWarningClicked) forControlEvents:UIControlEventTouchUpInside];
+        [topBar addSubview:warningButton];
+        warningButton.hidden = YES;
+        self.warningButton = warningButton;
+    }
 
     CGFloat assetSelectorViewHorizontalPadding = 8;
     self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(assetSelectorViewHorizontalPadding, headerLabel.frame.origin.y + headerLabel.frame.size.height + 8, self.view.frame.size.width - assetSelectorViewHorizontalPadding*2, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:AssetTypeBitcoin], [NSNumber numberWithInteger:AssetTypeBitcoinCash]] delegate:self];
@@ -186,7 +188,11 @@
 
 - (void)alertUserToTransferAllFunds:(BOOL)userClicked
 {
-#ifdef ENABLE_TRANSFER_FUNDS
+    AppFeatureConfiguration *transferFundsConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTransferFundsFromImportedAddress];
+    if (!transferFundsConfig.isEnabled) {
+        return;
+    }
+
     UIAlertController *alertToTransfer = [UIAlertController alertControllerWithTitle:BC_STRING_TRANSFER_FUNDS message:[NSString stringWithFormat:@"%@\n\n%@", BC_STRING_TRANSFER_FUNDS_DESCRIPTION_ONE, BC_STRING_TRANSFER_FUNDS_DESCRIPTION_TWO] preferredStyle:UIAlertControllerStyleAlert];
     [alertToTransfer addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
     [alertToTransfer addAction:[UIAlertAction actionWithTitle:BC_STRING_TRANSFER_FUNDS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -200,7 +206,6 @@
     }
     
     [self presentViewController:alertToTransfer animated:YES completion:nil];
-#endif
 }
 
 #pragma mark - Transfer Funds
