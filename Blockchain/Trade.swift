@@ -12,7 +12,7 @@ import Foundation
 // TODO: integrate with Exchange trades.
 struct Trade {
 
-    private struct Keys {
+    struct Keys {
         static let created = "createdAt"
         static let receiveAddress = "receiveAddress"
         static let tradeHash = "txHash"
