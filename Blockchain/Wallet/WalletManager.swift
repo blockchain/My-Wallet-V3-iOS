@@ -183,8 +183,8 @@ extension WalletManager: WalletDelegate {
             print("trade date not found")
             return
         }
-        let trade = Trade(date: date, hash: hash)
-        buySellDelegate?.didCompleteTrade(trade: trade)
+        let tradeObj = Trade(date: date, hash: hash)
+        buySellDelegate?.didCompleteTrade(trade: tradeObj)
     }
 
     func showCompletedTrade(_ txHash: String) {
