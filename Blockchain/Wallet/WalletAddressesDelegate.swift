@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Protocol definition for a delegate for pin entry-related wallet callbacks
+/// Protocol definition for a delegate for addresses-related wallet callbacks
 @objc protocol WalletAddressesDelegate: class {
     
     /// Method invoked when generating a new address (V2/legacy wallet only)
