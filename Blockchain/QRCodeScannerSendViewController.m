@@ -74,7 +74,7 @@
     [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
     
     // Go to the send screen if we are not already on it
-    [app showSendCoins];
+    [AppCoordinator.sharedInstance.tabControllerManager showSendCoinsAnimated:YES];
 }
 
 @end

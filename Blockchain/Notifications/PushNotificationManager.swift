@@ -35,13 +35,9 @@ class PushNotificationManager: NSObject {
         return shared
     }
 
-    /// UNNotification that is to be presented to the user
-    @objc var presentingPushNotification: UNNotification?
-
     /// Requests permission from the user to grant access to receive push notifications
     func requestAuthorization() {
         let userNotificationCenter = UNUserNotificationCenter.current()
-        userNotificationCenter.delegate = self
         userNotificationCenter.requestAuthorization(options: [.sound, .alert, .badge]) { _, error in
             guard error == nil else {
                 print("Push registration FAILED")
@@ -53,17 +49,5 @@ class PushNotificationManager: NSObject {
                 UIApplication.shared.registerForRemoteNotifications()
             }
         }
-    }
-}
-
-@available(iOS 10.0, *)
-extension PushNotificationManager: UNUserNotificationCenterDelegate {
-
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) {
-        presentingPushNotification = notification
     }
 }

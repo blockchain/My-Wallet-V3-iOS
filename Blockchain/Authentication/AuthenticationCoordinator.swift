@@ -16,6 +16,8 @@ import Foundation
         return shared
     }
 
+    var postAuthenticationRoute: PostAuthenticationRoute?
+
     var lastEnteredPIN: Pin?
 
     /// Authentication handler - this should not be a property of AuthenticationCoordinator
@@ -74,10 +76,9 @@ import Foundation
             ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
         }
 
-        // TODO
-//        let tabControllerManager = AppCoordinator.shared.tabControllerManager
-//        tabControllerManager.sendBitcoinViewController.reload()
-//        tabControllerManager.sendBitcoinCashViewController.reload()
+        let tabControllerManager = AppCoordinator.shared.tabControllerManager
+        tabControllerManager.sendBitcoinViewController?.reload()
+        tabControllerManager.sendBitcoinCashViewController?.reload()
 
         // Enabling touch ID and immediately backgrounding the app hides the status bar
         UIApplication.shared.setStatusBarHidden(false, with: .slide)
@@ -89,13 +90,14 @@ import Foundation
             LegacyPushNotificationManager.shared.requestAuthorization()
         }
 
-        // TODO
-        // if (showType == ShowTypeSendCoins) {
-        //     [self showSendCoins];
-        // } else if (showType == ShowTypeNewPayment) {
-        //     [self.tabControllerManager showTransactionsAnimated:YES];
-        // }
-        // showType = ShowTypeNone;
+        // Handle post authentication route, if any
+        if let route = strongSelf.postAuthenticationRoute {
+            switch route {
+            case .sendCoins:
+                tabControllerManager.showSendCoins(animated: true)
+            }
+            strongSelf.postAuthenticationRoute = nil
+        }
 
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController,
             BlockchainSettings.App.shared.isPinSet,

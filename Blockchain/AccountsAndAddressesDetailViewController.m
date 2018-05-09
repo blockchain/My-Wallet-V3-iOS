@@ -154,8 +154,8 @@ typedef enum {
     [self dismissViewControllerAnimated:YES completion:^{
         [[AppCoordinator sharedInstance] closeSideMenu];
     }];
-    
-    [app showSendCoins];
+
+    [AppCoordinator.sharedInstance.tabControllerManager showSendCoinsAnimated:YES];
 
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     [tabControllerManager transferFundsToDefaultAccountFromAddress:self.address];

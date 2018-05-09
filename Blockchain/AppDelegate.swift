@@ -215,8 +215,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
 
-            // TODO handle show type
-            //        showType = ShowTypeSendCoins;
+            AuthenticationCoordinator.shared.postAuthenticationRoute = .sendCoins
 
             AppCoordinator.shared.tabControllerManager.setupBitcoinPaymentFromURLHandler(
                 withAmountString: bitcoinUrlPayload.amount,

@@ -179,7 +179,7 @@
 
 //- (void)pushWebViewController:(NSString*)url title:(NSString *)title;
 
-- (void)showSendCoins;
+//- (void)showSendCoins;
 - (void)showAccountsAndAddresses;
 //- (void)showHdUpgrade;
 //- (void)showDebugMenu:(int)presenter;

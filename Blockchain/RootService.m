@@ -57,14 +57,14 @@ RootService * app;
 //@synthesize modalView;
 //@synthesize latestResponse;
 
-typedef enum {
-    ShowTypeNone = 100,
-    ShowTypeSendCoins = 200,
-//    ShowTypeNewContact = 300,
-    ShowTypeNewPayment = 400
-} ShowType;
-
-ShowType showType;
+//typedef enum {
+//    ShowTypeNone = 100,
+//    ShowTypeSendCoins = 200,
+////    ShowTypeNewContact = 300,
+//    ShowTypeNewPayment = 400
+//} ShowType;
+//
+//ShowType showType;
 
 enum {
     ShowReminderTypeNone,
@@ -424,8 +424,8 @@ SideMenuViewController *sideMenuViewController;
     // [rootService applicationDidBecomeActive:application];
 //}
 
-- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-{
+//- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+//{
 //    if (![BlockchainSettings sharedAppInstance].isPinSet) {
 //        if ([[url absoluteString] isEqualToString:[NSString stringWithFormat:@"%@%@", PREFIX_BLOCKCHAIN_WALLET_URI, @"loginAuthorized"]]) {
 //            [self manualPairClicked:nil];
@@ -453,12 +453,12 @@ SideMenuViewController *sideMenuViewController;
 //    NSString * addr = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
 //    NSString * amount = [dict objectForKey:DICTIONARY_KEY_AMOUNT];
 //
-    showType = ShowTypeSendCoins;
+//    showType = ShowTypeSendCoins;
 //
 //    [self.tabControllerManager setupBitcoinPaymentFromURLHandlerWithAmountString:amount address:addr];
 //
 //    return YES;
-}
+//}
 
 //- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 //{
@@ -974,8 +974,8 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 //
-- (void)walletDidFinishLoad
-{
+//- (void)walletDidFinishLoad
+//{
 //    DLog(@"walletDidFinishLoad");
 
 //    WalletManager.sharedInstance.wallet.btcSwipeAddressToSubscribe = nil;
@@ -1047,7 +1047,7 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //
 //    [WalletManager.sharedInstance.wallet loadContactsThenGetMessages];
-}
+//}
 
 - (void)didGetMultiAddressResponse:(MultiAddressResponse*)response
 {
@@ -1463,9 +1463,9 @@ SideMenuViewController *sideMenuViewController;
 //
 //    [self.modalChain removeAllObjects];
 //}
-
-- (void)closeModalWithTransition:(NSString *)transition
-{
+//
+//- (void)closeModalWithTransition:(NSString *)transition
+//{
 //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MODAL_VIEW_DISMISSED object:nil];
 //
 //    [modalView removeFromSuperview];
@@ -1509,20 +1509,20 @@ SideMenuViewController *sideMenuViewController;
 //    else {
 //        self.modalView = nil;
 //    }
-}
-
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText
-{
-    [self showModalWithContent:(BCModalContentView *)contentView closeType:closeType showHeader:YES headerText:headerText onDismiss:nil onResume:nil];
-}
-
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume
-{
-    [self showModalWithContent:(BCModalContentView *)contentView closeType:closeType showHeader:YES headerText:headerText onDismiss:onDismiss onResume:onResume];
-}
-
-- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume
-{
+//}
+//
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText
+//{
+//    [self showModalWithContent:(BCModalContentView *)contentView closeType:closeType showHeader:YES headerText:headerText onDismiss:nil onResume:nil];
+//}
+//
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume
+//{
+//    [self showModalWithContent:(BCModalContentView *)contentView closeType:closeType showHeader:YES headerText:headerText onDismiss:onDismiss onResume:onResume];
+//}
+//
+//- (void)showModalWithContent:(UIView *)contentView closeType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText onDismiss:(void (^)())onDismiss onResume:(void (^)())onResume
+//{
 //    // Remove the modal if we have one
 //    if (modalView) {
 //        [modalView removeFromSuperview];
@@ -1577,7 +1577,7 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-}
+//}
 
 - (void)didFailBackupWallet
 {
@@ -2619,10 +2619,10 @@ SideMenuViewController *sideMenuViewController;
     [self.tabControllerManager showTransactionsAnimated:YES];
 }
 
-- (void)showSendCoins
-{
-    [self.tabControllerManager showSendCoinsAnimated:YES];
-}
+//- (void)showSendCoins
+//{
+//    [self.tabControllerManager showSendCoinsAnimated:YES];
+//}
 
 //- (void)showDebugMenu:(int)presenter
 //{
@@ -2850,12 +2850,12 @@ SideMenuViewController *sideMenuViewController;
 //    [self.window.rootViewController presentViewController:recoveryWarningAlert animated:YES completion:nil];
 //}
 //
-- (IBAction)manualPairClicked:(id)sender
-{
+//- (IBAction)manualPairClicked:(id)sender
+//{
 //    [self showModalWithContent:manualPairView closeType:ModalCloseTypeBack headerText:BC_STRING_MANUAL_PAIRING];
 //    WalletManager.sharedInstance.wallet.twoFactorInput = nil;
 //    [manualPairView clearPasswordTextField];
-}
+//}
 //
 //- (void)showNewWalletSetup
 //{
