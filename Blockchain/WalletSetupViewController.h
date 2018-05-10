@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol SetupDelegate
-- (BOOL)enableTouchIDClicked;
+- (void)enableTouchIDClicked:(void (^_Nonnull)(BOOL success))completion;
 @end
 
 @interface WalletSetupViewController : UIViewController

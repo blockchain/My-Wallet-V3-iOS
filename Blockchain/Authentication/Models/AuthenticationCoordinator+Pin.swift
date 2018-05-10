@@ -9,6 +9,37 @@
 import Foundation
 
 extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
+
+    /// Coordinates the pin validation flow. Primarily used to validate the user's PIN code
+    /// when enabling touch ID.
+    @objc func validatePin() {
+        let pinController = PEPinEntryController.pinVerifyControllerClosable()!
+        pinController.pinDelegate = self
+        pinController.isNavigationBarHidden = true
+
+        let peViewController = pinController.viewControllers[0] as! PEViewController
+        peViewController.cancelButton.isHidden = false
+        peViewController.cancelButton.addTarget(self, action: #selector(onValidatePinCloseButtonTapped), for: .touchUpInside)
+        peViewController.modalTransitionStyle = .coverVertical
+
+        self.pinEntryViewController = pinController
+
+        AppCoordinator.shared.tabControllerManager.tabViewController.dismiss(animated: true)
+
+        if WalletManager.shared.wallet.isSyncing {
+            LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.syncingWallet)
+        }
+
+        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(pinController.view)
+        UIApplication.shared.statusBarStyle = .default
+    }
+
+    @objc func onValidatePinCloseButtonTapped() {
+        AppCoordinator.shared.showSettingsView()
+    }
+
+    // MARK: - PEPinEntryControllerDelegate
+
     func pinEntryController(
         _ pinEntryController: PEPinEntryController!,
         shouldAcceptPin pinInt: UInt,
@@ -30,7 +61,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
             config.isEnabled,
             pinEntryController.verifyOptional {
-                KeychainItemWrapper.setPINInKeychain(pin.toString)
+            pin.saveToKeychain()
         }
 
         guard let pinKey = BlockchainSettings.App.shared.pinKey else {
@@ -208,8 +239,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
         let inSettings = pinEntryViewController?.inSettings ?? false
         if inSettings {
-            // TODO migrate this
-            // [self showSettings];
+            AppCoordinator.shared.showSettingsView()
         }
 
         // Encrypt the wallet password with the random value

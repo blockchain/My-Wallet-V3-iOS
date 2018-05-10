@@ -10,7 +10,7 @@
 
 @implementation UIApplication (Suspend)
 
-- (void)suspend
+- (void)suspendApp
 {
     [self performSelector:@selector(suspend)];
 }

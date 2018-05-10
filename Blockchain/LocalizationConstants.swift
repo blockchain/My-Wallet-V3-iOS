@@ -22,14 +22,6 @@ let LCStringAuthGenericError = NSLocalizedString("Authentication Failed. Please 
 let LCStringAuthAuthenticationFailed = NSLocalizedString("Authentication was not successful because the user failed to provide valid credentials.", comment: "")
 let LCStringAuthPasscodeNotSet = NSLocalizedString("Failed to Authenticate because a passcode has not been set on the device.", comment: "")
 
-//: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
-let LCStringAuthTouchIDLockout = NSLocalizedString("Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID", comment: "")
-let LCStringAuthTouchIDNotAvailable = NSLocalizedString("Unable to Authenticate because Touch ID is not available on the device.", comment: "")
-
-//: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)
-let LCStringAuthBiometryLockout = NSLocalizedString("Unable to Authenticate due to failing Authentication too many times.", comment: "")
-let LCStringAuthBiometryNotAvailable = NSLocalizedString("Unable to Authenticate because the device does not support biometric Authentication.", comment: "")
-
 //: Onboarding
 struct LocalizationConstants {
     static let information = NSLocalizedString("Information", comment: "")
@@ -100,6 +92,18 @@ struct LocalizationConstants {
             static let validationError = NSLocalizedString("PIN Validation Error", comment: "")
             static let validationErrorMessage = NSLocalizedString("An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", comment: "")
         }
+    }
+
+    struct Biometrics {
+        static let touchIDEnableInstructions = NSLocalizedString("Touch ID is not enabled on this device. To enable Touch ID, go to Settings -> Touch ID & Passcode and add a fingerprint.", comment: "")
+
+        //: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)
+        static let biometricsLockout = NSLocalizedString("Unable to Authenticate due to failing Authentication too many times.", comment: "")
+        static let biometricsNotSupported = NSLocalizedString("Unable to Authenticate because the device does not support biometric Authentication.", comment: "")
+        static let unableToUseBiometrics = NSLocalizedString("Unable to use biometrics.", comment: "")
+
+        //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
+        static let touchIDLockout = NSLocalizedString("Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID", comment: "")
     }
 
     struct Onboarding {

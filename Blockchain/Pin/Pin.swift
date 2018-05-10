@@ -62,8 +62,12 @@ class Pin {
         if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
             config.isEnabled,
             BlockchainSettings.App.shared.touchIDEnabled {
-            KeychainItemWrapper.setPINInKeychain(self.toString)
+            saveToKeychain()
         }
+    }
+
+    func saveToKeychain() {
+        KeychainItemWrapper.setPINInKeychain(self.toString)
     }
 }
 

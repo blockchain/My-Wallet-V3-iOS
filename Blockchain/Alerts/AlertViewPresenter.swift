@@ -67,7 +67,7 @@ import Foundation
             title: LocalizationConstants.Authentication.failedToLoadWallet
         ) { _ in
             // Close App
-            UIApplication.shared.suspend()
+            UIApplication.shared.suspendApp()
         }
     }
 

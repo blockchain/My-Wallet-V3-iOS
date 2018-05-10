@@ -2902,30 +2902,30 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 
-- (void)validatePINOptionally
-{
-    PEPinEntryController *pinVerifyPINOptionalController = [PEPinEntryController pinVerifyControllerClosable];
-    pinVerifyPINOptionalController.pinDelegate = self;
-    pinVerifyPINOptionalController.navigationBarHidden = YES;
-
-    PEViewController *peViewController = (PEViewController *)[[pinVerifyPINOptionalController viewControllers] objectAtIndex:0];
-    peViewController.cancelButton.hidden = NO;
-    [peViewController.cancelButton addTarget:self action:@selector(showSettings) forControlEvents:UIControlEventTouchUpInside];
-
-    self.pinEntryViewController = pinVerifyPINOptionalController;
-
-    peViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-
-    [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
-
-    if (WalletManager.sharedInstance.wallet.isSyncing) {
-        [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
-    }
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
-
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-}
+//- (void)validatePINOptionally
+//{
+//    PEPinEntryController *pinVerifyPINOptionalController = [PEPinEntryController pinVerifyControllerClosable];
+//    pinVerifyPINOptionalController.pinDelegate = self;
+//    pinVerifyPINOptionalController.navigationBarHidden = YES;
+//
+//    PEViewController *peViewController = (PEViewController *)[[pinVerifyPINOptionalController viewControllers] objectAtIndex:0];
+//    peViewController.cancelButton.hidden = NO;
+//    [peViewController.cancelButton addTarget:self action:@selector(showSettings) forControlEvents:UIControlEventTouchUpInside];
+//
+//    self.pinEntryViewController = pinVerifyPINOptionalController;
+//
+//    peViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//
+//    [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
+//
+//    if (WalletManager.sharedInstance.wallet.isSyncing) {
+//        [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+//    }
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
+//
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+//}
 
 - (void)changePIN
 {
@@ -3103,32 +3103,32 @@ SideMenuViewController *sideMenuViewController;
 //
 //    mainPasswordTextField.text = nil;
 //}
+//
+//- (NSString *)checkForTouchIDAvailablility
+//{
+//    LAContext *context = [[LAContext alloc] init];
+//
+//    NSError *error = nil;
+//    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+//        return nil;
+//    } else {
+//        if (error.code == LAErrorTouchIDNotAvailable) {
+//            return BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE;
+//        } else if (error.code == LAErrorTouchIDNotEnrolled) {
+//            return BC_STRING_TOUCH_ID_ERROR_MUST_ENABLE;
+//        } else if (error.code == LAErrorTouchIDLockout) {
+//            return BC_STRING_TOUCH_ID_ERROR_LOCKED;
+//        }
+//
+//        return BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE;
+//        DLog(@"%@", [NSString stringWithFormat:BC_STRING_TOUCH_ID_ERROR_UNKNOWN_ARGUMENT, (long)error.code]);
+//    }
+//}
 
-- (NSString *)checkForTouchIDAvailablility
-{
-    LAContext *context = [[LAContext alloc] init];
-
-    NSError *error = nil;
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        return nil;
-    } else {
-        if (error.code == LAErrorTouchIDNotAvailable) {
-            return BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE;
-        } else if (error.code == LAErrorTouchIDNotEnrolled) {
-            return BC_STRING_TOUCH_ID_ERROR_MUST_ENABLE;
-        } else if (error.code == LAErrorTouchIDLockout) {
-            return BC_STRING_TOUCH_ID_ERROR_LOCKED;
-        }
-
-        return BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE;
-        DLog(@"%@", [NSString stringWithFormat:BC_STRING_TOUCH_ID_ERROR_UNKNOWN_ARGUMENT, (long)error.code]);
-    }
-}
-
-- (void)disabledTouchID
-{
-    [KeychainItemWrapper removePinFromKeychain];
-}
+//- (void)disabledTouchID
+//{
+//    [KeychainItemWrapper removePinFromKeychain];
+//}
 
 //- (void)verifyTwoFactorSMS
 //{
@@ -3682,24 +3682,24 @@ SideMenuViewController *sideMenuViewController;
 //    return self.window.frame;
 //}
 
-- (BOOL)enableTouchIDClicked
-{
-    NSString *errorString = [app checkForTouchIDAvailablility];
-    if (!errorString) {
-        BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
-        NSString * pin = [NSString stringWithFormat:@"%lu", (unsigned long)self.lastEnteredPIN];
-        [KeychainItemWrapper setPINInKeychain:pin];
-        return YES;
-    } else {
-        UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorString preferredStyle:UIAlertControllerStyleAlert];
-        [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-        [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alertTouchIDError animated:YES completion:nil];
-
-        BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = YES;
-
-        return NO;
-    }
-}
+//- (BOOL)enableTouchIDClicked
+//{
+//    NSString *errorString = [app checkForTouchIDAvailablility];
+//    if (!errorString) {
+//        BlockchainSettings.sharedAppInstance.touchIDEnabled = YES;
+//        NSString * pin = [NSString stringWithFormat:@"%lu", (unsigned long)self.lastEnteredPIN];
+//        [KeychainItemWrapper setPINInKeychain:pin];
+//        return YES;
+//    } else {
+//        UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorString preferredStyle:UIAlertControllerStyleAlert];
+//        [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//        [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alertTouchIDError animated:YES completion:nil];
+//
+//        BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = YES;
+//
+//        return NO;
+//    }
+//}
 
 //- (void)openMailClicked
 //{

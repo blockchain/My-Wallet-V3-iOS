@@ -25,6 +25,8 @@ final class AuthenticationManager: NSObject {
     /// The instance variable used to access functions of the `AuthenticationManager` class.
     static let shared = AuthenticationManager()
 
+    @objc class func sharedInstance() -> AuthenticationManager { return shared }
+
     /**
      The type alias for the closure used in:
      * `authenticateUsingBiometrics(andReply:)`
@@ -95,11 +97,25 @@ final class AuthenticationManager: NSObject {
             handler(false, nil, preFlightError(forError: preflightError!.code)); return
         }
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: authenticationReason, reply: { authenticated, error in
-            if let authError = error {
-                handler(false, nil, self.authenticationError(forError: authError)); return
+            DispatchQueue.main.async {
+                if let authError = error {
+                    handler(false, nil, self.authenticationError(forError: authError)); return
+                }
+                handler(authenticated, nil, nil)
             }
-            handler(authenticated, nil, nil)
         })
+    }
+
+    /// Evaluates whether the device owner can authenticate using biometrics.
+    ///
+    /// - Parameter handler: invoked with an AuthenticationError if the user cannot authenticate using biometrics, otherwise, nil
+    @objc func canAuthenticateUsingBiometry(andReply handler: @escaping ((_ success: Bool, _ errorMessage: String?) -> Void)) {
+        context = LAContext()
+        guard canAuthenticateUsingBiometry() else {
+            handler(false, preFlightError(forError: preflightError!.code).description)
+            return
+        }
+        handler(true, nil)
     }
 
     /**
@@ -163,9 +179,9 @@ final class AuthenticationManager: NSObject {
         if #available(iOS 11.0, *) {
             switch code {
             case LAError.biometryLockout.rawValue:
-                return AuthenticationError(code: code, description: LCStringAuthBiometryLockout)
+                return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.biometricsLockout)
             case LAError.biometryNotAvailable.rawValue:
-                return AuthenticationError(code: code, description: LCStringAuthBiometryNotAvailable)
+                return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.biometricsNotSupported)
             case LAError.biometryNotEnrolled.rawValue:
                 return AuthenticationError(code: code, description: nil)
             default:
@@ -184,11 +200,11 @@ final class AuthenticationManager: NSObject {
     private func preFlightError(forDeprecatedError code: Int) -> AuthenticationError {
         switch code {
         case LAError.touchIDLockout.rawValue:
-            return AuthenticationError(code: code, description: LCStringAuthTouchIDLockout)
+            return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.touchIDLockout)
         case LAError.touchIDNotAvailable.rawValue:
-            return AuthenticationError(code: code, description: LCStringAuthBiometryNotAvailable)
+            return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.biometricsNotSupported)
         case LAError.touchIDNotEnrolled.rawValue:
-            return AuthenticationError(code: code, description: nil)
+            return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.touchIDEnableInstructions)
         default:
             return genericAuthenticationError
         }

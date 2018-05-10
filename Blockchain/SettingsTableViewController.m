@@ -578,19 +578,19 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)switchTouchIDTapped
 {
-    NSString *errorString = [app checkForTouchIDAvailablility];
-    if (!errorString) {
-        [self toggleTouchID];
-    } else {
-        BlockchainSettings.sharedAppInstance.touchIDEnabled = NO;
-
-        UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorString preferredStyle:UIAlertControllerStyleAlert];
-        [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }]];
-        [self presentViewController:alertTouchIDError animated:YES completion:nil];
-    }
+    [AuthenticationManager.sharedInstance canAuthenticateUsingBiometryWithAndReply:^(BOOL success, NSString * _Nullable errorMessage) {
+        if (success) {
+            [self toggleTouchID];
+        } else {
+            BlockchainSettings.sharedAppInstance.touchIDEnabled = NO;
+            UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+            [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
+                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }]];
+            [self presentViewController:alertTouchIDError animated:YES completion:nil];
+        }
+    }];
 }
 
 - (void)toggleTouchID
@@ -604,11 +604,11 @@ const int aboutPrivacyPolicy = 2;
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
         [alertForTogglingTouchID addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [app validatePINOptionally];
+            [AuthenticationCoordinator.sharedInstance validatePin];
         }]];
         [self presentViewController:alertForTogglingTouchID animated:YES completion:nil];
     } else {
-        [app disabledTouchID];
+        [KeychainItemWrapper removePinFromKeychain];
         BlockchainSettings.sharedAppInstance.touchIDEnabled = !touchIDEnabled;
     }
 }

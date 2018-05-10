@@ -416,15 +416,10 @@
 #define BC_STRING_TOUCH_ID_AUTHENTICATE NSLocalizedString(@"Authenticate with Touch ID", nil)
 
 #define BC_STRING_FACE_ID_ERROR_LOCKED NSLocalizedString(@"Face ID has been locked due to too many failed attempts.", nil)
-#define BC_STRING_TOUCH_ID_ERROR_LOCKED NSLocalizedString(@"Touch ID has been locked due to too many failed attempts.", nil)
 // No longer needed
 #define BC_STRING_FACE_ID_ERROR_MUST_ENABLE NSLocalizedString(@"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint.", nil)
 // No longer needed
-#define BC_STRING_TOUCH_ID_ERROR_MUST_ENABLE NSLocalizedString(@"Touch ID is not enabled on this device. To enable Touch ID, go to Settings -> Touch ID & Passcode and add a fingerprint.", nil)
-// No longer needed
 #define BC_STRING_FACE_ID_ERROR_NOT_AVAILABLE NSLocalizedString(@"Face ID is not available on this device.", nil)
-// No longer needed
-#define BC_STRING_TOUCH_ID_ERROR_NOT_AVAILABLE NSLocalizedString(@"Touch ID is not available on this device.", nil)
 // No longer needed
 #define BC_STRING_FACE_ID_ERROR_UNKNOWN_ARGUMENT NSLocalizedString(@"Unknown Face ID error. Code: %ld", nil)
 // No longer needed

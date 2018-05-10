@@ -14,6 +14,6 @@
  Suspends the current UIApplication. Used mainly by legacy code and using this
  should be avoided if possible.
  */
-- (void)suspend;
+- (void)suspendApp;
 
 @end

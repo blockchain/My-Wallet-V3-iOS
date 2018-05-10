@@ -345,7 +345,6 @@ import Foundation
         // this is only used in didFinishLaunching so there is no delay when showing the PIN on start
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
         if asModal {
-
             // TODO handle settings navigation controller
 //            if ([_settingsNavigationController isBeingPresented]) {
 //                // Immediately after enabling touch ID, backgrounding the app while the Settings scren is still
@@ -489,7 +488,7 @@ import Foundation
         )
         alertController.addAction(
             UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { _ in
-                UIApplication.shared.suspend()
+                UIApplication.shared.suspendApp()
             }
         )
         topMostViewController.present(alertController, animated: true)
@@ -551,8 +550,26 @@ extension AuthenticationCoordinator: PasswordRequiredViewDelegate {
 }
 
 extension AuthenticationCoordinator: SetupDelegate {
-    func enableTouchIDClicked() -> Bool {
-        // TODO: handle touch ID
-        return false
+    func enableTouchIDClicked(_ completion: @escaping ((Bool) -> Void)) {
+        AuthenticationManager.shared.canAuthenticateUsingBiometry { success, error in
+            guard success else {
+
+                let errorMessage = error ?? LocalizationConstants.Biometrics.unableToUseBiometrics
+                AlertViewPresenter.shared.standardError(message: errorMessage)
+
+                BlockchainSettings.App.shared.didFailTouchIDSetup = true
+
+                completion(false)
+
+                return
+            }
+
+            BlockchainSettings.App.shared.touchIDEnabled = true
+
+            // Saving the last entered pin will store the pin in the user's keychain
+            self.lastEnteredPIN?.saveToKeychain()
+
+            completion(true)
+        }
     }
 }
