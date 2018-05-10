@@ -10,8 +10,7 @@
 #import "BCFadeView.h"
 #import "AssetSelectorView.h"
 
-@protocol WalletAddressesDelegate;
-@interface AccountsAndAddressesNavigationController : UINavigationController <TopViewController, WalletAddressesDelegate>
+@interface AccountsAndAddressesNavigationController : UINavigationController <TopViewController>
 @property (nonatomic) UILabel *headerLabel;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) UIButton *warningButton;

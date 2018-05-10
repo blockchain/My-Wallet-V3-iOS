@@ -15,7 +15,7 @@
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 
-@interface AccountsAndAddressesNavigationController () <AssetSelectorViewDelegate>
+@interface AccountsAndAddressesNavigationController () <AssetSelectorViewDelegate, WalletAddressesDelegate>
 @property (nonatomic, readwrite) AssetSelectorView *assetSelectorView;
 @property (nonatomic) UIView *topBar;
 @property (nonatomic) BOOL isOpeningSelector;

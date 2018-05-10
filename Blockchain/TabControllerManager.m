@@ -11,6 +11,8 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
+@interface TabControllerManager () <WalletSettingsDelegate>
+@end
 @implementation TabControllerManager
 
 - (instancetype)init
