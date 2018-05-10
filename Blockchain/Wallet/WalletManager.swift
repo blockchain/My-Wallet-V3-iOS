@@ -174,17 +174,12 @@ extension WalletManager: WalletDelegate {
         buySellDelegate?.initializeWebView()
     }
 
-    func didCompleteTrade(_ trade: [String: String]) {
-        guard let hash = trade[Trade.Keys.tradeHash] else {
-            print("trade hash not found")
+    func didCompleteTrade(_ tradeDict: [String: String]) {
+        guard let trade = Trade(dict: tradeDict) else {
+            print("Failed to create Trade object.")
             return
         }
-        guard let date = trade[Trade.Keys.created] else {
-            print("trade date not found")
-            return
-        }
-        let tradeObj = Trade(date: date, hash: hash)
-        buySellDelegate?.didCompleteTrade(trade: tradeObj)
+        buySellDelegate?.didCompleteTrade(trade: trade)
     }
 
     func showCompletedTrade(_ txHash: String) {
