@@ -2049,10 +2049,10 @@ SideMenuViewController *sideMenuViewController;
     [self.tabControllerManager didSetDefaultAccount];
 }
 
-- (void)didChangeLocalCurrency
-{
-    [self.tabControllerManager didChangeLocalCurrency];
-}
+//- (void)didChangeLocalCurrency
+//{
+//    [self.tabControllerManager didChangeLocalCurrency];
+//}
 
 //- (void)didCreateInvitation:(NSDictionary *)invitation
 //{

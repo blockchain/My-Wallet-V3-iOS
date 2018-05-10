@@ -78,6 +78,7 @@ import Foundation
         self.window.backgroundColor = UIColor.white
         super.init()
         self.walletManager.buySellDelegate = self
+        self.walletManager.settingsDelegate = self
     }
 
     // MARK: Public Methods
@@ -362,6 +363,12 @@ extension AppCoordinator: WalletBuySellDelegate {
         AppCoordinator.shared.closeSideMenu()
         AppCoordinator.shared.tabControllerManager.showTransactions(animated: true)
         AppCoordinator.shared.tabControllerManager.showTransactionDetail(forHash: tradeHash)
+    }
+}
+
+extension AppCoordinator: WalletSettingsDelegate {
+    func didChangeLocalCurrency() {
+        AppCoordinator.shared.tabControllerManager.didChangeLocalCurrency()
     }
 }
 
