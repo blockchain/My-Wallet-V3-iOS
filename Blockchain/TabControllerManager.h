@@ -23,7 +23,9 @@
 - (void)toggleSideMenu;
 @end
 
-@interface TabControllerManager : NSObject <AssetDelegate>
+@protocol WalletSettingsDelegate;
+
+@interface TabControllerManager : NSObject <AssetDelegate, WalletSettingsDelegate>
 @property (nonatomic) AssetType assetType;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
 

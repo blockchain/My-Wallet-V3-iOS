@@ -9,7 +9,7 @@
 import Foundation
 
 /// Protocol definition for a delegate for settings-related wallet callbacks
-protocol WalletSettingsDelegate: class {
+@objc protocol WalletSettingsDelegate: class {
     
     /// Method invoked when the web view needs to be initialized
     func didChangeLocalCurrency()
