@@ -21,16 +21,26 @@ extension AuthenticationCoordinator {
 
             self.pinEntryViewController?.view.isUserInteractionEnabled = true
 
-            if authenticated {
-                self.showVerifyingBusyView(withTimeout: 30)
+            guard authenticated else { return }
 
-                guard let pinKey = BlockchainSettings.App.shared.pinKey,
-                    let pin = KeychainItemWrapper.pinFromKeychain() else {
-                        AlertViewPresenter.shared.showKeychainReadError()
-                        return
+            self.showVerifyingBusyView(withTimeout: 30)
+
+            guard let pinKey = BlockchainSettings.App.shared.pinKey,
+                let pin = KeychainItemWrapper.pinFromKeychain() else {
+                    AlertViewPresenter.shared.showKeychainReadError()
+                    return
+            }
+
+            // Check for maintenance before allowing authentication.
+            NetworkManager.shared.checkForMaintenance(withCompletion: { response in
+                LoadingViewPresenter.shared.hideBusyView()
+                guard response == nil else {
+                    print("Error checking for maintenance in wallet options: %@", response!)
+                    AlertViewPresenter.shared.standardNotify(message: response!, title: LocalizationConstants.Errors.error, handler: nil)
+                    return
                 }
                 WalletManager.shared.wallet.apiGetPINValue(pinKey, pin: pin)
-            }
+            })
         }
     }
 
