@@ -10,6 +10,12 @@
 #import "RootService.h"
 #import "Blockchain-Swift.h"
 
+/* Temporary macros until file is deprecated */
+#define BC_STRING_SCAN_QR_CODE NSLocalizedString(@"Scan QR Code", comment: nil)
+#define PREFIX_BITCOIN_URI @"bitcoin:"
+#define BC_STRING_UNKNOWN_KEY_FORMAT NSLocalizedString(@"Unknown key format", comment: nil)
+#define BC_STRING_UNSUPPORTED_PRIVATE_KEY_FORMAT NSLocalizedString(@"Unsupported Private Key Format", comment: nil)
+
 @interface PrivateKeyReader()
 @property (nonatomic, copy) void (^onClose)();
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
