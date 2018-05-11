@@ -217,7 +217,7 @@
                                                  selector:@selector(promptForLabelAfterScan)
                                                      name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
         [WalletManager.sharedInstance.wallet addKey:keyString];
-    } error:nil acceptPublicKeys:YES busyViewText:BC_STRING_LOADING_IMPORT_KEY];
+    } error:nil acceptPublicKeys:YES busyViewText:[LocalizationConstantsObjcBridge loadingImportKey]];
     
     [[NSNotificationCenter defaultCenter] addObserver:reader selector:@selector(autoDismiss) name:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
     
