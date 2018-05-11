@@ -156,12 +156,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("applicationWillEnterForeground")
-
-        if BlockchainSettings.App.shared.isPinSet {
-            AuthenticationCoordinator.shared.authenticateWithBiometrics()
-            return
-        }
-
         if !WalletManager.shared.wallet.isInitialized() {
             if BlockchainSettings.App.shared.guid != nil && BlockchainSettings.App.shared.sharedKey != nil {
                 AuthenticationCoordinator.shared.start()

@@ -12,18 +12,20 @@ extension AuthenticationCoordinator {
     @objc internal func authenticateWithBiometrics() {
         pinEntryViewController?.view.isUserInteractionEnabled = false
         isPromptingForBiometricAuthentication = true
-        AuthenticationManager.shared.authenticateUsingBiometrics { authenticated, _, authenticationError in
-            self.isPromptingForBiometricAuthentication = false
+        AuthenticationManager.shared.authenticateUsingBiometrics { [weak self] authenticated, authenticationError in
+            guard let strongSelf = self else { return }
+
+            strongSelf.isPromptingForBiometricAuthentication = false
 
             if let error = authenticationError {
-                self.handleBiometricAuthenticationError(with: error)
+                strongSelf.handleBiometricAuthenticationError(with: error)
             }
 
-            self.pinEntryViewController?.view.isUserInteractionEnabled = true
+            strongSelf.pinEntryViewController?.view.isUserInteractionEnabled = true
 
             guard authenticated else { return }
 
-            self.showVerifyingBusyView(withTimeout: 30)
+            strongSelf.showVerifyingBusyView(withTimeout: 30)
 
             guard let pinKey = BlockchainSettings.App.shared.pinKey,
                 let pin = KeychainItemWrapper.pinFromKeychain() else {
@@ -31,16 +33,8 @@ extension AuthenticationCoordinator {
                     return
             }
 
-            // Check for maintenance before allowing authentication.
-            NetworkManager.shared.checkForMaintenance(withCompletion: { response in
-                LoadingViewPresenter.shared.hideBusyView()
-                guard response == nil else {
-                    print("Error checking for maintenance in wallet options: %@", response!)
-                    AlertViewPresenter.shared.standardNotify(message: response!, title: LocalizationConstants.Errors.error, handler: nil)
-                    return
-                }
-                WalletManager.shared.wallet.apiGetPINValue(pinKey, pin: pin)
-            })
+            let payload = PinPayload(pinCode: pin, pinKey: pinKey)
+            AuthenticationManager.shared.authenticate(using: payload, andReply: strongSelf.authHandler)
         }
     }
 

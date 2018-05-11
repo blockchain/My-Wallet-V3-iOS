@@ -30,9 +30,14 @@ final class AuthenticationManager: NSObject {
     /**
      The type alias for the closure used in:
      * `authenticateUsingBiometrics(andReply:)`
+     */
+    typealias BiometricsAuthHandler = (_ authenticated: Bool, _ error: AuthenticationError?) -> Void
+
+    /**
+     The type alias for the closure used in:
      * `authenticate(using:andReply:)`
      */
-    typealias Handler = (_ authenticated: Bool, _ twoFactorType: AuthenticationTwoFactorType?, _ error: AuthenticationError?) -> Void
+    typealias WalletAuthHandler = (_ authenticated: Bool, _ twoFactorType: AuthenticationTwoFactorType?, _ error: AuthenticationError?) -> Void
 
     /**
      The local authentication context.
@@ -64,7 +69,8 @@ final class AuthenticationManager: NSObject {
     /// The error object used prior to policy evaluation.
     var preflightError: NSError?
 
-    private var authHandler: Handler?
+    /// The handler invoked during wallet authentication
+    private var authHandler: WalletAuthHandler?
 
     private let walletManager: WalletManager
 
@@ -77,7 +83,7 @@ final class AuthenticationManager: NSObject {
     }
 
     /// Deprecate this method once the wallet creation process has been refactored
-    func setHandlerForWalletCreation(handler: @escaping Handler) {
+    func setHandlerForWalletCreation(handler: @escaping WalletAuthHandler) {
         self.authHandler = handler
     }
 
@@ -87,21 +93,21 @@ final class AuthenticationManager: NSObject {
      Authenticates the user using biometrics.
      - Parameter handler: The closure for the authentication reply.
      */
-    func authenticateUsingBiometrics(andReply handler: @escaping Handler) {
+    func authenticateUsingBiometrics(andReply handler: @escaping BiometricsAuthHandler) {
         context = LAContext()
         context.localizedFallbackTitle = LCStringAuthUsePasscode
         if #available(iOS 10.0, *) {
             context.localizedCancelTitle = LCStringAuthCancel
         }
         if !canAuthenticateUsingBiometry() {
-            handler(false, nil, preFlightError(forError: preflightError!.code)); return
+            handler(false, preFlightError(forError: preflightError!.code)); return
         }
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: authenticationReason, reply: { authenticated, error in
             DispatchQueue.main.async {
                 if let authError = error {
-                    handler(false, nil, self.authenticationError(forError: authError)); return
+                    handler(false, self.authenticationError(forError: authError)); return
                 }
-                handler(authenticated, nil, nil)
+                handler(authenticated, nil)
             }
         })
     }
@@ -134,7 +140,7 @@ final class AuthenticationManager: NSObject {
         - payload: The passcode payload used for authenticating the user.
         - handler: The completion handler for the authentication reply.
      */
-    func authenticate(using payload: PasscodePayload, andReply handler: @escaping Handler) {
+    func authenticate(using payload: PasscodePayload, andReply handler: @escaping WalletAuthHandler) {
 
         guard Reachability.hasInternetConnection() else {
             handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
@@ -152,6 +158,34 @@ final class AuthenticationManager: NSObject {
         authHandler = handler
 
         walletManager.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
+    }
+
+    // MARK: - Authentication with Pin
+
+    /// The function used to authenticate the user using a pin.
+    ///
+    /// - Parameters:
+    ///   - payload: The pin payload
+    ///   - handler: The completion handler
+    func authenticate(using payload: PinPayload, andReply handler: @escaping WalletAuthHandler) {
+        guard Reachability.hasInternetConnection() else {
+            handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
+            return
+        }
+
+        NetworkManager.shared.checkForMaintenance(withCompletion: { [weak self] response in
+            guard let strongSelf = self else { return }
+
+            guard response == nil else {
+                print("Error checking for maintenance in wallet options: %@", response!)
+                handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.walletMaintenance.rawValue, description: response!))
+                return
+            }
+
+            strongSelf.authHandler = handler
+
+            strongSelf.walletManager.wallet.apiGetPINValue(payload.pinKey, pin: payload.pinCode)
+        })
     }
 
     // MARK: - Authentication Errors

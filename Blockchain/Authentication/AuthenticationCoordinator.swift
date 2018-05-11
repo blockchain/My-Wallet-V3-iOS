@@ -23,7 +23,7 @@ import Foundation
     /// Authentication handler - this should not be a property of AuthenticationCoordinator
     /// but the current way wallet creation is designed, we need to share this handler
     /// with that flow. Eventually, wallet creation should be moved with AuthenticationCoordinator
-    lazy var authHandler: AuthenticationManager.Handler = { [weak self] isAuthenticated, _, error in
+    lazy var authHandler: AuthenticationManager.WalletAuthHandler = { [weak self] isAuthenticated, _, error in
         guard let strongSelf = self else { return }
 
         LoadingViewPresenter.shared.hideBusyView()

@@ -22,6 +22,7 @@ internal struct AuthenticationError {
         case failedToLoadWallet
         case invalidTwoFactorType
         case emailAuthorizationRequired
+        case walletMaintenance
         case unknown
     }
 

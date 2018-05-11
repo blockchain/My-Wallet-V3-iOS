@@ -87,17 +87,9 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             return
         }
 
-        // Check for maintenance before allowing pin entry
-        NetworkManager.shared.checkForMaintenance(withCompletion: { [unowned self] response in
-            LoadingViewPresenter.shared.hideBusyView()
-            guard response == nil else {
-                print("Error checking for maintenance in wallet options: %@", response!)
-                self.pinEntryViewController?.reset()
-                AlertViewPresenter.shared.standardNotify(message: response!, title: LocalizationConstants.Errors.error, handler: nil)
-                return
-            }
-            self.walletManager.wallet.apiGetPINValue(pinKey, pin: pin.toString)
-        })
+        let payload = PinPayload(pinCode: pin.toString, pinKey: pinKey)
+        AuthenticationManager.shared.authenticate(using: payload, andReply: authHandler)
+
         self.pinViewControllerCallback = callback
     }
 
