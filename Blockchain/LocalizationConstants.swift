@@ -95,6 +95,7 @@ struct LocalizationConstants {
     }
 
     struct Biometrics {
+        //: Touch ID specific instructions
         static let touchIDEnableInstructions = NSLocalizedString("Touch ID is not enabled on this device. To enable Touch ID, go to Settings -> Touch ID & Passcode and add a fingerprint.", comment: "")
 
         //: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)

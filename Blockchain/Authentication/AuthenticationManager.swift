@@ -183,7 +183,8 @@ final class AuthenticationManager: NSObject {
             case LAError.biometryNotAvailable.rawValue:
                 return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.biometricsNotSupported)
             case LAError.biometryNotEnrolled.rawValue:
-                return AuthenticationError(code: code, description: nil)
+                // Update this string if we ever enable face ID
+                return AuthenticationError(code: code, description: LocalizationConstants.Biometrics.touchIDEnableInstructions)
             default:
                 return genericAuthenticationError
             }
