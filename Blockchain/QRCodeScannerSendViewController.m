@@ -58,7 +58,7 @@
     UIView *view = [[UIView alloc] initWithFrame:frame];
     [view.layer addSublayer:_videoPreviewLayer];
 
-    [[ModalPresenter sharedInstance] showModalWithContent:view closeType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_SCAN_QR_CODE onDismiss:^{
+    [[ModalPresenter sharedInstance] showModalWithContent:view closeType:ModalCloseTypeClose showHeader:YES headerText:[LocalizationConstantsObjcBridge scanQRCode] onDismiss:^{
         [_captureSession stopRunning];
         _captureSession = nil;
         [_videoPreviewLayer removeFromSuperlayer];

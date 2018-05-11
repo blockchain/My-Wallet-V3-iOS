@@ -239,7 +239,7 @@
 #define BC_STRING_REQUEST NSLocalizedString(@"Request", nil)
 #define BC_STRING_REQUEST_PAYMENT NSLocalizedString(@"Request Payment", nil)
 #define BC_STRING_LABEL_ADDRESS NSLocalizedString(@"Label Address", nil)
-#define BC_STRING_SCAN_QR_CODE NSLocalizedString(@"Scan QR Code", nil)
+//#define BC_STRING_SCAN_QR_CODE NSLocalizedString(@"Scan QR Code", nil)
 #define BC_STRING_SCAN_PRIVATE_KEY NSLocalizedString(@"Scan Private Key", nil)
 #define BC_STRING_IMPORT_ADDRESS NSLocalizedString(@"Import address", nil)
 #define BC_STRING_CONTINUE NSLocalizedString(@"Continue", nil)
