@@ -1641,42 +1641,42 @@ SideMenuViewController *sideMenuViewController;
 //    [slidingViewController presentViewController:pairingCodeParser animated:YES completion:nil];
 //}
 
-- (void)scanPrivateKeyForWatchOnlyAddress:(NSString *)address
-{
-    if (!Reachability.hasInternetConnection) {
-        [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
-        return;
-    }
+//- (void)scanPrivateKeyForWatchOnlyAddress:(NSString *)address
+//{
+//    if (!Reachability.hasInternetConnection) {
+//        [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
+//        return;
+//    }
+//
+//    if (![app getCaptureDeviceInput:nil]) {
+//        return;
+//    }
+//
+//    PrivateKeyReader *reader = [[PrivateKeyReader alloc] initWithAssetType:self.tabControllerManager.assetType success:^(NSString* privateKeyString) {
+//        [WalletManager.sharedInstance.wallet addKey:privateKeyString toWatchOnlyAddress:address];
+//    } error:nil acceptPublicKeys:NO busyViewText:[LocalizationConstantsObjcBridge loadingImportKey]];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:reader selector:@selector(autoDismiss) name:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:reader animated:YES completion:nil];
+//
+//    WalletManager.sharedInstance.wallet.lastScannedWatchOnlyAddress = address;
+//}
 
-    if (![app getCaptureDeviceInput:nil]) {
-        return;
-    }
-
-    PrivateKeyReader *reader = [[PrivateKeyReader alloc] initWithAssetType:self.tabControllerManager.assetType success:^(NSString* privateKeyString) {
-        [WalletManager.sharedInstance.wallet addKey:privateKeyString toWatchOnlyAddress:address];
-    } error:nil acceptPublicKeys:NO busyViewText:BC_STRING_LOADING_IMPORT_KEY];
-
-    [[NSNotificationCenter defaultCenter] addObserver:reader selector:@selector(autoDismiss) name:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:reader animated:YES completion:nil];
-
-    WalletManager.sharedInstance.wallet.lastScannedWatchOnlyAddress = address;
-}
-
-- (void)askUserToAddWatchOnlyAddress:(NSString *)address success:(void (^)(NSString *))success
-{
-    UIAlertController *alertToWarnAboutWatchOnly = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING_TITLE message:[NSString stringWithFormat:@"%@\n\n%@", BC_STRING_ADD_WATCH_ONLY_ADDRESS_WARNING_ONE, BC_STRING_ADD_WATCH_ONLY_ADDRESS_WARNING_TWO] preferredStyle:UIAlertControllerStyleAlert];
-    [alertToWarnAboutWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (success) {
-            success(address);
-        }
-    }]];
-    [alertToWarnAboutWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
-}
+//- (void)askUserToAddWatchOnlyAddress:(NSString *)address success:(void (^)(NSString *))success
+//{
+//    UIAlertController *alertToWarnAboutWatchOnly = [UIAlertController alertControllerWithTitle:BC_STRING_WARNING_TITLE message:[NSString stringWithFormat:@"%@\n\n%@", BC_STRING_ADD_WATCH_ONLY_ADDRESS_WARNING_ONE, BC_STRING_ADD_WATCH_ONLY_ADDRESS_WARNING_TWO] preferredStyle:UIAlertControllerStyleAlert];
+//    [alertToWarnAboutWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        if (success) {
+//            success(address);
+//        }
+//    }]];
+//    [alertToWarnAboutWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alertToWarnAboutWatchOnly animated:YES completion:nil];
+//}
 
 //- (void)logout
 //{
@@ -1754,120 +1754,124 @@ SideMenuViewController *sideMenuViewController;
 //    [self setupBuySellWebview];
 //}
 
-- (void)didImportKey:(NSString *)address
-{
-    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+/* Beging key importer */
 
-    WalletManager.sharedInstance.wallet.lastImportedAddress = address;
+//- (void)didImportKey:(NSString *)address
+//{
+//    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+//
+//    WalletManager.sharedInstance.wallet.lastImportedAddress = address;
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedKey) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//}
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedKey) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-}
+// - (void)alertUserOfImportedKey
+// {
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//
+//    NSString *messageWithArgument = [WalletManager.sharedInstance.wallet isWatchOnlyLegacyAddress:WalletManager.sharedInstance.wallet.lastImportedAddress] ? BC_STRING_IMPORTED_WATCH_ONLY_ADDRESS_ARGUMENT : BC_STRING_IMPORTED_PRIVATE_KEY_ARGUMENT;
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:[NSString stringWithFormat:messageWithArgument, WalletManager.sharedInstance.wallet.lastImportedAddress] preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alert animated:YES completion:nil];
+// }
 
-- (void)alertUserOfImportedKey
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//- (void)didImportIncorrectPrivateKey:(NSString *)address
+//{
+//    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedIncorrectPrivateKey) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//}
 
-    NSString *messageWithArgument = [WalletManager.sharedInstance.wallet isWatchOnlyLegacyAddress:WalletManager.sharedInstance.wallet.lastImportedAddress] ? BC_STRING_IMPORTED_WATCH_ONLY_ADDRESS_ARGUMENT : BC_STRING_IMPORTED_PRIVATE_KEY_ARGUMENT;
+//- (void)alertUserOfImportedIncorrectPrivateKey
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//
+//    NSString *message = [NSString stringWithFormat:@"%@\n\n%@", BC_STRING_INCORRECT_PRIVATE_KEY_IMPORTED_MESSAGE_ONE, BC_STRING_INCORRECT_PRIVATE_KEY_IMPORTED_MESSAGE_TWO];
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:message preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alert animated:YES completion:nil];
+//}
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:[NSString stringWithFormat:messageWithArgument, WalletManager.sharedInstance.wallet.lastImportedAddress] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//- (void)didImportPrivateKeyToLegacyAddress
+//{
+//    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedPrivateKeyIntoLegacyAddress) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//}
 
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (void)alertUserOfImportedPrivateKeyIntoLegacyAddress
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:BC_STRING_IMPORTED_PRIVATE_KEY_SUCCESS preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:alert animated:YES completion:nil];
+//}
 
-- (void)didImportIncorrectPrivateKey:(NSString *)address
-{
-    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+//- (void)didFailToImportPrivateKey:(NSString *)error
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self.tabControllerManager.receiveBitcoinViewController name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
+//
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//    WalletManager.sharedInstance.wallet.isSyncing = NO;
+//
+//    if ([error containsString:ERROR_PRESENT_IN_WALLET]) {
+//        error = BC_STRING_KEY_ALREADY_IMPORTED;
+//    } else if ([error containsString:ERROR_NEEDS_BIP38]) {
+//        error = BC_STRING_NEEDS_BIP38_PASSWORD;
+//    } else if ([error containsString:ERROR_WRONG_BIP_PASSWORD]) {
+//        error = BC_STRING_WRONG_BIP38_PASSWORD;
+//    } else {
+//        error = BC_STRING_UNKNOWN_ERROR_PRIVATE_KEY;
+//    }
+//
+//    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
+//    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//    [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:errorAlert animated:YES completion:nil];
+//}
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedIncorrectPrivateKey) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-}
+//- (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//    WalletManager.sharedInstance.wallet.isSyncing = NO;
+//    NSString *alertTitle = BC_STRING_ERROR;
+//    if ([error containsString:ERROR_NOT_PRESENT_IN_WALLET]) {
+//        error = BC_STRING_ADDRESS_NOT_PRESENT_IN_WALLET;
+//    } else if ([error containsString:ERROR_ADDRESS_NOT_WATCH_ONLY]) {
+//        error = BC_STRING_ADDRESS_NOT_WATCH_ONLY;
+//    } else if ([error containsString:ERROR_WRONG_BIP_PASSWORD]) {
+//        error = BC_STRING_WRONG_BIP38_PASSWORD;
+//    } else if ([error containsString:ERROR_PRIVATE_KEY_OF_ANOTHER_WATCH_ONLY_ADDRESS]) {
+//        error = BC_STRING_KEY_BELONGS_TO_OTHER_ADDRESS_NOT_WATCH_ONLY;
+//    }
+//
+//    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:alertTitle message:error preferredStyle:UIAlertControllerStyleAlert];
+//    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+//    [errorAlert addAction:[UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge tryAgain] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self scanPrivateKeyForWatchOnlyAddress:WalletManager.sharedInstance.wallet.lastScannedWatchOnlyAddress];
+//    }]];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
+//
+//    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
+//    [topViewController presentViewController:errorAlert animated:YES completion:nil];
+//}
 
-- (void)alertUserOfImportedIncorrectPrivateKey
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-
-    NSString *message = [NSString stringWithFormat:@"%@\n\n%@", BC_STRING_INCORRECT_PRIVATE_KEY_IMPORTED_MESSAGE_ONE, BC_STRING_INCORRECT_PRIVATE_KEY_IMPORTED_MESSAGE_TWO];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)didImportPrivateKeyToLegacyAddress
-{
-    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(alertUserOfImportedPrivateKeyIntoLegacyAddress) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-}
-
-- (void)alertUserOfImportedPrivateKeyIntoLegacyAddress
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:BC_STRING_IMPORTED_PRIVATE_KEY_SUCCESS preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [[NSNotificationCenter defaultCenter] addObserver:alert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)didFailToImportPrivateKey:(NSString *)error
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self.tabControllerManager.receiveBitcoinViewController name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-
-    [LoadingViewPresenter.sharedInstance hideBusyView];
-    WalletManager.sharedInstance.wallet.isSyncing = NO;
-
-    if ([error containsString:ERROR_PRESENT_IN_WALLET]) {
-        error = BC_STRING_KEY_ALREADY_IMPORTED;
-    } else if ([error containsString:ERROR_NEEDS_BIP38]) {
-        error = BC_STRING_NEEDS_BIP38_PASSWORD;
-    } else if ([error containsString:ERROR_WRONG_BIP_PASSWORD]) {
-        error = BC_STRING_WRONG_BIP38_PASSWORD;
-    } else {
-        error = BC_STRING_UNKNOWN_ERROR_PRIVATE_KEY;
-    }
-
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
-    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:errorAlert animated:YES completion:nil];
-}
-
-- (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error
-{
-    [LoadingViewPresenter.sharedInstance hideBusyView];
-    WalletManager.sharedInstance.wallet.isSyncing = NO;
-    NSString *alertTitle = BC_STRING_ERROR;
-    if ([error containsString:ERROR_NOT_PRESENT_IN_WALLET]) {
-        error = BC_STRING_ADDRESS_NOT_PRESENT_IN_WALLET;
-    } else if ([error containsString:ERROR_ADDRESS_NOT_WATCH_ONLY]) {
-        error = BC_STRING_ADDRESS_NOT_WATCH_ONLY;
-    } else if ([error containsString:ERROR_WRONG_BIP_PASSWORD]) {
-        error = BC_STRING_WRONG_BIP38_PASSWORD;
-    } else if ([error containsString:ERROR_PRIVATE_KEY_OF_ANOTHER_WATCH_ONLY_ADDRESS]) {
-        error = BC_STRING_KEY_BELONGS_TO_OTHER_ADDRESS_NOT_WATCH_ONLY;
-    }
-
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:alertTitle message:error preferredStyle:UIAlertControllerStyleAlert];
-    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
-    [errorAlert addAction:[UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge tryAgain] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self scanPrivateKeyForWatchOnlyAddress:WalletManager.sharedInstance.wallet.lastScannedWatchOnlyAddress];
-    }]];
-
-    [[NSNotificationCenter defaultCenter] addObserver:errorAlert selector:@selector(autoDismiss) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController.topMostViewController;
-    [topViewController presentViewController:errorAlert animated:YES completion:nil];
-}
+/* End key importer */
 
 - (void)didFailRecovery
 {
