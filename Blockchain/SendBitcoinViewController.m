@@ -1994,7 +1994,7 @@ BOOL displayingLocalSymbolSend;
             
             // do something useful with results
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSDictionary *dict = [app parseURI:[metadataObj stringValue] prefix:PREFIX_BITCOIN_URI];
+                NSDictionary *dict = [app parseURI:[metadataObj stringValue] prefix:[ConstantsObjcBridge bitcoinUriPrefix]];
                 
                 NSString *address = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
                 
@@ -2003,7 +2003,7 @@ BOOL displayingLocalSymbolSend;
                     return;
                 }
                 
-                if ([address containsString:PREFIX_BITCOIN_CASH]) address = [address substringFromIndex:[PREFIX_BITCOIN_CASH length]];
+                if ([address containsString:[ConstantsObjcBridge bitcoinCashUriPrefix]]) address = [address substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]];
 
                 toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:address assetType:self.assetType];
                 self.toAddress = address;

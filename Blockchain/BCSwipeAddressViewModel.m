@@ -7,6 +7,7 @@
 //
 
 #import "BCSwipeAddressViewModel.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCSwipeAddressViewModel
 
@@ -35,8 +36,8 @@
 - (void)setAddress:(NSString *)address
 {
     _address = address;
-    
-    self.textAddress = self.assetType == LegacyAssetTypeBitcoinCash ? [address substringFromIndex:[PREFIX_BITCOIN_CASH length]] : address;
+
+    self.textAddress = self.assetType == LegacyAssetTypeBitcoinCash ? [address substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]] : address;
 }
 
 @end

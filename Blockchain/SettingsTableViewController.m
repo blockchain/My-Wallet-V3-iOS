@@ -880,7 +880,7 @@ const int aboutPrivacyPolicy = 2;
         [self resendVerificationEmail];
     }]];
     [alertForVerifyingEmail addAction:[UIAlertAction actionWithTitle:BC_STRING_OPEN_MAIL_APP style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSURL *mailURL = [NSURL URLWithString:PREFIX_MAIL_URI];
+        NSURL *mailURL = [NSURL URLWithString:[ConstantsObjcBridge mailUrl]];
         if ([[UIApplication sharedApplication] canOpenURL:mailURL]) {
             [[UIApplication sharedApplication] openURL:mailURL];
         }

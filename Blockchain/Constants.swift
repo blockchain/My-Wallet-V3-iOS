@@ -67,6 +67,12 @@ struct Constants {
         static let newAddress = NSNotification.Name("newAddress")
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
     }
+    struct Prefixes {
+        static let bitcoin = "bitcoin:"
+        static let bitcoinCash = "bitcoincash:"
+        static let ethereum = "ethereum:"
+        static let mail = "message://"
+    }
     struct PushNotificationKeys {
         static let userInfoType = "type"
         static let userInfoId = "id"
@@ -115,6 +121,26 @@ struct Constants {
 
     @objc class func notificationKeyNewAddress() -> String {
         return Constants.NotificationKeys.newAddress.rawValue
+    }
+
+    @objc class func notificationKeyBackupSuccess() -> String {
+        return Constants.NotificationKeys.backupSuccess.rawValue
+    }
+
+    @objc class func bitcoinUriPrefix() -> String {
+        return Constants.Prefixes.bitcoin
+    }
+
+    @objc class func bitcoinCashUriPrefix() -> String {
+        return Constants.Prefixes.bitcoinCash
+    }
+
+    @objc class func ethereumUriPrefix() -> String {
+        return Constants.Prefixes.ethereum
+    }
+
+    @objc class func mailUrl() -> String {
+        return Constants.Prefixes.mail
     }
 }
 

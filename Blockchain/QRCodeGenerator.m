@@ -13,7 +13,7 @@
 
 - (UIImage *)qrImageFromAddress:(NSString *)address
 {
-    NSString *addressURL = [NSString stringWithFormat:@"%@%@", PREFIX_BITCOIN_URI, address];
+    NSString *addressURL = [NSString stringWithFormat:@"%@%@", [ConstantsObjcBridge bitcoinUriPrefix], address];
     
     return [self createQRImageFromString:addressURL];
 }
@@ -22,7 +22,7 @@
 {
     NSString *amountString = [[NSNumberFormatter assetFormatterWithUSLocale] stringFromNumber:[NSNumber numberWithDouble:amount]];
     
-    NSString *addressURL = [NSString stringWithFormat:@"%@%@?amount=%@", PREFIX_BITCOIN_URI, address, amountString];
+    NSString *addressURL = [NSString stringWithFormat:@"%@%@?amount=%@", [ConstantsObjcBridge bitcoinUriPrefix], address, amountString];
     
     return [self createQRImageFromString:addressURL];
 }
