@@ -7,6 +7,7 @@
 //
 
 #import "BCNavigationController.h"
+#import "Blockchain-Swift.h"
 
 @interface BCNavigationController ()
 
@@ -77,7 +78,7 @@
     busyLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:BUSY_VIEW_LABEL_FONT_SYSTEM_SIZE];
     busyLabel.alpha = BUSY_VIEW_LABEL_ALPHA;
     busyLabel.textAlignment = NSTextAlignmentCenter;
-    busyLabel.text = BC_STRING_LOADING_SYNCING_WALLET;
+    busyLabel.text = [LocalizationConstantsObjcBridge syncingWallet];
     busyLabel.center = CGPointMake(textWithSpinnerView.bounds.origin.x + textWithSpinnerView.bounds.size.width/2, textWithSpinnerView.bounds.origin.y + textWithSpinnerView.bounds.size.height/2 + 15);
     [textWithSpinnerView addSubview:busyLabel];
     self.busyLabel = busyLabel;

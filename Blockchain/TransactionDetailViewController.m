@@ -51,9 +51,9 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.rows = [NSMutableArray new];
-    
+
     if (self.transactionModel.doubleSpend || self.transactionModel.replaceByFee) [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_WARNING];
     [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_VALUE];
     if (!self.transactionModel.hideNote) [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_DESCRIPTION];
@@ -61,13 +61,13 @@ const CGFloat rowHeightValueReceived = 80;
     [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_FROM];
     [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_DATE];
     [self.rows addObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_STATUS];
-    
+
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+
     [self.tableView registerClass:[TransactionDetailDoubleSpendWarningCell class] forCellReuseIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_WARNING];
     [self.tableView registerClass:[TransactionDetailDescriptionCell class] forCellReuseIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_DESCRIPTION];
     [self.tableView registerClass:[TransactionDetailToCell class] forCellReuseIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_TO];
@@ -77,7 +77,7 @@ const CGFloat rowHeightValueReceived = 80;
     [self.tableView registerClass:[TransactionDetailValueCell class] forCellReuseIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_VALUE];
 
     self.tableView.tableFooterView = [UIView new];
-    
+
     [self setupPullToRefresh];
     [self setupTextViewInputAccessoryView];
 
@@ -90,7 +90,7 @@ const CGFloat rowHeightValueReceived = 80;
 {
     UIView *inputAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, BUTTON_HEIGHT)];
     inputAccessoryView.backgroundColor = COLOR_WARNING_RED;
-    
+
     UIButton *updateButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, BUTTON_HEIGHT)];
     updateButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
     [updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -98,13 +98,13 @@ const CGFloat rowHeightValueReceived = 80;
     [updateButton setTitle:BC_STRING_UPDATE forState:UIControlStateNormal];
     [updateButton addTarget:self action:@selector(saveNote) forControlEvents:UIControlEventTouchUpInside];
     [inputAccessoryView addSubview:updateButton];
-    
+
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(updateButton.frame.size.width - 50, 0, 50, BUTTON_HEIGHT)];
     cancelButton.backgroundColor = COLOR_BUTTON_GRAY_CANCEL;
     [cancelButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancelEditing) forControlEvents:UIControlEventTouchUpInside];
     [inputAccessoryView addSubview:cancelButton];
-    
+
     self.descriptionInputAccessoryView = inputAccessoryView;
 }
 
@@ -131,7 +131,7 @@ const CGFloat rowHeightValueReceived = 80;
 
     [self.textView resignFirstResponder];
     self.textView.editable = NO;
-    
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.rows indexOfObject:CELL_IDENTIFIER_TRANSACTION_DETAIL_DESCRIPTION] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     });
@@ -140,12 +140,12 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)saveNote
 {
     self.textViewCursorPosition = self.textView.selectedRange;
-    
+
     [self.textView resignFirstResponder];
     self.textView.editable = NO;
-    
+
     if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
-        [self.busyViewDelegate showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        [self.busyViewDelegate showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge syncingWallet]];
         [WalletManager.sharedInstance.wallet saveNote:self.textView.text forTransaction:self.transactionModel.myHash];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHistoryAfterSavingNote) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
     } else if (self.transactionModel.assetType == LegacyAssetTypeEther) {
@@ -175,7 +175,7 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)reloadData
 {
     [self.busyViewDelegate hideBusyView];
-    
+
     NSArray *newTransactions;
     if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         newTransactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
@@ -184,11 +184,11 @@ const CGFloat rowHeightValueReceived = 80;
     } else if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash) {
         newTransactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
     }
-    
+
     [self findAndUpdateTransaction:newTransactions];
-    
+
     [self.tableView reloadData];
-    
+
     if (self.refreshControl && self.refreshControl.isRefreshing) {
         [self.refreshControl endRefreshing];
     }
@@ -197,9 +197,9 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)reloadEtherData
 {
     [self.busyViewDelegate hideBusyView];
-    
+
     [self.tableView reloadData];
-    
+
     if (self.refreshControl && self.refreshControl.isRefreshing) {
         [self.refreshControl endRefreshing];
     }
@@ -208,7 +208,7 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)findAndUpdateTransaction:(NSArray *)newTransactions
 {
     BOOL didFindTransaction = NO;
-    
+
     for (Transaction *transaction in newTransactions) {
         if ([transaction.myHash isEqualToString:self.transactionModel.myHash]) {
             if (self.transactionModel.assetType == LegacyAssetTypeBitcoin || self.transactionModel.assetType == LegacyAssetTypeEther) self.transactionModel.note = transaction.note;
@@ -244,7 +244,7 @@ const CGFloat rowHeightValueReceived = 80;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *rowType = [self.rows objectAtIndex:indexPath.row];
-    
+
     if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_WARNING]) {
         TransactionDetailDoubleSpendWarningCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_WARNING forIndexPath:indexPath];
         [cell configureWithTransactionModel:self.transactionModel];
@@ -264,22 +264,22 @@ const CGFloat rowHeightValueReceived = 80;
     } else if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_TO]) {
         TransactionDetailToCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_TO forIndexPath:indexPath];
         [cell configureWithTransactionModel:self.transactionModel];
-        
+
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showToAddressOptions)];
         tapGestureRecognizer.numberOfTapsRequired = 1;
         [cell.accessoryLabel addGestureRecognizer:tapGestureRecognizer];
         cell.accessoryLabel.userInteractionEnabled = YES;
-        
+
         return cell;
     } else if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_FROM]) {
         TransactionDetailFromCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_FROM forIndexPath:indexPath];
         [cell configureWithTransactionModel:self.transactionModel];
-        
+
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFromAddressOptions)];
         tapGestureRecognizer.numberOfTapsRequired = 1;
         [cell.accessoryLabel addGestureRecognizer:tapGestureRecognizer];
         cell.accessoryLabel.userInteractionEnabled = YES;
-        
+
         return cell;
     } else if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_DATE]) {
         TransactionDetailDateCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_DATE forIndexPath:indexPath];
@@ -297,20 +297,20 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *rowType = [self.rows objectAtIndex:indexPath.row];
-    
+
     if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_TO] && self.transactionModel.to.count > 1) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self showRecipients];
         return;
     }
-    
+
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *rowType = [self.rows objectAtIndex:indexPath.row];
-    
+
     if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_WARNING]) {
         return rowHeightWarning;
     } else if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_VALUE]) {
@@ -392,7 +392,7 @@ const CGFloat rowHeightValueReceived = 80;
 {
     NSString *address;
     NSString *labelString;
-    
+
     if (willSelectFrom) {
         if (self.transactionModel.hasFromLabel) return;
         address = self.transactionModel.fromAddress;
@@ -403,11 +403,11 @@ const CGFloat rowHeightValueReceived = 80;
         address = [toObject isKindOfClass:[NSString class]] ? toObject : [toObject objectForKey:DICTIONARY_KEY_ADDRESS];
         labelString = self.transactionModel.toString;
     }
-    
+
     if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash && [WalletManager.sharedInstance.wallet isValidAddress:address assetType:LegacyAssetTypeBitcoinCash]) {
         address = [WalletManager.sharedInstance.wallet toBitcoinCash:address includePrefix:NO];
     }
-    
+
     UIAlertController *copyAddressController = [UIAlertController alertControllerWithTitle:labelString message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     [copyAddressController addAction:[UIAlertAction actionWithTitle:BC_STRING_COPY_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (address) {
@@ -444,10 +444,10 @@ const CGFloat rowHeightValueReceived = 80;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect keyboardAccessoryRect = [self.descriptionInputAccessoryView.superview convertRect:self.descriptionInputAccessoryView.frame toView:self.tableView];
         CGRect keyboardPlusAccessoryRect = CGRectMake(keyboardAccessoryRect.origin.x, keyboardAccessoryRect.origin.y, keyboardAccessoryRect.size.width, self.view.frame.size.height - keyboardAccessoryRect.origin.y);
-        
+
         UITextRange *selectionRange = [textView selectedTextRange];
         CGRect selectionEndRect = [textView convertRect:[textView caretRectForPosition:selectionRange.end] toView:self.tableView];
-        
+
         if (CGRectIntersectsRect(keyboardPlusAccessoryRect, selectionEndRect)) {
             [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y + selectionEndRect.origin.y + selectionEndRect.size.height - keyboardAccessoryRect.origin.y + 15) animated:NO];
         }
@@ -457,7 +457,7 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)showWebviewDetail
 {
     NSURL *url = [NSURL URLWithString:self.transactionModel.detailButtonLink];
-    
+
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
         if (safariViewController) {

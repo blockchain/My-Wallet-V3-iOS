@@ -222,7 +222,6 @@
 #define BC_STRING_LOADING_IMPORT_KEY NSLocalizedString(@"Importing key", nil)
 #define BC_STRING_LOADING_PROCESSING_KEY NSLocalizedString(@"Processing key", nil)
 #define BC_STRING_LOADING_CREATING_NEW_ADDRESS NSLocalizedString(@"Creating new address", nil)
-#define BC_STRING_LOADING_SYNCING_WALLET NSLocalizedString(@"Syncing Wallet", nil)
 #define BC_STRING_LOADING_CREATING_REQUEST NSLocalizedString(@"Creating request", nil)
 #define BC_STRING_LOADING_CREATING_INVITATION NSLocalizedString(@"Creating invitation", nil)
 #define BC_STRING_IDENTIFIER NSLocalizedString(@"Identifier", nil)

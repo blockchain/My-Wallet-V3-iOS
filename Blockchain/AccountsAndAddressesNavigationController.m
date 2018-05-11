@@ -166,7 +166,7 @@
     self.busyLabel.alpha = 0.75;
     self.busyLabel.textAlignment = NSTextAlignmentCenter;
     self.busyLabel.adjustsFontSizeToFitWidth = YES;
-    self.busyLabel.text = BC_STRING_LOADING_SYNCING_WALLET;
+    self.busyLabel.text = [LocalizationConstantsObjcBridge syncingWallet];
     self.busyLabel.center = CGPointMake(textWithSpinnerView.bounds.origin.x + textWithSpinnerView.bounds.size.width/2, textWithSpinnerView.bounds.origin.y + textWithSpinnerView.bounds.size.height/2 + 15);
     [textWithSpinnerView addSubview:self.busyLabel];
     
