@@ -24,7 +24,6 @@
 #import "UncaughtExceptionHandler.h"
 #import "UITextField+Blocks.h"
 #import "PairingCodeParser.h"
-#import "PrivateKeyReader.h"
 #import "NSData+Hex.h"
 #import "Reachability.h"
 //#import "SideMenuViewController.h"
