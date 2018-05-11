@@ -274,7 +274,7 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)alertUserOfSuccess:(NSString *)successMessage
 {
-    UIAlertController *alertForSuccess = [UIAlertController alertControllerWithTitle:BC_STRING_SUCCESS message:successMessage preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertForSuccess = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:successMessage preferredStyle:UIAlertControllerStyleAlert];
     [alertForSuccess addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     if (self.alertTargetViewController) {
         [self.alertTargetViewController presentViewController:alertForSuccess animated:YES completion:nil];
