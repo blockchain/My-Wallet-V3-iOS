@@ -2926,26 +2926,26 @@ SideMenuViewController *sideMenuViewController;
 //
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 //}
-
-- (void)changePIN
-{
-    PEPinEntryController *pinChangeController = [PEPinEntryController pinChangeController];
-    pinChangeController.pinDelegate = self;
-    pinChangeController.navigationBarHidden = YES;
-
-    PEViewController *peViewController = (PEViewController *)[[pinChangeController viewControllers] objectAtIndex:0];
-    peViewController.cancelButton.hidden = NO;
-    [peViewController.cancelButton addTarget:self action:@selector(showSettings) forControlEvents:UIControlEventTouchUpInside];
-
-    self.pinEntryViewController = pinChangeController;
-
-    peViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
-
-    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
-
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-}
+//
+//- (void)changePIN
+//{
+//    PEPinEntryController *pinChangeController = [PEPinEntryController pinChangeController];
+//    pinChangeController.pinDelegate = self;
+//    pinChangeController.navigationBarHidden = YES;
+//
+//    PEViewController *peViewController = (PEViewController *)[[pinChangeController viewControllers] objectAtIndex:0];
+//    peViewController.cancelButton.hidden = NO;
+//    [peViewController.cancelButton addTarget:self action:@selector(showSettings) forControlEvents:UIControlEventTouchUpInside];
+//
+//    self.pinEntryViewController = pinChangeController;
+//
+//    peViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [self.tabControllerManager.tabViewController dismissViewControllerAnimated:YES completion:nil];
+//
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:self.pinEntryViewController.view];
+//
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+//}
 //
 //- (void)clearPin
 //{

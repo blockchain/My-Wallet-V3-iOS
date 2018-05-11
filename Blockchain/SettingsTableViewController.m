@@ -1076,7 +1076,7 @@ const int aboutPrivacyPolicy = 2;
                 [self showBackup];
                 return;
             } else if (indexPath.row == PINChangePIN) {
-                [app changePIN];
+                [AuthenticationCoordinator.sharedInstance changePin];
                 return;
             }
             return;

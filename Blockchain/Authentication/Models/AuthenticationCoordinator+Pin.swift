@@ -10,6 +10,25 @@ import Foundation
 
 extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
+    /// Coordinates the change pin flow.
+    @objc func changePin() {
+        let pinChangeController = PEPinEntryController.pinChange()!
+        pinChangeController.pinDelegate = self
+        pinChangeController.isNavigationBarHidden = true
+
+        let peViewController = pinChangeController.viewControllers[0] as! PEViewController
+        peViewController.cancelButton.isHidden = false
+        peViewController.cancelButton.addTarget(self, action: #selector(onPinCloseButtonTapped), for: .touchUpInside)
+        peViewController.modalTransitionStyle = .coverVertical
+
+        self.pinEntryViewController = pinChangeController
+
+        AppCoordinator.shared.tabControllerManager.tabViewController.dismiss(animated: true)
+
+        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(pinChangeController.view)
+        UIApplication.shared.statusBarStyle = .default
+    }
+
     /// Coordinates the pin validation flow. Primarily used to validate the user's PIN code
     /// when enabling touch ID.
     @objc func validatePin() {
@@ -19,7 +38,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         let peViewController = pinController.viewControllers[0] as! PEViewController
         peViewController.cancelButton.isHidden = false
-        peViewController.cancelButton.addTarget(self, action: #selector(onValidatePinCloseButtonTapped), for: .touchUpInside)
+        peViewController.cancelButton.addTarget(self, action: #selector(onPinCloseButtonTapped), for: .touchUpInside)
         peViewController.modalTransitionStyle = .coverVertical
 
         self.pinEntryViewController = pinController
@@ -34,7 +53,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         UIApplication.shared.statusBarStyle = .default
     }
 
-    @objc func onValidatePinCloseButtonTapped() {
+    @objc func onPinCloseButtonTapped() {
         AppCoordinator.shared.showSettingsView()
     }
 

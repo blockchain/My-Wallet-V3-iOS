@@ -206,10 +206,10 @@
 - (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder;
 - (void)checkIfPaymentRequestFulfilled:(Transaction *)transaction;
 
-- (void)clearPin;
-- (void)showPinModalAsView:(BOOL)asView;
-- (void)validatePINOptionally;
-- (void)changePIN;
+//- (void)clearPin;
+//- (void)showPinModalAsView:(BOOL)asView;
+//- (void)validatePINOptionally;
+//- (void)changePIN;
 
 //- (BOOL)checkInternetConnection;
 
