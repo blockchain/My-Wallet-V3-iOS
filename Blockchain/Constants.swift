@@ -66,6 +66,7 @@ struct Constants {
         static let reloadToDismissViews = NSNotification.Name("reloadToDismissViews")
         static let newAddress = NSNotification.Name("newAddress")
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
+        static let backupSuccess = NSNotification.Name("backupSuccess")
     }
     struct Prefixes {
         static let bitcoin = "bitcoin:"

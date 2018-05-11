@@ -864,12 +864,12 @@ const int aboutPrivacyPolicy = 2;
 
     [WalletManager.sharedInstance.wallet disableEmailNotifications];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeEmailAfterDisablingNotifications) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeEmailAfterDisablingNotifications) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
 }
 
 - (void)changeEmailAfterDisablingNotifications
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
     [self changeEmail:self.enteredEmailString];
 }
 

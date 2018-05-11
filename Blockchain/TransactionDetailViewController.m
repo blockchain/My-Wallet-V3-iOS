@@ -147,7 +147,7 @@ const CGFloat rowHeightValueReceived = 80;
     if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         [self.busyViewDelegate showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge syncingWallet]];
         [WalletManager.sharedInstance.wallet saveNote:self.textView.text forTransaction:self.transactionModel.myHash];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHistoryAfterSavingNote) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHistoryAfterSavingNote) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
     } else if (self.transactionModel.assetType == LegacyAssetTypeEther) {
         [WalletManager.sharedInstance.wallet saveEtherNote:self.textView.text forTransaction:self.transactionModel.myHash];
     }
@@ -155,7 +155,7 @@ const CGFloat rowHeightValueReceived = 80;
 
 - (void)getHistoryAfterSavingNote
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
     [WalletManager.sharedInstance.wallet getHistory];
 }
 

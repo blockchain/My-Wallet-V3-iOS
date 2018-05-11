@@ -215,7 +215,7 @@
     PrivateKeyReader *reader = [[PrivateKeyReader alloc] initWithAssetType:self.assetType success:^(NSString* keyString) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(promptForLabelAfterScan)
-                                                     name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
+                                                     name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
         [WalletManager.sharedInstance.wallet addKey:keyString];
     } error:nil acceptPublicKeys:YES busyViewText:BC_STRING_LOADING_IMPORT_KEY];
     
@@ -230,7 +230,7 @@
     self.clickedAddress = [allKeys lastObject];
     [self didSelectAddress:self.clickedAddress];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_BACKUP_SUCCESS
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyBackupSuccess]
                                                   object:nil];
 }
 
