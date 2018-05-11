@@ -28,6 +28,7 @@ struct LocalizationConstants {
     static let cancel = NSLocalizedString("Cancel", comment: "")
     static let continueString = NSLocalizedString("Continue", comment: "")
     static let okString = NSLocalizedString("OK", comment: "")
+    static let success = NSLocalizedString("Success", comment: "")
     static let syncingWallet = NSLocalizedString("Syncing Wallet", comment: "")
     static let tryAgain = NSLocalizedString("Try again", comment: "")
     static let verifying = NSLocalizedString ("Verifying", comment: "")
@@ -130,10 +131,30 @@ struct LocalizationConstants {
         static let viewDetails = NSLocalizedString("View details", comment: "")
         static let errorTryAgain = NSLocalizedString("Something went wrong, please try reopening Buy & Sell Bitcoin again.", comment: "")
     }
+
+    struct AddressAndKeyImport {
+        static let importedWatchOnlyAddressArgument = NSLocalizedString("Imported watch-only address %@", comment: "")
+        static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
+        static let loadingImportKey = NSLocalizedString("Importing key", comment: "")
+        static let importedKeyButForIncorrectAddress = NSLocalizedString("You've successfully imported a private key.", comment: "")
+        static let importedKeyDoesNotCorrespondToAddress = NSLocalizedString("NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.", comment: "")
+        static let importedKeySuccess = NSLocalizedString("You can now spend from this address.", comment: "")
+        static let keyAlreadyImported = NSLocalizedString("Key already imported", comment: "")
+        static let keyNeedsBip38Password = NSLocalizedString("Needs BIP38 Password", comment: "")
+        static let incorrectBip38Password = NSLocalizedString("Wrong BIP38 Password", comment: "")
+        static let unknownErrorPrivateKey = NSLocalizedString("There was an error importing this private key", comment: "")
+        static let addressNotPresentInWallet = NSLocalizedString("Your wallet does not contain this address.", comment: "")
+        static let addressNotWatchOnly = NSLocalizedString("This address is not watch-only.", comment: "")
+        static let keyBelongsToOtherAddressNotWatchOnly = NSLocalizedString("This private key belongs to another address that is not watch only", comment: "")
+        static let unknownKeyFormat = NSLocalizedString("Unknown key format", comment: "")
+        static let unsupportedPrivateKey = NSLocalizedString("Unsupported Private Key Format", comment: "")
+        static let addWatchOnlyAddressWarning = NSLocalizedString("You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address.", comment: "")
+        static let addWatchOnlyAddressWarningPrompt = NSLocalizedString("These options are recommended for advanced users only. Continue?", comment: "")
+    }
 }
 
+// TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
-/// Should deprecate this once Obj-C is no longer using this
 @objc class LocalizationConstantsObjcBridge: NSObject {
 
     @objc class func requestFailedCheckConnection() -> String { return LocalizationConstants.Errors.requestFailedCheckConnection }
@@ -161,4 +182,14 @@ struct LocalizationConstants {
     @objc class func noPasswordEntered() -> String { return LocalizationConstants.Authentication.noPasswordEntered }
 
     @objc class func secondPasswordRequired() -> String { return LocalizationConstants.Authentication.secondPasswordRequired }
+
+    @objc class func success() -> String { return LocalizationConstants.success }
+
+    @objc class func syncingWallet() -> String { return LocalizationConstants.syncingWallet }
+
+    @objc class func loadingImportKey() -> String { return LocalizationConstants.AddressAndKeyImport.loadingImportKey }
+
+    @objc class func incorrectBip38Password() -> String { return LocalizationConstants.AddressAndKeyImport.incorrectBip38Password }
+
+    @objc class func scanQRCode() -> String { return LocalizationConstants.scanQRCode }
 }
