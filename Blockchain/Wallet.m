@@ -3560,6 +3560,10 @@
     self.accountInfo = [accountInfo getJSONObject];
     self.hasLoadedAccountInfo = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+    
+    if ([delegate respondsToSelector:@selector(walletDidGetAccountInfo:)]) {
+        [self.delegate walletDidGetAccountInfo:self];
+    }
 }
 
 - (void)on_get_all_currency_symbols_success:(NSString *)currencies
@@ -3583,6 +3587,10 @@
     
     self.currencySymbols = currencySymbolsWithNames;
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
+
+    if ([self.delegate respondsToSelector:@selector(walletDidGetAllCurrencySymbols:)]) {
+        [self.delegate walletDidGetAllCurrencySymbols:self];
+    }
 }
 
 - (void)on_change_email_success

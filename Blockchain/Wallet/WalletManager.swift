@@ -32,6 +32,7 @@ class WalletManager: NSObject {
     weak var authDelegate: WalletAuthDelegate?
     weak var pinEntryDelegate: WalletPinEntryDelegate?
     weak var buySellDelegate: WalletBuySellDelegate?
+    weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
 
     init(wallet: Wallet = Wallet()!) {
@@ -106,6 +107,10 @@ class WalletManager: NSObject {
     private func endBackgroundUpdateTask() {
         guard let backgroundUpdateTaskIdentifer = backgroundUpdateTaskIdentifer else { return }
         UIApplication.shared.endBackgroundTask(backgroundUpdateTaskIdentifer)
+    }
+
+    fileprivate func updateSymbols() {
+        // TODO
     }
 }
 
@@ -205,12 +210,12 @@ extension WalletManager: WalletDelegate {
         pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
     }
 
-    func didPutPinSuccess(_ dictionary: [AnyHashable : Any]!) {
+    func didPutPinSuccess(_ dictionary: [AnyHashable: Any]!) {
         let response = PutPinResponse(response: dictionary)
         pinEntryDelegate?.putPinSuccess(response: response)
     }
 
-    func didGetPinResponse(_ dictionary: [AnyHashable : Any]!) {
+    func didGetPinResponse(_ dictionary: [AnyHashable: Any]!) {
         let response = GetPinResponse(response: dictionary)
         pinEntryDelegate?.getPinSuccess(response: response)
     }
@@ -222,5 +227,19 @@ extension WalletManager: WalletDelegate {
 
     func returnToAddressesScreen() {
         addressesDelegate?.didGenerateNewAddress()
+    }
+
+    // MARK: - Account Info
+
+    func walletDidGetAccountInfo(_ wallet: Wallet!) {
+        accountInfoDelegate?.didGetAccountInfo()
+        wallet.getAllCurrencySymbols()
+    }
+
+    // MARK: - Currency Symbols
+
+    func walletDidGetAllCurrencySymbols(_ wallet: Wallet!) {
+        updateSymbols()
+        wallet.fetchBitcoinCashExchangeRates()
     }
 }

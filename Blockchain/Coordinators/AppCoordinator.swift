@@ -131,12 +131,14 @@ import Foundation
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(backupController, animated: true)
     }
 
-    @objc func showSettingsView(completion: (() -> Void)? = nil) {
+    @objc func showSettingsView(completion: ((_ settingViewController: SettingsNavigationController) -> Void)? = nil) {
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             settingsNavigationController,
-            animated: true,
-            completion: completion
-        )
+            animated: true
+        ) { [weak self] in
+            guard let strongSelf = self else { return }
+            completion?(strongSelf.settingsNavigationController)
+        }
     }
 
     @objc func showBuyBitcoinView() {

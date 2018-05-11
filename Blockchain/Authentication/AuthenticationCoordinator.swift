@@ -68,12 +68,12 @@ import Foundation
             let timeIntervalBetweenPrompts = Constants.Time.securityReminderModalTimeInterval
 
             if dateOfLastSecurityReminder.timeIntervalSinceNow < -timeIntervalBetweenPrompts {
-                ReminderCoordinator.shared.showSecurityReminder()
+                ReminderPresenter.shared.showSecurityReminder()
             }
         } else if BlockchainSettings.App.shared.hasSeenEmailReminder {
-            ReminderCoordinator.shared.showSecurityReminder()
+            ReminderPresenter.shared.showSecurityReminder()
         } else {
-            ReminderCoordinator.shared.checkIfSettingsLoadedAndShowEmailReminder()
+            ReminderPresenter.shared.checkIfSettingsLoadedAndShowEmailReminder()
         }
 
         let tabControllerManager = AppCoordinator.shared.tabControllerManager

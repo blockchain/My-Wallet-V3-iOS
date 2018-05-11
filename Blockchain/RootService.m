@@ -1092,34 +1092,34 @@ SideMenuViewController *sideMenuViewController;
     [WalletManager.sharedInstance.wallet getAccountInfo];
 }
 
-- (void)didGetAccountInfo
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+//- (void)didGetAccountInfo
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+//
+//    if (showReminderType == ShowReminderTypeTwoFactor) {
+//        if (![WalletManager.sharedInstance.wallet hasEnabledTwoStep]) {
+//            [self showTwoFactorReminder];
+//        }
+//    } else if (showReminderType == ShowReminderTypeEmail) {
+//        if (![WalletManager.sharedInstance.wallet hasVerifiedEmail]) {
+//            [self showEmailVerificationReminder];
+//        }
+//    }
+//
+//    showReminderType = ShowReminderTypeNone;
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterGettingCurrencySymbols) name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
+//    [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
+//}
 
-    if (showReminderType == ShowReminderTypeTwoFactor) {
-        if (![WalletManager.sharedInstance.wallet hasEnabledTwoStep]) {
-            [self showTwoFactorReminder];
-        }
-    } else if (showReminderType == ShowReminderTypeEmail) {
-        if (![WalletManager.sharedInstance.wallet hasVerifiedEmail]) {
-            [self showEmailVerificationReminder];
-        }
-    }
-
-    showReminderType = ShowReminderTypeNone;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterGettingCurrencySymbols) name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
-    [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
-}
-
-- (void)reloadAfterGettingCurrencySymbols
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
-
-    [self updateSymbols];
-
-    [WalletManager.sharedInstance.wallet fetchBitcoinCashExchangeRates];
-}
+//- (void)reloadAfterGettingCurrencySymbols
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
+//
+//    [self updateSymbols];
+//
+//    [WalletManager.sharedInstance.wallet fetchBitcoinCashExchangeRates];
+//}
 
 - (void)didGetBitcoinCashExchangeRates
 {
@@ -2726,87 +2726,87 @@ SideMenuViewController *sideMenuViewController;
 //        [_slidingViewController resetTopViewAnimated:YES];
 //    }
 //}
+//
+//- (void)showSecurityReminder
+//{
+//    BlockchainSettings.sharedAppInstance.reminderModalDate = [NSDate date];
+//
+//    if ([WalletManager.sharedInstance.wallet getTotalActiveBalance] > 0) {
+//        if (![WalletManager.sharedInstance.wallet isRecoveryPhraseVerified]) {
+//            [self showBackupReminder:NO];
+//        } else {
+//            [self checkIfSettingsLoadedAndShowTwoFactorReminder];
+//        }
+//    } else {
+//        [self checkIfSettingsLoadedAndShowTwoFactorReminder];
+//    }
+//}
+//
+//- (void)checkIfSettingsLoadedAndShowTwoFactorReminder
+//{
+//    if (WalletManager.sharedInstance.wallet.hasLoadedAccountInfo) {
+//        if (![WalletManager.sharedInstance.wallet hasEnabledTwoStep]) {
+//            [self showTwoFactorReminder];
+//        }
+//    } else {
+//        showReminderType = ShowReminderTypeTwoFactor;
+//    }
+//}
+//
+//- (void)checkIfSettingsLoadedAndShowEmailReminder
+//{
+//    if (WalletManager.sharedInstance.wallet.hasLoadedAccountInfo) {
+//        if (![WalletManager.sharedInstance.wallet hasVerifiedEmail]) {
+//            [self showEmailVerificationReminder];
+//        } else {
+//            [self showSecurityReminder];
+//        }
+//    } else {
+//        showReminderType = ShowReminderTypeEmail;
+//    }
+//}
+//
+//- (void)showEmailVerificationReminder
+//{
+//    BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = YES;
+//
+//    WalletSetupViewController *setupViewController = [[WalletSetupViewController alloc] initWithSetupDelegate:self];
+//
+//    BOOL shouldShowTouchID = BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup;
+//    setupViewController.emailOnly = !shouldShowTouchID;
+//    BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = NO;
+//    BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = NO;
+//
+//    setupViewController.modalPresentationStyle = UIModalTransitionStyleCrossDissolve;
+//    [self.window.rootViewController presentViewController:setupViewController animated:NO completion:nil];
+//}
+//
+//- (void)showBackupReminder:(BOOL)firstReceive
+//{
+//    ReminderType reminderType = firstReceive ? ReminderTypeBackupJustReceivedBitcoin : ReminderTypeBackupHasBitcoin;
+//
+//    ReminderModalViewController *backupController = [[ReminderModalViewController alloc] initWithReminderType:reminderType];
+//    backupController.delegate = self;
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:backupController];
+//    navigationController.navigationBarHidden = YES;
+//    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
+//}
+//
+//- (void)showTwoFactorReminder
+//{
+//    ReminderModalViewController *twoFactorController = [[ReminderModalViewController alloc] initWithReminderType:ReminderTypeTwoFactor];
+//    twoFactorController.delegate = self;
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:twoFactorController];
+//    navigationController.navigationBarHidden = YES;
+//    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
+//}
 
-- (void)showSecurityReminder
-{
-    BlockchainSettings.sharedAppInstance.reminderModalDate = [NSDate date];
-
-    if ([WalletManager.sharedInstance.wallet getTotalActiveBalance] > 0) {
-        if (![WalletManager.sharedInstance.wallet isRecoveryPhraseVerified]) {
-            [self showBackupReminder:NO];
-        } else {
-            [self checkIfSettingsLoadedAndShowTwoFactorReminder];
-        }
-    } else {
-        [self checkIfSettingsLoadedAndShowTwoFactorReminder];
-    }
-}
-
-- (void)checkIfSettingsLoadedAndShowTwoFactorReminder
-{
-    if (WalletManager.sharedInstance.wallet.hasLoadedAccountInfo) {
-        if (![WalletManager.sharedInstance.wallet hasEnabledTwoStep]) {
-            [self showTwoFactorReminder];
-        }
-    } else {
-        showReminderType = ShowReminderTypeTwoFactor;
-    }
-}
-
-- (void)checkIfSettingsLoadedAndShowEmailReminder
-{
-    if (WalletManager.sharedInstance.wallet.hasLoadedAccountInfo) {
-        if (![WalletManager.sharedInstance.wallet hasVerifiedEmail]) {
-            [self showEmailVerificationReminder];
-        } else {
-            [self showSecurityReminder];
-        }
-    } else {
-        showReminderType = ShowReminderTypeEmail;
-    }
-}
-
-- (void)showEmailVerificationReminder
-{
-    BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = YES;
-
-    WalletSetupViewController *setupViewController = [[WalletSetupViewController alloc] initWithSetupDelegate:self];
-
-    BOOL shouldShowTouchID = BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup;
-    setupViewController.emailOnly = !shouldShowTouchID;
-    BlockchainSettings.sharedAppInstance.shouldShowTouchIDSetup = NO;
-    BlockchainSettings.sharedAppInstance.didFailTouchIDSetup = NO;
-
-    setupViewController.modalPresentationStyle = UIModalTransitionStyleCrossDissolve;
-    [self.window.rootViewController presentViewController:setupViewController animated:NO completion:nil];
-}
-
-- (void)showBackupReminder:(BOOL)firstReceive
-{
-    ReminderType reminderType = firstReceive ? ReminderTypeBackupJustReceivedBitcoin : ReminderTypeBackupHasBitcoin;
-
-    ReminderModalViewController *backupController = [[ReminderModalViewController alloc] initWithReminderType:reminderType];
-    backupController.delegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:backupController];
-    navigationController.navigationBarHidden = YES;
-    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
-}
-
-- (void)showTwoFactorReminder
-{
-    ReminderModalViewController *twoFactorController = [[ReminderModalViewController alloc] initWithReminderType:ReminderTypeTwoFactor];
-    twoFactorController.delegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:twoFactorController];
-    navigationController.navigationBarHidden = YES;
-    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
-}
-
-- (void)forceHDUpgradeForLegacyWallets
-{
+//- (void)forceHDUpgradeForLegacyWallets
+//{
 //    if (![WalletManager.sharedInstance.wallet didUpgradeToHd]) {
 //        [self showHdUpgrade];
 //    }
-}
+//}
 //
 //- (void)showHdUpgrade
 //{
@@ -3256,15 +3256,15 @@ SideMenuViewController *sideMenuViewController;
 //    backupController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 //    [self.tabControllerManager.tabViewController presentViewController:backupController animated:YES completion:nil];
 //}
-
-- (void)showTwoStep
-{
-    void (^showBackupBlock)() = ^() {
-        [self.settingsNavigationController showTwoStep];
-    };
-
-    [self showSettings:showBackupBlock];
-}
+//
+//- (void)showTwoStep
+//{
+//    void (^showBackupBlock)() = ^() {
+//        [self.settingsNavigationController showTwoStep];
+//    };
+//
+//    [self showSettings:showBackupBlock];
+//}
 
 //- (void)checkIfPaymentRequestFulfilled:(Transaction *)transaction
 //{
