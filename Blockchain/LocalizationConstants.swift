@@ -36,6 +36,7 @@ struct LocalizationConstants {
     static let youWillBeLeavingTheApp = NSLocalizedString("You will be leaving the app.", comment: "")
     static let openMailApp = NSLocalizedString("Open Mail App", comment: "")
     static let goToSettings = NSLocalizedString("Go to Settings", comment: "")
+    static let scanQRCode = NSLocalizedString("Scan QR Code", comment: "")
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
