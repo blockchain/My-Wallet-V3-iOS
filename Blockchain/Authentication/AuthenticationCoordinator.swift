@@ -118,10 +118,12 @@ import Foundation
     private var isPinEntryModalPresented: Bool {
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
         let tabControllerManager = AppCoordinator.shared.tabControllerManager
-        return !(pinEntryViewController == nil ||
-            pinEntryViewController!.isBeingDismissed ||
-            !pinEntryViewController!.view.isDescendant(of: rootViewController.view) ||
-            tabControllerManager.tabViewController.presentedViewController != pinEntryViewController)
+        guard let pinEntryViewController = pinEntryViewController else {
+            return false
+        }
+        return (tabControllerManager.tabViewController.presentedViewController == pinEntryViewController &&
+            !pinEntryViewController.isBeingDismissed) ||
+            pinEntryViewController.view.isDescendant(of: rootViewController.view)
     }
 
     /// Flag used to indicate whether the device is prompting for biometric authentication.
