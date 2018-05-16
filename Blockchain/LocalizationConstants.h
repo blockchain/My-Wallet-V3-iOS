@@ -46,7 +46,6 @@
 #define BC_STRING_SENDING_TRANSACTION NSLocalizedString(@"Sending Transaction", nil)
 #define BC_STRING_USE_TOTAL_AVAILABLE_MINUS_FEE_ARGUMENT NSLocalizedString(@"Use total available minus fee: %@", nil)
 
-//#define BC_STRING_SUCCESS NSLocalizedString(@"Success", nil)
 #define BC_STRING_PAYMENT_SENT NSLocalizedString(@"Payment Sent!", nil)
 #define BC_STRING_PAYMENT_SENT_ETHER NSLocalizedString(@"Payment Sent! Your balance and transactions will update soon.", nil)
 #define BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_TITLE NSLocalizedString(@"Waiting for payment", nil)
@@ -218,7 +217,6 @@
 #define BC_STRING_LOADING_CREATING_V3_WALLET NSLocalizedString(@"Creating V3 Wallet", nil)
 #define BC_STRING_LOADING_CREATING NSLocalizedString(@"Creating", nil)
 #define BC_STRING_LOADING_CREATING_WALLET NSLocalizedString(@"Creating new Wallet", nil)
-//#define BC_STRING_LOADING_IMPORT_KEY NSLocalizedString(@"Importing key", nil)
 #define BC_STRING_LOADING_PROCESSING_KEY NSLocalizedString(@"Processing key", nil)
 #define BC_STRING_LOADING_CREATING_NEW_ADDRESS NSLocalizedString(@"Creating new address", nil)
 #define BC_STRING_LOADING_CREATING_REQUEST NSLocalizedString(@"Creating request", nil)
@@ -238,7 +236,6 @@
 #define BC_STRING_REQUEST NSLocalizedString(@"Request", nil)
 #define BC_STRING_REQUEST_PAYMENT NSLocalizedString(@"Request Payment", nil)
 #define BC_STRING_LABEL_ADDRESS NSLocalizedString(@"Label Address", nil)
-//#define BC_STRING_SCAN_QR_CODE NSLocalizedString(@"Scan QR Code", nil)
 #define BC_STRING_SCAN_PRIVATE_KEY NSLocalizedString(@"Scan Private Key", nil)
 #define BC_STRING_IMPORT_ADDRESS NSLocalizedString(@"Import address", nil)
 #define BC_STRING_CONTINUE NSLocalizedString(@"Continue", nil)
