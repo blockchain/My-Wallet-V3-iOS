@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 // swiftlint:disable line_length
+// swiftlint:disable identifier_name
 
 import Foundation
 
