@@ -13,7 +13,6 @@ protocol PrivateKeyReaderDelegate: class {
     func didFinishScanning(_ privateKey: String, for address: AssetAddress)
 }
 
-// TODO: move nib file to storyboard
 extension WalletManager {
 
     /// Wallet extension to support private key reading from QR codes
