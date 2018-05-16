@@ -228,11 +228,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define INFO_PLIST_KEY_CFBUNDLE_SHORT_VERSION_STRING @"CFBundleShortVersionString"
 
-//#define PREFIX_BITCOIN_URI @"bitcoin:"
-//#define PREFIX_ETHEREUM_URI @"ethereum:"
-//#define PREFIX_BITCOIN_CASH @"bitcoincash:"
-//#define PREFIX_MAIL_URI @"message://"
-
 #define TX_TYPE_TRANSFER @"transfer"
 #define TX_TYPE_SENT @"sent"
 #define TX_TYPE_RECEIVED @"received"
