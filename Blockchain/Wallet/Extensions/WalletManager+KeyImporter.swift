@@ -221,7 +221,7 @@ extension WalletManager {
         }
 
         func didFinishScanning(_ privateKey: String, for address: AssetAddress) {
-            WalletManager.shared.wallet.addKey(privateKey, toWatchOnlyAddress: address.description)
+            wallet.addKey(privateKey, toWatchOnlyAddress: address.description)
         }
     }
 }
