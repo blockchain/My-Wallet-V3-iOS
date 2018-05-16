@@ -3325,7 +3325,7 @@
     }
 }
 
-/* Beging Key Importer */
+/* Begin Key Importer */
 
 - (void)on_add_private_key_start
 {
