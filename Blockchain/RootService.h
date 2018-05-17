@@ -166,14 +166,14 @@
 
 //- (void)reload;
 - (void)reloadAfterMultiAddressResponse;
-- (void)toggleSymbol;
+//- (void)toggleSymbol;
 
 //- (void)logoutAndShowPasswordModal;
 
-- (NSInteger)filterIndex;
-- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType;
-- (void)filterTransactionsByImportedAddresses;
-- (void)removeTransactionsFilter;
+//- (NSInteger)filterIndex;
+//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType;
+//- (void)filterTransactionsByImportedAddresses;
+//- (void)removeTransactionsFilter;
 
 //- (void)initializeWebview;
 

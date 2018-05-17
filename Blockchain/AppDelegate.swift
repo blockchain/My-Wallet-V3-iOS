@@ -222,20 +222,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    // TODO: move to appropriate module
-    func toggleSymbol() {
-        let symbolLocal = BlockchainSettings.App.shared.symbolLocal
-        BlockchainSettings.App.shared.symbolLocal = !symbolLocal
-        reloadSymbols()
-    }
-
-    // TODO: don't keep a reference to each contoller, instead allow them to subscribe to value changes
-    func reloadSymbols() {
-        //    [self.tabControllerManager reloadSymbols];
-        //    [_accountsAndAddressesNavigationController reload];
-        //    [sideMenuViewController reload];
-    }
-
     // MARK: - State Checks
 
     func checkForNewInstall() {

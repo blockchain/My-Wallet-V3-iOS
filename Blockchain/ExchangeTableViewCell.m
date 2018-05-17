@@ -68,7 +68,7 @@
 
 - (IBAction)amountButtonClicked:(id)sender
 {
-    [app toggleSymbol];
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 @end

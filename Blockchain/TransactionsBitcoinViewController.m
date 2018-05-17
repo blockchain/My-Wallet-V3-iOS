@@ -485,11 +485,16 @@
 
 - (void)didSelectFilter:(int)filter
 {
+    TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
+
     if (filter == FILTER_INDEX_IMPORTED_ADDRESSES) {
-        [app filterTransactionsByImportedAddresses];
+        [tabControllerManager filterTransactionsByImportedAddresses];
     } else {
-        [app filterTransactionsByAccount:filter assetType:self.assetType];
+        NSString *filterLabel = [WalletManager.sharedInstance.wallet getLabelForAccount:filter assetType:self.assetType];
+        [tabControllerManager filterTransactionsByAccount:filter filterLabel:filterLabel assetType:self.assetType];
     }
+
+    [WalletManager.sharedInstance.wallet reloadFilter];
 }
 
 #pragma mark - View lifecycle

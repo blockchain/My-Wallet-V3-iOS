@@ -703,8 +703,8 @@ SideMenuViewController *sideMenuViewController;
 //    [sideMenuViewController reloadTableView];
 //}
 
-- (void)toggleSymbol
-{
+//- (void)toggleSymbol
+//{
 //    symbolLocal = !symbolLocal;
 //
 //    // Save this setting here and load it on start
@@ -712,41 +712,41 @@ SideMenuViewController *sideMenuViewController;
 //    [[NSUserDefaults standardUserDefaults] synchronize];
 //
 //    [self reloadSymbols];
-}
+//}
 
-- (NSInteger)filterIndex
-{
-    return [self.tabControllerManager getFilterIndex];
-}
+//- (NSInteger)filterIndex
+//{
+//    return [self.tabControllerManager getFilterIndex];
+//}
 
-- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType
-{
-    [self.tabControllerManager filterTransactionsByAccount:accountIndex filterLabel:[WalletManager.sharedInstance.wallet getLabelForAccount:accountIndex assetType:self.tabControllerManager.assetType] assetType:assetType];
+//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType
+//{
+//    [self.tabControllerManager filterTransactionsByAccount:accountIndex filterLabel:[WalletManager.sharedInstance.wallet getLabelForAccount:accountIndex assetType:self.tabControllerManager.assetType] assetType:assetType];
+//
+//    [WalletManager.sharedInstance.wallet reloadFilter];
+//}
 
-    [WalletManager.sharedInstance.wallet reloadFilter];
-}
+//- (void)filterTransactionsByImportedAddresses
+//{
+//    [self.tabControllerManager filterTransactionsByImportedAddresses];
+//
+//    [WalletManager.sharedInstance.wallet reloadFilter];
+//}
 
-- (void)filterTransactionsByImportedAddresses
-{
-    [self.tabControllerManager filterTransactionsByImportedAddresses];
+//- (void)removeTransactionsFilter
+//{
+//    [self.tabControllerManager removeTransactionsFilter];
+//    [WalletManager.sharedInstance.wallet reloadFilter];
+//}
 
-    [WalletManager.sharedInstance.wallet reloadFilter];
-}
-
-- (void)removeTransactionsFilter
-{
-    [self.tabControllerManager removeTransactionsFilter];
-    [WalletManager.sharedInstance.wallet reloadFilter];
-}
-
-- (void)reloadSymbols
-{
+//- (void)reloadSymbols
+//{
 //    [self.tabControllerManager reloadSymbols];
 //
 //    [_contactsViewController reloadSymbols];
 //    [_accountsAndAddressesNavigationController reload];
 //    [sideMenuViewController reload];
-}
+//}
 
 //- (void)showBusyViewWithLoadingText:(NSString *)text
 //{

@@ -224,8 +224,9 @@ int accountEntries = 0;
     headerView.backgroundView = backgroundView;
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:NO];
-    
-    [app removeTransactionsFilter];
+
+    [AppCoordinator.sharedInstance.tabControllerManager removeTransactionsFilter];
+    [WalletManager.sharedInstance.wallet reloadFilter];
 }
 
 #pragma mark - SlidingViewController Delegate

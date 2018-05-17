@@ -429,7 +429,7 @@ const CGFloat rowHeightValueReceived = 80;
 
 - (void)toggleSymbol
 {
-    [app toggleSymbol];
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 - (void)textViewDidChange:(UITextView *)textView

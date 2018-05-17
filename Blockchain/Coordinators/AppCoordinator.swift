@@ -78,6 +78,7 @@ import Foundation
         self.window.backgroundColor = UIColor.white
         super.init()
         self.walletManager.buySellDelegate = self
+        observeSymbolChanges()
     }
 
     // MARK: Public Methods
@@ -221,6 +222,15 @@ import Foundation
         tabControllerManager.transactionsBitcoinViewController?.messageIdentifier = nil
 
         closeSideMenu()
+    }
+
+    /// Observes symbol changes so that view controllers can reflect the new symbol
+    private func observeSymbolChanges() {
+        BlockchainSettings.App.shared.onSymbolLocalChanged = { [unowned self] _ in
+            self.tabControllerManager.reloadSymbols()
+            self.accountsAndAddressesNavigationController.reload()
+            self.sideMenuViewController.reload()
+        }
     }
 }
 

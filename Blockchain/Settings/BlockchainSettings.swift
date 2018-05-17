@@ -121,12 +121,22 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        var onSymbolLocalChanged: ((Bool) -> Void)?
+
+        /// Property indicating whether or not the currency symbol that should be used throughout the app
+        /// should be fiat, if set to true, or the asset-specific symbol, if false.
         @objc var symbolLocal: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.symbolLocal.rawValue)
             }
             set {
+                let oldValue = symbolLocal
+
                 defaults.set(newValue, forKey: UserDefaults.Keys.symbolLocal.rawValue)
+                
+                if oldValue != newValue {
+                    onSymbolLocalChanged?(newValue)
+                }
             }
         }
 
