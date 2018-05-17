@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeDelegate, WalletTransactionDelegate>
 @end
 @implementation TabControllerManager
 
@@ -25,10 +25,12 @@
         self.assetType = assetType;
         [self.tabViewController.assetSelectorView setSelectedAsset:assetType];
         
-        [WalletManager sharedInstance].settingsDelegate = self;
-        [WalletManager sharedInstance].sendBitcoinDelegate = self;
-        [WalletManager sharedInstance].sendEtherDelegate = self;
-        [WalletManager sharedInstance].exchangeDelegate = self;
+        WalletManager *walletManager = WalletManager.sharedInstance;
+        walletManager.settingsDelegate = self;
+        walletManager.sendBitcoinDelegate = self;
+        walletManager.sendEtherDelegate = self;
+        walletManager.exchangeDelegate = self;
+        walletManager.transactionDelegate = self;
     }
     return self;
 }
@@ -62,6 +64,32 @@
     [self.sendEtherViewController keepCurrentPayment];
     [self.receiveBitcoinViewController doCurrencyConversion];
     [self.transactionsEtherViewController reload];
+}
+
+#pragma mark - Wallet Transaction Delegate
+
+
+- (void)onPaymentReceivedWithAmount:(NSString * _Nonnull)amount assetType:(enum AssetType)assetType
+{
+    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED handler:nil];
+
+    LegacyAssetType legacyType;
+    switch (assetType) {
+        case AssetTypeBitcoin:
+            legacyType = LegacyAssetTypeBitcoin;
+        case AssetTypeBitcoinCash:
+            legacyType = LegacyAssetTypeBitcoinCash;
+        case AssetTypeEthereum:
+            legacyType = LegacyAssetTypeEther;
+    }
+    
+    [AuthenticationCoordinator.sharedInstance.pinEntryViewController paymentReceived:legacyType];
+}
+
+- (void)onTransactionReceived
+{
+    [SoundManager.sharedInstance playBeep];
+    [self receivedTransactionMessage];
 }
 
 #pragma mark - Reloading

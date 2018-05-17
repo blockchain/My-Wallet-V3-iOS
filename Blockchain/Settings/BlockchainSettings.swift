@@ -133,7 +133,7 @@ final class BlockchainSettings: NSObject {
                 let oldValue = symbolLocal
 
                 defaults.set(newValue, forKey: UserDefaults.Keys.symbolLocal.rawValue)
-                
+
                 if oldValue != newValue {
                     onSymbolLocalChanged?(newValue)
                 }

@@ -108,7 +108,7 @@ import Foundation
 
     internal let walletManager: WalletManager
 
-    internal(set) var pinEntryViewController: PEPinEntryController?
+    @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
     // TODO: loginTimout is never invalidated after a successful login
     internal var loginTimeout: Timer?

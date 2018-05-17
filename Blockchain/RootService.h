@@ -203,7 +203,7 @@
 - (void)setupTransferAllFunds;
 - (void)setupSendToAddress:(NSString *)address;
 
-- (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder;
+//- (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder;
 - (void)checkIfPaymentRequestFulfilled:(Transaction *)transaction;
 
 //- (void)clearPin;

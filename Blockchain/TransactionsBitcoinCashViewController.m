@@ -147,8 +147,12 @@
     } else if ([transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
         
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        
-        [app paymentReceived:[self getAmountForReceivedTransaction:transaction] showBackupReminder:NO];
+
+        TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
+        if (tabControllerManager.tabViewController.selectedIndex == TAB_RECEIVE && ![tabControllerManager isSending]) {
+            uint64_t amount = [self getAmountForReceivedTransaction:transaction];
+            [tabControllerManager paymentReceived:amount showBackupReminder:NO];
+        }
     } else {
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }

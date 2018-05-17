@@ -379,8 +379,14 @@
         
         BOOL shouldShowBackupReminder = (self.hasZeroTotalBalance && [WalletManager.sharedInstance.wallet getTotalActiveBalance] > 0 &&
                                          ![WalletManager.sharedInstance.wallet isRecoveryPhraseVerified]);
-        
-        [app paymentReceived:[self getAmountForReceivedTransaction:transaction] showBackupReminder:shouldShowBackupReminder];
+
+        TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
+        if (tabControllerManager.tabViewController.selectedIndex == TAB_RECEIVE && ![tabControllerManager isSending]) {
+            uint64_t amount = [self getAmountForReceivedTransaction:transaction];
+            [tabControllerManager paymentReceived:amount showBackupReminder:shouldShowBackupReminder];
+        } else if (shouldShowBackupReminder) {
+            [ReminderPresenter.sharedInstance showBackupReminderWithFirstReceive:YES];
+        }
     } else {
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:self.sectionMain]] withRowAnimation:UITableViewRowAnimationFade];
     }

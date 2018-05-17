@@ -9,8 +9,10 @@
 import Foundation
 
 /// Presenter for displaying various security-related reminders to the user.
-class ReminderPresenter {
+@objc class ReminderPresenter: NSObject {
     static let shared = ReminderPresenter()
+
+    @objc class func sharedInstance() -> ReminderPresenter { return shared }
 
     // MARK: - Properties
 
@@ -23,6 +25,7 @@ class ReminderPresenter {
 
     private init(walletManager: WalletManager = WalletManager.shared) {
         self.walletManager = walletManager
+        super.init()
         self.walletManager.accountInfoDelegate = self
     }
 
@@ -53,7 +56,7 @@ class ReminderPresenter {
     }
 
     /// Displays a reminder to the user that they should store the backup phrase for their wallet
-    func showBackupReminder(firstReceive: Bool) {
+    @objc func showBackupReminder(firstReceive: Bool) {
         let reminderType = firstReceive ? ReminderTypeBackupJustReceivedBitcoin : ReminderTypeBackupHasBitcoin
         let backupController = ReminderModalViewController(reminderType: reminderType)!
         backupController.delegate = self

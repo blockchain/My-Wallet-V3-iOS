@@ -2629,10 +2629,10 @@ SideMenuViewController *sideMenuViewController;
 //    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 //}
 
-- (void)showTransactions
-{
-    [self.tabControllerManager showTransactionsAnimated:YES];
-}
+//- (void)showTransactions
+//{
+//    [self.tabControllerManager showTransactionsAnimated:YES];
+//}
 
 //- (void)showSendCoins
 //{
@@ -3165,34 +3165,34 @@ SideMenuViewController *sideMenuViewController;
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[APP_STORE_LINK_PREFIX stringByAppendingString:APP_STORE_ID]]];
 }
 
-- (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder
-{
-    if (self.tabControllerManager.tabViewController.selectedIndex == TAB_RECEIVE && ![self.tabControllerManager isSending]) {
-        [self.tabControllerManager paymentReceived:amount showBackupReminder:showBackupReminder];
-    } else {
-        if (showBackupReminder) {
-            [self showBackupReminder:YES];
-        }
-    }
-}
+//- (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder
+//{
+//    if (self.tabControllerManager.tabViewController.selectedIndex == TAB_RECEIVE && ![self.tabControllerManager isSending]) {
+//        [self.tabControllerManager paymentReceived:amount showBackupReminder:showBackupReminder];
+//    } else {
+//        if (showBackupReminder) {
+//            [self showBackupReminder:YES];
+//        }
+//    }
+//}
 
-- (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PAYMENT_RECEIVED message:amount preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//- (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PAYMENT_RECEIVED message:amount preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//        [self.pinEntryViewController paymentReceived:assetType];
+//    });
+//}
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        [self.pinEntryViewController paymentReceived:assetType];
-    });
-}
-
-- (void)receivedTransactionMessage
-{
-    [SoundManager.sharedInstance playBeep];
-
-    [self.tabControllerManager receivedTransactionMessage];
-}
+//- (void)receivedTransactionMessage
+//{
+//    [SoundManager.sharedInstance playBeep];
+//
+//    [self.tabControllerManager receivedTransactionMessage];
+//}
 
 //- (void)authorizationRequired
 //{

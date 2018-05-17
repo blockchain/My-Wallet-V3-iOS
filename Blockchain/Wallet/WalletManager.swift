@@ -40,6 +40,7 @@ class WalletManager: NSObject {
     @objc weak var sendBitcoinDelegate: WalletSendBitcoinDelegate?
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
     @objc weak var exchangeDelegate: WalletExchangeDelegate?
+    @objc weak var transactionDelegate: WalletTransactionDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -403,5 +404,19 @@ extension WalletManager: WalletDelegate {
 
     func didCreateEthAccountForExchange() {
         exchangeDelegate?.didCreateEthAccountForExchange()
+    }
+
+    // MARK: - Transaction
+
+    func receivedTransactionMessage() {
+        DispatchQueue.main.async { [unowned self] in
+            self.transactionDelegate?.onTransactionReceived()
+        }
+    }
+
+    func paymentReceived(onPINScreen amount: String!, assetType: LegacyAssetType) {
+        DispatchQueue.main.async { [unowned self] in
+            self.transactionDelegate?.onPaymentReceived(amount: amount, assetType: AssetType.from(legacyAssetType: assetType))
+        }
     }
 }
