@@ -66,15 +66,15 @@ RootService * app;
 //
 //ShowType showType;
 
-enum {
-    ShowReminderTypeNone,
-    ShowReminderTypeTwoFactor,
-    ShowReminderTypeEmail
-};
-
-typedef NSInteger ShowReminderType;
-
-ShowReminderType showReminderType;
+//enum {
+//    ShowReminderTypeNone,
+//    ShowReminderTypeTwoFactor,
+//    ShowReminderTypeEmail
+//};
+//
+//typedef NSInteger ShowReminderType;
+//
+//ShowReminderType showReminderType;
 
 SideMenuViewController *sideMenuViewController;
 
