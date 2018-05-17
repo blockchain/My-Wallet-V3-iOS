@@ -1212,27 +1212,27 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 
-- (void)playBeepSound
-{
-    if (beepSoundID == 0) {
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: [[NSBundle mainBundle] pathForResource:@"beep" ofType:SOUND_FORMAT]], &beepSoundID);
-    }
+//- (void)playBeepSound
+//{
+//    if (beepSoundID == 0) {
+//        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: [[NSBundle mainBundle] pathForResource:@"beep" ofType:SOUND_FORMAT]], &beepSoundID);
+//    }
+//
+//    AudioServicesPlaySystemSound(beepSoundID);
+//}
 
-    AudioServicesPlaySystemSound(beepSoundID);
-}
-
-- (void)playAlertSound
-{
-    if (alertSoundID == 0) {
-        //Find the Alert Sound
-        NSString * alert_sound = [[NSBundle mainBundle] pathForResource:@"alert-received" ofType:SOUND_FORMAT];
-
-        //Create the system sound
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: alert_sound], &alertSoundID);
-    }
-
-    AudioServicesPlaySystemSound(alertSoundID);
-}
+//- (void)playAlertSound
+//{
+//    if (alertSoundID == 0) {
+//        //Find the Alert Sound
+//        NSString * alert_sound = [[NSBundle mainBundle] pathForResource:@"alert-received" ofType:SOUND_FORMAT];
+//
+//        //Create the system sound
+//        AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: alert_sound], &alertSoundID);
+//    }
+//
+//    AudioServicesPlaySystemSound(alertSoundID);
+//}
 
 //- (void)pushWebViewController:(NSString*)url title:(NSString *)title
 //{
@@ -3174,7 +3174,7 @@ SideMenuViewController *sideMenuViewController;
 
 - (void)receivedTransactionMessage
 {
-    [self playBeepSound];
+    [SoundManager.sharedInstance playBeep];
 
     [self.tabControllerManager receivedTransactionMessage];
 }

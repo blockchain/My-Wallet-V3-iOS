@@ -354,8 +354,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define URL_INFORMATION_RECEIVE @"https://support.blockchain.com/hc/en-us/articles/210353663-Why-is-my-bitcoin-address-changing"
 
-#define SOUND_FORMAT @"wav"
-
 #define TRANSACTION_FILTER_IMPORTED @"imported"
 
 #define CURRENCY_CODE_BTC @"BTC"

@@ -121,8 +121,8 @@
 
 //- (void)setAccountData:(NSString*)guid sharedKey:(NSString*)sharedKey;
 
-- (void)playBeepSound;
-- (void)playAlertSound;
+//- (void)playBeepSound;
+//- (void)playAlertSound;
 
 
 //- (void)showWelcome;

@@ -269,6 +269,8 @@
 		AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */; };
 		AAC8F35620993BB8004B7D33 /* WebSocketCloseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */; };
 		AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */; };
+		AAC9FCE520ADF17100E28B7A /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC9FCE420ADF17100E28B7A /* SoundManager.swift */; };
+		AAC9FCE620ADF17100E28B7A /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC9FCE420ADF17100E28B7A /* SoundManager.swift */; };
 		AACE31222091004A00B7B806 /* UIApplication+Suspend.m in Sources */ = {isa = PBXBuildFile; fileRef = AACE31212091004A00B7B806 /* UIApplication+Suspend.m */; };
 		AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED68208EB4FB002D8BAC /* PushNotificationManager.swift */; };
 		AACE3134209121B800B7B806 /* WalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6B208EC330002D8BAC /* WalletManager.swift */; };
@@ -1273,6 +1275,7 @@
 		AABDED6F208FACB9002D8BAC /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPCookieStorage.swift; sourceTree = "<group>"; };
 		AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketCloseCode.swift; sourceTree = "<group>"; };
+		AAC9FCE420ADF17100E28B7A /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SoundManager.swift; path = AV/SoundManager.swift; sourceTree = "<group>"; };
 		AACE31202091004900B7B806 /* UIApplication+Suspend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Suspend.h"; path = "Extensions/UIApplication+Suspend.h"; sourceTree = "<group>"; };
 		AACE31212091004A00B7B806 /* UIApplication+Suspend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Suspend.m"; path = "Extensions/UIApplication+Suspend.m"; sourceTree = "<group>"; };
 		AACE314B209152D800B7B806 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIApplication.swift; path = Extensions/UIApplication.swift; sourceTree = "<group>"; };
@@ -2370,6 +2373,7 @@
 			isa = PBXGroup;
 			children = (
 				AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */,
+				AAC9FCE420ADF17100E28B7A /* SoundManager.swift */,
 			);
 			name = AV;
 			sourceTree = "<group>";
@@ -2949,6 +2953,7 @@
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
+				AAC9FCE620ADF17100E28B7A /* SoundManager.swift in Sources */,
 				51135708209CF69C00056D65 /* BackupWordsViewController.swift in Sources */,
 				AACE31C42092A99B00B7B806 /* Constants.swift in Sources */,
 				C7369223209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift in Sources */,
@@ -3067,6 +3072,7 @@
 				51135701209CEEB900056D65 /* PushNotificationAuthPayload.swift in Sources */,
 				C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */,
 				2322DCB91D771831000E5AC1 /* SRPinningSecurityPolicy.m in Sources */,
+				AAC9FCE520ADF17100E28B7A /* SoundManager.swift in Sources */,
 				C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */,
 				23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */,
 				23E2FC081C7F60E7004CFF79 /* BCInsetLabel.m in Sources */,
