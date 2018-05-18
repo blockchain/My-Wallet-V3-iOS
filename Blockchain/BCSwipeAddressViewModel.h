@@ -14,6 +14,6 @@
 @property (nonatomic) NSString *textAddress;
 @property (nonatomic) NSString *action;
 @property (nonatomic) NSString *assetImageViewName;
-@property (nonatomic) AssetType assetType;
-- (id)initWithAssetType:(AssetType)assetType;
+@property (nonatomic) LegacyAssetType assetType;
+- (id)initWithAssetType:(LegacyAssetType)assetType;
 @end

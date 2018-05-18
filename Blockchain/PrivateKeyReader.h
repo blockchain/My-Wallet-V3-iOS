@@ -17,6 +17,6 @@
 @property (nonatomic) BOOL acceptsPublicKeys;
 @property (nonatomic) NSString *busyViewText;
 
-- (id)initWithAssetType:(AssetType)assetType success:(void (^)(NSString*))__success error:(void (^)(NSString*))__error acceptPublicKeys:(BOOL)acceptPublicKeys busyViewText:(NSString *)text;
+- (id)initWithAssetType:(LegacyAssetType)assetType success:(void (^)(NSString*))__success error:(void (^)(NSString*))__error acceptPublicKeys:(BOOL)acceptPublicKeys busyViewText:(NSString *)text;
 
 @end

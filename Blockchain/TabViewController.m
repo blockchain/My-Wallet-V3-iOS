@@ -92,7 +92,7 @@
         [animation setType:kCATransitionPush];
         [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
         
-        if (newIndex > selectedIndex || (newIndex == selectedIndex && self.assetSelectorView.selectedAsset == AssetTypeEther))
+        if (newIndex > selectedIndex || (newIndex == selectedIndex && self.assetSelectorView.selectedAsset == LegacyAssetTypeEther))
             [animation setSubtype:kCATransitionFromRight];
         else
             [animation setSubtype:kCATransitionFromLeft];
@@ -220,7 +220,7 @@
     balanceLabel.text = text;
 }
 
-- (void)selectAsset:(AssetType)assetType
+- (void)selectAsset:(LegacyAssetType)assetType
 {
     self.assetSelectorView.selectedAsset = assetType;
     
@@ -229,7 +229,7 @@
 
 - (void)assetSelectorChanged
 {
-    AssetType asset = self.assetSelectorView.selectedAsset;
+    LegacyAssetType asset = self.assetSelectorView.selectedAsset;
     
     [self.assetDelegate didSetAssetType:asset];
 }
@@ -274,7 +274,7 @@
 
 # pragma mark - Asset Selector Delegate
 
-- (void)didSelectAsset:(AssetType)assetType
+- (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         [topBar changeHeight:DEFAULT_HEADER_HEIGHT + DEFAULT_HEADER_HEIGHT_OFFSET];

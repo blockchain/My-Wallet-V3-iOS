@@ -186,7 +186,7 @@ typedef enum {
 
 - (void)setDefaultAccount:(int)account
 {
-    if (self.assetType == AssetTypeBitcoin) [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+    if (self.assetType == LegacyAssetTypeBitcoin) [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     [WalletManager.sharedInstance.wallet setDefaultAccount:account assetType:self.assetType];
 }
 
@@ -203,7 +203,7 @@ typedef enum {
             [self performSelector:@selector(toggleArchiveLegacyAddress) withObject:nil afterDelay:ANIMATION_DURATION];
         }
     } else {
-        if (self.assetType == AssetTypeBitcoin) [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
+        if (self.assetType == LegacyAssetTypeBitcoin) [self showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
         [self performSelector:@selector(toggleArchiveAccount) withObject:nil afterDelay:ANIMATION_DURATION];
     }
 }

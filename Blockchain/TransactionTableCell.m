@@ -161,7 +161,7 @@
 
 - (IBAction)btcbuttonclicked:(id)sender
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [self transactionClicked:nil];
     } else {
         [self bitcoinCashTransactionClicked];

@@ -76,7 +76,7 @@
         self.btcWithFiatFeeText = [self formatAmountInBCHAndFiat:fee];
         self.showDescription = NO;
         
-        if ([WalletManager.sharedInstance.wallet isValidAddress:self.to assetType:AssetTypeBitcoin]) {
+        if ([WalletManager.sharedInstance.wallet isValidAddress:self.to assetType:LegacyAssetTypeBitcoin]) {
             CGFloat fontSize = FONT_SIZE_EXTRA_SMALL;
             NSMutableAttributedString *warning = [[NSMutableAttributedString alloc] initWithString:BC_STRING_BITCOIN_CASH_WARNING_CONFIRM_VALID_ADDRESS_ONE];
             [warning addAttribute:NSFontAttributeName value:[UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize] range:NSMakeRange(0, [warning length])];

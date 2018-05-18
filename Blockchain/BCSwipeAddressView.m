@@ -96,7 +96,7 @@
     } else if (address) {
         QRCodeGenerator *qrCodeGenerator = [[QRCodeGenerator alloc] init];
         self.qrCodeImageView.hidden = NO;
-        self.qrCodeImageView.image = self.viewModel.assetType == AssetTypeBitcoin ? [qrCodeGenerator qrImageFromAddress:address] : [qrCodeGenerator createQRImageFromString:address];
+        self.qrCodeImageView.image = self.viewModel.assetType == LegacyAssetTypeBitcoin ? [qrCodeGenerator qrImageFromAddress:address] : [qrCodeGenerator createQRImageFromString:address];
         self.addressLabel.text = self.viewModel.textAddress;
     } else {
         self.qrCodeImageView.hidden = YES;

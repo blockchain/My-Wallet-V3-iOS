@@ -20,7 +20,7 @@
 
 @property (nonatomic) id <IChartAxisValueFormatter, BCPriceChartViewDelegate> delegate;
 
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic) LineChartView *chartView;
 @property (nonatomic) UIView *graphContainerView;
 @property (nonatomic) UILabel *titleLabel;
@@ -44,7 +44,7 @@
 
 @implementation BCPriceChartView
 
-- (id)initWithFrame:(CGRect)frame assetType:(AssetType)assetType dataPoints:(NSArray *)dataPoints delegate:(id<IChartAxisValueFormatter, ChartViewDelegate, BCPriceChartViewDelegate>)delegate
+- (id)initWithFrame:(CGRect)frame assetType:(LegacyAssetType)assetType dataPoints:(NSArray *)dataPoints delegate:(id<IChartAxisValueFormatter, ChartViewDelegate, BCPriceChartViewDelegate>)delegate
 {
     if (self == [super initWithFrame:frame]) {
         self.assetType = assetType;
@@ -411,12 +411,12 @@
 
 - (NSString *)getChartTitleText
 {
-    AssetType assetType = self.assetType;
-    if (assetType == AssetTypeBitcoin) {
+    LegacyAssetType assetType = self.assetType;
+    if (assetType == LegacyAssetTypeBitcoin) {
         return [BC_STRING_BITCOIN_PRICE uppercaseString];
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         return [BC_STRING_ETHER_PRICE uppercaseString];
-    } else if (assetType == AssetTypeBitcoinCash) {
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
         return [BC_STRING_BITCOIN_CASH_PRICE uppercaseString];
     }
     DLog(@"Error: unknown asset type!");
@@ -425,12 +425,12 @@
 
 - (NSString *)getPriceLabelText
 {
-    AssetType assetType = self.assetType;
-    if (assetType == AssetTypeBitcoin) {
+    LegacyAssetType assetType = self.assetType;
+    if (assetType == LegacyAssetTypeBitcoin) {
         return [NSNumberFormatter formatMoney:SATOSHI localCurrency:YES];
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         return [NSNumberFormatter formatEthToFiatWithSymbol:@"1" exchangeRate:self.lastEthExchangeRate];
-    } else if (assetType == AssetTypeBitcoinCash) {
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
         return [NSNumberFormatter formatBchWithSymbol:SATOSHI localCurrency:YES];
     }
     DLog(@"Error: unknown asset type!");

@@ -152,7 +152,7 @@ SideMenuViewController *sideMenuViewController;
 //
 //    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 //
-//    [userDefaults registerDefaults:@{USER_DEFAULTS_KEY_ASSET_TYPE : [NSNumber numberWithInt:AssetTypeBitcoin]}];
+//    [userDefaults registerDefaults:@{USER_DEFAULTS_KEY_ASSET_TYPE : [NSNumber numberWithInt:LegacyAssetTypeBitcoin]}];
 //
 //    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING : @YES}];
 //    [[NSUserDefaults standardUserDefaults] registerDefaults:@{USER_DEFAULTS_KEY_SWIPE_TO_RECEIVE_ENABLED : @YES}];
@@ -318,12 +318,12 @@ SideMenuViewController *sideMenuViewController;
 //        }
 //
 //        int numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
-//        NSArray *bitcoinSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:AssetTypeBitcoin];
+//        NSArray *bitcoinSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
 //        if (bitcoinSwipeAddresses) {
 //            numberOfBitcoinAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinSwipeAddresses.count;
 //        }
 //
-//        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinAddressesToDerive assetType:AssetTypeBitcoin];
+//        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinAddressesToDerive assetType:LegacyAssetTypeBitcoin];
 //
 //        [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationDidEnterBackground" object:self];
 //    }
@@ -719,7 +719,7 @@ SideMenuViewController *sideMenuViewController;
 //    return [self.tabControllerManager getFilterIndex];
 //}
 
-//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType
+//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(LegacyAssetType)assetType
 //{
 //    [self.tabControllerManager filterTransactionsByAccount:accountIndex filterLabel:[WalletManager.sharedInstance.wallet getLabelForAccount:accountIndex assetType:self.tabControllerManager.assetType] assetType:assetType];
 //
@@ -1075,7 +1075,7 @@ SideMenuViewController *sideMenuViewController;
     int newDefaultAccountLabeledAddressesCount = [WalletManager.sharedInstance.wallet getDefaultAccountLabelledAddressesCount];
     NSNumber *lastCount = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
     if (lastCount && [lastCount intValue] != newDefaultAccountLabeledAddressesCount) {
-        [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoin];
+        [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
     }
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:newDefaultAccountLabeledAddressesCount] forKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
 }
@@ -2001,20 +2001,20 @@ SideMenuViewController *sideMenuViewController;
     }
 }
 
-- (void)didGetFiatAtTime:(NSNumber *)fiatAmount currencyCode:(NSString *)currencyCode assetType:(AssetType)assetType
+- (void)didGetFiatAtTime:(NSNumber *)fiatAmount currencyCode:(NSString *)currencyCode assetType:(LegacyAssetType)assetType
 {
     BOOL didFindTransaction = NO;
 
     NSArray *transactions;
     NSString *targetHash;
 
-    if (assetType == AssetTypeBitcoin) {
+    if (assetType == LegacyAssetTypeBitcoin) {
         transactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
         targetHash = self.tabControllerManager.transactionsBitcoinViewController.detailViewController.transactionModel.myHash;
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         transactions = WalletManager.sharedInstance.wallet.etherTransactions;
         targetHash = self.tabControllerManager.transactionsEtherViewController.detailViewController.transactionModel.myHash;
-    } else if (assetType == AssetTypeBitcoinCash) {
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
         transactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
         targetHash = self.tabControllerManager.transactionsBitcoinCashViewController.detailViewController.transactionModel.myHash;
     }
@@ -2044,8 +2044,8 @@ SideMenuViewController *sideMenuViewController;
 
 - (void)didSetDefaultAccount
 {
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoin];
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoinCash];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
     [self.tabControllerManager didSetDefaultAccount];
 }
 
@@ -2389,7 +2389,7 @@ SideMenuViewController *sideMenuViewController;
 //    [WalletManager.sharedInstance.wallet getMessages];
 //}
 
-- (void)didGetSwipeAddresses:(NSArray *)newSwipeAddresses assetType:(AssetType)assetType
+- (void)didGetSwipeAddresses:(NSArray *)newSwipeAddresses assetType:(LegacyAssetType)assetType
 {
     if (!newSwipeAddresses) {
         DLog(@"Error: no new swipe addresses found!");
@@ -2400,15 +2400,15 @@ SideMenuViewController *sideMenuViewController;
         [KeychainItemWrapper addSwipeAddress:swipeAddress assetType:assetType];
     }
 
-    if (assetType == AssetTypeBitcoin) {
+    if (assetType == LegacyAssetTypeBitcoin) {
 
         int numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
-        NSArray *bitcoinCashSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:AssetTypeBitcoinCash];
+        NSArray *bitcoinCashSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
         if (bitcoinCashSwipeAddresses) {
             numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinCashSwipeAddresses.count;
         }
 
-        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinCashAddressesToDerive assetType:AssetTypeBitcoinCash];
+        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinCashAddressesToDerive assetType:LegacyAssetTypeBitcoinCash];
     } else {
         [self.pinEntryViewController setupQRCode];
     }
@@ -2577,7 +2577,7 @@ SideMenuViewController *sideMenuViewController;
 //            self.accountsAndAddressesNavigationController.viewControllers.count == 1 &&
 //            [WalletManager.sharedInstance.wallet didUpgradeToHd] &&
 //            [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] &&
-//            self.accountsAndAddressesNavigationController.assetSelectorView.selectedAsset == AssetTypeBitcoin) {
+//            self.accountsAndAddressesNavigationController.assetSelectorView.selectedAsset == LegacyAssetTypeBitcoin) {
 //            [self.accountsAndAddressesNavigationController alertUserToTransferAllFunds:NO];
 //        }
 //    }];
@@ -3161,7 +3161,7 @@ SideMenuViewController *sideMenuViewController;
     }
 }
 
-- (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(AssetType)assetType
+- (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_PAYMENT_RECEIVED message:amount preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
@@ -3189,13 +3189,13 @@ SideMenuViewController *sideMenuViewController;
 //    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 //}
 
-//- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType
+//- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(LegacyAssetType)assetType
 //{
 //    NSString *URLString;
 //
-//    if (assetType == AssetTypeBitcoin) {
+//    if (assetType == LegacyAssetTypeBitcoin) {
 //        URLString = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT, address]];
-//    } else if (assetType == AssetTypeBitcoinCash) {
+//    } else if (assetType == LegacyAssetTypeBitcoinCash) {
 //        NSString *addressToCheck = [app.wallet fromBitcoinCash:address];
 //        URLString = [[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:ADDRESS_URL_SUFFIX_BCH_ADDRESS_ARGUMENT, addressToCheck]];
 //    } else {

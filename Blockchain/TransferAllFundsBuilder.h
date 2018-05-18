@@ -39,7 +39,7 @@
 @property(nonatomic, copy) void (^on_finish_signing)();
 
 
-- (id)initWithAssetType:(AssetType)assetType usingSendScreen:(BOOL)usesSendScreen;
+- (id)initWithAssetType:(LegacyAssetType)assetType usingSendScreen:(BOOL)usesSendScreen;
 - (void)setupTransfersToAccount:(int)account;
 - (void)setupFirstTransferWithAddressesUsed:(NSArray *)addressesUsed;
 - (void)transferAllFundsToAccountWithSecondPassword:(NSString *)secondPassword;

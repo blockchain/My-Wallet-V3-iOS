@@ -102,7 +102,7 @@
 
 #pragma mark - Actions
 
-- (void)setAssetType:(AssetType)assetType
+- (void)setAssetType:(LegacyAssetType)assetType
 {
     _assetType = assetType;
     
@@ -238,7 +238,7 @@
 {
     AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
     
-    if (self.assetType == AssetTypeBitcoin && [WalletManager.sharedInstance.wallet didUpgradeToHd] && [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] && navigationController.visibleViewController == self) {
+    if (self.assetType == LegacyAssetTypeBitcoin && [WalletManager.sharedInstance.wallet didUpgradeToHd] && [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] && navigationController.visibleViewController == self) {
         navigationController.warningButton.hidden = NO;
     } else {
         navigationController.warningButton.hidden = YES;
@@ -296,7 +296,7 @@
     
     if (section == 0) {
         labelString = BC_STRING_WALLETS;
-        if (self.assetType == AssetTypeBitcoin) {
+        if (self.assetType == LegacyAssetTypeBitcoin) {
             UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 20 - 30, 4, 50, 40)];
             [addButton setImage:[[UIImage imageNamed:@"new"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
             addButton.imageView.tintColor = COLOR_BLOCKCHAIN_BLUE;
@@ -306,7 +306,7 @@
     }
     else if (section == 1) {
         labelString = BC_STRING_IMPORTED_ADDRESSES;
-        if (self.assetType == AssetTypeBitcoin) {
+        if (self.assetType == LegacyAssetTypeBitcoin) {
             UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 20 - 30, 4, 50, 40)];
             [addButton setImage:[[UIImage imageNamed:@"new"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
             addButton.imageView.tintColor = COLOR_BLOCKCHAIN_BLUE;
@@ -326,7 +326,7 @@
     if (section == 0)
         return [WalletManager.sharedInstance.wallet getAllAccountsCount:self.assetType];
     else if (section == 1) {
-        if (self.assetType == AssetTypeBitcoin) {
+        if (self.assetType == LegacyAssetTypeBitcoin) {
             return [allKeys count];
         } else {
             return [allKeys count] > 0 ? 1 : 0;
@@ -337,7 +337,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return 2;
     } else {
         return [WalletManager.sharedInstance.wallet hasLegacyAddresses:self.assetType] ? 2 : 1;
@@ -350,7 +350,7 @@
     if (indexPath.section == 0) {
         [self didSelectAccount:(int)indexPath.row];
     } else if (indexPath.section == 1) {
-        if (self.assetType == AssetTypeBitcoin) [self didSelectAddress:allKeys[indexPath.row]];
+        if (self.assetType == LegacyAssetTypeBitcoin) [self didSelectAddress:allKeys[indexPath.row]];
     }
 }
 
@@ -429,7 +429,7 @@
             cell.balanceLabel.text = BC_STRING_ARCHIVED;
             cell.balanceLabel.textColor = COLOR_BUTTON_BLUE;
         } else {
-            cell.balanceLabel.text = self.assetType == AssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
+            cell.balanceLabel.text = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
             cell.balanceLabel.textColor = COLOR_BLOCKCHAIN_GREEN;
         }
         cell.balanceLabel.minimumScaleFactor = 0.75f;
@@ -480,7 +480,7 @@
             [cell.watchLabel setHidden:TRUE];
 
             // Disable cell highlighting for BCH imported addresses
-            if (self.assetType == AssetTypeBitcoinCash) {
+            if (self.assetType == LegacyAssetTypeBitcoinCash) {
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             } else {
                 cell.selectionStyle = UITableViewCellSelectionStyleDefault;
@@ -488,16 +488,16 @@
         }
     }
     
-    NSString *label = self.assetType == AssetTypeBitcoin ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:addr assetType:self.assetType] : BC_STRING_IMPORTED_ADDRESSES;
+    NSString *label = self.assetType == LegacyAssetTypeBitcoin ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:addr assetType:self.assetType] : BC_STRING_IMPORTED_ADDRESSES;
     
     if (label)
         cell.labelLabel.text = label;
     else
         cell.labelLabel.text = BC_STRING_NO_LABEL;
     
-    cell.addressLabel.text = self.assetType == AssetTypeBitcoin ? addr : nil;
+    cell.addressLabel.text = self.assetType == LegacyAssetTypeBitcoin ? addr : nil;
     
-    uint64_t balance = self.assetType == AssetTypeBitcoin ? [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:addr assetType:self.assetType] longLongValue] : [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:self.assetType];
+    uint64_t balance = self.assetType == LegacyAssetTypeBitcoin ? [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:addr assetType:self.assetType] longLongValue] : [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:self.assetType];
     
     // Selected cell color
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
@@ -508,7 +508,7 @@
         cell.balanceLabel.text = BC_STRING_ARCHIVED;
         cell.balanceLabel.textColor = COLOR_BUTTON_BLUE;
     } else {
-        cell.balanceLabel.text = self.assetType == AssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
+        cell.balanceLabel.text = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
         cell.balanceLabel.textColor = COLOR_LABEL_BALANCE_GREEN;
     }
     cell.balanceLabel.minimumScaleFactor = 0.75f;

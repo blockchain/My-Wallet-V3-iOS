@@ -25,7 +25,7 @@
 - (id)initWithTransaction:(Transaction *)transaction
 {
     if (self == [super init]) {
-        self.assetType = AssetTypeBitcoin;
+        self.assetType = LegacyAssetTypeBitcoin;
         
         id fromLabel = [transaction.from objectForKey:DICTIONARY_KEY_LABEL];
         id toLabel = [transaction.to.firstObject objectForKey:DICTIONARY_KEY_LABEL];
@@ -69,7 +69,7 @@
 {
     if (self == [super init]) {
         self.exchangeRate = exchangeRate;
-        self.assetType = AssetTypeEther;
+        self.assetType = LegacyAssetTypeEther;
         self.txType = etherTransaction.txType;
         self.fromString = etherTransaction.from;
         self.fromAddress = etherTransaction.from;
@@ -95,12 +95,12 @@
 - (id)initWithBitcoinCashTransaction:(Transaction *)transaction
 {
     TransactionDetailViewModel *model = [self initWithTransaction:transaction];
-    if ([WalletManager.sharedInstance.wallet isValidAddress:model.fromString assetType:AssetTypeBitcoinCash]) {
+    if ([WalletManager.sharedInstance.wallet isValidAddress:model.fromString assetType:LegacyAssetTypeBitcoinCash]) {
         model.fromString = [WalletManager.sharedInstance.wallet toBitcoinCash:model.fromString includePrefix:NO];
     }
     NSString *convertedAddress = [WalletManager.sharedInstance.wallet toBitcoinCash:model.toString includePrefix:NO];
     model.toString = convertedAddress ? : model.toString;
-    model.assetType = AssetTypeBitcoinCash;
+    model.assetType = LegacyAssetTypeBitcoinCash;
     model.hideNote = YES;
     model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", [[BlockchainAPI sharedInstance] blockchairUrl]] uppercaseString];
     model.detailButtonLink = [[[BlockchainAPI sharedInstance] blockchairBchTransactionUrl] stringByAppendingString:model.myHash];
@@ -109,11 +109,11 @@
 
 - (NSString *)getAmountString
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [NSNumberFormatter formatMoneyWithLocalSymbol:ABS(self.amountInSatoshi)];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         return [NSNumberFormatter formatEthWithLocalSymbol:self.amountString exchangeRate:self.ethExchangeRate];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return [NSNumberFormatter formatBchWithSymbol:ABS(self.amountInSatoshi)];
     }
     
@@ -122,11 +122,11 @@
 
 - (NSString *)getFeeString
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [self getBtcFeeString];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         return [self getEthFeeString];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return [self getBchFeeString];
     }
     return nil;

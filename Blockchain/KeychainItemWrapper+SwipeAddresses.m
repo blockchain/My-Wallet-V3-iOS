@@ -12,13 +12,13 @@
 
 #pragma mark - Swipe To Receive
 
-+ (NSString *)keychainKeyForAssetType:(AssetType)assetType
++ (NSString *)keychainKeyForAssetType:(LegacyAssetType)assetType
 {
-    if (assetType == AssetTypeBitcoin) {
+    if (assetType == LegacyAssetTypeBitcoin) {
         return KEYCHAIN_KEY_BTC_SWIPE_ADDRESSES;
-    } else if (assetType == AssetTypeBitcoinCash) {
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
         return KEYCHAIN_KEY_BCH_SWIPE_ADDRESSES;
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         return KEYCHAIN_KEY_ETHER_ADDRESS;
     } else {
         DLog(@"KeychainItemWrapper error: Unsupported asset type!")
@@ -26,12 +26,12 @@
     }
 }
 
-+ (NSArray *)getSwipeAddressesForAssetType:(AssetType)assetType
++ (NSArray *)getSwipeAddressesForAssetType:(LegacyAssetType)assetType
 {
     return [KeychainItemWrapper getMutableSwipeAddressesForAssetType:assetType];
 }
 
-+ (NSMutableArray *)getMutableSwipeAddressesForAssetType:(AssetType)assetType
++ (NSMutableArray *)getMutableSwipeAddressesForAssetType:(LegacyAssetType)assetType
 {
     NSString *keychainKey = [KeychainItemWrapper keychainKeyForAssetType:assetType];
     
@@ -42,7 +42,7 @@
     return swipeAddresses;
 }
 
-+ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(AssetType)assetType
++ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(LegacyAssetType)assetType
 {
     NSMutableArray *swipeAddresses = [KeychainItemWrapper getMutableSwipeAddressesForAssetType:assetType];
     if (!swipeAddresses) swipeAddresses = [NSMutableArray new];
@@ -57,7 +57,7 @@
     [keychain setObject:[NSKeyedArchiver archivedDataWithRootObject:swipeAddresses] forKey:(__bridge id)kSecValueData];
 }
 
-+ (void)removeFirstSwipeAddressForAssetType:(AssetType)assetType
++ (void)removeFirstSwipeAddressForAssetType:(LegacyAssetType)assetType
 {
     NSMutableArray *swipeAddresses = [KeychainItemWrapper getMutableSwipeAddressesForAssetType:assetType];
     if (swipeAddresses.count > 0) {
@@ -75,7 +75,7 @@
     }
 }
 
-+ (void)removeAllSwipeAddressesForAssetType:(AssetType)assetType
++ (void)removeAllSwipeAddressesForAssetType:(LegacyAssetType)assetType
 {
     NSString *keychainKey = [KeychainItemWrapper keychainKeyForAssetType:assetType];
 
@@ -85,9 +85,9 @@
 
 + (void)removeAllSwipeAddresses
 {
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoin];
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoinCash];
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeEther];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeEther];
 }
 
 + (void)setSwipeEtherAddress:(NSString *)swipeAddress
@@ -101,13 +101,13 @@
 
 + (void)removeSwipeEtherAddress
 {
-    KeychainItemWrapper *etherKeychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:AssetTypeEther] accessGroup:nil];
+    KeychainItemWrapper *etherKeychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:LegacyAssetTypeEther] accessGroup:nil];
     [etherKeychain resetKeychainItem];
 }
 
 + (NSString *)getSwipeEtherAddress
 {
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:AssetTypeEther] accessGroup:nil];
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:LegacyAssetTypeEther] accessGroup:nil];
     NSData *etherAddressData = [keychain objectForKey:(__bridge id)kSecValueData];
     NSString *etherAddress = [[NSString alloc] initWithData:etherAddressData encoding:NSUTF8StringEncoding];
     

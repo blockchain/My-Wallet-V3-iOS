@@ -14,13 +14,13 @@
 @class ChartAxisBase, ChartDataEntry;
 @protocol IChartAxisValueFormatter;
 @protocol BCPriceChartViewDelegate
-- (void)addPriceChartView:(AssetType)assetType;
-- (void)reloadPriceChartView:(AssetType)assetType;
+- (void)addPriceChartView:(LegacyAssetType)assetType;
+- (void)reloadPriceChartView:(LegacyAssetType)assetType;
 @end
 
 @interface BCPriceChartView : UIView
 @property (nonatomic) BOOL isLoading;
-- (id)initWithFrame:(CGRect)frame assetType:(AssetType)assetType dataPoints:(NSArray *)dataPoints delegate:(id<IChartAxisValueFormatter, BCPriceChartViewDelegate>)delegate;
+- (id)initWithFrame:(CGRect)frame assetType:(LegacyAssetType)assetType dataPoints:(NSArray *)dataPoints delegate:(id<IChartAxisValueFormatter, BCPriceChartViewDelegate>)delegate;
 
 - (void)updateWithValues:(NSArray *)values;
 - (void)clear;

@@ -61,14 +61,14 @@
     return self;
 }
 
-+ (GraphTimeFrame *)timeFrameAll:(AssetType)assetType
++ (GraphTimeFrame *)timeFrameAll:(LegacyAssetType)assetType
 {
     GraphTimeFrame *timeFrame = [GraphTimeFrame new];
     timeFrame.timeFrame = TimeFrameAll;
     timeFrame.scale = STRING_SCALE_FIVE_DAYS;
-    if (assetType == AssetTypeBitcoin) {
+    if (assetType == LegacyAssetTypeBitcoin) {
         timeFrame.startDate = ENTRY_TIME_BTC;
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         timeFrame.startDate = ENTRY_TIME_ETH;
     }
     timeFrame.dateFormat = @"YYYY";

@@ -22,7 +22,7 @@
 @property (nonatomic) UILabel *filterSelectorView;
 @property (nonatomic) UILabel *filterSelectorLabel;
 @property (nonatomic) NSString *balance;
-- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(AssetType)assetType;
+- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(LegacyAssetType)assetType;
 - (void)setupFilter;
 - (uint64_t)getAmountForReceivedTransaction:(Transaction *)transaction;
 @end
@@ -58,7 +58,7 @@
     
     [self setupPullToRefresh];
 
-    [self setupNoTransactionsViewInView:self.tableView assetType:AssetTypeBitcoinCash];
+    [self setupNoTransactionsViewInView:self.tableView assetType:LegacyAssetTypeBitcoinCash];
 
     [self loadTransactions];
 }
@@ -103,9 +103,9 @@
     if (self.filterIndex == FILTER_INDEX_ALL) {
         return [WalletManager.sharedInstance.wallet getBchBalance];
     } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
-        return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:AssetTypeBitcoinCash];
+        return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoinCash];
     } else {
-        return [[WalletManager.sharedInstance.wallet getBalanceForAccount:(int)self.filterIndex assetType:AssetTypeBitcoinCash] longLongValue];
+        return [[WalletManager.sharedInstance.wallet getBalanceForAccount:(int)self.filterIndex assetType:LegacyAssetTypeBitcoinCash] longLongValue];
     }
 }
 
@@ -170,7 +170,7 @@
 
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionCell" owner:nil options:nil] objectAtIndex:0];
-        cell.assetType = AssetTypeBitcoinCash;
+        cell.assetType = LegacyAssetTypeBitcoinCash;
     }
     
     cell.transaction = transaction;
@@ -228,9 +228,9 @@
 
 #pragma mark - Address Selection Delegate
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
-    return AssetTypeBitcoinCash;
+    return LegacyAssetTypeBitcoinCash;
 }
 
 - (void)didSelectFilter:(int)filter
@@ -241,7 +241,7 @@
     } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
         self.filterSelectorLabel.text = BC_STRING_IMPORTED_ADDRESSES;
     } else {
-        self.filterSelectorLabel.text = [WalletManager.sharedInstance.wallet getLabelForAccount:filter assetType:AssetTypeBitcoinCash];
+        self.filterSelectorLabel.text = [WalletManager.sharedInstance.wallet getLabelForAccount:filter assetType:LegacyAssetTypeBitcoinCash];
     }
     [self reload];
 }

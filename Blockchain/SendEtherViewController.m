@@ -194,7 +194,7 @@
         self.amountInputView.userInteractionEnabled = YES;
     }
 
-    [WalletManager.sharedInstance.wallet createNewPayment:AssetTypeEther];
+    [WalletManager.sharedInstance.wallet createNewPayment:LegacyAssetTypeEther];
 
     if (self.addressToSet) {
         [self selectToAddress:self.addressToSet];
@@ -246,7 +246,7 @@
 {
     [super doCurrencyConversion];
     
-    [WalletManager.sharedInstance.wallet changePaymentAmount:self.ethAmount assetType:AssetTypeEther];
+    [WalletManager.sharedInstance.wallet changePaymentAmount:self.ethAmount assetType:LegacyAssetTypeEther];
 }
 
 - (void)didUpdatePayment:(NSDictionary *)payment;
@@ -359,7 +359,7 @@
     
     [self checkIfEtherContractAddress:self.toAddress successHandler:^(NSString *nonContractAddress) {
         
-        [WalletManager.sharedInstance.wallet changePaymentToAddress:nonContractAddress assetType:AssetTypeEther];
+        [WalletManager.sharedInstance.wallet changePaymentToAddress:nonContractAddress assetType:LegacyAssetTypeEther];
 
         NSDecimalNumber *totalDecimalNumber = [self.ethAmount decimalNumberByAdding:self.ethFee];
         
@@ -476,7 +476,7 @@
 
 - (BOOL)isEtherAddress:(NSString *)address
 {
-    return [WalletManager.sharedInstance.wallet isValidAddress:address assetType:AssetTypeEther];
+    return [WalletManager.sharedInstance.wallet isValidAddress:address assetType:LegacyAssetTypeEther];
 }
 
 - (void)selectToAddress:(NSString *)address

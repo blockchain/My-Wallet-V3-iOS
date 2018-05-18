@@ -10,7 +10,7 @@
 #import "UIView+ChangeFrameAttribute.h"
 
 @interface AssetSelectionTableViewCell ()
-@property (nonatomic, readwrite) AssetType assetType;
+@property (nonatomic, readwrite) LegacyAssetType assetType;
 @property (nonatomic) UIView *containerView;
 @property (nonatomic) UILabel *label;
 @property (nonatomic) UIImageView *assetImageView;
@@ -18,7 +18,7 @@
 
 @implementation AssetSelectionTableViewCell
 
-- (id)initWithAsset:(AssetType)assetType
+- (id)initWithAsset:(LegacyAssetType)assetType
 {
     if (self == [super init]) {
         
@@ -31,13 +31,13 @@
         NSString *text;
         NSString *assetImage;
         
-        if (assetType == AssetTypeBitcoin) {
+        if (assetType == LegacyAssetTypeBitcoin) {
             text = BC_STRING_BITCOIN;
             assetImage = @"bitcoin_white";
-        } else if (assetType == AssetTypeEther) {
+        } else if (assetType == LegacyAssetTypeEther) {
             text = BC_STRING_ETHER;
             assetImage = @"ether_white";
-        } else if (assetType == AssetTypeBitcoinCash) {
+        } else if (assetType == LegacyAssetTypeBitcoinCash) {
             text = BC_STRING_BITCOIN_CASH;
             assetImage = @"bitcoin_cash_white";
         }

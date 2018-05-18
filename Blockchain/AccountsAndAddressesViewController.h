@@ -12,6 +12,6 @@
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic, strong) NSArray *allKeys;
 @property (nonatomic) UIView *containerView;
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 - (void)didGenerateNewAddress;
 @end

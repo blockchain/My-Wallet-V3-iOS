@@ -177,7 +177,7 @@
     [self.view addSubview:self.bottomContainerView];
     
     CGFloat leftPadding = 0;
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         leftPadding = 15;
         BCLine *lineAboveAmounts = [[BCLine alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
         lineAboveAmounts.backgroundColor = COLOR_LINE_GRAY;
@@ -200,7 +200,7 @@
     lineBelowDescripton.backgroundColor = COLOR_LINE_GRAY;
     [self.bottomContainerView addSubview:lineBelowDescripton];
     
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         BCAmountInputView *amountView = [[BCAmountInputView alloc] init];
         amountView.btcLabel.text = WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.symbol;
         amountView.btcField.inputAccessoryView = amountKeyboardAccessoryView;
@@ -368,7 +368,7 @@
 {
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.bottomContainerView.frame.origin.y)];
     
-    if (!(IS_USING_SCREEN_SIZE_4S) && self.assetType == AssetTypeBitcoinCash) {
+    if (!(IS_USING_SCREEN_SIZE_4S) && self.assetType == LegacyAssetTypeBitcoinCash) {
         self.headerView.center = CGPointMake(self.headerView.center.x, (self.bottomContainerView.frame.origin.y + AMOUNT_INPUT_VIEW_HEIGHT)/2);
     }
     
@@ -433,7 +433,7 @@
 
 - (NSString *)uriURL
 {
-    if (self.assetType == AssetTypeBitcoinCash) {
+    if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return self.clickedAddress;
     }
 
@@ -518,7 +518,7 @@
     double amountAsDouble = (double)amount / SATOSHI;
         
     UIImage *image;
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         image = [self.qrCodeGenerator qrImageFromAddress:self.clickedAddress amount:amountAsDouble];
     } else {
         image = [self.qrCodeGenerator createQRImageFromString:self.clickedAddress];
@@ -617,7 +617,7 @@
 
 - (NSString*)formatPaymentRequestWithAmount:(NSString *)amount url:(NSString*)url
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [NSString stringWithFormat:BC_STRING_PAYMENT_REQUEST_BITCOIN_ARGUMENT_ARGUMENT, amount, url];
     }
     return [NSString stringWithFormat:BC_STRING_PAYMENT_REQUEST_BITCOIN_CASH_ARGUMENT, url];
@@ -737,8 +737,8 @@
 
 - (void)paymentReceived:(uint64_t)amountReceived showBackupReminder:(BOOL)showBackupReminder
 {
-    NSString *btcAmountString = self.assetType == AssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:NO] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:NO];
-    NSString *localCurrencyAmountString = self.assetType == AssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:YES] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:YES];
+    NSString *btcAmountString = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:NO] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:NO];
+    NSString *localCurrencyAmountString = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:YES] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:YES];
     [self alertUserOfPaymentWithMessage:[[NSString alloc] initWithFormat:@"%@\n%@", btcAmountString, localCurrencyAmountString] showBackupReminder:showBackupReminder];
 }
 
@@ -978,7 +978,7 @@
 
 #pragma mark - BCAddressSelectionView Delegate
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
     return self.assetType;
 }
@@ -1006,7 +1006,7 @@
     [self didSelectFromAddress:address];
 }
 
-- (void)didSelectFromAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectFromAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self didSelectFromAccount:account];
 }
@@ -1023,7 +1023,7 @@
     [self updateUI];
 }
 
-- (void)didSelectToAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectToAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self didSelectToAccount:account];
 }

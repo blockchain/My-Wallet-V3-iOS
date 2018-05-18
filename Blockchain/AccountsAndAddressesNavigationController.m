@@ -71,7 +71,7 @@
     }
 
     CGFloat assetSelectorViewHorizontalPadding = 8;
-    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(assetSelectorViewHorizontalPadding, headerLabel.frame.origin.y + headerLabel.frame.size.height + 8, self.view.frame.size.width - assetSelectorViewHorizontalPadding*2, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:AssetTypeBitcoin], [NSNumber numberWithInteger:AssetTypeBitcoinCash]] delegate:self];
+    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(assetSelectorViewHorizontalPadding, headerLabel.frame.origin.y + headerLabel.frame.size.height + 8, self.view.frame.size.width - assetSelectorViewHorizontalPadding*2, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
     [topBar addSubview:self.assetSelectorView];
     
     [self setupBusyView];
@@ -245,7 +245,7 @@
 
 #pragma mark - Asset Selector View Delegate
 
-- (void)didSelectAsset:(AssetType)assetType
+- (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT];

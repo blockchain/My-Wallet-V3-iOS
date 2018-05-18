@@ -25,7 +25,7 @@
 @property (nonatomic) UIView *filterSelectorView;
 @property (nonatomic) UILabel *filterSelectorLabel;
 @property (nonatomic) NSString *balance;
-- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(AssetType)assetType;
+- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(LegacyAssetType)assetType;
 - (void)setupFilter;
 - (uint64_t)getAmountForReceivedTransaction:(Transaction *)transaction;
 @end
@@ -105,7 +105,7 @@
 {
     if (indexPath.section == self.sectionMain) {
         TransactionTableCell *cell = (TransactionTableCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-        cell.assetType = AssetTypeBitcoin;
+        cell.assetType = LegacyAssetTypeBitcoin;
         [cell transactionClicked:nil];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     } else {
@@ -421,7 +421,7 @@
     if (self.filterIndex == FILTER_INDEX_ALL) {
         return [WalletManager.sharedInstance.wallet getTotalActiveBalance];
     } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
-        return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:AssetTypeBitcoin];
+        return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoin];
     } else {
         return [[WalletManager.sharedInstance.wallet getBalanceForAccount:(int)self.filterIndex assetType:self.assetType] longLongValue];
     }
@@ -478,7 +478,7 @@
 
 #pragma mark - Address Selection Delegate
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
     return self.assetType;
 }

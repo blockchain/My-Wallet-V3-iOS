@@ -10,7 +10,7 @@
 #import "Assets.h"
 
 @interface AssetSelectionTableViewCell : UITableViewCell
-@property (nonatomic, readonly) AssetType assetType;
+@property (nonatomic, readonly) LegacyAssetType assetType;
 @property (nonatomic) UIImageView *downwardChevron;
-- (id)initWithAsset:(AssetType)assetType;
+- (id)initWithAsset:(LegacyAssetType)assetType;
 @end

@@ -9,10 +9,10 @@
 #ifndef Assets_h
 #define Assets_h
 
-typedef NS_ENUM(NSInteger, AssetType) {
-    AssetTypeBitcoin,
-    AssetTypeEther,
-    AssetTypeBitcoinCash
+typedef NS_ENUM(NSInteger, LegacyAssetType) {
+    LegacyAssetTypeBitcoin,
+    LegacyAssetTypeEther,
+    LegacyAssetTypeBitcoinCash
 };
 
 #endif /* Assets_h */

@@ -14,11 +14,11 @@
 @property (nonatomic, copy) void (^onClose)();
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *captureSession;
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @end
 @implementation PrivateKeyReader
 
-- (id)initWithAssetType:(AssetType)assetType success:(void (^)(NSString*))__success error:(void (^)(NSString*))__error acceptPublicKeys:(BOOL)acceptPublicKeys busyViewText:(NSString *)text
+- (id)initWithAssetType:(LegacyAssetType)assetType success:(void (^)(NSString*))__success error:(void (^)(NSString*))__error acceptPublicKeys:(BOOL)acceptPublicKeys busyViewText:(NSString *)text
 {
     self = [super init];
     

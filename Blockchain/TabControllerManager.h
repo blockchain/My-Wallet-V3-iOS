@@ -24,7 +24,7 @@
 @end
 
 @interface TabControllerManager : NSObject <AssetDelegate>
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
 
 @property (weak, nonatomic) id <TabControllerDelegate> delegate;
@@ -112,7 +112,7 @@
 
 // Transactions View Controller
 - (void)updateTransactionsViewControllerData:(MultiAddressResponse *)data;
-- (void)filterTransactionsByAccount:(int)accountIndex filterLabel:(NSString *)filterLabel assetType:(AssetType)assetType;
+- (void)filterTransactionsByAccount:(int)accountIndex filterLabel:(NSString *)filterLabel assetType:(LegacyAssetType)assetType;
 - (NSInteger)getFilterIndex;
 - (void)filterTransactionsByImportedAddresses;
 - (void)selectPayment:(NSString *)payment;

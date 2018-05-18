@@ -77,7 +77,7 @@
 }
 
 // Must be a Bitcoin fork
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 
 @property (strong, nonatomic) BCConfirmPaymentView *confirmPaymentView;
 

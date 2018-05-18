@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void)didSetAssetType:(AssetType)assetType
+- (void)didSetAssetType:(LegacyAssetType)assetType
 {
     self.assetType = assetType;
     
@@ -121,22 +121,22 @@
 
 - (void)showSendCoinsAnimated:(BOOL)animated
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         if (!_sendBitcoinViewController) {
             _sendBitcoinViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
         }
         
         [_tabViewController setActiveViewController:_sendBitcoinViewController animated:animated index:TAB_SEND];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         if (!_sendEtherViewController) {
             _sendEtherViewController = [[SendEtherViewController alloc] init];
         }
         
         [_tabViewController setActiveViewController:_sendEtherViewController animated:animated index:TAB_SEND];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         if (!_sendBitcoinCashViewController) {
             _sendBitcoinCashViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
-            _sendBitcoinCashViewController.assetType = AssetTypeBitcoinCash;
+            _sendBitcoinCashViewController.assetType = LegacyAssetTypeBitcoinCash;
         }
         
         [_tabViewController setActiveViewController:_sendBitcoinCashViewController animated:animated index:TAB_SEND];
@@ -168,12 +168,12 @@
 {
     [self showSendCoinsAnimated:YES];
     
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         self.sendBitcoinViewController.addressFromURLHandler = address;
         [self.sendBitcoinViewController reload];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         self.sendEtherViewController.addressToSet = address;
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         self.sendBitcoinCashViewController.addressFromURLHandler = address;
         [self.sendBitcoinCashViewController reload];
     }
@@ -196,9 +196,9 @@
 
 - (void)didUpdateTotalAvailable:(NSNumber *)sweepAmount finalFee:(NSNumber *)finalFee
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [_sendBitcoinViewController didUpdateTotalAvailable:sweepAmount finalFee:finalFee];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [_sendBitcoinCashViewController didUpdateTotalAvailable:sweepAmount finalFee:finalFee];
     }
 }
@@ -250,12 +250,12 @@
 
 - (void)receivedTransactionMessage
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         if (_transactionsBitcoinViewController) {
             [_transactionsBitcoinViewController didReceiveTransactionMessage];
             [_receiveBitcoinViewController storeRequestedAmount];
         }
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [_receiveBitcoinCashViewController reload];
         if (_transactionsBitcoinCashViewController) {
             [_transactionsBitcoinCashViewController didReceiveTransactionMessage];
@@ -298,23 +298,23 @@
 
 - (void)showReceiveAnimated:(BOOL)animated
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         if (!_receiveBitcoinViewController) {
             _receiveBitcoinViewController = [[ReceiveBitcoinViewController alloc] initWithNibName:NIB_NAME_RECEIVE_COINS bundle:[NSBundle mainBundle]];
         }
         
         [_tabViewController setActiveViewController:_receiveBitcoinViewController animated:animated index:TAB_RECEIVE];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         if (!_receiveEtherViewController) {
             _receiveEtherViewController = [[ReceiveEtherViewController alloc] init];
         }
         
         [_tabViewController setActiveViewController:_receiveEtherViewController animated:animated index:TAB_RECEIVE];
         [_receiveEtherViewController showEtherAddress];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         if (!_receiveBitcoinCashViewController) {
             _receiveBitcoinCashViewController = [[ReceiveBitcoinViewController alloc] initWithNibName:NIB_NAME_RECEIVE_COINS bundle:[NSBundle mainBundle]];
-            _receiveBitcoinCashViewController.assetType = AssetTypeBitcoinCash;
+            _receiveBitcoinCashViewController.assetType = LegacyAssetTypeBitcoinCash;
         }
         
         [_tabViewController setActiveViewController:_receiveBitcoinCashViewController animated:animated index:TAB_RECEIVE];
@@ -339,9 +339,9 @@
 
 - (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [_receiveBitcoinViewController paymentReceived:amount showBackupReminder:showBackupReminder];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [_receiveBitcoinCashViewController paymentReceived:amount showBackupReminder:showBackupReminder];
     }
 }
@@ -369,19 +369,19 @@
 
 - (void)showTransactionsAnimated:(BOOL)animated
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         if (!_transactionsBitcoinViewController) {
             _transactionsBitcoinViewController = [[[NSBundle mainBundle] loadNibNamed:NIB_NAME_TRANSACTIONS owner:self options:nil] firstObject];
         }
         
         [_tabViewController setActiveViewController:_transactionsBitcoinViewController animated:animated index:TAB_TRANSACTIONS];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         if (!_transactionsEtherViewController) {
             _transactionsEtherViewController = [[TransactionsEtherViewController alloc] init];
         }
         
         [_tabViewController setActiveViewController:_transactionsEtherViewController animated:animated index:TAB_TRANSACTIONS];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         if (!_transactionsBitcoinCashViewController) {
             _transactionsBitcoinCashViewController = [[TransactionsBitcoinCashViewController alloc] init];
         }
@@ -401,7 +401,7 @@
     [_sendBitcoinViewController reload];
 }
 
-- (void)filterTransactionsByAccount:(int)accountIndex filterLabel:(NSString *)filterLabel assetType:(AssetType)assetType
+- (void)filterTransactionsByAccount:(int)accountIndex filterLabel:(NSString *)filterLabel assetType:(LegacyAssetType)assetType
 {
     _transactionsBitcoinViewController.clickedFetchMore = NO;
     _transactionsBitcoinViewController.filterIndex = accountIndex;
@@ -565,33 +565,33 @@
 
 - (void)showReceiveBitcoinCash
 {
-    [self changeAssetSelectorAsset:AssetTypeBitcoinCash];
+    [self changeAssetSelectorAsset:LegacyAssetTypeBitcoinCash];
     [self showReceiveAnimated:YES];
     [_receiveBitcoinCashViewController reload];
 }
 
 - (void)showTransactionsBitcoin
 {
-    [self changeAssetSelectorAsset:AssetTypeBitcoin];
+    [self changeAssetSelectorAsset:LegacyAssetTypeBitcoin];
     [self showTransactionsAnimated:YES];
     [_transactionsBitcoinViewController reload];
 }
 
 - (void)showTransactionsEther
 {
-    [self changeAssetSelectorAsset:AssetTypeEther];
+    [self changeAssetSelectorAsset:LegacyAssetTypeEther];
     [self showTransactionsAnimated:YES];
     [_transactionsEtherViewController reload];
 }
 
 - (void)showTransactionsBitcoinCash
 {
-    [self changeAssetSelectorAsset:AssetTypeBitcoinCash];
+    [self changeAssetSelectorAsset:LegacyAssetTypeBitcoinCash];
     [self showTransactionsAnimated:YES];
     [_transactionsBitcoinCashViewController reload];
 }
 
-- (void)changeAssetSelectorAsset:(AssetType)assetType
+- (void)changeAssetSelectorAsset:(LegacyAssetType)assetType
 {
     self.assetType = assetType;
     
@@ -644,7 +644,7 @@
         [_receiveBitcoinViewController hideKeyboard];
     }
     
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         if (!_sendBitcoinViewController) {
             _sendBitcoinViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
         }
@@ -652,7 +652,7 @@
         [_sendBitcoinViewController QRCodebuttonClicked:nil];
         
         [_tabViewController setActiveViewController:_sendBitcoinViewController animated:NO index:TAB_SEND];
-    } else if (self.assetType == AssetTypeEther) {
+    } else if (self.assetType == LegacyAssetTypeEther) {
         if (!_sendEtherViewController) {
             _sendEtherViewController = [[SendEtherViewController alloc] init];
         }
@@ -663,7 +663,7 @@
     } else {
         if (!_sendBitcoinCashViewController) {
             _sendBitcoinCashViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
-            _sendBitcoinCashViewController.assetType = AssetTypeBitcoinCash;
+            _sendBitcoinCashViewController.assetType = LegacyAssetTypeBitcoinCash;
         }
         
         [_sendBitcoinCashViewController QRCodebuttonClicked:nil];
@@ -734,7 +734,7 @@
                 [AppCoordinator.sharedInstance showBuyBitcoinView];
             } else {
                 [[AppCoordinator sharedInstance] closeSideMenu];
-                [self changeAssetSelectorAsset:AssetTypeBitcoin];
+                [self changeAssetSelectorAsset:LegacyAssetTypeBitcoin];
                 [self receiveCoinClicked:nil];
             }
         }];
@@ -742,14 +742,14 @@
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_GET_ETHER style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.tabViewController dismissViewControllerAnimated:YES completion:^{
             [[AppCoordinator sharedInstance] closeSideMenu];
-            [self changeAssetSelectorAsset:AssetTypeEther];
+            [self changeAssetSelectorAsset:LegacyAssetTypeEther];
             [self receiveCoinClicked:nil];
         }];
     }]];
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_GET_BITCOIN_CASH style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.tabViewController dismissViewControllerAnimated:YES completion:^{
             [[AppCoordinator sharedInstance] closeSideMenu];
-            [self changeAssetSelectorAsset:AssetTypeBitcoinCash];
+            [self changeAssetSelectorAsset:LegacyAssetTypeBitcoinCash];
             [self receiveCoinClicked:nil];
         }];
     }]];

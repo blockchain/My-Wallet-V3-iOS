@@ -36,7 +36,7 @@
     LatestBlock *latestBlock;
 }
 
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 
 @property(nonatomic, strong) MultiAddressResponse *data;
 @property(nonatomic, strong) LatestBlock *latestBlock;

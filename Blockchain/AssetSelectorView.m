@@ -39,9 +39,9 @@
         self.tableView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
         self.backgroundColor = [UIColor clearColor];
         
-        self.assets = @[[NSNumber numberWithInteger:AssetTypeBitcoin],
-                        [NSNumber numberWithInteger:AssetTypeEther],
-                        [NSNumber numberWithInteger:AssetTypeBitcoinCash]];
+        self.assets = @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
+                        [NSNumber numberWithInteger:LegacyAssetTypeEther],
+                        [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]];
     }
     
     return self;
@@ -56,7 +56,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    AssetType asset = self.isOpen ? [self.assets[indexPath.row] integerValue] : self.selectedAsset;
+    LegacyAssetType asset = self.isOpen ? [self.assets[indexPath.row] integerValue] : self.selectedAsset;
     AssetSelectionTableViewCell *cell = [[AssetSelectionTableViewCell alloc] initWithAsset:asset];
     cell.downwardChevron.hidden = indexPath.row != 0;
     return cell;

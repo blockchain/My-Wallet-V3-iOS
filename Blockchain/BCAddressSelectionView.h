@@ -25,11 +25,11 @@
 
 @protocol AddressSelectionDelegate <NSObject>
 @optional
-- (AssetType)getAssetType;
+- (LegacyAssetType)getAssetType;
 - (void)didSelectFromAccount:(int)account;
-- (void)didSelectFromAccount:(int)account assetType:(AssetType)asset;
+- (void)didSelectFromAccount:(int)account assetType:(LegacyAssetType)asset;
 - (void)didSelectToAccount:(int)account;
-- (void)didSelectToAccount:(int)account assetType:(AssetType)asset;
+- (void)didSelectToAccount:(int)account assetType:(LegacyAssetType)asset;
 - (void)didSelectFromAddress:(NSString*)address;
 - (void)didSelectToAddress:(NSString*)address;
 - (void)didSelectWatchOnlyAddress:(NSString*)address;

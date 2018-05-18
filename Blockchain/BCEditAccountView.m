@@ -12,7 +12,7 @@
 
 @implementation BCEditAccountView
 
--(id)initWithAssetType:(AssetType)assetType
+-(id)initWithAssetType:(LegacyAssetType)assetType
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
@@ -79,7 +79,7 @@
     
     [self.labelTextField resignFirstResponder];
     
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
     }
     

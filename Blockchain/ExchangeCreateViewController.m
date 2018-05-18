@@ -86,7 +86,7 @@
     
     [self setupViews];
     
-    self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:AssetTypeBitcoin];
+    self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:LegacyAssetTypeBitcoin];
     
     [self selectFromBitcoin];
     [self selectToEther];
@@ -873,7 +873,7 @@
     self.btcField = self.topLeftField;
     self.fromToView.fromLabel.text = [self bitcoinLabelText];
     self.leftLabel.text = CURRENCY_SYMBOL_BTC;
-    self.fromAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.btcAccount assetType:AssetTypeBitcoin];
+    self.fromAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.btcAccount assetType:LegacyAssetTypeBitcoin];
     
     [self clearAvailableBalance];
 
@@ -888,7 +888,7 @@
     self.bchField = self.topLeftField;
     self.fromToView.fromLabel.text = [self bitcoinCashLabelText];
     self.leftLabel.text = CURRENCY_SYMBOL_BCH;
-    self.fromAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.bchAccount assetType:AssetTypeBitcoin];
+    self.fromAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.bchAccount assetType:LegacyAssetTypeBitcoin];
     
     [self clearAvailableBalance];
     
@@ -903,7 +903,7 @@
     self.bchField = self.topRightField;
     self.fromToView.toLabel.text = [self bitcoinCashLabelText];
     self.rightLabel.text = CURRENCY_SYMBOL_BCH;
-    self.toAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.bchAccount assetType:AssetTypeBitcoinCash];
+    self.toAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.bchAccount assetType:LegacyAssetTypeBitcoinCash];
     
     [self didChangeTo];
 }
@@ -929,7 +929,7 @@
     self.btcField = self.topRightField;
     self.fromToView.toLabel.text = [self bitcoinLabelText];
     self.rightLabel.text = CURRENCY_SYMBOL_BTC;
-    self.toAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.btcAccount assetType:AssetTypeBitcoin];
+    self.toAddress = [WalletManager.sharedInstance.wallet getReceiveAddressForAccount:self.btcAccount assetType:LegacyAssetTypeBitcoin];
     
     [self didChangeTo];
 }
@@ -1189,17 +1189,17 @@
 
 - (NSString *)bitcoinLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:AssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:AssetTypeBitcoin] : BC_STRING_BITCOIN;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:LegacyAssetTypeBitcoin] : BC_STRING_BITCOIN;
 }
 
 - (NSString *)bitcoinCashLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:AssetTypeBitcoinCash] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.bchAccount assetType:AssetTypeBitcoinCash] : BC_STRING_BITCOIN_CASH;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoinCash] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.bchAccount assetType:LegacyAssetTypeBitcoinCash] : BC_STRING_BITCOIN_CASH;
 }
 
 - (NSString *)etherLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:AssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:0 assetType:AssetTypeEther] : BC_STRING_ETHER;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:0 assetType:LegacyAssetTypeEther] : BC_STRING_ETHER;
 }
 
 - (void)didChangeFrom
@@ -1235,28 +1235,28 @@
         
 #pragma mark - Address Selection Delegate
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
     // Exchange controller uses all assets 
     return -1;
 }
 
-- (void)didSelectFromAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectFromAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self.navigationController popViewControllerAnimated:YES];
 
     [self clearFieldOfSymbol:self.fromSymbol];
 
     switch (asset) {
-        case AssetTypeBitcoin:
+        case LegacyAssetTypeBitcoin:
             self.btcAccount = account;
             [self selectFromBitcoin];
             break;
-        case AssetTypeBitcoinCash:
+        case LegacyAssetTypeBitcoinCash:
             self.bchAccount = account;
             [self selectFromBitcoinCash];
             break;
-        case AssetTypeEther:
+        case LegacyAssetTypeEther:
             self.ethAccount = account;
             [self selectFromEther];
             break;
@@ -1265,22 +1265,22 @@
     [self getRate];
 }
 
-- (void)didSelectToAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectToAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self.navigationController popViewControllerAnimated:YES];
 
     [self clearFieldOfSymbol:self.toSymbol];
 
     switch (asset) {
-        case AssetTypeBitcoin:
+        case LegacyAssetTypeBitcoin:
             self.btcAccount = account;
             [self selectToBitcoin];
             break;
-        case AssetTypeBitcoinCash:
+        case LegacyAssetTypeBitcoinCash:
             self.bchAccount = account;
             [self selectToBitcoinCash];
             break;
-        case AssetTypeEther:
+        case LegacyAssetTypeEther:
             self.ethAccount = account;
             [self selectToEther];
             break;

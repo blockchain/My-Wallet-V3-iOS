@@ -13,7 +13,7 @@
 @interface BCEditAccountView : UIView <UITextFieldDelegate>
 
 @property int accountIdx;
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic, strong) BCSecureTextField *labelTextField;
-- (id)initWithAssetType:(AssetType)assetType;
+- (id)initWithAssetType:(LegacyAssetType)assetType;
 @end

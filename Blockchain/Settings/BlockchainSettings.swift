@@ -266,7 +266,7 @@ final class BlockchainSettings: NSObject {
 
             defaults.register(defaults: [
                 UserDefaults.Keys.swipeToReceiveEnabled.rawValue: true,
-                //: Was initialized with `NSNumber numberWithInt:AssetTypeBitcoin` before, could cause side unwanted effects...
+                //: Was initialized with `NSNumber numberWithInt:LegacyAssetTypeBitcoin` before, could cause side unwanted effects...
                 // TODO: test for potential side effects
                 UserDefaults.Keys.assetType.rawValue: AssetType.bitcoin.rawValue,
                 UserDefaults.DebugKeys.enableCertificatePinning.rawValue: true

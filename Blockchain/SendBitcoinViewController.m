@@ -174,7 +174,7 @@ BOOL displayingLocalSymbolSend;
     
     feeField.delegate = self;
         
-    toField.placeholder =  self.assetType == AssetTypeBitcoin ? BC_STRING_ENTER_BITCOIN_ADDRESS_OR_SELECT : BC_STRING_ENTER_BITCOIN_CASH_ADDRESS_OR_SELECT;
+    toField.placeholder =  self.assetType == LegacyAssetTypeBitcoin ? BC_STRING_ENTER_BITCOIN_ADDRESS_OR_SELECT : BC_STRING_ENTER_BITCOIN_CASH_ADDRESS_OR_SELECT;
     feeField.placeholder = BC_STRING_SATOSHI_PER_BYTE_ABBREVIATED;
     btcAmountField.placeholder = [NSString stringWithFormat:BTC_PLACEHOLDER_DECIMAL_SEPARATOR_ARGUMENT, [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
     fiatAmountField.placeholder = [NSString stringWithFormat:FIAT_PLACEHOLDER_DECIMAL_SEPARATOR_ARGUMENT, [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
@@ -188,7 +188,7 @@ BOOL displayingLocalSymbolSend;
     
     rejectPaymentButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(feeOptionsClicked:)];
         [feeTappableView addGestureRecognizer:tapGestureRecognizer];
     }
@@ -444,7 +444,7 @@ BOOL displayingLocalSymbolSend;
 {
     if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc) {
         fiatLabel.text = WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.code;
-        btcLabel.text = self.assetType == AssetTypeBitcoin ? WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.symbol : CURRENCY_SYMBOL_BCH;
+        btcLabel.text = self.assetType == LegacyAssetTypeBitcoin ? WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.symbol : CURRENCY_SYMBOL_BCH;
     }
     
     if (app->symbolLocal && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion > 0) {
@@ -577,7 +577,7 @@ BOOL displayingLocalSymbolSend;
              [self enablePaymentButtons];
              
              // Fields are automatically reset by reload, called by MyWallet.wallet.getHistory() after a utx websocket message is received. However, we cannot rely on the websocket 100% of the time.
-             if (self.assetType == AssetTypeBitcoin) {
+             if (self.assetType == LegacyAssetTypeBitcoin) {
                  [WalletManager.sharedInstance.wallet performSelector:@selector(getHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
              } else {
                  [WalletManager.sharedInstance.wallet performSelector:@selector(getBitcoinCashHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
@@ -729,7 +729,7 @@ BOOL displayingLocalSymbolSend;
     [self enablePaymentButtons];
     
     // Fields are automatically reset by reload, called by MyWallet.wallet.getHistory() after a utx websocket message is received. However, we cannot rely on the websocket 100% of the time.
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet performSelector:@selector(getHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
     } else {
         [WalletManager.sharedInstance.wallet performSelector:@selector(getBitcoinCashHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
@@ -815,7 +815,7 @@ BOOL displayingLocalSymbolSend;
         
         BCConfirmPaymentViewModel *confirmPaymentViewModel;
         
-        if (self.assetType == AssetTypeBitcoinCash) {
+        if (self.assetType == LegacyAssetTypeBitcoinCash) {
             confirmPaymentViewModel = [[BCConfirmPaymentViewModel alloc] initWithFrom:from
                                                                                    To:to
                                                                             bchAmount:amountInSatoshi
@@ -1094,7 +1094,7 @@ BOOL displayingLocalSymbolSend;
         }
         
         feeLabel.hidden = NO;
-        feeOptionsButton.hidden = self.assetType == AssetTypeBitcoinCash;
+        feeOptionsButton.hidden = self.assetType == LegacyAssetTypeBitcoinCash;
         lineBelowFeeField.hidden = NO;
         
         self.feeAmountLabel.hidden = NO;
@@ -1321,9 +1321,9 @@ BOOL displayingLocalSymbolSend;
 
 - (NSString *)formatAmount:(uint64_t)amount localCurrency:(BOOL)useLocalCurrency
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [NSNumberFormatter formatAmount:amount localCurrency:useLocalCurrency];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return [NSNumberFormatter formatBch:amount localCurrency:useLocalCurrency];
     }
     DLog(@"Warning: Unsupported asset type!");
@@ -1332,9 +1332,9 @@ BOOL displayingLocalSymbolSend;
 
 - (NSString *)formatMoney:(uint64_t)amount localCurrency:(BOOL)useLocalCurrency
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [NSNumberFormatter formatMoney:amount localCurrency:useLocalCurrency];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return [NSNumberFormatter formatBchWithSymbol:amount localCurrency:useLocalCurrency];
     }
     DLog(@"Warning: Unsupported asset type!");
@@ -1343,9 +1343,9 @@ BOOL displayingLocalSymbolSend;
 
 - (BOOL)canChangeFromAddress
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return !([WalletManager.sharedInstance.wallet hasAccount] && ![WalletManager.sharedInstance.wallet hasLegacyAddresses:self.assetType] && [WalletManager.sharedInstance.wallet getActiveAccountsCount:self.assetType] == 1);
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         
     }
     return YES;
@@ -1363,9 +1363,9 @@ BOOL displayingLocalSymbolSend;
 
 - (void)getTransactionFeeWithUpdateType:(FeeUpdateType)updateType
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet getTransactionFeeWithUpdateType:updateType];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         id to = self.sendToAddress ? self.toAddress : [NSNumber numberWithInt:self.toAccount];
         [WalletManager.sharedInstance.wallet buildBitcoinCashPaymentTo:to amount:amountInSatoshi];
         [self showSummary];
@@ -1374,27 +1374,27 @@ BOOL displayingLocalSymbolSend;
 
 - (void)sweepPaymentRegular
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet sweepPaymentRegular];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [self didGetMaxFee:[NSNumber numberWithLongLong:self.feeFromTransactionProposal] amount:[NSNumber numberWithLongLong:availableAmount] dust:0 willConfirm:NO];
     }
 }
 
 - (void)sweepPaymentAdvanced
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet sweepPaymentAdvanced];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         // No custom fee in bch
     }
 }
 
 - (void)changeSatoshiPerByte:(uint64_t)satoshiPerByte updateType:(FeeUpdateType)updateType
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet changeSatoshiPerByte:satoshiPerByte updateType:updateType];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         // No custom fee in bch
     }
 }
@@ -1402,9 +1402,9 @@ BOOL displayingLocalSymbolSend;
 
 - (uint64_t)dust
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         return [WalletManager.sharedInstance.wallet dust];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         
     }
     return 0;
@@ -1412,18 +1412,18 @@ BOOL displayingLocalSymbolSend;
 
 - (void)checkIfOverspending
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet checkIfOverspending];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [self didCheckForOverSpending:[NSNumber numberWithLongLong:availableAmount] fee:[NSNumber numberWithLongLong:self.feeFromTransactionProposal]];
     }
 }
 
 - (void)sendPaymentWithListener:(transactionProgressListeners*)listener secondPassword:(NSString *)secondPassword
 {
-    if (self.assetType == AssetTypeBitcoin) {
+    if (self.assetType == LegacyAssetTypeBitcoin) {
         [WalletManager.sharedInstance.wallet sendPaymentWithListener:listener secondPassword:secondPassword];
-    } else if (self.assetType == AssetTypeBitcoinCash) {
+    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         [WalletManager.sharedInstance.wallet sendBitcoinCashPaymentWithListener:listener];
     }
 }
@@ -1676,7 +1676,7 @@ BOOL displayingLocalSymbolSend;
 
 # pragma mark - AddressBook delegate
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
     return self.assetType;
 }
@@ -1693,12 +1693,12 @@ BOOL displayingLocalSymbolSend;
     self.addressSource = DestinationAddressSourceDropDown;
 }
 
-- (void)didSelectFromAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectFromAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self selectFromAccount:account];
 }
 
-- (void)didSelectToAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectToAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self selectToAccount:account];
     
@@ -1762,7 +1762,7 @@ BOOL displayingLocalSymbolSend;
     availableAmount = [sweepAmount longLongValue];
     uint64_t fee = [finalFee longLongValue];
     
-    if (self.assetType == AssetTypeBitcoinCash) self.feeFromTransactionProposal = fee;
+    if (self.assetType == LegacyAssetTypeBitcoinCash) self.feeFromTransactionProposal = fee;
     
     CGFloat warningLabelYPosition = [self defaultYPositionForWarningLabel];
     

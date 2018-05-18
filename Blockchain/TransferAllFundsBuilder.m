@@ -12,11 +12,11 @@
 
 @interface TransferAllFundsBuilder()
 @property (nonatomic) NSString *temporarySecondPassword;
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @end
 @implementation TransferAllFundsBuilder
 
-- (id)initWithAssetType:(AssetType)assetType usingSendScreen:(BOOL)usesSendScreen
+- (id)initWithAssetType:(LegacyAssetType)assetType usingSendScreen:(BOOL)usesSendScreen
 {
     if (self = [super init]) {
         self.assetType = assetType;

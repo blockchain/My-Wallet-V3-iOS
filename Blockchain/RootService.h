@@ -171,7 +171,7 @@
 //- (void)logoutAndShowPasswordModal;
 
 //- (NSInteger)filterIndex;
-//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(AssetType)assetType;
+//- (void)filterTransactionsByAccount:(int)accountIndex assetType:(LegacyAssetType)assetType;
 //- (void)filterTransactionsByImportedAddresses;
 //- (void)removeTransactionsFilter;
 
@@ -231,7 +231,7 @@
 - (void)endBackgroundUpdateTask;
 
 //- (NSString *)getVersionLabelString;
-- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(AssetType)assetType;
+- (void)checkForUnusedAddress:(NSString *)address success:(void (^)(NSString *, BOOL))successBlock error:(void (^)())errorBlock assetType:(LegacyAssetType)assetType;
 
 - (BOOL)checkIfWaitingOnEtherTransaction;
 

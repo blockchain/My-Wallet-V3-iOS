@@ -10,10 +10,10 @@
 #import "Assets.h"
 
 @interface KeychainItemWrapper (SwipeAddresses)
-+ (NSArray *)getSwipeAddressesForAssetType:(AssetType)assetType;
-+ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(AssetType)assetType;
-+ (void)removeFirstSwipeAddressForAssetType:(AssetType)assetType;
-+ (void)removeAllSwipeAddressesForAssetType:(AssetType)assetType;
++ (NSArray *)getSwipeAddressesForAssetType:(LegacyAssetType)assetType;
++ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(LegacyAssetType)assetType;
++ (void)removeFirstSwipeAddressForAssetType:(LegacyAssetType)assetType;
++ (void)removeAllSwipeAddressesForAssetType:(LegacyAssetType)assetType;
 + (void)removeAllSwipeAddresses;
 + (void)setSwipeEtherAddress:(NSString *)swipeAddress;
 + (NSString *)getSwipeEtherAddress;

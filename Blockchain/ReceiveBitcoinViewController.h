@@ -37,7 +37,7 @@
     // Keyboard accessory view
     UIView *amountKeyboardAccessoryView;
 }
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 
 @property(nonatomic, strong) NSArray *activeKeys;
 @property(nonatomic, strong) UITapGestureRecognizer *tapGesture;

@@ -77,7 +77,7 @@
     [self.scrollView setContentOffset:CGPointZero animated:NO];
 }
 
-- (void)setAssetType:(AssetType)assetType
+- (void)setAssetType:(LegacyAssetType)assetType
 {
     _assetType = assetType;
     
@@ -162,7 +162,7 @@
     [self reloadCards];
 }
 
-- (void)fetchChartDataForAsset:(AssetType)assetType
+- (void)fetchChartDataForAsset:(LegacyAssetType)assetType
 {
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_GRAPH_TIME_FRAME];
     GraphTimeFrame *timeFrame = [NSKeyedUnarchiver unarchiveObjectWithData:data] ? : [GraphTimeFrame timeFrameWeek];
@@ -172,13 +172,13 @@
         
     NSString *base;
     
-    if (assetType == AssetTypeBitcoin) {
+    if (assetType == LegacyAssetTypeBitcoin) {
         base = [CURRENCY_SYMBOL_BTC lowercaseString];
         entryDate = [timeFrame startDateBitcoin];
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         base = [CURRENCY_SYMBOL_ETH lowercaseString];
         entryDate = [timeFrame startDateEther];
-    } else if (assetType == AssetTypeBitcoinCash) {
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
         base = [CURRENCY_SYMBOL_BCH lowercaseString];
         entryDate = [timeFrame startDateBitcoinCash];
     }
@@ -241,9 +241,9 @@
     [self showChartContainerViewController];
     
     CGFloat padding = PRICE_CHART_PADDING;
-    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:AssetTypeBitcoin dataPoints:nil delegate:self];
+    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:LegacyAssetTypeBitcoin dataPoints:nil delegate:self];
     [self.chartContainerViewController addPriceChartView:priceChartView atIndex:0];
-    [self fetchChartDataForAsset:AssetTypeBitcoin];
+    [self fetchChartDataForAsset:LegacyAssetTypeBitcoin];
 }
 
 - (void)etherChartTapped
@@ -251,10 +251,10 @@
     [self showChartContainerViewController];
     
     CGFloat padding = PRICE_CHART_PADDING;
-    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:AssetTypeEther dataPoints:nil delegate:self];
+    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:LegacyAssetTypeEther dataPoints:nil delegate:self];
     [self.chartContainerViewController addPriceChartView:priceChartView atIndex:1];
     [self.chartContainerViewController updateEthExchangeRate:self.lastEthExchangeRate];
-    [self fetchChartDataForAsset:AssetTypeEther];
+    [self fetchChartDataForAsset:LegacyAssetTypeEther];
 }
 
 - (void)bitcoinCashChartTapped
@@ -262,9 +262,9 @@
     [self showChartContainerViewController];
 
     CGFloat padding = PRICE_CHART_PADDING;
-    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:AssetTypeBitcoinCash dataPoints:nil delegate:self];
+    BCPriceChartView *priceChartView = [[BCPriceChartView alloc] initWithFrame:CGRectMake(padding, padding, self.view.frame.size.width - padding, self.view.frame.size.height*3/4 - padding) assetType:LegacyAssetTypeBitcoinCash dataPoints:nil delegate:self];
     [self.chartContainerViewController addPriceChartView:priceChartView atIndex:2];
-    [self fetchChartDataForAsset:AssetTypeBitcoinCash];
+    [self fetchChartDataForAsset:LegacyAssetTypeBitcoinCash];
 }
 
 #pragma mark - Balances Chart Delegate
@@ -381,16 +381,16 @@
 
 #pragma mark - BCPriceChartView Delegate
 
-- (void)addPriceChartView:(AssetType)assetType
+- (void)addPriceChartView:(LegacyAssetType)assetType
 {
     switch (assetType) {
-        case AssetTypeBitcoin: [self bitcoinChartTapped]; return;
-        case AssetTypeEther: [self etherChartTapped]; return;
-        case AssetTypeBitcoinCash: [self bitcoinCashChartTapped]; return;
+        case LegacyAssetTypeBitcoin: [self bitcoinChartTapped]; return;
+        case LegacyAssetTypeEther: [self etherChartTapped]; return;
+        case LegacyAssetTypeBitcoinCash: [self bitcoinCashChartTapped]; return;
     }
 }
 
-- (void)reloadPriceChartView:(AssetType)assetType
+- (void)reloadPriceChartView:(LegacyAssetType)assetType
 {
     [self fetchChartDataForAsset:assetType];
 }

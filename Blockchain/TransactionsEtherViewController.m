@@ -19,7 +19,7 @@
 @property (nonatomic) NSString *balance;
 @property (nonatomic) UIView *noTransactionsView;
 
-- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(AssetType)assetType;
+- (void)setupNoTransactionsViewInView:(UIView *)view assetType:(LegacyAssetType)assetType;
 @end
 
 @interface TransactionsEtherViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -48,7 +48,7 @@
     
     [self setupPullToRefresh];
     
-    [self setupNoTransactionsViewInView:self.tableView assetType:AssetTypeEther];
+    [self setupNoTransactionsViewInView:self.tableView assetType:LegacyAssetTypeEther];
     
     [self reload];
 }

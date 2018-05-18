@@ -39,7 +39,7 @@
 -(IBAction)btcbuttonclicked:(id)sender;
 
 @property(nonatomic, strong)  Transaction * transaction;
-@property(nonatomic)  AssetType assetType;
+@property(nonatomic)  LegacyAssetType assetType;
 
 - (void)reload;
 - (void)changeBtcButtonTitleText:(NSString *)text;

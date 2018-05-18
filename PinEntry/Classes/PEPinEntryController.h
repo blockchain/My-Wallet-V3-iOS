@@ -65,7 +65,7 @@
 
 // Swipe-to-receive
 @property (nonatomic) UIAlertController *errorAlert;
-- (void)paymentReceived:(AssetType)assetType;
+- (void)paymentReceived:(LegacyAssetType)assetType;
 - (void)setupQRCode;
 - (void)reset;
 

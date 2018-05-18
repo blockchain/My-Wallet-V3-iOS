@@ -10,7 +10,7 @@
 @class Transaction, EtherTransaction;
 
 @interface TransactionDetailViewModel : NSObject
-@property (nonatomic) AssetType assetType;
+@property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic) NSString *fromString;
 @property (nonatomic) NSString *fromAddress;
 @property (nonatomic) BOOL hasFromLabel;

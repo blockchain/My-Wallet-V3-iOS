@@ -153,9 +153,9 @@
 - (NSString *)dictionaryKeyForPage:(NSInteger)pageIndex
 {
     switch (pageIndex) {
-        case AssetTypeBitcoin: return DICTIONARY_KEY_BITCOIN;
-        case AssetTypeEther: return DICTIONARY_KEY_ETHER;
-        case AssetTypeBitcoinCash: return DICTIONARY_KEY_BITCOIN_CASH;
+        case LegacyAssetTypeBitcoin: return DICTIONARY_KEY_BITCOIN;
+        case LegacyAssetTypeEther: return DICTIONARY_KEY_ETHER;
+        case LegacyAssetTypeBitcoinCash: return DICTIONARY_KEY_BITCOIN_CASH;
         default: return nil;
     }
 }

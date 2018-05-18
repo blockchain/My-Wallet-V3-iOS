@@ -10,19 +10,19 @@
 
 @implementation BCSwipeAddressViewModel
 
-- (id)initWithAssetType:(AssetType)assetType
+- (id)initWithAssetType:(LegacyAssetType)assetType
 {
     if (self == [super init]) {
         self.assetType = assetType;
         NSString *suffix;
         NSString *assetImageViewName;
-        if (assetType == AssetTypeBitcoin) {
+        if (assetType == LegacyAssetTypeBitcoin) {
             suffix = BC_STRING_BITCOIN;
             assetImageViewName = @"bitcoin_large";
-        } else if (assetType == AssetTypeEther) {
+        } else if (assetType == LegacyAssetTypeEther) {
             suffix = BC_STRING_ETHER;
             assetImageViewName = @"ether_large";
-        } else if (assetType == AssetTypeBitcoinCash) {
+        } else if (assetType == LegacyAssetTypeBitcoinCash) {
             suffix = BC_STRING_BITCOIN_CASH;
             assetImageViewName = @"bitcoin_cash_large";
         }
@@ -36,7 +36,7 @@
 {
     _address = address;
     
-    self.textAddress = self.assetType == AssetTypeBitcoinCash ? [address substringFromIndex:[PREFIX_BITCOIN_CASH length]] : address;
+    self.textAddress = self.assetType == LegacyAssetTypeBitcoinCash ? [address substringFromIndex:[PREFIX_BITCOIN_CASH length]] : address;
 }
 
 @end

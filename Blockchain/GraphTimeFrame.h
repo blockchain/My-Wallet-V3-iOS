@@ -23,7 +23,7 @@ typedef enum {
 @property (nonatomic, readonly) NSInteger startDate;
 @property (nonatomic, readonly) NSString *dateFormat;
 
-+ (GraphTimeFrame *)timeFrameAll:(AssetType)assetType;
++ (GraphTimeFrame *)timeFrameAll:(LegacyAssetType)assetType;
 + (GraphTimeFrame *)timeFrameYear;
 + (GraphTimeFrame *)timeFrameMonth;
 + (GraphTimeFrame *)timeFrameWeek;

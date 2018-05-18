@@ -117,7 +117,7 @@ const CGFloat rowHeightValueReceived = 80;
 
 - (NSString *)getNotePlaceholder
 {
-    if (self.transactionModel.assetType == AssetTypeBitcoin) {
+    if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         NSString *label = [WalletManager.sharedInstance.wallet getNotePlaceholderForTransactionHash:self.transactionModel.myHash];
         return label.length > 0 ? label : nil;
     } else {
@@ -144,11 +144,11 @@ const CGFloat rowHeightValueReceived = 80;
     [self.textView resignFirstResponder];
     self.textView.editable = NO;
     
-    if (self.transactionModel.assetType == AssetTypeBitcoin) {
+    if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         [self.busyViewDelegate showBusyViewWithLoadingText:BC_STRING_LOADING_SYNCING_WALLET];
         [WalletManager.sharedInstance.wallet saveNote:self.textView.text forTransaction:self.transactionModel.myHash];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHistoryAfterSavingNote) name:NOTIFICATION_KEY_BACKUP_SUCCESS object:nil];
-    } else if (self.transactionModel.assetType == AssetTypeEther) {
+    } else if (self.transactionModel.assetType == LegacyAssetTypeEther) {
         [WalletManager.sharedInstance.wallet saveEtherNote:self.textView.text forTransaction:self.transactionModel.myHash];
     }
 }
@@ -177,11 +177,11 @@ const CGFloat rowHeightValueReceived = 80;
     [self.busyViewDelegate hideBusyView];
     
     NSArray *newTransactions;
-    if (self.transactionModel.assetType == AssetTypeBitcoin) {
+    if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         newTransactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
-    } else if (self.transactionModel.assetType == AssetTypeEther) {
+    } else if (self.transactionModel.assetType == LegacyAssetTypeEther) {
         newTransactions = WalletManager.sharedInstance.wallet.etherTransactions;
-    } else if (self.transactionModel.assetType == AssetTypeBitcoinCash) {
+    } else if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash) {
         newTransactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
     }
     
@@ -211,7 +211,7 @@ const CGFloat rowHeightValueReceived = 80;
     
     for (Transaction *transaction in newTransactions) {
         if ([transaction.myHash isEqualToString:self.transactionModel.myHash]) {
-            if (self.transactionModel.assetType == AssetTypeBitcoin || self.transactionModel.assetType == AssetTypeEther) self.transactionModel.note = transaction.note;
+            if (self.transactionModel.assetType == LegacyAssetTypeBitcoin || self.transactionModel.assetType == LegacyAssetTypeEther) self.transactionModel.note = transaction.note;
             self.transactionModel.fiatAmountsAtTime = transaction.fiatAmountsAtTime;
             didFindTransaction = YES;
             break;
@@ -404,7 +404,7 @@ const CGFloat rowHeightValueReceived = 80;
         labelString = self.transactionModel.toString;
     }
     
-    if (self.transactionModel.assetType == AssetTypeBitcoinCash && [WalletManager.sharedInstance.wallet isValidAddress:address assetType:AssetTypeBitcoinCash]) {
+    if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash && [WalletManager.sharedInstance.wallet isValidAddress:address assetType:LegacyAssetTypeBitcoinCash]) {
         address = [WalletManager.sharedInstance.wallet toBitcoinCash:address includePrefix:NO];
     }
     

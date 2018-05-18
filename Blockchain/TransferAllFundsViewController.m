@@ -35,7 +35,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupViews];
-    self.transferPaymentBuilder = [[TransferAllFundsBuilder alloc] initWithAssetType:AssetTypeBitcoin usingSendScreen:NO];
+    self.transferPaymentBuilder = [[TransferAllFundsBuilder alloc] initWithAssetType:LegacyAssetTypeBitcoin usingSendScreen:NO];
     
     __weak TransferAllFundsViewController *weakSelf = self;
     
@@ -208,12 +208,12 @@
     [self.transferPaymentBuilder archiveTransferredAddresses];
 }
 
-- (AssetType)getAssetType
+- (LegacyAssetType)getAssetType
 {
-    return AssetTypeBitcoin;
+    return LegacyAssetTypeBitcoin;
 }
 
-- (void)didSelectFromAccount:(int)account assetType:(AssetType)asset
+- (void)didSelectFromAccount:(int)account assetType:(LegacyAssetType)asset
 {
     [self.navigationController popViewControllerAnimated:YES];
     [self.transferPaymentBuilder setupTransfersToAccount:account];

@@ -85,25 +85,25 @@ typedef enum {
         bchAddresses = [NSMutableArray array];
         bchAddressLabels = [NSMutableArray array];
 
-        AssetType assetType = [self.delegate getAssetType];
+        LegacyAssetType assetType = [self.delegate getAssetType];
 
-        NSMutableArray *accounts = assetType == AssetTypeBitcoin ? btcAccounts : bchAccounts;
-        NSMutableArray *accountLabels = assetType == AssetTypeBitcoin ? btcAccountLabels : bchAccountLabels;
+        NSMutableArray *accounts = assetType == LegacyAssetTypeBitcoin ? btcAccounts : bchAccounts;
+        NSMutableArray *accountLabels = assetType == LegacyAssetTypeBitcoin ? btcAccountLabels : bchAccountLabels;
         
         // Select from address
         if ([self showFromAddresses]) {
             
             if (selectMode == SelectModeExchangeAccountFrom) {
                 
-                NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:AssetTypeBitcoin getAccountsType:GetAccountsAll];
+                NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:LegacyAssetTypeBitcoin getAccountsType:GetAccountsAll];
                 [btcAccounts addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNTS]];
                 [btcAccountLabels addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNT_LABELS]];
                 
-                NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:AssetTypeBitcoinCash getAccountsType:GetAccountsAll];
+                NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:LegacyAssetTypeBitcoinCash getAccountsType:GetAccountsAll];
                 [bchAccounts addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNTS]];
                 [bchAccountLabels addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNT_LABELS]];
                 
-            } else if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
+            } else if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
                 
                 // First show the HD accounts with positive balance
                 NSDictionary *accountsAndLabelsPositiveBalance = [self getAccountsAndLabels:assetType getAccountsType:GetAccountsPositiveBalance];
@@ -116,22 +116,22 @@ typedef enum {
                 [accountLabels addObjectsFromArray:accountsAndLabelsZeroBalance[DICTIONARY_KEY_ACCOUNT_LABELS]];
                 
                 // Finally show all the user's active legacy addresses
-                if (assetType == AssetTypeBitcoin) {
+                if (assetType == LegacyAssetTypeBitcoin) {
                     for (NSString * addr in [_wallet activeLegacyAddresses:assetType]) {
                         [legacyAddresses addObject:addr];
                         [legacyAddressLabels addObject:[_wallet labelForLegacyAddress:addr assetType:assetType]];
                     }
                 }
                 
-                if (assetType == AssetTypeBitcoinCash && (selectMode == SelectModeSendFrom || selectMode == SelectModeFilter)) {
-                    if ([_wallet hasLegacyAddresses:AssetTypeBitcoinCash]) {
+                if (assetType == LegacyAssetTypeBitcoinCash && (selectMode == SelectModeSendFrom || selectMode == SelectModeFilter)) {
+                    if ([_wallet hasLegacyAddresses:LegacyAssetTypeBitcoinCash]) {
                         [bchAddresses addObject:BC_STRING_IMPORTED_ADDRESSES];
                         [bchAddressLabels addObject:BC_STRING_IMPORTED_ADDRESSES];
                     }
                 }
             }
             
-            if (assetType == AssetTypeEther || (selectMode == SelectModeExchangeAccountFrom && [WalletManager.sharedInstance.wallet hasEthAccount])) {
+            if (assetType == LegacyAssetTypeEther || (selectMode == SelectModeExchangeAccountFrom && [WalletManager.sharedInstance.wallet hasEthAccount])) {
                 [ethAccounts addObject:[NSNumber numberWithInt:0]];
                 [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
             }
@@ -147,15 +147,15 @@ typedef enum {
         else {
             if (selectMode == SelectModeExchangeAccountTo) {
 
-                NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:AssetTypeBitcoin getAccountsType:GetAccountsAll];
+                NSDictionary *accountsAndLabelsBitcoin = [self getAccountsAndLabels:LegacyAssetTypeBitcoin getAccountsType:GetAccountsAll];
                 [btcAccounts addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNTS]];
                 [btcAccountLabels addObjectsFromArray:accountsAndLabelsBitcoin[DICTIONARY_KEY_ACCOUNT_LABELS]];
 
-                NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:AssetTypeBitcoinCash getAccountsType:GetAccountsAll];
+                NSDictionary *accountsAndLabelsBitcoinCash = [self getAccountsAndLabels:LegacyAssetTypeBitcoinCash getAccountsType:GetAccountsAll];
                 [bchAccounts addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNTS]];
                 [bchAccountLabels addObjectsFromArray:accountsAndLabelsBitcoinCash[DICTIONARY_KEY_ACCOUNT_LABELS]];
 
-            } else if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
+            } else if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
                 TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
 
                 // Show the address book
@@ -170,7 +170,7 @@ typedef enum {
                 [accountLabels addObjectsFromArray:accountsAndLabels[DICTIONARY_KEY_ACCOUNT_LABELS]];
 
                 // Finally show all the user's active legacy addresses
-                if (![self accountsOnly] && assetType == AssetTypeBitcoin) {
+                if (![self accountsOnly] && assetType == LegacyAssetTypeBitcoin) {
                     for (NSString * addr in [_wallet activeLegacyAddresses:assetType]) {
                         [legacyAddresses addObject:addr];
                         [legacyAddressLabels addObject:[_wallet labelForLegacyAddress:addr assetType:assetType]];
@@ -178,7 +178,7 @@ typedef enum {
                 }
             }
 
-            if ([self.delegate getAssetType] == AssetTypeEther || (selectMode == SelectModeExchangeAccountTo && [WalletManager.sharedInstance.wallet hasEthAccount])) {
+            if ([self.delegate getAssetType] == LegacyAssetTypeEther || (selectMode == SelectModeExchangeAccountTo && [WalletManager.sharedInstance.wallet hasEthAccount])) {
                 [ethAccounts addObject:[NSNumber numberWithInt:0]];
                 [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
             }
@@ -253,20 +253,20 @@ typedef enum {
     if ([self showFromAddresses]) {
         if (indexPath.section == btcAccountsSectionNumber) {
             if (selectMode == SelectModeFilter) {
-                [self filterWithRow:indexPath.row assetType:AssetTypeBitcoin];
+                [self filterWithRow:indexPath.row assetType:LegacyAssetTypeBitcoin];
             } else {
-                int accountIndex = [WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row] intValue] assetType:AssetTypeBitcoin];
-                [delegate didSelectFromAccount:accountIndex assetType:AssetTypeBitcoin];
+                int accountIndex = [WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row] intValue] assetType:LegacyAssetTypeBitcoin];
+                [delegate didSelectFromAccount:accountIndex assetType:LegacyAssetTypeBitcoin];
             }
         }
         else if (indexPath.section == ethAccountsSectionNumber) {
-            [delegate didSelectFromAccount:0 assetType:AssetTypeEther];
+            [delegate didSelectFromAccount:0 assetType:LegacyAssetTypeEther];
         } else if (indexPath.section == bchAccountsSectionNumber) {
             if (selectMode == SelectModeFilter) {
-                [self filterWithRow:indexPath.row assetType:AssetTypeBitcoinCash];
+                [self filterWithRow:indexPath.row assetType:LegacyAssetTypeBitcoinCash];
             } else {
-                int accountIndex = [WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row] intValue] assetType:AssetTypeBitcoinCash];
-                [delegate didSelectFromAccount:accountIndex assetType:AssetTypeBitcoinCash];
+                int accountIndex = [WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row] intValue] assetType:LegacyAssetTypeBitcoinCash];
+                [delegate didSelectFromAccount:accountIndex assetType:LegacyAssetTypeBitcoinCash];
             }
         } else if (indexPath.section == legacyAddressesSectionNumber) {
             NSString *legacyAddress = [legacyAddresses objectAtIndex:[indexPath row]];
@@ -285,7 +285,7 @@ typedef enum {
             }
         } else if (indexPath.section == bchAddressesSectionNumber) {
             if (selectMode == SelectModeFilter) {
-                [self filterWithRow:indexPath.row assetType:AssetTypeBitcoinCash];
+                [self filterWithRow:indexPath.row assetType:LegacyAssetTypeBitcoinCash];
             } else {
                 [delegate didSelectFromAddress:BC_STRING_IMPORTED_ADDRESSES];
             }
@@ -295,13 +295,13 @@ typedef enum {
             [delegate didSelectToAddress:[addressBookAddresses objectAtIndex:[indexPath row]]];
         }
         else if (indexPath.section == btcAccountsSectionNumber) {
-            [delegate didSelectToAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:(int)indexPath.row assetType:AssetTypeBitcoin] assetType:AssetTypeBitcoin];
+            [delegate didSelectToAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:(int)indexPath.row assetType:LegacyAssetTypeBitcoin] assetType:LegacyAssetTypeBitcoin];
         }
         else if (indexPath.section == ethAccountsSectionNumber) {
-            [delegate didSelectToAccount:0 assetType:AssetTypeEther];
+            [delegate didSelectToAccount:0 assetType:LegacyAssetTypeEther];
         }
         else if (indexPath.section == bchAccountsSectionNumber) {
-            [delegate didSelectToAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:(int)indexPath.row assetType:AssetTypeBitcoinCash] assetType:AssetTypeBitcoinCash];
+            [delegate didSelectToAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:(int)indexPath.row assetType:LegacyAssetTypeBitcoinCash] assetType:LegacyAssetTypeBitcoinCash];
         }
         else if (indexPath.section == legacyAddressesSectionNumber) {
             [delegate didSelectToAddress:[legacyAddresses objectAtIndex:[indexPath row]]];
@@ -522,21 +522,21 @@ typedef enum {
             uint64_t btcBalance = 0;
             
             if (section == addressBookSectionNumber) {
-                btcBalance = [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:[addressBookAddresses objectAtIndex:row] assetType:AssetTypeBitcoin] longLongValue];
+                btcBalance = [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:[addressBookAddresses objectAtIndex:row] assetType:LegacyAssetTypeBitcoin] longLongValue];
             } else if (section == btcAccountsSectionNumber) {
                 if (selectMode == SelectModeFilter) {
                     if (btcAccounts.count == row - 1) {
-                        btcBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:AssetTypeBitcoin];
+                        btcBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoin];
                     } else if (row == 0) {
                         btcBalance = [WalletManager.sharedInstance.wallet getTotalActiveBalance];
                     } else {
-                        btcBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row - 1] intValue] assetType:AssetTypeBitcoin] assetType:AssetTypeBitcoin] longLongValue];
+                        btcBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row - 1] intValue] assetType:LegacyAssetTypeBitcoin] assetType:LegacyAssetTypeBitcoin] longLongValue];
                     }
                 } else {
-                    btcBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row] intValue] assetType:AssetTypeBitcoin] assetType:AssetTypeBitcoin] longLongValue];
+                    btcBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[btcAccounts objectAtIndex:indexPath.row] intValue] assetType:LegacyAssetTypeBitcoin] assetType:LegacyAssetTypeBitcoin] longLongValue];
                 }
             } else if (section == legacyAddressesSectionNumber) {
-                btcBalance = [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:[legacyAddresses objectAtIndex:row] assetType:AssetTypeBitcoin] longLongValue];
+                btcBalance = [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:[legacyAddresses objectAtIndex:row] assetType:LegacyAssetTypeBitcoin] longLongValue];
             }
 
             if (section == btcAccountsSectionNumber || (btcAccounts.count > 0 && section == legacyAddressesSectionNumber)) {
@@ -553,17 +553,17 @@ typedef enum {
                 if (section == bchAccountsSectionNumber) {
                     if (selectMode == SelectModeFilter) {
                         if (bchAccounts.count == row - 1) {
-                            bchBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:AssetTypeBitcoinCash];
+                            bchBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoinCash];
                         } else if (row == 0) {
                             bchBalance = [WalletManager.sharedInstance.wallet bitcoinCashTotalBalance];
                         } else {
-                            bchBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row - 1] intValue] assetType:AssetTypeBitcoinCash] assetType:AssetTypeBitcoinCash] longLongValue];
+                            bchBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row - 1] intValue] assetType:LegacyAssetTypeBitcoinCash] assetType:LegacyAssetTypeBitcoinCash] longLongValue];
                         }
                     } else {
-                        bchBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row] intValue] assetType:AssetTypeBitcoinCash] assetType:AssetTypeBitcoinCash] longLongValue];
+                        bchBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row] intValue] assetType:LegacyAssetTypeBitcoinCash] assetType:LegacyAssetTypeBitcoinCash] longLongValue];
                     }
                 } else if (section == bchAddressesSectionNumber) {
-                    bchBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:AssetTypeBitcoinCash];
+                    bchBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoinCash];
                 }
                 zeroBalance = bchBalance == 0;
                 cell.balanceLabel.text = [NSNumberFormatter formatBchWithSymbol:bchBalance];
@@ -618,7 +618,7 @@ typedef enum {
 
 # pragma mark - Helper Methods
 
-- (NSDictionary *)getAccountsAndLabels:(AssetType)assetType getAccountsType:(GetAccountsType)getAccountsType
+- (NSDictionary *)getAccountsAndLabels:(LegacyAssetType)assetType getAccountsType:(GetAccountsType)getAccountsType
 {
     NSMutableArray *accounts = [NSMutableArray new];
     NSMutableArray *accountLabels = [NSMutableArray new];
@@ -646,17 +646,17 @@ typedef enum {
              DICTIONARY_KEY_ACCOUNT_LABELS : accountLabels ? : @[]};
 }
 
-- (void)filterWithRow:(NSInteger)row assetType:(AssetType)asset
+- (void)filterWithRow:(NSInteger)row assetType:(LegacyAssetType)asset
 {
     NSMutableArray *accounts;
     switch (asset) {
-        case AssetTypeBitcoin:
+        case LegacyAssetTypeBitcoin:
             accounts = btcAccounts;
             break;
-        case AssetTypeBitcoinCash:
+        case LegacyAssetTypeBitcoinCash:
             accounts = bchAccounts;
             break;
-        case AssetTypeEther:
+        case LegacyAssetTypeEther:
             accounts = ethAccounts;
             break;
     }

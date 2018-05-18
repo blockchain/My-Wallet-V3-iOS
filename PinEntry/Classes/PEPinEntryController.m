@@ -175,7 +175,7 @@ static PEViewController *VerifyController()
         pinController.scrollView.delegate = self;
         
         for (int assetIndex = 0; assetIndex < assets.count; assetIndex++) {
-            AssetType asset = [assets[assetIndex] integerValue];
+            LegacyAssetType asset = [assets[assetIndex] integerValue];
             BCSwipeAddressViewModel *viewModel = [[BCSwipeAddressViewModel alloc] initWithAssetType:asset];
             BCSwipeAddressView *swipeView = [[BCSwipeAddressView alloc] initWithFrame:CGRectMake(windowWidth * (assetIndex + 1), 0, windowWidth, windowHeight) viewModel:viewModel delegate:self];
             [self addAddressToSwipeView:swipeView assetType:asset];
@@ -188,9 +188,9 @@ static PEViewController *VerifyController()
     }
 }
 
-- (void)addAddressToSwipeView:(BCSwipeAddressView *)swipeView assetType:(AssetType)assetType
+- (void)addAddressToSwipeView:(BCSwipeAddressView *)swipeView assetType:(LegacyAssetType)assetType
 {
-    if (assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) {
+    if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
         NSString *nextAddress = [[KeychainItemWrapper getSwipeAddressesForAssetType:assetType] firstObject];
         
         if (nextAddress) {
@@ -222,15 +222,15 @@ static PEViewController *VerifyController()
         } else {
             [swipeView updateAddress:nextAddress];
         }
-    } else if (assetType == AssetTypeEther) {
+    } else if (assetType == LegacyAssetTypeEther) {
         NSString *etherAddress = [KeychainItemWrapper getSwipeEtherAddress];
         [swipeView updateAddress:etherAddress];
     }
 }
 
-- (void)paymentReceived:(AssetType)assetType
+- (void)paymentReceived:(LegacyAssetType)assetType
 {
-    if ((assetType == AssetTypeBitcoin || assetType == AssetTypeBitcoinCash) &&
+    if ((assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) &&
         [KeychainItemWrapper getSwipeAddressesForAssetType:assetType].count > 0) {
         [KeychainItemWrapper removeFirstSwipeAddressForAssetType:assetType];
         BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:[NSNumber numberWithInteger:assetType]];
@@ -305,7 +305,7 @@ static PEViewController *VerifyController()
 
 - (NSArray *)assets
 {
-    return @[[NSNumber numberWithInteger:AssetTypeBitcoin], [NSNumber numberWithInteger:AssetTypeEther], [NSNumber numberWithInteger:AssetTypeBitcoinCash]];
+    return @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeEther], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]];
 }
 
 #pragma mark Debug Menu
