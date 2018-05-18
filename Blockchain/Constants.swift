@@ -68,22 +68,18 @@ struct Constants {
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
         static let backupSuccess = NSNotification.Name("backupSuccess")
     }
-    struct Prefixes {
-        static let bitcoin = "bitcoin:"
-        static let bitcoinCash = "bitcoincash:"
-        static let ethereum = "ethereum:"
-        static let mail = "message://"
-    }
     struct PushNotificationKeys {
         static let userInfoType = "type"
         static let userInfoId = "id"
         static let typePayment = "payment"
     }
     struct Schemes {
-        static let mail = "message://"
-        static let blockchainWallet = "blockchain-wallet"
-        static let blockchain = "blockchain"
         static let bitcoin = "bitcoin"
+        static let bitcoinCash = "bitcoincash"
+        static let blockchain = "blockchain"
+        static let blockchainWallet = "blockchain-wallet"
+        static let ethereum = "ethereum"
+        static let mail = "message"
     }
     struct Security {
         static let pinPBKDF2Iterations = 1 // This does not need to be large because the key is already 256 bits
@@ -129,19 +125,19 @@ struct Constants {
     }
 
     @objc class func bitcoinUriPrefix() -> String {
-        return Constants.Prefixes.bitcoin
+        return Constants.Schemes.bitcoin
     }
 
     @objc class func bitcoinCashUriPrefix() -> String {
-        return Constants.Prefixes.bitcoinCash
+        return Constants.Schemes.bitcoinCash
     }
 
     @objc class func ethereumUriPrefix() -> String {
-        return Constants.Prefixes.ethereum
+        return Constants.Schemes.ethereum
     }
 
     @objc class func mailUrl() -> String {
-        return Constants.Prefixes.mail
+        return Constants.Schemes.mail
     }
 }
 
