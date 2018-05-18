@@ -224,8 +224,6 @@
     BlockchainSettings.sharedAppInstance.reminderModalDate = NULL;
     
     BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
-    
-    [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
 }
 
 - (void)errorCreatingNewAccount:(NSString*)message

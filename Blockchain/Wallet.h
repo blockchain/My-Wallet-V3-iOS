@@ -140,14 +140,14 @@
 - (void)didShiftPayment:(NSDictionary *)info;
 - (void)showGetAssetsAlertForCurrencySymbol:(NSString *)currencySymbol;
 - (void)didCreateEthAccountForExchange;
-- (void)didGetBitcoinCashExchangeRates;
 - (void)didFetchBitcoinCashHistory;
 - (void)initializeWebView;
 - (void)wallet:(Wallet *)wallet didRequireTwoFactorAuthentication:(NSInteger)type;
 - (void)walletDidResendTwoFactorSMS:(Wallet *)wallet;
 - (void)walletDidRequireEmailAuthorization:(Wallet *)wallet;
 - (void)walletDidGetAccountInfo:(Wallet *)wallet;
-- (void)walletDidGetAllCurrencySymbols:(Wallet *)wallet;
+- (void)walletDidGetBtcExchangeRates:(Wallet *)wallet;
+- (void)walletDidGetAccountInfoAndExchangeRates:(Wallet *)wallet;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {
@@ -190,7 +190,7 @@
 @property BOOL isSyncing;
 @property BOOL isNew;
 @property NSString *twoFactorInput;
-@property (nonatomic) NSDictionary *currencySymbols;
+@property (nonatomic) NSDictionary *btcRates;
 
 @property (nonatomic) SRWebSocket *btcSocket;
 @property (nonatomic) SRWebSocket *bchSocket;
@@ -356,9 +356,11 @@
 - (int)getTwoStepType;
 - (BOOL)getEmailVerifiedStatus;
 
+- (void)getAccountInfoAndExchangeRates;
+
 - (void)changeEmail:(NSString *)newEmail;
 - (void)resendVerificationEmail:(NSString *)email;
-- (void)getAllCurrencySymbols;
+- (void)getBtcExchangeRates;
 - (void)changeMobileNumber:(NSString *)newMobileNumber;
 - (void)verifyMobileNumber:(NSString *)code;
 - (void)enableTwoStepVerificationForSMS;

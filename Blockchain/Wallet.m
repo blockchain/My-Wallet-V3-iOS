@@ -694,13 +694,17 @@
     };
 
 #pragma mark Settings
-
+    
+    self.context[@"objc_on_get_account_info_and_exchange_rates"] = ^() {
+        [weakSelf on_get_account_info_and_exchange_rates];
+    };
+    
     self.context[@"objc_on_get_account_info_success"] = ^(NSString *accountInfo) {
         [weakSelf on_get_account_info_success:accountInfo];
     };
-
-    self.context[@"objc_on_get_all_currency_symbols_success"] = ^(NSString *currencies) {
-        [weakSelf on_get_all_currency_symbols_success:currencies];
+    
+    self.context[@"objc_on_get_btc_exchange_rates_success"] = ^(NSString *currencies) {
+        [weakSelf on_get_btc_exchange_rates_success:currencies];
     };
 
     self.context[@"objc_on_error_creating_new_address"] = ^(NSString *error) {
@@ -826,9 +830,9 @@
     self.context[@"objc_on_fetch_bch_history_error"] = ^(JSValue *error) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR handler: nil];
     };
-
-    self.context[@"objc_did_get_bitcoin_cash_exchange_rates"] = ^(JSValue *result, JSValue *onLogin) {
-        [weakSelf did_get_bitcoin_cash_exchange_rates:[result toDictionary] onLogin:[onLogin toBool]];
+    
+    self.context[@"objc_did_get_bitcoin_cash_exchange_rates"] = ^(JSValue *result) {
+        [weakSelf did_get_bitcoin_cash_exchange_rates:[result toDictionary]];
     };
 
     self.context[@"objc_did_get_bch_swipe_addresses"] = ^(NSArray *swipeAddresses) {
@@ -1355,9 +1359,9 @@
     return [[[self.context evaluateScript:@"MyWalletPhone.getAllTransactionsCount()"] toNumber] intValue];
 }
 
-- (void)getAllCurrencySymbols
+- (void)getBtcExchangeRates
 {
-    [self.context evaluateScript:@"JSON.stringify(MyWalletPhone.getAllCurrencySymbols())"];
+    [self.context evaluateScript:@"JSON.stringify(MyWalletPhone.getBtcExchangeRates())"];
 }
 
 - (void)changeLocalCurrency:(NSString *)currencyCode
@@ -1395,6 +1399,15 @@
     }
 
     [self.context evaluateScript:@"JSON.stringify(MyWalletPhone.getAccountInfo())"];
+}
+
+- (void)getAccountInfoAndExchangeRates
+{
+    if (![self isInitialized]) {
+        return;
+    }
+    
+    [self.context evaluateScript:@"MyWalletPhone.getAccountInfoAndExchangeRates()"];
 }
 
 - (NSString *)getEmail
@@ -3298,8 +3311,7 @@
     if (self.isNew) {
 
         NSString *currencyCode = [[NSLocale currentLocale] objectForKey:NSLocaleCurrencyCode];
-
-        if ([[self.currencySymbols allKeys] containsObject:currencyCode]) {
+        if ([[self.btcRates allKeys] containsObject:currencyCode]) {
             [self changeLocalCurrency:[[NSLocale currentLocale] objectForKey:NSLocaleCurrencyCode]];
         }
     }
@@ -3536,9 +3548,9 @@
     }
 }
 
-- (void)on_get_all_currency_symbols_success:(NSString *)currencies
+- (void)on_get_btc_exchange_rates_success:(NSString *)currencies
 {
-    DLog(@"on_get_all_currency_symbols_success");
+    DLog(@"on_get_btc_exchange_rates_success");
     NSDictionary *allCurrencySymbolsDictionary = [currencies getJSONObject];
     NSMutableDictionary *currencySymbolsWithNames = [[NSMutableDictionary alloc] initWithDictionary:allCurrencySymbolsDictionary];
     NSDictionary *currencyNames = [CurrencySymbol currencyNames];
@@ -3555,11 +3567,12 @@
         }
     }
 
-    self.currencySymbols = currencySymbolsWithNames;
+    self.btcRates = currencySymbolsWithNames;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
 
-    if ([self.delegate respondsToSelector:@selector(walletDidGetAllCurrencySymbols:)]) {
-        [self.delegate walletDidGetAllCurrencySymbols:self];
+    if ([self.delegate respondsToSelector:@selector(walletDidGetBtcExchangeRates:)]) {
+        [self.delegate walletDidGetBtcExchangeRates:self];
     }
 }
 
@@ -4131,17 +4144,12 @@
     }
 }
 
-- (void)did_get_bitcoin_cash_exchange_rates:(NSDictionary *)rates onLogin:(BOOL)onLogin
+- (void)did_get_bitcoin_cash_exchange_rates:(NSDictionary *)rates
 {
-    if ([self.delegate respondsToSelector:@selector(didGetBitcoinCashExchangeRates)]) {
-        NSString *currency = [self.accountInfo objectForKey:DICTIONARY_KEY_CURRENCY];
-        double lastPrice = [[[rates objectForKey:currency] objectForKey:DICTIONARY_KEY_LAST] doubleValue];
-        self.bitcoinCashConversion = [[[(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI] decimalNumberByDividingBy: (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:lastPrice]] stringValue] longLongValue];
-        self.bitcoinCashExchangeRates = rates;
-        if (onLogin) [self.delegate didGetBitcoinCashExchangeRates];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didGetBitcoinCashExchangeRates!", [delegate class]);
-    }
+    NSString *currency = [self.accountInfo objectForKey:DICTIONARY_KEY_CURRENCY];
+    double lastPrice = [[[rates objectForKey:currency] objectForKey:DICTIONARY_KEY_LAST] doubleValue];
+    self.bitcoinCashConversion = [[[(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI] decimalNumberByDividingBy: (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:lastPrice]] stringValue] longLongValue];
+    self.bitcoinCashExchangeRates = rates;
 }
 
 - (void)on_get_exchange_trades_success:(NSArray *)trades
@@ -4161,8 +4169,8 @@
 
 - (void)on_get_exchange_rate_success:(NSDictionary *)result
 {
-    NSNumber *btcRateNumber = [[[self.context evaluateScript:@"MyWalletPhone.currencyCodeForHardLimit()"] toString] isEqualToString:CURRENCY_CODE_USD] ? [[[WalletManager.sharedInstance.wallet currencySymbols] objectForKey:CURRENCY_CODE_USD] objectForKey:DICTIONARY_KEY_LAST] : [[[WalletManager.sharedInstance.wallet currencySymbols] objectForKey:CURRENCY_CODE_EUR] objectForKey:DICTIONARY_KEY_LAST];
-
+    NSNumber *btcRateNumber = [[[self.context evaluateScript:@"MyWalletPhone.currencyCodeForHardLimit()"] toString] isEqualToString:CURRENCY_CODE_USD] ? [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_USD] objectForKey:DICTIONARY_KEY_LAST] : [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_EUR] objectForKey:DICTIONARY_KEY_LAST];
+    
     NSDecimalNumber *btcRate = [NSDecimalNumber decimalNumberWithDecimal:[btcRateNumber decimalValue]];
     NSDecimalNumber *ethRate = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_ETH_HARD_LIMIT_RATE]];
 
@@ -4246,6 +4254,15 @@
         [self.delegate didBuildExchangeTrade:tradeInfo];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didBuildExchangeTrade:!", [delegate class]);
+    }
+}
+
+- (void)on_get_account_info_and_exchange_rates
+{
+    if ([self.delegate respondsToSelector:@selector(walletDidGetAccountInfoAndExchangeRates:)]) {
+        [self.delegate walletDidGetAccountInfoAndExchangeRates:self];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector didGetAvailableEthBalance:!", [delegate class]);
     }
 }
 

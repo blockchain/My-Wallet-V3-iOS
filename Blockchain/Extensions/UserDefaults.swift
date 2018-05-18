@@ -41,5 +41,6 @@ extension UserDefaults {
         case symbolLocal = "symbolLocal"
         case touchIDEnabled = "touchIDEnabled"
         case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
+        case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
     }
 }

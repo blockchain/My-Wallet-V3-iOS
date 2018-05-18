@@ -65,6 +65,7 @@
 
 - (void)reload
 {
+    [_dashboardViewController reload];
     [_sendBitcoinViewController reload];
     [_sendEtherViewController reload];
     [_sendBitcoinCashViewController reload];

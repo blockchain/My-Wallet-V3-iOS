@@ -189,8 +189,8 @@ final class BlockchainSettings: NSObject {
             get {
                 return KeychainItemWrapper.sharedKey()
             }
-           
-            
+
+
             set {
                 guard let sharedKey = newValue else {
                     KeychainItemWrapper.removeSharedKeyFromKeychain()
@@ -199,7 +199,7 @@ final class BlockchainSettings: NSObject {
                 KeychainItemWrapper.setSharedKeyInKeychain(sharedKey)
             }
         }
-        
+
         @objc var shouldHideAllCards: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
@@ -208,7 +208,7 @@ final class BlockchainSettings: NSObject {
                 defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
             }
         }
-        
+
         @objc var shouldHideBuySellCard: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
@@ -256,6 +256,16 @@ final class BlockchainSettings: NSObject {
                     return
                 }
                 KeychainItemWrapper.setSwipeEtherAddress(etherAddress)
+            }
+        }
+
+        /// Number of labelled addresses for default account
+        @objc var defaultAccountLabelledAddressesCount: Int {
+            get {
+                return defaults.integer(forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
             }
         }
 

@@ -31,3 +31,4 @@
 #import "UncaughtExceptionHandler.h"
 #import "Wallet.h"
 #import "WebLoginViewController.h"
+#import "MultiAddressResponse.h"

@@ -506,7 +506,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define USER_DEFAULTS_KEY_ASSET_TYPE @"assetType"
 
-#define USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT @"defaultAccountLabelledAddressesCount"
 #define USER_DEFAULTS_KEY_NEXT_ADDRESS @"nextReceivingAddress"
 #define USER_DEFAULTS_KEY_NEXT_ADDRESS_USED @"nextReceivingAddressUsed"
 #define USER_DEFAULTS_KEY_APP_REVIEW_PROMPT_DATE @"appReviewPromptDate"

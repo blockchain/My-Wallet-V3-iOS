@@ -157,7 +157,7 @@ const int aboutPrivacyPolicy = 2;
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didGetCurrencySymbols) name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
 
-    [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
+    [WalletManager.sharedInstance.wallet getBtcExchangeRates];
 }
 
 - (void)didGetCurrencySymbols
@@ -168,7 +168,7 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)updateCurrencySymbols
 {
-    self.allCurrencySymbolsDictionary = WalletManager.sharedInstance.wallet.currencySymbols;
+    self.allCurrencySymbolsDictionary = WalletManager.sharedInstance.wallet.btcRates;
 
     [self reloadTableView];
 }
@@ -1020,7 +1020,6 @@ const int aboutPrivacyPolicy = 2;
     if ([segue.identifier isEqualToString:SEGUE_IDENTIFIER_CURRENCY]) {
         SettingsSelectorTableViewController *settingsSelectorTableViewController = segue.destinationViewController;
         settingsSelectorTableViewController.itemsDictionary = self.availableCurrenciesDictionary;
-        settingsSelectorTableViewController.allCurrencySymbolsDictionary = self.allCurrencySymbolsDictionary;
     } else if ([segue.identifier isEqualToString:SEGUE_IDENTIFIER_TWO_STEP]) {
         SettingsTwoStepViewController *twoStepViewController = (SettingsTwoStepViewController *)segue.destinationViewController;
         twoStepViewController.settingsController = self;

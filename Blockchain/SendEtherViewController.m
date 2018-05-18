@@ -215,7 +215,7 @@
         self.amountInputView.fiatLabel.text = WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.code;
     }
     
-    self.displayingLocalSymbolSend = (app->symbolLocal && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion > 0);
+    self.displayingLocalSymbolSend = (BlockchainSettings.sharedAppInstance.symbolLocal && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion > 0);
 }
 
 - (void)setAddress:(NSString *)address

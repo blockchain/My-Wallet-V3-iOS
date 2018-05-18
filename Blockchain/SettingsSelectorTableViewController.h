@@ -11,5 +11,4 @@
 
 @interface SettingsSelectorTableViewController : UITableViewController
 @property (nonatomic, copy) NSDictionary *itemsDictionary;
-@property (nonatomic, copy) NSDictionary *allCurrencySymbolsDictionary;
 @end

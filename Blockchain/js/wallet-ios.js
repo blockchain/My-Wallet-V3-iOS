@@ -1453,13 +1453,29 @@ MyWalletPhone.getAccountInfo = function () {
         console.log('Getting account info');
         var accountInfo = JSON.stringify(data, null, 2);
         objc_on_get_account_info_success(accountInfo);
+        return data;
     }
 
     var error = function (e) {
         console.log('Error getting account info: ' + e);
     };
 
-    MyWallet.wallet.fetchAccountInfo().then(success).catch(error);
+    return MyWallet.wallet.fetchAccountInfo().then(success).catch(error);
+}
+
+MyWalletPhone.getAccountInfoAndExchangeRates = function() {
+    
+    var success = function() {
+        objc_on_get_account_info_and_exchange_rates()
+    };
+    
+    MyWalletPhone.getAccountInfo().then(function(data) {
+        var getBtcExchangeRates = MyWalletPhone.getBtcExchangeRates()
+        var getBchExchangeRates = MyWalletPhone.bch.fetchExchangeRates()
+        var currency =  data.currency
+        var getEthExchangeRate = MyWalletPhone.getEthExchangeRate(currency)
+        Promise.all([getBtcExchangeRates, getBchExchangeRates, getEthExchangeRate]).then(success);
+    });
 }
 
 MyWalletPhone.getEmail = function () {
@@ -1613,12 +1629,13 @@ MyWalletPhone.changeBtcCurrency = function(code) {
     BlockchainSettingsAPI.changeBtcCurrency(code, success, error);
 }
 
-MyWalletPhone.getAllCurrencySymbols = function () {
+MyWalletPhone.getBtcExchangeRates = function () {
 
     var success = function (data) {
-        console.log('Getting all currency symbols');
+        console.log('Getting btc exchange rates');
         var currencySymbolData = JSON.stringify(data, null, 2);
-        objc_on_get_all_currency_symbols_success(currencySymbolData);
+        objc_on_get_btc_exchange_rates_success(currencySymbolData);
+        return data;
     };
 
     var error = function (e) {
@@ -1626,7 +1643,7 @@ MyWalletPhone.getAllCurrencySymbols = function () {
     };
 
     var promise = BlockchainAPI.getTicker();
-    promise.then(success, error);
+    return promise.then(success, error);
 }
 
 MyWalletPhone.getPasswordStrength = function(password) {
@@ -2360,6 +2377,7 @@ MyWalletPhone.getEthExchangeRate = function(currencyCode) {
     var success = function(result) {
         console.log('Success fetching eth exchange rate');
         objc_on_fetch_eth_exchange_rate_success(result, currencyCode);
+        return result;
     };
 
     var error = function(error) {
@@ -2368,7 +2386,7 @@ MyWalletPhone.getEthExchangeRate = function(currencyCode) {
         objc_on_fetch_eth_exchange_rate_error(error);
     };
 
-    BlockchainAPI.getExchangeRate(currencyCode, 'ETH').then(success).catch(error);
+    return BlockchainAPI.getExchangeRate(currencyCode, 'ETH').then(success).catch(error);
 }
 
 MyWalletPhone.getEthBalance = function() {
@@ -2902,14 +2920,14 @@ MyWalletPhone.bch = {
     
     fetchExchangeRates : function() {
         var success = function(result) {
-            objc_did_get_bitcoin_cash_exchange_rates(result, true);
+            objc_did_get_bitcoin_cash_exchange_rates(result);
             return result;
         }
         
         var error = function(e) {
             console.log(e);
         }
-        BlockchainAPI.getExchangeRate('USD', 'BCH').then(success).catch(error);
+        return BlockchainAPI.getExchangeRate('USD', 'BCH').then(success).catch(error);
     },
     
     getAvailableBalanceForAccount : function(accountIndex) {

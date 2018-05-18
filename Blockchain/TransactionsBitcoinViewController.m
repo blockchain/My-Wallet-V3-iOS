@@ -192,7 +192,7 @@
         }
 #endif
         // Balance
-        self.balance = [NSNumberFormatter formatMoney:[self getBalance] localCurrency:app->symbolLocal];
+        self.balance = [NSNumberFormatter formatMoney:[self getBalance] localCurrency:BlockchainSettings.sharedAppInstance.symbolLocal];
         [self changeFilterLabel:[self getFilterLabel]];
 
     }
@@ -201,7 +201,8 @@
         self.noTransactionsView.hidden = YES;
         
         // Balance
-        self.balance = [NSNumberFormatter formatMoney:[self getBalance] localCurrency:app->symbolLocal];
+        self.balance = [NSNumberFormatter formatMoney:[self getBalance] localCurrency: BlockchainSettings.sharedAppInstance.symbolLocal
+];
         [self changeFilterLabel:[self getFilterLabel]];
     }
 }

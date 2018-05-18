@@ -78,6 +78,7 @@ import Foundation
         self.window.backgroundColor = UIColor.white
         super.init()
         self.walletManager.buySellDelegate = self
+        self.walletManager.accountInfoAndExchangeRatesDelegate = self
         observeSymbolChanges()
     }
 
@@ -388,5 +389,12 @@ extension AppCoordinator: TabControllerDelegate {
 
         // TODO remove app reference and use wallet singleton.isFe
         walletManager.wallet.isFetchingTransactions = false
+    }
+}
+
+extension AppCoordinator: WalletAccountInfoAndExchangeRatesDelegate {
+    func didGetAccountInfoAndExchangeRates() {
+        LoadingViewPresenter.shared.hideBusyView()
+        reload()
     }
 }

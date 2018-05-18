@@ -1048,48 +1048,49 @@ SideMenuViewController *sideMenuViewController;
 //    [WalletManager.sharedInstance.wallet loadContactsThenGetMessages];
 //}
 
-- (void)didGetMultiAddressResponse:(MultiAddressResponse*)response
-{
-    WalletManager.sharedInstance.latestMultiAddressResponse = response;
+//- (void)didGetMultiAddressResponse:(MultiAddressResponse*)response
+//{
+//    WalletManager.sharedInstance.latestMultiAddressResponse = response;
+//
+//    [self.tabControllerManager updateTransactionsViewControllerData:response];
+//
+//#ifdef ENABLE_TRANSACTION_FETCHING
+//    if (WalletManager.sharedInstance.wallet.isFetchingTransactions) {
+//        [_transactionsViewController reload];
+//        WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
+//    } else {
+//        [self reloadAfterMultiAddressResponse];
+//    }
+//#else
+//    if (WalletManager.sharedInstance.wallet.isFilteringTransactions) {
+//        WalletManager.sharedInstance.wallet.isFilteringTransactions = NO;
+//        [self updateSymbols];
+//        [self reloadAfterMultiAddressResponse];
+//    } else {
+//        [WalletManager.sharedInstance.wallet getAccountInfoAndExchangeRates];
+//    }
+//#endif
+//
+//    int newDefaultAccountLabeledAddressesCount = [WalletManager.sharedInstance.wallet getDefaultAccountLabelledAddressesCount];
+//    NSNumber *lastCount = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
+//    if (lastCount && [lastCount intValue] != newDefaultAccountLabeledAddressesCount) {
+//        [KeychainItemWrapper removeAllSwipeAddressesForAssetType:AssetTypeBitcoin];
+//    }
+//    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:newDefaultAccountLabeledAddressesCount] forKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
+//}
 
-    [self.tabControllerManager updateTransactionsViewControllerData:response];
+//- (void)didSetLatestBlock:(LatestBlock*)block
+//{
+//    [self.tabControllerManager didSetLatestBlock:block];
+//}
 
-#ifdef ENABLE_TRANSACTION_FETCHING
-    if (WalletManager.sharedInstance.wallet.isFetchingTransactions) {
-        [_transactionsViewController reload];
-        WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
-    } else {
-        [self reloadAfterMultiAddressResponse];
-    }
-#else
-    if (WalletManager.sharedInstance.wallet.isFilteringTransactions) {
-        WalletManager.sharedInstance.wallet.isFilteringTransactions = NO;
-        [self updateSymbols];
-        [self reloadAfterMultiAddressResponse];
-    } else {
-        [self getAccountInfo];
-    }
-#endif
-
-    int newDefaultAccountLabeledAddressesCount = [WalletManager.sharedInstance.wallet getDefaultAccountLabelledAddressesCount];
-    NSNumber *lastCount = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
-    if (lastCount && [lastCount intValue] != newDefaultAccountLabeledAddressesCount) {
-        [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
-    }
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:newDefaultAccountLabeledAddressesCount] forKey:USER_DEFAULTS_KEY_DEFAULT_ACCOUNT_LABELLED_ADDRESSES_COUNT];
-}
-
-- (void)didSetLatestBlock:(LatestBlock*)block
-{
-    [self.tabControllerManager didSetLatestBlock:block];
-}
-
-- (void)getAccountInfo
-{
-    // TODO: move this to WalletManager
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didGetAccountInfo) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
-    [WalletManager.sharedInstance.wallet getAccountInfo];
-}
+//- (void)getAccountInfo
+//{
+//    // TODO: move this to WalletManager
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didGetAccountInfo) name:NOTIFICATION_KEY_GET_ACCOUNT_INFO_SUCCESS object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterGettingCurrencySymbols) name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
+//    [WalletManager.sharedInstance.wallet getAccountInfo];
+//}
 
 //- (void)didGetAccountInfo
 //{
@@ -1119,37 +1120,48 @@ SideMenuViewController *sideMenuViewController;
 //
 //    [WalletManager.sharedInstance.wallet fetchBitcoinCashExchangeRates];
 //}
+//    [WalletManager.sharedInstance.wallet getAllCurrencySymbols];
+//}
 
-- (void)didGetBitcoinCashExchangeRates
-{
-    [WalletManager.sharedInstance.wallet getEthExchangeRate];
-}
+//- (void)reloadAfterGettingCurrencySymbols
+//{
+////    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_ALL_CURRENCY_SYMBOLS_SUCCESS object:nil];
+//
+////    [self updateSymbols];
+//
+////    [WalletManager.sharedInstance.wallet fetchBitcoinCashExchangeRates];
+//}
 
-- (void)didFetchBitcoinCashHistory
-{
-    [LoadingViewPresenter.sharedInstance hideBusyView];
+//- (void)didGetBitcoinCashExchangeRates
+//{
+//    [WalletManager.sharedInstance.wallet getEthExchangeRate];
+//}
 
-    [AppCoordinator.sharedInstance reload];
-}
+//- (void)didFetchBitcoinCashHistory
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//
+//    [AppCoordinator.sharedInstance reload];
+//}
 
-- (void)updateSymbols
-{
-    {
-        NSString *fiatCode = WalletManager.sharedInstance.wallet.accountInfo[DICTIONARY_KEY_ACCOUNT_SETTINGS_CURRENCY_FIAT];
-        NSMutableDictionary *symbolLocalDict = [[NSMutableDictionary alloc] initWithDictionary:[WalletManager.sharedInstance.wallet.currencySymbols objectForKey:fiatCode]];
-        [symbolLocalDict setObject:fiatCode forKey:DICTIONARY_KEY_CODE];
-        if (symbolLocalDict) {
-            WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local = [CurrencySymbol symbolFromDict:symbolLocalDict];
-        }
-    }
-
-    {
-        NSString *btcCode = WalletManager.sharedInstance.wallet.accountInfo[DICTIONARY_KEY_ACCOUNT_SETTINGS_CURRENCY_BTC];
-        if (btcCode) {
-            WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = [CurrencySymbol btcSymbolFromCode:btcCode];
-        }
-    }
-}
+//- (void)updateSymbols
+//{
+//    {
+//        NSString *fiatCode = WalletManager.sharedInstance.wallet.accountInfo[DICTIONARY_KEY_ACCOUNT_SETTINGS_CURRENCY_FIAT];
+//        NSMutableDictionary *symbolLocalDict = [[NSMutableDictionary alloc] initWithDictionary:[WalletManager.sharedInstance.wallet.currencySymbols objectForKey:fiatCode]];
+//        [symbolLocalDict setObject:fiatCode forKey:DICTIONARY_KEY_CODE];
+//        if (symbolLocalDict) {
+//            WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local = [CurrencySymbol symbolFromDict:symbolLocalDict];
+//        }
+//    }
+//
+//    {
+//        NSString *btcCode = WalletManager.sharedInstance.wallet.accountInfo[DICTIONARY_KEY_ACCOUNT_SETTINGS_CURRENCY_BTC];
+//        if (btcCode) {
+//            WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = [CurrencySymbol btcSymbolFromCode:btcCode];
+//        }
+//    }
+//}
 
 //- (void)walletFailedToDecrypt
 //{
@@ -2429,12 +2441,12 @@ SideMenuViewController *sideMenuViewController;
     [self.tabControllerManager didUpdateEthPayment:ethPayment];
 }
 
-- (void)didFetchEthExchangeRate:(NSNumber *)rate
-{
-    [self reloadAfterMultiAddressResponse];
-
-    [self.tabControllerManager didFetchEthExchangeRate:rate];
-}
+//- (void)didFetchEthExchangeRate:(NSNumber *)rate
+//{
+//    [self reloadAfterMultiAddressResponse];
+//
+//    [self.tabControllerManager didFetchEthExchangeRate:rate];
+//}
 
 - (void)didSendEther
 {

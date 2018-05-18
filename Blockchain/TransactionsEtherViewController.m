@@ -74,7 +74,7 @@
     NSString *balance = [WalletManager.sharedInstance.wallet getEthBalanceTruncated];
 
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    self.balance = app->symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:balance exchangeRate:tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:balance];
+    self.balance = BlockchainSettings.sharedAppInstance.symbolLocal ? [NSNumberFormatter formatEthToFiatWithSymbol:balance exchangeRate:tabControllerManager.latestEthExchangeRate] : [NSNumberFormatter formatEth:balance];
 }
 
 - (void)reloadSymbols

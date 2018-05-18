@@ -46,7 +46,7 @@
     self.actionLabel.frame = CGRectMake(self.actionLabel.frame.origin.x, 29, self.actionLabel.frame.size.width, self.actionLabel.frame.size.height);
     self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, 11, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
     
-    if (app->symbolLocal) {
+    if (BlockchainSettings.sharedAppInstance.symbolLocal) {
         NSString *lowercaseWithdrawalCurrencySymbol = [[trade withdrawalCurrency] lowercaseString];
         if ([lowercaseWithdrawalCurrencySymbol isEqualToString:[CURRENCY_SYMBOL_BTC lowercaseString]]) {
             amountString = [NSNumberFormatter formatMoney:ABS([NSNumberFormatter parseBtcValueFromString:[trade.withdrawalAmount stringValue]])];

@@ -34,6 +34,7 @@ class WalletManager: NSObject {
     weak var buySellDelegate: WalletBuySellDelegate?
     weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
+    @objc weak var accountInfoAndExchangeRatesDelegate: WalletAccountInfoAndExchangeRatesDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -110,7 +111,37 @@ class WalletManager: NSObject {
     }
 
     fileprivate func updateSymbols() {
-        // TODO
+        updateFiatSymbols()
+        updateBtcSymbols()
+    }
+
+    private func updateFiatSymbols() {
+        guard let fiatCode = self.wallet.accountInfo["currency"] as? String else {
+            print("Could not get fiat code")
+            return
+        }
+        guard let currencySymbols = self.wallet.btcRates[fiatCode] as? [AnyHashable: Any] else {
+            print("Currency symbols dictionary is nil")
+            return
+        }
+        guard let symbolLocalDict = NSMutableDictionary(dictionary: currencySymbols) as? NSMutableDictionary else {
+            print("Could not create symbolLocalDict")
+            return
+        }
+        symbolLocalDict.setObject(fiatCode, forKey: "code" as NSString)
+        self.latestMultiAddressResponse?.symbol_local = CurrencySymbol(fromDict: symbolLocalDict as? [AnyHashable: Any])
+    }
+
+    private func updateBtcSymbols() {
+        guard let code = self.wallet.accountInfo["btc_currency"] as? String else {
+            print("Could not get btc code")
+            return
+        }
+        self.latestMultiAddressResponse?.symbol_btc = CurrencySymbol.btcSymbol(fromCode: code)
+    }
+    
+    private func reloadAfterMultiaddressResponse() {
+        AppCoordinator.shared.tabControllerManager.reloadAfterMultiAddressResponse()
     }
 }
 
@@ -173,7 +204,7 @@ extension WalletManager: WalletDelegate {
     func walletDidResendTwoFactorSMS(_ wallet: Wallet!) {
         authDelegate?.didResendTwoFactorSMSCode()
     }
-    
+
     // MARK: - Buy/Sell
 
     func initializeWebView() {
@@ -233,13 +264,46 @@ extension WalletManager: WalletDelegate {
 
     func walletDidGetAccountInfo(_ wallet: Wallet!) {
         accountInfoDelegate?.didGetAccountInfo()
-        wallet.getAllCurrencySymbols()
     }
 
     // MARK: - Currency Symbols
 
-    func walletDidGetAllCurrencySymbols(_ wallet: Wallet!) {
+    func walletDidGetBtcExchangeRates(_ wallet: Wallet!) {
         updateSymbols()
-        wallet.fetchBitcoinCashExchangeRates()
+    }
+
+    // MARK: - BTC Multiaddress
+    func didSetLatestBlock(_ block: LatestBlock!) {
+        AppCoordinator.shared.tabControllerManager.didSetLatestBlock(block)
+    }
+
+    func didGet(_ response: MultiAddressResponse) {
+        latestMultiAddressResponse = response
+        AppCoordinator.shared.tabControllerManager.updateTransactionsViewControllerData(response)
+        if self.wallet.isFilteringTransactions {
+            self.wallet.isFilteringTransactions = false
+            updateSymbols()
+            reloadAfterMultiaddressResponse()
+        } else {
+            self.wallet.getAccountInfoAndExchangeRates()
+        }
+
+        let newDefaultAccountLabeledAddressesCount = self.wallet.getDefaultAccountLabelledAddressesCount()
+        if BlockchainSettings.App.shared.defaultAccountLabelledAddressesCount != newDefaultAccountLabeledAddressesCount {
+            KeychainItemWrapper.removeAllSwipeAddresses(for: .bitcoin)
+        }
+        let newCount = newDefaultAccountLabeledAddressesCount
+        BlockchainSettings.App.shared.defaultAccountLabelledAddressesCount = Int(newCount)
+    }
+
+    // MARK: ETH Exchange Rate
+    func didFetchEthExchangeRate(_ rate: NSNumber!) {
+        reloadAfterMultiaddressResponse()
+        AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
+    }
+
+    // MARK: - Account Info and Exchange Rates on startup
+    func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
+        accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
     }
 }
