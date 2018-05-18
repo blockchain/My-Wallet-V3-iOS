@@ -4470,7 +4470,7 @@
             self.isSyncing = YES;
             [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAccount(%d, \"%@\")", account, [label escapeStringForJS]]];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSetLabelForAccount) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
-        } else if (assetType == AssetTypeBitcoinCash) {
+        } else if (assetType == LegacyAssetTypeBitcoinCash) {
             [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.setLabelForAccount(%d, \"%@\")", account, [label escapeStringForJS]]];
             [self getHistory];
         }
