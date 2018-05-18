@@ -147,8 +147,9 @@ extension WalletManager {
                 let objectDescription = metadataObject.description
                 var scannedKey: String? = nil
 
-                if objectDescription.hasPrefix(Constants.Prefixes.bitcoin) {
-                    let startIndex = objectDescription.index(objectDescription.startIndex, offsetBy: Constants.Prefixes.bitcoin.count)
+                if objectDescription.hasPrefix(Constants.Schemes.bitcoin) {
+                    let scheme = "\(Constants.Schemes.bitcoin):"
+                    let startIndex = objectDescription.index(objectDescription.startIndex, offsetBy: scheme.count)
                     let description = String(objectDescription[startIndex...])
                     scannedKey = description
                 }
