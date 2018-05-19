@@ -35,6 +35,7 @@ class WalletManager: NSObject {
     weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
     @objc weak var accountInfoAndExchangeRatesDelegate: WalletAccountInfoAndExchangeRatesDelegate?
+    @objc weak var backupDelegate: WalletBackupDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet

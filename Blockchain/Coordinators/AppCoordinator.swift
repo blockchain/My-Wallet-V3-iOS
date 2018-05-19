@@ -79,6 +79,7 @@ import Foundation
         super.init()
         self.walletManager.buySellDelegate = self
         self.walletManager.accountInfoAndExchangeRatesDelegate = self
+        self.walletManager.backupDelegate = self
         observeSymbolChanges()
     }
 
@@ -396,5 +397,15 @@ extension AppCoordinator: WalletAccountInfoAndExchangeRatesDelegate {
     func didGetAccountInfoAndExchangeRates() {
         LoadingViewPresenter.shared.hideBusyView()
         reload()
+    }
+}
+
+extension AppCoordinator: WalletBackupDelegate {
+    func didBackupWallet() {
+        reload()
+    }
+    
+    func didFailBackupWallet() {
+        walletManager.wallet.getAndHistory()
     }
 }

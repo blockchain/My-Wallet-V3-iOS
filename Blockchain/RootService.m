@@ -1590,18 +1590,18 @@ SideMenuViewController *sideMenuViewController;
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //}
 
-- (void)didFailBackupWallet
-{
-    // Refresh the wallet and history
-    [WalletManager.sharedInstance.wallet getWalletAndHistory];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_SYNC_ERROR object:nil];
-}
-
-- (void)didBackupWallet
-{
-    [AppCoordinator.sharedInstance reload];
-}
+//- (void)didFailBackupWallet
+//{
+//    // Refresh the wallet and history
+//    [WalletManager.sharedInstance.wallet getWalletAndHistory];
+//
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_SYNC_ERROR object:nil];
+//}
+//
+//- (void)didBackupWallet
+//{
+//    [AppCoordinator.sharedInstance reload];
+//}
 
 //- (void)setAccountData:(NSString*)guid sharedKey:(NSString*)sharedKey
 //{

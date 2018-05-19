@@ -122,7 +122,6 @@
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E2208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
-		513817FD20A5E4A1002BCC27 /* WalletManager+KeyImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513817FC20A5E4A1002BCC27 /* WalletManager+KeyImporterTests.swift */; };
 		513913F02081206C002578FD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
 		51392046205C60520025EE33 /* Cert in Resources */ = {isa = PBXBuildFile; fileRef = 51392045205C60520025EE33 /* Cert */; };
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
@@ -373,6 +372,8 @@
 		C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */; };
 		C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */; };
 		C77217D020AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */; };
+		C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
+		C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
 		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
@@ -1071,7 +1072,6 @@
 		511646E1208523E300C43522 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIDevice.swift; path = Extensions/UIDevice.swift; sourceTree = "<group>"; };
 		513467FE2056BC6600DE6A1E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Frameworks/Fabric.framework; sourceTree = "<group>"; };
 		513467FF2056BC6700DE6A1E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
-		513817FC20A5E4A1002BCC27 /* WalletManager+KeyImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+KeyImporterTests.swift"; sourceTree = "<group>"; };
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = Extensions/UserDefaults.swift; sourceTree = "<group>"; };
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
@@ -1374,6 +1374,7 @@
 		C769B2D81FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContinueButtonInputAccessoryView.h; sourceTree = "<group>"; };
 		C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContinueButtonInputAccessoryView.m; sourceTree = "<group>"; };
 		C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoAndExchangeRatesDelegate.swift; sourceTree = "<group>"; };
+		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
 		C780A444202228A400E49274 /* BCPriceChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartView.h; sourceTree = "<group>"; };
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
@@ -2332,6 +2333,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
 				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */,
@@ -3041,6 +3043,7 @@
 				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
 				AACE31C52092A99B00B7B806 /* Environment.swift in Sources */,
 				511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
+				C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
 				AAE9113E20A640A40093A431 /* PinPayload.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
@@ -3191,6 +3194,7 @@
 				67D95A261B3DD86B0012EBB1 /* BCTextField.swift in Sources */,
 				2322DCC01D771831000E5AC1 /* SRRandom.m in Sources */,
 				AA1E523A2097E2190099BD10 /* Strings.swift in Sources */,
+				C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
 				23FB5C0D1D9ABB650008C6AB /* TransactionDetailFromCell.m in Sources */,
 				2322DCBA1D771831000E5AC1 /* SRConstants.m in Sources */,
 				A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */,
