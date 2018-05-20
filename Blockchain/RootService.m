@@ -1935,40 +1935,40 @@ SideMenuViewController *sideMenuViewController;
     [self.tabControllerManager sendFromWatchOnlyAddress];
 }
 
-- (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee
-{
-    [self.tabControllerManager didCheckForOverSpending:amount fee:fee];
-}
-
-- (void)didGetMaxFee:(NSNumber *)fee amount:(NSNumber *)amount dust:(NSNumber *)dust willConfirm:(BOOL)willConfirm
-{
-    [self.tabControllerManager didGetMaxFee:fee amount:amount dust:dust willConfirm:willConfirm];
-}
-
-- (void)didUpdateTotalAvailable:(NSNumber *)sweepAmount finalFee:(NSNumber *)finalFee
-{
-    [self.tabControllerManager didUpdateTotalAvailable:sweepAmount finalFee:finalFee];
-}
-
-- (void)didGetFee:(NSNumber *)fee dust:(NSNumber *)dust txSize:(NSNumber *)txSize
-{
-    [self.tabControllerManager didGetFee:fee dust:dust txSize:txSize];
-}
-
-- (void)didChangeSatoshiPerByte:(NSNumber *)sweepAmount fee:(NSNumber *)fee dust:(NSNumber *)dust updateType:(FeeUpdateType)updateType
-{
-    [self.tabControllerManager didChangeSatoshiPerByte:sweepAmount fee:fee dust:dust updateType:updateType];
-}
-
-- (void)enableSendPaymentButtons
-{
-    [self.tabControllerManager enableSendPaymentButtons];
-}
-
-- (void)updateSendBalance:(NSNumber *)balance fees:(NSDictionary *)fees
-{
-    [self.tabControllerManager updateSendBalance:balance fees:fees];
-}
+//- (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee
+//{
+//    [self.tabControllerManager didCheckForOverSpending:amount fee:fee];
+//}
+//
+//- (void)didGetMaxFee:(NSNumber *)fee amount:(NSNumber *)amount dust:(NSNumber *)dust willConfirm:(BOOL)willConfirm
+//{
+//    [self.tabControllerManager didGetMaxFee:fee amount:amount dust:dust willConfirm:willConfirm];
+//}
+//
+//- (void)didUpdateTotalAvailable:(NSNumber *)sweepAmount finalFee:(NSNumber *)finalFee
+//{
+//    [self.tabControllerManager didUpdateTotalAvailable:sweepAmount finalFee:finalFee];
+//}
+//
+//- (void)didGetFee:(NSNumber *)fee dust:(NSNumber *)dust txSize:(NSNumber *)txSize
+//{
+//    [self.tabControllerManager didGetFee:fee dust:dust txSize:txSize];
+//}
+//
+//- (void)didChangeSatoshiPerByte:(NSNumber *)sweepAmount fee:(NSNumber *)fee dust:(NSNumber *)dust updateType:(FeeUpdateType)updateType
+//{
+//    [self.tabControllerManager didChangeSatoshiPerByte:sweepAmount fee:fee dust:dust updateType:updateType];
+//}
+//
+//- (void)enableSendPaymentButtons
+//{
+//    [self.tabControllerManager enableSendPaymentButtons];
+//}
+//
+//- (void)updateSendBalance:(NSNumber *)balance fees:(NSDictionary *)fees
+//{
+//    [self.tabControllerManager updateSendBalance:balance fees:fees];
+//}
 
 - (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed
 {
@@ -2436,10 +2436,10 @@ SideMenuViewController *sideMenuViewController;
     [AppCoordinator.sharedInstance reload];
 }
 
-- (void)didUpdateEthPayment:(NSDictionary *)ethPayment
-{
-    [self.tabControllerManager didUpdateEthPayment:ethPayment];
-}
+//- (void)didUpdateEthPayment:(NSDictionary *)ethPayment
+//{
+//    [self.tabControllerManager didUpdateEthPayment:ethPayment];
+//}
 
 //- (void)didFetchEthExchangeRate:(NSNumber *)rate
 //{
@@ -2448,15 +2448,15 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager didFetchEthExchangeRate:rate];
 //}
 
-- (void)didSendEther
-{
-    [self.tabControllerManager didSendEther];
-}
+//- (void)didSendEther
+//{
+//    [self.tabControllerManager didSendEther];
+//}
 
-- (void)didErrorDuringEtherSend:(NSString *)error
-{
-    [self.tabControllerManager didErrorDuringEtherSend:error];
-}
+//- (void)didErrorDuringEtherSend:(NSString *)error
+//{
+//    [self.tabControllerManager didErrorDuringEtherSend:error];
+//}
 
 - (void)didCreateEthAccountForExchange
 {

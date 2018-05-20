@@ -37,6 +37,8 @@ class WalletManager: NSObject {
     @objc weak var recoveryDelegate: WalletRecoveryDelegate?
     @objc weak var accountInfoAndExchangeRatesDelegate: WalletAccountInfoAndExchangeRatesDelegate?
     @objc weak var backupDelegate: WalletBackupDelegate?
+    @objc weak var sendBitcoinDelegate: WalletSendBitcoinDelegate?
+    @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -251,6 +253,52 @@ extension WalletManager: WalletDelegate {
     func didGetPinResponse(_ dictionary: [AnyHashable: Any]!) {
         let response = GetPinResponse(response: dictionary)
         pinEntryDelegate?.getPinSuccess(response: response)
+    }
+
+    // MARK: - Send Bitcoin/Bitcoin Cash
+    func didCheck(forOverSpending amount: NSNumber!, fee: NSNumber!) {
+        sendBitcoinDelegate?.didCheckForOverSpending(amount: amount, fee: fee)
+    }
+
+    func didGetMaxFee(_ fee: NSNumber!, amount: NSNumber!, dust: NSNumber?, willConfirm: Bool) {
+        sendBitcoinDelegate?.didGetMaxFee(fee: fee, amount: amount, dust: dust, willConfirm: willConfirm)
+    }
+
+    func didUpdateTotalAvailable(_ sweepAmount: NSNumber!, finalFee: NSNumber!) {
+        sendBitcoinDelegate?.didUpdateTotalAvailable(sweepAmount: sweepAmount, finalFee: finalFee)
+    }
+
+    func didGetFee(_ fee: NSNumber!, dust: NSNumber?, txSize: NSNumber!) {
+        sendBitcoinDelegate?.didGetFee(fee: fee, dust: dust, txSize: txSize)
+    }
+
+    func didChangeSatoshiPerByte(_ sweepAmount: NSNumber!, fee: NSNumber!, dust: NSNumber?, updateType: FeeUpdateType) {
+        sendBitcoinDelegate?.didChangeSatoshiPerByte(sweepAmount: sweepAmount, fee: fee, dust: dust, updateType: updateType)
+    }
+
+    func enableSendPaymentButtons() {
+        sendBitcoinDelegate?.enableSendPaymentButtons()
+    }
+
+    func updateSendBalance(_ balance: NSNumber!, fees: [AnyHashable: Any]!) {
+        sendBitcoinDelegate?.updateSendBalance(balance: balance, fees: fees as NSDictionary)
+    }
+
+    // MARK: - Send Ether
+    func didUpdateEthPayment(_ payment: [AnyHashable: Any]!) {
+        sendEtherDelegate?.didUpdateEthPayment(payment: payment as NSDictionary)
+    }
+
+    func didSendEther() {
+        sendEtherDelegate?.didSendEther()
+    }
+
+    func didErrorDuringEtherSend(_ error: String!) {
+        sendEtherDelegate?.didErrorDuringEtherSend(error: error)
+    }
+
+    func didGetEtherAddressWithSecondPassword() {
+        sendEtherDelegate?.didGetEtherAddressWithSecondPassword()
     }
 
     // MARK: - Addresses

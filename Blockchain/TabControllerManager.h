@@ -22,7 +22,6 @@
 @protocol TabControllerDelegate
 - (void)toggleSideMenu;
 @end
-
 @interface TabControllerManager : NSObject <AssetDelegate>
 @property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
@@ -79,17 +78,10 @@
 - (void)reloadSendController;
 - (void)clearSendToAddressAndAmountFields;
 - (BOOL)isSendViewControllerTransferringAll;
-- (void)enableSendPaymentButtons;
 - (void)setupBitcoinPaymentFromURLHandlerWithAmountString:(NSString *)amountString address:(NSString *)address;
 - (void)transferFundsToDefaultAccountFromAddress:(NSString *)address;
 - (void)sendFromWatchOnlyAddress;
-- (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee;
-- (void)didGetMaxFee:(NSNumber *)fee amount:(NSNumber *)amount dust:(NSNumber *)dust willConfirm:(BOOL)willConfirm;
-- (void)didUpdateTotalAvailable:(NSNumber *)sweepAmount finalFee:(NSNumber *)finalFee;
-- (void)didGetFee:(NSNumber *)fee dust:(NSNumber *)dust txSize:(NSNumber *)txSize;
-- (void)didChangeSatoshiPerByte:(NSNumber *)sweepAmount fee:(NSNumber *)fee dust:(NSNumber *)dust updateType:(FeeUpdateType)updateType;
 - (void)didGetSurgeStatus:(BOOL)surgeStatus;
-- (void)updateSendBalance:(NSNumber *)balance fees:(NSDictionary *)fees;
 - (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed;
 - (void)showSummaryForTransferAll;
 - (void)sendDuringTransferAll:(NSString *)secondPassword;

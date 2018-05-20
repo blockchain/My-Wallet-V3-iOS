@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate>
 @end
 @implementation TabControllerManager
 
@@ -26,6 +26,8 @@
         [self.tabViewController.assetSelectorView setSelectedAsset:assetType];
         
         [WalletManager sharedInstance].settingsDelegate = self;
+        [WalletManager sharedInstance].sendBitcoinDelegate = self;
+        [WalletManager sharedInstance].sendEtherDelegate = self;
     }
     return self;
 }
@@ -185,17 +187,29 @@
     [_sendBitcoinViewController sendFromWatchOnlyAddress];
 }
 
-- (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee
+#pragma mark - Wallet Send Bitcoin Delegate
+
+- (void)didChangeSatoshiPerByteWithSweepAmount:(NSNumber * _Nonnull)sweepAmount fee:(NSNumber * _Nonnull)fee dust:(NSNumber * _Nullable)dust updateType:(FeeUpdateType)updateType
+{
+    [_sendBitcoinViewController didChangeSatoshiPerByte:sweepAmount fee:fee dust:dust updateType:updateType];
+}
+
+- (void)didCheckForOverSpendingWithAmount:(NSNumber * _Nonnull)amount fee:(NSNumber * _Nonnull)fee
 {
     [_sendBitcoinViewController didCheckForOverSpending:amount fee:fee];
 }
 
-- (void)didGetMaxFee:(NSNumber *)fee amount:(NSNumber *)amount dust:(NSNumber *)dust willConfirm:(BOOL)willConfirm
+- (void)didGetFeeWithFee:(NSNumber * _Nonnull)fee dust:(NSNumber * _Nullable)dust txSize:(NSNumber * _Nonnull)txSize
+{
+    [_sendBitcoinViewController didGetFee:fee dust:dust txSize:txSize];
+}
+
+- (void)didGetMaxFeeWithFee:(NSNumber * _Nonnull)fee amount:(NSNumber * _Nonnull)amount dust:(NSNumber * _Nullable)dust willConfirm:(BOOL)willConfirm
 {
     [_sendBitcoinViewController didGetMaxFee:fee amount:amount dust:dust willConfirm:willConfirm];
 }
 
-- (void)didUpdateTotalAvailable:(NSNumber *)sweepAmount finalFee:(NSNumber *)finalFee
+- (void)didUpdateTotalAvailableWithSweepAmount:(NSNumber * _Nonnull)sweepAmount finalFee:(NSNumber * _Nonnull)finalFee
 {
     if (self.assetType == LegacyAssetTypeBitcoin) {
         [_sendBitcoinViewController didUpdateTotalAvailable:sweepAmount finalFee:finalFee];
@@ -204,24 +218,14 @@
     }
 }
 
-- (void)didGetFee:(NSNumber *)fee dust:(NSNumber *)dust txSize:(NSNumber *)txSize
+- (void)updateSendBalanceWithBalance:(NSNumber * _Nonnull)balance fees:(NSDictionary * _Nonnull)fees
 {
-    [_sendBitcoinViewController didGetFee:fee dust:dust txSize:txSize];
-}
-
-- (void)didChangeSatoshiPerByte:(NSNumber *)sweepAmount fee:(NSNumber *)fee dust:(NSNumber *)dust updateType:(FeeUpdateType)updateType
-{
-    [_sendBitcoinViewController didChangeSatoshiPerByte:sweepAmount fee:fee dust:dust updateType:updateType];
+    [_sendBitcoinViewController updateSendBalance:balance fees:fees];
 }
 
 - (void)didGetSurgeStatus:(BOOL)surgeStatus
 {
     _sendBitcoinViewController.surgeIsOccurring = surgeStatus;
-}
-
-- (void)updateSendBalance:(NSNumber *)balance fees:(NSDictionary *)fees
-{
-    [_sendBitcoinViewController updateSendBalance:balance fees:fees];
 }
 
 - (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed
@@ -269,9 +273,20 @@
 
 #pragma mark - Eth Send
 
-- (void)didUpdateEthPayment:(NSDictionary *)ethPayment
+- (void)didFetchEthExchangeRate:(NSNumber *)rate
 {
-    [_sendEtherViewController didUpdatePayment:ethPayment];
+    self.latestEthExchangeRate = [NSDecimalNumber decimalNumberWithDecimal:[rate decimalValue]];
+
+    [self.tabViewController didFetchEthExchangeRate];
+    [_sendEtherViewController updateExchangeRate:self.latestEthExchangeRate];
+    [_dashboardViewController updateEthExchangeRate:self.latestEthExchangeRate];
+}
+
+#pragma mark - Wallet Send Ether Delegate
+
+- (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
+{
+    [_sendEtherViewController didUpdatePayment:payment];
 }
 
 - (void)didSendEther
@@ -281,18 +296,14 @@
     [self showTransactionsAnimated:YES];
 }
 
-- (void)didErrorDuringEtherSend:(NSString *)error
+- (void)didErrorDuringEtherSendWithError:(NSString * _Nonnull)error
 {
     [self.tabViewController didErrorDuringEtherSend:error];
 }
 
-- (void)didFetchEthExchangeRate:(NSNumber *)rate
+- (void)didGetEtherAddressWithSecondPassword
 {
-    self.latestEthExchangeRate = [NSDecimalNumber decimalNumberWithDecimal:[rate decimalValue]];
-
-    [self.tabViewController didFetchEthExchangeRate];
-    [_sendEtherViewController updateExchangeRate:self.latestEthExchangeRate];
-    [_dashboardViewController updateEthExchangeRate:self.latestEthExchangeRate];
+    [_receiveEtherViewController showEtherAddress];
 }
 
 #pragma mark - Receive
@@ -320,11 +331,6 @@
         
         [_tabViewController setActiveViewController:_receiveBitcoinCashViewController animated:animated index:TAB_RECEIVE];
     }
-}
-
-- (void)didGetEtherAddressWithSecondPassword
-{
-    [_receiveEtherViewController showEtherAddress];
 }
 
 - (void)clearReceiveAmounts
