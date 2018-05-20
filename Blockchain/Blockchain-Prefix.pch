@@ -269,8 +269,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define NOTIFICATION_KEY_SHARE_CONTACT_LINK @"shareContactLink"
 
-#define NOTIFICATION_KEY_SYNC_ERROR @"syncError"
-
 // Notifications used in settings
 #define NOTIFICATION_KEY_RELOAD_SETTINGS @"reloadSettings"
 #define NOTIFICATION_KEY_RELOAD_SETTINGS_AFTER_MULTIADDRESS @"reloadSettingsAfterMultiAddress"
