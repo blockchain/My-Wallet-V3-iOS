@@ -374,6 +374,8 @@
 		C77217D020AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */; };
 		C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
 		C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
+		C77217ED20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
+		C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
 		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
@@ -1375,6 +1377,7 @@
 		C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContinueButtonInputAccessoryView.m; sourceTree = "<group>"; };
 		C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoAndExchangeRatesDelegate.swift; sourceTree = "<group>"; };
 		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
+		C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRecoveryDelegate.swift; sourceTree = "<group>"; };
 		C780A444202228A400E49274 /* BCPriceChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartView.h; sourceTree = "<group>"; };
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
@@ -2334,6 +2337,7 @@
 			isa = PBXGroup;
 			children = (
 				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
+				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
 				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */,
@@ -2974,6 +2978,7 @@
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
+				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
@@ -3198,6 +3203,7 @@
 				23FB5C0D1D9ABB650008C6AB /* TransactionDetailFromCell.m in Sources */,
 				2322DCBA1D771831000E5AC1 /* SRConstants.m in Sources */,
 				A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */,
+				C77217ED20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				C78893E520A36572003C0A8F /* Trade.swift in Sources */,
 				AA1E523D2097E6AC0099BD10 /* GetPinResponse.swift in Sources */,
 				AACE31812092794D00B7B806 /* Pin.swift in Sources */,

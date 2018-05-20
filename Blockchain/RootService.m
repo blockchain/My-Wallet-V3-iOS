@@ -1884,15 +1884,15 @@ SideMenuViewController *sideMenuViewController;
 
 /* End key importer */
 
-- (void)didFailRecovery
-{
-    [createWalletView showPassphraseTextField];
-}
-
-- (void)didRecoverWallet
-{
-    [createWalletView didRecoverWallet];
-}
+//- (void)didFailRecovery
+//{
+//    [createWalletView showPassphraseTextField];
+//}
+//
+//- (void)didRecoverWallet
+//{
+//    [createWalletView didRecoverWallet];
+//}
 
 - (void)didFailGetHistory:(NSString *)error
 {

@@ -34,6 +34,7 @@ class WalletManager: NSObject {
     weak var buySellDelegate: WalletBuySellDelegate?
     weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
+    @objc weak var recoveryDelegate: WalletRecoveryDelegate?
     @objc weak var accountInfoAndExchangeRatesDelegate: WalletAccountInfoAndExchangeRatesDelegate?
     @objc weak var backupDelegate: WalletBackupDelegate?
 
@@ -315,5 +316,14 @@ extension WalletManager: WalletDelegate {
     // MARK: - Account Info and Exchange Rates on startup
     func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
         accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
+    }
+
+    // MARK: - Recovery
+    func didRecoverWallet() {
+        recoveryDelegate?.didRecoverWallet()
+    }
+
+    func didFailRecovery() {
+        recoveryDelegate?.didFailRecovery()
     }
 }

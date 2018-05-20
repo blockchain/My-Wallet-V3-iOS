@@ -12,6 +12,8 @@ import Foundation
 class OnboardingCoordinator: Coordinator {
     static let shared = OnboardingCoordinator()
 
+    private var createWallet: BCCreateWalletView?
+    
     private init() {}
 
     // MARK: Public Methods
@@ -44,12 +46,12 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
     }
 
     private func _showCreateWallet(isRecoveringWallet: Bool = false, title: String = LocalizationConstants.Onboarding.createNewWallet) {
-        let createWallet = BCCreateWalletView.instanceFromNib()
-        createWallet.createBlankWallet()
-        createWallet.isRecoveringWallet = isRecoveringWallet
+        createWallet = BCCreateWalletView.instanceFromNib()
+        createWallet!.createBlankWallet()
+        createWallet!.isRecoveringWallet = isRecoveringWallet
         AuthenticationManager.shared.setHandlerForWalletCreation(handler: AuthenticationCoordinator.shared.authHandler)
         ModalPresenter.shared.showModal(
-            withContent: createWallet,
+            withContent: createWallet!,
             closeType: ModalCloseTypeBack,
             showHeader: true,
             headerText: LocalizationConstants.Onboarding.createNewWallet
@@ -98,5 +100,15 @@ extension OnboardingCoordinator: PairingInstructionsViewDelegate {
     func onManualPairClicked() {
         WalletManager.shared.wallet.twoFactorInput = nil
         AuthenticationCoordinator.shared.startManualPairing()
+    }
+}
+
+extension OnboardingCoordinator: WalletRecoveryDelegate {
+    func didRecoverWallet() {
+        createWallet?.didRecoverWallet()
+    }
+    
+    func didFailRecovery() {
+        createWallet?.showPassphraseTextField()
     }
 }
