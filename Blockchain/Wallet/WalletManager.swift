@@ -303,6 +303,15 @@ extension WalletManager: WalletDelegate {
         AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
     }
 
+    // MARK: - Backup
+    func didBackupWallet() {
+        backupDelegate?.didBackupWallet()
+    }
+
+    func didFailBackupWallet() {
+        backupDelegate?.didFailBackupWallet()
+    }
+
     // MARK: - Account Info and Exchange Rates on startup
     func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
         accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
