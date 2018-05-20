@@ -54,7 +54,5 @@
 - (void)setTitleLabelText:(NSString *)text;
 - (void)updateBalanceLabelText:(NSString *)text;
 - (void)didFetchEthExchangeRate;
-- (void)didSendEther;
-- (void)didErrorDuringEtherSend:(NSString *)error;
 - (void)reloadSymbols;
 @end

@@ -284,26 +284,35 @@
 
 #pragma mark - Wallet Send Ether Delegate
 
-- (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
-{
-    [_sendEtherViewController didUpdatePayment:payment];
-}
-
 - (void)didSendEther
 {
     [self.sendEtherViewController reload];
-    [self.tabViewController didSendEther];
+    
+    [[ModalPresenter sharedInstance] closeAllModals];
+    UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_PAYMENT_SENT_ETHER preferredStyle:UIAlertControllerStyleAlert];
+    [successAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+    [self.tabViewController presentViewController:successAlert animated:YES completion:nil];
+    
     [self showTransactionsAnimated:YES];
-}
-
-- (void)didErrorDuringEtherSendWithError:(NSString * _Nonnull)error
-{
-    [self.tabViewController didErrorDuringEtherSend:error];
 }
 
 - (void)didGetEtherAddressWithSecondPassword
 {
     [_receiveEtherViewController showEtherAddress];
+}
+
+- (void)didErrorDuringEtherSendWithError:(NSString * _Nonnull)error
+{
+    [[ModalPresenter sharedInstance] closeAllModals];
+    
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
+    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+    [self.tabViewController presentViewController:errorAlert animated:YES completion:nil];
+}
+
+- (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
+{
+    [_sendEtherViewController didUpdatePayment:payment];
 }
 
 #pragma mark - Receive

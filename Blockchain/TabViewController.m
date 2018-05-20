@@ -244,24 +244,6 @@
     [self.assetDelegate selectorButtonClicked];
 }
 
-- (void)didSendEther
-{
-    [[ModalPresenter sharedInstance] closeAllModals];
-    
-    UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_PAYMENT_SENT_ETHER preferredStyle:UIAlertControllerStyleAlert];
-    [successAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:successAlert animated:YES completion:nil];
-}
-
-- (void)didErrorDuringEtherSend:(NSString *)error
-{
-    [[ModalPresenter sharedInstance] closeAllModals];
-    
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
-    [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:errorAlert animated:YES completion:nil];
-}
-
 - (IBAction)qrCodeButtonClicked:(UIButton *)sender
 {
     [self.assetDelegate qrCodeButtonClicked];

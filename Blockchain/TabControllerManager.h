@@ -91,11 +91,6 @@
 - (DestinationAddressSource)getSendAddressSource;
 - (void)setupSendToAddress:(NSString *)address;
 
-// Send Eth View Controller
-- (void)didUpdateEthPayment:(NSDictionary *)ethPayment;
-- (void)didSendEther;
-- (void)didErrorDuringEtherSend:(NSString *)error;
-
 // Receive View Controller
 - (void)didGetEtherAddressWithSecondPassword;
 - (void)clearReceiveAmounts;
