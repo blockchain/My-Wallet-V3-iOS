@@ -2458,50 +2458,50 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager didErrorDuringEtherSend:error];
 //}
 
-- (void)didCreateEthAccountForExchange
-{
-    [self.tabControllerManager didCreateEthAccountForExchange];
-}
+//- (void)didCreateEthAccountForExchange
+//{
+//    [self.tabControllerManager didCreateEthAccountForExchange];
+//}
+//
+//- (void)didGetEtherAddressWithSecondPassword
+//{
+//    [self.tabControllerManager didGetEtherAddressWithSecondPassword];
+//}
+//
+//- (void)didGetExchangeTrades:(NSArray *)trades
+//{
+//    [self.tabControllerManager didGetExchangeTrades:trades];
+//}
+//
+//- (void)didGetExchangeRate:(NSDictionary *)result
+//{
+//    [self.tabControllerManager didGetExchangeRate:result];
+//}
+//
+//- (void)didGetAvailableBtcBalance:(NSDictionary *)result
+//{
+//    [self.tabControllerManager didGetAvailableBtcBalance:result];
+//}
+//
+//- (void)didGetAvailableEthBalance:(NSDictionary *)result
+//{
+//    [self.tabControllerManager didGetAvailableEthBalance:result];
+//}
+//
+//- (void)didBuildExchangeTrade:(NSDictionary *)tradeInfo
+//{
+//    [self.tabControllerManager didBuildExchangeTrade:tradeInfo];
+//}
+//
+//- (void)didShiftPayment:(NSDictionary *)info
+//{
+//    [self.tabControllerManager didShiftPayment:info];
+//}
 
-- (void)didGetEtherAddressWithSecondPassword
-{
-    [self.tabControllerManager didGetEtherAddressWithSecondPassword];
-}
-
-- (void)didGetExchangeTrades:(NSArray *)trades
-{
-    [self.tabControllerManager didGetExchangeTrades:trades];
-}
-
-- (void)didGetExchangeRate:(NSDictionary *)result
-{
-    [self.tabControllerManager didGetExchangeRate:result];
-}
-
-- (void)didGetAvailableBtcBalance:(NSDictionary *)result
-{
-    [self.tabControllerManager didGetAvailableBtcBalance:result];
-}
-
-- (void)didGetAvailableEthBalance:(NSDictionary *)result
-{
-    [self.tabControllerManager didGetAvailableEthBalance:result];
-}
-
-- (void)didBuildExchangeTrade:(NSDictionary *)tradeInfo
-{
-    [self.tabControllerManager didBuildExchangeTrade:tradeInfo];
-}
-
-- (void)didShiftPayment:(NSDictionary *)info
-{
-    [self.tabControllerManager didShiftPayment:info];
-}
-
-- (void)showGetAssetsAlert
-{
-    [self.tabControllerManager showGetAssetsAlert];
-}
+//- (void)showGetAssetsAlert
+//{
+//    [self.tabControllerManager showGetAssetsAlert];
+//}
 
 //- (void)checkForMaintenance
 //{

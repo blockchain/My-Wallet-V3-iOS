@@ -39,6 +39,7 @@ class WalletManager: NSObject {
     @objc weak var backupDelegate: WalletBackupDelegate?
     @objc weak var sendBitcoinDelegate: WalletSendBitcoinDelegate?
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
+    @objc weak var exchangeDelegate: WalletExchangeDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -373,5 +374,34 @@ extension WalletManager: WalletDelegate {
 
     func didFailRecovery() {
         recoveryDelegate?.didFailRecovery()
+    }
+
+    // MARK: - Exchange
+    func didGetExchangeTrades(_ trades: [Any]!) {
+        exchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
+    }
+
+    func didGetExchangeRate(_ result: [AnyHashable: Any]!) {
+        exchangeDelegate?.didGetExchangeRate(rate: result as NSDictionary)
+    }
+
+    func didGetAvailableBtcBalance(_ result: [AnyHashable: Any]!) {
+        exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary)
+    }
+
+    func didGetAvailableEthBalance(_ result: [AnyHashable: Any]!) {
+        exchangeDelegate?.didGetAvailableEthBalance(result: result as NSDictionary)
+    }
+
+    func didBuildExchangeTrade(_ tradeInfo: [AnyHashable: Any]!) {
+        exchangeDelegate?.didBuildExchangeTrade(tradeInfo: tradeInfo as NSDictionary)
+    }
+
+    func didShiftPayment(_ info: [AnyHashable: Any]!) {
+        exchangeDelegate?.didShiftPayment(info: info as NSDictionary)
+    }
+
+    func didCreateEthAccountForExchange() {
+        exchangeDelegate?.didCreateEthAccountForExchange()
     }
 }

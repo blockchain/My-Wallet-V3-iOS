@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeDelegate>
 @end
 @implementation TabControllerManager
 
@@ -28,6 +28,7 @@
         [WalletManager sharedInstance].settingsDelegate = self;
         [WalletManager sharedInstance].sendBitcoinDelegate = self;
         [WalletManager sharedInstance].sendEtherDelegate = self;
+        [WalletManager sharedInstance].exchangeDelegate = self;
     }
     return self;
 }
@@ -767,6 +768,36 @@
     }]];
     
     [self.tabViewController.presentedViewController presentViewController:showGetAssetsAlert animated:YES completion:nil];
+}
+
+- (void)didBuildExchangeTradeWithTradeInfo:(NSDictionary * _Nonnull)tradeInfo
+{
+    [self.exchangeOverviewViewController didBuildExchangeTrade:tradeInfo];
+}
+
+- (void)didGetAvailableBtcBalanceWithResult:(NSDictionary * _Nonnull)result
+{
+    [self.exchangeOverviewViewController didGetAvailableBtcBalance:result];
+}
+
+- (void)didGetAvailableEthBalanceWithResult:(NSDictionary * _Nonnull)result
+{
+    [self.exchangeOverviewViewController didGetAvailableEthBalance:result];
+}
+
+- (void)didGetExchangeRateWithRate:(NSDictionary * _Nonnull)rate
+{
+    [self.exchangeOverviewViewController didGetExchangeRate:rate];
+}
+
+- (void)didGetExchangeTradesWithTrades:(NSArray * _Nonnull)trades
+{
+    [self.exchangeOverviewViewController didGetExchangeTrades:trades];
+}
+
+- (void)didShiftPaymentWithInfo:(NSDictionary * _Nonnull)info
+{
+    [self.exchangeOverviewViewController didShiftPayment:info];
 }
 
 @end
