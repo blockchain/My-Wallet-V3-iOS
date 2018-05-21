@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeDelegate, WalletTransactionDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeIntermediateDelegate, WalletTransactionDelegate>
 @end
 @implementation TabControllerManager
 
@@ -29,7 +29,7 @@
         walletManager.settingsDelegate = self;
         walletManager.sendBitcoinDelegate = self;
         walletManager.sendEtherDelegate = self;
-        walletManager.exchangeDelegate = self;
+        walletManager.exchangeIntermediateDelegate = self;
         walletManager.transactionDelegate = self;
     }
     return self;

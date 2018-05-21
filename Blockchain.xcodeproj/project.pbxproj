@@ -361,6 +361,8 @@
 		C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */; };
 		C74E865220B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */; };
 		C74E865320B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */; };
+		C74E865920B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */; };
+		C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */; };
 		C74FEA232093B38A007CAB5D /* JSContextWithDOM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */; };
 		C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */; };
 		C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */; };
@@ -1364,6 +1366,7 @@
 		C74E21CB2028A61F00A9FBB1 /* BCPriceChartContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartContainerViewController.h; sourceTree = "<group>"; };
 		C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartContainerViewController.m; sourceTree = "<group>"; };
 		C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHistoryDelegate.swift; sourceTree = "<group>"; };
+		C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExchangeIntermediateDelegate.swift; sourceTree = "<group>"; };
 		C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOM.swift; sourceTree = "<group>"; };
 		C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOMTests.swift; sourceTree = "<group>"; };
 		C7559CAD1F55E874005B2375 /* BCConfirmPaymentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCConfirmPaymentViewModel.h; sourceTree = "<group>"; };
@@ -2352,6 +2355,7 @@
 			isa = PBXGroup;
 			children = (
 				C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */,
+				C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */,
 				C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */,
 				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
 				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
@@ -3088,6 +3092,7 @@
 				AA63F85120A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
+				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 			);
@@ -3323,6 +3328,7 @@
 				AA1E52382097D3C50099BD10 /* PutPinResponse.swift in Sources */,
 				6E2D90A21BBEC34800B719EC /* BCRecoveryView.m in Sources */,
 				A2599B9F1B0B5FC800C2EA81 /* BackupViewController.swift in Sources */,
+				C74E865920B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				AAD279B0209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift in Sources */,
 				C9BE917C1945D8F600FD516D /* PEPinEntryController.m in Sources */,
 				239539831B486C7100989667 /* UILabel+MultiLineAutoSize.m in Sources */,

@@ -38,6 +38,8 @@
 {
     [super viewDidLoad];
     
+    [WalletManager sharedInstance].exchangeDelegate = self;
+    
     self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
     
     NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
@@ -53,8 +55,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [WalletManager sharedInstance].exchangeDelegate = self;
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     navigationController.headerTitle = BC_STRING_EXCHANGE;

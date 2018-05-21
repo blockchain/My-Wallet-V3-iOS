@@ -27,7 +27,4 @@ import Foundation
 
     /// Method invoked when a shift payment has been submitted
     func didShiftPayment(info: NSDictionary)
-
-    /// Method invoked when eth account is created when exchange is opened
-    func didCreateEthAccountForExchange()
 }

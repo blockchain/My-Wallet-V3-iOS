@@ -41,6 +41,7 @@ class WalletManager: NSObject {
     @objc weak var sendBitcoinDelegate: WalletSendBitcoinDelegate?
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
     @objc weak var exchangeDelegate: WalletExchangeDelegate?
+    @objc weak var exchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
 
     init(wallet: Wallet = Wallet()!) {
@@ -404,7 +405,7 @@ extension WalletManager: WalletDelegate {
     }
 
     func didCreateEthAccountForExchange() {
-        exchangeDelegate?.didCreateEthAccountForExchange()
+        exchangeIntermediateDelegate?.didCreateEthAccountForExchange()
     }
 
     // MARK: - History
