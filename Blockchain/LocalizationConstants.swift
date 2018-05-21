@@ -45,6 +45,7 @@ struct LocalizationConstants {
         static let cannotOpenURLArg = NSLocalizedString("Cannot open URL %@", comment: "")
         static let unsafeDeviceWarningMessage = NSLocalizedString("Your device appears to be jailbroken. The security of your wallet may be compromised.", comment: "")
         static let noInternetConnection = NSLocalizedString("No internet connection.", comment: "")
+        static let noInternetConnectionPleaseCheckNetwork = NSLocalizedString("No internet connection available. Please check your network settings.", comment: "")
         static let warning = NSLocalizedString("Warning", comment: "")
         static let timedOut = NSLocalizedString("Connection timed out. Please check your internet connection.", comment: "")
         static let invalidServerResponse = NSLocalizedString("Invalid server response. Please try again later.", comment: "")

@@ -80,7 +80,7 @@
 - (void)didFailToImportPrivateKey:(NSString *)error;
 - (void)didFailRecovery;
 - (void)didRecoverWallet;
-- (void)didFailGetHistory:(NSString *)error;
+- (void)didFailGetHistory:(NSString *_Nullable)error;
 - (void)resendTwoFactorSuccess;
 - (void)resendTwoFactorError:(NSString *)error;
 - (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error;

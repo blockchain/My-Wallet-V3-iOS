@@ -1894,15 +1894,15 @@ SideMenuViewController *sideMenuViewController;
 //    [createWalletView didRecoverWallet];
 //}
 
-- (void)didFailGetHistory:(NSString *)error
-{
-    NSString *errorMessage = [error length] == 0 ? BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION : error;
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
+//- (void)didFailGetHistory:(NSString *)error
+//{
+//    NSString *errorMessage = [error length] == 0 ? BC_STRING_SEND_ERROR_NO_INTERNET_CONNECTION : error;
+//
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//
+//    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+//}
 
 //- (void)didGenerateNewAddress
 //{

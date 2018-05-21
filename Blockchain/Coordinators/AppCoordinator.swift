@@ -80,6 +80,7 @@ import Foundation
         self.walletManager.buySellDelegate = self
         self.walletManager.accountInfoAndExchangeRatesDelegate = self
         self.walletManager.backupDelegate = self
+        self.walletManager.historyDelegate = self
         observeSymbolChanges()
     }
 
@@ -404,8 +405,20 @@ extension AppCoordinator: WalletBackupDelegate {
     func didBackupWallet() {
         reload()
     }
-    
+
     func didFailBackupWallet() {
         walletManager.wallet.getAndHistory()
+    }
+}
+
+extension AppCoordinator: WalletHistoryDelegate {
+    func didFailGetHistory(error: String?) {
+        guard let errorMessage = error, errorMessage.count > 0 else {
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.noInternetConnectionPleaseCheckNetwork,
+                                                    title: LocalizationConstants.Errors.error,
+                                                    handler: nil)
+            return
+        }
+        AlertViewPresenter.shared.standardError(message: errorMessage, title: LocalizationConstants.Errors.error, handler: nil)
     }
 }

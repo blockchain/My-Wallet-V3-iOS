@@ -359,6 +359,8 @@
 		C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21C02024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m */; };
 		C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21C62024E6D700A9FBB1 /* BCPricePreviewView.m */; };
 		C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */; };
+		C74E865220B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */; };
+		C74E865320B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */; };
 		C74FEA232093B38A007CAB5D /* JSContextWithDOM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */; };
 		C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */; };
 		C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7559CAE1F55E874005B2375 /* BCConfirmPaymentViewModel.m */; };
@@ -1361,6 +1363,7 @@
 		C74E21C62024E6D700A9FBB1 /* BCPricePreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPricePreviewView.m; sourceTree = "<group>"; };
 		C74E21CB2028A61F00A9FBB1 /* BCPriceChartContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartContainerViewController.h; sourceTree = "<group>"; };
 		C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartContainerViewController.m; sourceTree = "<group>"; };
+		C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHistoryDelegate.swift; sourceTree = "<group>"; };
 		C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOM.swift; sourceTree = "<group>"; };
 		C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSContextWithDOMTests.swift; sourceTree = "<group>"; };
 		C7559CAD1F55E874005B2375 /* BCConfirmPaymentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCConfirmPaymentViewModel.h; sourceTree = "<group>"; };
@@ -2348,6 +2351,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */,
 				C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */,
 				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
 				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
@@ -3012,6 +3016,7 @@
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
 				AA63F85420A12FC8002B719B /* BitcoinURLPayloadTests.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
+				C74E865320B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */,
 				AACE31D62092A99B00B7B806 /* Bundle.swift in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
 				5113571620A0B6AC00056D65 /* WalletManager+KeyImporter.swift in Sources */,
@@ -3156,6 +3161,7 @@
 				C7559CB21F56FE09005B2375 /* TransactionsEtherViewController.m in Sources */,
 				AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */,
 				23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */,
+				C74E865220B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */,
 				AABDED70208FACB9002D8BAC /* Reachability.swift in Sources */,
 				C74FEA232093B38A007CAB5D /* JSContextWithDOM.swift in Sources */,
 				231A66EE1DB9434B0043F862 /* HDNode.m in Sources */,
