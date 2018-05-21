@@ -414,12 +414,10 @@ extension AppCoordinator: WalletBackupDelegate {
 extension AppCoordinator: WalletHistoryDelegate {
     func didFailGetHistory(error: String?) {
         guard let errorMessage = error, errorMessage.count > 0 else {
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.noInternetConnectionPleaseCheckNetwork,
-                                                    title: LocalizationConstants.Errors.error,
-                                                    handler: nil)
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.noInternetConnectionPleaseCheckNetwork)
             return
         }
-        AlertViewPresenter.shared.standardError(message: errorMessage, title: LocalizationConstants.Errors.error, handler: nil)
+        AlertViewPresenter.shared.standardError(message: errorMessage)
     }
 
     func didFetchEthHistory() {
