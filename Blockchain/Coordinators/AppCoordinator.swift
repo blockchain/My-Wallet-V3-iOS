@@ -421,4 +421,9 @@ extension AppCoordinator: WalletHistoryDelegate {
         }
         AlertViewPresenter.shared.standardError(message: errorMessage, title: LocalizationConstants.Errors.error, handler: nil)
     }
+
+    func didFetchEthHistory() {
+        LoadingViewPresenter.shared.hideBusyView()
+        reload()
+    }
 }

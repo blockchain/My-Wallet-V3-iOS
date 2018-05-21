@@ -412,6 +412,10 @@ extension WalletManager: WalletDelegate {
         historyDelegate?.didFailGetHistory(error: error)
     }
 
+    func didFetchEthHistory() {
+        historyDelegate?.didFetchEthHistory()
+    }
+
     // MARK: - Transaction
 
     func receivedTransactionMessage() {

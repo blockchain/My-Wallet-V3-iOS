@@ -2429,12 +2429,12 @@ SideMenuViewController *sideMenuViewController;
     }
 }
 
-- (void)didFetchEthHistory
-{
-    [LoadingViewPresenter.sharedInstance hideBusyView];
-
-    [AppCoordinator.sharedInstance reload];
-}
+//- (void)didFetchEthHistory
+//{
+//    [LoadingViewPresenter.sharedInstance hideBusyView];
+//
+//    [AppCoordinator.sharedInstance reload];
+//}
 
 //- (void)didUpdateEthPayment:(NSDictionary *)ethPayment
 //{
