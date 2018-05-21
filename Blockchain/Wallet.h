@@ -138,7 +138,6 @@
 - (void)didGetAvailableBtcBalance:(NSDictionary *)result;
 - (void)didBuildExchangeTrade:(NSDictionary *)tradeInfo;
 - (void)didShiftPayment:(NSDictionary *)info;
-- (void)showGetAssetsAlertForCurrencySymbol:(NSString *)currencySymbol;
 - (void)didCreateEthAccountForExchange;
 - (void)didFetchBitcoinCashHistory;
 - (void)initializeWebView;
