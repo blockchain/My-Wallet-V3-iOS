@@ -305,7 +305,7 @@
 {
     [[ModalPresenter sharedInstance] closeAllModals];
 
-    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:nil handler:nil]l
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:nil handler:nil];
 }
 
 - (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
