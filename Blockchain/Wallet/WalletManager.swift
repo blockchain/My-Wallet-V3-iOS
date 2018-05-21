@@ -350,7 +350,7 @@ extension WalletManager: WalletDelegate {
 
     // MARK: ETH Exchange Rate
     func didFetchEthExchangeRate(_ rate: NSNumber!) {
-        reloadAfterMultiaddressResponse()
+        if latestMultiAddressResponse?.symbol_local != nil { reloadAfterMultiaddressResponse() }
         AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
     }
 
