@@ -101,7 +101,7 @@
         [WalletManager.sharedInstance.wallet getBchBalance] > 0) {
         [self getRate];
     } else {
-        [app showGetAssetsAlert];
+        [[AppCoordinator sharedInstance].tabControllerManager showGetAssetsAlert];
     }
 }
 

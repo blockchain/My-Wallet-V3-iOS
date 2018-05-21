@@ -117,4 +117,5 @@
 - (void)updateBadgeNumber:(NSInteger)number forSelectedIndex:(int)index;
 
 - (void)exchangeClicked;
+- (void)showGetAssetsAlert;
 @end
