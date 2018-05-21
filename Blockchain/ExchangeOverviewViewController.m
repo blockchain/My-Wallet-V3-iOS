@@ -78,6 +78,11 @@
     self.didFinishShift = NO;
 }
 
+- (void)reloadSymbols
+{
+    [self.tableView reloadData];
+}
+
 - (void)setupSubviewsIfNeeded
 {
     if (!self.tableView) {
