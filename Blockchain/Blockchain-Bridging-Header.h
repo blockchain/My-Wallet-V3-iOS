@@ -3,6 +3,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Assets.h"
 #import "BCCreateWalletView.h"
 #import "BCFadeView.h"
 #import "BCManualPairView.h"
