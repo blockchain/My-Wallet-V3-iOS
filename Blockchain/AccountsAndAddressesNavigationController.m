@@ -275,6 +275,13 @@
 
 #pragma mark WalletAddressesDelegate
 
+- (void)didSetDefaultAccount
+{
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
+    [AppCoordinator.sharedInstance.tabControllerManager didSetDefaultAccount];
+}
+
 - (void)didGenerateNewAddress
 {
     if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {

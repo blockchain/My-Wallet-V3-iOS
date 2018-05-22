@@ -16,4 +16,7 @@ import Foundation
 
     /// Method invoked when finding a null account or address when checking if archived
     func returnToAddressesScreen()
+
+    /// Method invoked when the default account for an asset has been changed
+    func didSetDefaultAccount()
 }

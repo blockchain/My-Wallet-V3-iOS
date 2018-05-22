@@ -75,7 +75,7 @@ RootService * app;
 //
 //ShowReminderType showReminderType;
 
-SideMenuViewController *sideMenuViewController;
+//SideMenuViewController *sideMenuViewController;
 
 //UNNotification *pushNotificationPendingAction;
 
@@ -140,7 +140,7 @@ SideMenuViewController *sideMenuViewController;
 //#endif
 //}
 
-#pragma mark - Application Lifecycle
+//#pragma mark - Application Lifecycle
 
 //- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 //{
@@ -662,7 +662,7 @@ SideMenuViewController *sideMenuViewController;
 //    self.buyBitcoinViewController = [[BuyBitcoinViewController alloc] init];
 //}
 
-#pragma mark - UI State
+//#pragma mark - UI State
 //
 //- (void)reload
 //{
@@ -914,7 +914,7 @@ SideMenuViewController *sideMenuViewController;
 //    });
 //}
 
-# pragma mark - Wallet.js callbacks
+//# pragma mark - Wallet.js callbacks
 
 //- (void)walletDidLoad
 //{
@@ -2057,12 +2057,12 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager.tabViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
 //}
 
-- (void)didSetDefaultAccount
-{
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
-    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
-    [self.tabControllerManager didSetDefaultAccount];
-}
+//- (void)didSetDefaultAccount
+//{
+//    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
+//    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
+//    [self.tabControllerManager didSetDefaultAccount];
+//}
 
 //- (void)didChangeLocalCurrency
 //{
@@ -2561,7 +2561,7 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 
-#pragma mark - Show Screens
+//#pragma mark - Show Screens
 
 //- (void)showContacts
 //{
@@ -2598,13 +2598,13 @@ SideMenuViewController *sideMenuViewController;
 //    }];
 //}
 
-- (void)showSettings
-{
-    [self showSettings:nil];
-}
+//- (void)showSettings
+//{
+//    [self showSettings:nil];
+//}
 
-- (void)showSettings:(void (^)())completionBlock
-{
+//- (void)showSettings:(void (^)())completionBlock
+//{
 //    if (!_settingsNavigationController) {
 //        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:STORYBOARD_NAME_SETTINGS bundle: nil];
 //        self.settingsNavigationController = [storyboard instantiateViewControllerWithIdentifier:NAVIGATION_CONTROLLER_NAME_SETTINGS];
@@ -2617,7 +2617,7 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager.tabViewController presentViewController:self.settingsNavigationController animated:YES completion:completionBlock];
 //
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-}
+//}
 
 //- (void)showSupport
 //{
@@ -2649,8 +2649,8 @@ SideMenuViewController *sideMenuViewController;
 //    [self.window.rootViewController presentViewController:navigationController animated:YES completion:nil];
 //}
 
-- (void)showPinModalAsView:(BOOL)asView
-{
+//- (void)showPinModalAsView:(BOOL)asView
+//{
 //    BOOL walletIsNew = WalletManager.sharedInstance.wallet.isNew;
 //    BOOL didAutoPair = WalletManager.sharedInstance.wallet.didPairAutomatically;
 //
@@ -2713,7 +2713,7 @@ SideMenuViewController *sideMenuViewController;
 //    [LoadingViewPresenter.sharedInstance hideBusyView];
 //
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-}
+//}
 //
 //- (void)showStatusBar
 //{
@@ -2880,7 +2880,7 @@ SideMenuViewController *sideMenuViewController;
 //    }];
 //}
 //
-#pragma mark - Actions
+//#pragma mark - Actions
 
 //- (IBAction)accountsAndAddressesClicked:(id)sender
 //{
@@ -3645,7 +3645,7 @@ SideMenuViewController *sideMenuViewController;
 //    [self savePIN:pin];
 //}
 
-- (void)savePIN:(NSString*)pin {
+//- (void)savePIN:(NSString*)pin {
 //    uint8_t data[32];
 //    int err = 0;
 //
@@ -3670,7 +3670,7 @@ SideMenuViewController *sideMenuViewController;
 //        [KeychainItemWrapper setPINInKeychain:pin];
 //    }
 //#endif
-}
+//}
 
 //- (void)pinEntryControllerDidCancel:(PEPinEntryController *)c
 //{
@@ -3690,7 +3690,7 @@ SideMenuViewController *sideMenuViewController;
 //    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 //}
 
-#pragma mark - Setup Delegate
+//#pragma mark - Setup Delegate
 
 //- (CGRect)getFrame
 //{
@@ -3726,7 +3726,7 @@ SideMenuViewController *sideMenuViewController;
 //    return [WalletManager.sharedInstance.wallet getEmail];
 //}
 
-#pragma mark - State Checks
+//#pragma mark - State Checks
 
 //- (void)checkForNewInstall
 //{
@@ -3817,8 +3817,8 @@ SideMenuViewController *sideMenuViewController;
 //    return YES;
 //}
 
-- (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController
-{
+//- (AVCaptureDeviceInput *)getCaptureDeviceInput:(UIViewController *)viewController
+//{
 //    NSError *error;
 //    AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
 //    if (!deviceInput) {
@@ -3829,7 +3829,7 @@ SideMenuViewController *sideMenuViewController;
 //        }
 //    }
 //    return deviceInput;
-}
+//}
 
 //#pragma mark - Certificate Pinner Delegate
 //
