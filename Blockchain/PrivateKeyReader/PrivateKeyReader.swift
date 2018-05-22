@@ -50,8 +50,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     //: Legacy Objc delegate to support Legacy asset types
     @objc weak var legacyDelegate: LegacyPrivateKeyDelegate?
 
-    //: Internal so that the same class instance can be reused to scan public keys
-    var acceptPublicKeys: Bool!
+    private var acceptPublicKeys: Bool!
 
     @objc var loadingText: String!
 
