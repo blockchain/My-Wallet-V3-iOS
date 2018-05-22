@@ -66,8 +66,7 @@
 
 - (void)rateApp
 {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate rateApp];
+    [[UIApplication sharedApplication] rateApp];
 }
 
 - (void)closeButtonClicked

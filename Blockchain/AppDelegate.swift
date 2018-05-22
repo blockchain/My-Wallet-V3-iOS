@@ -234,13 +234,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
     }
 
-    // MARK: - Rate Application
-
-    @objc func rateApp() {
-        let url = URL(string: "\(Constants.Url.appStoreLinkPrefix)\(Constants.AppStore.AppID)")!
-        UIApplication.shared.openURL(url)
-    }
-
     // MARK: - State Checks
 
     func checkForNewInstall() {
