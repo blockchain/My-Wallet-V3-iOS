@@ -44,6 +44,7 @@ class WalletManager: NSObject {
     @objc weak var exchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
+    @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -415,6 +416,11 @@ extension WalletManager: WalletDelegate {
 
     func didFetchEthHistory() {
         historyDelegate?.didFetchEthHistory()
+    }
+
+    // MARK: - Watch Only Send
+    func sendFromWatchOnlyAddress() {
+        watchOnlyDelegate?.sendFromWatchOnlyAddress()
     }
 
     // MARK: - Transaction

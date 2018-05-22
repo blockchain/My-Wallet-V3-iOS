@@ -425,6 +425,8 @@
 		C799B27A205383DD00CC522D /* BCSwipeAddressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C799B279205383DD00CC522D /* BCSwipeAddressView.m */; };
 		C79B27B120A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
 		C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
+		C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */; };
+		C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */; };
 		C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79EEFC11E898E380087DDCD /* WalletSetupViewController.m */; };
 		C7A0E90E1FA796EC004F4267 /* BCChartMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E90D1FA796EC004F4267 /* BCChartMarkerView.swift */; };
 		C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E9251FA89FE9004F4267 /* ExchangeModalView.m */; };
@@ -1443,6 +1445,7 @@
 		C799B279205383DD00CC522D /* BCSwipeAddressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCSwipeAddressView.m; sourceTree = "<group>"; };
 		C79A239720B3520D000D96B9 /* DestinationAddressSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DestinationAddressSource.h; sourceTree = "<group>"; };
 		C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSendEtherDelegate.swift; sourceTree = "<group>"; };
+		C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletWatchOnlyDelegate.swift; sourceTree = "<group>"; };
 		C79EEFC01E898E380087DDCD /* WalletSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalletSetupViewController.h; sourceTree = "<group>"; };
 		C79EEFC11E898E380087DDCD /* WalletSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalletSetupViewController.m; sourceTree = "<group>"; };
 		C7A0E90D1FA796EC004F4267 /* BCChartMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCChartMarkerView.swift; sourceTree = "<group>"; };
@@ -2363,6 +2366,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */,
 				C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */,
 				C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */,
 				C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */,
@@ -3049,6 +3053,7 @@
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
+				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				51135703209CF5D000056D65 /* AuthenticationTwoFactorType.swift in Sources */,
 				AA1E52332097CC260099BD10 /* WalletAuthDelegate.swift in Sources */,
 				AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */,
@@ -3196,6 +3201,7 @@
 				C74E866120B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
 				84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */,
 				9F765F3D14BC7C4F00048EFB /* Transaction.m in Sources */,
+				C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
 				2322DCC31D771831000E5AC1 /* NSRunLoop+SRWebSocket.m in Sources */,
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,

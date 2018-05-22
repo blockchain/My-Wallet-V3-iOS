@@ -830,10 +830,10 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 
-- (void)hideSendAndReceiveKeyboards
-{
-    [self.tabControllerManager hideSendAndReceiveKeyboards];
-}
+//- (void)hideSendAndReceiveKeyboards
+//{
+//    [self.tabControllerManager hideSendAndReceiveKeyboards];
+//}
 
 //- (void)showMobileNotice
 //{
@@ -1930,10 +1930,10 @@ SideMenuViewController *sideMenuViewController;
     });
 }
 
-- (void)sendFromWatchOnlyAddress
-{
-    [self.tabControllerManager sendFromWatchOnlyAddress];
-}
+//- (void)sendFromWatchOnlyAddress
+//{
+//    [self.tabControllerManager sendFromWatchOnlyAddress];
+//}
 
 //- (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee
 //{
