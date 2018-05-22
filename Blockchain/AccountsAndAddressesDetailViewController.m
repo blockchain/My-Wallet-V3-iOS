@@ -12,7 +12,7 @@
 #import "BCEditAccountView.h"
 #import "BCEditAddressView.h"
 #import "BCQRCodeView.h"
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import "SendBitcoinViewController.h"
 #import "Blockchain-Swift.h"

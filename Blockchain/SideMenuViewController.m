@@ -14,7 +14,7 @@
 #import "AccountTableCell.h"
 #import "SideMenuViewCell.h"
 #import "BCLine.h"
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "Blockchain-Swift.h"

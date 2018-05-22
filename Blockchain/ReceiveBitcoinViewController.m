@@ -10,7 +10,7 @@
 #import "RootService.h"
 #import "ReceiveTableCell.h"
 #import "Address.h"
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import "QRCodeGenerator.h"
 #import "BCAddressSelectionView.h"
