@@ -168,9 +168,11 @@ extension WalletManager {
                 return
             }
 
-            let reader = PrivateKeyReader()
-            reader.delegate = self
-            reader.startReadingQRCode(for: address)
+            guard let privateKeyReader = PrivateKeyReader() else {
+                return
+            }
+            privateKeyReader.delegate = self
+            privateKeyReader.startReadingQRCode(for: address)
 
             // TODO: `lastScannedWatchOnlyAddress` needs to be of type AssetAddress, not String
             wallet.lastScannedWatchOnlyAddress = address.description
@@ -190,17 +192,17 @@ extension WalletManager {
 
         // MARK: - Private Methods
 
-        @objc private func alertUserOfImportedKey() {
+        @objc func alertUserOfImportedKey() {
             NotificationCenter.default.removeObserver(self, name: backupKey, object: nil)
             let isWatchOnly = wallet.isWatchOnlyLegacyAddress(wallet.lastImportedAddress)
             let importedAddressArgument = LocalizationConstants.AddressAndKeyImport.importedWatchOnlyAddressArgument
             let importedPrivateKeyArgument = LocalizationConstants.AddressAndKeyImport.importedPrivateKeyArgument
             let format = isWatchOnly ? importedAddressArgument : importedPrivateKeyArgument
             let message = String(format: format, wallet.lastImportedAddress)
-            AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.okString, handler: nil)
+            AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.success, handler: nil)
         }
 
-        @objc private func alertUserOfImportedIncorrectPrivateKey() {
+        @objc func alertUserOfImportedIncorrectPrivateKey() {
             NotificationCenter.default.removeObserver(self, name: backupKey, object: nil)
             let importedKeyButForIncorrectAddress = LocalizationConstants.AddressAndKeyImport.importedKeyButForIncorrectAddress
             let importedKeyDoesNotCorrespondToAddress = LocalizationConstants.AddressAndKeyImport.importedKeyDoesNotCorrespondToAddress
@@ -208,7 +210,7 @@ extension WalletManager {
             AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.okString, handler: nil)
         }
 
-        @objc private func alertUserOfImportedPrivateKeyIntoLegacyAddress() {
+        @objc func alertUserOfImportedPrivateKeyIntoLegacyAddress() {
             NotificationCenter.default.removeObserver(self, name: backupKey, object: nil)
             let importedKeySuccess = LocalizationConstants.AddressAndKeyImport.importedKeySuccess
             AlertViewPresenter.shared.standardNotify(message: importedKeySuccess, title: LocalizationConstants.success, handler: nil)
@@ -216,12 +218,12 @@ extension WalletManager {
 
         // MARK: - PrivateKeyReader Delegate
 
-        func didFinishScanningWithError(_ error: AVCaptureDeviceError) {
+        func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
             // TODO: implement error handling
         }
 
-        func didFinishScanning(_ privateKey: String, for address: AssetAddress) {
-            wallet.addKey(privateKey, toWatchOnlyAddress: address.description)
+        func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
+            wallet.addKey(privateKey, toWatchOnlyAddress: address?.description)
         }
     }
 }
