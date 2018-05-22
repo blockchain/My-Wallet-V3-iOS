@@ -85,7 +85,6 @@
 - (void)resendTwoFactorError:(NSString *)error;
 - (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error;
 - (void)returnToAddressesScreen;
-- (void)alertUserOfInvalidAccountName;
 - (void)alertUserOfInvalidPrivateKey;
 - (void)sendFromWatchOnlyAddress;
 - (void)estimateTransactionSize:(uint64_t)size;
