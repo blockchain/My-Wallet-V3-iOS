@@ -79,11 +79,19 @@ import Foundation
     @objc func on_error_adding_private_key_watch_only(error: String) {
         failedToImportPrivateKeyForWatchOnlyAddress(errorDescription: error)
     }
+
+    @objc func on_error_import_key_for_sending_from_watch_only(error: String) {
+        failedToImportPrivateKeyForSendingFromWatchOnlyAddress(errorDescription: error)
+    }
 }
 
 // MARK: - WalletKeyImportDelegate
 
 extension KeyImportCoordinator: WalletKeyImportDelegate {
+    func alertUserOfInvalidPrivateKey() {
+        AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.incorrectPrivateKey)
+    }
+
     @objc func alertUserOfImportedIncorrectPrivateKey() {
         NotificationCenter.default.removeObserver(self, name: backupKey, object: nil)
         let importedKeyButForIncorrectAddress = LocalizationConstants.AddressAndKeyImport.importedKeyButForIncorrectAddress
@@ -141,6 +149,18 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
         }
 
         AlertViewPresenter.shared.standardNotify(message: error, title: LocalizationConstants.Errors.error, handler: nil)
+    }
+
+    func failedToImportPrivateKeyForSendingFromWatchOnlyAddress(errorDescription: String) {
+        walletManager.wallet.loading_stop()
+        if errorDescription == Constants.JSErrors.AddressAndKeyImport.wrongPrivateKey {
+            alertUserOfInvalidPrivateKey()
+        } else if errorDescription == Constants.JSErrors.AddressAndKeyImport.wrongBipPass {
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.incorrectBip38Password)
+        } else {
+            // TODO: improve copy for all other errors
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
+        }
     }
 
     func failedToImportPrivateKeyForWatchOnlyAddress(errorDescription: String) {

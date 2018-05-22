@@ -86,7 +86,6 @@
 - (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error;
 - (void)returnToAddressesScreen;
 - (void)alertUserOfInvalidAccountName;
-- (void)alertUserOfInvalidPrivateKey;
 - (void)sendFromWatchOnlyAddress;
 - (void)estimateTransactionSize:(uint64_t)size;
 - (void)didCheckForOverSpending:(NSNumber *)amount fee:(NSNumber *)fee;
