@@ -288,13 +288,13 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.incorrect)
         } else if response.code == GetPinResponse.StatusCode.deleted.rawValue {
             // Pin retry limit exceeded
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.validationCannotBeCompleted)
             BlockchainSettings.App.shared.clearPin()
             logout(showPasswordView: false)
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.showPasswordModal()
                 strongSelf.closePinEntryView(animated: true)
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.validationCannotBeCompleted)
             }
         } else if response.code == GetPinResponse.StatusCode.incorrect.rawValue {
             let error = response.error ?? LocalizationConstants.Pin.incorrectUnknownError
