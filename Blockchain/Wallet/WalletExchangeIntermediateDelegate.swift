@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol WalletExchangeIntermediateDelegate: class {
+@objc protocol WalletExchangeIntermediateDelegate: class {
     /// Method invoked when eth account is created when exchange is opened
     func didCreateEthAccountForExchange()
 }
