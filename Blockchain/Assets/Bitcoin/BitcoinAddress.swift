@@ -26,7 +26,7 @@ public struct BitcoinAddress: AssetAddress {
     // MARK: Public Methods
 
     public func isValid(_ address: String) -> Bool {
-        // TODO: implement validation logic
-        return true
+        // TODO: implement validation logic natively
+        return WalletManager.shared.wallet.isValidAddress(address, assetType: LegacyAssetType.bitcoin)
     }
 }
