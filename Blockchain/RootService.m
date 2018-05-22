@@ -3310,10 +3310,10 @@ SideMenuViewController *sideMenuViewController;
 //    }
 //}
 
-- (void)setupSendToAddress:(NSString *)address
-{
-    [self.tabControllerManager setupSendToAddress:address];
-}
+//- (void)setupSendToAddress:(NSString *)address
+//{
+//    [self.tabControllerManager setupSendToAddress:address];
+//}
 
 //#pragma mark - Pin Entry Delegates
 

@@ -418,7 +418,7 @@ const CGFloat rowHeightValueReceived = 80;
     }]];
     [copyAddressController addAction:[UIAlertAction actionWithTitle:BC_STRING_SEND_TO_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self dismissViewControllerAnimated:YES completion:^{
-            [app setupSendToAddress:address];
+            [[AppCoordinator sharedInstance].tabControllerManager setupSendToAddress:address];
         }];
     }]];
     [copyAddressController addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
