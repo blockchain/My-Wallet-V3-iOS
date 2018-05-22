@@ -133,10 +133,7 @@ class WalletManager: NSObject {
             print("Currency symbols dictionary is nil")
             return
         }
-        guard let symbolLocalDict = NSMutableDictionary(dictionary: currencySymbols) as? NSMutableDictionary else {
-            print("Could not create symbolLocalDict")
-            return
-        }
+        let symbolLocalDict = NSMutableDictionary(dictionary: currencySymbols)
         symbolLocalDict.setObject(fiatCode, forKey: "code" as NSString)
         self.latestMultiAddressResponse?.symbol_local = CurrencySymbol(fromDict: symbolLocalDict as? [AnyHashable: Any])
     }
@@ -220,8 +217,8 @@ extension WalletManager: WalletDelegate {
         buySellDelegate?.initializeWebView()
     }
 
-    func didCompleteTrade(_ tradeDict: [String: String]) {
-        guard let trade = Trade(dict: tradeDict) else {
+    func didCompleteTrade(_ tradeDict: [AnyHashable : Any]!) {
+        guard let trade = Trade(dict: tradeDict as! [String : String]) else {
             print("Failed to create Trade object.")
             return
         }
