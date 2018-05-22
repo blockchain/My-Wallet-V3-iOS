@@ -34,7 +34,6 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
 
     //: Temporary bridging asset type
     @objc private let legacyAssetType: LegacyAssetType
-//    private var address: AssetAddress?
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var viewFrame: CGRect {
