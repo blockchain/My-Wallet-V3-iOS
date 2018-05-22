@@ -10,7 +10,9 @@ import UIKit
 
 struct Constants {
 
-    static let AppStoreID = "id493253309"
+    struct AppStore {
+        static let AppID = "id493253309"
+    }
 
     struct Animation {
         static let duration = 0.2
