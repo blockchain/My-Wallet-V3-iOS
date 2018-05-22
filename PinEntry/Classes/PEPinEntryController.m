@@ -190,8 +190,20 @@ static PEViewController *VerifyController()
 
 - (void)addAddressToSwipeView:(BCSwipeAddressView *)swipeView assetType:(LegacyAssetType)assetType
 {
+    AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
     if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
-        NSString *nextAddress = [[KeychainItemWrapper getSwipeAddressesForAssetType:assetType] firstObject];
+
+        AssetType type;
+        switch (assetType) {
+            case LegacyAssetTypeBitcoin:
+                type = AssetTypeBitcoin;
+            case LegacyAssetTypeBitcoinCash:
+                type = AssetTypeBitcoinCash;
+            case LegacyAssetTypeEther:
+                type = AssetTypeEthereum;
+        }
+
+        NSString *nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject];
         
         if (nextAddress) {
             
@@ -214,7 +226,7 @@ static PEViewController *VerifyController()
                     [swipeView updateAddress:address];
                     self.errorAlert = nil;
                 } else {
-                    [KeychainItemWrapper removeFirstSwipeAddressForAssetType:assetType];
+                    [assetAddressRepository removeFirstSwipeAddressFor:type];
                     self.errorAlert = nil;
                 }
             };
@@ -223,19 +235,37 @@ static PEViewController *VerifyController()
             [swipeView updateAddress:nextAddress];
         }
     } else if (assetType == LegacyAssetTypeEther) {
-        NSString *etherAddress = [KeychainItemWrapper getSwipeEtherAddress];
-        [swipeView updateAddress:etherAddress];
+        NSString *etherAddress = [[assetAddressRepository swipeToReceiveAddressesFor:AssetTypeEthereum] firstObject];
+        if (etherAddress) {
+            [swipeView updateAddress:etherAddress];
+        }
     }
 }
 
 - (void)paymentReceived:(LegacyAssetType)assetType
 {
-    if ((assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) &&
-        [KeychainItemWrapper getSwipeAddressesForAssetType:assetType].count > 0) {
-        [KeychainItemWrapper removeFirstSwipeAddressForAssetType:assetType];
-        BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:[NSNumber numberWithInteger:assetType]];
-        [self addAddressToSwipeView:swipeView assetType:assetType];
+    AssetType type;
+    switch (assetType) {
+        case LegacyAssetTypeBitcoin:
+            type = AssetTypeBitcoin;
+        case LegacyAssetTypeBitcoinCash:
+            type = AssetTypeBitcoinCash;
+        case LegacyAssetTypeEther:
+            type = AssetTypeEthereum;
     }
+
+    if (type != AssetTypeBitcoin && type != AssetTypeBitcoinCash) {
+        return;
+    }
+
+    AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
+    if ([assetAddressRepository swipeToReceiveAddressesFor:type].count <= 0) {
+        return;
+    }
+    [assetAddressRepository removeFirstSwipeAddressFor:type];
+
+    BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:[NSNumber numberWithInteger:assetType]];
+    [self addAddressToSwipeView:swipeView assetType:assetType];
 }
 
 - (void)pinEntryControllerDidEnteredPin:(PEViewController *)controller

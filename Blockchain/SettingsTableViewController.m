@@ -557,7 +557,7 @@ const int aboutPrivacyPolicy = 2;
             BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled = !swipeToReceiveEnabled;
             // Clear all swipe addresses in case default account has changed
             if (!swipeToReceiveEnabled) {
-                [KeychainItemWrapper removeAllSwipeAddresses];
+                [AssetAddressRepository.sharedInstance removeAllSwipeAddresses];
             }
         }]];
         [swipeToReceiveAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -569,7 +569,7 @@ const int aboutPrivacyPolicy = 2;
         BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled = !swipeToReceiveEnabled;
         // Clear all swipe addresses in case default account has changed
         if (!swipeToReceiveEnabled) {
-            [KeychainItemWrapper removeAllSwipeAddresses];
+            [AssetAddressRepository.sharedInstance removeAllSwipeAddresses];
         }
     }
 }

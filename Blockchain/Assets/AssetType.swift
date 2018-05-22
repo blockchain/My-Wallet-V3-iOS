@@ -24,4 +24,15 @@ extension AssetType {
             return AssetType.ethereum
         }
     }
+
+    var legacy: LegacyAssetType {
+        switch self {
+        case .bitcoin:
+            return LegacyAssetType.bitcoin
+        case .bitcoinCash:
+            return LegacyAssetType.bitcoinCash
+        case .ethereum:
+            return LegacyAssetType.ether
+        }
+    }
 }

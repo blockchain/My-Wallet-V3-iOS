@@ -46,6 +46,7 @@ class WalletManager: NSObject {
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
     @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
+    weak var swipeAddressDelegate: WalletSwipeAddressDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -83,7 +84,7 @@ class WalletManager: NSObject {
 
         wallet.sessionToken = nil
 
-        KeychainItemWrapper.removeAllSwipeAddresses()
+        AssetAddressRepository.shared.removeAllSwipeAddresses()
         BlockchainSettings.App.shared.guid = nil
         BlockchainSettings.App.shared.sharedKey = nil
 
@@ -352,7 +353,7 @@ extension WalletManager: WalletDelegate {
 
         let newDefaultAccountLabeledAddressesCount = self.wallet.getDefaultAccountLabelledAddressesCount()
         if BlockchainSettings.App.shared.defaultAccountLabelledAddressesCount != newDefaultAccountLabeledAddressesCount {
-            KeychainItemWrapper.removeAllSwipeAddresses(for: .bitcoin)
+            AssetAddressRepository.shared.removeAllSwipeAddresses(for: .bitcoin)
         }
         let newCount = newDefaultAccountLabeledAddressesCount
         BlockchainSettings.App.shared.defaultAccountLabelledAddressesCount = Int(newCount)
@@ -475,5 +476,14 @@ extension WalletManager: WalletDelegate {
 
     func didErrorWhenGettingFiat(atTime error: String?) {
         fiatAtTimeDelegate?.didErrorWhenGettingFiatAtTime(error: error)
+    }
+
+    // MARK: - Swipe Address
+
+    func didGetSwipeAddresses(_ newSwipeAddresses: [Any]!, assetType: LegacyAssetType) {
+        swipeAddressDelegate?.onRetrievedSwipeToReceive(
+            addresses: newSwipeAddresses as! [String],
+            assetType: AssetType.from(legacyAssetType: assetType)
+        )
     }
 }

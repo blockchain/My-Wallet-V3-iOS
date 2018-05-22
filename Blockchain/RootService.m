@@ -2404,30 +2404,30 @@ RootService * app;
 //    [WalletManager.sharedInstance.wallet getMessages];
 //}
 
-- (void)didGetSwipeAddresses:(NSArray *)newSwipeAddresses assetType:(LegacyAssetType)assetType
-{
-    if (!newSwipeAddresses) {
-        DLog(@"Error: no new swipe addresses found!");
-        return;
-    }
-
-    for (NSString *swipeAddress in newSwipeAddresses) {
-        [KeychainItemWrapper addSwipeAddress:swipeAddress assetType:assetType];
-    }
-
-    if (assetType == LegacyAssetTypeBitcoin) {
-
-        int numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
-        NSArray *bitcoinCashSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
-        if (bitcoinCashSwipeAddresses) {
-            numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinCashSwipeAddresses.count;
-        }
-
-        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinCashAddressesToDerive assetType:LegacyAssetTypeBitcoinCash];
-    } else {
-        [self.pinEntryViewController setupQRCode];
-    }
-}
+//- (void)didGetSwipeAddresses:(NSArray *)newSwipeAddresses assetType:(LegacyAssetType)assetType
+//{
+//    if (!newSwipeAddresses) {
+//        DLog(@"Error: no new swipe addresses found!");
+//        return;
+//    }
+//
+//    for (NSString *swipeAddress in newSwipeAddresses) {
+//        [KeychainItemWrapper addSwipeAddress:swipeAddress assetType:assetType];
+//    }
+//
+//    if (assetType == LegacyAssetTypeBitcoin) {
+//
+//        int numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT;
+//        NSArray *bitcoinCashSwipeAddresses = [KeychainItemWrapper getSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
+//        if (bitcoinCashSwipeAddresses) {
+//            numberOfBitcoinCashAddressesToDerive = SWIPE_TO_RECEIVE_ADDRESS_COUNT - (int)bitcoinCashSwipeAddresses.count;
+//        }
+//
+//        [WalletManager.sharedInstance.wallet getSwipeAddresses:numberOfBitcoinCashAddressesToDerive assetType:LegacyAssetTypeBitcoinCash];
+//    } else {
+//        [self.pinEntryViewController setupQRCode];
+//    }
+//}
 
 //- (void)didFetchEthHistory
 //{

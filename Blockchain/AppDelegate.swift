@@ -102,17 +102,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appSettings = BlockchainSettings.App.shared
         let wallet = WalletManager.shared.wallet
 
-        if appSettings.swipeToReceiveEnabled && wallet.isInitialized() && wallet.didUpgradeToHd() {
+        AssetAddressRepository.shared.fetchSwipeToReceiveAddressesIfNeeded()
 
-            appSettings.swipeAddressForEther = wallet.getEtherAddress()
-
-            var numberOfBTCAddressesToDerive = Constants.Wallet.swipeToReceiveAddressCount
-            if let bitcoinSwipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: .bitcoin) {
-                numberOfBTCAddressesToDerive -= bitcoinSwipeAddresses.count
-            }
-            wallet.getSwipeAddresses(Int32(numberOfBTCAddressesToDerive), assetType: .bitcoin)
-            NotificationCenter.default.post(name: Constants.NotificationKeys.appEnteredBackground, object: nil)
-        }
+        NotificationCenter.default.post(name: Constants.NotificationKeys.appEnteredBackground, object: nil)
 
         wallet.isFetchingTransactions = false
         wallet.isFilteringTransactions = false
