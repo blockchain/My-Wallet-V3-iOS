@@ -291,6 +291,10 @@ extension WalletManager: WalletDelegate {
         sendBitcoinDelegate?.updateSendBalance(balance: balance, fees: fees as NSDictionary)
     }
 
+    func didReceivePaymentNotice(_ notice: String?) {
+        sendBitcoinDelegate?.didReceivePaymentNotice(notice: notice)
+    }
+
     // MARK: - Send Ether
     func didUpdateEthPayment(_ payment: [AnyHashable: Any]!) {
         sendEtherDelegate?.didUpdateEthPayment(payment: payment as NSDictionary)

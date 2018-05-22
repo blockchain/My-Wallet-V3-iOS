@@ -104,7 +104,7 @@
 - (void)updateLoadedAllTransactions:(NSNumber *)loadedAll;
 - (void)receivedTransactionMessage;
 - (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType;
-- (void)didReceivePaymentNotice:(NSString *)notice;
+- (void)didReceivePaymentNotice:(NSString *_Nullable)notice;
 - (void)didGetFiatAtTime:(NSNumber *)fiatAmount currencyCode:(NSString *)currencyCode assetType:(LegacyAssetType)assetType;
 - (void)didErrorWhenGettingFiatAtTime:(NSString *_Nullable)error;
 - (void)didSetDefaultAccount;

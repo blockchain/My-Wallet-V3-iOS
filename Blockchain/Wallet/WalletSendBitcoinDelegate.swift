@@ -31,4 +31,7 @@ import Foundation
 
     /// Method invoked when changing a payment 'from' to update balance in UI (Bitcoin Cash only)
     func didUpdateTotalAvailable(sweepAmount: NSNumber, finalFee: NSNumber)
+
+    /// Method invoked when a message is emitted, usually to inform of network congestion/high fees
+    func didReceivePaymentNotice(notice: String?)
 }
