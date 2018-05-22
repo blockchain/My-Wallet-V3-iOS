@@ -16,7 +16,6 @@
 #import "UIViewController+AutoDismiss.h"
 #import "LocalizationConstants.h"
 #import "TransactionsBitcoinViewController.h"
-#import "LegacyPrivateKeyReader.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "TransferAllFundsBuilder.h"
 #import "BCNavigationController.h"
