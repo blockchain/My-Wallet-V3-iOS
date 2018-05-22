@@ -115,8 +115,6 @@
 		51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237827191B7E472D00E9EE03 /* BCSecureTextField.swift */; };
 		5113570B209CF6D700056D65 /* BackupVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */; };
-		5113571520A0B6AC00056D65 /* WalletManager+KeyImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113571420A0B6AC00056D65 /* WalletManager+KeyImporter.swift */; };
-		5113571620A0B6AC00056D65 /* WalletManager+KeyImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113571420A0B6AC00056D65 /* WalletManager+KeyImporter.swift */; };
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
@@ -127,6 +125,10 @@
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
+		51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
+		51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
+		51578AEE20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
+		51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
 		5164E4D220584D2800FC706A /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5164E4CF20584D0700FC706A /* Charts.framework */; };
 		5164E4D320584D2800FC706A /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5164E4CF20584D0700FC706A /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
@@ -162,7 +164,6 @@
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
-		673107F219F6D49F00BE6899 /* LegacyPrivateKeyReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
 		67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67470A0719D43AFE00757D46 /* BCManualPairView.m */; };
 		6750389B1B4D832F00F7B488 /* SideMenuViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6750389A1B4D832F00F7B488 /* SideMenuViewCell.m */; };
@@ -1067,7 +1068,6 @@
 		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
 		511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+PushNotifications.swift"; sourceTree = "<group>"; };
 		51135700209CEEB900056D65 /* PushNotificationAuthPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationAuthPayload.swift; sourceTree = "<group>"; };
-		5113571420A0B6AC00056D65 /* WalletManager+KeyImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+KeyImporter.swift"; sourceTree = "<group>"; };
 		511646C4208124E200C43522 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetType.swift; path = Assets/AssetType.swift; sourceTree = "<group>"; };
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
@@ -1077,6 +1077,8 @@
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = Extensions/UserDefaults.swift; sourceTree = "<group>"; };
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
+		51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyImportDelegate.swift; sourceTree = "<group>"; };
+		51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyImportCoordinator.swift; sourceTree = "<group>"; };
 		5164E4C920584D0700FC706A /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Submodules/Charts/Charts.xcodeproj; sourceTree = "<group>"; };
 		516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkManager+UserAgent.swift"; sourceTree = "<group>"; };
 		516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Enum+Enumeratable.swift"; path = "Extensions/Enum+Enumeratable.swift"; sourceTree = "<group>"; };
@@ -1112,8 +1114,6 @@
 		670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		6710DA0C1A8E82D80089DDED /* BCLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCLine.h; sourceTree = "<group>"; };
 		6710DA0D1A8E82D80089DDED /* BCLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCLine.m; sourceTree = "<group>"; };
-		673107F019F6D49F00BE6899 /* LegacyPrivateKeyReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyPrivateKeyReader.h; sourceTree = "<group>"; };
-		673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegacyPrivateKeyReader.m; sourceTree = "<group>"; };
 		674709EA19D1D14300757D46 /* BCWelcomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCWelcomeView.h; sourceTree = "<group>"; };
 		674709EB19D1D14300757D46 /* BCWelcomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCWelcomeView.m; sourceTree = "<group>"; };
 		67470A0519D438E000757D46 /* LocalizationConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationConstants.h; sourceTree = "<group>"; };
@@ -1734,7 +1734,6 @@
 		5113571220A0B67700056D65 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				5113571420A0B6AC00056D65 /* WalletManager+KeyImporter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2089,9 +2088,7 @@
 			children = (
 				C790E0F21E4913F00063D141 /* Blockchain.entitlements */,
 				84F4BDF8197F21D700B7BF7B /* PairingCodeParser.h */,
-				673107F019F6D49F00BE6899 /* LegacyPrivateKeyReader.h */,
 				84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */,
-				673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */,
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
 				67D95A271B3DDC900012EBB1 /* Constants.swift */,
 				511646C7208129D800C43522 /* Environment.swift */,
@@ -2313,6 +2310,7 @@
 				AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */,
 				AA69F6582086A2720054EFCE /* AppCoordinator.swift */,
 				AAA3333A2088115C0019AD55 /* Coordinator.swift */,
+				51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -2344,17 +2342,18 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
-				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
-				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
-				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
+				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
 				AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */,
 				C787180020A22362000CC46E /* WalletAddressesDelegate.swift */,
 				AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */,
+				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
 				AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */,
+				51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */,
 				AABDED6B208EC330002D8BAC /* WalletManager.swift */,
 				5168564B2098E5C00088FBEB /* WalletOptions.swift */,
 				AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */,
+				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
 				C78893D920A34DF4003C0A8F /* WalletSettingsDelegate.swift */,
 				5113571220A0B67700056D65 /* Extensions */,
 				AA1E52362097D3B20099BD10 /* Models */,
@@ -2984,6 +2983,7 @@
 				AA31A7BC2098DFCF00FE6268 /* SideMenuItem.swift in Sources */,
 				AA63F85920A134DA002B719B /* BCTextField.swift in Sources */,
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
+				51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
 				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
@@ -3005,7 +3005,6 @@
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				AACE31D62092A99B00B7B806 /* Bundle.swift in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
-				5113571620A0B6AC00056D65 /* WalletManager+KeyImporter.swift in Sources */,
 				51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */,
 				5113570B209CF6D700056D65 /* BackupVerifyViewController.swift in Sources */,
 				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
@@ -3041,6 +3040,7 @@
 				51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				51135705209CF5E200056D65 /* WalletBuySellDelegate.swift in Sources */,
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
+				51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
 				AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */,
 				51135704209CF5D800056D65 /* PutPinResponse.swift in Sources */,
@@ -3154,7 +3154,6 @@
 				51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */,
 				AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */,
 				AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,
-				5113571520A0B6AC00056D65 /* WalletManager+KeyImporter.swift in Sources */,
 				23B731D31E01AC1100129770 /* ReminderModalViewController.m in Sources */,
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
 				AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */,
@@ -3190,6 +3189,7 @@
 				230FD2D31C5BD04000336683 /* BCEditAddressView.m in Sources */,
 				C75EE7D8201BBA820067BA16 /* UITextView+Animations.m in Sources */,
 				23C95EA61C0779C600E4692A /* SettingsChangePasswordViewController.m in Sources */,
+				51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
 				23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */,
@@ -3280,6 +3280,7 @@
 				6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */,
 				AAA3333D208813040019AD55 /* OnboardingCoordinator.swift in Sources */,
 				67EE1DCE19E3325900DBBFC9 /* ECSlidingViewController.m in Sources */,
+				51578AEE20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
 				FCB33B721FC36EA200317E6B /* ExchangeProgressViewController.m in Sources */,
 				6780DB981A40BDF40048EED2 /* AccountInOut.m in Sources */,
 				51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */,
@@ -3313,7 +3314,6 @@
 				5168564C2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
-				673107F219F6D49F00BE6899 /* LegacyPrivateKeyReader.m in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
