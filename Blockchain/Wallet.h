@@ -101,7 +101,7 @@
 - (void)showSummaryForTransferAll;
 - (void)sendDuringTransferAll:(NSString *_Nullable)secondPassword;
 - (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *_Nullable)secondPassword;
-- (void)updateLoadedAllTransactions:(NSNumber *)loadedAll;
+- (void)updateLoadedAllTransactions:(BOOL)loadedAll;
 - (void)receivedTransactionMessage;
 - (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType;
 - (void)didReceivePaymentNotice:(NSString *_Nullable)notice;

@@ -2004,10 +2004,10 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager didErrorDuringTransferAll:error secondPassword:secondPassword];
 //}
 
-- (void)updateLoadedAllTransactions:(NSNumber *)loadedAll
-{
-    [self.tabControllerManager updateLoadedAllTransactions:loadedAll];
-}
+//- (void)updateLoadedAllTransactions:(NSNumber *)loadedAll
+//{
+//    [self.tabControllerManager updateLoadedAllTransactions:loadedAll];
+//}
 
 //- (void)didReceivePaymentNotice:(NSString *)notice
 //{

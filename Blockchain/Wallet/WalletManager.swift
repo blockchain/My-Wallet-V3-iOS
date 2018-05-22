@@ -443,6 +443,10 @@ extension WalletManager: WalletDelegate {
         }
     }
 
+    func updateLoadedAllTransactions(_ loadedAll: Bool) {
+        self.transactionDelegate?.updateLoadedAllTransactions(loadedAll: loadedAll)
+    }
+
     // MARK: - Transfer all
     func updateTransferAllAmount(_ amount: NSNumber!, fee: NSNumber!, addressesUsed: [Any]!) {
         transferAllDelegate?.updateTransferAll(amount: amount, fee: fee, addressesUsed: addressesUsed as NSArray)
