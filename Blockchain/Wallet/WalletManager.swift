@@ -420,6 +420,10 @@ extension WalletManager: WalletDelegate {
         historyDelegate?.didFetchEthHistory()
     }
 
+    func didFetchBitcoinCashHistory() {
+        historyDelegate?.didFetchBitcoinCashHistory()
+    }
+
     // MARK: - Watch Only Send
     func sendFromWatchOnlyAddress() {
         watchOnlyDelegate?.sendFromWatchOnlyAddress()

@@ -442,4 +442,9 @@ extension AppCoordinator: WalletHistoryDelegate {
         LoadingViewPresenter.shared.hideBusyView()
         reload()
     }
+
+    func didFetchBitcoinCashHistory() {
+        LoadingViewPresenter.shared.hideBusyView()
+        reload()
+    }
 }

@@ -15,4 +15,7 @@ import Foundation
 
     /// Method invoked after getting ETH transaction history
     func didFetchEthHistory()
+
+    /// Method invoked after getting BCH transaction history
+    func didFetchBitcoinCashHistory()
 }
