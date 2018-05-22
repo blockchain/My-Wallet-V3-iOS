@@ -75,6 +75,8 @@
         return;
     }
     
+    Wallet *wallet = WalletManager.sharedInstance.wallet;
+    
     transactionProgressListeners *listener = [[transactionProgressListeners alloc] init];
     
     listener.on_start = self.on_start;
@@ -91,11 +93,11 @@
         
         self.temporarySecondPassword = secondPassword;
         
-        [WalletManager.sharedInstance.wallet changeLastUsedReceiveIndexOfDefaultAccount];
+        [wallet changeLastUsedReceiveIndexOfDefaultAccount];
         // Fields are automatically reset by reload, called by MyWallet.wallet.getHistory() after a utx websocket message is received. However, we cannot rely on the websocket 100% of the time.
-        [WalletManager.sharedInstance.wallet performSelector:@selector(getHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
+        [wallet performSelector:@selector(getHistoryIfNoTransactionMessage) withObject:nil afterDelay:DELAY_GET_HISTORY_BACKUP];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueTransferringFunds) name:NOTIFICATION_KEY_MULTIADDRESS_RESPONSE_RELOAD object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueTransferringFunds) name:[ConstantsObjcBridge notificationKeyMultiAddressResponseReload] object:nil];
         
         if (self.on_success) self.on_success(secondPassword);
     };
@@ -121,23 +123,30 @@
         
         if (self.on_error) self.on_error(error, secondPassword);
         
-        [WalletManager.sharedInstance.wallet getHistory];
+        [wallet getHistory];
     };
-    
-    if (self.on_before_send) self.on_before_send();
     
     WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction = NO;
     
     if (self.usesSendScreen) {
-        [WalletManager.sharedInstance.wallet sendPaymentWithListener:listener secondPassword:_secondPassword];
+        if (self.on_before_send) self.on_before_send();
+        [wallet sendPaymentWithListener:listener secondPassword:_secondPassword];
     } else {
-        [WalletManager.sharedInstance.wallet transferFundsBackupWithListener:listener secondPassword:_secondPassword];
+        if (wallet.needsSecondPassword && !_secondPassword) {
+            [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD headerText:BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPasswordInput) {
+                if (self.on_before_send) self.on_before_send();
+                [wallet transferFundsBackupWithListener:listener secondPassword:secondPasswordInput];
+            }];
+        } else {
+            if (self.on_before_send) self.on_before_send();
+            [wallet transferFundsBackupWithListener:listener secondPassword:_secondPassword];
+        }
     }
 }
 
 - (void)continueTransferringFunds
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_MULTIADDRESS_RESPONSE_RELOAD object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyMultiAddressResponseReload] object:nil];
     
     if ([self.transferAllAddressesToTransfer count] > 0) {
         [self.transferAllAddressesTransferred addObject:self.transferAllAddressesToTransfer[0]];

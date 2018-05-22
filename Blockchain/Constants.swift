@@ -65,6 +65,7 @@ struct Constants {
         static let modalViewDismissed = NSNotification.Name("modalViewDismissed")
         static let reloadToDismissViews = NSNotification.Name("reloadToDismissViews")
         static let newAddress = NSNotification.Name("newAddress")
+        static let multiAddressResponseReload = NSNotification.Name("multiaddressResponseReload")
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
         static let backupSuccess = NSNotification.Name("backupSuccess")
     }
@@ -118,6 +119,10 @@ struct Constants {
 
     @objc class func notificationKeyNewAddress() -> String {
         return Constants.NotificationKeys.newAddress.rawValue
+    }
+
+    @objc class func notificationKeyMultiAddressResponseReload() -> String {
+        return Constants.NotificationKeys.multiAddressResponseReload.rawValue
     }
 
     @objc class func notificationKeyBackupSuccess() -> String {

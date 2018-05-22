@@ -11,6 +11,7 @@
 
 @interface SendEtherViewController : EtherAmountInputViewController
 @property (nonatomic) NSString *addressToSet;
+@property (nonatomic, readonly) DestinationAddressSource addressSource;
 - (void)reload;
 - (void)reloadAfterMultiAddressResponse;
 - (void)getHistory;

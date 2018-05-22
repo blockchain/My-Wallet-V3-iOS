@@ -29,6 +29,7 @@
 @property (nonatomic) NSDecimalNumber *ethAmount;
 @property (nonatomic) NSDecimalNumber *ethAvailable;
 @property (nonatomic) BOOL displayingLocalSymbolSend;
+@property (nonatomic, readwrite) DestinationAddressSource addressSource;
 
 - (void)doCurrencyConversion;
 @end
@@ -467,6 +468,7 @@
                 [self selectToAddress:address];
                 DLog(@"toAddress: %@", address);
                 
+                self.addressSource = DestinationAddressSourceQR;
             });
         }
     }

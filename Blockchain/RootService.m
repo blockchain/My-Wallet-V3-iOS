@@ -677,25 +677,25 @@ SideMenuViewController *sideMenuViewController;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_NEW_ADDRESS object:nil userInfo:nil];
 //}
 //
-- (void)reloadAfterMultiAddressResponse
-{
-    if (WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction) {
-        WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction = NO;
-        Transaction *transaction = WalletManager.sharedInstance.latestMultiAddressResponse.transactions.firstObject;
-        [self.tabControllerManager.receiveBitcoinViewController paymentReceived:ABS(transaction.amount) showBackupReminder:NO];
-    }
-
-    [self.tabControllerManager reloadAfterMultiAddressResponse];
-    [_settingsNavigationController reloadAfterMultiAddressResponse];
-    [_accountsAndAddressesNavigationController reload];
-
-    [sideMenuViewController reload];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
-    // Legacy code for generating new addresses
-    [[NSNotificationCenter defaultCenter] postNotificationName:ConstantsObjcBridge.notificationKeyNewAddress object:nil userInfo:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MULTIADDRESS_RESPONSE_RELOAD object:nil];
-}
+//- (void)reloadAfterMultiAddressResponse
+//{
+//    if (WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction) {
+//        WalletManager.sharedInstance.wallet.didReceiveMessageForLastTransaction = NO;
+//        Transaction *transaction = WalletManager.sharedInstance.latestMultiAddressResponse.transactions.firstObject;
+//        [self.tabControllerManager.receiveBitcoinViewController paymentReceived:ABS(transaction.amount) showBackupReminder:NO];
+//    }
+//
+//    [self.tabControllerManager reloadAfterMultiAddressResponse];
+//    [_settingsNavigationController reloadAfterMultiAddressResponse];
+//    [_accountsAndAddressesNavigationController reload];
+//
+//    [sideMenuViewController reload];
+//
+//    [[NSNotificationCenter defaultCenter] postNotificationName:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
+//    // Legacy code for generating new addresses
+//    [[NSNotificationCenter defaultCenter] postNotificationName:ConstantsObjcBridge.notificationKeyNewAddress object:nil userInfo:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_MULTIADDRESS_RESPONSE_RELOAD object:nil];
+//}
 
 //- (void)reloadSideMenu
 //{
@@ -1970,39 +1970,39 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager updateSendBalance:balance fees:fees];
 //}
 
-- (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed
-{
-    if (self.transferAllFundsModalController) {
-        [self.transferAllFundsModalController updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
-        [LoadingViewPresenter.sharedInstance hideBusyView];
-    } else {
-        [self.tabControllerManager updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
-    }
-}
-
-- (void)showSummaryForTransferAll
-{
-    if (self.transferAllFundsModalController) {
-        [self.transferAllFundsModalController showSummaryForTransferAll];
-        [LoadingViewPresenter.sharedInstance hideBusyView];
-    } else {
-        [self.tabControllerManager showSummaryForTransferAll];
-    }
-}
-
-- (void)sendDuringTransferAll:(NSString *)secondPassword
-{
-    if (self.transferAllFundsModalController) {
-        [self.transferAllFundsModalController sendDuringTransferAll:secondPassword];
-    } else {
-        [self.tabControllerManager sendDuringTransferAll:secondPassword];
-    }
-}
-
-- (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *)secondPassword
-{
-    [self.tabControllerManager didErrorDuringTransferAll:error secondPassword:secondPassword];
-}
+//- (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed
+//{
+//    if (self.transferAllFundsModalController) {
+//        [self.transferAllFundsModalController updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
+//    } else {
+//        [self.tabControllerManager updateTransferAllAmount:amount fee:fee addressesUsed:addressesUsed];
+//    }
+//}
+//
+//- (void)showSummaryForTransferAll
+//{
+//    if (self.transferAllFundsModalController) {
+//        [self.transferAllFundsModalController showSummaryForTransferAll];
+//        [LoadingViewPresenter.sharedInstance hideBusyView];
+//    } else {
+//        [self.tabControllerManager showSummaryForTransferAll];
+//    }
+//}
+//
+//- (void)sendDuringTransferAll:(NSString *)secondPassword
+//{
+//    if (self.transferAllFundsModalController) {
+//        [self.transferAllFundsModalController sendDuringTransferAll:secondPassword];
+//    } else {
+//        [self.tabControllerManager sendDuringTransferAll:secondPassword];
+//    }
+//}
+//
+//- (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *)secondPassword
+//{
+//    [self.tabControllerManager didErrorDuringTransferAll:error secondPassword:secondPassword];
+//}
 
 - (void)updateLoadedAllTransactions:(NSNumber *)loadedAll
 {
@@ -2276,41 +2276,41 @@ SideMenuViewController *sideMenuViewController;
 //    [self.tabControllerManager showTransactionDetailForHash:txHash];
 //}
 
-- (void)didPushTransaction
-{
-    DestinationAddressSource source = [self.tabControllerManager getSendAddressSource];
-    NSString *eventName;
-
-    if (source == DestinationAddressSourceQR) {
-        eventName = WALLET_EVENT_TX_FROM_QR;
-    } else if (source == DestinationAddressSourcePaste) {
-        eventName = WALLET_EVENT_TX_FROM_PASTE;
-    } else if (source == DestinationAddressSourceURI) {
-        eventName = WALLET_EVENT_TX_FROM_URI;
-    } else if (source == DestinationAddressSourceDropDown) {
-        eventName = WALLET_EVENT_TX_FROM_DROPDOWN;
-    } else if (source == DestinationAddressSourceContact) {
-        eventName = WALLET_EVENT_TX_FROM_CONTACTS;
-    } else if (source == DestinationAddressSourceNone) {
-        DLog(@"Destination address source none");
-        return;
-    } else {
-        DLog(@"Unknown destination address source %d", source);
-        return;
-    }
-
-    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:URL_SUFFIX_EVENT_NAME_ARGUMENT, eventName]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
-    request.HTTPMethod = @"POST";
-
-    NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-            DLog(@"Error saving address input: %@", [error localizedDescription]);
-        }
-    }];
-
-    [dataTask resume];
-}
+//- (void)didPushTransaction
+//{
+//    DestinationAddressSource source = [self.tabControllerManager getSendAddressSource];
+//    NSString *eventName;
+//
+//    if (source == DestinationAddressSourceQR) {
+//        eventName = WALLET_EVENT_TX_FROM_QR;
+//    } else if (source == DestinationAddressSourcePaste) {
+//        eventName = WALLET_EVENT_TX_FROM_PASTE;
+//    } else if (source == DestinationAddressSourceURI) {
+//        eventName = WALLET_EVENT_TX_FROM_URI;
+//    } else if (source == DestinationAddressSourceDropDown) {
+//        eventName = WALLET_EVENT_TX_FROM_DROPDOWN;
+//    } else if (source == DestinationAddressSourceContact) {
+//        eventName = WALLET_EVENT_TX_FROM_CONTACTS;
+//    } else if (source == DestinationAddressSourceNone) {
+//        DLog(@"Destination address source none");
+//        return;
+//    } else {
+//        DLog(@"Unknown destination address source %d", source);
+//        return;
+//    }
+//
+//    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:URL_SUFFIX_EVENT_NAME_ARGUMENT, eventName]];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
+//    request.HTTPMethod = @"POST";
+//
+//    NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        if (error) {
+//            DLog(@"Error saving address input: %@", [error localizedDescription]);
+//        }
+//    }];
+//
+//    [dataTask resume];
+//}
 
 //- (void)didSendPaymentRequest:(NSDictionary *)info amount:(uint64_t)amount name:(NSString *)name requestId:(NSString *)requestId
 //{
@@ -3066,13 +3066,13 @@ SideMenuViewController *sideMenuViewController;
 //}
 
 
-- (void)setupTransferAllFunds
-{
-    self.transferAllFundsModalController = nil;
-//    app.topViewControllerDelegate = nil;
-
-    [self.tabControllerManager setupTransferAllFunds];
-}
+//- (void)setupTransferAllFunds
+//{
+//    self.transferAllFundsModalController = nil;
+////    app.topViewControllerDelegate = nil;
+//
+//    [self.tabControllerManager setupTransferAllFunds];
+//}
 
 //- (void)loginMainPassword
 //{

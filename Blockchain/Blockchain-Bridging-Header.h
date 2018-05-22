@@ -32,3 +32,4 @@
 #import "Wallet.h"
 #import "WebLoginViewController.h"
 #import "MultiAddressResponse.h"
+#import "Transaction.h"

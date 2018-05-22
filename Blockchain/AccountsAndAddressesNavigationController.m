@@ -221,7 +221,7 @@
         [[AppCoordinator sharedInstance] closeSideMenu];
     }];
     
-    [app setupTransferAllFunds];
+    [[AppCoordinator sharedInstance] setupTransferAllFunds];
 }
 
 #pragma mark - Navigation

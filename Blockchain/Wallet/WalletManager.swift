@@ -43,6 +43,7 @@ class WalletManager: NSObject {
     @objc weak var exchangeDelegate: WalletExchangeDelegate?
     @objc weak var exchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
+    @objc weak var transferAllDelegate: WalletTransferAllDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -147,9 +148,9 @@ class WalletManager: NSObject {
         }
         self.latestMultiAddressResponse?.symbol_btc = CurrencySymbol.btcSymbol(fromCode: code)
     }
-    
+
     private func reloadAfterMultiaddressResponse() {
-        AppCoordinator.shared.tabControllerManager.reloadAfterMultiAddressResponse()
+        AppCoordinator.shared.reloadAfterMultiAddressResponse()
     }
 }
 
@@ -352,7 +353,6 @@ extension WalletManager: WalletDelegate {
 
     // MARK: ETH Exchange Rate
     func didFetchEthExchangeRate(_ rate: NSNumber!) {
-        reloadAfterMultiaddressResponse()
         AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
     }
 
@@ -419,6 +419,10 @@ extension WalletManager: WalletDelegate {
 
     // MARK: - Transaction
 
+    func didPushTransaction() {
+        self.transactionDelegate?.didPushTransaction()
+    }
+
     func receivedTransactionMessage() {
         DispatchQueue.main.async { [unowned self] in
             self.transactionDelegate?.onTransactionReceived()
@@ -429,5 +433,22 @@ extension WalletManager: WalletDelegate {
         DispatchQueue.main.async { [unowned self] in
             self.transactionDelegate?.onPaymentReceived(amount: amount, assetType: AssetType.from(legacyAssetType: assetType))
         }
+    }
+
+    // MARK: - Transfer all
+    func updateTransferAllAmount(_ amount: NSNumber!, fee: NSNumber!, addressesUsed: [Any]!) {
+        transferAllDelegate?.updateTransferAll(amount: amount, fee: fee, addressesUsed: addressesUsed as NSArray)
+    }
+
+    func showSummaryForTransferAll() {
+        transferAllDelegate?.showSummaryForTransferAll()
+    }
+
+    func sendDuringTransferAll(_ secondPassword: String?) {
+        transferAllDelegate?.sendDuringTransferAll(secondPassword: secondPassword)
+    }
+
+    func didErrorDuringTransferAll(_ error: String!, secondPassword: String?) {
+        transferAllDelegate?.didErrorDuringTransferAll(error: error, secondPassword: secondPassword)
     }
 }

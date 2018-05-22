@@ -25,6 +25,7 @@
 #import "FeeTypes.h"
 #import "QRCodeScannerSendViewController.h"
 #import "Assets.h"
+#import "DestinationAddressSource.h"
 
 @class Wallet;
 
@@ -80,15 +81,6 @@
 @property (nonatomic) LegacyAssetType assetType;
 
 @property (strong, nonatomic) BCConfirmPaymentView *confirmPaymentView;
-
-typedef enum {
-    DestinationAddressSourceNone,
-    DestinationAddressSourceQR,
-    DestinationAddressSourcePaste,
-    DestinationAddressSourceURI,
-    DestinationAddressSourceDropDown,
-    DestinationAddressSourceContact
-} DestinationAddressSource;
 
 @property (nonatomic, readonly) DestinationAddressSource addressSource;
 

@@ -99,8 +99,8 @@
 - (void)updateSendBalance:(NSNumber *)balance fees:(NSDictionary *)fees;
 - (void)updateTransferAllAmount:(NSNumber *)amount fee:(NSNumber *)fee addressesUsed:(NSArray *)addressesUsed;
 - (void)showSummaryForTransferAll;
-- (void)sendDuringTransferAll:(NSString *)secondPassword;
-- (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *)secondPassword;
+- (void)sendDuringTransferAll:(NSString *_Nullable)secondPassword;
+- (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *_Nullable)secondPassword;
 - (void)updateLoadedAllTransactions:(NSNumber *)loadedAll;
 - (void)receivedTransactionMessage;
 - (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType;

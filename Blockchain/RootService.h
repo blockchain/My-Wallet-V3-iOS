@@ -94,7 +94,7 @@
 //@property (strong, nonatomic) IBOutlet BCModalView *modalView;
 //@property (strong, nonatomic) NSMutableArray *modalChain;
 
-@property (strong, nonatomic) TransferAllFundsViewController *transferAllFundsModalController;
+//@property (strong, nonatomic) TransferAllFundsViewController *transferAllFundsModalController;
 
 @property(nonatomic) NSString *deviceToken;
 @property (nonatomic) BuyBitcoinViewController *buyBitcoinViewController;

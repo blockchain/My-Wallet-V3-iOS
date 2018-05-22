@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "QRCodeScannerSendViewController.h"
+#import "DestinationAddressSource.h"
 
 @interface EtherAmountInputViewController : QRCodeScannerSendViewController <UITextFieldDelegate>
-
+@property (nonatomic, readonly) DestinationAddressSource addressSource;
 @end

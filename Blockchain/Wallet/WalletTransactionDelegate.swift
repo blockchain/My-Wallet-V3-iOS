@@ -21,4 +21,7 @@ import Foundation
     /// Method invoked when a transaction is received (only invoked when there is an
     /// active websocket connection when the transaction was received)
     func onTransactionReceived()
+
+    /// Method invoked after pushing a transaction to the network
+    func didPushTransaction()
 }

@@ -92,6 +92,42 @@
     [self receivedTransactionMessage];
 }
 
+- (void)didPushTransaction
+{
+    DestinationAddressSource source = [self getSendAddressSource];
+    NSString *eventName;
+    
+    if (source == DestinationAddressSourceQR) {
+        eventName = WALLET_EVENT_TX_FROM_QR;
+    } else if (source == DestinationAddressSourcePaste) {
+        eventName = WALLET_EVENT_TX_FROM_PASTE;
+    } else if (source == DestinationAddressSourceURI) {
+        eventName = WALLET_EVENT_TX_FROM_URI;
+    } else if (source == DestinationAddressSourceDropDown) {
+        eventName = WALLET_EVENT_TX_FROM_DROPDOWN;
+    } else if (source == DestinationAddressSourceContact) {
+        eventName = WALLET_EVENT_TX_FROM_CONTACTS;
+    } else if (source == DestinationAddressSourceNone) {
+        DLog(@"Destination address source none");
+        return;
+    } else {
+        DLog(@"Unknown destination address source %d", source);
+        return;
+    }
+    
+    NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:URL_SUFFIX_EVENT_NAME_ARGUMENT, eventName]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
+    request.HTTPMethod = @"POST";
+    
+    NSURLSessionDataTask *dataTask = [[[NetworkManager sharedInstance] session] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            DLog(@"Error saving address input: %@", [error localizedDescription]);
+        }
+    }];
+    
+    [dataTask resume];
+}
+
 #pragma mark - Reloading
 
 - (void)reload
@@ -109,7 +145,7 @@
 }
 
 - (void)reloadAfterMultiAddressResponse
-{
+{    
     [_dashboardViewController reload];
     [_sendBitcoinViewController reloadAfterMultiAddressResponse];
     [_sendEtherViewController reloadAfterMultiAddressResponse];
@@ -193,6 +229,9 @@
 
 - (DestinationAddressSource)getSendAddressSource
 {
+    if (self.assetType == AssetTypeEthereum) {
+        return self.sendEtherViewController.addressSource;
+    }
     return self.sendBitcoinViewController.addressSource;
 }
 
@@ -322,6 +361,8 @@
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PAYMENT_SENT_ETHER title:[LocalizationConstantsObjcBridge success] handler:nil];
     
     [self showTransactionsAnimated:YES];
+    
+    [self didPushTransaction];
 }
 
 - (void)didGetEtherAddressWithSecondPassword
