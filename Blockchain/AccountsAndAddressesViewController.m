@@ -12,14 +12,14 @@
 #import "ReceiveTableCell.h"
 #import "BCCreateAccountView.h"
 #import "BCModalViewController.h"
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import "Blockchain-Swift.h"
 #import "UIView+ChangeFrameAttribute.h"
 
 #define CELL_HEIGHT_DEFAULT 44.0f
 
-@interface AccountsAndAddressesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface AccountsAndAddressesViewController () <UITableViewDelegate, UITableViewDataSource, LegacyPrivateKeyDelegate>
 @property (nonatomic) NSString *clickedAddress;
 @property (nonatomic) int clickedAccount;
 @end
@@ -201,27 +201,36 @@
         return;
     }
 
-    NSError *error;
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
-    if (!input) {
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
-            [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
-        } else {
-            [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
-        }
-        return;
+    PrivateKeyReader *privateKeyReader = [[PrivateKeyReader alloc] initWithAssetType:self.assetType acceptPublicKeys:YES];
+    if (privateKeyReader) {
+        privateKeyReader.legacyDelegate = self;
+        [privateKeyReader startReadingQRCode];
+
+        [[NSNotificationCenter defaultCenter] addObserver:privateKeyReader selector:@selector(autoDismiss) name:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
+
+        [self presentViewController:privateKeyReader animated:YES completion:nil];
     }
-    
-    PrivateKeyReader *reader = [[PrivateKeyReader alloc] initWithAssetType:self.assetType success:^(NSString* keyString) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(promptForLabelAfterScan)
-                                                     name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
-        [WalletManager.sharedInstance.wallet addKey:keyString];
-    } error:nil acceptPublicKeys:YES busyViewText:[LocalizationConstantsObjcBridge loadingImportKey]];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:reader selector:@selector(autoDismiss) name:ConstantsObjcBridge.notificationKeyReloadToDismissViews object:nil];
-    
-    [self presentViewController:reader animated:YES completion:nil];
+}
+
+#pragma mark - LegacyPrivateKeyDelegate
+
+- (void)didFinishScanning:(NSString *)privateKey {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(promptForLabelAfterScan) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
+    [WalletManager.sharedInstance.wallet addKey:privateKey];
+}
+
+- (void)didFinishScanningWithError:(PrivateKeyReaderError)error {
+    switch (error) {
+        case PrivateKeyReaderErrorBadMetadataObject:
+            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge error] title:[LocalizationConstantsObjcBridge error] handler:nil];
+            break;
+        case PrivateKeyReaderErrorUnknownKeyFormat:
+            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge unknownKeyFormat] title:[LocalizationConstantsObjcBridge error] handler:nil];
+            break;
+        case PrivateKeyReaderErrorUnsupportedPrivateKey:
+            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge unsupportedPrivateKey] title:[LocalizationConstantsObjcBridge error] handler:nil];
+            break;
+    }
 }
 
 - (void)promptForLabelAfterScan
