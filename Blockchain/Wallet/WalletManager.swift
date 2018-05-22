@@ -42,6 +42,7 @@ class WalletManager: NSObject {
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
     @objc weak var exchangeDelegate: WalletExchangeDelegate?
     @objc weak var exchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
+    @objc weak var fiatAtTimeDelegate: WalletFiatAtTimeDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
     @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
@@ -456,5 +457,14 @@ extension WalletManager: WalletDelegate {
 
     func didErrorDuringTransferAll(_ error: String!, secondPassword: String?) {
         transferAllDelegate?.didErrorDuringTransferAll(error: error, secondPassword: secondPassword)
+    }
+
+    // MARK: - Fiat at Time
+    func didGetFiat(atTime fiatAmount: NSNumber!, currencyCode: String!, assetType: LegacyAssetType) {
+        fiatAtTimeDelegate?.didGetFiatAtTime(fiatAmount: fiatAmount, currencyCode: currencyCode, assetType: AssetType.from(legacyAssetType: assetType))
+    }
+
+    func didErrorWhenGettingFiat(atTime error: String?) {
+        fiatAtTimeDelegate?.didErrorWhenGettingFiatAtTime(error: error)
     }
 }

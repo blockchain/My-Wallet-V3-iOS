@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeIntermediateDelegate, WalletTransactionDelegate, WalletWatchOnlyDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeIntermediateDelegate, WalletTransactionDelegate, WalletWatchOnlyDelegate, WalletFiatAtTimeDelegate>
 @end
 @implementation TabControllerManager
 
@@ -32,6 +32,7 @@
         walletManager.exchangeIntermediateDelegate = self;
         walletManager.transactionDelegate = self;
         walletManager.watchOnlyDelegate = self;
+        walletManager.fiatAtTimeDelegate = self;
     }
     return self;
 }
@@ -377,12 +378,52 @@
 {
     [[ModalPresenter sharedInstance] closeAllModals];
 
-    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:nil handler:nil];
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] handler:nil];
 }
 
 - (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
 {
     [_sendEtherViewController didUpdatePayment:payment];
+}
+
+#pragma mark - Fiat at Time
+
+- (void)didGetFiatAtTimeWithFiatAmount:(NSNumber * _Nonnull)fiatAmount currencyCode:(NSString * _Nonnull)currencyCode assetType:(LegacyAssetType)assetType
+{
+    BOOL didFindTransaction = NO;
+    
+    NSArray *transactions;
+    NSString *targetHash;
+    
+    if (assetType == LegacyAssetTypeBitcoin) {
+        transactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
+        targetHash = self.transactionsBitcoinViewController.detailViewController.transactionModel.myHash;
+    } else if (assetType == LegacyAssetTypeEther) {
+        transactions = WalletManager.sharedInstance.wallet.etherTransactions;
+        targetHash = self.transactionsEtherViewController.detailViewController.transactionModel.myHash;
+    } else if (assetType == LegacyAssetTypeBitcoinCash) {
+        transactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
+        targetHash = self.transactionsBitcoinCashViewController.detailViewController.transactionModel.myHash;
+    }
+    
+    for (Transaction *transaction in transactions) {
+        if ([transaction.myHash isEqualToString:targetHash]) {
+            [transaction.fiatAmountsAtTime setObject:[[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:fiatAmount] forKey:currencyCode];
+            didFindTransaction = YES;
+            break;
+        }
+    }
+    
+    if (!didFindTransaction) {
+        DLog(@"didGetFiatAtTime: will not set fiat amount because the detail controller's transaction hash cannot be found.");
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
+}
+
+- (void)didErrorWhenGettingFiatAtTimeWithError:(NSString * _Nullable)error
+{
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:BC_STRING_ERROR_GETTING_FIAT_AT_TIME title:BC_STRING_ERROR handler:nil];
 }
 
 #pragma mark - Receive

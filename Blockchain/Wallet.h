@@ -106,7 +106,7 @@
 - (void)paymentReceivedOnPINScreen:(NSString *)amount assetType:(LegacyAssetType)assetType;
 - (void)didReceivePaymentNotice:(NSString *)notice;
 - (void)didGetFiatAtTime:(NSNumber *)fiatAmount currencyCode:(NSString *)currencyCode assetType:(LegacyAssetType)assetType;
-- (void)didErrorWhenGettingFiatAtTime:(NSString *)error;
+- (void)didErrorWhenGettingFiatAtTime:(NSString *_Nullable)error;
 - (void)didSetDefaultAccount;
 - (void)didChangeLocalCurrency;
 - (void)setupBackupTransferAll:(id)transferAllController;

@@ -112,7 +112,7 @@ const CGFloat rowHeightValueReceived = 80;
 {
     [WalletManager.sharedInstance.wallet getFiatAtTime:self.transactionModel.time value:self.transactionModel.decimalAmount currencyCode:[WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.code lowercaseString] assetType:self.transactionModel.assetType];
     self.isGettingFiatAtTime = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterGetFiatAtTime) name:NOTIFICATION_KEY_GET_FIAT_AT_TIME object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterGetFiatAtTime) name:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
 }
 
 - (NSString *)getNotePlaceholder
@@ -168,7 +168,7 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)reloadDataAfterGetFiatAtTime
 {
     self.isGettingFiatAtTime = NO;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_GET_FIAT_AT_TIME object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
     [self reloadData];
 }
 

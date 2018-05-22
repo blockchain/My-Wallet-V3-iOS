@@ -68,6 +68,7 @@ struct Constants {
         static let multiAddressResponseReload = NSNotification.Name("multiaddressResponseReload")
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
         static let backupSuccess = NSNotification.Name("backupSuccess")
+        static let getFiatAtTime = NSNotification.Name("getFiatAtTime")
     }
     struct PushNotificationKeys {
         static let userInfoType = "type"
@@ -127,6 +128,10 @@ struct Constants {
 
     @objc class func notificationKeyBackupSuccess() -> String {
         return Constants.NotificationKeys.backupSuccess.rawValue
+    }
+
+    @objc class func notificationKeyGetFiatAtTime() -> String {
+        return Constants.NotificationKeys.getFiatAtTime.rawValue
     }
 
     @objc class func bitcoinUriPrefix() -> String {

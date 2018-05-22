@@ -382,6 +382,8 @@
 		C76D730520B2052000040B57 /* WalletExchangeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */; };
 		C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */; };
 		C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */; };
+		C76D732C20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D732B20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift */; };
+		C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D732B20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift */; };
 		C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */; };
 		C77217D020AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */; };
 		C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
@@ -1399,6 +1401,7 @@
 		C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContinueButtonInputAccessoryView.m; sourceTree = "<group>"; };
 		C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExchangeDelegate.swift; sourceTree = "<group>"; };
 		C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTransferAllDelegate.swift; sourceTree = "<group>"; };
+		C76D732B20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletFiatAtTimeDelegate.swift; sourceTree = "<group>"; };
 		C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoAndExchangeRatesDelegate.swift; sourceTree = "<group>"; };
 		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
 		C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRecoveryDelegate.swift; sourceTree = "<group>"; };
@@ -2370,6 +2373,7 @@
 				C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */,
 				C74E865820B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift */,
 				C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */,
+				C76D732B20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift */,
 				C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */,
 				C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */,
 				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
@@ -3112,6 +3116,7 @@
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
+				C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3405,6 +3410,7 @@
 				C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */,
 				AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */,
 				A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */,
+				C76D732C20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
