@@ -207,7 +207,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
                             self.legacyDelegate?.didFinishScanningWithError(.unknownKeyFormat)
                             return
                         }
-                        WalletManager.KeyImporter.shared.askUserToAddWatchOnlyAddress(address) {
+                        WalletManager.shared.askUserToAddWatchOnlyAddress(address) {
                             self.delegate?.didFinishScanning(scannedKey, for: address)
                             // TODO: remove once LegacyPrivateKeyDelegate is deprecated
                             self.legacyDelegate?.didFinishScanning(scannedKey)
