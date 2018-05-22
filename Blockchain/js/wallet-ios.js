@@ -298,7 +298,6 @@ MyWalletPhone.isAccountNameValid = function(name) {
     for (var i = 0; i < accounts.length; i++) {
         var account = accounts[i];
         if (account.label == name) {
-            objc_on_error_account_name_in_use();
             return false;
         }
     }
