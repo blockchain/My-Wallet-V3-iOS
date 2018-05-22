@@ -78,7 +78,7 @@
     }
 
     if (![WalletManager.sharedInstance.wallet isAccountNameValid:label]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NAME_ALREADY_IN_USE title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge nameAlreadyInUse] title:[LocalizationConstantsObjcBridge error] handler:nil];
         [LoadingViewPresenter.sharedInstance hideBusyView];
         return;
     }

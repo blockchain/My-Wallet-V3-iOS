@@ -54,6 +54,7 @@ struct LocalizationConstants {
         static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
         static let cameraAccessDenied = NSLocalizedString("Camera Access Denied", comment: "")
         static let cameraAccessDeniedMessage = NSLocalizedString("Blockchain does not have access to the camera. To enable access, go to your device Settings.", comment: "")
+        static let nameAlreadyInUse = NSLocalizedString("This name is already in use. Please choose a different name.", comment: "")
     }
 
     struct Authentication {
@@ -195,4 +196,6 @@ struct LocalizationConstants {
     @objc class func incorrectBip38Password() -> String { return LocalizationConstants.AddressAndKeyImport.incorrectBip38Password }
 
     @objc class func scanQRCode() -> String { return LocalizationConstants.scanQRCode }
+
+    @objc class func nameAlreadyInUse() -> String { return LocalizationConstants.Errors.nameAlreadyInUse }
 }
