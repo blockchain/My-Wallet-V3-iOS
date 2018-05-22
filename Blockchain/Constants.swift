@@ -107,6 +107,12 @@ struct Constants {
     struct Wallet {
         static let swipeToReceiveAddressCount = 5
     }
+    struct JSErrors {
+        struct AddressAndKeyImport {
+            static let wrongBipPass = "wrongBipPass"
+            static let wrongPrivateKey = "wrongPrivateKey"
+        }
+    }
 }
 
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this
@@ -154,6 +160,14 @@ struct Constants {
 
     @objc class func mailUrl() -> String {
         return Constants.Schemes.mail
+    }
+
+    @objc class func wrongPrivateKey() -> String {
+        return Constants.JSErrors.AddressAndKeyImport.wrongPrivateKey
+    }
+
+    @objc class func wrongBip38Password() -> String {
+        return Constants.JSErrors.AddressAndKeyImport.wrongBipPass
     }
 }
 
