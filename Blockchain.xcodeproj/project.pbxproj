@@ -156,13 +156,13 @@
 		51A862E12092506600B338E0 /* AssetAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862E02092506600B338E0 /* AssetAddress.swift */; };
 		51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */; };
 		51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */ = {isa = PBXBuildFile; fileRef = 51A862E6209268D300B338E0 /* sample-unused-address.json */; };
-		51D17A9920A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift */; };
-		51D17A9A20A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift */; };
+		51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
+		51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
-		673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 673107F119F6D49F00BE6899 /* PrivateKeyReader.m */; };
+		673107F219F6D49F00BE6899 /* LegacyPrivateKeyReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
 		67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67470A0719D43AFE00757D46 /* BCManualPairView.m */; };
 		6750389B1B4D832F00F7B488 /* SideMenuViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6750389A1B4D832F00F7B488 /* SideMenuViewCell.m */; };
@@ -1104,7 +1104,7 @@
 		51A862E02092506600B338E0 /* AssetAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetAddress.swift; path = Assets/AssetAddress.swift; sourceTree = "<group>"; };
 		51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUnusedAddressTests.swift; sourceTree = "<group>"; };
 		51A862E6209268D300B338E0 /* sample-unused-address.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "sample-unused-address.json"; sourceTree = "<group>"; };
-		51D17A9820A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+PrivateKeyReader.swift"; sourceTree = "<group>"; };
+		51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyReader.swift; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthenticationManager.swift; path = Authentication/AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -1112,8 +1112,8 @@
 		670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		6710DA0C1A8E82D80089DDED /* BCLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCLine.h; sourceTree = "<group>"; };
 		6710DA0D1A8E82D80089DDED /* BCLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCLine.m; sourceTree = "<group>"; };
-		673107F019F6D49F00BE6899 /* PrivateKeyReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateKeyReader.h; sourceTree = "<group>"; };
-		673107F119F6D49F00BE6899 /* PrivateKeyReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateKeyReader.m; sourceTree = "<group>"; };
+		673107F019F6D49F00BE6899 /* LegacyPrivateKeyReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyPrivateKeyReader.h; sourceTree = "<group>"; };
+		673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegacyPrivateKeyReader.m; sourceTree = "<group>"; };
 		674709EA19D1D14300757D46 /* BCWelcomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCWelcomeView.h; sourceTree = "<group>"; };
 		674709EB19D1D14300757D46 /* BCWelcomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCWelcomeView.m; sourceTree = "<group>"; };
 		67470A0519D438E000757D46 /* LocalizationConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationConstants.h; sourceTree = "<group>"; };
@@ -1661,6 +1661,14 @@
 			path = Submodules/SocketRocket/SocketRocket;
 			sourceTree = "<group>";
 		};
+		51042C8820B1FDA600B022DE /* PrivateKeyReader */ = {
+			isa = PBXGroup;
+			children = (
+				51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */,
+			);
+			path = PrivateKeyReader;
+			sourceTree = "<group>";
+		};
 		510EA1732080F58700A63AB8 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -1727,7 +1735,6 @@
 			isa = PBXGroup;
 			children = (
 				5113571420A0B6AC00056D65 /* WalletManager+KeyImporter.swift */,
-				51D17A9820A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2082,9 +2089,9 @@
 			children = (
 				C790E0F21E4913F00063D141 /* Blockchain.entitlements */,
 				84F4BDF8197F21D700B7BF7B /* PairingCodeParser.h */,
-				673107F019F6D49F00BE6899 /* PrivateKeyReader.h */,
+				673107F019F6D49F00BE6899 /* LegacyPrivateKeyReader.h */,
 				84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */,
-				673107F119F6D49F00BE6899 /* PrivateKeyReader.m */,
+				673107F119F6D49F00BE6899 /* LegacyPrivateKeyReader.m */,
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
 				67D95A271B3DDC900012EBB1 /* Constants.swift */,
 				511646C7208129D800C43522 /* Environment.swift */,
@@ -2105,6 +2112,7 @@
 				AABDED66208EB4EA002D8BAC /* Notifications */,
 				AAA333402088450D0019AD55 /* Onboarding */,
 				AACE317E2092793300B7B806 /* Pin */,
+				51042C8820B1FDA600B022DE /* PrivateKeyReader */,
 				AACE31FA2093F9F200B7B806 /* Reminder */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
 				AA69F65C2086A7330054EFCE /* Settings */,
@@ -3030,7 +3038,7 @@
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */,
 				AACE31DF2092A99B00B7B806 /* CertificatePinner.swift in Sources */,
-				51D17A9A20A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift in Sources */,
+				51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				51135705209CF5E200056D65 /* WalletBuySellDelegate.swift in Sources */,
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
@@ -3239,7 +3247,7 @@
 				C723F3461F61D35300A858A9 /* TransactionDetailViewModel.m in Sources */,
 				C79672841FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m in Sources */,
 				C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */,
-				51D17A9920A33A700071E7E0 /* WalletManager+PrivateKeyReader.swift in Sources */,
+				51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				2322DCC61D771831000E5AC1 /* SRSecurityPolicy.m in Sources */,
 				C7BD107B209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
 				9F61B89E151519EF0083C57A /* BCAddressSelectionView.m in Sources */,
@@ -3305,7 +3313,7 @@
 				5168564C2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
-				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
+				673107F219F6D49F00BE6899 /* LegacyPrivateKeyReader.m in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
