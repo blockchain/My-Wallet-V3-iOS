@@ -217,8 +217,8 @@ extension WalletManager: WalletDelegate {
         buySellDelegate?.initializeWebView()
     }
 
-    func didCompleteTrade(_ tradeDict: [AnyHashable : Any]!) {
-        guard let trade = Trade(dict: tradeDict as! [String : String]) else {
+    func didCompleteTrade(_ tradeDict: [AnyHashable: Any]!) {
+        guard let trade = Trade(dict: tradeDict as! [String: String]) else {
             print("Failed to create Trade object.")
             return
         }
