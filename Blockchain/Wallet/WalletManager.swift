@@ -37,6 +37,7 @@ class WalletManager: NSObject {
     @objc weak var recoveryDelegate: WalletRecoveryDelegate?
     @objc weak var accountInfoAndExchangeRatesDelegate: WalletAccountInfoAndExchangeRatesDelegate?
     @objc weak var backupDelegate: WalletBackupDelegate?
+    weak var keyImportDelegate: WalletKeyImportDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -254,6 +255,7 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Addresses
+
     func didGenerateNewAddress() {
         addressesDelegate?.didGenerateNewAddress()
     }
@@ -299,12 +301,14 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: ETH Exchange Rate
+
     func didFetchEthExchangeRate(_ rate: NSNumber!) {
         reloadAfterMultiaddressResponse()
         AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
     }
 
     // MARK: - Backup
+
     func didBackupWallet() {
         backupDelegate?.didBackupWallet()
     }
@@ -314,16 +318,29 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Account Info and Exchange Rates on startup
+
     func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
         accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
     }
 
     // MARK: - Recovery
+
     func didRecoverWallet() {
         recoveryDelegate?.didRecoverWallet()
     }
 
     func didFailRecovery() {
         recoveryDelegate?.didFailRecovery()
+    }
+
+    // MARK: - Key Importing
+
+    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void) {
+        keyImportDelegate?.askUserToAddWatchOnlyAddress(address, continueHandler: continueHandler)
+    }
+
+    @objc func scanPrivateKeyForWatchOnlyAddress(_ address: String) {
+        let address = BitcoinAddress(string: address)!
+        keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
     }
 }
