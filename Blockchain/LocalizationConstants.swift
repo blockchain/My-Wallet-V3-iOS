@@ -54,7 +54,6 @@ struct LocalizationConstants {
         static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
         static let cameraAccessDenied = NSLocalizedString("Camera Access Denied", comment: "")
         static let cameraAccessDeniedMessage = NSLocalizedString("Blockchain does not have access to the camera. To enable access, go to your device Settings.", comment: "")
-        static let noPaymentInfo = NSLocalizedString("The server tried sending payment information but failed.", comment: "")
     }
 
     struct Authentication {

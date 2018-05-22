@@ -343,9 +343,9 @@
     }
 }
 
-- (void)didReceivePaymentNoticeWithNotice:(NSString *)notice
+- (void)didReceivePaymentNoticeWithNotice:(NSString *_Nullable)notice
 {
-    if (self.tabViewController.selectedIndex == TAB_SEND && LoadingViewPresenter.sharedInstance.busyView.alpha == 0 && !AuthenticationCoordinator.shared.pinEntryViewController && !self.tabViewController.presentedViewController) {
+    if (notice && self.tabViewController.selectedIndex == TAB_SEND && LoadingViewPresenter.sharedInstance.busyView.alpha == 0 && !AuthenticationCoordinator.shared.pinEntryViewController && !self.tabViewController.presentedViewController) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] handler: nil];
     }
 }
