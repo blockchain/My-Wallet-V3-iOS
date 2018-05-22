@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "RootService.h"
 #import "Blockchain-Swift.h"
 
@@ -16,13 +16,13 @@
 #define BC_STRING_UNKNOWN_KEY_FORMAT NSLocalizedString(@"Unknown key format", comment: nil)
 #define BC_STRING_UNSUPPORTED_PRIVATE_KEY_FORMAT NSLocalizedString(@"Unsupported Private Key Format", comment: nil)
 
-@interface PrivateKeyReader()
+@interface LegacyPrivateKeyReader()
 @property (nonatomic, copy) void (^onClose)();
 @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *captureSession;
 @property (nonatomic) LegacyAssetType assetType;
 @end
-@implementation PrivateKeyReader
+@implementation LegacyPrivateKeyReader
 
 - (id)initWithAssetType:(LegacyAssetType)assetType success:(void (^)(NSString*))__success error:(void (^)(NSString*))__error acceptPublicKeys:(BOOL)acceptPublicKeys busyViewText:(NSString *)text
 {

@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Assets.h"
 
-@interface PrivateKeyReader : UIViewController<AVCaptureMetadataOutputObjectsDelegate>
+@interface LegacyPrivateKeyReader : UIViewController<AVCaptureMetadataOutputObjectsDelegate>
 
 @property(nonatomic, copy) void (^success)(NSString*);
 @property(nonatomic, copy) void (^error)(NSString*);
