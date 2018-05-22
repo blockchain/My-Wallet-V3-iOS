@@ -11,11 +11,11 @@ import Foundation
 /**
  Manager object for push notifications
  */
-class PushNotificationManager {
+class PushNotificationManager: NSObject {
 
     static let shared = PushNotificationManager()
 
-    @objc class func sharedInstace() -> PushNotificationManager {
+    @objc class func sharedInstance() -> PushNotificationManager {
         return shared
     }
 
@@ -48,11 +48,11 @@ class PushNotificationManager {
     ///   - fetchCompletionHandler: the completion handler invoked once processing the remote notification is completed
     func processRemoteNotification(
         from application: UIApplication,
-        userInfo: [AnyHashable : Any],
+        userInfo: [AnyHashable: Any],
         fetchCompletionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
         if application.applicationState == .inactive {
-            application.applicationIconBadgeNumber = application.applicationIconBadgeNumber + 1
+            application.applicationIconBadgeNumber += 1
         }
         fetchCompletionHandler(.noData)
     }
