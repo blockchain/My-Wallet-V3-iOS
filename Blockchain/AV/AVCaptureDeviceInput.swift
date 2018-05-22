@@ -38,7 +38,7 @@ extension AVCaptureDeviceInput {
     /// - Throws: throws an error if there are any issues with retrieving the `AVCaptureDeviceInput`
     @objc static func deviceInputForQRScanner() throws -> AVCaptureDeviceInput {
         guard let device = AVCaptureDevice.default(for: .video) else {
-            throw AVCaptureDeviceError(type: .failedToRetrieveDevice)
+            throw AVCaptureDeviceError(type: .failedToRetrieveDevice, description: LocalizationConstants.Errors.failedToRetrieveDevice)
         }
         do {
             return try AVCaptureDeviceInput(device: device)
@@ -46,7 +46,7 @@ extension AVCaptureDeviceInput {
             guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else {
                 throw AVCaptureDeviceError(type: .notAuthorized)
             }
-            throw AVCaptureDeviceError(type: .inputError, description: error.localizedDescription)
+            throw AVCaptureDeviceError(type: .inputError, description: LocalizationConstants.Errors.inputError)
         }
     }
 }
