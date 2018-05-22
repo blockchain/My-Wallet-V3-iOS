@@ -47,6 +47,7 @@ class WalletManager: NSObject {
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
     @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
     weak var swipeAddressDelegate: WalletSwipeAddressDelegate?
+    weak var keyImportDelegate: WalletKeyImportDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -311,6 +312,7 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Addresses
+
     func didGenerateNewAddress() {
         addressesDelegate?.didGenerateNewAddress()
     }
@@ -360,11 +362,13 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: ETH Exchange Rate
+
     func didFetchEthExchangeRate(_ rate: NSNumber!) {
         AppCoordinator.shared.tabControllerManager.didFetchEthExchangeRate(rate)
     }
 
     // MARK: - Backup
+
     func didBackupWallet() {
         backupDelegate?.didBackupWallet()
     }
@@ -374,11 +378,13 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Account Info and Exchange Rates on startup
+
     func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
         accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
     }
 
     // MARK: - Recovery
+
     func didRecoverWallet() {
         recoveryDelegate?.didRecoverWallet()
     }
@@ -489,5 +495,15 @@ extension WalletManager: WalletDelegate {
             addresses: newSwipeAddresses as! [String],
             assetType: AssetType.from(legacyAssetType: assetType)
         )
+
+    // MARK: - Key Importing
+
+    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void) {
+        keyImportDelegate?.askUserToAddWatchOnlyAddress(address, continueHandler: continueHandler)
+    }
+
+    @objc func scanPrivateKeyForWatchOnlyAddress(_ address: String) {
+        let address = BitcoinAddress(string: address)!
+        keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
     }
 }
