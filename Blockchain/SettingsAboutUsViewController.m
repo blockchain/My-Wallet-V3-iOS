@@ -7,7 +7,6 @@
 //
 
 #import "SettingsAboutUsViewController.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface SettingsAboutUsViewController ()
@@ -67,7 +66,8 @@
 
 - (void)rateApp
 {
-    [app rateApp];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate rateApp];
 }
 
 - (void)closeButtonClicked

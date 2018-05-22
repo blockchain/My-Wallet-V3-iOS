@@ -3160,10 +3160,10 @@ SideMenuViewController *sideMenuViewController;
 //    [manualPairView verifyTwoFactorYubiKey];
 //}
 
--(void)rateApp {
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[APP_STORE_LINK_PREFIX stringByAppendingString:APP_STORE_ID]]];
-}
+//-(void)rateApp {
+//
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[APP_STORE_LINK_PREFIX stringByAppendingString:APP_STORE_ID]]];
+//}
 
 //- (void)paymentReceived:(uint64_t)amount showBackupReminder:(BOOL)showBackupReminder
 //{

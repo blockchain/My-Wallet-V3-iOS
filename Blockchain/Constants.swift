@@ -9,6 +9,9 @@
 import UIKit
 
 struct Constants {
+
+    static let AppStoreID = "id493253309"
+
     struct Animation {
         static let duration = 0.2
         static let durationLong = 0.5
@@ -95,6 +98,7 @@ struct Constants {
         }
     }
     struct Url {
+        static let appStoreLinkPrefix = "itms-apps://itunes.apple.com/app/"
         static let blockchainSupport = "https://support.blockchain.com"
         static let forgotPassword = "https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
     }

@@ -225,7 +225,7 @@
 //- (void)verifyTwoFactorGoogle;
 //- (void)verifyTwoFactorYubiKey;
 
-- (void)rateApp;
+//- (void)rateApp;
 - (void)authorizationRequired;
 
 - (void)endBackgroundUpdateTask;
