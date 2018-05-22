@@ -16,7 +16,6 @@ class TransferAllCoordinator: Coordinator {
         WalletManager.shared.transferAllDelegate = self
     }
 
-    weak var transferDelegate: TransferAllPromptDelegate?
     var transferAllController: TransferAllFundsViewController?
 
     func start() {
