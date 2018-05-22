@@ -16,7 +16,7 @@
 #import "UIViewController+AutoDismiss.h"
 #import "LocalizationConstants.h"
 #import "TransactionsBitcoinViewController.h"
-#import "PrivateKeyReader.h"
+#import "LegacyPrivateKeyReader.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "TransferAllFundsBuilder.h"
 #import "BCNavigationController.h"
@@ -40,7 +40,7 @@ typedef enum {
 - (void)stopReadingQRCode;
 @end
 
-@interface SendBitcoinViewController () <UITextFieldDelegate, TransferAllFundsDelegate, FeeSelectionDelegate, ConfirmPaymentViewDelegate>
+@interface SendBitcoinViewController () <UITextFieldDelegate, TransferAllFundsDelegate, FeeSelectionDelegate, ConfirmPaymentViewDelegate, LegacyPrivateKeyDelegate>
 
 @property (nonatomic) TransactionType transactionType;
 
@@ -1032,25 +1032,25 @@ BOOL displayingLocalSymbolSend;
 
 - (void)scanPrivateKeyToSendFromWatchOnlyAddress
 {
-    NSError *error;
-    AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputForQRScannerAndReturnError:&error];
-    if (!deviceInput) {
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
-            [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
-        } else {
-            [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
-        }
-        return;
-    }
-    
-    PrivateKeyReader *privateKeyScanner = [[PrivateKeyReader alloc] initWithAssetType:self.assetType success:^(NSString *privateKeyString) {
-        [WalletManager.sharedInstance.wallet sendFromWatchOnlyAddress:self.fromAddress privateKey:privateKeyString];
-    } error:^(NSString *error) {
-        [[ModalPresenter sharedInstance] closeAllModals];
-    } acceptPublicKeys:NO busyViewText:BC_STRING_LOADING_PROCESSING_KEY];
+    PrivateKeyReader *privateKeyScanner = [[PrivateKeyReader alloc] initWithAssetType:self.assetType acceptPublicKeys:NO];
+    if (privateKeyScanner) {
+        privateKeyScanner.legacyDelegate = self;
+        privateKeyScanner.loadingText = [LocalizationConstantsObjcBridge loadingProcessingKey];
+        [privateKeyScanner startReadingQRCode];
 
-    TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    [tabControllerManager.tabViewController presentViewController:privateKeyScanner animated:YES completion:nil];
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager.tabViewController presentViewController:privateKeyScanner animated:YES completion:nil];
+    }
+}
+
+#pragma mark - LegacyPrivateKeyDelegate
+
+- (void)didFinishScanning:(NSString *)privateKey {
+    [WalletManager.sharedInstance.wallet sendFromWatchOnlyAddress:self.fromAddress privateKey:privateKey];
+}
+
+- (void)didFinishScanningWithError:(PrivateKeyReaderError)error {
+    [[ModalPresenter sharedInstance] closeAllModals];
 }
 
 - (void)setupFees
