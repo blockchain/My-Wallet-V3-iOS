@@ -3335,40 +3335,55 @@
 
 /* Begin Key Importer */
 
-- (void)on_add_private_key_start
-{
-    // TODO: remove bridging function call
-    [[KeyImporter sharedInstance] on_add_private_key_start];
-}
-
 - (void)on_add_key:(NSString*)address
 {
     // TODO: call Swift `importKey` directly once available
-    [[KeyImporter sharedInstance] on_add_keyWithAddress:address];
+    [[KeyImportCoordinator sharedInstance] on_add_keyWithAddress:address];
 }
 
 - (void)on_add_incorrect_private_key:(NSString *)address
 {
     // TODO: remove bridging function call
-    [[KeyImporter sharedInstance] on_add_incorrect_private_keyWithAddress:address];
+    [[KeyImportCoordinator sharedInstance] on_add_incorrect_private_keyWithAddress:address];
+}
+
+- (void)on_add_private_key_start
+{
+    // TODO: remove bridging function call
+    [[KeyImportCoordinator sharedInstance] on_add_private_key_start];
 }
 
 - (void)on_add_private_key_to_legacy_address:(NSString *)address
 {
     // TODO: remove bridging function call
-    [[KeyImporter sharedInstance] on_add_private_key_to_legacy_addressWithAddress:address];
+    [[KeyImportCoordinator sharedInstance] on_add_private_key_to_legacy_addressWithAddress:address];
 }
 
 - (void)on_error_adding_private_key:(NSString*)error
 {
     // TODO: remove bridging function call
-    [[KeyImporter sharedInstance] on_error_adding_private_keyWithError:error];
+    [[KeyImportCoordinator sharedInstance] on_error_adding_private_keyWithError:error];
 }
 
 - (void)on_error_adding_private_key_watch_only:(NSString*)error
 {
     // TODO: remove bridging function call
-    [[KeyImporter sharedInstance] on_error_adding_private_key_watch_onlyWithError:error];
+    [[KeyImportCoordinator sharedInstance] on_error_adding_private_key_watch_onlyWithError:error];
+}
+
+- (void)on_error_import_key_for_sending_from_watch_only:(NSString *)error
+{
+    [self loading_stop];
+
+    if ([error isEqualToString:[ConstantsObjcBridge wrongPrivateKey]]) {
+        if ([self.delegate respondsToSelector:@selector(alertUserOfInvalidPrivateKey)]) {
+            [self.delegate alertUserOfInvalidPrivateKey];
+        }
+    } else if ([error isEqualToString:[ConstantsObjcBridge wrongBip38Password]]) {
+        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge incorrectBip38Password] title:[LocalizationConstantsObjcBridge error] handler:nil];
+    } else {
+        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] handler: nil];
+    }
 }
 
 /* End Key Importer */
@@ -3884,22 +3899,6 @@
     DLog(@"on_success_import_key_for_sending_from_watch_only");
     if ([self.delegate respondsToSelector:@selector(sendFromWatchOnlyAddress)]) {
         [self.delegate sendFromWatchOnlyAddress];
-    }
-}
-
-- (void)on_error_import_key_for_sending_from_watch_only:(NSString *)error
-{
-    [self loading_stop];
-
-    DLog(@"on_error_import_key_for_sending_from_watch_only");
-    if ([error isEqualToString:ERROR_WRONG_PRIVATE_KEY]) {
-        if ([self.delegate respondsToSelector:@selector(alertUserOfInvalidPrivateKey)]) {
-            [self.delegate alertUserOfInvalidPrivateKey];
-        }
-    } else if ([error isEqualToString:[[KeyImporter sharedInstance] wrongBip38Password]]) {
-        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge incorrectBip38Password] title:[LocalizationConstantsObjcBridge error] handler:nil];
-    } else {
-        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] handler: nil];
     }
 }
 
