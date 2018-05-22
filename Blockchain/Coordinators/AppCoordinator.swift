@@ -202,12 +202,6 @@ import Foundation
         slidingViewController.resetTopView(animated: true)
     }
 
-    @objc func setupTransferAllFunds() {
-        let coordinator = TransferAllCoordinator.shared
-        coordinator.transferAllController = nil
-        tabControllerManager.setupTransferAllFunds()
-    }
-
     /// Reloads contained view controllers
     @objc func reload() {
         tabControllerManager.reload()

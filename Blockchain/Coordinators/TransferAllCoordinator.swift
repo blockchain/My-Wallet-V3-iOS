@@ -9,14 +9,20 @@
 import Foundation
 
 /// Coordinator for the transfer all flow.
-class TransferAllCoordinator: Coordinator {
+@objc class TransferAllCoordinator: NSObject, Coordinator {
     static let shared = TransferAllCoordinator()
 
-    private init() {
+    // class function declared so that the TransferAllCoordinator singleton can be accessed from obj-C
+    @objc class func sharedInstance() -> TransferAllCoordinator {
+        return TransferAllCoordinator.shared
+    }
+    
+    private override init() {
+        super.init()
         WalletManager.shared.transferAllDelegate = self
     }
 
-    var transferAllController: TransferAllFundsViewController?
+    private var transferAllController: TransferAllFundsViewController?
 
     func start() {
         transferAllController = TransferAllFundsViewController()
@@ -27,6 +33,16 @@ class TransferAllCoordinator: Coordinator {
         )
         let tabViewController = AppCoordinator.shared.tabControllerManager.tabViewController
         tabViewController?.topMostViewController!.present(navigationController!, animated: true, completion: nil)
+    }
+    
+    @objc func start(withDelegate delegate: TransferAllPromptDelegate) {
+        start()
+        transferAllController?.delegate = delegate
+    }
+    
+    @objc func startWithSendScreen() {
+        transferAllController = nil
+        AppCoordinator.shared.tabControllerManager.setupTransferAllFunds()
     }
 }
 

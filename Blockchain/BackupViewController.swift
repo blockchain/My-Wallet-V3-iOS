@@ -65,8 +65,7 @@ import UIKit
                 let alertToTransferAll = UIAlertController(title: NSLocalizedString("Transfer imported addresses?", comment: ""), message: NSLocalizedString("Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup.", comment: ""), preferredStyle: .alert)
                 alertToTransferAll.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
                 alertToTransferAll.addAction(UIAlertAction(title: NSLocalizedString("Transfer all", comment: ""), style: .default, handler: { _ in
-                    TransferAllCoordinator.shared.start()
-                    TransferAllCoordinator.shared.transferAllController?.delegate = self
+                    TransferAllCoordinator.shared.start(withDelegate: self)
                 }))
                 present(alertToTransferAll, animated: true, completion: nil)
             }
