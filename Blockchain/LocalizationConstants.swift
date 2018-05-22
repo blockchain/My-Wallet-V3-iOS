@@ -53,6 +53,8 @@ struct LocalizationConstants {
         static let errorLoadingWalletIdentifierFromKeychain = NSLocalizedString("An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.", comment: "")
         static let cameraAccessDenied = NSLocalizedString("Camera Access Denied", comment: "")
         static let cameraAccessDeniedMessage = NSLocalizedString("Blockchain does not have access to the camera. To enable access, go to your device Settings.", comment: "")
+        static let failedToRetrieveDevice = NSLocalizedString("Unable to retrieve the input device.", comment: "AVCaptureDeviceError: failedToRetrieveDevice")
+        static let inputError = NSLocalizedString("There was an error with the device input.", comment: "AVCaptureDeviceError: inputError")
     }
 
     struct Authentication {
@@ -138,6 +140,7 @@ struct LocalizationConstants {
         static let importedWatchOnlyAddressArgument = NSLocalizedString("Imported watch-only address %@", comment: "")
         static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
         static let loadingImportKey = NSLocalizedString("Importing key", comment: "")
+        static let loadingProcessingKey = NSLocalizedString("Processing key", comment: "")
         static let importedKeyButForIncorrectAddress = NSLocalizedString("You've successfully imported a private key.", comment: "")
         static let importedKeyDoesNotCorrespondToAddress = NSLocalizedString("NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.", comment: "")
         static let importedKeySuccess = NSLocalizedString("You can now spend from this address.", comment: "")
@@ -191,7 +194,13 @@ struct LocalizationConstants {
 
     @objc class func loadingImportKey() -> String { return LocalizationConstants.AddressAndKeyImport.loadingImportKey }
 
+    @objc class func loadingProcessingKey() -> String { return LocalizationConstants.AddressAndKeyImport.loadingProcessingKey }
+
     @objc class func incorrectBip38Password() -> String { return LocalizationConstants.AddressAndKeyImport.incorrectBip38Password }
 
     @objc class func scanQRCode() -> String { return LocalizationConstants.scanQRCode }
+
+    @objc class func unknownKeyFormat() -> String { return LocalizationConstants.AddressAndKeyImport.unknownKeyFormat }
+
+    @objc class func unsupportedPrivateKey() -> String { return LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey }
 }
