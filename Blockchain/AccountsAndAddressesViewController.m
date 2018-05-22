@@ -12,7 +12,6 @@
 #import "ReceiveTableCell.h"
 #import "BCCreateAccountView.h"
 #import "BCModalViewController.h"
-#import "LegacyPrivateKeyReader.h"
 #import "UIViewController+AutoDismiss.h"
 #import "Blockchain-Swift.h"
 #import "UIView+ChangeFrameAttribute.h"
