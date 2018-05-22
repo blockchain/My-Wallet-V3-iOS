@@ -256,7 +256,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define ERROR_BELOW_DUST_THRESHOLD @"BELOW_DUST_THRESHOLD"
 #define ERROR_NO_UNSPENT_OUTPUTS @"NO_UNSPENT_OUTPUTS"
 #define ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL @"The number of destiny addresses and destiny amounts should be the same."
-#define ERROR_WRONG_PRIVATE_KEY @"wrongPrivateKey"
 #define ERROR_TYPE_MUST_START_WITH_NUMBER @"TypeError: must start with number"
 #define ERROR_FIRST_ARGUMENT_MUST_BE_STRING @"TypeError: First argument must be a string"
 #define ERROR_INVALID_PAIRING_VERSION_CODE @"Invalid Pairing Version Code"
