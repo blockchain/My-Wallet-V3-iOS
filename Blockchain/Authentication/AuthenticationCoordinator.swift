@@ -84,11 +84,7 @@ import Foundation
         UIApplication.shared.setStatusBarHidden(false, with: .slide)
 
         /// Prompt the user for push notification permission
-        if #available(iOS 10.0, *) {
-            PushNotificationManager.shared.requestAuthorization()
-        } else {
-            LegacyPushNotificationManager.shared.requestAuthorization()
-        }
+        PushNotificationManager.shared.requestAuthorization()
 
         // Handle post authentication route, if any
         if let route = strongSelf.postAuthenticationRoute {

@@ -222,6 +222,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        PushNotificationManager.shared.processRemoteNotification(
+            from: application,
+            userInfo: userInfo,
+            fetchCompletionHandler: completionHandler
+        )
+    }
+
     // MARK: - State Checks
 
     func checkForNewInstall() {

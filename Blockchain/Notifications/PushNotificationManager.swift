@@ -9,25 +9,9 @@
 import Foundation
 
 /**
- Manager object for push notifications for iOS versions < 10.0.
- */
-@available(iOS, deprecated: 10.0, message: "Use PushNotificationManager")
-class LegacyPushNotificationManager {
-    static let shared = LegacyPushNotificationManager()
-
-    /// Requests permission from the user to grant access to receive push notifications
-    func requestAuthorization() {
-        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
-        UIApplication.shared.registerUserNotificationSettings(notificationSettings)
-    }
-}
-
-/**
  Manager object for push notifications
  */
-@available(iOS 10.0, *)
-@objc
-class PushNotificationManager: NSObject {
+class PushNotificationManager {
 
     static let shared = PushNotificationManager()
 
@@ -37,6 +21,11 @@ class PushNotificationManager: NSObject {
 
     /// Requests permission from the user to grant access to receive push notifications
     func requestAuthorization() {
+        guard #available(iOS 10.0, *) else {
+            requestAuthorizationPreIos10()
+            return
+        }
+
         let userNotificationCenter = UNUserNotificationCenter.current()
         userNotificationCenter.requestAuthorization(options: [.sound, .alert, .badge]) { _, error in
             guard error == nil else {
@@ -49,5 +38,29 @@ class PushNotificationManager: NSObject {
                 UIApplication.shared.registerForRemoteNotifications()
             }
         }
+    }
+
+    /// Processes a received remote notification.
+    ///
+    /// - Parameters:
+    ///   - application: the application receiving the remote notification
+    ///   - userInfo: the payload associated with the remote notification
+    ///   - fetchCompletionHandler: the completion handler invoked once processing the remote notification is completed
+    func processRemoteNotification(
+        from application: UIApplication,
+        userInfo: [AnyHashable : Any],
+        fetchCompletionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        if application.applicationState == .inactive {
+            application.applicationIconBadgeNumber = application.applicationIconBadgeNumber + 1
+        }
+        fetchCompletionHandler(.noData)
+    }
+
+    // MARK: - Pre iOS 10 Methods
+
+    private func requestAuthorizationPreIos10() {
+        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(notificationSettings)
     }
 }

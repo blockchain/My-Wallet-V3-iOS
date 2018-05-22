@@ -493,16 +493,16 @@ SideMenuViewController *sideMenuViewController;
 //    self.deviceToken = [token copy];
 //}
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
-{
-    DLog(@"didReceiveRemoteNotification");
-    if (application.applicationState == UIApplicationStateInactive) {
-        NSInteger badgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber + 1];
-    }
-
-    completionHandler(UIBackgroundFetchResultNoData);
-}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
+//{
+//    DLog(@"didReceiveRemoteNotification");
+//    if (application.applicationState == UIApplicationStateInactive) {
+//        NSInteger badgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+//        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber + 1];
+//    }
+//
+//    completionHandler(UIBackgroundFetchResultNoData);
+//}
 
 //- (void)applicationWillTerminate:(UIApplication *)application
 //{
