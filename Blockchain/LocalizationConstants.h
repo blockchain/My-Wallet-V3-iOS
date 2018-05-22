@@ -217,7 +217,6 @@
 #define BC_STRING_LOADING_CREATING_V3_WALLET NSLocalizedString(@"Creating V3 Wallet", nil)
 #define BC_STRING_LOADING_CREATING NSLocalizedString(@"Creating", nil)
 #define BC_STRING_LOADING_CREATING_WALLET NSLocalizedString(@"Creating new Wallet", nil)
-#define BC_STRING_LOADING_PROCESSING_KEY NSLocalizedString(@"Processing key", nil)
 #define BC_STRING_LOADING_CREATING_NEW_ADDRESS NSLocalizedString(@"Creating new address", nil)
 #define BC_STRING_LOADING_CREATING_REQUEST NSLocalizedString(@"Creating request", nil)
 #define BC_STRING_LOADING_CREATING_INVITATION NSLocalizedString(@"Creating invitation", nil)
