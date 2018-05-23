@@ -83,7 +83,6 @@
 - (void)didFailGetHistory:(NSString *_Nullable)error;
 - (void)resendTwoFactorSuccess;
 - (void)resendTwoFactorError:(NSString *)error;
-- (void)didFailToImportPrivateKeyForWatchOnlyAddress:(NSString *)error;
 - (void)returnToAddressesScreen;
 - (void)sendFromWatchOnlyAddress;
 - (void)estimateTransactionSize:(uint64_t)size;
