@@ -61,7 +61,7 @@ import Foundation
     }
 
     // MARK: - Temporary Objective-C bridging methods for backwards compatibility
-
+  
     @objc func on_add_private_key_start() {
         walletManager.wallet.isSyncing = true
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.AddressAndKeyImport.loadingImportKey)
