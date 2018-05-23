@@ -26,28 +26,24 @@
 {
     [super awakeFromNib];
     self.labelBusy.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+    self.containerView.layer.cornerRadius = 5;
 }
 
 - (void)fadeIn {
-    self.containerView.layer.cornerRadius = 5;
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationDelegate:self];
-    self.alpha = 1.0;
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 1.0;
+    }];
 }
 
 - (void)fadeOut {
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationDidStopSelector:@selector(removeModalView)];
-    self.alpha = 0.0;
-    [UIView commitAnimations];
-}
-
-- (void)removeModalView {
-    [self removeFromSuperview];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 0.0;
+    }];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 @end

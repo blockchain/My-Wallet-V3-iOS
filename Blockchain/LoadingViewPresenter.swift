@@ -13,12 +13,16 @@ import Foundation
 
     static let shared = LoadingViewPresenter()
 
-    @objc private(set) lazy var busyView: BCFadeView = {
+    @objc private lazy var busyView: BCFadeView = {
         let busyView = BCFadeView.instanceFromNib()
         busyView.frame = UIScreen.main.bounds
         busyView.alpha = 0.0
         return busyView
     }()
+
+    @objc var isLoadingShown: Bool {
+        return busyView.superview != nil && busyView.alpha == 1.0
+    }
 
     /// sharedInstance function declared so that the LoadingViewPresenter singleton can be accessed
     /// from Obj-C. Should deprecate this once all Obj-c references have been removed.
@@ -26,10 +30,6 @@ import Foundation
 
     private override init() {
         super.init()
-    }
-
-    func initialize() {
-        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(busyView)
     }
 
     @objc func hideBusyView() {
@@ -40,9 +40,12 @@ import Foundation
             return
         }
 
-        if busyView.alpha == 1.0 {
-            busyView.fadeOut()
+        guard isLoadingShown else {
+            return
         }
+
+        // After fading out is completed, it will also be removed from the superview
+        busyView.fadeOut()
     }
 
     @objc func showBusyView(withLoadingText text: String) {
@@ -53,28 +56,19 @@ import Foundation
             return
         }
 
-        // TODO: state check for pinEntryViewController should not be here
-        if let pinEntryViewController = topMostViewController as? PEPinEntryController {
-            if pinEntryViewController.inSettings &&
-                text != LocalizationConstants.syncingWallet &&
-                text != LocalizationConstants.verifying {
-                print("Verify optional PIN view is presented - will not update busy views unless verifying or syncing")
-                return
-            }
-        }
-
         if AppCoordinator.shared.tabControllerManager.isSending() && ModalPresenter.shared.modalView != nil {
             print("Send progress modal is presented - will not show busy view")
             return
         }
 
-        busyView.labelBusy.text = text
-
-        UIApplication.shared.keyWindow?.rootViewController?.view.bringSubview(toFront: busyView)
-
-        if busyView.alpha < 1.0 {
-            busyView.fadeIn()
+        guard !isLoadingShown else {
+            return
         }
+
+        attachToMainWindow()
+
+        busyView.labelBusy.text = text
+        busyView.fadeIn()
     }
 
     @objc func updateBusyViewLoadingText(text: String) {
@@ -85,18 +79,30 @@ import Foundation
             return
         }
 
-        // TODO: state check for pinEntryViewController should not be here
-        if let pinEntryViewController = topMostViewController as? PEPinEntryController {
-            if pinEntryViewController.inSettings &&
-                text != LocalizationConstants.syncingWallet &&
-                text != LocalizationConstants.verifying {
-                print("Verify optional PIN view is presented - will not update busy views unless verifying or syncing")
-                return
-            }
+        guard isLoadingShown else {
+            return
         }
 
-        if busyView.alpha == 1.0 {
-            busyView.labelBusy.text = text
+        busyView.labelBusy.text = text
+    }
+
+    private func attachToMainWindow() {
+        guard !isLoadingShown else {
+            print("Loading view already attached.")
+            return
+        }
+
+        for window in UIApplication.shared.windows.reversed() {
+            let onMainScreen    = window.screen == UIScreen.main
+            let isVisible       = !window.isHidden && window.alpha > 0
+            let levelIsNormal   = window.windowLevel == UIWindowLevelNormal
+            let levelIsStatus   = window.windowLevel == UIWindowLevelStatusBar
+
+            if onMainScreen && isVisible && (levelIsNormal || levelIsStatus) {
+                window.addSubview(busyView)
+                busyView.frame = window.bounds
+                break
+            }
         }
     }
 }

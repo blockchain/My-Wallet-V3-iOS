@@ -92,9 +92,6 @@ import Foundation
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
 
-        // Add busy view
-        LoadingViewPresenter.shared.initialize()
-
         // Display welcome screen if no wallet is authenticated
         if BlockchainSettings.App.shared.guid == nil || BlockchainSettings.App.shared.sharedKey == nil {
             OnboardingCoordinator.shared.start()

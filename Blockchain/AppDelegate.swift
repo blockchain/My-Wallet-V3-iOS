@@ -15,14 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Properties
 
-    lazy var busyView: BCFadeView? = {
-        guard let windowFrame = UIApplication.shared.keyWindow?.frame else {
-            return BCFadeView(frame: UIScreen.main.bounds)
-        }
-        print(windowFrame)
-        return BCFadeView(frame: windowFrame)
-    }()
-
     /// The overlay shown when the application resigns active state.
     lazy var privacyScreen: UIImageView? = {
         let launchImages = [

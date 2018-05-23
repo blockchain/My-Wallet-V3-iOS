@@ -98,8 +98,6 @@ typealias OnModalResumed = () -> Void
 
         if let previousModalView = modalChain.last {
             topMostView?.addSubview(previousModalView)
-            // TODO: handle busyView
-            // [[UIApplication sharedApplication].keyWindow.rootViewController.view bringSubviewToFront:busyView];
             topMostView?.endEditing(true)
 
             modalView.onResume?()
