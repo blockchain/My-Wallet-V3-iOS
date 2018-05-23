@@ -495,6 +495,7 @@ extension WalletManager: WalletDelegate {
             addresses: newSwipeAddresses as! [String],
             assetType: AssetType.from(legacyAssetType: assetType)
         )
+    }
 
     // MARK: - Key Importing
 

@@ -203,11 +203,9 @@ struct LocalizationConstants {
 
     @objc class func scanQRCode() -> String { return LocalizationConstants.scanQRCode }
 
-<<<<<<< HEAD
     @objc class func nameAlreadyInUse() -> String { return LocalizationConstants.Errors.nameAlreadyInUse }
-=======
+
     @objc class func unknownKeyFormat() -> String { return LocalizationConstants.AddressAndKeyImport.unknownKeyFormat }
 
     @objc class func unsupportedPrivateKey() -> String { return LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey }
->>>>>>> feat(Localization Constants): update constants for address importing
 }
