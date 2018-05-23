@@ -677,7 +677,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
         if (showBackupReminder) {
-            [app showBackupReminder:YES];
+            [ReminderPresenter.sharedInstance showBackupReminderWithFirstReceive:YES];
         } else if ([self.amountInputView.btcField isFirstResponder] || [self.amountInputView.fiatField isFirstResponder]) {
             [self.lastSelectedField becomeFirstResponder];
         }

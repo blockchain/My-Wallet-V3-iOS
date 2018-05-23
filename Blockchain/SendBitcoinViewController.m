@@ -1991,9 +1991,10 @@ BOOL displayingLocalSymbolSend;
             
             // do something useful with results
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSDictionary *dict = [app parseURI:[metadataObj stringValue] prefix:[ConstantsObjcBridge bitcoinUriPrefix]];
-                
-                NSString *address = [dict objectForKey:DICTIONARY_KEY_ADDRESS];
+                NSURL *url = [NSURL URLWithString:[metadataObj stringValue]];
+                BitcoinURLPayload *payload = [[BitcoinURLPayload alloc] initWithUrl:url];
+
+                NSString *address = payload.address;
                 
                 if (address == nil || ![WalletManager.sharedInstance.wallet isValidAddress:address assetType:self.assetType]) {
                     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR handler: nil];
@@ -2010,7 +2011,7 @@ BOOL displayingLocalSymbolSend;
                 
                 self.addressSource = DestinationAddressSourceQR;
                 
-                NSString *amountStringFromDictionary = [dict objectForKey:DICTIONARY_KEY_AMOUNT];
+                NSString *amountStringFromDictionary = payload.amount;
                 if ([NSNumberFormatter stringHasBitcoinValue:amountStringFromDictionary]) {
                     if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc) {
                         NSDecimalNumber *amountDecimalNumber = [NSDecimalNumber decimalNumberWithString:amountStringFromDictionary];

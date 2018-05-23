@@ -3460,7 +3460,7 @@
 {
     DLog(@"on_error_maintenance_mode");
     [self loading_stop];
-    [app.pinEntryViewController reset];
+    [AuthenticationCoordinator.sharedInstance.pinEntryViewController reset];
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_MAINTENANCE_MODE title:BC_STRING_ERROR handler: nil];
 }
 
