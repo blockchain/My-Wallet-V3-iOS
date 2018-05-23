@@ -354,8 +354,7 @@ import Foundation
             rootViewController.view.addSubview(pinViewController.view)
 //            }
         } else {
-            let topMostViewController = rootViewController.topMostViewController
-            topMostViewController?.present(pinViewController, animated: true) { [weak self] in
+            rootViewController.present(pinViewController, animated: true) { [weak self] in
                 guard let strongSelf = self else { return }
 
                 // Can both of these alerts be moved elsewhere?                                     
