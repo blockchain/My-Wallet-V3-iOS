@@ -9,14 +9,14 @@
 import Foundation
 
 protocol PrivateKeyReaderDelegate: class {
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError)
     func didFinishScanning(_ privateKey: String, for address: AssetAddress?)
+    func didFinishScanningWithError(_ error: PrivateKeyReaderError)
 }
 
 // TODO: remove once AccountsAndAddresses and SendBitcoinViewController are migrated to Swift
 @objc protocol LegacyPrivateKeyDelegate: class {
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError)
     func didFinishScanning(_ privateKey: String)
+    func didFinishScanningWithError(_ error: PrivateKeyReaderError)
 }
 
 @objc enum PrivateKeyReaderError: Int {
@@ -50,17 +50,21 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     //: Legacy Objc delegate to support Legacy asset types
     @objc weak var legacyDelegate: LegacyPrivateKeyDelegate?
 
-    private var acceptPublicKeys: Bool!
+    @objc var acceptPublicKeys = false
 
-    @objc var loadingText: String!
+    @objc var publicKey: String?
+
+    @objc var loadingText: String
 
     // MARK: - Initialization
 
-    init?(assetType: AssetType = .bitcoin, acceptPublicKeys: Bool = false) {
+    /// - Parameters:
+    ///   - assetType: the asset type used in the key import context
+    ///   - publicKey: the public key used for scanning the respective private key
+    init?(assetType: AssetType, publicKey: String? = nil) {
         self.assetType = assetType
         legacyAssetType = LegacyAssetType.bitcoin
-        delegate = nil; captureSession = nil; videoPreviewLayer = nil
-        self.acceptPublicKeys = acceptPublicKeys
+        self.publicKey = publicKey
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)
         self.modalTransitionStyle = .crossDissolve
@@ -70,10 +74,10 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     }
 
     // TODO: remove once AccountsAndAddresses and SendBitcoinViewController are migrated to Swift
-    @objc init?(assetType: LegacyAssetType, acceptPublicKeys: Bool = false) {
+    @objc init?(assetType: LegacyAssetType, publicKey: String? = nil) {
         legacyAssetType = assetType
-        self.assetType = nil; delegate = nil; captureSession = nil; videoPreviewLayer = nil
-        self.acceptPublicKeys = acceptPublicKeys
+        self.assetType = nil
+        self.publicKey = publicKey
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)
         self.modalTransitionStyle = .crossDissolve
@@ -145,10 +149,6 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     // MARK: Class Methods
 
     @objc func startReadingQRCode() {
-        startReadingQRCode(for: nil)
-    }
-
-    func startReadingQRCode(for address: AssetAddress? = nil) {
         let captureMetadataOutput = AVCaptureMetadataOutput()
         captureSession?.addOutput(captureMetadataOutput)
 
