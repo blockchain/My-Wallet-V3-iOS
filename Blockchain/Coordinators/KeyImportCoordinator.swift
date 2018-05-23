@@ -34,11 +34,10 @@ import Foundation
     private init(walletManager: WalletManager = WalletManager.shared) {
         self.walletManager = walletManager
         super.init()
+        self.walletManager.keyImportDelegate = self
     }
 
-    func start() {
-        walletManager.keyImportDelegate = self
-    }
+    func start() {}
 
     // MARK: - Temporary Objective-C bridging methods for backwards compatibility
 
