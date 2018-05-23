@@ -45,6 +45,10 @@ class PasswordConfirmView: UIView {
         confirmHandler?(passwordText)
         textFieldPassword.text = nil
     }
+
+    func updateLabelDescription(text: String) {
+        labelDescription.text = text.count > 0 ? text : LocalizationConstants.Authentication.secondPasswordDefaultDescription
+    }
 }
 
 extension PasswordConfirmView: UITextFieldDelegate {

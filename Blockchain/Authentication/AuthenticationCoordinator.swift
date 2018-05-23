@@ -412,6 +412,7 @@ import Foundation
         confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler
     ) {
         let passwordConfirmView = PasswordConfirmView.instanceFromNib()
+        passwordConfirmView.updateLabelDescription(text: displayText)
         passwordConfirmView.validateSecondPassword = validateSecondPassword
         passwordConfirmView.confirmHandler = { [unowned self] password in
             guard password.count > 0 else {

@@ -83,6 +83,7 @@ struct LocalizationConstants {
         static let manualPairingAuthorizationRequiredMessage = NSLocalizedString("Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.", comment: "")
         static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
         static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
+        static let secondPasswordDefaultDescription = NSLocalizedString("This action requires the second password for your wallet. Please enter it below and press continue.", comment: "")
         static let password = NSLocalizedString("Password", comment: "")
     }
 
