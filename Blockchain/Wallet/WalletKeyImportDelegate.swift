@@ -18,7 +18,7 @@ protocol WalletKeyImportDelegate: class {
 
     func alertUserOfInvalidPrivateKey()
 
-    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void)
+    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, then: @escaping () -> Void)
 
     func didImportIncorrectPrivateKey()
 
