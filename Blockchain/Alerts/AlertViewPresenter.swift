@@ -93,6 +93,12 @@ import Foundation
         }
     }
 
+    @objc func showWaitingForEtherPaymentAlert() {
+        standardNotify(
+            message: LocalizationConstants.SendEther.waitingForPaymentToFinishMessage,
+            title: LocalizationConstants.SendEther.waitingForPaymentToFinishTitle)
+    }
+
     /// Displays the standard error alert
     @objc func standardError(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
         standardNotify(message: message, title: title, handler: handler)

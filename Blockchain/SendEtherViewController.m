@@ -405,7 +405,10 @@
 
 - (void)reallyDoPayment
 {
-    if ([app checkIfWaitingOnEtherTransaction]) return;
+    if ([[WalletManager sharedInstance].wallet isWaitingOnEtherTransaction]) {
+        [[AlertViewPresenter sharedInstance] showWaitingForEtherPaymentAlert];
+        return;
+    }
     
     UIView *sendView = [[UIView alloc] initWithFrame:self.view.frame];
     

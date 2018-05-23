@@ -161,7 +161,12 @@
 
 - (void)confirmButtonClicked
 {
-    if ([[self.trade.depositCurrency uppercaseString] isEqualToString:CURRENCY_SYMBOL_ETH] && [app checkIfWaitingOnEtherTransaction]) return;
+    if ([[self.trade.depositCurrency uppercaseString] isEqualToString:CURRENCY_SYMBOL_ETH]) return;
+
+    if ([[WalletManager sharedInstance].wallet isWaitingOnEtherTransaction]) {
+        [[AlertViewPresenter sharedInstance] showWaitingForEtherPaymentAlert];
+        return;
+    }
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     [navigationController showBusyViewWithLoadingText:BC_STRING_CONFIRMING];

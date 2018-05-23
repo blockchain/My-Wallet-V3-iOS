@@ -159,6 +159,11 @@ struct LocalizationConstants {
         static let addWatchOnlyAddressWarning = NSLocalizedString("You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address.", comment: "")
         static let addWatchOnlyAddressWarningPrompt = NSLocalizedString("These options are recommended for advanced users only. Continue?", comment: "")
     }
+
+    struct SendEther {
+        static let waitingForPaymentToFinishTitle = NSLocalizedString("Waiting for payment", comment: "")
+        static let waitingForPaymentToFinishMessage = NSLocalizedString("Please wait until your last ether transaction confirms.", comment: "")
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this

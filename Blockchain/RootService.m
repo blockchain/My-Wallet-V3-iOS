@@ -850,24 +850,24 @@ RootService * app;
 //        }
 //    }
 //}
-
-- (BOOL)checkIfWaitingOnEtherTransaction
-{
-    BOOL isWaiting = [WalletManager.sharedInstance.wallet isWaitingOnEtherTransaction];
-
-    if (isWaiting) {
-        UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_TITLE message:BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-        [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
-
-        if (self.window.rootViewController.presentedViewController) {
-            [self.window.rootViewController.presentedViewController presentViewController:errorAlert animated:YES completion:nil];
-        } else {
-            [self.window.rootViewController presentViewController:errorAlert animated:YES completion:nil];
-        }
-    }
-
-    return isWaiting;
-}
+//
+//- (BOOL)checkIfWaitingOnEtherTransaction
+//{
+//    BOOL isWaiting = [WalletManager.sharedInstance.wallet isWaitingOnEtherTransaction];
+//
+//    if (isWaiting) {
+//        UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_TITLE message:BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
+//        [errorAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
+//
+//        if (self.window.rootViewController.presentedViewController) {
+//            [self.window.rootViewController.presentedViewController presentViewController:errorAlert animated:YES completion:nil];
+//        } else {
+//            [self.window.rootViewController presentViewController:errorAlert animated:YES completion:nil];
+//        }
+//    }
+//
+//    return isWaiting;
+//}
 
 //#pragma mark - AlertView Helpers
 //
