@@ -3373,17 +3373,8 @@
 
 - (void)on_error_import_key_for_sending_from_watch_only:(NSString *)error
 {
-    [self loading_stop];
-
-    if ([error isEqualToString:[ConstantsObjcBridge wrongPrivateKey]]) {
-        if ([self.delegate respondsToSelector:@selector(alertUserOfInvalidPrivateKey)]) {
-            [self.delegate alertUserOfInvalidPrivateKey];
-        }
-    } else if ([error isEqualToString:[ConstantsObjcBridge wrongBip38Password]]) {
-        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge incorrectBip38Password] title:[LocalizationConstantsObjcBridge error] handler:nil];
-    } else {
-        [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] handler: nil];
-    }
+    // TODO: remove bridging function call
+    [[KeyImportCoordinator sharedInstance] on_error_adding_private_key_watch_onlyWithError:error];
 }
 
 /* End Key Importer */

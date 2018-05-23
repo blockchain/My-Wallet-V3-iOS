@@ -16,11 +16,15 @@ protocol WalletKeyImportDelegate: class {
 
     func alertUserOfImportedPrivateKeyIntoLegacyAddress()
 
+    func alertUserOfInvalidPrivateKey()
+
     func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void)
 
     func didImportIncorrectPrivateKey()
 
     func failedToImportPrivateKey(errorDescription: String)
+
+    func failedToImportPrivateKeyForSendingFromWatchOnlyAddress(errorDescription: String)
 
     func failedToImportPrivateKeyForWatchOnlyAddress(errorDescription: String)
 

@@ -1923,12 +1923,12 @@ RootService * app;
 //    [LoadingViewPresenter.sharedInstance hideBusyView];
 //}
 
-- (void)alertUserOfInvalidPrivateKey
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PRIVATE_KEY title:BC_STRING_ERROR handler: nil];
-    });
-}
+//- (void)alertUserOfInvalidPrivateKey
+//{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INCORRECT_PRIVATE_KEY title:BC_STRING_ERROR handler: nil];
+//    });
+//}
 
 //- (void)sendFromWatchOnlyAddress
 //{
