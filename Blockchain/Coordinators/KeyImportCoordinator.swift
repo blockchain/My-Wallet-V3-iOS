@@ -23,12 +23,19 @@ import Foundation
         case privateKeyOfAnotherNonWatchOnlyAddress
     }
 
-    static let shared = KeyImportCoordinator()
+    //: Nil if device input is unavailable
+    @objc var privateKeyReader: PrivateKeyReader?
 
     /// Observer key for notifications used throughout this class
     private let backupKey = Constants.NotificationKeys.backupSuccess
 
     private let walletManager: WalletManager
+
+    static let shared = KeyImportCoordinator()
+
+    @objc class func sharedInstance() -> KeyImportCoordinator {
+        return KeyImportCoordinator.shared
+    }
 
     // TODO: Refactor class to support other asset types (currently assumed to be Bitcoin)
     private init(walletManager: WalletManager = WalletManager.shared) {
@@ -37,13 +44,23 @@ import Foundation
         self.walletManager.keyImportDelegate = self
     }
 
-    func start() {}
+    func start() { /* Tasks which do not require scanning should call this */ }
+
+    func start(with delegate: PrivateKeyReaderDelegate, assetType: AssetType = .bitcoin) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType)
+        guard privateKeyReader != nil else { return }
+        privateKeyReader!.delegate = delegate
+        privateKeyReader!.startReadingQRCode()
+    }
+
+    @objc func start(with delegate: LegacyPrivateKeyDelegate, assetType: LegacyAssetType = .bitcoin) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType)
+        guard privateKeyReader != nil else { return }
+        privateKeyReader!.legacyDelegate = delegate
+        privateKeyReader!.startReadingQRCode()
+    }
 
     // MARK: - Temporary Objective-C bridging methods for backwards compatibility
-
-    @objc class func sharedInstance() -> KeyImportCoordinator {
-        return KeyImportCoordinator.shared
-    }
 
     @objc func on_add_private_key_start() {
         walletManager.wallet.isSyncing = true
@@ -115,13 +132,13 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
         AlertViewPresenter.shared.standardNotify(message: importedKeySuccess, title: LocalizationConstants.success, handler: nil)
     }
 
-    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void) {
+    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, then: @escaping () -> Void) {
         let firstLine = LocalizationConstants.AddressAndKeyImport.addWatchOnlyAddressWarning
         let secondLine = LocalizationConstants.AddressAndKeyImport.addWatchOnlyAddressWarningPrompt
         let message = String(format: "%@\n\n%@", firstLine, secondLine)
         let title = LocalizationConstants.Errors.warning
         let continueAction = UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
-            continueHandler()
+            then()
         }
         let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil)
         AlertViewPresenter.shared.standardNotify(message: message, title: title, actions: [continueAction, cancelAction])
@@ -212,9 +229,7 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
             return
         }
 
-        guard let privateKeyReader = PrivateKeyReader() else { return }
-        privateKeyReader.delegate = self
-        privateKeyReader.startReadingQRCode(for: address)
+        start(with: self, assetType: .bitcoin)
 
         // TODO: `lastScannedWatchOnlyAddress` needs to be of type AssetAddress, not String
         walletManager.wallet.lastScannedWatchOnlyAddress = address.description
@@ -224,11 +239,18 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
 // MARK: - PrivateKeyReaderDelegate
 
 extension KeyImportCoordinator: PrivateKeyReaderDelegate {
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
-
+    func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
+        walletManager.wallet.addKey(privateKey, toWatchOnlyAddress: address?.description)
     }
 
-    func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
-        // wallet.addKey(privateKey, toWatchOnlyAddress: address?.description)
+    func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
+        switch error {
+        case .badMetadataObject:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
+        case .unknownKeyFormat:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unknownKeyFormat)
+        case .unsupportedPrivateKey:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey)
+        }
     }
 }
