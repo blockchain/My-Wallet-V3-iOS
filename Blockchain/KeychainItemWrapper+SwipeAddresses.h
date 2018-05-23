@@ -11,7 +11,7 @@
 
 @interface KeychainItemWrapper (SwipeAddresses)
 + (NSArray *)getSwipeAddressesForAssetType:(LegacyAssetType)assetType;
-+ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(LegacyAssetType)assetType;
++ (void)addSwipeAddress:(id)swipeAddress assetType:(LegacyAssetType)assetType;
 + (void)removeFirstSwipeAddressForAssetType:(LegacyAssetType)assetType;
 + (void)removeAllSwipeAddressesForAssetType:(LegacyAssetType)assetType;
 + (void)removeAllSwipeAddresses;

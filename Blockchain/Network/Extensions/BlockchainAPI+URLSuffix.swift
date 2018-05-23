@@ -17,7 +17,7 @@ extension BlockchainAPI {
             return String(format: "%@/address/%@?format=json", url, description)
         case .bitcoinCash:
             guard let url = apiUrl else { return nil }
-            return String(format: "/bch/multiaddr?active=%@", url, description)
+            return String(format: "%@/bch/multiaddr?active=%@", url, description)
         default:
             return nil
         }

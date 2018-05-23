@@ -42,7 +42,7 @@
     return swipeAddresses;
 }
 
-+ (void)addSwipeAddress:(NSString *)swipeAddress assetType:(LegacyAssetType)assetType
++ (void)addSwipeAddress:(id)swipeAddress assetType:(LegacyAssetType)assetType
 {
     NSMutableArray *swipeAddresses = [KeychainItemWrapper getMutableSwipeAddressesForAssetType:assetType];
     if (!swipeAddresses) swipeAddresses = [NSMutableArray new];

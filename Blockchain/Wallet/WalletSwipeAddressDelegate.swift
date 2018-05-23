@@ -16,5 +16,5 @@ protocol WalletSwipeAddressDelegate: class {
     /// - Parameters:
     ///   - addresses: the addresses
     ///   - assetType: the type of the asset for the retrieved addresses
-    func onRetrievedSwipeToReceive(addresses: [String], assetType: AssetType)
+    func onRetrievedSwipeToReceive(addresses: [Any], assetType: AssetType)
 }
