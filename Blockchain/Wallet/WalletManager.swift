@@ -499,8 +499,8 @@ extension WalletManager: WalletDelegate {
 
     // MARK: - Key Importing
 
-    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, continueHandler: @escaping () -> Void) {
-        keyImportDelegate?.askUserToAddWatchOnlyAddress(address, continueHandler: continueHandler)
+    func askUserToAddWatchOnlyAddress(_ address: AssetAddress, then: @escaping () -> Void) {
+        keyImportDelegate?.askUserToAddWatchOnlyAddress(address, then: then)
     }
 
     @objc func scanPrivateKeyForWatchOnlyAddress(_ address: String) {
