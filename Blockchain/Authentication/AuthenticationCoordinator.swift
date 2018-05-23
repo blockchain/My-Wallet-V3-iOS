@@ -171,7 +171,7 @@ import Foundation
         let setUpWalletViewController = WalletSetupViewController(setupDelegate: self)!
         let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
         topMostViewController?.present(setUpWalletViewController, animated: false) { [weak self] in
-            self?.showPinEntryView(asModal: false)
+            self?.showPinEntryView(asModal: false, inViewController: setUpWalletViewController)
         }
     }
 
@@ -313,7 +313,13 @@ import Foundation
         UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
     }
 
-    @objc func showPinEntryView(asModal: Bool) {
+    /// Shows the pin entry view.
+    ///
+    /// - Parameters:
+    ///   - asModal: true if the pin entry view should be presented modally
+    ///   - viewController: the view controller to present the pin entry view in, if nil, it will be
+    ///                     presented in the root controller
+    @objc func showPinEntryView(asModal: Bool, inViewController viewController: UIViewController? = nil) {
 
         guard !walletManager.didChangePassword else {
             showPasswordModal()
@@ -339,9 +345,7 @@ import Foundation
         pinViewController.isNavigationBarHidden = true
         pinViewController.pinDelegate = self
 
-        // asView inserts the modal's view into the rootViewController as a view -
-        // this is only used in didFinishLaunching so there is no delay when showing the PIN on start
-        let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
+        let viewControllerToPresentIn = viewController ?? UIApplication.shared.keyWindow!.rootViewController!
         if asModal {
             // TODO handle settings navigation controller
 //            if ([_settingsNavigationController isBeingPresented]) {
@@ -351,10 +355,10 @@ import Foundation
             // performSelector:@selector(addSubview:) withObject:self.pinEntryViewController.view afterDelay:DELAY_KEYBOARD_DISMISSAL];
 //                [self performSelector:@selector(showStatusBar) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 //            } else {
-            rootViewController.view.addSubview(pinViewController.view)
+            viewControllerToPresentIn.view.addSubview(pinViewController.view)
 //            }
         } else {
-            rootViewController.present(pinViewController, animated: true) { [weak self] in
+            viewControllerToPresentIn.present(pinViewController, animated: true) { [weak self] in
                 guard let strongSelf = self else { return }
 
                 // Can both of these alerts be moved elsewhere?                                     
