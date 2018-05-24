@@ -50,20 +50,22 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     //: Legacy Objc delegate to support Legacy asset types
     @objc weak var legacyDelegate: LegacyPrivateKeyDelegate?
 
-    @objc var acceptPublicKeys = false
+    private var acceptPublicKeys = false
 
-    @objc var publicKey: String?
+    private var publicKey: String?
 
-    @objc var loadingText: String
+    private var loadingText: String
 
     // MARK: - Initialization
 
     /// - Parameters:
     ///   - assetType: the asset type used in the key import context
+    ///   - acceptPublicKeys: accept public keys during scan
     ///   - publicKey: the public key used for scanning the respective private key
-    init?(assetType: AssetType, publicKey: String? = nil) {
+    init?(assetType: AssetType, acceptPublicKeys: Bool, publicKey: String?) {
         self.assetType = assetType
         legacyAssetType = LegacyAssetType.bitcoin
+        self.acceptPublicKeys = acceptPublicKeys
         self.publicKey = publicKey
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)
@@ -74,9 +76,10 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     }
 
     // TODO: remove once AccountsAndAddresses and SendBitcoinViewController are migrated to Swift
-    @objc init?(assetType: LegacyAssetType, publicKey: String? = nil) {
+    @objc init?(assetType: LegacyAssetType, acceptPublicKeys: Bool, publicKey: String?) {
         legacyAssetType = assetType
         self.assetType = nil
+        self.acceptPublicKeys = acceptPublicKeys
         self.publicKey = publicKey
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)

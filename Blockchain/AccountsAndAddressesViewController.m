@@ -200,12 +200,12 @@
         return;
     }
 
-    [[KeyImportCoordinator sharedInstance] startWith:self assetType:self.assetType];
-    PrivateKeyReader *privateKeyReader = [[KeyImportCoordinator sharedInstance] privateKeyReader];
-    if (privateKeyReader) {
-        privateKeyReader.acceptPublicKeys = YES;
-        [self presentViewController:privateKeyReader animated:YES completion:nil];
-    }
+    [[KeyImportCoordinator sharedInstance] startWith:self
+                                                  in:self
+                                           assetType:self.assetType
+                                    acceptPublicKeys:YES
+                                         loadingText:[LocalizationConstantsObjcBridge loadingImportKey]
+                                           publicKey:nil];
 }
 
 #pragma mark - LegacyPrivateKeyDelegate

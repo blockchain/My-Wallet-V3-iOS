@@ -24,7 +24,7 @@ import Foundation
     }
 
     //: Nil if device input is unavailable
-    @objc var privateKeyReader: PrivateKeyReader?
+    private var privateKeyReader: PrivateKeyReader?
 
     /// Observer key for notifications used throughout this class
     private let backupKey = Constants.NotificationKeys.backupSuccess
@@ -46,22 +46,34 @@ import Foundation
 
     func start() { /* Tasks which do not require scanning should call this */ }
 
-    func start(with delegate: PrivateKeyReaderDelegate, assetType: AssetType = .bitcoin) {
-        privateKeyReader = PrivateKeyReader(assetType: assetType)
+    func start(with delegate: PrivateKeyReaderDelegate,
+               in viewController: UIViewController,
+               assetType: AssetType = .bitcoin,
+               acceptPublicKeys: Bool = false,
+               loadingText: String = LocalizationConstants.AddressAndKeyImport.loadingImportKey,
+               publicKey: String? = nil) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, publicKey: publicKey)
         guard privateKeyReader != nil else { return }
         privateKeyReader!.delegate = delegate
         privateKeyReader!.startReadingQRCode()
+        viewController.present(privateKeyReader!, animated: true, completion: nil)
     }
 
-    @objc func start(with delegate: LegacyPrivateKeyDelegate, assetType: LegacyAssetType = .bitcoin) {
-        privateKeyReader = PrivateKeyReader(assetType: assetType)
+    @objc func start(with delegate: LegacyPrivateKeyDelegate,
+                     in viewController: UIViewController,
+                     assetType: LegacyAssetType = .bitcoin,
+                     acceptPublicKeys: Bool = false,
+                     loadingText: String = LocalizationConstants.AddressAndKeyImport.loadingImportKey,
+                     publicKey: String? = nil) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, publicKey: publicKey)
         guard privateKeyReader != nil else { return }
         privateKeyReader!.legacyDelegate = delegate
         privateKeyReader!.startReadingQRCode()
+        viewController.present(privateKeyReader!, animated: true, completion: nil)
     }
 
     // MARK: - Temporary Objective-C bridging methods for backwards compatibility
-  
+
     @objc func on_add_private_key_start() {
         walletManager.wallet.isSyncing = true
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.AddressAndKeyImport.loadingImportKey)
@@ -229,7 +241,10 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
             return
         }
 
-        start(with: self, assetType: .bitcoin)
+        guard let rootVC = UIApplication.shared.keyWindow?.rootViewController else {
+            fatalError("The rootViewController was not set!")
+        }
+        start(with: self, in: rootVC)
 
         // TODO: `lastScannedWatchOnlyAddress` needs to be of type AssetAddress, not String
         walletManager.wallet.lastScannedWatchOnlyAddress = address.description
