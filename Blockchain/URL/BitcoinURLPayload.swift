@@ -33,28 +33,24 @@ extension BitcoinURLPayload {
             return nil
         }
 
-<<<<<<< Updated upstream
-        let queryArgs = url.queryArgs
-
-        let address = url.host ?? queryArgs["address"]
-        let amount = queryArgs["amount"]
-
-        self.init(address: address, amount: amount)
-=======
+        let address: String?
+        let amount: String?
         let urlString = url.absoluteString
+        
         if urlString.contains("//") {
             let queryArgs = url.queryArgs
 
-            self.address = url.host ?? queryArgs["address"]
-            self.amount = queryArgs["amount"]
+            address = url.host ?? queryArgs["address"]
+            amount = queryArgs["amount"]
         } else if let commaIndex = urlString.index(of: ":") {
             // Handle web format (e.g. "bitcoin:1Amu4uPJnYbUXX2HhDFMNq7tSneDwWYDyv")
-            self.address = String(urlString[urlString.index(after: commaIndex)..<urlString.endIndex])
-            self.amount = nil
+            address = String(urlString[urlString.index(after: commaIndex)..<urlString.endIndex])
+            amount = nil
         } else {
-            self.address = nil
-            self.amount = nil
+            address = nil
+            amount = nil
         }
->>>>>>> Stashed changes
+
+        self.init(address: address, amount: amount)
     }
 }
