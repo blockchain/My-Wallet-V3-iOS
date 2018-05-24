@@ -105,3 +105,45 @@ extension AssetAddressRepository: WalletSwipeAddressDelegate {
         }
     }
 }
+
+extension AssetAddressRepository {
+    @objc func checkForUnusedAddress(_ address: String,
+                                     displayAddress: String,
+                               legacyAssetType: LegacyAssetType,
+                               successHandler: @escaping ((_ address: String, _ isUnused: Bool) -> Void),
+                               errorHandler: @escaping (() -> Void)) {
+
+        var assetAddress: AssetAddress
+
+        let assetType = AssetType.from(legacyAssetType: legacyAssetType)
+
+        switch assetType {
+        case .bitcoin: assetAddress = BitcoinAddress(string: address)!
+        case .bitcoinCash: assetAddress = BitcoinCashAddress(string: address)!
+        case .ethereum: return
+        }
+
+        guard
+            let urlString = BlockchainAPI.shared.suffixURL(address: assetAddress),
+            let url = URL(string: urlString) else {
+                return
+        }
+        NetworkManager.shared.session.sessionDescription = url.host
+        let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
+            if let error = error {
+                DispatchQueue.main.async { errorHandler() }; return
+            }
+            guard
+                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+                let transactions = json!["txs"] as? [NSDictionary] else {
+                    // TODO: call error handler
+                    return
+            }
+            DispatchQueue.main.async {
+                let isUnused = transactions.count == 0
+                successHandler(displayAddress, isUnused)
+            }
+        })
+        task.resume()
+    }
+}

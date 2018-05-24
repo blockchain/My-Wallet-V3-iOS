@@ -269,35 +269,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         privacyScreen?.alpha = 1
         UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
     }
-
-    //: These two functions are used to justify the regeneration of addresses in the swipe-to-receive screen.
-    // NOTE: Ethereum does not apply here, because the address is currently not regenerated.
-
-    // TODO: move to appropriate controller
-    func checkForUnusedAddress(_ address: AssetAddress,
-                               successHandler: @escaping ((_ isUnused: Bool) -> Void),
-                               errorHandler: @escaping ((_ error: Error) -> Void)) {
-        guard
-            let urlString = BlockchainAPI.shared.suffixURL(address: address),
-            let url = URL(string: urlString) else {
-                return
-        }
-        NetworkManager.shared.session.sessionDescription = url.host
-        let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
-            if let error = error {
-                DispatchQueue.main.async { errorHandler(error) }; return
-            }
-            guard
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
-                let transactions = json!["txs"] as? [NSDictionary] else {
-                    // TODO: call error handler
-                    return
-            }
-            DispatchQueue.main.async {
-                let isUnused = transactions.count == 0
-                successHandler(isUnused)
-            }
-        })
-        task.resume()
-    }
 }
