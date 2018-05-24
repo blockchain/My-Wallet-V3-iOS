@@ -107,12 +107,21 @@ extension AssetAddressRepository: WalletSwipeAddressDelegate {
 }
 
 extension AssetAddressRepository {
-    @objc func checkForUnusedAddress(_ address: String,
-                                     displayAddress: String,
-                               legacyAssetType: LegacyAssetType,
-                               successHandler: @escaping ((_ address: String, _ isUnused: Bool) -> Void),
-                               errorHandler: @escaping (() -> Void)) {
-
+    /// Checks whether an address has been used (has ever had a transaction)
+    ///
+    /// - Parameters:
+    ///   - address: address to be checked with network request
+    ///   - displayAddress: address to be shown to the user in text and in QR code (usually the same as address unless checking for corresponding BTC address for BCH
+    ///   - legacyAssetType: asset type for the address. Currently only supports BTC and BCH.
+    ///   - successHandler: success handler to do something with the display address and whether the address has ever had a transaction
+    ///   - errorHandler: error handler
+    @objc func checkForUnusedAddress(
+        _ address: String,
+        displayAddress: String,
+        legacyAssetType: LegacyAssetType,
+        successHandler: @escaping ((_ displayAddress: String, _ isUnused: Bool) -> Void),
+        errorHandler: @escaping (() -> Void)
+    ) {
         var assetAddress: AssetAddress
 
         let assetType = AssetType.from(legacyAssetType: legacyAssetType)
