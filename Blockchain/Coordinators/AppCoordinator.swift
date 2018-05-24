@@ -68,7 +68,7 @@ import Foundation
         return viewController
     }()
 
-    private var buyBitcoinViewController: BuyBitcoinViewController?
+    @objc private(set) var buyBitcoinViewController: BuyBitcoinViewController?
 
     // MARK: NSObject
 
