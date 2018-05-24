@@ -33,57 +33,67 @@ import Foundation
     }
 
     @objc func hideBusyView() {
-        let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+        DispatchQueue.main.async { [unowned self] in
+            let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
 
-        if let topViewController = topMostViewController as? TopViewController {
-            topViewController.hideBusyView?()
-            return
+            if let topViewController = topMostViewController as? TopViewController {
+                topViewController.hideBusyView?()
+                return
+            }
+
+            guard self.isLoadingShown else {
+                return
+            }
+
+            // After fading out is completed, it will also be removed from the superview
+            self.busyView.fadeOut()
         }
-
-        guard isLoadingShown else {
-            return
-        }
-
-        // After fading out is completed, it will also be removed from the superview
-        busyView.fadeOut()
     }
 
+    // TODO: Show/hide/update methods can be called from any thread so we need to make sure to
+    // explicitly dispatch the actions to the main thread. Once the wallet-rearch is completed, the
+    // show/hide/update logic should not be dispatched to the main thread and instead callers should
+    // guarantee to call these methods in the main thread.
     @objc func showBusyView(withLoadingText text: String) {
-        let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+        DispatchQueue.main.async { [unowned self] in
+            let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
 
-        if let topViewController = topMostViewController as? TopViewController {
-            topViewController.showBusyView?(withLoadingText: text)
-            return
+            if let topViewController = topMostViewController as? TopViewController {
+                topViewController.showBusyView?(withLoadingText: text)
+                return
+            }
+
+            if AppCoordinator.shared.tabControllerManager.isSending() && ModalPresenter.shared.modalView != nil {
+                print("Send progress modal is presented - will not show busy view")
+                return
+            }
+
+            guard !self.isLoadingShown else {
+                return
+            }
+
+            self.attachToMainWindow()
+
+            self.busyView.labelBusy.text = text
+            self.busyView.fadeIn()
         }
-
-        if AppCoordinator.shared.tabControllerManager.isSending() && ModalPresenter.shared.modalView != nil {
-            print("Send progress modal is presented - will not show busy view")
-            return
-        }
-
-        guard !isLoadingShown else {
-            return
-        }
-
-        attachToMainWindow()
-
-        busyView.labelBusy.text = text
-        busyView.fadeIn()
     }
 
     @objc func updateBusyViewLoadingText(text: String) {
-        let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+        DispatchQueue.main.async { [unowned self] in
+            let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
 
-        if let topViewController = topMostViewController as? TopViewController {
-            topViewController.updateBusyViewLoadingText?(text)
-            return
+            if let topViewController = topMostViewController as? TopViewController {
+                topViewController.updateBusyViewLoadingText?(text)
+                return
+            }
+
+            guard self.isLoadingShown else {
+                return
+            }
+
+            self.busyView.labelBusy.text = text
         }
-
-        guard isLoadingShown else {
-            return
-        }
-
-        busyView.labelBusy.text = text
     }
 
     private func attachToMainWindow() {
