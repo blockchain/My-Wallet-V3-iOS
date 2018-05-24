@@ -161,9 +161,7 @@
 
 - (void)confirmButtonClicked
 {
-    if ([[self.trade.depositCurrency uppercaseString] isEqualToString:CURRENCY_SYMBOL_ETH]) return;
-
-    if ([[WalletManager sharedInstance].wallet isWaitingOnEtherTransaction]) {
+    if ([[self.trade.depositCurrency uppercaseString] isEqualToString:CURRENCY_SYMBOL_ETH] && [[WalletManager sharedInstance].wallet isWaitingOnEtherTransaction]) {
         [[AlertViewPresenter sharedInstance] showWaitingForEtherPaymentAlert];
         return;
     }
