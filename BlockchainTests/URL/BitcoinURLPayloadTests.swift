@@ -25,6 +25,14 @@ class BitcoinURLPayloadTests: XCTestCase {
         XCTAssertNotNil(payload)
     }
 
+    func testBitcoinWebFormat() {
+        let address = "1Amu4uPJnYbUXX2HhDFMNq7tSneDwWYDyv"
+        let url = URL(string: "\(Constants.Schemes.bitcoin):\(address)")
+        let payload = BitcoinURLPayload(url: url!)
+        XCTAssertNotNil(payload)
+        XCTAssertEqual(address, payload!.address)
+    }
+
     func testBitcoinAddressInHost() {
         let address = "bitcoinaddress"
         let url = URL(string: "\(Constants.Schemes.bitcoin)://\(address)")
