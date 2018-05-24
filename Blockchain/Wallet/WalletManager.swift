@@ -492,7 +492,7 @@ extension WalletManager: WalletDelegate {
 
     func didGetSwipeAddresses(_ newSwipeAddresses: [Any]!, assetType: LegacyAssetType) {
         swipeAddressDelegate?.onRetrievedSwipeToReceive(
-            addresses: newSwipeAddresses as! [String],
+            addresses: newSwipeAddresses,
             assetType: AssetType.from(legacyAssetType: assetType)
         )
     }

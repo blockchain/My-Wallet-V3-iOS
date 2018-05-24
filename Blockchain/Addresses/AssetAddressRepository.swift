@@ -66,7 +66,7 @@ import Foundation
     ///
     /// - Parameter assetType: the AssetType
     /// - Returns: the swipe addresses
-    @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [String] {
+    @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [Any] {
         if assetType == .ethereum {
             if let swipeAddressForEther = BlockchainSettings.App.shared.swipeAddressForEther {
                 return [swipeAddressForEther]
@@ -75,7 +75,7 @@ import Foundation
             }
         }
 
-        return KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) as? [String] ?? []
+        return KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) ?? []
     }
 
     /// Removes the first swipe address for assetType.
@@ -99,9 +99,51 @@ import Foundation
 }
 
 extension AssetAddressRepository: WalletSwipeAddressDelegate {
-    func onRetrievedSwipeToReceive(addresses: [String], assetType: AssetType) {
+    func onRetrievedSwipeToReceive(addresses: [Any], assetType: AssetType) {
         addresses.forEach {
             KeychainItemWrapper.addSwipeAddress($0, assetType: assetType.legacy)
         }
+    }
+}
+
+extension AssetAddressRepository {
+    @objc func checkForUnusedAddress(_ address: String,
+                                     displayAddress: String,
+                               legacyAssetType: LegacyAssetType,
+                               successHandler: @escaping ((_ address: String, _ isUnused: Bool) -> Void),
+                               errorHandler: @escaping (() -> Void)) {
+
+        var assetAddress: AssetAddress
+
+        let assetType = AssetType.from(legacyAssetType: legacyAssetType)
+
+        switch assetType {
+        case .bitcoin: assetAddress = BitcoinAddress(string: address)!
+        case .bitcoinCash: assetAddress = BitcoinCashAddress(string: address)!
+        case .ethereum: return
+        }
+
+        guard
+            let urlString = BlockchainAPI.shared.suffixURL(address: assetAddress),
+            let url = URL(string: urlString) else {
+                return
+        }
+        NetworkManager.shared.session.sessionDescription = url.host
+        let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
+            if let error = error {
+                DispatchQueue.main.async { errorHandler() }; return
+            }
+            guard
+                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+                let transactions = json!["txs"] as? [NSDictionary] else {
+                    // TODO: call error handler
+                    return
+            }
+            DispatchQueue.main.async {
+                let isUnused = transactions.count == 0
+                successHandler(displayAddress, isUnused)
+            }
+        })
+        task.resume()
     }
 }

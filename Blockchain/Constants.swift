@@ -80,6 +80,10 @@ struct Constants {
         static let userInfoId = "id"
         static let typePayment = "payment"
     }
+    struct SwipeAddressKeys {
+        static let btc = "btc"
+        static let bch = "bch"
+    }
     struct Schemes {
         static let bitcoin = "bitcoin"
         static let bitcoinCash = "bitcoincash"
@@ -144,6 +148,14 @@ struct Constants {
 
     @objc class func notificationKeyGetFiatAtTime() -> String {
         return Constants.NotificationKeys.getFiatAtTime.rawValue
+    }
+
+    @objc class func swipeAddressKeyBTC() -> String {
+        return Constants.SwipeAddressKeys.btc
+    }
+
+    @objc class func swipeAddressKeyBCH() -> String {
+        return Constants.SwipeAddressKeys.bch
     }
 
     @objc class func bitcoinUriPrefix() -> String {

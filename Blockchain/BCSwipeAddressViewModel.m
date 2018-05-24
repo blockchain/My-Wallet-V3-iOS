@@ -37,7 +37,7 @@
 {
     _address = address;
 
-    self.textAddress = self.assetType == LegacyAssetTypeBitcoinCash ? [address substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]] : address;
+    self.textAddress = self.assetType == LegacyAssetTypeBitcoinCash ? [address substringFromIndex:[[[ConstantsObjcBridge bitcoinCashUriPrefix] stringByAppendingString:@":"] length]] : address;
 }
 
 @end

@@ -231,7 +231,7 @@
 
 - (Boolean)isAddressArchived:(NSString *)address;
 
-- (void)subscribeToSwipeAddress:(NSString *)address assetType:(LegacyAssetType)assetType;
+- (void)subscribeToSwipeAddress:(id)address assetType:(LegacyAssetType)assetType;
 - (void)subscribeToAddress:(NSString *)address assetType:(LegacyAssetType)assetType;
 
 - (void)addToAddressBook:(NSString *)address label:(NSString *)label;

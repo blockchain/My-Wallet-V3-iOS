@@ -18,7 +18,7 @@ public struct BitcoinCashAddress: AssetAddress {
     // MARK: - Initialization
 
     public init?(string: String) {
-        self.assetType = .bitcoin
+        self.assetType = .bitcoinCash
         if !isValid(string) { return nil }
         description = string
     }

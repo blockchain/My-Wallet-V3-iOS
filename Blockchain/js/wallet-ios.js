@@ -3159,8 +3159,9 @@ MyWalletPhone.bch = {
         var receiveIndex = MyWallet.wallet.bch.getAccountIndexes(xpub).receive;
 
         for (var i = 0; i < numberOfAddresses; i++) {
-            var address = Helpers.toBitcoinCash(Blockchain.MyWallet.wallet.hdwallet.accounts[0].receiveAddressAtIndex(receiveIndex + i));
-            addresses.push(address);
+            var btcAddress = Blockchain.MyWallet.wallet.hdwallet.accounts[0].receiveAddressAtIndex(receiveIndex + i);
+            var bchAddress = Helpers.toBitcoinCash(btcAddress);
+            addresses.push({'btc': btcAddress, 'bch': bchAddress});
         }
 
         objc_did_get_bch_swipe_addresses(addresses);

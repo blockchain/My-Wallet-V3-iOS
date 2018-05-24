@@ -1008,12 +1008,12 @@
     }
 }
 
-- (void)subscribeToSwipeAddress:(NSString *)address assetType:(LegacyAssetType)assetType
+- (void)subscribeToSwipeAddress:(id)address assetType:(LegacyAssetType)assetType
 {
     if (assetType == LegacyAssetTypeBitcoin) {
         self.btcSwipeAddressToSubscribe = address;
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        self.bchSwipeAddressToSubscribe = address;
+        self.bchSwipeAddressToSubscribe = [address objectForKey:[ConstantsObjcBridge swipeAddressKeyBCH]];
     }
 
     [self subscribeToAddress:address assetType:assetType];

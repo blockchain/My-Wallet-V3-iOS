@@ -195,7 +195,7 @@ static PEViewController *VerifyController()
 
         AssetType type = [self assetTypeFromLegacyAssetType:assetType];
 
-        NSString *nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject];
+        id nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject];
         
         if (nextAddress) {
             
@@ -222,7 +222,19 @@ static PEViewController *VerifyController()
                     self.errorAlert = nil;
                 }
             };
-            [app checkForUnusedAddress:nextAddress success:success error:error assetType:assetType];
+            
+            NSString *addressToCheck = nextAddress;
+            NSString *displayAddress = nextAddress;
+
+            if (assetType == LegacyAssetTypeBitcoinCash) {
+                if ([nextAddress isKindOfClass:[NSString class]]) {
+                    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
+                } else {
+                    addressToCheck = [nextAddress objectForKey:[ConstantsObjcBridge swipeAddressKeyBTC]];
+                    displayAddress = [nextAddress objectForKey:[ConstantsObjcBridge swipeAddressKeyBCH]];
+                }
+            }
+            [[AssetAddressRepository sharedInstance] checkForUnusedAddress:addressToCheck displayAddress:displayAddress legacyAssetType:assetType successHandler:success errorHandler:error];
         } else {
             [swipeView updateAddress:nextAddress];
         }
