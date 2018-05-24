@@ -111,7 +111,8 @@ extension AssetAddressRepository {
     ///
     /// - Parameters:
     ///   - address: address to be checked with network request
-    ///   - displayAddress: address to be shown to the user in text and in QR code (usually the same as address unless checking for corresponding BTC address for BCH
+    ///   - displayAddress: address to be shown to the user in text and in QR code
+    /// (usually the same as address unless checking for corresponding BTC address for BCH
     ///   - legacyAssetType: asset type for the address. Currently only supports BTC and BCH.
     ///   - successHandler: success handler to do something with the display address and whether the address has ever had a transaction
     ///   - errorHandler: error handler
