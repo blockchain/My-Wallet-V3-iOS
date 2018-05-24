@@ -8,7 +8,6 @@
 
 #import "KeyPair.h"
 #import "BTCKey.h"
-#import "RootService.h"
 #import "NSData+Hex.h"
 #import "NSString+NSString_EscapeQuotes.h"
 #import "NSData+BTCData.h"

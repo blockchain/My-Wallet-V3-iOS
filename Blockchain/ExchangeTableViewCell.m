@@ -8,7 +8,6 @@
 
 #import "ExchangeTableViewCell.h"
 #import "NSDateFormatter+TimeAgoString.h"
-#import "RootService.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "Blockchain-Swift.h"
 

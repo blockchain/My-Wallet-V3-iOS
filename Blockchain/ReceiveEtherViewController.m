@@ -7,7 +7,6 @@
 //
 
 #import "ReceiveEtherViewController.h"
-#import "RootService.h"
 #import "QRCodeGenerator.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "UITextView+Animations.h"

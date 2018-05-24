@@ -59,7 +59,6 @@
 		23444FA81DD1177E00573C8C /* SettingsAboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444FA71DD1177E00573C8C /* SettingsAboutUsViewController.m */; };
 		2357BA411D53979600BE0BFD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2357BA431D53979600BE0BFD /* InfoPlist.strings */; };
 		235BD5661C58216000969B31 /* BCModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BD5651C58216000969B31 /* BCModalViewController.m */; };
-		237451C91D624C1C00CF7049 /* RootService.m in Sources */ = {isa = PBXBuildFile; fileRef = 237451C81D624C1C00CF7049 /* RootService.m */; };
 		2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237827191B7E472D00E9EE03 /* BCSecureTextField.swift */; };
 		237C9E901C482132000754F7 /* AccountsAndAddressesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 237C9E8F1C482132000754F7 /* AccountsAndAddressesDetailViewController.m */; };
 		238FC4D21DEC79E200591D5F /* TransactionDetailDoubleSpendWarningCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 238FC4D11DEC79E200591D5F /* TransactionDetailDoubleSpendWarningCell.m */; };
@@ -824,8 +823,6 @@
 		23600FB01D9EF8F500D9985D /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2371DEAC1C6A8898000DC8AF /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/AccountsAndAddresses.strings"; sourceTree = "<group>"; };
 		2371DEAF1C6A8AF3000DC8AF /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/AccountsAndAddresses.strings"; sourceTree = "<group>"; };
-		237451C71D624C1C00CF7049 /* RootService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootService.h; sourceTree = "<group>"; };
-		237451C81D624C1C00CF7049 /* RootService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootService.m; sourceTree = "<group>"; };
 		2374BFA41B750D6E00A53FBE /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Backup.strings; sourceTree = "<group>"; };
 		2374BFA61B750DE400A53FBE /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Backup.strings; sourceTree = "<group>"; };
 		2374BFA81B750E1900A53FBE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Backup.strings; sourceTree = "<group>"; };
@@ -2072,8 +2069,6 @@
 				9F765F4614BC8AEF00048EFB /* MultiAddressResponse.m */,
 				230FD2DA1C5BFB4300336683 /* QRCodeGenerator.h */,
 				230FD2DB1C5BFB4300336683 /* QRCodeGenerator.m */,
-				237451C71D624C1C00CF7049 /* RootService.h */,
-				237451C81D624C1C00CF7049 /* RootService.m */,
 				C71859551F4B695700745A87 /* TabControllerManager.h */,
 				C71859561F4B695700745A87 /* TabControllerManager.m */,
 				9F765F3B14BC7C4F00048EFB /* Transaction.h */,
@@ -3274,7 +3269,6 @@
 				AAA3333F2088131D0019AD55 /* ModalPresenter.swift in Sources */,
 				51A862E12092506600B338E0 /* AssetAddress.swift in Sources */,
 				9FCA4D1B151494BF00ECDFBE /* SendBitcoinViewController.m in Sources */,
-				237451C91D624C1C00CF7049 /* RootService.m in Sources */,
 				511646E2208523E300C43522 /* UIDevice.swift in Sources */,
 				C7CE34BE1F4E128900032806 /* BCAmountInputView.m in Sources */,
 				AA69F6592086A2720054EFCE /* AppCoordinator.swift in Sources */,
@@ -3393,7 +3387,6 @@
 				5168564C2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
-				673107F219F6D49F00BE6899 /* PrivateKeyReader.m in Sources */,
 				C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,

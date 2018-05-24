@@ -10,7 +10,6 @@
 #import "BuyBitcoinViewController.h"
 #import <WebKit/WebKit.h>
 #import "NSString+NSString_EscapeQuotes.h"
-#import "RootService.h"
 #import <SafariServices/SafariServices.h>
 #import "TransactionDetailNavigationController.h"
 #import "Blockchain-Swift.h"

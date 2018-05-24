@@ -10,12 +10,12 @@
 #import "Transaction.h"
 #import "TransactionTableCell.h"
 #import "MultiAddressResponse.h"
-#import "RootService.h"
 #import "TransactionDetailViewController.h"
 #import "BCAddressSelectionView.h"
 #import "TransactionDetailNavigationController.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @interface TransactionsViewController ()
 @property (nonatomic) UILabel *noTransactionsTitle;
@@ -533,7 +533,7 @@
     [balanceBigButton.titleLabel setMinimumScaleFactor:.5f];
     [balanceBigButton.titleLabel setAdjustsFontSizeToFitWidth:YES];
     
-    [balanceBigButton addTarget:app action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
+    [balanceBigButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
     
 #ifdef ENABLE_TRANSACTION_FETCHING
     self.moreButton = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -551,6 +551,11 @@
     [self setupPullToRefresh];
     
     [self reload];
+}
+
+- (void)toggleSymbol
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 - (void)viewWillAppear:(BOOL)animated

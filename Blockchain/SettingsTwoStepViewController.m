@@ -7,7 +7,6 @@
 //
 
 #import "SettingsTwoStepViewController.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @implementation SettingsTwoStepViewController

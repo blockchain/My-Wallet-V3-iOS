@@ -24,7 +24,6 @@
 
 #import "PEPinEntryController.h"
 #import "QRCodeGenerator.h"
-#import "RootService.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "BCSwipeAddressViewModel.h"
 #import "UIView+ChangeFrameAttribute.h"

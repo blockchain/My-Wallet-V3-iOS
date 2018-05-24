@@ -8,10 +8,10 @@
 
 #import "BCAddressSelectionView.h"
 #import "Wallet.h"
-#import "RootService.h"
 #import "ReceiveTableCell.h"
 #import "SendBitcoinViewController.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define DICTIONARY_KEY_ACCOUNTS @"accounts"
 #define DICTIONARY_KEY_ACCOUNT_LABELS @"accountLabels"

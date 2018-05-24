@@ -7,7 +7,6 @@
 //
 
 #import "AccountTableCell.h"
-#import "RootService.h"
 #import "ECSlidingViewController.h"
 #import "BCEditAccountView.h"
 #import "Blockchain-Swift.h"

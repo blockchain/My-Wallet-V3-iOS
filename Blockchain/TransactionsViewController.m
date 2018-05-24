@@ -11,7 +11,6 @@
 #import "BCLine.h"
 #import "Transaction.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface TransactionsViewController ()

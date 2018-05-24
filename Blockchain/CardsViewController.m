@@ -7,10 +7,10 @@
 //
 
 #import "CardsViewController.h"
-#import "RootService.h"
 #import "BCCardView.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define ANNOUNCEMENT_CARD_HEIGHT 208
 

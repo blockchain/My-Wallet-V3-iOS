@@ -7,7 +7,6 @@
 //
 
 #import "ReceiveBitcoinViewController.h"
-#import "RootService.h"
 #import "ReceiveTableCell.h"
 #import "Address.h"
 #import "UIViewController+AutoDismiss.h"
@@ -20,6 +19,7 @@
 #import "BCDescriptionView.h"
 #import "BCAmountInputView.h"
 #import "UILabel+Animations.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 101
 #define BOTTOM_CONTAINER_HEIGHT_FULL 201

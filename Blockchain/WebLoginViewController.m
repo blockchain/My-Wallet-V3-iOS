@@ -6,7 +6,6 @@
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "RootService.h"
 #import "WebLoginViewController.h"
 #import "QRCodeGenerator.h"
 #import "Blockchain-Swift.h"
@@ -236,7 +235,7 @@ const float qrSize = 230;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    WalletManager.sharedInstance.wallet.delegate = app;
+    WalletManager.sharedInstance.wallet.delegate = WalletManager.sharedInstance;
     [super viewWillDisappear:animated];
 }
 

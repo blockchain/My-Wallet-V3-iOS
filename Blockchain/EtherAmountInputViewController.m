@@ -9,7 +9,6 @@
 #import "EtherAmountInputViewController.h"
 #import "BCAmountInputView.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface EtherAmountInputViewController ()

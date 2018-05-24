@@ -9,7 +9,6 @@
 #import "AccountsAndAddressesNavigationController.h"
 #import "AccountsAndAddressesViewController.h"
 #import "AccountsAndAddressesDetailViewController.h"
-#import "RootService.h"
 #import "SendBitcoinViewController.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"

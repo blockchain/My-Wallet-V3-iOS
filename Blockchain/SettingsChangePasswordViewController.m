@@ -6,7 +6,6 @@
 //  Copyright © 2015 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "RootService.h"
 #import "BCFadeView.h"
 #import "SettingsChangePasswordViewController.h"
 #import "Blockchain-Swift.h"
@@ -128,7 +127,6 @@
     UIAlertController *alertForChangePasswordSuccess = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_SETTINGS_SECURITY_PASSWORD_CHANGED preferredStyle:UIAlertControllerStyleAlert];
     [alertForChangePasswordSuccess addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        app.settingsNavigationController = nil;
         [[AppCoordinator sharedInstance] closeSideMenu];
         [AuthenticationCoordinator.sharedInstance showPasswordModal];
         WalletManager.sharedInstance.didChangePassword = YES;

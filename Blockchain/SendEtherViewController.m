@@ -11,11 +11,11 @@
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 #import "BCAmountInputView.h"
-#import "RootService.h"
 #import "BCConfirmPaymentView.h"
 #import "BCConfirmPaymentViewModel.h"
 #import "ContinueButtonInputAccessoryView.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @interface QRCodeScannerSendViewController ()
 - (void)stopReadingQRCode;

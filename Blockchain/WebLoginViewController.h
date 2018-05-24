@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Wallet.h"
 
 @interface WebLoginViewController : UIViewController<WalletDelegate> {
     IBOutlet UIImageView *qrCodeMainImageView;

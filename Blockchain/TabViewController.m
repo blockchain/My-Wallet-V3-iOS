@@ -7,7 +7,6 @@
 //
 
 #import "TabViewController.h"
-#import "RootService.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 
@@ -30,7 +29,7 @@
     balanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_LARGE];
     balanceLabel.adjustsFontSizeToFitWidth = YES;
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:app action:@selector(toggleSymbol)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSymbol)];
     [balanceLabel addGestureRecognizer:tapGesture];
     
     tabBar.delegate = self;
@@ -52,6 +51,11 @@
         
         [self.view addSubview:_menuSwipeRecognizerView];
     }
+}
+
+- (void)toggleSymbol
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 - (void)setupTabButtons

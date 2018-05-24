@@ -7,7 +7,6 @@
 //
 
 #import "PairingCodeParser.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @implementation PairingCodeParser

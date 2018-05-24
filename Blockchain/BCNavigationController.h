@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "BCFadeView.h"
-#import "RootService.h"
 
 @interface BCNavigationController : UINavigationController <TopViewController>
 @property (nonatomic) UIView *topBar;

@@ -7,8 +7,8 @@
 //
 
 #import "TransferAllFundsBuilder.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @interface TransferAllFundsBuilder()
 @property (nonatomic) NSString *temporarySecondPassword;

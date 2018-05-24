@@ -7,7 +7,6 @@
 //
 
 #import "TransactionsBitcoinCashViewController.h"
-#import "RootService.h"
 #import "NSNumberFormatter+Currencies.h"
 #import "TransactionTableCell.h"
 #import "Transaction.h"

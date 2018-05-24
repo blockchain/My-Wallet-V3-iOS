@@ -10,7 +10,6 @@
 #import "BCLine.h"
 #import "UILabel+CGRectForSubstring.h"
 #import "ExchangeDetailView.h"
-#import "RootService.h"
 #import "BCNavigationController.h"
 #import <SafariServices/SafariServices.h>
 #import "NSNumberFormatter+Currencies.h"

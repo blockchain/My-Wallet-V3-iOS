@@ -7,7 +7,6 @@
 //
 
 #import "SideMenuViewController.h"
-#import "RootService.h"
 #import "ECSlidingViewController.h"
 #import "BCCreateAccountView.h"
 #import "BCEditAccountView.h"
@@ -76,9 +75,9 @@ int accountEntries = 0;
     blueView.layer.zPosition -= 1;
     
     sideMenu.delegate = self;
-    
-    tapToCloseGestureRecognizerViewController = [[UITapGestureRecognizer alloc] initWithTarget:app action:@selector(toggleSideMenu)];
-    tapToCloseGestureRecognizerTabBar = [[UITapGestureRecognizer alloc] initWithTarget:app action:@selector(toggleSideMenu)];
+
+    tapToCloseGestureRecognizerViewController = [[UITapGestureRecognizer alloc] initWithTarget:AppCoordinator.sharedInstance action:@selector(toggleSideMenu)];
+    tapToCloseGestureRecognizerTabBar = [[UITapGestureRecognizer alloc] initWithTarget:AppCoordinator.sharedInstance action:@selector(toggleSideMenu)];
 }
 
 - (NSUInteger)menuEntriesCount {
@@ -136,7 +135,7 @@ int accountEntries = 0;
     TabViewcontroller *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
     
     // Hide status bar
-    if (!app.pinEntryViewController.inSettings) {
+    if (!AuthenticationCoordinator.sharedInstance.pinEntryViewController.inSettings) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     }
     

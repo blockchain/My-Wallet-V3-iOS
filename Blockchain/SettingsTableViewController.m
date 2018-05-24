@@ -11,7 +11,6 @@
 #import "SettingsWebViewController.h"
 #import "SettingsTwoStepViewController.h"
 #import "Blockchain-Swift.h"
-#import "RootService.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "SettingsAboutUsViewController.h"
 #import "BCVerifyEmailViewController.h"
@@ -57,6 +56,7 @@ const int aboutPrivacyPolicy = 2;
 @property (nonatomic) UITextField *changeFeeTextField;
 @property (nonatomic) float currentFeePerKb;
 
+@property (nonatomic) BOOL isVerifyingMobileNumber;
 @property (nonatomic) BOOL isEnablingTwoStepSMS;
 @property (nonatomic) BackupNavigationViewController *backupController;
 
@@ -362,11 +362,11 @@ const int aboutPrivacyPolicy = 2;
 
 - (BOOL)showVerifyAlertIfNeeded
 {
-    BOOL shouldShowVerifyAlert = app.isVerifyingMobileNumber;
+    BOOL shouldShowVerifyAlert = self.isVerifyingMobileNumber;
 
     if (shouldShowVerifyAlert) {
         [self alertUserToVerifyMobileNumber];
-        app.isVerifyingMobileNumber = NO;
+        self.isVerifyingMobileNumber = NO;
     }
 
     return shouldShowVerifyAlert;
@@ -468,7 +468,7 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)alertUserToVerifyMobileNumber
 {
-    app.isVerifyingMobileNumber = YES;
+    self.isVerifyingMobileNumber = YES;
 
     UIAlertController *alertForVerifyingMobileNumber = [UIAlertController alertControllerWithTitle:BC_STRING_SETTINGS_VERIFY_ENTER_CODE message:[[NSString alloc] initWithFormat:BC_STRING_SETTINGS_SENT_TO_ARGUMENT, self.mobileNumberString] preferredStyle:UIAlertControllerStyleAlert];
     [alertForVerifyingMobileNumber addAction:[UIAlertAction actionWithTitle:BC_STRING_SETTINGS_VERIFY_MOBILE_RESEND style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -513,7 +513,7 @@ const int aboutPrivacyPolicy = 2;
 
 - (void)verifyMobileNumberSuccess
 {
-    app.isVerifyingMobileNumber = NO;
+    self.isVerifyingMobileNumber = NO;
 
     [self removeObserversForVerifyingMobileNumber];
 

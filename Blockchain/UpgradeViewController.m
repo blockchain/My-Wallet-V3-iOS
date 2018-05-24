@@ -7,7 +7,6 @@
 //
 
 #import "UpgradeViewController.h"
-#import "RootService.h"
 #import "LocalizationConstants.h"
 #import "UILabel+MultiLineAutoSize.h"
 #import "Blockchain-Swift.h"

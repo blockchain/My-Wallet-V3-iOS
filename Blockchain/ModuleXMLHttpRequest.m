@@ -1,5 +1,4 @@
 #import "ModuleXMLHttpRequest.h"
-#import "RootService.h"
 #import "NSURLSession+SendSynchronousRequest.h"
 #import "Blockchain-Swift.h"
 

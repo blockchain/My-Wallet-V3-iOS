@@ -8,7 +8,6 @@
 
 #import "AccountsAndAddressesNavigationController.h"
 #import "AccountsAndAddressesDetailViewController.h"
-#import "RootService.h"
 #import "BCEditAccountView.h"
 #import "BCEditAddressView.h"
 #import "BCQRCodeView.h"

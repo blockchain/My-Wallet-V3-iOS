@@ -8,7 +8,6 @@
 
 #import "BCConfirmPaymentViewModel.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface BCConfirmPaymentViewModel ()

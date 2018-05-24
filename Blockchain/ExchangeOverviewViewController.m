@@ -14,7 +14,6 @@
 #import "BCNavigationController.h"
 #import "BCLine.h"
 #import "ExchangeTableViewCell.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 #import "ExchangeDetailView.h"
 

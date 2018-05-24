@@ -17,7 +17,6 @@
 #import "TransactionDetailTableCell.h"
 #import "TransactionDetailDoubleSpendWarningCell.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "TransactionDetailNavigationController.h"
 #import "BCWebViewController.h"
 #import "TransactionRecipientsViewController.h"

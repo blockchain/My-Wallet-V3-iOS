@@ -8,7 +8,6 @@
 
 #import "SendBitcoinViewController.h"
 #import "Wallet.h"
-#import "RootService.h"
 #import "BCAddressSelectionView.h"
 #import "TabViewController.h"
 #import "UncaughtExceptionHandler.h"
@@ -23,6 +22,7 @@
 #import "StoreKit/StoreKit.h"
 #import "BCConfirmPaymentViewModel.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 typedef enum {
     TransactionTypeRegular = 100,

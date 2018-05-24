@@ -8,7 +8,6 @@
 
 #import "DebugTableViewController.h"
 #import "Blockchain-Swift.h"
-#import "RootService.h"
 
 #define DICTIONARY_KEY_SERVER @"server"
 #define DICTIONARY_KEY_WEB_SOCKET @"webSocket"

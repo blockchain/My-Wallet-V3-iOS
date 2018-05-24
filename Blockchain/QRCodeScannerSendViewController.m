@@ -7,7 +7,6 @@
 //
 
 #import "QRCodeScannerSendViewController.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface QRCodeScannerSendViewController () <AVCaptureMetadataOutputObjectsDelegate>

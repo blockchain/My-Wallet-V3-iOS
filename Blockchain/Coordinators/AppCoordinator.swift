@@ -396,7 +396,7 @@ extension AppCoordinator: WalletBuySellDelegate {
 }
 
 extension AppCoordinator: TabControllerDelegate {
-    func toggleSideMenu() {
+    @objc func toggleSideMenu() {
         // If the sideMenu is not shown, show it
         if slidingViewController.currentTopViewPosition == .centered {
             slidingViewController.anchorTopViewToRight(animated: true)

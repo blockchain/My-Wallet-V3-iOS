@@ -11,8 +11,8 @@
 #import "NSDateFormatter+TimeAgoString.h"
 #import "TransactionDetailViewController.h"
 #import "TransactionDetailNavigationController.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @implementation TransactionEtherTableViewCell
 

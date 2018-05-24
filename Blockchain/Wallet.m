@@ -8,7 +8,6 @@
 //
 
 #import "Wallet.h"
-#import "RootService.h"
 #import "Transaction.h"
 #import "EtherTransaction.h"
 #import "NSString+NSString_EscapeQuotes.h"
@@ -35,6 +34,7 @@
 #import "BTCData.h"
 #import "KeyPair.h"
 #import "NSData+BTCData.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define DICTIONARY_KEY_CURRENCY @"currency"
 

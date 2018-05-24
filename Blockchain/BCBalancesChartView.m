@@ -10,6 +10,7 @@
 #import "UIView+ChangeFrameAttribute.h"
 #import "BCBalanceChartLegendKeyView.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define CHART_VIEW_BOTTOM_PADDING 16
 

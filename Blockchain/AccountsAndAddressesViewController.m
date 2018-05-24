@@ -8,13 +8,13 @@
 
 #import "AccountsAndAddressesViewController.h"
 #import "AccountsAndAddressesDetailViewController.h"
-#import "RootService.h"
 #import "ReceiveTableCell.h"
 #import "BCCreateAccountView.h"
 #import "BCModalViewController.h"
 #import "UIViewController+AutoDismiss.h"
 #import "Blockchain-Swift.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define CELL_HEIGHT_DEFAULT 44.0f
 
@@ -438,7 +438,7 @@
         cell.balanceLabel.minimumScaleFactor = 0.75f;
         [cell.balanceLabel setAdjustsFontSizeToFitWidth:YES];
         
-        [cell.balanceButton addTarget:app action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
+        [cell.balanceButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
         
         return cell;
     }
@@ -517,9 +517,14 @@
     cell.balanceLabel.minimumScaleFactor = 0.75f;
     [cell.balanceLabel setAdjustsFontSizeToFitWidth:YES];
     
-    [cell.balanceButton addTarget:app action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
+    [cell.balanceButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
+}
+
+- (void)toggleSymbol
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 @end

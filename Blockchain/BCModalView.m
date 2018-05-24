@@ -7,7 +7,6 @@
 //
 
 #import "BCModalView.h"
-#import "RootService.h"
 #import "LocalizationConstants.h"
 #import "Blockchain-Swift.h"
 

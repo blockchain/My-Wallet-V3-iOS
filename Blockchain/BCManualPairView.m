@@ -7,7 +7,6 @@
 //
 
 #import "BCManualPairView.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @implementation BCManualPairView

@@ -10,7 +10,6 @@
 #import "BTCBigNumber.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "BTCData.h"
-#import "RootService.h"
 #import "NSString+NSString_EscapeQuotes.h"
 #import "NSData+Hex.h"
 #import "BTCCurvePoint.h"

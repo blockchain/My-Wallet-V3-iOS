@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 /**
  Manager object for push notifications

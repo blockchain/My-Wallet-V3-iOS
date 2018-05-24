@@ -8,12 +8,12 @@
 
 #import "TransactionTableCell.h"
 #import "Transaction.h"
-#import "RootService.h"
 #import "TransactionsBitcoinViewController.h"
 #import "TransactionDetailViewController.h"
 #import "TransactionDetailNavigationController.h"
 #import "NSDateFormatter+TimeAgoString.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @implementation TransactionTableCell
 

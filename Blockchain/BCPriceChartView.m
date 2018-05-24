@@ -11,6 +11,7 @@
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 #import "GraphTimeFrame.h"
+#import "NSNumberFormatter+Currencies.h"
 
 #define X_INSET_GRAPH_CONTAINER 16
 

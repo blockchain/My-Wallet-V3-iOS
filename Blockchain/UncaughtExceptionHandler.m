@@ -19,7 +19,6 @@
 #import "KeychainItemWrapper+Credentials.h"
 #include <execinfo.h>
 #import "NSString+URLEncode.h"
-#import "RootService.h"
 #import "NSURLSession+SendSynchronousRequest.h"
 #import "Blockchain-Swift.h"
 

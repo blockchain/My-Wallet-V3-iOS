@@ -7,7 +7,6 @@
 //
 
 #import "MultiAddressResponse.h"
-#import "RootService.h"
 #import "Address.h"
 #import "Transaction.h"
 #import "Wallet.h"

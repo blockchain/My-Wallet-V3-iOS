@@ -7,7 +7,6 @@
 //
 
 #import "BCWebViewController.h"
-#import "RootService.h"
 #import "Blockchain-Swift.h"
 
 @interface BCWebViewController ()

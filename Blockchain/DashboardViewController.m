@@ -11,7 +11,6 @@
 #import "DashboardViewController.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "GraphTimeFrame.h"
 #import "Blockchain-Swift.h"
 #import "BCPriceChartView.h"
@@ -292,8 +291,10 @@
 - (void)showError:(NSString *)error
 {
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+    PEPinEntryController *pinEntryViewController = AuthenticationCoordinator.sharedInstance.pinEntryViewController;
+
     if ([BlockchainSettings sharedAppInstance].isPinSet &&
-        !app.pinEntryViewController &&
+        !pinEntryViewController &&
         [WalletManager.sharedInstance.wallet isInitialized] &&
         tabControllerManager.tabViewController.selectedIndex == TAB_DASHBOARD
         && ![ModalPresenter sharedInstance].modalView) {

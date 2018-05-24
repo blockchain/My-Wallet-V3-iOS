@@ -10,7 +10,6 @@
 #import "Transaction.h"
 #import "EtherTransaction.h"
 #import "NSNumberFormatter+Currencies.h"
-#import "RootService.h"
 #import "NSDateFormatter+VerboseString.h"
 #import "Blockchain-Swift.h"
 

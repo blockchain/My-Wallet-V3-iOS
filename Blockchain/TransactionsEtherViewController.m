@@ -7,10 +7,10 @@
 //
 
 #import "TransactionsEtherViewController.h"
-#import "RootService.h"
 #import "TransactionEtherTableViewCell.h"
 #import "EtherTransaction.h"
 #import "Blockchain-Swift.h"
+#import "NSNumberFormatter+Currencies.h"
 
 @interface TransactionsViewController ()
 @property (nonatomic) UILabel *noTransactionsTitle;

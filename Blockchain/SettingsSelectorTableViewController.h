@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RootService.h"
 
 @interface SettingsSelectorTableViewController : UITableViewController
 @property (nonatomic, copy) NSDictionary *itemsDictionary;

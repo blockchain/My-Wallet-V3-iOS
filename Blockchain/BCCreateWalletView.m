@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "RootService.h"
 #import "BCCreateWalletView.h"
 #import "BuyBitcoinViewController.h"
 #import "Blockchain-Swift.h"
@@ -213,7 +212,6 @@
     [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:password];
     
     WalletManager.sharedInstance.wallet.isNew = YES;
-    app.buyBitcoinViewController.isNew = YES; // TODO: move this to a coordinator
     
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = NO;
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = NO;
