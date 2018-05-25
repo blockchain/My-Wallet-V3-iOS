@@ -167,7 +167,13 @@ extension WalletManager: WalletDelegate {
     func walletDidDecrypt() {
         print("walletDidDecrypt()")
 
-        authDelegate?.didDecryptWallet(guid: wallet.guid, sharedKey: wallet.sharedKey, password: wallet.password)
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.didDecryptWallet(
+                guid: self.wallet.guid,
+                sharedKey: self.wallet.sharedKey,
+                password: self.wallet.password
+            )
+        }
 
         didChangePassword = false
     }
@@ -179,46 +185,60 @@ extension WalletManager: WalletDelegate {
         wallet.bchSwipeAddressToSubscribe = nil
         wallet.twoFactorInput = nil
 
-        authDelegate?.authenticationCompleted()
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.authenticationCompleted()
+        }
     }
 
     func walletFailedToDecrypt() {
         print("walletFailedToDecrypt()")
-        authDelegate?.authenticationError(error:
-            AuthenticationError(code: AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue)
-        )
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.authenticationError(error:
+                AuthenticationError(code: AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue)
+            )
+        }
     }
 
     func walletFailedToLoad() {
         print("walletFailedToLoad()")
-        authDelegate?.authenticationError(error: AuthenticationError(
-            code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
-        ))
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.authenticationError(error: AuthenticationError(
+                code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
+            ))
+        }
     }
 
     func walletDidRequireEmailAuthorization(_ wallet: Wallet!) {
-        authDelegate?.emailAuthorizationRequired()
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.emailAuthorizationRequired()
+        }
     }
 
     func wallet(_ wallet: Wallet!, didRequireTwoFactorAuthentication type: Int) {
-        guard let twoFactorType = AuthenticationTwoFactorType(rawValue: type) else {
-            authDelegate?.authenticationError(error: AuthenticationError(
-                code: AuthenticationError.ErrorCode.invalidTwoFactorType.rawValue,
-                description: LocalizationConstants.Authentication.invalidTwoFactorAuthenticationType
-            ))
-            return
+        DispatchQueue.main.async { [unowned self] in
+            guard let twoFactorType = AuthenticationTwoFactorType(rawValue: type) else {
+                self.authDelegate?.authenticationError(error: AuthenticationError(
+                    code: AuthenticationError.ErrorCode.invalidTwoFactorType.rawValue,
+                    description: LocalizationConstants.Authentication.invalidTwoFactorAuthenticationType
+                ))
+                return
+            }
+            self.authDelegate?.didRequireTwoFactorAuth(withType: twoFactorType)
         }
-        authDelegate?.didRequireTwoFactorAuth(withType: twoFactorType)
     }
 
     func walletDidResendTwoFactorSMS(_ wallet: Wallet!) {
-        authDelegate?.didResendTwoFactorSMSCode()
+        DispatchQueue.main.async { [unowned self] in
+            self.authDelegate?.didResendTwoFactorSMSCode()
+        }
     }
 
     // MARK: - Buy/Sell
 
     func initializeWebView() {
-        buySellDelegate?.initializeWebView()
+        DispatchQueue.main.async { [unowned self] in
+            self.buySellDelegate?.initializeWebView()
+        }
     }
 
     func didCompleteTrade(_ tradeDict: [AnyHashable: Any]!) {
@@ -226,115 +246,170 @@ extension WalletManager: WalletDelegate {
             print("Failed to create Trade object.")
             return
         }
-        buySellDelegate?.didCompleteTrade(trade: trade)
+        DispatchQueue.main.async { [unowned self] in
+            self.buySellDelegate?.didCompleteTrade(trade: trade)
+        }
     }
 
     func showCompletedTrade(_ txHash: String) {
-        buySellDelegate?.showCompletedTrade(tradeHash: txHash)
+        DispatchQueue.main.async { [unowned self] in
+            self.buySellDelegate?.showCompletedTrade(tradeHash: txHash)
+        }
     }
 
     // MARK: - Pin Entry
 
     func didFailGetPinTimeout() {
-        pinEntryDelegate?.errorGetPinValueTimeout()
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.errorGetPinValueTimeout()
+        }
     }
 
     func didFailGetPinNoResponse() {
-        pinEntryDelegate?.errorGetPinEmptyResponse()
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.errorGetPinEmptyResponse()
+        }
     }
 
     func didFailGetPinInvalidResponse() {
-        pinEntryDelegate?.errorGetPinInvalidResponse()
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.errorGetPinInvalidResponse()
+        }
     }
 
     func didFailPutPin(_ value: String!) {
-        pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
+        }
     }
 
     func didPutPinSuccess(_ dictionary: [AnyHashable: Any]!) {
         let response = PutPinResponse(response: dictionary)
-        pinEntryDelegate?.putPinSuccess(response: response)
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.putPinSuccess(response: response)
+        }
     }
 
     func didGetPinResponse(_ dictionary: [AnyHashable: Any]!) {
         let response = GetPinResponse(response: dictionary)
-        pinEntryDelegate?.getPinSuccess(response: response)
+        DispatchQueue.main.async { [unowned self] in
+            self.pinEntryDelegate?.getPinSuccess(response: response)
+        }
     }
 
     // MARK: - Send Bitcoin/Bitcoin Cash
     func didCheck(forOverSpending amount: NSNumber!, fee: NSNumber!) {
-        sendBitcoinDelegate?.didCheckForOverSpending(amount: amount, fee: fee)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didCheckForOverSpending(amount: amount, fee: fee)
+        }
     }
 
     func didGetMaxFee(_ fee: NSNumber!, amount: NSNumber!, dust: NSNumber?, willConfirm: Bool) {
-        sendBitcoinDelegate?.didGetMaxFee(fee: fee, amount: amount, dust: dust, willConfirm: willConfirm)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didGetMaxFee(fee: fee, amount: amount, dust: dust, willConfirm: willConfirm)
+        }
     }
 
     func didUpdateTotalAvailable(_ sweepAmount: NSNumber!, finalFee: NSNumber!) {
-        sendBitcoinDelegate?.didUpdateTotalAvailable(sweepAmount: sweepAmount, finalFee: finalFee)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didUpdateTotalAvailable(sweepAmount: sweepAmount, finalFee: finalFee)
+        }
     }
 
     func didGetFee(_ fee: NSNumber!, dust: NSNumber?, txSize: NSNumber!) {
-        sendBitcoinDelegate?.didGetFee(fee: fee, dust: dust, txSize: txSize)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didGetFee(fee: fee, dust: dust, txSize: txSize)
+        }
     }
 
     func didChangeSatoshiPerByte(_ sweepAmount: NSNumber!, fee: NSNumber!, dust: NSNumber?, updateType: FeeUpdateType) {
-        sendBitcoinDelegate?.didChangeSatoshiPerByte(sweepAmount: sweepAmount, fee: fee, dust: dust, updateType: updateType)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didChangeSatoshiPerByte(
+                sweepAmount: sweepAmount,
+                fee: fee,
+                dust: dust,
+                updateType: updateType
+            )
+        }
     }
 
     func enableSendPaymentButtons() {
-        sendBitcoinDelegate?.enableSendPaymentButtons()
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.enableSendPaymentButtons()
+        }
     }
 
     func updateSendBalance(_ balance: NSNumber!, fees: [AnyHashable: Any]!) {
-        sendBitcoinDelegate?.updateSendBalance(balance: balance, fees: fees as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.updateSendBalance(balance: balance, fees: fees as NSDictionary)
+        }
     }
 
     func didReceivePaymentNotice(_ notice: String?) {
-        sendBitcoinDelegate?.didReceivePaymentNotice(notice: notice)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendBitcoinDelegate?.didReceivePaymentNotice(notice: notice)
+        }
     }
 
     // MARK: - Send Ether
     func didUpdateEthPayment(_ payment: [AnyHashable: Any]!) {
-        sendEtherDelegate?.didUpdateEthPayment(payment: payment as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendEtherDelegate?.didUpdateEthPayment(payment: payment as NSDictionary)
+        }
     }
 
     func didSendEther() {
-        sendEtherDelegate?.didSendEther()
+        DispatchQueue.main.async { [unowned self] in
+            self.sendEtherDelegate?.didSendEther()
+        }
     }
 
     func didErrorDuringEtherSend(_ error: String!) {
-        sendEtherDelegate?.didErrorDuringEtherSend(error: error)
+        DispatchQueue.main.async { [unowned self] in
+            self.sendEtherDelegate?.didErrorDuringEtherSend(error: error)
+        }
     }
 
     func didGetEtherAddressWithSecondPassword() {
-        sendEtherDelegate?.didGetEtherAddressWithSecondPassword()
+        DispatchQueue.main.async { [unowned self] in
+            self.sendEtherDelegate?.didGetEtherAddressWithSecondPassword()
+        }
     }
 
     // MARK: - Addresses
 
     func didGenerateNewAddress() {
-        addressesDelegate?.didGenerateNewAddress()
+        DispatchQueue.main.async { [unowned self] in
+            self.addressesDelegate?.didGenerateNewAddress()
+        }
     }
 
     func returnToAddressesScreen() {
-        addressesDelegate?.didGenerateNewAddress()
+        DispatchQueue.main.async { [unowned self] in
+            self.addressesDelegate?.didGenerateNewAddress()
+        }
     }
 
     func didSetDefaultAccount() {
-        addressesDelegate?.didSetDefaultAccount()
+        DispatchQueue.main.async { [unowned self] in
+            self.addressesDelegate?.didSetDefaultAccount()
+        }
     }
 
     // MARK: - Account Info
 
     func walletDidGetAccountInfo(_ wallet: Wallet!) {
-        accountInfoDelegate?.didGetAccountInfo()
+        DispatchQueue.main.async { [unowned self] in
+            self.accountInfoDelegate?.didGetAccountInfo()
+        }
     }
 
     // MARK: - Currency Symbols
 
     func walletDidGetBtcExchangeRates(_ wallet: Wallet!) {
-        updateSymbols()
+        DispatchQueue.main.async { [unowned self] in
+            self.updateSymbols()
+        }
     }
 
     // MARK: - BTC Multiaddress
@@ -370,80 +445,114 @@ extension WalletManager: WalletDelegate {
     // MARK: - Backup
 
     func didBackupWallet() {
-        backupDelegate?.didBackupWallet()
+        DispatchQueue.main.async { [unowned self] in
+            self.backupDelegate?.didBackupWallet()
+        }
     }
 
     func didFailBackupWallet() {
-        backupDelegate?.didFailBackupWallet()
+        DispatchQueue.main.async { [unowned self] in
+            self.backupDelegate?.didFailBackupWallet()
+        }
     }
 
     // MARK: - Account Info and Exchange Rates on startup
 
     func walletDidGetAccountInfoAndExchangeRates(_ wallet: Wallet!) {
-        accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
+        DispatchQueue.main.async { [unowned self] in
+            self.accountInfoAndExchangeRatesDelegate?.didGetAccountInfoAndExchangeRates()
+        }
     }
 
     // MARK: - Recovery
 
     func didRecoverWallet() {
-        recoveryDelegate?.didRecoverWallet()
+        DispatchQueue.main.async { [unowned self] in
+            self.recoveryDelegate?.didRecoverWallet()
+        }
     }
 
     func didFailRecovery() {
-        recoveryDelegate?.didFailRecovery()
+        DispatchQueue.main.async { [unowned self] in
+            self.recoveryDelegate?.didFailRecovery()
+        }
     }
 
     // MARK: - Exchange
     func didGetExchangeTrades(_ trades: [Any]!) {
-        exchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
+        }
     }
 
     func didGetExchangeRate(_ result: [AnyHashable: Any]!) {
-        exchangeDelegate?.didGetExchangeRate(rate: result as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didGetExchangeRate(rate: result as NSDictionary)
+        }
     }
 
     func didGetAvailableBtcBalance(_ result: [AnyHashable: Any]!) {
-        exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary)
+        }
     }
 
     func didGetAvailableEthBalance(_ result: [AnyHashable: Any]!) {
-        exchangeDelegate?.didGetAvailableEthBalance(result: result as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didGetAvailableEthBalance(result: result as NSDictionary)
+        }
     }
 
     func didBuildExchangeTrade(_ tradeInfo: [AnyHashable: Any]!) {
-        exchangeDelegate?.didBuildExchangeTrade(tradeInfo: tradeInfo as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didBuildExchangeTrade(tradeInfo: tradeInfo as NSDictionary)
+        }
     }
 
     func didShiftPayment(_ info: [AnyHashable: Any]!) {
-        exchangeDelegate?.didShiftPayment(info: info as NSDictionary)
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeDelegate?.didShiftPayment(info: info as NSDictionary)
+        }
     }
 
     func didCreateEthAccountForExchange() {
-        exchangeIntermediateDelegate?.didCreateEthAccountForExchange()
+        DispatchQueue.main.async { [unowned self] in
+            self.exchangeIntermediateDelegate?.didCreateEthAccountForExchange()
+        }
     }
 
     // MARK: - History
     func didFailGetHistory(_ error: String?) {
-        historyDelegate?.didFailGetHistory(error: error)
+        DispatchQueue.main.async { [unowned self] in
+            self.historyDelegate?.didFailGetHistory(error: error)
+        }
     }
 
     func didFetchEthHistory() {
-        historyDelegate?.didFetchEthHistory()
+        DispatchQueue.main.async { [unowned self] in
+            self.historyDelegate?.didFetchEthHistory()
+        }
     }
 
     func didFetchBitcoinCashHistory() {
-        historyDelegate?.didFetchBitcoinCashHistory()
+        DispatchQueue.main.async { [unowned self] in
+            self.historyDelegate?.didFetchBitcoinCashHistory()
+        }
     }
 
     // MARK: - Watch Only Send
     func sendFromWatchOnlyAddress() {
-        watchOnlyDelegate?.sendFromWatchOnlyAddress()
+        DispatchQueue.main.async { [unowned self] in
+            self.watchOnlyDelegate?.sendFromWatchOnlyAddress()
+        }
     }
 
     // MARK: - Transaction
 
     func didPushTransaction() {
-        self.transactionDelegate?.didPushTransaction()
+        DispatchQueue.main.async { [unowned self] in
+            self.transactionDelegate?.didPushTransaction()
+        }
     }
 
     func receivedTransactionMessage() {
@@ -459,52 +568,80 @@ extension WalletManager: WalletDelegate {
     }
 
     func updateLoadedAllTransactions(_ loadedAll: Bool) {
-        self.transactionDelegate?.updateLoadedAllTransactions(loadedAll: loadedAll)
+        DispatchQueue.main.async { [unowned self] in
+            self.transactionDelegate?.updateLoadedAllTransactions(loadedAll: loadedAll)
+        }
     }
 
     // MARK: - Transfer all
     func updateTransferAllAmount(_ amount: NSNumber!, fee: NSNumber!, addressesUsed: [Any]!) {
-        transferAllDelegate?.updateTransferAll(amount: amount, fee: fee, addressesUsed: addressesUsed as NSArray)
+        DispatchQueue.main.async { [unowned self] in
+            self.transferAllDelegate?.updateTransferAll(
+                amount: amount,
+                fee: fee,
+                addressesUsed: addressesUsed as NSArray
+            )
+        }
     }
 
     func showSummaryForTransferAll() {
-        transferAllDelegate?.showSummaryForTransferAll()
+        DispatchQueue.main.async { [unowned self] in
+            self.transferAllDelegate?.showSummaryForTransferAll()
+        }
     }
 
     func sendDuringTransferAll(_ secondPassword: String?) {
-        transferAllDelegate?.sendDuringTransferAll(secondPassword: secondPassword)
+        DispatchQueue.main.async { [unowned self] in
+            self.transferAllDelegate?.sendDuringTransferAll(secondPassword: secondPassword)
+        }
     }
 
     func didErrorDuringTransferAll(_ error: String!, secondPassword: String?) {
-        transferAllDelegate?.didErrorDuringTransferAll(error: error, secondPassword: secondPassword)
+        DispatchQueue.main.async { [unowned self] in
+            self.transferAllDelegate?.didErrorDuringTransferAll(error: error, secondPassword: secondPassword)
+        }
     }
 
     // MARK: - Fiat at Time
     func didGetFiat(atTime fiatAmount: NSNumber!, currencyCode: String!, assetType: LegacyAssetType) {
-        fiatAtTimeDelegate?.didGetFiatAtTime(fiatAmount: fiatAmount, currencyCode: currencyCode, assetType: AssetType.from(legacyAssetType: assetType))
+        DispatchQueue.main.async { [unowned self] in
+            self.fiatAtTimeDelegate?.didGetFiatAtTime(
+                fiatAmount: fiatAmount,
+                currencyCode: currencyCode,
+                assetType: AssetType.from(legacyAssetType: assetType)
+            )
+        }
     }
 
     func didErrorWhenGettingFiat(atTime error: String?) {
-        fiatAtTimeDelegate?.didErrorWhenGettingFiatAtTime(error: error)
+        DispatchQueue.main.async { [unowned self] in
+            self.fiatAtTimeDelegate?.didErrorWhenGettingFiatAtTime(error: error)
+        }
     }
 
     // MARK: - Swipe Address
 
     func didGetSwipeAddresses(_ newSwipeAddresses: [Any]!, assetType: LegacyAssetType) {
-        swipeAddressDelegate?.onRetrievedSwipeToReceive(
-            addresses: newSwipeAddresses as! [String],
-            assetType: AssetType.from(legacyAssetType: assetType)
-        )
+        DispatchQueue.main.async { [unowned self] in
+            self.swipeAddressDelegate?.onRetrievedSwipeToReceive(
+                addresses: newSwipeAddresses as! [String],
+                assetType: AssetType.from(legacyAssetType: assetType)
+            )
+        }
     }
 
     // MARK: - Key Importing
 
     func askUserToAddWatchOnlyAddress(_ address: AssetAddress, then: @escaping () -> Void) {
-        keyImportDelegate?.askUserToAddWatchOnlyAddress(address, then: then)
+        DispatchQueue.main.async { [unowned self] in
+            self.keyImportDelegate?.askUserToAddWatchOnlyAddress(address, then: then)
+        }
     }
 
     @objc func scanPrivateKeyForWatchOnlyAddress(_ address: String) {
         let address = BitcoinAddress(string: address)!
-        keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
+        DispatchQueue.main.async { [unowned self] in
+            self.keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
+        }
     }
 }
