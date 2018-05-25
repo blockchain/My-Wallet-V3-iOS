@@ -330,10 +330,6 @@
         [weakSelf on_pin_code_get_response:response];
     };
 
-    self.context[@"objc_loading_start_download_wallet"] = ^(){
-        [weakSelf loading_start_download_wallet];
-    };
-
     self.context[@"objc_loading_start_get_wallet_and_history"] = ^() {
         [weakSelf loading_start_get_wallet_and_history];
     };
@@ -2941,13 +2937,6 @@
 }
 
 #pragma mark - Callbacks from JS to Obj-C dealing with loading texts
-
-- (void)loading_start_download_wallet
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:LocalizationConstantsObjcBridge.downloadingWallet];
-    });
-}
 
 - (void)loading_start_decrypt_wallet
 {
