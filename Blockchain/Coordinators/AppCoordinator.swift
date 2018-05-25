@@ -58,15 +58,7 @@ import Foundation
         return viewController
     }()
 
-    private lazy var settingsNavigationController: SettingsNavigationController = { [unowned self] in
-        let storyboard = UIStoryboard(name: "Settings", bundle: nil)
-        let viewController = storyboard.instantiateViewController(
-            withIdentifier: "SettingsNavigationController"
-        ) as! SettingsNavigationController
-        viewController.showSettings()
-        viewController.modalTransitionStyle = .coverVertical
-        return viewController
-    }()
+    @objc private var settingsNavigationController: SettingsNavigationController?
 
     @objc private(set) var buyBitcoinViewController: BuyBitcoinViewController?
 
@@ -133,13 +125,20 @@ import Foundation
     }
 
     @objc func showSettingsView(completion: ((_ settingViewController: SettingsNavigationController) -> Void)? = nil) {
+        let storyboard = UIStoryboard(name: "Settings", bundle: nil)
+        let viewController = storyboard.instantiateViewController(
+            withIdentifier: "SettingsNavigationController"
+        ) as! SettingsNavigationController
+        viewController.showSettings()
+        viewController.modalTransitionStyle = .coverVertical
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
-            settingsNavigationController,
+            viewController,
             animated: true
-        ) { [weak self] in
-            guard let strongSelf = self else { return }
-            completion?(strongSelf.settingsNavigationController)
+        ) {
+            completion?(viewController)
         }
+
+        settingsNavigationController = viewController
     }
 
     @objc func showBuyBitcoinView() {
@@ -202,7 +201,7 @@ import Foundation
     /// Reloads contained view controllers
     @objc func reload() {
         tabControllerManager.reload()
-        settingsNavigationController.reload()
+        settingsNavigationController?.reload()
         accountsAndAddressesNavigationController.reload()
 
         if let sideMenuViewController = slidingViewController.underLeftViewController as? SideMenuViewController {
@@ -242,7 +241,7 @@ import Foundation
         }
 
         tabControllerManager.reloadAfterMultiAddressResponse()
-        settingsNavigationController.reloadAfterMultiAddressResponse()
+        settingsNavigationController?.reloadAfterMultiAddressResponse()
         accountsAndAddressesNavigationController.reload()
         sideMenuViewController.reload()
 

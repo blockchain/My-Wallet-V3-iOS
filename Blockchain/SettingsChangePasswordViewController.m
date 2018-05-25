@@ -127,7 +127,7 @@
     UIAlertController *alertForChangePasswordSuccess = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_SETTINGS_SECURITY_PASSWORD_CHANGED preferredStyle:UIAlertControllerStyleAlert];
     [alertForChangePasswordSuccess addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        [[AppCoordinator sharedInstance] closeSideMenu];
+        [AppCoordinator.sharedInstance closeSideMenu];
         [AuthenticationCoordinator.sharedInstance showPasswordModal];
         WalletManager.sharedInstance.didChangePassword = YES;
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForChangePasswordSuccess animated:YES completion:nil];
