@@ -130,6 +130,12 @@
     [dataTask resume];
 }
 
+- (void)updateLoadedAllTransactionsWithLoadedAll:(BOOL)loadedAll
+{
+    // Should eventually apply to all asset types, but the fetching mechanism was never merged into My-Wallet-V3.
+    _transactionsBitcoinViewController.loadedAllTransactions = loadedAll;
+}
+
 #pragma mark - Reloading
 
 - (void)reload
@@ -343,14 +349,6 @@
     if (notice && self.tabViewController.selectedIndex == TAB_SEND && !LoadingViewPresenter.sharedInstance.isLoadingShown && !AuthenticationCoordinator.shared.pinEntryViewController && !self.tabViewController.presentedViewController) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] handler: nil];
     }
-}
-
-#pragma mark - Wallet Transactions Fetching Delegate
-
-- (void)updateLoadedAllTransactions:(BOOL)loadedAll
-{
-    // Should eventually apply to all asset types, but the fetching mechanism was never merged into My-Wallet-V3.
-    _transactionsBitcoinViewController.loadedAllTransactions = loadedAll;
 }
 
 #pragma mark - Eth Send
