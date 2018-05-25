@@ -76,7 +76,13 @@ class PasswordRequiredView: UIView {
         textFieldPassword.resignFirstResponder()
         textFieldPassword.text = nil
 
-        delegate?.didContinue(with: cleanedPassword)
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Authentication.downloadingWallet)
+
+        perform(#selector(login), with: cleanedPassword, afterDelay: Constants.Animation.durationLong)
+    }
+
+    @objc private func login(password: String) {
+        delegate?.didContinue(with: password)
     }
 }
 
