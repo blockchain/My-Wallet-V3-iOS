@@ -21,3 +21,11 @@ extension UINavigationController {
         return visibleViewController ?? self
     }
 }
+
+extension UIAlertController {
+
+    /// Overridden so that UIAlertControllers will never show up as the `topMostViewController`.
+    override var topMostViewController: UIViewController? {
+        return presentedViewController?.topMostViewController
+    }
+}
