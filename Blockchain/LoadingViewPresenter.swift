@@ -41,6 +41,7 @@ import Foundation
         }
 
         guard self.isLoadingShown else {
+            print("[LoadingViewPresenter]: Cannot hide busy view, already shown.")
             return
         }
 
@@ -48,10 +49,6 @@ import Foundation
         self.busyView.fadeOut()
     }
 
-    // TODO: Show/hide/update methods can be called from any thread so we need to make sure to
-    // explicitly dispatch the actions to the main thread. Once the wallet-rearch is completed, the
-    // show/hide/update logic should not be dispatched to the main thread and instead callers should
-    // guarantee to call these methods in the main thread.
     @objc func showBusyView(withLoadingText text: String) {
         let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
 
@@ -65,13 +62,15 @@ import Foundation
             return
         }
 
+        self.busyView.labelBusy.text = text
+
         guard !self.isLoadingShown else {
+            print("[LoadingViewPresenter]: cannot show busy view already shown.")
             return
         }
 
         self.attachToMainWindow()
 
-        self.busyView.labelBusy.text = text
         self.busyView.fadeIn()
     }
 
@@ -84,6 +83,7 @@ import Foundation
         }
 
         guard self.isLoadingShown else {
+            print("[LoadingViewPresenter]: Cannot update busy view with text: '\(text)', busy view should be shown.")
             return
         }
 

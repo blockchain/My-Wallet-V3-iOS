@@ -279,13 +279,12 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
     }
 
     func getPinSuccess(response: GetPinResponse) {
-        LoadingViewPresenter.shared.hideBusyView()
 
         var pinSuccess = false
 
         // Incorrect pin
         if response.code == nil {
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.incorrect)
+            showPinError(withMessage: LocalizationConstants.Pin.incorrect)
         } else if response.code == GetPinResponse.StatusCode.deleted.rawValue {
             // Pin retry limit exceeded
             BlockchainSettings.App.shared.clearPin()
@@ -294,16 +293,17 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
                 guard let strongSelf = self else { return }
                 strongSelf.showPasswordModal()
                 strongSelf.closePinEntryView(animated: true)
-                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.validationCannotBeCompleted)
+                strongSelf.showPinError(withMessage: LocalizationConstants.Pin.validationCannotBeCompleted)
             }
         } else if response.code == GetPinResponse.StatusCode.incorrect.rawValue {
             let error = response.error ?? LocalizationConstants.Pin.incorrectUnknownError
-            AlertViewPresenter.shared.standardError(message: error)
+            showPinError(withMessage: error)
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
             // Handle touch ID
             if let config = AppFeatureConfigurator.shared.configuration(for: .touchId), config.isEnabled,
                 pinEntryViewController?.verifyOptional ?? false {
+                LoadingViewPresenter.shared.hideBusyView()
                 BlockchainSettings.App.shared.touchIDEnabled = true
                 closePinEntryView(animated: true)
                 AppCoordinator.shared.showSettingsView()
@@ -319,7 +319,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
             // Initial PIN setup ?
             if response.pinDecryptionValue?.count == 0 {
-                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.responseSuccessLengthZero)
+                showPinError(withMessage: LocalizationConstants.Pin.responseSuccessLengthZero)
                 return
             }
 
@@ -333,7 +333,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             if let decryptedPassword = decryptedPassword, decryptedPassword.count > 0 {
                 tryToLoadWallet(password: decryptedPassword)
             } else {
-                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Pin.decryptedPasswordLengthZero)
+                showPinError(withMessage: LocalizationConstants.Pin.decryptedPasswordLengthZero)
                 askIfUserWantsToResetPIN()
                 return
             }
@@ -341,6 +341,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             closePinEntryView(animated: true)
             pinSuccess = true
         } else {
+            LoadingViewPresenter.shared.hideBusyView()
             askIfUserWantsToResetPIN()
         }
 
@@ -397,8 +398,8 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
     }
 
     private func showPinError(withMessage message: String) {
+        LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error) { [unowned self] _ in
-            LoadingViewPresenter.shared.hideBusyView()
             self.pinEntryViewController?.reset()
         }
     }

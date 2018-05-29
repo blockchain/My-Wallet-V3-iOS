@@ -330,6 +330,10 @@
         [weakSelf on_pin_code_get_response:response];
     };
 
+    self.context[@"objc_loading_start_download_wallet"] = ^(){
+        [weakSelf loading_start_download_wallet];
+    };
+
     self.context[@"objc_loading_start_get_wallet_and_history"] = ^() {
         [weakSelf loading_start_get_wallet_and_history];
     };
@@ -2938,25 +2942,24 @@
 
 #pragma mark - Callbacks from JS to Obj-C dealing with loading texts
 
+- (void)loading_start_download_wallet
+{
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:LocalizationConstantsObjcBridge.downloadingWallet];
+}
+
 - (void)loading_start_decrypt_wallet
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_DECRYPTING_WALLET];
-    });
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_DECRYPTING_WALLET];
 }
 
 - (void)loading_start_build_wallet
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_BUILD_HD_WALLET];
-    });
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_BUILD_HD_WALLET];
 }
 
 - (void)loading_start_multiaddr
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
-    });
+    [[LoadingViewPresenter sharedInstance] updateBusyViewLoadingTextWithText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
 }
 
 - (void)loading_start_get_history
