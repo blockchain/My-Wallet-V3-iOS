@@ -41,7 +41,7 @@ import Foundation
         }
 
         guard self.isLoadingShown else {
-            print("[LoadingViewPresenter]: Cannot hide busy view, already shown.")
+            print("[LoadingViewPresenter]: Cannot hide busy view, already not shown.")
             return
         }
 
