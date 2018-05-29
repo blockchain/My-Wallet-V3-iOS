@@ -101,8 +101,9 @@ struct Constants {
     }
     struct Url {
         static let blockchainHome = "https://www.blockchain.com"
-        static let blockchainPrivacyPolicy = blockchainHome + "/privacy"
-        static let blockchainTermsOfService = blockchainHome + "/terms"
+        static let privacyPolicy = blockchainHome + "/privacy"
+        static let termsOfService = blockchainHome + "/terms"
+        static let cookiePolicy = blockchainHome + "/cookies"
         static let appStoreLinkPrefix = "itms-apps://itunes.apple.com/app/"
         static let blockchainSupport = "https://support.blockchain.com"
         static let forgotPassword = "https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
@@ -172,13 +173,17 @@ struct Constants {
     @objc class func wrongBip38Password() -> String {
         return Constants.JSErrors.AddressAndKeyImport.wrongBipPass
     }
-    
+
     @objc class func termsOfServiceURLString() -> String {
-        return Constants.Url.blockchainTermsOfService
+        return Constants.Url.termsOfService
     }
-    
+
     @objc class func privacyPolicyURLString() -> String {
-        return Constants.Url.blockchainPrivacyPolicy
+        return Constants.Url.privacyPolicy
+    }
+
+    @objc class func cookiePolicyURLString() -> String {
+        return Constants.Url.cookiePolicy
     }
 }
 

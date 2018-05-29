@@ -165,6 +165,12 @@ struct LocalizationConstants {
         static let waitingForPaymentToFinishTitle = NSLocalizedString("Waiting for payment", comment: "")
         static let waitingForPaymentToFinishMessage = NSLocalizedString("Please wait until your last ether transaction confirms.", comment: "")
     }
+
+    struct Settings {
+        struct About {
+            static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
+        }
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -214,4 +220,6 @@ struct LocalizationConstants {
     @objc class func unknownKeyFormat() -> String { return LocalizationConstants.AddressAndKeyImport.unknownKeyFormat }
 
     @objc class func unsupportedPrivateKey() -> String { return LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey }
+
+    @objc class func cookiePolicy() -> String { return LocalizationConstants.Settings.About.cookiePolicy }
 }

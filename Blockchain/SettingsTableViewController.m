@@ -42,6 +42,7 @@ const int aboutSection = 3;
 const int aboutUs = 0;
 const int aboutTermsOfService = 1;
 const int aboutPrivacyPolicy = 2;
+const int aboutCookiePolicy = 3;
 
 @interface SettingsTableViewController () <UITextFieldDelegate, EmailDelegate, MobileNumberDelegate>
 
@@ -408,6 +409,14 @@ const int aboutPrivacyPolicy = 2;
     SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
     aboutViewController.urlTargetString = [ConstantsObjcBridge privacyPolicyURLString];
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:BC_STRING_SETTINGS_PRIVACY_POLICY];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)showCookiePolicy
+{
+    SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
+    aboutViewController.urlTargetString = [ConstantsObjcBridge cookiePolicyURLString];
+    BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:[LocalizationConstantsObjcBridge cookiePolicy]];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -1094,6 +1103,10 @@ const int aboutPrivacyPolicy = 2;
                     [self showPrivacyPolicy];
                     return;
                 }
+                case aboutCookiePolicy: {
+                    [self showCookiePolicy];
+                    return;
+                }
             }
             return;
         }
@@ -1123,7 +1136,7 @@ const int aboutPrivacyPolicy = 2;
 
             return [WalletManager.sharedInstance.wallet didUpgradeToHd] ? numberOfRows + 1 : numberOfRows;
         }
-        case aboutSection: return 3;
+        case aboutSection: return 4;
         default: return 0;
     }
 }
@@ -1319,6 +1332,10 @@ const int aboutPrivacyPolicy = 2;
                 }
                 case aboutPrivacyPolicy: {
                     cell.textLabel.text = BC_STRING_SETTINGS_PRIVACY_POLICY;
+                    return cell;
+                }
+                case aboutCookiePolicy: {
+                    cell.textLabel.text = [LocalizationConstantsObjcBridge cookiePolicy];
                     return cell;
                 }
             }
