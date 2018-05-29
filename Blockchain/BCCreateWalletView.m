@@ -186,7 +186,7 @@
 {
     BCWebViewController *webViewController = [[BCWebViewController alloc] initWithTitle:BC_STRING_TERMS_OF_SERVICE];
     webViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [webViewController loadURL:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingString:URL_SUFFIX_TERMS_OF_SERVICE]];
+    [webViewController loadURL:[ConstantsObjcBridge termsOfServiceURLString]];
     [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:webViewController animated:true completion:nil];
 }
 

@@ -284,9 +284,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define NOTIFICATION_KEY_CHANGE_NOTIFICATIONS_SUCCESS @"ChangeEmailNotifications"
 #define NOTIFICATION_KEY_CHANGE_NOTIFICATIONS_ERROR @"ChangeEmailNotificationsError"
 
-#define URL_SUFFIX_TERMS_OF_SERVICE @"/Resources/TermsofServicePolicy.pdf"
-#define URL_SUFFIX_PRIVACY_POLICY @"/Resources/PrivacyPolicy.pdf"
-
 #define URL_SUFFIX_ETH_IS_CONTRACT_ADDRESS_ARGUMENT @"/eth/account/%@/isContract"
 #define URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME @"/price/index?base=%@&quote=%@&time=%lld"
 
