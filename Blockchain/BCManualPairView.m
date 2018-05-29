@@ -134,6 +134,15 @@
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge downloadingWallet]];
+    
+    [self performSelector:@selector(pair) withObject:nil afterDelay:[ConstantsObjcBridge animationDurationLong]];
+}
+
+- (void)pair
+{
+    NSString *guid = walletIdentifierTextField.text;
+    NSString *password = passwordTextField.text;
     [self.delegate manualPairView:self didContinueWithGuid:guid andPassword:password];
 }
 

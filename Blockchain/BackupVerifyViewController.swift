@@ -136,7 +136,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
             }
             if valid {
                 let backupNavigation = self.navigationController as? BackupNavigationViewController
-                backupNavigation?.busyView?.fadeIn()
+                LoadingViewPresenter.sharedInstance().showBusyView(withLoadingText: LocalizationConstants.syncingWallet)
                 backupNavigation?.markIsVerifying()
                 word1.resignFirstResponder()
                 word2.resignFirstResponder()
