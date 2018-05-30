@@ -1763,16 +1763,20 @@
 
 - (BOOL)isValidAddress:(NSString*)string assetType:(LegacyAssetType)assetType
 {
+    // NOTE: address validation should still be available if the wallet is not initialized
     if (![self isInitialized]) {
         return NO;
     }
 
     if (assetType == LegacyAssetTypeBitcoin) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"Helpers.isBitcoinAddress(\"%@\");", [string escapeStringForJS]]] toBool];
+        BitcoinAddress *address = [[BitcoinAddress alloc] initWithString:string];
+        return [[AddressValidator sharedInstance] validateWithBitcoinAddress:address];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"Helpers.isBitcoinAddress(\"%@\");", [string escapeStringForJS]]] toBool] || [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.isValidAddress(\"%@\")", [string escapeStringForJS]]] toBool];
+        BitcoinCashAddress *address = [[BitcoinCashAddress alloc] initWithString:string];
+        return [[AddressValidator sharedInstance] validateWithBitcoinCashAddress:address];
     } else if (assetType == LegacyAssetTypeEther) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isEthAddress(\"%@\")", string]] toBool];
+        EthereumAddress *address = [[EthereumAddress alloc] initWithString:string];
+        return [[AddressValidator sharedInstance] validateWithEthereumAddress:address];
     }
     return NO;
 }
