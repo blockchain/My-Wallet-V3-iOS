@@ -7,7 +7,7 @@ echo "Cleaning node_modules..."
 rm -rf node_modules
 
 echo "Installing node_modules..."
-yarn
+yarn --ignore-engines
 
 # Required for JavaScriptCore
 echo "Patching fetch..."

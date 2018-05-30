@@ -64,13 +64,6 @@
     self.contentView.frame = contentViewFrame;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self.balancesChartView hideChartMarker];
-}
-
 - (void)resetScrollView
 {
     [self.scrollView setContentOffset:CGPointZero animated:NO];
@@ -147,7 +140,7 @@
         [self.balancesChartView updateBitcoinFiatBalance:btcBalance];
         [self.balancesChartView updateEtherFiatBalance:ethBalance];
         [self.balancesChartView updateBitcoinCashFiatBalance:bchBalance];
-        [self.balancesChartView updateTotalFiatBalance:[NSNumberFormatter appendStringToFiatSymbol:[NSString stringWithFormat:@"%.2f", totalFiatBalance]]];
+        [self.balancesChartView updateTotalFiatBalance:[NSNumberFormatter appendStringToFiatSymbol:[NSNumberFormatter fiatStringFromDouble:totalFiatBalance]]];
         // Balances
         [self.balancesChartView updateBitcoinBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getTotalActiveBalance] localCurrency:NO]];
         [self.balancesChartView updateEtherBalance:[WalletManager.sharedInstance.wallet getEthBalanceTruncated]];

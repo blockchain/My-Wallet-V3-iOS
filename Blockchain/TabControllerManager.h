@@ -86,7 +86,6 @@
 - (void)showSummaryForTransferAll;
 - (void)sendDuringTransferAll:(NSString *)secondPassword;
 - (void)didErrorDuringTransferAll:(NSString *)error secondPassword:(NSString *_Nullable)secondPassword;
-- (void)updateLoadedAllTransactions:(BOOL)loadedAll;
 - (void)receivedTransactionMessage;
 - (DestinationAddressSource)getSendAddressSource;
 - (void)setupSendToAddress:(NSString *)address;

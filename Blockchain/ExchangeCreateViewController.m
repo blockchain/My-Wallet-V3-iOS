@@ -33,6 +33,8 @@
 
 @property (nonatomic) UIButton *assetToggleButton;
 
+@property (nonatomic) NSTimer *quoteTimer;
+
 // Digital asset input
 @property (nonatomic) BCSecureTextField *topLeftField;
 @property (nonatomic) BCSecureTextField *topRightField;
@@ -111,6 +113,14 @@
     
     BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
     navigationController.headerTitle = BC_STRING_EXCHANGE;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self.quoteTimer invalidate];
+    self.quoteTimer = nil;
 }
 
 - (void)setupViews
@@ -448,6 +458,8 @@
             self.amount = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:depositAmountString]];
         }
         
+        self.lastChangedField = self.bottomLeftField;
+        
         NSString *toSymbol = self.toSymbol;
         if ([toSymbol isEqualToString:CURRENCY_SYMBOL_ETH]) {
             self.bottomRightField.text = ethResult;
@@ -559,6 +571,10 @@
     [self saveAmount:amountString fromField:textField];
     
     [self clearOppositeFields];
+    
+    [self cancelCurrentDataTask];
+    
+    [self.quoteTimer invalidate];
     
     [self performSelector:@selector(doCurrencyConversionAfterTyping) withObject:nil afterDelay:0.1f];
     return YES;
@@ -675,7 +691,7 @@
     
     [self disablePaymentButtons];
     
-    [self performSelector:@selector(getApproximateQuote) withObject:nil afterDelay:0.5];
+    self.quoteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(getApproximateQuoteAfterTimer) userInfo:nil repeats:NO];
 }
 
 - (void)doCurrencyConversion
@@ -1010,11 +1026,7 @@
         return;
     }
     
-    if (self.currentDataTask) {
-        [self.currentDataTask cancel];
-        self.currentDataTask = nil;
-        [self.spinner stopAnimating];
-    }
+    [self cancelCurrentDataTask];
     
     BOOL usingFromField = self.lastChangedField != self.topRightField && self.lastChangedField != self.bottomRightField;
 
@@ -1079,6 +1091,22 @@
 }
 
 #pragma mark - Helpers
+
+- (void)getApproximateQuoteAfterTimer
+{
+    [self disablePaymentButtons];
+    [self getApproximateQuote];
+    self.quoteTimer = nil;
+}
+
+- (void)cancelCurrentDataTask
+{
+    if (self.currentDataTask) {
+        [self.currentDataTask cancel];
+        self.currentDataTask = nil;
+        [self.spinner stopAnimating];
+    }
+}
 
 - (void)hideKeyboard
 {

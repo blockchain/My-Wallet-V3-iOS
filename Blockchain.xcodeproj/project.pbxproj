@@ -2958,7 +2958,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && ./node_modules/karma/bin/karma start karma.conf.js --single-run";
+			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && yarn test --single-run";
 		};
 		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
 			isa = PBXShellScriptBuildPhase;

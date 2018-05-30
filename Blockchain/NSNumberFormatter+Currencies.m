@@ -274,10 +274,12 @@
 + (NSString *)fiatStringFromDouble:(double)fiatBalance
 {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     numberFormatter.minimumIntegerDigits = 1;
     NSUInteger decimalPlaces = 2;
     numberFormatter.minimumFractionDigits = decimalPlaces;
     numberFormatter.maximumFractionDigits = decimalPlaces;
+    numberFormatter.usesGroupingSeparator = YES;
     return [numberFormatter stringFromNumber:[NSNumber numberWithDouble:fiatBalance]];
 }
 

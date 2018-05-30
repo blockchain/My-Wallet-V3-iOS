@@ -21,6 +21,7 @@
 #import "ModuleXMLHttpRequest.h"
 #import "MultiAddressResponse.h"
 #import "NSData+Hex.h"
+#import "NSNumberFormatter+Currencies.h"
 #import "NSString+SHA256.h"
 #import "PEPinEntryController.h"
 #import "PairingCodeParser.h"

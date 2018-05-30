@@ -499,6 +499,9 @@ import Foundation
 
 extension AuthenticationCoordinator: ManualPairViewDelegate {
     func manualPairView(_ manualPairView: BCManualPairView!, didContinueWithGuid guid: String!, andPassword password: String!) {
+
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Authentication.downloadingWallet)
+
         let payload = PasscodePayload(guid: guid, password: password, sharedKey: "")
         AuthenticationManager.shared.authenticate(using: payload) { [weak self] isAuthenticated, twoFAtype, error in
             guard let strongSelf = self else { return }

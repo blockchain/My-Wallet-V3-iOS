@@ -35,10 +35,6 @@ typealias OnModalResumed = () -> Void
     @objc func closeAllModals() {
         LoadingViewPresenter.shared.hideBusyView()
 
-        // TODO: figure out why this is related to closing modals
-//        secondPasswordSuccess = nil;
-//        secondPasswordTextField.text = nil;
-
         WalletManager.shared.wallet.isSyncing = false
 
         guard let modalView = modalView else { return }
