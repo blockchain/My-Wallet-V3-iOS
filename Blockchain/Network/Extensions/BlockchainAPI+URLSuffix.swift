@@ -8,16 +8,17 @@
 
 import Foundation
 
+// TODO: implement ethereum case
+
 extension BlockchainAPI {
     func suffixURL(address: AssetAddress) -> String? {
-        guard let description = address.description else { return nil }
         switch address.assetType {
         case .bitcoin:
             guard let url = walletUrl else { return nil }
-            return String(format: "%@/address/%@?format=json", url, description)
+            return "\(url)/address/\(address)?format=json"
         case .bitcoinCash:
             guard let url = apiUrl else { return nil }
-            return String(format: "%@/bch/multiaddr?active=%@", url, description)
+            return "\(url)/bch/multiaddr?active=\(address)"
         default:
             return nil
         }

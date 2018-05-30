@@ -504,7 +504,7 @@ extension WalletManager: WalletDelegate {
     }
 
     @objc func scanPrivateKeyForWatchOnlyAddress(_ address: String) {
-        let address = BitcoinAddress(string: address)!
+        let address = BitcoinAddress(string: address)
         keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
     }
 }

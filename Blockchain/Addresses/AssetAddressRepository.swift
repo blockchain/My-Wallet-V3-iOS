@@ -128,8 +128,8 @@ extension AssetAddressRepository {
         let assetType = AssetType.from(legacyAssetType: legacyAssetType)
 
         switch assetType {
-        case .bitcoin: assetAddress = BitcoinAddress(string: address)!
-        case .bitcoinCash: assetAddress = BitcoinCashAddress(string: address)!
+        case .bitcoin: assetAddress = BitcoinAddress(string: address)
+        case .bitcoinCash: assetAddress = BitcoinCashAddress(string: address)
         case .ethereum: return
         }
 
