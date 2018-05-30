@@ -14,7 +14,6 @@ extension String {
         let insensitive = NSString.CompareOptions.caseInsensitive
         output = output
             .replacingOccurrences(of: "\"", with: "\\\"", options: insensitive)    // Quotation mark
-            .replacingOccurrences(of: "/", with: "\\/", options: insensitive)      // Solidus
             .replacingOccurrences(of: "\\", with: "\\\\", options: insensitive)    // Reverse solidus
             .replacingOccurrences(of: "'", with: "\\'", options: insensitive)      // Single quote
             .replacingOccurrences(of: "\u{8}", with: "\\b", options: insensitive)  // Backspace

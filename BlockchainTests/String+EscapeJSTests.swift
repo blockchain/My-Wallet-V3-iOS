@@ -33,14 +33,6 @@ class StringEscapeJSTests: XCTestCase {
 //        let result = input.escapedForJS()
 //        XCTAssertEqual(result, expected, "Expected strings to match")
 //    }
-//
-//    //: Solidus
-//    func testEscapedForJSWithSolidus() {
-//        let input = "This string should escape the solidus (/) character."
-//        let expected = "This string should escape the solidus (\\/) character."
-//        let result = input.escapedForJS()
-//        XCTAssertEqual(result, expected, "Expected \(result) to match \(expected).")
-//    }
 
     //: Reverse solidus
     func testEscapedForJSWithBackslash() {
