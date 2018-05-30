@@ -1764,9 +1764,13 @@
 - (BOOL)isValidAddress:(NSString*)string assetType:(LegacyAssetType)assetType
 {
     // NOTE: address validation should still be available if the wallet is not initialized
+
     if (![self isInitialized]) {
         return NO;
     }
+
+    // No need to nil check [AddressValidator sharedInstance]
+    // because the wallet is guaranteed to be initialized above
 
     if (assetType == LegacyAssetTypeBitcoin) {
         BitcoinAddress *address = [[BitcoinAddress alloc] initWithString:string];
