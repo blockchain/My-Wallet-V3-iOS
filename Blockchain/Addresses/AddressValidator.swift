@@ -19,8 +19,13 @@ public final class AddressValidator: NSObject {
 
     static let shared = AddressValidator()
 
+    @objc class func sharedInstance() -> AddressValidator? {
+        return shared
+    }
+
     // MARK: - Initialization
 
+    @objc
     private init?(context: JSContext? = WalletManager.shared.wallet.context) {
         guard let JSContext = context else { return nil }
         self.context = JSContext
@@ -28,6 +33,7 @@ public final class AddressValidator: NSObject {
 
     // MARK: - Bitcoin Address Validation
 
+    @objc
     func validate(bitcoinAddress address: BitcoinAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
         guard let result = context?.evaluateScript("Helpers.isBitcoinAddress(\"\(escapedString)\");") else { return false }
@@ -36,6 +42,7 @@ public final class AddressValidator: NSObject {
 
     // MARK: - Bitcoin Cash Address Validation
 
+    @objc
     func validate(bitcoinCashAddress address: BitcoinCashAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
         guard let result = context?.evaluateScript("MyWalletPhone.bch.isValidAddress(\"\(escapedString)\");") else {
@@ -47,6 +54,7 @@ public final class AddressValidator: NSObject {
 
     // MARK: - Ethereum Address Validation
 
+    @objc
     func validate(ethereumAddress address: EthereumAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
         guard let result = context?.evaluateScript("MyWalletPhone.isEthAddress(\"\(escapedString)\");") else { return false }
