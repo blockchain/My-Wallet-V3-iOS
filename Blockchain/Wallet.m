@@ -10,11 +10,9 @@
 #import "Wallet.h"
 #import "Transaction.h"
 #import "EtherTransaction.h"
-#import "NSString+NSString_EscapeQuotes.h"
 #import "MultiAddressResponse.h"
 #import "UncaughtExceptionHandler.h"
 #import "NSString+JSONParser_NSString.h"
-#import "NSString+NSString_EscapeQuotes.h"
 #import "crypto_scrypt.h"
 #import "NSData+Hex.h"
 #import "TransactionsBitcoinViewController.h"
@@ -1064,11 +1062,11 @@
     if (self.guid && self.password) {
         DLog(@"Fetch Wallet");
 
-        NSString *escapedSharedKey = self.sharedKey == nil ? @"" : [self.sharedKey escapeStringForJS];
-        NSString *escapedSessionToken = self.sessionToken == nil ? @"" : [self.sessionToken escapeStringForJS];
-        NSString *escapedTwoFactorInput = self.twoFactorInput == nil ? @"" : [self.twoFactorInput escapeStringForJS];
+        NSString *escapedSharedKey = self.sharedKey == nil ? @"" : [self.sharedKey escapedForJS];
+        NSString *escapedSessionToken = self.sessionToken == nil ? @"" : [self.sessionToken escapedForJS];
+        NSString *escapedTwoFactorInput = self.twoFactorInput == nil ? @"" : [self.twoFactorInput escapedForJS];
 
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.login(\"%@\", \"%@\", false, \"%@\", \"%@\", \"%@\")", [self.guid escapeStringForJS], escapedSharedKey, [self.password escapeStringForJS], escapedSessionToken, escapedTwoFactorInput]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.login(\"%@\", \"%@\", false, \"%@\", \"%@\", \"%@\")", [self.guid escapedForJS], escapedSharedKey, [self.password escapedForJS], escapedSessionToken, escapedTwoFactorInput]];
     }
 }
 
@@ -1114,14 +1112,14 @@
         [self.pendingEthSocketMessages removeAllObjects];
     } else if (webSocket == self.btcSocket) {
         DLog(@"btc websocket opened");
-        NSString *message = self.btcSwipeAddressToSubscribe ? [NSString stringWithFormat:@"{\"op\":\"addr_sub\",\"addr\":\"%@\"}", [self.btcSwipeAddressToSubscribe escapeStringForJS]] : [[self.context evaluateScript:@"MyWallet.getSocketOnOpenMessage()"] toString];
+        NSString *message = self.btcSwipeAddressToSubscribe ? [NSString stringWithFormat:@"{\"op\":\"addr_sub\",\"addr\":\"%@\"}", [self.btcSwipeAddressToSubscribe escapedForJS]] : [[self.context evaluateScript:@"MyWallet.getSocketOnOpenMessage()"] toString];
 
         NSError *error;
         [webSocket sendString:message error:&error];
         if (error) DLog(@"Error subscribing to address: %@", [error localizedDescription]);
     } else if (webSocket == self.bchSocket) {
         DLog(@"bch websocket opened");
-        NSString *message = self.bchSwipeAddressToSubscribe ? [NSString stringWithFormat:@"{\"op\":\"addr_sub\",\"addr\":\"%@\"}", [self fromBitcoinCash:[self.bchSwipeAddressToSubscribe escapeStringForJS]]] : [[self.context evaluateScript:@"MyWalletPhone.bch.getSocketOnOpenMessage()"] toString];
+        NSString *message = self.bchSwipeAddressToSubscribe ? [NSString stringWithFormat:@"{\"op\":\"addr_sub\",\"addr\":\"%@\"}", [self fromBitcoinCash:[self.bchSwipeAddressToSubscribe escapedForJS]]] : [[self.context evaluateScript:@"MyWalletPhone.bch.getSocketOnOpenMessage()"] toString];
         NSError *error;
         [webSocket sendString:message error:&error];
         if (error) DLog(@"Error subscribing to address: %@", [error localizedDescription]);
@@ -1165,12 +1163,12 @@
 {
     if (webSocket == self.ethSocket) {
         DLog(@"received eth socket message string");
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.didReceiveEthSocketMessage(\"%@\")", [string escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.didReceiveEthSocketMessage(\"%@\")", [string escapedForJS]]];
     } else {
         DLog(@"received websocket message string");
 
         if (webSocket == self.btcSocket) {
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.getSocketOnMessage(\"%@\", { checksum: null })", [string escapeStringForJS]]];
+            [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.getSocketOnMessage(\"%@\", { checksum: null })", [string escapedForJS]]];
         } else if (webSocket == self.bchSocket) {
             [self.context evaluateScript:@"MyWalletPhone.bch.didGetTxMessage()"];
         }
@@ -1278,17 +1276,17 @@
 
 - (NSString*)encrypt:(NSString*)data password:(NSString*)_password pbkdf2_iterations:(int)pbkdf2_iterations
 {
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"WalletCrypto.encrypt(\"%@\", \"%@\", %d)", [data escapeStringForJS], [_password escapeStringForJS], pbkdf2_iterations]] toString];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"WalletCrypto.encrypt(\"%@\", \"%@\", %d)", [data escapedForJS], [_password escapedForJS], pbkdf2_iterations]] toString];
 }
 
 - (NSString*)decrypt:(NSString*)data password:(NSString*)_password pbkdf2_iterations:(int)pbkdf2_iterations
 {
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"WalletCrypto.decryptPasswordWithProcessedPin(\"%@\", \"%@\", %d)", [data escapeStringForJS], [_password escapeStringForJS], pbkdf2_iterations]] toString];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"WalletCrypto.decryptPasswordWithProcessedPin(\"%@\", \"%@\", %d)", [data escapedForJS], [_password escapedForJS], pbkdf2_iterations]] toString];
 }
 
 - (float)getStrengthForPassword:(NSString *)passwordString
 {
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getPasswordStrength(\"%@\")", [passwordString escapeStringForJS]]] toDouble];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getPasswordStrength(\"%@\")", [passwordString escapedForJS]]] toDouble];
 }
 
 - (void)loadMetadata
@@ -1366,7 +1364,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeLocalCurrency(\"%@\")", [currencyCode escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeLocalCurrency(\"%@\")", [currencyCode escapedForJS]]];
 }
 
 - (void)changeBtcCurrency:(NSString *)btcCode
@@ -1375,7 +1373,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeBtcCurrency(\"%@\")", [btcCode escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeBtcCurrency(\"%@\")", [btcCode escapedForJS]]];
 }
 
 - (uint64_t)conversionForBitcoinAssetType:(LegacyAssetType)assetType
@@ -1488,7 +1486,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeEmail(\"%@\")", [newEmail escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeEmail(\"%@\")", [newEmail escapedForJS]]];
 }
 
 - (void)resendVerificationEmail:(NSString *)email
@@ -1497,7 +1495,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.resendEmailConfirmation(\"%@\")", [email escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.resendEmailConfirmation(\"%@\")", [email escapedForJS]]];
 }
 
 - (void)changeMobileNumber:(NSString *)newMobileNumber
@@ -1506,7 +1504,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeMobileNumber(\"%@\")", [newMobileNumber escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeMobileNumber(\"%@\")", [newMobileNumber escapedForJS]]];
 }
 
 - (void)verifyMobileNumber:(NSString *)code
@@ -1515,7 +1513,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.verifyMobile(\"%@\")", [code escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.verifyMobile(\"%@\")", [code escapedForJS]]];
 }
 
 - (void)enableTwoStepVerificationForSMS
@@ -1542,7 +1540,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePassword(\"%@\")", [changedPassword escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePassword(\"%@\")", [changedPassword escapedForJS]]];
 }
 
 - (BOOL)isCorrectPassword:(NSString *)inputedPassword
@@ -1551,7 +1549,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isCorrectMainPassword(\"%@\")", [inputedPassword escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isCorrectMainPassword(\"%@\")", [inputedPassword escapedForJS]]] toBool];
 }
 
 - (void)sendPaymentWithListener:(transactionProgressListeners*)listener secondPassword:(NSString *)secondPassword
@@ -1563,9 +1561,9 @@
     }
 
     if (secondPassword) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", true, \"%@\")", [txProgressID escapeStringForJS], [secondPassword escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", true, \"%@\")", [txProgressID escapedForJS], [secondPassword escapedForJS]]];
     } else {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", true)", [txProgressID escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", true)", [txProgressID escapedForJS]]];
     }
 }
 
@@ -1578,9 +1576,9 @@
     }
 
     if (secondPassword) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", false, \"%@\")", [txProgressID escapeStringForJS], [secondPassword escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", false, \"%@\")", [txProgressID escapedForJS], [secondPassword escapedForJS]]];
     } else {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", false)", [txProgressID escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.quickSendBtc(\"%@\", false)", [txProgressID escapedForJS]]];
     }
 }
 
@@ -1593,7 +1591,7 @@
 {
     NSString *requestedAmountString = [NSNumberFormatter convertedDecimalString:inputString];
 
-    return [[[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.precisionToSatoshiBN(\"%@\", %lld).toString()", [requestedAmountString escapeStringForJS], WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]] toNumber] longLongValue];
+    return [[[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.precisionToSatoshiBN(\"%@\", %lld).toString()", [requestedAmountString escapedForJS], WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc.conversion]] toNumber] longLongValue];
 }
 
 // Make a request to blockchain.info to get the session id SID in a cookie. This cookie is around for new instances of UIWebView and will be used to let the server know the user is trying to gain access from a new device. The device is recognized based on the SID.
@@ -1611,7 +1609,7 @@
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.parsePairingCode(\"%@\");", [code escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.parsePairingCode(\"%@\");", [code escapedForJS]]];
 }
 
 // Pairing code JS callbacks
@@ -1667,7 +1665,7 @@
 
 - (void)newAccount:(NSString*)__password email:(NSString *)__email
 {
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.newAccount(\"%@\", \"%@\", \"%@\")", [__password escapeStringForJS], [__email escapeStringForJS], BC_STRING_MY_BITCOIN_WALLET]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.newAccount(\"%@\", \"%@\", \"%@\")", [__password escapedForJS], [__email escapedForJS], BC_STRING_MY_BITCOIN_WALLET]];
 }
 
 - (BOOL)needsSecondPassword
@@ -1685,7 +1683,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.validateSecondPassword(\"%@\")", [secondPassword escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.validateSecondPassword(\"%@\")", [secondPassword escapedForJS]]] toBool];
 }
 
 - (void)getFinalBalance
@@ -1713,7 +1711,7 @@
     }
 
     if ([self checkIfWalletHasAddress:address]) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.key(\"%@\").isWatchOnly", [address escapeStringForJS]]] toBool];
+        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.key(\"%@\").isWatchOnly", [address escapedForJS]]] toBool];
     } else {
         return NO;
     }
@@ -1729,7 +1727,7 @@
         if ([[WalletManager.sharedInstance.wallet.addressBook objectForKey:address] length] > 0) {
             return [WalletManager.sharedInstance.wallet.addressBook objectForKey:address];
         } else if ([[WalletManager.sharedInstance.wallet allLegacyAddresses:assetType] containsObject:address]) {
-            NSString *label = [self checkIfWalletHasAddress:address] ? [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.labelForLegacyAddress(\"%@\")", [address escapeStringForJS]]] toString] : nil;
+            NSString *label = [self checkIfWalletHasAddress:address] ? [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.labelForLegacyAddress(\"%@\")", [address escapedForJS]]] toString] : nil;
             if (label && ![label isEqualToString:@""])
                 return label;
         }
@@ -1746,7 +1744,7 @@
         return FALSE;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isArchived(\"%@\")", [address escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isArchived(\"%@\")", [address escapedForJS]]] toBool];
 }
 
 - (BOOL)isAccountArchived:(int)account assetType:(LegacyAssetType)assetType
@@ -1847,7 +1845,7 @@
 
     self.isSyncing = YES;
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAddress(\"%@\", \"%@\")", [address escapeStringForJS], [label escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAddress(\"%@\", \"%@\")", [address escapedForJS], [label escapedForJS]]];
 }
 
 - (void)toggleArchiveLegacyAddress:(NSString*)address
@@ -1863,7 +1861,7 @@
 
     self.isSyncing = YES;
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.toggleArchived(\"%@\")", [address escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.toggleArchived(\"%@\")", [address escapedForJS]]];
 }
 
 - (void)toggleArchiveAccount:(int)account assetType:(LegacyAssetType)assetType
@@ -1893,7 +1891,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.archiveTransferredAddresses(\"%@\")", [[transferredAddresses jsonString] escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.archiveTransferredAddresses(\"%@\")", [[transferredAddresses jsonString] escapedForJS]]];
 }
 
 - (id)getLegacyAddressBalance:(NSString*)address assetType:(LegacyAssetType)assetType
@@ -1905,13 +1903,13 @@
 
     if (assetType == LegacyAssetTypeBitcoin) {
         if ([self checkIfWalletHasAddress:address]) {
-            return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.key(\"%@\").balance", [address escapeStringForJS]]] toNumber];
+            return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.key(\"%@\").balance", [address escapedForJS]]] toNumber];
         } else {
             DLog(@"Wallet error: Tried to get balance of address %@, which was not found in this wallet", address);
             return errorBalance;
         }
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.getBalanceForAddress(\"%@\")", [address escapeStringForJS]]] toNumber];
+        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.getBalanceForAddress(\"%@\")", [address escapedForJS]]] toNumber];
     }
     return 0;
 }
@@ -1922,7 +1920,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addKey(\"%@\")", [privateKeyString escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addKey(\"%@\")", [privateKeyString escapedForJS]]] toBool];
 }
 
 - (BOOL)addKey:(NSString*)privateKeyString toWatchOnlyAddress:(NSString *)watchOnlyAddress
@@ -1931,7 +1929,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addKeyToLegacyAddress(\"%@\", \"%@\")", [privateKeyString escapeStringForJS], [watchOnlyAddress escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addKeyToLegacyAddress(\"%@\", \"%@\")", [privateKeyString escapedForJS], [watchOnlyAddress escapedForJS]]] toBool];
 }
 
 - (void)sendFromWatchOnlyAddress:(NSString *)watchOnlyAddress privateKey:(NSString *)privateKeyString
@@ -1940,7 +1938,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.sendFromWatchOnlyAddressWithPrivateKey(\"%@\", \"%@\")", [privateKeyString escapeStringForJS], [watchOnlyAddress escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.sendFromWatchOnlyAddressWithPrivateKey(\"%@\", \"%@\")", [privateKeyString escapedForJS], [watchOnlyAddress escapedForJS]]];
 }
 
 - (NSDictionary*)addressBook
@@ -1960,7 +1958,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addAddressBookEntry(\"%@\", \"%@\")", [address escapeStringForJS], [label escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.addAddressBookEntry(\"%@\", \"%@\")", [address escapedForJS], [label escapedForJS]]];
 }
 
 - (NSString*)detectPrivateKeyFormat:(NSString*)privateKeyString
@@ -1969,7 +1967,7 @@
         return nil;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.detectPrivateKeyFormat(\"%@\")", [privateKeyString escapeStringForJS]]] toString];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.detectPrivateKeyFormat(\"%@\")", [privateKeyString escapedForJS]]] toString];
 }
 
 - (void)createNewPayment:(LegacyAssetType)assetType
@@ -1990,7 +1988,7 @@
 - (void)changePaymentFromAddress:(NSString *)address isAdvanced:(BOOL)isAdvanced assetType:(LegacyAssetType)assetType
 {
     if (assetType == LegacyAssetTypeBitcoin) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePaymentFrom(\"%@\", %d)", [address escapeStringForJS], isAdvanced]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePaymentFrom(\"%@\", %d)", [address escapedForJS], isAdvanced]];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
         [self.context evaluateScript:@"MyWalletPhone.bch.changePaymentFromImportedAddresses()"];
     }
@@ -2029,11 +2027,11 @@
     }
 
     if (assetType == LegacyAssetTypeBitcoin) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePaymentTo(\"%@\")", [toString escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changePaymentTo(\"%@\")", [toString escapedForJS]]];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.changePaymentToAddress(\"%@\")", [toString escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.changePaymentToAddress(\"%@\")", [toString escapedForJS]]];
     } else if (assetType == LegacyAssetTypeEther) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setEtherPaymentTo(\"%@\")", [toString escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setEtherPaymentTo(\"%@\")", [toString escapedForJS]]];
     }
 }
 
@@ -2067,7 +2065,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferAllFundsToAccount(%d, true, \"%@\", \"%@\", %d)", account, [address escapeStringForJS], [secondPassword escapeStringForJS], useSendPayment]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferAllFundsToAccount(%d, true, \"%@\", \"%@\", %d)", account, [address escapedForJS], [secondPassword escapedForJS], useSendPayment]];
 }
 
 - (void)setupFollowingTransferForAllFundsToAccount:(int)account address:(NSString *)address secondPassword:(NSString *)secondPassword useSendPayment:(BOOL)useSendPayment
@@ -2076,7 +2074,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferAllFundsToAccount(%d, false, \"%@\", \"%@\", %d)", account, [address escapeStringForJS], [secondPassword escapeStringForJS], useSendPayment]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferAllFundsToAccount(%d, false, \"%@\", \"%@\", %d)", account, [address escapedForJS], [secondPassword escapedForJS], useSendPayment]];
 }
 
 - (void)transferFundsToDefaultAccountFromAddress:(NSString *)address
@@ -2085,7 +2083,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferFundsToDefaultAccountFromAddress(\"%@\")", [address escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.transferFundsToDefaultAccountFromAddress(\"%@\")", [address escapedForJS]]];
 }
 
 - (void)changeLastUsedReceiveIndexOfDefaultAccount
@@ -2211,7 +2209,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.checkIfWalletHasAddress(\"%@\")", [address escapeStringForJS]] ] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.checkIfWalletHasAddress(\"%@\")", [address escapedForJS]] ] toBool];
 }
 
 - (void)recoverWithEmail:(NSString *)email password:(NSString *)recoveryPassword passphrase:(NSString *)passphrase
@@ -2220,12 +2218,12 @@
 
     self.emptyAccountIndex = 0;
     self.recoveredAccountIndex = 0;
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.recoverWithPassphrase(\"%@\",\"%@\",\"%@\")", [email escapeStringForJS], [recoveryPassword escapeStringForJS], [passphrase escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.recoverWithPassphrase(\"%@\",\"%@\",\"%@\")", [email escapedForJS], [recoveryPassword escapedForJS], [passphrase escapedForJS]]];
 }
 
 - (void)resendTwoFactorSMS
 {
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.resendTwoFactorSms(\"%@\", \"%@\")", [self.guid escapeStringForJS], [self.sessionToken escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.resendTwoFactorSms(\"%@\", \"%@\")", [self.guid escapedForJS], [self.sessionToken escapedForJS]]];
 }
 
 - (NSString *)get2FAType
@@ -2253,17 +2251,17 @@
 
 - (void)updateServerURL:(NSString *)newURL
 {
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateServerURL(\"%@\")", [newURL escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateServerURL(\"%@\")", [newURL escapedForJS]]];
 }
 
 - (void)updateWebSocketURL:(NSString *)newURL
 {
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateWebsocketURL(\"%@\")", [newURL escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateWebsocketURL(\"%@\")", [newURL escapedForJS]]];
 }
 
 - (void)updateAPIURL:(NSString *)newURL
 {
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateAPIURL(\"%@\")", [newURL escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.updateAPIURL(\"%@\")", [newURL escapedForJS]]];
 }
 
 - (NSDictionary *)filteredWalletJSON
@@ -2297,7 +2295,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isAccountNameValid(\"%@\")", [name escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isAccountNameValid(\"%@\")", [name escapedForJS]]] toBool];
 }
 
 - (BOOL)isAddressAvailable:(NSString *)address
@@ -2306,7 +2304,7 @@
         return NO;
     }
 
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isAddressAvailable(\"%@\")", [address escapeStringForJS]]] toBool];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isAddressAvailable(\"%@\")", [address escapedForJS]]] toBool];
 }
 
 - (BOOL)isAccountAvailable:(int)account
@@ -2350,16 +2348,16 @@
 {
     NSString *text = [note stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (text.length == 0) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.deleteNote(\"%@\")", [hash escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.deleteNote(\"%@\")", [hash escapedForJS]]];
     } else {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.setNote(\"%@\", \"%@\")", [hash escapeStringForJS], [note escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWallet.wallet.setNote(\"%@\", \"%@\")", [hash escapedForJS], [note escapedForJS]]];
     }
 }
 
 - (void)saveEtherNote:(NSString *)note forTransaction:(NSString *)hash
 {
     if ([self isInitialized]) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.saveEtherNote(\"%@\", \"%@\")", [hash escapeStringForJS], [note escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.saveEtherNote(\"%@\", \"%@\")", [hash escapedForJS], [note escapedForJS]]];
     }
 }
 
@@ -2505,7 +2503,7 @@
 - (BOOL)isStateWhitelistedForShapeshift:(NSString *)stateCode
 {
     if ([self isInitialized]) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isStateWhitelistedForShapeshift(\"%@\")", [stateCode escapeStringForJS]]] toBool];
+        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isStateWhitelistedForShapeshift(\"%@\")", [stateCode escapedForJS]]] toBool];
     }
 
     return NO;
@@ -2514,7 +2512,7 @@
 - (void)selectState:(NSString *)name code:(NSString *)code
 {
     if ([self isInitialized]) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setStateForShapeshift(\"%@\", \"%@\")", [name escapeStringForJS], [code escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setStateForShapeshift(\"%@\", \"%@\")", [name escapedForJS], [code escapedForJS]]];
     }
 }
 
@@ -2525,7 +2523,7 @@
 
 - (void)getRate:(NSString *)coinPair
 {
-    if ([self isInitialized]) [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getRate(\"%@\")", [coinPair escapeStringForJS]]];
+    if ([self isInitialized]) [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getRate(\"%@\")", [coinPair escapedForJS]]];
 }
 
 - (NSURLSessionDataTask *)getApproximateQuote:(NSString *)coinPair usingFromField:(BOOL)usingFromField amount:(NSString *)amount completion:(void (^)(NSDictionary *, NSURLResponse *, NSError *))completion
@@ -2542,7 +2540,7 @@
 
         NSString *depositOrWithdrawParameter = usingFromField ? @"depositAmount" : @"withdrawalAmount";
 
-        NSString *postParameters = [NSString stringWithFormat:@"{\"pair\":\"%@\",\"%@\":\"%@\",\"apiKey\":\"%@\"}", [coinPair escapeStringForJS], [depositOrWithdrawParameter escapeStringForJS], [convertedAmount escapeStringForJS], [apiKey escapeStringForJS]];
+        NSString *postParameters = [NSString stringWithFormat:@"{\"pair\":\"%@\",\"%@\":\"%@\",\"apiKey\":\"%@\"}", [coinPair escapedForJS], [depositOrWithdrawParameter escapedForJS], [convertedAmount escapedForJS], [apiKey escapedForJS]];
         NSData *postData = [postParameters dataUsingEncoding:NSUTF8StringEncoding];
 
         [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -2600,7 +2598,7 @@
 
         NSString *convertedAmount = [NSNumberFormatter convertedDecimalString:amount];
 
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.buildExchangeTrade(%d, %d, \"%@\", \"%@\", \"%@\")", fromAccount, toAccount, [[coinPair lowercaseString] escapeStringForJS], [convertedAmount escapeStringForJS], [fee escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.buildExchangeTrade(%d, %d, \"%@\", \"%@\", \"%@\")", fromAccount, toAccount, [[coinPair lowercaseString] escapedForJS], [convertedAmount escapedForJS], [fee escapedForJS]]];
     }
 }
 
@@ -2614,7 +2612,7 @@
 - (BOOL)isDepositTransaction:(NSString *)txHash
 {
     if ([self isInitialized]) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isDepositTransaction(\"%@\")", [txHash escapeStringForJS]]] toBool];
+        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isDepositTransaction(\"%@\")", [txHash escapedForJS]]] toBool];
     }
 
     return NO;
@@ -2623,7 +2621,7 @@
 - (BOOL)isWithdrawalTransaction:(NSString *)txHash
 {
     if ([self isInitialized]) {
-        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isWithdrawalTransaction(\"%@\")", [txHash escapeStringForJS]]] toBool];
+        return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.isWithdrawalTransaction(\"%@\")", [txHash escapedForJS]]] toBool];
     }
 
     return NO;
@@ -2635,7 +2633,7 @@
 {
     if ([self isInitialized]) {
         NSString *setupHelperText = BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT;
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.createEthAccountForExchange(\"%@\", \"%@\")", [secondPassword escapeStringForJS], [setupHelperText escapeStringForJS]]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.createEthAccountForExchange(\"%@\", \"%@\")", [secondPassword escapedForJS], [setupHelperText escapedForJS]]];
     }
 }
 
@@ -2689,7 +2687,7 @@
 - (void)sendEtherPaymentWithNote:(NSString *)note
 {
     if ([self isInitialized]) {
-        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.sendEtherPaymentWithNote(\"%@\")", note ? [note escapeStringForJS] : @""]];
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.sendEtherPaymentWithNote(\"%@\")", note ? [note escapedForJS] : @""]];
     }
 }
 
@@ -2697,7 +2695,7 @@
 {
     if ([self isInitialized]) {
         NSString *setupHelperText = BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT;
-        JSValue *result = [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getEtherAddress(\"%@\")", [setupHelperText escapeStringForJS]]];
+        JSValue *result = [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getEtherAddress(\"%@\")", [setupHelperText escapedForJS]]];
         if ([result isUndefined]) return nil;
         NSString *etherAddress = [result toString];
         return etherAddress;
@@ -2746,12 +2744,12 @@
 
 - (NSString *)fromBitcoinCash:(NSString *)address
 {
-    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.fromBitcoinCash(\"%@\")", [address escapeStringForJS]]] toString];
+    return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.fromBitcoinCash(\"%@\")", [address escapedForJS]]] toString];
 }
 
 - (NSString *)toBitcoinCash:(NSString *)address includePrefix:(BOOL)includePrefix
 {
-    JSValue *result = [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.toBitcoinCash(\"%@\", %d)", [address escapeStringForJS], includePrefix]];
+    JSValue *result = [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.toBitcoinCash(\"%@\", %d)", [address escapedForJS], includePrefix]];
     if ([result isUndefined]) return nil;
     NSString *bitcoinCashAddress = [result toString];
     return includePrefix ? bitcoinCashAddress : [bitcoinCashAddress substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]];
@@ -2798,7 +2796,7 @@
 {
     if ([self isInitialized]) {
         if ([to isKindOfClass:[NSString class]]) {
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.buildPayment(\"%@\", %lld)", [to escapeStringForJS], amount]];
+            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.buildPayment(\"%@\", %lld)", [to escapedForJS], amount]];
         } else {
             [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.buildPayment(%d, %lld)", [to intValue], amount]];
         }
@@ -2813,7 +2811,7 @@
         [self.transactionProgressListeners setObject:listener forKey:txProgressID];
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.quickSend(\"%@\", true)", [txProgressID escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.quickSend(\"%@\", true)", [txProgressID escapedForJS]]];
 }
 
 - (NSString *)bitcoinCashExchangeRate
@@ -4280,7 +4278,7 @@
         return;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getRecoveryPhrase(\"%@\")", [secondPassword escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getRecoveryPhrase(\"%@\")", [secondPassword escapedForJS]]];
 }
 
 - (BOOL)isRecoveryPhraseVerified {
@@ -4463,10 +4461,10 @@
     if ([self isInitialized]) {
         if (assetType == LegacyAssetTypeBitcoin) {
             self.isSyncing = YES;
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAccount(%d, \"%@\")", account, [label escapeStringForJS]]];
+            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAccount(%d, \"%@\")", account, [label escapedForJS]]];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSetLabelForAccount) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
         } else if (assetType == LegacyAssetTypeBitcoinCash) {
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.setLabelForAccount(%d, \"%@\")", account, [label escapeStringForJS]]];
+            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.setLabelForAccount(%d, \"%@\")", account, [label escapedForJS]]];
             [self getHistory];
         }
     }
@@ -4490,7 +4488,7 @@
 
         // Wait a little bit to make sure the loading text is showing - then execute the blocking and kind of long create account
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.createAccount(\"%@\")", [label escapeStringForJS]]];
+            [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.createAccount(\"%@\")", [label escapedForJS]]];
         });
     }
 }
@@ -4736,7 +4734,7 @@
         network = NETWORK_MAINNET;
     }
 
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeNetwork(\"%@\")", [network escapeStringForJS]]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeNetwork(\"%@\")", [network escapedForJS]]];
 #endif
 }
 

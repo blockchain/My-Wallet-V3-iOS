@@ -9,7 +9,6 @@
 #import <stdio.h>
 #import "BuyBitcoinViewController.h"
 #import <WebKit/WebKit.h>
-#import "NSString+NSString_EscapeQuotes.h"
 #import <SafariServices/SafariServices.h>
 #import "TransactionDetailNavigationController.h"
 #import "Blockchain-Swift.h"
@@ -104,7 +103,7 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
 
 NSString* loginWithGuidScript(NSString* guid, NSString* sharedKey, NSString* password)
 {
-    return [NSString stringWithFormat:@"activateMobileBuy('%@','%@','%@')", [guid escapeStringForJS], [sharedKey escapeStringForJS], [password escapeStringForJS]];
+    return [NSString stringWithFormat:@"activateMobileBuy('%@','%@','%@')", [guid escapedForJS], [sharedKey escapedForJS], [password escapedForJS]];
 }
 
 
@@ -116,7 +115,7 @@ NSString* loginWithGuidScript(NSString* guid, NSString* sharedKey, NSString* pas
 
 NSString* loginWithJsonScript(NSString* json, NSString* externalJson, NSString* magicHash, NSString* password, BOOL isNew)
 {
-    return [NSString stringWithFormat:@"activateMobileBuyFromJson('%@','%@','%@','%@',%d)", [json escapeStringForJS], [externalJson escapeStringForJS], [magicHash escapeStringForJS], [password escapeStringForJS], isNew];
+    return [NSString stringWithFormat:@"activateMobileBuyFromJson('%@','%@','%@','%@',%d)", [json escapedForJS], [externalJson escapedForJS], [magicHash escapedForJS], [password escapedForJS], isNew];
 }
 
 - (void)loginWithJson:(NSString *)json externalJson:(NSString *)externalJson magicHash:(NSString *)magicHash password:(NSString *)password

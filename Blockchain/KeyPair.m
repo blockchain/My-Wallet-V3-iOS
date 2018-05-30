@@ -9,7 +9,6 @@
 #import "KeyPair.h"
 #import "BTCKey.h"
 #import "NSData+Hex.h"
-#import "NSString+NSString_EscapeQuotes.h"
 #import "NSData+BTCData.h"
 #import "BTCNetwork.h"
 #import "BTCAddress.h"
@@ -42,12 +41,12 @@
 
 - (JSValue *)d
 {
-    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"BigInteger.fromBuffer(new Buffer('%@', 'hex'))", [[self.key.privateKey hexadecimalString] escapeStringForJS]]];
+    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"BigInteger.fromBuffer(new Buffer('%@', 'hex'))", [[self.key.privateKey hexadecimalString] escapedForJS]]];
 }
 
 - (JSValue *)Q
 {
-    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"BigInteger.fromBuffer(new Buffer('%@', 'hex'))", [[self.key.publicKey hexadecimalString] escapeStringForJS]]];
+    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"BigInteger.fromBuffer(new Buffer('%@', 'hex'))", [[self.key.publicKey hexadecimalString] escapedForJS]]];
 }
 
 + (KeyPair *)fromPublicKey:(NSString *)buffer buffer:(JSValue *)network
@@ -112,7 +111,7 @@
 
 - (JSValue *)bufferFromData:(NSData *)data
 {
-    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"new Buffer('%@', 'hex')", [[data hexadecimalString] escapeStringForJS]]];
+    return [WalletManager.sharedInstance.wallet executeJSSynchronous:[NSString stringWithFormat:@"new Buffer('%@', 'hex')", [[data hexadecimalString] escapedForJS]]];
 }
 
 @end
