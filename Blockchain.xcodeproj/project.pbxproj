@@ -1814,12 +1814,12 @@
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
 				C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */,
 				AACE31B72092A87900B7B806 /* PinTests.swift */,
+				51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */,
 				AACE3206209782DD00B7B806 /* Authentication */,
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				511356DF209CA48F00056D65 /* Network */,
 				AA63F85220A12F4C002B719B /* URL */,
-				51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */,
 			);
 			path = BlockchainTests;
 			sourceTree = "<group>";
