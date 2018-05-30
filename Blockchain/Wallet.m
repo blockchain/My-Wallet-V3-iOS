@@ -1761,6 +1761,7 @@
     return NO;
 }
 
+// TODO: deprecate this method once dependencies are migrated to Swift
 - (BOOL)isValidAddress:(NSString*)string assetType:(LegacyAssetType)assetType
 {
     // NOTE: address validation should still be available if the wallet is not initialized
