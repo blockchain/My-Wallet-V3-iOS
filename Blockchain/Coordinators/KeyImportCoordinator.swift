@@ -80,7 +80,12 @@ import Foundation
     }
 
     @objc func on_add_key(address: String) {
-        guard let importedAddress = BitcoinAddress(string: address) else { return }
+        let importedAddress = BitcoinAddress(string: address)
+        guard
+            let validator = AddressValidator.shared,
+            validator.validate(bitcoinAddress: importedAddress) else {
+                return
+        }
         walletManager.wallet.isSyncing = true
         walletManager.wallet.shouldLoadMetadata = true
         importKey(from: importedAddress)
@@ -207,7 +212,12 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
 
         let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil)
         let tryAgainAction = UIAlertAction(title: LocalizationConstants.tryAgain, style: .default) { [unowned self] _ in
-            guard let address = BitcoinAddress(string: self.walletManager.wallet.lastScannedWatchOnlyAddress) else { return }
+            let address = BitcoinAddress(string: self.walletManager.wallet.lastScannedWatchOnlyAddress)
+            guard
+                let validator = AddressValidator.shared,
+                validator.validate(bitcoinAddress: address) else {
+                    return
+            }
             self.scanPrivateKeyForWatchOnlyAddress(address)
         }
 
