@@ -209,6 +209,8 @@
 
 - (void)login;
 
+- (void)loadJS;
+
 - (void)loadWalletWithGuid:(NSString *)_guid sharedKey:(NSString *)_sharedKey password:(NSString *)_password;
 - (void)loadBlankWallet;
 
