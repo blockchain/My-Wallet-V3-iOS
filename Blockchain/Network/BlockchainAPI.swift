@@ -54,6 +54,11 @@ final class BlockchainAPI: NSObject {
         case shapeshift = "shapeshift.io"
     }
 
+    struct Parameters {
+        /// The API code to be used when making network calls to the Blockchain API
+        static let apiCode = "1770d5d9-bcea-4d28-ad21-6cbd5be018a8"
+    }
+
     // MARK: - Initialization
 
     //: Prevent outside objects from creating their own instances of this class.

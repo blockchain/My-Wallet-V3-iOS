@@ -10,35 +10,40 @@ import Foundation
 
 @objc
 extension BlockchainAPI {
-    var apiUrl: String? {
-        guard let host = Bundle.main.infoDictionary!["API_URL"] as? String else {
-            return nil
-        }
+    var apiUrl: String {
+        let host = Bundle.main.infoDictionary!["API_URL"] as! String
         return "https://\(host)"
     }
-    var walletUrl: String? {
-        guard let host = Bundle.main.infoDictionary!["WALLET_SERVER"] as? String else {
-            return nil
-        }
+
+    var walletUrl: String {
+        let host = Bundle.main.infoDictionary!["WALLET_SERVER"] as! String
         return "https://\(host)"
     }
-    var walletOptionsUrl: String? {
+
+    var walletOptionsUrl: String {
         return "https://\(Endpoints.blockchainWallet.rawValue)/Resources/wallet-options.json"
     }
+
     var buyWebViewUrl: String? {
-        guard let hostAndPath = Bundle.main.infoDictionary!["BUY_WEBVIEW_URL"] as? String else {
-            return nil
-        }
+        let hostAndPath = Bundle.main.infoDictionary!["BUY_WEBVIEW_URL"] as! String
         return "https://\(hostAndPath)"
     }
+
     var blockchairUrl: String {
         return "https://\(PartnerEndpoints.blockchair.rawValue)"
     }
+
     var etherscanUrl: String {
         return "https://\(PartnerEndpoints.etherscan.rawValue)"
     }
-    var pushNotificationsUrl: String? {
-        guard let walletUrl = walletUrl else { return nil }
+
+    var pushNotificationsUrl: String {
         return "\(walletUrl)/wallet?method=update-ios"
+    }
+
+    // MARK: - API Endpoints
+
+    var pinStore: String {
+        return "\(walletUrl)/pin-store"
     }
 }
