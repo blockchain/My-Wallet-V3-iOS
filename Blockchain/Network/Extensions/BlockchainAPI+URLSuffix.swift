@@ -14,11 +14,9 @@ extension BlockchainAPI {
     func suffixURL(address: AssetAddress) -> String? {
         switch address.assetType {
         case .bitcoin:
-            guard let url = walletUrl else { return nil }
-            return "\(url)/address/\(address)?format=json"
+            return "\(walletUrl)/address/\(address)?format=json"
         case .bitcoinCash:
-            guard let url = apiUrl else { return nil }
-            return "\(url)/bch/multiaddr?active=\(address)"
+            return "\(walletUrl)/bch/multiaddr?active=\(address)"
         default:
             return nil
         }

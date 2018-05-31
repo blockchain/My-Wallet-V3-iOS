@@ -11,9 +11,8 @@ import Foundation
 extension NetworkManager {
     static func registerDeviceForPushNotifications(withDeviceToken token: String) {
         // TODO: test deregistering from the server
-        guard
-            let pushNotificationsUrl = BlockchainAPI.shared.pushNotificationsUrl,
-            let url = URL(string: pushNotificationsUrl),
+        let pushNotificationsUrl = BlockchainAPI.shared.pushNotificationsUrl
+        guard let url = URL(string: pushNotificationsUrl),
             let guid = WalletManager.shared.wallet.guid,
             let sharedKey = WalletManager.shared.wallet.sharedKey,
             let payload = PushNotificationAuthPayload(guid: guid, sharedKey: sharedKey, deviceToken: token),

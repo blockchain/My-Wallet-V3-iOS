@@ -6,9 +6,12 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import Alamofire
+import RxSwift
 
 typealias AuthChallengeHandler = (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
+
+typealias URLParameters = [String: Any]
 
 /**
  Manages network related tasks such as requests and sessions.
@@ -19,12 +22,15 @@ typealias AuthChallengeHandler = (URLSession.AuthChallengeDisposition, URLCreden
  */
 
 @objc
-final class NetworkManager: NSObject, URLSessionDelegate {
+class NetworkManager: NSObject, URLSessionDelegate {
 
     // MARK: - Properties
 
     /// The instance variable used to access functions of the `NetworkManager` class.
     static let shared = NetworkManager()
+
+    /// Default unknown network error
+    static let unknownNetworkError = NSError(domain: "NetworkManagerDomain", code: -1, userInfo: nil)
 
     // TODO: remove once migration is complete
     /// Objective-C compatible class function
@@ -38,8 +44,7 @@ final class NetworkManager: NSObject, URLSessionDelegate {
 
     // MARK: - Initialization
 
-    //: Prevent outside objects from creating their own instances of this class.
-    private override init() {
+    override init() {
         super.init()
         sessionConfiguration = URLSessionConfiguration.default
         if let userAgent = NetworkManager.userAgent {
@@ -53,10 +58,46 @@ final class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
+    // MARK: - HTTP Requests
+
+    /// Performs a network request and returns an Observable emitting the HTTPURLResponse along with the
+    /// decoded response data. The response data will be attempted to be decoded as a JSON, however if it
+    /// fails, it will be attempted to be decoded as a String. It is up to the observer to check the type.
+    ///
+    /// - Parameters:
+    ///   - url: the URL for the request (e.g. "http://blockchain.info/uuid-generator?n=3")
+    ///   - method: the HTTP method
+    ///   - parameters: the parameters for the request
+    /// - Returns: the Observable returning the HTTPURLResponse and the decoded response data
+    func requestJsonOrString(
+        _ url: String,
+        method: HttpMethod,
+        parameters: URLParameters? = nil
+    ) -> Observable<(HTTPURLResponse, Any)> {
+
+        let dataRequestObservable = Observable.create { (observer: AnyObserver<DataRequest>) -> Disposable in
+            let request = SessionManager.default.request(
+                url,
+                method: method.toAlamofireHTTPMethod,
+                parameters: parameters,
+                encoding: URLEncoding.default,
+                headers: nil
+            )
+            observer.onNext(request)
+            observer.onCompleted()
+            return Disposables.create()
+        }
+        return dataRequestObservable.flatMap { request -> Observable<(HTTPURLResponse, Any)> in
+            return request.responseJSONObservable()
+                .catchError { _ -> Observable<(HTTPURLResponse, Any)> in
+                    return request.responseStringObservable()
+                }
+        }
+    }
+
     func checkForMaintenance(withCompletion handler: @escaping (_ response: String?) -> Void) {
-        guard
-            let walletOptionsUrl = BlockchainAPI.shared.walletOptionsUrl,
-            let url = URL(string: walletOptionsUrl) else {
+        let walletOptionsUrl = BlockchainAPI.shared.walletOptionsUrl
+        guard let url = URL(string: walletOptionsUrl) else {
                 fatalError("Failed to get wallet options url from Bundle.")
         }
         NetworkManager.shared.session.sessionDescription = url.host
@@ -114,5 +155,64 @@ final class NetworkManager: NSObject, URLSessionDelegate {
 
     fileprivate func disableUIWebViewCaching() {
         URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
+    }
+}
+
+extension DataRequest {
+    func responseJSONObservable() -> Observable<(HTTPURLResponse, Any)> {
+        return Observable.create { [unowned self] observer -> Disposable in
+            self.responseJSON { jsonResponse in
+                if let error = jsonResponse.result.error {
+                    observer.onError(error)
+                    return
+                }
+                guard let response = jsonResponse.response, let result = jsonResponse.result.value else {
+                    observer.onError(NetworkManager.unknownNetworkError)
+                    return
+                }
+                observer.onNext((response, result))
+                observer.onCompleted()
+
+            }
+            return Disposables.create {
+                self.cancel()
+            }
+        }
+    }
+
+    func responseStringObservable() -> Observable<(HTTPURLResponse, Any)> {
+        return Observable.create { [unowned self] observer -> Disposable in
+            self.responseString { stringResponse in
+                if let error = stringResponse.result.error {
+                    observer.onError(error)
+                    return
+                }
+                guard let response = stringResponse.response, let result = stringResponse.result.value else {
+                    observer.onError(NetworkManager.unknownNetworkError)
+                    return
+                }
+                observer.onNext((response, result))
+                observer.onCompleted()
+
+            }
+            return Disposables.create {
+                self.cancel()
+            }
+        }
+    }
+}
+
+extension HttpMethod {
+
+    /// Transforms this HttpMethod to an Alamofire.HTTPMethod
+    var toAlamofireHTTPMethod: HTTPMethod {
+        switch self {
+        case .get:
+            return HTTPMethod.get
+        case .post:
+            return HTTPMethod.post
+        case .put:
+            return HTTPMethod.put
+        }
     }
 }
