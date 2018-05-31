@@ -340,6 +340,11 @@
 		AAD27A31209D22FD00C0EAFC /* AVCaptureDeviceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */; };
 		AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAD27A5120A0DE1200C0EAFC /* PasswordConfirmView.xib */; };
 		AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAD27A5120A0DE1200C0EAFC /* PasswordConfirmView.xib */; };
+		AADB01E920C09FA7000FFFEC /* WalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADB01E820C09FA7000FFFEC /* WalletService.swift */; };
+		AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADB01E820C09FA7000FFFEC /* WalletService.swift */; };
+		AADB022D20C0A0B1000FFFEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AADB01D920C09C42000FFFEC /* Alamofire.framework */; };
+		AADB022E20C0A0B1000FFFEC /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AADB020420C09FCB000FFFEC /* RxSwift.framework */; };
+		AADB022F20C0A0F7000FFFEC /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AADB020C20C09FCB000FFFEC /* RxCocoa.framework */; };
 		AAE9113120A51C900093A431 /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113020A51C900093A431 /* ReminderType.swift */; };
 		AAE9113220A51C900093A431 /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113020A51C900093A431 /* ReminderType.swift */; };
 		AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */; };
@@ -531,6 +536,202 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9FB3637014B60128004BEA02;
 			remoteInfo = Blockchain;
+		};
+		AADB01D820C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		AADB01DA20C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS Tests";
+		};
+		AADB01DC20C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
+			remoteInfo = "Alamofire macOS";
+		};
+		AADB01DE20C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F829C6B21A7A94F100A2CD59;
+			remoteInfo = "Alamofire macOS Tests";
+		};
+		AADB01E020C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626EF1BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS";
+		};
+		AADB01E220C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626F81BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS Tests";
+		};
+		AADB01E420C09C42000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4202FE01B667AA100C997FB;
+			remoteInfo = "Alamofire watchOS";
+		};
+		AADB020320C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8A56AD71AD7424700B4673B;
+			remoteInfo = "RxSwift-iOS";
+		};
+		AADB020520C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88BB8711B07E5ED0064D411;
+			remoteInfo = "RxSwift-macOS";
+		};
+		AADB020720C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2EA280C1BB9B5A200880ED3;
+			remoteInfo = "RxSwift-tvOS";
+		};
+		AADB020920C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8F0C0021BBBFB8B001B112F;
+			remoteInfo = "RxSwift-watchOS";
+		};
+		AADB020B20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C809396D1B8A71760088E94D;
+			remoteInfo = "RxCocoa-iOS";
+		};
+		AADB020D20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C80939E71B8A71840088E94D;
+			remoteInfo = "RxCocoa-macOS";
+		};
+		AADB020F20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2138C751BB9BE9800339B5C;
+			remoteInfo = "RxCocoa-tvOS";
+		};
+		AADB021120C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8F0C04B1BBBFBB9001B112F;
+			remoteInfo = "RxCocoa-watchOS";
+		};
+		AADB021320C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8093BC71B8A71F00088E94D;
+			remoteInfo = "RxBlocking-iOS";
+		};
+		AADB021520C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8093C451B8A71FC0088E94D;
+			remoteInfo = "RxBlocking-macOS";
+		};
+		AADB021720C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2EBEB811BB9B99D003A27DC;
+			remoteInfo = "RxBlocking-tvOS";
+		};
+		AADB021920C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8F0C0581BBBFBCE001B112F;
+			remoteInfo = "RxBlocking-watchOS";
+		};
+		AADB021B20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88FA50C1C25C44800CCFEA4;
+			remoteInfo = "RxTest-iOS";
+		};
+		AADB021D20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88FA51D1C25C4B500CCFEA4;
+			remoteInfo = "RxTest-macOS";
+		};
+		AADB021F20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88FA52E1C25C4C000CCFEA4;
+			remoteInfo = "RxTest-tvOS";
+		};
+		AADB022120C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88FA53F1C25C4CC00CCFEA4;
+			remoteInfo = "RxTest-watchOS";
+		};
+		AADB022320C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83508C31C386F6F0027C24C;
+			remoteInfo = "AllTests-iOS";
+		};
+		AADB022520C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83509841C38740E0027C24C;
+			remoteInfo = "AllTests-tvOS";
+		};
+		AADB022720C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83509941C38742C0027C24C;
+			remoteInfo = "AllTests-macOS";
+		};
+		AADB022920C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C85BA04B1C3878740075D68E;
+			remoteInfo = Microoptimizations;
+		};
+		AADB022B20C09FCB000FFFEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8E8BA551E2C181A00A4AC2C;
+			remoteInfo = Benchmarks;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1346,6 +1547,9 @@
 		AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AVCaptureDeviceInput.swift; path = AV/AVCaptureDeviceInput.swift; sourceTree = "<group>"; };
 		AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PasswordConfirmView.swift; path = Authentication/Views/PasswordConfirmView.swift; sourceTree = "<group>"; };
 		AAD27A5120A0DE1200C0EAFC /* PasswordConfirmView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordConfirmView.xib; path = Authentication/Views/PasswordConfirmView.xib; sourceTree = "<group>"; };
+		AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		AADB01E820C09FA7000FFFEC /* WalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletService.swift; sourceTree = "<group>"; };
+		AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Submodules/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
 		AAE9113020A51C900093A431 /* ReminderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderType.swift; sourceTree = "<group>"; };
 		AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoDelegate.swift; sourceTree = "<group>"; };
 		AAE9113C20A640A40093A431 /* PinPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PinPayload.swift; path = Authentication/Models/PinPayload.swift; sourceTree = "<group>"; };
@@ -1565,11 +1769,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */,
-				515315F32056C1A0000161DF /* libcrypto.a in Frameworks */,
+				AADB022D20C0A0B1000FFFEC /* Alamofire.framework in Frameworks */,
 				5164E4D220584D2800FC706A /* Charts.framework in Frameworks */,
-				515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */,
+				5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */,
 				513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */,
+				515315F32056C1A0000161DF /* libcrypto.a in Frameworks */,
+				515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */,
+				AADB022F20C0A0F7000FFFEC /* RxCocoa.framework in Frameworks */,
+				AADB022E20C0A0B1000FFFEC /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1798,6 +2005,40 @@
 			children = (
 			);
 			path = Extensions;
+        };
+		511646C02081247700C43522 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				51A862E02092506600B338E0 /* AssetAddress.swift */,
+				511646C4208124E200C43522 /* AssetType.swift */,
+				511646C12081248600C43522 /* Bitcoin */,
+				511646C22081248C00C43522 /* Bitcoin Cash */,
+				511646C32081249300C43522 /* Ethereum */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		511646C12081248600C43522 /* Bitcoin */ = {
+			isa = PBXGroup;
+			children = (
+				51A862D820921E7600B338E0 /* BitcoinAddress.swift */,
+			);
+			name = Bitcoin;
+			sourceTree = "<group>";
+		};
+		511646C22081248C00C43522 /* Bitcoin Cash */ = {
+			isa = PBXGroup;
+			children = (
+				51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */,
+			);
+			name = "Bitcoin Cash";
+			sourceTree = "<group>";
+		};
+		511646C32081249300C43522 /* Ethereum */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Ethereum;
 			sourceTree = "<group>";
 		};
 		5164E4CA20584D0700FC706A /* Products */ = {
@@ -1844,12 +2085,13 @@
 		51A7348B20891EB3009727D5 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				511356FF209CEE9900056D65 /* Models */,
 				51A7349020891EB3009727D5 /* BlockchainAPI.swift */,
 				51A7348C20891EB3009727D5 /* CertificatePinner.swift */,
 				51A7348D20891EB3009727D5 /* NetworkManager.swift */,
 				AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */,
+				AADB01E720C09F7B000FFFEC /* API */,
 				51A7348E20891EB3009727D5 /* Extensions */,
+				511356FF209CEE9900056D65 /* Models */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2412,7 +2654,6 @@
 				AAC9FCED20AE456400E28B7A /* WalletTransactionDelegate.swift */,
 				C76D731620B24B5300040B57 /* WalletTransferAllDelegate.swift */,
 				C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */,
-				5113571220A0B67700056D65 /* Extensions */,
 				AA1E52362097D3B20099BD10 /* Models */,
 			);
 			path = Wallet;
@@ -2468,6 +2709,56 @@
 				AAC9FCE420ADF17100E28B7A /* SoundManager.swift */,
 			);
 			name = AV;
+			sourceTree = "<group>";
+		};
+		AADB01CE20C09C42000FFFEC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AADB01D920C09C42000FFFEC /* Alamofire.framework */,
+				AADB01DB20C09C42000FFFEC /* Alamofire iOS Tests.xctest */,
+				AADB01DD20C09C42000FFFEC /* Alamofire.framework */,
+				AADB01DF20C09C42000FFFEC /* Alamofire macOS Tests.xctest */,
+				AADB01E120C09C42000FFFEC /* Alamofire.framework */,
+				AADB01E320C09C42000FFFEC /* Alamofire tvOS Tests.xctest */,
+				AADB01E520C09C42000FFFEC /* Alamofire.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AADB01E720C09F7B000FFFEC /* API */ = {
+			isa = PBXGroup;
+			children = (
+				AADB01E820C09FA7000FFFEC /* WalletService.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		AADB01EC20C09FCA000FFFEC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AADB020420C09FCB000FFFEC /* RxSwift.framework */,
+				AADB020620C09FCB000FFFEC /* RxSwift.framework */,
+				AADB020820C09FCB000FFFEC /* RxSwift.framework */,
+				AADB020A20C09FCB000FFFEC /* RxSwift.framework */,
+				AADB020C20C09FCB000FFFEC /* RxCocoa.framework */,
+				AADB020E20C09FCB000FFFEC /* RxCocoa.framework */,
+				AADB021020C09FCB000FFFEC /* RxCocoa.framework */,
+				AADB021220C09FCB000FFFEC /* RxCocoa.framework */,
+				AADB021420C09FCB000FFFEC /* RxBlocking.framework */,
+				AADB021620C09FCB000FFFEC /* RxBlocking.framework */,
+				AADB021820C09FCB000FFFEC /* RxBlocking.framework */,
+				AADB021A20C09FCB000FFFEC /* RxBlocking.framework */,
+				AADB021C20C09FCB000FFFEC /* RxTest.framework */,
+				AADB021E20C09FCB000FFFEC /* RxTest.framework */,
+				AADB022020C09FCB000FFFEC /* RxTest.framework */,
+				AADB022220C09FCB000FFFEC /* RxTest.framework */,
+				AADB022420C09FCB000FFFEC /* AllTests-iOS.xctest */,
+				AADB022620C09FCB000FFFEC /* AllTests-tvOS.xctest */,
+				AADB022820C09FCB000FFFEC /* AllTests-macOS.xctest */,
+				AADB022A20C09FCB000FFFEC /* PerformanceTests.app */,
+				AADB022C20C09FCB000FFFEC /* Benchmarks.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -2574,17 +2865,19 @@
 		C9D4B2AE193E020D00EDA9EA /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
+				9F2780B515343A7D0015F83F /* UncaughtExceptionHandler.h */,
+				9F2780B615343A7D0015F83F /* UncaughtExceptionHandler.m */,
+				AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */,
 				5164E4C920584D0700FC706A /* Charts.xcodeproj */,
+				AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */,
 				23444F7B1DCD210B00573C8C /* CoreBitcoin */,
-				2322DC811D771831000E5AC1 /* SocketRocket */,
 				670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */,
+				84C25678198109AF00F901D1 /* Keys */,
+				C9BE91651945D8F600FD516D /* PinEntry */,
 				670DF9481A43BCB200CEA1EA /* Reachability */,
 				67FA1A4A1ABA092D000C9196 /* RegEx */,
 				67E9673419DF1DD300305358 /* SideMenu */,
-				84C25678198109AF00F901D1 /* Keys */,
-				C9BE91651945D8F600FD516D /* PinEntry */,
-				9F2780B515343A7D0015F83F /* UncaughtExceptionHandler.h */,
-				9F2780B615343A7D0015F83F /* UncaughtExceptionHandler.m */,
+				2322DC811D771831000E5AC1 /* SocketRocket */,
 			);
 			name = "Third Party";
 			sourceTree = "<group>";
@@ -2850,8 +3143,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = AADB01CE20C09C42000FFFEC /* Products */;
+					ProjectRef = AADB01CD20C09C42000FFFEC /* Alamofire.xcodeproj */;
+				},
+				{
 					ProductGroup = 5164E4CA20584D0700FC706A /* Products */;
 					ProjectRef = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
+				},
+				{
+					ProductGroup = AADB01EC20C09FCA000FFFEC /* Products */;
+					ProjectRef = AADB01EB20C09FCA000FFFEC /* Rx.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -2875,6 +3176,203 @@
 			fileType = wrapper.cfbundle;
 			path = ChartsTests.xctest;
 			remoteRef = 5164E4D020584D0700FC706A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01D920C09C42000FFFEC /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = AADB01D820C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01DB20C09C42000FFFEC /* Alamofire iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire iOS Tests.xctest";
+			remoteRef = AADB01DA20C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01DD20C09C42000FFFEC /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = AADB01DC20C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01DF20C09C42000FFFEC /* Alamofire macOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire macOS Tests.xctest";
+			remoteRef = AADB01DE20C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01E120C09C42000FFFEC /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = AADB01E020C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01E320C09C42000FFFEC /* Alamofire tvOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire tvOS Tests.xctest";
+			remoteRef = AADB01E220C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB01E520C09C42000FFFEC /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = AADB01E420C09C42000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020420C09FCB000FFFEC /* RxSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxSwift.framework;
+			remoteRef = AADB020320C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020620C09FCB000FFFEC /* RxSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxSwift.framework;
+			remoteRef = AADB020520C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020820C09FCB000FFFEC /* RxSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxSwift.framework;
+			remoteRef = AADB020720C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020A20C09FCB000FFFEC /* RxSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxSwift.framework;
+			remoteRef = AADB020920C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020C20C09FCB000FFFEC /* RxCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxCocoa.framework;
+			remoteRef = AADB020B20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB020E20C09FCB000FFFEC /* RxCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxCocoa.framework;
+			remoteRef = AADB020D20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021020C09FCB000FFFEC /* RxCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxCocoa.framework;
+			remoteRef = AADB020F20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021220C09FCB000FFFEC /* RxCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxCocoa.framework;
+			remoteRef = AADB021120C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021420C09FCB000FFFEC /* RxBlocking.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxBlocking.framework;
+			remoteRef = AADB021320C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021620C09FCB000FFFEC /* RxBlocking.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxBlocking.framework;
+			remoteRef = AADB021520C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021820C09FCB000FFFEC /* RxBlocking.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxBlocking.framework;
+			remoteRef = AADB021720C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021A20C09FCB000FFFEC /* RxBlocking.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxBlocking.framework;
+			remoteRef = AADB021920C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021C20C09FCB000FFFEC /* RxTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxTest.framework;
+			remoteRef = AADB021B20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB021E20C09FCB000FFFEC /* RxTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxTest.framework;
+			remoteRef = AADB021D20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022020C09FCB000FFFEC /* RxTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxTest.framework;
+			remoteRef = AADB021F20C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022220C09FCB000FFFEC /* RxTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxTest.framework;
+			remoteRef = AADB022120C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022420C09FCB000FFFEC /* AllTests-iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "AllTests-iOS.xctest";
+			remoteRef = AADB022320C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022620C09FCB000FFFEC /* AllTests-tvOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "AllTests-tvOS.xctest";
+			remoteRef = AADB022520C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022820C09FCB000FFFEC /* AllTests-macOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "AllTests-macOS.xctest";
+			remoteRef = AADB022720C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022A20C09FCB000FFFEC /* PerformanceTests.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			name = PerformanceTests.app;
+			path = Microoptimizations.app;
+			remoteRef = AADB022920C09FCB000FFFEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AADB022C20C09FCB000FFFEC /* Benchmarks.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Benchmarks.xctest;
+			remoteRef = AADB022B20C09FCB000FFFEC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3119,6 +3617,7 @@
 				51135704209CF5D800056D65 /* PutPinResponse.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
+				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
@@ -3322,6 +3821,7 @@
 				C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				6780DB951A40BDCF0048EED2 /* InOut.m in Sources */,
 				5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */,
+				AADB01E920C09FA7000FFFEC /* WalletService.swift in Sources */,
 				516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */,
 				23444F901DCD21AB00573C8C /* BTCCurvePoint.m in Sources */,
 				C75CBD041F1FB12F00CACE0D /* BCTotalAmountView.m in Sources */,

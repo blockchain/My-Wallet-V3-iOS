@@ -13,3 +13,9 @@
 [submodule "Submodules/Charts"]
 	path = Submodules/Charts
 	url = https://github.com/danielgindi/Charts
+[submodule "Submodules/Alamofire"]
+	path = Submodules/Alamofire
+	url = https://github.com/Alamofire/Alamofire.git
+[submodule "Submodules/RxSwift"]
+	path = Submodules/RxSwift
+	url = git@github.com:ReactiveX/RxSwift.git
