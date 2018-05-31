@@ -26,5 +26,5 @@ import Foundation
     func didBuildExchangeTrade(tradeInfo: NSDictionary)
 
     /// Method invoked when a shift payment has been submitted
-    func didShiftPayment(info: NSDictionary)
+    func didShiftPayment()
 }

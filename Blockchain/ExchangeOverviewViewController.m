@@ -64,8 +64,7 @@
     [super viewDidAppear:animated];
     
     if (self.didFinishShift) {
-        BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-        [navigationController showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingTransactions]];
         [WalletManager.sharedInstance.wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
     }
 }
@@ -159,8 +158,7 @@
 
 - (void)getHistory
 {
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    [navigationController showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingTransactions]];
     [WalletManager.sharedInstance.wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
 }
 
@@ -230,10 +228,9 @@
     [self.createViewController didBuildExchangeTrade:tradeInfo];
 }
 
-- (void)didShiftPaymentWithInfo:(NSDictionary * _Nonnull)info
+- (void)didShiftPayment
 {
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    [navigationController hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     ExchangeModalView *exchangeModalView = [[ExchangeModalView alloc] initWithFrame:self.view.frame description:BC_STRING_EXCHANGE_DESCRIPTION_SENDING_FUNDS imageName:@"exchange_sending" bottomText:[NSString stringWithFormat:BC_STRING_STEP_ARGUMENT_OF_ARGUMENT, 1, 3] closeButtonText:BC_STRING_CLOSE];
     exchangeModalView.delegate = self;

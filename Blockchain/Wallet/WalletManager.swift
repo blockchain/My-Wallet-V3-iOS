@@ -509,9 +509,9 @@ extension WalletManager: WalletDelegate {
         }
     }
 
-    func didShiftPayment(_ info: [AnyHashable: Any]!) {
+    func didShiftPayment() {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didShiftPayment(info: info as NSDictionary)
+            self.exchangeDelegate?.didShiftPayment()
         }
     }
 

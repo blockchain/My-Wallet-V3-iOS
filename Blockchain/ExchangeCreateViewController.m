@@ -477,8 +477,7 @@
 
 - (void)didBuildExchangeTrade:(NSDictionary *)tradeInfo
 {
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    [navigationController hideBusyView];
+    [[LoadingViewPresenter sharedInstance] hideBusyView];
     
     ExchangeTrade *trade = [ExchangeTrade builtTradeFromJSONDict:tradeInfo];
     // pair is not returned from API call - need to manually set
@@ -1323,8 +1322,7 @@
 {
     [self hideKeyboard];
     
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    [navigationController showBusyViewWithLoadingText:BC_STRING_GETTING_QUOTE];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge gettingQuote]];
     
     [self performSelector:@selector(buildTrade) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 }

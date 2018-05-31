@@ -165,8 +165,7 @@
         return;
     }
     
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    [navigationController showBusyViewWithLoadingText:BC_STRING_CONFIRMING];
+    [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge confirming]];
     
     [self performSelector:@selector(shiftPayment) withObject:nil afterDelay:ANIMATION_DURATION];
 }

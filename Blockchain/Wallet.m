@@ -4228,8 +4228,8 @@
 
 - (void)on_shift_payment_success:(NSDictionary *)result
 {
-    if ([self.delegate respondsToSelector:@selector(didShiftPayment:)]) {
-        [self.delegate didShiftPayment:result];
+    if ([self.delegate respondsToSelector:@selector(didShiftPayment)]) {
+        [self.delegate didShiftPayment];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didShiftPayment:!", [delegate class]);
     }

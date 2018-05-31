@@ -139,6 +139,12 @@ struct LocalizationConstants {
         static let errorTryAgain = NSLocalizedString("Something went wrong, please try reopening Buy & Sell Bitcoin again.", comment: "")
     }
 
+    struct Exchange {
+        static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
+        static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
+        static let confirming = NSLocalizedString("Confirming", comment: "")
+    }
+
     struct AddressAndKeyImport {
         static let importedWatchOnlyAddressArgument = NSLocalizedString("Imported watch-only address %@", comment: "")
         static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
@@ -222,4 +228,10 @@ struct LocalizationConstants {
     @objc class func unsupportedPrivateKey() -> String { return LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey }
 
     @objc class func cookiePolicy() -> String { return LocalizationConstants.Settings.About.cookiePolicy }
+
+    @objc class func gettingQuote() -> String { return LocalizationConstants.Exchange.gettingQuote }
+
+    @objc class func confirming() -> String { return LocalizationConstants.Exchange.confirming }
+
+    @objc class func loadingTransactions() -> String { return LocalizationConstants.Exchange.loadingTransactions }
 }
