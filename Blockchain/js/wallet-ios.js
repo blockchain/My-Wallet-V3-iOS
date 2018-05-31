@@ -156,8 +156,6 @@ MyWalletPhone.createAccount = function(label) {
     var success = function () {
         console.log('Created new account');
 
-        objc_loading_stop();
-
         objc_on_add_new_account();
 
         objc_reload();
@@ -169,10 +167,12 @@ MyWalletPhone.createAccount = function(label) {
 
     if (MyWallet.wallet.isDoubleEncrypted) {
         MyWalletPhone.getSecondPassword(function (pw) {
+          objc_loading_start_create_account();
           MyWallet.wallet.newAccount(label, pw, null, success);
         });
     }
     else {
+        objc_loading_start_create_account();
         MyWallet.wallet.newAccount(label, null, null, success);
     }
 };

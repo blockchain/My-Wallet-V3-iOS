@@ -18,7 +18,7 @@
 
 #define CELL_HEIGHT_DEFAULT 44.0f
 
-@interface AccountsAndAddressesViewController () <UITableViewDelegate, UITableViewDataSource, LegacyPrivateKeyDelegate>
+@interface AccountsAndAddressesViewController () <UITableViewDelegate, UITableViewDataSource, LegacyPrivateKeyDelegate, ModalViewControllerDismissDelegate>
 @property (nonatomic) NSString *clickedAddress;
 @property (nonatomic) int clickedAccount;
 @end
@@ -127,6 +127,7 @@
 - (void)newAccountClicked:(id)sender
 {
     BCCreateAccountView *createAccountView = [[BCCreateAccountView alloc] init];
+    createAccountView.dismissDelegate = self;
     
     BCModalViewController *modalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_CREATE view:createAccountView];
     
@@ -246,6 +247,13 @@
     } else {
         navigationController.warningButton.hidden = YES;
     }
+}
+
+#pragma mark - Modal View Controller Dismiss Delegate
+
+- (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion
+{
+    [self dismissViewControllerAnimated:YES completion:completion];
 }
 
 #pragma mark - Table View Delegate

@@ -173,3 +173,7 @@ typealias OnModalResumed = () -> Void
         static let hideModal = "HideModal"
     }
 }
+
+@objc protocol ModalViewControllerDismissDelegate {
+    func dismissModalViewController(completion: (() -> Void)?)
+}
