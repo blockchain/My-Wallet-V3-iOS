@@ -399,9 +399,26 @@
 		AAE94F3F20C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
 		AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
 		AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F4320C736E8005A3595 /* AssetURLPayloadFactoryTests.swift */; };
-		AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */; };
-		AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6920C75C4E005A3595 /* MockPinView.swift */; };
-		AAE94F6C20C75C67005A3595 /* MockPinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */; };
+		AAE94DCA20C25124005A3595 /* WalletServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DC920C25124005A3595 /* WalletServiceTests.swift */; };
+		AAE94DCC20C25836005A3595 /* PinStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCB20C25836005A3595 /* PinStoreError.swift */; };
+		AAE94DCD20C25836005A3595 /* PinStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCB20C25836005A3595 /* PinStoreError.swift */; };
+		AAE94DCF20C25F37005A3595 /* MockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */; };
+		AAE94E4920C5B7E7005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
+		AAE94E4A20C5B7E7005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
+		AAE94EC420C5EA2E005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
+		AAE94EC820C5EA2E005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
+		AAE94ED020C5ECDC005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
+		AAE94ED120C5ECDC005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
+		AAE94ED220C5ECDC005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
+		AAE94ED320C5ECDC005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
+		AAE94EF320C5FE73005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
+		AAE94EF420C5FE73005A3595 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AAE94EF720C5FE73005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
+		AAE94EF820C5FE73005A3595 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AAE94F0420C5FE7E005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
+		AAE94F0520C5FE7E005A3595 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AAE94F0820C5FEA9005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
+		AAE94F0920C5FEAA005A3595 /* RxBlocking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -1654,6 +1671,11 @@
 		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
 		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
 		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
+		AAE94DC920C25124005A3595 /* WalletServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletServiceTests.swift; sourceTree = "<group>"; };
+		AAE94DCB20C25836005A3595 /* PinStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreError.swift; sourceTree = "<group>"; };
+		AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManager.swift; sourceTree = "<group>"; };
+		AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Submodules/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
+		AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -3805,6 +3827,7 @@
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */,
+				5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 				AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */,
 				C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
