@@ -11,15 +11,15 @@ import Foundation
 // TODO: convert class to struct once there are no more objc dependents
 
 @objc
-internal class BitcoinCashAddress: NSObject & AssetAddress {
+public class BitcoinCashAddress: NSObject & AssetAddress {
 
     // MARK: - Properties
 
-    private(set) var address: String
+    public private(set) var address: String
 
-    var assetType: AssetType
+    public var assetType: AssetType
 
-    override var description: String {
+    override public var description: String {
         return address
     }
 
