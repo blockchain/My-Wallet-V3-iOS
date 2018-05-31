@@ -12,10 +12,10 @@ import Foundation
 extension Bundle {
     /// The application version. Equivalent to CFBundleShortVersionString.
     static var applicationVersion: String? {
-        guard let infoDictionary = main.infoDictionary as? [String: String] else {
+        guard let infoDictionary = main.infoDictionary else {
             return nil
         }
-        guard let version = infoDictionary["CFBundleShortVersionString"] else {
+        guard let version = infoDictionary["CFBundleShortVersionString"] as? String else {
             return nil
         }
         return version
