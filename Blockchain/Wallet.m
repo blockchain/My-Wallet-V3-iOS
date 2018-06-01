@@ -3203,7 +3203,12 @@
 
 - (void)getSecondPassword:(NSString *)canDiscard success:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
 {
+    LoadingViewPresenter *loadingViewPresenter = [LoadingViewPresenter sharedInstance];
+    BOOL isLoadingShown = [loadingViewPresenter isLoadingShown];
+    if (isLoadingShown) [loadingViewPresenter hideBusyView];
+
     [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:helperText headerText:LocalizationConstantsObjcBridge.secondPasswordRequired validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPassword) {
+        if (isLoadingShown) [loadingViewPresenter showBusyViewWithLoadingText:[loadingViewPresenter currentLoadingText]];
         [success callWithArguments:@[secondPassword]];
     }];
 }

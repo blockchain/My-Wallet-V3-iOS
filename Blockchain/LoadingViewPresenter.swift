@@ -33,12 +33,6 @@ import Foundation
     }
 
     @objc func hideBusyView() {
-        let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
-
-        if let topViewController = topMostViewController as? TopViewController {
-            topViewController.hideBusyView?()
-            return
-        }
 
         guard self.isLoadingShown else {
             print("[LoadingViewPresenter]: Cannot hide busy view, already not shown.")
@@ -49,13 +43,11 @@ import Foundation
         self.busyView.fadeOut()
     }
 
-    @objc func showBusyView(withLoadingText text: String) {
-        let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+    @objc func currentLoadingText() -> String? {
+        return self.busyView.labelBusy.text
+    }
 
-        if let topViewController = topMostViewController as? TopViewController {
-            topViewController.showBusyView?(withLoadingText: text)
-            return
-        }
+    @objc func showBusyView(withLoadingText text: String) {
 
         if AppCoordinator.shared.tabControllerManager.isSending() && ModalPresenter.shared.modalView != nil {
             print("Send progress modal is presented - will not show busy view")
