@@ -43,7 +43,7 @@ import Foundation
         self.busyView.fadeOut()
     }
 
-    @objc func currentLoadingText() -> String? {
+    @objc var currentLoadingText: String? {
         return self.busyView.labelBusy.text
     }
 
