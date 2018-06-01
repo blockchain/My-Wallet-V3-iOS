@@ -40,6 +40,11 @@ import Foundation
             case AuthenticationError.ErrorCode.failedToLoadWallet.rawValue:
                 strongSelf.handleFailedToLoadWallet()
             case AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue:
+                if BlockchainSettings.App.shared.guid == nil && WalletManager.shared.wallet.guid != nil {
+                    // Attempted to manual pair with incorrect password
+                    strongSelf.startManualPairing()
+                    return
+                }
                 strongSelf.showPasswordModal()
             default:
                 if let description = error!.description {
