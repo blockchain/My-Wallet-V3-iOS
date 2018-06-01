@@ -52,6 +52,7 @@ const int aboutSection = 3;
 const int aboutUs = 0;
 const int aboutTermsOfService = 1;
 const int aboutPrivacyPolicy = 2;
+const int aboutCookiePolicy = 3;
 
 @interface SettingsTableViewController () <UITextFieldDelegate, EmailDelegate, MobileNumberDelegate>
 
@@ -381,7 +382,7 @@ const int aboutPrivacyPolicy = 2;
 - (void)termsOfServiceClicked
 {
     SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
-    aboutViewController.urlTargetString = [[NSBundle walletUrl] stringByAppendingString:URL_SUFFIX_TERMS_OF_SERVICE];
+    aboutViewController.urlTargetString = [URL_BLOCKCHAIN_COM stringByAppendingString:URL_SUFFIX_TERMS_OF_SERVICE];
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:BC_STRING_SETTINGS_TERMS_OF_SERVICE];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -389,8 +390,16 @@ const int aboutPrivacyPolicy = 2;
 - (void)showPrivacyPolicy
 {
     SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
-    aboutViewController.urlTargetString = [[NSBundle walletUrl] stringByAppendingString:URL_SUFFIX_PRIVACY_POLICY];
+    aboutViewController.urlTargetString = [URL_BLOCKCHAIN_COM stringByAppendingString:URL_SUFFIX_PRIVACY_POLICY];
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:BC_STRING_SETTINGS_PRIVACY_POLICY];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)showCookiePolicy
+{
+    SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
+    aboutViewController.urlTargetString = [URL_BLOCKCHAIN_COM stringByAppendingString:URL_SUFFIX_COOKIE_POLICY];
+    BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:BC_STRING_SETTINGS_COOKIE_POLICY];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -1076,6 +1085,10 @@ const int aboutPrivacyPolicy = 2;
                     [self showPrivacyPolicy];
                     return;
                 }
+                case aboutCookiePolicy: {
+                    [self showCookiePolicy];
+                    return;
+                }
             }
             return;
         }
@@ -1105,7 +1118,7 @@ const int aboutPrivacyPolicy = 2;
 
             return [app.wallet didUpgradeToHd] ? numberOfRows + 1 : numberOfRows;
         }
-        case aboutSection: return 3;
+        case aboutSection: return 4;
         default: return 0;
     }
 }
@@ -1301,6 +1314,10 @@ const int aboutPrivacyPolicy = 2;
                 }
                 case aboutPrivacyPolicy: {
                     cell.textLabel.text = BC_STRING_SETTINGS_PRIVACY_POLICY;
+                    return cell;
+                }
+                case aboutCookiePolicy: {
+                    cell.textLabel.text = BC_STRING_SETTINGS_COOKIE_POLICY;
                     return cell;
                 }
             }

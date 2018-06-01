@@ -399,6 +399,7 @@
 #define BC_STRING_SETTINGS_ABOUT_US NSLocalizedString(@"About Us", nil)
 #define BC_STRING_SETTINGS_PRIVACY_POLICY NSLocalizedString(@"Privacy Policy", nil)
 #define BC_STRING_SETTINGS_TERMS_OF_SERVICE NSLocalizedString(@"Terms of Service", nil)
+#define BC_STRING_SETTINGS_COOKIE_POLICY NSLocalizedString(@"Cookie Policy", nil)
 #define BC_STRING_SETTINGS_VERIFY NSLocalizedString(@"Verify", nil)
 #define BC_STRING_SETTINGS_SENT_TO_ARGUMENT NSLocalizedString(@"Sent to %@", nil)
 #define BC_STRING_SETTINGS_VERIFY_MOBILE_SEND NSLocalizedString(@"Send verification SMS", nil)
