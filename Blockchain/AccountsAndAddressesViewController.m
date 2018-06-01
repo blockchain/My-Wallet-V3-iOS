@@ -128,9 +128,7 @@
 {
     BCCreateAccountView *createAccountView = [[BCCreateAccountView alloc] init];
     
-    BCModalViewController *modalViewController = [[BCModalViewController alloc] initWithCloseType:ModalCloseTypeClose showHeader:YES headerText:BC_STRING_CREATE view:createAccountView];
-    
-    [self presentViewController:modalViewController animated:YES completion:nil];
+    [[ModalPresenter sharedInstance] showModalWithContent:createAccountView closeType:ModalCloseTypeClose showHeader:true headerText:BC_STRING_CREATE onDismiss:nil onResume:nil];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [createAccountView.labelTextField becomeFirstResponder];
