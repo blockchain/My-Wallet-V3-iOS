@@ -26,6 +26,8 @@ import Foundation
     lazy var authHandler: AuthenticationManager.WalletAuthHandler = { [weak self] isAuthenticated, _, error in
         guard let strongSelf = self else { return }
 
+        strongSelf.invalidateLoginTimeout()
+
         LoadingViewPresenter.shared.hideBusyView()
 
         // Error checking
@@ -106,10 +108,9 @@ import Foundation
 
     @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
-    // TODO: loginTimout is never invalidated after a successful login
-    internal var loginTimeout: Timer?
-
     internal var pinViewControllerCallback: ((Bool) -> Void)?
+
+    private var loginTimeout: Timer?
 
     private var isPinEntryModalPresented: Bool {
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
@@ -189,7 +190,7 @@ import Foundation
 
     /// Unauthenticates the user
     @objc func logout(showPasswordView: Bool) {
-        loginTimeout?.invalidate()
+        invalidateLoginTimeout()
 
         BlockchainSettings.App.shared.clearPin()
 
@@ -429,7 +430,7 @@ import Foundation
             }
 
             confirmHandler(password)
-            
+
             ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
         }
         ModalPresenter.shared.showModal(
@@ -442,13 +443,37 @@ import Foundation
 
     // MARK: - Internal
 
-    @objc internal func showLoginError() {
+    internal func showVerifyingBusyView(withTimeout seconds: Int) {
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
+
+        // TODO: this timeout approach should be deprecated in favor of checking actual success/error responses
+        if #available(iOS 10.0, *) {
+            loginTimeout = Timer.scheduledTimer(withTimeInterval: TimeInterval(seconds), repeats: false) { [weak self] _ in
+                self?.showLoginError()
+            }
+        } else {
+            loginTimeout = Timer.scheduledTimer(
+                timeInterval: TimeInterval(seconds),
+                target: self,
+                selector: #selector(showLoginError),
+                userInfo: nil,
+                repeats: false
+            )
+        }
+    }
+
+    internal func invalidateLoginTimeout() {
         loginTimeout?.invalidate()
         loginTimeout = nil
+    }
+
+    @objc internal func showLoginError() {
+        invalidateLoginTimeout()
 
         guard walletManager.wallet.guid == nil else {
             return
         }
+        
         pinEntryViewController?.reset()
         LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.errorLoadingWallet)

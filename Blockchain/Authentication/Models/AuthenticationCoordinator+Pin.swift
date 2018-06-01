@@ -154,27 +154,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         closePinEntryView(animated: true)
     }
 
-    // MARK: - Internal
-
-    internal func showVerifyingBusyView(withTimeout seconds: Int) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-
-        // TODO: this timeout approach should be deprecated in favor of checking actual success/error responses
-        if #available(iOS 10.0, *) {
-            loginTimeout = Timer.scheduledTimer(withTimeInterval: TimeInterval(seconds), repeats: false) { [weak self] _ in
-                self?.showLoginError()
-            }
-        } else {
-            loginTimeout = Timer.scheduledTimer(
-                timeInterval: TimeInterval(seconds),
-                target: self,
-                selector: #selector(showLoginError),
-                userInfo: nil,
-                repeats: false
-            )
-        }
-    }
-
     // MARK: - Private
 
     private func reopenChangePin() {
@@ -398,6 +377,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
     }
 
     private func showPinError(withMessage message: String) {
+        invalidateLoginTimeout()
         LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error) { [unowned self] _ in
             self.pinEntryViewController?.reset()
