@@ -8,27 +8,17 @@
 
 import Foundation
 
-// TODO: use associatedtype in protocol once there are no more objc dependents
-
 @objc
 public final class AddressValidator: NSObject {
 
     // MARK: - Properties
 
-    private var context: JSContext?
-
-    static let shared = AddressValidator()
-
-    @objc class func sharedInstance() -> AddressValidator? {
-        return shared
-    }
+    private let context: JSContext
 
     // MARK: - Initialization
 
-    @objc
-    private init?(context: JSContext? = WalletManager.shared.wallet.context) {
-        guard let JSContext = context else { return nil }
-        self.context = JSContext
+    @objc init(context: JSContext) {
+        self.context = context
     }
 
     // MARK: - Bitcoin Address Validation
@@ -36,7 +26,7 @@ public final class AddressValidator: NSObject {
     @objc
     func validate(bitcoinAddress address: BitcoinAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
-        guard let result = context?.evaluateScript("Helpers.isBitcoinAddress(\"\(escapedString)\");") else { return false }
+        guard let result = context.evaluateScript("Helpers.isBitcoinAddress(\"\(escapedString)\");") else { return false }
         return result.toBool()
     }
 
@@ -45,7 +35,7 @@ public final class AddressValidator: NSObject {
     @objc
     func validate(bitcoinCashAddress address: BitcoinCashAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
-        guard let result = context?.evaluateScript("MyWalletPhone.bch.isValidAddress(\"\(escapedString)\");") else {
+        guard let result = context.evaluateScript("MyWalletPhone.bch.isValidAddress(\"\(escapedString)\");") else {
             let possibleBTCAddress = BitcoinAddress(string: address.description)
             return validate(bitcoinAddress: possibleBTCAddress)
         }
@@ -57,7 +47,7 @@ public final class AddressValidator: NSObject {
     @objc
     func validate(ethereumAddress address: EthereumAddress) -> Bool {
         let escapedString = address.description.escapedForJS()
-        guard let result = context?.evaluateScript("MyWalletPhone.isEthAddress(\"\(escapedString)\");") else { return false }
+        guard let result = context.evaluateScript("MyWalletPhone.isEthAddress(\"\(escapedString)\");") else { return false }
         return result.toBool()
     }
 }

@@ -1770,18 +1770,17 @@
         return NO;
     }
 
-    // No need to nil check [AddressValidator sharedInstance]
-    // because the wallet is guaranteed to be initialized above
+    AddressValidator *validator = [[AddressValidator alloc] initWithContext:[WalletManager sharedInstance].wallet.context];
 
     if (assetType == LegacyAssetTypeBitcoin) {
         BitcoinAddress *address = [[BitcoinAddress alloc] initWithString:string];
-        return [[AddressValidator sharedInstance] validateWithBitcoinAddress:address];
+        return [validator validateWithBitcoinAddress:address];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
         BitcoinCashAddress *address = [[BitcoinCashAddress alloc] initWithString:string];
-        return [[AddressValidator sharedInstance] validateWithBitcoinCashAddress:address];
+        return [validator validateWithBitcoinCashAddress:address];
     } else if (assetType == LegacyAssetTypeEther) {
         EthereumAddress *address = [[EthereumAddress alloc] initWithString:string];
-        return [[AddressValidator sharedInstance] validateWithEthereumAddress:address];
+        return [validator validateWithEthereumAddress:address];
     }
     return NO;
 }

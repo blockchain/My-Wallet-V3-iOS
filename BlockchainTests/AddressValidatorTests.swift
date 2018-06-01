@@ -15,8 +15,9 @@ class AddressValidatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         WalletManager.shared.wallet.loadJS()
-        precondition((WalletManager.shared.wallet.context != nil), "JS context is required for use of AddressValidator")
-        addressValidator = AddressValidator.shared
+        let context = WalletManager.shared.wallet.context
+        precondition((context != nil), "JS context is required for use of AddressValidator")
+        addressValidator = AddressValidator(context: context!)
     }
 
     override func tearDown() {

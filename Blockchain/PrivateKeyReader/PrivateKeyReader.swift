@@ -203,9 +203,8 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
                     LoadingViewPresenter.shared.hideBusyView()
                     if self.acceptPublicKeys {
                         let address = BitcoinAddress(string: scannedKey)
-                        guard
-                            let validator = AddressValidator.shared,
-                            validator.validate(bitcoinAddress: address) else {
+                        let validator = AddressValidator(context: WalletManager.shared.wallet.context)
+                        guard validator.validate(bitcoinAddress: address) else {
                                 self.delegate?.didFinishScanningWithError(.unknownKeyFormat)
                                 // TODO: remove once LegacyPrivateKeyDelegate is deprecated
                                 self.legacyDelegate?.didFinishScanningWithError(.unknownKeyFormat)
