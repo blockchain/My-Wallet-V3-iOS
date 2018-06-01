@@ -535,10 +535,6 @@
         [weakSelf crypto_scrypt:_password salt:salt n:N r:r p:p dkLen:derivedKeyLen success:success error:error];
     };
 
-    self.context[@"objc_loading_start_create_account"] = ^() {
-        [weakSelf loading_start_create_account];
-    };
-
     self.context[@"objc_loading_start_create_new_address"] = ^() {
         [weakSelf loading_start_create_new_address];
     };
@@ -4515,6 +4511,7 @@
 {
     if ([self isInitialized] && Reachability.hasInternetConnection) {
         // Show loading text
+        [self loading_start_create_account];
 
         self.isSyncing = YES;
         self.shouldLoadMetadata = YES;

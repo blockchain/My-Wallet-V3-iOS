@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Blockchain-Swift.h"
 @class BCSecureTextField;
 
 @interface BCCreateAccountView : UIView <UITextFieldDelegate>
 
 @property (nonatomic, strong) BCSecureTextField *labelTextField;
-@property(nonatomic, weak) id <ModalViewControllerDismissDelegate> dismissDelegate;
 
 @end

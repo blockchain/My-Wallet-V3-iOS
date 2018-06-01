@@ -82,9 +82,9 @@
         return;
     }
 
-    [self.dismissDelegate dismissModalViewControllerWithCompletion:^{
-        [WalletManager.sharedInstance.wallet createAccountWithLabel:label];
-    }];
+    [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFade];
+
+    [WalletManager.sharedInstance.wallet createAccountWithLabel:label];
 }
 
 #pragma mark - Textfield Delegates

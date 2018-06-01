@@ -18,7 +18,7 @@ extension UIViewController {
 
 extension UINavigationController {
     override var topMostViewController: UIViewController? {
-        return self
+        return visibleViewController ?? self
     }
 }
 
