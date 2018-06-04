@@ -21,8 +21,13 @@ Boolean shouldShowAnimation;
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     shouldShowAnimation = true;
-    
-    self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height - 20)];
+
+    // TODO: use autolayout
+    if (@available(iOS 11.0, *)) {
+        self = [super initWithFrame:window.rootViewController.view.safeAreaLayoutGuide.layoutFrame];
+    } else {
+        self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height - 20)];
+    }
     
     if (self) {
         self.backgroundColor = [UIColor whiteColor];

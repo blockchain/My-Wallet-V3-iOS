@@ -15,12 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Properties
 
+    // NOTE: Xcode automatically creates the file name for each launch image
     /// The overlay shown when the application resigns active state.
     lazy var privacyScreen: UIImageView? = {
         let launchImages = [
             "320x480": "LaunchImage-700",
             "320x568": "LaunchImage-700-568h",
             "375x667": "LaunchImage-800-667h",
+            "375x812": "LaunchImage-1100-Portrait-2436h",
             "414x736": "LaunchImage-800-Portrait-736h"
         ]
         let screenWidth = Int(UIScreen.main.bounds.size.width)
