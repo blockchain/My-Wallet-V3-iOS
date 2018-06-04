@@ -105,11 +105,19 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
         if wordsPageControl.currentPage == 0 {
             previousWordButton.isEnabled = false
             previousWordButton.setTitleColor(UIColor.darkGray, for: UIControlState())
-            previousWordButton.backgroundColor = Constants.Colors.DisabledGray
+            if #available(iOS 11.0, *) {
+                previousWordButton.backgroundColor = UIColor(named: "ColorGray1")
+            } else {
+                previousWordButton.backgroundColor = Constants.Colors.ColorGray1
+            }
         } else {
             previousWordButton.isEnabled = true
             previousWordButton.setTitleColor(UIColor.white, for: UIControlState())
-            previousWordButton.backgroundColor = Constants.Colors.BlockchainLightBlue
+            if #available(iOS 11.0, *) {
+                previousWordButton.backgroundColor = UIColor(named: "ColorBrandSecondary")
+            } else {
+                previousWordButton.backgroundColor = Constants.Colors.ColorBrandSecondary
+            }
         }
     }
 
@@ -140,11 +148,19 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
         wordsProgressLabel.text = progressLabelText
         if let count = wordLabels?.count {
             if wordsPageControl.currentPage == count-1 {
-                nextWordButton.backgroundColor = Constants.Colors.BlockchainBlue
+                if #available(iOS 11.0, *) {
+                    nextWordButton.backgroundColor = UIColor(named: "ColorBrandPrimary")
+                } else {
+                    nextWordButton.backgroundColor = Constants.Colors.ColorBrandPrimary
+                }
                 nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
                 nextWordButton.setTitle(NSLocalizedString("Done", comment: ""), for: UIControlState())
             } else if wordsPageControl.currentPage == count-2 {
-                nextWordButton.backgroundColor = Constants.Colors.BlockchainLightBlue
+                if #available(iOS 11.0, *) {
+                    nextWordButton.backgroundColor = UIColor(named: "ColorBrandSecondary")
+                } else {
+                    nextWordButton.backgroundColor = Constants.Colors.ColorBrandSecondary
+                }
                 nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
                 nextWordButton.setTitle(NSLocalizedString("NEXT", comment: ""), for: UIControlState())
             }

@@ -49,7 +49,11 @@ import UIKit
         super.viewDidLoad()
         let viewWidth = self.view.frame.size.width
         topBar = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: Constants.Measurements.DefaultHeaderHeight))
-        topBar.backgroundColor = Constants.Colors.BlockchainBlue
+        if #available(iOS 11.0, *) {
+            topBar.backgroundColor = UIColor(named: "ColorBrandPrimary")
+        } else {
+            topBar.backgroundColor = Constants.Colors.ColorBrandPrimary
+        }
         self.view.addSubview(topBar)
 
         setUpHeaderLabel()
