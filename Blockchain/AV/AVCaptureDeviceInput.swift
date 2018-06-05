@@ -42,7 +42,7 @@ extension AVCaptureDeviceInput {
         }
         do {
             return try AVCaptureDeviceInput(device: device)
-        } catch let error as NSError {
+        } catch _ as NSError {
             guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else {
                 throw AVCaptureDeviceError(type: .notAuthorized)
             }

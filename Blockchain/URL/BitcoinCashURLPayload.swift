@@ -8,37 +8,19 @@
 
 import Foundation
 
-/// Encapsulates the payload of a "bitcoincash://" URL payload
-@objc class BitcoinCashURLPayload: NSObject {
+/// Encapsulates the payload of a "bitcoincash:" URL payload
+@objc class BitcoinCashURLPayload: NSObject, BIP21URI {
 
-    /// The bitcoin cash address
-    @objc let address: String?
-
-    @objc init(address: String?) {
-        self.address = address
+    static var scheme: String {
+        return Constants.Schemes.bitcoinCash
     }
-}
 
-extension BitcoinCashURLPayload {
-    @objc convenience init?(url: URL) {
-        guard let scheme = url.scheme else {
-            return nil
-        }
+    @objc var address: String
 
-        guard scheme == Constants.Schemes.bitcoinCash else {
-            return nil
-        }
+    @objc var amount: String?
 
-        let urlString = url.absoluteString
-        let address: String?
-
-        if let commaIndex = urlString.index(of: ":") {
-            // Handle web format (e.g. "bitcoincash:qp3gpp53evw2gv7am7pj3nhaeujgpmx68q53amwrnt")
-            address = String(urlString[urlString.index(after: commaIndex)..<urlString.endIndex])
-        } else {
-            address = nil
-        }
-
-        self.init(address: address)
+    @objc required init(address: String, amount: String?) {
+        self.address = address
+        self.amount = amount
     }
 }

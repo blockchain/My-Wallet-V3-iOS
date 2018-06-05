@@ -478,7 +478,7 @@ import Foundation
         guard walletManager.wallet.guid == nil else {
             return
         }
-        
+
         pinEntryViewController?.reset()
         LoadingViewPresenter.shared.hideBusyView()
         AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.errorLoadingWallet)

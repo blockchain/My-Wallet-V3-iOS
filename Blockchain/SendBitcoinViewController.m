@@ -1993,23 +1993,13 @@ BOOL displayingLocalSymbolSend;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 NSURL *url = [NSURL URLWithString:[metadataObj stringValue]];
 
-                NSString *address;
-                NSString *amount;
-                if (self.assetType == LegacyAssetTypeBitcoin) {
-                    BitcoinURLPayload *payload = [[BitcoinURLPayload alloc] initWithUrl:url];
-                    address = payload.address;
-                    amount = payload.amount;
-                } else {
-                    BitcoinCashURLPayload *payload = [[BitcoinCashURLPayload alloc] initWithUrl:url];
-                    address = payload.address;
-                }
+                id<AssetURLPayload> payload = [AssetURLPayloadFactory createFrom:url];
+                NSString *address = payload.address;
 
                 if (address == nil || ![WalletManager.sharedInstance.wallet isValidAddress:address assetType:self.assetType]) {
                     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR handler: nil];
                     return;
                 }
-                
-                if ([address containsString:[ConstantsObjcBridge bitcoinCashUriPrefix]]) address = [address substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]];
 
                 toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:address assetType:self.assetType];
                 self.toAddress = address;
@@ -2018,11 +2008,17 @@ BOOL displayingLocalSymbolSend;
                 [self selectToAddress:self.toAddress];
                 
                 self.addressSource = DestinationAddressSourceQR;
-                
-                NSString *amountStringFromDictionary = amount;
-                if ([NSNumberFormatter stringHasBitcoinValue:amountStringFromDictionary]) {
+
+                NSString *amount;
+                if (self.assetType == LegacyAssetTypeBitcoin) {
+                    amount = ((BitcoinURLPayload *) payload).amount;
+                } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
+                    amount = ((BitcoinCashURLPayload *) payload).amount;
+                }
+
+                if ([NSNumberFormatter stringHasBitcoinValue:amount]) {
                     if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc) {
-                        NSDecimalNumber *amountDecimalNumber = [NSDecimalNumber decimalNumberWithString:amountStringFromDictionary];
+                        NSDecimalNumber *amountDecimalNumber = [NSDecimalNumber decimalNumberWithString:amount];
                         amountInSatoshi = [[amountDecimalNumber decimalNumberByMultiplyingBy:(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI]] longLongValue];
                     } else {
                         amountInSatoshi = 0.0;

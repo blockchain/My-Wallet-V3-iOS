@@ -22,7 +22,7 @@ class BitcoinURLPayloadTests: XCTestCase {
     func testEmptyURI() {
         let url = URL(string: "\(Constants.Schemes.bitcoin)://")
         let payload = BitcoinURLPayload(url: url!)
-        XCTAssertNotNil(payload)
+        XCTAssertNil(payload)
     }
 
     func testBitcoinWebFormat() {
