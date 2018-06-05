@@ -418,7 +418,9 @@ import Foundation
     ) {
         let loadingViewPresenter = LoadingViewPresenter.shared
         let isLoadingShown = loadingViewPresenter.isLoadingShown
-        if isLoadingShown { loadingViewPresenter.hideBusyView() }
+        if isLoadingShown {
+            loadingViewPresenter.hideBusyView()
+        }
 
         let passwordConfirmView = PasswordConfirmView.instanceFromNib()
         passwordConfirmView.updateLabelDescription(text: displayText)
