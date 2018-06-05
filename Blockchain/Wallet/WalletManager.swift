@@ -48,6 +48,7 @@ class WalletManager: NSObject {
     @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
     weak var swipeAddressDelegate: WalletSwipeAddressDelegate?
     weak var keyImportDelegate: WalletKeyImportDelegate?
+    weak var secondPasswordDelegate: WalletSecondPasswordDelegate?
 
     init(wallet: Wallet = Wallet()!) {
         self.wallet = wallet
@@ -643,5 +644,14 @@ extension WalletManager: WalletDelegate {
         DispatchQueue.main.async { [unowned self] in
             self.keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
         }
+    }
+
+    // MARK: - Second Password
+    @objc func getSecondPassword(success: JSValue) {
+        secondPasswordDelegate?.getSecondPassword(success: success)
+    }
+
+    @objc func getPrivateKeyPassword(success: JSValue) {
+        secondPasswordDelegate?.getPrivateKeyPassword(success: success)
     }
 }

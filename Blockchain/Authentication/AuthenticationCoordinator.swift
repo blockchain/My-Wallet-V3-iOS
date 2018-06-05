@@ -132,6 +132,7 @@ import Foundation
         self.walletManager = walletManager
         super.init()
         self.walletManager.pinEntryDelegate = self
+        self.walletManager.secondPasswordDelegate = self
     }
 
     // MARK: - Start Flows
@@ -415,6 +416,10 @@ import Foundation
         validateSecondPassword: Bool,
         confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler
     ) {
+        let loadingViewPresenter = LoadingViewPresenter.shared
+        let isLoadingShown = loadingViewPresenter.isLoadingShown
+        if isLoadingShown { loadingViewPresenter.hideBusyView() }
+
         let passwordConfirmView = PasswordConfirmView.instanceFromNib()
         passwordConfirmView.updateLabelDescription(text: displayText)
         passwordConfirmView.validateSecondPassword = validateSecondPassword
@@ -429,9 +434,11 @@ import Foundation
                 return
             }
 
-            confirmHandler(password)
-
             ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+
+            if isLoadingShown { loadingViewPresenter.showBusyView(withLoadingText: loadingViewPresenter.currentLoadingText!) }
+
+            confirmHandler(password)
         }
         ModalPresenter.shared.showModal(
             withContent: passwordConfirmView,
@@ -598,6 +605,24 @@ extension AuthenticationCoordinator: SetupDelegate {
             self.lastEnteredPIN?.saveToKeychain()
 
             completion(true)
+        }
+    }
+}
+
+extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
+    func getSecondPassword(success: JSValue) {
+        showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
+                            headerText: LocalizationConstants.Authentication.secondPasswordRequired,
+                            validateSecondPassword: true) { (secondPassword) in
+                                success.call(withArguments: [secondPassword])
+        }
+    }
+
+    func getPrivateKeyPassword(success: JSValue) {
+        showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.privateKeyPasswordDefaultDescription,
+                            headerText: LocalizationConstants.Authentication.privateKeyNeeded,
+                            validateSecondPassword: false) { (privateKeyPassword) in
+                                success.call(withArguments: [privateKeyPassword])
         }
     }
 }

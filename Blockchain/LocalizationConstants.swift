@@ -86,6 +86,8 @@ struct LocalizationConstants {
         static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
         static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
         static let secondPasswordDefaultDescription = NSLocalizedString("This action requires the second password for your wallet. Please enter it below and press continue.", comment: "")
+        static let privateKeyNeeded = NSLocalizedString("Second Password Required", comment: "")
+        static let privateKeyPasswordDefaultDescription = NSLocalizedString("The private key you are attempting to import is encrypted. Please enter the password below.", comment: "")
         static let password = NSLocalizedString("Password", comment: "")
     }
 
@@ -208,6 +210,12 @@ struct LocalizationConstants {
     @objc class func noPasswordEntered() -> String { return LocalizationConstants.Authentication.noPasswordEntered }
 
     @objc class func secondPasswordRequired() -> String { return LocalizationConstants.Authentication.secondPasswordRequired }
+
+    @objc class func secondPasswordDefaultDescription() -> String { return LocalizationConstants.Authentication.secondPasswordDefaultDescription }
+
+    @objc class func privateKeyNeeded() -> String { return LocalizationConstants.Authentication.privateKeyNeeded }
+
+    @objc class func privateKeyDefaultDescription() -> String { return LocalizationConstants.Authentication.privateKeyPasswordDefaultDescription }
 
     @objc class func success() -> String { return LocalizationConstants.success }
 

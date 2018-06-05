@@ -185,7 +185,9 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
 
         self.captureSession?.stopRunning()
         self.videoPreviewLayer?.removeFromSuperlayer()
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: self.loadingText)
+        DispatchQueue.main.sync {
+            LoadingViewPresenter.shared.showBusyView(withLoadingText: self.loadingText)
+        }
 
         self.dismiss(animated: true) {
             let deadlineTime = DispatchTime.now() + Constants.Animation.duration

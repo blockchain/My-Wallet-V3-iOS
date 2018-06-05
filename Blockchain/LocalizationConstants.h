@@ -139,9 +139,7 @@
 #define BC_STRING_FORGET_WALLET NSLocalizedString(@"Forget Wallet", nil)
 
 #define BC_STRING_CLOSE_APP NSLocalizedString(@"Close App", nil)
-#define BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION NSLocalizedString(@"The private key you are attempting to import is encrypted. Please enter the password below.", nil)
 
-#define BC_STRING_ACTION_REQUIRES_SECOND_PASSWORD NSLocalizedString(@"This action requires the second password for your wallet. Please enter it below and press continue.", nil)
 #define BC_STRING_INVALID_GUID NSLocalizedString(@"Invalid Wallet ID", nil)
 
 #define BC_STRING_ENTER_YOUR_CHARACTER_WALLET_IDENTIFIER NSLocalizedString(@"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup.", nil)
@@ -451,7 +449,6 @@
 #define BC_STRING_DONT_SHOW_AGAIN NSLocalizedString(@"Don't show again", nil)
 #define BC_STRING_NOT_NOW NSLocalizedString(@"Not Now", nil)
 #define BC_STRING_ILL_DO_THIS_LATER NSLocalizedString(@"I'll do this later", nil)
-#define BC_STRING_PRIVATE_KEY_NEEDED NSLocalizedString(@"Private Key Needed", nil)
 #define BC_STRING_PRIVATE_KEY_NEEDED_MESSAGE_ARGUMENT NSLocalizedString(@"This action requires the private key for the Bitcoin address %@. Please scan the QR code.", nil)
 #define BC_STRING_ENTER_ARGUMENT_AMOUNT NSLocalizedString(@"Enter %@ amount", nil)
 #define BC_STRING_RETRIEVING_RECOMMENDED_FEE NSLocalizedString(@"Retrieving recommended fee", nil)

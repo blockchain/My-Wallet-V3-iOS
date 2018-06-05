@@ -1020,7 +1020,7 @@ BOOL displayingLocalSymbolSend;
 
 - (void)alertUserForSpendingFromWatchOnlyAddress
 {
-    UIAlertController *alertForSpendingFromWatchOnly = [UIAlertController alertControllerWithTitle:BC_STRING_PRIVATE_KEY_NEEDED message:[NSString stringWithFormat:BC_STRING_PRIVATE_KEY_NEEDED_MESSAGE_ARGUMENT, self.fromAddress] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertForSpendingFromWatchOnly = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge privateKeyNeeded] message:[NSString stringWithFormat:BC_STRING_PRIVATE_KEY_NEEDED_MESSAGE_ARGUMENT, self.fromAddress] preferredStyle:UIAlertControllerStyleAlert];
     [alertForSpendingFromWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self scanPrivateKeyToSendFromWatchOnlyAddress];
     }]];

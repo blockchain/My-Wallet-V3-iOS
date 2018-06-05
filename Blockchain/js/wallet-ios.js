@@ -1364,14 +1364,12 @@ MyWalletPhone.getRecoveryPhrase = function(secondPassword) {
 // Get passwords
 
 MyWalletPhone.getPrivateKeyPassword = function(callback) {
-    // Due to the way the JSBridge handles calls with success/error callbacks, we need a first argument that can be ignored
     objc_get_private_key_password(function(pw) {
         callback(pw);
     });
 };
 
 MyWalletPhone.getSecondPassword = function(callback, helperText) {
-    // Due to the way the JSBridge handles calls with success/error callbacks, we need a first argument that can be ignored
     objc_get_second_password(function(pw) {
         callback(pw);
     }, helperText);

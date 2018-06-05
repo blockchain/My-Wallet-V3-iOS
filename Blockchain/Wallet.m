@@ -491,11 +491,11 @@
     };
 
     self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *helperText) {
-        [weakSelf getSecondPassword:nil success:secondPassword error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
+        [weakSelf getSecondPasswordSuccess:secondPassword error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
     };
 
     self.context[@"objc_get_private_key_password"] = ^(JSValue *privateKeyPassword) {
-        [weakSelf getPrivateKeyPassword:nil success:privateKeyPassword error:nil];
+        [weakSelf getPrivateKeyPasswordSuccess:privateKeyPassword error:nil];
     };
 
     self.context[@"objc_on_resend_two_factor_sms_success"] = ^() {
@@ -3194,23 +3194,22 @@
     }
 }
 
-- (void)getPrivateKeyPassword:(NSString *)canDiscard success:(JSValue *)success error:(void(^)(id))_error
+- (void)getPrivateKeyPasswordSuccess:(JSValue *)success error:(void(^)(id))_error
 {
-    [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:BC_STRING_PRIVATE_KEY_ENCRYPTED_DESCRIPTION headerText:LocalizationConstantsObjcBridge.passwordRequired validateSecondPassword:NO confirmHandler:^(NSString * _Nonnull secondPassword) {
-        [success callWithArguments:@[secondPassword]];
-    }];
+    if ([delegate respondsToSelector:@selector(getPrivateKeyPasswordWithSuccess:)]) {
+        [delegate getPrivateKeyPasswordWithSuccess:success];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector getPrivateKeyPassword!", [delegate class]);
+    }
 }
 
-- (void)getSecondPassword:(NSString *)canDiscard success:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
+- (void)getSecondPasswordSuccess:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
 {
-    LoadingViewPresenter *loadingViewPresenter = [LoadingViewPresenter sharedInstance];
-    BOOL isLoadingShown = [loadingViewPresenter isLoadingShown];
-    if (isLoadingShown) [loadingViewPresenter hideBusyView];
-
-    [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:helperText headerText:LocalizationConstantsObjcBridge.secondPasswordRequired validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPassword) {
-        if (isLoadingShown) [loadingViewPresenter showBusyViewWithLoadingText:[loadingViewPresenter currentLoadingText]];
-        [success callWithArguments:@[secondPassword]];
-    }];
+    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:)]) {
+        [delegate getSecondPasswordWithSuccess:success];
+    } else {
+        DLog(@"Error: delegate of class %@ does not respond to selector getSecondPassword!", [delegate class]);
+    }
 }
 
 - (void)setLoadingText:(NSString*)message

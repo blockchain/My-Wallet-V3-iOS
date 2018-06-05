@@ -144,6 +144,8 @@
 - (void)walletDidGetAccountInfo:(Wallet *)wallet;
 - (void)walletDidGetBtcExchangeRates:(Wallet *)wallet;
 - (void)walletDidGetAccountInfoAndExchangeRates:(Wallet *)wallet;
+- (void)getSecondPasswordWithSuccess:(JSValue *)success;
+- (void)getPrivateKeyPasswordWithSuccess:(JSValue *)success;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {
