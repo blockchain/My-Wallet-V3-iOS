@@ -108,6 +108,19 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        @objc var pin: String? {
+            get {
+                return KeychainItemWrapper.pinFromKeychain()
+            }
+            set {
+                guard let pin = newValue else {
+                    KeychainItemWrapper.removePinFromKeychain()
+                    return
+                }
+                KeychainItemWrapper.setPINInKeychain(pin)
+            }
+        }
+
         @objc var isPinSet: Bool {
             return pinKey != nil && encryptedPinPassword != nil
         }
@@ -189,7 +202,6 @@ final class BlockchainSettings: NSObject {
             get {
                 return KeychainItemWrapper.sharedKey()
             }
-
 
             set {
                 guard let sharedKey = newValue else {

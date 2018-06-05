@@ -26,6 +26,13 @@ struct GetPinResponse {
 }
 
 extension GetPinResponse {
+    var statusCode: StatusCode? {
+        guard let code = code else {
+            return nil
+        }
+        return StatusCode(rawValue: code)
+    }
+
     init(response: [AnyHashable: Any]) {
         self.code = response["code"] as? Int
         self.error = response["error"] as? String

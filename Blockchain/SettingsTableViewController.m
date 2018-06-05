@@ -617,7 +617,7 @@ const int aboutCookiePolicy = 3;
         }]];
         [self presentViewController:alertForTogglingTouchID animated:YES completion:nil];
     } else {
-        [KeychainItemWrapper removePinFromKeychain];
+        BlockchainSettings.sharedAppInstance.pin = nil;
         BlockchainSettings.sharedAppInstance.touchIDEnabled = !touchIDEnabled;
     }
 }

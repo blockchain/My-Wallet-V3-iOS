@@ -67,7 +67,7 @@ class Pin {
     }
 
     func saveToKeychain() {
-        KeychainItemWrapper.setPINInKeychain(self.toString)
+        BlockchainSettings.App.shared.pin = self.toString
     }
 }
 
