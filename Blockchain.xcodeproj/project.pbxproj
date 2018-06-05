@@ -401,6 +401,8 @@
 		C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
 		C77217ED20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
 		C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
+		C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
+		C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
 		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
@@ -1418,6 +1420,7 @@
 		C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoAndExchangeRatesDelegate.swift; sourceTree = "<group>"; };
 		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
 		C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRecoveryDelegate.swift; sourceTree = "<group>"; };
+		C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSecondPasswordDelegate.swift; sourceTree = "<group>"; };
 		C780A444202228A400E49274 /* BCPriceChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartView.h; sourceTree = "<group>"; };
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
@@ -2366,6 +2369,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
 				AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */,
@@ -3049,6 +3053,7 @@
 				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				AAC9FCEF20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AA63F84C20A12AE9002B719B /* URLs.swift in Sources */,
+				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
 				C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
@@ -3288,6 +3293,7 @@
 				C7448A9C2034DDF80041947E /* AssetSelectorView.m in Sources */,
 				C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */,
 				AA722C1420B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
+				C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				6780DB951A40BDCF0048EED2 /* InOut.m in Sources */,
 				5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */,
 				516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */,
