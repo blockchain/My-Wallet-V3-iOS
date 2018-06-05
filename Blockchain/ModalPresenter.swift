@@ -139,10 +139,6 @@ typealias OnModalResumed = () -> Void
             modalContentView.prepareForModalPresentation()
         }
 
-        if #available(iOS 11.0, *), let topView = topMostView {
-            modalViewToShow.myHolderView.frame = topView.safeAreaLayoutGuide.layoutFrame
-        }
-
         content.frame = CGRect(
             x: 0,
             y: 0,
