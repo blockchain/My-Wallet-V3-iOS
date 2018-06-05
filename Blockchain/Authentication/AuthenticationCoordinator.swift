@@ -612,19 +612,19 @@ extension AuthenticationCoordinator: SetupDelegate {
 }
 
 extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
-    func getSecondPassword(success: JSValue) {
+    func getSecondPassword(success: WalletSuccessCallback) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.secondPasswordRequired,
                             validateSecondPassword: true) { (secondPassword) in
-                                success.call(withArguments: [secondPassword])
+                                success.success(string: secondPassword)
         }
     }
 
-    func getPrivateKeyPassword(success: JSValue) {
+    func getPrivateKeyPassword(success: WalletSuccessCallback) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.privateKeyPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.privateKeyNeeded,
                             validateSecondPassword: false) { (privateKeyPassword) in
-                                success.call(withArguments: [privateKeyPassword])
+                                success.success(string: privateKeyPassword)
         }
     }
 }

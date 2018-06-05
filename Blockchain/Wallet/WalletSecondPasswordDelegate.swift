@@ -10,8 +10,18 @@ import Foundation
 
 protocol WalletSecondPasswordDelegate: class {
     /// Method invoked when second password is required for JS function to complete.
-    func getSecondPassword(success: JSValue)
+    func getSecondPassword(success: WalletSuccessCallback)
 
     /// Method invoked when a password is required for bip38 private key decryption
-    func getPrivateKeyPassword(success: JSValue)
+    func getPrivateKeyPassword(success: WalletSuccessCallback)
+}
+
+protocol WalletSuccessCallback {
+    func success(string: String)
+}
+
+extension JSValue: WalletSuccessCallback {
+    func success(string: String) {
+        self.call(withArguments: [string])
+    }
 }
