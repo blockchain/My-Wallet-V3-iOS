@@ -42,7 +42,11 @@ import UIKit
         onePixelLine.frame = self.superview!.convert(onePixelLine.frame, from: self)
 
         onePixelLine.isUserInteractionEnabled = false
-        onePixelLine.backgroundColor = Constants.Colors.TextFieldBorderGray
+        if #available(iOS 11.0, *) {
+            onePixelLine.backgroundColor = UIColor(named: "ColorGray2")
+        } else {
+            onePixelLine.backgroundColor = Constants.Colors.ColorGray2
+        }
 
         self.superview!.addSubview(onePixelLine)
     }

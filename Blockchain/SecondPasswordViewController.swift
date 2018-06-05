@@ -28,7 +28,11 @@ class SecondPasswordViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         let viewWidth = self.view.frame.size.width
         topBar = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: Constants.Measurements.DefaultHeaderHeight))
-        topBar.backgroundColor = Constants.Colors.BlockchainBlue
+        if #available(iOS 11.0, *) {
+            topBar.backgroundColor = UIColor(named: "ColorBrandPrimary")
+        } else {
+            topBar.backgroundColor = Constants.Colors.ColorBrandPrimary
+        }
         self.view.addSubview(topBar)
 
         let headerLabel = UILabel(frame: CGRect(x: 60, y: 27, width: 200, height: 30))
