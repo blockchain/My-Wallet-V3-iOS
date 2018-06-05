@@ -34,6 +34,8 @@ struct Constants {
     }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
+        // TODO: remove this once we use autolayout
+        static let DefaultNavigationBarHeight: CGFloat = 44
         static let BackupButtonCornerRadius: CGFloat = 4
         static let BusyViewLabelWidth: CGFloat = 230
         static let BusyViewLabelHeight: CGFloat = 30
@@ -186,6 +188,10 @@ struct Constants {
 
     @objc class func cookiePolicyURLString() -> String {
         return Constants.Url.cookiePolicy
+    }
+
+    @objc class func defaultNavigationBarHeight() -> CGFloat {
+        return Constants.Measurements.DefaultNavigationBarHeight
     }
 }
 
