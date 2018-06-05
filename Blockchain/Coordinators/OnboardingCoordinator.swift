@@ -54,7 +54,7 @@ extension OnboardingCoordinator: BCWelcomeViewDelegate {
             withContent: createWallet!,
             closeType: ModalCloseTypeBack,
             showHeader: true,
-            headerText: LocalizationConstants.Onboarding.createNewWallet
+            headerText: title
         )
     }
 
