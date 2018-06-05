@@ -42,10 +42,8 @@ class PasswordConfirmView: UIView {
         guard let passwordText = textFieldPassword.text else {
             return
         }
-        DispatchQueue.main.async {
-            self.confirmHandler?(passwordText)
-            self.textFieldPassword.text = nil
-        }
+        self.confirmHandler?(passwordText)
+        self.textFieldPassword.text = nil
     }
 
     func updateLabelDescription(text: String) {
