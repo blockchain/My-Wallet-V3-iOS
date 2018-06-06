@@ -58,8 +58,6 @@
 - (void)createBlankWallet
 {
     [WalletManager.sharedInstance.wallet loadBlankWallet];
-    
-    [WalletManager.sharedInstance.wallet setupBuySellWebview];
 }
 
 // Make sure keyboard comes back if use is returning from TOS
@@ -212,7 +210,7 @@
     [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:password];
     
     WalletManager.sharedInstance.wallet.isNew = YES;
-    AppCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
+    BuySellCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
     
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = NO;
     BlockchainSettings.sharedAppInstance.shouldHideAllCards = NO;

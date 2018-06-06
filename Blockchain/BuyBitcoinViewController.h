@@ -12,7 +12,7 @@
 @interface BuyBitcoinViewController : UIViewController
 @property (nonatomic) BOOL isNew;
 @property (nonatomic) id<ExchangeAccountDelegate>delegate;
-- (id)init;
+- (id)initWithRootURL:(NSString *_Nullable)rootURL;
 - (void)loginWithGuid:(NSString *)guid sharedKey:(NSString *)sharedKey password:(NSString *)password;
 - (void)loginWithJson:(NSString *)guid externalJson:(NSString *)externalJson magicHash:(NSString *)magicHash password:(NSString *)password;
 - (void)runScript:(NSString *)script;

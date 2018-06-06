@@ -27,7 +27,7 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
 
 @implementation BuyBitcoinViewController
 
-- (id)init
+- (id)initWithRootURL:(NSString *)rootURL
 {
     if (self = [super init]) {
         
@@ -48,8 +48,7 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
         self.webView.scrollView.scrollEnabled = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         
-        NSString *walletOptionsRootURL = [WalletManager.sharedInstance.wallet buySellWebviewRootURLString];
-        NSString *urlString = walletOptionsRootURL ? [walletOptionsRootURL stringByAppendingString:URL_BUY_WEBVIEW_SUFFIX] : [[BlockchainAPI sharedInstance] buyWebViewUrl];
+        NSString *urlString = rootURL ? [rootURL stringByAppendingString:URL_BUY_WEBVIEW_SUFFIX] : [[BlockchainAPI sharedInstance] buyWebViewUrl];
         NSURL *login = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:login cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval: 10.0];
         [self.webView loadRequest:request];

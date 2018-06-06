@@ -53,37 +53,49 @@ final class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
-    func checkForMaintenance(withCompletion handler: @escaping (_ response: String?) -> Void) {
+    func getWalletOptions(withCompletion success: @escaping (_ response: Dictionary<String, Any>?) -> Void, error: @escaping(_ error: String?) -> Void) {
         guard
             let walletOptionsUrl = BlockchainAPI.shared.walletOptionsUrl,
             let url = URL(string: walletOptionsUrl) else {
                 fatalError("Failed to get wallet options url from Bundle.")
         }
         NetworkManager.shared.session.sessionDescription = url.host
-        let task = NetworkManager.shared.session.dataTask(with: url) { data, _, error in
+        let task = NetworkManager.shared.session.dataTask(with: url) { data, _, taskError in
             DispatchQueue.main.async {
-                guard error == nil else {
-                    handler(LocalizationConstants.Errors.requestFailedCheckConnection)
+                guard taskError == nil else {
+                    error(LocalizationConstants.Errors.requestFailedCheckConnection)
                     return
                 }
-                guard
-                    let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
-                    let downForMaintenance = json![WalletOptions.maintenance] as? Bool else {
-                        handler(LocalizationConstants.Errors.invalidServerResponse); return
+                guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] else {
+                    error(LocalizationConstants.Errors.invalidServerResponse)
+                    return
                 }
-                if downForMaintenance {
-                    let languageCode = Locale.current.languageCode ?? "en"
-                    guard
-                        let mobileInfo = json![WalletOptions.mobileInfo] as? [String: String],
-                        let message = mobileInfo[languageCode] else {
-                            handler(LocalizationConstants.Errors.invalidServerResponse); return
-                    }
-                    handler(message); return
-                }
-                handler(nil)
+                success(json)
             }
         }
         task.resume()
+    }
+
+    /// Check for maintenance flag in wallet-options.
+    ///
+    /// - Parameter handler: takes an String argument as a response. If the response is non-nil,
+    ///  it is assumed that the user should not proceed due to server maintenance.
+    func checkForMaintenance(withCompletion handler: @escaping (_ response: String?) -> Void) {
+        getWalletOptions(withCompletion: { response in
+            guard let downForMaintenance = response![WalletOptions.maintenance] as? Bool else {
+                handler(LocalizationConstants.Errors.invalidServerResponse); return
+            }
+            if downForMaintenance {
+                let languageCode = Locale.current.languageCode ?? "en"
+                guard
+                    let mobileInfo = response![WalletOptions.mobileInfo] as? [String: String],
+                    let message = mobileInfo[languageCode] else {
+                        handler(LocalizationConstants.Errors.invalidServerResponse); return
+                }
+                handler(message); return
+            }
+            handler(nil)
+        }, error: handler)
     }
 
     // MARK: - URLSessionDelegate

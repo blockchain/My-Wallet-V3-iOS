@@ -60,8 +60,6 @@ import Foundation
 
     @objc private var settingsNavigationController: SettingsNavigationController?
 
-    @objc private(set) var buyBitcoinViewController: BuyBitcoinViewController?
-
     // MARK: NSObject
 
     private init(walletManager: WalletManager = WalletManager.shared) {
@@ -69,7 +67,6 @@ import Foundation
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window.backgroundColor = UIColor.white
         super.init()
-        self.walletManager.buySellDelegate = self
         self.walletManager.accountInfoAndExchangeRatesDelegate = self
         self.walletManager.backupDelegate = self
         self.walletManager.historyDelegate = self
@@ -83,6 +80,8 @@ import Foundation
         window.rootViewController = slidingViewController
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
+
+        BuySellCoordinator.shared.start()
 
         // Display welcome screen if no wallet is authenticated
         if BlockchainSettings.App.shared.guid == nil || BlockchainSettings.App.shared.sharedKey == nil {
@@ -142,53 +141,7 @@ import Foundation
     }
 
     @objc func showBuyBitcoinView() {
-        guard let buyBitcoinViewController = buyBitcoinViewController else {
-            print("buyBitcoinViewController not yet initialized")
-            return
-        }
-
-        // TODO convert this dictionary into a model
-        guard let loginDataDict = walletManager.wallet.executeJSSynchronous(
-            "MyWalletPhone.getWebViewLoginData()"
-            ).toDictionary() else {
-                print("loginData from wallet is empty")
-                return
-        }
-
-        guard let walletJson = loginDataDict["walletJson"] as? String else {
-            print("walletJson is nil")
-            return
-        }
-
-        guard let externalJson = loginDataDict["externalJson"] is NSNull ? "" : loginDataDict["externalJson"] as? String else {
-            print("externalJson is nil")
-            return
-        }
-
-        guard let magicHash = loginDataDict["magicHash"] is NSNull ? "" : loginDataDict["magicHash"] as? String else {
-            print("magicHash is nil")
-            return
-        }
-
-        buyBitcoinViewController.login(
-            withJson: walletJson,
-            externalJson: externalJson,
-            magicHash: magicHash,
-            password: walletManager.wallet.password
-        )
-        buyBitcoinViewController.delegate = walletManager.wallet // TODO fix this
-
-        guard let navigationController = BuyBitcoinNavigationController(
-            rootViewController: buyBitcoinViewController,
-            title: LocalizationConstants.SideMenu.buySellBitcoin
-            ) else {
-                return
-        }
-
-        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
-            navigationController,
-            animated: true
-        )
+        BuySellCoordinator.shared.showBuyBitcoinView()
     }
 
     @objc func closeSideMenu() {
@@ -369,28 +322,6 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
 
     private func handleExchange() {
         tabControllerManager.exchangeClicked()
-    }
-}
-
-extension AppCoordinator: WalletBuySellDelegate {
-    func initializeWebView() {
-        buyBitcoinViewController = BuyBitcoinViewController()
-    }
-
-    func didCompleteTrade(trade: Trade) {
-        let actions = [UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil),
-                       UIAlertAction(title: LocalizationConstants.BuySell.viewDetails, style: .default, handler: { _ in
-                        AppCoordinator.shared.tabControllerManager.showTransactionDetail(forHash: trade.hash)
-                       })]
-        AlertViewPresenter.shared.standardNotify(message: String(format: LocalizationConstants.BuySell.tradeCompletedDetailArg, trade.date),
-                                          title: LocalizationConstants.BuySell.tradeCompleted,
-                                          actions: actions)
-    }
-
-    func showCompletedTrade(tradeHash: String) {
-        AppCoordinator.shared.closeSideMenu()
-        AppCoordinator.shared.tabControllerManager.showTransactions(animated: true)
-        AppCoordinator.shared.tabControllerManager.showTransactionDetail(forHash: tradeHash)
     }
 }
 

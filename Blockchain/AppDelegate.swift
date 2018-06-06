@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         wallet.isFetchingTransactions = false
         wallet.isFilteringTransactions = false
         wallet.didReceiveMessageForLastTransaction = false
-        wallet.setupBuySellWebview()
+        BuySellCoordinator.shared.start()
 
         WalletManager.shared.closeWebSockets(withCloseCode: .backgroundedApp)
 

@@ -10,10 +10,6 @@ import Foundation
 
 /// Protocol definition for a delegate for buy/sell wallet callbacks
 protocol WalletBuySellDelegate: class {
-
-    /// Method invoked when the web view needs to be initialized
-    func initializeWebView()
-    
     /// Method invoked when trade initiated from buy is completed
     func didCompleteTrade(trade: Trade)
     
