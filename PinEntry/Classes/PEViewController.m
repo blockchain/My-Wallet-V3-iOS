@@ -41,31 +41,13 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-    
-//    // Move up pin entry views for bigger screens
-//    if ([[UIScreen mainScreen] bounds].size.height >= 568) {
-//        int moveUp = 60;
-//        
-//        CGRect frame = pin0.frame;
-//        frame.origin.y -= moveUp;
-//        pin0.frame = frame;
-//        
-//        frame = pin1.frame;
-//        frame.origin.y -= moveUp;
-//        pin1.frame = frame;
-//        
-//        frame = pin2.frame;
-//        frame.origin.y -= moveUp;
-//        pin2.frame = frame;
-//        
-//        frame = pin3.frame;
-//        frame.origin.y -= moveUp;
-//        pin3.frame = frame;
-//        
-//        frame = promptLabel.frame;
-//        frame.origin.y -= 48;
-//        promptLabel.frame = frame;
-//    }
+
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+
+    CGFloat safeAreaInsetBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    }
     
     pins[0] = pin0;
 	pins[1] = pin1;
@@ -83,9 +65,15 @@
         pin3.frame = CGRectOffset(pin3.frame, 0, offsetY);
         promptLabel.frame = CGRectOffset(promptLabel.frame, 0, offsetY);
         containerViewHeight = 380;
-    } else {        
+    } else {
         if (IS_USING_SCREEN_SIZE_LARGER_THAN_5S) {
-            CGFloat offsetY = IS_USING_6_OR_7_PLUS_SCREEN_SIZE ? -80 : -60;
+            CGFloat actualScreenHeight = window.bounds.size.height;
+            CGFloat additionalOffsetForEvenLargerDevices = 0;
+            if (actualScreenHeight > HEIGHT_IPHONE_6_PLUS) {
+                additionalOffsetForEvenLargerDevices = actualScreenHeight - HEIGHT_IPHONE_6_PLUS;
+            }
+            CGFloat offsetY = (IS_USING_6_OR_7_PLUS_SCREEN_SIZE ? -80 : -60) - safeAreaInsetBottom;
+            offsetY -= (additionalOffsetForEvenLargerDevices / 2);
             pin0.frame = CGRectOffset(pin0.frame, 0, offsetY);
             pin1.frame = CGRectOffset(pin1.frame, 0, offsetY);
             pin2.frame = CGRectOffset(pin2.frame, 0, offsetY);
@@ -98,11 +86,26 @@
     promptLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     self.versionLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
     self.versionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    
-    CGFloat windowWidth = WINDOW_WIDTH;
-    containerView.frame = CGRectMake(0, 480 - containerViewHeight, windowWidth, containerViewHeight);
+
+    containerView.frame = CGRectMake(0, 480 - containerViewHeight - safeAreaInsetBottom, WINDOW_WIDTH, containerViewHeight);
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
+
+    //: If the the safe area has a bottom inset, add filler view
+    //: Must use window's frame because view's frame is hardcoded
+    if (safeAreaInsetBottom > 0) {
+        CGFloat height = safeAreaInsetBottom;
+        CGFloat width = window.frame.size.width;
+        CGFloat posY = window.frame.size.height - height;
+        UIView *fillerView = [[UIView alloc] initWithFrame:CGRectMake(0, posY, width, height)];
+        fillerView.userInteractionEnabled = NO;
+        if (@available(iOS 11.0, *)) {
+            fillerView.backgroundColor = [UIColor colorNamed:@"ColorBrandPrimary"];
+        } else {
+            fillerView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        }
+        [self.view addSubview:fillerView];
+    }
     
     self.swipeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     self.swipeLabel.text = BC_STRING_SETTINGS_PIN_SWIPE_TO_RECEIVE;
@@ -110,7 +113,7 @@
     self.swipeLabelImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.swipeLabelImageView.image = [self.swipeLabelImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.swipeLabelImageView setTintColor:COLOR_BLOCKCHAIN_BLUE];
-    
+
     [self setupTapActionForSwipeQR];
 }
 
