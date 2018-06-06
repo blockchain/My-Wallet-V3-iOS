@@ -12,6 +12,7 @@
 @interface WalletSetupViewController ()
 @property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) UILabel *emailLabel;
+@property (nonatomic) UIWindow *window;
 @end
 
 @implementation WalletSetupViewController
@@ -20,19 +21,26 @@
 {
     if (self = [super init]) {
         self.delegate = delegate;
+        _window = [UIApplication sharedApplication].keyWindow;
     }
     return self;
 }
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:UIApplication.sharedApplication.keyWindow.frame];
+    CGFloat safeAreaInsetBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetBottom = _window.rootViewController.view.safeAreaInsets.bottom;
+    }
+
+    CGRect frame = CGRectMake(0, 0, _window.frame.size.width, _window.frame.size.height - safeAreaInsetBottom);
+    self.view = [[UIView alloc] initWithFrame:frame];
     self.view.backgroundColor = [UIColor whiteColor];
     
     if (self.view == nil) {
         [super loadView];
     }
-    
+
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
     scrollView.pagingEnabled = YES;
     scrollView.showsHorizontalScrollIndicator = NO;
@@ -43,12 +51,14 @@
     [scrollView addSubview:[self setupTouchIDView]];
     [scrollView addSubview:[self setupEmailView]];
     
-    scrollView.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, self.view.frame.size.height);
+    scrollView.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, scrollView.frame.size.height);
     [self.view addSubview:scrollView];
     
     self.scrollView = scrollView;
     
-    if (self.emailOnly) [self goToSecondPage];
+    if (self.emailOnly) {
+        [self goToSecondPage];
+    }
 }
 
 - (UIView *)setupTouchIDView
@@ -162,12 +172,22 @@
 
 - (UIView *)setupBannerViewWithImageName:(NSString *)imageName
 {
-    UIView *bannerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT + 80)];
+    CGFloat safeAreaInsetTop = 20;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = _window.rootViewController.view.safeAreaInsets.top;
+    }
+
+    CGFloat headerHeight = [ConstantsObjcBridge defaultNavigationBarHeight] + safeAreaInsetTop + 80;
+
+    UIView *bannerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, headerHeight)];
     bannerView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
 
+    CGFloat imageHeight = 72;
+    CGFloat imageWidth = 72;
+    CGFloat posX = (bannerView.frame.size.width / 2) - (imageWidth / 2);
+    CGFloat posY = (bannerView.frame.size.height / 2) - (imageHeight / 2) + (safeAreaInsetTop / 2);
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    imageView.frame = CGRectMake(0, 0, 72, 72);
-    imageView.center = CGPointMake(bannerView.center.x, bannerView.center.y + DEFAULT_STATUS_BAR_HEIGHT/2);
+    imageView.frame = CGRectMake(posX, posY, imageWidth, imageHeight);
     
     [bannerView addSubview:imageView];
     return bannerView;
