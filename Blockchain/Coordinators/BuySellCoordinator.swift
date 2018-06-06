@@ -32,11 +32,11 @@ import Foundation
                 print(error)
                 return
             }
-            guard let mobile = response["mobile"] as? [String: String] else {
+            guard let mobile = response[Constants.WalletOptionsKeys.mobile] as? [String: String] else {
                 print(error)
                 return
             }
-            guard let rootURL = mobile["walletRoot"] else {
+            guard let rootURL = mobile[Constants.WalletOptionsKeys.walletRoot] else {
                 print(error)
                 return
             }
