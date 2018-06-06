@@ -16,7 +16,7 @@ protocol WalletSecondPasswordDelegate: class {
     func getPrivateKeyPassword(success: WalletSuccessCallback)
 }
 
-protocol WalletSuccessCallback {
+@objc protocol WalletSuccessCallback {
     func success(string: String)
 }
 
