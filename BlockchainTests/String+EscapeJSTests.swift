@@ -26,13 +26,17 @@ class StringEscapeJSTests: XCTestCase {
     }
 
 //    //: Quotation mark
-//    func testEscapedForJSWithDoubleQuote() {
-//        let input = "\"This string should escape the double quote (\") character.\""
-//        let input2 = NSString(string: "\"This string should escape the double quote (\") character.\"")
-//        let expected = "\"This string should escape the double quote (\") character.\""
-//        let result = input.escapedForJS()
-//        XCTAssertEqual(result, expected, "Expected strings to match")
-//    }
+    func testEscapedForJSWithDoubleQuote() {
+        let expected = "\\\"This string should escape the double quote (\\\") character.\\\""
+
+        let input = "\"This string should escape the double quote (\") character.\""
+        let result = input.escapedForJS()
+        XCTAssertEqual(result, expected, "Expected strings to match")
+
+        let input2 = NSString(string: "\"This string should escape the double quote (\") character.\"")
+        let result2 = input2.escapedForJS()
+        XCTAssertEqual(result2, expected, "Expected strings to match")
+    }
 
     //: Reverse solidus
     func testEscapedForJSWithBackslash() {
