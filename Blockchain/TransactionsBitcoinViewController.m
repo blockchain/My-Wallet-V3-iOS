@@ -271,7 +271,7 @@
     [tableView reloadData];
     
     [self reloadNewTransactions];
-    
+
     [self animateFirstCell];
     
     [self reloadLastNumberOfTransactions];
@@ -321,10 +321,9 @@
 - (void)animateFirstCell
 {
     if (data.transactions.count > 0 && self.receivedTransactionMessage) {
-        
         self.receivedTransactionMessage = NO;
 
-        [self performSelector:@selector(didGetNewTransaction) withObject:nil afterDelay:0.1f];
+        [self didGetNewTransaction];
     } else {
         self.hasZeroTotalBalance = [WalletManager.sharedInstance.wallet getTotalActiveBalance] == 0;
     }
