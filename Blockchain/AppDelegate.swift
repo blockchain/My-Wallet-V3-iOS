@@ -101,7 +101,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         wallet.isFetchingTransactions = false
         wallet.isFilteringTransactions = false
         wallet.didReceiveMessageForLastTransaction = false
-        BuySellCoordinator.shared.start()
 
         WalletManager.shared.closeWebSockets(withCloseCode: .backgroundedApp)
 
@@ -140,6 +139,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("applicationWillEnterForeground")
+
+        BuySellCoordinator.shared.start()
+
         if !WalletManager.shared.wallet.isInitialized() {
             if BlockchainSettings.App.shared.guid != nil && BlockchainSettings.App.shared.sharedKey != nil {
                 AuthenticationCoordinator.shared.start()
