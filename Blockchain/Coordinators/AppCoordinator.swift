@@ -140,10 +140,6 @@ import Foundation
         settingsNavigationController = viewController
     }
 
-    @objc func showBuyBitcoinView() {
-        BuySellCoordinator.shared.showBuyBitcoinView()
-    }
-
     @objc func closeSideMenu() {
         guard slidingViewController.currentTopViewPosition != .centered else {
             return
@@ -317,7 +313,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     }
 
     private func handleBuyBitcoin() {
-        showBuyBitcoinView()
+        BuySellCoordinator.shared.showBuyBitcoinView()
     }
 
     private func handleExchange() {

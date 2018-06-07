@@ -836,7 +836,7 @@
     [showGetAssetsAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_GET_BITCOIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.tabViewController dismissViewControllerAnimated:YES completion:^{
             if ([WalletManager.sharedInstance.wallet isBuyEnabled]) {
-                [AppCoordinator.sharedInstance showBuyBitcoinView];
+                [BuySellCoordinator.sharedInstance showBuyBitcoinView];
             } else {
                 [[AppCoordinator sharedInstance] closeSideMenu];
                 [self changeAssetSelectorAsset:LegacyAssetTypeBitcoin];

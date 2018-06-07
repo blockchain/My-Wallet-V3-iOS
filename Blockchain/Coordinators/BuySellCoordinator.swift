@@ -50,7 +50,7 @@ import Foundation
         buyBitcoinViewController = BuyBitcoinViewController(rootURL: rootURL)
     }
 
-    func showBuyBitcoinView() {
+    @objc func showBuyBitcoinView() {
         guard let buyBitcoinViewController = buyBitcoinViewController else {
             print("buyBitcoinViewController not yet initialized")
             return
