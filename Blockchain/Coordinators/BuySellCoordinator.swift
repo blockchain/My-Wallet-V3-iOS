@@ -27,13 +27,8 @@ import Foundation
 
     func start() {
         NetworkManager.shared.getWalletOptions(withCompletion: { walletOptions in
-            let error = "Error with wallet options response when starting buy sell webview"
-            guard let walletOptions = walletOptions else {
-                print(error)
-                return
-            }
             guard let rootURL = walletOptions.mobile?.walletRoot else {
-                print(error)
+                print("Error with wallet options response when starting buy sell webview")
                 return
             }
             self.initializeWebView(rootURL: rootURL)

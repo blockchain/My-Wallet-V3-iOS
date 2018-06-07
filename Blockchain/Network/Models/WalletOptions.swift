@@ -16,7 +16,7 @@ struct WalletOptions {
         static let mobileInfo = "mobileInfo"
     }
 
-    let downForMaintenance: Bool?
+    let downForMaintenance: Bool
 
     struct Mobile {
         let walletRoot: String?
@@ -52,8 +52,8 @@ struct WalletOptions {
 }
 
 extension WalletOptions {
-    init?(response: [String: Any]) {
-        downForMaintenance = response[Keys.maintenance] as? Bool
+    init(response: [String: Any]) {
+        downForMaintenance = response[Keys.maintenance] as? Bool ?? false
         self.mobile = WalletOptions.Mobile(response)
         self.mobileInfo = WalletOptions.MobileInfo(response)
     }
