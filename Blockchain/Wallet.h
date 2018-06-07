@@ -340,8 +340,6 @@
 
 - (BOOL)isBuyEnabled;
 - (BOOL)canUseSfox;
-- (void)setupBuySellWebview;
-- (NSString *)buySellWebviewRootURLString;
 
 // Settings
 - (void)getAccountInfo;

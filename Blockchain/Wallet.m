@@ -2429,17 +2429,6 @@
     return [[self.context evaluateScript:@"MyWalletPhone.canUseSfox()"] toBool];
 }
 
-- (void)setupBuySellWebview
-{
-    [self.context evaluateScript:@"MyWalletPhone.setupBuySellWebview()"];
-}
-
-- (NSString *)buySellWebviewRootURLString
-{
-    JSValue *result = [self.context evaluateScript:@"MyWalletPhone.getBuySellWebviewRootURL()"];
-    return [result isNull] ? nil : [result toString];
-}
-
 - (void)watchPendingTrades:(BOOL)shouldSync
 {
     if (shouldSync) {
