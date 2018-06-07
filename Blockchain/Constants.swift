@@ -80,10 +80,6 @@ struct Constants {
         static let userInfoId = "id"
         static let typePayment = "payment"
     }
-    struct WalletOptionsKeys {
-        static let mobile = "mobile"
-        static let walletRoot = "walletRoot"
-    }
     struct Schemes {
         static let bitcoin = "bitcoin"
         static let bitcoinCash = "bitcoincash"

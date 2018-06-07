@@ -53,7 +53,7 @@ final class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
-    func getWalletOptions(withCompletion success: @escaping (_ response: Dictionary<String, Any>?) -> Void, error: @escaping(_ error: String?) -> Void) {
+    func getWalletOptions(withCompletion success: @escaping (_ response: WalletOptions?) -> Void, error: @escaping(_ error: String?) -> Void) {
         guard
             let walletOptionsUrl = BlockchainAPI.shared.walletOptionsUrl,
             let url = URL(string: walletOptionsUrl) else {
@@ -70,7 +70,7 @@ final class NetworkManager: NSObject, URLSessionDelegate {
                     error(LocalizationConstants.Errors.invalidServerResponse)
                     return
                 }
-                success(json)
+                success(WalletOptions(response: json!))
             }
         }
         task.resume()
@@ -81,18 +81,18 @@ final class NetworkManager: NSObject, URLSessionDelegate {
     /// - Parameter handler: takes an String argument as a response. If the response is non-nil,
     ///  it is assumed that the user should not proceed due to server maintenance.
     func checkForMaintenance(withCompletion handler: @escaping (_ response: String?) -> Void) {
-        getWalletOptions(withCompletion: { response in
-            guard let downForMaintenance = response![WalletOptions.maintenance] as? Bool else {
-                handler(LocalizationConstants.Errors.invalidServerResponse); return
+        getWalletOptions(withCompletion: { walletOptions in
+            guard let walletOptions = walletOptions else {
+                handler(LocalizationConstants.Errors.invalidServerResponse)
+                return
             }
-            if downForMaintenance {
-                let languageCode = Locale.current.languageCode ?? "en"
-                guard
-                    let mobileInfo = response![WalletOptions.mobileInfo] as? [String: String],
-                    let message = mobileInfo[languageCode] else {
-                        handler(LocalizationConstants.Errors.invalidServerResponse); return
+            if walletOptions.downForMaintenance == true {
+                guard let message = walletOptions.mobileInfo?.message else {
+                    handler(LocalizationConstants.Errors.invalidServerResponse)
+                    return
                 }
-                handler(message); return
+                handler(message)
+                return
             }
             handler(nil)
         }, error: handler)
