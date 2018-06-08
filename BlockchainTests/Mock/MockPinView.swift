@@ -18,7 +18,6 @@ class MockPinView: PinView {
     var didCallSuccessPinValidExpectation: XCTestExpectation?
 
     init() {
-        
     }
 
     func showLoadingView(withText text: String) {

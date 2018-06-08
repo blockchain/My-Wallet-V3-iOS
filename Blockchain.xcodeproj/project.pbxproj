@@ -263,6 +263,8 @@
 		AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56421D20DDBDA90092A022 /* PinTests.swift */; };
 		AA56423B20DDBDBB0092A022 /* String+EscapeJSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */; };
 		AA56423C20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */; };
+		AA5B3B8020C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */; };
+		AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */; };
 		AA63F84B20A12AE9002B719B /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84A20A12AE9002B719B /* URLs.swift */; };
 		AA63F84C20A12AE9002B719B /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84A20A12AE9002B719B /* URLs.swift */; };
 		AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84F20A12DA6002B719B /* BitcoinURLPayload.swift */; };
@@ -423,6 +425,13 @@
 		AAE94F2F20C644DE005A3595 /* PinPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F2D20C644DE005A3595 /* PinPresenter.swift */; };
 		AAE94F3120C64B49005A3595 /* PinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3020C64B49005A3595 /* PinInteractor.swift */; };
 		AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3020C64B49005A3595 /* PinInteractor.swift */; };
+		AAE94F3520C70B97005A3595 /* AssetURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */; };
+		AAE94F3620C70B97005A3595 /* AssetURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */; };
+		AAE94F3C20C70F4B005A3595 /* BIP21URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */; };
+		AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */; };
+		AAE94F3F20C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
+		AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
+		AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F4320C736E8005A3595 /* AssetURLPayloadFactoryTests.swift */; };
 		AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */; };
 		AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6920C75C4E005A3595 /* MockPinView.swift */; };
 		AAE94F6C20C75C67005A3595 /* MockPinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */; };
@@ -1616,6 +1625,7 @@
 		AA56421D20DDBDA90092A022 /* PinTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
 		AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+EscapeJSTests.swift"; sourceTree = "<group>"; };
 		AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+AssetsTests.swift"; sourceTree = "<group>"; };
+		AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PEPinEntryController+PinView.swift"; sourceTree = "<group>"; };
 		AA63F84A20A12AE9002B719B /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = URLs.swift; path = Extensions/URLs.swift; sourceTree = "<group>"; };
 		AA63F84F20A12DA6002B719B /* BitcoinURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURLPayload.swift; sourceTree = "<group>"; };
 		AA63F85320A12FC8002B719B /* BitcoinURLPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURLPayloadTests.swift; sourceTree = "<group>"; };
@@ -1685,6 +1695,10 @@
 		AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		AAE94F2D20C644DE005A3595 /* PinPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenter.swift; sourceTree = "<group>"; };
 		AAE94F3020C64B49005A3595 /* PinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinInteractor.swift; sourceTree = "<group>"; };
+		AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayload.swift; sourceTree = "<group>"; };
+		AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP21URI.swift; sourceTree = "<group>"; };
+		AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayloadFactory.swift; sourceTree = "<group>"; };
+		AAE94F4320C736E8005A3595 /* AssetURLPayloadFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayloadFactoryTests.swift; sourceTree = "<group>"; };
 		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
 		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
 		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
@@ -2993,6 +3007,7 @@
 				C9BE916B1945D8F600FD516D /* PEViewController.h */,
 				C9BE916C1945D8F600FD516D /* PEViewController.m */,
 				C9BE916D1945D8F600FD516D /* PEViewController.xib */,
+				AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -3717,6 +3732,7 @@
 				AA2BA64420DC754600F01954 /* BitcoinAddressTests.swift in Sources */,
 				51C2ADD420BDD3EA00D66108 /* AddressValidatorTests.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
+				AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				AAE94F6C20C75C67005A3595 /* MockPinInteractor.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
@@ -3901,6 +3917,7 @@
 				C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */,
 				C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				23964C031DCA3F19001323BE /* KeyPair.m in Sources */,
+				AA5B3B8020C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				230FD2DC1C5BFB4300336683 /* QRCodeGenerator.m in Sources */,
 				51A665C72080EBD80040EE7C /* AuthenticationError.swift in Sources */,
 				C7A0E90E1FA796EC004F4267 /* BCChartMarkerView.swift in Sources */,

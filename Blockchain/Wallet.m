@@ -304,28 +304,12 @@
         return SATOSHI;
     };
 
-    self.context[@"objc_on_error_maintenance_mode"] = ^(){
-        [weakSelf on_error_maintenance_mode];
-    };
-
-    self.context[@"objc_on_error_pin_code_get_timeout"] = ^(){
-        [weakSelf on_error_pin_code_get_timeout];
-    };
-
-    self.context[@"objc_on_error_pin_code_get_empty_response"] = ^(){
-        [weakSelf on_error_pin_code_get_empty_response];
-    };
-
     self.context[@"objc_on_error_pin_code_put_error"] = ^(NSString *error){
         [weakSelf on_error_pin_code_put_error:error];
     };
 
     self.context[@"objc_on_error_creating_new_account"] = ^(NSString *error) {
         [weakSelf on_error_creating_new_account:error];
-    };
-
-    self.context[@"objc_on_pin_code_get_response"] = ^(NSDictionary *response) {
-        [weakSelf on_pin_code_get_response:response];
     };
 
     self.context[@"objc_loading_start_download_wallet"] = ^(){
@@ -1011,15 +995,6 @@
     }
 
     [self subscribeToAddress:address assetType:assetType];
-}
-
-- (void)apiGetPINValue:(NSString*)key pin:(NSString*)pin
-{
-    [self loadJS];
-
-    [self useDebugSettingsIfSet];
-
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.apiGetPINValue(\"%@\", \"%@\")", key, pin]];
 }
 
 - (void)loadWalletWithGuid:(NSString*)_guid sharedKey:(NSString*)_sharedKey password:(NSString*)_password
@@ -3428,58 +3403,6 @@
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didPutPinSuccess:!", [delegate class]);
     }
-}
-
-- (void)on_error_pin_code_get_timeout
-{
-    DLog(@"on_error_pin_code_get_timeout");
-
-    if ([delegate respondsToSelector:@selector(didFailGetPinTimeout)]) {
-        [delegate didFailGetPinTimeout];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didFailGetPinTimeout!", [delegate class]);
-    }
-}
-
-- (void)on_error_pin_code_get_empty_response
-{
-    DLog(@"on_error_pin_code_get_empty_response");
-
-    if ([delegate respondsToSelector:@selector(didFailGetPinNoResponse)]) {
-        [delegate didFailGetPinNoResponse];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didFailGetPinNoResponse!", [delegate class]);
-    }
-}
-
-- (void)on_error_pin_code_get_invalid_response
-{
-    DLog(@"on_error_pin_code_get_invalid_response");
-
-    if ([delegate respondsToSelector:@selector(didFailGetPinInvalidResponse)]) {
-        [delegate didFailGetPinInvalidResponse];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didFailGetPinInvalidResponse!", [delegate class]);
-    }
-}
-
-- (void)on_pin_code_get_response:(NSDictionary*)responseObject
-{
-    DLog(@"on_pin_code_get_response:");
-
-    if ([delegate respondsToSelector:@selector(didGetPinResponse:)]) {
-        [delegate didGetPinResponse:responseObject];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didGetPinResponse:!", [delegate class]);
-    }
-}
-
-- (void)on_error_maintenance_mode
-{
-    DLog(@"on_error_maintenance_mode");
-    [self loading_stop];
-    [AuthenticationCoordinator.sharedInstance.pinEntryViewController reset];
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_MAINTENANCE_MODE title:BC_STRING_ERROR handler: nil];
 }
 
 - (void)on_backup_wallet_start

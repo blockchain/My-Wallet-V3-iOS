@@ -9,7 +9,12 @@
 import Foundation
 
 /// The payload for authenticating into the wallet using a pin code
-struct PinPayload {
+@objc class PinPayload: NSObject {
     let pinCode: String
     let pinKey: String
+
+    init(pinCode: String, pinKey: String) {
+        self.pinCode = pinCode
+        self.pinKey = pinKey
+    }
 }

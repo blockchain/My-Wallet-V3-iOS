@@ -27,14 +27,14 @@
 #import "Assets.h"
 
 @class PEPinEntryController;
+@class PinPresenter;
 
 @protocol PEPinEntryControllerDelegate
 
 @required
-- (void)pinEntryController:(PEPinEntryController *)c shouldAcceptPin:(NSUInteger)pin callback:(void(^)(BOOL))callback;
 - (void)pinEntryController:(PEPinEntryController *)c changedPin:(NSUInteger)pin;
-- (void)pinEntryController:(PEPinEntryController *)c willChangeToNewPin:(NSUInteger)pin;
 - (void)pinEntryControllerDidCancel:(PEPinEntryController *)c;
+- (void)pinEntryControllerDidObtainPasswordDecryptionKey:(NSString * _Nonnull)decryptionKey;
 
 @end
 
@@ -49,12 +49,14 @@
 	NSUInteger pinStage;
 	NSUInteger pinEntry1;
 	PEViewController *pinController;
+    PinPresenter *pinPresenter;
 	id <PEPinEntryControllerDelegate> __weak pinDelegate;
 }
 @property (nonatomic, readwrite, weak) id <PEPinEntryControllerDelegate> pinDelegate;
 @property (nonatomic, readonly) BOOL verifyOnly;
 @property (nonatomic, readonly) BOOL verifyOptional;
 @property (nonatomic, readwrite) BOOL inSettings;
+@property (nonatomic) PinPresenter *pinPresenter;
 @property (nonatomic) UILongPressGestureRecognizer *longPressGesture;
 @property (nonatomic) UIButton *debugButton;
 @property (nonatomic) UIPageControl *scrollViewPageControl;
@@ -67,6 +69,7 @@
 - (void)paymentReceived:(LegacyAssetType)assetType;
 - (void)setupQRCode;
 - (void)reset;
+- (void)goToEnter1Pin;
 
 + (PEPinEntryController *)pinVerifyController;
 + (PEPinEntryController *)pinVerifyControllerClosable;

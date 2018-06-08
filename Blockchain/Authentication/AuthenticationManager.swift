@@ -160,34 +160,6 @@ final class AuthenticationManager: NSObject {
         walletManager.wallet.load(withGuid: payload.guid, sharedKey: payload.sharedKey, password: payload.password)
     }
 
-    // MARK: - Authentication with Pin
-
-    /// The function used to authenticate the user using a pin.
-    ///
-    /// - Parameters:
-    ///   - payload: The pin payload
-    ///   - handler: The completion handler
-    func authenticate(using payload: PinPayload, andReply handler: @escaping WalletAuthHandler) {
-        guard Reachability.hasInternetConnection() else {
-            handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.noInternet.rawValue))
-            return
-        }
-
-        NetworkManager.shared.checkForMaintenance(withCompletion: { [weak self] response in
-            guard let strongSelf = self else { return }
-
-            guard response == nil else {
-                print("Error checking for maintenance in wallet options: %@", response!)
-                handler(false, nil, AuthenticationError(code: AuthenticationError.ErrorCode.walletMaintenance.rawValue, description: response!))
-                return
-            }
-
-            strongSelf.authHandler = handler
-
-            strongSelf.walletManager.wallet.apiGetPINValue(payload.pinKey, pin: payload.pinCode)
-        })
-    }
-
     // MARK: - Authentication Errors
 
     /**

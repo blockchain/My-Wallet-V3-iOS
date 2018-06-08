@@ -258,6 +258,15 @@ struct LocalizationConstants {
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
+    @objc class func continueString() -> String { return LocalizationConstants.continueString }
+
+    @objc class func warning() -> String { return LocalizationConstants.Errors.warning }
+
+    @objc class func pinCodeCommonMessage() -> String { return LocalizationConstants.Authentication.pinCodeCommonMessage }
+
+    @objc class func newPinMustBeDifferent() -> String { return LocalizationConstants.Authentication.newPinMustBeDifferent }
+
+    @objc class func chooseAnotherPin() -> String { return LocalizationConstants.Authentication.chooseAnotherPin }
 
     @objc class func requestFailedCheckConnection() -> String { return LocalizationConstants.Errors.requestFailedCheckConnection }
 

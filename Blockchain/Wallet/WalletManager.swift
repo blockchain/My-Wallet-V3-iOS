@@ -255,24 +255,6 @@ extension WalletManager: WalletDelegate {
 
     // MARK: - Pin Entry
 
-    func didFailGetPinTimeout() {
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.errorGetPinValueTimeout()
-        }
-    }
-
-    func didFailGetPinNoResponse() {
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.errorGetPinEmptyResponse()
-        }
-    }
-
-    func didFailGetPinInvalidResponse() {
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.errorGetPinInvalidResponse()
-        }
-    }
-
     func didFailPutPin(_ value: String!) {
         DispatchQueue.main.async { [unowned self] in
             self.pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
@@ -283,13 +265,6 @@ extension WalletManager: WalletDelegate {
         let response = PutPinResponse(response: dictionary)
         DispatchQueue.main.async { [unowned self] in
             self.pinEntryDelegate?.putPinSuccess(response: response)
-        }
-    }
-
-    func didGetPinResponse(_ dictionary: [AnyHashable: Any]!) {
-        let response = GetPinResponse(response: dictionary)
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.getPinSuccess(response: response)
         }
     }
 

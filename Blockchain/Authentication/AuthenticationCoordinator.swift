@@ -113,8 +113,6 @@ import Foundation
 
     @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
-    internal var pinViewControllerCallback: ((Bool) -> Void)?
-
     private var loginTimeout: Timer?
 
     private var isPinEntryModalPresented: Bool {

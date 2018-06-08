@@ -134,7 +134,6 @@
 //#define BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION NSLocalizedString(@"Request failed. Please check your internet connection.", nil)
 #define BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION NSLocalizedString(@"An error occurred while updating your spendable balance. Please check your internet connection and try again.", nil)
 #define BC_STRING_EMPTY_RESPONSE NSLocalizedString(@"Empty response from server.", nil)
-#define BC_STRING_MAINTENANCE_MODE NSLocalizedString(@"Blockchain is currently down for maintenance. Please try again later.", nil)
 
 #define BC_STRING_FORGET_WALLET NSLocalizedString(@"Forget Wallet", nil)
 
