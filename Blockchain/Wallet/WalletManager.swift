@@ -641,11 +641,11 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Second Password
-    @objc func getSecondPassword(success: WalletSuccessCallback) {
+    @objc func getSecondPassword(withSuccess success: WalletSuccessCallback) {
         secondPasswordDelegate?.getSecondPassword(success: success)
     }
 
-    @objc func getPrivateKeyPassword(success: WalletSuccessCallback) {
+    @objc func getPrivateKeyPassword(withSuccess success: WalletSuccessCallback) {
         secondPasswordDelegate?.getPrivateKeyPassword(success: success)
     }
 }

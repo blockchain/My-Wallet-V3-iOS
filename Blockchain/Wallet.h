@@ -43,6 +43,8 @@
 
 @class Wallet, Transaction, JSValue, JSContext;
 
+@protocol WalletSuccessCallback;
+
 @protocol ExchangeAccountDelegate
 - (void)watchPendingTrades:(BOOL)shouldSync;
 - (void)showCompletedTrade:(NSString *)txHash;
@@ -143,8 +145,8 @@
 - (void)walletDidGetAccountInfo:(Wallet *)wallet;
 - (void)walletDidGetBtcExchangeRates:(Wallet *)wallet;
 - (void)walletDidGetAccountInfoAndExchangeRates:(Wallet *)wallet;
-- (void)getSecondPasswordWithSuccess:(JSValue *)success;
-- (void)getPrivateKeyPasswordWithSuccess:(JSValue *)success;
+- (void)getSecondPasswordWithSuccess:(id<WalletSuccessCallback>)success;
+- (void)getPrivateKeyPasswordWithSuccess:(id<WalletSuccessCallback>)success;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {
