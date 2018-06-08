@@ -140,11 +140,13 @@ extension AssetAddressRepository {
         }
         NetworkManager.shared.session.sessionDescription = url.host
         let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
-            if let error = error {
-                DispatchQueue.main.async { errorHandler() }; return
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    errorHandler()
+                }
+                return
             }
-            guard
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+            guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
                 let transactions = json!["txs"] as? [NSDictionary] else {
                     // TODO: call error handler
                     return
