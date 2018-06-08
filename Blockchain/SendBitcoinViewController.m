@@ -1991,9 +1991,7 @@ BOOL displayingLocalSymbolSend;
             
             // do something useful with results
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSURL *url = [NSURL URLWithString:[metadataObj stringValue]];
-
-                id<AssetURLPayload> payload = [AssetURLPayloadFactory createFrom:url];
+                id<AssetURLPayload> payload = [AssetURLPayloadFactory createFromString:[metadataObj stringValue] legacyAssetType:self.assetType];
                 NSString *address = payload.address;
 
                 if (address == nil || ![WalletManager.sharedInstance.wallet isValidAddress:address assetType:self.assetType]) {

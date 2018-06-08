@@ -32,16 +32,28 @@ extension BIP21URI {
         let address: String?
         let amount: String?
         let urlString = url.absoluteString
+        let doubleSlash = "//"
+        let colon = ":"
 
-        if urlString.contains("//") {
+        if urlString.contains(doubleSlash) {
             let queryArgs = url.queryArgs
 
             address = url.host ?? queryArgs["address"]
             amount = queryArgs["amount"]
-        } else if let commaIndex = urlString.index(of: ":") {
+        } else if urlString.contains(colon) {
             // Handle web format (e.g. "scheme:1Amu4uPJnYbUXX2HhDFMNq7tSneDwWYDyv")
-            address = String(urlString[urlString.index(after: commaIndex)..<urlString.endIndex])
-            amount = nil
+            guard let request = urlString.components(separatedBy: colon).last else {
+                return nil
+            }
+            let requestComponents = request.components(separatedBy: "?")
+            if let args = requestComponents.last {
+                let queryArgs = args.queryArgs
+                address = requestComponents.first ?? queryArgs["address"]
+                amount = queryArgs["amount"]
+            } else {
+                address = requestComponents.first
+                amount = nil
+            }
         } else {
             address = nil
             amount = nil

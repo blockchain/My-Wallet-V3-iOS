@@ -16,18 +16,6 @@ extension URL {
             return [:]
         }
 
-        var queryArgs = [String: String]()
-        let components = query.components(separatedBy: "&")
-        components.forEach {
-            let paramValueArray = $0.components(separatedBy: "=")
-
-            if let param = paramValueArray[0].removingPercentEncoding,
-                let value = paramValueArray[1].removingPercentEncoding,
-                paramValueArray.count == 2 {
-                queryArgs[param] = value
-            }
-        }
-
-        return queryArgs
+        return query.queryArgs
     }
 }

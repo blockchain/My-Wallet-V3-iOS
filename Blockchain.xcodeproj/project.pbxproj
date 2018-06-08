@@ -408,6 +408,8 @@
 		C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
 		C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
 		C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
+		C7745CFD20CAD88D008430BE /* StringQueryArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7745CFC20CAD88D008430BE /* StringQueryArgs.swift */; };
+		C7745CFE20CAD88D008430BE /* StringQueryArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7745CFC20CAD88D008430BE /* StringQueryArgs.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
 		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
@@ -1435,6 +1437,7 @@
 		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
 		C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRecoveryDelegate.swift; sourceTree = "<group>"; };
 		C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSecondPasswordDelegate.swift; sourceTree = "<group>"; };
+		C7745CFC20CAD88D008430BE /* StringQueryArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringQueryArgs.swift; sourceTree = "<group>"; };
 		C780A444202228A400E49274 /* BCPriceChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartView.h; sourceTree = "<group>"; };
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
@@ -1761,6 +1764,7 @@
 		510EA19620811FF100A63AB8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C7745CFC20CAD88D008430BE /* StringQueryArgs.swift */,
 				AACE31202091004900B7B806 /* UIApplication+Suspend.h */,
 				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
 				511646DE20851BC600C43522 /* Bundle.swift */,
@@ -3046,6 +3050,7 @@
 				AA63F85920A134DA002B719B /* BCTextField.swift in Sources */,
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
 				51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
+				C7745CFE20CAD88D008430BE /* StringQueryArgs.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
 				51C2ADD420BDD3EA00D66108 /* AddressValidatorTests.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
@@ -3379,6 +3384,7 @@
 				AAA3333D208813040019AD55 /* OnboardingCoordinator.swift in Sources */,
 				67EE1DCE19E3325900DBBFC9 /* ECSlidingViewController.m in Sources */,
 				51578AEE20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
+				C7745CFD20CAD88D008430BE /* StringQueryArgs.swift in Sources */,
 				FCB33B721FC36EA200317E6B /* ExchangeProgressViewController.m in Sources */,
 				6780DB981A40BDF40048EED2 /* AccountInOut.m in Sources */,
 				51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */,
