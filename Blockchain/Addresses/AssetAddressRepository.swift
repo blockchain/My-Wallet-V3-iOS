@@ -113,31 +113,32 @@ extension AssetAddressRepository {
     ///   - address: address to be checked with network request
     ///   - displayAddress: address to be shown to the user in text and in QR code
     /// (usually the same as address unless checking for corresponding BTC address for BCH
-    ///   - legacyAssetType: asset type for the address. Currently only supports BTC and BCH.
+    ///   - assetType: asset type for the address. Currently only supports BTC and BCH.
     ///   - successHandler: success handler to do something with the display address and whether the address has ever had a transaction
     ///   - errorHandler: error handler
     @objc func checkForUnusedAddress(
         _ address: String,
         displayAddress: String,
-        legacyAssetType: LegacyAssetType,
+        assetType: AssetType,
         successHandler: @escaping ((_ displayAddress: String, _ isUnused: Bool) -> Void),
         errorHandler: @escaping (() -> Void)
     ) {
-        var assetAddress: AssetAddress
-
-        let assetType = AssetType.from(legacyAssetType: legacyAssetType)
-
-        switch assetType {
-        case .bitcoin: assetAddress = BitcoinAddress(string: address)
-        case .bitcoinCash: assetAddress = BitcoinCashAddress(string: address)
-        case .ethereum: return
+        guard assetType != .ethereum else {
+            print("Ethereum addresses not supported for checking if it is unused.")
+            return
         }
 
-        guard
-            let urlString = BlockchainAPI.shared.suffixURL(address: assetAddress),
-            let url = URL(string: urlString) else {
-                return
+        var assetAddress = AssetAddressFactory.create(fromAddressString: address, assetType: assetType)
+        if let bchAddress = assetAddress as? BitcoinCashAddress,
+            let transformedBtcAddress = bchAddress.toBitcoinAddress(wallet: walletManager.wallet) {
+            assetAddress = transformedBtcAddress
         }
+
+        guard let urlString = BlockchainAPI.shared.suffixURL(address: assetAddress), let url = URL(string: urlString) else {
+            print("Cannot construct URL to check if the address '\(address)' is unused.")
+            return
+        }
+
         NetworkManager.shared.session.sessionDescription = url.host
         let task = NetworkManager.shared.session.dataTask(with: url, completionHandler: { data, _, error in
             guard error == nil else {

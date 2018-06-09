@@ -220,7 +220,11 @@ static PEViewController *VerifyController()
                     self.errorAlert = nil;
                 }
             };
-            [[AssetAddressRepository sharedInstance] checkForUnusedAddress:nextAddress displayAddress:nextAddress legacyAssetType:assetType successHandler:success errorHandler:error];
+            [[AssetAddressRepository sharedInstance] checkForUnusedAddress:nextAddress
+                                                            displayAddress:nextAddress
+                                                                 assetType:[self assetTypeFromLegacyAssetType:assetType]
+                                                            successHandler:success
+                                                              errorHandler:error];
         } else {
             [swipeView updateAddress:nextAddress];
         }

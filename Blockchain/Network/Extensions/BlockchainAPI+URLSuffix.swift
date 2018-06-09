@@ -15,10 +15,10 @@ extension BlockchainAPI {
         switch address.assetType {
         case .bitcoin:
             guard let url = walletUrl else { return nil }
-            return "\(url)/address/\(address)?format=json"
+            return "\(url)/address/\(address.address)?format=json"
         case .bitcoinCash:
             guard let url = apiUrl else { return nil }
-            return "\(url)/bch/multiaddr?active=\(address)"
+            return "\(url)/bch/multiaddr?active=\(address.address)"
         default:
             return nil
         }

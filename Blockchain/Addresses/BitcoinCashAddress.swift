@@ -30,3 +30,16 @@ public class BitcoinCashAddress: NSObject & AssetAddress {
         self.assetType = .bitcoinCash
     }
 }
+
+extension BitcoinCashAddress {
+    /// Transforms this BCH address to a `BitcoinAddress`
+    ///
+    /// - Parameter wallet: a Wallet instance
+    /// - Returns: the transformed BTC address
+    func toBitcoinAddress(wallet: Wallet) -> BitcoinAddress? {
+        guard let btcAddress = wallet.fromBitcoinCash(address) else {
+            return nil
+        }
+        return BitcoinAddress(string: btcAddress)
+    }
+}
