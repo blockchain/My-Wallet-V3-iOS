@@ -40,8 +40,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
 
-        //: Global appearance customizations
+        // MARK: - Global Appearance
+
+        //: Status Bar
         UIApplication.shared.statusBarStyle = .default
+
+        //: Navigation Bar
+        let navigationBarAppearance = UINavigationBar.appearance()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.isTranslucent = false
+        if #available(iOS 11.0, *) {
+            navigationBarAppearance.barTintColor = UIColor(named: "ColorBrandPrimary")
+        } else {
+            navigationBarAppearance.barTintColor = Constants.Colors.ColorBrandPrimary
+        }
+        navigationBarAppearance.tintColor = UIColor.white
+        navigationBarAppearance.titleTextAttributes = UINavigationBar.standardTitleTextAttributes
 
         #if DEBUG
         let envKey = UserDefaults.Keys.environment.rawValue
