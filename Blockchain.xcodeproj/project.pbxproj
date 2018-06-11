@@ -114,6 +114,10 @@
 		51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237827191B7E472D00E9EE03 /* BCSecureTextField.swift */; };
 		5113570B209CF6D700056D65 /* BackupVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */; };
+		5114EA1F20CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5114EA1E20CB2BA90098E26E /* TabControllerManager+Nib.swift */; };
+		5114EA2020CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5114EA1E20CB2BA90098E26E /* TabControllerManager+Nib.swift */; };
+		5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5114EA2220CD8B900098E26E /* UINavigationBar+TitleAttributes.swift */; };
+		5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5114EA2220CD8B900098E26E /* UINavigationBar+TitleAttributes.swift */; };
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
@@ -1109,6 +1113,8 @@
 		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
 		511356E2209CAFC600056D65 /* NetworkManager+PushNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+PushNotifications.swift"; sourceTree = "<group>"; };
 		51135700209CEEB900056D65 /* PushNotificationAuthPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationAuthPayload.swift; sourceTree = "<group>"; };
+		5114EA1E20CB2BA90098E26E /* TabControllerManager+Nib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabControllerManager+Nib.swift"; sourceTree = "<group>"; };
+		5114EA2220CD8B900098E26E /* UINavigationBar+TitleAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UINavigationBar+TitleAttributes.swift"; path = "Extensions/UINavigationBar+TitleAttributes.swift"; sourceTree = "<group>"; };
 		511646C4208124E200C43522 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
@@ -1767,13 +1773,14 @@
 				516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */,
 				5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */,
 				AABDED6F208FACB9002D8BAC /* Reachability.swift */,
+				51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */,
 				AA1E52392097E2190099BD10 /* Strings.swift */,
 				AACE314B209152D800B7B806 /* UIApplication.swift */,
 				511646E1208523E300C43522 /* UIDevice.swift */,
+				5114EA2220CD8B900098E26E /* UINavigationBar+TitleAttributes.swift */,
 				AABDED3F208A6E8D002D8BAC /* UIViewController.swift */,
-				513913EF2081206C002578FD /* UserDefaults.swift */,
 				AA63F84A20A12AE9002B719B /* URLs.swift */,
-				51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */,
+				513913EF2081206C002578FD /* UserDefaults.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -2126,6 +2133,7 @@
 				AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */,
 				51E5C73020741A130000A7FD /* LocalizationConstants.swift */,
 				AAA3333E2088131D0019AD55 /* ModalPresenter.swift */,
+				5114EA1E20CB2BA90098E26E /* TabControllerManager+Nib.swift */,
 				AA722C1720B4BB8F00262A5F /* Addresses */,
 				AAA33169208964FC00BBD292 /* Alerts */,
 				510EA1732080F58700A63AB8 /* Authentication */,
@@ -3143,6 +3151,7 @@
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
 				51C2ADD720BDECE700D66108 /* String+EscapeJS.swift in Sources */,
+				5114EA2020CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */,
 				AAD27A31209D22FD00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,
 				AA1E525A2098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				51135706209CF64900056D65 /* BackupNavigationViewController.swift in Sources */,
@@ -3156,6 +3165,8 @@
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
+				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
+				5168564D2098E5C00088FBEB /* WalletOptions.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 				C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 			);
@@ -3223,6 +3234,7 @@
 				AACE314C209152D800B7B806 /* UIApplication.swift in Sources */,
 				AA63F86720A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */,
+				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */,
 				516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
 				84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */,
@@ -3360,6 +3372,7 @@
 				23FDEF9A1D6CBC7000FC80D6 /* TransactionDetailViewController.m in Sources */,
 				67EE1DCA19E3325900DBBFC9 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */,
+				5114EA1F20CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */,
 				C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */,
 				AA1E52592098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				678CD7481A2777E600748AA5 /* BCCreateAccountView.m in Sources */,

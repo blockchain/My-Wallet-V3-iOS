@@ -10,31 +10,34 @@
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 
-@interface TabViewcontroller () <AssetSelectorViewDelegate>
+@interface TabViewController () <AssetSelectorViewDelegate>
 @end
 
-@implementation TabViewcontroller
+@implementation TabViewController
 
 @synthesize oldViewController;
 @synthesize activeViewController;
 @synthesize contentView;
 
+UILabel *titleLabel;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return [super initWithCoder:aDecoder];
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
+
     self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(0, 0, bannerView.bounds.size.width, bannerView.bounds.size.height) delegate:self];
     [bannerView addSubview:self.assetSelectorView];
-    
-    balanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_LARGE];
-    balanceLabel.adjustsFontSizeToFitWidth = YES;
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSymbol)];
-    [balanceLabel addGestureRecognizer:tapGesture];
+
+    [self setupNavigationItemTitleView];
     
     tabBar.delegate = self;
     
-    // Default selected: transactions
+    //: Default selected: transactions
     selectedIndex = TAB_TRANSACTIONS;
     
     [self setupTabButtons];
@@ -44,13 +47,31 @@
 {
     // Add side bar to swipe open the sideMenu
     if (!_menuSwipeRecognizerView) {
-        _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, 20, self.view.frame.size.height)];
+        _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, self.view.frame.size.height)];
         
         ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         [_menuSwipeRecognizerView addGestureRecognizer:sideMenu.panGesture];
         
         [self.view addSubview:_menuSwipeRecognizerView];
     }
+}
+
+/**
+ Setup custom title view for tap gesture support
+ - SeeAlso:
+ [titleView](https://developer.apple.com/documentation/uikit/uinavigationitem/1624935-titleview)
+ */
+- (void)setupNavigationItemTitleView
+{
+    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, self.navigationBar.frame.size.height)];
+    titleLabel.adjustsFontSizeToFitWidth = NO;
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:20];
+    titleLabel.textColor = UIColor.whiteColor;
+
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSymbol)];
+    [titleLabel addGestureRecognizer:tapGesture];
+
+    self.navigationItem.titleView = titleLabel;
 }
 
 - (void)toggleSymbol
@@ -60,15 +81,15 @@
 
 - (void)setupTabButtons
 {
-    NSDictionary *tabButtons = @{BC_STRING_SEND:sendButton, BC_STRING_DASHBOARD:dashBoardButton, BC_STRING_TRANSACTIONS:homeButton, BC_STRING_REQUEST:receiveButton};
+    NSDictionary *tabButtons = @{BC_STRING_SEND:sendButton, BC_STRING_DASHBOARD:dashBoardButton, BC_STRING_TRANSACTIONS:overviewButton, BC_STRING_REQUEST:requestButton};
     
     for (UITabBarItem *button in [tabButtons allValues]) {
         NSString *label = [[tabButtons allKeysForObject:button] firstObject];
         button.title = label;
         button.image = [button.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         button.selectedImage = [button.selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL], NSForegroundColorAttributeName : COLOR_TEXT_DARK_GRAY} forState:UIControlStateNormal];
-        [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL], NSForegroundColorAttributeName : COLOR_BLOCKCHAIN_LIGHT_BLUE} forState:UIControlStateSelected];
+        [button setTitleTextAttributes:@{NSFontAttributeName: [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL], NSForegroundColorAttributeName : COLOR_TEXT_DARK_GRAY} forState:UIControlStateNormal];
+        [button setTitleTextAttributes:@{NSFontAttributeName: [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL], NSForegroundColorAttributeName : COLOR_BLOCKCHAIN_LIGHT_BLUE} forState:UIControlStateSelected];
     }
 }
 
@@ -112,13 +133,13 @@
 - (void)insertActiveView
 {
     if ([contentView.subviews count] > 0) {
-        [[contentView.subviews objectAtIndex:0] removeFromSuperview];
+        [[contentView.subviews firstObject] removeFromSuperview];
     }
     
     [contentView addSubview:activeViewController.view];
     
-    //Resize the View Sub Controller
-    activeViewController.view.frame = CGRectMake(activeViewController.view.frame.origin.x, activeViewController.view.frame.origin.y, contentView.frame.size.width, activeViewController.view.frame.size.height);
+    //: Resize the View Sub Controller
+    activeViewController.view.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height);
     
     [activeViewController.view setNeedsLayout];
 }
@@ -139,7 +160,7 @@
     });
     
     NSArray *titles = @[BC_STRING_SEND, BC_STRING_DASHBOARD, BC_STRING_TRANSACTIONS, BC_STRING_REQUEST];
-    
+    if (nindex == 2) { return; }
     if (nindex < titles.count) {
         [self setTitleLabelText:[titles objectAtIndex:nindex]];
     } else {
@@ -149,29 +170,30 @@
 
 - (void)updateTopBarForIndex:(int)newIndex
 {
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    CGFloat safeAreaInsetTop = 20;
+//    if (@available(iOS 11.0, *)) {
+//        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+//    }
+//    CGFloat headerHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
     if (newIndex == TAB_DASHBOARD) {
-        titleLabel.text = BC_STRING_DASHBOARD;
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            [topBar changeHeight:DEFAULT_HEADER_HEIGHT];
-        }];
+//        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+//            [_navigationBar changeHeight:headerHeight];
+//        }];
         [self.assetSelectorView hide];
         [self.bannerSelectorView changeHeight:0];
     } else {
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            [topBar changeHeight:DEFAULT_HEADER_HEIGHT + DEFAULT_HEADER_HEIGHT_OFFSET];
-        }];
+//        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+//            [_navigationBar changeHeight:headerHeight];
+//        }];
         [self.assetSelectorView show];
         [self.bannerSelectorView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
     }
     
     if (newIndex == TAB_TRANSACTIONS) {
-        balanceLabel.hidden = NO;
-        balanceLabel.userInteractionEnabled = YES;
-        titleLabel.hidden = YES;
+        self.navigationItem.titleView.userInteractionEnabled = YES;
     } else {
-        balanceLabel.hidden = YES;
-        balanceLabel.userInteractionEnabled = NO;
-        titleLabel.hidden = NO;
+        self.navigationItem.titleView.userInteractionEnabled = NO;
     }
 }
 
@@ -198,9 +220,9 @@
     
     if (item == sendButton) {
         [[AppCoordinator sharedInstance].tabControllerManager sendCoinsClicked:item];
-    } else if (item == homeButton) {
+    } else if (item == overviewButton) {
         [[AppCoordinator sharedInstance].tabControllerManager transactionsClicked:item];
-    } else if (item == receiveButton) {
+    } else if (item == requestButton) {
         [[AppCoordinator sharedInstance].tabControllerManager receiveCoinClicked:item];
     } else if (item == dashBoardButton) {
         [[AppCoordinator sharedInstance].tabControllerManager dashBoardClicked:item];
@@ -216,12 +238,15 @@
 - (void)setTitleLabelText:(NSString *)text
 {
     titleLabel.text = text;
-    titleLabel.hidden = NO;
+    titleLabel.font = [titleLabel.font fontWithSize:20];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (void)updateBalanceLabelText:(NSString *)text
 {
-    balanceLabel.text = text;
+    titleLabel.text = text;
+    titleLabel.font = [titleLabel.font fontWithSize:27];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (void)selectAsset:(LegacyAssetType)assetType
@@ -263,7 +288,7 @@
 - (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [topBar changeHeight:DEFAULT_HEADER_HEIGHT + DEFAULT_HEADER_HEIGHT_OFFSET];
+        [_navigationBar changeHeight:DEFAULT_HEADER_HEIGHT + DEFAULT_HEADER_HEIGHT_OFFSET];
         self.activeViewController.view.frame = CGRectMake(0,
                                                           DEFAULT_HEADER_HEIGHT_OFFSET,
                                                           [UIScreen mainScreen].bounds.size.width,
@@ -278,7 +303,7 @@
 {
     CGFloat bannerOffset = 2;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [topBar changeHeight:DEFAULT_HEADER_HEIGHT + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count + bannerOffset];
+        [_navigationBar changeHeight:DEFAULT_HEADER_HEIGHT + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count + bannerOffset];
         self.activeViewController.view.frame = CGRectMake(0,
                                                           ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count + bannerOffset,
                                                           [UIScreen mainScreen].bounds.size.width,

@@ -553,7 +553,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define NAVIGATION_CONTROLLER_NAME_SETTINGS @"SettingsNavigationController"
 #define NAVIGATION_CONTROLLER_NAME_BACKUP @"BackupNavigation"
 
-#define NIB_NAME_TAB_CONTROLLER @"TabController"
 #define NIB_NAME_TRANSACTIONS @"Transactions"
 #define NIB_NAME_SEND_COINS @"SendCoins"
 #define NIB_NAME_RECEIVE_COINS @"ReceiveCoins"

@@ -14,23 +14,20 @@
 - (void)qrCodeButtonClicked;
 @end
 
-@interface TabViewcontroller : UIViewController <UITabBarDelegate> {
+@interface TabViewController : UIViewController <UITabBarDelegate> {
     IBOutlet UITabBarItem *sendButton;
     IBOutlet UITabBarItem *dashBoardButton;
-    IBOutlet UITabBarItem *homeButton;
-    IBOutlet UITabBarItem *receiveButton;
+    IBOutlet UITabBarItem *overviewButton;
+    IBOutlet UITabBarItem *requestButton;
     IBOutlet UITabBar *tabBar;
-    IBOutlet UIView *topBar;
-	
     IBOutlet UIView *bannerView;
-    IBOutlet UILabel *titleLabel;
-    IBOutlet UILabel *balanceLabel;
     UIViewController *activeViewController;
 	UIViewController *oldViewController;
     
 	int selectedIndex;
 }
 
+@property(nonatomic, retain) UINavigationBar *navigationBar;
 @property(nonatomic, retain) UIViewController *activeViewController;
 @property(nonatomic, retain) UIViewController *oldViewController;
 @property(nonatomic, retain) IBOutlet UIView *contentView;
