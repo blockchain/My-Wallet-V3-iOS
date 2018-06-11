@@ -57,7 +57,6 @@ UILabel *titleLabel;
     // Add side bar to swipe open the sideMenu
     if (!_menuSwipeRecognizerView) {
         _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, self.view.frame.size.height)];
-
         ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         [_menuSwipeRecognizerView addGestureRecognizer:sideMenu.panGesture];
 
@@ -92,7 +91,6 @@ UILabel *titleLabel;
 - (void)setupTabButtons
 {
     NSDictionary *tabButtons = @{BC_STRING_SEND:sendButton, BC_STRING_DASHBOARD:dashBoardButton, BC_STRING_TRANSACTIONS:overviewButton, BC_STRING_REQUEST:requestButton};
-
     for (UITabBarItem *button in [tabButtons allValues]) {
         NSString *label = [[tabButtons allKeysForObject:button] firstObject];
         button.title = label;
@@ -188,7 +186,6 @@ UILabel *titleLabel;
         [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
         [self.assetSelectorView show];
     }
-
     self.navigationItem.titleView.userInteractionEnabled = (newIndex == TAB_TRANSACTIONS);
 }
 
