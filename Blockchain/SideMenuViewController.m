@@ -132,7 +132,7 @@ int accountEntries = 0;
 
 - (void)setSideMenuGestures
 {
-    TabViewcontroller *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
+    TabViewController *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
     
     // Hide status bar
     if (!AuthenticationCoordinator.sharedInstance.pinEntryViewController.inSettings) {
@@ -163,7 +163,7 @@ int accountEntries = 0;
 
 - (void)resetSideMenuGestures
 {
-    TabViewcontroller *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
+    TabViewController *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
 
     // Show status bar again
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];

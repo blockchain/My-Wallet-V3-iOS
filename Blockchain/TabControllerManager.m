@@ -15,26 +15,27 @@
 @end
 @implementation TabControllerManager
 
-- (instancetype)init
+- (void)viewDidLoad
 {
-    if (self == [super init]) {
-        self.tabViewController = [[[NSBundle mainBundle] loadNibNamed:NIB_NAME_TAB_CONTROLLER owner:self options:nil] firstObject];
-        self.tabViewController.assetDelegate = self;
-        
-        NSInteger assetType = [[[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ASSET_TYPE] integerValue];
-        self.assetType = assetType;
-        [self.tabViewController.assetSelectorView setSelectedAsset:assetType];
-        
-        WalletManager *walletManager = WalletManager.sharedInstance;
-        walletManager.settingsDelegate = self;
-        walletManager.sendBitcoinDelegate = self;
-        walletManager.sendEtherDelegate = self;
-        walletManager.exchangeIntermediateDelegate = self;
-        walletManager.transactionDelegate = self;
-        walletManager.watchOnlyDelegate = self;
-        walletManager.fiatAtTimeDelegate = self;
-    }
-    return self;
+    [super viewDidLoad];
+
+    self.tabViewController.navigationBar = self.navigationBar;
+    self.tabViewController.assetDelegate = self;
+
+    self.viewControllers = @[self.tabViewController];
+
+    NSInteger assetType = [[[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ASSET_TYPE] integerValue];
+    self.assetType = assetType;
+    [self.tabViewController.assetSelectorView setSelectedAsset:assetType];
+
+    WalletManager *walletManager = WalletManager.sharedInstance;
+    walletManager.settingsDelegate = self;
+    walletManager.sendBitcoinDelegate = self;
+    walletManager.sendEtherDelegate = self;
+    walletManager.exchangeIntermediateDelegate = self;
+    walletManager.transactionDelegate = self;
+    walletManager.watchOnlyDelegate = self;
+    walletManager.fiatAtTimeDelegate = self;
 }
 
 - (void)didSetAssetType:(LegacyAssetType)assetType
