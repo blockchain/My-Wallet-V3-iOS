@@ -187,12 +187,6 @@ UILabel *titleLabel;
 
 - (void)updateTopBarForIndex:(int)newIndex
 {
-//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-//    CGFloat safeAreaInsetTop = 20;
-//    if (@available(iOS 11.0, *)) {
-//        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-//    }
-//    CGFloat headerHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
     if (newIndex == TAB_DASHBOARD) {
         [bannerView changeHeight:0];
         [self.assetSelectorView hide];
