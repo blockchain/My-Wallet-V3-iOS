@@ -149,7 +149,7 @@
         NSString *trimmedRecoveryPhrase = [recoveryPhrase stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceCharacterSet]];
         
-        [WalletManager.sharedInstance.wallet loading_start_recover_wallet];
+        [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_RECOVERING_WALLET];
         [self.recoveryPhraseView.recoveryPassphraseTextField resignFirstResponder];
         self.recoveryPhraseView.recoveryPassphraseTextField.hidden = YES;
 

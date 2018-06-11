@@ -107,7 +107,7 @@ extension OnboardingCoordinator: WalletRecoveryDelegate {
     func didRecoverWallet() {
         createWallet?.didRecoverWallet()
     }
-    
+
     func didFailRecovery() {
         createWallet?.showPassphraseTextField()
     }
