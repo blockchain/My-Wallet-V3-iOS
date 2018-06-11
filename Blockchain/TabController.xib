@@ -90,6 +90,7 @@
                         <outlet property="requestButton" destination="WtV-wW-2qZ" id="cZk-y9-gI7"/>
                         <outlet property="sendButton" destination="4mt-zm-WqX" id="kZE-8Z-P5g"/>
                         <outlet property="tabBar" destination="sNc-FJ-eAH" id="Iu6-5f-kN2"/>
+                        <outlet property="tabBarBottomConstraint" destination="tjD-Gz-vUx" id="tZv-8F-7QX"/>
                     </connections>
                 </viewController>
             </viewControllers>

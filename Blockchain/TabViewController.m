@@ -42,6 +42,16 @@ UILabel *titleLabel;
     [self setupTabButtons];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    }
+    _tabBarBottomConstraint.constant = safeAreaInsetBottom;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     // Add side bar to swipe open the sideMenu
