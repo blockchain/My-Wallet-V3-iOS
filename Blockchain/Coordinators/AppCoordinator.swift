@@ -33,12 +33,12 @@ import Foundation
     @objc lazy var slidingViewController: ECSlidingViewController = { [unowned self] in
         let viewController = ECSlidingViewController()
         viewController.underLeftViewController = self.sideMenuViewController
-        viewController.topViewController = tabControllerManager.tabViewController
+        viewController.topViewController = tabControllerManager
         return viewController
     }()
 
     @objc lazy var tabControllerManager: TabControllerManager = { [unowned self] in
-        let tabControllerManager = TabControllerManager()
+        let tabControllerManager = TabControllerManager.instanceFromNib()
         tabControllerManager.delegate = self
         return tabControllerManager
     }()

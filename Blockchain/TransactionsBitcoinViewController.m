@@ -517,22 +517,10 @@
     self.lastNumberTransactions = INT_MAX;
     
     self.loadedAllTransactions = NO;
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
-    
-    headerView.clipsToBounds = YES;
-    
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.scrollsToTop = YES;
-    
-    [balanceBigButton.titleLabel setMinimumScaleFactor:.5f];
-    [balanceBigButton.titleLabel setAdjustsFontSizeToFitWidth:YES];
-    
-    [balanceBigButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
     
 #ifdef ENABLE_TRANSACTION_FETCHING
     self.moreButton = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -564,8 +552,6 @@
     self.balance = @"";
     [self setText];
     [self reloadData];
-    
-    balanceBigButton.center = CGPointMake(headerView.center.x, balanceBigButton.center.y);
 }
 
 - (void)viewDidDisappear:(BOOL)animated
