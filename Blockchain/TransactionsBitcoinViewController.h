@@ -27,7 +27,6 @@
 @interface TransactionsBitcoinViewController : TransactionsViewController <UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate>
 {
     IBOutlet UITableView *tableView;
-
     MultiAddressResponse *data;
     LatestBlock *latestBlock;
 }

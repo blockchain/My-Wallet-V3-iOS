@@ -38,7 +38,6 @@ UILabel *titleLabel;
     tabBar.delegate = self;
 
     selectedIndex = TAB_DASHBOARD;
-
     [self setupTabButtons];
 }
 
@@ -140,7 +139,6 @@ UILabel *titleLabel;
 
         [[contentView layer] addAnimation:animation forKey:@"SwitchToView1"];
     }
-
     [self updateTopBarForIndex:newIndex];
 }
 
@@ -157,7 +155,6 @@ UILabel *titleLabel;
                                                  offsetForAssetSelector,
                                                  contentView.frame.size.width,
                                                  contentView.frame.size.height - offsetForAssetSelector);
-
     [activeViewController.view setNeedsLayout];
 }
 
