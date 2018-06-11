@@ -170,31 +170,15 @@ UILabel *titleLabel;
 
 - (void)updateTopBarForIndex:(int)newIndex
 {
-//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-//    CGFloat safeAreaInsetTop = 20;
-//    if (@available(iOS 11.0, *)) {
-//        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-//    }
-//    CGFloat headerHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
     if (newIndex == TAB_DASHBOARD) {
-//        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-//            [_navigationBar changeHeight:headerHeight];
-//        }];
         [self.assetSelectorView hide];
         [self.bannerSelectorView changeHeight:0];
     } else {
-//        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-//            [_navigationBar changeHeight:headerHeight];
-//        }];
         [self.assetSelectorView show];
         [self.bannerSelectorView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
     }
     
-    if (newIndex == TAB_TRANSACTIONS) {
-        self.navigationItem.titleView.userInteractionEnabled = YES;
-    } else {
-        self.navigationItem.titleView.userInteractionEnabled = NO;
-    }
+    self.navigationItem.titleView.userInteractionEnabled = (newIndex == TAB_TRANSACTIONS);
 }
 
 - (void)addTapGestureRecognizerToTabBar:(UITapGestureRecognizer *)tapGestureRecognizer
@@ -288,11 +272,7 @@ UILabel *titleLabel;
 - (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [_navigationBar changeHeight:DEFAULT_HEADER_HEIGHT + DEFAULT_HEADER_HEIGHT_OFFSET];
-        self.activeViewController.view.frame = CGRectMake(0,
-                                                          DEFAULT_HEADER_HEIGHT_OFFSET,
-                                                          [UIScreen mainScreen].bounds.size.width,
-                                                          [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
+        self.activeViewController.view.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height);
         [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
     }];
     
@@ -301,13 +281,9 @@ UILabel *titleLabel;
 
 - (void)didOpenSelector
 {
-    CGFloat bannerOffset = 2;
+    CGFloat viewYOffset = ASSET_SELECTOR_ROW_HEIGHT * self.assetSelectorView.assets.count;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [_navigationBar changeHeight:DEFAULT_HEADER_HEIGHT + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count + bannerOffset];
-        self.activeViewController.view.frame = CGRectMake(0,
-                                                          ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count + bannerOffset,
-                                                          [UIScreen mainScreen].bounds.size.width,
-                                                          [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
+        self.activeViewController.view.frame = CGRectMake(0, viewYOffset, self.view.frame.size.width, self.view.frame.size.height - viewYOffset);
         [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT*3];
     }];
 }
