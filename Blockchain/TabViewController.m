@@ -187,9 +187,10 @@ UILabel *titleLabel;
 - (void)updateTopBarForIndex:(int)newIndex
 {
     if (newIndex == TAB_DASHBOARD) {
+        [bannerView changeHeight:0];
         [self.assetSelectorView hide];
     } else {
-
+        [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
         [self.assetSelectorView show];
     }
     

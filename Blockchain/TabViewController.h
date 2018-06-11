@@ -27,16 +27,15 @@
 	int selectedIndex;
 }
 
-@property(nonatomic, retain) UINavigationBar *navigationBar;
-@property(nonatomic, retain) UIViewController *activeViewController;
-@property(nonatomic, retain) UIViewController *oldViewController;
-@property(nonatomic, retain) IBOutlet UIView *contentView;
+@property (nonatomic, retain) UINavigationBar *navigationBar;
+@property (nonatomic, retain) UIViewController *activeViewController;
+@property (nonatomic, retain) UIViewController *oldViewController;
+@property (nonatomic, retain) IBOutlet UIView *contentView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *tabBarBottomConstraint;
-@property (nonatomic) IBOutlet AssetSelectorView *assetSelectorView;
-@property (strong, nonatomic) IBOutlet UIView *assetControlContainer;
-@property(nonatomic, retain) UIView *menuSwipeRecognizerView;
-@property(nonatomic) UIView *tabBarGestureView;
-
+@property (nonatomic, retain) AssetSelectorView *assetSelectorView;
+@property (strong, nonatomic) UIView *assetControlContainer;
+@property (nonatomic, retain) UIView *menuSwipeRecognizerView;
+@property (nonatomic) UIView *tabBarGestureView;
 @property (nonatomic) UIView *bannerPricesView;
 @property (nonatomic) UILabel *ethPriceLabel;
 @property (nonatomic) UILabel *btcPriceLabel;
