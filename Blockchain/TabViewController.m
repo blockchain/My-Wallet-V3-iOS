@@ -172,10 +172,9 @@ UILabel *titleLabel;
 {
     if (newIndex == TAB_DASHBOARD) {
         [self.assetSelectorView hide];
-        [self.bannerSelectorView changeHeight:0];
     } else {
+
         [self.assetSelectorView show];
-        [self.bannerSelectorView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
     }
     
     self.navigationItem.titleView.userInteractionEnabled = (newIndex == TAB_TRANSACTIONS);

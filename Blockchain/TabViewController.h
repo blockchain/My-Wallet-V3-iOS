@@ -40,7 +40,6 @@
 @property (nonatomic) UILabel *ethPriceLabel;
 @property (nonatomic) UILabel *btcPriceLabel;
 
-@property (nonatomic) UIView *bannerSelectorView;
 @property(weak, nonatomic) id <AssetDelegate> assetDelegate;
 - (void)selectAsset:(LegacyAssetType)assetType;
 - (void)setActiveViewController:(UIViewController *)nviewcontroller animated:(BOOL)animated index:(int)index;

@@ -529,11 +529,6 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.scrollsToTop = YES;
     
-    [balanceBigButton.titleLabel setMinimumScaleFactor:.5f];
-    [balanceBigButton.titleLabel setAdjustsFontSizeToFitWidth:YES];
-    
-    [balanceBigButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
-    
 #ifdef ENABLE_TRANSACTION_FETCHING
     self.moreButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.moreButton setTitle:BC_STRING_LOAD_MORE_TRANSACTIONS forState:UIControlStateNormal];
@@ -564,8 +559,6 @@
     self.balance = @"";
     [self setText];
     [self reloadData];
-    
-    balanceBigButton.center = CGPointMake(headerView.center.x, balanceBigButton.center.y);
 }
 
 - (void)viewDidDisappear:(BOOL)animated
