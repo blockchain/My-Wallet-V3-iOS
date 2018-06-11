@@ -16,11 +16,7 @@ import Foundation
                 print("Could not create payload from URL \(string)")
                 return nil
             }
-            guard let payload = create(from: url) else {
-                print("Error creating payload from URL \(string)")
-                return nil
-            }
-            return payload
+            return create(from: url)
         } else {
             switch legacyAssetType {
             case .bitcoin:
