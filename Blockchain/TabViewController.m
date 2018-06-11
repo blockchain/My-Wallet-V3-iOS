@@ -36,9 +36,8 @@ UILabel *titleLabel;
     [self setupNavigationItemTitleView];
     
     tabBar.delegate = self;
-    
-    //: Default selected: transactions
-    selectedIndex = TAB_TRANSACTIONS;
+
+    selectedIndex = TAB_DASHBOARD;
     
     [self setupTabButtons];
 }
@@ -107,6 +106,8 @@ UILabel *titleLabel;
     
     activeViewController = nviewcontroller;
     
+    [self setSelectedIndex:newIndex];
+
     [self insertActiveView];
     
     self.oldViewController = nil;
@@ -125,8 +126,6 @@ UILabel *titleLabel;
         [[contentView layer] addAnimation:animation forKey:@"SwitchToView1"];
     }
     
-    [self setSelectedIndex:newIndex];
-    
     [self updateTopBarForIndex:newIndex];
 }
 
@@ -137,9 +136,12 @@ UILabel *titleLabel;
     }
     
     [contentView addSubview:activeViewController.view];
-    
-    //: Resize the View Sub Controller
-    activeViewController.view.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height);
+
+    CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
+    activeViewController.view.frame = CGRectMake(0,
+                                                 offsetForAssetSelector,
+                                                 contentView.frame.size.width,
+                                                 contentView.frame.size.height - offsetForAssetSelector);
     
     [activeViewController.view setNeedsLayout];
 }
@@ -271,8 +273,12 @@ UILabel *titleLabel;
 - (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        self.activeViewController.view.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height);
-        [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
+        CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
+        self.activeViewController.view.frame = CGRectMake(0,
+                                                          offsetForAssetSelector,
+                                                          contentView.frame.size.width,
+                                                          contentView.frame.size.height - offsetForAssetSelector);
+        [bannerView changeHeight:offsetForAssetSelector];
     }];
     
     [self selectAsset:assetType];
@@ -280,10 +286,13 @@ UILabel *titleLabel;
 
 - (void)didOpenSelector
 {
-    CGFloat viewYOffset = ASSET_SELECTOR_ROW_HEIGHT * self.assetSelectorView.assets.count;
+    CGFloat offsetForAssetSelector = ASSET_SELECTOR_ROW_HEIGHT * self.assetSelectorView.assets.count;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        self.activeViewController.view.frame = CGRectMake(0, viewYOffset, self.view.frame.size.width, self.view.frame.size.height - viewYOffset);
-        [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT*3];
+        self.activeViewController.view.frame = CGRectMake(0,
+                                                          offsetForAssetSelector,
+                                                          contentView.frame.size.width,
+                                                          contentView.frame.size.height - offsetForAssetSelector);
+        [bannerView changeHeight:offsetForAssetSelector];
     }];
 }
 

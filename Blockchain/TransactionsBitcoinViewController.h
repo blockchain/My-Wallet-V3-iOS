@@ -28,8 +28,6 @@
 {
     IBOutlet UITableView *tableView;
     
-    IBOutlet UIView *headerView;
-    
     MultiAddressResponse *data;
     LatestBlock *latestBlock;
 }
