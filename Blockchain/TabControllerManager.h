@@ -22,13 +22,14 @@
 @protocol TabControllerDelegate
 - (void)toggleSideMenu;
 @end
-@interface TabControllerManager : NSObject <AssetDelegate>
+@interface TabControllerManager : UINavigationController <AssetDelegate>
+
+@property (strong, nonatomic) IBOutlet TabViewController *tabViewController;
+
 @property (nonatomic) LegacyAssetType assetType;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
 
 @property (weak, nonatomic) id <TabControllerDelegate> delegate;
-
-@property (strong, nonatomic) TabViewcontroller *tabViewController;
 
 @property (strong, nonatomic) DashboardViewController *dashboardViewController;
 
