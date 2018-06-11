@@ -151,7 +151,6 @@
         
         [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_RECOVERING_WALLET];
         [self.recoveryPhraseView.recoveryPassphraseTextField resignFirstResponder];
-        self.recoveryPhraseView.recoveryPassphraseTextField.hidden = YES;
 
         [WalletManager.sharedInstance.wallet recoverWithEmail:emailTextField.text password:passwordTextField.text passphrase:trimmedRecoveryPhrase];
         
