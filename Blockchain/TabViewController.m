@@ -44,6 +44,7 @@ UILabel *titleLabel;
 
 - (void)viewDidLayoutSubviews
 {
+    [super viewDidLayoutSubviews];
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     CGFloat safeAreaInsetBottom = 0;
     if (@available(iOS 11.0, *)) {
