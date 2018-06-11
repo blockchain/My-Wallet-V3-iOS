@@ -118,7 +118,6 @@ UILabel *titleLabel;
     activeViewController = nviewcontroller;
 
     CGFloat previousSelectedIndex = selectedIndex;
-
     [self setSelectedIndex:newIndex];
 
     [self insertActiveView];
@@ -130,13 +129,11 @@ UILabel *titleLabel;
         [animation setDuration:ANIMATION_DURATION];
         [animation setType:kCATransitionPush];
         [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-
         if (newIndex > previousSelectedIndex || (newIndex == previousSelectedIndex && self.assetSelectorView.selectedAsset == LegacyAssetTypeEther)) {
             [animation setSubtype:kCATransitionFromRight];
         } else {
             [animation setSubtype:kCATransitionFromLeft];
         }
-
         [[contentView layer] addAnimation:animation forKey:@"SwitchToView1"];
     }
     [self updateTopBarForIndex:newIndex];
