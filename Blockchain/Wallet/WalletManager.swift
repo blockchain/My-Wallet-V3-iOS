@@ -54,6 +54,7 @@ class WalletManager: NSObject {
         self.wallet = wallet
         super.init()
         self.wallet.delegate = self
+        self.wallet.loadJS()
     }
 
     /// Performs closing operations on the wallet. This should be called on logout and
