@@ -75,6 +75,7 @@ UILabel *titleLabel;
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, self.navigationBar.frame.size.height)];
     titleLabel.adjustsFontSizeToFitWidth = NO;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:20];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = UIColor.whiteColor;
 
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSymbol)];
