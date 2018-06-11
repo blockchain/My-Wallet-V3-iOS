@@ -26,4 +26,22 @@ class AssetAddressFactory {
             return EthereumAddress(string: address)
         }
     }
+
+    /// Creates the appropriate concrete instances of an `AssetAddress` provided a string
+    /// array of addresses and the desired asset type.
+    ///
+    /// - Parameters:
+    ///   - address: the address of the asset
+    ///   - assetType: the type of the asset
+    /// - Returns: an array of the concrete AssetAddress instances
+    static func create(
+        fromAddressStringArray addressArray: [String],
+        assetType: AssetType
+    ) -> [AssetAddress] {
+        var createdAddresses = [AssetAddress]()
+        addressArray.forEach {
+            createdAddresses.append(create(fromAddressString: $0, assetType: assetType))
+        }
+        return createdAddresses
+    }
 }

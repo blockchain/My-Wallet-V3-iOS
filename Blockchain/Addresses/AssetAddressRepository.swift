@@ -66,16 +66,16 @@ import Foundation
     ///
     /// - Parameter assetType: the AssetType
     /// - Returns: the swipe addresses
-    @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [String] {
+    @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [AssetAddress] {
         if assetType == .ethereum {
-            if let swipeAddressForEther = BlockchainSettings.App.shared.swipeAddressForEther {
-                return [swipeAddressForEther]
-            } else {
+            guard let swipeAddressForEther = BlockchainSettings.App.shared.swipeAddressForEther else {
                 return []
             }
+            return [EthereumAddress(string: swipeAddressForEther)]
         }
 
-        return KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) as? [String] ?? []
+        let swipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) as? [String] ?? []
+        return AssetAddressFactory.create(fromAddressStringArray: swipeAddresses, assetType: assetType)
     }
 
     /// Removes the first swipe address for assetType.
