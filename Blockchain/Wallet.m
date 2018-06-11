@@ -3245,7 +3245,7 @@
     }
 
     if ([type isEqualToString:@"error"]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
     } else if ([type isEqualToString:@"info"]) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge information] title:BC_STRING_ERROR handler: nil];
     }
