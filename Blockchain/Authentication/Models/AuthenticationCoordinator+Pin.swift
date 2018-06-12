@@ -63,7 +63,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         _ pinEntryController: PEPinEntryController!,
         shouldAcceptPin pinInt: UInt,
         callback: ((Bool) -> Void)!
-        ) {
+    ) {
         let pin = Pin(code: pinInt)
         self.lastEnteredPIN = pin
 
@@ -77,6 +77,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         showVerifyingBusyView(withTimeout: 30)
 
+        // TODO: Only save to keychain when putting pin, not getting
         if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
             config.isEnabled,
             pinEntryController.verifyOptional {
@@ -280,6 +281,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
             // Handle touch ID
+            // this is the specific case when you are enabling touch ID from the settings view
             if let config = AppFeatureConfigurator.shared.configuration(for: .biometry), config.isEnabled,
                 pinEntryViewController?.verifyOptional ?? false {
                 LoadingViewPresenter.shared.hideBusyView()
@@ -329,7 +331,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
 
         // Remove pin from keychain if needed
         if !pinSuccess && pinEntryViewController?.verifyOptional ?? false {
-            KeychainItemWrapper.removePinFromKeychain()
+            BlockchainSettings.App.shared.pin = nil
         }
     }
 

@@ -37,9 +37,11 @@ class WalletServiceTests: XCTestCase {
             (mockNetworkManager.mockHTTPURLResponse(statusCode: 504), "timeout request")
         )
         XCTAssertThrowsError(
-            try walletService.validatePin(PinPayload(pinCode: "1111", pinKey: "pinKey")
-                ).toBlocking().first()) { error in
-                    XCTAssertTrue(error is PinStoreError)
+            try walletService.validatePin(PinPayload(pinCode: "1111", pinKey: "pinKey"))
+                .toBlocking()
+                .first()
+        ) { error in
+            XCTAssertTrue(error is PinStoreError)
         }
     }
 
