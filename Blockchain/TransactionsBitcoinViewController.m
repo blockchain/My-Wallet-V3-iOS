@@ -272,7 +272,7 @@
     
     [self reloadNewTransactions];
 
-    [self animateFirstCell];
+    self.hasZeroTotalBalance = [WalletManager.sharedInstance.wallet getTotalActiveBalance] == 0;
     
     [self reloadLastNumberOfTransactions];
     
@@ -285,6 +285,8 @@
 - (void)updateData:(MultiAddressResponse *)newData
 {
     data = newData;
+    [self reloadData];
+    [self displayTransactionMessageIfNeeded];
 }
 
 - (void)reloadSymbols
@@ -318,14 +320,11 @@
     }
 }
 
-- (void)animateFirstCell
+- (void)displayTransactionMessageIfNeeded
 {
     if (data.transactions.count > 0 && self.receivedTransactionMessage) {
         self.receivedTransactionMessage = NO;
-
         [self didGetNewTransaction];
-    } else {
-        self.hasZeroTotalBalance = [WalletManager.sharedInstance.wallet getTotalActiveBalance] == 0;
     }
 }
 
