@@ -9,7 +9,7 @@
 import Foundation
 
 /// View presented when the user's password must be provided
-class PasswordConfirmView: UIView {
+class PasswordConfirmView: BCModalContentView {
 
     typealias OnPasswordConfirmHandler = ((_ password: String) -> Void)
 
@@ -48,6 +48,10 @@ class PasswordConfirmView: UIView {
 
     func updateLabelDescription(text: String) {
         labelDescription.text = text.count > 0 ? text : LocalizationConstants.Authentication.secondPasswordDefaultDescription
+    }
+
+    override func modalWasDismissed() {
+        ModalPresenter.shared.closeAllModals()
     }
 }
 
