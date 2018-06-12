@@ -17,6 +17,8 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "Blockchain-Swift.h"
 
+#define MENU_ENTRY_HEIGHT 54
+
 @interface SideMenuViewController ()
 
 @property (strong, readwrite, nonatomic) UITableView *tableView;
@@ -40,16 +42,28 @@ NSString *entryKeyLogout = @"logout";
 NSString *entryKeyBuyBitcoin = @"buy_bitcoin";
 NSString *entryKeyExchange = @"exchange";
 
+CGFloat safeAreaInsetTop = 20;
+CGFloat safeAreaInsetBottom = 0;
+
 int balanceEntries = 0;
 int accountEntries = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    }
     
     sideMenu = [AppCoordinator sharedInstance].slidingViewController;
     
     self.tableView = ({
-        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - sideMenu.anchorLeftPeekAmount, MENU_ENTRY_HEIGHT * self.menuEntriesCount) style:UITableViewStylePlain];
+        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
+                                                                               0,
+                                                                               self.view.frame.size.width - sideMenu.anchorLeftPeekAmount,
+                                                                               self.view.frame.size.height - safeAreaInsetBottom) style:UITableViewStylePlain];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
         tableView.delegate = self;
         tableView.dataSource = self;
@@ -57,6 +71,7 @@ int accountEntries = 0;
         tableView.backgroundColor = [UIColor clearColor];
         tableView.backgroundView = nil;
         tableView.showsVerticalScrollIndicator = NO;
+        tableView.scrollEnabled = NO;
         tableView;
     });
 
@@ -134,11 +149,6 @@ int accountEntries = 0;
 {
     TabViewController *tabViewController = [AppCoordinator sharedInstance].tabControllerManager.tabViewController;
     
-    // Hide status bar
-    if (!AuthenticationCoordinator.sharedInstance.pinEntryViewController.inSettings) {
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
-    }
-    
     // Disable all interactions on main view
     for (UIView *view in tabViewController.activeViewController.view.subviews) {
         [view setUserInteractionEnabled:NO];
@@ -185,33 +195,12 @@ int accountEntries = 0;
 
 - (void)reload
 {
-    // Resize table view
-    [self reloadTableViewSize];
-    
     [self.tableView reloadData];
 }
 
 - (void)reloadTableView
 {
     [self.tableView reloadData];
-}
-
-- (void)reloadTableViewSize
-{
-    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width - sideMenu.anchorLeftPeekAmount, MENU_ENTRY_HEIGHT * self.menuEntriesCount + MENU_TOP_BANNER_HEIGHT);
-    
-    // If the tableView is bigger than the screen, enable scrolling and resize table view to screen size
-    if (self.tableView.frame.size.height > self.view.frame.size.height ) {
-        self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width - sideMenu.anchorLeftPeekAmount, self.view.frame.size.height);
-        
-        // Add some extra space to bottom of tableview so things look nicer when scrolling all the way down
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, SECTION_HEADER_HEIGHT, 0);
-        
-        self.tableView.scrollEnabled = YES;
-    }
-    else {
-        self.tableView.scrollEnabled = NO;
-    }
 }
 
 - (void)removeTransactionsFilter
@@ -274,7 +263,7 @@ int accountEntries = 0;
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return MENU_TOP_BANNER_HEIGHT;
+        return [ConstantsObjcBridge defaultNavigationBarHeight] + safeAreaInsetTop;
     }
     
     return 0;
@@ -282,25 +271,29 @@ int accountEntries = 0;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    // Total Balance
-    if (section == 0) {
-        UITableViewHeaderFooterView *view = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, MENU_TOP_BANNER_HEIGHT)];
-        UIView *backgroundView = [[UIView alloc] initWithFrame:view.bounds];
-        backgroundView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
-        view.backgroundView = backgroundView;
-        CGFloat defaultAnchorRevealWidth = 276;
-        CGFloat imageViewOriginY = 15;
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(30, imageViewOriginY, defaultAnchorRevealWidth - 60, MENU_TOP_BANNER_HEIGHT - imageViewOriginY*2)];
-        imageView.clipsToBounds = NO;
-        imageView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        imageView.image = [UIImage imageNamed:@"logo_and_banner_white"];
-        [view addSubview:imageView];
-        
-        return view;
-    }
+    if (section != 0) { return nil; }
     
-    return nil;
+    CGFloat defaultAnchorRevealWidth = 276;
+    CGFloat xOffset = self.view.frame.size.width - defaultAnchorRevealWidth;
+    UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0,
+                                                                                                            0,
+                                                                                                            self.view.frame.size.width,
+                                                                                                            [self tableView:tableView heightForHeaderInSection:section])];
+    UIView *backgroundView = [[UIView alloc] initWithFrame:headerView.bounds];
+    backgroundView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    headerView.backgroundView = backgroundView;
+    CGFloat imageHeight = 30; CGFloat imageWidth = 161;
+    CGFloat posX = ((headerView.frame.size.width - xOffset) / 2) - (imageWidth / 2);
+    CGFloat posY = (safeAreaInsetTop == 44) ? (headerView.frame.size.height / 2) : ((headerView.frame.size.height - safeAreaInsetTop) / 2);
+
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, imageWidth, imageHeight)];
+    imageView.clipsToBounds = NO;
+    imageView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.image = [UIImage imageNamed:@"logo_and_banner_white"];
+    [headerView addSubview:imageView];
+
+    return headerView;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
@@ -338,12 +331,7 @@ int accountEntries = 0;
         cell.textLabel.adjustsFontSizeToFitWidth = YES;
         NSString *imageName = entry[@"icon"];
         cell.imageView.image = [UIImage imageNamed:imageName];
-        
-        if ([imageName isEqualToString:@"icon_contact_small"]) {
-            cell.imageView.image = [cell.imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [cell.imageView setTintColor:COLOR_DARK_GRAY];
-        }
-        
+
         return cell;
     }
     return nil;
