@@ -38,6 +38,7 @@ UILabel *titleLabel;
     tabBar.delegate = self;
 
     selectedIndex = TAB_DASHBOARD;
+  
     [self setupTabButtons];
 }
 
@@ -116,6 +117,7 @@ UILabel *titleLabel;
     activeViewController = nviewcontroller;
 
     CGFloat previousSelectedIndex = selectedIndex;
+
     [self setSelectedIndex:newIndex];
 
     [self insertActiveView];
