@@ -19,9 +19,6 @@ protocol WalletAuthDelegate: class {
     /// Callback invoked when the SMS containing a code for 2FA was resent
     func didResendTwoFactorSMSCode()
 
-    /// Callback invoked when the provided two factor code is incorrect
-    func incorrectTwoFactorCode()
-
     /// Callback invoked when an email authorization is required (only for manual pairing)
     func emailAuthorizationRequired()
 
