@@ -353,17 +353,14 @@ import Foundation
         pinViewController.pinDelegate = self
 
         let viewControllerToPresentIn = viewController ?? UIApplication.shared.keyWindow!.rootViewController!
+
+        // presentedViewController could be non-nil if it is presenting an alert
+        if let presentedViewController = viewControllerToPresentIn.presentedViewController {
+            presentedViewController.dismiss(animated: false)
+        }
+
         if asModal {
-            // TODO handle settings navigation controller
-//            if ([_settingsNavigationController isBeingPresented]) {
-//                // Immediately after enabling touch ID, backgrounding the app while the Settings scren is still
-            // being presented results in failure to add the PIN screen back. Using a delay to allow animation to complete fixes this
-//                [[UIApplication sharedApplication].keyWindow.rootViewController.view
-            // performSelector:@selector(addSubview:) withObject:self.pinEntryViewController.view afterDelay:DELAY_KEYBOARD_DISMISSAL];
-//                [self performSelector:@selector(showStatusBar) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
-//            } else {
             viewControllerToPresentIn.view.addSubview(pinViewController.view)
-//            }
         } else {
             viewControllerToPresentIn.present(pinViewController, animated: true) { [weak self] in
                 guard let strongSelf = self else { return }
