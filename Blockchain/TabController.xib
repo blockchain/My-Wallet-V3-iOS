@@ -71,12 +71,12 @@
                         <viewLayoutGuide key="safeArea" id="LYU-sy-chi"/>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="REi-Hm-Pl8">
-                        <barButtonItem key="leftBarButtonItem" title="Menu" image="menu" id="Xze-N7-ehC">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="Xze-N7-ehC">
                             <connections>
                                 <action selector="menuButtonClicked:" destination="-2" id="VJd-Pd-JCB"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Scan QR Code" image="qrscanner" id="GKL-pe-sth">
+                        <barButtonItem key="rightBarButtonItem" image="qrscanner" id="GKL-pe-sth">
                             <connections>
                                 <action selector="qrCodeButtonClicked:" destination="M9G-7G-NQi" id="6yh-mt-OKC"/>
                             </connections>

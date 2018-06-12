@@ -34,11 +34,11 @@ UILabel *titleLabel;
     [bannerView addSubview:self.assetSelectorView];
 
     [self setupNavigationItemTitleView];
-    
+
     tabBar.delegate = self;
 
     selectedIndex = TAB_DASHBOARD;
-    
+  
     [self setupTabButtons];
 }
 
@@ -58,10 +58,9 @@ UILabel *titleLabel;
     // Add side bar to swipe open the sideMenu
     if (!_menuSwipeRecognizerView) {
         _menuSwipeRecognizerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, self.view.frame.size.height)];
-        
         ECSlidingViewController *sideMenu = [AppCoordinator sharedInstance].slidingViewController;
         [_menuSwipeRecognizerView addGestureRecognizer:sideMenu.panGesture];
-        
+
         [self.view addSubview:_menuSwipeRecognizerView];
     }
 }
@@ -93,7 +92,6 @@ UILabel *titleLabel;
 - (void)setupTabButtons
 {
     NSDictionary *tabButtons = @{BC_STRING_SEND:sendButton, BC_STRING_DASHBOARD:dashBoardButton, BC_STRING_TRANSACTIONS:overviewButton, BC_STRING_REQUEST:requestButton};
-    
     for (UITabBarItem *button in [tabButtons allValues]) {
         NSString *label = [[tabButtons allKeysForObject:button] firstObject];
         button.title = label;
@@ -113,34 +111,31 @@ UILabel *titleLabel;
 {
     if (nviewcontroller == activeViewController)
         return;
-    
+
     self.oldViewController = activeViewController;
-    
+
     activeViewController = nviewcontroller;
 
     CGFloat previousSelectedIndex = selectedIndex;
-    
+
     [self setSelectedIndex:newIndex];
 
     [self insertActiveView];
-    
+
     self.oldViewController = nil;
-    
+
     if (animated) {
         CATransition *animation = [CATransition animation];
         [animation setDuration:ANIMATION_DURATION];
         [animation setType:kCATransitionPush];
         [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-        
         if (newIndex > previousSelectedIndex || (newIndex == previousSelectedIndex && self.assetSelectorView.selectedAsset == LegacyAssetTypeEther)) {
             [animation setSubtype:kCATransitionFromRight];
         } else {
             [animation setSubtype:kCATransitionFromLeft];
         }
-        
         [[contentView layer] addAnimation:animation forKey:@"SwitchToView1"];
     }
-    
     [self updateTopBarForIndex:newIndex];
 }
 
@@ -149,7 +144,7 @@ UILabel *titleLabel;
     if ([contentView.subviews count] > 0) {
         [[contentView.subviews firstObject] removeFromSuperview];
     }
-    
+
     [contentView addSubview:activeViewController.view];
 
     CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
@@ -157,7 +152,6 @@ UILabel *titleLabel;
                                                  offsetForAssetSelector,
                                                  contentView.frame.size.width,
                                                  contentView.frame.size.height - offsetForAssetSelector);
-    
     [activeViewController.view setNeedsLayout];
 }
 
@@ -169,13 +163,13 @@ UILabel *titleLabel;
 - (void)setSelectedIndex:(int)nindex
 {
     selectedIndex = nindex;
-    
+
     tabBar.selectedItem = nil;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         tabBar.selectedItem = [[tabBar items] objectAtIndex:selectedIndex];
     });
-    
+
     NSArray *titles = @[BC_STRING_SEND, BC_STRING_DASHBOARD, BC_STRING_TRANSACTIONS, BC_STRING_REQUEST];
     if (nindex == 2) { return; }
     if (nindex < titles.count) {
@@ -194,7 +188,6 @@ UILabel *titleLabel;
         [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
         [self.assetSelectorView show];
     }
-    
     self.navigationItem.titleView.userInteractionEnabled = (newIndex == TAB_TRANSACTIONS);
 }
 
@@ -218,7 +211,7 @@ UILabel *titleLabel;
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     [self.assetSelectorView close];
-    
+
     if (item == sendButton) {
         [[AppCoordinator sharedInstance].tabControllerManager sendCoinsClicked:item];
     } else if (item == overviewButton) {
@@ -253,14 +246,14 @@ UILabel *titleLabel;
 - (void)selectAsset:(LegacyAssetType)assetType
 {
     self.assetSelectorView.selectedAsset = assetType;
-    
+
     [self assetSelectorChanged];
 }
 
 - (void)assetSelectorChanged
 {
     LegacyAssetType asset = self.assetSelectorView.selectedAsset;
-    
+
     [self.assetDelegate didSetAssetType:asset];
 }
 
@@ -296,7 +289,7 @@ UILabel *titleLabel;
                                                           contentView.frame.size.height - offsetForAssetSelector);
         [bannerView changeHeight:offsetForAssetSelector];
     }];
-    
+
     [self selectAsset:assetType];
 }
 

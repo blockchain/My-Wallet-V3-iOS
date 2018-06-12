@@ -23,7 +23,7 @@
     IBOutlet UIView *bannerView;
     UIViewController *activeViewController;
 	UIViewController *oldViewController;
-    
+
 	int selectedIndex;
 }
 
