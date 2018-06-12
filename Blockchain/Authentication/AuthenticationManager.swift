@@ -323,7 +323,7 @@ extension AuthenticationManager: WalletAuthDelegate {
     }
 
     func emailAuthorizationRequired() {
-        failAuth(withError: AuthenticationError(
+        authHandler?(false, nil, AuthenticationError(
             code: AuthenticationError.ErrorCode.emailAuthorizationRequired.rawValue
         ))
     }

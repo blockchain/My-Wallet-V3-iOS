@@ -157,7 +157,8 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifyingMobileNumber animated:YES completion:nil];
+
+    [self presentAlertController:alertForVerifyingMobileNumber];
 }
 
 - (void)verifyTwoFactorGoogle
@@ -186,7 +187,19 @@
         verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
         verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertForVerifying animated:YES completion:nil];
+    [self presentAlertController:alertForVerifying];
+}
+
+-  (void)presentAlertController:(UIAlertController *)alertController
+{
+    UIViewController *presentingViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    // presentingViewController might still have an alert presented, if so, dismiss that first before presenting alertController
+    if (presentingViewController.presentedViewController != nil) {
+        [presentingViewController.presentedViewController dismissViewControllerAnimated:false completion:nil];
+    }
+
+    [presentingViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 @end
