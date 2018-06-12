@@ -113,7 +113,7 @@
 
 + (NSString *)formatAmount:(uint64_t)amount localCurrency:(BOOL)localCurrency
 {
-    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:[NSNumberFormatter assetFormatter]];
+    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:localCurrency ? [NSNumberFormatter localCurrencyFormatter] : [NSNumberFormatter assetFormatter]];
 }
 
 + (BOOL)stringHasBitcoinValue:(NSString *)string
