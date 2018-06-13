@@ -101,7 +101,7 @@
     model.toString = convertedAddress ? : model.toString;
     model.assetType = LegacyAssetTypeBitcoinCash;
     model.hideNote = YES;
-    model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", [[BlockchainAPI sharedInstance] blockchairUrl]] uppercaseString];
+    model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", [[BlockchainAPI sharedInstance] blockchair]] uppercaseString];
     model.detailButtonLink = [[[BlockchainAPI sharedInstance] blockchairBchTransactionUrl] stringByAppendingString:model.myHash];
     return model;
 }
