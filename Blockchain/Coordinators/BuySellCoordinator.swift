@@ -7,34 +7,47 @@
 //
 
 import Foundation
+import RxSwift
 
 @objc class BuySellCoordinator: NSObject, Coordinator {
     static let shared = BuySellCoordinator()
 
     @objc private(set) var buyBitcoinViewController: BuyBitcoinViewController?
+
     private let walletManager: WalletManager
+
+    private let walletService: WalletService
+
+    private var disposable: Disposable?
 
     // class function declared so that the BuySellCoordinator singleton can be accessed from obj-C
     @objc class func sharedInstance() -> BuySellCoordinator {
         return BuySellCoordinator.shared
     }
 
-    private init(walletManager: WalletManager = WalletManager.shared) {
+    private init(
+        walletManager: WalletManager = WalletManager.shared,
+        walletService: WalletService = WalletService.shared
+    ) {
         self.walletManager = walletManager
+        self.walletService = walletService
         super.init()
         self.walletManager.buySellDelegate = self
     }
 
     func start() {
-        NetworkManager.shared.getWalletOptions(withCompletion: { walletOptions in
-            guard let rootURL = walletOptions.mobile?.walletRoot else {
-                print("Error with wallet options response when starting buy sell webview")
-                return
-            }
-            self.initializeWebView(rootURL: rootURL)
-        }, error: { _ in
-            print("Error getting wallet options to start buy sell webview")
-        })
+        disposable = walletService.walletOptions
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { walletOptions in
+                guard let rootURL = walletOptions.mobile?.walletRoot else {
+                    print("Error with wallet options response when starting buy sell webview")
+                    return
+                }
+                self.initializeWebView(rootURL: rootURL)
+            }, onError: { _ in
+                print("Error getting wallet options to start buy sell webview")
+            })
     }
 
     private func initializeWebView(rootURL: String?) {

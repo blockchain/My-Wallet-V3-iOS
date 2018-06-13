@@ -15,12 +15,23 @@ class OnboardingCoordinator: Coordinator {
 
     private var createWallet: BCCreateWalletView?
 
-    private init() {}
+    private let walletService: WalletService
+
+    private var disposable: Disposable?
+
+    init(walletService: WalletService = WalletService.shared) {
+        self.walletService = walletService
+    }
+
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
 
     // MARK: Public Methods
 
     func start() {
-        _ = WalletService.shared.walletOptions
+        disposable = walletService.walletOptions
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { walletOptions in

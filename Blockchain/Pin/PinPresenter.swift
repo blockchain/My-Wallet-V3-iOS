@@ -67,28 +67,7 @@ import RxSwift
                     return
                 }
 
-                guard let statusCode = response.statusCode else {
-                    strongSelf.view.hideLoadingView()
-                    strongSelf.view.error(message: LocalizationConstants.Pin.incorrect)
-                    return
-                }
-
-                switch statusCode {
-                case .deleted:
-                    strongSelf.view.hideLoadingView()
-                    strongSelf.view.errorPinRetryLimitExceeded()
-                case .incorrect:
-                    strongSelf.view.hideLoadingView()
-                    let errorMessage = response.error ?? LocalizationConstants.Pin.incorrectUnknownError
-                    strongSelf.view.error(message: errorMessage)
-                case .success:
-                    guard let pinPassword = response.pinDecryptionValue, pinPassword.count != 0 else {
-                        strongSelf.view.hideLoadingView()
-                        strongSelf.view.error(message: LocalizationConstants.Pin.responseSuccessLengthZero)
-                        return
-                    }
-                    strongSelf.view.successPinValid(pinPassword: pinPassword)
-                }
+                strongSelf.handle(getPinResponse: response)
             }, onError: { [weak self] error in
                 guard let strongSelf = self else {
                     return
@@ -106,5 +85,30 @@ import RxSwift
 
                 strongSelf.view.error(message: LocalizationConstants.Errors.invalidServerResponse)
             })
+    }
+
+    private func handle(getPinResponse response: GetPinResponse) {
+        guard let statusCode = response.statusCode else {
+            view.hideLoadingView()
+            view.error(message: LocalizationConstants.Pin.incorrect)
+            return
+        }
+
+        switch statusCode {
+        case .deleted:
+            view.hideLoadingView()
+            view.errorPinRetryLimitExceeded()
+        case .incorrect:
+            view.hideLoadingView()
+            let errorMessage = response.error ?? LocalizationConstants.Pin.incorrectUnknownError
+            view.error(message: errorMessage)
+        case .success:
+            guard let pinPassword = response.pinDecryptionValue, pinPassword.count != 0 else {
+                view.hideLoadingView()
+                view.error(message: LocalizationConstants.Pin.responseSuccessLengthZero)
+                return
+            }
+            view.successPinValid(pinPassword: pinPassword)
+        }
     }
 }

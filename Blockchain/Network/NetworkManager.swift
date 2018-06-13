@@ -97,31 +97,6 @@ class NetworkManager: NSObject, URLSessionDelegate {
         }
     }
 
-    // TODO: remove
-    func getWalletOptions(
-        withCompletion success: @escaping (_ response: WalletOptions) -> Void,
-        error: @escaping(_ error: String?
-    ) -> Void) {
-        guard let url = URL(string: BlockchainAPI.shared.walletOptionsUrl) else {
-            fatalError("Failed to get wallet options url from Bundle.")
-        }
-        NetworkManager.shared.session.sessionDescription = url.host
-        let task = NetworkManager.shared.session.dataTask(with: url) { data, _, taskError in
-            DispatchQueue.main.async {
-                guard taskError == nil else {
-                    error(LocalizationConstants.Errors.requestFailedCheckConnection)
-                    return
-                }
-                guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON else {
-                    error(LocalizationConstants.Errors.invalidServerResponse)
-                    return
-                }
-                success(WalletOptions(json: json!))
-            }
-        }
-        task.resume()
-    }
-
     // MARK: - URLSessionDelegate
 
     // TODO: find place to put UIApplication.shared.isNetworkActivityIndicatorVisible

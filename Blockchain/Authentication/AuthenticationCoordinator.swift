@@ -112,9 +112,13 @@ import RxSwift
 
     internal let walletManager: WalletManager
 
+    private let walletService: WalletService
+
     @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
     private var loginTimeout: Timer?
+
+    private var disposable: Disposable?
 
     private var isPinEntryModalPresented: Bool {
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
@@ -132,11 +136,20 @@ import RxSwift
 
     // MARK: - Initializer
 
-    init(walletManager: WalletManager = WalletManager.shared) {
+    init(
+        walletManager: WalletManager = WalletManager.shared,
+        walletService: WalletService = WalletService.shared
+    ) {
         self.walletManager = walletManager
+        self.walletService = walletService
         super.init()
         self.walletManager.pinEntryDelegate = self
         self.walletManager.secondPasswordDelegate = self
+    }
+
+    deinit {
+        disposable?.dispose()
+        disposable = nil
     }
 
     // MARK: - Start Flows
@@ -160,7 +173,7 @@ import RxSwift
                 authenticateWithBiometrics()
             }
         } else {
-            _ = WalletService.shared.walletOptions
+            disposable = walletService.walletOptions
                 .subscribeOn(MainScheduler.asyncInstance)
                 .observeOn(MainScheduler.instance)
                 .subscribe(onSuccess: { walletOptions in
