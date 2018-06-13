@@ -93,46 +93,11 @@ BOOL displayingLocalSymbolSend;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    CGFloat statusBarAdjustment = [[UIApplication sharedApplication] statusBarFrame].size.height > DEFAULT_STATUS_BAR_HEIGHT ? DEFAULT_STATUS_BAR_HEIGHT : 0;
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT - statusBarAdjustment);
-    
-    [containerView changeWidth:WINDOW_WIDTH];
-
-    [selectAddressTextField changeWidth:self.view.frame.size.width - fromLabel.frame.size.width - 15 - 13 - selectFromButton.frame.size.width];
-    [selectFromButton changeXPosition:self.view.frame.size.width - selectFromButton.frame.size.width];
-    
-    [toField changeWidth:self.view.frame.size.width - toLabel.frame.size.width - 15 - 13 - addressBookButton.frame.size.width];
-    [addressBookButton changeXPosition:self.view.frame.size.width - addressBookButton.frame.size.width];
-    
-    CGFloat amountFieldWidth = (self.view.frame.size.width - btcLabel.frame.origin.x - btcLabel.frame.size.width - fiatLabel.frame.size.width - 15 - 13 - 8 - 13)/2;
-    btcAmountField.frame = CGRectMake(btcAmountField.frame.origin.x, btcAmountField.frame.origin.y, amountFieldWidth, btcAmountField.frame.size.height);
-    fiatLabel.frame = CGRectMake(btcAmountField.frame.origin.x + btcAmountField.frame.size.width + 8, fiatLabel.frame.origin.y, fiatLabel.frame.size.width, fiatLabel.frame.size.height);
-    fiatAmountField.frame = CGRectMake(fiatLabel.frame.origin.x + fiatLabel.frame.size.width + 13, fiatAmountField.frame.origin.y, amountFieldWidth, fiatAmountField.frame.size.height);
-    
-    [feeOptionsButton changeXPosition:self.view.frame.size.width - feeOptionsButton.frame.size.width];
-    
-    self.feeDescriptionLabel.frame = CGRectMake(feeField.frame.origin.x, feeField.center.y, btcAmountField.frame.size.width*2/3, 20);
-    self.feeDescriptionLabel.adjustsFontSizeToFitWidth = YES;
-    self.feeTypeLabel.frame = CGRectMake(feeField.frame.origin.x, feeField.center.y - 20, btcAmountField.frame.size.width*2/3, 20);
-    CGFloat amountLabelOriginX = self.feeTypeLabel.frame.origin.x + self.feeTypeLabel.frame.size.width;
-    self.feeTypeLabel.adjustsFontSizeToFitWidth = YES;
-    self.feeAmountLabel.frame = CGRectMake(amountLabelOriginX, feeField.center.y - 10, feeOptionsButton.frame.origin.x - amountLabelOriginX, 20);
-    self.feeAmountLabel.adjustsFontSizeToFitWidth = YES;
-
-    [self setupFeeWarningLabelFrameSmall];
-    
-    [feeField changeWidth:self.feeAmountLabel.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width) - (feeField.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width))];
 
     sendProgressModalText.text = nil;
-    
+
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_KEY_LOADING_TEXT object:nil queue:nil usingBlock:^(NSNotification * notification) {
-        
-        sendProgressModalText.text = [notification object];
+        self->sendProgressModalText.text = [notification object];
     }];
 }
 
@@ -148,6 +113,33 @@ BOOL displayingLocalSymbolSend;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetTop = 20;
+    CGFloat safeAreaInsetBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    }
+
+    if (@available(iOS 11.0, *)) {
+        self.view.frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+    } else {
+        self.view.frame = CGRectMake(0, 0, window.frame.size.width, window.frame.size.height);
+    }
+
+    [containerView changeWidth:self.view.frame.size.width];
+
+    [selectAddressTextField changeWidth:self.view.frame.size.width - fromLabel.frame.size.width - 15 - 13 - selectFromButton.frame.size.width];
+    [selectFromButton changeXPosition:self.view.frame.size.width - selectFromButton.frame.size.width];
+
+    [toField changeWidth:self.view.frame.size.width - toLabel.frame.size.width - 15 - 13 - addressBookButton.frame.size.width];
+    [addressBookButton changeXPosition:self.view.frame.size.width - addressBookButton.frame.size.width];
+
+    CGFloat amountFieldWidth = (self.view.frame.size.width - btcLabel.frame.origin.x - btcLabel.frame.size.width - fiatLabel.frame.size.width - 15 - 13 - 8 - 13)/2;
+    btcAmountField.frame = CGRectMake(btcAmountField.frame.origin.x, btcAmountField.frame.origin.y, amountFieldWidth, btcAmountField.frame.size.height);
+    fiatLabel.frame = CGRectMake(btcAmountField.frame.origin.x + btcAmountField.frame.size.width + 8, fiatLabel.frame.origin.y, fiatLabel.frame.size.width, fiatLabel.frame.size.height);
+    fiatAmountField.frame = CGRectMake(fiatLabel.frame.origin.x + fiatLabel.frame.size.width + 13, fiatAmountField.frame.origin.y, amountFieldWidth, fiatAmountField.frame.size.height);
     
     btcAmountField.inputAccessoryView = amountKeyboardAccessoryView;
     fiatAmountField.inputAccessoryView = amountKeyboardAccessoryView;
@@ -166,6 +158,20 @@ BOOL displayingLocalSymbolSend;
     feeField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     
     [self setupFeeLabels];
+
+    [self setupFeeWarningLabelFrameSmall];
+
+    [feeOptionsButton changeXPosition:self.view.frame.size.width - feeOptionsButton.frame.size.width];
+
+    self.feeDescriptionLabel.frame = CGRectMake(feeField.frame.origin.x, feeField.center.y, btcAmountField.frame.size.width*2/3, 20);
+    self.feeDescriptionLabel.adjustsFontSizeToFitWidth = YES;
+    self.feeTypeLabel.frame = CGRectMake(feeField.frame.origin.x, feeField.center.y - 20, btcAmountField.frame.size.width*2/3, 20);
+    CGFloat amountLabelOriginX = self.feeTypeLabel.frame.origin.x + self.feeTypeLabel.frame.size.width;
+    self.feeTypeLabel.adjustsFontSizeToFitWidth = YES;
+    self.feeAmountLabel.frame = CGRectMake(amountLabelOriginX, feeField.center.y - 10, feeOptionsButton.frame.origin.x - amountLabelOriginX, 20);
+    self.feeAmountLabel.adjustsFontSizeToFitWidth = YES;
+
+    [feeField changeWidth:self.feeAmountLabel.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width) - (feeField.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width))];
     
     fundsAvailableButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     [fundsAvailableButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
@@ -1310,7 +1316,7 @@ BOOL displayingLocalSymbolSend;
 
 - (CGFloat)continuePaymentButtonOriginY
 {
-    CGFloat spacing = 12;
+    CGFloat spacing = 20;
     return self.view.frame.size.height - BUTTON_HEIGHT - spacing;
 }
 
