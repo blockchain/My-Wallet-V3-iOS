@@ -203,8 +203,6 @@ BOOL displayingLocalSymbolSend;
     CGFloat continueButtonOriginY = [self continuePaymentButtonOriginY];
     continuePaymentButton.frame = CGRectMake(0, continueButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT);
     
-    rejectPaymentButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
-    
     if (self.assetType == LegacyAssetTypeBitcoin) {
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(feeOptionsClicked:)];
         [feeTappableView addGestureRecognizer:tapGestureRecognizer];
@@ -328,8 +326,6 @@ BOOL displayingLocalSymbolSend;
     [self enableAmountViews];
     [self enableToField];
     [self hideContactLabel];
-
-    [self hideRejectPaymentButton];
     
     self.isSending = NO;
     self.isReloading = NO;
@@ -1257,18 +1253,6 @@ BOOL displayingLocalSymbolSend;
 - (CGFloat)defaultYPositionForWarningLabel
 {
     return IS_USING_SCREEN_SIZE_4S ? 76 : 112;
-}
-
-- (void)hideRejectPaymentButton
-{
-    rejectPaymentButton.alpha = 1.0;
-    
-    [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        rejectPaymentButton.alpha = 0.0;
-        rejectPaymentButton
-        .hidden = YES;
-        [continuePaymentButton changeYPosition:[self continuePaymentButtonOriginY]];
-    }];
 }
 
 - (void)hideContactLabel

@@ -44,7 +44,6 @@
                 <outlet property="lineBelowFeeField" destination="hE6-gR-aYg" id="uG3-4u-SEQ"/>
                 <outlet property="lineBelowFromField" destination="Ln6-qa-kth" id="fc8-7K-FFo"/>
                 <outlet property="lineBelowToField" destination="X3L-rz-Q8u" id="NLJ-KC-GmX"/>
-                <outlet property="rejectPaymentButton" destination="A2t-gT-fpX" id="34P-C2-GhR"/>
                 <outlet property="selectAddressTextField" destination="zyc-E3-FOM" id="TU8-Uu-bf4"/>
                 <outlet property="selectFromButton" destination="BRT-me-wxI" id="qT9-fg-Tm7"/>
                 <outlet property="sendProgressActivityIndicator" destination="tKj-lu-8bc" id="yLg-rV-y7v"/>
@@ -222,23 +221,6 @@
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A2t-gT-fpX" userLabel="Reject">
-                            <rect key="frame" x="20" y="420" width="279" height="41"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                            <state key="normal" title="Continue">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="4"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </button>
                         <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Contact Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="qkl-tN-HpA">
                             <rect key="frame" x="63" y="51" width="222" height="39"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
