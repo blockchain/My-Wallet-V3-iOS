@@ -55,7 +55,20 @@
 {
     [super viewDidLoad];
     
-    [self resetFrame];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetTop = 20;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+    }
+
+    if (@available(iOS 11.0, *)) {
+        self.view.frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+    } else {
+        CGFloat assetSelectorHeight = 36;
+        CGFloat tabBarHeight = 49;
+        CGFloat height = window.frame.size.height - safeAreaInsetTop - [ConstantsObjcBridge defaultNavigationBarHeight] - assetSelectorHeight - tabBarHeight;
+        self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
+    }
     
     UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 12, 40, 21)];
     fromLabel.adjustsFontSizeToFitWidth = YES;
@@ -137,8 +150,7 @@
     BCLine *lineBelowFee = [self offsetLineWithYPosition:163+ROW_HEIGHT_SEND_LARGE];
     [self.view addSubview:lineBelowFee];
     
-    CGFloat spacing = 12;
-    CGFloat sendButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - spacing;
+    CGFloat sendButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - 20;
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(0, sendButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     continueButton.center = CGPointMake(self.view.center.x, continueButton.center.y);
     [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
@@ -155,19 +167,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self resetFrame];
-    
     [self getHistory];
-}
-
-- (void)resetFrame
-{
-    CGFloat statusBarAdjustment = [[UIApplication sharedApplication] statusBarFrame].size.height > DEFAULT_STATUS_BAR_HEIGHT ? DEFAULT_STATUS_BAR_HEIGHT : 0;
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT - statusBarAdjustment);
 }
 
 - (void)keepCurrentPayment
