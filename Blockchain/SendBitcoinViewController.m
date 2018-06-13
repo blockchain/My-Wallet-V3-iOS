@@ -115,13 +115,6 @@ BOOL displayingLocalSymbolSend;
     [super viewDidLoad];
 
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    CGFloat safeAreaInsetTop = 20;
-    CGFloat safeAreaInsetBottom = 0;
-    if (@available(iOS 11.0, *)) {
-        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
-    }
-
     if (@available(iOS 11.0, *)) {
         self.view.frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
     } else {
