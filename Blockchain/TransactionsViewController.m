@@ -76,8 +76,8 @@
         descriptionText = BC_STRING_NO_TRANSACTIONS_TEXT_BITCOIN_CASH;
         buttonText = BC_STRING_REQUEST_BITCOIN_CASH;
     }
-    
-    self.noTransactionsView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x, 0, self.view.frame.size.width, self.view.frame.size.height)];
+
+    self.noTransactionsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
     
     // Title label Y origin will be above midpoint between end of cards view and table view height
     UILabel *noTransactionsTitle = [[UILabel alloc] initWithFrame:CGRectZero];

@@ -136,26 +136,6 @@
     return 65;
 }
 
-- (CGFloat)tableView:(UITableView *)_tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0;
-}
-
-- (UIView *)tableView:(UITableView *)_tableView viewForHeaderInSection:(NSInteger)section
-{
-    return nil;
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    //Setup
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetShouldAntialias(context, YES);
-    
-    CGContextSetFillColorWithColor(context, [UIColor lightGrayColor].CGColor);
-    CGContextFillRect(context, CGRectMake(0, 0, 320, 15));
-}
-
 - (UITableView*)tableView
 {
     return tableView;
@@ -360,7 +340,7 @@
     }
 #else
     [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_LOADING_TRANSACTIONS];
-    
+
     [WalletManager.sharedInstance.wallet performSelector:@selector(getHistory) withObject:nil afterDelay:0.1f];
 #endif
 }
@@ -539,11 +519,6 @@
     [self reload];
 }
 
-- (void)toggleSymbol
-{
-    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -551,6 +526,11 @@
     self.balance = @"";
     [self setText];
     [self reloadData];
+}
+
+- (void)toggleSymbol
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
