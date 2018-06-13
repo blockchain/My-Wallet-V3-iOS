@@ -80,10 +80,13 @@
     switch (assetType) {
         case AssetTypeBitcoin:
             legacyType = LegacyAssetTypeBitcoin;
+            break;
         case AssetTypeBitcoinCash:
             legacyType = LegacyAssetTypeBitcoinCash;
+            break;
         case AssetTypeEthereum:
             legacyType = LegacyAssetTypeEther;
+            break;
     }
     
     [AuthenticationCoordinator.sharedInstance.pinEntryViewController paymentReceived:legacyType];
