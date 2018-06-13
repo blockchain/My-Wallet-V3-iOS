@@ -145,14 +145,14 @@ UILabel *titleLabel;
         [[contentView.subviews firstObject] removeFromSuperview];
     }
 
-    [contentView addSubview:activeViewController.view];
-
     CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
     activeViewController.view.frame = CGRectMake(0,
                                                  offsetForAssetSelector,
                                                  contentView.frame.size.width,
                                                  contentView.frame.size.height - offsetForAssetSelector);
     [activeViewController.view setNeedsLayout];
+
+    [contentView addSubview:activeViewController.view];
 }
 
 - (int)selectedIndex
