@@ -14,15 +14,34 @@ import XCTest
 
 class PinPresenterTests: XCTestCase {
 
-    var pinView: MockPinView!
-    var interactor: MockPinInteractor!
-    var presenter: PinPresenter!
+    private var pinView: MockPinView!
+    private var interactor: MockPinInteractor!
+    private var walletService: MockWalletService!
+    private var presenter: PinPresenter!
 
     override func setUp() {
         super.setUp()
         pinView = MockPinView()
         interactor = MockPinInteractor()
-        presenter = PinPresenter(view: pinView, interactor: interactor)
+        walletService = MockWalletService()
+        presenter = PinPresenter(view: pinView, interactor: interactor, walletService: walletService)
+    }
+
+    func testMaintenance() {
+        let maintenanceMessage = "Site is down."
+        walletService.mockWalletOptions = WalletOptions(json: [
+            "maintenance": true,
+            "mobileInfo": [
+                "en": maintenanceMessage
+            ]
+        ])
+        interactor.mockValidatePinResponse = Single.just(
+            GetPinResponse(code: GetPinResponse.StatusCode.success.rawValue, error: nil, pinDecryptionValue: "success")
+        )
+        pinView.didCallShowLoadingViewExpectation = expectation(description: "Show loading view called.")
+        pinView.didCallErrorExpectation = expectation(description: "Did call error.")
+        _ = presenter.validatePin(PinPayload(pinCode: "1111", pinKey: "asdf"))
+        waitForExpectations(timeout: 1)
     }
 
     func testIncorrectPin() {
@@ -47,7 +66,7 @@ class PinPresenterTests: XCTestCase {
 
     func testMaxRetryPin() {
         pinView.didCallShowLoadingViewExpectation = expectation(description: "Show loading view called.")
-        pinView.didCallErrorPinRetryLimitExceededExpectation = expectation(description: "Did max retry limit error.")
+        pinView.didCallErrorPinRetryExceededExpectation = expectation(description: "Did max retry limit error.")
         interactor.mockValidatePinResponse = Single.just(
             GetPinResponse(code: GetPinResponse.StatusCode.deleted.rawValue, error: "incorrect", pinDecryptionValue: nil)
         )

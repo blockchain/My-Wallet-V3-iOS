@@ -48,7 +48,7 @@ extension WalletOptions.Mobile {
 
 extension WalletOptions.MobileInfo {
     init(json: JSON) {
-        if let mobileInfo = json[Keys.mobile] as? [String: String] {
+        if let mobileInfo = json[Keys.mobileInfo] as? [String: String] {
             if let code = Locale.current.languageCode {
                 self.message = mobileInfo[code] ?? mobileInfo["en"]
             } else {

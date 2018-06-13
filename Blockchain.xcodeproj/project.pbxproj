@@ -281,6 +281,7 @@
 		AA63F87B20A3A198002B719B /* AppFeatureConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F87920A3A198002B719B /* AppFeatureConfigurator.swift */; };
 		AA69118420D0967300DDB541 /* WalletServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69118320D0967300DDB541 /* WalletServiceError.swift */; };
 		AA69118520D0967300DDB541 /* WalletServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69118320D0967300DDB541 /* WalletServiceError.swift */; };
+		AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6911A020D18B6E00DDB541 /* MockWalletService.swift */; };
 		AA69F6592086A2720054EFCE /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F6582086A2720054EFCE /* AppCoordinator.swift */; };
 		AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		AA722C1420B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */; };
@@ -1634,6 +1635,7 @@
 		AA63F87620A39DCF002B719B /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		AA63F87920A3A198002B719B /* AppFeatureConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureConfigurator.swift; sourceTree = "<group>"; };
 		AA69118320D0967300DDB541 /* WalletServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletServiceError.swift; sourceTree = "<group>"; };
+		AA6911A020D18B6E00DDB541 /* MockWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWalletService.swift; sourceTree = "<group>"; };
 		AA69F6582086A2720054EFCE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
 		AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwipeAddressDelegate.swift; sourceTree = "<group>"; };
@@ -2863,6 +2865,7 @@
 				AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */,
 				AAE94F6920C75C4E005A3595 /* MockPinView.swift */,
 				AACE320A20978EB100B7B806 /* MockWallet.swift */,
+				AA6911A020D18B6E00DDB541 /* MockWalletService.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -3765,6 +3768,7 @@
 				AA63F84C20A12AE9002B719B /* URLs.swift in Sources */,
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
+				AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
 				C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,

@@ -14,7 +14,7 @@ class MockPinView: PinView {
     var didCallShowLoadingViewExpectation: XCTestExpectation?
     var didCallHideLoadingViewExpectation: XCTestExpectation?
     var didCallErrorExpectation: XCTestExpectation?
-    var didCallErrorPinRetryLimitExceededExpectation: XCTestExpectation?
+    var didCallErrorPinRetryExceededExpectation: XCTestExpectation?
     var didCallSuccessPinValidExpectation: XCTestExpectation?
 
     init() {
@@ -33,10 +33,10 @@ class MockPinView: PinView {
     }
 
     func errorPinRetryLimitExceeded() {
-        didCallErrorPinRetryLimitExceededExpectation?.fulfill()
+        didCallErrorPinRetryExceededExpectation?.fulfill()
     }
 
-    func successPinValid() {
+    func successPinValid(pinPassword: String) {
         didCallSuccessPinValidExpectation?.fulfill()
     }
 }
