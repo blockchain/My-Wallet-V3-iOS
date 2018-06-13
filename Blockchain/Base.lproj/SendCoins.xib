@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -25,6 +26,7 @@
                 <outlet property="btcLabel" destination="7ho-GV-ikp" id="e2a-3k-kXk"/>
                 <outlet property="contactLabel" destination="qkl-tN-HpA" id="8W4-Q3-S0p"/>
                 <outlet property="containerView" destination="Gzr-Wy-8Rh" id="DL3-hD-g0C"/>
+                <outlet property="continueButtonTopConstraint" destination="imL-4O-tP2" id="yHH-pp-d9a"/>
                 <outlet property="continuePaymentAccessoryButton" destination="pPu-bJ-k6p" id="ymH-4D-0a6"/>
                 <outlet property="continuePaymentButton" destination="4" id="xDx-7s-gZq"/>
                 <outlet property="feeField" destination="p7q-Ud-nYh" id="A0V-si-4g2"/>
@@ -59,18 +61,17 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="Gzr-Wy-8Rh" userLabel="ContainerView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gzr-Wy-8Rh" userLabel="ContainerView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="From" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="7">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="From" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                             <rect key="frame" x="15" y="12" width="40" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
                             <color key="textColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Any Address" minimumFontSize="17" id="zyc-E3-FOM" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Any Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zyc-E3-FOM" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
                             <rect key="frame" x="68" y="8" width="217" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -80,7 +81,7 @@
                                 <outlet property="delegate" destination="-1" id="9q4-vm-2LR"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="BRT-me-wxI" userLabel="FromDisclose">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BRT-me-wxI" userLabel="FromDisclose">
                             <rect key="frame" x="285" y="8" width="35" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="disclosure">
@@ -90,19 +91,19 @@
                                 <action selector="selectFromAddressClicked:" destination="-1" eventType="touchUpInside" id="xzh-5I-TAj"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" id="Ln6-qa-kth" customClass="BCLine">
-                            <rect key="frame" x="15" y="45" width="305" height="1"/>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ln6-qa-kth" customClass="BCLine">
+                            <rect key="frame" x="14" y="45" width="305" height="1"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.80392156862745101" green="0.80392156862745101" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="To" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="fpY-AA-We5">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="To" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="fpY-AA-We5">
                             <rect key="frame" x="15" y="61" width="40" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
                             <color key="textColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="14" id="pZ1-lU-Nxo" userLabel="toField" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="pZ1-lU-Nxo" userLabel="toField" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
                             <rect key="frame" x="68" y="57" width="217" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -112,7 +113,7 @@
                                 <outlet property="delegate" destination="-1" id="k1B-L4-jYd"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="S58-Vf-zi7" userLabel="ToDisclose">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S58-Vf-zi7" userLabel="ToDisclose">
                             <rect key="frame" x="285" y="57" width="35" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="disclosure">
@@ -122,17 +123,17 @@
                                 <action selector="addressBookClicked:" destination="-1" eventType="touchUpInside" id="6ay-zq-kzm"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" id="X3L-rz-Q8u" customClass="BCLine">
-                            <rect key="frame" x="15" y="96" width="305" height="1"/>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X3L-rz-Q8u" customClass="BCLine">
+                            <rect key="frame" x="14" y="96" width="305" height="1"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.80392156862745101" green="0.80392156862745101" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <view contentMode="scaleToFill" id="UFr-og-Lbi">
-                            <rect key="frame" x="0.0" y="98" width="320" height="115"/>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UFr-og-Lbi">
+                            <rect key="frame" x="0.0" y="98" width="319" height="115"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="d7n-Ue-QXL">
-                                    <rect key="frame" x="15" y="36" width="297" height="23"/>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d7n-Ue-QXL">
+                                    <rect key="frame" x="16" y="36" width="296" height="23"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                     <state key="normal" title="Funds available">
@@ -143,14 +144,14 @@
                                         <action selector="useAllClicked:" destination="-1" eventType="touchUpInside" id="HRM-zU-WMG"/>
                                     </connections>
                                 </button>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="7ho-GV-ikp">
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="7ho-GV-ikp">
                                     <rect key="frame" x="15" y="12" width="40" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
                                     <color key="textColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.000" minimumFontSize="17" id="52" userLabel="Amount No Border Style Text Field - 0.00" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="52" userLabel="Amount No Border Style Text Field - 0.00" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
                                     <rect key="frame" x="68" y="8" width="117" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -160,31 +161,31 @@
                                         <outlet property="delegate" destination="-1" id="53"/>
                                     </connections>
                                 </textField>
-                                <view contentMode="scaleToFill" id="CCV-V9-it9" customClass="BCLine">
-                                    <rect key="frame" x="15" y="61" width="305" height="1"/>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CCV-V9-it9" customClass="BCLine">
+                                    <rect key="frame" x="16" y="61" width="303" height="1"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.80392156859999997" green="0.80392156859999997" blue="0.80392156859999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vGH-md-Ck3">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="USD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGH-md-Ck3">
                                     <rect key="frame" x="184" y="12" width="40" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
                                     <color key="textColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Fee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="Zhm-Jw-P4C">
+                                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Fee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Zhm-Jw-P4C">
                                     <rect key="frame" x="15" y="75" width="40" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
                                     <color key="textColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view hidden="YES" contentMode="scaleToFill" misplaced="YES" id="hE6-gR-aYg" customClass="BCLine">
-                                    <rect key="frame" x="15" y="112" width="305" height="1"/>
+                                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hE6-gR-aYg" customClass="BCLine">
+                                    <rect key="frame" x="16" y="112" width="303" height="1"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.80392156859999997" green="0.80392156859999997" blue="0.80392156859999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </view>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.00" minimumFontSize="17" id="qx4-XV-uhn" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.00" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qx4-XV-uhn" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
                                     <rect key="frame" x="231" y="8" width="81" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -194,7 +195,7 @@
                                         <outlet property="delegate" destination="-1" id="lWM-Kv-1GL"/>
                                     </connections>
                                 </textField>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="8CA-Iw-4Gl" userLabel="ToDisclose">
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8CA-Iw-4Gl" userLabel="ToDisclose">
                                     <rect key="frame" x="285" y="71" width="35" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="disclosure">
@@ -204,7 +205,7 @@
                                         <action selector="feeOptionsClicked:" destination="-1" eventType="touchUpInside" id="39o-JP-E3b"/>
                                     </connections>
                                 </button>
-                                <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.000" minimumFontSize="17" id="p7q-Ud-nYh" userLabel="Amount No Border Style Text Field - 0.00" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
+                                <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p7q-Ud-nYh" userLabel="Amount No Border Style Text Field - 0.00" customClass="BCSecureTextField" customModule="Blockchain" customModuleProvider="target">
                                     <rect key="frame" x="68" y="72" width="244" height="28"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -214,17 +215,44 @@
                                         <outlet property="delegate" destination="-1" id="MPG-3J-rVc"/>
                                     </connections>
                                 </textField>
-                                <view contentMode="scaleToFill" misplaced="YES" id="FK0-bF-ZTY">
-                                    <rect key="frame" x="0.0" y="61" width="320" height="52"/>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FK0-bF-ZTY">
+                                    <rect key="frame" x="0.0" y="61" width="319" height="52"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4">
-                            <rect key="frame" x="20" y="412" width="280" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A2t-gT-fpX" userLabel="Reject">
+                            <rect key="frame" x="20" y="420" width="279" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <color key="backgroundColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                            <state key="normal" title="Continue">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="highlighted">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Contact Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="qkl-tN-HpA">
+                            <rect key="frame" x="63" y="51" width="222" height="39"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
+                            <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                            <rect key="frame" x="20" y="420" width="279" height="40"/>
                             <color key="backgroundColor" red="0.094117647058823528" green="0.61176470588235299" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="O6j-0l-AGY"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                             <state key="normal" title="Continue">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -241,36 +269,22 @@
                                 <action selector="sendPaymentClicked:" destination="-1" eventType="touchUpInside" id="aHu-Zy-1yz"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A2t-gT-fpX" userLabel="Reject">
-                            <rect key="frame" x="20" y="412" width="280" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                            <state key="normal" title="Continue">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="4"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </button>
-                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Contact Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" id="qkl-tN-HpA">
-                            <rect key="frame" x="63" y="51" width="222" height="39"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
-                            <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="4" firstAttribute="leading" secondItem="Gzr-Wy-8Rh" secondAttribute="leading" constant="20" id="NZ4-7E-CcN"/>
+                        <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" constant="21" id="Y5y-AD-jHh"/>
+                        <constraint firstItem="4" firstAttribute="top" secondItem="Gzr-Wy-8Rh" secondAttribute="top" constant="420" id="imL-4O-tP2"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Gzr-Wy-8Rh" firstAttribute="leading" secondItem="3" secondAttribute="leading" id="5os-Vm-5J7"/>
+                <constraint firstAttribute="trailing" secondItem="Gzr-Wy-8Rh" secondAttribute="trailing" id="fSJ-4k-mEH"/>
+                <constraint firstItem="Gzr-Wy-8Rh" firstAttribute="top" secondItem="3" secondAttribute="top" id="mE6-xX-02l"/>
+                <constraint firstAttribute="bottom" secondItem="Gzr-Wy-8Rh" secondAttribute="bottom" id="w15-v9-JG0"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="324" y="378"/>
@@ -279,7 +293,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pPu-bJ-k6p">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pPu-bJ-k6p">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.094117647058823528" green="0.61176470588235299" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
@@ -294,7 +308,7 @@
                         <action selector="sendPaymentClicked:" destination="-1" eventType="touchUpInside" id="oLQ-V7-Yye"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YyQ-yX-XIF">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YyQ-yX-XIF">
                     <rect key="frame" x="270" y="0.0" width="50" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.48627450980392156" green="0.49019607843137253" blue="0.49803921568627452" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -316,7 +330,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="63">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="63">
                     <rect key="frame" x="212" y="162" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92156862750000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -337,14 +351,14 @@
                         <action selector="labelAddressClicked:" destination="-1" eventType="touchUpInside" id="73"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Address" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="64">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Address" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="64">
                     <rect key="frame" x="15" y="8" width="290" height="21"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Label" minimumFontSize="17" id="62" customClass="BCTextField" customModule="Blockchain" customModuleProvider="target">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Label" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="62" customClass="BCTextField" customModule="Blockchain" customModuleProvider="target">
                     <rect key="frame" x="15" y="37" width="290" height="30"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -363,18 +377,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please Wait" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zgn-Wx-Uwx">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please Wait" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zgn-Wx-Uwx">
                     <rect key="frame" x="40" y="90" width="240" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                     <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="tKj-lu-8bc">
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="tKj-lu-8bc">
                     <rect key="frame" x="150" y="60" width="20" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Pgx-k8-cTb">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pgx-k8-cTb">
                     <rect key="frame" x="0.0" y="432" width="320" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -403,6 +417,10 @@
             </tabBar>
             <viewControllers>
                 <viewController id="VBP-zm-B7S">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="o7n-Rg-dXs"/>
+                        <viewControllerLayoutGuide type="bottom" id="qeU-GK-045"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="30L-9f-Rgm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -411,6 +429,10 @@
                     <tabBarItem key="tabBarItem" title="Item 1" id="Stz-G2-YBO"/>
                 </viewController>
                 <viewController id="Ls1-wO-9hL">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NIc-3z-39d"/>
+                        <viewControllerLayoutGuide type="bottom" id="JSK-ia-0UP"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="BTi-cu-d5J">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -419,15 +441,11 @@
                     <tabBarItem key="tabBarItem" title="Item 2" id="ySA-tv-IsA"/>
                 </viewController>
             </viewControllers>
+            <point key="canvasLocation" x="-73" y="-258"/>
         </tabBarController>
     </objects>
     <resources>
         <image name="close" width="18" height="18"/>
         <image name="disclosure" width="11" height="17"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>

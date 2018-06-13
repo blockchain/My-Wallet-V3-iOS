@@ -41,6 +41,8 @@ typedef enum {
 
 @interface SendBitcoinViewController () <UITextFieldDelegate, TransferAllFundsDelegate, FeeSelectionDelegate, ConfirmPaymentViewDelegate, LegacyPrivateKeyDelegate>
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *continueButtonTopConstraint;
+
 @property (nonatomic) TransactionType transactionType;
 
 @property (nonatomic, readwrite) DestinationAddressSource addressSource;
@@ -99,6 +101,24 @@ BOOL displayingLocalSymbolSend;
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_KEY_LOADING_TEXT object:nil queue:nil usingBlock:^(NSNotification * notification) {
         self->sendProgressModalText.text = [notification object];
     }];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetTop = 20;
+    CGFloat safeAreaInsetBottom = 0;
+    CGFloat assetSelectorHeight = 36;
+    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
+    CGFloat tabBarHeight = 49;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    }
+    CGFloat topConstant = window.bounds.size.height - safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight - safeAreaInsetBottom;
+    _continueButtonTopConstraint.constant = topConstant - BUTTON_HEIGHT - 20;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -182,7 +202,6 @@ BOOL displayingLocalSymbolSend;
     
     CGFloat continueButtonOriginY = [self continuePaymentButtonOriginY];
     continuePaymentButton.frame = CGRectMake(0, continueButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT);
-    continuePaymentButton.center = CGPointMake(self.view.center.x, continuePaymentButton.center.y);
     
     rejectPaymentButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     

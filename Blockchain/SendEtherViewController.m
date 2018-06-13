@@ -68,7 +68,7 @@
     if (@available(iOS 11.0, *)) {
         CGRect safeAreaLayoutFrame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
         CGFloat height = safeAreaLayoutFrame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
-        self.view.frame = CGRectMake(0, safeAreaLayoutFrame.origin.y, safeAreaLayoutFrame.size.width, height);
+        self.view.frame = CGRectMake(0, 0, safeAreaLayoutFrame.size.width, height);
     } else {
         CGFloat height = window.frame.size.height - safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
         self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
