@@ -148,8 +148,6 @@
 
 -(void)didParsePairingCode:(NSDictionary *)dict
 {
-    [[LoadingViewPresenter sharedInstance] hideBusyView];
-
     WalletManager.sharedInstance.wallet.didPairAutomatically = YES;
 
     if (self.success) {
