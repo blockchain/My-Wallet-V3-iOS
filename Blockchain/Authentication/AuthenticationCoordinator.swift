@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 @objc class AuthenticationCoordinator: NSObject, Coordinator {
 
@@ -159,11 +160,18 @@ import Foundation
                 authenticateWithBiometrics()
             }
         } else {
-            NetworkManager.shared.checkForMaintenance(withCompletion: { response in
-                guard let message = response else { return }
-                print("Error checking for maintenance in wallet options: %@", message)
-                AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.Errors.error, handler: nil)
-            })
+            _ = WalletService.shared.walletOptions
+                .subscribeOn(MainScheduler.asyncInstance)
+                .observeOn(MainScheduler.instance)
+                .subscribe(onSuccess: { walletOptions in
+                    guard !walletOptions.downForMaintenance else {
+                        let message = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError
+                        AlertViewPresenter.shared.standardError(message: message)
+                        return
+                    }
+                }, onError: { _ in
+                    AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.requestFailedCheckConnection)
+                })
             showPasswordModal()
             AlertViewPresenter.shared.checkAndWarnOnJailbrokenPhones()
         }

@@ -97,6 +97,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
         }
     }
 
+    // TODO: remove
     func getWalletOptions(
         withCompletion success: @escaping (_ response: WalletOptions) -> Void,
         error: @escaping(_ error: String?
@@ -119,24 +120,6 @@ class NetworkManager: NSObject, URLSessionDelegate {
             }
         }
         task.resume()
-    }
-
-    /// Check for maintenance flag in wallet-options.
-    ///
-    /// - Parameter handler: takes an String argument as a response. If the response is non-nil,
-    ///  it is assumed that the user should not proceed due to server maintenance.
-    func checkForMaintenance(withCompletion handler: @escaping (_ response: String?) -> Void) {
-        getWalletOptions(withCompletion: { walletOptions in
-            if walletOptions.downForMaintenance == true {
-                guard let message = walletOptions.mobileInfo?.message else {
-                    handler(LocalizationConstants.Errors.invalidServerResponse)
-                    return
-                }
-                handler(message)
-                return
-            }
-            handler(nil)
-        }, error: handler)
     }
 
     // MARK: - URLSessionDelegate
