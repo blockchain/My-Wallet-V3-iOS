@@ -57,16 +57,20 @@
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     CGFloat safeAreaInsetTop = 20;
+    CGFloat assetSelectorHeight = 36;
+    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
+    CGFloat tabBarHeight = 49;
     if (@available(iOS 11.0, *)) {
         safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
     }
 
+    //: Frame must be calculated manually because there is no associated xib file with this class
     if (@available(iOS 11.0, *)) {
-        self.view.frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        CGRect safeAreaLayoutFrame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        CGFloat height = safeAreaLayoutFrame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
+        self.view.frame = CGRectMake(0, safeAreaLayoutFrame.origin.y, safeAreaLayoutFrame.size.width, height);
     } else {
-        CGFloat assetSelectorHeight = 36;
-        CGFloat tabBarHeight = 49;
-        CGFloat height = window.frame.size.height - safeAreaInsetTop - [ConstantsObjcBridge defaultNavigationBarHeight] - assetSelectorHeight - tabBarHeight;
+        CGFloat height = window.frame.size.height - safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
         self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
     }
     
