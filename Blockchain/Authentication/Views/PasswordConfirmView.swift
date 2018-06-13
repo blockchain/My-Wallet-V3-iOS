@@ -50,6 +50,10 @@ class PasswordConfirmView: BCModalContentView {
         labelDescription.text = text.count > 0 ? text : LocalizationConstants.Authentication.secondPasswordDefaultDescription
     }
 
+    func showKeyboard() {
+        textFieldPassword.becomeFirstResponder()
+    }
+
     override func modalWasDismissed() {
         ModalPresenter.shared.closeAllModals()
     }

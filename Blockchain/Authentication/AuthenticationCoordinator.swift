@@ -450,6 +450,8 @@ import Foundation
             showHeader: true,
             headerText: headerText
         )
+
+        passwordConfirmView.showKeyboard()
     }
 
     // MARK: - Internal
