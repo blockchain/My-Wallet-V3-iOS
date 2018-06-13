@@ -48,6 +48,7 @@ struct LocalizationConstants {
         static let noInternetConnectionPleaseCheckNetwork = NSLocalizedString("No internet connection available. Please check your network settings.", comment: "")
         static let warning = NSLocalizedString("Warning", comment: "")
         static let timedOut = NSLocalizedString("Connection timed out. Please check your internet connection.", comment: "")
+        static let siteMaintenanceError = NSLocalizedString("Blockchain's servers are currently under maintenance. Please try again later", comment: "")
         static let invalidServerResponse = NSLocalizedString("Invalid server response. Please try again later.", comment: "")
         static let invalidStatusCodeReturned = NSLocalizedString("Invalid Status Code Returned %@", comment: "")
         static let requestFailedCheckConnection = NSLocalizedString("Request failed. Please check your internet connection.", comment: "")

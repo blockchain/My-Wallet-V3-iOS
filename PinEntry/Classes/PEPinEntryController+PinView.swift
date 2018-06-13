@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 extension PEPinEntryController: PinView {
     @objc func validate(pin: Pin) {
@@ -20,8 +21,26 @@ extension PEPinEntryController: PinView {
             return
         }
 
-        let payload = PinPayload(pinCode: pin.toString, pinKey: pinKey)
-        _ = self.pinPresenter.validatePin(payload)
+        // Check for maintenance first, followed by validating the user's pin
+        showLoadingView(withText: LocalizationConstants.verifying)
+
+        _ = WalletService.shared.walletOptions
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] walletOptions in
+                guard let strongSelf = self else { return }
+                guard !walletOptions.downForMaintenance else {
+                    strongSelf.hideLoadingView()
+                    strongSelf.error(message: LocalizationConstants.Errors.siteMaintenanceError)
+                    return
+                }
+
+                let payload = PinPayload(pinCode: pin.toString, pinKey: pinKey)
+                _ = strongSelf.pinPresenter.validatePin(payload)
+            }, onError: { [weak self] error in
+                guard let strongSelf = self else { return }
+                strongSelf.hideLoadingView()
+                strongSelf.error(message: LocalizationConstants.Errors.invalidServerResponse)
+            })
     }
 
     func showLoadingView(withText text: String) {

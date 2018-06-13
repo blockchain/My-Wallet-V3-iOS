@@ -400,7 +400,7 @@ static PEViewController *VerifyController()
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.pinPresenter = [[PinPresenter alloc] initWithView:self interactor:[PinInteractor sharedInstance]];
+    self.pinPresenter = [[PinPresenter alloc] initWithView:self interactor:[PinInteractor sharedInstance] walletService: [WalletService sharedInstance]];
 }
 
 - (void)viewDidAppear:(BOOL)animated

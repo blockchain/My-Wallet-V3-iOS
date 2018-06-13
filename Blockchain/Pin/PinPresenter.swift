@@ -27,25 +27,43 @@ import RxSwift
 
     private let view: PinView
     private let interactor: PinInteractor
+    private let walletService: WalletService
 
-    @objc init(view: PinView, interactor: PinInteractor = PinInteractor.shared) {
+    @objc init(
+        view: PinView,
+        interactor: PinInteractor = PinInteractor.shared,
+        walletService: WalletService = WalletService.shared
+    ) {
         self.view = view
         self.interactor = interactor
+        self.walletService = walletService
     }
 
     /// Validates if the provided pin payload (i.e. pin code and pin key combination) is correct.
-    /// Calling this method will also invoked the necessary methods to the PinView.
+    /// Calling this method will also fetch the WalletOptions to see if the server is under maintenance.
+    /// If the site is under maintenance, the pin will not be validated to the pin-store.
     ///
     /// - Parameter pinPayload: the PinPayload
     /// - Returns: a Disposable
     func validatePin(_ pinPayload: PinPayload) -> Disposable {
         self.view.showLoadingView(withText: LocalizationConstants.verifying)
 
-        return interactor.validatePin(pinPayload)
-            .subscribeOn(MainScheduler.asyncInstance)
+        return Observable.combineLatest(
+            walletService.walletOptions.asObservable(),
+            interactor.validatePin(pinPayload).asObservable()
+        ) { (walletOptions, pinResponse) -> (WalletOptions, GetPinResponse) in
+            return (walletOptions, pinResponse)
+        }.subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { [weak self] response in
+            .subscribe(onNext: { [weak self] (walletOptions, response) in
                 guard let strongSelf = self else {
+                    return
+                }
+
+                guard !walletOptions.downForMaintenance else {
+                    strongSelf.view.hideLoadingView()
+                    let errorMessage = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError
+                    strongSelf.view.error(message: errorMessage)
                     return
                 }
 
@@ -71,12 +89,21 @@ import RxSwift
                     }
                     strongSelf.view.successPinValid(pinPassword: pinPassword)
                 }
-
             }, onError: { [weak self] error in
                 guard let strongSelf = self else {
                     return
                 }
                 strongSelf.view.hideLoadingView()
+
+                // Display error message from server, if any
+                if let walletServiceError = error as? WalletServiceError {
+                    if case let WalletServiceError.generic(message) = walletServiceError {
+                        let errorMessage = message ?? LocalizationConstants.Errors.invalidServerResponse
+                        strongSelf.view.error(message: errorMessage)
+                        return
+                    }
+                }
+
                 strongSelf.view.error(message: LocalizationConstants.Errors.invalidServerResponse)
             })
     }

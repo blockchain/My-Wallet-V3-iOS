@@ -21,8 +21,8 @@ struct WalletOptions {
     struct Mobile {
         let walletRoot: String?
 
-        init(_ response: [String: Any]) {
-            if let mobile = response[Keys.mobile] as? [String: String] {
+        init(json: JSON) {
+            if let mobile = json[Keys.mobile] as? [String: String] {
                 walletRoot = mobile[Keys.walletRoot]
             } else {
                 walletRoot = nil
@@ -35,8 +35,8 @@ struct WalletOptions {
     struct MobileInfo {
         let message: String?
 
-        init(_ response: [String: Any]) {
-            if let mobileInfo = response[Keys.mobile] as? [String: String] {
+        init(json: JSON) {
+            if let mobileInfo = json[Keys.mobile] as? [String: String] {
                 if let code = Locale.current.languageCode {
                     message = mobileInfo[code] ?? mobileInfo["en"]
                 } else {
@@ -52,9 +52,9 @@ struct WalletOptions {
 }
 
 extension WalletOptions {
-    init(response: [String: Any]) {
-        downForMaintenance = response[Keys.maintenance] as? Bool ?? false
-        self.mobile = WalletOptions.Mobile(response)
-        self.mobileInfo = WalletOptions.MobileInfo(response)
+    init(json: JSON) {
+        downForMaintenance = json[Keys.maintenance] as? Bool ?? false
+        self.mobile = WalletOptions.Mobile(json: json)
+        self.mobileInfo = WalletOptions.MobileInfo(json: json)
     }
 }

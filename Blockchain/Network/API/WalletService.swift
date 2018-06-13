@@ -9,11 +9,11 @@
 import Foundation
 import RxSwift
 
-typealias JSON = [String: Any]
-
 /// Service that interacts with the Blockchain API
-class WalletService {
+@objc class WalletService: NSObject {
     static let shared = WalletService()
+
+    @objc class func sharedInstance() -> WalletService { return shared }
 
     private let networkManager: NetworkManager
 
@@ -23,15 +23,31 @@ class WalletService {
 
     // MARK: - Public
 
+    /// A Single returning the WalletOptions which contains dynamic flags for configuring the app.
+    var walletOptions: Single<WalletOptions> {
+        return networkManager.requestJsonOrString(
+            BlockchainAPI.shared.walletOptionsUrl,
+            method: .get
+        ).asSingle().map {
+            guard $0.statusCode == 200 else {
+                throw WalletServiceError.generic(message: nil)
+            }
+            guard let json = $1 as? JSON else {
+                throw WalletServiceError.jsonParseError
+            }
+            return WalletOptions(json: json)
+        }
+    }
+
     /// Validates if the provided pin payload (i.e. pin code and pin key combination) is correct.
     ///
     /// - Parameter pinPayload: the PinPayload
-    /// - Returns: an Observable returning the response
+    /// - Returns: an Single returning the response
     func validatePin(_ pinPayload: PinPayload) -> Single<GetPinResponse> {
         return pinStore(pinPayload: pinPayload, method: "get").map {
             guard let responseJson = $1 as? JSON else {
-                let errorMessage = $1 as? String ?? ""
-                throw PinStoreError(errorMessage: errorMessage)
+                let errorMessage = $1 as? String
+                throw WalletServiceError.generic(message: errorMessage)
             }
             return GetPinResponse(response: responseJson)
         }

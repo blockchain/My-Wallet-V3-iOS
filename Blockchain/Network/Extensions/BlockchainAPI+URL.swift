@@ -21,7 +21,7 @@ extension BlockchainAPI {
     }
 
     var walletOptionsUrl: String {
-        return "https://\(Endpoints.blockchainWallet.rawValue)/Resources/wallet-options.json"
+        return "\(walletUrl)/Resources/wallet-options.json"
     }
 
     var buyWebViewUrl: String? {

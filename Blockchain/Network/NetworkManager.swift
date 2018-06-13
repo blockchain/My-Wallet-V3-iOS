@@ -11,6 +11,8 @@ import RxSwift
 
 typealias AuthChallengeHandler = (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
 
+typealias JSON = [String: Any]
+
 typealias URLParameters = [String: Any]
 
 /**
@@ -109,11 +111,11 @@ class NetworkManager: NSObject, URLSessionDelegate {
                     error(LocalizationConstants.Errors.requestFailedCheckConnection)
                     return
                 }
-                guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] else {
+                guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON else {
                     error(LocalizationConstants.Errors.invalidServerResponse)
                     return
                 }
-                success(WalletOptions(response: json!))
+                success(WalletOptions(json: json!))
             }
         }
         task.resume()
