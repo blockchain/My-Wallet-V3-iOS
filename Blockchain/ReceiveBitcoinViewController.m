@@ -23,8 +23,8 @@
 
 #define BOTTOM_CONTAINER_HEIGHT_PARTIAL 101
 #define BOTTOM_CONTAINER_HEIGHT_FULL 201
-#define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_DEFAULT 220
-#define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S 210
+#define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_DEFAULT 226
+#define BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S 224
 #define ESTIMATED_KEYBOARD_PLUS_ACCESSORY_VIEW_HEIGHT 205.5
 
 @interface ReceiveBitcoinViewController() <UIActivityItemSource, AddressSelectionDelegate>
@@ -32,7 +32,6 @@
 @property (nonatomic) QRCodeGenerator *qrCodeGenerator;
 @property (nonatomic) uint64_t lastRequestedAmount;
 @property (nonatomic) BOOL firstLoading;
-@property (nonatomic) BCNavigationController *contactRequestNavigationController;
 @property (nonatomic) BCLine *lineBelowFromField;
 @property (nonatomic) BCSecureTextField *descriptionField;
 @property (nonatomic) UIView *descriptionContainerView;
@@ -49,6 +48,7 @@
 
 @property (nonatomic) NSString *detailAddress;
 @property (nonatomic) NSString *detailLabel;
+@property (nonatomic) CGFloat safeAreaInsetTop;
 @end
 
 @implementation ReceiveBitcoinViewController
@@ -67,14 +67,30 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
+    CGFloat assetSelectorHeight = 36;
+    CGFloat tabBarHeight = 49;
+    if (@available(iOS 11.0, *)) {
+        CGRect frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        CGFloat posX = frame.origin.x;
+        CGFloat posY = navBarHeight;
+        CGFloat height = frame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
+        CGFloat width = frame.size.width;
+        _safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        self.view.frame = CGRectMake(posX, posY, width, height);
+    } else {
+        _safeAreaInsetTop = 20;
+        CGFloat height = window.bounds.size.height - _safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
+        self.view.frame = CGRectMake(0,
+                                     navBarHeight,
+                                     window.bounds.size.width,
+                                     height);
+    }
     
     self.firstLoading = YES;
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
-    
+
     [self setupAmountInputAccessoryView];
     [self setupTotalAmountView];
     [self setupBottomViews];
@@ -94,16 +110,6 @@
     self.firstLoading = NO;
     
     [self updateUI];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -173,7 +179,6 @@
     
     self.bottomContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - containerHeightPlusButtonSpace, self.view.frame.size.width, BOTTOM_CONTAINER_HEIGHT_PARTIAL)];
     self.bottomContainerView.clipsToBounds = YES;
-    [self.view addSubview:self.bottomContainerView];
     
     CGFloat leftPadding = 0;
     if (self.assetType == LegacyAssetTypeBitcoin) {
@@ -276,9 +281,8 @@
     self.descriptionField.returnKeyType = UIReturnKeyDone;
     self.descriptionField.delegate = self;
     [self.descriptionContainerView addSubview:self.descriptionField];
-    
-    CGFloat spacing = 12;
-    CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - spacing;
+
+    CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - 20;
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.bottomContainerView.center.x, requestButton.center.y);
     [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
@@ -294,6 +298,8 @@
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     [self.view addGestureRecognizer:tapGesture];
+
+    [self.view addSubview:self.bottomContainerView];
 }
 
 - (void)selectDefaultDestination
@@ -367,16 +373,15 @@
 {
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.bottomContainerView.frame.origin.y)];
     
-    if (!(IS_USING_SCREEN_SIZE_4S) && self.assetType == LegacyAssetTypeBitcoinCash) {
-        self.headerView.center = CGPointMake(self.headerView.center.x, (self.bottomContainerView.frame.origin.y + AMOUNT_INPUT_VIEW_HEIGHT)/2);
-    }
-    
-    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 42)];
+    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                           (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? 0 : 10,
+                                                                           self.view.frame.size.width - 40,
+                                                                           42)];
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
-    instructionsLabel.text = IS_USING_SCREEN_SIZE_4S ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    instructionsLabel.text = (self.assetType == LegacyAssetTypeBitcoin && IS_USING_SCREEN_SIZE_4S) ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
     [instructionsLabel sizeToFit];
     if (instructionsLabel.frame.size.height > 40) [instructionsLabel changeHeight:40];
     instructionsLabel.center = CGPointMake(self.view.frame.size.width/2, instructionsLabel.center.y);
@@ -399,7 +404,7 @@
             }
             instructionsLabel.center = CGPointMake(self.headerView.center.x, qrCodeMainImageView.frame.origin.y/2);
         } else {
-            [qrCodeMainImageView changeYPosition:0];
+            [qrCodeMainImageView changeYPosition:instructionsLabel.frame.origin.y + instructionsLabel.frame.size.height + 5];
         }
         
         [self.headerView addSubview:qrCodeMainImageView];
@@ -719,14 +724,9 @@
     if (self.bottomContainerView.frame.origin.y == 0) {
         [self.bottomContainerView changeYPosition:self.view.frame.size.height - BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S];
     }
-    
-//    if (WalletManager.sharedInstance.wallet.contacts.count > 0) {
-//        self.selectFromButton.hidden = NO;
-//        self.whatsThisButton.hidden = YES;
-//    } else {
-        self.selectFromButton.hidden = YES;
-        self.whatsThisButton.hidden = NO;
-//    }
+
+    self.selectFromButton.hidden = YES;
+    self.whatsThisButton.hidden = NO;
 
     self.receiveToLabel.text = self.mainLabel;
     self.mainAddressLabel.text = [[self.mainAddress componentsSeparatedByString:@":"] lastObject];
@@ -846,9 +846,10 @@
     if (textField == self.amountInputView.fiatField || textField == self.amountInputView.btcField) {
         self.lastSelectedField = textField;
         
+        CGFloat additionalSpaceForiPhoneX = (_safeAreaInsetTop == 44) ? 41 : 0;
         self.view.scrollEnabled = YES;
         self.view.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + (self.view.frame.size.height - self.bottomContainerView.frame.origin.y + 50));
-        [self.view scrollRectToVisible:CGRectMake(0, self.bottomContainerView.frame.origin.y + self.amountInputView.frame.size.height + ESTIMATED_KEYBOARD_PLUS_ACCESSORY_VIEW_HEIGHT, 1, 1) animated:YES];
+        [self.view scrollRectToVisible:CGRectMake(0, self.bottomContainerView.frame.origin.y + self.amountInputView.frame.size.height + ESTIMATED_KEYBOARD_PLUS_ACCESSORY_VIEW_HEIGHT + additionalSpaceForiPhoneX, 1, 1) animated:YES];
     }
     
     if (textField == self.descriptionField) {

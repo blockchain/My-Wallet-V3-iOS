@@ -18,6 +18,7 @@
 @property (nonatomic) UITextView *addressTextView;
 @property (nonatomic) UILabel *instructionsLabel;
 @property (nonatomic) NSString *address;
+@property (nonatomic) CGFloat safeAreaInsetTop;
 @end
 
 @implementation ReceiveEtherViewController
@@ -26,34 +27,48 @@
 {
     [super viewDidLoad];
     
-    CGFloat statusBarAdjustment = [[UIApplication sharedApplication] statusBarFrame].size.height > DEFAULT_STATUS_BAR_HEIGHT ? DEFAULT_STATUS_BAR_HEIGHT : 0;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
+    CGFloat assetSelectorHeight = 36;
+    CGFloat tabBarHeight = 49;
+    if (@available(iOS 11.0, *)) {
+        CGRect frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        CGFloat posX = frame.origin.x;
+        CGFloat posY = navBarHeight;
+        CGFloat height = frame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
+        CGFloat width = frame.size.width;
+        _safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        self.view.frame = CGRectMake(posX, posY, width, height);
+    } else {
+        _safeAreaInsetTop = 20;
+        CGFloat height = window.bounds.size.height - _safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
+        self.view.frame = CGRectMake(0,
+                                     navBarHeight,
+                                     window.bounds.size.width,
+                                     height);
+    }
 
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT - statusBarAdjustment);
-    CGFloat imageWidth = IS_USING_SCREEN_SIZE_4S ? 170 : 200;
-
-    UIImageView *qrCodeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 120 - 12, imageWidth, imageWidth)];
-    qrCodeImageView.center = CGPointMake(self.view.center.x, self.view.frame.size.height/2 - DEFAULT_HEADER_HEIGHT/2);
-    [self.view addSubview:qrCodeImageView];
-    
-    UITapGestureRecognizer *tapMainQRGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainQRClicked)];
-    [qrCodeImageView addGestureRecognizer:tapMainQRGestureRecognizer];
-    qrCodeImageView.userInteractionEnabled = YES;
-    self.qrCodeImageView = qrCodeImageView;
-
-    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 0)];
+    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width - 40, 0)];
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
     instructionsLabel.text = BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
     [instructionsLabel sizeToFit];
-    [instructionsLabel changeYPosition:qrCodeImageView.frame.origin.y - instructionsLabel.frame.size.height - 8];
     instructionsLabel.center = CGPointMake(self.view.center.x, instructionsLabel.center.y);
     [self.view addSubview:instructionsLabel];
     self.instructionsLabel = instructionsLabel;
+
+    CGFloat imageWidth = IS_USING_SCREEN_SIZE_4S ? 170 : 200;
+    CGFloat qrCodeImageViewPosX = (self.view.frame.size.width / 2) - (imageWidth / 2);
+    CGFloat qrCodeImageViewPosY = instructionsLabel.frame.origin.y + instructionsLabel.frame.size.height + 10;
+    UIImageView *qrCodeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(qrCodeImageViewPosX, qrCodeImageViewPosY, imageWidth, imageWidth)];
+    [self.view addSubview:qrCodeImageView];
+
+    UITapGestureRecognizer *tapMainQRGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainQRClicked)];
+    [qrCodeImageView addGestureRecognizer:tapMainQRGestureRecognizer];
+    qrCodeImageView.userInteractionEnabled = YES;
+    self.qrCodeImageView = qrCodeImageView;
     
     UITextView *addressTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 50)];
     addressTextView.textColor = COLOR_TEXT_DARK_GRAY;
@@ -71,8 +86,7 @@
     addressTextView.userInteractionEnabled = YES;
     self.addressTextView = addressTextView;
     
-    CGFloat spacing = 12;
-    CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - spacing;
+    CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - 20;
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.view.center.x, requestButton.center.y);
     [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
