@@ -93,7 +93,8 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.syncingWallet)
         }
 
-        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(pinController, animated: false)
+        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+        rootViewController?.topMostViewController?.present(pinController, animated: true)
     }
 
     private func reopenChangePin() {

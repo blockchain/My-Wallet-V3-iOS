@@ -100,43 +100,46 @@ import Foundation
     }
 
     /// Displays the standard error alert
-    @objc func standardError(message: String, title: String = LocalizationConstants.Errors.error, handler: AlertConfirmHandler? = nil) {
-        standardNotify(message: message, title: title, handler: handler)
+    @objc func standardError(
+        message: String,
+        title: String = LocalizationConstants.Errors.error,
+        in viewController: UIViewController? = nil,
+        handler: AlertConfirmHandler? = nil
+    ) {
+        standardNotify(message: message, title: title, in: viewController, handler: handler)
     }
 
-    @objc func standardNotify(message: String, title: String, handler: AlertConfirmHandler? = nil) {
+    @objc func standardNotify(
+        message: String,
+        title: String,
+        in viewController: UIViewController? = nil,
+        handler: AlertConfirmHandler? = nil
+    ) {
         let standardAction = UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: handler)
-        standardNotify(message: message, title: title, actions: [standardAction])
+        standardNotify(message: message, title: title, actions: [standardAction], in: viewController)
     }
 
     /// Allows custom actions to be included in the standard alert presentation
-    @objc func standardNotify(message: String, title: String, actions: [UIAlertAction]) {
+    @objc func standardNotify(
+        message: String,
+        title: String,
+        actions: [UIAlertAction],
+        in viewController: UIViewController? = nil
+    ) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         actions.forEach { alert.addAction($0) }
         if actions.isEmpty {
             alert.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil))
         }
-        standardNotify(alert: alert)
+        standardNotify(alert: alert, in: viewController)
     }
 
-    private func standardNotify(alert: UIAlertController) {
+    private func standardNotify(alert: UIAlertController, in viewController: UIViewController? = nil) {
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow
-            guard let topMostViewController = window?.rootViewController?.topMostViewController else {
-                window?.rootViewController?.present(alert, animated: true)
-                return
-            }
-
-            if !(topMostViewController is PEPinEntryController) {
-                NotificationCenter.default.addObserver(
-                    alert,
-                    selector: #selector(UIViewController.autoDismiss),
-                    name: NSNotification.Name.UIApplicationDidEnterBackground,
-                    object: nil
-                )
-            }
-
-            topMostViewController.present(alert, animated: true)
+            let rootController = window?.rootViewController
+            let presentingViewController = viewController ?? rootController ?? rootController?.topMostViewController
+            presentingViewController?.present(alert, animated: true)
         }
     }
 

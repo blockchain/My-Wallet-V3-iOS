@@ -294,7 +294,7 @@ static PEViewController *VerifyController()
 				c.delegate = self;
 				self.viewControllers = [NSArray arrayWithObjects:c, [self.viewControllers objectAtIndex:0], nil];
 				[self popViewControllerAnimated:NO];
-                [self presentViewController:alert animated:YES completion:nil];
+                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 			} else {
 				[self.pinDelegate pinEntryController:self changedPin:[controller.pin intValue]];
 			}
@@ -335,7 +335,8 @@ static PEViewController *VerifyController()
         ];
         [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[LocalizationConstantsObjcBridge pinCodeCommonMessage]
                                                                title:[LocalizationConstantsObjcBridge warning]
-                                                             actions:actions];
+                                                             actions:actions
+                                                                  in:self];
         return;
     }
 
@@ -366,6 +367,7 @@ static PEViewController *VerifyController()
     __weak PEPinEntryController *weakSelf = self;
     [AlertViewPresenter.sharedInstance standardErrorWithMessage:errorMessage
                                                           title:[LocalizationConstantsObjcBridge error]
+                                                             in:self
                                                         handler:^(UIAlertAction * _Nonnull action) {
                                                             [weakSelf reset];
                                                         }];

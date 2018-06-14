@@ -32,7 +32,7 @@ typedef enum {
                 if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
                     [AlertViewPresenter.sharedInstance showNeedsCameraPermissionAlert];
                 } else {
-                    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error handler:nil];
+                    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[error localizedDescription] title:LocalizationConstantsObjcBridge.error in:self handler:nil];
                 }
             }
 

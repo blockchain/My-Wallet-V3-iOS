@@ -74,7 +74,7 @@
 
 - (void)onPaymentReceivedWithAmount:(NSString * _Nonnull)amount assetType:(enum AssetType)assetType
 {
-    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED handler:nil];
+    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED in:self handler:nil];
 
     LegacyAssetType legacyType = [AssetTypeLegacyHelper convertToLegacy: assetType];
     
@@ -338,7 +338,7 @@
 - (void)didReceivePaymentNoticeWithNotice:(NSString *_Nullable)notice
 {
     if (notice && self.tabViewController.selectedIndex == TAB_SEND && !LoadingViewPresenter.sharedInstance.isLoadingShown && !AuthenticationCoordinator.shared.pinEntryViewController && !self.tabViewController.presentedViewController) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] in:self handler: nil];
     }
 }
 
@@ -361,7 +361,7 @@
     
     [[ModalPresenter sharedInstance] closeAllModals];
 
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PAYMENT_SENT_ETHER title:[LocalizationConstantsObjcBridge success] handler:nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PAYMENT_SENT_ETHER title:[LocalizationConstantsObjcBridge success] in:self handler:nil];
     
     [self showTransactionsAnimated:YES];
     
@@ -377,7 +377,7 @@
 {
     [[ModalPresenter sharedInstance] closeAllModals];
 
-    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] handler:nil];
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:error title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
 }
 
 - (void)didUpdateEthPaymentWithPayment:(NSDictionary * _Nonnull)payment
@@ -422,7 +422,7 @@
 
 - (void)didErrorWhenGettingFiatAtTimeWithError:(NSString * _Nullable)error
 {
-    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:BC_STRING_ERROR_GETTING_FIAT_AT_TIME title:BC_STRING_ERROR handler:nil];
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:BC_STRING_ERROR_GETTING_FIAT_AT_TIME title:BC_STRING_ERROR in:self handler:nil];
 }
 
 #pragma mark - Receive

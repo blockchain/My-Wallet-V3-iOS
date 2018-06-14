@@ -802,7 +802,7 @@
     };
 
     self.context[@"objc_on_fetch_bch_history_error"] = ^(JSValue *error) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR in:nil handler: nil];
     };
     
     self.context[@"objc_did_get_bitcoin_cash_exchange_rates"] = ^(JSValue *result) {
@@ -2522,14 +2522,14 @@
                 DLog(@"Error getting approximate quote: %@", error);
                 NSInteger cancelledErrorCode = -999;
                 if (error.code != cancelledErrorCode) {
-                    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_APPROXIMATE_QUOTE_ARGUMENT_MESSAGE, error] title:BC_STRING_ERROR handler: nil];
+                    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_APPROXIMATE_QUOTE_ARGUMENT_MESSAGE, error] title:BC_STRING_ERROR in:nil handler:nil];
                 }
             } else {
                 NSError *jsonError;
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
                 if (result[DICTIONARY_KEY_ERROR] && [result[DICTIONARY_KEY_ERROR] isKindOfClass:[NSDictionary class]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_APPROXIMATE_QUOTE_ARGUMENT_MESSAGE, result[DICTIONARY_KEY_ERROR][DICTIONARY_KEY_MESSAGE]] title:BC_STRING_ERROR handler: nil];
+                        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_APPROXIMATE_QUOTE_ARGUMENT_MESSAGE, result[DICTIONARY_KEY_ERROR][DICTIONARY_KEY_MESSAGE]] title:BC_STRING_ERROR in:nil handler:nil];
                     });
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -3002,7 +3002,9 @@
 - (void)upgrade_success
 {
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge upgradeSuccess]
-                                                             title:[LocalizationConstantsObjcBridge upgradeSuccessTitle] handler: nil];
+                                                             title:[LocalizationConstantsObjcBridge upgradeSuccessTitle]
+                                                                in: nil
+                                                           handler: nil];
 }
 
 #pragma mark - Callbacks from JS to Obj-C
@@ -3216,14 +3218,14 @@
 
     NSRange errorSavingWalletStringRange = [message rangeOfString:@"Error Saving Wallet" options:NSCaseInsensitiveSearch range:NSMakeRange(0, message.length) locale:[NSLocale currentLocale]];
     if (errorSavingWalletStringRange.location != NSNotFound) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_SAVING_WALLET_CHECK_FOR_OTHER_DEVICES title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_SAVING_WALLET_CHECK_FOR_OTHER_DEVICES title:BC_STRING_ERROR in:nil handler:nil];
         return;
     }
 
     if ([type isEqualToString:@"error"]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler: nil];
     } else if ([type isEqualToString:@"info"]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge information] title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge information] title:BC_STRING_ERROR in:nil handler: nil];
     }
 }
 
@@ -3237,12 +3239,12 @@
         NSRange identifierRange = [message rangeOfString:BC_STRING_IDENTIFIER options:NSCaseInsensitiveSearch range:NSMakeRange(0, message.length) locale:[NSLocale currentLocale]];
         NSRange connectivityErrorRange = [message rangeOfString:ERROR_FAILED_NETWORK_REQUEST options:NSCaseInsensitiveSearch range:NSMakeRange(0, message.length) locale:[NSLocale currentLocale]];
         if (identifierRange.location != NSNotFound) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
             [self error_restoring_wallet];
             return;
         } else if (connectivityErrorRange.location != NSNotFound) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION_LONG * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR handler: nil];
+                [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR in:nil handler:nil];
             });
             [self error_restoring_wallet];
             return;
@@ -3250,7 +3252,7 @@
 
         if (![KeychainItemWrapper guid]) {
             // This error is used whe trying to login with incorrect passwords or when the account is locked, so present an alert if the app has no guid, since it currently conflicts with makeNotice when backgrounding after changing password in-app
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
         }
     }
 }
@@ -3476,7 +3478,7 @@
 - (void)on_change_currency_error
 {
     DLog(@"on_change_local_currency_error");
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SETTINGS_ERROR_LOADING_MESSAGE title:BC_STRING_SETTINGS_ERROR_UPDATING_TITLE handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SETTINGS_ERROR_LOADING_MESSAGE title:BC_STRING_SETTINGS_ERROR_UPDATING_TITLE in:nil handler:nil];
 }
 
 - (void)on_get_account_info_success:(NSString *)accountInfo
@@ -3651,15 +3653,15 @@
 
     if (updateType == FeeUpdateTypeConfirm) {
         if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR in:nil handler:nil];
         } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
             id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
             uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR in:nil handler:nil];
         } else if ([message isEqualToString:ERROR_FETCH_UNSPENT]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR in:nil handler:nil];
         } else {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
         }
 
         if ([self.delegate respondsToSelector:@selector(enableSendPaymentButtons)]) {
@@ -3692,7 +3694,7 @@
 - (void)on_error_creating_new_address:(NSString*)error
 {
     DLog(@"on_error_creating_new_address");
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_add_new_account
@@ -3709,7 +3711,7 @@
 - (void)on_error_add_new_account:(NSString*)error
 {
     DLog(@"on_error_generating_new_address");
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_success_get_recovery_phrase:(NSString*)phrase
@@ -3736,13 +3738,13 @@
     DLog(@"on_error_recover_with_passphrase:");
     [self loading_stop];
     if ([error isEqualToString:ERROR_INVALID_PASSPHRASE]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_RECOVERY_PHRASE title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_RECOVERY_PHRASE title:BC_STRING_ERROR in:nil handler:nil];
     } else if ([error isEqualToString:@""]) {
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
     } else if ([error isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR in:nil handler:nil];
     } else {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
     }
     if ([delegate respondsToSelector:@selector(didFailRecovery)]) {
         [delegate didFailRecovery];
@@ -3770,13 +3772,13 @@
 - (void)on_error_downloading_account_settings
 {
     DLog(@"on_error_downloading_account_settings");
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SETTINGS_ERROR_LOADING_MESSAGE title:BC_STRING_SETTINGS_ERROR_LOADING_TITLE handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SETTINGS_ERROR_LOADING_MESSAGE title:BC_STRING_SETTINGS_ERROR_LOADING_TITLE in:nil handler:nil];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:USER_DEFAULTS_KEY_LOADED_SETTINGS];
 }
 
 - (void)on_update_email_error
 {
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_error_get_history:(NSString *)error
@@ -3799,13 +3801,13 @@
 
 - (void)on_resend_two_factor_sms_error:(NSString *)error
 {
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)wrong_two_factor_code:(NSString *)error
 {
     self.twoFactorInput = nil;
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_change_notifications_success
@@ -3957,7 +3959,7 @@
 
 - (void)on_get_pending_trades_error:(JSValue *)error
 {
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[error toString] title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_fetch_eth_history_success
@@ -4123,7 +4125,7 @@
     if ([error isEqualToString:ERROR_NO_FREE_OUTPUTS_TO_SPEND]) {
         [self.delegate didGetAvailableBtcBalance:nil];
     } else {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_BALANCE_ARGUMENT_ASSET_ARGUMENT_MESSAGE, currencySymbol, error] title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_ERROR_GETTING_BALANCE_ARGUMENT_ASSET_ARGUMENT_MESSAGE, currencySymbol, error] title:BC_STRING_ERROR in:nil handler:nil];
     }
 }
 
@@ -4151,7 +4153,7 @@
         [[LoadingViewPresenter sharedInstance] hideBusyView];
 
         NSString *errorMessage = [result objectForKey:DICTIONARY_KEY_MESSAGE];
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:errorMessage title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:errorMessage title:BC_STRING_ERROR in:nil handler:nil];
     });
 }
 
@@ -4611,7 +4613,7 @@
     });
 #endif
 
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:decription title:BC_STRING_ERROR handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:decription title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 #pragma mark - Settings Helpers

@@ -357,15 +357,15 @@
     self.toAddress = self.toField.text;
     
     if (self.toAddress == nil || self.toAddress.length == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_YOU_MUST_ENTER_DESTINATION_ADDRESS title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_YOU_MUST_ENTER_DESTINATION_ADDRESS title:BC_STRING_ERROR in:self handler:nil];
         return;
     } else if (![self isEtherAddress:self.toAddress]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, self.toAddress] title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, self.toAddress] title:BC_STRING_ERROR in:self handler:nil];
         return;
     }
     
     if ([self.ethAmount isEqualToNumber:@0]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_SEND_VALUE title:BC_STRING_ERROR in:self handler:nil];
         return;
     }
     
@@ -498,7 +498,7 @@
 - (void)selectToAddress:(NSString *)address
 {
     if (address == nil || ![self isEtherAddress:address]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR in:self handler:nil];
         return;
     }
     
