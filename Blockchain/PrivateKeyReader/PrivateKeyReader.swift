@@ -52,7 +52,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
 
     private var acceptPublicKeys = false
 
-    private var publicKey: String?
+    private var assetAddress: AssetAddress?
 
     private var loadingText: String
 
@@ -62,11 +62,11 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     ///   - assetType: the asset type used in the key import context
     ///   - acceptPublicKeys: accept public keys during scan
     ///   - publicKey: the public key used for scanning the respective private key
-    init?(assetType: AssetType, acceptPublicKeys: Bool, publicKey: String?) {
+    init?(assetType: AssetType, acceptPublicKeys: Bool, assetAddress: AssetAddress?) {
         self.assetType = assetType
         legacyAssetType = LegacyAssetType.bitcoin
         self.acceptPublicKeys = acceptPublicKeys
-        self.publicKey = publicKey
+        self.assetAddress = assetAddress
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)
         self.modalTransitionStyle = .crossDissolve
@@ -76,11 +76,11 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     }
 
     // TODO: remove once AccountsAndAddresses and SendBitcoinViewController are migrated to Swift
-    @objc init?(assetType: LegacyAssetType, acceptPublicKeys: Bool, publicKey: String?) {
+    @objc init?(assetType: LegacyAssetType, acceptPublicKeys: Bool, assetAddress: AssetAddress?) {
         legacyAssetType = assetType
         self.assetType = nil
         self.acceptPublicKeys = acceptPublicKeys
-        self.publicKey = publicKey
+        self.assetAddress = assetAddress
         loadingText = LocalizationConstants.AddressAndKeyImport.loadingImportKey
         super.init(nibName: nil, bundle: nil)
         self.modalTransitionStyle = .crossDissolve
@@ -193,7 +193,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
             LoadingViewPresenter.shared.showBusyView(withLoadingText: self.loadingText)
         }
 
-        self.dismiss(animated: true) {
+        self.dismiss(animated: true) { [unowned self] in
             let deadlineTime = DispatchTime.now() + Constants.Animation.duration
             DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
                 let scheme = "\(Constants.Schemes.bitcoin):"
@@ -229,7 +229,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
                     return
                 }
                 //: Pass valid private key back via success handler
-                self.delegate?.didFinishScanning(scannedKey, for: nil)
+                self.delegate?.didFinishScanning(scannedKey, for: self.assetAddress)
                 // TODO: remove once LegacyPrivateKeyDelegate is deprecated
                 self.legacyDelegate?.didFinishScanning(scannedKey)
             }

@@ -203,7 +203,7 @@
                                            assetType:self.assetType
                                     acceptPublicKeys:YES
                                          loadingText:[LocalizationConstantsObjcBridge loadingImportKey]
-                                           publicKey:nil];
+                                        assetAddress:nil];
 }
 
 #pragma mark - LegacyPrivateKeyDelegate

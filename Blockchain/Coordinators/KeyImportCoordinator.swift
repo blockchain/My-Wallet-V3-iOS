@@ -41,6 +41,10 @@ import Foundation
     private init(walletManager: WalletManager = WalletManager.shared) {
         self.walletManager = walletManager
         super.init()
+        initialize()
+    }
+
+    @objc func initialize() {
         self.walletManager.keyImportDelegate = self
     }
 
@@ -51,8 +55,8 @@ import Foundation
                assetType: AssetType = .bitcoin,
                acceptPublicKeys: Bool = false,
                loadingText: String = LocalizationConstants.AddressAndKeyImport.loadingImportKey,
-               publicKey: String? = nil) {
-        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, publicKey: publicKey)
+               assetAddress: AssetAddress? = nil) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, assetAddress: assetAddress)
         guard privateKeyReader != nil else { return }
         privateKeyReader!.delegate = delegate
         privateKeyReader!.startReadingQRCode()
@@ -64,8 +68,8 @@ import Foundation
                      assetType: LegacyAssetType = .bitcoin,
                      acceptPublicKeys: Bool = false,
                      loadingText: String = LocalizationConstants.AddressAndKeyImport.loadingImportKey,
-                     publicKey: String? = nil) {
-        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, publicKey: publicKey)
+                     assetAddress: AssetAddress? = nil) {
+        privateKeyReader = PrivateKeyReader(assetType: assetType, acceptPublicKeys: acceptPublicKeys, assetAddress: assetAddress)
         guard privateKeyReader != nil else { return }
         privateKeyReader!.legacyDelegate = delegate
         privateKeyReader!.startReadingQRCode()
@@ -245,13 +249,13 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
             return
         }
 
-        guard let rootVC = UIApplication.shared.keyWindow?.rootViewController else {
-            fatalError("The rootViewController was not set!")
+        guard let topVC = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController else {
+            fatalError("topMostViewController is nil")
         }
-        start(with: self, in: rootVC)
+        start(with: self, in: topVC, assetAddress: address)
 
         // TODO: `lastScannedWatchOnlyAddress` needs to be of type AssetAddress, not String
-        walletManager.wallet.lastScannedWatchOnlyAddress = address.description
+        walletManager.wallet.lastScannedWatchOnlyAddress = address.address
     }
 }
 
@@ -259,7 +263,7 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
 
 extension KeyImportCoordinator: PrivateKeyReaderDelegate {
     func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
-        walletManager.wallet.addKey(privateKey, toWatchOnlyAddress: address?.description)
+        walletManager.wallet.addKey(privateKey, toWatchOnlyAddress: address?.address)
     }
 
     func didFinishScanningWithError(_ error: PrivateKeyReaderError) {

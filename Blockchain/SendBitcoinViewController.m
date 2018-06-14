@@ -1051,7 +1051,7 @@ BOOL displayingLocalSymbolSend;
                                            assetType:self.assetType
                                     acceptPublicKeys:NO
                                          loadingText:[LocalizationConstantsObjcBridge loadingProcessingKey]
-                                           publicKey:nil];
+                                        assetAddress:nil];
 }
 
 #pragma mark - LegacyPrivateKeyDelegate
