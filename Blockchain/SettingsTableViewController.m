@@ -1105,6 +1105,7 @@ const int aboutCookiePolicy = 3;
                 [self showBackup];
                 return;
             } else if (indexPath.row == PINChangePIN) {
+                NSLog(@"Change pin");
                 [AuthenticationCoordinator.sharedInstance changePin];
                 return;
             }

@@ -21,10 +21,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         present(pinController: PEPinEntryController.pinVerifyControllerClosable()!)
     }
 
-    @objc func onPinCloseButtonTapped() {
-        AppCoordinator.shared.showSettingsView()
-    }
-
     // MARK: - PEPinEntryControllerDelegate
 
     func pinEntryController(_ pinEntryController: PEPinEntryController!, changedPin pinInt: UInt) {
@@ -89,19 +85,15 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         let peViewController = pinController.viewControllers[0] as! PEViewController
         peViewController.cancelButton.isHidden = false
-        peViewController.cancelButton.addTarget(self, action: #selector(onPinCloseButtonTapped), for: .touchUpInside)
         peViewController.modalTransitionStyle = .coverVertical
 
         self.pinEntryViewController = pinController
-
-        AppCoordinator.shared.tabControllerManager.tabViewController.dismiss(animated: true)
 
         if WalletManager.shared.wallet.isSyncing {
             LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.syncingWallet)
         }
 
-        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(pinController.view)
-        UIApplication.shared.statusBarStyle = .default
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(pinController, animated: false)
     }
 
     private func reopenChangePin() {
@@ -118,9 +110,8 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             pinViewController.inSettings = true
         }
 
-        UIApplication.shared.keyWindow?.rootViewController?.view.addSubview(pinViewController.view)
-
         pinEntryViewController = pinViewController
+        UIApplication.shared.keyWindow?.rootViewController?.present(pinViewController, animated: true)
     }
 }
 
