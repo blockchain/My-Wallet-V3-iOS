@@ -237,7 +237,7 @@
 {
     if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
         AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
-        [accountsAndAddressesViewController.containerView changeYPosition:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT];
+        [accountsAndAddressesViewController.containerView changeYPosition:8 + ASSET_SELECTOR_ROW_HEIGHT];
     }
 }
 
@@ -264,7 +264,7 @@
         [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
         if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
             AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
-            [accountsAndAddressesViewController.containerView changeYPosition:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
+            [accountsAndAddressesViewController.containerView changeYPosition:8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
         }
     } completion:^(BOOL finished) {
         self.isOpeningSelector = NO;

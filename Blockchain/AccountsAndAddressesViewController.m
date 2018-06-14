@@ -35,7 +35,7 @@
     
     self.view.frame = [UIApplication sharedApplication].keyWindow.frame;
     
-    UIView *containerView = [[UIView alloc] initWithFrame:CGRectOffset([UIApplication sharedApplication].keyWindow.frame, 0, DEFAULT_HEADER_HEIGHT + ASSET_SELECTOR_ROW_HEIGHT + 8)];
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectOffset([UIApplication sharedApplication].keyWindow.frame, 0, ASSET_SELECTOR_ROW_HEIGHT + 8)];
     [self.view addSubview:containerView];
     self.containerView = containerView;
     
