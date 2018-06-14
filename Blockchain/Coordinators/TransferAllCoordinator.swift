@@ -16,7 +16,7 @@ import Foundation
     @objc class func sharedInstance() -> TransferAllCoordinator {
         return TransferAllCoordinator.shared
     }
-    
+
     private override init() {
         super.init()
         WalletManager.shared.transferAllDelegate = self
@@ -34,12 +34,12 @@ import Foundation
         let tabViewController = AppCoordinator.shared.tabControllerManager.tabViewController
         tabViewController?.topMostViewController!.present(navigationController!, animated: true, completion: nil)
     }
-    
+
     @objc func start(withDelegate delegate: TransferAllPromptDelegate) {
         start()
         transferAllController?.delegate = delegate
     }
-    
+
     @objc func startWithSendScreen() {
         transferAllController = nil
         AppCoordinator.shared.tabControllerManager.setupTransferAllFunds()

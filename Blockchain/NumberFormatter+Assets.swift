@@ -45,7 +45,7 @@ extension NumberFormatter {
         let formatter = decimalStyleFormatter(withMinfractionDigits: localCurrencyFractionDigits,
                                               maxfractionDigits: localCurrencyFractionDigits,
                                               usesGroupingSeparator: false)
-        formatter.locale = Locale(identifier: Constants.Locales.English.us)
+        formatter.locale = Locale(identifier: Constants.Locales.englishUS)
         return formatter
     }()
 
@@ -71,7 +71,7 @@ extension NumberFormatter {
         let formatter = decimalStyleFormatter(withMinfractionDigits: 0,
                                               maxfractionDigits: assetFractionDigits,
                                               usesGroupingSeparator: false)
-        formatter.locale = Locale(identifier: Constants.Locales.English.us)
+        formatter.locale = Locale(identifier: Constants.Locales.englishUS)
         return formatter
     }()
 }

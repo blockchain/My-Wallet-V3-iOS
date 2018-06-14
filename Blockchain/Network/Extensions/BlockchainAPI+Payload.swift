@@ -13,7 +13,14 @@ extension BlockchainAPI {
         guard let payload = payload else { return nil }
         let language = Locale.preferredLanguages.first ?? "en"
         let length = payload.deviceToken.count
-        let body = String(format: "guid=%@&sharedKey=%@&payload=%@&length=%d&lang=%@", payload.guid, payload.sharedKey, payload.deviceToken, length, language)
+        let body = String(
+            format: "guid=%@&sharedKey=%@&payload=%@&length=%d&lang=%@",
+            payload.guid,
+            payload.sharedKey,
+            payload.deviceToken,
+            length,
+            language
+        )
         guard let encodedData = body.data(using: String.Encoding.utf8) else { return nil }
         return encodedData
     }

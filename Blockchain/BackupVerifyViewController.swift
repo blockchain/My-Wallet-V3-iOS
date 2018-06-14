@@ -222,9 +222,9 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "verifyBackupWithSecondPassword" {
-            let vc = segue.destination as! SecondPasswordViewController
-            vc.delegate = self
-            vc.wallet = wallet
+            let viewController = segue.destination as! SecondPasswordViewController
+            viewController.delegate = self
+            viewController.wallet = wallet
         }
     }
 

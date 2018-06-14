@@ -99,9 +99,7 @@ struct Constants {
         static let securityReminderModalTimeInterval: TimeInterval = 60 * 60 * 24 * 30 // Seconds in thirty days
     }
     struct Locales {
-        struct English {
-            static let us = "en_US"
-        }
+        static let englishUS = "en_US"
     }
     struct Url {
         static let blockchainHome = "https://www.blockchain.com"
@@ -116,10 +114,8 @@ struct Constants {
         static let swipeToReceiveAddressCount = 5
     }
     struct JSErrors {
-        struct AddressAndKeyImport {
-            static let wrongBipPass = "wrongBipPass"
-            static let wrongPrivateKey = "wrongPrivateKey"
-        }
+        static let addressAndKeyImportWrongBipPass = "wrongBipPass"
+        static let addressAndKeyImportWrongPrivateKey = "wrongPrivateKey"
     }
 }
 
@@ -171,11 +167,11 @@ struct Constants {
     }
 
     @objc class func wrongPrivateKey() -> String {
-        return Constants.JSErrors.AddressAndKeyImport.wrongPrivateKey
+        return Constants.JSErrors.addressAndKeyImportWrongPrivateKey
     }
 
     @objc class func wrongBip38Password() -> String {
-        return Constants.JSErrors.AddressAndKeyImport.wrongBipPass
+        return Constants.JSErrors.addressAndKeyImportWrongBipPass
     }
 
     @objc class func termsOfServiceURLString() -> String {

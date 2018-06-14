@@ -13,10 +13,10 @@ import Foundation
     
     /// Method invoked after updating an ether payment
     func didUpdateEthPayment(payment: NSDictionary)
-    
+
     /// Method invoked after sending ether
     func didSendEther()
-    
+
     /// Method invoked when an error occurs while sending ether
     func didErrorDuringEtherSend(error: String)
 

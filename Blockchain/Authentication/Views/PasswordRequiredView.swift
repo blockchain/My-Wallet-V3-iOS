@@ -41,7 +41,7 @@ class PasswordRequiredView: UIView {
 
         buttonForgotPassword.titleLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
         buttonForgotPassword.titleLabel?.adjustsFontSizeToFitWidth = true
-        buttonForgotPassword.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10)
+        buttonForgotPassword.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         buttonForgotPassword.titleLabel?.textAlignment = .center
         buttonForgotPassword.setTitle(LocalizationConstants.Authentication.forgotPassword, for: .normal)
 
@@ -49,7 +49,7 @@ class PasswordRequiredView: UIView {
 
         buttonForgetWallet.titleLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
         buttonForgetWallet.titleLabel?.adjustsFontSizeToFitWidth = true
-        buttonForgetWallet.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10)
+        buttonForgetWallet.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         buttonForgetWallet.titleLabel?.textAlignment = .center
 
         let tapGesture = UITapGestureRecognizer(target: textFieldPassword, action: #selector(resignFirstResponder))

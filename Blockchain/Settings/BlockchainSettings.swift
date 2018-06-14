@@ -190,7 +190,6 @@ final class BlockchainSettings: NSObject {
                 return KeychainItemWrapper.sharedKey()
             }
 
-
             set {
                 guard let sharedKey = newValue else {
                     KeychainItemWrapper.removeSharedKeyFromKeychain()
@@ -276,8 +275,6 @@ final class BlockchainSettings: NSObject {
 
             defaults.register(defaults: [
                 UserDefaults.Keys.swipeToReceiveEnabled.rawValue: true,
-                //: Was initialized with `NSNumber numberWithInt:LegacyAssetTypeBitcoin` before, could cause side unwanted effects...
-                // TODO: test for potential side effects
                 UserDefaults.Keys.assetType.rawValue: AssetType.bitcoin.rawValue,
                 UserDefaults.DebugKeys.enableCertificatePinning.rawValue: true
             ])

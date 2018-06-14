@@ -114,12 +114,12 @@ import UIKit
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "backupWords" {
-            let vc = segue.destination as! BackupWordsViewController
-            vc.wallet = wallet
+            let viewController = segue.destination as! BackupWordsViewController
+            viewController.wallet = wallet
         } else if segue.identifier == "verifyBackup" {
-            let vc = segue.destination as! BackupVerifyViewController
-            vc.wallet = wallet
-            vc.isVerifying = true
+            let viewController = segue.destination as! BackupVerifyViewController
+            viewController.wallet = wallet
+            viewController.isVerifying = true
         }
     }
 

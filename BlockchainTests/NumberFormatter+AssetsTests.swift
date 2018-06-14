@@ -73,7 +73,7 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(1.0, noGrouping)
         testStringFromNumber(0, noGrouping)
     }
-    
+
     func testLocalCurrencyFormatterWithUSLocale() {
         let testStringFromNumber = { (input: NSNumber) in
             let formatter = NumberFormatter.localCurrencyFormatterWithUSLocale

@@ -183,9 +183,9 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
 
     func failedToImportPrivateKeyForSendingFromWatchOnlyAddress(errorDescription: String) {
         walletManager.wallet.loading_stop()
-        if errorDescription == Constants.JSErrors.AddressAndKeyImport.wrongPrivateKey {
+        if errorDescription == Constants.JSErrors.addressAndKeyImportWrongPrivateKey {
             alertUserOfInvalidPrivateKey()
-        } else if errorDescription == Constants.JSErrors.AddressAndKeyImport.wrongBipPass {
+        } else if errorDescription == Constants.JSErrors.addressAndKeyImportWrongBipPass {
             AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.incorrectBip38Password)
         } else {
             // TODO: improve copy for all other errors

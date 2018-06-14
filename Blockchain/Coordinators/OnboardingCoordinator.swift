@@ -13,7 +13,7 @@ class OnboardingCoordinator: Coordinator {
     static let shared = OnboardingCoordinator()
 
     private var createWallet: BCCreateWalletView?
-    
+
     private init() {}
 
     // MARK: Public Methods

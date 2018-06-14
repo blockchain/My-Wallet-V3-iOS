@@ -175,9 +175,7 @@ struct LocalizationConstants {
     }
 
     struct Settings {
-        struct About {
-            static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
-        }
+        static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
     }
 }
 
@@ -235,7 +233,7 @@ struct LocalizationConstants {
 
     @objc class func unsupportedPrivateKey() -> String { return LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey }
 
-    @objc class func cookiePolicy() -> String { return LocalizationConstants.Settings.About.cookiePolicy }
+    @objc class func cookiePolicy() -> String { return LocalizationConstants.Settings.cookiePolicy }
 
     @objc class func gettingQuote() -> String { return LocalizationConstants.Exchange.gettingQuote }
 

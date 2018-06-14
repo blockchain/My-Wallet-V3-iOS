@@ -32,11 +32,11 @@ class PairingInstructionsView: BCModalContentView {
         textViewStepTwo.font = UIFont(name: Constants.FontNames.gillSans, size: Constants.FontSizes.Medium)
         textViewStepThree.font = UIFont(name: Constants.FontNames.gillSans, size: Constants.FontSizes.Medium)
 
-        buttonScanPairing.titleEdgeInsets = UIEdgeInsetsMake(0, 12.5, 0, 12.5)
+        buttonScanPairing.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12.5, bottom: 0, right: 12.5)
         buttonScanPairing.titleLabel?.adjustsFontSizeToFitWidth = true
         buttonScanPairing.titleLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
 
-        buttonManualPair.titleEdgeInsets = UIEdgeInsetsMake(0, 12.5, 0, 12.5)
+        buttonManualPair.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12.5, bottom: 0, right: 12.5)
         buttonManualPair.titleLabel?.adjustsFontSizeToFitWidth = true
         buttonManualPair.titleLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
     }

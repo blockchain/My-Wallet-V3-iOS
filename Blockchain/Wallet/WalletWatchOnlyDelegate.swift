@@ -9,7 +9,7 @@
 import Foundation
 
 @objc protocol WalletWatchOnlyDelegate: class {
-    
+
     /// Method invoked after scanning private key to send from watch-only address
     func sendFromWatchOnlyAddress()
 }
