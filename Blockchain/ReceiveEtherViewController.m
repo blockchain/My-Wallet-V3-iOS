@@ -48,7 +48,11 @@
                                      height);
     }
 
-    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width - 40, 0)];
+    CGFloat topOffset = IS_USING_SCREEN_SIZE_4S ? 10 : 20;
+    if (_safeAreaInsetTop == 44) {
+        topOffset = (self.view.frame.size.height / 2) - 180;
+    }
+    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, topOffset, self.view.frame.size.width - 40, 0)];
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.numberOfLines = 0;

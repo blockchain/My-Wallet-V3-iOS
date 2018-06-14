@@ -97,6 +97,9 @@
     [self selectDefaultDestination];
     
     CGFloat imageWidth = IS_USING_SCREEN_SIZE_LARGER_THAN_5S ? 200 : IS_USING_SCREEN_SIZE_4S ? 120 : 150;
+    if (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) {
+        imageWidth = 80;
+    }
     
     qrCodeMainImageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - imageWidth) / 2, 35, imageWidth, imageWidth)];
     qrCodeMainImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -371,17 +374,17 @@
 
 - (void)setupHeaderView
 {
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.bottomContainerView.frame.origin.y)];
-    
-    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                           (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? 0 : 10,
-                                                                           self.view.frame.size.width - 40,
-                                                                           42)];
+    CGFloat headerTopOffset = 10;
+    if (_safeAreaInsetTop == 44) {
+        headerTopOffset = 60;
+    }
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, headerTopOffset, self.view.frame.size.width, self.bottomContainerView.frame.origin.y)];
+    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 42)];
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
-    instructionsLabel.text = (self.assetType == LegacyAssetTypeBitcoin && IS_USING_SCREEN_SIZE_4S) ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    instructionsLabel.text = BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
     [instructionsLabel sizeToFit];
     if (instructionsLabel.frame.size.height > 40) [instructionsLabel changeHeight:40];
     instructionsLabel.center = CGPointMake(self.view.frame.size.width/2, instructionsLabel.center.y);
