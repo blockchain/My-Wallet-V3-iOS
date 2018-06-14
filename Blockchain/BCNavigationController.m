@@ -29,18 +29,28 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    self.topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
+
+    UIWindow *window = UIApplication.sharedApplication.keyWindow;
+    CGFloat safeAreaInsetTop;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+    } else {
+        safeAreaInsetTop = 20;
+    }
+
+    CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
+    self.topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topBarHeight)];
     self.topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
     [self.view addSubview:self.topBar];
     
-    self.headerLabel = [[UILabel alloc] initWithFrame:FRAME_HEADER_LABEL];
+    self.headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, safeAreaInsetTop + 6, 200, 30)];
     self.headerLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
     self.headerLabel.textColor = [UIColor whiteColor];
     self.headerLabel.textAlignment = NSTextAlignmentCenter;
     self.headerLabel.adjustsFontSizeToFitWidth = YES;
     self.headerLabel.text = self.headerTitle;
     self.headerLabel.center = CGPointMake(self.topBar.center.x, self.headerLabel.center.y);
+
     [self.topBar addSubview:self.headerLabel];
     
     self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
