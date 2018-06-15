@@ -34,6 +34,17 @@
 {
     [super viewDidLoad];
 
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetTop = 20;
+    CGFloat assetSelectorHeight = 36;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        CGRect frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        self.view.frame = CGRectMake(0, assetSelectorHeight, frame.size.width, frame.size.height);
+    } else {
+        self.view.frame = CGRectMake(0, assetSelectorHeight, window.frame.size.width, window.frame.size.height - safeAreaInsetTop);
+    }
+
     self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
     self.accountsAndAddressesNavigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
     UILabel *navigationItemTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, [ConstantsObjcBridge defaultNavigationBarHeight])];
@@ -46,13 +57,8 @@
                                     initWithImage:[UIImage imageNamed:@"close"]
                                     style:UIBarButtonItemStylePlain
                                     target:self action:@selector(closeButtonClicked:)];
-    CGFloat assetSelectorHeight = 36;
-    if (@available(iOS 11.0, *)) {
-        CGRect frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
-        self.view.frame = CGRectMake(0, assetSelectorHeight, frame.size.width, frame.size.height);
-    }
-
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    CGRect frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - assetSelectorHeight - safeAreaInsetTop);
+    self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
