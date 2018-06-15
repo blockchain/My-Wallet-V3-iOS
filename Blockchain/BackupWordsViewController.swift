@@ -75,9 +75,16 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        var bottomPadding: CGFloat = 0
+        if #available(iOS 11.0, *) {
+            let window = UIApplication.shared.keyWindow
+            bottomPadding = window?.safeAreaInsets.bottom ?? 0
+        }
+
         UIView .animate(withDuration: 0.3, animations: {
             var posX: CGFloat = 0
-            let posY: CGFloat = self.view.frame.size.height - self.previousWordButton.frame.size.height
+            let posY: CGFloat = self.view.frame.size.height - bottomPadding - self.previousWordButton.frame.size.height
             let buttonWidth = (self.view.frame.size.width / 2) - 2
             var buttonHeight = self.previousWordButton.frame.size.height
             self.previousWordButton.frame = CGRect(x: 0, y: posY, width: buttonWidth, height: buttonHeight)
