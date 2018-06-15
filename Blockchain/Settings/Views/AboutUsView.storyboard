@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="627-lv-TG5">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--AboutUsViewController-->
+        <scene sceneID="QXb-fX-KLY">
+            <objects>
+                <viewController title="AboutUsViewController" id="627-lv-TG5" customClass="AboutUsViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qAn-aX-xnb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o8W-9z-yhl">
+                                <rect key="frame" x="331" y="52" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="D1M-3U-jbJ"/>
+                                    <constraint firstAttribute="height" constant="32" id="Qg8-Y4-Ywx"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="close">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onCloseTapped:" destination="627-lv-TG5" eventType="touchUpInside" id="4ZW-rh-g10"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_and_banner" translatesAutoresizingMaskIntoConstraints="NO" id="6KM-C3-nTd">
+                                <rect key="frame" x="44" y="341" width="286" height="42"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blockchain Wallet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hk5-PQ-LxA">
+                                <rect key="frame" x="16" y="401" width="343" height="21"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggH-hG-a0l">
+                                <rect key="frame" x="156.33333333333334" y="450" width="63" height="33"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Rate us">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRateUsTapped:" destination="627-lv-TG5" eventType="touchUpInside" id="FxS-Iv-hcg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="hk5-PQ-LxA" firstAttribute="leading" secondItem="SVW-X8-TAE" secondAttribute="leading" constant="16" id="8as-dB-TU5"/>
+                            <constraint firstItem="ggH-hG-a0l" firstAttribute="top" secondItem="hk5-PQ-LxA" secondAttribute="bottom" constant="28" id="AU2-Fi-BRq"/>
+                            <constraint firstItem="ggH-hG-a0l" firstAttribute="centerX" secondItem="SVW-X8-TAE" secondAttribute="centerX" id="H57-aY-EkX"/>
+                            <constraint firstItem="SVW-X8-TAE" firstAttribute="trailing" secondItem="o8W-9z-yhl" secondAttribute="trailing" constant="12" id="Il9-yT-sdn"/>
+                            <constraint firstItem="SVW-X8-TAE" firstAttribute="trailing" secondItem="hk5-PQ-LxA" secondAttribute="trailing" constant="16" id="XH6-sG-ioA"/>
+                            <constraint firstItem="hk5-PQ-LxA" firstAttribute="top" secondItem="6KM-C3-nTd" secondAttribute="bottom" constant="18" id="e2I-xs-vII"/>
+                            <constraint firstItem="6KM-C3-nTd" firstAttribute="centerX" secondItem="SVW-X8-TAE" secondAttribute="centerX" id="pd9-GV-4dH"/>
+                            <constraint firstItem="o8W-9z-yhl" firstAttribute="top" secondItem="SVW-X8-TAE" secondAttribute="top" constant="8" id="ssU-OZ-1Gf"/>
+                            <constraint firstItem="hk5-PQ-LxA" firstAttribute="centerX" secondItem="SVW-X8-TAE" secondAttribute="centerX" id="suW-BY-rO3"/>
+                            <constraint firstItem="hk5-PQ-LxA" firstAttribute="centerY" secondItem="SVW-X8-TAE" secondAttribute="centerY" id="yAK-95-uYI"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="SVW-X8-TAE"/>
+                    </view>
+                    <connections>
+                        <outlet property="buttonClose" destination="o8W-9z-yhl" id="lgk-7X-ZFt"/>
+                        <outlet property="buttonRateUs" destination="ggH-hG-a0l" id="C9k-uS-Hb0"/>
+                        <outlet property="labelMain" destination="hk5-PQ-LxA" id="hhK-OP-M4q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gJK-vq-FEv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-14" y="101"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="close" width="18" height="18"/>
+        <image name="logo_and_banner" width="286" height="42"/>
+    </resources>
+</document>

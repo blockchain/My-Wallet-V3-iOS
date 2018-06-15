@@ -12,7 +12,6 @@
 #import "SettingsTwoStepViewController.h"
 #import "Blockchain-Swift.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
-#import "SettingsAboutUsViewController.h"
 #import "BCVerifyEmailViewController.h"
 #import "BCVerifyMobileNumberViewController.h"
 #import "WebLoginViewController.h"
@@ -125,8 +124,6 @@ const int aboutCookiePolicy = 3;
     if (!loadedSettings) {
         [self reload];
     }
-
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -134,6 +131,11 @@ const int aboutCookiePolicy = 3;
     [super viewDidAppear:animated];
 
     [self.tableView reloadData];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)reload
@@ -392,8 +394,7 @@ const int aboutCookiePolicy = 3;
 
 - (void)aboutUsClicked
 {
-    SettingsAboutUsViewController *aboutViewController = [[SettingsAboutUsViewController alloc] init];
-    [self presentViewController:aboutViewController animated:YES completion:nil];
+    [AboutUsViewController presentIn:self];
 }
 
 - (void)termsOfServiceClicked

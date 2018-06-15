@@ -176,6 +176,7 @@ struct LocalizationConstants {
 
     struct Settings {
         static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
+        static let allRightsReserved = NSLocalizedString("All rights reserved.", comment: "")
     }
 }
 
