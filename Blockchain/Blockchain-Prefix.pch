@@ -140,7 +140,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define FRAME_HEADER_LABEL CGRectMake(60, 26, 200, 30)
 #define FRAME_BACK_BUTTON CGRectMake(0, 12, 85, 51)
 
-#define IMAGE_EDGE_INSETS_BACK_BUTTON_SHARE UIEdgeInsetsMake(4, 12, 0, 0)
 #define IMAGE_EDGE_INSETS_BACK_BUTTON_CHEVRON UIEdgeInsetsMake(10, 8, 0, 0)
 #define IMAGE_EDGE_INSETS_CLOSE_BUTTON_X UIEdgeInsetsMake(3, 0, 0, 18)
 
