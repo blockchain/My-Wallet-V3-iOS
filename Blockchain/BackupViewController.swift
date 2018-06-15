@@ -17,6 +17,7 @@ import UIKit
 
     @objc var wallet: Wallet?
     var transferredAll = false
+    private var finalHeight: CGFloat?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +81,9 @@ import UIKit
         }
         explanation.sizeToFit()
         explanation.center = CGPoint(x: view.frame.width/2, y: explanation.center.y)
-        changeYPosition(view.frame.size.height - 40 - backupWalletButton.frame.size.height, view: backupWalletButton)
+
+        let newYPosition = (finalHeight ?? view.frame.size.height) - 40 - backupWalletButton.frame.size.height
+        changeYPosition(newYPosition, viewToChange: backupWalletButton)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,6 +93,7 @@ import UIKit
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        finalHeight = view.frame.size.height
         if wallet!.isRecoveryPhraseVerified() {
             backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControlState())
         } else {
@@ -97,11 +101,11 @@ import UIKit
         }
     }
 
-    func changeYPosition(_ newY: CGFloat, view: UIView) {
-        let posX = view.frame.origin.x
-        let width = view.frame.size.width
-        let height = view.frame.size.height
-        view.frame = CGRect(x: posX, y: newY, width: width, height: height)
+    func changeYPosition(_ newY: CGFloat, viewToChange: UIView) {
+        let posX = viewToChange.frame.origin.x
+        let width = viewToChange.frame.size.width
+        let height = viewToChange.frame.size.height
+        viewToChange.frame = CGRect(x: posX, y: newY, width: width, height: height)
     }
 
     @IBAction func backupWalletButtonTapped(_ sender: UIButton) {
