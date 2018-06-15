@@ -129,7 +129,7 @@ import UIKit
         headerLabel.textAlignment = .center
         headerLabel.adjustsFontSizeToFitWidth = true
         headerLabel.text = NSLocalizedString("Backup Funds", comment: "")
-        headerLabel.center = useSafeAreas ? CGPoint(x: topBar.center.x, y: topBar.frame.size.height/2) : headerLabel.center
+        headerLabel.center = CGPoint(x: topBar.frame.size.width/2, y: useSafeAreas ? topBar.frame.size.height/2 : headerLabel.center.y)
         topBar.addSubview(headerLabel!)
     }
 
