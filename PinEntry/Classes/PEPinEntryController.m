@@ -288,13 +288,14 @@ static PEViewController *VerifyController()
 		}
 		case PS_ENTER2:
 			if([controller.pin intValue] != pinEntry1) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_PIN_NO_MATCH preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
 				PEViewController *c = NewController();
 				c.delegate = self;
 				self.viewControllers = [NSArray arrayWithObjects:c, [self.viewControllers objectAtIndex:0], nil];
 				[self popViewControllerAnimated:NO];
-                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+                [AlertViewPresenter.sharedInstance standardErrorWithMessage:LocalizationConstantsObjcBridge.pinsDoNotMatch
+                                                                      title:LocalizationConstantsObjcBridge.error
+                                                                         in:self
+                                                                    handler:nil];
 			} else {
 				[self.pinDelegate pinEntryController:self changedPin:[controller.pin intValue]];
 			}
@@ -370,6 +371,10 @@ static PEViewController *VerifyController()
                                                              in:self
                                                         handler:^(UIAlertAction * _Nonnull action) {
                                                             [weakSelf reset];
+                                                            UIViewController * viewController = weakSelf.viewControllers.firstObject;
+                                                            if ([viewController isKindOfClass:[PEViewController class]]) {
+                                                                [((PEViewController *) viewController) resetPin];
+                                                            }
                                                         }];
 }
 
@@ -536,8 +541,7 @@ static PEViewController *VerifyController()
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_COPY_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [UIPasteboard generalPasteboard].string = address;
     }]];
-
-    [self.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

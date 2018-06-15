@@ -34,7 +34,7 @@ extension PEPinEntryController: PinView {
 
     func error(message: String) {
         self.reset()
-        AlertViewPresenter.shared.standardError(message: message)
+        AlertViewPresenter.shared.standardError(message: message, in: self)
     }
 
     func errorPinRetryLimitExceeded() {

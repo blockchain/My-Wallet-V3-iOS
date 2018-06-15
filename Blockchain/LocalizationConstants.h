@@ -170,7 +170,6 @@
 #define BC_STRING_HOW_WOULD_YOU_LIKE_TO_PAIR NSLocalizedString(@"How would you like to pair?", nil)
 #define BC_STRING_MANUALLY NSLocalizedString(@"Manually", nil)
 #define BC_STRING_AUTOMATICALLY NSLocalizedString(@"Automatically", nil)
-#define BC_PIN_NO_MATCH NSLocalizedString(@"PINs do not match", nil)
 #define BC_STRING_ENTER_PIN NSLocalizedString(@"Enter PIN", nil)
 #define BC_STRING_PLEASE_ENTER_PIN NSLocalizedString(@"Please enter your PIN", nil)
 #define BC_STRING_PLEASE_ENTER_NEW_PIN NSLocalizedString(@"Please enter a new PIN", nil)

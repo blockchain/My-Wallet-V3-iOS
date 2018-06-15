@@ -49,7 +49,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             LoadingViewPresenter.shared.hideBusyView()
             BlockchainSettings.App.shared.biometryEnabled = true
             closePinEntryView(animated: true)
-            AppCoordinator.shared.showSettingsView()
             return
         }
 
@@ -154,11 +153,6 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
             return
         }
 
-        let inSettings = pinEntryViewController?.inSettings ?? false
-        if inSettings {
-            AppCoordinator.shared.showSettingsView()
-        }
-
         // Encrypt the wallet password with the random value
         guard let encryptedPinPassword = walletManager.wallet.encrypt(
             password,
@@ -177,6 +171,7 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         // Update your info to new pin code
         closePinEntryView(animated: true)
 
+        let inSettings = pinEntryViewController?.inSettings ?? false
         if walletManager.wallet.isInitialized() && !inSettings {
             AlertViewPresenter.shared.showMobileNoticeIfNeeded()
         }
