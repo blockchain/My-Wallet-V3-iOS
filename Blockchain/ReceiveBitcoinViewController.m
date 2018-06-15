@@ -98,7 +98,7 @@
     
     CGFloat imageWidth = IS_USING_SCREEN_SIZE_LARGER_THAN_5S ? 200 : IS_USING_SCREEN_SIZE_4S ? 120 : 150;
     if (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) {
-        imageWidth = 80;
+        imageWidth = 100;
     }
     
     qrCodeMainImageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - imageWidth) / 2, 35, imageWidth, imageWidth)];
@@ -384,7 +384,7 @@
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
-    instructionsLabel.text = BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    instructionsLabel.text = (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
     [instructionsLabel sizeToFit];
     if (instructionsLabel.frame.size.height > 40) [instructionsLabel changeHeight:40];
     instructionsLabel.center = CGPointMake(self.view.frame.size.width/2, instructionsLabel.center.y);
