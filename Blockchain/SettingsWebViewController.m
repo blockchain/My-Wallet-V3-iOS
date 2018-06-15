@@ -9,7 +9,6 @@
 #import "SettingsWebViewController.h"
 #import "SettingsNavigationController.h"
 #import "DebugTableViewController.h"
-#import "Blockchain-Swift.h"
 
 @interface SettingsWebViewController ()
 @property (nonatomic) UIWebView *webView;
