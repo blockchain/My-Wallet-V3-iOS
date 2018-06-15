@@ -21,6 +21,7 @@
 @interface AccountsAndAddressesViewController () <UITableViewDelegate, UITableViewDataSource, LegacyPrivateKeyDelegate>
 @property (nonatomic) NSString *clickedAddress;
 @property (nonatomic) int clickedAccount;
+@property (nonatomic) AccountsAndAddressesNavigationController *accountsAndAddressesNavigationController;
 @end
 
 @implementation AccountsAndAddressesViewController
@@ -32,17 +33,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.view.frame = [UIApplication sharedApplication].keyWindow.frame;
-    
-    UIView *containerView = [[UIView alloc] initWithFrame:CGRectOffset([UIApplication sharedApplication].keyWindow.frame, 0, ASSET_SELECTOR_ROW_HEIGHT + 8)];
-    [self.view addSubview:containerView];
-    self.containerView = containerView;
-    
+
+    self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.accountsAndAddressesNavigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
+    UILabel *navigationItemTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, [ConstantsObjcBridge defaultNavigationBarHeight])];
+    navigationItemTitleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:23];
+    navigationItemTitleLabel.textAlignment = NSTextAlignmentCenter;
+    navigationItemTitleLabel.textColor = UIColor.whiteColor;
+    navigationItemTitleLabel.text = BC_STRING_ADDRESSES;
+    self.navigationItem.titleView = navigationItemTitleLabel;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                    initWithImage:[UIImage imageNamed:@"close"]
+                                    style:UIBarButtonItemStylePlain
+                                    target:self action:@selector(closeButtonClicked:)];
+    CGFloat assetSelectorHeight = 36;
+    if (@available(iOS 11.0, *)) {
+        CGRect frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        self.view.frame = CGRectMake(0, assetSelectorHeight, frame.size.width, frame.size.height);
+    }
+
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
-    [self.tableView changeHeight:self.view.frame.size.height - CELL_HEIGHT_DEFAULT*2];
     self.tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
-    [self.containerView addSubview:self.tableView];
+    [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:NOTIFICATION_KEY_RELOAD_ACCOUNTS_AND_ADDRESSES object:nil];
@@ -52,8 +64,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
-    navigationController.headerLabel.text = BC_STRING_ADDRESSES;
+    [self.accountsAndAddressesNavigationController.assetSelectorView show];
     
     if (IS_USING_SCREEN_SIZE_4S) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -65,8 +76,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
-    navigationController.warningButton.hidden = YES;
+    [self.accountsAndAddressesNavigationController.assetSelectorView hide];
 }
 
 - (void)dealloc
@@ -78,7 +88,6 @@
 {
     allKeys = [WalletManager.sharedInstance.wallet allLegacyAddresses:self.assetType];
     [self.tableView reloadData];
-    
     [self displayTransferFundsWarningIfAppropriate];
 }
 
@@ -92,11 +101,18 @@
         if (self.clickedAddress) {
             detailViewController.address = self.clickedAddress;
             detailViewController.account = -1;
+            detailViewController.navigationItemTitle = self.clickedAddress;
         } else if (self.clickedAccount >= 0) {
             detailViewController.account = self.clickedAccount;
             detailViewController.address = nil;
+            detailViewController.navigationItemTitle = [WalletManager.sharedInstance.wallet getLabelForAccount:self.clickedAccount assetType:self.assetType];
         }
     }
+}
+
+- (IBAction)closeButtonClicked:(UIButton *)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Actions
@@ -183,7 +199,7 @@
 
 - (void)promptForLabelAfterGenerate
 {
-    //newest address is the last object in activeKeys
+    //: Newest address is the last object in activeKeys
     self.clickedAddress = [allKeys lastObject];
     [self didSelectAddress:self.clickedAddress];
     
@@ -229,7 +245,7 @@
 
 - (void)promptForLabelAfterScan
 {
-    // Newest address is the last object in activeKeys
+    //: Newest address is the last object in activeKeys
     self.clickedAddress = [allKeys lastObject];
     [self didSelectAddress:self.clickedAddress];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
@@ -237,12 +253,10 @@
 
 - (void)displayTransferFundsWarningIfAppropriate
 {
-    AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
-    
-    if (self.assetType == LegacyAssetTypeBitcoin && [WalletManager.sharedInstance.wallet didUpgradeToHd] && [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] && navigationController.visibleViewController == self) {
-        navigationController.warningButton.hidden = NO;
+    if (self.assetType == LegacyAssetTypeBitcoin && [WalletManager.sharedInstance.wallet didUpgradeToHd] && [WalletManager.sharedInstance.wallet getTotalBalanceForSpendableActiveLegacyAddresses] >= [WalletManager.sharedInstance.wallet dust] && self.accountsAndAddressesNavigationController.visibleViewController == self) {
+        self.navigationItem.leftBarButtonItem = self.accountsAndAddressesNavigationController.warningButton;
     } else {
-        navigationController.warningButton.hidden = YES;
+        self.navigationItem.leftBarButtonItem = nil;
     }
 }
 
@@ -399,11 +413,10 @@
                     [cell.watchLabel changeWidth:newWidth];
                 }
                 
-                CGFloat windowWidth = WINDOW_WIDTH;
+                CGFloat windowWidth = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 cell.balanceLabel.frame = CGRectMake(minimumBalanceButtonOriginX, 11, windowWidth - minimumBalanceButtonOriginX - 20, 21);
                 cell.balanceButton.frame = CGRectMake(minimumBalanceButtonOriginX, 0, windowWidth - minimumBalanceButtonOriginX, CELL_HEIGHT_DEFAULT);
             } else {
-                
                 // Don't show the watch only tag and resize the label and balance labels to use up the freed up space
                 cell.labelLabel.frame = CGRectMake(20, 11, 185, 21);
                 cell.balanceLabel.frame = CGRectMake(217, 11, 120, 21);
@@ -491,16 +504,16 @@
     
     NSString *label = self.assetType == LegacyAssetTypeBitcoin ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:addr assetType:self.assetType] : BC_STRING_IMPORTED_ADDRESSES;
     
-    if (label)
+    if (label) {
         cell.labelLabel.text = label;
-    else
+    } else {
         cell.labelLabel.text = BC_STRING_NO_LABEL;
+    }
     
     cell.addressLabel.text = self.assetType == LegacyAssetTypeBitcoin ? addr : nil;
     
     uint64_t balance = self.assetType == LegacyAssetTypeBitcoin ? [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:addr assetType:self.assetType] longLongValue] : [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:self.assetType];
-    
-    // Selected cell color
+
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
     [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
     [cell setSelectedBackgroundView:v];

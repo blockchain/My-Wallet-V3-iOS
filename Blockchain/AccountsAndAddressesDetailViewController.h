@@ -12,4 +12,5 @@
 @property (nonatomic) int account;
 @property (nonatomic) NSString *address;
 @property (nonatomic) LegacyAssetType assetType;
+@property (nonatomic) NSString *navigationItemTitle;
 @end

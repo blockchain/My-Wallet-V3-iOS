@@ -11,9 +11,7 @@
 #import "AssetSelectorView.h"
 
 @interface AccountsAndAddressesNavigationController : UINavigationController <TopViewController>
-@property (nonatomic) UILabel *headerLabel;
-@property (nonatomic) UIButton *backButton;
-@property (nonatomic) UIButton *warningButton;
+@property (nonatomic) UIBarButtonItem *warningButton;
 @property (nonatomic) BCFadeView *busyView;
 @property (nonatomic) UILabel *busyLabel;
 @property (nonatomic, readonly) AssetSelectorView *assetSelectorView;

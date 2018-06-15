@@ -45,6 +45,16 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UILabel *navigationItemTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, [ConstantsObjcBridge defaultNavigationBarHeight])];
+    navigationItemTitleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:23];
+    navigationItemTitleLabel.adjustsFontSizeToFitWidth = YES;
+    navigationItemTitleLabel.textAlignment = NSTextAlignmentCenter;
+    navigationItemTitleLabel.textColor = UIColor.whiteColor;
+    navigationItemTitleLabel.text = self.navigationItemTitle;
+    self.navigationItem.titleView = navigationItemTitleLabel;
+    [self.navigationItem.backBarButtonItem setTitle:nil];
+
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
@@ -55,7 +65,6 @@ typedef enum {
         DLog(@"Error: no account or address set!");
     }
 
-    [self resetHeader];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:NOTIFICATION_KEY_RELOAD_ACCOUNTS_AND_ADDRESSES object:nil];
 }
 
@@ -66,8 +75,6 @@ typedef enum {
     if (IS_USING_SCREEN_SIZE_4S) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-
-    [self resetHeader];
 }
 
 - (void)dealloc
@@ -77,23 +84,10 @@ typedef enum {
 
 - (void)reload
 {
-    [self resetHeader];
     [self.tableView reloadData];
 }
 
 #pragma mark - UI Helpers
-
-- (void)resetHeader
-{
-    AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
-    navigationController.headerLabel.text = self.address ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:self.address assetType:self.assetType] : [WalletManager.sharedInstance.wallet getLabelForAccount:self.account assetType:self.assetType];
-}
-
-- (void)updateHeaderText:(NSString *)headerText
-{
-    AccountsAndAddressesNavigationController *navigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
-    navigationController.headerLabel.text = headerText;
-}
 
 - (void)showBusyViewWithLoadingText:(NSString *)text;
 {
@@ -237,7 +231,7 @@ typedef enum {
             [self setupModalView:editAddressView inViewController:segue.destinationViewController];
 
             [editAddressView.labelTextField becomeFirstResponder];
-            [self updateHeaderText:BC_STRING_LABEL_ADDRESS];
+            // [self updateHeaderText:BC_STRING_LABEL_ADDRESS];
 
         } else if (detailType == DetailTypeEditAccountLabel) {
 
@@ -248,7 +242,7 @@ typedef enum {
             [self setupModalView:editAccountView inViewController:segue.destinationViewController];
 
             [editAccountView.labelTextField becomeFirstResponder];
-            [self updateHeaderText:BC_STRING_NAME];
+            // [self updateHeaderText:BC_STRING_NAME];
 
         } else if (detailType == DetailTypeShowExtendedPublicKey) {
 
@@ -259,7 +253,7 @@ typedef enum {
             [self setupModalView:qrCodeView inViewController:segue.destinationViewController];
 
             qrCodeView.qrCodeFooterLabel.text = BC_STRING_COPY_XPUB;
-            [self updateHeaderText:BC_STRING_EXTENDED_PUBLIC_KEY];
+            // [self updateHeaderText:BC_STRING_EXTENDED_PUBLIC_KEY];
 
         } else if (detailType == DetailTypeShowAddress) {
 
@@ -270,7 +264,7 @@ typedef enum {
             [self setupModalView:qrCodeView inViewController:segue.destinationViewController];
 
             qrCodeView.qrCodeFooterLabel.text = BC_STRING_COPY_ADDRESS;
-            [self updateHeaderText:BC_STRING_ADDRESS];
+            // [self updateHeaderText:BC_STRING_ADDRESS];
         }
     }
 }

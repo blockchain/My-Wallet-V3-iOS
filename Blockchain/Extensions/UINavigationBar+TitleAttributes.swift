@@ -13,4 +13,8 @@ extension UINavigationBar {
         NSAttributedStringKey.font: UIFont(name: "Montserrat-Regular", size: 20)!,
         NSAttributedStringKey.foregroundColor: UIColor.white
     ]
+    @objc static let largeTitleTextAttributes = [
+        NSAttributedStringKey.font: UIFont(name: "Montserrat-Regular", size: 23)!,
+        NSAttributedStringKey.foregroundColor: UIColor.white
+    ]
 }

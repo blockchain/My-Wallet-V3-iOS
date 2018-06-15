@@ -15,7 +15,6 @@
 
 @interface AccountsAndAddressesNavigationController () <AssetSelectorViewDelegate, WalletAddressesDelegate>
 @property (nonatomic, readwrite) AssetSelectorView *assetSelectorView;
-@property (nonatomic) UIView *topBar;
 @property (nonatomic) BOOL isOpeningSelector;
 @end
 
@@ -26,51 +25,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    WalletManager.sharedInstance.addressesDelegate = self;
 
-    self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
-    
-    UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT)];
-    topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
-    [self.view addSubview:topBar];
-    self.topBar = topBar;
-    
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:FRAME_HEADER_LABEL];
-    headerLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
-    headerLabel.textColor = [UIColor whiteColor];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.adjustsFontSizeToFitWidth = YES;
-    headerLabel.center = CGPointMake(topBar.center.x, headerLabel.center.y);
-    [topBar addSubview:headerLabel];
-    self.headerLabel = headerLabel;
-    
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    backButton.imageEdgeInsets = IMAGE_EDGE_INSETS_BACK_BUTTON_CHEVRON;
-    [backButton.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE_MEDIUM]];
-    [backButton setImage:[UIImage imageNamed:@"back_chevron_icon"] forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor colorWithWhite:0.56 alpha:1.0] forState:UIControlStateHighlighted];
-    [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topBar addSubview:backButton];
-    self.backButton = backButton;
-
-    AppFeatureConfiguration *transferFundsConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTransferFundsFromImportedAddress];
-    if (transferFundsConfig.isEnabled) {
-        UIButton *warningButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        warningButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        warningButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        [warningButton.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE_MEDIUM]];
-        [warningButton setImage:[UIImage imageNamed:@"warning"] forState:UIControlStateNormal];
-        [warningButton addTarget:self action:@selector(transferAllFundsWarningClicked) forControlEvents:UIControlEventTouchUpInside];
-        [topBar addSubview:warningButton];
-        warningButton.hidden = YES;
-        self.warningButton = warningButton;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat safeAreaInsetTop = 20;
+    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
+    CGFloat assetSelectorHeight = 36;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        CGRect safeAreaLayoutFrame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
+        CGFloat height = safeAreaLayoutFrame.size.height - navBarHeight - assetSelectorHeight;
+        self.view.frame = CGRectMake(0, 0, safeAreaLayoutFrame.size.width, height);
+    } else {
+        CGFloat height = window.frame.size.height - safeAreaInsetTop - navBarHeight - assetSelectorHeight;
+        self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
     }
 
+    [self.navigationBar setTitleTextAttributes:[UINavigationBar largeTitleTextAttributes]];
+    self.warningButton = [[UIBarButtonItem alloc]
+                          initWithImage:[UIImage imageNamed:@"warning"]
+                          style:UIBarButtonItemStylePlain
+                          target:self action:@selector(transferAllFundsWarningClicked)];
+
+    WalletManager.sharedInstance.addressesDelegate = self;
+
     CGFloat assetSelectorViewHorizontalPadding = 8;
-    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(assetSelectorViewHorizontalPadding, headerLabel.frame.origin.y + headerLabel.frame.size.height + 8, self.view.frame.size.width - assetSelectorViewHorizontalPadding*2, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
-    [topBar addSubview:self.assetSelectorView];
+    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(0, safeAreaInsetTop + navBarHeight, self.view.frame.size.width, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
+    [self.view addSubview:self.assetSelectorView];
     
     [self setupBusyView];
 }
@@ -79,32 +59,7 @@
 {
     [super viewDidLayoutSubviews];
     
-    if (self.isOpeningSelector) return;
-    
-    self.warningButton.frame = CGRectMake(6, 16, 85, 51);
-    
-    if (self.viewControllers.count == 1 || [self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
-        self.backButton.frame = CGRectMake(self.view.frame.size.width - 80, 15, 80, 51);
-        self.backButton.imageEdgeInsets = IMAGE_EDGE_INSETS_CLOSE_BUTTON_X;
-        self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        self.backButton.center = CGPointMake(self.backButton.center.x, self.headerLabel.center.y);
-        [self.backButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT];
-            [self.assetSelectorView show];
-            [self resetAddressesViewControllerContainerFrame];
-        }];
-    } else {
-        self.backButton.frame = FRAME_BACK_BUTTON;
-        self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.backButton setTitle:@"" forState:UIControlStateNormal];
-        self.backButton.imageEdgeInsets = IMAGE_EDGE_INSETS_BACK_BUTTON_CHEVRON;
-        [self.backButton setImage:[UIImage imageNamed:@"back_chevron_icon"] forState:UIControlStateNormal];
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            [self.assetSelectorView hide];
-            [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT];
-        }];
-    }
+    if (self.isOpeningSelector) { return; }
 }
 
 - (void)reload
@@ -224,15 +179,6 @@
 
 #pragma mark - Navigation
 
-- (IBAction)backButtonClicked:(UIButton *)sender
-{
-    if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [self popViewControllerAnimated:YES];
-    }
-}
-
 - (void)resetAddressesViewControllerContainerFrame
 {
     if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
@@ -246,7 +192,6 @@
 - (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT];
         [self resetAddressesViewControllerContainerFrame];
     }];
     
@@ -261,7 +206,6 @@
     self.isOpeningSelector = YES;
 
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [self.topBar changeHeight:DEFAULT_HEADER_HEIGHT + 8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
         if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
             AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
             [accountsAndAddressesViewController.containerView changeYPosition:8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
