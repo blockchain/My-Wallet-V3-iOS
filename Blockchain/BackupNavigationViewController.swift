@@ -48,7 +48,13 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         let viewWidth = self.view.frame.size.width
-        topBar = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: Constants.Measurements.DefaultHeaderHeight))
+        var topPadding: CGFloat = 0
+        if #available(iOS 11.0, *) {
+            let window = UIApplication.shared.keyWindow
+            topPadding = window?.safeAreaInsets.top ?? 0
+        }
+        let hasTopPadding = topPadding > 0
+        topBar = UIView(frame: CGRect(x: 0, y: topPadding, width: viewWidth, height: hasTopPadding ? 44 : Constants.Measurements.DefaultHeaderHeight))
         if #available(iOS 11.0, *) {
             topBar.backgroundColor = UIColor(named: "ColorBrandPrimary")
         } else {
@@ -56,9 +62,9 @@ import UIKit
         }
         self.view.addSubview(topBar)
 
-        setUpHeaderLabel()
+        setUpHeaderLabel(useSafeAreas: hasTopPadding)
 
-        setUpCloseButton()
+        setUpCloseButton(useSafeAreas: hasTopPadding)
 
         let backupViewController = self.viewControllers.first as! BackupViewController
         backupViewController.wallet = self.wallet
@@ -108,6 +114,7 @@ import UIKit
             closeButton.setImage(UIImage(named: "close"), for: UIControlState())
         } else {
             closeButton.frame = CGRect(x: 0, y: 12, width: 85, height: 51)
+            closeButton.center = CGPoint(x: closeButton.center.x, y: topBar.frame.size.height/2)
             closeButton.setTitle("", for: UIControlState())
             closeButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 0, right: 0)
             closeButton.contentHorizontalAlignment = .left
@@ -115,23 +122,24 @@ import UIKit
         }
     }
 
-    func setUpHeaderLabel() {
+    func setUpHeaderLabel(useSafeAreas: Bool) {
         headerLabel = UILabel(frame: CGRect(x: 60, y: 26, width: 200, height: 30))
         headerLabel.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraExtraLarge)
         headerLabel.textColor = UIColor.white
         headerLabel.textAlignment = .center
         headerLabel.adjustsFontSizeToFitWidth = true
         headerLabel.text = NSLocalizedString("Backup Funds", comment: "")
-        headerLabel.center = CGPoint(x: topBar.center.x, y: headerLabel!.center.y)
+        headerLabel.center = useSafeAreas ? CGPoint(x: topBar.center.x, y: topBar.frame.size.height/2) : headerLabel.center
         topBar.addSubview(headerLabel!)
     }
 
-    func setUpCloseButton() {
+    func setUpCloseButton(useSafeAreas: Bool) {
         closeButton = UIButton(type: UIButtonType.custom)
         closeButton.contentHorizontalAlignment = .left
         closeButton.titleLabel?.font = UIFont.systemFont(ofSize: Constants.FontSizes.Medium)
         closeButton.setTitleColor(UIColor(white: 0.56, alpha: 1.0), for: .highlighted)
         closeButton.addTarget(self, action: #selector(backButtonClicked), for: .touchUpInside)
+        closeButton.center = useSafeAreas ? CGPoint(x: topBar.center.x, y: topBar.frame.size.height/2) : closeButton.center
         topBar.addSubview(closeButton)
     }
 
