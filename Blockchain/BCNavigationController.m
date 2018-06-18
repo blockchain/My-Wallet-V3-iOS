@@ -63,8 +63,9 @@
     [self.topBar addSubview:self.closeButton];
     
     self.backButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    self.backButton.imageEdgeInsets = IMAGE_EDGE_INSETS_BACK_BUTTON_CHEVRON;
-    self.backButton.frame = FRAME_BACK_BUTTON;
+    self.backButton.imageEdgeInsets = UIEdgeInsetsMake(5, 8, 5, 0);
+    self.backButton.frame = CGRectMake(0, 0, 85, 51);
+    self.backButton.center = CGPointMake(self.backButton.center.x, self.headerLabel.center.y);
     self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.backButton setTitle:@"" forState:UIControlStateNormal];
     [self.backButton setImage:[UIImage imageNamed:@"back_chevron_icon"] forState:UIControlStateNormal];

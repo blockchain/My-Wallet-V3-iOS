@@ -16,7 +16,7 @@
 
 - (id)init
 {
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame.size.width;
     if (self = [super initWithFrame:CGRectMake(0, 0, windowWidth, BUTTON_HEIGHT)]) {
         UIButton *continueButton = [[UIButton alloc] initWithFrame:self.bounds];
         [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
