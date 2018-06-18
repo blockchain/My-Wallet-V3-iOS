@@ -43,7 +43,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = self.view.frame.size.width;
     
     [self setupTimerView];
     
@@ -67,12 +67,12 @@
 
 - (void)setupTimerView
 {
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = self.view.frame.size.width;
     BOOL isUsing4S = IS_USING_SCREEN_SIZE_4S;
     CGFloat offset = isUsing4S ? 0 : 16;
     CGFloat timerViewHeight = isUsing4S ? 36 : 40;
 
-    UIView *timerView = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT + offset, windowWidth, timerViewHeight)];
+    UIView *timerView = [[UIView alloc] initWithFrame:CGRectMake(0, offset, windowWidth, timerViewHeight)];
     UILabel *timerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
     timerLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     timerLabel.textColor = COLOR_TEXT_GRAY;
@@ -85,7 +85,7 @@
 - (void)setupAgreementViewsAtYPosition:(CGFloat)yPosition
 {
     CGFloat horizontalMargin = MARGIN_HORIZONTAL;
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = self.view.frame.size.width;
     
     UISwitch *agreementSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(horizontalMargin, yPosition, 0, 0)];
     agreementSwitch.onTintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
@@ -130,13 +130,22 @@
 
 - (void)setupConfirmButton
 {
+    UIWindow *window = UIApplication.sharedApplication.keyWindow;
+    CGFloat safeAreaInsetTop;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+    } else {
+        safeAreaInsetTop = 20;
+    }
+    CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
+
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     button.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
     button.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [button setTitle:BC_STRING_CONFIRM forState:UIControlStateNormal];
-    button.center = CGPointMake(self.view.center.x, self.view.frame.size.height - 24 - BUTTON_HEIGHT/2);
+    button.center = CGPointMake(self.view.center.x, self.view.frame.size.height - topBarHeight - 24 - BUTTON_HEIGHT/2);
     [self.view addSubview:button];
     [button addTarget:self action:@selector(confirmButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     self.confirmButton = button;
