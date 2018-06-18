@@ -8,6 +8,7 @@
 
 #import "StateSelectorViewController.h"
 #import "BCNavigationController.h"
+#import "Blockchain-Swift.h"
 #import "UIView+ChangeFrameAttribute.h"
 
 @interface StateSelectorViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -54,7 +55,7 @@
 
 - (void)setupTableView
 {
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, self.view.frame.size.width, 44)];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     searchBar.placeholder = BC_STRING_SEARCH;
     searchBar.layer.borderColor = [COLOR_BLOCKCHAIN_BLUE CGColor];
     searchBar.layer.borderWidth = 1;
@@ -69,8 +70,20 @@
     searchBar.delegate = self;
     [self.view addSubview:searchBar];
     self.searchBar = searchBar;
+
+    UIWindow *window = UIApplication.sharedApplication.keyWindow;
+    CGFloat safeAreaInsetTop;
+    CGFloat safeAreaInsetBottom;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        safeAreaInsetBottom = window.rootViewController.view.safeAreaInsets.bottom;
+    } else {
+        safeAreaInsetTop = 20;
+        safeAreaInsetBottom = 0;
+    }
+    CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchBar.frame.origin.y + searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - DEFAULT_HEADER_HEIGHT) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchBar.frame.origin.y + searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - topBarHeight - searchBar.frame.size.height) style:UITableViewStylePlain];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.sectionIndexColor = COLOR_BLOCKCHAIN_BLUE;
     self.tableView.delegate = self;
