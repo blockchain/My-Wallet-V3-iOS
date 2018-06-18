@@ -16,7 +16,7 @@
     self = [super initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, frame.size.width, frame.size.height - DEFAULT_HEADER_HEIGHT)];
     
     if (self) {
-        CGFloat windowWidth = WINDOW_WIDTH - 50;
+        CGFloat windowWidth = frame.size.width - 50;
         UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, windowWidth, 100)];
         descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
         descriptionLabel.textAlignment = NSTextAlignmentCenter;
