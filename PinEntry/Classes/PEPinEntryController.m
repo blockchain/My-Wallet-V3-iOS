@@ -165,8 +165,9 @@ static PEViewController *VerifyController()
         backgroundViewPageControl.hidden = YES;
         self.backgroundViewPageControl = backgroundViewPageControl;
 
-        CGFloat windowWidth = WINDOW_WIDTH;
-        CGFloat windowHeight = WINDOW_HEIGHT;
+        CGRect rootFrame = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame;
+        CGFloat windowWidth = rootFrame.size.width;
+        CGFloat windowHeight = rootFrame.size.height;
 
         [pinController.scrollView setContentSize:CGSizeMake(windowWidth * (assets.count + 1), windowHeight)];
         [pinController.scrollView setPagingEnabled:YES];
@@ -389,7 +390,7 @@ static PEViewController *VerifyController()
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (!self.scrollViewPageControl) {
-        CGFloat windowWidth = WINDOW_WIDTH;
+        CGFloat windowWidth = self.view.frame.size.width;
         UIPageControl *scrollViewPageControl = [self pageControlWithAssets:[self assets]];
         [scrollViewPageControl changeXPosition:scrollViewPageControl.frame.origin.x + windowWidth];
         [pinController.scrollView addSubview:scrollViewPageControl];

@@ -87,7 +87,7 @@
     self.versionLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
     self.versionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
 
-    containerView.frame = CGRectMake(0, 480 - containerViewHeight - safeAreaInsetBottom, WINDOW_WIDTH, containerViewHeight);
+    containerView.frame = CGRectMake(0, 480 - containerViewHeight - safeAreaInsetBottom, window.rootViewController.view.frame.size.width, containerViewHeight);
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
 
@@ -185,7 +185,7 @@
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSwipeQR)];
     tapGestureRecognizer.numberOfTapsRequired = 1;
     
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = self.view.frame.size.width;
     CGFloat actionViewOriginX = self.swipeLabelImageView.frame.origin.x - self.swipeLabel.intrinsicContentSize.width - 8;
     UIView *actionView = [[UIView alloc] initWithFrame:CGRectMake(actionViewOriginX, self.swipeLabel.frame.origin.y, windowWidth - actionViewOriginX, self.swipeLabel.frame.size.height)];
     [containerView addSubview:actionView];

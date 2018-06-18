@@ -51,11 +51,9 @@
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
 
     CGRect rootFrame = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame;
-    CGRect frame = CGRectMake(0, 0, rootFrame.size.width, rootFrame.size.height);
+    [_videoPreviewLayer setFrame:rootFrame];
     
-    [_videoPreviewLayer setFrame:frame];
-    
-    UIView *view = [[UIView alloc] initWithFrame:frame];
+    UIView *view = [[UIView alloc] initWithFrame:rootFrame];
     [view.layer addSublayer:_videoPreviewLayer];
 
     [[ModalPresenter sharedInstance] showModalWithContent:view closeType:ModalCloseTypeClose showHeader:YES headerText:[LocalizationConstantsObjcBridge scanQRCode] onDismiss:^{
