@@ -127,8 +127,8 @@
 {
     self.view.backgroundColor = COLOR_EXCHANGE_BACKGROUND_GRAY;
     
-    CGFloat windowWidth = WINDOW_WIDTH;
-    FromToView *fromToView = [[FromToView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT + 16, windowWidth, 96) enableToTextField:NO];
+    CGFloat windowWidth = self.view.frame.size.width;
+    FromToView *fromToView = [[FromToView alloc] initWithFrame:CGRectMake(0, 16, windowWidth, 96) enableToTextField:NO];
     fromToView.delegate = self;
     [self.view addSubview:fromToView];
     self.fromToView = fromToView;

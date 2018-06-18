@@ -101,7 +101,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    CGFloat windowWidth = WINDOW_WIDTH;
+    CGFloat windowWidth = self.view.frame.size.width;
     
     UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, windowWidth, 50)];
     
