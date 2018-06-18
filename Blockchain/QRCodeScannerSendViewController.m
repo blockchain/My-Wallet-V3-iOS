@@ -49,8 +49,9 @@
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    
-    CGRect frame = CGRectMake(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    CGRect rootFrame = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame;
+    CGRect frame = CGRectMake(0, 0, rootFrame.size.width, rootFrame.size.height);
     
     [_videoPreviewLayer setFrame:frame];
     
