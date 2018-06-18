@@ -92,8 +92,8 @@
 
 - (void)setupExchangeButtonView
 {
-    CGFloat windowWidth = WINDOW_WIDTH;
-    UIView *newExchangeView = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT + EXCHANGE_VIEW_OFFSET, windowWidth, EXCHANGE_VIEW_HEIGHT)];
+    CGFloat windowWidth = self.view.frame.size.width;
+    UIView *newExchangeView = [[UIView alloc] initWithFrame:CGRectMake(0, EXCHANGE_VIEW_OFFSET, windowWidth, EXCHANGE_VIEW_HEIGHT)];
     newExchangeView.backgroundColor = [UIColor whiteColor];
     
     BCLine *topLine = [[BCLine alloc] initWithYPosition:newExchangeView.frame.origin.y - 1];
@@ -130,8 +130,8 @@
 
 - (void)setupTableView
 {
-    CGFloat windowWidth = WINDOW_WIDTH;
-    CGFloat yOrigin = DEFAULT_HEADER_HEIGHT + EXCHANGE_VIEW_OFFSET + EXCHANGE_VIEW_HEIGHT + 16;
+    CGFloat windowWidth = self.view.frame.size.width;
+    CGFloat yOrigin = EXCHANGE_VIEW_OFFSET + EXCHANGE_VIEW_HEIGHT + 16;
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, yOrigin, windowWidth, self.view.frame.size.height - 16 - yOrigin) style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
