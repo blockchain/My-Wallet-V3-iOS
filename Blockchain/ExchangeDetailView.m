@@ -120,7 +120,7 @@
 - (UIView *)rowViewWithText:(NSString *)text accessoryText:(NSString *)accessoryText yPosition:(CGFloat)posY accessoryLabelWidthHasPriority:(BOOL)accessoryLabelWidthHasPriority
 {
     CGFloat horizontalMargin = MARGIN_HORIZONTAL;
-    CGFloat rowWidth = WINDOW_WIDTH;
+    CGFloat rowWidth = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame.size.width;
     CGFloat rowHeight = [ExchangeDetailView rowHeight];
     UIView *rowView = [[UIView alloc] initWithFrame:CGRectMake(0, posY, rowWidth, rowHeight)];
 
