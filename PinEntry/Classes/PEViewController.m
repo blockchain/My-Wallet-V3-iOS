@@ -104,7 +104,7 @@
         } else {
             fillerView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
         }
-        [self.view addSubview:fillerView];
+        [self.scrollView addSubview:fillerView];
     }
     
     self.swipeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
