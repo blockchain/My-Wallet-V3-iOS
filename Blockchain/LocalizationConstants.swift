@@ -178,6 +178,10 @@ struct LocalizationConstants {
         static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
         static let allRightsReserved = NSLocalizedString("All rights reserved.", comment: "")
     }
+
+    struct SwipeToReceive {
+        static let pleaseLoginToLoadMoreAddresses = NSLocalizedString("Please login to load more addresses.", comment: "")
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this

@@ -22,15 +22,16 @@ struct Constants {
     //: Prefix colors with `Color` for easy filtering in asset catalog
     //: Adding new color: create entry in Images.xcassets, then add constant here with same name
     struct Colors {
-        static let ColorBrandPrimary = UIColorFromRGB(0x004A7C)   // previously BlockchainBlue
-        static let ColorBrandSecondary = UIColorFromRGB(0x10ADE4) // previously BlockchainLightBlue
-        static let ColorBrandTertiary = UIColorFromRGB(0xB2D5E5)  // previously BlockchainLightestBlue
-        static let ColorError = UIColorFromRGB(0xCA3A3C)          // previously WarningRed
-        static let ColorGray1 = UIColorFromRGB(0xEAEAEA)          // previously DisabledGray, SecondaryGray
-        static let ColorGray2 = UIColorFromRGB(0xCCCCCC)          // previously TextFieldBorderGray
-        static let ColorGray5 = UIColorFromRGB(0x545456)          // previously DarkGray
-        static let ColorSent = UIColorFromRGB(0xF26C57)           // previously SentRed
-        static let ColorSuccess = UIColorFromRGB(0x00A76F)        // previously SuccessGreen
+        static let ColorBrandPrimary = UIColorFromRGB(0x004A7C)    // previously BlockchainBlue
+        static let ColorBrandSecondary = UIColorFromRGB(0x10ADE4)  // previously BlockchainLightBlue
+        static let ColorBrandTertiary = UIColorFromRGB(0xB2D5E5)   // previously BlockchainLighterBlue
+        static let ColorBrandQuaternary = UIColorFromRGB(0xDAF2FB) // previously BlockchainLightestBlue
+        static let ColorError = UIColorFromRGB(0xCA3A3C)           // previously WarningRed
+        static let ColorGray1 = UIColorFromRGB(0xEAEAEA)           // previously DisabledGray, SecondaryGray
+        static let ColorGray2 = UIColorFromRGB(0xCCCCCC)           // previously TextFieldBorderGray
+        static let ColorGray5 = UIColorFromRGB(0x545456)           // previously DarkGray
+        static let ColorSent = UIColorFromRGB(0xF26C57)            // previously SentRed
+        static let ColorSuccess = UIColorFromRGB(0x00A76F)         // previously SuccessGreen
     }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
@@ -46,6 +47,7 @@ struct Constants {
         static let ScreenHeightIphone5S: CGFloat = 568
     }
     struct FontSizes {
+        static let ExtraSmall: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 15.0 : 12.0
         static let Small: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 16.0 : 13.0
         static let SmallMedium: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 17.0 : 14.0
         static let Medium: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 18.0 : 15.0

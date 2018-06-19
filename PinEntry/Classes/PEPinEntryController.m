@@ -144,7 +144,7 @@ static PEViewController *VerifyController()
     if (self.verifyOnly && BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled) {
         
         for (NSNumber *key in self.swipeViews) {
-            BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:key];
+            SwipeToReceiveAddressView *swipeView = [self.swipeViews objectForKey:key];
             [swipeView removeFromSuperview];
         }
         
@@ -157,27 +157,26 @@ static PEViewController *VerifyController()
         pinController.scrollView.backgroundColor = [UIColor clearColor];
         
         [pinController.scrollView setUserInteractionEnabled:YES];
-        
+
+        CGFloat windowWidth = self.view.frame.size.width;
+
         NSArray *assets = [self assets];
-        
-        UIPageControl *backgroundViewPageControl = [self pageControlWithAssets:assets];
-        [self.view addSubview:backgroundViewPageControl];
-        backgroundViewPageControl.hidden = YES;
-        self.backgroundViewPageControl = backgroundViewPageControl;
 
-        CGRect rootFrame = UIApplication.sharedApplication.keyWindow.rootViewController.view.frame;
-        CGFloat windowWidth = rootFrame.size.width;
-        CGFloat windowHeight = rootFrame.size.height;
-
-        [pinController.scrollView setContentSize:CGSizeMake(windowWidth * (assets.count + 1), windowHeight)];
+        [pinController.scrollView setContentSize:CGSizeMake(windowWidth * (assets.count + 1), self.view.frame.size.height)];
         [pinController.scrollView setPagingEnabled:YES];
         pinController.scrollView.delegate = self;
-        
+
         for (int assetIndex = 0; assetIndex < assets.count; assetIndex++) {
             LegacyAssetType asset = [assets[assetIndex] integerValue];
             BCSwipeAddressViewModel *viewModel = [[BCSwipeAddressViewModel alloc] initWithAssetType:asset];
-            BCSwipeAddressView *swipeView = [[BCSwipeAddressView alloc] initWithFrame:CGRectMake(windowWidth * (assetIndex + 1), 0, windowWidth, windowHeight) viewModel:viewModel delegate:self];
-            [self addAddressToSwipeView:swipeView assetType:asset];
+            SwipeToReceiveAddressView *swipeView = [SwipeToReceiveAddressView instanceFromNib];
+            swipeView.onRequestAssetTapped = ^(NSString * _Nonnull address) {
+                [self confirmCopyAddressToClipboard:address];
+            };
+            swipeView.frame = CGRectMake(windowWidth * (assetIndex + 1), 0, windowWidth, pinController.scrollView.frame.size.height);
+            [swipeView layoutIfNeeded];
+            swipeView.viewModel = viewModel;
+            [self addAddressToSwipeToReceiveView:swipeView assetType:asset];
             [self.swipeViews setObject:swipeView forKey:[NSNumber numberWithInteger:asset]];
             [pinController.scrollView addSubview:swipeView];
         }
@@ -187,7 +186,7 @@ static PEViewController *VerifyController()
     }
 }
 
-- (void)addAddressToSwipeView:(BCSwipeAddressView *)swipeView assetType:(LegacyAssetType)assetType
+- (void)addAddressToSwipeToReceiveView:(SwipeToReceiveAddressView *)swipeView assetType:(LegacyAssetType)assetType
 {
     AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
     if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
@@ -195,26 +194,26 @@ static PEViewController *VerifyController()
         AssetType type = [AssetTypeLegacyHelper convertFromLegacy:assetType];
 
         NSString *nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject].address;
-        
+
         if (nextAddress) {
-            
+
             void (^error)(void) = ^() {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizationConstantsObjcBridge.noInternetConnection message:BC_STRING_SWIPE_TO_RECEIVE_NO_INTERNET_CONNECTION_WARNING preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [swipeView updateAddress:[LocalizationConstantsObjcBridge requestFailedCheckConnection]];
+                    swipeView.address = LocalizationConstantsObjcBridge.requestFailedCheckConnection;
                 }]];
                 [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:nextAddress assetType:assetType];
-                    [swipeView updateAddress:nextAddress];
+                    swipeView.address = nextAddress;
                 }]];
                 self.errorAlert = alert;
             };
-            
+
             void (^success)(NSString *, BOOL) = ^(NSString *address, BOOL isUnused) {
-                
+
                 if (isUnused) {
                     [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:nextAddress assetType:assetType];
-                    [swipeView updateAddress:address];
+                    swipeView.address = address;
                     self.errorAlert = nil;
                 } else {
                     [assetAddressRepository removeFirstSwipeAddressFor:type];
@@ -227,12 +226,12 @@ static PEViewController *VerifyController()
                                                             successHandler:success
                                                               errorHandler:error];
         } else {
-            [swipeView updateAddress:nextAddress];
+            swipeView.address = nextAddress;
         }
     } else if (assetType == LegacyAssetTypeEther) {
         NSString *etherAddress = [[assetAddressRepository swipeToReceiveAddressesFor:AssetTypeEthereum] firstObject].address;
         if (etherAddress) {
-            [swipeView updateAddress:etherAddress];
+            swipeView.address = etherAddress;
         }
     }
 }
@@ -251,8 +250,8 @@ static PEViewController *VerifyController()
     }
     [assetAddressRepository removeFirstSwipeAddressFor:type];
 
-    BCSwipeAddressView *swipeView = [self.swipeViews objectForKey:[NSNumber numberWithInteger:assetType]];
-    [self addAddressToSwipeView:swipeView assetType:assetType];
+    SwipeToReceiveAddressView *swipeView = [self.swipeViews objectForKey:[NSNumber numberWithInteger:assetType]];
+    [self addAddressToSwipeToReceiveView:swipeView assetType:assetType];
 }
 
 - (void)pinEntryControllerDidEnteredPin:(PEViewController *)controller
@@ -386,6 +385,13 @@ static PEViewController *VerifyController()
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if (!self.backgroundViewPageControl) {
+        UIPageControl *backgroundViewPageControl = [self pageControlWithAssets:[self assets]];
+        [self.view addSubview:backgroundViewPageControl];
+        backgroundViewPageControl.hidden = YES;
+        self.backgroundViewPageControl = backgroundViewPageControl;
+    }
+
     if (!self.scrollViewPageControl) {
         CGFloat windowWidth = self.view.frame.size.width;
         UIPageControl *scrollViewPageControl = [self pageControlWithAssets:[self assets]];
@@ -432,7 +438,13 @@ static PEViewController *VerifyController()
 
 - (UIPageControl *)pageControlWithAssets:(NSArray *)assets
 {
-    UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, [BCSwipeAddressView pageIndicatorYOrigin], 100, 30)];
+    SwipeToReceiveAddressView *swipeView;
+    for (NSNumber *key in self.swipeViews) {
+        swipeView = [[self swipeViews] objectForKey:key];
+        break;
+    }
+
+    UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, swipeView.pageIndicatorYOrigin, 100, 30)];
     pageControl.center = CGPointMake(self.view.bounds.size.width/2, pageControl.center.y);
     pageControl.pageIndicatorTintColor = COLOR_BLOCKCHAIN_LIGHTEST_BLUE;
     pageControl.currentPageIndicatorTintColor = COLOR_BLOCKCHAIN_DARK_BLUE;
@@ -440,9 +452,7 @@ static PEViewController *VerifyController()
     return pageControl;
 }
 
-#pragma mark - Swipe View Delegate
-
-- (void)requestButtonClickedForAddress:(NSString *)address
+- (void)confirmCopyAddressToClipboard:(NSString *)address
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_COPY_ADDRESS message:BC_STRING_COPY_WARNING_TEXT preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];

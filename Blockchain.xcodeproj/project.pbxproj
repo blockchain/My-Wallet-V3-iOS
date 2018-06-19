@@ -250,11 +250,14 @@
 		AA1E525A2098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E52582098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift */; };
 		AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */; };
 		AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */; };
+		AA2D000120D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
+		AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
 		AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
 		AA31A7BC2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
 		AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */; };
+		AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA54277B20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib */; };
 		AA63F84B20A12AE9002B719B /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84A20A12AE9002B719B /* URLs.swift */; };
 		AA63F84C20A12AE9002B719B /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84A20A12AE9002B719B /* URLs.swift */; };
 		AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F84F20A12DA6002B719B /* BitcoinURLPayload.swift */; };
@@ -453,7 +456,6 @@
 		C79261B51E8ADF0300C87CED /* BCCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C79261B41E8ADF0300C87CED /* BCCardView.m */; };
 		C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C793E1FB1F8E7921001F171C /* ExchangeOverviewViewController.m */; };
 		C79672841FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m in Sources */ = {isa = PBXBuildFile; fileRef = C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */; };
-		C799B27A205383DD00CC522D /* BCSwipeAddressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C799B279205383DD00CC522D /* BCSwipeAddressView.m */; };
 		C79B27B120A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
 		C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
 		C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */; };
@@ -1317,9 +1319,11 @@
 		AA1E523C2097E6AC0099BD10 /* GetPinResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPinResponse.swift; sourceTree = "<group>"; };
 		AA1E52582098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AuthenticationCoordinator+Biometrics.swift"; path = "Authentication/AuthenticationCoordinator+Biometrics.swift"; sourceTree = "<group>"; };
 		AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTypeLegacyHelper.swift; sourceTree = "<group>"; };
+		AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReceiveAddressView.swift; sourceTree = "<group>"; };
 		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuItem.swift; sourceTree = "<group>"; };
 		AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBuySellDelegate.swift; sourceTree = "<group>"; };
+		AA54277B20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwipeToReceiveAddressView.xib; sourceTree = "<group>"; };
 		AA63F84A20A12AE9002B719B /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = URLs.swift; path = Extensions/URLs.swift; sourceTree = "<group>"; };
 		AA63F84F20A12DA6002B719B /* BitcoinURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURLPayload.swift; sourceTree = "<group>"; };
 		AA63F85320A12FC8002B719B /* BitcoinURLPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURLPayloadTests.swift; sourceTree = "<group>"; };
@@ -1490,8 +1494,6 @@
 		C793E1FB1F8E7921001F171C /* ExchangeOverviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeOverviewViewController.m; sourceTree = "<group>"; };
 		C79672821FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+VerboseString.h"; sourceTree = "<group>"; };
 		C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+VerboseString.m"; sourceTree = "<group>"; };
-		C799B278205383DD00CC522D /* BCSwipeAddressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCSwipeAddressView.h; sourceTree = "<group>"; };
-		C799B279205383DD00CC522D /* BCSwipeAddressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCSwipeAddressView.m; sourceTree = "<group>"; };
 		C79A239720B3520D000D96B9 /* DestinationAddressSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DestinationAddressSource.h; sourceTree = "<group>"; };
 		C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSendEtherDelegate.swift; sourceTree = "<group>"; };
 		C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletWatchOnlyDelegate.swift; sourceTree = "<group>"; };
@@ -2166,6 +2168,7 @@
 				AA69F65C2086A7330054EFCE /* Settings */,
 				AA31A7B82098DFB900FE6268 /* Side Menu */,
 				9FB3637C14B60128004BEA02 /* Supporting Files */,
+				AA54277820D88D1D00D5FEEE /* Swipe to Receive */,
 				AA63F84E20A12D88002B719B /* URL */,
 				9FCA4D18151494A300ECDFBE /* View Controllers */,
 				C9D4B2B2193E032200EDA9EA /* Views */,
@@ -2308,6 +2311,23 @@
 				AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */,
 			);
 			path = "Side Menu";
+			sourceTree = "<group>";
+		};
+		AA54277820D88D1D00D5FEEE /* Swipe to Receive */ = {
+			isa = PBXGroup;
+			children = (
+				AA54277A20D88D6600D5FEEE /* Views */,
+			);
+			path = "Swipe to Receive";
+			sourceTree = "<group>";
+		};
+		AA54277A20D88D6600D5FEEE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */,
+				AA54277B20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		AA63F84E20A12D88002B719B /* URL */ = {
@@ -2692,7 +2712,6 @@
 				C780A444202228A400E49274 /* BCPriceChartView.h */,
 				C74E21C52024E6D700A9FBB1 /* BCPricePreviewView.h */,
 				230FD2D71C5BF1A700336683 /* BCQRCodeView.h */,
-				C799B278205383DD00CC522D /* BCSwipeAddressView.h */,
 				C75CBD021F1FB12F00CACE0D /* BCTotalAmountView.h */,
 				C769B2D81FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.h */,
 				FCB33B6D1FC369D700317E6B /* ExchangeDetailView.h */,
@@ -2732,7 +2751,6 @@
 				C780A445202228A400E49274 /* BCPriceChartView.m */,
 				C74E21C62024E6D700A9FBB1 /* BCPricePreviewView.m */,
 				230FD2D81C5BF1A700336683 /* BCQRCodeView.m */,
-				C799B279205383DD00CC522D /* BCSwipeAddressView.m */,
 				C75CBD031F1FB12F00CACE0D /* BCTotalAmountView.m */,
 				C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */,
 				FCB33B6E1FC369D700317E6B /* ExchangeDetailView.m */,
@@ -2993,6 +3011,7 @@
 				C9BE91841945D8F600FD516D /* PEKeyboard-2-done.png in Resources */,
 				220E375719A3613600E06996 /* BCAddressSelectionView.xib in Resources */,
 				220E374F19A3604500E06996 /* ReceiveCoins.xib in Resources */,
+				AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */,
 				9F1831F0151744FC00FB3D52 /* ReceiveCell.xib in Resources */,
 				C790E11B1E52061B0063D141 /* Montserrat-SemiBold.ttf in Resources */,
 				ECD244EE19A8AC45004B1F40 /* PEKeyboard-3-next.png in Resources */,
@@ -3164,6 +3183,7 @@
 				51135704209CF5D800056D65 /* PutPinResponse.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
+				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
@@ -3265,6 +3285,7 @@
 				C9BE917B1945D8F600FD516D /* PENumpadView.m in Sources */,
 				AACE314C209152D800B7B806 /* UIApplication.swift in Sources */,
 				AA63F86720A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
+				AA2D000120D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */,
 				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */,
@@ -3398,7 +3419,6 @@
 				23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */,
 				C7442E3A1FBB636300695E4C /* FromToView.m in Sources */,
 				C72D6CC21EC0B7F80000F922 /* FeeTableCell.m in Sources */,
-				C799B27A205383DD00CC522D /* BCSwipeAddressView.m in Sources */,
 				2322DCBE1D771831000E5AC1 /* SRLog.m in Sources */,
 				238FC4D21DEC79E200591D5F /* TransactionDetailDoubleSpendWarningCell.m in Sources */,
 				23FDEF9A1D6CBC7000FC80D6 /* TransactionDetailViewController.m in Sources */,
