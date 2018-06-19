@@ -13,8 +13,12 @@ import Foundation
     @IBOutlet weak var labelMain: UILabel!
     @IBOutlet weak var buttonRateUs: UIButton!
 
+    private var previousStatusBarStyle: UIStatusBarStyle!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        previousStatusBarStyle = UIApplication.shared.statusBarStyle
 
         UIApplication.shared.statusBarStyle = .default
 
@@ -33,6 +37,11 @@ import Foundation
         let closeImage = UIImage(named: "close")?.withRenderingMode(.alwaysTemplate)
         buttonClose.setImage(closeImage, for: .normal)
         buttonClose.imageView?.tintColor = Constants.Colors.ColorBrandPrimary
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        UIApplication.shared.statusBarStyle = previousStatusBarStyle
+        super.viewWillDisappear(animated)
     }
 
     @IBAction func onCloseTapped(_ sender: Any) {
