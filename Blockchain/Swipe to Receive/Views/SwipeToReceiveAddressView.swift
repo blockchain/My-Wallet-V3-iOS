@@ -15,7 +15,7 @@ import UIKit
     @IBOutlet private weak var imageViewQRCode: UIImageView!
     @IBOutlet private weak var labelAddress: UILabel!
 
-    @objc var onRequestAssetTapped: ((String) -> ())?
+    @objc var onRequestAssetTapped: ((String) -> Void)?
 
     @objc var viewModel: BCSwipeAddressViewModel? {
         didSet {
@@ -68,7 +68,6 @@ import UIKit
     }
 
     @IBAction func onRequestButtonTapped(_ sender: Any) {
-        print("Request button tapped.")
         guard let address = address else {
             return
         }
