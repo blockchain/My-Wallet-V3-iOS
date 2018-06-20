@@ -76,18 +76,7 @@
 {
     [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED handler:nil];
 
-    LegacyAssetType legacyType;
-    switch (assetType) {
-        case AssetTypeBitcoin:
-            legacyType = LegacyAssetTypeBitcoin;
-            break;
-        case AssetTypeBitcoinCash:
-            legacyType = LegacyAssetTypeBitcoinCash;
-            break;
-        case AssetTypeEthereum:
-            legacyType = LegacyAssetTypeEther;
-            break;
-    }
+    LegacyAssetType legacyType = [AssetTypeLegacyHelper convertToLegacy: assetType];
     
     [AuthenticationCoordinator.sharedInstance.pinEntryViewController paymentReceived:legacyType];
 }

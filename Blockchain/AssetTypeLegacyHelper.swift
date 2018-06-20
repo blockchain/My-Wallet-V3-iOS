@@ -21,4 +21,15 @@ import Foundation
             return .bitcoinCash
         }
     }
+
+    @objc static func convert(toLegacy type: AssetType) -> LegacyAssetType {
+        switch type {
+        case .bitcoin:
+            return .bitcoin
+        case .ethereum:
+            return .ether
+        case .bitcoinCash:
+            return .bitcoinCash
+        }
+    }
 }

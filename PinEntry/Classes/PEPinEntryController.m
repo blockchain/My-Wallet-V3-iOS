@@ -191,7 +191,7 @@ static PEViewController *VerifyController()
     AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
     if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
 
-        AssetType type = [self assetTypeFromLegacyAssetType:assetType];
+        AssetType type = [AssetTypeLegacyHelper convertFromLegacy:assetType];
 
         NSString *nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject].address;
         
@@ -222,7 +222,7 @@ static PEViewController *VerifyController()
             };
             [[AssetAddressRepository sharedInstance] checkForUnusedAddress:nextAddress
                                                             displayAddress:nextAddress
-                                                                 assetType:[self assetTypeFromLegacyAssetType:assetType]
+                                                                 assetType:[AssetTypeLegacyHelper convertFromLegacy:assetType]
                                                             successHandler:success
                                                               errorHandler:error];
         } else {
@@ -236,21 +236,9 @@ static PEViewController *VerifyController()
     }
 }
 
-- (AssetType)assetTypeFromLegacyAssetType:(LegacyAssetType)legacyAssetType
-{
-    switch (legacyAssetType) {
-        case LegacyAssetTypeBitcoin:
-            return AssetTypeBitcoin;
-        case LegacyAssetTypeBitcoinCash:
-            return AssetTypeBitcoinCash;
-        case LegacyAssetTypeEther:
-            return AssetTypeEthereum;
-    }
-}
-
 - (void)paymentReceived:(LegacyAssetType)assetType
 {
-    AssetType type = [self assetTypeFromLegacyAssetType: assetType];
+    AssetType type = [AssetTypeLegacyHelper convertFromLegacy:assetType];
 
     if (type != AssetTypeBitcoin && type != AssetTypeBitcoinCash) {
         return;
