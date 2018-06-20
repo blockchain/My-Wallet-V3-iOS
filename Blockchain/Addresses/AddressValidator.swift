@@ -39,7 +39,16 @@ public final class AddressValidator: NSObject {
             let possibleBTCAddress = BitcoinAddress(string: address.description)
             return validate(bitcoinAddress: possibleBTCAddress)
         }
-        return result.toBool()
+
+        let isValidBCHAddress = result.toBool()
+
+        // Fallback on BTC address validation for legacy BCH addresses
+        if !isValidBCHAddress {
+            let possibleBTCAddress = BitcoinAddress(string: address.description)
+            return validate(bitcoinAddress: possibleBTCAddress)
+        }
+
+        return isValidBCHAddress
     }
 
     // MARK: - Ethereum Address Validation

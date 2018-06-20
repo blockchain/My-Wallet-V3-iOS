@@ -16,6 +16,9 @@ import Foundation
     /// The asset's address (e.g. "1Amu4uPJnYbUXX2HhDFMNq7tSneDwWYDyv")
     @objc var address: String { get }
 
+    /// Same as scheme - mostly here for obj-c compatibility reasons
+    @objc var schemeCompat: String { get }
+
     /// The asset's scheme (e.g. "bitcoin")
     static var scheme: String { get }
 }

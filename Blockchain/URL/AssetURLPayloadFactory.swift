@@ -10,7 +10,18 @@ import Foundation
 
 @objc class AssetURLPayloadFactory: NSObject {
 
-    @objc static func create(fromString string: String, legacyAssetType: LegacyAssetType) -> AssetURLPayload? {
+    @objc static func scheme(forAssetType type: AssetType) -> String? {
+        switch type {
+        case .bitcoin:
+            return BitcoinURLPayload.scheme
+        case .bitcoinCash:
+            return BitcoinCashURLPayload.scheme
+        default:
+            return nil
+        }
+    }
+
+    @objc static func create(fromString string: String, assetType: AssetType) -> AssetURLPayload? {
         if string.contains(":") {
             guard let url = URL(string: string) else {
                 print("Could not create payload from URL \(string)")
@@ -18,7 +29,7 @@ import Foundation
             }
             return create(from: url)
         } else {
-            switch legacyAssetType {
+            switch assetType {
             case .bitcoin:
                 return BitcoinURLPayload(address: string, amount: nil)
             case .bitcoinCash:

@@ -15,6 +15,10 @@ import Foundation
         return Constants.Schemes.bitcoin
     }
 
+    @objc var schemeCompat: String {
+        return BitcoinURLPayload.scheme
+    }
+
     @objc var address: String
 
     @objc var amount: String?

@@ -1973,11 +1973,15 @@ BOOL displayingLocalSymbolSend;
             
             // do something useful with results
             dispatch_sync(dispatch_get_main_queue(), ^{
-                id<AssetURLPayload> payload = [AssetURLPayloadFactory createFromString:[metadataObj stringValue] legacyAssetType:self.assetType];
-                NSString *address = payload.address;
+                AssetType type = [AssetTypeLegacyHelper convertFromLegacy:self.assetType];
+                id<AssetURLPayload> payload = [AssetURLPayloadFactory createFromString:[metadataObj stringValue] assetType:type];
 
-                if (address == nil || ![WalletManager.sharedInstance.wallet isValidAddress:address assetType:self.assetType]) {
-                    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT, address] title:BC_STRING_ERROR handler: nil];
+                NSString *address = payload.address;
+                NSString *scheme = [AssetURLPayloadFactory schemeForAssetType:type];
+                if (address == nil || ![payload.schemeCompat isEqualToString:scheme] || ![WalletManager.sharedInstance.wallet isValidAddress:address assetType:self.assetType]) {
+                    NSString *assetName = (type == AssetTypeBitcoin) ? @"Bitcoin" : @"Bitcoin Cash";
+                    NSString *errorMessage = [NSString stringWithFormat:LocalizationConstantsObjcBridge.invalidXAddressY, assetName, address];
+                    [AlertViewPresenter.sharedInstance standardErrorWithMessage:errorMessage title:LocalizationConstantsObjcBridge.error handler:nil];
                     return;
                 }
 

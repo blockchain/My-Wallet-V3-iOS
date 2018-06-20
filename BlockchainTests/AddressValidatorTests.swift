@@ -72,6 +72,12 @@ class AddressValidatorTests: XCTestCase {
 
     // MARK: - Bitcoin Cash Address Validation
 
+    func testAddressValidatorWithValidLegacyBitcoinAddress() {
+        precondition(addressValidator != nil, "Address validator must not be nil!")
+        let address = BitcoinCashAddress(string: "1K43HTP8ayuJjfqAHG7azwVDDQaDwLtqtK")
+        XCTAssertTrue(addressValidator!.validate(bitcoinCashAddress: address), "Expected address to be invalid.")
+    }
+
     func testAddressValidatorWithValidBitcoinCashAddress() {
         precondition(addressValidator != nil, "Address validator must not be nil!")
         let address = BitcoinCashAddress(string: "qz2js9054gqxj4dww35kkc3jpf0ph4cfh53tld3zek")

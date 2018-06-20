@@ -262,8 +262,6 @@
 #define BC_STRING_SURVEY_ALERT_TITLE NSLocalizedString(@"Would you like to tell us about your experience with Blockchain?", nil)
 #define BC_STRING_SURVEY_ALERT_MESSAGE NSLocalizedString(@"You will be leaving the app.", nil)
 
-#define BC_STRING_INVALID_ADDRESS NSLocalizedString(@"Address is not valid", nil)
-#define BC_STRING_INVALID_ADDRESS_ARGUMENT NSLocalizedString(@"Invalid address: %@", nil)
 #define BC_STRING_INVALID_BITCOIN_ADDRESS_ARGUMENT NSLocalizedString(@"Invalid Bitcoin address: %@", nil)
 #define BC_STRING_INVALID_ETHER_ADDRESS_ARGUMENT NSLocalizedString(@"Invalid Ether address: %@", nil)
 
