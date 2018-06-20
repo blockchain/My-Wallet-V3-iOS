@@ -346,7 +346,16 @@ static PEViewController *VerifyController()
     if (self.verifyOnly) {
         self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
         self.longPressGesture.minimumPressDuration = DURATION_LONG_PRESS_GESTURE_DEBUG;
-        self.debugButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 80, 15, 80, 51)];
+
+        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+        CGFloat safeAreaInsetTop;
+        if (@available(iOS 11.0, *)) {
+            safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+        } else {
+            safeAreaInsetTop = 20;
+        }
+
+        self.debugButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 80, safeAreaInsetTop, 80, 51)];
         self.debugButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         self.debugButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [self.debugButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)];
