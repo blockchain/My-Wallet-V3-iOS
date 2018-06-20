@@ -19,9 +19,8 @@ import Foundation
     private override init() {
         super.init()
         // Enable all features by default
-        AppFeature.rawValues.forEach {
-            let feature = AppFeature(rawValue: $0)!
-            featureToConfigurations[feature] = AppFeatureConfiguration(isEnabled: true)
+        AppFeature.allFeatures.forEach {
+            featureToConfigurations[$0] = AppFeatureConfiguration(isEnabled: true)
         }
     }
 
