@@ -248,6 +248,8 @@
 		AA1E523E2097E6AC0099BD10 /* GetPinResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E523C2097E6AC0099BD10 /* GetPinResponse.swift */; };
 		AA1E52592098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E52582098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift */; };
 		AA1E525A2098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E52582098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift */; };
+		AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */; };
+		AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */; };
 		AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
@@ -1314,6 +1316,7 @@
 		AA1E52392097E2190099BD10 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = Extensions/Strings.swift; sourceTree = "<group>"; };
 		AA1E523C2097E6AC0099BD10 /* GetPinResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPinResponse.swift; sourceTree = "<group>"; };
 		AA1E52582098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AuthenticationCoordinator+Biometrics.swift"; path = "Authentication/AuthenticationCoordinator+Biometrics.swift"; sourceTree = "<group>"; };
+		AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTypeLegacyHelper.swift; sourceTree = "<group>"; };
 		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuItem.swift; sourceTree = "<group>"; };
 		AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBuySellDelegate.swift; sourceTree = "<group>"; };
@@ -2136,6 +2139,7 @@
 				84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */,
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
 				511646C4208124E200C43522 /* AssetType.swift */,
+				AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */,
 				67D95A271B3DDC900012EBB1 /* Constants.swift */,
 				511646C7208129D800C43522 /* Environment.swift */,
 				AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */,
@@ -3147,6 +3151,7 @@
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
+				AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
 				AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */,
 				AACE31DF2092A99B00B7B806 /* CertificatePinner.swift in Sources */,
 				AAE94F3620C70B97005A3595 /* AssetURLPayload.swift in Sources */,
@@ -3473,6 +3478,7 @@
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
 				AAC9FCEE20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
+				AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
 				AA63F84B20A12AE9002B719B /* URLs.swift in Sources */,
 				23F601A41D09C931009102BF /* Reachability.m in Sources */,
 				510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */,

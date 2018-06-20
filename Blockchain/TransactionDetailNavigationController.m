@@ -156,7 +156,11 @@
 - (void)share
 {
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    NSURL *url = tabControllerManager.assetType == LegacyAssetTypeBitcoin ? [NSURL URLWithString:[[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:@"/tx/%@", self.transactionHash]] : [NSURL URLWithString:[[[BlockchainAPI sharedInstance] blockchairBchTransactionUrl] stringByAppendingString:self.transactionHash]];
+
+    AssetType assetType = [AssetTypeLegacyHelper convertFromLegacy:tabControllerManager.assetType];
+
+    NSString *txDetailString = [BlockchainAPI.sharedInstance transactionDetailURLFor:self.transactionHash assetType:assetType];
+    NSURL *url = [NSURL URLWithString:txDetailString];
 
     NSArray *activityItems = @[self, url];
     

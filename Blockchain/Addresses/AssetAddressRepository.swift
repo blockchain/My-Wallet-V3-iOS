@@ -134,7 +134,7 @@ extension AssetAddressRepository {
             assetAddress = transformedBtcAddress
         }
 
-        guard let urlString = BlockchainAPI.shared.suffixURL(address: assetAddress), let url = URL(string: urlString) else {
+        guard let urlString = BlockchainAPI.shared.assetInfoURL(for: assetAddress), let url = URL(string: urlString) else {
             print("Cannot construct URL to check if the address '\(address)' is unused.")
             return
         }

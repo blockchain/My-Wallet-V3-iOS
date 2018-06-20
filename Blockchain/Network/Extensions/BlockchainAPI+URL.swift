@@ -34,9 +34,6 @@ extension BlockchainAPI {
     var blockchairUrl: String {
         return "https://\(PartnerEndpoints.blockchair.rawValue)"
     }
-    var blockchairBchTransactionUrl: String {
-        return  "\(blockchairUrl)/bitcoin-cash/transaction/"
-    }
     var etherscanUrl: String {
         return "https://\(PartnerEndpoints.etherscan.rawValue)"
     }

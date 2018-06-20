@@ -8,19 +8,39 @@
 
 import Foundation
 
-// TODO: implement ethereum case
-
-extension BlockchainAPI {
-    func suffixURL(address: AssetAddress) -> String? {
-        switch address.assetType {
+@objc extension BlockchainAPI {
+    /// Returns the URL for the specified address's asset information (number of transactions,
+    /// total sent/received, etc.)
+    ///
+    /// - Parameter assetAddress: the `AssetAddress`
+    /// - Returns: the URL for the `AssetAddress`
+    func assetInfoURL(for assetAddress: AssetAddress) -> String? {
+        switch assetAddress.assetType {
         case .bitcoin:
             guard let url = walletUrl else { return nil }
-            return "\(url)/address/\(address.address)?format=json"
+            return "\(url)/address/\(assetAddress.address)?format=json"
         case .bitcoinCash:
             guard let url = apiUrl else { return nil }
-            return "\(url)/bch/multiaddr?active=\(address.address)"
+            return "\(url)/bch/multiaddr?active=\(assetAddress.address)"
         default:
             return nil
+        }
+    }
+
+    /// Returns the URL for the specified address's transaction detail.
+    ///
+    /// - Parameter transactionHash: the hash of the transaction
+    /// - Parameter assetType: the `AssetType`
+    /// - Returns: the URL for the transaction detail
+    func transactionDetailURL(for transactionHash: String, assetType: AssetType) -> String? {
+        switch assetType {
+        case .bitcoin:
+            guard let url = walletUrl else { return nil }
+            return "\(url)/tx/\(transactionHash)"
+        case .ethereum:
+            return "\(etherscanUrl)/tx/\(transactionHash)"
+        case .bitcoinCash:
+            return "\(blockchairUrl)/bitcoin-cash/transaction/\(transactionHash)"
         }
     }
 }

@@ -23,7 +23,7 @@ class BlockchainAPIURLSuffixTests: XCTestCase {
 
     func testSuffixURLWithValidBitcoinAddress() {
         let btcAddress = BitcoinAddress(string: "1W3hBBAnECvpmpFXcBrWoBXXihJAEkTmA")
-        let url = BlockchainAPI.shared.suffixURL(address: btcAddress)
+        let url = BlockchainAPI.shared.assetInfoURL(for: btcAddress)
         let expected = "https://blockchain.info/address/\(btcAddress.description)?format=json"
         XCTAssertNotNil(url, "Expected the url to be \(expected), but got nil.")
     }
@@ -32,7 +32,7 @@ class BlockchainAPIURLSuffixTests: XCTestCase {
 
 //    func testSuffixURLWithInvalidBitcoinAddress() {
 //        let invalidBtcAddress = BitcoinAddress(string: "12345")
-//        let url = BlockchainAPI.shared.suffixURL(address: invalidBtcAddress!)
+//        let url = BlockchainAPI.shared.assetInfoURL(for: invalidBtcAddress!)
 //        XCTAssertNil(url, "Expected the url to be nil due to an invalid address.")
 //    }
 
@@ -40,7 +40,7 @@ class BlockchainAPIURLSuffixTests: XCTestCase {
 
     func testSuffixURLWithValidBitcoinCashAddress() {
         let bchAddress = BitcoinCashAddress(string: "qqzhunu9f7p39e8kgchr628z9wsdxq0c5ua3yf4kzr")
-        let url = BlockchainAPI.shared.suffixURL(address: bchAddress)
+        let url = BlockchainAPI.shared.assetInfoURL(for: bchAddress)
         let expected = "https://api.blockchain.info/bch/multiaddr?active=\(bchAddress.description)"
         XCTAssertNotNil(url, "Expected the url to be \(expected), but got nil.")
     }
@@ -49,7 +49,7 @@ class BlockchainAPIURLSuffixTests: XCTestCase {
 
 //    func testSuffixURLWithInvalidBitcoinCashAddress() {
 //        let invalidBchAddress = BitcoinCashAddress(string: "abc")
-//        let url = BlockchainAPI.shared.suffixURL(address: invalidBchAddress!)
+//        let url = BlockchainAPI.shared.assetInfoURL(for: invalidBchAddress!)
 //        XCTAssertNil(url, "Expected the url to be nil due to an invalid address.")
 //    }
 }
