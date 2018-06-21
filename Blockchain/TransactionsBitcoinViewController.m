@@ -58,6 +58,100 @@
     [self reload];
 }
 
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self setupFilter];
+
+    [self.tableView changeYPosition:self.filterSelectorView.frame.origin.y + self.filterSelectorView.frame.size.height];
+    [self.tableView changeHeight:self.tableView.frame.size.height - self.filterSelectorView.frame.size.height];
+
+    self.lastNumberTransactions = INT_MAX;
+
+    self.loadedAllTransactions = NO;
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.scrollsToTop = YES;
+
+#ifdef ENABLE_TRANSACTION_FETCHING
+    self.moreButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.moreButton setTitle:BC_STRING_LOAD_MORE_TRANSACTIONS forState:UIControlStateNormal];
+    self.moreButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    self.moreButton.backgroundColor = [UIColor whiteColor];
+    [self.moreButton setTitleColor:COLOR_BLOCKCHAIN_BLUE forState:UIControlStateNormal];
+    [self.view addSubview:self.moreButton];
+    [self.moreButton addTarget:self action:@selector(fetchMoreClicked) forControlEvents:UIControlEventTouchUpInside];
+    self.moreButton.hidden = YES;
+#endif
+
+    [self setupBlueBackgroundForBounceArea];
+
+    [self setupPullToRefresh];
+
+    [self reload];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.balance = @"";
+    [self setText];
+    [self reloadData];
+}
+
+- (void)toggleSymbol
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
+}
+
+#pragma mark - Setup
+
+- (void)setupBlueBackgroundForBounceArea
+{
+    // Blue background for bounce area
+    CGRect frame = self.view.bounds;
+    frame.origin.y = -frame.size.height;
+    self.bounceView = [[UIView alloc] initWithFrame:frame];
+    [self.tableView addSubview:self.bounceView];
+    // Make sure the refresh control is in front of the blue area
+    self.bounceView.layer.zPosition -= 1;
+}
+
+- (void)setupPullToRefresh
+{
+    // Tricky way to get the refreshController to work on a UIViewController - @see http://stackoverflow.com/a/12502450/2076094
+    UITableViewController *tableViewController = [[UITableViewController alloc] init];
+    tableViewController.tableView = self.tableView;
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                            action:@selector(loadTransactions)
+                  forControlEvents:UIControlEventValueChanged];
+    tableViewController.refreshControl = self.refreshControl;
+}
+
+- (void)getAssetButtonClicked
+{
+    if ([WalletManager.sharedInstance.wallet isBuyEnabled]) {
+        [BuySellCoordinator.sharedInstance showBuyBitcoinView];
+    } else {
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        [tabControllerManager receiveCoinClicked:nil];
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)_tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == self.sectionMain) {
@@ -480,99 +574,6 @@
     }
 
     [WalletManager.sharedInstance.wallet reloadFilter];
-}
-
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self setupFilter];
-    
-    [self.tableView changeYPosition:self.filterSelectorView.frame.origin.y + self.filterSelectorView.frame.size.height];
-    [self.tableView changeHeight:self.tableView.frame.size.height - self.filterSelectorView.frame.size.height];
-    
-    self.lastNumberTransactions = INT_MAX;
-    
-    self.loadedAllTransactions = NO;
-
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.scrollsToTop = YES;
-    
-#ifdef ENABLE_TRANSACTION_FETCHING
-    self.moreButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    [self.moreButton setTitle:BC_STRING_LOAD_MORE_TRANSACTIONS forState:UIControlStateNormal];
-    self.moreButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    self.moreButton.backgroundColor = [UIColor whiteColor];
-    [self.moreButton setTitleColor:COLOR_BLOCKCHAIN_BLUE forState:UIControlStateNormal];
-    [self.view addSubview:self.moreButton];
-    [self.moreButton addTarget:self action:@selector(fetchMoreClicked) forControlEvents:UIControlEventTouchUpInside];
-    self.moreButton.hidden = YES;
-#endif
-    
-    [self setupBlueBackgroundForBounceArea];
-    
-    [self setupPullToRefresh];
-    
-    [self reload];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    self.balance = @"";
-    [self setText];
-    [self reloadData];
-}
-
-- (void)toggleSymbol
-{
-    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    WalletManager.sharedInstance.wallet.isFetchingTransactions = NO;
-}
-
-#pragma mark - Setup
-
-- (void)setupBlueBackgroundForBounceArea
-{
-    // Blue background for bounce area
-    CGRect frame = self.view.bounds;
-    frame.origin.y = -frame.size.height;
-    self.bounceView = [[UIView alloc] initWithFrame:frame];
-    [self.tableView addSubview:self.bounceView];
-    // Make sure the refresh control is in front of the blue area
-    self.bounceView.layer.zPosition -= 1;
-}
-
-- (void)setupPullToRefresh
-{
-    // Tricky way to get the refreshController to work on a UIViewController - @see http://stackoverflow.com/a/12502450/2076094
-    UITableViewController *tableViewController = [[UITableViewController alloc] init];
-    tableViewController.tableView = self.tableView;
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self
-                       action:@selector(loadTransactions)
-             forControlEvents:UIControlEventValueChanged];
-    tableViewController.refreshControl = self.refreshControl;
-}
-
-- (void)getAssetButtonClicked
-{
-    if ([WalletManager.sharedInstance.wallet isBuyEnabled]) {
-        [BuySellCoordinator.sharedInstance showBuyBitcoinView];
-    } else {
-        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-        [tabControllerManager receiveCoinClicked:nil];
-    }
 }
 
 @end

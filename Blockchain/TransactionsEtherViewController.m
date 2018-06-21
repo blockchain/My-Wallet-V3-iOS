@@ -33,12 +33,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.view.frame = CGRectMake(0,
-                                 DEFAULT_HEADER_HEIGHT_OFFSET,
-                                 [UIScreen mainScreen].bounds.size.width,
-                                 [UIScreen mainScreen].bounds.size.height - DEFAULT_HEADER_HEIGHT - DEFAULT_HEADER_HEIGHT_OFFSET - DEFAULT_FOOTER_HEIGHT);
-    
+
+    self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
+
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
