@@ -399,19 +399,6 @@ BOOL displayingLocalSymbolSend;
     }
 }
 
-- (void)showContactLabelWithName:(NSString *)name reason:(NSString *)reason
-{
-    CGFloat originX = toField.frame.origin.x;
-    CGFloat originY = lineBelowFromField.frame.origin.y + 4;
-    contactLabel.frame = CGRectMake(originX, originY, addressBookButton.frame.origin.x - originX, lineBelowToField.frame.origin.y - originY - 4);
-    contactLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    contactLabel.textColor = COLOR_TEXT_DARK_GRAY;
-    
-    contactLabel.hidden = NO;
-    contactLabel.text = IS_USING_SCREEN_SIZE_4S ? [NSString stringWithFormat:@"%@ - %@", name, reason] : [NSString stringWithFormat:@"%@\n%@", name, reason];
-    contactLabel.alpha = 0.5;
-}
-
 - (void)reloadFromAndToFields
 {
     [self reloadFromField];
@@ -474,13 +461,10 @@ BOOL displayingLocalSymbolSend;
 - (IBAction)reallyDoPayment:(id)sender
 {
     if (self.sendFromAddress && [WalletManager.sharedInstance.wallet isWatchOnlyLegacyAddress:self.fromAddress]) {
-        
         [self alertUserForSpendingFromWatchOnlyAddress];
-    
         return;
-    } else {
-        [self sendPaymentWithListener];
     }
+    [self sendPaymentWithListener];
 }
 
 - (void)getInfoForTransferAllFundsToDefaultAccount
@@ -844,7 +828,9 @@ BOOL displayingLocalSymbolSend;
                                                                                 surge:surgePresent];
         }
         
-        self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithWindow:[UIApplication sharedApplication].keyWindow viewModel:confirmPaymentViewModel sendButtonFrame:continuePaymentButton.frame];
+        self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithFrame:self.view.frame
+                                                                     viewModel:confirmPaymentViewModel
+                                                               sendButtonFrame:continuePaymentButton.frame];
         
         self.confirmPaymentView.confirmDelegate = self;
         

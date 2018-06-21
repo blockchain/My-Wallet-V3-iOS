@@ -23,12 +23,14 @@
 @end
 @implementation BCConfirmPaymentView
 
-- (id)initWithWindow:(UIView *)window viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame
+- (id)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame
 {
-    self = [super initWithFrame:CGRectMake(0, DEFAULT_HEADER_HEIGHT, window.frame.size.width, window.frame.size.height - DEFAULT_HEADER_HEIGHT)];
-    
+    self = [super initWithFrame:frame];
+
     if (self) {
         
+        self.frame = frame;
+
         self.viewModel = viewModel;
         
         BCTotalAmountView *totalAmountView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:COLOR_BLOCKCHAIN_RED amount:0];
@@ -45,7 +47,7 @@
         
         self.backgroundColor = [UIColor whiteColor];
         
-        UITableView *summaryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, totalAmountView.frame.origin.y + totalAmountView.frame.size.height, window.frame.size.width, tableViewHeight)];
+        UITableView *summaryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, totalAmountView.frame.origin.y + totalAmountView.frame.size.height, frame.size.width, tableViewHeight)];
         summaryTableView.scrollEnabled = NO;
         summaryTableView.delegate = self;
         summaryTableView.dataSource = self;
@@ -73,7 +75,7 @@
         
         self.reallyDoPaymentButton = [[UIButton alloc] initWithFrame:sendButtonFrame];
         self.reallyDoPaymentButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-        [self.reallyDoPaymentButton changeYPosition:self.bounds.size.height - 12 - sendButtonFrame.size.height];
+        [self.reallyDoPaymentButton changeYPosition:self.frame.size.height - 20 + 49];
         
         [self.reallyDoPaymentButton setTitle:buttonTitle forState:UIControlStateNormal];
         self.reallyDoPaymentButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
@@ -82,7 +84,7 @@
         [self.reallyDoPaymentButton addTarget:self action:@selector(reallyDoPaymentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:self.reallyDoPaymentButton];
-        
+
         if (viewModel.warningText) {
             UITextView *warning = [[UITextView alloc] initWithFrame:self.reallyDoPaymentButton.frame];
             warning.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);

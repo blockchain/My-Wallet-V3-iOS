@@ -16,7 +16,7 @@
 @end
 @interface BCConfirmPaymentView : BCDescriptionView
 
-- (id)initWithWindow:(UIView *)window viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame;
+- (id)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame;
 
 @property (nonatomic) UIButton *reallyDoPaymentButton;
 @property (nonatomic) UIButton *feeInformationButton;
