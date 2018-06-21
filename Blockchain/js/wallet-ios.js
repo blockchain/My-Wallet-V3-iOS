@@ -1097,15 +1097,11 @@ MyWalletPhone.newAccount = function(password, email, firstAccountName) {
 
     var error = function(e) {
         objc_loading_stop();
-        if (e == 'Invalid Email') {
-            objc_on_update_email_error();
-        } else {
-            var message = e;
-            if (e.initial_error) {
-                message = e.initial_error;
-            }
-            objc_on_error_creating_new_account(''+message);
+        var message = e;
+        if (e.initial_error) {
+            message = e.initial_error;
         }
+        objc_on_error_creating_new_account(''+message);
     };
 
     MyWallet.createNewWallet(email, password, firstAccountName, null, null, success, error);
