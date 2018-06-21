@@ -273,7 +273,7 @@ typedef enum {
     [viewController.view addSubview:modalView];
 
     CGRect frame = modalView.frame;
-    frame.origin.y = viewController.view.frame.origin.y + DEFAULT_HEADER_HEIGHT;
+    frame.origin.y = viewController.view.frame.origin.y;
     modalView.frame = frame;
 }
 
