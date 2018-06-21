@@ -233,6 +233,7 @@ UILabel *titleLabel;
 {
     titleLabel.text = text;
     titleLabel.font = [titleLabel.font fontWithSize:20];
+    titleLabel.adjustsFontSizeToFitWidth = NO;
     [self.navigationItem.titleView sizeToFit];
 }
 
@@ -240,6 +241,7 @@ UILabel *titleLabel;
 {
     titleLabel.text = text;
     titleLabel.font = [titleLabel.font fontWithSize:27];
+    titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.navigationItem.titleView sizeToFit];
 }
 
