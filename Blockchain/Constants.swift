@@ -200,10 +200,13 @@ struct Constants {
     @objc class func assetSelectorHeight() -> CGFloat {
         return Constants.Measurements.AssetSelectorHeight
     }
+<<<<<<< HEAD
 
     @objc class func minimumTapTargetSize() -> CGFloat {
         return Constants.Measurements.MinimumTapTargetSize
     }
+=======
+>>>>>>> feat(Views): add UIView extension for safe area frames
 }
 
 // MARK: Helper functions
