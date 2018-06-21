@@ -378,7 +378,7 @@
     if (_safeAreaInsetTop == 44) {
         headerTopOffset = 60;
     }
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, headerTopOffset, self.view.frame.size.width, self.bottomContainerView.frame.origin.y)];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, headerTopOffset, self.view.frame.size.width, self.bottomContainerView.frame.origin.y - headerTopOffset)];
     UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 42)];
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
