@@ -8,20 +8,21 @@
 
 import Foundation
 
-/**
- UIView Safe Area Frame Extension
- - Note: must only be called when safe area insets have been set (viewSafeAreaInsetsDidChange(), viewDidLayoutSubviews())
- - Note: this extension only supports the default screen orientation.
- - Parameter navigationBar: the height of the navigation bar should be considered when sizing the frame.
- - Parameter tabBar: the height of the tab bar should be considered when sizing the frame.
- - Parameter: assetSelector: the height of the asset selector should be considered when sizing the frame.
- */
 @objc
 extension UIView {
+    /**
+     UIView Safe Area Frame Extension
+     - Note: must only be called when safe area insets have been set (viewSafeAreaInsetsDidChange(), viewDidLayoutSubviews())
+     - Note: this extension only supports the default screen orientation.
+     - Parameter navigationBar: the height of the navigation bar should be considered when sizing the frame.
+     - Parameter tabBar: the height of the tab bar should be considered when sizing the frame.
+     - Parameter: assetSelector: the height of the asset selector should be considered when sizing the frame.
+     */
     class func safeAreaFrame(
         navigationBar: Bool = false,
         tabBar: Bool = false,
-        assetSelector: Bool = false) -> CGRect {
+        assetSelector: Bool = false
+        ) -> CGRect {
         guard
             let window = UIApplication.shared.keyWindow,
             let rootViewController = window.rootViewController else {
