@@ -1856,11 +1856,10 @@
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
 				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
-				C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */,
 				AACE31B72092A87900B7B806 /* PinTests.swift */,
-				51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */,
 				AA94966120CB611F00A9C2DD /* Addresses */,
 				AACE3206209782DD00B7B806 /* Authentication */,
+				51C9EBBF20DBE88000AB521D /* Extensions */,
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				511356DF209CA48F00056D65 /* Network */,
@@ -1902,6 +1901,15 @@
 				51A862E6209268D300B338E0 /* sample-unused-address.json */,
 			);
 			path = "Mock Data";
+			sourceTree = "<group>";
+		};
+		51C9EBBF20DBE88000AB521D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */,
+				51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */ = {
