@@ -18,7 +18,7 @@ extension UIView {
      - Parameter tabBar: the height of the tab bar should be considered when sizing the frame.
      - Parameter: assetSelector: the height of the asset selector should be considered when sizing the frame.
      */
-    class func safeAreaFrame(
+    class func rootViewSafeAreaFrame(
         navigationBar: Bool = false,
         tabBar: Bool = false,
         assetSelector: Bool = false
@@ -54,7 +54,7 @@ extension UIView {
         return frame
     }
 
-    class func safeAreaInsets() -> UIEdgeInsets {
+    class func rootViewSafeAreaInsets() -> UIEdgeInsets {
         guard
             let window = UIApplication.shared.keyWindow,
             let rootViewController = window.rootViewController else {
