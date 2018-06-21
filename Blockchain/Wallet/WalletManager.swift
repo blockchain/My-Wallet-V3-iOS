@@ -475,6 +475,7 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Exchange
+
     func didGetExchangeTrades(_ trades: [Any]!) {
         DispatchQueue.main.async { [unowned self] in
             self.exchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
@@ -487,9 +488,9 @@ extension WalletManager: WalletDelegate {
         }
     }
 
-    func didGetAvailableBtcBalance(_ result: [AnyHashable: Any]!) {
+    func didGetAvailableBtcBalance(_ result: [AnyHashable: Any]?) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary)
+            self.exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary?)
         }
     }
 

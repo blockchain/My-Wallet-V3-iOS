@@ -218,7 +218,7 @@
     [self.createViewController didGetAvailableEthBalance:result];
 }
 
-- (void)didGetAvailableBtcBalanceWithResult:(NSDictionary * _Nonnull)result
+- (void)didGetAvailableBtcBalanceWithResult:(NSDictionary * _Nullable)result
 {
     [self.createViewController didGetAvailableBtcBalance:result];
 }
