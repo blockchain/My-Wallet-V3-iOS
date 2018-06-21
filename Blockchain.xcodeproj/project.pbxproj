@@ -162,6 +162,8 @@
 		51C2ADD620BDECE700D66108 /* String+EscapeJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */; };
 		51C2ADD720BDECE700D66108 /* String+EscapeJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */; };
 		51C2ADD920BDEF9900D66108 /* String+EscapeJSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */; };
+		51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */; };
+		51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */; };
 		51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
 		51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
 		51DC2F5C20B72F4900E03AF2 /* AddressValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DC2F5B20B72F4900E03AF2 /* AddressValidator.swift */; };
@@ -1162,6 +1164,7 @@
 		51C2ADD320BDD3EA00D66108 /* AddressValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressValidatorTests.swift; sourceTree = "<group>"; };
 		51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+EscapeJS.swift"; sourceTree = "<group>"; };
 		51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+EscapeJSTests.swift"; sourceTree = "<group>"; };
+		51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+SafeAreaFrame.swift"; sourceTree = "<group>"; };
 		51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyReader.swift; sourceTree = "<group>"; };
 		51DC2F5B20B72F4900E03AF2 /* AddressValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressValidator.swift; sourceTree = "<group>"; };
 		51DC2F5F20B7312600E03AF2 /* EthereumAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
@@ -1779,6 +1782,7 @@
 		510EA19620811FF100A63AB8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */,
 				AACE31202091004900B7B806 /* UIApplication+Suspend.h */,
 				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
 				511646DE20851BC600C43522 /* Bundle.swift */,
@@ -3177,6 +3181,7 @@
 				51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				51135705209CF5E200056D65 /* WalletBuySellDelegate.swift in Sources */,
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
+				51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
 				AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */,
@@ -3257,6 +3262,7 @@
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,
 				23FB5C101D9ABB730008C6AB /* TransactionDetailDateCell.m in Sources */,
 				670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */,
+				51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				C790E1211E5345160063D141 /* BCVerifyEmailViewController.m in Sources */,
 				C71859571F4B695700745A87 /* TabControllerManager.m in Sources */,
 				51135701209CEEB900056D65 /* PushNotificationAuthPayload.swift in Sources */,

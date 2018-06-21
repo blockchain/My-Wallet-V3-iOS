@@ -36,15 +36,18 @@ struct Constants {
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
         // TODO: remove this once we use autolayout
-        static let DefaultNavigationBarHeight: CGFloat = 44
-        static let BackupButtonCornerRadius: CGFloat = 4
-        static let BusyViewLabelWidth: CGFloat = 230
-        static let BusyViewLabelHeight: CGFloat = 30
+        static let DefaultStatusBarHeight: CGFloat = 20.0
+        static let DefaultNavigationBarHeight: CGFloat = 44.0
+        static let DefaultTabBarHeight: CGFloat = 49.0
+        static let AssetSelectorHeight: CGFloat = 36.0
+        static let BackupButtonCornerRadius: CGFloat = 4.0
+        static let BusyViewLabelWidth: CGFloat = 230.0
+        static let BusyViewLabelHeight: CGFloat = 30.0
         static let BusyViewLabelAlpha: CGFloat = 0.75
         static let BusyViewLabelFontSystemSize: CGFloat = 14.0
 
-        static let ScreenHeightIphone4S: CGFloat = 480
-        static let ScreenHeightIphone5S: CGFloat = 568
+        static let ScreenHeightIphone4S: CGFloat = 480.0
+        static let ScreenHeightIphone5S: CGFloat = 568.0
     }
     struct FontSizes {
         static let ExtraSmall: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 15.0 : 12.0
@@ -190,6 +193,10 @@ struct Constants {
 
     @objc class func defaultNavigationBarHeight() -> CGFloat {
         return Constants.Measurements.DefaultNavigationBarHeight
+    }
+
+    @objc class func assetSelectorHeight() -> CGFloat {
+        return Constants.Measurements.AssetSelectorHeight
     }
 }
 
