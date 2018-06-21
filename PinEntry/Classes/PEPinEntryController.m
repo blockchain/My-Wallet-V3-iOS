@@ -143,11 +143,6 @@ static PEViewController *VerifyController()
 
     if (self.verifyOnly && BlockchainSettings.sharedAppInstance.swipeToReceiveEnabled) {
         
-        for (NSNumber *key in self.swipeViews) {
-            SwipeToReceiveAddressView *swipeView = [self.swipeViews objectForKey:key];
-            [swipeView removeFromSuperview];
-        }
-        
         pinController.swipeLabel.alpha = 1;
         pinController.swipeLabel.hidden = NO;
         
@@ -159,30 +154,46 @@ static PEViewController *VerifyController()
         [pinController.scrollView setUserInteractionEnabled:YES];
 
         CGFloat windowWidth = self.view.frame.size.width;
-
         NSArray *assets = [self assets];
 
         [pinController.scrollView setContentSize:CGSizeMake(windowWidth * (assets.count + 1), self.view.frame.size.height)];
         [pinController.scrollView setPagingEnabled:YES];
         pinController.scrollView.delegate = self;
-
-        for (int assetIndex = 0; assetIndex < assets.count; assetIndex++) {
-            LegacyAssetType asset = [assets[assetIndex] integerValue];
-            BCSwipeAddressViewModel *viewModel = [[BCSwipeAddressViewModel alloc] initWithAssetType:asset];
-            SwipeToReceiveAddressView *swipeView = [SwipeToReceiveAddressView instanceFromNib];
-            swipeView.onRequestAssetTapped = ^(NSString * _Nonnull address) {
-                [self confirmCopyAddressToClipboard:address];
-            };
-            swipeView.frame = CGRectMake(windowWidth * (assetIndex + 1), 0, windowWidth, pinController.scrollView.frame.size.height);
-            [swipeView layoutIfNeeded];
-            swipeView.viewModel = viewModel;
-            [self addAddressToSwipeToReceiveView:swipeView assetType:asset];
-            [self.swipeViews setObject:swipeView forKey:[NSNumber numberWithInteger:asset]];
-            [pinController.scrollView addSubview:swipeView];
-        }
     } else {
         pinController.swipeLabel.hidden = YES;
         pinController.swipeLabelImageView.hidden = YES;
+    }
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self updateSwipeToReceiveViews];
+}
+
+- (void)updateSwipeToReceiveViews
+{
+    CGFloat windowWidth = self.view.frame.size.width;
+    NSArray *assets = [self assets];
+
+    for (NSNumber *key in self.swipeViews) {
+        SwipeToReceiveAddressView *swipeView = [self.swipeViews objectForKey:key];
+        [swipeView removeFromSuperview];
+    }
+
+    for (int assetIndex = 0; assetIndex < assets.count; assetIndex++) {
+        LegacyAssetType asset = [assets[assetIndex] integerValue];
+        BCSwipeAddressViewModel *viewModel = [[BCSwipeAddressViewModel alloc] initWithAssetType:asset];
+        SwipeToReceiveAddressView *swipeView = [SwipeToReceiveAddressView instanceFromNib];
+        swipeView.onRequestAssetTapped = ^(NSString * _Nonnull address) {
+            [self confirmCopyAddressToClipboard:address];
+        };
+        swipeView.frame = CGRectMake(windowWidth * (assetIndex + 1), 0, windowWidth, pinController.scrollView.frame.size.height);
+        [swipeView layoutIfNeeded];
+        swipeView.viewModel = viewModel;
+        [self addAddressToSwipeToReceiveView:swipeView assetType:asset];
+        [self.swipeViews setObject:swipeView forKey:[NSNumber numberWithInteger:asset]];
+        [pinController.scrollView addSubview:swipeView];
     }
 }
 
