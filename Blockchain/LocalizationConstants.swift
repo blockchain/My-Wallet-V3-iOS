@@ -182,6 +182,10 @@ struct LocalizationConstants {
     struct SwipeToReceive {
         static let pleaseLoginToLoadMoreAddresses = NSLocalizedString("Please login to load more addresses.", comment: "")
     }
+
+    struct ReceiveAsset {
+        static let xPaymentRequest = NSLocalizedString("%@ payment request", comment: "Subject of the email sent when requesting for payment from another user.")
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -245,4 +249,6 @@ struct LocalizationConstants {
     @objc class func confirming() -> String { return LocalizationConstants.Exchange.confirming }
 
     @objc class func loadingTransactions() -> String { return LocalizationConstants.Exchange.loadingTransactions }
+
+    @objc class func xPaymentRequest() -> String { return LocalizationConstants.ReceiveAsset.xPaymentRequest }
 }

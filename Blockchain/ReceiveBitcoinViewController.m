@@ -792,7 +792,9 @@
 
     activityViewController.excludedActivityTypes = @[UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypeOpenInIBooks, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo];
 
-    [activityViewController setValue:BC_STRING_PAYMENT_REQUEST_BITCOIN_SUBJECT forKey:@"subject"];
+    NSString *assetTitle = (self.assetType == LegacyAssetTypeBitcoin) ? @"Bitcoin" : @"Bitcoin Cash";
+    NSString *subject = [NSString stringWithFormat:LocalizationConstantsObjcBridge.xPaymentRequest, assetTitle];
+    [activityViewController setValue:subject forKey:@"subject"];
 
     [self.amountInputView.btcField resignFirstResponder];
     [self.amountInputView.fiatField resignFirstResponder];
