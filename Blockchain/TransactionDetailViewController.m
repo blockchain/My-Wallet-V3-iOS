@@ -403,8 +403,10 @@ const CGFloat rowHeightValueReceived = 80;
         labelString = self.transactionModel.toString;
     }
 
-    if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash && [WalletManager.sharedInstance.wallet isValidAddress:address assetType:LegacyAssetTypeBitcoinCash]) {
-        address = [WalletManager.sharedInstance.wallet toBitcoinCash:address includePrefix:NO];
+    Wallet *wallet = WalletManager.sharedInstance.wallet;
+    if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash && [wallet isValidAddress:address assetType:LegacyAssetTypeBitcoinCash]) {
+        BitcoinAddress *bitcoinAddress = [[BitcoinAddress alloc] initWithString:address];
+        address = [bitcoinAddress toBitcoinCashAddressWithWallet:wallet].address;
     }
 
     UIAlertController *copyAddressController = [UIAlertController alertControllerWithTitle:labelString message:nil preferredStyle:UIAlertControllerStyleActionSheet];

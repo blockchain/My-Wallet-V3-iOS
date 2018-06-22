@@ -2747,7 +2747,7 @@
     JSValue *result = [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.toBitcoinCash(\"%@\", %d)", [address escapedForJS], includePrefix]];
     if ([result isUndefined]) return nil;
     NSString *bitcoinCashAddress = [result toString];
-    return includePrefix ? bitcoinCashAddress : [bitcoinCashAddress substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]];
+    return includePrefix ? bitcoinCashAddress : [bitcoinCashAddress substringFromIndex:[[ConstantsObjcBridge bitcoinCashUriPrefix] length]+1];
 }
 
 - (void)getBitcoinCashHistoryAndRates

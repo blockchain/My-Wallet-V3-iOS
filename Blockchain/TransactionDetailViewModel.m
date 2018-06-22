@@ -96,11 +96,22 @@
 - (id)initWithBitcoinCashTransaction:(Transaction *)transaction
 {
     TransactionDetailViewModel *model = [self initWithTransaction:transaction];
-    if ([WalletManager.sharedInstance.wallet isValidAddress:model.fromString assetType:LegacyAssetTypeBitcoinCash]) {
-        model.fromString = [WalletManager.sharedInstance.wallet toBitcoinCash:model.fromString includePrefix:NO];
+
+    Wallet *wallet = WalletManager.sharedInstance.wallet;
+    AddressValidator *addressValidator = [[AddressValidator alloc] initWithContext:wallet.context];
+
+    // Populate "from" field
+    BitcoinCashAddress *fromAddress = [[BitcoinCashAddress alloc] initWithString:model.fromAddress];
+    if ([addressValidator validateWithBitcoinCashAddress:fromAddress]) {
+        BitcoinAddress *fromBtcAddress = [[BitcoinAddress alloc] initWithString:model.fromAddress];
+        model.fromString = [fromBtcAddress toBitcoinCashAddressWithWallet:wallet].address;
     }
-    NSString *convertedAddress = [WalletManager.sharedInstance.wallet toBitcoinCash:model.toString includePrefix:NO];
-    model.toString = convertedAddress ? : model.toString;
+
+    // Populate "to" field
+    BitcoinAddress *toBtcAddress = [[BitcoinAddress alloc] initWithString:model.toString];
+    BitcoinCashAddress *toBchAddress = [toBtcAddress toBitcoinCashAddressWithWallet:WalletManager.sharedInstance.wallet];
+    model.toString = toBchAddress.address ?: model.toString;
+
     model.assetType = LegacyAssetTypeBitcoinCash;
     model.hideNote = YES;
     model.detailButtonTitle = [[BC_STRING_VIEW_ON_URL_ARGUMENT stringByAppendingFormat:@" %@", [[BlockchainAPI sharedInstance] blockchair]] uppercaseString];
