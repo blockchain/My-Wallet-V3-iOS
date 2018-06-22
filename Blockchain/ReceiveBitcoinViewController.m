@@ -245,21 +245,6 @@
     fromLabel.text = BC_STRING_FROM;
     fromLabel.adjustsFontSizeToFitWidth = YES;
     [self.bottomContainerView addSubview:fromLabel];
-
-    self.selectFromButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 35,  lineBelowToField.frame.origin.y + 10, 35, 30)];
-    self.selectFromButton.adjustsImageWhenHighlighted = NO;
-    [self.selectFromButton setImage:[UIImage imageNamed:@"disclosure"] forState:UIControlStateNormal];
-    [self.selectFromButton addTarget:self action:@selector(selectFromClicked) forControlEvents:UIControlEventTouchUpInside];
-    self.selectFromButton.hidden = YES;
-    [self.bottomContainerView addSubview:self.selectFromButton];
-    
-    CGFloat whatsThisButtonWidth = IS_USING_SCREEN_SIZE_LARGER_THAN_5S ? 120 : 100;
-    self.whatsThisButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - whatsThisButtonWidth, lineBelowToField.frame.origin.y + 15, whatsThisButtonWidth, 21)];
-    self.whatsThisButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    [self.whatsThisButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
-    [self.whatsThisButton setTitle:BC_STRING_WHATS_THIS forState:UIControlStateNormal];
-    [self.whatsThisButton addTarget:self action:@selector(whatsThisButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomContainerView addSubview:self.whatsThisButton];
     
     self.descriptionContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.lineBelowFromField.frame.origin.y + self.lineBelowFromField.frame.size.height, self.view.frame.size.width, 49)];
     self.descriptionContainerView.backgroundColor = [UIColor whiteColor];
@@ -728,9 +713,6 @@
         [self.bottomContainerView changeYPosition:self.view.frame.size.height - BOTTOM_CONTAINER_HEIGHT_PLUS_BUTTON_SPACE_4S];
     }
 
-    self.selectFromButton.hidden = YES;
-    self.whatsThisButton.hidden = NO;
-
     self.receiveToLabel.text = self.mainLabel;
     self.mainAddressLabel.text = [[self.mainAddress componentsSeparatedByString:@":"] lastObject];
     
@@ -741,7 +723,14 @@
 {
     NSString *btcAmountString = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:NO] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:NO];
     NSString *localCurrencyAmountString = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:amountReceived localCurrency:YES] : [NSNumberFormatter formatBchWithSymbol:amountReceived localCurrency:YES];
-    [self alertUserOfPaymentWithMessage:[[NSString alloc] initWithFormat:@"%@\n%@", btcAmountString, localCurrencyAmountString] showBackupReminder:showBackupReminder];
+
+    NSString *paymentMessage;
+    if (![localCurrencyAmountString isEqualToString:btcAmountString]) {
+        paymentMessage = [NSString stringWithFormat:@"%@\n%@", btcAmountString, localCurrencyAmountString];
+    } else {
+        paymentMessage = btcAmountString;
+    }
+    [self alertUserOfPaymentWithMessage:paymentMessage showBackupReminder:showBackupReminder];
 }
 
 - (void)selectDestination

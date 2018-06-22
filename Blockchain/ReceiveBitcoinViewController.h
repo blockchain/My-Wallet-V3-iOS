@@ -46,8 +46,6 @@
 
 @property(nonatomic) UIView *bottomContainerView;
 @property(nonatomic) UILabel *receiveToLabel;
-@property(nonatomic) UIButton *selectFromButton;
-@property(nonatomic) UIButton *whatsThisButton;
 @property(nonatomic) UIView *headerView;
 
 - (IBAction)archiveAddressClicked:(id)sender;
