@@ -48,6 +48,8 @@ struct Constants {
 
         static let ScreenHeightIphone4S: CGFloat = 480.0
         static let ScreenHeightIphone5S: CGFloat = 568.0
+
+        static let MinimumTapTargetSize: CGFloat = 22.0
     }
     struct FontSizes {
         static let ExtraSmall: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 15.0 : 12.0
@@ -197,6 +199,10 @@ struct Constants {
 
     @objc class func assetSelectorHeight() -> CGFloat {
         return Constants.Measurements.AssetSelectorHeight
+    }
+
+    @objc class func minimumTapTargetSize() -> CGFloat {
+        return Constants.Measurements.MinimumTapTargetSize
     }
 }
 

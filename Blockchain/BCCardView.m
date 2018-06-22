@@ -7,6 +7,8 @@
 //
 
 #import "BCCardView.h"
+#import "Blockchain-Swift.h"
+
 @interface BCCardView ()
 @property (nonatomic) ActionType actionType;
 @property (nonatomic) BOOL reducedHeightForPageIndicator;
@@ -108,9 +110,12 @@
 
 - (void)setupCloseButton
 {
-    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 25, 12.5, 12.5, 12.5)];
-    [closeButton setImage:[[UIImage imageNamed:@"close_large"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    CGRect closeFrame = CGRectMake(self.bounds.size.width - ConstantsObjcBridge.minimumTapTargetSize - 4, 4, ConstantsObjcBridge.minimumTapTargetSize, ConstantsObjcBridge.minimumTapTargetSize);
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:closeFrame];
+    UIImage *buttonImage = [[UIImage imageNamed:@"close_large"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [closeButton setImage:buttonImage forState:UIControlStateNormal];
     closeButton.tintColor = COLOR_TEXT_DARK_GRAY;
+    closeButton.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [self addSubview:closeButton];
     self.closeButton = closeButton;
 }
