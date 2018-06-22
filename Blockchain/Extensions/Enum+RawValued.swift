@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// Protocol definition for an enum that is also a `RawValue`.
+/// Note: do not use this protocol on enums that are also Ints
+/// as there is a known buffer overflow issue with release builds
+/// See: https://github.com/blockchain/My-Wallet-V3-iOS/pull/264
 protocol RawValued: Hashable, RawRepresentable {
     static var rawValues: [RawValue] { get }
 }
