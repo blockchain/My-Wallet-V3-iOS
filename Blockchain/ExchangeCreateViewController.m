@@ -780,7 +780,7 @@
 - (void)selectAccountClicked:(SelectMode)selectMode
 {
     BCAddressSelectionView *selectorView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:selectMode delegate:self];
-    selectorView.frame = CGRectMake(0, DEFAULT_HEADER_HEIGHT, self.view.frame.size.width, self.view.frame.size.height);
+    selectorView.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
     
     UIViewController *viewController = [UIViewController new];
     viewController.automaticallyAdjustsScrollViewInsets = NO;
