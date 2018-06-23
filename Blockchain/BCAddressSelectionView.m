@@ -197,24 +197,10 @@ typedef enum {
         
         [self addSubview:mainView];
         
-        mainView.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
-        
-        [tableView layoutIfNeeded];
-        float tableHeight = [tableView contentSize].height;
-        float tableSpace = mainView.frame.size.height - DEFAULT_HEADER_HEIGHT;
-        
-        CGRect frame = tableView.frame;
-        frame.size.height = tableSpace;
-        tableView.frame = frame;
-        
-        // Disable scrolling if table content fits on screen
-        if (tableHeight < tableSpace) {
-            tableView.scrollEnabled = NO;
-        }
-        else {
-            tableView.scrollEnabled = YES;
-        }
-        
+        mainView.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
+        CGRect tableViewFrame = mainView.frame;
+        tableViewFrame.size.height = mainView.frame.size.height + [UIView rootViewSafeAreaInsets].bottom;
+        tableView.frame = tableViewFrame;
         tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
     }
     return self;
