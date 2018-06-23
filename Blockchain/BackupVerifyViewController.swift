@@ -61,6 +61,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
             // do not segue since words vc already asks for second password and gets recovery phrase
         } else if wallet!.needsSecondPassword() {
             // if you need a second password, the second password delegate takes care of getting the recovery phrase
+            //: Is this even necessary? Not called if the second password is verified prior to starting the backup
             self.performSegue(withIdentifier: "verifyBackupWithSecondPassword", sender: self)
         }
 
@@ -222,9 +223,11 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "verifyBackupWithSecondPassword" {
-            let viewController = segue.destination as! SecondPasswordViewController
-            viewController.delegate = self
-            viewController.wallet = wallet
+            let navController = segue.destination as! UINavigationController
+            let secondPasswordController = SecondPasswordViewController()
+            secondPasswordController.delegate = self
+            secondPasswordController.wallet = wallet
+            navController.viewControllers = [secondPasswordController]
         }
     }
 

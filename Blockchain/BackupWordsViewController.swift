@@ -188,9 +188,14 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "secondPasswordForBackup" {
-            let viewController = segue.destination as! SecondPasswordViewController
-            viewController.delegate = self
-            viewController.wallet = wallet
+            let navController = segue.destination as! UINavigationController
+            let storyboard = UIStoryboard(name: "Backup", bundle: nil)
+            let secondPasswordController = storyboard.instantiateViewController(
+                withIdentifier: "secondPasswordController"
+                ) as! SecondPasswordViewController
+            secondPasswordController.delegate = self
+            secondPasswordController.wallet = wallet
+            navController.viewControllers = [secondPasswordController]
         } else if segue.identifier == "backupVerify" {
             let viewController = segue.destination as! BackupVerifyViewController
             viewController.wallet = wallet
