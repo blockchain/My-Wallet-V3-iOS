@@ -2695,13 +2695,13 @@
 		C9D4B2B1193E026500EDA9EA /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
-				C718595A1F4B85E800745A87 /* Transactions.xib */,
-				C9B32CF9194F3F5800BDF3A0 /* Cells */,
-				220E375919A3613600E06996 /* BCAddressSelectionView.xib */,
 				C71859581F4B791600745A87 /* TabController.xib */,
+				C718595A1F4B85E800745A87 /* Transactions.xib */,
+				220E375919A3613600E06996 /* BCAddressSelectionView.xib */,
+				C9B32CF9194F3F5800BDF3A0 /* Cells */,
+				220E376219A3614F00E06996 /* MainWindow.xib */,
 				220E375119A3604500E06996 /* ReceiveCoins.xib */,
 				220E375F19A3614900E06996 /* SendCoins.xib */,
-				220E376219A3614F00E06996 /* MainWindow.xib */,
 			);
 			name = Xibs;
 			sourceTree = "<group>";
