@@ -15,6 +15,7 @@
 #import "BCVerifyEmailViewController.h"
 #import "BCVerifyMobileNumberViewController.h"
 #import "WebLoginViewController.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 const int textFieldTagChangePasswordHint = 8;
 const int textFieldTagVerifyMobileNumber = 7;
@@ -60,34 +61,36 @@ const int aboutCookiePolicy = 3;
 @property (nonatomic) BOOL isEnablingTwoStepSMS;
 @property (nonatomic) BackupNavigationViewController *backupController;
 
-@property (readonly, nonatomic) int PINTouchID;
+@property (readonly, nonatomic) int PINBiometry;
 @property (readonly, nonatomic) int PINSwipeToReceive;
 
 @end
 
 @implementation SettingsTableViewController
 
-- (int)PINTouchID
+// Note: - There should not be a toggle for this setting, instead just assume the user wants to use it during pin setup.
+// SeeAlso: - https://developer.apple.com/design/human-interface-guidelines/ios/user-interaction/authentication
+- (int)PINBiometry
 {
-    AppFeatureConfiguration *touchIDConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTouchId];
-    AppFeatureConfiguration *swipeToReceiveConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
-    if (touchIDConfig.isEnabled && swipeToReceiveConfig.isEnabled) {
-        return 4;
-    } else if (touchIDConfig.isEnabled) {
-        return 4;
+    //: Don't show the option to enable biometric authentication if the user is not enrolled
+    if (![self biometryTypeDescription]) {
+        return -1;
     }
-    return -1;
+    //: As long as the user is enrolled in biometric authentication, the row index will be 4
+    return 4;
 }
 
 - (int)PINSwipeToReceive
 {
-    AppFeatureConfiguration *touchIDConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureTouchId];
-    AppFeatureConfiguration *swipeToReceiveConfig = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
-    if (touchIDConfig.isEnabled && swipeToReceiveConfig.isEnabled) {
-        return 5;
-    } else if (touchIDConfig.isEnabled) {
+    AppFeatureConfiguration *swipeToReceive = [AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureSwipeToReceive];
+    if (!swipeToReceive.isEnabled) {
         return -1;
     }
+    //: If the user is enrolled in biometric authentication, account for the additional row
+    if ([self biometryTypeDescription]) {
+        return 5;
+    }
+    //: Otherwise it will be the forth item
     return 4;
 }
 
@@ -584,42 +587,59 @@ const int aboutCookiePolicy = 3;
     }
 }
 
-#pragma mark - Change Touch ID
+#pragma mark - Biometrics
 
-- (void)switchTouchIDTapped
+/**
+ Gets the biometric type description depending on whether the device supports Face ID or Touch ID.
+ This method may also be used to quickly determine whether or not the user is enrolled in biometric authentication.
+ @return The biometric type description of the authentication method.
+ */
+- (NSString *)biometryTypeDescription
+{
+    LAContext *context = [[LAContext alloc] init];
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+        if (context.biometryType == LABiometryTypeFaceID) {
+            return [NSString stringWithFormat:[LocalizationConstantsObjcBridge useBiometricsAsPin], @"Face ID"];
+        }
+        return [NSString stringWithFormat:[LocalizationConstantsObjcBridge useBiometricsAsPin], @"Touch ID"];
+    }
+    return nil;
+}
+
+- (void)biometrySwitchTapped
 {
     [AuthenticationManager.sharedInstance canAuthenticateUsingBiometryWithAndReply:^(BOOL success, NSString * _Nullable errorMessage) {
         if (success) {
-            [self toggleTouchID];
+            [self toggleBiometry];
         } else {
-            BlockchainSettings.sharedAppInstance.touchIDEnabled = NO;
-            UIAlertController *alertTouchIDError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
-            [alertTouchIDError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
+            BlockchainSettings.sharedAppInstance.biometryEnabled = NO;
+            UIAlertController *alertBiometryError = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+            [alertBiometryError addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINBiometry inSection:sectionSecurity];
                 [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }]];
-            [self presentViewController:alertTouchIDError animated:YES completion:nil];
+            [self presentViewController:alertBiometryError animated:YES completion:nil];
         }
     }];
 }
 
-- (void)toggleTouchID
+- (void)toggleBiometry
 {
-    BOOL touchIDEnabled = BlockchainSettings.sharedAppInstance.touchIDEnabled;
-
-    if (!(touchIDEnabled == YES)) {
-        UIAlertController *alertForTogglingTouchID = [UIAlertController alertControllerWithTitle:BC_STRING_SETTINGS_PIN_USE_TOUCH_ID_AS_PIN message:BC_STRING_TOUCH_ID_WARNING preferredStyle:UIAlertControllerStyleAlert];
-        [alertForTogglingTouchID addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINTouchID inSection:sectionSecurity];
+    BOOL biometryEnabled = BlockchainSettings.sharedAppInstance.biometryEnabled;
+    if (!(biometryEnabled == YES)) {
+        NSString *biometryWarning = [NSString stringWithFormat:[LocalizationConstantsObjcBridge biometryWarning], [self biometryTypeDescription]];
+        UIAlertController *alertForTogglingBiometry = [UIAlertController alertControllerWithTitle:[self biometryTypeDescription] message:biometryWarning preferredStyle:UIAlertControllerStyleAlert];
+        [alertForTogglingBiometry addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.PINBiometry inSection:sectionSecurity];
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
-        [alertForTogglingTouchID addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertForTogglingBiometry addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [AuthenticationCoordinator.sharedInstance validatePin];
         }]];
-        [self presentViewController:alertForTogglingTouchID animated:YES completion:nil];
+        [self presentViewController:alertForTogglingBiometry animated:YES completion:nil];
     } else {
         [KeychainItemWrapper removePinFromKeychain];
-        BlockchainSettings.sharedAppInstance.touchIDEnabled = !touchIDEnabled;
+        BlockchainSettings.sharedAppInstance.biometryEnabled = !biometryEnabled;
     }
 }
 
@@ -1125,44 +1145,21 @@ const int aboutCookiePolicy = 3;
         case sectionProfile: return 4;
         case sectionPreferences: return 2;
         case sectionSecurity: {
-            NSInteger numberOfRows = 0;
-
-            if (self.PINTouchID > 0 && self.PINSwipeToReceive > 0) {
-                numberOfRows = 5;
-            } else if (self.PINTouchID > 0 || self.PINSwipeToReceive > 0) {
-                numberOfRows = 4;
-            } else {
-                numberOfRows = 3;
+            NSInteger numberOfRows = 6;
+            if (self.PINBiometry == -1) {
+                numberOfRows--;
             }
-
-            return [WalletManager.sharedInstance.wallet didUpgradeToHd] ? numberOfRows + 1 : numberOfRows;
+            if (self.PINSwipeToReceive == -1) {
+                numberOfRows--;
+            }
+            if (![WalletManager.sharedInstance.wallet didUpgradeToHd]) {
+                numberOfRows--;
+            }
+            return numberOfRows;
         }
         case aboutSection: return 4;
         default: return 0;
     }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, self.view.frame.size.width, 14)];
-    label.textColor = COLOR_BLOCKCHAIN_BLUE;
-    label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-
-    [view addSubview:label];
-
-    NSString *labelString = [self titleForHeaderInSection:section];
-
-    label.text = labelString;
-
-    return view;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 45.0f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1294,17 +1291,17 @@ const int aboutCookiePolicy = 3;
                 cell.textLabel.text = BC_STRING_CHANGE_PIN;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 return cell;
-            } else if (indexPath.row == self.PINTouchID) {
+            } else if (indexPath.row == self.PINBiometry) {
                 cell.textLabel.adjustsFontSizeToFitWidth = YES;
                 cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.textLabel.font = [SettingsTableViewController fontForCell];
-                cell.textLabel.text = BC_STRING_SETTINGS_PIN_USE_TOUCH_ID_AS_PIN;
-                UISwitch *switchForTouchID = [[UISwitch alloc] init];
-                BOOL touchIDEnabled = BlockchainSettings.sharedAppInstance.touchIDEnabled;
-                switchForTouchID.on = touchIDEnabled;
-                [switchForTouchID addTarget:self action:@selector(switchTouchIDTapped) forControlEvents:UIControlEventTouchUpInside];
-                cell.accessoryView = switchForTouchID;
+                cell.textLabel.text = [self biometryTypeDescription];
+                UISwitch *biometrySwitch = [[UISwitch alloc] init];
+                BOOL biometryEnabled = BlockchainSettings.sharedAppInstance.biometryEnabled;
+                biometrySwitch.on = biometryEnabled;
+                [biometrySwitch addTarget:self action:@selector(biometrySwitchTapped) forControlEvents:UIControlEventTouchUpInside];
+                cell.accessoryView = biometrySwitch;
                 return cell;
             } else if (indexPath.row == self.PINSwipeToReceive) {
                 cell.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -1340,10 +1337,36 @@ const int aboutCookiePolicy = 3;
                     return cell;
                 }
             }
-        }        default: return nil;
+        }
+        default: return nil;
     }
 
     return cell;
+}
+
+#pragma mark - Table view delegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
+    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, self.view.frame.size.width, 14)];
+    label.textColor = COLOR_BLOCKCHAIN_BLUE;
+    label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
+
+    NSString *labelString = [self titleForHeaderInSection:section];
+    label.text = labelString;
+    [label sizeToFit];
+
+    [view addSubview:label];
+
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 45.0f;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

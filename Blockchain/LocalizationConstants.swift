@@ -115,6 +115,8 @@ struct LocalizationConstants {
 
         //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
         static let touchIDLockout = NSLocalizedString("Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID", comment: "")
+        static let biometryWarning = NSLocalizedString("Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet.", comment: "%@ represents either Face ID or Touch ID to avoid additional translation")
+        static let enableBiometrics = NSLocalizedString("Enable %@", comment: "")
     }
 
     struct Onboarding {
@@ -125,6 +127,7 @@ struct LocalizationConstants {
         static let askToUserOldWalletTitle = NSLocalizedString("We’ve detected a previous installation of Blockchain Wallet on your phone.", comment: "")
         static let askToUserOldWalletMessage = NSLocalizedString("Please choose from the options below.", comment: "")
         static let loginExistingWallet = NSLocalizedString("Login existing Wallet", comment: "")
+        static let biometricInstructions = NSLocalizedString("Use %@ instead of PIN to authenticate Blockchain and access your wallet.", comment: "")
     }
 
     struct SideMenu {
@@ -184,6 +187,7 @@ struct LocalizationConstants {
     struct Settings {
         static let cookiePolicy = NSLocalizedString("Cookie Policy", comment: "")
         static let allRightsReserved = NSLocalizedString("All rights reserved.", comment: "")
+        static let useBiometricsAsPin = NSLocalizedString("Use %@ as PIN", comment: "")
     }
 
     struct SwipeToReceive {
@@ -314,4 +318,12 @@ struct LocalizationConstants {
     @objc class func upgradeFeatureTwo() -> String { return LocalizationConstants.LegacyUpgrade.upgradeFeatureTwo }
 
     @objc class func upgradeFeatureThree() -> String { return LocalizationConstants.LegacyUpgrade.upgradeFeatureThree }
+
+    @objc class func useBiometricsAsPin() -> String { return LocalizationConstants.Settings.useBiometricsAsPin }
+
+    @objc class func biometryWarning() -> String { return LocalizationConstants.Biometrics.biometryWarning }
+
+    @objc class func biometricInstructions() -> String { return LocalizationConstants.Onboarding.biometricInstructions }
+
+    @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableBiometrics }
 }

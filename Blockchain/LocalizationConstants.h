@@ -284,8 +284,6 @@
 #define BC_STRING_SETTINGS_FEES NSLocalizedString(@"Fees", nil)
 #define BC_STRING_SETTINGS_FEE_PER_KB NSLocalizedString(@"Fee per KB", nil)
 #define BC_STRING_SETTINGS_SECURITY NSLocalizedString(@"Security", nil)
-#define BC_STRING_SETTINGS_PIN_USE_FACE_ID_AS_PIN NSLocalizedString(@"Use Face ID as PIN", nil)
-#define BC_STRING_SETTINGS_PIN_USE_TOUCH_ID_AS_PIN NSLocalizedString(@"Use Touch ID as PIN", nil)
 #define BC_STRING_SETTINGS_PIN_SWIPE_TO_RECEIVE NSLocalizedString(@"Swipe to Receive", nil)
 #define BC_STRING_SWIPE_TO_RECEIVE_NO_INTERNET_CONNECTION_WARNING NSLocalizedString(@"We can't check whether this address has been used. Show anyway?", nil)
 #define BC_STRING_SETTINGS_SECURITY_TWO_STEP_VERIFICATION NSLocalizedString(@"2-step Verification", nil)
@@ -401,10 +399,6 @@
 #define BC_STRING_FACE_ID_ERROR_UNKNOWN_ARGUMENT NSLocalizedString(@"Unknown Face ID error. Code: %ld", nil)
 // No longer needed
 #define BC_STRING_TOUCH_ID_ERROR_UNKNOWN_ARGUMENT NSLocalizedString(@"Unknown Touch ID error. Code: %ld", nil)
-// No longer needed
-#define BC_STRING_FACE_ID_WARNING NSLocalizedString(@"Enabling this feature will allow all users with a registered Face ID fingerprint on this device to access to your wallet.", nil)
-// No longer needed
-#define BC_STRING_TOUCH_ID_WARNING NSLocalizedString(@"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet.", nil)
 
 #define BC_STRING_NO_EMAIL_CONFIGURED NSLocalizedString(@"You do not have an account set up for Mail. Please contact %@", nil)
 #define BC_STRING_PIN NSLocalizedString(@"PIN", nil)
@@ -546,12 +540,6 @@
 #define BC_STRING_WELCOME_MESSAGE_ONE NSLocalizedString (@"Welcome to Blockchain", nil)
 #define BC_STRING_WELCOME_MESSAGE_TWO NSLocalizedString (@"Securely store bitcoin", nil)
 #define BC_STRING_WELCOME_MESSAGE_THREE NSLocalizedString (@"Seamlessly transact with others around the world", nil)
-#define BC_STRING_WELCOME_FACE_ID_INSTRUCTIONS NSLocalizedString (@"Use Face ID instead of PIN to authenticate Blockchain and access your wallet.", nil)
-#define BC_STRING_WELCOME_TOUCH_ID_INSTRUCTIONS NSLocalizedString (@"Use Touch ID fingerprint instead of PIN to authenticate Blockchain and access your wallet.", nil)
-#define BC_STRING_FACE_ID NSLocalizedString(@"Face ID", nil)
-#define BC_STRING_TOUCH_ID NSLocalizedString(@"Touch ID", nil)
-#define BC_STRING_ENABLE_FACE_ID NSLocalizedString(@"Enable Face ID", nil)
-#define BC_STRING_ENABLE_TOUCH_ID NSLocalizedString(@"Enable Touch ID", nil)
 #define BC_STRING_OVERVIEW_MARKET_PRICE_TITLE NSLocalizedString(@"Current Price", nil)
 #define BC_STRING_OVERVIEW_MARKET_PRICE_DESCRIPTION NSLocalizedString (@"We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet.", nil)
 #define BC_STRING_OVERVIEW_REQUEST_FUNDS_TITLE NSLocalizedString(@"Request Funds", nil)
