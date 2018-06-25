@@ -193,6 +193,11 @@ struct LocalizationConstants {
     struct ReceiveAsset {
         static let xPaymentRequest = NSLocalizedString("%@ payment request", comment: "Subject of the email sent when requesting for payment from another user.")
     }
+
+    struct Backup {
+        static let reminderBackupMessageFirstBitcoin = NSLocalizedString("Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password.", comment: "")
+        static let reminderBackupMessageHasFunds = NSLocalizedString("For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password.", comment: "")
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -260,4 +265,8 @@ struct LocalizationConstants {
     @objc class func xPaymentRequest() -> String { return LocalizationConstants.ReceiveAsset.xPaymentRequest }
 
     @objc class func invalidXAddressY() -> String { return LocalizationConstants.SendAsset.invalidXAddressY }
+
+    @objc class func reminderBackupMessageFirstBitcoin() -> String { return LocalizationConstants.Backup.reminderBackupMessageFirstBitcoin }
+
+    @objc class func reminderBackupMessageHasFunds() -> String { return LocalizationConstants.Backup.reminderBackupMessageHasFunds }
 }

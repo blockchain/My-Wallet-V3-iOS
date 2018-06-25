@@ -102,7 +102,7 @@
         detailLabel.frame = CGRectOffset(emailLabel.frame, 0, 38);
     } else if (self.reminderType == ReminderTypeBackupHasBitcoin || self.reminderType == ReminderTypeBackupJustReceivedBitcoin) {
         titleLabel.text = BC_STRING_REMINDER_BACKUP_TITLE;
-        detailLabelString = self.reminderType == ReminderTypeBackupJustReceivedBitcoin ? BC_STRING_REMINDER_BACKUP_MESSAGE_FIRST_BITCOIN : BC_STRING_REMINDER_BACKUP_MESSAGE_HAS_BITCOIN;
+        detailLabelString = self.reminderType == ReminderTypeBackupJustReceivedBitcoin ? [LocalizationConstantsObjcBridge reminderBackupMessageFirstBitcoin] : [LocalizationConstantsObjcBridge reminderBackupMessageHasFunds];
         iconImageView.image = [UIImage imageNamed:@"lock_large"];
         [continueButton setTitle:BC_STRING_REMINDER_BACKUP_NOW forState:UIControlStateNormal];
         [continueButton addTarget:self action:@selector(showBackup) forControlEvents:UIControlEventTouchUpInside];
