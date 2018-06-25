@@ -99,7 +99,7 @@ class WalletManager: NSObject {
 
         AppCoordinator.shared.reload()
 
-        BlockchainSettings.App.shared.touchIDEnabled = false
+        BlockchainSettings.App.shared.biometryEnabled = false
 
         AppCoordinator.shared.tabControllerManager.transition(to: 1)
 

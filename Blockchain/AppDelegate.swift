@@ -131,8 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appSettings.shouldHideAllCards = true
         }
 
-        if appSettings.didFailTouchIDSetup && !appSettings.touchIDEnabled {
-            appSettings.shouldShowTouchIDSetup = true
+        if appSettings.didFailBiometrySetup && !appSettings.biometryEnabled {
+            appSettings.shouldShowBiometrySetup = true
         }
 
         // UI-related background actions

@@ -155,9 +155,9 @@ import Foundation
 
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView(asModal: true)
-            if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
+            if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
                 config.isEnabled,
-                BlockchainSettings.App.shared.touchIDEnabled {
+                BlockchainSettings.App.shared.biometryEnabled {
                 authenticateWithBiometrics()
             }
         } else {
@@ -598,14 +598,14 @@ extension AuthenticationCoordinator: SetupDelegate {
                 let errorMessage = error ?? LocalizationConstants.Biometrics.unableToUseBiometrics
                 AlertViewPresenter.shared.standardError(message: errorMessage)
 
-                BlockchainSettings.App.shared.didFailTouchIDSetup = true
+                BlockchainSettings.App.shared.didFailBiometrySetup = true
 
                 completion(false)
 
                 return
             }
 
-            BlockchainSettings.App.shared.touchIDEnabled = true
+            BlockchainSettings.App.shared.biometryEnabled = true
 
             // Saving the last entered pin will store the pin in the user's keychain
             self.lastEnteredPIN?.saveToKeychain()

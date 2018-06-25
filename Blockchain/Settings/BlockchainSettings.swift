@@ -36,12 +36,12 @@ final class BlockchainSettings: NSObject {
 
         // MARK: - Properties
 
-        @objc var didFailTouchIDSetup: Bool {
+        @objc var didFailBiometrySetup: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.didFailTouchIDSetup.rawValue)
+                return defaults.bool(forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.didFailTouchIDSetup.rawValue)
+                defaults.set(newValue, forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
             }
         }
 
@@ -150,12 +150,12 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var touchIDEnabled: Bool {
+        @objc var biometryEnabled: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.touchIDEnabled.rawValue)
+                return defaults.bool(forKey: UserDefaults.Keys.biometryEnabled.rawValue)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.touchIDEnabled.rawValue)
+                defaults.set(newValue, forKey: UserDefaults.Keys.biometryEnabled.rawValue)
             }
         }
 
@@ -217,12 +217,12 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var shouldShowTouchIDSetup: Bool {
+        @objc var shouldShowBiometrySetup: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldShowTouchIDSetup.rawValue)
+                return defaults.bool(forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowTouchIDSetup.rawValue)
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
             }
         }
 

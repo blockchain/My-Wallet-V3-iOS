@@ -21,7 +21,7 @@ extension UserDefaults {
 
     enum Keys: String {
         case assetType = "assetType"
-        case didFailTouchIDSetup = "didFailTouchIDSetup"
+        case didFailBiometrySetup = "didFailBiometrySetup"
         case encryptedPinPassword = "encryptedPINPassword"
         case environment = "environment"
         case firstRun = "firstRun"
@@ -36,10 +36,10 @@ extension UserDefaults {
         case reminderModalDate = "reminderModalDate"
         case shouldHideAllCards = "shouldHideAllCards"
         case shouldHideBuySellCard = "shouldHideBuySellNotificationCard"
-        case shouldShowTouchIDSetup = "shouldShowTouchIDSetup"
+        case shouldShowBiometrySetup = "shouldShowBiometrySetup"
         case swipeToReceiveEnabled = "swipeToReceive"
         case symbolLocal = "symbolLocal"
-        case touchIDEnabled = "touchIDEnabled"
+        case biometryEnabled = "biometryEnabled"
         case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
         case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
     }

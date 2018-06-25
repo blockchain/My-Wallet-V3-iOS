@@ -10,7 +10,7 @@ import Foundation
 
 /// Enumerates app features that can be dynamically configured (e.g. enabled/disabled)
 @objc enum AppFeature: Int {
-    case touchId
+    case biometry
     case swipeToReceive
     case transferFundsFromImportedAddress
 }
@@ -18,6 +18,6 @@ import Foundation
 extension AppFeature {
     // Use CaseIterable once upgraded to Swift 4.2
     static let allFeatures: [AppFeature] = [
-        .touchId, .swipeToReceive, .transferFundsFromImportedAddress
+        .biometry, .swipeToReceive, .transferFundsFromImportedAddress
     ]
 }

@@ -70,11 +70,11 @@ import Foundation
         appSettings.hasSeenEmailReminder = true
 
         let setupViewController = WalletSetupViewController(setupDelegate: AuthenticationCoordinator.shared)!
-        setupViewController.emailOnly = !appSettings.shouldShowTouchIDSetup
+        setupViewController.emailOnly = !appSettings.shouldShowBiometrySetup
         setupViewController.modalTransitionStyle = .crossDissolve
 
-        appSettings.shouldShowTouchIDSetup = false
-        appSettings.didFailTouchIDSetup = false
+        appSettings.shouldShowBiometrySetup = false
+        appSettings.didFailBiometrySetup = false
 
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(setupViewController, animated: true)
     }

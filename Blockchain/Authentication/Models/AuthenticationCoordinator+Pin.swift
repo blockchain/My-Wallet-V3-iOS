@@ -77,7 +77,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         showVerifyingBusyView(withTimeout: 30)
 
-        if let config = AppFeatureConfigurator.shared.configuration(for: .touchId),
+        if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
             config.isEnabled,
             pinEntryController.verifyOptional {
             pin.saveToKeychain()
@@ -280,10 +280,10 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         } else if response.code == GetPinResponse.StatusCode.success.rawValue {
 
             // Handle touch ID
-            if let config = AppFeatureConfigurator.shared.configuration(for: .touchId), config.isEnabled,
+            if let config = AppFeatureConfigurator.shared.configuration(for: .biometry), config.isEnabled,
                 pinEntryViewController?.verifyOptional ?? false {
                 LoadingViewPresenter.shared.hideBusyView()
-                BlockchainSettings.App.shared.touchIDEnabled = true
+                BlockchainSettings.App.shared.biometryEnabled = true
                 closePinEntryView(animated: true)
                 AppCoordinator.shared.showSettingsView()
                 return
