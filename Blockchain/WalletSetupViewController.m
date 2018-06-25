@@ -8,6 +8,7 @@
 
 #import "WalletSetupViewController.h"
 #import "Blockchain-Swift.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 @interface WalletSetupViewController ()
 @property (nonatomic) UIScrollView *scrollView;
@@ -48,7 +49,7 @@
     
     NSInteger numberOfPages = 2;
     
-    [scrollView addSubview:[self setupTouchIDView]];
+    [scrollView addSubview:[self setupBiometricView]];
     [scrollView addSubview:[self setupEmailView]];
     
     scrollView.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, scrollView.frame.size.height);
@@ -61,44 +62,65 @@
     }
 }
 
-- (UIView *)setupTouchIDView
+#pragma mark - Biometrics
+
+/**
+ Gets the biometric type depending on whether the device supports Face ID or Touch ID.
+ - Note: The biometric type does not need to be localized.
+ @return The biometric type of the authentication method.
+ */
+- (NSString *)biometryType
 {
-    UIView *touchIDView = [[UIView alloc] initWithFrame:self.view.frame];
-    
+    LAContext *context = [[LAContext alloc] init];
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+        if (context.biometryType == LABiometryTypeFaceID) {
+            return @"Face ID";
+        }
+        return @"Touch ID";
+    }
+    return nil;
+}
+
+- (UIView *)setupBiometricView
+{
+    UIView *biometricView = [[UIView alloc] initWithFrame:self.view.frame];
     UIView *bannerView = [self setupBannerViewWithImageName:@"fingerprint"];
-    [touchIDView addSubview:bannerView];
+
+    [biometricView addSubview:bannerView];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height + 32, touchIDView.frame.size.width - 50, 50)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height + 32, biometricView.frame.size.width - 50, 50)];
     titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_LARGE];
     titleLabel.textColor = COLOR_TEXT_DARK_GRAY;
-    titleLabel.text = BC_STRING_TOUCH_ID;
-    titleLabel.center = CGPointMake(touchIDView.center.x, titleLabel.center.y);
+    titleLabel.text = [self biometryType];
+    titleLabel.center = CGPointMake(biometricView.center.x, titleLabel.center.y);
     titleLabel.textAlignment = NSTextAlignmentCenter;
-    [touchIDView addSubview:titleLabel];
+    [biometricView addSubview:titleLabel];
     
-    UITextView *body = [[UITextView alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, touchIDView.frame.size.width - 50, 100)];
+    UITextView *body = [[UITextView alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, biometricView.frame.size.width - 50, 100)];
+    NSString *biometricInstructions = [NSString stringWithFormat:[LocalizationConstantsObjcBridge biometricInstructions], [self biometryType]];
     body.selectable = NO;
     body.editable = NO;
     body.scrollEnabled = NO;
     body.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     body.textColor = COLOR_TEXT_DARK_GRAY;
-    body.text = BC_STRING_WELCOME_TOUCH_ID_INSTRUCTIONS;
-    body.center = CGPointMake(touchIDView.center.x, body.center.y);
+    body.text = biometricInstructions;
+    body.center = CGPointMake(biometricView.center.x, body.center.y);
     body.textAlignment = NSTextAlignmentCenter;
-    [touchIDView addSubview:body];
+    [biometricView addSubview:body];
     
-    UIButton *enableTouchIDButton = [self setupActionButton];
-    [enableTouchIDButton setTitle:[BC_STRING_ENABLE_TOUCH_ID uppercaseString] forState:UIControlStateNormal];
-    [enableTouchIDButton addTarget:self action:@selector(enableTouchID:) forControlEvents:UIControlEventTouchUpInside];
-    enableTouchIDButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-    [touchIDView addSubview:enableTouchIDButton];
+    UIButton *enableBiometricButton = [self setupActionButton];
+    NSString *buttonTitle = [NSString stringWithFormat:[LocalizationConstantsObjcBridge enableBiometrics], [self biometryType]];
+    [enableBiometricButton setTitle:[buttonTitle uppercaseString] forState:UIControlStateNormal];
+    [enableBiometricButton addTarget:self action:@selector(enableTouchID:) forControlEvents:UIControlEventTouchUpInside];
+    enableBiometricButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
+    [biometricView addSubview:enableBiometricButton];
     
     UIButton *doneButton = [self setupDoneButton];
     doneButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [doneButton addTarget:self action:@selector(goToSecondPage) forControlEvents:UIControlEventTouchUpInside];
-    [touchIDView addSubview:doneButton];
+    [biometricView addSubview:doneButton];
     
-    return touchIDView;
+    return biometricView;
 }
 
 - (UIView *)setupEmailView
