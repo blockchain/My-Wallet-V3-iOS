@@ -204,6 +204,15 @@ struct LocalizationConstants {
             comment: "Reminder message for when the user already has funds prior to having completed the backup phrase."
         )
     }
+
+    struct LegacyUpgrade {
+        static let upgrade = NSLocalizedString("Upgrade", comment: "")
+        static let upgradeFeatureOne = NSLocalizedString("Always know the market price", comment: "")
+        static let upgradeFeatureTwo = NSLocalizedString("Easy one time wallet backup keeps you in control of your funds.", comment: "")
+        static let upgradeFeatureThree = NSLocalizedString("Everything you need to store, spend and receive btc, etc and bch.", comment: "")
+        static let upgradeSuccess = NSLocalizedString("You are now running our most secure wallet", comment: "")
+        static let upgradeSuccessTitle = NSLocalizedString("Success!", comment: "")
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -275,4 +284,16 @@ struct LocalizationConstants {
     @objc class func reminderBackupMessageFirstBitcoin() -> String { return LocalizationConstants.Backup.reminderBackupMessageFirstBitcoin }
 
     @objc class func reminderBackupMessageHasFunds() -> String { return LocalizationConstants.Backup.reminderBackupMessageHasFunds }
+
+    @objc class func upgradeSuccess() -> String { return LocalizationConstants.LegacyUpgrade.upgradeSuccess }
+
+    @objc class func upgradeSuccessTitle() -> String { return LocalizationConstants.LegacyUpgrade.upgradeSuccessTitle }
+
+    @objc class func upgrade() -> String { return LocalizationConstants.LegacyUpgrade.upgrade }
+
+    @objc class func upgradeFeatureOne() -> String { return LocalizationConstants.LegacyUpgrade.upgradeFeatureOne }
+
+    @objc class func upgradeFeatureTwo() -> String { return LocalizationConstants.LegacyUpgrade.upgradeFeatureTwo }
+
+    @objc class func upgradeFeatureThree() -> String { return LocalizationConstants.LegacyUpgrade.upgradeFeatureThree }
 }

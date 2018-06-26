@@ -124,7 +124,7 @@ int accountEntries = 0;
         [self addMenuEntry:entryKeyExchange text:BC_STRING_EXCHANGE icon:@"exchange_menu"];
     }
     if (!WalletManager.sharedInstance.wallet.didUpgradeToHd) {
-        [self addMenuEntry:entryKeyUpgradeBackup text:BC_STRING_UPGRADE icon:@"icon_upgrade"];
+        [self addMenuEntry:entryKeyUpgradeBackup text:[LocalizationConstantsObjcBridge upgrade] icon:@"icon_upgrade"];
     } else {
         [self addMenuEntry:entryKeyUpgradeBackup text:BC_STRING_BACKUP_FUNDS icon:@"lock"];
     }

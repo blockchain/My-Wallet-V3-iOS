@@ -3026,7 +3026,8 @@
 
 - (void)upgrade_success
 {
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_UPGRADE_SUCCESS title:BC_STRING_UPGRADE_SUCCESS_TITLE handler: nil];
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge upgradeSuccess]
+                                                             title:[LocalizationConstantsObjcBridge upgradeSuccessTitle] handler: nil];
 }
 
 #pragma mark - Callbacks from JS to Obj-C

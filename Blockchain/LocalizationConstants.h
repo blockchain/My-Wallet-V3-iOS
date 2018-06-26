@@ -245,17 +245,7 @@
 #define BC_STRING_UNARCHIVE_ADDRESS NSLocalizedString(@"Unarchive Address", nil)
 
 #define BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS NSLocalizedString(@"You must leave at least one active address", nil)
-#define BC_STRING_UPGRADE NSLocalizedString(@"Upgrade", nil)
-#define BC_STRING_UPGRADE_SUCCESS_TITLE NSLocalizedString(@"Success!", nil)
-#define BC_STRING_UPGRADE_SUCCESS NSLocalizedString(@"You are now running our most secure Bitcoin wallet", nil)
-#define BC_STRING_UPGRADE_FEATURE_THREE NSLocalizedString(@"Customize the way you organize your bitcoin in your Blockchain Wallet", nil)
-#define BC_STRING_UPGRADE_FEATURE_TWO NSLocalizedString(@"Easy one time wallet backup keeps you in control of your funds", nil)
-#define BC_STRING_UPGRADE_FEATURE_ONE NSLocalizedString(@"Everything you need to store, spend and receive your bitcoin", nil)
-#define BC_STRING_UPGRADE_ALERTVIEW_TITLE NSLocalizedString(@"Upgrade Wallet", nil)
-#define BC_STRING_UPGRADE_ALERTVIEW_CANCEL_TITLE NSLocalizedString(@"Not now", nil)
-#define BC_STRING_UPGRADE_ALERTVIEW_UPDATE_TITLE NSLocalizedString(@"Update", nil)
-#define BC_STRING_DONT_UPGRADE NSLocalizedString(@"or Continue", nil)
-#define BC_STRING_UPGRADE_BUTTON_TITLE NSLocalizedString(@"UPGRADE YOUR WALLET", nil)
+
 #define BC_STRING_ASK_ME_LATER NSLocalizedString(@"Ask Me Later", nil)
 #define BC_STRING_LOGOUT_AND_FORGET_WALLET NSLocalizedString(@"Logout and forget wallet", nil)
 
