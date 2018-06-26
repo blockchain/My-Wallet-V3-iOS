@@ -50,7 +50,7 @@
 
 - (NSArray *)imageNamesArray
 {
-    return @[@"ImageUpgradeFeatureOne", @"ImageUpgradeFeatureTwo", @"ImageUpgradeFeatureThree"];
+    return @[@"ImageUpgradeFeature1", @"ImageUpgradeFeature2", @"ImageUpgradeFeature3"];
 }
 
 - (NSArray *)captionLabelStringsArray
