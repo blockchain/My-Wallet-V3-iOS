@@ -209,7 +209,7 @@ struct LocalizationConstants {
         static let upgrade = NSLocalizedString("Upgrade", comment: "")
         static let upgradeFeatureOne = NSLocalizedString("Always know the market price", comment: "")
         static let upgradeFeatureTwo = NSLocalizedString("Easy one time wallet backup keeps you in control of your funds.", comment: "")
-        static let upgradeFeatureThree = NSLocalizedString("Everything you need to store, spend and receive btc, etc and bch.", comment: "")
+        static let upgradeFeatureThree = NSLocalizedString("Everything you need to store, spend and receive BTC, ETH and BCH.", comment: "")
         static let upgradeSuccess = NSLocalizedString("You are now running our most secure wallet", comment: "")
         static let upgradeSuccessTitle = NSLocalizedString("Success!", comment: "")
     }
