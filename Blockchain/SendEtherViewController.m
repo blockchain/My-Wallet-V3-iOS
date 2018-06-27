@@ -174,6 +174,11 @@
     [self getHistory];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self reload];
+}
+
 - (void)keepCurrentPayment
 {
     self.shouldKeepCurrentPayment = YES;
