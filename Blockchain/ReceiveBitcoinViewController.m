@@ -115,6 +115,11 @@
     [self updateUI];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self clearAmounts];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
