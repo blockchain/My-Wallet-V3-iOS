@@ -170,7 +170,10 @@ struct LocalizationConstants {
     }
 
     struct SendAsset {
-        static let invalidXAddressY = NSLocalizedString("Invalid %@ address: %@", comment: "")
+        static let invalidXAddressY = NSLocalizedString(
+            "Invalid %@ address: %@",
+            comment: "String presented to the user when they try to scan a QR code with an invalid address."
+        )
     }
 
     struct SendEther {
