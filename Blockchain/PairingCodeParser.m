@@ -34,14 +34,7 @@
     
     self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
 
-    UIWindow *window = UIApplication.sharedApplication.keyWindow;
-    CGFloat safeAreaInsetTop;
-    if (@available(iOS 11.0, *)) {
-        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-    } else {
-        safeAreaInsetTop = 20;
-    }
-
+    CGFloat safeAreaInsetTop = UIView.rootViewSafeAreaInsets.top;
     CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
     UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topBarHeight)];
     topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
