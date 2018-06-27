@@ -10,6 +10,9 @@
 #import "Blockchain-Swift.h"
 
 @implementation PairingCodeParser
+{
+    UIView *topBar;
+}
 
 - (id)initWithSuccess:(void (^)(NSDictionary*))__success error:(void (^)(NSString*))__error
 {
@@ -29,18 +32,29 @@
 {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height - DEFAULT_HEADER_HEIGHT);
-    
-    UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
+    self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
+
+    UIWindow *window = UIApplication.sharedApplication.keyWindow;
+    CGFloat safeAreaInsetTop;
+    if (@available(iOS 11.0, *)) {
+        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
+    } else {
+        safeAreaInsetTop = 20;
+    }
+
+    CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
+    UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topBarHeight)];
     topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
     [self.view addSubview:topBarView];
+    topBar = topBarView;
     
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:FRAME_HEADER_LABEL];
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, safeAreaInsetTop + 6, 200, 30)];
     headerLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_TOP_BAR_TEXT];
     headerLabel.textColor = [UIColor whiteColor];
     headerLabel.textAlignment = NSTextAlignmentCenter;
     headerLabel.adjustsFontSizeToFitWidth = YES;
     headerLabel.text = BC_STRING_SCAN_PAIRING_CODE;
+    headerLabel.center = CGPointMake(topBarView.center.x, headerLabel.center.y);
     [topBarView addSubview:headerLabel];
     
     UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 80, 15, 80, 51)];
@@ -88,8 +102,9 @@
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    
-    CGRect frame = CGRectMake(0, DEFAULT_HEADER_HEIGHT, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height - DEFAULT_HEADER_HEIGHT);
+
+    CGFloat topBarHeight = topBar.frame.size.height;
+    CGRect frame = CGRectMake(0, topBarHeight, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height - topBarHeight);
     
     [_videoPreviewLayer setFrame:frame];
     
