@@ -325,7 +325,6 @@ BOOL displayingLocalSymbolSend;
     
     [self enableAmountViews];
     [self enableToField];
-    [self hideContactLabel];
     
     self.isSending = NO;
     self.isReloading = NO;
@@ -1239,11 +1238,6 @@ BOOL displayingLocalSymbolSend;
 - (CGFloat)defaultYPositionForWarningLabel
 {
     return IS_USING_SCREEN_SIZE_4S ? 76 : 112;
-}
-
-- (void)hideContactLabel
-{
-    contactLabel.hidden = YES;
 }
 
 - (void)disableToField

@@ -100,8 +100,6 @@
         eventName = WALLET_EVENT_TX_FROM_URI;
     } else if (source == DestinationAddressSourceDropDown) {
         eventName = WALLET_EVENT_TX_FROM_DROPDOWN;
-    } else if (source == DestinationAddressSourceContact) {
-        eventName = WALLET_EVENT_TX_FROM_CONTACTS;
     } else if (source == DestinationAddressSourceNone) {
         DLog(@"Destination address source none");
         return;

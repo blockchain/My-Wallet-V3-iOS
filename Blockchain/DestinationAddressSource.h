@@ -15,7 +15,6 @@ typedef enum {
     DestinationAddressSourcePaste,
     DestinationAddressSourceURI,
     DestinationAddressSourceDropDown,
-    DestinationAddressSourceContact
 } DestinationAddressSource;
 
 #endif /* DestinationAddressSource_h */

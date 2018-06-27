@@ -24,7 +24,6 @@
                 <outlet property="bottomContainerView" destination="UFr-og-Lbi" id="lgK-g1-LV7"/>
                 <outlet property="btcAmountField" destination="52" id="YXL-6B-QU6"/>
                 <outlet property="btcLabel" destination="7ho-GV-ikp" id="e2a-3k-kXk"/>
-                <outlet property="contactLabel" destination="qkl-tN-HpA" id="8W4-Q3-S0p"/>
                 <outlet property="containerView" destination="Gzr-Wy-8Rh" id="DL3-hD-g0C"/>
                 <outlet property="continueButtonTopConstraint" destination="imL-4O-tP2" id="yHH-pp-d9a"/>
                 <outlet property="continuePaymentAccessoryButton" destination="pPu-bJ-k6p" id="ymH-4D-0a6"/>
@@ -221,14 +220,6 @@
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Contact Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="qkl-tN-HpA">
-                            <rect key="frame" x="63" y="51" width="222" height="39"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="13"/>
-                            <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4">
                             <rect key="frame" x="20" y="420" width="279" height="40"/>
                             <color key="backgroundColor" red="0.094117647058823528" green="0.61176470588235299" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
