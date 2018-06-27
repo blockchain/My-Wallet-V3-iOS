@@ -80,7 +80,7 @@
             pin3.frame = CGRectOffset(pin3.frame, 0, offsetY);
             promptLabel.frame = CGRectOffset(promptLabel.frame, 0, offsetY);
         }
-        containerViewHeight = [[UIScreen mainScreen] bounds].size.height/HEIGHT_IPHONE_5S * 380;
+        containerViewHeight = UIScreen.mainScreen.bounds.size.width * 1.1875; // PIN entry view must be 19:16 aspect ratio
     }
     
     promptLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
