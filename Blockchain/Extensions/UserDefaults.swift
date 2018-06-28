@@ -44,18 +44,15 @@ extension UserDefaults {
         case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
     }
 
-    static func migrateLegacyKeysIfNeeded() {
-        if let didFailTouchIDSetup = standard.object(forKey: "didFailTouchIDSetup") as? Bool {
-            standard.set(didFailTouchIDSetup, forKey: Keys.didFailBiometrySetup.rawValue)
-            standard.removeObject(forKey: "didFailTouchIDSetup")
-        }
-        if let shouldShowTouchIDSetup = standard.object(forKey: "shouldShowTouchIDSetup") as? Bool {
-            standard.set(shouldShowTouchIDSetup, forKey: Keys.shouldShowBiometrySetup.rawValue)
-            standard.removeObject(forKey: "shouldShowTouchIDSetup")
-        }
-        if let touchIDEnabled = standard.object(forKey: "touchIDEnabled") as? Bool {
-            standard.set(touchIDEnabled, forKey: Keys.biometryEnabled.rawValue)
-            standard.removeObject(forKey: "touchIDEnabled")
-        }
+    func migrateLegacyKeysIfNeeded() {
+        migrateBool(fromKey: "didFailTouchIDSetup", toKey: Keys.didFailBiometrySetup.rawValue)
+        migrateBool(fromKey: "shouldShowTouchIDSetup", toKey: Keys.shouldShowBiometrySetup.rawValue)
+        migrateBool(fromKey: "touchIDEnabled", toKey: Keys.biometryEnabled.rawValue)
+    }
+
+    private func migrateBool(fromKey: String, toKey: String) {
+        guard let value = self.object(forKey: fromKey) as? Bool else { return }
+        self.set(value, forKey: toKey)
+        self.removeObject(forKey: fromKey)
     }
 }

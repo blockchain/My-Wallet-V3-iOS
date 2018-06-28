@@ -309,7 +309,7 @@ final class BlockchainSettings: NSObject {
 
         //: Handles settings migration when keys change
         func handleMigrationIfNeeded() {
-            UserDefaults.migrateLegacyKeysIfNeeded()
+            defaults.migrateLegacyKeysIfNeeded()
         }
     }
 
