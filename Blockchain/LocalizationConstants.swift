@@ -206,12 +206,30 @@ struct LocalizationConstants {
     }
 
     struct LegacyUpgrade {
-        static let upgrade = NSLocalizedString("Upgrade", comment: "")
-        static let upgradeFeatureOne = NSLocalizedString("Always know the market price", comment: "")
-        static let upgradeFeatureTwo = NSLocalizedString("Easy one time wallet backup keeps you in control of your funds.", comment: "")
-        static let upgradeFeatureThree = NSLocalizedString("Everything you need to store, spend and receive BTC, ETH and BCH.", comment: "")
-        static let upgradeSuccess = NSLocalizedString("You are now running our most secure wallet", comment: "")
-        static let upgradeSuccessTitle = NSLocalizedString("Success!", comment: "")
+        static let upgrade = NSLocalizedString(
+            "Upgrade",
+            comment: "The title of the side menu entry item."
+        )
+        static let upgradeFeatureOne = NSLocalizedString(
+            "Always know the market price",
+            comment: "The description in the first view of the legacy wallet upgrade flow."
+        )
+        static let upgradeFeatureTwo = NSLocalizedString(
+            "Easy one time wallet backup keeps you in control of your funds.",
+            comment: "The description in the second view of the legacy wallet upgrade flow."
+        )
+        static let upgradeFeatureThree = NSLocalizedString(
+            "Everything you need to store, spend and receive BTC, ETH and BCH.",
+            comment: "The description in the third view of the legacy wallet upgrade flow."
+        )
+        static let upgradeSuccess = NSLocalizedString(
+            "You are now running our most secure wallet",
+            comment: "The message displayed in the alert view after completing the legacy upgrade flow."
+        )
+        static let upgradeSuccessTitle = NSLocalizedString(
+            "Success!",
+            comment: "The title of the alert view after completing the legacy upgrade flow."
+        )
     }
 }
 
