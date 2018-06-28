@@ -105,18 +105,36 @@ struct LocalizationConstants {
     }
 
     struct Biometrics {
-        //: Touch ID specific instructions
-        static let touchIDEnableInstructions = NSLocalizedString("Touch ID is not enabled on this device. To enable Touch ID, go to Settings -> Touch ID & Passcode and add a fingerprint.", comment: "")
-
+        static let touchIDEnableInstructions = NSLocalizedString(
+            "Touch ID is not enabled on this device. To enable Touch ID, go to Settings -> Touch ID & Passcode and add a fingerprint.",
+            comment: "The error description for when the user is not enrolled in biometric authentication."
+        )
         //: Biometry Authentication Errors (only available on iOS 11, possibly including newer versions)
-        static let biometricsLockout = NSLocalizedString("Unable to Authenticate due to failing Authentication too many times.", comment: "")
-        static let biometricsNotSupported = NSLocalizedString("Unable to Authenticate because the device does not support biometric Authentication.", comment: "")
-        static let unableToUseBiometrics = NSLocalizedString("Unable to use biometrics.", comment: "")
-
+        static let biometricsLockout = NSLocalizedString(
+            "Unable to authenticate due to failing authentication too many times.",
+            comment: "The error description for when the user has made too many failed authentication attempts using biometrics."
+        )
+        static let biometricsNotSupported = NSLocalizedString(
+            "Unable to authenticate because the device does not support biometric authentication.",
+            comment: "The error description for when the device does not support biometric authentication."
+        )
+        static let unableToUseBiometrics = NSLocalizedString(
+            "Unable to use biometrics.",
+            comment: "The error message displayed to the user upon failure to authenticate using biometrics."
+        )
         //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
-        static let touchIDLockout = NSLocalizedString("Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID", comment: "")
-        static let biometryWarning = NSLocalizedString("Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet.", comment: "%@ represents either Face ID or Touch ID to avoid additional translation")
-        static let enableBiometrics = NSLocalizedString("Enable %@", comment: "")
+        static let touchIDLockout = NSLocalizedString(
+            "Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID",
+            comment: "The error description for when the user has made too many failed authentication attempts using Touch ID."
+        )
+        static let biometryWarning = NSLocalizedString(
+            "Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet.",
+            comment: "The message displayed in the alert view when the biometry switch is toggled in the settings view."
+        )
+        static let enableX = NSLocalizedString(
+            "Enable %@",
+            comment: "The title of the biometric authentication button in the wallet setup view. The value depends on the type of biometry."
+        )
     }
 
     struct Onboarding {
@@ -325,5 +343,5 @@ struct LocalizationConstants {
 
     @objc class func biometricInstructions() -> String { return LocalizationConstants.Onboarding.biometricInstructions }
 
-    @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableBiometrics }
+    @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableX }
 }
