@@ -44,6 +44,7 @@
         UILabel *balanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, fiatBalanceLabel.frame.origin.y + fiatBalanceLabel.frame.size.height, frame.size.width, labelHeight)];
         balanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:fontSize];
         balanceLabel.textColor = labelTextColor;
+        balanceLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:balanceLabel];
         self.balanceLabel = balanceLabel;
     }
