@@ -15,4 +15,4 @@
 "8Zy-R2-HoW.text" = "Two-Step Verification";
 
 /* Class = "UILabel"; text = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet."; ObjectID = "bFL-5O-fcl"; */
-"bFL-5O-fcl.text" = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet.";
+"bFL-5O-fcl.text" = "Protect your wallet from unauthorized access by enabling two-factor authentication using your mobile number. When you try to access your wallet, an SMS code will be requested to approve the login.";
