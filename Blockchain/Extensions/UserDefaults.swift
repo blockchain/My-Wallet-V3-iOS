@@ -1,5 +1,5 @@
 //
-//  UserDefaults.swift
+//  Userstandard.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 4/13/18.
@@ -42,5 +42,20 @@ extension UserDefaults {
         case biometryEnabled = "biometryEnabled"
         case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
         case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
+    }
+
+    static func migrateLegacyKeysIfNeeded() {
+        if let didFailTouchIDSetup = standard.object(forKey: "didFailTouchIDSetup") as? Bool {
+            standard.set(didFailTouchIDSetup, forKey: Keys.didFailBiometrySetup.rawValue)
+            standard.removeObject(forKey: "didFailTouchIDSetup")
+        }
+        if let shouldShowTouchIDSetup = standard.object(forKey: "shouldShowTouchIDSetup") as? Bool {
+            standard.set(shouldShowTouchIDSetup, forKey: Keys.shouldShowBiometrySetup.rawValue)
+            standard.removeObject(forKey: "shouldShowTouchIDSetup")
+        }
+        if let touchIDEnabled = standard.object(forKey: "touchIDEnabled") as? Bool {
+            standard.set(touchIDEnabled, forKey: Keys.biometryEnabled.rawValue)
+            standard.removeObject(forKey: "touchIDEnabled")
+        }
     }
 }

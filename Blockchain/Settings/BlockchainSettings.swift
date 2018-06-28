@@ -279,6 +279,7 @@ final class BlockchainSettings: NSObject {
                 UserDefaults.DebugKeys.enableCertificatePinning.rawValue: true
             ])
             migratePasswordAndPinIfNeeded()
+            handleMigrationIfNeeded()
         }
 
         // MARK: - Public
@@ -304,6 +305,11 @@ final class BlockchainSettings: NSObject {
 
             defaults.removeObject(forKey: UserDefaults.Keys.password.rawValue)
             defaults.removeObject(forKey: UserDefaults.Keys.pin.rawValue)
+        }
+
+        //: Handles settings migration when keys change
+        func handleMigrationIfNeeded() {
+            UserDefaults.migrateLegacyKeysIfNeeded()
         }
     }
 
