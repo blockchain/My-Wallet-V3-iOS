@@ -323,7 +323,7 @@ import Foundation
     /// - Parameters:
     ///   - viewController: the view controller to present the pin entry view in, if nil, it will be
     ///                     presented in the root controller
-    @objc func showPinEntryView(inViewController viewController: UIViewController? = nil) {
+    func showPinEntryView(inViewController viewController: UIViewController? = nil) {
 
         guard !walletManager.didChangePassword else {
             showPasswordModal()
@@ -380,6 +380,8 @@ import Foundation
         self.pinEntryViewController = pinViewController
 
         LoadingViewPresenter.shared.hideBusyView()
+
+        UIApplication.shared.statusBarStyle = .default
     }
 
     // MARK: - Password Presentation

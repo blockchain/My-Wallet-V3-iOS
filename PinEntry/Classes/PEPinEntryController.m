@@ -131,11 +131,6 @@ static PEViewController *VerifyController()
 	return n;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
-}
-
 - (void)reset
 {
     [pinController resetPin];
