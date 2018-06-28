@@ -195,8 +195,14 @@ struct LocalizationConstants {
     }
 
     struct Backup {
-        static let reminderBackupMessageFirstBitcoin = NSLocalizedString("Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password.", comment: "")
-        static let reminderBackupMessageHasFunds = NSLocalizedString("For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password.", comment: "")
+        static let reminderBackupMessageFirstBitcoin = NSLocalizedString(
+            "Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password.",
+            comment: "Reminder message for when the user has just received funds prior to having completed the backup phrase."
+        )
+        static let reminderBackupMessageHasFunds = NSLocalizedString(
+            "For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password.",
+            comment: "Reminder message for when the user already has funds prior to having completed the backup phrase."
+        )
     }
 }
 
