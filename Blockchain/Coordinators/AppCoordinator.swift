@@ -92,17 +92,17 @@ import Foundation
     }
 
     /// Shows an upgrade to HD wallet prompt if the user has a legacy wallet
-    @objc func showHdUpgradeViewIfNeeded() {
+    func showHdUpgradeViewIfNeeded() {
         guard !walletManager.wallet.didUpgradeToHd() else { return }
         showHdUpgradeView()
     }
 
     /// Shows the HD wallet upgrade view
-    @objc func showHdUpgradeView() {
+    func showHdUpgradeView() {
         let storyboard = UIStoryboard(name: "Upgrade", bundle: nil)
         let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "UpgradeViewController")
         upgradeViewController.modalTransitionStyle = .coverVertical
-        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
+        UIApplication.shared.keyWindow?.rootViewController?.present(
             upgradeViewController,
             animated: true
         )
