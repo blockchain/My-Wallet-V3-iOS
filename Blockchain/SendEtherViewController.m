@@ -458,7 +458,7 @@
     if (self.displayingLocalSymbolSend) {
         availableAmount = [NSNumberFormatter formatEthToFiatWithSymbol:[self.ethAvailable stringValue] exchangeRate:self.latestExchangeRate];
     } else {
-        availableAmount = [NSNumberFormatter formatEth:self.ethAvailable];
+        availableAmount = [NSNumberFormatter formatEth:[[NSNumberFormatter assetFormatter] stringFromNumber:self.ethAvailable]];
     }
     
     [self.fundsAvailableButton setTitle:[NSString stringWithFormat:BC_STRING_USE_TOTAL_AVAILABLE_MINUS_FEE_ARGUMENT, availableAmount] forState:UIControlStateNormal];
