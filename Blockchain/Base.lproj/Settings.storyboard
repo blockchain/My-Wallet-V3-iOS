@@ -215,8 +215,8 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bFL-5O-fcl">
-                                <rect key="frame" x="24" y="199" width="327" height="86.333333333333314"/>
-                                <string key="text">Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet.</string>
+                                <rect key="frame" x="24" y="199" width="327" height="69"/>
+                                <string key="text">Protect your wallet from unauthorized access by enabling two-factor authentication using your mobile number. When you try to access your wallet, an SMS code will be requested to approve the login.</string>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                 <color key="textColor" red="0.23137254900000001" green="0.23137254900000001" blue="0.23137254900000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
