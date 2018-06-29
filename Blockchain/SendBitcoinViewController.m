@@ -133,12 +133,7 @@ BOOL displayingLocalSymbolSend;
 {
     [super viewDidLoad];
 
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    if (@available(iOS 11.0, *)) {
-        self.view.frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
-    } else {
-        self.view.frame = CGRectMake(0, 0, window.frame.size.width, window.frame.size.height);
-    }
+    self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
 
     [containerView changeWidth:self.view.frame.size.width];
 

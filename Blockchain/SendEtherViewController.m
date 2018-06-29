@@ -54,25 +54,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    CGFloat safeAreaInsetTop = 20;
-    CGFloat assetSelectorHeight = 36;
-    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
-    CGFloat tabBarHeight = 49;
-    if (@available(iOS 11.0, *)) {
-        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-    }
 
-    //: Frame must be calculated manually because there is no associated xib file with this class
-    if (@available(iOS 11.0, *)) {
-        CGRect safeAreaLayoutFrame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
-        CGFloat height = safeAreaLayoutFrame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
-        self.view.frame = CGRectMake(0, 0, safeAreaLayoutFrame.size.width, height);
-    } else {
-        CGFloat height = window.frame.size.height - safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
-        self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
-    }
+    self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
     
     UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 12, 40, 21)];
     fromLabel.adjustsFontSizeToFitWidth = YES;
