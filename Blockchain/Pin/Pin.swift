@@ -11,30 +11,39 @@ import Foundation
 struct SavePinError: Error {}
 
 /// Model for a user's 4-digit pin
-class Pin {
+@objc class Pin: NSObject {
     static let Invalid = Pin(code: 0000)
 
     private(set) var pinCode: UInt
 
     /// Checks if this pin is a valid
-    var isValid: Bool {
+    @objc var isValid: Bool {
         return self != Pin.Invalid
     }
 
     /// Checks if this pin is a commonly used pin (read: not very secure)
-    var isCommon: Bool {
+    @objc var isCommon: Bool {
         let commonPinCodes: [UInt] = [1234, 1111, 1212, 7777, 1004]
         return commonPinCodes.contains(pinCode)
     }
 
     /// String representation of the underlying pin
-    var toString: String {
+    @objc var toString: String {
         return pinCode.pinToString
     }
 
-    init(code: UInt) {
+    // MARK: - Initializers
+
+    @objc init(code: UInt) {
         self.pinCode = code
     }
+
+    convenience init?(string: String) {
+        guard let code = UInt(string) else { return nil }
+        self.init(code: code)
+    }
+
+    // MARK: - Public
 
     // TODO: not the best place for this - move elsewhere
     func save() throws {
@@ -71,12 +80,16 @@ class Pin {
     }
 }
 
-extension Pin: Equatable, Hashable {
+extension Pin {
     static func == (lhs: Pin, rhs: Pin) -> Bool {
         return lhs.pinCode == rhs.pinCode
     }
 
-    var hashValue: Int {
+    override func isEqual(_ object: Any?) -> Bool {
+        return self.pinCode == (object as? Pin)?.pinCode
+    }
+
+    override var hashValue: Int {
         return Int(pinCode)
     }
 }

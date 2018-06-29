@@ -219,7 +219,7 @@ const CGFloat rowHeightValueReceived = 80;
 
     if (!didFindTransaction) {
         [self dismissViewControllerAnimated:YES completion:^{
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_COULD_NOT_FIND_TRANSACTION_ARGUMENT, self.transactionModel.myHash] title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_COULD_NOT_FIND_TRANSACTION_ARGUMENT, self.transactionModel.myHash] title:BC_STRING_ERROR in:self handler:nil];
         }];
     }
 }
@@ -414,7 +414,7 @@ const CGFloat rowHeightValueReceived = 80;
         if (address) {
             [UIPasteboard generalPasteboard].string = address;
         } else {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR in:self handler:nil];
         }
     }]];
     [copyAddressController addAction:[UIAlertAction actionWithTitle:BC_STRING_SEND_TO_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

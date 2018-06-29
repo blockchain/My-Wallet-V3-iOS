@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 /// The View that the PinPresenter displays to.
-protocol PinView {
+@objc protocol PinView {
     func showLoadingView(withText text: String)
 
     func hideLoadingView()
@@ -19,16 +19,16 @@ protocol PinView {
 
     func errorPinRetryLimitExceeded()
 
-    func successPinValid()
+    func successPinValid(pinPassword: String)
 }
 
 /// Presenter for the pin flow.
-class PinPresenter {
+@objc class PinPresenter: NSObject {
 
-    let view: PinView
-    let interactor: PinInteractor
+    private let view: PinView
+    private let interactor: PinInteractor
 
-    init(view: PinView, interactor: PinInteractor) {
+    @objc init(view: PinView, interactor: PinInteractor = PinInteractor.shared) {
         self.view = view
         self.interactor = interactor
     }
@@ -49,26 +49,27 @@ class PinPresenter {
                     return
                 }
 
-                strongSelf.view.hideLoadingView()
-
                 guard let statusCode = response.statusCode else {
+                    strongSelf.view.hideLoadingView()
                     strongSelf.view.error(message: LocalizationConstants.Pin.incorrect)
                     return
                 }
 
                 switch statusCode {
                 case .deleted:
+                    strongSelf.view.hideLoadingView()
                     strongSelf.view.errorPinRetryLimitExceeded()
                 case .incorrect:
+                    strongSelf.view.hideLoadingView()
                     let errorMessage = response.error ?? LocalizationConstants.Pin.incorrectUnknownError
                     strongSelf.view.error(message: errorMessage)
                 case .success:
-                    if response.pinDecryptionValue?.count == 0 {
-                        // Will this ever happen?
+                    guard let pinPassword = response.pinDecryptionValue, pinPassword.count != 0 else {
+                        strongSelf.view.hideLoadingView()
                         strongSelf.view.error(message: LocalizationConstants.Pin.responseSuccessLengthZero)
                         return
                     }
-                    strongSelf.view.successPinValid()
+                    strongSelf.view.successPinValid(pinPassword: pinPassword)
                 }
 
             }, onError: { [weak self] error in

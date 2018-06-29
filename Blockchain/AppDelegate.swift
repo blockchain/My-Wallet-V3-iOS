@@ -145,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Show pin modal before we close the app so the PIN verify modal gets shown in the list of running apps and immediately after we restart
         if appSettings.isPinSet {
-            AuthenticationCoordinator.shared.showPinEntryView(asModal: true)
+            AuthenticationCoordinator.shared.showPinEntryView()
         }
 
         NetworkManager.shared.session.reset {

@@ -68,6 +68,10 @@ static PEViewController *VerifyController()
 	return c;
 }
 
+@interface PEPinEntryController ()
+@property (nonatomic) Pin *lastEnteredPIN;
+@end
+
 @implementation PEPinEntryController
 
 @synthesize pinDelegate, verifyOnly, verifyOptional, inSettings;
@@ -269,41 +273,24 @@ static PEViewController *VerifyController()
 {
 	switch (pinStage) {
 		case PS_VERIFY: {
-			[self.pinDelegate pinEntryController:self shouldAcceptPin:[controller.pin intValue] callback:^(BOOL yes) {
-                if (yes) {
-                    if(verifyOnly == NO) {
-                        PEViewController *c = NewController();
-                        c.delegate = self;
-                        pinStage = PS_ENTER1;
-                        [[self navigationController] pushViewController:c animated:NO];
-                        self.viewControllers = [NSArray arrayWithObject:c];
-                    }
-                } else {
-                    controller.prompt = LocalizationConstantsObjcBridge.incorrectPin;
-                    [controller resetPin];
-                }
-            }];
+            self.lastEnteredPIN = [[Pin alloc] initWithCode:[controller.pin intValue]];
+            [self validateWithPin:self.lastEnteredPIN];
 			break;
         }
 		case PS_ENTER1: {
-			pinEntry1 = [controller.pin intValue];
-			PEViewController *c = VerifyController();
-			c.delegate = self;
-			[[self navigationController] pushViewController:c animated:NO];
-			self.viewControllers = [NSArray arrayWithObject:c];
-			pinStage = PS_ENTER2;
-            [self.pinDelegate pinEntryController:self willChangeToNewPin:[controller.pin intValue]];
+            [self didEnter1Pin:controller];
 			break;
 		}
 		case PS_ENTER2:
 			if([controller.pin intValue] != pinEntry1) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:BC_PIN_NO_MATCH preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];
 				PEViewController *c = NewController();
 				c.delegate = self;
 				self.viewControllers = [NSArray arrayWithObjects:c, [self.viewControllers objectAtIndex:0], nil];
 				[self popViewControllerAnimated:NO];
-                [self presentViewController:alert animated:YES completion:nil];
+                [AlertViewPresenter.sharedInstance standardErrorWithMessage:LocalizationConstantsObjcBridge.pinsDoNotMatch
+                                                                      title:LocalizationConstantsObjcBridge.error
+                                                                         in:self
+                                                                    handler:nil];
 			} else {
 				[self.pinDelegate pinEntryController:self changedPin:[controller.pin intValue]];
 			}
@@ -311,6 +298,79 @@ static PEViewController *VerifyController()
 		default:
 			break;
 	}
+}
+
+- (void)didEnter1Pin:(PEViewController *)controller
+{
+    Pin *pin = [[Pin alloc] initWithCode: [controller.pin intValue]];
+
+    // Check that the selected pin passes checks
+    if (!pin.isValid) {
+        [self errorAndResetWithMessage:[LocalizationConstantsObjcBridge chooseAnotherPin]];
+        return;
+    }
+
+    if ([pin isEqual:self.lastEnteredPIN]) {
+        [self errorAndResetWithMessage:[LocalizationConstantsObjcBridge newPinMustBeDifferent]];
+        return;
+    }
+
+    if (pin.isCommon) {
+        __weak PEPinEntryController *weakSelf = self;
+        NSArray *actions = @[
+            [UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge continueString]
+                                     style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf goToEnter2Pin:controller];
+            }],
+            [UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge tryAgain]
+                                     style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf reset];
+            }],
+        ];
+        [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[LocalizationConstantsObjcBridge pinCodeCommonMessage]
+                                                               title:[LocalizationConstantsObjcBridge warning]
+                                                             actions:actions
+                                                                  in:self];
+        return;
+    }
+
+    [self goToEnter2Pin:controller];
+}
+
+- (void)goToEnter1Pin
+{
+    PEViewController *c = NewController();
+    c.delegate = self;
+    pinStage = PS_ENTER1;
+    [[self navigationController] pushViewController:c animated:NO];
+    self.viewControllers = [NSArray arrayWithObject:c];
+}
+
+- (void)goToEnter2Pin:(PEViewController *)controller
+{
+    pinEntry1 = [controller.pin intValue];
+    PEViewController *c = VerifyController();
+    c.delegate = self;
+    [[self navigationController] pushViewController:c animated:NO];
+    self.viewControllers = [NSArray arrayWithObject:c];
+    pinStage = PS_ENTER2;
+}
+
+- (void)errorAndResetWithMessage:(NSString *)errorMessage
+{
+    __weak PEPinEntryController *weakSelf = self;
+    [AlertViewPresenter.sharedInstance standardErrorWithMessage:errorMessage
+                                                          title:[LocalizationConstantsObjcBridge error]
+                                                             in:self
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+                                                            [weakSelf reset];
+                                                            UIViewController * viewController = weakSelf.viewControllers.firstObject;
+                                                            if ([viewController isKindOfClass:[PEViewController class]]) {
+                                                                [((PEViewController *) viewController) resetPin];
+                                                            }
+                                                        }];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
@@ -336,6 +396,12 @@ static PEViewController *VerifyController()
 }
 
 #pragma mark Debug Menu
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.pinPresenter = [[PinPresenter alloc] initWithView:self interactor:[PinInteractor sharedInstance]];
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -470,8 +536,7 @@ static PEViewController *VerifyController()
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_COPY_ADDRESS style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [UIPasteboard generalPasteboard].string = address;
     }]];
-
-    [self.view.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

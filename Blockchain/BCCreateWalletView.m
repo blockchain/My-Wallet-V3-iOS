@@ -227,13 +227,13 @@
     if ([message isEqualToString:@""]) {
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
     } else if ([message isEqualToString:ERROR_TIMEOUT_REQUEST]){
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.timedOut title:BC_STRING_ERROR in:nil handler: nil];
     } else if ([message isEqualToString:ERROR_FAILED_NETWORK_REQUEST] || [message containsString:ERROR_TIMEOUT_ERROR] || [[message stringByReplacingOccurrencesOfString:@" " withString:@""] containsString:ERROR_STATUS_ZERO]){
         dispatch_after(DELAY_KEYBOARD_DISMISSAL, dispatch_get_main_queue(), ^{
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR handler: nil];
+            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge requestFailedCheckConnection] title:BC_STRING_ERROR in:nil handler:nil];
         });
     } else {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
     }
 }
 
@@ -358,7 +358,7 @@
 - (BOOL)isReadyToSubmitForm
 {
     if ([emailTextField.text length] == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PLEASE_PROVIDE_AN_EMAIL_ADDRESS title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PLEASE_PROVIDE_AN_EMAIL_ADDRESS title:BC_STRING_ERROR in:nil handler: nil];
         [emailTextField becomeFirstResponder];
         return NO;
     }
@@ -366,7 +366,7 @@
     if ([emailTextField.text hasPrefix:@"@"] ||
         [emailTextField.text hasSuffix:@"@"] ||
         [[emailTextField.text componentsSeparatedByString:@"@"] count] != 2) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR in:nil handler: nil];
         [emailTextField becomeFirstResponder];
         return NO;
     }
@@ -374,31 +374,31 @@
     self.tmpPassword = passwordTextField.text;
     
     if (!self.tmpPassword || [self.tmpPassword length] == 0) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.noPasswordEntered title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:LocalizationConstantsObjcBridge.noPasswordEntered title:BC_STRING_ERROR in:nil handler:nil];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if ([self.tmpPassword isEqualToString:emailTextField.text]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_DIFFERENT_FROM_YOUR_EMAIL title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_DIFFERENT_FROM_YOUR_EMAIL title:BC_STRING_ERROR in:nil handler:nil];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if (self.passwordStrength < 25) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_NOT_STRONG_ENOUGH title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_NOT_STRONG_ENOUGH title:BC_STRING_ERROR in:nil handler:nil];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if ([self.tmpPassword length] > 255) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_LESS_THAN_OR_EQUAL_TO_255_CHARACTERS title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORD_MUST_BE_LESS_THAN_OR_EQUAL_TO_255_CHARACTERS title:BC_STRING_ERROR in:nil handler:nil];
         [passwordTextField becomeFirstResponder];
         return NO;
     }
     
     if (![self.tmpPassword isEqualToString:[password2TextField text]]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORDS_DO_NOT_MATCH title:BC_STRING_ERROR handler: nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PASSWORDS_DO_NOT_MATCH title:BC_STRING_ERROR in:nil handler:nil];
         [password2TextField becomeFirstResponder];
         return NO;
     }

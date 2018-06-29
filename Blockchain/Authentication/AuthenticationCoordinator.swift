@@ -61,7 +61,7 @@ import Foundation
             if strongSelf.walletManager.wallet.isNew {
                 AuthenticationCoordinator.shared.startNewWalletSetUp()
             } else {
-                strongSelf.showPinEntryView(asModal: false)
+                strongSelf.showPinEntryView()
             }
             return
         }
@@ -113,8 +113,6 @@ import Foundation
 
     @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
-    internal var pinViewControllerCallback: ((Bool) -> Void)?
-
     private var loginTimeout: Timer?
 
     private var isPinEntryModalPresented: Bool {
@@ -154,7 +152,7 @@ import Foundation
         BlockchainSettings.App.shared.shouldHideAllCards = true
 
         if BlockchainSettings.App.shared.isPinSet {
-            showPinEntryView(asModal: true)
+            showPinEntryView()
             if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
                 config.isEnabled,
                 BlockchainSettings.App.shared.biometryEnabled {
@@ -178,7 +176,7 @@ import Foundation
         let setUpWalletViewController = WalletSetupViewController(setupDelegate: self)!
         let topMostViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
         topMostViewController?.present(setUpWalletViewController, animated: false) { [weak self] in
-            self?.showPinEntryView(asModal: false, inViewController: setUpWalletViewController)
+            self?.showPinEntryView(inViewController: setUpWalletViewController)
         }
     }
 
@@ -323,10 +321,9 @@ import Foundation
     /// Shows the pin entry view.
     ///
     /// - Parameters:
-    ///   - asModal: true if the pin entry view should be presented modally
     ///   - viewController: the view controller to present the pin entry view in, if nil, it will be
     ///                     presented in the root controller
-    @objc func showPinEntryView(asModal: Bool, inViewController viewController: UIViewController? = nil) {
+    func showPinEntryView(inViewController viewController: UIViewController? = nil) {
 
         guard !walletManager.didChangePassword else {
             showPasswordModal()
@@ -359,29 +356,25 @@ import Foundation
             presentedViewController.dismiss(animated: false)
         }
 
-        if asModal {
-            viewControllerToPresentIn.view.addSubview(pinViewController.view)
-        } else {
-            viewControllerToPresentIn.present(pinViewController, animated: true) { [weak self] in
-                guard let strongSelf = self else { return }
+        viewControllerToPresentIn.present(pinViewController, animated: true) { [weak self] in
+            guard let strongSelf = self else { return }
 
-                // Can both of these alerts be moved elsewhere?                                     
-                if strongSelf.walletManager.wallet.isNew {
-                    AlertViewPresenter.shared.standardNotify(
-                        message: LocalizationConstants.Authentication.didCreateNewWalletMessage,
-                        title: LocalizationConstants.Authentication.didCreateNewWalletTitle
-                    )
-                    return
-                }
+            // Can both of these alerts be moved elsewhere?
+            if strongSelf.walletManager.wallet.isNew {
+                AlertViewPresenter.shared.standardNotify(
+                    message: LocalizationConstants.Authentication.didCreateNewWalletMessage,
+                    title: LocalizationConstants.Authentication.didCreateNewWalletTitle
+                )
+                return
+            }
 
-                if strongSelf.walletManager.wallet.didPairAutomatically {
-                    AlertViewPresenter.shared.standardNotify(
-                        message: LocalizationConstants.Authentication.walletPairedSuccessfullyMessage,
-                        title: LocalizationConstants.Authentication.walletPairedSuccessfullyTitle
-                    )
-                    strongSelf.walletManager.wallet.didPairAutomatically = false
-                    return
-                }
+            if strongSelf.walletManager.wallet.didPairAutomatically {
+                AlertViewPresenter.shared.standardNotify(
+                    message: LocalizationConstants.Authentication.walletPairedSuccessfullyMessage,
+                    title: LocalizationConstants.Authentication.walletPairedSuccessfullyTitle
+                )
+                strongSelf.walletManager.wallet.didPairAutomatically = false
+                return
             }
         }
         self.pinEntryViewController = pinViewController

@@ -11,9 +11,11 @@ import RxSwift
 
 /// Interactor for the pin. This component interacts with the Blockchain API and the local
 /// pin data store. When the pin is updated, the pin is also stored on the keychain.
-class PinInteractor {
+@objc class PinInteractor: NSObject {
 
     static let shared = PinInteractor()
+
+    @objc class func sharedInstance() -> PinInteractor { return shared }
 
     private let walletService: WalletService
 

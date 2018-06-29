@@ -27,14 +27,12 @@ extension AuthenticationCoordinator {
 
             strongSelf.showVerifyingBusyView(withTimeout: 30)
 
-            guard let pinKey = BlockchainSettings.App.shared.pinKey,
-                let pin = KeychainItemWrapper.pinFromKeychain() else {
-                    AlertViewPresenter.shared.showKeychainReadError()
-                    return
+            guard let pinString = BlockchainSettings.App.shared.pin, let pin = Pin(string: pinString) else {
+                AlertViewPresenter.shared.showKeychainReadError()
+                return
             }
 
-            let payload = PinPayload(pinCode: pin, pinKey: pinKey)
-            AuthenticationManager.shared.authenticate(using: payload, andReply: strongSelf.authHandler)
+            strongSelf.pinEntryViewController?.validate(pin: pin)
         }
     }
 

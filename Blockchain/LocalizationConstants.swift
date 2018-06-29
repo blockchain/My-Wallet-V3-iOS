@@ -92,16 +92,50 @@ struct LocalizationConstants {
     }
 
     struct Pin {
-        static let incorrect = NSLocalizedString("Incorrect PIN. Please retry.", comment: "")
-        static let cannotSaveInvalidWalletState = NSLocalizedString("Cannot save PIN Code while wallet is not initialized or password is null", comment: "")
-        static let responseKeyOrValueLengthZero = NSLocalizedString("PIN Response Object key or value length 0", comment: "")
-        static let encryptedStringIsNil = NSLocalizedString("PIN Encrypted String is nil", comment: "")
-        static let validationCannotBeCompleted = NSLocalizedString("PIN Validation cannot be completed. Please enter your wallet password manually.", comment: "")
-        static let incorrectUnknownError = NSLocalizedString("PIN Code Incorrect. Unknown Error Message.", comment: "")
-        static let responseSuccessLengthZero = NSLocalizedString("PIN Response Object success length 0", comment: "")
-        static let decryptedPasswordLengthZero = NSLocalizedString("Decrypted PIN Password length 0", comment: "")
-        static let validationError = NSLocalizedString("PIN Validation Error", comment: "")
-        static let validationErrorMessage = NSLocalizedString("An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?", comment: "")
+        static let incorrect = NSLocalizedString(
+            "Incorrect PIN. Please retry.",
+            comment: "Error message displayed when the entered pin is incorrect and the user should try to enter the pin code again."
+        )
+        static let cannotSaveInvalidWalletState = NSLocalizedString(
+            "Cannot save PIN Code while wallet is not initialized or password is null",
+            comment: "Error message displayed when the wallet is in an invalid state and the user tried to enter a new pin code."
+        )
+        static let responseKeyOrValueLengthZero = NSLocalizedString(
+            "PIN Response Object key or value length 0",
+            comment: "Error message displayed to the user when the pin-store endpoint is returning an invalid response."
+        )
+        static let encryptedStringIsNil = NSLocalizedString(
+            "PIN Encrypted String is nil",
+            comment: "Error message displayed when the encrypted pin is invalid."
+        )
+        static let validationCannotBeCompleted = NSLocalizedString(
+            "PIN Validation cannot be completed. Please enter your wallet password manually.",
+            comment: "Error message displayed when the user's pin cannot be validated and instead they are prompted to enter their password."
+        )
+        static let incorrectUnknownError = NSLocalizedString(
+            "PIN Code Incorrect. Unknown Error Message.",
+            comment: "Error message displayed when the pin cannot be validated and the error is unknown."
+        )
+        static let responseSuccessLengthZero = NSLocalizedString(
+            "PIN Response Object success length 0",
+            comment: "Error message displayed to the user when the pin-store endpoint is returning an invalid response."
+        )
+        static let decryptedPasswordLengthZero = NSLocalizedString(
+            "Decrypted PIN Password length 0",
+            comment: "Error message displayed when the user's decrypted password length is 0."
+        )
+        static let validationError = NSLocalizedString(
+            "PIN Validation Error",
+            comment: "Title of the error message displayed to the user when their PIN cannot be validated if it is correct."
+        )
+        static let validationErrorMessage = NSLocalizedString(
+            "An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?",
+            comment: "Error message displayed to the user when their PIN cannot be validated if it is correct."
+        )
+        static let pinsDoNotMatch = NSLocalizedString(
+            "PINs do not match",
+            comment: "Message presented to user when they enter an incorrect pin when confirming a pin."
+        )
     }
 
     struct Biometrics {
@@ -258,6 +292,15 @@ struct LocalizationConstants {
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
+    @objc class func continueString() -> String { return LocalizationConstants.continueString }
+
+    @objc class func warning() -> String { return LocalizationConstants.Errors.warning }
+
+    @objc class func pinCodeCommonMessage() -> String { return LocalizationConstants.Authentication.pinCodeCommonMessage }
+
+    @objc class func newPinMustBeDifferent() -> String { return LocalizationConstants.Authentication.newPinMustBeDifferent }
+
+    @objc class func chooseAnotherPin() -> String { return LocalizationConstants.Authentication.chooseAnotherPin }
 
     @objc class func requestFailedCheckConnection() -> String { return LocalizationConstants.Errors.requestFailedCheckConnection }
 
@@ -344,4 +387,6 @@ struct LocalizationConstants {
     @objc class func biometricInstructions() -> String { return LocalizationConstants.Onboarding.biometricInstructions }
 
     @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableX }
+
+    @objc class func pinsDoNotMatch() -> String { return LocalizationConstants.Pin.pinsDoNotMatch }
 }

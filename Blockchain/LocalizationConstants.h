@@ -134,7 +134,6 @@
 //#define BC_STRING_REQUEST_FAILED_PLEASE_CHECK_INTERNET_CONNECTION NSLocalizedString(@"Request failed. Please check your internet connection.", nil)
 #define BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION NSLocalizedString(@"An error occurred while updating your spendable balance. Please check your internet connection and try again.", nil)
 #define BC_STRING_EMPTY_RESPONSE NSLocalizedString(@"Empty response from server.", nil)
-#define BC_STRING_MAINTENANCE_MODE NSLocalizedString(@"Blockchain is currently down for maintenance. Please try again later.", nil)
 
 #define BC_STRING_FORGET_WALLET NSLocalizedString(@"Forget Wallet", nil)
 
@@ -171,7 +170,6 @@
 #define BC_STRING_HOW_WOULD_YOU_LIKE_TO_PAIR NSLocalizedString(@"How would you like to pair?", nil)
 #define BC_STRING_MANUALLY NSLocalizedString(@"Manually", nil)
 #define BC_STRING_AUTOMATICALLY NSLocalizedString(@"Automatically", nil)
-#define BC_PIN_NO_MATCH NSLocalizedString(@"PINs do not match", nil)
 #define BC_STRING_ENTER_PIN NSLocalizedString(@"Enter PIN", nil)
 #define BC_STRING_PLEASE_ENTER_PIN NSLocalizedString(@"Please enter your PIN", nil)
 #define BC_STRING_PLEASE_ENTER_NEW_PIN NSLocalizedString(@"Please enter a new PIN", nil)
