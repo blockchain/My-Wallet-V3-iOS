@@ -68,26 +68,10 @@
 {
     [super viewDidLoad];
 
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
-    CGFloat assetSelectorHeight = 36;
-    CGFloat tabBarHeight = 49;
-    if (@available(iOS 11.0, *)) {
-        CGRect frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
-        CGFloat posX = frame.origin.x;
-        CGFloat posY = navBarHeight;
-        CGFloat height = frame.size.height - navBarHeight - assetSelectorHeight - tabBarHeight;
-        CGFloat width = frame.size.width;
-        _safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-        self.view.frame = CGRectMake(posX, posY, width, height);
-    } else {
-        _safeAreaInsetTop = 20;
-        CGFloat height = window.bounds.size.height - _safeAreaInsetTop - navBarHeight - assetSelectorHeight - tabBarHeight;
-        self.view.frame = CGRectMake(0,
-                                     navBarHeight,
-                                     window.bounds.size.width,
-                                     height);
-    }
+    _safeAreaInsetTop = [UIView rootViewSafeAreaInsets].top;
+    CGRect frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
+    CGFloat offsetY = [ConstantsObjcBridge defaultNavigationBarHeight];
+    self.view.frame = CGRectOffset(frame, 0, offsetY);
     
     self.firstLoading = YES;
 
