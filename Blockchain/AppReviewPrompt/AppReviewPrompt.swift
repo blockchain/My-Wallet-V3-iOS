@@ -55,33 +55,33 @@ final class AppReviewPrompt: NSObject {
     private func requestReview() {
         if #available(iOS 10.3, *) {
             SKStoreReviewController.requestReview()
-        } else {
-            let settings = BlockchainSettings.App.shared
-            if settings.dontAskUserToShowAppReviewPrompt {
-                #if DEBUG
-                print("App review prompt will not show because the user does not want to be asked.")
-                #endif
-                return
-            }
-            let affirmativeAction = UIAlertAction(
-                title: LocalizationConstants.AppReviewFallbackPrompt.affirmativeActionTitle,
-                style: .default,
-                handler: { _ in
-                    settings.dontAskUserToShowAppReviewPrompt = true
-                    UIApplication.shared.rateApp()
-            })
-            let secondaryAction = UIAlertAction(
-                title: LocalizationConstants.AppReviewFallbackPrompt.secondaryActionTitle,
-                style: .cancel,
-                handler: nil)
-            let tertiaryAction = UIAlertAction(title: LocalizationConstants.dontShowAgain, style: .cancel, handler: { _ in
-                settings.dontAskUserToShowAppReviewPrompt = true
-            })
-            AlertViewPresenter.shared.standardNotify(
-                message: LocalizationConstants.AppReviewFallbackPrompt.message,
-                title: LocalizationConstants.AppReviewFallbackPrompt.title,
-                actions: [affirmativeAction, secondaryAction, tertiaryAction]
-            )
+            return
         }
+        let settings = BlockchainSettings.App.shared
+        if settings.dontAskUserToShowAppReviewPrompt {
+            #if DEBUG
+            print("App review prompt will not show because the user does not want to be asked.")
+            #endif
+            return
+        }
+        let affirmativeAction = UIAlertAction(
+            title: LocalizationConstants.AppReviewFallbackPrompt.affirmativeActionTitle,
+            style: .default,
+            handler: { _ in
+                settings.dontAskUserToShowAppReviewPrompt = true
+                UIApplication.shared.rateApp()
+        })
+        let secondaryAction = UIAlertAction(
+            title: LocalizationConstants.AppReviewFallbackPrompt.secondaryActionTitle,
+            style: .cancel,
+            handler: nil)
+        let tertiaryAction = UIAlertAction(title: LocalizationConstants.dontShowAgain, style: .cancel, handler: { _ in
+            settings.dontAskUserToShowAppReviewPrompt = true
+        })
+        AlertViewPresenter.shared.standardNotify(
+            message: LocalizationConstants.AppReviewFallbackPrompt.message,
+            title: LocalizationConstants.AppReviewFallbackPrompt.title,
+            actions: [affirmativeAction, secondaryAction, tertiaryAction]
+        )
     }
 }
