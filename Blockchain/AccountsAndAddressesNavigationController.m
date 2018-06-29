@@ -153,7 +153,7 @@
     }]];
     
     if (!userClicked) {
-        [alertToTransfer addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertToTransfer addAction:[UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge dontShowAgain] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             BlockchainSettings.sharedAppInstance.hideTransferAllFundsAlert = YES;
         }]];
     }
