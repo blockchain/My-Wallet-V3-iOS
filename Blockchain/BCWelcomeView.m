@@ -22,17 +22,11 @@ Boolean shouldShowAnimation;
     
     shouldShowAnimation = true;
 
-    // TODO: use autolayout
-    if (@available(iOS 11.0, *)) {
-        self = [super initWithFrame:window.rootViewController.view.safeAreaLayoutGuide.layoutFrame];
-    } else {
-        self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height - 20)];
-    }
+    self = [super initWithFrame:[UIView rootViewSafeAreaFrameWithNavigationBar:NO tabBar:NO assetSelector:NO]];
     
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         
-        // Logo
         UIImage *logo = [UIImage imageNamed:@"logo_both"];
         imageView = [[UIImageView alloc] initWithFrame:CGRectMake((window.frame.size.width -logo.size.width) / 2, 80, logo.size.width, logo.size.height)];
         imageView.image = logo;
