@@ -3094,9 +3094,10 @@ MyWalletPhone.bch = {
 
         var xpub = MyWallet.wallet.bch.defaultAccount.xpub
         var receiveIndex = MyWallet.wallet.bch.getAccountIndexes(xpub).receive;
+        const accountIndex = MyWallet.wallet.bch.defaultAccountIdx;
 
         for (var i = 0; i < numberOfAddresses; i++) {
-            var address = Helpers.toBitcoinCash(Blockchain.MyWallet.wallet.hdwallet.accounts[0].receiveAddressAtIndex(receiveIndex + i));
+            var address = Helpers.toBitcoinCash(Blockchain.MyWallet.wallet.hdwallet.accounts[accountIndex].receiveAddressAtIndex(receiveIndex + i));
             addresses.push(address);
         }
 
