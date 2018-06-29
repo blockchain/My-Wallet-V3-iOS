@@ -19,7 +19,6 @@
 #import "TransferAllFundsBuilder.h"
 #import "BCNavigationController.h"
 #import "BCFeeSelectionView.h"
-#import "StoreKit/StoreKit.h"
 #import "BCConfirmPaymentViewModel.h"
 #import "Blockchain-Swift.h"
 #import "NSNumberFormatter+Currencies.h"
@@ -518,52 +517,10 @@ BOOL displayingLocalSymbolSend;
          };
          
          listener.on_success = ^(NSString*secondPassword, NSString *transactionHash) {
-             
              DLog(@"SendViewController: on_success");
-             
              UIAlertController *paymentSentAlert = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_PAYMENT_SENT preferredStyle:UIAlertControllerStyleAlert];
              [paymentSentAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                 if (![[NSUserDefaults standardUserDefaults] boolForKey:USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT]) {
-                     
-                     if ([WalletManager.sharedInstance.wallet getAllTransactionsCount] < NUMBER_OF_TRANSACTIONS_REQUIRED_FOR_FOR_APP_STORE_REVIEW_PROMPT) {
-                         return;
-                     }
-                     
-                     id promptDate = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_APP_REVIEW_PROMPT_DATE];
-                     
-                     if (promptDate) {
-                         NSTimeInterval secondsSincePrompt = [[NSDate date] timeIntervalSinceDate:promptDate];
-                         NSTimeInterval secondsUntilPromptingAgain = TIME_INTERVAL_APP_STORE_REVIEW_PROMPT;
-#ifdef DEBUG
-                         id customTimeValue = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER];
-                         if (customTimeValue) {
-                             secondsUntilPromptingAgain = [customTimeValue doubleValue];
-                         }
-#endif
-                         if (secondsSincePrompt < secondsUntilPromptingAgain) {
-                             return;
-                         }
-                     }
-                     
-                     if (NSClassFromString(@"SKStoreReviewController") && [SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
-                         [SKStoreReviewController requestReview];
-                         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:USER_DEFAULTS_KEY_APP_REVIEW_PROMPT_DATE];
-                     } else {
-                         UIAlertController *appReviewAlert = [UIAlertController alertControllerWithTitle:BC_STRING_APP_REVIEW_PROMPT_TITLE message:BC_STRING_APP_REVIEW_PROMPT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
-                         [appReviewAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_YES_RATE_BLOCKCHAIN_WALLET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT];
-                             [[UIApplication sharedApplication] rateApp];
-                         }]];
-                         [appReviewAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_ASK_ME_LATER style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                             [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:USER_DEFAULTS_KEY_APP_REVIEW_PROMPT_DATE];
-                         }]];
-                         [appReviewAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT];
-                         }]];
-
-                         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:appReviewAlert animated:YES completion:nil];
-                     }
-                 }
+                 [[AppReviewPrompt sharedInstance] askToShow];
              }]];
              
              [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:paymentSentAlert animated:YES completion:nil];

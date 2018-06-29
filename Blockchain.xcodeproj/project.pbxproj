@@ -121,6 +121,8 @@
 		511646C8208129D800C43522 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C7208129D800C43522 /* Environment.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E2208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
+		511BF4ED20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
+		511BF4EE20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
 		513913F02081206C002578FD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
 		51392046205C60520025EE33 /* Cert in Resources */ = {isa = PBXBuildFile; fileRef = 51392045205C60520025EE33 /* Cert */; };
@@ -1423,6 +1425,7 @@
 		511646C7208129D800C43522 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		511646DE20851BC600C43522 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bundle.swift; path = Extensions/Bundle.swift; sourceTree = "<group>"; };
 		511646E1208523E300C43522 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIDevice.swift; path = Extensions/UIDevice.swift; sourceTree = "<group>"; };
+		511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewPrompt.swift; sourceTree = "<group>"; };
 		513467FE2056BC6600DE6A1E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Frameworks/Fabric.framework; sourceTree = "<group>"; };
 		513467FF2056BC6700DE6A1E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = Extensions/UserDefaults.swift; sourceTree = "<group>"; };
@@ -2160,6 +2163,21 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		5113571220A0B67700056D65 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		511BF4F020E6828900A14072 /* AppReviewPrompt */ = {
+			isa = PBXGroup;
+			children = (
+				511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */,
+			);
+			path = AppReviewPrompt;
+			sourceTree = "<group>";
+		};
 		5164E4CA20584D0700FC706A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2499,6 +2517,7 @@
 				5114EA1E20CB2BA90098E26E /* TabControllerManager+Nib.swift */,
 				AA722C1720B4BB8F00262A5F /* Addresses */,
 				AAA33169208964FC00BBD292 /* Alerts */,
+				511BF4F020E6828900A14072 /* AppReviewPrompt */,
 				510EA1732080F58700A63AB8 /* Authentication */,
 				AAD279DE209A99CA00C0EAFC /* AV */,
 				9F1831F315176F2200FB3D52 /* Categories */,
@@ -3837,6 +3856,7 @@
 				C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
 				AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */,
 				AAE9113E20A640A40093A431 /* PinPayload.swift in Sources */,
+				511BF4EE20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
@@ -3948,6 +3968,7 @@
 				9F765F3914BC7BAC00048EFB /* TransactionTableCell.m in Sources */,
 				AAE94DCC20C25836005A3595 /* PinStoreError.swift in Sources */,
 				AADB023920C0A871000FFFEC /* HttpMethod.swift in Sources */,
+				511BF4ED20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */,
 				51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */,
 				AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */,
 				AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,

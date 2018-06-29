@@ -494,7 +494,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 #define USER_DEFAULTS_KEY_NEXT_ADDRESS @"nextReceivingAddress"
 #define USER_DEFAULTS_KEY_NEXT_ADDRESS_USED @"nextReceivingAddressUsed"
-#define USER_DEFAULTS_KEY_APP_REVIEW_PROMPT_DATE @"appReviewPromptDate"
 #define USER_DEFAULTS_KEY_LOADED_SETTINGS @"loadedSettings"
 #define USER_DEFAULTS_KEY_HIDE_APP_REVIEW_PROMPT @"hideAppReviewPrompt"
 #define USER_DEFAULTS_KEY_SHARED_KEY @"sharedKey"
@@ -508,8 +507,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define USER_DEFAULTS_KEY_DEBUG_ENABLE_CERTIFICATE_PINNING @"certificatePinning"
 #define USER_DEFAULTS_KEY_DEBUG_SIMULATE_SURGE @"simulateSurge"
 #define USER_DEFAULTS_KEY_DEBUG_SIMULATE_ZERO_TICKER @"zeroTicker"
-
-#define USER_DEFAULTS_KEY_DEBUG_APP_REVIEW_PROMPT_CUSTOM_TIMER @"appReviewPromptTimer"
 #define USER_DEFAULTS_KEY_HAS_SEEN_SURVEY_PROMPT @"hasSeenSurveyPrompt"
 //#define USER_DEFAULTS_KEY_REMINDER_MODAL_DATE @"reminderModalDate"
 //#define USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION @"hasEndedFirstSession"
@@ -624,8 +621,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 
 // Most common pin codes: http://datagenetics.com/blog/september32012/index.html
 
-#define NUMBER_OF_TRANSACTIONS_REQUIRED_FOR_FOR_APP_STORE_REVIEW_PROMPT 3
-
 #define TWO_STEP_AUTH_TYPE_SMS 5
 #define TWO_STEP_AUTH_TYPE_GOOGLE 4
 #define TWO_STEP_AUTH_TYPE_YUBI_KEY 1
@@ -644,7 +639,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define DEBUG_PRESENTER_PIN_VERIFY 1
 #define DEBUG_PRESENTER_SETTINGS_ABOUT 2
 
-#define TIME_INTERVAL_APP_STORE_REVIEW_PROMPT 60*60*24*7 // Seconds in one week
 #define TIME_INTERVAL_SECURITY_REMINDER_PROMPT 60*60*24*30 // Seconds in thirty days
 
 #define MSEC_PER_SEC 1000

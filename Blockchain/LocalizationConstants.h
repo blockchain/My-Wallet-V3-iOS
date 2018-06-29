@@ -244,7 +244,6 @@
 
 #define BC_STRING_AT_LEAST_ONE_ACTIVE_ADDRESS NSLocalizedString(@"You must leave at least one active address", nil)
 
-#define BC_STRING_ASK_ME_LATER NSLocalizedString(@"Ask Me Later", nil)
 #define BC_STRING_LOGOUT_AND_FORGET_WALLET NSLocalizedString(@"Logout and forget wallet", nil)
 
 #define BC_STRING_SURVEY_ALERT_TITLE NSLocalizedString(@"Would you like to tell us about your experience with Blockchain?", nil)
@@ -423,7 +422,6 @@
 #define BC_STRING_PLEASE_CHECK_AND_CLICK_EMAIL_VERIFICATION_LINK NSLocalizedString(@"Please check your email and click on the verification link.", nil)
 #define BC_STRING_ERROR_PLEASE_REFRESH_PAIRING_CODE NSLocalizedString(@"Please refresh the pairing code and try again.", nil)
 
-#define BC_STRING_DONT_SHOW_AGAIN NSLocalizedString(@"Don't show again", nil)
 #define BC_STRING_NOT_NOW NSLocalizedString(@"Not Now", nil)
 #define BC_STRING_ILL_DO_THIS_LATER NSLocalizedString(@"I'll do this later", nil)
 #define BC_STRING_PRIVATE_KEY_NEEDED_MESSAGE_ARGUMENT NSLocalizedString(@"This action requires the private key for the Bitcoin address %@. Please scan the QR code.", nil)
@@ -454,9 +452,7 @@
 
 #define BC_STRING_BLOCKCHAIN_ALL_RIGHTS_RESERVED NSLocalizedString(@"All rights reserved.", nil)
 
-#define BC_STRING_APP_REVIEW_PROMPT_TITLE NSLocalizedString(@"Rate Blockchain Wallet", nil)
-#define BC_STRING_YES_RATE_BLOCKCHAIN_WALLET NSLocalizedString(@"Yes, rate Blockchain Wallet", nil)
-#define BC_STRING_APP_REVIEW_PROMPT_MESSAGE NSLocalizedString(@"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it.", nil)
+
 
 #define BC_STRING_RATE_US NSLocalizedString(@"Rate us", nil)
 

@@ -40,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
 
+        BlockchainSettings.App.shared.appOpenedCount += 1
+
         // MARK: - Global Appearance
 
         //: Status Bar
@@ -67,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let securityReminderKey = UserDefaults.DebugKeys.securityReminderTimer.rawValue
         UserDefaults.standard.removeObject(forKey: securityReminderKey)
 
-        let appReviewPromptKey = UserDefaults.DebugKeys.appReviewPromptTimer.rawValue
+        let appReviewPromptKey = UserDefaults.DebugKeys.appReviewPromptCount.rawValue
         UserDefaults.standard.removeObject(forKey: appReviewPromptKey)
 
         let zeroTickerKey = UserDefaults.DebugKeys.simulateZeroTicker.rawValue

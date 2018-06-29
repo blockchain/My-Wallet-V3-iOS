@@ -38,6 +38,10 @@ struct LocalizationConstants {
     static let openMailApp = NSLocalizedString("Open Mail App", comment: "")
     static let goToSettings = NSLocalizedString("Go to Settings", comment: "")
     static let scanQRCode = NSLocalizedString("Scan QR Code", comment: "")
+    static let dontShowAgain = NSLocalizedString(
+        "Don't show again",
+        comment: "Text displayed to the user when an action has the option to not be asked again."
+    )
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -287,6 +291,25 @@ struct LocalizationConstants {
             comment: "The title of the alert view after completing the legacy upgrade flow."
         )
     }
+
+    struct AppReviewFallbackPrompt {
+        static let title = NSLocalizedString(
+            "Rate Blockchain Wallet",
+            comment: "The title of the fallback app review prompt."
+        )
+        static let message = NSLocalizedString(
+            "Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it.",
+            comment: "The message of the fallback app review prompt."
+        )
+        static let affirmativeActionTitle = NSLocalizedString(
+            "Yes, rate Blockchain Wallet",
+            comment: "The title for the affirmative prompt action."
+        )
+        static let secondaryActionTitle = NSLocalizedString(
+            "Ask Me Later",
+            comment: "The title for the secondary prompt action."
+        )
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -389,4 +412,6 @@ struct LocalizationConstants {
     @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableX }
 
     @objc class func pinsDoNotMatch() -> String { return LocalizationConstants.Pin.pinsDoNotMatch }
+
+    @objc class func dontShowAgain() -> String { return LocalizationConstants.dontShowAgain }
 }

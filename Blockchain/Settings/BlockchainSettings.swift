@@ -36,6 +36,15 @@ final class BlockchainSettings: NSObject {
 
         // MARK: - Properties
 
+        @objc var appOpenedCount: Int {
+            get {
+                return defaults.integer(forKey:UserDefaults.Keys.appOpenedCount.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.appOpenedCount.rawValue)
+            }
+        }
+
         @objc var didFailBiometrySetup: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
@@ -279,6 +288,15 @@ final class BlockchainSettings: NSObject {
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
+            }
+        }
+
+        @objc var dontAskUserToShowAppReviewPrompt: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.dontAskUserToShowAppReviewPrompt.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.dontAskUserToShowAppReviewPrompt.rawValue)
             }
         }
 

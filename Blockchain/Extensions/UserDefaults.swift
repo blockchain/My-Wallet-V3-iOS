@@ -12,7 +12,7 @@ import Foundation
 @objc
 extension UserDefaults {
     enum DebugKeys: String {
-        case appReviewPromptTimer = "appReviewPromptTimer"
+        case appReviewPromptCount = "appReviewPromptCount"
         case enableCertificatePinning = "certificatePinning"
         case securityReminderTimer = "securiterReminderTimer"
         case simulateSurge = "simulateSurge"
@@ -20,6 +20,7 @@ extension UserDefaults {
     }
 
     enum Keys: String {
+        case appOpenedCount = "appOpenedCount"
         case assetType = "assetType"
         case didFailBiometrySetup = "didFailBiometrySetup"
         case encryptedPinPassword = "encryptedPINPassword"
@@ -42,6 +43,7 @@ extension UserDefaults {
         case biometryEnabled = "biometryEnabled"
         case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
         case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
+        case dontAskUserToShowAppReviewPrompt = "dontAskUserToShowAppReviewPrompt"
     }
 
     func migrateLegacyKeysIfNeeded() {

@@ -694,7 +694,7 @@
         [self didSelectFromAddress:address];
         [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
     }]];
-    [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:BC_STRING_DONT_SHOW_AGAIN style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertForWatchOnly addAction:[UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge dontShowAgain] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:USER_DEFAULTS_KEY_HIDE_WATCH_ONLY_RECEIVE_WARNING];
         [self didSelectFromAddress:address];
         [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
