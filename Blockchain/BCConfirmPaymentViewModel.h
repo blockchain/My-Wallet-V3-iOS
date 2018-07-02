@@ -34,10 +34,10 @@
 
 @property (nonatomic) NSString *from;
 @property (nonatomic) NSString *to;
+@property (nonatomic) NSString *totalAmountText;
 @property (nonatomic) NSString *fiatTotalAmountText;
-@property (nonatomic) NSString *btcTotalAmountText;
-@property (nonatomic) NSString *btcWithFiatAmountText;
-@property (nonatomic) NSString *btcWithFiatFeeText;
+@property (nonatomic) NSString *cryptoWithFiatAmountText;
+@property (nonatomic) NSString *amountWithFiatFeeText;
 @property (nonatomic) NSString *noteText;
 @property (nonatomic) NSString *buttonTitle;
 @property (nonatomic) BOOL showDescription;

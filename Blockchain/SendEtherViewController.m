@@ -363,7 +363,7 @@
                                                               ethAmount:[NSNumberFormatter formatEth:self.ethAmount]
                                                               ethFee:[NSNumberFormatter formatEth:self.ethFee]
                                                               ethTotal:[NSNumberFormatter formatEth:[NSNumberFormatter truncatedEthAmount:totalDecimalNumber locale:nil]]
-                                                              fiatAmount:[NSNumberFormatter appendStringToFiatSymbol:self.amountInputView.fiatField.text]
+                                                              fiatAmount:[NSNumberFormatter formatEthToFiatWithSymbol:[self.ethAmount stringValue] exchangeRate:self.latestExchangeRate]
                                                               fiatFee:[NSNumberFormatter formatEthToFiatWithSymbol:[self.ethFee stringValue] exchangeRate:self.latestExchangeRate]
                                                               fiatTotal:[NSNumberFormatter formatEthToFiatWithSymbol:[NSString stringWithFormat:@"%@", totalDecimalNumber] exchangeRate:self.latestExchangeRate]];
         

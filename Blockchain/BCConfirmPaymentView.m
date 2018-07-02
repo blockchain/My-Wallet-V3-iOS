@@ -35,7 +35,7 @@
         
         BCTotalAmountView *totalAmountView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:COLOR_BLOCKCHAIN_RED amount:0];
         
-        totalAmountView.btcAmountLabel.text = self.viewModel.btcTotalAmountText;
+        totalAmountView.btcAmountLabel.text = self.viewModel.totalAmountText;
         totalAmountView.fiatAmountLabel.text = self.viewModel.fiatTotalAmountText;
         
         [self addSubview:totalAmountView];
@@ -109,8 +109,8 @@
     if (self.viewModel.from) [self.rows addObject:@[BC_STRING_FROM, self.viewModel.from]];
     if (self.viewModel.to) [self.rows addObject:@[BC_STRING_TO, self.viewModel.to]];
     if (self.viewModel.showDescription) [self.rows addObject:@[BC_STRING_DESCRIPTION, self.viewModel.noteText ? : @""]];
-    if (self.viewModel.btcWithFiatAmountText) [self.rows addObject:@[BC_STRING_AMOUNT, self.viewModel.btcWithFiatAmountText]];
-    if (self.viewModel.btcWithFiatFeeText) [self.rows addObject:@[BC_STRING_FEE, self.viewModel.btcWithFiatFeeText]];
+    if (self.viewModel.cryptoWithFiatAmountText) [self.rows addObject:@[BC_STRING_AMOUNT, self.viewModel.cryptoWithFiatAmountText]];
+    if (self.viewModel.amountWithFiatFeeText) [self.rows addObject:@[BC_STRING_FEE, self.viewModel.amountWithFiatFeeText]];
 }
 
 - (void)reallyDoPaymentButtonClicked
@@ -169,14 +169,13 @@
     if (self.isEditingDescription) {
         cell = [self configureDescriptionTextViewForCell:cell];
     } else {
-        
         NSString *textLabel = [self.rows[indexPath.row] firstObject];
         NSString *detailTextLabel = [self.rows[indexPath.row] lastObject];
 
         cell.textLabel.text = textLabel;
         cell.detailTextLabel.text = detailTextLabel;
         
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = [textLabel isEqualToString:BC_STRING_FROM] || [textLabel isEqualToString:BC_STRING_TO];
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = [textLabel isEqualToString:BC_STRING_FROM] || [textLabel isEqualToString:BC_STRING_TO] || [textLabel isEqualToString:BC_STRING_AMOUNT];
         
         if ([textLabel isEqualToString:BC_STRING_FEE]) {
             UILabel *testLabel = [[UILabel alloc] initWithFrame:CGRectZero];

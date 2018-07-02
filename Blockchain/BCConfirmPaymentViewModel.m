@@ -29,9 +29,9 @@
         self.surgeIsOccurring = surgePresent;
         self.buttonTitle = BC_STRING_SEND;
         self.fiatTotalAmountText = [NSNumberFormatter formatMoney:total localCurrency:YES];
-        self.btcTotalAmountText = [NSNumberFormatter formatBTC:total];
-        self.btcWithFiatAmountText = [self formatAmountInBTCAndFiat:amount];
-        self.btcWithFiatFeeText = [self formatAmountInBTCAndFiat:fee];
+        self.totalAmountText = [NSNumberFormatter formatBTC:total];
+        self.cryptoWithFiatAmountText = [self formatAmountInBTCAndFiat:amount];
+        self.amountWithFiatFeeText = [self formatAmountInBTCAndFiat:fee];
         self.showDescription = YES;
     }
     return self;
@@ -46,10 +46,12 @@
        fiatTotal:(NSString *)fiatTotal
 {
     if (self == [super init]) {
+        self.from = BC_STRING_MY_ETHER_WALLET;
         self.to = to;
         self.fiatTotalAmountText = fiatTotal;
-        self.btcTotalAmountText = ethTotal;
-        self.btcWithFiatFeeText = [NSString stringWithFormat:@"%@ (%@)", ethFee, fiatFee];
+        self.totalAmountText = ethTotal;
+        self.cryptoWithFiatAmountText = [NSString stringWithFormat:@"%@ (%@)", ethAmount, fiatAmount];
+        self.amountWithFiatFeeText = [NSString stringWithFormat:@"%@ (%@)", ethFee, fiatFee];
         self.showDescription = YES;
     }
     return self;
@@ -70,10 +72,10 @@
         self.surgeIsOccurring = surgePresent;
         
         self.fiatTotalAmountText = [NSNumberFormatter formatBchWithSymbol:total localCurrency:YES];
-        self.btcTotalAmountText = [NSNumberFormatter formatBCH:total];
-        self.btcWithFiatAmountText = [self formatAmountInBCHAndFiat:amount];
-        self.btcWithFiatFeeText = [self formatAmountInBCHAndFiat:fee];
-        self.showDescription = NO;
+        self.totalAmountText = [NSNumberFormatter formatBCH:total];
+        self.cryptoWithFiatAmountText = [self formatAmountInBCHAndFiat:amount];
+        self.amountWithFiatFeeText = [self formatAmountInBCHAndFiat:fee];
+        self.showDescription = YES;
         
         if ([WalletManager.sharedInstance.wallet isValidAddress:self.to assetType:LegacyAssetTypeBitcoin]) {
             CGFloat fontSize = FONT_SIZE_EXTRA_SMALL;
