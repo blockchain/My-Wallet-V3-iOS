@@ -10,7 +10,6 @@
 #import "AccountsAndAddressesDetailViewController.h"
 #import "ReceiveTableCell.h"
 #import "BCCreateAccountView.h"
-#import "BCModalViewController.h"
 #import "UIViewController+AutoDismiss.h"
 #import "Blockchain-Swift.h"
 #import "UIView+ChangeFrameAttribute.h"
