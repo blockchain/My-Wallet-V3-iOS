@@ -59,7 +59,7 @@
 
 - (void)reloadCards
 {
-    self.showCards = !BlockchainSettings.sharedAppInstance.shouldHideAllCards;
+    self.showCards = !BlockchainSettings.sharedAppInstance.hasSeenAllCards;
     
     self.announcementCards = [NSMutableArray new];
     if (!self.showCards) {
@@ -418,8 +418,8 @@
     } completion:^(BOOL finished) {
         [self removeCardsView];
     }];
-    
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
+
+    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
 }
 
 - (void)removeCardsView

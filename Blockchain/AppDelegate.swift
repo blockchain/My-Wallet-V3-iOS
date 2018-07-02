@@ -127,10 +127,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             WalletManager.shared.close()
         }
 
-        if appSettings.hasSeenAllCards {
-            appSettings.shouldHideAllCards = true
-        }
-
         if appSettings.didFailBiometrySetup && !appSettings.biometryEnabled {
             appSettings.shouldShowBiometrySetup = true
         }

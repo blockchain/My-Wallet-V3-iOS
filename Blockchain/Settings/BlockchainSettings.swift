@@ -222,15 +222,6 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var shouldHideAllCards: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideAllCards.rawValue)
-            }
-        }
-
         @objc var shouldHideBuySellCard: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)

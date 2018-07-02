@@ -35,7 +35,6 @@ extension UserDefaults {
         case pin = "pin"
         case pinKey = "pinKey"
         case reminderModalDate = "reminderModalDate"
-        case shouldHideAllCards = "shouldHideAllCards"
         case shouldHideBuySellCard = "shouldHideBuySellNotificationCard"
         case shouldShowBiometrySetup = "shouldShowBiometrySetup"
         case swipeToReceiveEnabled = "swipeToReceive"

@@ -1578,7 +1578,6 @@
     [self useDebugSettingsIfSet];
 
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.parsePairingCode(\"%@\");", [code escapedForJS]]];
 }

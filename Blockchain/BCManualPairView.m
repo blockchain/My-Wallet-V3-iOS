@@ -132,7 +132,6 @@
     [passwordTextField resignFirstResponder];
     
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = YES;
 
     [self.delegate manualPairView:self didContinueWithGuid:guid andPassword:password];
 }

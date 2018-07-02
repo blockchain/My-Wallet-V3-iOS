@@ -212,7 +212,7 @@
     BuySellCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
     
     BlockchainSettings.sharedAppInstance.hasSeenAllCards = NO;
-    BlockchainSettings.sharedAppInstance.shouldHideAllCards = NO;
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_LAST_CARD_OFFSET];
 
     BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = NO;
