@@ -29,11 +29,7 @@
 
 - (void)loadView
 {
-    CGFloat safeAreaInsetBottom = 0;
-    if (@available(iOS 11.0, *)) {
-        safeAreaInsetBottom = _window.rootViewController.view.safeAreaInsets.bottom;
-    }
-
+    CGFloat safeAreaInsetBottom = [UIView rootViewSafeAreaInsets].bottom;
     CGRect frame = CGRectMake(0, 0, _window.frame.size.width, _window.frame.size.height - safeAreaInsetBottom);
     self.view = [[UIView alloc] initWithFrame:frame];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -49,7 +45,11 @@
     
     NSInteger numberOfPages = 2;
     
-    [scrollView addSubview:[self setupBiometricView]];
+    if ([self biometryType]) {
+        [scrollView addSubview:[self setupBiometricView]];
+    } else {
+        self.emailOnly = YES;
+    }
     [scrollView addSubview:[self setupEmailView]];
     
     scrollView.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, scrollView.frame.size.height);
@@ -111,7 +111,7 @@
     UIButton *enableBiometricButton = [self setupActionButton];
     NSString *buttonTitle = [NSString stringWithFormat:[LocalizationConstantsObjcBridge enableBiometrics], [self biometryType]];
     [enableBiometricButton setTitle:[buttonTitle uppercaseString] forState:UIControlStateNormal];
-    [enableBiometricButton addTarget:self action:@selector(enableTouchID:) forControlEvents:UIControlEventTouchUpInside];
+    [enableBiometricButton addTarget:self action:@selector(enableBiometrics:) forControlEvents:UIControlEventTouchUpInside];
     enableBiometricButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [biometricView addSubview:enableBiometricButton];
     
@@ -231,7 +231,7 @@
     [UIApplication.sharedApplication openMailApplication];
 }
 
-- (void)enableTouchID:(UIButton *)sender
+- (void)enableBiometrics:(UIButton *)sender
 {
     [self.delegate enableTouchIDClicked:^(BOOL success) {
         if (success) {
