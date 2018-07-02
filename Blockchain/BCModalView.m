@@ -16,21 +16,20 @@
 - (id)initWithCloseType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    //: Pre iOS 11 devices only need to consider the status bar (20pt)
-    CGFloat safeAreaInsetTop = 20;
-    if (@available(iOS 11.0, *)) {
-        safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
-    }
-    
-    self = [super initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)];
-    
+    CGRect myHolderViewFrame = CGRectZero;
+    CGFloat safeAreaInsetTop = [UIView rootViewSafeAreaInsets].top;
+    CGFloat offsetY = safeAreaInsetTop;
+
+    self = [super initWithFrame:window.frame];
+
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         self.closeType = closeType;
 
         if (showHeader) {
-            // TODO: use UINavigationBar & autolayout
+            myHolderViewFrame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
             CGFloat topBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight] + safeAreaInsetTop;
+            offsetY = topBarHeight;
             UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, topBarHeight)];
             topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
             [self addSubview:topBarView];
@@ -46,8 +45,7 @@
             CGFloat labelHeight = headerLabel.frame.size.height;
             CGFloat labelPosX = (topBarView.frame.size.width / 2) - (labelWidth / 2);
             CGFloat labelPosY = (topBarView.frame.size.height / 2) - (headerLabel.frame.size.height / 2) + (safeAreaInsetTop / 2);
-            CGRect frame = CGRectMake(labelPosX, labelPosY, labelWidth, labelHeight);
-            [headerLabel setFrame:frame];
+            [headerLabel setFrame:CGRectMake(labelPosX, labelPosY, labelWidth, labelHeight)];
             [topBarView addSubview:headerLabel];
 
             if (closeType == ModalCloseTypeBack) {
@@ -66,32 +64,14 @@
                 [self.closeButton addTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [topBarView addSubview:self.closeButton];
             }
-
-            if (@available(iOS 11.0, *)) {
-                CGRect frame = window.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
-                CGFloat topInset = window.rootViewController.view.safeAreaInsets.top;
-                CGFloat posX = frame.origin.x;
-                CGFloat posY = topBarView.frame.size.height;
-                CGFloat height = frame.size.height - topBarView.frame.size.height + topInset;
-                CGFloat width = frame.size.width;
-                self.myHolderView = [[UIView alloc] initWithFrame:CGRectMake(posX, posY, width, height)];
-            } else {
-                self.myHolderView = [[UIView alloc] initWithFrame:CGRectMake(0, topBarView.frame.size.height, window.frame.size.width, window.frame.size.height - DEFAULT_HEADER_HEIGHT)];
-            }
-
-            [self addSubview:self.myHolderView];
-            
             [self bringSubviewToFront:topBarView];
         } else {
-            if (@available(iOS 11.0, *)) {
-                self.myHolderView = [[UIView alloc] initWithFrame:window.rootViewController.view.safeAreaLayoutGuide.layoutFrame];
-            } else {
-                self.myHolderView = [[UIView alloc] initWithFrame:CGRectMake(0, safeAreaInsetTop, window.frame.size.width, window.frame.size.height - safeAreaInsetTop)];
-            }
-            [self addSubview:self.myHolderView];
+            myHolderViewFrame = [UIView rootViewSafeAreaFrameWithNavigationBar:NO tabBar:NO assetSelector:NO];
         }
+        self.myHolderView = [[UIView alloc] initWithFrame:CGRectOffset(myHolderViewFrame, 0, offsetY)];
+        [self addSubview:self.myHolderView];
     }
-    
+
     return self;
 }
 
@@ -105,7 +85,7 @@
         if ([self.myHolderView.subviews[0] respondsToSelector:@selector(modalWasDismissed)]) {
             [self.myHolderView.subviews[0] modalWasDismissed];
         }
-        
+
         if (self.closeType == ModalCloseTypeBack) {
             [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionFromLeft];
         }
