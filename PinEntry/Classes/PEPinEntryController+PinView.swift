@@ -30,7 +30,10 @@ extension PEPinEntryController: PinView {
                 guard let strongSelf = self else { return }
                 guard !walletOptions.downForMaintenance else {
                     strongSelf.hideLoadingView()
-                    strongSelf.error(message: LocalizationConstants.Errors.siteMaintenanceError)
+
+                    let errorMessage = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError
+                    strongSelf.error(message: errorMessage)
+
                     return
                 }
 
