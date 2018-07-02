@@ -127,8 +127,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             WalletManager.shared.close()
         }
 
-        if appSettings.didFailBiometrySetup && !appSettings.biometryEnabled {
-            appSettings.shouldShowBiometrySetup = true
+        let onboardingSettings = OnboardingSettings.shared
+        if onboardingSettings.didFailBiometrySetup && !appSettings.biometryEnabled {
+            onboardingSettings.shouldShowBiometrySetup = true
         }
 
         // UI-related background actions
@@ -232,21 +233,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func checkForNewInstall() {
 
         let appSettings = BlockchainSettings.App.shared
+        let onboardingSettings = OnboardingSettings.shared
 
-        //        if UserDefaults.standard.object(forKey: upgradeKey) != nil {
-        //            UserDefaults.standard.removeObject(forKey: upgradeKey)
-        //        }
-        // TODO: investigate this further
-        if appSettings.hasSeenUpgradeToHdScreen {
-            appSettings.hasSeenUpgradeToHdScreen = false
+        if onboardingSettings.hasSeenUpgradeToHdScreen {
+            onboardingSettings.hasSeenUpgradeToHdScreen = false
         }
 
-        guard !appSettings.firstRun else {
+        guard !onboardingSettings.firstRun else {
             print("This is not the 1st time the user is running the app.")
             return
         }
 
-        appSettings.firstRun = true
+        onboardingSettings.firstRun = true
 
         if appSettings.guid != nil && appSettings.sharedKey != nil && !appSettings.isPinSet {
             AlertViewPresenter.shared.alertUserAskingToUseOldKeychain { _ in

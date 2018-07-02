@@ -38,19 +38,10 @@ final class BlockchainSettings: NSObject {
 
         @objc var appOpenedCount: Int {
             get {
-                return defaults.integer(forKey:UserDefaults.Keys.appOpenedCount.rawValue)
+                return defaults.integer(forKey: UserDefaults.Keys.appOpenedCount.rawValue)
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.appOpenedCount.rawValue)
-            }
-        }
-
-        @objc var didFailBiometrySetup: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
             }
         }
 
@@ -73,15 +64,6 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var firstRun: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.firstRun.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.firstRun.rawValue)
-            }
-        }
-
         @objc var hasEndedFirstSession: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.hasEndedFirstSession.rawValue)
@@ -91,30 +73,12 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var hasSeenAllCards: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
-            }
-        }
-
         @objc var hasSeenEmailReminder: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.hasSeenEmailReminder.rawValue)
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenEmailReminder.rawValue)
-            }
-        }
-
-        @objc var hasSeenUpgradeToHdScreen: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
             }
         }
 
@@ -219,24 +183,6 @@ final class BlockchainSettings: NSObject {
                     return
                 }
                 KeychainItemWrapper.setSharedKeyInKeychain(sharedKey)
-            }
-        }
-
-        @objc var shouldHideBuySellCard: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
-            }
-        }
-
-        @objc var shouldShowBiometrySetup: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
             }
         }
 

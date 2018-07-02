@@ -131,7 +131,7 @@
     [walletIdentifierTextField resignFirstResponder];
     [passwordTextField resignFirstResponder];
     
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+    OnboardingSettings.sharedInstance.hasSeenAllCards = YES;
 
     [self.delegate manualPairView:self didContinueWithGuid:guid andPassword:password];
 }

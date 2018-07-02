@@ -211,7 +211,7 @@
     WalletManager.sharedInstance.wallet.isNew = YES;
     BuySellCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
     
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = NO;
+    OnboardingSettings.sharedInstance.hasSeenAllCards = NO;
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_DEFAULTS_KEY_LAST_CARD_OFFSET];
 
@@ -219,7 +219,7 @@
     BlockchainSettings.sharedAppInstance.hasEndedFirstSession = NO;
     BlockchainSettings.sharedAppInstance.reminderModalDate = NULL;
     
-    BlockchainSettings.sharedAppInstance.shouldHideBuySellCard = YES;
+    OnboardingSettings.sharedInstance.shouldHideBuySellCard = YES;
 }
 
 - (void)errorCreatingNewAccount:(NSString*)message

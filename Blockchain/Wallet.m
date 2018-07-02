@@ -1577,7 +1577,7 @@
 {
     [self useDebugSettingsIfSet];
 
-    BlockchainSettings.sharedAppInstance.hasSeenAllCards = YES;
+    OnboardingSettings.sharedInstance.hasSeenAllCards = YES;
 
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.parsePairingCode(\"%@\");", [code escapedForJS]]];
 }

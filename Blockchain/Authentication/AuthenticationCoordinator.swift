@@ -608,7 +608,7 @@ extension AuthenticationCoordinator: SetupDelegate {
                 let errorMessage = error ?? LocalizationConstants.Biometrics.unableToUseBiometrics
                 AlertViewPresenter.shared.standardError(message: errorMessage)
 
-                BlockchainSettings.App.shared.didFailBiometrySetup = true
+                OnboardingSettings.shared.didFailBiometrySetup = true
 
                 completion(false)
 
