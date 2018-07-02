@@ -148,9 +148,6 @@ import Foundation
             return
         }
 
-        BlockchainSettings.App.shared.hasSeenAllCards = true
-        BlockchainSettings.App.shared.shouldHideAllCards = true
-
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView()
             if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),

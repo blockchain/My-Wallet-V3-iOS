@@ -175,13 +175,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
-    func applicationWillTerminate(_ application: UIApplication) {
-        let appSettings = BlockchainSettings.App.shared
-        appSettings.shouldHideAllCards = true
-        appSettings.hasSeenAllCards = true
-        appSettings.shouldHideBuySellCard = true
-    }
-
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
 
         let urlString = url.absoluteString
