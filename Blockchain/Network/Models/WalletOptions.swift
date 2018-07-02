@@ -62,7 +62,7 @@ extension WalletOptions.MobileInfo {
 
 extension WalletOptions {
     init(json: JSON) {
-        downForMaintenance = json[Keys.maintenance] as? Bool ?? false
+        self.downForMaintenance = json[Keys.maintenance] as? Bool ?? false
         self.mobile = WalletOptions.Mobile(json: json)
         self.mobileInfo = WalletOptions.MobileInfo(json: json)
     }
