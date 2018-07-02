@@ -1734,7 +1734,7 @@ BOOL displayingLocalSymbolSend;
     
     CGFloat warningLabelYPosition = [self defaultYPositionForWarningLabel];
     
-    if (availableAmount <= 0 || availableAmount < fee) {
+    if (availableAmount <= 0) {
         [lineBelowFeeField changeYPositionAnimated:warningLabelYPosition + 30 completion:^(BOOL finished) {
             if (self.feeType == FeeTypeCustom) {
                 [self setupFeeWarningLabelFrameSmall];
