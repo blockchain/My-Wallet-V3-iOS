@@ -10,7 +10,6 @@
 #import "TransferAllFundsBuilder.h"
 #import "TransferAmountTableCell.h"
 #import "BCAddressSelectionView.h"
-#import "BCModalViewController.h"
 #import "BCNavigationController.h"
 #import "Blockchain-Swift.h"
 
