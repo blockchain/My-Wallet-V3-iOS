@@ -1378,17 +1378,6 @@ BOOL displayingLocalSymbolSend;
     }
 }
 
-
-- (uint64_t)dust
-{
-    if (self.assetType == LegacyAssetTypeBitcoin) {
-        return [WalletManager.sharedInstance.wallet dust];
-    } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
-        
-    }
-    return 0;
-}
-
 - (void)checkIfOverspending
 {
     if (self.assetType == LegacyAssetTypeBitcoin) {
@@ -2088,7 +2077,6 @@ BOOL displayingLocalSymbolSend;
 
 - (IBAction)sendPaymentClicked:(id)sender
 {
-    // TODO: investigate if dust should be used
     if ([self.toAddress length] == 0) {
         self.toAddress = toField.text;
         DLog(@"toAddress: %@", self.toAddress);
