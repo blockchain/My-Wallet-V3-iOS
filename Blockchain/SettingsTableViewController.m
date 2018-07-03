@@ -632,7 +632,6 @@ const int aboutCookiePolicy = 3;
         }]];
         [self presentViewController:alertForTogglingBiometry animated:YES completion:nil];
     } else {
-        BlockchainSettings.sharedAppInstance.pin = nil;
         BlockchainSettings.sharedAppInstance.biometryEnabled = !biometryEnabled;
     }
 }
