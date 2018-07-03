@@ -36,8 +36,7 @@ class OnboardingCoordinator: Coordinator {
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { walletOptions in
                 guard !walletOptions.downForMaintenance else {
-                    let message = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError
-                    AlertViewPresenter.shared.standardError(message: message)
+                    AlertViewPresenter.shared.showMaintenanceError(from: walletOptions)
                     return
                 }
             })

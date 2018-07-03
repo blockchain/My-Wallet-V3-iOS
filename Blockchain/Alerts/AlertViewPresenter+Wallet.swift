@@ -11,6 +11,18 @@ import Foundation
 /// Extension for wallet-related alerts
 extension AlertViewPresenter {
 
+    /// Shows the site maintenance error message from `walletOptions` if any.
+    ///
+    /// - Parameter walletOptions: the WalletOptions
+    func showMaintenanceError(from walletOptions: WalletOptions) {
+        guard walletOptions.downForMaintenance else {
+            print("Not showing site maintenance alert. WalletOptions `downForMaintenance` flag is not set.")
+            return
+        }
+        let message = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError
+        AlertViewPresenter.shared.standardError(message: message)
+    }
+
     @objc func showEmailAuthorizationRequired() {
         let alert = UIAlertController(
             title: LocalizationConstants.Authentication.manualPairingAuthorizationRequiredTitle,
