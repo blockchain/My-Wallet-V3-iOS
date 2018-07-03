@@ -40,7 +40,7 @@ import LocalAuthentication
     }
 }
 
-// MARK - UIDevice Biometrics Extension
+// MARK: - UIDevice Biometrics Extension
 
 extension UIDevice {
     @objc var supportedBiometricType: BiometricType? {
