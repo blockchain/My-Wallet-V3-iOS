@@ -512,7 +512,6 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 //#define USER_DEFAUTS_KEY_HAS_ENDED_FIRST_SESSION @"hasEndedFirstSession"
 #define USER_DEFAULTS_KEY_LAST_CARD_OFFSET @"lastCardOffset"
 //#define USER_DEFAULTS_KEY_SHOULD_HIDE_BUY_SELL_CARD @"shouldHideBuySellNotificationCard"
-#define USER_DEFAULTS_KEY_SHOULD_HIDE_BITCOIN_CASH_CARD @"shouldHideBitcoinCashNotificationCard"
 
 #define USER_DEFAULTS_KEY_DEBUG_SECURITY_REMINDER_CUSTOM_TIMER @"securiterReminderTimer"
 //#define USER_DEFAULTS_KEY_HAS_SEEN_EMAIL_REMINDER @"hasSeenEmailReminder"

@@ -34,7 +34,7 @@
         
         self.backgroundColor = [UIColor whiteColor];
         
-        CGFloat imageViewHeight = actionType == ActionTypeBuySell || actionType == ActionTypeBitcoinCash ? self.frame.size.height - 32 : 100;
+        CGFloat imageViewHeight = actionType == ActionTypeBuySell ? self.frame.size.height - 32 : 100;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 16, 100, imageViewHeight)];
         imageView.image = [UIImage imageNamed:imageName];
@@ -58,7 +58,7 @@
             actionName = BC_STRING_BUY_AND_SELL_BITCOIN;
             actionColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
             titleColor = actionColor;
-        } else if (actionType == ActionTypeBuySell || actionType == ActionTypeBitcoinCash) {
+        } else if (actionType == ActionTypeBuySell) {
             actionName = BC_STRING_GET_STARTED;
             actionColor = COLOR_BLOCKCHAIN_BLUE;
             titleColor = COLOR_BLOCKCHAIN_BLUE;
