@@ -126,6 +126,8 @@
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
 		513913F02081206C002578FD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
 		51392046205C60520025EE33 /* Cert in Resources */ = {isa = PBXBuildFile; fileRef = 51392045205C60520025EE33 /* Cert */; };
+		513C828620EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
+		513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
@@ -376,37 +378,6 @@
 		AAE9113D20A640A40093A431 /* PinPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113C20A640A40093A431 /* PinPayload.swift */; };
 		AAE9113E20A640A40093A431 /* PinPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113C20A640A40093A431 /* PinPayload.swift */; };
 		AAE94DCA20C25124005A3595 /* WalletServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DC920C25124005A3595 /* WalletServiceTests.swift */; };
-		AAE94DCF20C25F37005A3595 /* MockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */; };
-		AAE94E4920C5B7E7005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
-		AAE94E4A20C5B7E7005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
-		AAE94EC420C5EA2E005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
-		AAE94EC820C5EA2E005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
-		AAE94ED020C5ECDC005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
-		AAE94ED120C5ECDC005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
-		AAE94ED220C5ECDC005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
-		AAE94ED320C5ECDC005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
-		AAE94EF320C5FE73005A3595 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; };
-		AAE94EF420C5FE73005A3595 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0720C5B71E005A3595 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AAE94EF720C5FE73005A3595 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; };
-		AAE94EF820C5FE73005A3595 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E0F20C5B71E005A3595 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AAE94F0420C5FE7E005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
-		AAE94F0520C5FE7E005A3595 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AAE94F0820C5FEA9005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
-		AAE94F0920C5FEAA005A3595 /* RxBlocking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AAE94F2E20C644DE005A3595 /* PinPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F2D20C644DE005A3595 /* PinPresenter.swift */; };
-		AAE94F2F20C644DE005A3595 /* PinPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F2D20C644DE005A3595 /* PinPresenter.swift */; };
-		AAE94F3120C64B49005A3595 /* PinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3020C64B49005A3595 /* PinInteractor.swift */; };
-		AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3020C64B49005A3595 /* PinInteractor.swift */; };
-		AAE94F3520C70B97005A3595 /* AssetURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */; };
-		AAE94F3620C70B97005A3595 /* AssetURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */; };
-		AAE94F3C20C70F4B005A3595 /* BIP21URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */; };
-		AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */; };
-		AAE94F3F20C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
-		AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */; };
-		AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94F4320C736E8005A3595 /* AssetURLPayloadFactoryTests.swift */; };
-		AAE94DCA20C25124005A3595 /* WalletServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DC920C25124005A3595 /* WalletServiceTests.swift */; };
-		AAE94DCC20C25836005A3595 /* PinStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCB20C25836005A3595 /* PinStoreError.swift */; };
-		AAE94DCD20C25836005A3595 /* PinStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCB20C25836005A3595 /* PinStoreError.swift */; };
 		AAE94DCF20C25F37005A3595 /* MockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */; };
 		AAE94E4920C5B7E7005A3595 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E3C20C5B734005A3595 /* Alamofire.framework */; };
 		AAE94E4A20C5B7E7005A3595 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE94E1720C5B71E005A3595 /* RxBlocking.framework */; };
@@ -1431,6 +1402,7 @@
 		513467FF2056BC6700DE6A1E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = Extensions/UserDefaults.swift; sourceTree = "<group>"; };
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
+		513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIDevice+Biometrics.swift"; path = "Extensions/UIDevice+Biometrics.swift"; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyImportDelegate.swift; sourceTree = "<group>"; };
 		51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyImportCoordinator.swift; sourceTree = "<group>"; };
@@ -1681,20 +1653,6 @@
 		AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoDelegate.swift; sourceTree = "<group>"; };
 		AAE9113C20A640A40093A431 /* PinPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PinPayload.swift; path = Authentication/Models/PinPayload.swift; sourceTree = "<group>"; };
 		AAE94DC920C25124005A3595 /* WalletServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletServiceTests.swift; sourceTree = "<group>"; };
-		AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManager.swift; sourceTree = "<group>"; };
-		AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Submodules/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
-		AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
-		AAE94F2D20C644DE005A3595 /* PinPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenter.swift; sourceTree = "<group>"; };
-		AAE94F3020C64B49005A3595 /* PinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinInteractor.swift; sourceTree = "<group>"; };
-		AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayload.swift; sourceTree = "<group>"; };
-		AAE94F3B20C70F4B005A3595 /* BIP21URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP21URI.swift; sourceTree = "<group>"; };
-		AAE94F3E20C71379005A3595 /* AssetURLPayloadFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayloadFactory.swift; sourceTree = "<group>"; };
-		AAE94F4320C736E8005A3595 /* AssetURLPayloadFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayloadFactoryTests.swift; sourceTree = "<group>"; };
-		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
-		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
-		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
-		AAE94DC920C25124005A3595 /* WalletServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletServiceTests.swift; sourceTree = "<group>"; };
-		AAE94DCB20C25836005A3595 /* PinStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreError.swift; sourceTree = "<group>"; };
 		AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManager.swift; sourceTree = "<group>"; };
 		AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Submodules/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
 		AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
@@ -2123,6 +2081,7 @@
 		510EA19620811FF100A63AB8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */,
 				51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */,
 				AACE31202091004900B7B806 /* UIApplication+Suspend.h */,
 				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
@@ -2165,13 +2124,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		5113571220A0B67700056D65 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		511BF4F020E6828900A14072 /* AppReviewPrompt */ = {
 			isa = PBXGroup;
 			children = (
@@ -2209,8 +2161,6 @@
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
 				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
-				C7369222209A4FDF004F5438 /* NumberFormatter+AssetsTests.swift */,
-				51C2ADD820BDEF9900D66108 /* String+EscapeJSTests.swift */,
 				AA94966120CB611F00A9C2DD /* Addresses */,
 				AACE3206209782DD00B7B806 /* Authentication */,
 				51C9EBBF20DBE88000AB521D /* Extensions */,
@@ -3875,6 +3825,7 @@
 				AACE31C62092A99B00B7B806 /* LoadingViewPresenter.swift in Sources */,
 				AAE9113620A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
+				513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				AA63F85120A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
@@ -4065,6 +4016,7 @@
 				516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */,
 				23444F901DCD21AB00573C8C /* BTCCurvePoint.m in Sources */,
 				C75CBD041F1FB12F00CACE0D /* BCTotalAmountView.m in Sources */,
+				513C828620EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				67EE1DCC19E3325900DBBFC9 /* ECSlidingInteractiveTransition.m in Sources */,
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
 				C7442E341FBA1E7800695E4C /* ExchangeTableViewCell.m in Sources */,
