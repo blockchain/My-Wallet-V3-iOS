@@ -42,42 +42,27 @@
             headerLabel.adjustsFontSizeToFitWidth = YES;
             headerLabel.text = headerText;
             [headerLabel sizeToFit];
-            CGFloat labelPosX = (topBarView.frame.size.width / 2) - (headerLabel.frame.size.width / 2);
-            CGFloat labelPosY = (topBarView.frame.size.height / 2) - (headerLabel.frame.size.height / 2) + (safeAreaInsetTop / 2);
-            CGFloat labelWidth = headerLabel.frame.size.width;
+            CGFloat labelWidth = MIN(headerLabel.frame.size.width, topBarView.frame.size.width - 105);
             CGFloat labelHeight = headerLabel.frame.size.height;
+            CGFloat labelPosX = (topBarView.frame.size.width / 2) - (labelWidth / 2);
+            CGFloat labelPosY = (topBarView.frame.size.height / 2) - (headerLabel.frame.size.height / 2) + (safeAreaInsetTop / 2);
             CGRect frame = CGRectMake(labelPosX, labelPosY, labelWidth, labelHeight);
             [headerLabel setFrame:frame];
             [topBarView addSubview:headerLabel];
-            
-            // TODO: update ModalCloseTypeClose and ModalCloseTypeDone button image edge insets
+
             if (closeType == ModalCloseTypeBack) {
-                self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                CGFloat buttonHeight = topBarView.frame.size.height - safeAreaInsetTop;
-                CGFloat buttonPosY = topBarView.frame.size.height - buttonHeight;
-                self.backButton.frame = CGRectMake(0, buttonPosY, 85, buttonHeight);
-                self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-                self.backButton.imageEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0);
-                [self.backButton.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE_MEDIUM]];
+                self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 37, 44)];
+                self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+                self.backButton.center = CGPointMake(self.backButton.center.x, headerLabel.center.y);
                 [self.backButton setImage:[UIImage imageNamed:@"back_chevron_icon"] forState:UIControlStateNormal];
-                [self.backButton setTitleColor:[UIColor colorWithWhite:0.56 alpha:1.0] forState:UIControlStateHighlighted];
                 [self.backButton addTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [topBarView addSubview:self.backButton];
             } else if (closeType == ModalCloseTypeClose) {
-                self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 80, 15, 80, 51)];
-                self.closeButton.imageEdgeInsets = IMAGE_EDGE_INSETS_CLOSE_BUTTON_X;
-                self.closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+                CGFloat rightEdgeInset = 8;
+                self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 37 - rightEdgeInset, 0, 37, 44)];
+                self.closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+                self.closeButton.center = CGPointMake(self.closeButton.center.x, headerLabel.center.y);
                 [self.closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-                self.closeButton.center = CGPointMake(self.closeButton.center.x, headerLabel.center.y);
-                [self.closeButton addTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventTouchUpInside];
-                [topBarView addSubview:self.closeButton];
-            } else if (closeType == ModalCloseTypeDone) {
-                self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 80, 15, 80, 51)];
-                self.closeButton.titleEdgeInsets = IMAGE_EDGE_INSETS_CLOSE_BUTTON_X;
-                self.closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-                self.closeButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-                [self.closeButton setTitle:BC_STRING_DONE forState:UIControlStateNormal];
-                self.closeButton.center = CGPointMake(self.closeButton.center.x, headerLabel.center.y);
                 [self.closeButton addTarget:self action:@selector(closeModalClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [topBarView addSubview:self.closeButton];
             }
