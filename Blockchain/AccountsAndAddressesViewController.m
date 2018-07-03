@@ -35,7 +35,7 @@
 
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     CGFloat safeAreaInsetTop = 20;
-    CGFloat assetSelectorHeight = 36;
+    CGFloat assetSelectorHeight = [ConstantsObjcBridge assetSelectorHeight];
     if (@available(iOS 11.0, *)) {
         safeAreaInsetTop = window.rootViewController.view.safeAreaInsets.top;
         CGRect frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.safeAreaLayoutGuide.layoutFrame;
