@@ -20,22 +20,24 @@ import LocalAuthentication
     // MARK: - Initialization
 
     @available(iOS 11.0, *)
-    init?(type: LABiometryType) {
+    convenience init?(type: LABiometryType) {
         switch type {
         case .faceID:
-            self.title = "Face ID"
-            self.asset = "IconFaceID"
+            self.init(title: "Face ID", asset: "IconFaceID")
         case .touchID:
-            self.title = "Touch ID"
-            self.asset = "IconTouchID"
+            self.init()
         default:
             return nil
         }
     }
 
-    override init() {
-        self.title = "Touch ID"
-        self.asset = "IconTouchID"
+    override convenience init() {
+        self.init(title: "Touch ID", asset: "IconTouchID")
+    }
+
+    private init(title: String, asset: String) {
+        self.title = title
+        self.asset = asset
         super.init()
     }
 }
