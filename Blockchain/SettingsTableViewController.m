@@ -590,20 +590,14 @@ const int aboutCookiePolicy = 3;
 #pragma mark - Biometrics
 
 /**
- Gets the biometric type description depending on whether the device supports Face ID or Touch ID.
- This method may also be used to quickly determine whether or not the user is enrolled in biometric authentication.
+ Gets the biometric type description depending on whether the device supports Face ID, Touch ID or neither.
  @return The biometric type description of the authentication method.
  */
 - (NSString *)biometryTypeDescription
 {
-    LAContext *context = [[LAContext alloc] init];
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
-        if (context.biometryType == LABiometryTypeFaceID) {
-            return [NSString stringWithFormat:[LocalizationConstantsObjcBridge useBiometricsAsPin], @"Face ID"];
-        }
-        return [NSString stringWithFormat:[LocalizationConstantsObjcBridge useBiometricsAsPin], @"Touch ID"];
-    }
-    return nil;
+    BiometricType *type = UIDevice.currentDevice.supportedBiometricType;
+    if (!type) { return nil; }
+    return [NSString stringWithFormat:[LocalizationConstantsObjcBridge useBiometricsAsPin], type.title];
 }
 
 - (void)biometrySwitchTapped
