@@ -13,8 +13,7 @@
 typedef enum {
     ModalCloseTypeClose = 100,
     ModalCloseTypeBack = 200,
-    ModalCloseTypeNone = 300,
-    ModalCloseTypeDone = 400
+    ModalCloseTypeNone = 300
 }ModalCloseType;
 
 @interface BCModalView : UIView
