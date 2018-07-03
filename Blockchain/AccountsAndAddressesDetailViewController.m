@@ -53,7 +53,6 @@ typedef enum {
     navigationItemTitleLabel.textColor = UIColor.whiteColor;
     navigationItemTitleLabel.text = self.navigationItemTitle;
     self.navigationItem.titleView = navigationItemTitleLabel;
-    [self.navigationItem.backBarButtonItem setTitle:nil];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = [UIColor whiteColor];
