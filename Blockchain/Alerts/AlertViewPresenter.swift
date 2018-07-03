@@ -138,7 +138,7 @@ import Foundation
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow
             let rootController = window?.rootViewController
-            let presentingViewController = viewController ?? rootController ?? rootController?.topMostViewController
+            let presentingViewController = viewController ?? rootController?.topMostViewController ?? rootController
             presentingViewController?.present(alert, animated: true)
         }
     }
