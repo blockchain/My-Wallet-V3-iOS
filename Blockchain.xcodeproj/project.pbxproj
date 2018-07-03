@@ -2081,10 +2081,6 @@
 		510EA19620811FF100A63AB8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */,
-				51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */,
-				AACE31202091004900B7B806 /* UIApplication+Suspend.h */,
-				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
 				511646DE20851BC600C43522 /* Bundle.swift */,
 				516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */,
 				5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */,
@@ -2092,8 +2088,12 @@
 				51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */,
 				AA1E52392097E2190099BD10 /* Strings.swift */,
 				AACE314B209152D800B7B806 /* UIApplication.swift */,
+				AACE31202091004900B7B806 /* UIApplication+Suspend.h */,
+				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
 				511646E1208523E300C43522 /* UIDevice.swift */,
+				513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */,
 				5114EA2220CD8B900098E26E /* UINavigationBar+TitleAttributes.swift */,
+				51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */,
 				AABDED3F208A6E8D002D8BAC /* UIViewController.swift */,
 				AA63F84A20A12AE9002B719B /* URLs.swift */,
 				513913EF2081206C002578FD /* UserDefaults.swift */,
