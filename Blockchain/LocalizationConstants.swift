@@ -91,7 +91,7 @@ struct LocalizationConstants {
         static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
         static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
         static let secondPasswordDefaultDescription = NSLocalizedString("This action requires the second password for your wallet. Please enter it below and press continue.", comment: "")
-        static let privateKeyNeeded = NSLocalizedString("Second Password Required", comment: "")
+        static let privateKeyNeeded = NSLocalizedString("Private Key Needed", comment: "")
         static let privateKeyPasswordDefaultDescription = NSLocalizedString("The private key you are attempting to import is encrypted. Please enter the password below.", comment: "")
         static let password = NSLocalizedString("Password", comment: "")
     }
