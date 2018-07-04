@@ -450,6 +450,8 @@
 		C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C76135631F9E55DF0029E159 /* ExchangeCreateViewController.m */; };
 		C7618B611F66C817003E7589 /* QRCodeScannerSendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7618B601F66C817003E7589 /* QRCodeScannerSendViewController.m */; };
 		C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7640FBE2056B70E00D14D51 /* BCSwipeAddressViewModel.m */; };
+		C764372920ED199500CA7CA4 /* BalanceDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C764372820ED199500CA7CA4 /* BalanceDisplayModel.swift */; };
+		C764372A20ED199500CA7CA4 /* BalanceDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C764372820ED199500CA7CA4 /* BalanceDisplayModel.swift */; };
 		C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */; };
 		C76D730420B2052000040B57 /* WalletExchangeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */; };
 		C76D730520B2052000040B57 /* WalletExchangeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */; };
@@ -1736,6 +1738,7 @@
 		C7618B601F66C817003E7589 /* QRCodeScannerSendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeScannerSendViewController.m; sourceTree = "<group>"; };
 		C7640FBD2056B70E00D14D51 /* BCSwipeAddressViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCSwipeAddressViewModel.h; sourceTree = "<group>"; };
 		C7640FBE2056B70E00D14D51 /* BCSwipeAddressViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCSwipeAddressViewModel.m; sourceTree = "<group>"; };
+		C764372820ED199500CA7CA4 /* BalanceDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDisplayModel.swift; sourceTree = "<group>"; };
 		C769B2D81FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContinueButtonInputAccessoryView.h; sourceTree = "<group>"; };
 		C769B2D91FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContinueButtonInputAccessoryView.m; sourceTree = "<group>"; };
 		C76D730320B2052000040B57 /* WalletExchangeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExchangeDelegate.swift; sourceTree = "<group>"; };
@@ -2371,6 +2374,7 @@
 		9F765F3A14BC7C3100048EFB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C764372820ED199500CA7CA4 /* BalanceDisplayModel.swift */,
 				C79A239720B3520D000D96B9 /* DestinationAddressSource.h */,
 				C78893E420A36572003C0A8F /* Trade.swift */,
 				6780DB961A40BDF40048EED2 /* AccountInOut.h */,
@@ -3831,6 +3835,7 @@
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
+				C764372A20ED199500CA7CA4 /* BalanceDisplayModel.swift in Sources */,
 				AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 				AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */,
@@ -3868,6 +3873,7 @@
 				AAA3316B2089650B00BBD292 /* AlertViewPresenter.swift in Sources */,
 				2322DCC71D771831000E5AC1 /* SRWebSocket.m in Sources */,
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,
+				C764372920ED199500CA7CA4 /* BalanceDisplayModel.swift in Sources */,
 				23FB5C101D9ABB730008C6AB /* TransactionDetailDateCell.m in Sources */,
 				670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */,
 				51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,

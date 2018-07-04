@@ -19,12 +19,9 @@
 @interface BCBalancesChartView ()
 @property (nonatomic) PieChartView *chartView;
 @property (nonatomic) NSString *fiatSymbol;
-@property (nonatomic) double bitcoinFiatBalance;
-@property (nonatomic) double etherFiatBalance;
-@property (nonatomic) double bitcoinCashFiatBalance;
-@property (nonatomic) NSString *bitcoinBalance;
-@property (nonatomic) NSString *etherBalance;
-@property (nonatomic) NSString *bitcoinCashBalance;
+@property (nonatomic) BalanceDisplayModel *bitcoin;
+@property (nonatomic) BalanceDisplayModel *ether;
+@property (nonatomic) BalanceDisplayModel *bitcoinCash;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *etherLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinCashLegendKey;
@@ -94,6 +91,25 @@
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
 }
 
+// Lazy initializers
+- (BalanceDisplayModel *)bitcoin
+{
+    if (!_bitcoin) _bitcoin = [[BalanceDisplayModel alloc] init];
+    return _bitcoin;
+}
+
+- (BalanceDisplayModel *)ether
+{
+    if (!_ether) _ether = [[BalanceDisplayModel alloc] init];
+    return _ether;
+}
+
+- (BalanceDisplayModel *)bitcoinCash
+{
+    if (!_bitcoinCash) _bitcoinCash = [[BalanceDisplayModel alloc] init];
+    return _bitcoinCash;
+}
+
 - (void)hideChartMarker
 {
     [self.chartView highlightValue:nil callDelegate:NO];
@@ -106,17 +122,36 @@
 
 - (void)updateBitcoinFiatBalance:(double)fiatBalance
 {
-    self.bitcoinFiatBalance = fiatBalance;
+    self.bitcoin.fiatBalance = fiatBalance;
 }
+
+- (void)updateBitcoinWatchOnlyFiatBalance:(double)watchOnlyFiatBalance
+{
+    self.bitcoin.watchOnly.fiatBalance = watchOnlyFiatBalance;
+}
+
+// Ethereum
 
 - (void)updateEtherFiatBalance:(double)fiatBalance
 {
-    self.etherFiatBalance = fiatBalance;
+    self.ether.fiatBalance = fiatBalance;
 }
+
+// Bitcoin Cash
 
 - (void)updateBitcoinCashFiatBalance:(double)fiatBalance
 {
-    self.bitcoinCashFiatBalance = fiatBalance;
+    self.bitcoinCash.fiatBalance = fiatBalance;
+}
+
+- (void)updateBitcoinCashWatchOnlyBalance:(NSString *)balance
+{
+    self.bitcoinCash.watchOnly.balance = balance;
+}
+
+- (void)updateBitcoinCashWatchOnlyFiatBalance:(double)watchOnlyFiatBalance
+{
+    self.bitcoinCash.watchOnly.fiatBalance = watchOnlyFiatBalance;
 }
 
 - (void)updateTotalFiatBalance:(NSString *)fiatBalance
@@ -127,23 +162,23 @@
 - (void)updateBitcoinBalance:(NSString *)balance
 {
     if (!balance) {
-        self.bitcoinBalance = @"0";
+        self.bitcoin.balance = @"0";
     } else {
-        self.bitcoinBalance = balance;
+        self.bitcoin.balance = balance;
     }
 }
 
 - (void)updateEtherBalance:(NSString *)balance
 {
-    self.etherBalance = balance;
+    self.ether.balance = balance;
 }
 
 - (void)updateBitcoinCashBalance:(NSString *)balance
 {
     if (!balance) {
-        self.bitcoinCashBalance = @"0";
+        self.bitcoinCash.balance = @"0";
     } else {
-        self.bitcoinCashBalance = balance;
+        self.bitcoinCash.balance = balance;
     }
 }
 
@@ -151,7 +186,7 @@
 {
     [self hideChartMarker];
     
-    BOOL hasZeroBalances = !self.bitcoinFiatBalance && !self.etherFiatBalance && !self.bitcoinCashFiatBalance;
+    BOOL hasZeroBalances = !self.bitcoin.fiatBalance && !self.ether.fiatBalance && !self.bitcoinCash.fiatBalance;
 
     PieChartDataSet *dataSet;
 
@@ -166,9 +201,9 @@
         NSDictionary *btcChartEntryData = @{@"currency": BC_STRING_BITCOIN, @"symbol": fiatSymbol};
         NSDictionary *ethChartEntryData = @{@"currency": BC_STRING_ETHER, @"symbol": fiatSymbol};
         NSDictionary *bchChartEntryData = @{@"currency": BC_STRING_BITCOIN_CASH, @"symbol": fiatSymbol};
-        ChartDataEntry *bitcoinValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinFiatBalance data:btcChartEntryData];
-        ChartDataEntry *etherValue = [[PieChartDataEntry alloc] initWithValue:self.etherFiatBalance data:ethChartEntryData];
-        ChartDataEntry *bitcoinCashValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinCashFiatBalance data:bchChartEntryData];
+        ChartDataEntry *bitcoinValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoin.fiatBalance data:btcChartEntryData];
+        ChartDataEntry *etherValue = [[PieChartDataEntry alloc] initWithValue:self.ether.fiatBalance data:ethChartEntryData];
+        ChartDataEntry *bitcoinCashValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinCash.fiatBalance data:bchChartEntryData];
         dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue] label:BC_STRING_BALANCES];
         dataSet.colors = @[COLOR_BLOCKCHAIN_BLUE, COLOR_BLOCKCHAIN_LIGHT_BLUE, COLOR_BLOCKCHAIN_LIGHTER_BLUE];
         dataSet.selectionShift = 5;
@@ -184,14 +219,14 @@
         [self.chartView animateWithYAxisDuration:1.0];
     }
 
-    [self.bitcoinLegendKey changeBalance:[self.bitcoinBalance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC]];
-    [self.bitcoinLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoinFiatBalance]]];
+    [self.bitcoinLegendKey changeBalance:[self.bitcoin.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC]];
+    [self.bitcoinLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoin.fiatBalance]]];
 
-    [self.etherLegendKey changeBalance:[self.etherBalance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_ETH]];
-    [self.etherLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.etherFiatBalance]]];
+    [self.etherLegendKey changeBalance:[self.ether.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_ETH]];
+    [self.etherLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.ether.fiatBalance]]];
 
-    [self.bitcoinCashLegendKey changeBalance:[self.bitcoinCashBalance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BCH]];
-    [self.bitcoinCashLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoinCashFiatBalance]]];
+    [self.bitcoinCashLegendKey changeBalance:[self.bitcoinCash.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BCH]];
+    [self.bitcoinCashLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoinCash.fiatBalance]]];
 }
 
 - (NSAttributedString *)balanceAttributedStringWithText:(NSString *)text

@@ -14,14 +14,21 @@
 @end
 @interface BCBalancesChartView : UIView
 @property (nonatomic, weak) id<BCBalancesChartViewDelegate> delegate;
-- (void)updateBitcoinFiatBalance:(double)fiatBalance;
-- (void)updateEtherFiatBalance:(double)fiatBalance;
-- (void)updateBitcoinCashFiatBalance:(double)fiatBalance;
-- (void)updateTotalFiatBalance:(NSString *)fiatBalance;
 
 - (void)updateBitcoinBalance:(NSString *)balance;
+- (void)updateBitcoinFiatBalance:(double)fiatBalance;
+- (void)updateBitcoinWatchOnlyBalance:(NSString *)watchOnlyBalance;
+- (void)updateBitcoinWatchOnlyFiatBalance:(double)watchOnlyFiatBalance;
+
 - (void)updateEtherBalance:(NSString *)balance;
+- (void)updateEtherFiatBalance:(double)fiatBalance;
+
 - (void)updateBitcoinCashBalance:(NSString *)balance;
+- (void)updateBitcoinCashFiatBalance:(double)fiatBalance;
+- (void)updateBitcoinCashWatchOnlyBalance:(NSString *)watchOnlyBalance;
+- (void)updateBitcoinCashWatchOnlyFiatBalance:(double)watchOnlyFiatBalance;
+
+- (void)updateTotalFiatBalance:(NSString *)fiatBalance;
 
 - (void)updateFiatSymbol:(NSString *)symbol;
 
