@@ -30,6 +30,7 @@ struct Constants {
         static let ColorGray1 = UIColorFromRGB(0xEAEAEA)           // previously DisabledGray, SecondaryGray
         static let ColorGray2 = UIColorFromRGB(0xCCCCCC)           // previously TextFieldBorderGray
         static let ColorGray5 = UIColorFromRGB(0x545456)           // previously DarkGray
+        static let ColorGray6 = UIColorFromRGB(0xEEEEEE)
         static let ColorSent = UIColorFromRGB(0xF26C57)            // previously SentRed
         static let ColorSuccess = UIColorFromRGB(0x00A76F)         // previously SuccessGreen
     }
@@ -64,7 +65,7 @@ struct Constants {
     struct FontNames {
         static let montserratRegular = "Montserrat-Regular"
         static let montserratSemiBold = "Montserrat-SemiBold"
-        static let montserratSemiLight = "Montserrat-Light"
+        static let montserratLight = "Montserrat-Light"
         static let montserratSemiExtraLight = "Montserrat-ExtraLight"
         static let gillSans = "GillSans"
         static let gillSansLight = "GillSans-Light"
@@ -203,6 +204,30 @@ struct Constants {
 
     @objc class func minimumTapTargetSize() -> CGFloat {
         return Constants.Measurements.MinimumTapTargetSize
+    }
+
+    @objc class func colorGray2() -> UIColor {
+        return Constants.Colors.ColorGray2
+    }
+
+    @objc class func colorGray5() -> UIColor {
+        return Constants.Colors.ColorGray5
+    }
+
+    @objc class func colorGray6() -> UIColor {
+        return Constants.Colors.ColorGray6
+    }
+
+    @objc class func colorBrandPrimary() -> UIColor {
+        return Constants.Colors.ColorBrandPrimary
+    }
+
+    @objc class func montserratLight() -> String {
+        return Constants.FontNames.montserratLight
+    }
+
+    @objc class func montserratSemiBold() -> String {
+        return Constants.FontNames.montserratSemiBold
     }
 }
 

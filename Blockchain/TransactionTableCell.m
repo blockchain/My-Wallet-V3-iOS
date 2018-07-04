@@ -14,6 +14,7 @@
 #import "NSDateFormatter+TimeAgoString.h"
 #import "Blockchain-Swift.h"
 #import "NSNumberFormatter+Currencies.h"
+#import "UIView+ChangeFrameAttribute.h"
 
 @implementation TransactionTableCell
 
@@ -56,22 +57,37 @@
     
     infoLabel.adjustsFontSizeToFitWidth = YES;
     infoLabel.layer.cornerRadius = 5;
+    infoLabel.layer.borderWidth = 1;
     infoLabel.clipsToBounds = YES;
-    infoLabel.customEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 4);
+    infoLabel.customEdgeInsets = UIEdgeInsetsMake(2, 7, 3, 7);
     infoLabel.hidden = NO;
 
     actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 20, actionLabel.frame.size.width, actionLabel.frame.size.height);
     dateLabel.frame = CGRectMake(dateLabel.frame.origin.x, 3, dateLabel.frame.size.width, dateLabel.frame.size.height);
     
+    UIFont *exchangeFont = [UIFont fontWithName:[ConstantsObjcBridge montserratSemiBold] size:infoLabel.font.pointSize];
+    UIColor *exchangeTextColor = [UIColor whiteColor];
+    UIColor *exchangeBackgroundColor = [ConstantsObjcBridge colorBrandPrimary];
+    UIColor *exchangeBorderColor = exchangeBackgroundColor;
+
     if ((([transaction.txType isEqualToString:TX_TYPE_RECEIVED] || [transaction.txType isEqualToString:TX_TYPE_TRANSFER]) && transaction.toWatchOnly) || ([transaction.txType isEqualToString:TX_TYPE_SENT] && transaction.fromWatchOnly)) {
-        infoLabel.text = BC_STRING_WATCH_ONLY;
-        infoLabel.backgroundColor = COLOR_DARK_GRAY;
+        infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratLight] size:infoLabel.font.pointSize];
+        infoLabel.text = [LocalizationConstantsObjcBridge nonSpendable];
+        infoLabel.textColor = [ConstantsObjcBridge colorGray5];
+        infoLabel.backgroundColor = [ConstantsObjcBridge colorGray6];
+        infoLabel.layer.borderColor = [[ConstantsObjcBridge colorGray2] CGColor];
     } else if ([WalletManager.sharedInstance.wallet isDepositTransaction:transaction.myHash]) {
+        infoLabel.font = exchangeFont;
         infoLabel.text = BC_STRING_DEPOSITED_TO_SHAPESHIFT;
-        infoLabel.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        infoLabel.textColor = exchangeTextColor;
+        infoLabel.backgroundColor = exchangeBackgroundColor;
+        infoLabel.layer.borderColor = [exchangeBorderColor CGColor];
     } else if ([WalletManager.sharedInstance.wallet isWithdrawalTransaction:transaction.myHash]) {
+        infoLabel.font = exchangeFont;
         infoLabel.text = BC_STRING_RECEIVED_FROM_SHAPESHIFT;
-        infoLabel.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        infoLabel.textColor = exchangeTextColor;
+        infoLabel.backgroundColor = exchangeBackgroundColor;
+        infoLabel.layer.borderColor = [exchangeBorderColor CGColor];
     } else {
         infoLabel.hidden = YES;
         actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 29, actionLabel.frame.size.width, actionLabel.frame.size.height);
@@ -79,6 +95,8 @@
     }
     
     [infoLabel sizeToFit];
+    // Having issues vertically centering the text - I'm sure there is a better way to do this but it might take too long to do
+    [infoLabel changeHeight:infoLabel.frame.size.height + 3];
     
     warningImageView.image = [warningImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [warningImageView setTintColor:COLOR_WARNING_RED];

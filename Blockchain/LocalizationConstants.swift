@@ -208,6 +208,7 @@ struct LocalizationConstants {
     }
 
     struct AddressAndKeyImport {
+        static let nonSpendable = NSLocalizedString("Non-Spendable", comment: "")
         static let importedWatchOnlyAddressArgument = NSLocalizedString("Imported watch-only address %@", comment: "")
         static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
         static let loadingImportKey = NSLocalizedString("Importing key", comment: "")
@@ -415,4 +416,6 @@ struct LocalizationConstants {
     @objc class func pinsDoNotMatch() -> String { return LocalizationConstants.Pin.pinsDoNotMatch }
 
     @objc class func dontShowAgain() -> String { return LocalizationConstants.dontShowAgain }
+
+    @objc class func nonSpendable() -> String { return LocalizationConstants.AddressAndKeyImport.nonSpendable }
 }

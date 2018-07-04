@@ -51,7 +51,7 @@ import UIKit
         imageViewAsset.tintColor = Constants.Colors.ColorGray5
 
         buttonRequest.titleLabel?.font = UIFont(
-            name: Constants.FontNames.montserratSemiLight,
+            name: Constants.FontNames.montserratLight,
             size: Constants.FontSizes.Small
         )
         buttonRequest.layer.borderWidth = 1.0
