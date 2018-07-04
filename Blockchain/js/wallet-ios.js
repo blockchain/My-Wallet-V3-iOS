@@ -270,6 +270,15 @@ MyWalletPhone.getBalanceForAccount = function(num) {
     return MyWallet.wallet.hdwallet.accounts[num].balance;
 };
 
+MyWalletPhone.totalActiveBalance = function() {
+    if (!MyWallet.wallet.isUpgradedToHD) {
+        console.log('Warning: Getting accounts when wallet has not upgraded!');
+        return MyWallet.wallet.balanceSpendableActiveLegacy;
+    }
+
+    return MyWallet.wallet.hdwallet.balanceActiveAccounts + MyWallet.wallet.balanceSpendableActiveLegacy;
+}
+
 MyWalletPhone.getLabelForAccount = function(num) {
     if (!MyWallet.wallet.isUpgradedToHD) {
         console.log('Warning: Getting accounts when wallet has not upgraded!');

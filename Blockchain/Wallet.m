@@ -4326,7 +4326,7 @@
         return 0;
     }
 
-    return [[[self.context evaluateScript:@"MyWallet.wallet.balanceActive"] toNumber] longLongValue];
+    return [[[self.context evaluateScript:@"MyWalletPhone.totalActiveBalance()"] toNumber] longLongValue];
 }
 
 - (uint64_t)getTotalBalanceForActiveLegacyAddresses:(LegacyAssetType)assetType
