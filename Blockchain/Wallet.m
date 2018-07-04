@@ -4329,6 +4329,24 @@
     return [[[self.context evaluateScript:@"MyWalletPhone.totalActiveBalance()"] toNumber] longLongValue];
 }
 
+- (uint64_t)getWatchOnlyBalance
+{
+    if (![self isInitialized]) {
+        return 0;
+    }
+
+    return [[[self.context evaluateScript:@"MyWalletPhone.watchOnlyBalance()"] toNumber] longLongValue];
+}
+
+- (BOOL)hasWatchOnlyAddresses
+{
+    if (![self isInitialized]) {
+        return NO;
+    }
+
+    return [[self.context evaluateScript:@"MyWalletPhone.hasWatchOnlyAddresses()"] toBool];
+}
+
 - (uint64_t)getTotalBalanceForActiveLegacyAddresses:(LegacyAssetType)assetType
 {
     if (![self isInitialized]) {

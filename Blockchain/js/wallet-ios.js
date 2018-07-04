@@ -279,6 +279,18 @@ MyWalletPhone.totalActiveBalance = function() {
     return MyWallet.wallet.hdwallet.balanceActiveAccounts + MyWallet.wallet.balanceSpendableActiveLegacy;
 }
 
+MyWalletPhone.watchOnlyBalance = function() {
+    return this.activeKeys
+    .filter(function (k) { return k.isWatchOnly; })
+    .map(function (k) { return k.balance; })
+    .reduce(Helpers.add, 0);
+}
+
+MyWalletPhone.hasWatchOnlyAddresses = function() {
+    return this.activeKeys
+    .filter(function (k) { return k.isWatchOnly; }).length > 0;
+}
+
 MyWalletPhone.getLabelForAccount = function(num) {
     if (!MyWallet.wallet.isUpgradedToHD) {
         console.log('Warning: Getting accounts when wallet has not upgraded!');

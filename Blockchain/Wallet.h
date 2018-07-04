@@ -308,6 +308,8 @@
 - (BOOL)isAccountNameValid:(NSString *)name;
 
 - (uint64_t)getTotalActiveBalance;
+- (uint64_t)getWatchOnlyBalance;
+- (BOOL)hasWatchOnlyAddresses;
 - (uint64_t)getTotalBalanceForActiveLegacyAddresses:(LegacyAssetType)assetType;
 - (uint64_t)getTotalBalanceForSpendableActiveLegacyAddresses;
 - (id)getBalanceForAccount:(int)account assetType:(LegacyAssetType)assetType;
