@@ -280,14 +280,14 @@ MyWalletPhone.totalActiveBalance = function() {
 }
 
 MyWalletPhone.watchOnlyBalance = function() {
-    return this.activeKeys
+    return MyWallet.wallet.activeKeys
     .filter(function (k) { return k.isWatchOnly; })
     .map(function (k) { return k.balance; })
     .reduce(Helpers.add, 0);
 }
 
 MyWalletPhone.hasWatchOnlyAddresses = function() {
-    return this.activeKeys
+    return MyWallet.wallet.activeKeys
     .filter(function (k) { return k.isWatchOnly; }).length > 0;
 }
 

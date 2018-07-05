@@ -125,6 +125,11 @@
     self.bitcoin.fiatBalance = fiatBalance;
 }
 
+- (void)updateBitcoinWatchOnlyBalance:(NSString *)watchOnlyBalance;
+{
+    self.bitcoin.watchOnly.balance = watchOnlyBalance;
+}
+
 - (void)updateBitcoinWatchOnlyFiatBalance:(double)watchOnlyFiatBalance
 {
     self.bitcoin.watchOnly.fiatBalance = watchOnlyFiatBalance;

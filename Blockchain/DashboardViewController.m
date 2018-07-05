@@ -130,21 +130,34 @@
 
 - (void)reload
 {
-    double btcBalance = [self getBtcBalance];
-    double ethBalance = [self getEthBalance];
-    double bchBalance = [self getBchBalance];
-    double totalFiatBalance = btcBalance + ethBalance + bchBalance;
+    double btcFiatBalance = [self getBtcBalance];
+    double ethFiatBalance = [self getEthBalance];
+    double bchFiatBalance = [self getBchBalance];
+    double totalFiatBalance = btcFiatBalance + ethFiatBalance + bchFiatBalance;
+
+    double watchOnlyFiatBalance = [self getBtcWatchOnlyBalance];
+
     if (WalletManager.sharedInstance.wallet.isInitialized) {
         [self.balancesChartView updateFiatSymbol:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol];
         // Fiat balances
-        [self.balancesChartView updateBitcoinFiatBalance:btcBalance];
-        [self.balancesChartView updateEtherFiatBalance:ethBalance];
-        [self.balancesChartView updateBitcoinCashFiatBalance:bchBalance];
+        [self.balancesChartView updateBitcoinFiatBalance:btcFiatBalance];
+        [self.balancesChartView updateEtherFiatBalance:ethFiatBalance];
+        [self.balancesChartView updateBitcoinCashFiatBalance:bchFiatBalance];
         [self.balancesChartView updateTotalFiatBalance:[NSNumberFormatter appendStringToFiatSymbol:[NSNumberFormatter fiatStringFromDouble:totalFiatBalance]]];
         // Balances
         [self.balancesChartView updateBitcoinBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getTotalActiveBalance] localCurrency:NO]];
         [self.balancesChartView updateEtherBalance:[WalletManager.sharedInstance.wallet getEthBalanceTruncated]];
         [self.balancesChartView updateBitcoinCashBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet bitcoinCashTotalBalance] localCurrency:NO]];
+        // Watch only balances
+        if ([WalletManager.sharedInstance.wallet hasWatchOnlyAddresses]) {
+            // Will change UI here
+            // [self.balancesChartView showWatchOnlyView];
+            [self.balancesChartView updateBitcoinWatchOnlyFiatBalance:watchOnlyFiatBalance];
+            [self.balancesChartView updateBitcoinWatchOnlyBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getWatchOnlyBalance] localCurrency:NO]];
+        } else {
+            // Will change UI here
+            // [self.balancesChartView showWatchOnlyView];
+        }
     }
 
     [self.balancesChartView updateChart];
@@ -358,6 +371,11 @@
 - (double)getBchBalance
 {
     return [self doubleFromString:[NSNumberFormatter formatBch:[WalletManager.sharedInstance.wallet bitcoinCashTotalBalance] localCurrency:YES]];
+}
+
+- (double)getBtcWatchOnlyBalance
+{
+    return [self doubleFromString:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getWatchOnlyBalance] localCurrency:YES]];
 }
 
 - (double)doubleFromString:(NSString *)string
