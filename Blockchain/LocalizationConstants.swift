@@ -42,6 +42,10 @@ struct LocalizationConstants {
         "Don't show again",
         comment: "Text displayed to the user when an action has the option to not be asked again."
     )
+    static let myEtherWallet = NSLocalizedString(
+        "My Ether Wallet",
+        comment: "The default name of the ether wallet."
+    )
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -415,4 +419,6 @@ struct LocalizationConstants {
     @objc class func pinsDoNotMatch() -> String { return LocalizationConstants.Pin.pinsDoNotMatch }
 
     @objc class func dontShowAgain() -> String { return LocalizationConstants.dontShowAgain }
+
+    @objc class func myEtherWallet() -> String { return LocalizationConstants.myEtherWallet }
 }

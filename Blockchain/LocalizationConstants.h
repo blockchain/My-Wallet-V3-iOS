@@ -600,8 +600,6 @@
 #define BC_STRING_NOW_SUPPORTING_ETHER_DESCRIPTION NSLocalizedString(@"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!", nil)
 #define BC_STRING_GET_STARTED_WITH_ETHER NSLocalizedString(@"Get Started with Ether", nil)
 
-#define BC_STRING_MY_ETHER_WALLET NSLocalizedString(@"My Ether Wallet", nil)
-
 #define BC_STRING_EXCHANGE NSLocalizedString(@"Exchange", nil)
 #define BC_STRING_NEW_EXCHANGE NSLocalizedString(@"New Exchange", nil)
 #define BC_STRING_USE_MINIMUM NSLocalizedString(@"Use minimum", nil)

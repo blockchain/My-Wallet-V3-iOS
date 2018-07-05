@@ -68,7 +68,7 @@
     UILabel *fromPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(fromPlaceholderLabelOriginX, 8, self.view.frame.size.width - fromPlaceholderLabelOriginX, 30)];
     fromPlaceholderLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     fromPlaceholderLabel.textColor = COLOR_TEXT_DARK_GRAY;
-    fromPlaceholderLabel.text = BC_STRING_MY_ETHER_WALLET;
+    fromPlaceholderLabel.text = [LocalizationConstantsObjcBridge myEtherWallet];
     [self.view addSubview:fromPlaceholderLabel];
     
     BCLine *lineAboveToField = [self offsetLineWithYPosition:ROW_HEIGHT_SEND_SMALL];

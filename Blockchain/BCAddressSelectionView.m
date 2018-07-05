@@ -133,7 +133,7 @@ typedef enum {
             
             if (assetType == LegacyAssetTypeEther || (selectMode == SelectModeExchangeAccountFrom && [WalletManager.sharedInstance.wallet hasEthAccount])) {
                 [ethAccounts addObject:[NSNumber numberWithInt:0]];
-                [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
+                [ethAccountLabels addObject:[LocalizationConstantsObjcBridge myEtherWallet]];
             }
 
             addressBookSectionNumber = -1;
@@ -180,7 +180,7 @@ typedef enum {
 
             if ([self.delegate getAssetType] == LegacyAssetTypeEther || (selectMode == SelectModeExchangeAccountTo && [WalletManager.sharedInstance.wallet hasEthAccount])) {
                 [ethAccounts addObject:[NSNumber numberWithInt:0]];
-                [ethAccountLabels addObject:BC_STRING_MY_ETHER_WALLET];
+                [ethAccountLabels addObject:[LocalizationConstantsObjcBridge myEtherWallet]];
             }
 
             btcAccountsSectionNumber = btcAccounts.count > 0 ? 0 : -1;
@@ -466,7 +466,7 @@ typedef enum {
             cell.addressLabel.text = nil;
         }
         else if (section == ethAccountsSectionNumber) {
-            label = BC_STRING_MY_ETHER_WALLET;
+            label = [LocalizationConstantsObjcBridge myEtherWallet];
             cell.addressLabel.text = nil;
         }
         else if (section == bchAccountsSectionNumber) {

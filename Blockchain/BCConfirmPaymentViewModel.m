@@ -46,7 +46,7 @@
        fiatTotal:(NSString *)fiatTotal
 {
     if (self == [super init]) {
-        self.from = BC_STRING_MY_ETHER_WALLET;
+        self.from = [LocalizationConstantsObjcBridge myEtherWallet];
         self.to = to;
         self.fiatTotalAmountText = fiatTotal;
         self.totalAmountText = ethTotal;
