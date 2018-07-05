@@ -13,18 +13,23 @@
 #import "NSNumberFormatter+Currencies.h"
 
 #define CHART_VIEW_BOTTOM_PADDING 16
+#define CONTAINER_VIEW_HORIZONTAL_PADDING 20
 
 @import Charts;
 
 @interface BCBalancesChartView ()
-@property (nonatomic) PieChartView *chartView;
 @property (nonatomic) NSString *fiatSymbol;
 @property (nonatomic) BalanceDisplayModel *bitcoin;
 @property (nonatomic) BalanceDisplayModel *ether;
 @property (nonatomic) BalanceDisplayModel *bitcoinCash;
+
+@property (nonatomic) PieChartView *chartView;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *etherLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinCashLegendKey;
+@property (nonatomic) UIView *legendKeyContainerView;
+@property (nonatomic) UIView *watchOnlyContainerView;
+
 @property (nonatomic) CGFloat defaultHeight;
 @end
 
@@ -69,7 +74,7 @@
 - (void)setupLegendWithFrame:(CGRect)frame
 {
     CGFloat bottomPadding = CHART_VIEW_BOTTOM_PADDING;
-    CGFloat containerViewHorizontalPadding = 20;
+    CGFloat containerViewHorizontalPadding = CONTAINER_VIEW_HORIZONTAL_PADDING;
     UIView *legendKeyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizontalPadding, self.chartView.frame.origin.y + self.chartView.frame.size.height + bottomPadding, frame.size.width - containerViewHorizontalPadding*2, (frame.size.height - bottomPadding)/5)];
     [self addSubview:legendKeyContainerView];
     
@@ -91,6 +96,8 @@
     UITapGestureRecognizer *tapGestureBitcoinCash = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinCashLegendTapped)];
     [self.bitcoinCashLegendKey addGestureRecognizer:tapGestureBitcoinCash];
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
+
+    self.legendKeyContainerView = legendKeyContainerView;
 }
 
 - (CGFloat)watchOnlyViewHeight
@@ -101,6 +108,12 @@
 - (void)showWatchOnlyView
 {
     [self changeHeight:self.defaultHeight + [self watchOnlyViewHeight]];
+
+    if (!self.watchOnlyContainerView) {
+        CGFloat containerViewHorizonalPadding = CONTAINER_VIEW_HORIZONTAL_PADDING;
+        self.watchOnlyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizonalPadding, self.legendKeyContainerView.frame.origin.y + self.legendKeyContainerView.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 40)];
+        [self addSubview:self.watchOnlyContainerView];
+    }
 }
 
 - (void)hideWatchOnlyView
