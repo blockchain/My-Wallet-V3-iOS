@@ -14,12 +14,21 @@ import Foundation
     private let balanceLabel: BCInsetLabel
 
     override init(frame: CGRect) {
-        self.assetLabel = UILabel(frame: CGRect.zero)
+        self.assetLabel = UILabel(frame: CGRect(x: 0, y: 8, width: 0, height: 0))
         self.assetLabel.text = LocalizationConstants.Assets.bitcoin
+        self.assetLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraSmall)
         self.assetLabel.sizeToFit()
 
-        self.balanceLabel = BCInsetLabel(frame: CGRect(x: assetLabel.frame.origin.x + assetLabel.frame.size.width + 8, y: 0, width: 0, height: 0))
+        self.balanceLabel = BCInsetLabel(frame: CGRect(x: assetLabel.frame.origin.x + assetLabel.frame.size.width + 8, y: 4, width: 0, height: 0))
+        self.balanceLabel.layer.cornerRadius = 5
+        self.balanceLabel.layer.borderWidth = 1
+        self.balanceLabel.textColor = Constants.Colors.ColorGray5
+        self.balanceLabel.backgroundColor = Constants.Colors.ColorGray6
+        self.balanceLabel.layer.borderColor = Constants.Colors.ColorGray2.cgColor
+        self.balanceLabel.clipsToBounds = true
+        self.balanceLabel.customEdgeInsets = UIEdgeInsets(top: 3.5, left: 11, bottom: 3.5, right: 11)
         self.balanceLabel.text = LocalizationConstants.AddressAndKeyImport.nonSpendable
+        self.balanceLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.ExtraExtraSmall)
 
         super.init(frame: frame)
 
@@ -32,7 +41,14 @@ import Foundation
     }
 
     @objc func updateText(balance: String) {
-        balanceLabel.text = LocalizationConstants.AddressAndKeyImport.nonSpendable + " " + balance
+        balanceLabel.text = balance + " " + LocalizationConstants.AddressAndKeyImport.nonSpendable
         balanceLabel.sizeToFit()
+        let horizontalOffset = self.balanceLabel.customEdgeInsets.left + self.balanceLabel.customEdgeInsets.right
+        let verticalOffset = self.balanceLabel.customEdgeInsets.top + self.balanceLabel.customEdgeInsets.bottom
+        balanceLabel.frame = CGRect(x: balanceLabel.frame.origin.x,
+                                    y: balanceLabel.frame.origin.y,
+                                    width: balanceLabel.frame.size.width + horizontalOffset,
+                                    height: balanceLabel.frame.size.height + verticalOffset)
+        balanceLabel.center = CGPoint(x: balanceLabel.center.x, y: assetLabel.center.y)
     }
 }
