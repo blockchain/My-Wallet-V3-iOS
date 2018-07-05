@@ -526,6 +526,8 @@
 		C7E2750B1F589C8D0054EFA5 /* ReceiveEtherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E2750A1F589C8D0054EFA5 /* ReceiveEtherViewController.m */; };
 		C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */; };
 		C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */; };
+		C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */; };
+		C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */; };
 		C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C7EEB8441EA95505002F28B9 /* UIView+ChangeFrameAttribute.m */; };
 		C7F041961E3BD4A6004E8B4A /* BuyBitcoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F041951E3BD4A6004E8B4A /* BuyBitcoinViewController.m */; };
 		C9BE917B1945D8F600FD516D /* PENumpadView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9BE91681945D8F600FD516D /* PENumpadView.m */; };
@@ -1820,6 +1822,7 @@
 		C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Animations.m"; sourceTree = "<group>"; };
 		C7E4D291203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransactionsBitcoinCashViewController.h; sourceTree = "<group>"; };
 		C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransactionsBitcoinCashViewController.m; sourceTree = "<group>"; };
+		C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchOnlyBalanceView.swift; sourceTree = "<group>"; };
 		C7EEB8431EA95505002F28B9 /* UIView+ChangeFrameAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ChangeFrameAttribute.h"; sourceTree = "<group>"; };
 		C7EEB8441EA95505002F28B9 /* UIView+ChangeFrameAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ChangeFrameAttribute.m"; sourceTree = "<group>"; };
 		C7F041941E3BD4A6004E8B4A /* BuyBitcoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinViewController.h; sourceTree = "<group>"; };
@@ -3085,6 +3088,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */,
 				676250801A2DDF360052B63F /* AccountTableCell.h */,
 				C7448A942034BF2F0041947E /* AssetSelectionTableViewCell.h */,
 				C7448A9A2034DDF80041947E /* AssetSelectorView.h */,
@@ -3832,6 +3836,7 @@
 				513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				AA63F85120A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
+				C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
@@ -4006,6 +4011,7 @@
 				23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */,
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
 				C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
+				C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
 				6762507D1A2CC5800052B63F /* BCEditAccountView.m in Sources */,
 				C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */,

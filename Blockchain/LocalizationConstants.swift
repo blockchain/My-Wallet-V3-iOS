@@ -43,6 +43,12 @@ struct LocalizationConstants {
         comment: "Text displayed to the user when an action has the option to not be asked again."
     )
 
+    struct Assets {
+        static let bitcoin = "Bitcoin"
+        static let ether = "Ether"
+        static let bitcoinCash = "Bitcoin Cash"
+    }
+
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
         static let errorLoadingWallet = NSLocalizedString("Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.", comment: "")
