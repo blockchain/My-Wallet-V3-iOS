@@ -25,6 +25,7 @@
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *etherLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinCashLegendKey;
+@property (nonatomic) CGFloat defaultHeight;
 @end
 
 @implementation BCBalancesChartView
@@ -35,6 +36,7 @@
         self.backgroundColor = [UIColor whiteColor];
         [self setupChartViewWithFrame:frame];
         [self setupLegendWithFrame:frame];
+        self.defaultHeight = self.bounds.size.height;
     }
     
     return self;
@@ -68,7 +70,7 @@
 {
     CGFloat bottomPadding = CHART_VIEW_BOTTOM_PADDING;
     CGFloat containerViewHorizontalPadding = 20;
-    UIView *legendKeyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizontalPadding, frame.size.height * 4/5 - bottomPadding, frame.size.width - containerViewHorizontalPadding*2, (frame.size.height - bottomPadding)/5)];
+    UIView *legendKeyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizontalPadding, self.chartView.frame.origin.y + self.chartView.frame.size.height + bottomPadding, frame.size.width - containerViewHorizontalPadding*2, (frame.size.height - bottomPadding)/5)];
     [self addSubview:legendKeyContainerView];
     
     CGFloat legendKeySpacing = 12;
@@ -89,6 +91,21 @@
     UITapGestureRecognizer *tapGestureBitcoinCash = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinCashLegendTapped)];
     [self.bitcoinCashLegendKey addGestureRecognizer:tapGestureBitcoinCash];
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
+}
+
+- (CGFloat)watchOnlyViewHeight
+{
+    return 60;
+}
+
+- (void)showWatchOnlyView
+{
+    [self changeHeight:self.defaultHeight + [self watchOnlyViewHeight]];
+}
+
+- (void)hideWatchOnlyView
+{
+    [self changeHeight:self.defaultHeight];
 }
 
 // Lazy initializers
@@ -258,7 +275,6 @@
 - (void)bitcoinCashLegendTapped
 {
     [self.delegate bitcoinCashLegendTapped];
-
 }
 
 @end

@@ -34,4 +34,7 @@
 
 - (void)updateChart;
 
+- (CGFloat)watchOnlyViewHeight;
+- (void)showWatchOnlyView;
+- (void)hideWatchOnlyView;
 @end
