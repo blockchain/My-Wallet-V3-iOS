@@ -31,13 +31,14 @@ import RxSwift
     /// - Returns: an Observable returning the response
     func validatePin(_ pinPayload: PinPayload) -> Single<GetPinResponse> {
         return self.walletService.validatePin(pinPayload)
-            .do(onSuccess: { [unowned self] response in
+            .do(onSuccess: { response in
                 guard let responseCode = response.statusCode else { return }
 
                 switch responseCode {
                 case .success:
                     // Optionally save the pin to the keychain
-                    self.saveToKeychainIfNeeded(pinPayload: pinPayload)
+                    let pin = Pin(string: pinPayload.pinCode)
+                    pin?.saveToKeychainIfNeeded()
                     return
                 case .deleted:
                     // Clear pin from keychain if the user exceeded the number of retries when entering the pin.
@@ -47,17 +48,5 @@ import RxSwift
                     return
                 }
             })
-    }
-
-    private func saveToKeychainIfNeeded(pinPayload: PinPayload) {
-        guard let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
-            config.isEnabled,
-            BlockchainSettings.App.shared.biometryEnabled else {
-            // Biometric auth not enabled, not saving pin to keychain
-            return
-        }
-
-        let pin = Pin(string: pinPayload.pinCode)
-        pin?.saveToKeychain()
     }
 }
