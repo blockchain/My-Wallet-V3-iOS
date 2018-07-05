@@ -57,9 +57,9 @@
     CGFloat balancesChartHeight = _balancesChartView.frame.size.height;
     CGFloat titleLabelHeight = 2 * (40 + 16);
     CGFloat pricePreviewHeight = 3 * 140;
-    CGFloat privePreviewSpacing = 3 * 16;
+    CGFloat pricePreviewSpacing = 3 * 16;
     CGFloat bottomPadding = 8;
-    CGFloat contentHeight = balancesChartHeight + titleLabelHeight + pricePreviewHeight + privePreviewSpacing + bottomPadding;
+    CGFloat contentHeight = balancesChartHeight + titleLabelHeight + pricePreviewHeight + pricePreviewSpacing + bottomPadding;
     CGRect contentViewFrame = CGRectMake(0, 0, self.view.frame.size.width, contentHeight);
     self.contentView.frame = contentViewFrame;
 }
