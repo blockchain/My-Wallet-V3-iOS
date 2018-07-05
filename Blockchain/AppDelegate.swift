@@ -127,7 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             WalletManager.shared.close()
         }
 
-        let onboardingSettings = OnboardingSettings.shared
+        let onboardingSettings = BlockchainSettings.Onboarding.shared
         if onboardingSettings.didFailBiometrySetup && !appSettings.biometryEnabled {
             onboardingSettings.shouldShowBiometrySetup = true
         }
@@ -233,7 +233,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func checkForNewInstall() {
 
         let appSettings = BlockchainSettings.App.shared
-        let onboardingSettings = OnboardingSettings.shared
+        let onboardingSettings = BlockchainSettings.Onboarding.shared
 
         if onboardingSettings.hasSeenUpgradeToHdScreen {
             onboardingSettings.hasSeenUpgradeToHdScreen = false

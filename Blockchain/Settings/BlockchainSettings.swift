@@ -21,6 +21,12 @@ final class BlockchainSettings: NSObject {
         return App.shared
     }
 
+    @objc class func sharedOnboardingInstance() -> Onboarding {
+        return Onboarding.shared
+    }
+
+    // MARK: - App
+
     @objc
     final class App: NSObject {
         static let shared = App()
@@ -281,6 +287,82 @@ final class BlockchainSettings: NSObject {
         func handleMigrationIfNeeded() {
             defaults.migrateLegacyKeysIfNeeded()
         }
+    }
+
+    // MARK: - App
+
+    /// Encapsulates all onboarding-related settings for the user
+    @objc class Onboarding: NSObject {
+        static let shared: Onboarding = Onboarding()
+
+        private lazy var defaults: UserDefaults = {
+            return UserDefaults.standard
+        }()
+
+        /// Property indicating if setting up biometric authentication failed
+        var didFailBiometrySetup: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
+            }
+        }
+
+        /// Property indicating if the user saw the HD wallet upgrade screen
+        var hasSeenUpgradeToHdScreen: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+            }
+        }
+
+        /// Property indicating if the biometric authentication set-up should be shown to the user
+        var shouldShowBiometrySetup: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
+            }
+        }
+
+        /// Property indicating if this is the first time the user is running the application
+        var firstRun: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.firstRun.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.firstRun.rawValue)
+            }
+        }
+
+        /// Property indicating if the buy/sell onboarding card should be shown
+        @objc var shouldHideBuySellCard: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+            }
+        }
+
+        /// Property indicating if the user has seen all onboarding cards
+        @objc var hasSeenAllCards: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
+            }
+        }
+
+        private override init() {
+            super.init()
+        }
+
     }
 
     private override init() {

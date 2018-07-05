@@ -59,11 +59,11 @@
 
 - (void)reloadCards
 {
-    self.showCards = !OnboardingSettings.sharedInstance.hasSeenAllCards;
+    self.showCards = !BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards;
     
     self.announcementCards = [NSMutableArray new];
     if (!self.showCards) {
-        if (!OnboardingSettings.sharedInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
+        if (!BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
             [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
         }
     }
@@ -275,7 +275,7 @@
 
 - (void)closeBuySellCard
 {
-    OnboardingSettings.sharedInstance.shouldHideBuySellCard = YES;
+    BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard = YES;
     [self closeAnnouncementCard:CardConfigurationBuySell];
 }
 
@@ -320,7 +320,7 @@
         
         BOOL didSeeAllCards = scrollView.contentOffset.x > scrollView.contentSize.width - scrollView.frame.size.width * 1.5;
         if (didSeeAllCards) {
-            OnboardingSettings.sharedInstance.hasSeenAllCards = YES;
+            BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards = YES;
         }
         
         if (!self.isUsingPageControl) {
@@ -402,7 +402,7 @@
         [self removeCardsView];
     }];
 
-    OnboardingSettings.sharedInstance.hasSeenAllCards = YES;
+    BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards = YES;
 }
 
 - (void)removeCardsView

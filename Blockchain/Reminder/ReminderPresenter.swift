@@ -66,7 +66,7 @@ import Foundation
     /// Displays a reminder to the user that they still need to verify their email
     func showEmailVerificationReminder() {
         let appSettings = BlockchainSettings.App.shared
-        let onboardingSettings = OnboardingSettings.shared
+        let onboardingSettings = BlockchainSettings.Onboarding.shared
 
         appSettings.hasSeenEmailReminder = true
 
