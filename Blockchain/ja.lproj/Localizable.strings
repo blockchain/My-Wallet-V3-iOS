@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "待機時間は終了しました";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "失敗の試行回数が多すぎたため、フェイスIDがロックされました。";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "このデバイスではフェイスIDが有効になっていません。フェイスIDを有効にするには、「設定」->「フェイスID」と「パスコード」に移動し、指紋を追加します。";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "このデバイスではフェイスIDは利用できません。";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "不明なフェイスIDのエラー。コード: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "不明なタッチIDのエラー。コード: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "ブロックチェーンのサーバーは現在メンテナンス中です。後ほどお試しください。";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "失敗の認証回数が多すぎるため、認証できません。";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "デバイスが生体認証をサポートしていないため、認証できません。";
+
+/* (No Commment) */
+"Unable to use biometrics." = "生体認証を使用できません。";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "タッチIDの失敗の試行回数が多すぎるため、認証できません。タッチIDのロックを解除するにはパスコードが必要です。";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "この機能を有効にすると、このデバイスの%@指紋が登録されているすべてのユーザーがウォレットにアクセスできます。";
+
+/* (No Commment) */
+"Enable %@" = "%@を有効にする";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "ブロックチェーンを認証してウォレットにアクセスするには、PINの代わりに%@を使用します。";
+
+/* (No Commment) */
+"Use %@ as PIN" = "%@をPINとして使用";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "おめでとうございます、現在ビットコインを所持しています！パスワードを忘れた場合でも資金にアクセスできるように、今すぐウォレットをバックアップしましょう。";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "無効な%@アドレス: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@支払いリクエスト";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookieポリシー";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "メールを確認し、このログインを許可してください。その後ここに戻り、もう一度ログインしてください。";
+
+/* (No Commment) */
+"Non-Spendable" = "利用不可";

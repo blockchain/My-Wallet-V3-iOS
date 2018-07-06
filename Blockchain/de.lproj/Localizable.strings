@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Das Warten ist vorbei";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID wurde aufgrund zu vieler fehlgeschlagener Versuche blockiert.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID ist auf diesem Gerät nicht aktiviert. Um Face ID zu aktivieren, gehen Sie zu Einstellungen -> Face ID & Code und fügen Sie einen Fingerabdruck hinzu.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID ist auf diesem gerät nicht verfügbar.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Unbekannter Face ID Fehler. Code: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Unbekannter Touch ID Fehler. Code: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Die Blockchain-Server werden momentan gewartet. Bitte versuchen Sie es später erneut";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Authentifizierung nicht möglich aufgrund zu häufig fehlgeschlagener Versuche.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Authentifizierung nicht möglich, da das Gerät keine biometrische Authentifizierung erlaubt.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Biometrie nicht verfügbar.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Authentifizierung nicht möglich, da zu viele Versuche mit Touch ID fehlgeschlagen sind. Code zum Freischalten von Touch ID erforderlich";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Die Aktivierung dieser Funktion gestattet allen Nutzern mit einem auf diesem Gerät registrierten %@-Fingerabdruck den Zugriff auf Ihr Wallet.";
+
+/* (No Commment) */
+"Enable %@" = "%@ aktivieren";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "%@ anstelle einer PIN verwenden, um Blockchain zu authentifizieren und auf ihr Wallet zuzugreifen.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "%@ als PIN verwenden";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Glückwunsch! Sie haben Bitcoin! Jetzt sollten wir ein Backup Ihres Wallets anlegen, damit sie auch dann auf Ihr Guthaben zugreifen können, wenn Sie Ihr Passwort vergessen haben.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Ungültige %@-Adresse: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@-Auszahlungsanfrage";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie-Bestimmungen";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Bitte überprüfen Sie Ihren Posteingang und genehmigen Sie diesen Anmeldungsversuch. Anschließend kommen Sie zurück auf dieses Seite und melden sich erneut an.";
+
+/* (No Commment) */
+"Non-Spendable" = "Nicht auszahlungsfähig";

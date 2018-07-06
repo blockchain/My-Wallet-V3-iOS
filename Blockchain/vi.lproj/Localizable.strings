@@ -2212,3 +2212,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Thời gian chờ đã hết";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID đã bị khóa do quá nhiều lần thử không thành công.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID không được kích hoạt trên thiết bị này. Để kích hoạt Face ID, đến Cài đặt -> Face ID & Mã khóa và thêm dấu vân tay.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID không khả dụng trên thiết bị này.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Lỗi Face ID không xác định. Mã: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Lỗi Touch ID không xác định. Mã: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Các máy chủ của Blockchain hiện đang được bảo trì. Vui lòng thử lại sau";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Không thể xác thực do xác thực không thành công quá nhiều lần.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Không thể xác thực vì thiết bị không hỗ trợ xác thực sinh trắc học.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Không thể sử dụng sinh trắc học.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Không thể xác thực do đăng nhập bằng Touch ID không thành công quá nhiều lần. Yêu cầu mã số để mở khóa Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Kích hoạt tính năng này sẽ cho phép tất cả người dùng có dấu vân tay %@ đã đăng ký trên thiết bị này có thể truy cập vào ví của bạn.";
+
+/* (No Commment) */
+"Enable %@" = "Kích hoạt %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Sử dụng %@ thay cho mã PIN để xác thực Blockchain và truy cập ví của bạn.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Sử dụng %@ làm mã PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Chúc mừng, bạn có bitcoin! Bây giờ hãy sao lưu ví của bạn để đảm bảo bạn có thể truy cập vào các khoản tiền của mình nếu bạn quên mật khẩu.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Địa chỉ %@ không hợp lệ: %@";
+
+/* (No Commment) */
+"%@ payment request" = "Yêu cầu thanh toán %@";
+
+/* (No Commment) */
+"Cookie Policy" = "Chính sách Cookie";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vui lòng kiểm tra email của bạn và cấp quyền cho lần đăng nhập này. Sau khi thực hiện, vui lòng quay lại đây và thử đăng nhập lại";
+
+/* (No Commment) */
+"Non-Spendable" = "Không thể Tiêu dùng";

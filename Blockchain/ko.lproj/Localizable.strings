@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "기다림은 끝났습니다";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "실패한 시도 횟수가 너무 많으므로 Face ID가 잠겼습니다.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "이 기기에서 Face ID가 활성화되지 않았습니다. Face ID를 활성화하려면, 설정 -> Face ID 및 패스코드로 이동하여 지문을 추가하세요.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "이 기기에서 Face ID를 사용할 수 없습니다.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "알 수 없는 Face ID 오류입니다. 코드: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "알 수 없는 Touch ID 오류입니다. 코드: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain의 서버가 현재 점검 중입니다. 나중에 다시 시도해 주세요";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "실패한 인증 횟수가 너무 많으므로 인증할 수 없습니다.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "기기가 생체인식 인증을 지원하지 않으므로 인증할 수 없습니다.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "생체인식을 사용할 수 없습니다.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "실패한 Touch ID 시도 횟수가 너무 많으므로 인증할 수 없습니다. Touch ID를 잠금 해제하려면 패스코드가 필요합니다";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "이 기능을 활성화하면 이 기기에서 등록된 %@ 지문이 있는 모든 사용자가 귀하의 지갑에 액세스할 수 있습니다.";
+
+/* (No Commment) */
+"Enable %@" = "%@ 활성화";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "PIN 대신에 %@을(를) Blockchain 인증 및 지갑 액세스에 사용합니다.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "%@을(를) PIN으로 사용하기";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "축하합니다, 비트코인이 있습니다! 이제 비밀번호를 잊어버려도 자금에 액세스할 수 있도록 지갑을 백업해 봅시다.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "잘못된 %@ 주소: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ 지급 요청";
+
+/* (No Commment) */
+"Cookie Policy" = "쿠키 정책";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "이메일을 확인하시고 이 로그인 시도를 승인해 주세요. 그런 다음, 여기로 돌아와서 다시 로그인을 시도해 주세요";
+
+/* (No Commment) */
+"Non-Spendable" = "사용 불가";

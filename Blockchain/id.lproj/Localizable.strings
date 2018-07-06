@@ -2255,3 +2255,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Penantian Anda berakhir";
+
+/* (No Commment) */
+Face ID has been locked due to too many failed attempts." = ID Wajah telah dikunci karena terlalu banyak usaha yang gagal.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "ID Wajah tidak diaktifkan di perangkat ini. Untuk mengaktifkan ID Wajah, kunjungi Pengaturan -> ID Wajah & Sandi dan tambahkan sidik jari.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "ID Wajah tidak tersedia di perangkat ini.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Kesalahan ID Wajah tak dikenal. Kode: %ld";
+
+/* (No Commment) */
+“Unknown Touch ID error. Code: %ld" = "Kesalahan ID Sentuh tak dikenal. Kode: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Server blockchain saat ini dalam perawatan. Harap coba lagi nanti";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Tidak dapat mengotentikasi karena terlalu banyak otentikasi yang gagal.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Tidak dapat mengotentikasi karena perangkat todak mendukung otentikasi biometrik.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Tidak dapat menggunakan biometrik.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Tidak dapat Mengotentikasi karena ada terlalu banyak usaha ID Sentuh yang gagal. Sandi diperlukan untuk membuak ID Sentuh";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Mengaktifkan fitur ini akan memungkinkan semua pengguna dengan sidik jari %@ yang tercatat di perangkat ini untuk mengakses dompet Anda.";
+
+/* (No Commment) */
+"Enable %@" = "Aktifkan %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Gunakan %@ sebagai ganti PIN untuk mengotentikasi Blockchain dan mengakses dompet Anda.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Gunakan %@ sebagai PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Selamat, Anda memiliki bitcoin! Sekarang mari cadangkan dompet Anda untuk memastikan Anda dapat mengakses dana Anda jika Anda lupa sandi Anda.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Alamat %@ tidak sah: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ permintaan pembayaran";
+
+/* (No Commment) */
+"Cookie Policy" = "Kebijakan Cookie";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Silakan periksa email Anda dan izinkan usaha login ini. Setelah itu, harap kembali ke sini dan coba login lagi";
+
+/* (No Commment) */
+"Non-Spendable" = "Tidak dapat dibelanjakan";

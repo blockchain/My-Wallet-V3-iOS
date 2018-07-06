@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Период ожидания истек";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID заблокировано из-за чрезмерного числа неудачных попыток.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID не включено на этом устройстве. Для включения Face ID перейдите в «Настройки -> Face ID и секретный код» и добавьте отпечаток пальца.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID недоступно на этом устройстве.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Неизвестная ошибка Face ID. Код: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Неизвестная ошибка Touch ID. Код: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Сейчас выполняется техобслуживание серверов блокчейна. Повторите попытку позже";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Невозможно выполнить аутентификацию из-за чрезмерного числа неудачных попыток аутентификации.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Невозможно выполнить аутентификацию из-за того, что устройство не поддерживает биометрическую аутентификацию.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Невозможно использовать биотметрию.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Невозможно выполнить аутентификацию из-за чрезмерного числа неудачных попыток использования Touch ID. Для разблокировки Touch ID требуется секретный код";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Включение этой функции позволит всем пользователям с зарегистрированным на этом устройстве отпечатком пальца %@ получать доступ к вашему кошельку.";
+
+/* (No Commment) */
+"Enable %@" = "Включить %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Используйте %@ вместо пин-кода для аутентификации блокчейна и получения доступа к своему кошельку.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Использовать %@ как пин-код";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Поздравляем, у вас есть биткойн! Теперь давайте создадим резервную копию вашего кошелька, чтобы вы сохранили доступ к своим средствам, если забудете свой пароль.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Неверный адрес %@: %@";
+
+/* (No Commment) */
+"%@ payment request" = "Запрос платежа %@";
+
+/* (No Commment) */
+"Cookie Policy" = "Политика о файлах куки";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Проверьте свою электронную почту и разрешите эту попытку входа. После этгго вернитесь сюда и снова попробуйте войти";
+
+/* (No Commment) */
+"Non-Spendable" = "Невозможно потратить";

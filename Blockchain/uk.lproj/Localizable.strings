@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Очікування закінчилося";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Ідентифікатор обличчя заблокований через занадто велику кількість невдалих спроб.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Ідентифікатор обличчя не включений на цьому пристрої. Щоб включити ідентифікатор обличчя, відкрийте «Налаштування» -> «Ідентифікатор обличчя і пароль» і додайте відбиток пальця.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Ідентифікатор обличчя недоступний на цьому пристрої.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Невідома помилка ідентифікатора обличчя. Код: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Невідома помилка сканера відбитків пальців. Код: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Наразі проводиться технічне обслуговування серверів Blockchain. Повторіть спробу пізніше";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Не вдалося виконати аутентифікацію через занадто велику кількість невдалих спроб аутентифікації.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Не вдалося виконати аутентифікацію, оскільки пристрій не підтримує біометричну аутентифікацію.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Неможливо використовувати біометрію.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Не вдалося виконати аутентифікацію через через занадто велику кількість невдалих спроб сканування відбитків пальців. Для розблокування сканера відбитків пальців необхідний пароль";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Включення цієї функції дозволить всім користувачам із зареєстрованим відбитком пальця %@ на цьому пристрої отримати доступ до вашого гаманця.";
+
+/* (No Commment) */
+"Enable %@" = "Включити %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Використовуйте %@ замість PIN-коду для аутентифікації Blockchain і отримання доступу до свого гаманця.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Використовуйте %@ в якості PIN-коду";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Вітаємо, у вас є bitcoin! Тепер давайте створимо резервну копію вашого гаманця, щоб ви могли отримати доступ до своїх коштів, якщо забудете пароль.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Неправильна адреса %@: %@";
+
+/* (No Commment) */
+"%@ payment request" = "Запит на оплату %@";
+
+/* (No Commment) */
+"Cookie Policy" = "Політика використання cookie-файлів";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Перевірте свою електронну пошту і авторизуйте цю спробу входу в систему. Після цього поверніться сюди і спробуйте знову увійти в систему";
+
+/* (No Commment) */
+"Non-Spendable" = "Не підлягає витрачанню";

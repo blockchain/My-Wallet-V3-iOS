@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "การรอคอยสิ้นสุดลงแล้ว";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID ถูกล็อกเนื่องจากความพยายามที่ล้มเหลวหลายครั้งเกินไป";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID ไม่ได้เปิดใช้งานบนอุปกรณ์นี้ เพื่อเปิดใช้งาน Face ID ไปยัง การตั้งค่า ->Face ID & Passcode และเพิ่มลายนิ้วมือ";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "ไม่มี Face ID บนอุปกรณ์นี้";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "ข้อผิดพลาด Face ID ที่ไม่เป็นที่รู้จัก รหัส: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "ข้อผิดพลาด Touch ID ที่ไม่เป็นที่รู้จัก รหัส: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "กำลังบำรุงรักษาเซิร์ฟเวอร์ Blockchain อยู่ในปัจจุบันนี้ โปรดลองอีกครั้งภายหลัง";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากการพิสูจน์ตัวตนล้มเหลวหลายครั้งเกินไป";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากอุปกรณ์ไม่รองรับการพิสูจน์ตัวตนแบบไบโอแมทริกซ์";
+
+/* (No Commment) */
+"Unable to use biometrics." = "ไม่สามารถใช้ไบโอแมทริกซ์ได้";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากมีความพยามที่ล้มเหลวในการใช้ Touch ID หลายครั้งเกินไป ต้องมีรหัสผ่านเพื่อปลดล็อก Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "การเปิดใช้งานฟีเจอร์นี้จะอนุญาตให้ผู้ใช้ทั้งหมดซึ่งมีการลงทะเบียนลายนิ้วมือ %@ บนอุปกรณ์นี้สามารถเข้าถึงกระเป๋าเงินของคุณได้";
+
+/* (No Commment) */
+"Enable %@" = "เปิดใช้งาน %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "ใช้ %@ แทน PIN เพื่อพิสูจน์ตัวตนสำหรับ Blockchain และเข้าถึงกระเป๋าเงินของคุณ";
+
+/* (No Commment) */
+"Use %@ as PIN" = "ใช้ %@ เป็น PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "ยินดีด้วย คุณมี bitcoin! ตอนนี้มาสำรองข้อมูลให้กับกระเป๋าเงินของคุณเพื่อยืนยันว่าคุณจะสามารถเข้าถึงเงินทุนของคุณได้หากคุณลืมรหัสผ่านของคุณ";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "ที่อยู่ %@ ไม่ถูกต้อง: %@";
+
+/* (No Commment) */
+"%@ payment request" = "คำร้องขอการชำระเงิน %@";
+
+/* (No Commment) */
+"Cookie Policy" = "นโยบายคุกกี้";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "โปรดตรวจสอบอีเมลของคุณแล้วอนุญาตความพยายามในการล็อกอินครั้งนี้ หลังจากทำเช่นนั้นแล้ว โปรดกลับมาที่นี่แล้วลองล็อกอินอีกครั้ง";
+
+/* (No Commment) */
+"Non-Spendable" = "ไม่สามารถใช้จ่ายได้";

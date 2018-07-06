@@ -2548,3 +2548,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Čekání je u konce";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "ID obličeje bylo kvůli příliš velkému počtu neúspěšných pokusů uzamčeno.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "ID obličeje není na tomto zařízení povoleno. Chcete-li povolit ID obličeje, přejděte do Nastavení -> ID obličeje a heslo a přidejte otisk prostu.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "ID obličeje není na tomto zařízen dostupné.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Neznámá chyba ID obličeje. Kód: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Neznámá chyba ID dotyku. Kód: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Na serverech Blockchain nyní probíhá údržba. Zkuste to později";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Nelze ověřit kvůli velkému počtu neúspěšných ověření.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Nelze ověřit, protože zařízení nepodporuje biometrické ověření.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Nelze použít biometriku.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Nelze ověřit, protože existuje příliš mnoho neúspěšných pokusů o ID dotyku. K odemčení ID dotyku je vyžadováno heslo";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Povolení této funkce umožní všem uživatelům se zaregistrovaným %@ otiskem prstu na tomto zařízení přistupovat k vaší peněžence.";
+
+/* (No Commment) */
+"Enable %@" = "Povolit %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Používat%@ místo kódu PIN pro ověření Blockchainu a přístup k vaší peněžence.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Používat%@ jako kód PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Blahopřejeme, máte bitcoin! Nyní zálohuje svou peněženku, abyste měli jistotu, že ke svým prostředkům budete moct přistupovat, i když zapomenete heslo.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Neplatná %@ adresa: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ požadavek na platbu";
+
+/* (No Commment) */
+"Cookie Policy" = "Zásady použití souborů cookie";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Zkontrolujte prosím svůj email a autorizujte tento pokus o přihlášení. Poté se vraťte zpět a zkuste se přihlásit znovu";
+
+/* (No Commment) */
+"Non-Spendable" = "Nelze utratit";

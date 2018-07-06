@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Artık beklemek sona erdi";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID çok sayıda başarısız denemeden dolayı kilitlendi.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID bu cihazda etkinleştirilmemiş. Face ID'yi etkinleştirmek için Ayarlar -> Face ID ve Parola bölümüne gidip bir parmak izi ekleyin.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID bu cihazda kullanılamıyor.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Bilinmeyen Face ID hatası. Kod: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Bilinmeyen Touch ID hatası. Kod: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain sunucuları şu anda bakım altında. Lütfen daha sonra tekrar deneyin";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Çok sayıda başarısız kimlik doğrulamasından dolayı kimlik doğrulaması yapılamıyor.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Cihaz biyometrik kimlik doğrulamayı desteklemediği için kimlik doğrulaması yapılamıyor.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Biyometrikler kullanılamıyor.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Çok sayıda başarısız Touch ID denemesi olduğu için Kimlik Doğrulaması gerçekleştirilemiyor. Touch ID'nin kilidini açmak için parola gereklidir";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Bu özelliği etkinleştirmek bu cihazda kayıtlı bir %@ parmak izi olan tüm kullanıcıların cüzdanınıza erişim sağlayabilmesine izin verecek.";
+
+/* (No Commment) */
+"Enable %@" = "%@ özelliğini etkinleştir";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Blockchain kimlik doğrulaması gerçekleştirip cüzdanınıza erişim sağlamak için PIN yerine %@ ögesini kullanın.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "PIN olarak %@ ögesini kullanın";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Tebrikler, bitcoininiz var! Şifrenizi unutmanız durumunda paranıza erişim sağlayabilmenizi garanti etmek için şimdi cüzdanınızı yedekleyelim.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Geçersiz %@ adresi: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ ödeme talebi";
+
+/* (No Commment) */
+"Cookie Policy" = "Çerez Politikası";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Lütfen e-posta adresinizi kontrol edin ve bu oturum açma denemesine yetki verin. Bunu yaptıktan sonra lütfen buraya geri dönüp tekrar oturum açmayı deneyin";
+
+/* (No Commment) */
+"Non-Spendable" = "Harcanamaz";

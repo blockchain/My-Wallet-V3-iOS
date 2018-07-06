@@ -2237,3 +2237,63 @@
 
 /* (No Commment) */
 "The wait is over" = "等待结束";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "由于太多次失败尝试，Face ID已被锁定。";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "此设备上未启用Face ID。若要启用Face ID，请前往设置 -> Face ID和密码，并添加一个指纹。";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "此设备上Face ID不可用。";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "未知Face ID错误。代码：%ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "未知Touch ID错误。代码：%ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "区块链的服务器目前正在维护中。请稍后再试";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "由于验证失败太多次，无法验证。";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "由于设备不支持生物特征验证，无法验证。";
+
+/* (No Commment) */
+"Unable to use biometrics." = "无法使用生物识别技术。";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "由于太多次Touch ID失败尝试，无法验证。解锁Touch ID须使用密码";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "启用此功能将让在此设备上拥有注册%@指纹的所有用户能够访问您的钱包。";
+
+/* (No Commment) */
+"Enable %@" = "启用%@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "使用%@代替PIN码来验证区块链和访问您的钱包。";
+
+/* (No Commment) */
+"Use %@ as PIN" = "使用%@作为PIN码";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "祝贺您，您有比特币了！现在让我们备份您的钱包，以确保当您忘记密码时您可以存取您的资金。";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "无效的%@地址：%@";
+
+/* (No Commment) */
+"%@ payment request" = "%@支付请求";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie政策";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "请检查您的电子邮件并授权此次登录尝试。在进行此操作之后，请返回这里并再次尝试登录";
+
+/* (No Commment) */
+"Non-Spendable" = "不可花费";

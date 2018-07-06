@@ -2498,3 +2498,63 @@
 
 /* (No Commment) */
 "The wait is over" = "Het wachten is voorbij";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID is geblokkeerd als gevolg van teveel mislukte pogingen.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID is niet ingeschakeld op dit apparaat. Face ID inschakelen: ga u naar Instellingen -> Face ID & wachtwoord en voeg een vingerafdruk toe.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID is niet beschikbaar op dit apparaat.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Onbekende Face ID-fout. Code: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Onbekende Touch ID-fout. Code: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "De servers van de Blockchain ondergaan momenteel onderhoud. Probeer het later opnieuw";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Kan niet authenticeren als gevolg van te vaak gefaalde authenticatie.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Kan niet authenticeren omdat het apparaat geen biometrische authenticatie ondersteunt.";
+
+/* (No Commment) */
+"Unable to use biometrics." =  "Kan geen biometrie gebruiken.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Kan niet authenticeren wegens teveel gefaalde Touch ID-pogingen. Het wachtwoord is vereist om Touch ID te ontgrendelen";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Het inschakelen van deze functie zal alle gebruikers met een geregistreerde %@-vingerafdruk op dit apparaat toegang tot uw portemonnee geven.";
+
+/* (No Commment) */
+"Enable %@" = "%@ inschakelen";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Gebruik %@ in plaats van een pincode om Blockchain te authenticeren en toegang tot uw portemonnee te krijgen.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "%@ als pincode gebruiken";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Gefeliciteerd, u heeft bitcoin! Laten we nu uw portemonee backuppen zodat u zelfs bij uw geld kunt als u uw wachtwoord vergeet.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Ongeldig %@-adres: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ betalingsverzoek";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookiebeleid";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Controleer uw e-mail en autoriseer deze inlogpoging. Kom daarna hier weer terug en probeer opnieuw in te loggen";
+
+/* (No Commment) */
+"Non-Spendable" = "Niet besteedbaar";
