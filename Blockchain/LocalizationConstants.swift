@@ -166,7 +166,7 @@ struct LocalizationConstants {
         )
         static let genericError = NSLocalizedString(
             "Authentication Failed. Please try again.",
-            comment: "Fallback error for all other errors that may occur during authentication."
+            comment: "Fallback error for all other errors that may occur during biometric authentication."
         )
         static let usePasscode = NSLocalizedString(
             "Use Passcode",
