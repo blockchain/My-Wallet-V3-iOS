@@ -9,7 +9,11 @@
 import Foundation
 
 @objc class BalanceChartModel: NSObject {
-    @objc var balance: String = "0"
+    private var _balance: String?
+    @objc var balance: String? {
+        get { return _balance == nil ? "0" : _balance }
+        set { _balance = newValue }
+    }
     @objc var fiatBalance: Double = 0
 }
 
