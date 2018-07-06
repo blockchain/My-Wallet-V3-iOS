@@ -10,19 +10,6 @@
 
 import Foundation
 
-//: Local Authentication - Face ID & Touch ID
-
-let LCStringAuthCancel = NSLocalizedString("Cancel", comment: "")
-let LCStringAuthUsePasscode = NSLocalizedString("Use Passcode", comment: "")
-
-let LCStringFaceIDAuthenticate = NSLocalizedString("Authenticate to unlock your wallet", comment: "")
-let LCStringTouchIDAuthenticate = NSLocalizedString("Authenticate to unlock your wallet", comment: "")
-
-//: Authentication Errors
-let LCStringAuthGenericError = NSLocalizedString("Authentication Failed. Please try again.", comment: "")
-let LCStringAuthAuthenticationFailed = NSLocalizedString("Authentication was not successful because the user failed to provide valid credentials.", comment: "")
-let LCStringAuthPasscodeNotSet = NSLocalizedString("Failed to Authenticate because a passcode has not been set on the device.", comment: "")
-
 //: Onboarding
 struct LocalizationConstants {
     static let information = NSLocalizedString("Information", comment: "")
@@ -165,11 +152,6 @@ struct LocalizationConstants {
             "Unable to use biometrics.",
             comment: "The error message displayed to the user upon failure to authenticate using biometrics."
         )
-        //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
-        static let touchIDLockout = NSLocalizedString(
-            "Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID",
-            comment: "The error description for when the user has made too many failed authentication attempts using Touch ID."
-        )
         static let biometryWarning = NSLocalizedString(
             "Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet.",
             comment: "The message displayed in the alert view when the biometry switch is toggled in the settings view."
@@ -177,6 +159,31 @@ struct LocalizationConstants {
         static let enableX = NSLocalizedString(
             "Enable %@",
             comment: "The title of the biometric authentication button in the wallet setup view. The value depends on the type of biometry."
+        )
+        static let authenticationReason = NSLocalizedString(
+            "Authenticate to unlock your wallet",
+            comment: "The app-provided reason for requesting authentication, which displays in the authentication dialog presented to the user."
+        )
+        static let genericError = NSLocalizedString(
+            "Authentication Failed. Please try again.",
+            comment: "Fallback error for all other errors that may occur during authentication."
+        )
+        static let usePasscode = NSLocalizedString(
+            "Use Passcode",
+            comment: "Fallback title for when biometric authentication fails."
+        )
+        static let authenticationFailed = NSLocalizedString(
+            "Authentication was not successful because the user failed to provide valid credentials.",
+            comment: "The internal error description if biometric authentication fails because the user failed to provide valid credentials."
+        )
+        static let passcodeNotSet = NSLocalizedString(
+            "Failed to Authenticate because a passcode has not been set on the device.",
+            comment: "The internal error description if biometric authentication fails because no passcode has been set."
+        )
+        //: Deprecated Authentication Errors (remove once we stop supporting iOS >= 8.0 and iOS <= 11)
+        static let touchIDLockout = NSLocalizedString(
+            "Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID",
+            comment: "The error description for when the user has made too many failed authentication attempts using Touch ID."
         )
     }
 

@@ -380,23 +380,6 @@
 #define BC_STRING_HIGH_FEE_WARNING_MESSAGE NSLocalizedString(@"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"", nil)
 #define BC_STRING_NO_EMAIL_CONFIGURED NSLocalizedString(@"You do not have an account set up for Mail. Please contact %@", nil)
 
-//: Authentication - Face ID & Touch ID
-
-#define BC_STRING_TOUCH_ID_ERROR_VERIFYING_IDENTITY NSLocalizedString(@"There was a problem verifying your identity.", nil)
-#define BC_STRING_TOUCH_ID_ERROR_WRONG_USER NSLocalizedString(@"Your identity does not match our records.", nil)
-// #define BC_STRING_FACE_ID_AUTHENTICATE NSLocalizedString("@Authenticate with Face ID", nil)
-#define BC_STRING_TOUCH_ID_AUTHENTICATE NSLocalizedString(@"Authenticate with Touch ID", nil)
-
-#define BC_STRING_FACE_ID_ERROR_LOCKED NSLocalizedString(@"Face ID has been locked due to too many failed attempts.", nil)
-// No longer needed
-#define BC_STRING_FACE_ID_ERROR_MUST_ENABLE NSLocalizedString(@"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint.", nil)
-// No longer needed
-#define BC_STRING_FACE_ID_ERROR_NOT_AVAILABLE NSLocalizedString(@"Face ID is not available on this device.", nil)
-// No longer needed
-#define BC_STRING_FACE_ID_ERROR_UNKNOWN_ARGUMENT NSLocalizedString(@"Unknown Face ID error. Code: %ld", nil)
-// No longer needed
-#define BC_STRING_TOUCH_ID_ERROR_UNKNOWN_ARGUMENT NSLocalizedString(@"Unknown Touch ID error. Code: %ld", nil)
-
 #define BC_STRING_NO_EMAIL_CONFIGURED NSLocalizedString(@"You do not have an account set up for Mail. Please contact %@", nil)
 #define BC_STRING_PIN NSLocalizedString(@"PIN", nil)
 
