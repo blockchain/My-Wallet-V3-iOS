@@ -178,24 +178,24 @@
     if (self.assetType == LegacyAssetTypeBitcoin) {
         leftPadding = 15;
         BCLine *lineAboveAmounts = [[BCLine alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-        lineAboveAmounts.backgroundColor = COLOR_LINE_GRAY;
+        lineAboveAmounts.backgroundColor = [ConstantsObjcBridge grayLineColor];
         [self.bottomContainerView addSubview:lineAboveAmounts];
     }
 
     BCLine *lineBelowAmounts = [[BCLine alloc] initWithFrame:CGRectMake(leftPadding, 50, self.view.frame.size.width - leftPadding, 1)];
-    lineBelowAmounts.backgroundColor = COLOR_LINE_GRAY;
+    lineBelowAmounts.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [self.bottomContainerView addSubview:lineBelowAmounts];
     
     BCLine *lineBelowToField = [[BCLine alloc] initWithFrame:CGRectMake(0, lineBelowAmounts.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    lineBelowToField.backgroundColor = COLOR_LINE_GRAY;
+    lineBelowToField.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [self.bottomContainerView addSubview:lineBelowToField];
     
     self.lineBelowFromField = [[BCLine alloc] initWithFrame:CGRectMake(0, lineBelowToField.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    self.lineBelowFromField.backgroundColor = COLOR_LINE_GRAY;
+    self.lineBelowFromField.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [self.bottomContainerView addSubview:self.lineBelowFromField];
     
     BCLine *lineBelowDescripton = [[BCLine alloc] initWithFrame:CGRectMake(0, self.lineBelowFromField.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    lineBelowDescripton.backgroundColor = COLOR_LINE_GRAY;
+    lineBelowDescripton.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [self.bottomContainerView addSubview:lineBelowDescripton];
     
     if (self.assetType == LegacyAssetTypeBitcoin) {

@@ -58,13 +58,13 @@
         summaryTableView.clipsToBounds = YES;
         
         CALayer *topBorder = [CALayer layer];
-        topBorder.borderColor = [COLOR_LINE_GRAY CGColor];
+        topBorder.borderColor = [[ConstantsObjcBridge grayLineColor] CGColor];
         topBorder.borderWidth = 1;
         topBorder.frame = CGRectMake(0, 0, CGRectGetWidth(summaryTableView.frame), lineWidth);
         [summaryTableView.layer addSublayer:topBorder];
         
         CALayer *bottomBorder = [CALayer layer];
-        bottomBorder.borderColor = [COLOR_LINE_GRAY CGColor];
+        bottomBorder.borderColor = [[ConstantsObjcBridge grayLineColor] CGColor];
         bottomBorder.borderWidth = 1;
         bottomBorder.frame = CGRectMake(0, CGRectGetHeight(summaryTableView.frame) - lineWidth, CGRectGetWidth(summaryTableView.frame), lineWidth);
         [summaryTableView.layer addSublayer:bottomBorder];

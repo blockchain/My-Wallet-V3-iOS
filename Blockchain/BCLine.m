@@ -7,6 +7,7 @@
 //
 
 #import "BCLine.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCLine
 
@@ -34,7 +35,7 @@
     UIView *onePixelLine = [[UIView alloc] initWithFrame:CGRectMake(0, yPosition, windowWidth, onePixelHeight)];
     
     onePixelLine.userInteractionEnabled = NO;
-    [onePixelLine setBackgroundColor:self.backgroundColor ? : COLOR_LINE_GRAY];
+    [onePixelLine setBackgroundColor:self.backgroundColor ? : [ConstantsObjcBridge grayLineColor]];
     [self addSubview:onePixelLine];
     
     self.backgroundColor = [UIColor clearColor];

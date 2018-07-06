@@ -11,6 +11,7 @@
 #import "BCBalanceChartLegendKeyView.h"
 #import "Blockchain-Swift.h"
 #import "NSNumberFormatter+Currencies.h"
+#import "BCLine.h"
 
 #define CHART_VIEW_BOTTOM_PADDING 16
 #define CONTAINER_VIEW_HORIZONTAL_PADDING 20
@@ -28,6 +29,7 @@
 @property (nonatomic) BCBalanceChartLegendKeyView *etherLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinCashLegendKey;
 @property (nonatomic) UIView *legendKeyContainerView;
+@property (nonatomic) BCLine *lineSeparator;
 @property (nonatomic) WatchOnlyBalanceView *watchOnlyBalanceView;
 
 @property (nonatomic) CGFloat defaultHeight;
@@ -41,6 +43,7 @@
         self.backgroundColor = [UIColor whiteColor];
         [self setupChartViewWithFrame:frame];
         [self setupLegendWithFrame:frame];
+        [self setupLineSeparator];
         self.defaultHeight = self.bounds.size.height;
     }
     
@@ -100,9 +103,19 @@
     self.legendKeyContainerView = legendKeyContainerView;
 }
 
+- (void)setupLineSeparator
+{
+    BCLine *line = [[BCLine alloc] initWithFrame:CGRectMake(self.legendKeyContainerView.frame.origin.x, self.legendKeyContainerView.frame.origin.y + self.legendKeyContainerView.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 1)];
+    line.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    [self addSubview:line];
+    self.lineSeparator = line;
+
+    self.lineSeparator.hidden = YES;
+}
+
 - (CGFloat)watchOnlyViewHeight
 {
-    return 60;
+    return 50;
 }
 
 - (void)showWatchOnlyView
@@ -111,7 +124,7 @@
 
     if (!self.watchOnlyBalanceView) {
         CGFloat containerViewHorizonalPadding = CONTAINER_VIEW_HORIZONTAL_PADDING;
-        self.watchOnlyBalanceView = [[WatchOnlyBalanceView alloc] initWithFrame:CGRectMake(containerViewHorizonalPadding, self.legendKeyContainerView.frame.origin.y + self.legendKeyContainerView.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 40)];
+        self.watchOnlyBalanceView = [[WatchOnlyBalanceView alloc] initWithFrame:CGRectMake(containerViewHorizonalPadding, self.lineSeparator.frame.origin.y + self.lineSeparator.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 40)];
         [self addSubview:self.watchOnlyBalanceView];
     }
 
@@ -119,11 +132,14 @@
     [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]] :
     [self.bitcoin.watchOnly.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
     [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
+
+    self.lineSeparator.hidden = NO;
 }
 
 - (void)hideWatchOnlyView
 {
     [self changeHeight:self.defaultHeight];
+    self.lineSeparator.hidden = YES;
 }
 
 // Lazy initializers

@@ -34,6 +34,8 @@ import Foundation
 
         self.addSubview(self.assetLabel)
         self.addSubview(self.balanceLabel)
+
+        self.assetLabel.center = CGPoint(x: assetLabel.center.x, y: self.bounds.size.height/2)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -191,7 +191,7 @@
     self.ethField = self.topRightField;
     
     UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(leftFieldOriginX, ROW_HEIGHT_FROM_TO_VIEW, windowWidth - leftFieldOriginX, 0.5)];
-    dividerLine.backgroundColor = COLOR_LINE_GRAY;
+    dividerLine.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [amountView addSubview:dividerLine];
     
     BCSecureTextField *bottomLeftField = [self inputTextFieldWithFrame:CGRectMake(leftFieldOriginX, dividerLine.frame.origin.y + dividerLine.frame.size.height + 8, leftField.frame.size.width, 30)];
@@ -225,7 +225,7 @@
     BCLine *lineAboveButtonsView = [[BCLine alloc] initWithYPosition:amountView.frame.origin.y + amountView.frame.size.height];
     [self.view addSubview:lineAboveButtonsView];
     UIView *buttonsView = [[UIView alloc] initWithFrame:CGRectMake(0, amountView.frame.origin.y + amountView.frame.size.height + 0.5, windowWidth, buttonHeight)];
-    buttonsView.backgroundColor = COLOR_LINE_GRAY;
+    buttonsView.backgroundColor = [ConstantsObjcBridge grayLineColor];
     [self.view addSubview:buttonsView];
     
     UIFont *buttonFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];

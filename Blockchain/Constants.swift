@@ -31,6 +31,7 @@ struct Constants {
         static let ColorGray2 = UIColorFromRGB(0xCCCCCC)           // previously TextFieldBorderGray
         static let ColorGray5 = UIColorFromRGB(0x545456)           // previously DarkGray
         static let ColorGray6 = UIColorFromRGB(0xEEEEEE)
+        static let ColorGrayLine = UIColorFromRGB(0xcdcdcd)
         static let ColorSent = UIColorFromRGB(0xF26C57)            // previously SentRed
         static let ColorSuccess = UIColorFromRGB(0x00A76F)         // previously SuccessGreen
     }
@@ -235,6 +236,10 @@ struct Constants {
 
     @objc class func infoLabelEdgeInsets() -> UIEdgeInsets {
         return Constants.Measurements.infoLabelEdgeInsets
+    }
+
+    @objc class func grayLineColor() -> UIColor {
+        return Constants.Colors.ColorGrayLine
     }
 }
 
