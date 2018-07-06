@@ -20,9 +20,9 @@
 
 @interface BCBalancesChartView ()
 @property (nonatomic) NSString *fiatSymbol;
-@property (nonatomic) BalanceDisplayModel *bitcoin;
-@property (nonatomic) BalanceDisplayModel *ether;
-@property (nonatomic) BalanceDisplayModel *bitcoinCash;
+@property (nonatomic) BalanceChartViewModel *bitcoin;
+@property (nonatomic) BalanceChartViewModel *ether;
+@property (nonatomic) BalanceChartViewModel *bitcoinCash;
 
 @property (nonatomic) PieChartView *chartView;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinLegendKey;
@@ -148,21 +148,21 @@
 }
 
 // Lazy initializers
-- (BalanceDisplayModel *)bitcoin
+- (BalanceChartViewModel *)bitcoin
 {
-    if (!_bitcoin) _bitcoin = [[BalanceDisplayModel alloc] init];
+    if (!_bitcoin) _bitcoin = [[BalanceChartViewModel alloc] init];
     return _bitcoin;
 }
 
-- (BalanceDisplayModel *)ether
+- (BalanceChartViewModel *)ether
 {
-    if (!_ether) _ether = [[BalanceDisplayModel alloc] init];
+    if (!_ether) _ether = [[BalanceChartViewModel alloc] init];
     return _ether;
 }
 
-- (BalanceDisplayModel *)bitcoinCash
+- (BalanceChartViewModel *)bitcoinCash
 {
-    if (!_bitcoinCash) _bitcoinCash = [[BalanceDisplayModel alloc] init];
+    if (!_bitcoinCash) _bitcoinCash = [[BalanceChartViewModel alloc] init];
     return _bitcoinCash;
 }
 
