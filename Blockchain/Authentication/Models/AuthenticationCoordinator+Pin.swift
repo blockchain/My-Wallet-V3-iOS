@@ -48,7 +48,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             self.pinEntryViewController?.verifyOptional ?? false {
             LoadingViewPresenter.shared.hideBusyView()
             BlockchainSettings.App.shared.biometryEnabled = true
-            lastEnteredPIN?.saveToKeychainIfNeeded()
             closePinEntryView(animated: true)
             return
         }

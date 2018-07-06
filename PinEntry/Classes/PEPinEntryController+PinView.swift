@@ -37,7 +37,11 @@ extension PEPinEntryController: PinView {
                     return
                 }
 
-                let payload = PinPayload(pinCode: pin.toString, pinKey: pinKey)
+                let payload = PinPayload(
+                    pinCode: pin.toString,
+                    pinKey: pinKey,
+                    persistLocally: strongSelf.verifyOptional
+                )
                 _ = strongSelf.pinPresenter.validatePin(payload)
             }, onError: { [weak self] error in
                 guard let strongSelf = self else { return }

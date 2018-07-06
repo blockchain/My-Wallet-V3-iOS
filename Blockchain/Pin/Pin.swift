@@ -67,16 +67,14 @@ struct SavePinError: Error {}
 
         WalletManager.shared.wallet.pinServerPutKey(onPinServerServer: key, value: value, pin: self.toString)
 
-        saveToKeychainIfNeeded()
+        if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
+            config.isEnabled,
+            BlockchainSettings.App.shared.biometryEnabled {
+            saveToKeychain()
+        }
     }
 
-    /// Saves this pin to the keychain only if biometric authentication is enabled
-    func saveToKeychainIfNeeded() {
-        guard let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
-            config.isEnabled,
-            BlockchainSettings.App.shared.biometryEnabled else {
-            return
-        }
+    func saveToKeychain() {
         BlockchainSettings.App.shared.pin = self.toString
     }
 }

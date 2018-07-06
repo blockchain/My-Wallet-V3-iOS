@@ -618,7 +618,7 @@ extension AuthenticationCoordinator: SetupDelegate {
             BlockchainSettings.App.shared.biometryEnabled = true
 
             // Saving the last entered pin will store the pin in the user's keychain
-            self.lastEnteredPIN?.saveToKeychainIfNeeded()
+            self.lastEnteredPIN?.saveToKeychain()
 
             completion(true)
         }
