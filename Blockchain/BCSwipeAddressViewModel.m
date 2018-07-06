@@ -18,13 +18,13 @@
         NSString *suffix;
         NSString *assetImageViewName;
         if (assetType == LegacyAssetTypeBitcoin) {
-            suffix = BC_STRING_BITCOIN;
+            suffix = [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin];
             assetImageViewName = @"bitcoin_large";
         } else if (assetType == LegacyAssetTypeEther) {
-            suffix = BC_STRING_ETHER;
+            suffix = [AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum];
             assetImageViewName = @"ether_large";
         } else if (assetType == LegacyAssetTypeBitcoinCash) {
-            suffix = BC_STRING_BITCOIN_CASH;
+            suffix = [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash];
             assetImageViewName = @"bitcoin_cash_large";
         }
         self.assetImageViewName = assetImageViewName;

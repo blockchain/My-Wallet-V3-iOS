@@ -32,4 +32,8 @@ import Foundation
             return .bitcoinCash
         }
     }
+
+    @objc static func description(for type: AssetType) -> String {
+        return type.description
+    }
 }

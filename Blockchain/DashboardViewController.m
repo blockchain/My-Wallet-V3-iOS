@@ -115,21 +115,21 @@
     balancesLabel.text = [BC_STRING_PRICE_CHARTS uppercaseString];
     [priceChartContainerView addSubview:balancesLabel];
     
-    BCPricePreviewView *bitcoinPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, balancesLabel.frame.origin.y + balancesLabel.frame.size.height, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:BC_STRING_BITCOIN price:[NSNumberFormatter formatMoney:SATOSHI localCurrency:YES] assetImage:@"bitcoin_white"];
+    BCPricePreviewView *bitcoinPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, balancesLabel.frame.origin.y + balancesLabel.frame.size.height, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin] price:[NSNumberFormatter formatMoney:SATOSHI localCurrency:YES] assetImage:@"bitcoin_white"];
     [priceChartContainerView addSubview:bitcoinPreviewView];
     self.bitcoinPricePreview = bitcoinPreviewView;
     
     UITapGestureRecognizer *bitcoinChartTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinChartTapped)];
     [bitcoinPreviewView addGestureRecognizer:bitcoinChartTapGesture];
     
-    BCPricePreviewView *etherPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, bitcoinPreviewView.frame.origin.y + bitcoinPreviewView.frame.size.height + previewViewSpacing, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:BC_STRING_ETHER price:[self getEthPrice] assetImage:@"ether_white"];
+    BCPricePreviewView *etherPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, bitcoinPreviewView.frame.origin.y + bitcoinPreviewView.frame.size.height + previewViewSpacing, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum] price:[self getEthPrice] assetImage:@"ether_white"];
     [priceChartContainerView addSubview:etherPreviewView];
     self.etherPricePreview = etherPreviewView;
     
     UITapGestureRecognizer *etherChartTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(etherChartTapped)];
     [etherPreviewView addGestureRecognizer:etherChartTapGesture];
     
-    BCPricePreviewView *bitcoinCashPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, etherPreviewView.frame.origin.y + etherPreviewView.frame.size.height + previewViewSpacing, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:BC_STRING_BITCOIN_CASH price:[self getBchPrice] assetImage:@"bitcoin_cash_white"];
+    BCPricePreviewView *bitcoinCashPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, etherPreviewView.frame.origin.y + etherPreviewView.frame.size.height + previewViewSpacing, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash] price:[self getBchPrice] assetImage:@"bitcoin_cash_white"];
     [priceChartContainerView addSubview:bitcoinCashPreviewView];
     self.bitcoinCashPricePreview = bitcoinCashPreviewView;
     

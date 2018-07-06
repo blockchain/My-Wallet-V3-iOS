@@ -7,9 +7,6 @@
 //
 #import <Foundation/Foundation.h>
 
-#define BC_STRING_BITCOIN NSLocalizedString(@"Bitcoin", nil)
-#define BC_STRING_ETHER NSLocalizedString(@"Ether", nil)
-
 #define BC_STRING_ALL_WALLETS NSLocalizedString(@"All Wallets", nil)
 #define BC_STRING_WALLETS NSLocalizedString(@"Wallets", nil)
 
@@ -664,15 +661,10 @@
 #define BC_STRING_SEE_CHARTS NSLocalizedString(@"See charts", nil)
 #define BC_STRING_PRICE_CHARTS NSLocalizedString(@"Price charts", nil)
 
-#define BC_STRING_BITCOIN_CASH NSLocalizedString(@"Bitcoin Cash", nil)
 #define BC_STRING_BITCOIN_CASH_PRICE NSLocalizedString(@"Bitcoin Cash Price", nil)
 #define BC_STRING_ENTER_BITCOIN_CASH_ADDRESS_OR_SELECT NSLocalizedString(@"Enter Bitcoin Cash address or select", nil)
 #define BC_STRING_BUY_SELL_CARD_DESCRIPTION NSLocalizedString(@"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.", nil)
 #define BC_STRING_BUY_SELL_CARD_ACTION_TITLE BC_STRING_GET_STARTED
-
-#define BC_STRING_BITCOIN_CASH_CARD_TITLE BC_STRING_BITCOIN_CASH
-#define BC_STRING_BITCOIN_CASH_CARD_DESCRIPTION NSLocalizedString(@"We are excited to announce that your Blockchain wallet will allow you to seamlessly send, receive, and exchange Bitcoin Cash!", nil)
-#define BC_STRING_BITCOIN_CASH_CARD_ACTION_TITLE BC_STRING_GET_STARTED
 
 #define BC_STRING_BITCOIN_CASH_WARNING_CONFIRM_VALID_ADDRESS_ONE NSLocalizedString(@"Are you sure this is a bitcoin cash address?", nil)
 #define BC_STRING_BITCOIN_CASH_WARNING_CONFIRM_VALID_ADDRESS_TWO NSLocalizedString(@"Sending funds to a bitcoin address by accident will result in loss of funds.", nil)

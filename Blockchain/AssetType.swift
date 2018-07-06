@@ -36,3 +36,16 @@ extension AssetType {
         }
     }
 }
+
+extension AssetType {
+    var description: String {
+        switch self {
+        case .bitcoin:
+            return "Bitcoin"
+        case .bitcoinCash:
+            return "Bitcoin Cash"
+        case .ethereum:
+            return "Ether"
+        }
+    }
+}

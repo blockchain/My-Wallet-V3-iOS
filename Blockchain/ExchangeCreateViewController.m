@@ -1216,17 +1216,17 @@
 
 - (NSString *)bitcoinLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:LegacyAssetTypeBitcoin] : BC_STRING_BITCOIN;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]] : [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin];
 }
 
 - (NSString *)bitcoinCashLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoinCash] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.bchAccount assetType:LegacyAssetTypeBitcoinCash] : BC_STRING_BITCOIN_CASH;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoinCash] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.bchAccount assetType:LegacyAssetTypeBitcoinCash] : [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash];
 }
 
 - (NSString *)etherLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:0 assetType:LegacyAssetTypeEther] : BC_STRING_ETHER;
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:0 assetType:LegacyAssetTypeEther] : [AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum];
 }
 
 - (void)didChangeFrom

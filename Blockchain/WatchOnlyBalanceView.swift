@@ -15,7 +15,7 @@ import Foundation
 
     override init(frame: CGRect) {
         self.assetLabel = UILabel(frame: CGRect(x: 0, y: 8, width: 0, height: 0))
-        self.assetLabel.text = LocalizationConstants.Assets.bitcoin
+        self.assetLabel.text = AssetType.bitcoin.description
         self.assetLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraSmall)
         self.assetLabel.sizeToFit()
 
