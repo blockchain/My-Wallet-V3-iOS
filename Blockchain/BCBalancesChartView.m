@@ -115,7 +115,10 @@
         [self addSubview:self.watchOnlyBalanceView];
     }
 
-    [self.watchOnlyBalanceView updateTextWithBalance:@"test"];
+    NSString *watchOnlyBalance = BlockchainSettings.sharedAppInstance.symbolLocal ?
+    [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]] :
+    [self.bitcoin.watchOnly.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
+    [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
 }
 
 - (void)hideWatchOnlyView

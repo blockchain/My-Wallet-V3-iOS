@@ -9,7 +9,7 @@
 import Foundation
 
 @objc class BalanceModel: NSObject {
-    @objc var balance: String?
+    @objc var balance: String = "0"
     @objc var fiatBalance: Double = 0
 }
 
