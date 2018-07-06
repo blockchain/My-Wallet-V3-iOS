@@ -46,5 +46,14 @@ import Foundation
         balanceLabel.text = balance + " " + LocalizationConstants.AddressAndKeyImport.nonSpendable
         balanceLabel.sizeToFit()
         balanceLabel.center = CGPoint(x: balanceLabel.center.x, y: assetLabel.center.y)
+
+        // If balance text is so long that it goes past the edge, truncate the label and text
+        let distancePastRightEdge = balanceLabel.frame.origin.x + balanceLabel.frame.size.width - self.bounds.size.width
+        if distancePastRightEdge > 0 {
+            balanceLabel.frame = CGRect(x: balanceLabel.frame.origin.x,
+                                        y: balanceLabel.frame.origin.y,
+                                        width: balanceLabel.frame.size.width - distancePastRightEdge,
+                                        height: balanceLabel.frame.size.height)
+        }
     }
 }
