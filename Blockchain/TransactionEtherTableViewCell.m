@@ -60,7 +60,7 @@
     self.infoLabel.adjustsFontSizeToFitWidth = YES;
     self.infoLabel.layer.cornerRadius = 5;
     self.infoLabel.clipsToBounds = YES;
-    self.infoLabel.customEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 4);
+    self.infoLabel.customEdgeInsets = [ConstantsObjcBridge infoLabelEdgeInsets];
     self.infoLabel.hidden = NO;
     
     self.actionLabel.frame = CGRectMake(self.actionLabel.frame.origin.x, 20, self.actionLabel.frame.size.width, self.actionLabel.frame.size.height);

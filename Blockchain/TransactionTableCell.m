@@ -59,7 +59,7 @@
     infoLabel.layer.cornerRadius = 5;
     infoLabel.layer.borderWidth = 1;
     infoLabel.clipsToBounds = YES;
-    infoLabel.customEdgeInsets = UIEdgeInsetsMake(2, 7, 3, 7);
+    infoLabel.customEdgeInsets = [ConstantsObjcBridge infoLabelEdgeInsets];
     infoLabel.hidden = NO;
 
     actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 20, actionLabel.frame.size.width, actionLabel.frame.size.height);

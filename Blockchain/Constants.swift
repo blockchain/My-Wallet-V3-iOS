@@ -51,6 +51,8 @@ struct Constants {
         static let ScreenHeightIphone5S: CGFloat = 568.0
 
         static let MinimumTapTargetSize: CGFloat = 22.0
+
+        static let infoLabelEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 7, bottom: 3, right: 7)
     }
     struct FontSizes {
         static let ExtraExtraSmall: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 14.0 : 11.0
@@ -229,6 +231,10 @@ struct Constants {
 
     @objc class func montserratSemiBold() -> String {
         return Constants.FontNames.montserratSemiBold
+    }
+
+    @objc class func infoLabelEdgeInsets() -> UIEdgeInsets {
+        return Constants.Measurements.infoLabelEdgeInsets
     }
 }
 
