@@ -19,7 +19,9 @@
 {
     [super sizeToFit];
 
-    // When using a BCInsetLabel with custom edge inset values > 0, calling sizeToFit() on it causes the frame to become smaller than it should be, truncating the text. By manually changing the frame by its inset values, sizeToFit() gives the expected frame.
+    // When using a BCInsetLabel with custom edge inset values > 0, calling sizeToFit()
+    // on it causes the frame to become smaller than it should be, truncating the text.
+    // By manually changing the frame by its inset values, sizeToFit() gives the expected frame.
     CGFloat horizontalOffset = self.customEdgeInsets.left + self.customEdgeInsets.right;
     CGFloat verticalOffset = self.customEdgeInsets.top + self.customEdgeInsets.bottom;
     self.frame = CGRectMake(self.frame.origin.x,
