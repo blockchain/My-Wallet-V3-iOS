@@ -163,14 +163,14 @@
         // Watch only balances
         CGFloat previewViewSpacing = PRICE_PREVIEW_SPACING;
         if ([WalletManager.sharedInstance.wallet hasWatchOnlyAddresses]) {
+            // Update model
+            [self.balancesChartView updateBitcoinWatchOnlyFiatBalance:watchOnlyFiatBalance];
+            [self.balancesChartView updateBitcoinWatchOnlyBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getWatchOnlyBalance] localCurrency:NO]];
+
             // Increase height and Y positions to show watch only view
             [self.balancesChartView showWatchOnlyView];
             [self.priceChartContainerView changeYPosition:self.balancesChartView.frame.origin.y + self.balancesChartView.frame.size.height + previewViewSpacing];
             [self.contentView changeHeight:self.defaultContentHeight + [self.balancesChartView watchOnlyViewHeight]];
-
-            // Update model
-            [self.balancesChartView updateBitcoinWatchOnlyFiatBalance:watchOnlyFiatBalance];
-            [self.balancesChartView updateBitcoinWatchOnlyBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getWatchOnlyBalance] localCurrency:NO]];
         } else {
             // Show default heights and Y positions
             [self.balancesChartView hideWatchOnlyView];
