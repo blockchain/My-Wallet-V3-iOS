@@ -95,8 +95,6 @@
     }
     
     [infoLabel sizeToFit];
-    // Having issues vertically centering the text - I'm sure there is a better way to do this but it might take too long to do
-    [infoLabel changeHeight:infoLabel.frame.size.height + 3];
     
     warningImageView.image = [warningImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [warningImageView setTintColor:COLOR_WARNING_RED];

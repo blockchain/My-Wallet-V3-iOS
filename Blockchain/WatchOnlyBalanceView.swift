@@ -43,12 +43,6 @@ import Foundation
     @objc func updateText(balance: String) {
         balanceLabel.text = balance + " " + LocalizationConstants.AddressAndKeyImport.nonSpendable
         balanceLabel.sizeToFit()
-        let horizontalOffset = self.balanceLabel.customEdgeInsets.left + self.balanceLabel.customEdgeInsets.right
-        let verticalOffset = self.balanceLabel.customEdgeInsets.top + self.balanceLabel.customEdgeInsets.bottom
-        balanceLabel.frame = CGRect(x: balanceLabel.frame.origin.x,
-                                    y: balanceLabel.frame.origin.y,
-                                    width: balanceLabel.frame.size.width + horizontalOffset,
-                                    height: balanceLabel.frame.size.height + verticalOffset)
         balanceLabel.center = CGPoint(x: balanceLabel.center.x, y: assetLabel.center.y)
     }
 }
