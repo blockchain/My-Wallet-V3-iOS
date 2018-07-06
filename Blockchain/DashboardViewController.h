@@ -13,5 +13,6 @@
 @interface DashboardViewController : CardsViewController
 @property (nonatomic) LegacyAssetType assetType;
 - (void)reload;
+- (void)reloadSymbols;
 - (void)updateEthExchangeRate:(NSDecimalNumber *)rate;
 @end

@@ -30,7 +30,6 @@
 - (void)updateBitcoinCashWatchOnlyFiatBalance:(double)watchOnlyFiatBalance;
 
 - (void)updateTotalFiatBalance:(NSString *)fiatBalance;
-
 - (void)updateFiatSymbol:(NSString *)symbol;
 
 - (void)updateChart;
@@ -38,4 +37,5 @@
 - (CGFloat)watchOnlyViewHeight;
 - (void)showWatchOnlyView;
 - (void)hideWatchOnlyView;
+- (void)updateWatchOnlyViewBalance;
 @end

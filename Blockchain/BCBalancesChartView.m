@@ -133,10 +133,7 @@
         self.watchOnlyBalanceView.userInteractionEnabled = YES;
     }
 
-    NSString *watchOnlyBalance = BlockchainSettings.sharedAppInstance.symbolLocal ?
-    [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]] :
-    [self.bitcoin.watchOnly.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
-    [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
+    [self updateWatchOnlyViewBalance];
 
     self.lineSeparator.hidden = NO;
 }
@@ -145,6 +142,14 @@
 {
     [self changeHeight:self.defaultHeight];
     self.lineSeparator.hidden = YES;
+}
+
+- (void)updateWatchOnlyViewBalance
+{
+    NSString *watchOnlyBalance = BlockchainSettings.sharedAppInstance.symbolLocal ?
+    [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]] :
+    [self.bitcoin.watchOnly.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
+    [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
 }
 
 // Lazy initializers

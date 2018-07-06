@@ -186,6 +186,11 @@
     [self reloadCards];
 }
 
+- (void)reloadSymbols
+{
+    [self.balancesChartView updateWatchOnlyViewBalance];
+}
+
 - (void)fetchChartDataForAsset:(LegacyAssetType)assetType
 {
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_GRAPH_TIME_FRAME];
