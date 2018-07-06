@@ -578,6 +578,7 @@
 
 - (void)reloadSymbols
 {
+    [_dashboardViewController reload];
     [_sendBitcoinViewController reloadSymbols];
     [_sendBitcoinCashViewController reloadSymbols];
     [_transactionsBitcoinViewController reloadSymbols];

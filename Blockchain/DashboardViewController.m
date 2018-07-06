@@ -311,6 +311,11 @@
     [tabControllerManager showTransactionsBitcoinCash];
 }
 
+- (void)watchOnlyViewTapped
+{
+    BlockchainSettings.sharedAppInstance.symbolLocal = !BlockchainSettings.sharedAppInstance.symbolLocal;
+}
+
 #pragma mark - View Helpers
 
 - (void)showError:(NSString *)error

@@ -11,6 +11,7 @@
 - (void)bitcoinLegendTapped;
 - (void)etherLegendTapped;
 - (void)bitcoinCashLegendTapped;
+- (void)watchOnlyViewTapped;
 @end
 @interface BCBalancesChartView : UIView
 @property (nonatomic, weak) id<BCBalancesChartViewDelegate> delegate;

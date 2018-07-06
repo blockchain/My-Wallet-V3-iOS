@@ -126,6 +126,11 @@
         CGFloat containerViewHorizonalPadding = CONTAINER_VIEW_HORIZONTAL_PADDING;
         self.watchOnlyBalanceView = [[WatchOnlyBalanceView alloc] initWithFrame:CGRectMake(containerViewHorizonalPadding, self.lineSeparator.frame.origin.y + self.lineSeparator.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 40)];
         [self addSubview:self.watchOnlyBalanceView];
+
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(watchOnlyViewTapped)];
+        tapGesture.numberOfTapsRequired = 1;
+        [self.watchOnlyBalanceView addGestureRecognizer:tapGesture];
+        self.watchOnlyBalanceView.userInteractionEnabled = YES;
     }
 
     NSString *watchOnlyBalance = BlockchainSettings.sharedAppInstance.symbolLocal ?
@@ -309,6 +314,11 @@
 - (void)bitcoinCashLegendTapped
 {
     [self.delegate bitcoinCashLegendTapped];
+}
+
+- (void)watchOnlyViewTapped
+{
+    [self.delegate watchOnlyViewTapped];
 }
 
 @end
