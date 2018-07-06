@@ -32,20 +32,9 @@ import RxSwift
     func validatePin(_ pinPayload: PinPayload) -> Single<GetPinResponse> {
         return self.walletService.validatePin(pinPayload)
             .do(onSuccess: { response in
-                guard let responseCode = response.statusCode else { return }
-
-                switch responseCode {
-                case .success:
-                    // Optionally save the pin to the keychain
-                    let pin = Pin(string: pinPayload.pinCode)
-                    pin?.saveToKeychainIfNeeded()
-                    return
-                case .deleted:
-                    // Clear pin from keychain if the user exceeded the number of retries when entering the pin.
+                // Clear pin from keychain if the user exceeded the number of retries when entering the pin.
+                if response.statusCode == .deleted {
                     BlockchainSettings.App.shared.pin = nil
-                    return
-                default:
-                    return
                 }
             })
     }
