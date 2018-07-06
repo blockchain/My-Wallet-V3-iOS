@@ -208,7 +208,7 @@ struct LocalizationConstants {
     }
 
     struct AddressAndKeyImport {
-        static let nonSpendable = NSLocalizedString("Non-Spendable", comment: "")
+        static let nonSpendable = NSLocalizedString("Non-Spendable", comment: "Text displayed to indicate that part of the funds in the user's wallet is not spendable.")
         static let importedWatchOnlyAddressArgument = NSLocalizedString("Imported watch-only address %@", comment: "")
         static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
         static let loadingImportKey = NSLocalizedString("Importing key", comment: "")
