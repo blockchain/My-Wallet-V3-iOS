@@ -16,7 +16,8 @@ import Foundation
     override init(frame: CGRect) {
         self.assetLabel = UILabel(frame: CGRect(x: 0, y: 8, width: 0, height: 0))
         self.assetLabel.text = AssetType.bitcoin.description
-        self.assetLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraSmall)
+        self.assetLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraExtraSmall)
+        self.assetLabel.textColor = Constants.Colors.ColorGray5
         self.assetLabel.sizeToFit()
 
         self.balanceLabel = BCInsetLabel(frame: CGRect(x: assetLabel.frame.origin.x + assetLabel.frame.size.width + 8, y: 4, width: 0, height: 0))
@@ -28,7 +29,7 @@ import Foundation
         self.balanceLabel.clipsToBounds = true
         self.balanceLabel.customEdgeInsets = UIEdgeInsets(top: 3.5, left: 11, bottom: 3.5, right: 11)
         self.balanceLabel.text = LocalizationConstants.AddressAndKeyImport.nonSpendable
-        self.balanceLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.ExtraExtraSmall)
+        self.balanceLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.ExtraExtraExtraSmall)
 
         super.init(frame: frame)
 
