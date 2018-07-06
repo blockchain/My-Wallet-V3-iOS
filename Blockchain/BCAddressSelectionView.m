@@ -571,7 +571,7 @@ typedef enum {
         
         if (isWatchOnlyLegacyAddress) {
             // Show the watch only tag and resize the label and balance labels so there is enough space
-            cell.labelLabel.frame = CGRectMake(20, 11, 148, 21);
+            cell.labelLabel.frame = CGRectMake(20, 11, 110, 21);
             cell.balanceLabel.frame = CGRectMake(254, 11, 83, 21);
             cell.watchLabel.hidden = NO;
             

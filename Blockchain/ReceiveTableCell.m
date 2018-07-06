@@ -7,6 +7,7 @@
 //
 
 #import "ReceiveTableCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation ReceiveTableCell
 
@@ -26,8 +27,7 @@
     
     self.balanceLabel.adjustsFontSizeToFitWidth = YES;
     self.watchLabel.adjustsFontSizeToFitWidth = YES;
-    self.watchLabel.textAlignment = NSTextAlignmentCenter;
-    self.watchLabel.text = BC_STRING_WATCH_ONLY;
+    self.watchLabel.text = [LocalizationConstantsObjcBridge nonSpendable];
 }
 
 @end

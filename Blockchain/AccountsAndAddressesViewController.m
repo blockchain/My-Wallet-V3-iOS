@@ -481,7 +481,7 @@
 
         if (isWatchOnlyLegacyAddress) {
             // Show the watch only tag and resize the label and balance labels so there is enough space
-            cell.labelLabel.frame = CGRectMake(20, 11, 148, 21);
+            cell.labelLabel.frame = CGRectMake(20, 11, 110, 21);
             
             cell.balanceLabel.frame = CGRectMake(254, 11, 83, 21);
             UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 254, cell.frame.size.height-(cell.frame.size.height-cell.balanceLabel.frame.origin.y-cell.balanceLabel.frame.size.height), 0);
