@@ -2201,16 +2201,16 @@
 "The wait is over" = "La espera terminó";
 
 /* (No Commment) */
-"Face ID has been locked due to too many failed attempts." = "Se bloqueó el reconocimiento facial debido a demasiados intentos fallidos.";
+"Face ID has been locked due to too many failed attempts." = "Se bloqueó Face ID debido a demasiados intentos fallidos.";
 
 /* (No Commment) */
-"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Reconocimiento facial no activado en este dispositivo. Para activarlo, vaya a Configuración -> Reconocimiento facial y contraseña y agregue una huella dactilar.";
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID no activado en este dispositivo. Para activarlo, vaya a Configuración -> Face ID y contraseña y agregue una huella dactilar.";
 
 /* (No Commment) */
-"Face ID is not available on this device." = "Reconocimiento facial no disponible en este dispositivo.";
+"Face ID is not available on this device." = "Face ID no disponible en este dispositivo.";
 
 /* (No Commment) */
-"Unknown Face ID error. Code: %ld" = "Error de reconocimiento facial desconocido. Código: %ld";
+"Unknown Face ID error. Code: %ld" = "Error de Face ID desconocido. Código: %ld";
 
 /* (No Commment) */
 "Unknown Touch ID error. Code: %ld" = "Error de identificación táctil desconocido. Código: %ld";
