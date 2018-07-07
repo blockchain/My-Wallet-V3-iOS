@@ -33,6 +33,7 @@
 - (void)updateFiatSymbol:(NSString *)symbol;
 
 - (void)updateChart;
+- (void)clearLegendKeyBalances;
 
 - (CGFloat)watchOnlyViewHeight;
 - (void)showWatchOnlyView;

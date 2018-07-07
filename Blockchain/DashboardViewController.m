@@ -148,7 +148,8 @@
 
     double watchOnlyFiatBalance = [self getBtcWatchOnlyBalance];
 
-    if (WalletManager.sharedInstance.wallet.isInitialized) {
+    BOOL walletIsInitialized = WalletManager.sharedInstance.wallet.isInitialized;
+    if (walletIsInitialized) {
         [self.balancesChartView updateFiatSymbol:WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.symbol];
         // Fiat balances
         [self.balancesChartView updateBitcoinFiatBalance:btcFiatBalance];
@@ -181,6 +182,8 @@
 
     [self.balancesChartView updateChart];
     
+    if (!walletIsInitialized) [self.balancesChartView clearLegendKeyBalances];
+
     [self reloadPricePreviews];
 
     [self reloadCards];

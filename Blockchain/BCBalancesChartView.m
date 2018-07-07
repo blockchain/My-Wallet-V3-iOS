@@ -295,6 +295,18 @@
     [self.bitcoinCashLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoinCash.fiatBalance]]];
 }
 
+- (void)clearLegendKeyBalances
+{
+    [self.bitcoinLegendKey changeBalance:nil];
+    [self.bitcoinLegendKey changeFiatBalance:nil];
+
+    [self.etherLegendKey changeBalance:nil];
+    [self.etherLegendKey changeFiatBalance:nil];
+
+    [self.bitcoinCashLegendKey changeBalance:nil];
+    [self.bitcoinCashLegendKey changeFiatBalance:nil];
+}
+
 - (NSAttributedString *)balanceAttributedStringWithText:(NSString *)text
 {
     UIFont *font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
