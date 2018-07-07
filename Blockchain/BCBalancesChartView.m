@@ -146,13 +146,9 @@
 
 - (void)updateWatchOnlyViewBalance
 {
-    NSString *watchOnlyBalance;
-    if (BlockchainSettings.sharedAppInstance.symbolLocal) {
-        watchOnlyBalance = [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]];
-    } else {
-        NSString *balance = self.bitcoin.watchOnly.balance ? : @"0";
-        watchOnlyBalance = [balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
-    }
+    NSString *watchOnlyBalance = BlockchainSettings.sharedAppInstance.symbolLocal ?
+    [self.fiatSymbol stringByAppendingString: [NSNumberFormatter fiatStringFromDouble:self.bitcoin.watchOnly.fiatBalance]] :
+    [self.bitcoin.watchOnly.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC];
     [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
 }
 
@@ -231,7 +227,11 @@
 
 - (void)updateBitcoinBalance:(NSString *)balance
 {
-    self.bitcoin.balance = balance;
+    if (!balance) {
+        self.bitcoin.balance = @"0";
+    } else {
+        self.bitcoin.balance = balance;
+    }
 }
 
 - (void)updateEtherBalance:(NSString *)balance
@@ -241,7 +241,11 @@
 
 - (void)updateBitcoinCashBalance:(NSString *)balance
 {
-    self.bitcoinCash.balance = balance;
+    if (!balance) {
+        self.bitcoinCash.balance = @"0";
+    } else {
+        self.bitcoinCash.balance = balance;
+    }
 }
 
 - (void)updateChart
