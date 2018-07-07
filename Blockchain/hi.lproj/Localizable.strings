@@ -1969,3 +1969,57 @@
 
 /* (No Commment) */
 "Miners receive this fee to process this transaction." = "Miners receive this fee to process this transaction.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "चेहरा आईडी पर सक्षम नहीं है, इस डिवाइस है । सक्षम करने के लिए चेहरे#, सेटिंग्स में जाओ -> चेहरा आईडी और पासकोड जोड़ने और एक अंगुली की छाप है ।";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "चेहरा आईडी उपलब्ध नहीं है पर इस डिवाइस है ।";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "अज्ञात का सामना आईडी त्रुटि । कोड: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain के सर्वर रखरखाव के अंतर्गत वर्तमान में है । कृपया बाद में फिर से कोशिश";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "में असमर्थ प्रमाणित करने के लिए कारण करने के लिए असफल प्रमाणीकरण भी कई बार.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "में असमर्थ प्रमाणित करने के लिए कारण का समर्थन नहीं करता डिवाइस बॉयोमीट्रिक प्रमाणीकरण.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "का उपयोग करने में असमर्थ बॉयोमीट्रिक्स.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "में असमर्थ प्रमाणित करने के लिए, क्योंकि वहाँ थे भी कई विफल टच आईडी का प्रयास करता है । पासकोड की आवश्यकता है अनलॉक करने के लिए टच आईडी";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "इस सुविधा को सक्षम करने की अनुमति देगा सभी उपयोगकर्ताओं के साथ एक पंजीकृत %@ फिंगरप्रिंट पर इस उपकरण का उपयोग करने के लिए अपने बटुए के लिए.";
+
+/* (No Commment) */
+"Enable %@" = "सक्षम %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "उपयोग %@ के बजाय पिन प्रमाणित करने के लिए Blockchain और उपयोग अपने बटुए.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "उपयोग %@ के रूप में पिन";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "बधाई हो, आप bitcoin! अब चलो अपने बटुए का बैकअप करें यह सुनिश्चित करने के लिए आप कर सकते हैं अपने धन का उपयोग अगर आप अपना पासवर्ड भूल जाते हैं.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "अमान्य %@ पता: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ भुगतान अनुरोध";
+
+/* (No Commment) */
+"Cookie Policy" = "कुकी नीति";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "कृपया अपने ईमेल की जाँच करें और को अधिकृत यह लॉग-इन करने का प्रयास । ऐसा करने के बाद, वापस कृपया यहाँ और में प्रवेश करने का प्रयास फिर से";
+
+/* (No Commment) */
+"Non-Spendable" = "गैर-Spendable";

@@ -2089,3 +2089,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Sende penger til en bitcoin adresse ved et uhell, vil resultere i tap av midler.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID ikke er aktivert på enheten. For å aktivere Face ID, kan du gå til Innstillinger -> Face ID og Passord, og legge til et fingeravtrykk.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID ikke er tilgjengelig på denne enheten.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Ukjent Ansikt ID-feil. Kode: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain servere er for øyeblikket under vedlikehold. Vennligst prøv igjen senere";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Kan ikke godkjennes på grunn av sviktende godkjenning for mange ganger.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Kan ikke godkjennes fordi enheten ikke støtter biometrisk autentisering.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Ute av stand til å bruke biometri.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Kan ikke Godkjennes fordi det var for mange mislykkede Touch-ID forsøk. Passordet kreves for å låse opp Trykk på ID-en";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Hvis du aktiverer denne funksjonen vil tillate alle brukere med en registrert %@ fingeravtrykk på denne enheten for å få tilgang til lommeboken din.";
+
+/* (No Commment) */
+"Enable %@" = "Aktiver %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Bruk %@ i stedet for PIN-kode for å autentisere Blockchain og få tilgang til lommeboken din.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Bruk %@ som PIN-kode";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Gratulerer, du har bitcoin! Nå la oss ta sikkerhetskopi av din lommebok for å sikre at du kan få tilgang til pengene dine hvis du glemmer passordet ditt.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Ugyldig %@ adresse: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ betaling forespørsel";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie Policy";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vennligst sjekk din e-post og godkjenne denne logge forsøk. Etter du har gjort dette, kan du komme tilbake hit og prøv å logge på igjen";
+
+/* (No Commment) */
+"Non-Spendable" = "Ikke-Spendable";

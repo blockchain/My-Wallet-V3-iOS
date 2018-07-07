@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Αποστολή χρημάτων σε μια διεύθυνση bitcoin από ατύχημα θα οδηγήσει σε απώλεια πόρων.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "ID προσώπου δεν είναι ενεργοποιημένη στη συσκευή αυτή. Για να ενεργοποιήσετε το Πρόσωπο ID, μεταβείτε στις Ρυθμίσεις -> Πρόσωπο ID και Κωδικό πρόσβασης και να προσθέσετε ένα δακτυλικό αποτύπωμα.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "ID προσώπου δεν είναι διαθέσιμη για αυτήν τη συσκευή.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Άγνωστο Πρόσωπο ΑΝΑΓΝΩΡΙΣΤΙΚΌ σφάλματος. Κωδικός: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain είναι διακομιστές που βρίσκονται υπό συντήρηση. Παρακαλώ δοκιμάστε ξανά αργότερα";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Σε θέση να τον έλεγχο ταυτότητας λόγω αποτυχίας ελέγχου ταυτότητας πάρα πολλές φορές.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Σε θέση να τον έλεγχο ταυτότητας, επειδή η συσκευή δεν υποστηρίζει το βιομετρικό έλεγχο ταυτότητας.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Θέση σε χρήση βιομετρικών στοιχείων.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Σε θέση να τον έλεγχο Ταυτότητας, επειδή υπήρχαν πάρα πολλά απέτυχε Touch ID προσπάθειες. Απαιτείται κωδικός πρόσβασης για να ξεκλειδώσετε το Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Ενεργοποιώντας αυτό το χαρακτηριστικό θα επιτρέψει σε όλους τους χρήστες που έχουν την καταστατική τους %@ δακτυλικών αποτυπωμάτων σε αυτή τη συσκευή για να αποκτήσετε πρόσβαση στο πορτοφόλι σας.";
+
+/* (No Commment) */
+"Enable %@" = "Ενεργοποίηση %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Χρήση %@ αντί για PIN για τον έλεγχο ταυτότητας Blockchain και πρόσβαση πορτοφόλι σας.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Χρήση %@ ως PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Συγχαρητήρια, έχετε το bitcoin! Τώρα ας αντιγράφων ασφαλείας του πορτοφολιού σας ώστε να μπορείτε να έχουν πρόσβαση στα χρήματά σας, εάν ξεχάσετε τον κωδικό πρόσβασής σας.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Μη έγκυρη %@ διεύθυνση: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ αίτηση πληρωμής";
+
+/* (No Commment) */
+"Cookie Policy" = "Πολιτική Cookie";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Παρακαλώ ελέγξτε το email σας και επιτρέπουν αυτό το log-in προσπάθεια. Μετά από αυτό, παρακαλούμε να επιστρέψετε εδώ και δοκιμάστε να συνδεθείτε ξανά";
+
+/* (No Commment) */
+"Non-Spendable" = "Μη Διαθέσιμο";

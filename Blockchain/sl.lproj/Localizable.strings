@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Pošiljanje sredstva za bitcoin naslov po nesreči bo imelo za posledico izgubo skladov.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Obraz ID ni omogočena na tej napravi. Če želite omogočiti Obraz ID, pojdite v Nastavitve - > > Obraz ID in Geslo in dodajte prstnih odtisov.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Obraz ID ni na voljo za to napravo.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Neznan Obraz ID napako. Koda: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain strežnikov je trenutno v fazi vzdrževanja. Prosimo, poskusite znova pozneje";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "More overiti zaradi propadajoče preverjanje pristnosti preveč krat.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "More overiti, ker naprava ne podpira biometrično overjanje.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Ne more uporabo biometričnih podatkov.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "More Overiti, ker je bilo preveč ni uspelo Dotik ID poskusov. Geslo je potrebna za odklepanje Dotik ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Omogočanje te funkcije bo omogočal vsem uporabnikom, ki imajo registriran %@ prstni odtis na ta naprava za dostop do vaše denarnice.";
+
+/* (No Commment) */
+"Enable %@" = "Omogočite %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Uporabite %@ namesto PIN za preverjanje pristnosti Blockchain in dostop do vaše denarnice.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Uporabite %@ kot PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Čestitke, ki ste jih bitcoin! Zdaj pa varnostno kopiranje vaše denarnice, da bi vam lahko dostopate do sredstev, če ste pozabili svoje geslo.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Neveljavna %@ naslov: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ zahtevek za plačilo";
+
+/* (No Commment) */
+"Cookie Policy" = "Piškotek Politike";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Prosimo, preverite vaš e-poštni in dovolite, da ta dnevnik-v poskus. Po tem, se vrnite tukaj in poskusite ponovno prijavi";
+
+/* (No Commment) */
+"Non-Spendable" = "Non-Spendable";

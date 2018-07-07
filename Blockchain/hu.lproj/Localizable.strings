@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Küld alapok egy bitcoin-cím a baleset következtében a vagyonvesztés.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Arca ID nem engedélyezett ez a készülék. Engedélyezze Arcát ID, menj a Beállítások -> Arcát ID & Számkódot, majd a hozzáadás egy ujjlenyomat.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Arca ID nem érhető el ez az eszköz.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Ismeretlen Arc ID hiba. Kód: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blokklánc szerverek jelenleg karbantartás alatt. Kérjük, próbálja újra később";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Nem tudta hitelesíteni miatt hiányában hitelesítés túl sokszor.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Nem tudta hitelesíteni, mert a készülék nem támogatja a biometrikus azonosítás.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Nem tudja használni biometria.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Nem tudta Hitelesíteni, mert túl sok a sikertelen Touch ID kísérletek. Jelszó szükséges, hogy kinyit a Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Lehetővé teszi, hogy ez a funkció lehetővé teszi, hogy a felhasználók a regisztrált %@ ujjlenyomat ez a készülék hozzáférjen a pénztárca.";
+
+/* (No Commment) */
+"Enable %@" = "Engedélyezze %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Használja %@ helyett PIN-hitelesíteni Blokklánc való hozzáférés, valamint a tárca.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Használja %@ , mint a PIN-kódot";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Gratulálok, a bitcoin! Most nézzük hát a tárca annak érdekében, hogy hozzáférhessen a forrásokat, ha elfelejti jelszavát.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Érvénytelen %@ cím: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ kifizetési kérelem";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie-Politika";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Kérjük, ellenőrizze az e-mail, engedélyezhetik ezt a bejelentkezési kísérlet. Ezt követően kérjük térjen vissza ide, majd próbálja bejelentkezés újra";
+
+/* (No Commment) */
+"Non-Spendable" = "Nem Elkölthető";

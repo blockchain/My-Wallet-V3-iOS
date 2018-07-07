@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Poslanie peňazí na bitcoin adresu náhodou bude mať za následok stratu finančných prostriedkov.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Tvár ID, nie je povolené na tomto zariadení. Ak chcete zapnúť Tvár ID, prejdite na Nastavenia -> Tvár ID & Prístupový kód a pridať odtlačkov prstov.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Tvár ID nie je k dispozícii na tomto zariadení.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Neznáme Tváre ID chyba. Kód: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain na servery momentálne prebieha údržba. Prosím, skúste znova neskôr";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Schopný overiť vzhľadom na opačnom prípade overovania príliš veľa krát.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Schopný overiť, pretože prístroj nepodporuje biometrické overovanie.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Nie je možné používať biometrie.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Schopný Overiť, pretože tam bolo príliš veľa nepodarilo Dotyk ID pokusy. Prístupový kód je potrebné odomknúť Dotykový ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Zapnutie tejto funkcie bude, aby všetci používatelia s registrovaný %@ odtlačkov prstov na toto zariadenie na prístup k vašej peňaženke.";
+
+/* (No Commment) */
+"Enable %@" = "Umožniť %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Použitie %@ namiesto PIN na overenie Blockchain a prístup k vašej peňaženke.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Použitie %@ ako PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Gratulujeme, máte bitcoin! Teraz poďme zálohovanie vašej peňaženky, aby ste mohli získať prístup k fondov, ak zabudnete svoje heslo.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Neplatné %@ adresa: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ žiadosti o platbu";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie Politiky";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Skontrolujte svoj e-mail a schváliť tento protokol pokus. Po tom, vráťte sa sem a skúste sa prihlásiť znova";
+
+/* (No Commment) */
+"Non-Spendable" = "Non-Spendable";

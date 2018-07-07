@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Lähettää varoja bitcoin-osoitteen vahingossa johtaa varojen menetyksen.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Kasvot TUNNUS ei ole käytössä tässä laitteessa. Jotta Kasvot TUNNUS, mene Asetukset -> Face ID & Passcode ja lisää sormenjälki.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID ei ole käytettävissä tällä laitteella.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Tuntematon Kasvot ID virhe. Koodi: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain - palvelimet ovat tällä hetkellä huollossa. Yritä myöhemmin uudelleen";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Pysty todentamaan, koska ei ole authentication liian monta kertaa.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Pysty todentamaan, koska laite ei tue biometrinen tunnistus.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Voi käyttää biometriikkaa.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Pysty Todentamaan, koska siellä oli liian monta epäonnistunutta Touch ID-yrityksiä. Salasana tarvitaan avata Touch TUNNUS";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Tämän ominaisuuden avulla kaikki käyttäjät, joilla on rekisteröity %@ sormenjälki tämä laite käyttää lompakon.";
+
+/* (No Commment) */
+"Enable %@" = "Jotta %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Käytä %@ sijaan PIN-todentamiseen Blockchain ja käyttää lompakon.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Käytä %@ PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Onnittelut, sinulla on bitcoin! Nyt varmuuskopio lompakkoosi, jotta voit käyttää varoja, jos unohdat salasanasi.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Virheellinen %@ osoite: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ maksupyyntö";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie Policy";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Tarkista sähköpostisi ja valtuuttaa tämän log-in yritys. Kun teemme niin, ole hyvä ja palauta täällä ja yritä kirjautua sisään uudelleen";
+
+/* (No Commment) */
+"Non-Spendable" = "Ei-Spendable";

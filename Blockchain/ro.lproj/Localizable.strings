@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Trimiterea de fonduri de la o adresă bitcoin de accident va duce la pierderea de fonduri.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Fata ID-ul nu este permis pe acest dispozitiv. Pentru a activa Fata ID-ul, du-te la Setări -> Fata ID & Parolă și se adaugă o amprentă.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Fata ID-ul nu este disponibil pe acest dispozitiv.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Necunoscut Fața ID de eroare. Cod: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain serverele sunt în prezent în curs de întreținere. Vă rugăm să încercați din nou mai târziu";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "În imposibilitatea de a autentifica din cauza eșecului de autentificare de prea multe ori.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "În imposibilitatea de a autentifica deoarece aparatul nu are suport pentru autentificare biometrică.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "În imposibilitatea de a utiliza datele biometrice.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "În imposibilitatea de a Autentifica pentru că au fost prea multe nu a reușit Touch ID încercări. Parolă este necesară pentru a debloca Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Activați această caracteristică va permite tuturor utilizatorilor cu un inregistrate %@ amprenta pe acest dispozitiv pentru accesul la portofel.";
+
+/* (No Commment) */
+"Enable %@" = "Permite %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Utilizarea %@ în loc de PIN pentru autentificarea Blockchain și acces portofel.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Utilizarea %@ ca PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Felicitări, ai bitcoin! Acum hai să backup portofel pentru a vă asigura că poate accesa fonduri, dacă vă uitați parola.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Invalid %@ adresa: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ cerere de plată";
+
+/* (No Commment) */
+"Cookie Policy" = "Politica Privind Cookie-Urile";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vă rugăm să verificați adresa dvs. de email și de a autoriza acest log-in incercare. După ce face acest lucru, vă rugăm să reveniți aici și încercați să vă conectați din nou";
+
+/* (No Commment) */
+"Non-Spendable" = "Non-Spendable";

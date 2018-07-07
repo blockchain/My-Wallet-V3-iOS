@@ -2161,3 +2161,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Du kan skicka pengar till en bitcoin-adress av misstag kommer att resultera i förlust av pengar.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID är inte aktiverade på den här enheten. För att aktivera Face ID, gå till Inställningar -> Ansikts-ID och Lösenordet och lägger till en fingeravtryck.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Face ID är inte tillgängligt för denna enhet.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Okänt Ansikte-ID-fel. Kod: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain ' s servrar är för närvarande under underhåll. Vänligen försök igen senare";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "Kan inte verifiera på grund av autentisering misslyckas alltför många gånger.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "Inte att verifiera eftersom enheten inte har stöd för biometrisk autentisering.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "Det går inte att använda biometri.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Inte att Verifiera eftersom det var för många misslyckats med Touch-ID försök. Lösenord krävs för att låsa upp Tryck på ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Aktivering av denna funktion kommer alla användare som är registrerade %@ fingeravtryck på denna enhet för att få tillgång till din plånbok.";
+
+/* (No Commment) */
+"Enable %@" = "Aktivera %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Använd %@ istället för PIN-kod för att verifiera Blockchain och få tillgång till din plånbok.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Använd %@ som PIN-kod";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Grattis, du har bitcoin! Låt oss nu backup på din plånbok för att säkerställa att du kan komma åt dina pengar om du glömmer bort ditt lösenord.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Ogiltiga %@ adress: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ begäran om utbetalning";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie-Policy";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vänligen kontrollera din e-post och godkänna denna logg-försök. När du gör det ska du återvända hit och prova att logga in igen";
+
+/* (No Commment) */
+"Non-Spendable" = "Icke-Utbetalbara";

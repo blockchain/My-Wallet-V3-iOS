@@ -2101,3 +2101,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "发送资金的一个特币地址的意外事故会导致损失的资金。";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "面对ID不是启用这一设备。 启用面ID，去设置->的脸名和密码，并添加一个指纹。";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "面对ID不提供这种设备。";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "未知的脸ID错误。 代码： %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "区块链的服务器，目前正在维护。 请稍后再试";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "无法验证了由于失败的认证了太多的时间。";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "无法进行认证，因为该设备不支持生物认证。";
+
+/* (No Commment) */
+"Unable to use biometrics." = "无法使用生物识别技术。";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "无法进行认证，因为有太多的失败标的尝试。 密码是需要解锁触ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "使这一功能将允许所有用户注册 %@ 指纹上的这个设备来访问你的钱包。";
+
+/* (No Commment) */
+"Enable %@" = "使 %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "使用 %@ 而不是销认证块链接入你的钱包。";
+
+/* (No Commment) */
+"Use %@ as PIN" = "使用 %@ 作为销";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "恭喜你比特币！ 现在，让我们备你的钱包，以确保可以访问基金如果你忘记了你的密码。";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "无效 %@ 地址： %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ 付款请求";
+
+/* (No Commment) */
+"Cookie Policy" = "Cookie政策";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "请检查你的电子邮件和授权这一登录尝试。 这样做之后，请回这里和尝试再次登录";
+
+/* (No Commment) */
+"Non-Spendable" = "非支配";

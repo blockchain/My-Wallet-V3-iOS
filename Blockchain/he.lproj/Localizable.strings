@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "שולח כספים כתובת bitcoin בטעות לגרום לאובדן כספים.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "הפנים ID אינה מופעלת בהתקן זה. כדי לאפשר זיהוי הפנים, ללכת להגדרות -> הפנים ID & סיסמה להוסיף טביעת אצבע.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "הפנים מזהה אינו זמין במכשיר זה.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "לא ידוע הפנים מזהה שגיאה. קוד: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain שרתי כיום תחת תחזוקה. אנא נסה שוב מאוחר יותר";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "אין אפשרות לאמת בשל אימות נכשל יותר מדי פעמים.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "לא ניתן לאמת כי המכשיר אינו תומך אימות ביומטרי.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "אין אפשרות להשתמש ביומטריה.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "לא ניתן לאמת כי היו שם יותר מדי נכשל Touch ID ניסיונות. הסיסמה הנדרשת כדי לפתוח את Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "הפעלת תכונה זו תאפשר לכל המשתמשים עם רשום %@ טביעת אצבע במכשיר זה כדי לגשת לארנק שלך.";
+
+/* (No Commment) */
+"Enable %@" = "לאפשר %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "השתמש %@ במקום PIN כדי לאמת Blockchain וגישה הארנק שלך.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "השתמש %@ כמו מסמר";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "מזל טוב, יש לך bitcoin! עכשיו בואו גיבוי הארנק שלך כדי לוודא שאתה יכול לגשת הכספים שלך אם אתה שוכח את הסיסמה שלך.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "חוקי %@ כתובת: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ תשלום הבקשה.";
+
+/* (No Commment) */
+"Cookie Policy" = "מדיניות ה-Cookie";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "אנא בדוק את הדוא ל שלך, לאשר את זה התחבר-ניסיון. לאחר ביצוע פעולה זו, אנא שובו לכאן ואז לנסות ולהיכנס שוב";
+
+/* (No Commment) */
+"Non-Spendable" = "שאינו מתכלה למכשיר";

@@ -2164,3 +2164,57 @@
 
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "إرسال الأموال إلى عنوان بيتكوين عن طريق الصدفة سوف يؤدي إلى خسارة الأموال.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "الوجه ID لم يتم تمكين على هذا الجهاز. لتمكين تحديد الوجه, انتقل إلى إعدادات -> الوجه ID & Passcode وإضافة بصمة.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "الوجه معرف غير متوفر على هذا الجهاز.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "غير معروف الوجه خطأ معرف. رمز: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain خوادم حاليا تحت الصيانة. يرجى المحاولة مرة أخرى في وقت لاحق";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "غير قادر على مصادقة بسبب عدم مصادقة مرات كثيرة جدا.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "غير قادر على مصادقة لأن الجهاز لا يدعم المصادقة البيومترية.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "غير قادر على استخدام القياسات الحيوية.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "غير قادر على مصادقة لأن هناك الكثير من فشل Touch ID المحاولات. المرور المطلوبة لفتح Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "تمكين هذه الميزة تسمح للمستخدمين المسجلين %@ بصمة على هذا الجهاز إلى الوصول إلى محفظتك.";
+
+/* (No Commment) */
+"Enable %@" = "تمكين %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "استخدام %@ بدلا من دبوس لمصادقة Blockchain و الوصول إلى محفظتك.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "استخدام %@ كما دبوس";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "مبروك, لديك بيتكوين! الآن دعونا النسخ الاحتياطي الخاص بك محفظة ضمان يمكنك الوصول إلى الأموال الخاصة بك إذا كنت قد نسيت كلمة المرور الخاصة بك.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "صالح %@ العنوان: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ طلب الدفع";
+
+/* (No Commment) */
+"Cookie Policy" = "سياسة الكوكيز";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "يرجى التحقق من البريد الإلكتروني الخاص بك و يأذن هذا سجل في المحاولة. بعد القيام بذلك ، يرجى العودة إلى هنا وحاول تسجيل الدخول مرة أخرى";
+
+/* (No Commment) */
+"Non-Spendable" = "غير المنفق";
