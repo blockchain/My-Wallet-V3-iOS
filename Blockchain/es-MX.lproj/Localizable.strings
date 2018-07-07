@@ -2201,19 +2201,19 @@
 "The wait is over" = "La espera terminó";
 
 /* (No Commment) */
-"Face ID has been locked due to too many failed attempts." = "Se bloqueó el reconocimiento facial debido a demasiados intentos fallidos.";
+"Face ID has been locked due to too many failed attempts." = "Se bloqueó Face ID debido a demasiados intentos fallidos.";
 
 /* (No Commment) */
-"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Reconocimiento facial no activado en este dispositivo. Para activarlo, vaya a Configuración -> Reconocimiento facial y contraseña y agregue una huella dactilar.";
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID no activado en este dispositivo. Para activarlo, vaya a Configuración -> Face ID y contraseña y agregue una huella dactilar.";
 
 /* (No Commment) */
-"Face ID is not available on this device." = "Reconocimiento facial no disponible en este dispositivo.";
+"Face ID is not available on this device." = "Face ID no disponible en este dispositivo.";
 
 /* (No Commment) */
-"Unknown Face ID error. Code: %ld" = "Error de reconocimiento facial desconocido. Código: %ld";
+"Unknown Face ID error. Code: %ld" = "Error de Face ID desconocido. Código: %ld";
 
 /* (No Commment) */
-"Unknown Touch ID error. Code: %ld" = "Error de identificación táctil desconocido. Código: %ld";
+"Unknown Touch ID error. Code: %ld" = "Error de Touch ID desconocido. Código: %ld";
 
 /* (No Commment) */
 "Blockchain's servers are currently under maintenance. Please try again later" = "Los servidores de Blockchain están en mantenimiento. Intente de nuevo más tarde";
@@ -2228,7 +2228,7 @@
 "Unable to use biometrics." = "No se pueden usar los datos biométricos.";
 
 /* (No Commment) */
-"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "No se puede autenticar debido a demasiados intentos fallidos de identificación táctil. Se requiere una contraseña para desbloquear la identificación táctil";
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "No se puede autenticar debido a demasiados intentos fallidos de Touch ID. Se requiere una contraseña para desbloquear Touch ID";
 
 /* (No Commment) */
 "Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Habilitar esta función permitirá a todos los usuarios con una huella dactilar %@ registrada en este dispositivo acceder a su billetera.";
