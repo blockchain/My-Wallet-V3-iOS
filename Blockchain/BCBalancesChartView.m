@@ -135,12 +135,14 @@
 
     [self updateWatchOnlyViewBalance];
 
+    self.watchOnlyBalanceView.hidden = NO;
     self.lineSeparator.hidden = NO;
 }
 
 - (void)hideWatchOnlyView
 {
     [self changeHeight:self.defaultHeight];
+    self.watchOnlyBalanceView.hidden = YES;
     self.lineSeparator.hidden = YES;
 }
 
