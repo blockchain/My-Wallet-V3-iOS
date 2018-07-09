@@ -74,7 +74,7 @@
 
 - (void)onPaymentReceivedWithAmount:(NSString * _Nonnull)amount assetType:(enum AssetType)assetType
 {
-    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED in:self handler:nil];
+    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:amount title:BC_STRING_PAYMENT_RECEIVED in:nil handler:nil];
 
     LegacyAssetType legacyType = [AssetTypeLegacyHelper convertToLegacy: assetType];
     
