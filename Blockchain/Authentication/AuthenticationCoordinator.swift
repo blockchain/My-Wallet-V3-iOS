@@ -213,6 +213,8 @@ import RxSwift
     @objc func logout(showPasswordView: Bool) {
         invalidateLoginTimeout()
 
+        pinEntryViewController = nil
+
         BlockchainSettings.App.shared.clearPin()
 
         WalletManager.shared.close()
