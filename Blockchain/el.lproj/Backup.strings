@@ -1,48 +1,48 @@
 /* Class = "UIButton"; normalTitle = "Backup funds again"; ObjectID = "1Hq-6D-ut1"; */
-"1Hq-6D-ut1.normalTitle" = "Εφεδρική κεφάλαια και πάλι";
+"1Hq-6D-ut1.normalTitle" = "Δημιουργία αντιγράφων ασφαλείας κεφαλαίων ξανά";
 
 /* (No Commment) */
-"1Hq-6D-ut1.text" = "Εφεδρική κεφάλαια και πάλι";
+"1Hq-6D-ut1.text" = "Δημιουργία αντιγράφων ασφαλείας κεφαλαίων ξανά";
 
 /* (No Commment) */
 "3kJ-3U-lFe.text" = "Παρακαλώ προσπαθήστε ξανά";
 
 /* Class = "UILabel"; text = "Enter the following words from your Recovery Phrase to complete the backup process."; ObjectID = "4Nq-ue-tXr"; */
-"4Nq-ue-tXr.text" = "Πληκτρολογήστε τις ακόλουθες λέξεις από φράση σας αποκατάστασης για να ολοκληρωθεί η διαδικασία δημιουργίας αντιγράφων ασφαλείας.";
+"4Nq-ue-tXr.text" = "Πληκτρολογήστε τις ακόλουθες λέξεις από τη δική σας φράση αποκατάστασης για να ολοκληρωθεί η διαδικασία δημιουργίας αντιγράφων ασφαλείας.";
 
 /* (No Commment) */
-"6zt-Xf-txg.text" = "Πατήστε και κρατήστε πατημένο για να αποκαλύψει τη λέξη";
+"6zt-Xf-txg.text" = "Πατήστε και κρατήστε πατημένο το κουμπί για να αποκαλυφθεί η λέξη";
 
 /* (No Commment) */
 "07q-RX-CeI.text" = "Παρακαλώ προσπαθήστε ξανά";
 
 /* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "9A7-TT-PzN"; */
-"9A7-TT-PzN.title" = "Εφεδρική ταμεία";
+"9A7-TT-PzN.title" = "Αντίγραφο ασφαλείας πορτοφολιού";
 
 /* Class = "UILabel"; text = "Oh no! You haven't backed up your funds yet."; ObjectID = "9Hu-uO-gJl"; */
-"9Hu-uO-gJl.text" = "Ω δεν! Δεν είχατε κάνει τα χρήματά σας ακόμα.";
+"9Hu-uO-gJl.text" = "Ωχ όχι! Δεν είχατε κάνει αντίγραφο ασφαλείας των κεφαλαίων σας ακόμα.";
 
 /* Class = "UILabel"; text = "This action requires the second password for your bitcoin wallet. Please enter it below and press continue."; ObjectID = "9WK-My-5CL"; */
-"9WK-My-5CL.text" = "Αυτή η ενέργεια απαιτεί τον δεύτερο κωδικό πρόσβασης για το πορτοφόλι σας bitcoin. Παρακαλώ εισάγετέ τον παρακάτω και πατήστε το πλήκτρο συνεχίσει.";
+"9WK-My-5CL.text" = "Αυτή η ενέργεια απαιτεί τον δεύτερο κωδικό πρόσβασης για το bitcoin πορτοφόλι σας. Παρακαλώ εισάγετε τον δεύτερο κωδικό παρακάτω και πατήστε το πλήκτρο για να συνεχίσετε.";
 
 /* (No Commment) */
 "9hR-tm-aq5.placeholder" = "πρώτη λέξη";
 
 /* Class = "UINavigationItem"; title = "Second Password Required"; ObjectID = "74J-f3-Lhq"; */
-"74J-f3-Lhq.title" = "Δεύτερο κωδικό πρόσβασης που απαιτείται";
+"74J-f3-Lhq.title" = "Απαιτείται δεύτερος κωδικός πρόσβασης";
 
 /* Class = "UIButton"; normalTitle = "Previous word"; ObjectID = "AFH-AI-Rgk"; */
-"AFH-AI-Rgk.normalTitle" = "Προηγούμενης λέξης";
+"AFH-AI-Rgk.normalTitle" = "Προηγούμενη λέξη";
 
 /* Class = "UITextField"; placeholder = "Password"; ObjectID = "CBl-1W-VP8"; */
 "CBl-1W-VP8.placeholder" = "Κωδικός πρόσβασης";
 
 /* (No Commment) */
-"EQM-OM-jK8.normalTitle" = "Γίνει";
+"EQM-OM-jK8.normalTitle" = "Εντάξει";
 
 /* Class = "UILabel"; text = "It is important to make sure you write down your words exactly as they appear here and in this order."; ObjectID = "FDO-ui-cGo"; */
-"FDO-ui-cGo.text" = "Μην πάρτε ένα screenshot!
-Να θέσουν σε κίνδυνο ασφαλείας σας πορτοφόλι";
+"FDO-ui-cGo.text" = "Μην κάνετε screenshot!
+Θα θέσετε σε κίνδυνο ασφαλείας το πορτοφόλι σας";
 
 /* (No Commment) */
 "Fda-Z4-3e7.placeholder" = "έκτη λέξη";
@@ -60,11 +60,11 @@
 "T4p-mz-siC.normalTitle" = "ΕΠΑΛΗΘΕΎΣΕΤΕ ΤΗ ΔΗΜΙΟΥΡΓΊΑ ΑΝΤΙΓΡΆΦΩΝ ΑΣΦΑΛΕΊΑΣ";
 
 /* Class = "UILabel"; text = "Write down your Recovery Phrase and keep it somewhere very safe and secure. Anyone who knows your Recovery Phrase has access to your bitcoins, so don’t share this with anyone you don’t trust."; ObjectID = "UCL-i9-UDp"; */
-"UCL-i9-UDp.text" = "Καταγράψτε τις λέξεις, την ακριβή σειρά που εμφανίζονται σε ένα φύλλο χαρτί, και να το αποθηκεύσετε κάπου ασφαλή
+"UCL-i9-UDp.text" = "Καταγράψτε τις λέξεις σε ένα φύλλο χαρτί με την ακριβή σειρά που εμφανίζονται και να το αποθηκεύστε το κάπου ασφαλή
 ";
 
 /* Class = "UILabel"; text = "Lost your 12 word recovery phrase?"; ObjectID = "Yh8-Gm-6op"; */
-"Yh8-Gm-6op.text" = "Χάσατε σας 12 λέξη φράση αποκατάστασης;";
+"Yh8-Gm-6op.text" = "Χάσατε τη φράση αποκατάστασης με τις 12 λέξεις;";
 
 /* Class = "UIButton"; normalTitle = "NEXT WORD"; ObjectID = "dkQ-nj-Pkf"; */
 "dkQ-nj-Pkf.normalTitle" = "ΕΠΌΜΕΝΗ ΛΈΞΗ";
@@ -73,20 +73,20 @@
 "eaO-py-9rY.normalTitle" = "Επόμενη λέξη";
 
 /* Class = "UILabel"; text = "Please take a few minutes to ensure you can access your Bitcoin (except in imported addresses), even if you forget your password or if our service becomes unavailable. We promise doing so is quick, painless, and worth it."; ObjectID = "eyR-AW-SMc"; */
-"eyR-AW-SMc.text" = "Αφιερώστε λίγα λεπτά για να εξασφαλιστεί έχετε πρόσβαση σας bitcoin (εκτός από Εισηγμένες διευθύνσεις), ακόμη και αν ξεχάσετε τον κωδικό πρόσβασης ή εάν η υπηρεσία μας δεν είναι διαθέσιμος. Υποσχόμαστε κάτι τέτοιο είναι γρήγορη, ανώδυνη, και αξίζει τον κόπο.";
+"eyR-AW-SMc.text" = "Αφιερώστε λίγα λεπτά για να εξασφαλίσουμε ότι έχετε πρόσβαση στα Bitcoin σας (εκτός από εισηγμένες διευθύνσεις), ακόμη και αν ξεχάσετε τον κωδικό πρόσβασης ή εάν η υπηρεσία μας δεν είναι διαθέσιμη. Υποσχόμαστε κάτι τέτοιο είναι γρήγορο, ανώδυνο και αξίζει τον κόπο.";
 
 /* (No Commment) */
 "kcC-2S-PfL.placeholder" = "Τρίτη λέξη";
 
 /* Class = "UILabel"; text = "Word 5 of 12"; ObjectID = "mUc-u7-Zcj"; */
-"mUc-u7-Zcj.text" = "Λέξη 5 12";
+"mUc-u7-Zcj.text" = "Λέξη 5 από 12";
 
 /* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "mYR-MQ-mS2"; */
-"mYR-MQ-mS2.title" = "Εφεδρική πορτοφόλι";
+"mYR-MQ-mS2.title" = "Αντίγραφο ασφαλείας πορτοφολιού";
 
 /* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "nuD-nb-tAt"; */
-"nuD-nb-tAt.normalTitle" = "Συνεχίσει";
+"nuD-nb-tAt.normalTitle" = "Συνέχεια";
 
 /* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "xmf-pK-R3X"; */
-"xmf-pK-R3X.title" = "Εφεδρική πορτοφόλι";
+"xmf-pK-R3X.title" = "Αντίγραφο ασφαλείας πορτοφολιού";
 
