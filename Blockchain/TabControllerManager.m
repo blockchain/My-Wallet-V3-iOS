@@ -770,33 +770,29 @@
     if (_receiveBitcoinViewController) {
         [_receiveBitcoinViewController hideKeyboard];
     }
-    
+
+    QRCodeScannerSendViewController *viewControllerToPresent;
+
     if (self.assetType == LegacyAssetTypeBitcoin) {
         if (!_sendBitcoinViewController) {
             _sendBitcoinViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
         }
-        
-        [_sendBitcoinViewController QRCodebuttonClicked:nil];
-        
-        [_tabViewController setActiveViewController:_sendBitcoinViewController animated:NO index:TAB_SEND];
+        viewControllerToPresent = _sendBitcoinViewController;
     } else if (self.assetType == LegacyAssetTypeEther) {
         if (!_sendEtherViewController) {
             _sendEtherViewController = [[SendEtherViewController alloc] init];
         }
-        
-        [_sendEtherViewController QRCodebuttonClicked:nil];
-        
-        [_tabViewController setActiveViewController:_sendEtherViewController animated:NO index:TAB_SEND];
+        viewControllerToPresent = _sendEtherViewController;
     } else {
         if (!_sendBitcoinCashViewController) {
             _sendBitcoinCashViewController = [[SendBitcoinViewController alloc] initWithNibName:NIB_NAME_SEND_COINS bundle:[NSBundle mainBundle]];
             _sendBitcoinCashViewController.assetType = LegacyAssetTypeBitcoinCash;
         }
-        
-        [_sendBitcoinCashViewController QRCodebuttonClicked:nil];
-        
-        [_tabViewController setActiveViewController:_sendBitcoinCashViewController animated:NO index:TAB_SEND];
+        viewControllerToPresent = _sendBitcoinCashViewController;
     }
+
+    [_tabViewController setActiveViewController:viewControllerToPresent animated:NO index:TAB_SEND];
+    [viewControllerToPresent QRCodebuttonClicked:nil];
 }
 
 - (void)exchangeClicked
