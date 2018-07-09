@@ -133,7 +133,10 @@ static PEViewController *VerifyController()
 
 - (void)reset
 {
-    [pinController resetPin];
+    UIViewController * viewController = self.viewControllers.firstObject;
+    if ([viewController isKindOfClass:[PEViewController class]]) {
+        [((PEViewController *) viewController) resetPin];
+    }
 }
 
 - (void)setupQRCode
@@ -366,10 +369,6 @@ static PEViewController *VerifyController()
                                                              in:self
                                                         handler:^(UIAlertAction * _Nonnull action) {
                                                             [weakSelf reset];
-                                                            UIViewController * viewController = weakSelf.viewControllers.firstObject;
-                                                            if ([viewController isKindOfClass:[PEViewController class]]) {
-                                                                [((PEViewController *) viewController) resetPin];
-                                                            }
                                                         }];
 }
 
