@@ -29,6 +29,37 @@ Prepare OpenSSL:
     cd ../OpenSSL-for-iPhone
     ./build-libssl.sh
 
+Add production Config file
+
+    #create a directory named Config in the root
+    mkdir Config
+
+    #create the config file
+    vi Production.xcconfig
+
+    #write the following in Production.xcconfig
+    APP_NAME = Blockchain
+
+    APP_ICON = AppIcon
+
+    API_URL = api.blockchain.info
+
+    WALLET_SERVER = blockchain.info
+
+    WEBSOCKET_SERVER = ws.blockchain.info/inv
+
+    WEBSOCKET_SERVER_BCH = ws.blockchain.info/bch/inv
+
+    WEBSOCKET_SERVER_ETH = ws.blockchain.info/eth/inv
+
+    BUY_WEBVIEW_URL = blockchain.info/wallet/#/intermediate
+
+    LOCAL_CERTIFICATE_FILE = blockchain
+
+    GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
+
+    OTHER_SWIFT_FLAGS = -DDEBUG
+
 ## Open the project in Xcode
 
     open Blockchain.xcodeproj
