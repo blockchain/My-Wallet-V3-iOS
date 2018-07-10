@@ -125,8 +125,6 @@ BOOL displayingLocalSymbolSend;
     [super viewDidDisappear:animated];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_LOADING_TEXT object:nil];
-
-    [self reload];
 }
 
 - (void)viewDidLoad
