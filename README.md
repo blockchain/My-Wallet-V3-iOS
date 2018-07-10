@@ -11,7 +11,7 @@ Prepare SocketRocket:
 
 Prepare the MyWallet Javascript:
 
-    # use node v7.9.0 by using a node version manager such as NVM or n
+    # use node v7.9.0 by using a node version manager such as [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)
     npm install -g n
     n v7.9.0
 
