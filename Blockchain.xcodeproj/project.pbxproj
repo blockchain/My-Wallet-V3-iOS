@@ -3692,7 +3692,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY}";
+			shellScript = "if [ -z \"${FABRIC_API_KEY}\" ] || [ -z \"${FABRIC_SECRET_KEY}\" ]; then\necho \"Fabric key(s) missing/empty - will not run Fabric.\";\nelse\n./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY};\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
