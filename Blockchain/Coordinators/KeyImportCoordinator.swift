@@ -131,7 +131,7 @@ extension KeyImportCoordinator: WalletKeyImportDelegate {
         let importedKeyButForIncorrectAddress = LocalizationConstants.AddressAndKeyImport.importedKeyButForIncorrectAddress
         let importedKeyDoesNotCorrespondToAddress = LocalizationConstants.AddressAndKeyImport.importedKeyDoesNotCorrespondToAddress
         let message = String(format: "%@\n\n%@", importedKeyButForIncorrectAddress, importedKeyDoesNotCorrespondToAddress)
-        AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.okString, handler: nil)
+        AlertViewPresenter.shared.standardNotify(message: message, title: LocalizationConstants.success, handler: nil)
     }
 
     @objc func alertUserOfImportedKey() {
