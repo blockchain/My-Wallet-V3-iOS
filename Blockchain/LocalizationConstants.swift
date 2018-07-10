@@ -234,9 +234,9 @@ struct LocalizationConstants {
         static let unknownErrorPrivateKey = NSLocalizedString("There was an error importing this private key.", comment: "")
         static let addressNotPresentInWallet = NSLocalizedString("Your wallet does not contain this address.", comment: "")
         static let addressNotWatchOnly = NSLocalizedString("This address is not watch-only.", comment: "")
-        static let keyBelongsToOtherAddressNotWatchOnly = NSLocalizedString("This private key belongs to another address that is not watch only.", comment: "")
-        static let unknownKeyFormat = NSLocalizedString("Unknown key format.", comment: "")
-        static let unsupportedPrivateKey = NSLocalizedString("Unsupported Private Key Format,", comment: "")
+        static let keyBelongsToOtherAddressNotWatchOnly = NSLocalizedString("This private key belongs to another address that is not watch only", comment: "")
+        static let unknownKeyFormat = NSLocalizedString("Unknown key format", comment: "")
+        static let unsupportedPrivateKey = NSLocalizedString("Unsupported Private Key Format", comment: "")
         static let addWatchOnlyAddressWarning = NSLocalizedString("You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address.", comment: "")
         static let addWatchOnlyAddressWarningPrompt = NSLocalizedString("These options are recommended for advanced users only. Continue?", comment: "")
     }
