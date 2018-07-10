@@ -265,8 +265,4 @@ extension KeyImportCoordinator: PrivateKeyReaderDelegate {
     func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
         walletManager.wallet.addKey(privateKey, toWatchOnlyAddress: address?.address)
     }
-
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
-        // No custom implementation - error presentation handled by PrivateKeyReader
-    }
 }

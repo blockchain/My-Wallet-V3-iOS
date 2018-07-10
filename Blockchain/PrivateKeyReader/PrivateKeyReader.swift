@@ -8,9 +8,9 @@
 
 import Foundation
 
-protocol PrivateKeyReaderDelegate: class {
+@objc protocol PrivateKeyReaderDelegate: class {
     func didFinishScanning(_ privateKey: String, for address: AssetAddress?)
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError)
+    @objc optional func didFinishScanningWithError(_ error: PrivateKeyReaderError)
 }
 
 // TODO: remove once AccountsAndAddresses and SendBitcoinViewController are migrated to Swift
@@ -181,7 +181,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
             metadataObject.type == .qr,
             let codeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
             let stringValue = codeObject.stringValue else {
-                delegate?.didFinishScanningWithError(.badMetadataObject)
+                delegate?.didFinishScanningWithError?(.badMetadataObject)
                 // TODO: remove once LegacyPrivateKeyDelegate is deprecated
                 legacyDelegate?.didFinishScanningWithError(.badMetadataObject)
                 return
@@ -235,7 +235,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
     }
 
     func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
-        self.delegate?.didFinishScanningWithError(error)
+        self.delegate?.didFinishScanningWithError?(error)
         // TODO: remove once LegacyPrivateKeyDelegate is deprecated
         self.legacyDelegate?.didFinishScanningWithError(error)
 
