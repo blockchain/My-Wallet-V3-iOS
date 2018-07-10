@@ -992,12 +992,27 @@
     self.bottomLeftField.text = fiatResult;
     
     [self updateAvailableBalance];
-    
-    [self hideKeyboard];
+
+    [self showKeyboardOnAutoFillIfNeeded];
     
     [self disablePaymentButtons];
     
     [self performSelector:@selector(getApproximateQuote) withObject:nil afterDelay:0.5];
+}
+
+/**
+ Conditionally displays the keyboard when the fields are autofilled. This is necessary because
+ the continue button is only visible while the keyboard is shown.
+ */
+- (void)showKeyboardOnAutoFillIfNeeded
+{
+    if (self.topLeftField.isFirstResponder ||
+        self.topRightField.isFirstResponder ||
+        self.bottomLeftField.isFirstResponder ||
+        self.bottomRightField.isFirstResponder) {
+        return;
+    }
+    [self.topLeftField becomeFirstResponder];
 }
 
 - (void)showErrorText:(NSString *)errorText
