@@ -267,13 +267,6 @@ extension KeyImportCoordinator: PrivateKeyReaderDelegate {
     }
 
     func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
-        switch error {
-        case .badMetadataObject:
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
-        case .unknownKeyFormat:
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unknownKeyFormat)
-        case .unsupportedPrivateKey:
-            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey)
-        }
+        // No custom implementation - error presentation handled by PrivateKeyReader
     }
 }

@@ -211,28 +211,41 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
                         let address = BitcoinAddress(string: scannedKey)
                         let validator = AddressValidator(context: WalletManager.shared.wallet.context)
                         guard validator.validate(bitcoinAddress: address) else {
-                                self.delegate?.didFinishScanningWithError(.unknownKeyFormat)
-                                // TODO: remove once LegacyPrivateKeyDelegate is deprecated
-                                self.legacyDelegate?.didFinishScanningWithError(.unknownKeyFormat)
-                                return
+                            self.didFinishScanningWithError(.unknownKeyFormat)
+                            return
                         }
                         WalletManager.shared.askUserToAddWatchOnlyAddress(address) {
-                            self.delegate?.didFinishScanning(scannedKey, for: address)
-                            // TODO: remove once LegacyPrivateKeyDelegate is deprecated
-                            self.legacyDelegate?.didFinishScanning(scannedKey)
+                            self.didFinishScanning(scannedKey, for: address)
                         }
                     } else {
-                        self.delegate?.didFinishScanningWithError(.unsupportedPrivateKey)
-                        // TODO: remove once LegacyPrivateKeyDelegate is deprecated
-                        self.legacyDelegate?.didFinishScanningWithError(.unsupportedPrivateKey)
+                        self.didFinishScanningWithError(.unsupportedPrivateKey)
                     }
                     return
                 }
                 //: Pass valid private key back via success handler
-                self.delegate?.didFinishScanning(scannedKey, for: self.assetAddress)
-                // TODO: remove once LegacyPrivateKeyDelegate is deprecated
-                self.legacyDelegate?.didFinishScanning(scannedKey)
+                self.didFinishScanning(scannedKey, for: self.assetAddress)
             }
+        }
+    }
+
+    func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
+        self.delegate?.didFinishScanning(privateKey, for: address)
+        // TODO: remove once LegacyPrivateKeyDelegate is deprecated
+        self.legacyDelegate?.didFinishScanning(privateKey)
+    }
+
+    func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
+        self.delegate?.didFinishScanningWithError(error)
+        // TODO: remove once LegacyPrivateKeyDelegate is deprecated
+        self.legacyDelegate?.didFinishScanningWithError(error)
+
+        switch error {
+        case .badMetadataObject:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
+        case .unknownKeyFormat:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unknownKeyFormat)
+        case .unsupportedPrivateKey:
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.AddressAndKeyImport.unsupportedPrivateKey)
         }
     }
 }
