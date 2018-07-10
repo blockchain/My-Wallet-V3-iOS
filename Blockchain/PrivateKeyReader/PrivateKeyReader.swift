@@ -181,9 +181,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
             metadataObject.type == .qr,
             let codeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
             let stringValue = codeObject.stringValue else {
-                delegate?.didFinishScanningWithError?(.badMetadataObject)
-                // TODO: remove once LegacyPrivateKeyDelegate is deprecated
-                legacyDelegate?.didFinishScanningWithError?(.badMetadataObject)
+                self.didFinishScanningWithError(.badMetadataObject)
                 return
         }
 
