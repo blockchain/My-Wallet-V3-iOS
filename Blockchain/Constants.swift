@@ -175,10 +175,6 @@ struct Constants {
         return Constants.Schemes.ethereum
     }
 
-    @objc class func mailUrl() -> String {
-        return Constants.Schemes.mail
-    }
-
     @objc class func wrongPrivateKey() -> String {
         return Constants.JSErrors.addressAndKeyImportWrongPrivateKey
     }
