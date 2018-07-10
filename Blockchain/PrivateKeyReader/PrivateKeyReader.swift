@@ -228,13 +228,13 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
         }
     }
 
-    func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
+    private func didFinishScanning(_ privateKey: String, for address: AssetAddress?) {
         self.delegate?.didFinishScanning(privateKey, for: address)
         // TODO: remove once LegacyPrivateKeyDelegate is deprecated
         self.legacyDelegate?.didFinishScanning(privateKey)
     }
 
-    func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
+    private func didFinishScanningWithError(_ error: PrivateKeyReaderError) {
         self.delegate?.didFinishScanningWithError?(error)
         // TODO: remove once LegacyPrivateKeyDelegate is deprecated
         self.legacyDelegate?.didFinishScanningWithError?(error)
