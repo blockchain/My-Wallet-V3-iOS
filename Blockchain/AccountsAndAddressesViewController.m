@@ -235,20 +235,6 @@
     [WalletManager.sharedInstance.wallet addKey:privateKey];
 }
 
-- (void)didFinishScanningWithError:(PrivateKeyReaderError)error {
-    switch (error) {
-        case PrivateKeyReaderErrorBadMetadataObject:
-            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge error] title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
-            break;
-        case PrivateKeyReaderErrorUnknownKeyFormat:
-            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge unknownKeyFormat] title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
-            break;
-        case PrivateKeyReaderErrorUnsupportedPrivateKey:
-            [[AlertViewPresenter sharedInstance] standardErrorWithMessage:[LocalizationConstantsObjcBridge unsupportedPrivateKey] title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
-            break;
-    }
-}
-
 - (void)promptForLabelAfterScan
 {
     //: Newest address is the last object in activeKeys
