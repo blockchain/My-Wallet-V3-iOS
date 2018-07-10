@@ -1216,7 +1216,7 @@
 
 - (NSString *)bitcoinLabelText
 {
-    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]] : [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin];
+    return [WalletManager.sharedInstance.wallet getActiveAccountsCount:LegacyAssetTypeBitcoin] > 1 ? [WalletManager.sharedInstance.wallet getLabelForAccount:self.btcAccount assetType:LegacyAssetTypeBitcoin] : [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin];
 }
 
 - (NSString *)bitcoinCashLabelText
