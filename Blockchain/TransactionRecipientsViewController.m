@@ -9,6 +9,7 @@
 #import "TransactionRecipientsViewController.h"
 #import "ReceiveTableCell.h"
 #import "NSNumberFormatter+Currencies.h"
+#import "Blockchain-Swift.h"
 
 @interface TransactionRecipientsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic) NSArray *recipients;
@@ -58,7 +59,7 @@
     
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ReceiveCell" owner:nil options:nil] objectAtIndex:0];
-        cell.backgroundColor = COLOR_BACKGROUND_GRAY;
+        cell.backgroundColor = UIColor.lightGray;
         
         cell.labelLabel.frame = CGRectMake(20, 11, 155, 21);
         cell.balanceLabel.frame = CGRectMake(247, 11, 90, 21);
@@ -67,7 +68,7 @@
         [cell.balanceButton addTarget:self action:@selector(toggleSymbol) forControlEvents:UIControlEventTouchUpInside];
         
         cell.watchLabel.text = BC_STRING_WATCH_ONLY;
-        cell.watchLabel.textColor = COLOR_WARNING_RED;
+        cell.watchLabel.textColor = UIColor.error;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     

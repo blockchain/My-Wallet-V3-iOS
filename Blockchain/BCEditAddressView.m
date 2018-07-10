@@ -33,14 +33,14 @@
         self.labelTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         [self addSubview:self.labelTextField];
         self.labelTextField.frame = CGRectMake(15, 37, 290, 30);
-        self.labelTextField.textColor = COLOR_TEXT_DARK_GRAY;
+        self.labelTextField.textColor = UIColor.gray5;
         self.labelTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:self.labelTextField.font.pointSize];
         self.labelTextField.returnKeyType = UIReturnKeyDone;
         self.labelTextField.delegate = self;
         
         UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
         saveButton.frame = CGRectMake(0, 0, self.frame.size.width, 46);
-        saveButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        saveButton.backgroundColor = UIColor.brandSecondary;
         [saveButton setTitle:BC_STRING_SAVE forState:UIControlStateNormal];
         [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         saveButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];

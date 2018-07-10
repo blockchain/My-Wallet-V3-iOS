@@ -75,7 +75,7 @@
     UIView *timerView = [[UIView alloc] initWithFrame:CGRectMake(0, offset, windowWidth, timerViewHeight)];
     UILabel *timerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
     timerLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    timerLabel.textColor = COLOR_TEXT_GRAY;
+    timerLabel.textColor = UIColor.gray3;
     [timerView addSubview:timerLabel];
     self.timerLabel = timerLabel;
     [self.view addSubview:timerView];
@@ -88,7 +88,7 @@
     CGFloat windowWidth = self.view.frame.size.width;
     
     UISwitch *agreementSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(horizontalMargin, yPosition, 0, 0)];
-    agreementSwitch.onTintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    agreementSwitch.onTintColor = UIColor.brandSecondary;
     [self.view addSubview:agreementSwitch];
     [agreementSwitch addTarget:self action:@selector(agreementSwitchChanged:) forControlEvents:UIControlEventValueChanged];
     self.agreementSwitch = agreementSwitch;
@@ -100,13 +100,13 @@
     
     NSAttributedString *attributedStringPrefix = [[NSAttributedString alloc] initWithString:BC_STRING_AGREE_TO_SHAPESHIFT];
     NSMutableAttributedString *termsAndConditionsText = [[NSMutableAttributedString alloc] initWithAttributedString:attributedStringPrefix];
-    [termsAndConditionsText addAttribute:NSForegroundColorAttributeName value:COLOR_TEXT_DARK_GRAY range:NSMakeRange(0, [attributedStringPrefix length])];
+    [termsAndConditionsText addAttribute:NSForegroundColorAttributeName value:UIColor.gray5 range:NSMakeRange(0, [attributedStringPrefix length])];
     
     NSAttributedString *attributedStringSpace = [[NSAttributedString alloc] initWithString:@" "];
     
     NSAttributedString *attributedStringSuffix = [[NSAttributedString alloc] initWithString:BC_STRING_TERMS_AND_CONDITIONS];
     NSMutableAttributedString *termsAndConditionsSuffix = [[NSMutableAttributedString alloc] initWithAttributedString:attributedStringSuffix];
-    [termsAndConditionsSuffix addAttribute:NSForegroundColorAttributeName value:COLOR_BLOCKCHAIN_LIGHT_BLUE range:NSMakeRange(0, [attributedStringSuffix length])];
+    [termsAndConditionsSuffix addAttribute:NSForegroundColorAttributeName value:UIColor.brandSecondary range:NSMakeRange(0, [attributedStringSuffix length])];
     
     [termsAndConditionsText appendAttributedString:attributedStringSpace];
     [termsAndConditionsText appendAttributedString:termsAndConditionsSuffix];
@@ -140,7 +140,7 @@
     CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
 
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
-    button.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    button.backgroundColor = UIColor.brandSecondary;
     button.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -157,14 +157,14 @@
 {
     self.confirmButton.enabled = YES;
     [self.confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.confirmButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [self.confirmButton setBackgroundColor:UIColor.brandSecondary];
 }
 
 - (void)disableConfirmButton
 {
     self.confirmButton.enabled = NO;
     [self.confirmButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [self.confirmButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [self.confirmButton setBackgroundColor:UIColor.keyPadButton];
 }
 
 - (void)confirmButtonClicked
@@ -216,7 +216,7 @@
     self.timerLabel.center = CGPointMake(self.timerLabel.center.x, self.timerView.frame.size.height/2);
     
     if (hours == 0 && minutes < 5) {
-        self.timerLabel.textColor = COLOR_WARNING_RED;
+        self.timerLabel.textColor = UIColor.error;
     }
     
     if (hours + minutes + seconds <= 0) {

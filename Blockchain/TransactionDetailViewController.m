@@ -88,10 +88,10 @@ const CGFloat rowHeightValueReceived = 80;
 - (void)setupTextViewInputAccessoryView
 {
     UIView *inputAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, BUTTON_HEIGHT)];
-    inputAccessoryView.backgroundColor = COLOR_WARNING_RED;
+    inputAccessoryView.backgroundColor = UIColor.error;
 
     UIButton *updateButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, BUTTON_HEIGHT)];
-    updateButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    updateButton.backgroundColor = UIColor.brandSecondary;
     [updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [updateButton.titleLabel setFont:[UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:updateButton.titleLabel.font.pointSize]];
     [updateButton setTitle:BC_STRING_UPDATE forState:UIControlStateNormal];
@@ -99,7 +99,7 @@ const CGFloat rowHeightValueReceived = 80;
     [inputAccessoryView addSubview:updateButton];
 
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(updateButton.frame.size.width - 50, 0, 50, BUTTON_HEIGHT)];
-    cancelButton.backgroundColor = COLOR_BUTTON_GRAY_CANCEL;
+    cancelButton.backgroundColor = UIColor.gray4;
     [cancelButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancelEditing) forControlEvents:UIControlEventTouchUpInside];
     [inputAccessoryView addSubview:cancelButton];

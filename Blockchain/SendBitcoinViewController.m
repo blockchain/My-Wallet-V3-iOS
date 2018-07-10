@@ -179,7 +179,7 @@ BOOL displayingLocalSymbolSend;
     [feeField changeWidth:self.feeAmountLabel.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width) - (feeField.frame.origin.x - (feeLabel.frame.origin.x + feeLabel.frame.size.width))];
     
     fundsAvailableButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    [fundsAvailableButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [fundsAvailableButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     fundsAvailableButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     
     feeField.delegate = self;
@@ -212,23 +212,23 @@ BOOL displayingLocalSymbolSend;
 {
     self.feeDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.feeDescriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.feeDescriptionLabel.textColor = COLOR_LIGHT_GRAY;
+    self.feeDescriptionLabel.textColor = UIColor.gray2;
     [bottomContainerView addSubview:self.feeDescriptionLabel];
     
     self.feeTypeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.feeTypeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.feeTypeLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.feeTypeLabel.textColor = UIColor.gray5;
     [bottomContainerView addSubview:self.feeTypeLabel];
     
     self.feeAmountLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.feeAmountLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.feeAmountLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.feeAmountLabel.textColor = UIColor.gray5;
     [bottomContainerView addSubview:self.feeAmountLabel];
     
     self.feeWarningLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     // Use same font size for all screen sizes
     self.feeWarningLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    self.feeWarningLabel.textColor = COLOR_WARNING_RED;
+    self.feeWarningLabel.textColor = UIColor.error;
     self.feeWarningLabel.numberOfLines = 2;
     [bottomContainerView addSubview:self.feeWarningLabel];
 }
@@ -877,36 +877,36 @@ BOOL displayingLocalSymbolSend;
 
 - (void)highlightInvalidAmounts
 {
-    btcAmountField.textColor = COLOR_WARNING_RED;
-    fiatAmountField.textColor = COLOR_WARNING_RED;
+    btcAmountField.textColor = UIColor.error;
+    fiatAmountField.textColor = UIColor.error;
 }
 
 - (void)removeHighlightFromAmounts
 {
-    btcAmountField.textColor = COLOR_TEXT_DARK_GRAY;
-    fiatAmountField.textColor = COLOR_TEXT_DARK_GRAY;
+    btcAmountField.textColor = UIColor.gray5;
+    fiatAmountField.textColor = UIColor.gray5;
 }
 
 - (void)disablePaymentButtons
 {
     continuePaymentButton.enabled = NO;
     [continuePaymentButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [continuePaymentButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [continuePaymentButton setBackgroundColor:UIColor.keyPadButton];
     
     continuePaymentAccessoryButton.enabled = NO;
     [continuePaymentAccessoryButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [continuePaymentAccessoryButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [continuePaymentAccessoryButton setBackgroundColor:UIColor.keyPadButton];
 }
 
 - (void)enablePaymentButtons
 {
     continuePaymentButton.enabled = YES;
     [continuePaymentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [continuePaymentButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [continuePaymentButton setBackgroundColor:UIColor.brandSecondary];
     
     [continuePaymentAccessoryButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     continuePaymentAccessoryButton.enabled = YES;
-    [continuePaymentAccessoryButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [continuePaymentAccessoryButton setBackgroundColor:UIColor.brandSecondary];
 }
 
 - (void)showInsufficientFunds
@@ -1124,7 +1124,7 @@ BOOL displayingLocalSymbolSend;
         [feeTappableView changeXPosition:self.feeAmountLabel.frame.origin.x];
         
         self.feeAmountLabel.hidden = NO;
-        self.feeAmountLabel.textColor = COLOR_LIGHT_GRAY;
+        self.feeAmountLabel.textColor = UIColor.gray2;
 
         self.feeDescriptionLabel.hidden = YES;
         
@@ -1137,7 +1137,7 @@ BOOL displayingLocalSymbolSend;
         [lineBelowFeeField changeYPositionAnimated:[self defaultYPositionForWarningLabel] completion:nil];
 
         self.feeAmountLabel.hidden = NO;
-        self.feeAmountLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        self.feeAmountLabel.textColor = UIColor.gray5;
         self.feeAmountLabel.text = nil;
         
         self.feeDescriptionLabel.hidden = NO;
@@ -1517,7 +1517,7 @@ BOOL displayingLocalSymbolSend;
 
 - (void)updateFundsAvailable
 {
-    if (fiatAmountField.textColor == COLOR_WARNING_RED && btcAmountField.textColor == COLOR_WARNING_RED && [fiatAmountField.text isEqualToString:[NSNumberFormatter formatAmount:availableAmount localCurrency:YES]]) {
+    if (fiatAmountField.textColor == UIColor.error && btcAmountField.textColor == UIColor.error && [fiatAmountField.text isEqualToString:[NSNumberFormatter formatAmount:availableAmount localCurrency:YES]]) {
         [fundsAvailableButton setTitle:[NSString stringWithFormat:BC_STRING_USE_TOTAL_AVAILABLE_MINUS_FEE_ARGUMENT, [self formatMoney:availableAmount localCurrency:NO]] forState:UIControlStateNormal];
     } else {
         [fundsAvailableButton setTitle:[NSString stringWithFormat:BC_STRING_USE_TOTAL_AVAILABLE_MINUS_FEE_ARGUMENT,
@@ -1723,11 +1723,11 @@ BOOL displayingLocalSymbolSend;
     
     if (updateType != FeeUpdateTypeConfirm) {
         if (amountInSatoshi > availableAmount) {
-            feeField.textColor = COLOR_WARNING_RED;
+            feeField.textColor = UIColor.error;
             [self disablePaymentButtons];
         } else {
             [self removeHighlightFromAmounts];
-            feeField.textColor = COLOR_TEXT_DARK_GRAY;
+            feeField.textColor = UIColor.gray5;
             [self enablePaymentButtons];
         }
     }

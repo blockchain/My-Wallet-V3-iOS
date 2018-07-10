@@ -7,6 +7,7 @@
 //
 
 #import "TransactionDetailStatusCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionDetailStatusCell
 
@@ -32,7 +33,7 @@
     self.mainLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.contentView.layoutMargins.left, 0, 70, 60)];
     self.mainLabel.adjustsFontSizeToFitWidth = YES;
     self.mainLabel.text = BC_STRING_STATUS;
-    self.mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mainLabel.textColor = UIColor.gray5;
     self.mainLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE];
     [self.contentView addSubview:self.mainLabel];
     
@@ -45,13 +46,13 @@
     [self.accessoryButton setTitle:buttonTitle forState:UIControlStateNormal];
     [self.accessoryButton.titleLabel setFont:[UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE]];
     self.accessoryButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.accessoryButton setTitleColor:COLOR_TABLE_VIEW_CELL_TEXT_BLUE forState:UIControlStateNormal];
+    [self.accessoryButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [self.contentView addSubview:self.accessoryButton];
     
     self.bannerButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.accessoryButton.frame.origin.y + self.accessoryButton.frame.size.height + 32, self.contentView.frame.size.width - 60, 48)];
     self.bannerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 24, 0, 24);
     self.bannerButton.titleLabel.textColor = [UIColor whiteColor];
-    self.bannerButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    self.bannerButton.backgroundColor = UIColor.brandSecondary;
     self.bannerButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM_LARGE];
     self.bannerButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.bannerButton setTitle:transactionModel.detailButtonTitle forState:UIControlStateNormal];

@@ -32,7 +32,7 @@
     
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     saveButton.frame = CGRectMake(0, 0, self.window.frame.size.width, 46);
-    saveButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    saveButton.backgroundColor = UIColor.brandSecondary;
     [saveButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
     [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     saveButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];

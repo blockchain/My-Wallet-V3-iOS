@@ -55,11 +55,7 @@ import UIKit
         }
         let hasTopPadding = topPadding > 0
         topBar = UIView(frame: CGRect(x: 0, y: topPadding, width: viewWidth, height: hasTopPadding ? 44 : Constants.Measurements.DefaultHeaderHeight))
-        if #available(iOS 11.0, *) {
-            topBar.backgroundColor = UIColor(named: "ColorBrandPrimary")
-        } else {
-            topBar.backgroundColor = Constants.Colors.ColorBrandPrimary
-        }
+        topBar.backgroundColor = UIColor.brandPrimary
         self.view.addSubview(topBar)
 
         setUpHeaderLabel(useSafeAreas: hasTopPadding)

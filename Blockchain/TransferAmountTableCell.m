@@ -7,6 +7,7 @@
 //
 
 #import "TransferAmountTableCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransferAmountTableCell
 
@@ -31,9 +32,9 @@
         self.btcLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];
         self.fiatLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];
         
-        self.mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
-        self.btcLabel.textColor = COLOR_TEXT_DARK_GRAY;
-        self.fiatLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        self.mainLabel.textColor = UIColor.gray5;
+        self.btcLabel.textColor = UIColor.gray5;
+        self.fiatLabel.textColor = UIColor.gray5;
         
         self.mainLabel.adjustsFontSizeToFitWidth = YES;
         self.btcLabel.adjustsFontSizeToFitWidth = YES;

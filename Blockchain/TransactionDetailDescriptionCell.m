@@ -7,6 +7,7 @@
 //
 
 #import "TransactionDetailDescriptionCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionDetailDescriptionCell
 
@@ -35,13 +36,13 @@
     self.mainLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE];
     self.mainLabel.text = BC_STRING_DESCRIPTION;
     self.mainLabel.adjustsFontSizeToFitWidth = YES;
-    self.mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mainLabel.textColor = UIColor.gray5;
     [self.contentView addSubview:self.mainLabel];
     
     self.subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.mainLabel.frame.origin.x, 0, 30, 30)];
     self.subtitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:12];
     self.subtitleLabel.adjustsFontSizeToFitWidth = YES;
-    self.subtitleLabel.textColor = COLOR_LIGHT_GRAY;
+    self.subtitleLabel.textColor = UIColor.gray2;
     [self.contentView addSubview:self.subtitleLabel];
     
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 160, 0)];
@@ -50,7 +51,7 @@
     self.textView.showsVerticalScrollIndicator = NO;
     self.textView.textAlignment = NSTextAlignmentRight;
     [self.textView setFont:[UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE]];
-    self.textView.textColor = COLOR_TEXT_DARK_GRAY;
+    self.textView.textColor = UIColor.gray5;
     
     self.textView.frame = CGRectMake(self.textView.frame.origin.x, self.textView.frame.origin.y, self.textView.frame.size.width - self.defaultTextViewHeight, self.defaultTextViewHeight);
     
@@ -197,7 +198,7 @@
     self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.textView.frame.origin.x - 8, self.textView.frame.origin.y, self.textView.frame.size.width, self.defaultTextViewHeight)];
     self.textViewPlaceholderLabel.textAlignment = NSTextAlignmentRight;
     self.textViewPlaceholderLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE];
-    self.textViewPlaceholderLabel.textColor = COLOR_LIGHT_GRAY;
+    self.textViewPlaceholderLabel.textColor = UIColor.gray2;
     NSString *label = [self.descriptionDelegate getNotePlaceholder];
     self.textViewPlaceholderLabel.text = label && label.length > 0 ? label : BC_STRING_TRANSACTION_DESCRIPTION_PLACEHOLDER;
     self.textViewPlaceholderLabel.adjustsFontSizeToFitWidth = YES;

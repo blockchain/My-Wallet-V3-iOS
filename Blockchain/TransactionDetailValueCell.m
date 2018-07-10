@@ -8,6 +8,7 @@
 
 #import "TransactionDetailValueCell.h"
 #import "NSNumberFormatter+Currencies.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionDetailValueCell
 
@@ -72,7 +73,7 @@
     if (![transactionModel.txType isEqualToString:TX_TYPE_RECEIVED]) {
         self.transactionFeeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.contentView.layoutMargins.left, self.fiatValueWhenSentLabel.frame.origin.y + self.fiatValueWhenSentLabel.frame.size.height, self.frame.size.width - self.contentView.layoutMargins.right - self.contentView.layoutMargins.left, 16)];
         self.transactionFeeLabel.font =  [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_SMALL];
-        self.transactionFeeLabel.textColor = COLOR_LIGHT_GRAY;
+        self.transactionFeeLabel.textColor = UIColor.gray2;
         self.transactionFeeLabel.text = [NSString stringWithFormat:BC_STRING_TRANSACTION_FEE_ARGUMENT, [transactionModel getFeeString]];
         self.transactionFeeLabel.adjustsFontSizeToFitWidth = YES;
         self.transactionFeeLabel.textAlignment = NSTextAlignmentRight;
@@ -89,14 +90,14 @@
     
     if ([transactionModel.fiatAmountsAtTime objectForKey:[currencyCode lowercaseString]]) {
         self.fiatValueWhenSentLabel.attributedText = nil;
-        self.fiatValueWhenSentLabel.textColor = COLOR_LIGHT_GRAY;
+        self.fiatValueWhenSentLabel.textColor = UIColor.gray2;
         self.fiatValueWhenSentLabel.text = [NSString stringWithFormat:sentOrReceived, [NSNumberFormatter appendStringToFiatSymbol:[transactionModel.fiatAmountsAtTime objectForKey:[currencyCode lowercaseString]]]];
         self.fiatValueWhenSentLabel.hidden = NO;
     } else {
         self.fiatValueWhenSentLabel.hidden = YES;
         self.fiatValueWhenSentLabel.text = nil;
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:sentOrReceived, @".........."]];
-        [attributedString addAttribute:NSForegroundColorAttributeName value:COLOR_LIGHT_GRAY range:NSMakeRange(0, attributedString.length - 10)];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.gray2 range:NSMakeRange(0, attributedString.length - 10)];
         [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(attributedString.length - 10, 10)];
         self.fiatValueWhenSentLabel.attributedText = attributedString;
     }
@@ -106,13 +107,13 @@
 {
     if ([transactionModel.txType isEqualToString:TX_TYPE_TRANSFER]) {
         self.mainLabel.text = [BC_STRING_TRANSFERRED uppercaseString];
-        self.mainLabel.textColor = COLOR_TRANSACTION_TRANSFERRED;
+        self.mainLabel.textColor = UIColor.grayBlue;
     } else if ([transactionModel.txType isEqualToString:TX_TYPE_RECEIVED]) {
         self.mainLabel.text = [BC_STRING_RECEIVED uppercaseString];
-        self.mainLabel.textColor = COLOR_TRANSACTION_RECEIVED;
+        self.mainLabel.textColor = UIColor.aqua;
     } else {
         self.mainLabel.text = [BC_STRING_SENT uppercaseString];
-        self.mainLabel.textColor = COLOR_TRANSACTION_SENT;
+        self.mainLabel.textColor = UIColor.red;
     }
 }
 

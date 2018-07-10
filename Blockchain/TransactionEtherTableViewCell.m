@@ -44,17 +44,17 @@
     [self.ethButton addTarget:self action:@selector(ethButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     if ([self.transaction.txType isEqualToString:TX_TYPE_TRANSFER]) {
-        [self.ethButton setBackgroundColor:COLOR_TRANSACTION_TRANSFERRED];
+        [self.ethButton setBackgroundColor:UIColor.grayBlue];
         self.actionLabel.text = [BC_STRING_TRANSFERRED uppercaseString];
-        self.actionLabel.textColor = COLOR_TRANSACTION_TRANSFERRED;
+        self.actionLabel.textColor = UIColor.grayBlue;
     } else if ([self.transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
-        [self.ethButton setBackgroundColor:COLOR_TRANSACTION_RECEIVED];
+        [self.ethButton setBackgroundColor:UIColor.aqua];
         self.actionLabel.text = [BC_STRING_RECEIVED uppercaseString];
-        self.actionLabel.textColor = COLOR_TRANSACTION_RECEIVED;
+        self.actionLabel.textColor = UIColor.aqua;
     } else {
-        [self.ethButton setBackgroundColor:COLOR_TRANSACTION_SENT];
+        [self.ethButton setBackgroundColor:UIColor.red];
         self.actionLabel.text = [BC_STRING_SENT uppercaseString];
-        self.actionLabel.textColor = COLOR_TRANSACTION_SENT;
+        self.actionLabel.textColor = UIColor.red;
     }
     
     self.infoLabel.adjustsFontSizeToFitWidth = YES;
@@ -68,10 +68,10 @@
     
     if ([WalletManager.sharedInstance.wallet isDepositTransaction:self.transaction.myHash]) {
         self.infoLabel.text = BC_STRING_DEPOSITED_TO_SHAPESHIFT;
-        self.infoLabel.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        self.infoLabel.backgroundColor = UIColor.brandPrimary;
     } else if ([WalletManager.sharedInstance.wallet isWithdrawalTransaction:self.transaction.myHash]) {
         self.infoLabel.text = BC_STRING_RECEIVED_FROM_SHAPESHIFT;
-        self.infoLabel.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        self.infoLabel.backgroundColor = UIColor.brandPrimary;
     } else {
         self.infoLabel.hidden = YES;
         self.actionLabel.frame = CGRectMake(self.actionLabel.frame.origin.x, 29, self.actionLabel.frame.size.width, self.actionLabel.frame.size.height);

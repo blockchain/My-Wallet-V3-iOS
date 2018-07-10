@@ -91,7 +91,7 @@
     
     UIView *cardsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.cardsViewHeight)];
     cardsView.clipsToBounds = YES;
-    cardsView.backgroundColor = COLOR_BACKGROUND_LIGHT_GRAY;
+    cardsView.backgroundColor = UIColor.lightGray;
     
     return cardsView;
 }
@@ -173,13 +173,13 @@
     
     UIImageView *checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 40, 40)];
     checkImageView.image = [[UIImage imageNamed:@"success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    checkImageView.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    checkImageView.tintColor = UIColor.brandSecondary;
     checkImageView.center = CGPointMake(overviewCompleteCenterX, checkImageView.center.y);
     [scrollView addSubview:checkImageView];
     
     UILabel *doneTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, checkImageView.frame.origin.y + checkImageView.frame.size.height + 14, 150, 30)];
     doneTitleLabel.textAlignment = NSTextAlignmentCenter;
-    doneTitleLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+    doneTitleLabel.textColor = UIColor.brandPrimary;
     doneTitleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM_LARGE];
     doneTitleLabel.adjustsFontSizeToFitWidth = YES;
     doneTitleLabel.text = BC_STRING_OVERVIEW_COMPLETE_TITLE;
@@ -189,7 +189,7 @@
     UILabel *doneDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     doneDescriptionLabel.textAlignment = NSTextAlignmentCenter;
     doneDescriptionLabel.numberOfLines = 0;
-    doneDescriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    doneDescriptionLabel.textColor = UIColor.gray5;
     doneDescriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_SMALL];
     doneDescriptionLabel.adjustsFontSizeToFitWidth = YES;
     doneDescriptionLabel.text = BC_STRING_OVERVIEW_COMPLETE_DESCRIPTION;
@@ -214,15 +214,15 @@
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, cardRect.origin.y + cardRect.size.height + 8, 100, 30)];
     self.pageControl.center = CGPointMake(cardsView.center.x, self.pageControl.center.y);
     self.pageControl.numberOfPages = numberOfCards;
-    self.pageControl.currentPageIndicatorTintColor = COLOR_BLOCKCHAIN_BLUE;
-    self.pageControl.pageIndicatorTintColor = COLOR_BLOCKCHAIN_LIGHTER_BLUE;
+    self.pageControl.currentPageIndicatorTintColor = UIColor.brandPrimary;
+    self.pageControl.pageIndicatorTintColor = UIColor.brandTertiary;
     [self.pageControl addTarget:self action:@selector(pageControlChanged:) forControlEvents:UIControlEventValueChanged];
     [cardsView addSubview:self.pageControl];
     
     self.startOverButton = [[UIButton alloc] initWithFrame:CGRectInset(self.pageControl.frame, -40, -10)];
     [cardsView addSubview:self.startOverButton];
     [self.startOverButton setTitle:BC_STRING_START_OVER forState:UIControlStateNormal];
-    [self.startOverButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [self.startOverButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     self.startOverButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     self.startOverButton.hidden = YES;
     [self.startOverButton addTarget:self action:@selector(showFirstCard) forControlEvents:UIControlEventTouchUpInside];
@@ -231,7 +231,7 @@
     self.closeCardsViewButton = [[UIButton alloc] initWithFrame:CGRectMake(cardsView.frame.size.width - closeButtonHeight, 0, closeButtonHeight, closeButtonHeight)];
     self.closeCardsViewButton.imageEdgeInsets = UIEdgeInsetsMake(16, 20, 16, 12);
     [self.closeCardsViewButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    self.closeCardsViewButton.imageView.tintColor = COLOR_LIGHT_GRAY;
+    self.closeCardsViewButton.imageView.tintColor = UIColor.gray2;
     [self.closeCardsViewButton addTarget:self action:@selector(closeCardsView) forControlEvents:UIControlEventTouchUpInside];
     [cardsView addSubview:self.closeCardsViewButton];
     self.closeCardsViewButton.hidden = YES;
@@ -241,7 +241,7 @@
     self.skipAllButton = [[UIButton alloc] initWithFrame:CGRectMake(cardsView.frame.size.width - skipAllButtonWidth, self.pageControl.frame.origin.y, skipAllButtonWidth, skipAllButtonHeight)];
     self.skipAllButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     self.skipAllButton.backgroundColor = [UIColor clearColor];
-    [self.skipAllButton setTitleColor:COLOR_BLOCKCHAIN_LIGHTER_BLUE forState:UIControlStateNormal];
+    [self.skipAllButton setTitleColor:UIColor.brandTertiary forState:UIControlStateNormal];
     [self.skipAllButton setTitle:BC_STRING_SKIP_ALL forState:UIControlStateNormal];
     [self.skipAllButton addTarget:self action:@selector(closeCardsView) forControlEvents:UIControlEventTouchUpInside];
     [cardsView addSubview:self.skipAllButton];

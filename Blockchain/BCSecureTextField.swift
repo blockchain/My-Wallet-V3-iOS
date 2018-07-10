@@ -38,16 +38,9 @@ import UIKit
         let onePixelHeight = 1.0/UIScreen.main.scale
         let onePixelLine = UIView(frame: CGRect(x: 0, y: self.frame.size.height - onePixelHeight,
                                                 width: self.frame.size.width + 15, height: onePixelHeight))
-
         onePixelLine.frame = self.superview!.convert(onePixelLine.frame, from: self)
-
         onePixelLine.isUserInteractionEnabled = false
-        if #available(iOS 11.0, *) {
-            onePixelLine.backgroundColor = UIColor(named: "ColorGray2")
-        } else {
-            onePixelLine.backgroundColor = Constants.Colors.ColorGray2
-        }
-
+        onePixelLine.backgroundColor = UIColor.gray2
         self.superview!.addSubview(onePixelLine)
     }
 }

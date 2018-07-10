@@ -190,7 +190,7 @@
 {
     // Selected cell color
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
-    [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+    [v setBackgroundColor:UIColor.brandPrimary];
     return v;
 }
 

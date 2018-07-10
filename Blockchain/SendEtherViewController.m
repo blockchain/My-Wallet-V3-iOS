@@ -60,14 +60,14 @@
     UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 12, 40, 21)];
     fromLabel.adjustsFontSizeToFitWidth = YES;
     fromLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    fromLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    fromLabel.textColor = UIColor.gray5;
     fromLabel.text = BC_STRING_FROM;
     [self.view addSubview:fromLabel];
     
     CGFloat fromPlaceholderLabelOriginX = fromLabel.frame.origin.x + fromLabel.frame.size.width + 13;
     UILabel *fromPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(fromPlaceholderLabelOriginX, 8, self.view.frame.size.width - fromPlaceholderLabelOriginX, 30)];
     fromPlaceholderLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    fromPlaceholderLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    fromPlaceholderLabel.textColor = UIColor.gray5;
     fromPlaceholderLabel.text = [LocalizationConstantsObjcBridge myEtherWallet];
     [self.view addSubview:fromPlaceholderLabel];
     
@@ -76,7 +76,7 @@
     
     UILabel *toLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, ROW_HEIGHT_SEND_SMALL + 16, 40, 21)];
     toLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    toLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    toLabel.textColor = UIColor.gray5;
     toLabel.text = BC_STRING_TO;
     [self.view addSubview:toLabel];
     
@@ -85,7 +85,7 @@
     toField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     toField.placeholder = BC_STRING_ENTER_ETHER_ADDRESS;
     toField.delegate = self;
-    toField.textColor = COLOR_TEXT_DARK_GRAY;
+    toField.textColor = UIColor.gray5;
     toField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:toField];
     self.toField = toField;
@@ -111,7 +111,7 @@
     CGFloat useAllButtonOriginY = amountInputView.frame.origin.y + amountInputView.frame.size.height;
     UIButton *fundsAvailableButton = [[UIButton alloc] initWithFrame:CGRectMake(15, useAllButtonOriginY, self.view.frame.size.width - 15 - 8, 112 + ROW_HEIGHT_SEND_LARGE -useAllButtonOriginY)];
     fundsAvailableButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [fundsAvailableButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [fundsAvailableButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     fundsAvailableButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL];
     fundsAvailableButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     [fundsAvailableButton addTarget:self action:@selector(useAllClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -123,13 +123,13 @@
     [self.view addSubview:lineBelowAmounts];
     
     UILabel *feeLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 112 + ROW_HEIGHT_SEND_LARGE + 15, 40, 21)];
-    feeLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    feeLabel.textColor = UIColor.gray5;
     feeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     feeLabel.text = BC_STRING_FEE;
     [self.view addSubview:feeLabel];
     
     UILabel *feeAmountLabel = [[UILabel alloc] initWithFrame:CGRectMake(feeLabel.frame.origin.x + feeLabel.frame.size.width + 8, 112 + ROW_HEIGHT_SEND_LARGE + 6, 222, 39)];
-    feeAmountLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    feeAmountLabel.textColor = UIColor.gray5;
     feeAmountLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     [self.view addSubview:feeAmountLabel];
     self.feeAmountLabel = feeAmountLabel;
@@ -141,7 +141,7 @@
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(0, sendButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     continueButton.center = CGPointMake(self.view.center.x, continueButton.center.y);
     [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
-    continueButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    continueButton.backgroundColor = UIColor.brandSecondary;
     continueButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -270,7 +270,7 @@
 
     if ([WalletManager.sharedInstance.wallet isWaitingOnEtherTransaction]) {
         [self.fundsAvailableButton setTitle:BC_STRING_WAITING_FOR_ETHER_PAYMENT_TO_FINISH_MESSAGE forState:UIControlStateNormal];
-        [self.fundsAvailableButton setTitleColor:COLOR_WARNING_RED forState:UIControlStateNormal];
+        [self.fundsAvailableButton setTitleColor:UIColor.error forState:UIControlStateNormal];
         self.toField.userInteractionEnabled = NO;
         self.fundsAvailableButton.userInteractionEnabled = NO;
         self.amountInputView.userInteractionEnabled = NO;
@@ -278,7 +278,7 @@
         return;
     } else {
         [self updateFundsAvailable];
-        [self.fundsAvailableButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+        [self.fundsAvailableButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
         self.toField.userInteractionEnabled = YES;
         self.fundsAvailableButton.userInteractionEnabled = YES;
         self.amountInputView.userInteractionEnabled = YES;
@@ -299,7 +299,7 @@
 {
     self.continuePaymentButton.enabled = NO;
     [self.continuePaymentButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [self.continuePaymentButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [self.continuePaymentButton setBackgroundColor:UIColor.keyPadButton];
     
     [self.continuePaymentAccessoryView disableContinueButton];
 }
@@ -308,7 +308,7 @@
 {
     self.continuePaymentButton.enabled = YES;
     [self.continuePaymentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continuePaymentButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [self.continuePaymentButton setBackgroundColor:UIColor.brandSecondary];
     
     [self.continuePaymentAccessoryView enableContinueButton];
 }
@@ -415,7 +415,7 @@
     UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, 240, 120)];
     sendLabel.textAlignment = NSTextAlignmentCenter;
     sendLabel.center = CGPointMake(self.view.center.x, sendLabel.center.y);
-    sendLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    sendLabel.textColor = UIColor.gray5;
     sendLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     sendLabel.text = BC_STRING_SENDING;
     [sendView addSubview:sendLabel];

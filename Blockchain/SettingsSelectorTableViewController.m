@@ -21,7 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    self.tableView.tintColor = UIColor.brandSecondary;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 

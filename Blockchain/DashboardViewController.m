@@ -50,7 +50,7 @@
     self.contentView = [[UIView alloc] initWithFrame:CGRectZero];
     self.contentView.clipsToBounds = YES;
     self.contentView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = COLOR_BACKGROUND_LIGHT_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
     [self.scrollView addSubview:self.contentView];
     
     [self setupPieChart];
@@ -84,7 +84,7 @@
     CGFloat horizontalPadding = DASHBOARD_HORIZONTAL_PADDING;
 
     UILabel *balancesLabel = [[UILabel alloc] initWithFrame:CGRectMake(horizontalPadding, 16, self.view.frame.size.width/2, 40)];
-    balancesLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+    balancesLabel.textColor = UIColor.brandPrimary;
     balancesLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_LARGE];
     balancesLabel.text = [BC_STRING_BALANCES uppercaseString];
     [self.contentView addSubview:balancesLabel];
@@ -110,7 +110,7 @@
     [self.contentView addSubview:priceChartContainerView];
 
     UILabel *balancesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/2, labelHeight)];
-    balancesLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+    balancesLabel.textColor = UIColor.brandPrimary;
     balancesLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_LARGE];
     balancesLabel.text = [BC_STRING_PRICE_CHARTS uppercaseString];
     [priceChartContainerView addSubview:balancesLabel];

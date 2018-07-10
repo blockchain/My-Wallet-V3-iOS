@@ -48,20 +48,20 @@
 
         if (actionType == ActionTypeScanQR) {
             actionName = BC_STRING_SCAN_ADDRESS;
-            actionColor = COLOR_BLOCKCHAIN_BLUE;
+            actionColor = UIColor.brandPrimary;
             titleColor = actionColor;
         } else if (actionType == ActionTypeShowReceive) {
             actionName = BC_STRING_REQUEST;
-            actionColor = COLOR_BLOCKCHAIN_AQUA;
+            actionColor = UIColor.aqua;
             titleColor = actionColor;
         } else if (actionType == ActionTypeBuyBitcoin) {
             actionName = BC_STRING_BUY_AND_SELL_BITCOIN;
-            actionColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+            actionColor = UIColor.brandSecondary;
             titleColor = actionColor;
         } else if (actionType == ActionTypeBuySell) {
             actionName = BC_STRING_GET_STARTED;
-            actionColor = COLOR_BLOCKCHAIN_BLUE;
-            titleColor = COLOR_BLOCKCHAIN_BLUE;
+            actionColor = UIColor.brandPrimary;
+            titleColor = UIColor.brandPrimary;
         }
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.size.width + 8, imageView.frame.origin.y, textWidth, 54)];
@@ -78,7 +78,7 @@
         descriptionLabel.numberOfLines = 0;
         descriptionLabel.adjustsFontSizeToFitWidth = YES;
         descriptionLabel.text = description;
-        descriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        descriptionLabel.textColor = UIColor.gray5;
         descriptionLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:descriptionLabel];
         
@@ -114,7 +114,7 @@
     UIButton *closeButton = [[UIButton alloc] initWithFrame:closeFrame];
     UIImage *buttonImage = [[UIImage imageNamed:@"close_large"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [closeButton setImage:buttonImage forState:UIControlStateNormal];
-    closeButton.tintColor = COLOR_TEXT_DARK_GRAY;
+    closeButton.tintColor = UIColor.gray5;
     closeButton.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [self addSubview:closeButton];
     self.closeButton = closeButton;

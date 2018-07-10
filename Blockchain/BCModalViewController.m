@@ -30,7 +30,7 @@
         
         if (showHeader) {
             UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
-            topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+            topBarView.backgroundColor = UIColor.brandPrimary;
             [self.view addSubview:topBarView];
             
             UILabel *headerLabel = [[UILabel alloc] initWithFrame:FRAME_HEADER_LABEL];

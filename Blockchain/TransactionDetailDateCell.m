@@ -7,6 +7,7 @@
 //
 
 #import "TransactionDetailDateCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionDetailDateCell
 
@@ -35,7 +36,7 @@
     self.mainLabel.adjustsFontSizeToFitWidth = YES;
     self.mainLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE];
     self.mainLabel.text = BC_STRING_DATE;
-    self.mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mainLabel.textColor = UIColor.gray5;
     [self.contentView addSubview:self.mainLabel];
     
     CGFloat accessoryLabelXPosition = self.mainLabel.frame.origin.x + self.mainLabel.frame.size.width + 8;
@@ -44,7 +45,7 @@
     self.accessoryLabel.adjustsFontSizeToFitWidth = YES;
     self.accessoryLabel.textAlignment = NSTextAlignmentRight;
     self.accessoryLabel.text = dateString;
-    self.accessoryLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.accessoryLabel.textColor = UIColor.gray5;
     [self.contentView addSubview:self.accessoryLabel];
     
     self.isSetup = YES;

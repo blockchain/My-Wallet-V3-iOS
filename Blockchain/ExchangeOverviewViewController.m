@@ -39,7 +39,7 @@
     
     [WalletManager sharedInstance].exchangeDelegate = self;
     
-    self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
     
     NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
     
@@ -108,7 +108,7 @@
     UILabel *newExchangeLabel = [[UILabel alloc] initWithFrame:CGRectMake(exchangeLabelOriginX, newExchangeView.frame.size.height/2 - exchangeLabelHeight/2, windowWidth - exchangeLabelOriginX - chevronWidth, exchangeLabelHeight)];
     newExchangeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM];
     newExchangeLabel.text = BC_STRING_NEW_EXCHANGE;
-    newExchangeLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    newExchangeLabel.textColor = UIColor.gray5;
     [newExchangeView addSubview:newExchangeLabel];
     
     CGFloat exchangeIconImageViewWidth = 50;
@@ -119,7 +119,7 @@
     UIImageView *chevronImageView = [[UIImageView alloc] initWithFrame:CGRectMake(newExchangeView.frame.size.width - 8 - chevronWidth, newExchangeView.frame.size.height/2 - chevronWidth/2, chevronWidth, chevronWidth)];
     chevronImageView.image = [UIImage imageNamed:@"chevron_right"];
     chevronImageView.contentMode = UIViewContentModeScaleAspectFit;
-    chevronImageView.tintColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    chevronImageView.tintColor = UIColor.lightGray;
     [newExchangeView addSubview:chevronImageView];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(newExchangeClicked)];
@@ -272,10 +272,10 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 45)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    view.backgroundColor = UIColor.lightGray;
     
     UILabel *leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 12, tableView.frame.size.width/2, 30)];
-    leftLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    leftLabel.textColor = UIColor.gray5;
     leftLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_SMALL];
     
     [view addSubview:leftLabel];
@@ -284,7 +284,7 @@
     
     CGFloat rightLabelOriginX = leftLabel.frame.origin.x + leftLabel.frame.size.width + 8;
     UILabel *rightLabel = [[UILabel alloc] initWithFrame:CGRectMake(rightLabelOriginX, 12, self.view.frame.size.width - rightLabelOriginX - 15, 30)];
-    rightLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    rightLabel.textColor = UIColor.gray5;
     rightLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_SMALL];
     rightLabel.textAlignment = NSTextAlignmentRight;
     

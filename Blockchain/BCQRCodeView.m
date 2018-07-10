@@ -8,6 +8,7 @@
 
 #import "BCQRCodeView.h"
 #import "QRCodeGenerator.h"
+#import "Blockchain-Swift.h"
 
 const float imageWidth = 190;
 
@@ -47,7 +48,7 @@ const float imageWidth = 190;
     if (qrHeaderText) {
         qrCodeHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, 280, 64)];
         qrCodeHeaderLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
-        qrCodeHeaderLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        qrCodeHeaderLabel.textColor = UIColor.gray5;
         qrCodeHeaderLabel.numberOfLines = 5;
         qrCodeHeaderLabel.textAlignment = NSTextAlignmentCenter;
         qrCodeHeaderLabel.text = qrHeaderText;
@@ -61,7 +62,7 @@ const float imageWidth = 190;
     [self addSubview:self.qrCodeImageView];
     
     self.qrCodeFooterLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.qrCodeImageView.frame.origin.y + self.qrCodeImageView.frame.size.height + 15, 280, 24)];
-    self.qrCodeFooterLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.qrCodeFooterLabel.textColor = UIColor.gray5;
     self.qrCodeFooterLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     self.qrCodeFooterLabel.textAlignment = NSTextAlignmentCenter;
     self.qrCodeFooterLabel.adjustsFontSizeToFitWidth = YES;
@@ -74,7 +75,7 @@ const float imageWidth = 190;
     [self addSubview:self.qrCodeFooterLabel];
     
     self.doneButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
-    self.doneButton.backgroundColor = COLOR_BUTTON_BLUE;
+    self.doneButton.backgroundColor = UIColor.brandSecondary;
     self.doneButton.layer.cornerRadius = 4;
     [self.doneButton setTitle:BC_STRING_DONE forState:UIControlStateNormal];
     self.doneButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:13];
@@ -129,13 +130,13 @@ const float imageWidth = 190;
         UIImageView *checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(labelToAnimate.frame.origin.x - labelToAnimate.frame.size.height - 5, labelToAnimate.frame.origin.y, labelToAnimate.frame.size.height, labelToAnimate.frame.size.height)];
         checkImageView.image = [UIImage imageNamed:@"check"];
         checkImageView.image = [checkImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        checkImageView.tintColor = COLOR_BUTTON_GREEN;
+        checkImageView.tintColor = UIColor.green;
         [self addSubview:checkImageView];
         checkImageView.alpha = 0.0;
         
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             labelToAnimate.text = intermediateText;
-            labelToAnimate.textColor = COLOR_BUTTON_GREEN;
+            labelToAnimate.textColor = UIColor.green;
             labelToAnimate.alpha = 1.0;
             checkImageView.alpha = 1.0;
         } completion:^(BOOL finished) {

@@ -63,7 +63,7 @@
     
     self.sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.center.x - 120, self.tableView.frame.origin.y + self.tableView.frame.size.height + 24, 240, 40)];
     self.sendButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    self.sendButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    self.sendButton.backgroundColor = UIColor.brandSecondary;
     [self.sendButton setTitle:BC_STRING_TRANSFER_FUNDS forState:UIControlStateNormal];
     self.sendButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -146,7 +146,7 @@
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
         cell.textLabel.text = BC_STRING_FROM;
         cell.textLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:cell.textLabel.font.pointSize];
-        cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        cell.textLabel.textColor = UIColor.gray5;
         cell.detailTextLabel.text = self.addressesUsed == nil ? @"" : addressesString;
         cell.detailTextLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:cell.detailTextLabel.font.pointSize];
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -156,7 +156,7 @@
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
         cell.textLabel.text = BC_STRING_TO;
         cell.textLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:cell.textLabel.font.pointSize];
-        cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        cell.textLabel.textColor = UIColor.gray5;
         cell.detailTextLabel.text = [self.transferPaymentBuilder getLabelForDestinationAccount];
         cell.detailTextLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:cell.detailTextLabel.font.pointSize];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

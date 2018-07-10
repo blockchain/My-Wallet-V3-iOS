@@ -499,7 +499,7 @@ typedef enum {
         switch (indexPath.row) {
             case 0: {
                 cell.textLabel.text = BC_STRING_TRANSFER_FUNDS;
-                cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+                cell.textLabel.textColor = UIColor.brandSecondary;
                 cell.detailTextLabel.text = nil;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
@@ -513,14 +513,14 @@ typedef enum {
                 if ([self isArchived]) {
                     if ([self isArchived]) {
                         cell.textLabel.text = BC_STRING_UNARCHIVE;
-                        cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+                        cell.textLabel.textColor = UIColor.brandSecondary;
                     } else {
                         cell.textLabel.text = BC_STRING_ARCHIVE;
-                        cell.textLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                        cell.textLabel.textColor = UIColor.error;
                     }
                 } else {
                     cell.textLabel.text = self.address? BC_STRING_LABEL : BC_STRING_NAME;
-                    cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+                    cell.textLabel.textColor = UIColor.gray5;
                     cell.detailTextLabel.text = self.address ? [WalletManager.sharedInstance.wallet labelForLegacyAddress:self.address assetType:self.assetType] : [WalletManager.sharedInstance.wallet getLabelForAccount:self.account assetType:self.assetType];
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 }
@@ -530,16 +530,16 @@ typedef enum {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 if (self.address) {
                     cell.textLabel.text = BC_STRING_ADDRESS;
-                    cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+                    cell.textLabel.textColor = UIColor.gray5;
                     cell.detailTextLabel.text = self.address;
                 } else {
                     if ([WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:self.assetType] != self.account) {
                         cell.textLabel.text = BC_STRING_MAKE_DEFAULT;
-                        cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+                        cell.textLabel.textColor = UIColor.brandSecondary;
                         cell.accessoryType = UITableViewCellAccessoryNone;
                     } else {
                         cell.textLabel.text = BC_STRING_EXTENDED_PUBLIC_KEY;
-                        cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+                        cell.textLabel.textColor = UIColor.gray5;
                     }
                 }
                 return cell;
@@ -548,20 +548,20 @@ typedef enum {
                 if (self.address) {
                     if ([WalletManager.sharedInstance.wallet isWatchOnlyLegacyAddress:self.address]) {
                         cell.textLabel.text = BC_STRING_SCAN_PRIVATE_KEY;
-                        cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+                        cell.textLabel.textColor = UIColor.brandSecondary;
                         cell.accessoryType = UITableViewCellAccessoryNone;
                     } else {
                         if ([self isArchived]) {
                             cell.textLabel.text = BC_STRING_UNARCHIVE;
-                            cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+                            cell.textLabel.textColor = UIColor.brandSecondary;
                         } else {
                             cell.textLabel.text = BC_STRING_ARCHIVE;
-                            cell.textLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                            cell.textLabel.textColor = UIColor.error;
                         }
                     }
                 } else {
                     cell.textLabel.text = BC_STRING_EXTENDED_PUBLIC_KEY;
-                    cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+                    cell.textLabel.textColor = UIColor.gray5;
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 }
                 return cell;
@@ -572,10 +572,10 @@ typedef enum {
     if (indexPath.section == sectionArchived) {
         if ([self isArchived]) {
             cell.textLabel.text = BC_STRING_UNARCHIVE;
-            cell.textLabel.textColor = COLOR_TABLE_VIEW_CELL_TEXT_BLUE;
+            cell.textLabel.textColor = UIColor.brandSecondary;
         } else {
             cell.textLabel.text = BC_STRING_ARCHIVE;
-            cell.textLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+            cell.textLabel.textColor = UIColor.error;
         }
         return cell;
     }

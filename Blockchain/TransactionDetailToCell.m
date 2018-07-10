@@ -8,6 +8,7 @@
 
 #import "TransactionDetailToCell.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @implementation TransactionDetailToCell
 
@@ -36,7 +37,7 @@
     self.mainLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_MEDIUM_LARGE];
     self.mainLabel.adjustsFontSizeToFitWidth = YES;
     self.mainLabel.text = BC_STRING_TO;
-    self.mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mainLabel.textColor = UIColor.gray5;
     [self.mainLabel sizeToFit];
     [self.mainLabel changeXPosition:self.contentView.layoutMargins.left];
     self.mainLabel.center = CGPointMake(self.mainLabel.center.x, self.contentView.center.y);
@@ -44,7 +45,7 @@
     
     if (transactionModel.to.count > 1) {
         self.detailTextLabel.text = [NSString stringWithFormat:BC_STRING_ARGUMENT_RECIPIENTS, transactionModel.to.count];
-        self.detailTextLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        self.detailTextLabel.textColor = UIColor.gray5;
         self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else {
@@ -55,7 +56,7 @@
         self.accessoryLabel.text = transactionModel.toString;
         self.accessoryLabel.adjustsFontSizeToFitWidth = YES;
         self.accessoryLabel.center = CGPointMake(self.accessoryLabel.center.x, self.contentView.center.y);
-        self.accessoryLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        self.accessoryLabel.textColor = UIColor.gray5;
         [self.contentView addSubview:self.accessoryLabel];
         self.accessoryType = UITableViewCellAccessoryNone;
     }

@@ -29,7 +29,7 @@
     
     UIButton *createButton = [UIButton buttonWithType:UIButtonTypeCustom];
     createButton.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, 46);
-    createButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    createButton.backgroundColor = UIColor.brandSecondary;
     [createButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
     [createButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     createButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
@@ -39,9 +39,9 @@
     self.newerPasswordTextField.inputAccessoryView = createButton;
     self.confirmNewPasswordTextField.inputAccessoryView = createButton;
     
-    self.mainPasswordTextField.textColor = COLOR_TEXT_DARK_GRAY;
-    self.newerPasswordTextField.textColor = COLOR_TEXT_DARK_GRAY;
-    self.confirmNewPasswordTextField.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mainPasswordTextField.textColor = UIColor.gray5;
+    self.newerPasswordTextField.textColor = UIColor.gray5;
+    self.confirmNewPasswordTextField.textColor = UIColor.gray5;
     
     self.mainPasswordTextField.delegate = self;
     self.newerPasswordTextField.delegate = self;
@@ -170,19 +170,19 @@
     float passwordStrength = [WalletManager.sharedInstance.wallet getStrengthForPassword:password];
 
     if (passwordStrength < 25) {
-        color = COLOR_PASSWORD_STRENGTH_WEAK;
+        color = UIColor.error;
         description = BC_STRING_PASSWORD_STRENGTH_WEAK;
     }
     else if (passwordStrength < 50) {
-        color = COLOR_PASSWORD_STRENGTH_REGULAR;
+        color = UIColor.brandYellow;
         description = BC_STRING_PASSWORD_STRENGTH_REGULAR;
     }
     else if (passwordStrength < 75) {
-        color = COLOR_PASSWORD_STRENGTH_NORMAL;
+        color = UIColor.brandSecondary;
         description = BC_STRING_PASSWORD_STRENGTH_NORMAL;
     }
     else {
-        color = COLOR_PASSWORD_STRENGTH_STRONG;
+        color = UIColor.green;
         description = BC_STRING_PASSWORD_STRENGTH_STRONG;
     }
     

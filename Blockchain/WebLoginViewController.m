@@ -101,7 +101,7 @@ const float qrSize = 230;
     self.QRCodeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 240, BUTTON_HEIGHT)];
     [self.QRCodeButton setTitle:[BC_STRING_SHOW_QR_CODE uppercaseString] forState:UIControlStateNormal];
     self.QRCodeButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
-    self.QRCodeButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    self.QRCodeButton.backgroundColor = UIColor.brandSecondary;
     self.QRCodeButton.center = CGPointMake(self.view.center.x, self.view.center.y + verticalOffset);
     self.QRCodeButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [self.QRCodeButton addTarget:self action:@selector(toggleQRCode) forControlEvents:UIControlEventTouchUpInside];
@@ -110,7 +110,7 @@ const float qrSize = 230;
     self.QRInstructionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.QRInstructionLabel.text = BC_STRING_WEB_LOGIN_QR_INSTRUCTION_LABEL_HIDDEN;
     self.QRInstructionLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
-    self.QRInstructionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.QRInstructionLabel.textColor = UIColor.gray5;
     self.QRInstructionLabel.frame = CGRectMake(0, 0, self.view.frame.size.width - 20, 50);
     self.QRInstructionLabel.textAlignment = NSTextAlignmentCenter;
     self.QRInstructionLabel.numberOfLines = 2;
@@ -243,7 +243,7 @@ const float qrSize = 230;
 {
     UITextView *textView = [[UITextView alloc] initWithFrame:CGRectZero];
     textView.textContainerInset = UIEdgeInsetsZero;
-    textView.textColor = COLOR_TEXT_DARK_GRAY;
+    textView.textColor = UIColor.gray5;
     textView.editable = NO;
     textView.selectable = NO;
     textView.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
@@ -254,7 +254,7 @@ const float qrSize = 230;
 + (UILabel *)labelForInstructionStep:(NSString *)stepNumber
 {
     UILabel *label = [[UILabel alloc] init];
-    label.textColor = COLOR_TEXT_DARK_GRAY;
+    label.textColor = UIColor.gray5;
     label.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
     label.text = stepNumber;
     [label sizeToFit];

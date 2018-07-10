@@ -9,6 +9,7 @@
 #import "AssetSelectorView.h"
 #import "AssetSelectionTableViewCell.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 #define CELL_IDENTIFIER_ASSET_SELECTOR @"assetSelectorCell"
 
@@ -36,7 +37,7 @@
         
         [self.tableView changeHeight:ASSET_SELECTOR_ROW_HEIGHT * 3];
         
-        self.tableView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+        self.tableView.backgroundColor = UIColor.brandPrimary;
         self.backgroundColor = [UIColor clearColor];
         
         self.assets = @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],

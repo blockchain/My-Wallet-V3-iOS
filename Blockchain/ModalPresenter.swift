@@ -150,11 +150,7 @@ typealias OnModalResumed = () -> Void
         //: due to bottom insets on the iPhone X
         // TODO: remove this stopgap solution when the modal view presenter is deprecated
         if content is PairingInstructionsView {
-            if #available(iOS 11.0, *) {
-                modalViewToShow.backgroundColor = UIColor(named: "ColorGray1")
-            } else {
-                modalViewToShow.backgroundColor = Constants.Colors.ColorGray1
-            }
+            modalViewToShow.backgroundColor = UIColor.gray1
         }
 
         modalViewToShow.myHolderView.addSubview(content)

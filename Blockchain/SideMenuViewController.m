@@ -84,7 +84,7 @@ int accountEntries = 0;
     CGRect frame = self.view.bounds;
     frame.origin.y = -frame.size.height;
     UIView* blueView = [[UIView alloc] initWithFrame:frame];
-    blueView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    blueView.backgroundColor = UIColor.brandPrimary;
     [self.tableView addSubview:blueView];
     // Make sure the refresh control is in front of the blue area
     blueView.layer.zPosition -= 1;
@@ -207,7 +207,7 @@ int accountEntries = 0;
 {
     UITableViewHeaderFooterView *headerView = [self.tableView headerViewForSection:0];
     UIView *backgroundView = [[UIView alloc] initWithFrame:headerView.frame];
-    [backgroundView setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+    [backgroundView setBackgroundColor:UIColor.brandPrimary];
     headerView.backgroundView = backgroundView;
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:NO];
@@ -280,7 +280,7 @@ int accountEntries = 0;
                                                                                                             self.view.frame.size.width,
                                                                                                             [self tableView:tableView heightForHeaderInSection:section])];
     UIView *backgroundView = [[UIView alloc] initWithFrame:headerView.bounds];
-    backgroundView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    backgroundView.backgroundColor = UIColor.brandPrimary;
     headerView.backgroundView = backgroundView;
     CGFloat imageHeight = 30; CGFloat imageWidth = 161;
     CGFloat posX = ((headerView.frame.size.width - xOffset) / 2) - (imageWidth / 2);
@@ -288,7 +288,7 @@ int accountEntries = 0;
 
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(posX, posY, imageWidth, imageHeight)];
     imageView.clipsToBounds = NO;
-    imageView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    imageView.backgroundColor = UIColor.brandPrimary;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.image = [UIImage imageNamed:@"logo_and_banner_white"];
     [headerView addSubview:imageView];
@@ -322,7 +322,7 @@ int accountEntries = 0;
             cell = [[SideMenuViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
             
             UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height)];
-            [v setBackgroundColor:COLOR_TABLE_VIEW_CELL_SELECTED_LIGHT_GRAY];
+            [v setBackgroundColor:UIColor.lightGray];
             cell.selectedBackgroundView = v;
         }
 

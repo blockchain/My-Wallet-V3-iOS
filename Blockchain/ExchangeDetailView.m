@@ -128,7 +128,7 @@
     CGFloat maxLabelWidth = rowWidth/2 - horizontalMargin;
     UILabel *mainLabel = [[UILabel alloc] initWithFrame:CGRectMake(horizontalMargin, 0, 0, 0)];
     mainLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    mainLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    mainLabel.textColor = UIColor.gray5;
     mainLabel.text = text;
     [mainLabel sizeToFit];
     [mainLabel changeHeight:rowHeight];
@@ -163,7 +163,7 @@
     UILabel *accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(accessoryLabelOriginX, 0, self.frame.size.width - accessoryLabelOriginX - horizontalMargin, rowHeight)];
     accessoryLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     accessoryLabel.text = accessoryText;
-    accessoryLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    accessoryLabel.textColor = UIColor.gray5;
     accessoryLabel.textAlignment = NSTextAlignmentRight;
     accessoryLabel.numberOfLines = 0;
     [rowView addSubview:accessoryLabel];

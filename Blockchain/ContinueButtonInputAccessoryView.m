@@ -7,6 +7,7 @@
 //
 
 #import "ContinueButtonInputAccessoryView.h"
+#import "Blockchain-Swift.h"
 
 @interface ContinueButtonInputAccessoryView()
 @property (nonatomic) UIButton *continueButton;
@@ -22,7 +23,7 @@
         [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
         continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
         [continueButton addTarget:self action:@selector(continueButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        continueButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        continueButton.backgroundColor = UIColor.brandSecondary;
         [self addSubview:continueButton];
         self.continueButton = continueButton;
         
@@ -30,7 +31,7 @@
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - closeButtonWidth, 0, closeButtonWidth, BUTTON_HEIGHT)];
         [closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        closeButton.backgroundColor = COLOR_BUTTON_DARK_GRAY;
+        closeButton.backgroundColor = UIColor.gray4;
         [self addSubview:closeButton];
         self.closeButton = closeButton;
     }
@@ -51,14 +52,14 @@
 {
     self.continueButton.enabled = YES;
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continueButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [self.continueButton setBackgroundColor:UIColor.brandSecondary];
 }
 
 - (void)disableContinueButton
 {
     self.continueButton.enabled = NO;
     [self.continueButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [self.continueButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [self.continueButton setBackgroundColor:UIColor.keyPadButton];
 }
 
 @end

@@ -44,7 +44,7 @@
         self.view.frame = CGRectMake(0, assetSelectorHeight, window.frame.size.width, window.frame.size.height - safeAreaInsetTop);
     }
 
-    self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
     self.accountsAndAddressesNavigationController = (AccountsAndAddressesNavigationController *)self.navigationController;
     UILabel *navigationItemTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, [ConstantsObjcBridge defaultNavigationBarHeight])];
     navigationItemTitleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:23];
@@ -59,7 +59,7 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     CGRect frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - assetSelectorHeight - safeAreaInsetTop);
     self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
-    self.tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.tableView.backgroundColor = UIColor.lightGray;
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -291,10 +291,10 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    view.backgroundColor = UIColor.lightGray;
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, self.view.frame.size.width, 14)];
-    label.textColor = COLOR_BLOCKCHAIN_BLUE;
+    label.textColor = UIColor.brandPrimary;
     label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     
     [view addSubview:label];
@@ -306,7 +306,7 @@
         if (self.assetType == LegacyAssetTypeBitcoin) {
             UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 20 - 30, 4, 50, 40)];
             [addButton setImage:[[UIImage imageNamed:@"new"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            addButton.imageView.tintColor = COLOR_BLOCKCHAIN_BLUE;
+            addButton.imageView.tintColor = UIColor.brandPrimary;
             [addButton addTarget:self action:@selector(newAccountClicked:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:addButton];
         }
@@ -316,7 +316,7 @@
         if (self.assetType == LegacyAssetTypeBitcoin) {
             UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 20 - 30, 4, 50, 40)];
             [addButton setImage:[[UIImage imageNamed:@"new"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            addButton.imageView.tintColor = COLOR_BLOCKCHAIN_BLUE;
+            addButton.imageView.tintColor = UIColor.brandPrimary;
             [addButton addTarget:self action:@selector(newAddressClicked:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:addButton];
         }
@@ -417,7 +417,7 @@
                 
                 cell.watchLabel.hidden = YES;
                 cell.watchLabel.text = BC_STRING_WATCH_ONLY;
-                cell.watchLabel.textColor = COLOR_WARNING_RED;
+                cell.watchLabel.textColor = UIColor.error;
             }
         }
         
@@ -428,15 +428,15 @@
         
         // Selected cell color
         UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
-        [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+        [v setBackgroundColor:UIColor.brandPrimary];
         [cell setSelectedBackgroundView:v];
         
         if ([WalletManager.sharedInstance.wallet isAccountArchived:accountIndex assetType:self.assetType]) {
             cell.balanceLabel.text = BC_STRING_ARCHIVED;
-            cell.balanceLabel.textColor = COLOR_BUTTON_BLUE;
+            cell.balanceLabel.textColor = UIColor.brandSecondary;
         } else {
             cell.balanceLabel.text = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
-            cell.balanceLabel.textColor = COLOR_BLOCKCHAIN_GREEN;
+            cell.balanceLabel.textColor = UIColor.green;
         }
         cell.balanceLabel.minimumScaleFactor = 0.75f;
         [cell.balanceLabel setAdjustsFontSizeToFitWidth:YES];
@@ -507,15 +507,15 @@
     uint64_t balance = self.assetType == LegacyAssetTypeBitcoin ? [[WalletManager.sharedInstance.wallet getLegacyAddressBalance:addr assetType:self.assetType] longLongValue] : [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:self.assetType];
 
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
-    [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+    [v setBackgroundColor:UIColor.brandPrimary];
     [cell setSelectedBackgroundView:v];
     
     if ([WalletManager.sharedInstance.wallet isAddressArchived:addr]) {
         cell.balanceLabel.text = BC_STRING_ARCHIVED;
-        cell.balanceLabel.textColor = COLOR_BUTTON_BLUE;
+        cell.balanceLabel.textColor = UIColor.brandSecondary;
     } else {
         cell.balanceLabel.text = self.assetType == LegacyAssetTypeBitcoin ? [NSNumberFormatter formatMoney:balance] : [NSNumberFormatter formatBchWithSymbol:balance];
-        cell.balanceLabel.textColor = COLOR_LABEL_BALANCE_GREEN;
+        cell.balanceLabel.textColor = UIColor.green;
     }
     cell.balanceLabel.minimumScaleFactor = 0.75f;
     [cell.balanceLabel setAdjustsFontSizeToFitWidth:YES];

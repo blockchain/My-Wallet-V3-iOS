@@ -31,7 +31,7 @@
         _labelTextField.borderStyle = UITextBorderStyleRoundedRect;
         _labelTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _labelTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:_labelTextField.font.pointSize];
-        _labelTextField.textColor = COLOR_TEXT_DARK_GRAY;
+        _labelTextField.textColor = UIColor.gray5;
         _labelTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         _labelTextField.spellCheckingType = UITextSpellCheckingTypeNo;
         [self addSubview:_labelTextField];
@@ -41,7 +41,7 @@
 
         UIButton *editAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         editAccountButton.frame = CGRectMake(0, 0, window.frame.size.width, 46);
-        editAccountButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        editAccountButton.backgroundColor = UIColor.brandSecondary;
         [editAccountButton setTitle:BC_STRING_SAVE forState:UIControlStateNormal];
         [editAccountButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         editAccountButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];

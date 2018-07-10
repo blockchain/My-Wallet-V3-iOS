@@ -7,6 +7,7 @@
 //
 
 #import "BCBalanceChartLegendKeyView.h"
+#import "Blockchain-Swift.h"
 
 @interface BCBalanceChartLegendKeyView ()
 @property (nonatomic) UILabel *balanceLabel;
@@ -27,7 +28,7 @@
         [self addSubview:colorView];
         
         CGFloat labelHeight = frame.size.height/3 - lineHeight/3;
-        UIColor *labelTextColor = COLOR_TEXT_DARK_GRAY;
+        UIColor *labelTextColor = UIColor.gray5;
         
         UILabel *assetLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, colorView.frame.origin.y + colorView.frame.size.height, frame.size.width, labelHeight)];
         assetLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];

@@ -15,8 +15,6 @@
 #import "BCNavigationController.h"
 #import "NSNumberFormatter+Currencies.h"
 
-#define COLOR_EXCHANGE_BACKGROUND_GRAY COLOR_BACKGROUND_LIGHT_GRAY
-
 #define DICTIONARY_KEY_TRADE_MINIMUM @"minimum"
 #define DICTIONARY_KEY_TRADE_MAX_LIMIT @"maxLimit"
 
@@ -125,7 +123,7 @@
 
 - (void)setupViews
 {
-    self.view.backgroundColor = COLOR_EXCHANGE_BACKGROUND_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
     
     CGFloat windowWidth = self.view.frame.size.width;
     FromToView *fromToView = [[FromToView alloc] initWithFrame:CGRectMake(0, 16, windowWidth, 96) enableToTextField:NO];
@@ -139,7 +137,7 @@
     
     UILabel *topLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 40, 30)];
     topLeftLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    topLeftLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    topLeftLabel.textColor = UIColor.gray5;
     topLeftLabel.text = CURRENCY_SYMBOL_BTC;
     topLeftLabel.center = CGPointMake(topLeftLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW/2);
     self.leftLabel = topLeftLabel;
@@ -162,7 +160,7 @@
     
     UILabel *topRightLabel = [[UILabel alloc] initWithFrame:CGRectMake(assetToggleButton.frame.origin.x + assetToggleButton.frame.size.width + 15, 12, 40, 30)];
     topRightLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    topRightLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    topRightLabel.textColor = UIColor.gray5;
     topRightLabel.text = CURRENCY_SYMBOL_ETH;
     topRightLabel.center = CGPointMake(topRightLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW/2);
     self.rightLabel = topRightLabel;
@@ -191,7 +189,7 @@
     self.ethField = self.topRightField;
     
     UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(leftFieldOriginX, ROW_HEIGHT_FROM_TO_VIEW, windowWidth - leftFieldOriginX, 0.5)];
-    dividerLine.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    dividerLine.backgroundColor = UIColor.grayLine;
     [amountView addSubview:dividerLine];
     
     BCSecureTextField *bottomLeftField = [self inputTextFieldWithFrame:CGRectMake(leftFieldOriginX, dividerLine.frame.origin.y + dividerLine.frame.size.height + 8, leftField.frame.size.width, 30)];
@@ -211,7 +209,7 @@
     UILabel *fiatLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 40, 30)];
     fiatLabel.center = CGPointMake(fiatLabel.center.x, bottomLeftField.center.y);
     fiatLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    fiatLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    fiatLabel.textColor = UIColor.gray5;
     fiatLabel.text = WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.code;
     fiatLabel.center = CGPointMake(fiatLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW*1.5);
     [amountView addSubview:fiatLabel];
@@ -225,7 +223,7 @@
     BCLine *lineAboveButtonsView = [[BCLine alloc] initWithYPosition:amountView.frame.origin.y + amountView.frame.size.height];
     [self.view addSubview:lineAboveButtonsView];
     UIView *buttonsView = [[UIView alloc] initWithFrame:CGRectMake(0, amountView.frame.origin.y + amountView.frame.size.height + 0.5, windowWidth, buttonHeight)];
-    buttonsView.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    buttonsView.backgroundColor = UIColor.grayLine;
     [self.view addSubview:buttonsView];
     
     UIFont *buttonFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
@@ -233,7 +231,7 @@
     UIButton *useMinButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonsView.frame.size.width/2 - dividerLineWidth/2, buttonHeight)];
     useMinButton.titleLabel.font = buttonFont;
     useMinButton.backgroundColor = [UIColor whiteColor];
-    [useMinButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [useMinButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [useMinButton setTitle:BC_STRING_USE_MINIMUM forState:UIControlStateNormal];
     [useMinButton addTarget:self action:@selector(useMinButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [buttonsView addSubview:useMinButton];
@@ -242,7 +240,7 @@
     UIButton *useMaxButton = [[UIButton alloc] initWithFrame:CGRectMake(useMaxButtonOriginX, 0, buttonsView.frame.size.width - useMaxButtonOriginX, buttonHeight)];
     useMaxButton.titleLabel.font = buttonFont;
     useMaxButton.backgroundColor = [UIColor whiteColor];
-    [useMaxButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [useMaxButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [useMaxButton setTitle:BC_STRING_USE_MAXIMUM forState:UIControlStateNormal];
     [useMaxButton addTarget:self action:@selector(useMaxButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [buttonsView addSubview:useMaxButton];
@@ -251,7 +249,7 @@
     errorTextView.editable = NO;
     errorTextView.scrollEnabled = NO;
     errorTextView.selectable = NO;
-    errorTextView.textColor = COLOR_WARNING_RED;
+    errorTextView.textColor = UIColor.error;
     errorTextView.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     errorTextView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:errorTextView];
@@ -259,7 +257,7 @@
     self.errorTextView = errorTextView;
     
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
-    continueButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    continueButton.backgroundColor = UIColor.brandSecondary;
     continueButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -418,7 +416,7 @@
     
     self.continueButton.enabled = YES;
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continueButton setBackgroundColor:COLOR_BLOCKCHAIN_LIGHT_BLUE];
+    [self.continueButton setBackgroundColor:UIColor.brandSecondary];
 }
 
 - (void)disablePaymentButtons
@@ -427,7 +425,7 @@
 
     self.continueButton.enabled = NO;
     [self.continueButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [self.continueButton setBackgroundColor:COLOR_BUTTON_KEYPAD_GRAY];
+    [self.continueButton setBackgroundColor:UIColor.keyPadButton];
 }
 
 - (void)didGetApproximateQuote:(NSDictionary *)result
@@ -1119,7 +1117,7 @@
 
 - (void)highlightInvalidAmounts
 {
-    UIColor *newColor = COLOR_WARNING_RED;
+    UIColor *newColor = UIColor.error;
     self.topLeftField.textColor = newColor;
     self.topRightField.textColor = newColor;
     self.bottomLeftField.textColor = newColor;
@@ -1128,7 +1126,7 @@
 
 - (void)removeHighlightFromAmounts
 {
-    UIColor *newColor = COLOR_TEXT_DARK_GRAY;
+    UIColor *newColor = UIColor.gray5;
     self.topLeftField.textColor = newColor;
     self.topRightField.textColor = newColor;
     self.bottomLeftField.textColor = newColor;
@@ -1184,7 +1182,7 @@
     BCSecureTextField *textField = [[BCSecureTextField alloc] initWithFrame:frame];
     textField.keyboardType = UIKeyboardTypeDecimalPad;
     textField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    textField.textColor = COLOR_TEXT_DARK_GRAY;
+    textField.textColor = UIColor.gray5;
     textField.delegate = self;
     return textField;
 }

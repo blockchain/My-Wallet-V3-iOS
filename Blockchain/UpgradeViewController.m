@@ -61,7 +61,7 @@
     
     UIFont *font = [UIFont fontWithName:FONT_HELVETICA_NUEUE size:FONT_SIZE_MEDIUM];
     
-    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[COLOR_BLOCKCHAIN_BLUE, style, font] forKeys:@[NSForegroundColorAttributeName, NSParagraphStyleAttributeName, NSFontAttributeName]];
+    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[UIColor.brandPrimary, style, font] forKeys:@[NSForegroundColorAttributeName, NSParagraphStyleAttributeName, NSFontAttributeName]];
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributesDictionary];
     return attributedString;
@@ -131,7 +131,7 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = COLOR_BLOCKCHAIN_UPGRADE_BLUE;
+    self.view.backgroundColor = UIColor.brandTertiary;
     
     [self setupCaptionLabels];
     

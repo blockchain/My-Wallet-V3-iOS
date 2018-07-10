@@ -35,7 +35,7 @@
     UIView *onePixelLine = [[UIView alloc] initWithFrame:CGRectMake(0, yPosition, windowWidth, onePixelHeight)];
     
     onePixelLine.userInteractionEnabled = NO;
-    [onePixelLine setBackgroundColor:self.backgroundColor ? : [ConstantsObjcBridge grayLineColor]];
+    [onePixelLine setBackgroundColor:self.backgroundColor ? : UIColor.grayLine];
     [self addSubview:onePixelLine];
     
     self.backgroundColor = [UIColor clearColor];

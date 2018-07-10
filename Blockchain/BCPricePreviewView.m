@@ -8,6 +8,7 @@
 
 #import "BCPricePreviewView.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface BCPricePreviewView ()
 @property (nonatomic) UILabel *priceLabel;
@@ -35,7 +36,7 @@
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, 0, 24)];
         titleLabel.text = [[name stringByAppendingFormat:@" %@", BC_STRING_PRICE] uppercaseString];
         titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_EXTRALIGHT size:FONT_SIZE_EXTRA_SMALL];
-        titleLabel.textColor = COLOR_BLOCKCHAIN_DARK_BLUE;
+        titleLabel.textColor = UIColor.brandPrimary;
         [titleLabel sizeToFit];
         titleLabel.center = CGPointMake(self.frame.size.width/2, titleLabel.center.y);
         [self addSubview:titleLabel];
@@ -43,7 +44,7 @@
         UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, 0, 30)];
         priceLabel.text = price;
         priceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_LARGE];
-        priceLabel.textColor = COLOR_BLOCKCHAIN_DARK_BLUE;
+        priceLabel.textColor = UIColor.brandPrimary;
         [priceLabel sizeToFit];
         priceLabel.center = CGPointMake(self.frame.size.width/2, priceLabel.center.y);
         [self addSubview:priceLabel];
@@ -51,7 +52,7 @@
         self.priceLabel = priceLabel;
         
         UILabel *seeChartsLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        seeChartsLabel.textColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        seeChartsLabel.textColor = UIColor.brandSecondary;
         seeChartsLabel.text = BC_STRING_SEE_CHARTS;
         seeChartsLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_SMALL];
         [seeChartsLabel sizeToFit];
@@ -62,7 +63,7 @@
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imageViewWidth, imageViewWidth)];
         imageView.image = [[UIImage imageNamed:assetImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        imageView.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        imageView.tintColor = UIColor.brandSecondary;
         
         UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, priceLabel.frame.origin.y + priceLabel.frame.size.height + 8, imageViewWidth + seeChartsLabel.frame.size.width + 8, 40)];
         [containerView addSubview:seeChartsLabel];

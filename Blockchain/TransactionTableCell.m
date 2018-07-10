@@ -42,17 +42,17 @@
     [btcButton setTitle:[NSNumberFormatter formatMoney:ABS(transaction.amount)] forState:UIControlStateNormal];
     
     if([transaction.txType isEqualToString:TX_TYPE_TRANSFER]) {
-        [btcButton setBackgroundColor:COLOR_TRANSACTION_TRANSFERRED];
+        [btcButton setBackgroundColor:UIColor.grayBlue];
         actionLabel.text = [BC_STRING_TRANSFERRED uppercaseString];
-        actionLabel.textColor = COLOR_TRANSACTION_TRANSFERRED;
+        actionLabel.textColor = UIColor.grayBlue;
     } else if ([transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
-        [btcButton setBackgroundColor:COLOR_TRANSACTION_RECEIVED];
+        [btcButton setBackgroundColor:UIColor.aqua];
         actionLabel.text = [BC_STRING_RECEIVED uppercaseString];
-        actionLabel.textColor = COLOR_TRANSACTION_RECEIVED;
+        actionLabel.textColor = UIColor.aqua;
     } else {
-        [btcButton setBackgroundColor:COLOR_TRANSACTION_SENT];
+        [btcButton setBackgroundColor:UIColor.red];
         actionLabel.text = [BC_STRING_SENT uppercaseString];
-        actionLabel.textColor = COLOR_TRANSACTION_SENT;
+        actionLabel.textColor = UIColor.red;
     }
     
     infoLabel.adjustsFontSizeToFitWidth = YES;
@@ -67,15 +67,15 @@
     
     UIFont *exchangeFont = [UIFont fontWithName:[ConstantsObjcBridge montserratSemiBold] size:infoLabel.font.pointSize];
     UIColor *exchangeTextColor = [UIColor whiteColor];
-    UIColor *exchangeBackgroundColor = [ConstantsObjcBridge colorBrandPrimary];
+    UIColor *exchangeBackgroundColor = UIColor.brandPrimary;
     UIColor *exchangeBorderColor = exchangeBackgroundColor;
 
     if ((([transaction.txType isEqualToString:TX_TYPE_RECEIVED] || [transaction.txType isEqualToString:TX_TYPE_TRANSFER]) && transaction.toWatchOnly) || ([transaction.txType isEqualToString:TX_TYPE_SENT] && transaction.fromWatchOnly)) {
         infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratLight] size:infoLabel.font.pointSize];
         infoLabel.text = [LocalizationConstantsObjcBridge nonSpendable];
-        infoLabel.textColor = [ConstantsObjcBridge colorGray5];
-        infoLabel.backgroundColor = [ConstantsObjcBridge colorGray6];
-        infoLabel.layer.borderColor = [[ConstantsObjcBridge colorGray2] CGColor];
+        infoLabel.textColor = UIColor.gray5;
+        infoLabel.backgroundColor = UIColor.gray6;
+        infoLabel.layer.borderColor = UIColor.gray2.CGColor;
     } else if ([WalletManager.sharedInstance.wallet isDepositTransaction:transaction.myHash]) {
         infoLabel.font = exchangeFont;
         infoLabel.text = BC_STRING_DEPOSITED_TO_SHAPESHIFT;
@@ -97,7 +97,7 @@
     [infoLabel sizeToFit];
     
     warningImageView.image = [warningImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [warningImageView setTintColor:COLOR_WARNING_RED];
+    [warningImageView setTintColor:UIColor.error];
     
     if (transaction.doubleSpend || transaction.replaceByFee) {
         warningImageView.hidden = NO;

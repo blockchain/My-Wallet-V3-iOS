@@ -47,7 +47,7 @@
     self.tableView = oneRowTableView;
     
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 32, BUTTON_HEIGHT)];
-    button.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    button.backgroundColor = UIColor.brandSecondary;
     button.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];

@@ -37,7 +37,7 @@
         topOffset = (self.view.frame.size.height / 2) - 180;
     }
     UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, topOffset, self.view.frame.size.width - 40, 0)];
-    instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    instructionsLabel.textColor = UIColor.gray5;
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
@@ -59,7 +59,7 @@
     self.qrCodeImageView = qrCodeImageView;
     
     UITextView *addressTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 50)];
-    addressTextView.textColor = COLOR_TEXT_DARK_GRAY;
+    addressTextView.textColor = UIColor.gray5;
     addressTextView.textAlignment = NSTextAlignmentCenter;
     addressTextView.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL];
     [addressTextView changeYPosition:qrCodeImageView.frame.origin.y + qrCodeImageView.frame.size.height];
@@ -78,7 +78,7 @@
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.view.center.x, requestButton.center.y);
     [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
-    requestButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    requestButton.backgroundColor = UIColor.brandSecondary;
     requestButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     requestButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [requestButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

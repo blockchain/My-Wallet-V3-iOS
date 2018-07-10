@@ -23,6 +23,7 @@
 ********************************************************************************/
 
 #import "PEViewController.h"
+#import "Blockchain-Swift.h"
 
 @interface PEViewController ()
 
@@ -84,7 +85,7 @@
     }
     
     promptLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-    self.versionLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+    self.versionLabel.textColor = UIColor.brandPrimary;
     self.versionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
 
     containerView.frame = CGRectMake(0, 480 - containerViewHeight - safeAreaInsetBottom, window.rootViewController.view.frame.size.width, containerViewHeight);
@@ -102,7 +103,7 @@
         if (@available(iOS 11.0, *)) {
             fillerView.backgroundColor = [UIColor colorNamed:@"ColorBrandPrimary"];
         } else {
-            fillerView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+            fillerView.backgroundColor = UIColor.brandPrimary;
         }
         [self.scrollView addSubview:fillerView];
     }
@@ -112,7 +113,7 @@
     self.swipeLabelImageView.image = [UIImage imageNamed:@"arrow_downward"];
     self.swipeLabelImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.swipeLabelImageView.image = [self.swipeLabelImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.swipeLabelImageView setTintColor:COLOR_BLOCKCHAIN_BLUE];
+    [self.swipeLabelImageView setTintColor:UIColor.brandPrimary];
 
     [self setupTapActionForSwipeQR];
 }

@@ -7,6 +7,7 @@
 //
 
 #import "SideMenuViewCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation SideMenuViewCell
 
@@ -24,8 +25,8 @@
     
     self.backgroundColor = [UIColor clearColor];
     self.textLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    self.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
-    self.textLabel.highlightedTextColor = COLOR_TEXT_DARK_GRAY;
+    self.textLabel.textColor = UIColor.gray5;
+    self.textLabel.highlightedTextColor = UIColor.gray5;
 }
 
 @end

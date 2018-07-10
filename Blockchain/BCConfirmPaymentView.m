@@ -33,7 +33,7 @@
 
         self.viewModel = viewModel;
         
-        BCTotalAmountView *totalAmountView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:COLOR_BLOCKCHAIN_RED amount:0];
+        BCTotalAmountView *totalAmountView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:UIColor.red amount:0];
         
         totalAmountView.btcAmountLabel.text = self.viewModel.totalAmountText;
         totalAmountView.fiatAmountLabel.text = self.viewModel.fiatTotalAmountText;
@@ -58,13 +58,13 @@
         summaryTableView.clipsToBounds = YES;
         
         CALayer *topBorder = [CALayer layer];
-        topBorder.borderColor = [[ConstantsObjcBridge grayLineColor] CGColor];
+        topBorder.borderColor = UIColor.grayLine.CGColor;
         topBorder.borderWidth = 1;
         topBorder.frame = CGRectMake(0, 0, CGRectGetWidth(summaryTableView.frame), lineWidth);
         [summaryTableView.layer addSublayer:topBorder];
         
         CALayer *bottomBorder = [CALayer layer];
-        bottomBorder.borderColor = [[ConstantsObjcBridge grayLineColor] CGColor];
+        bottomBorder.borderColor = UIColor.grayLine.CGColor;
         bottomBorder.borderWidth = 1;
         bottomBorder.frame = CGRectMake(0, CGRectGetHeight(summaryTableView.frame) - lineWidth, CGRectGetWidth(summaryTableView.frame), lineWidth);
         [summaryTableView.layer addSublayer:bottomBorder];
@@ -78,7 +78,7 @@
         [self.reallyDoPaymentButton changeYPosition:self.frame.size.height - 20 + 49];
         
         [self.reallyDoPaymentButton setTitle:buttonTitle forState:UIControlStateNormal];
-        self.reallyDoPaymentButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        self.reallyDoPaymentButton.backgroundColor = UIColor.brandSecondary;
         self.reallyDoPaymentButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
         
         [self.reallyDoPaymentButton addTarget:self action:@selector(reallyDoPaymentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -91,7 +91,7 @@
             warning.editable = NO;
             warning.scrollEnabled = NO;
             warning.selectable = NO;
-            warning.backgroundColor = COLOR_BLOCKCHAIN_YELLOW;
+            warning.backgroundColor = UIColor.brandYellow;
             [self addSubview:warning];
             warning.attributedText = viewModel.warningText;
             CGSize fittedSize = [warning sizeThatFits:CGSizeMake(self.reallyDoPaymentButton.frame.size.width, CGFLOAT_MAX)];
@@ -161,9 +161,9 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    cell.textLabel.textColor = UIColor.gray5;
     cell.textLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    cell.detailTextLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    cell.detailTextLabel.textColor = UIColor.gray5;
     cell.detailTextLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
     
     if (self.isEditingDescription) {
@@ -179,7 +179,7 @@
         
         if ([textLabel isEqualToString:BC_STRING_FEE]) {
             UILabel *testLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-            testLabel.textColor = COLOR_TEXT_DARK_GRAY;
+            testLabel.textColor = UIColor.gray5;
             testLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
             testLabel.text = BC_STRING_FEE;
             [testLabel sizeToFit];
@@ -187,11 +187,11 @@
             CGFloat feeInformationButtonWidth = 19;
             self.feeInformationButton = [[UIButton alloc] initWithFrame:CGRectMake(15 + testLabel.frame.size.width + 8, cellHeight/2 - feeInformationButtonWidth/2, feeInformationButtonWidth, feeInformationButtonWidth)];
             [self.feeInformationButton setImage:[[UIImage imageNamed:@"help"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            self.feeInformationButton.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+            self.feeInformationButton.tintColor = UIColor.brandSecondary;
             [self.feeInformationButton addTarget:self action:@selector(feeInformationButtonClicked) forControlEvents:UIControlEventTouchUpInside];
             [cell.contentView addSubview:self.feeInformationButton];
             
-            if (self.viewModel.surgeIsOccurring) cell.detailTextLabel.textColor = COLOR_WARNING_RED;
+            if (self.viewModel.surgeIsOccurring) cell.detailTextLabel.textColor = UIColor.error;
         } else if ([textLabel isEqualToString:BC_STRING_DESCRIPTION]) {
             cell.textLabel.text = nil;
             
@@ -201,14 +201,14 @@
             UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftMargin, cellHeight/2 - labelHeight/2, self.frame.size.width/2 - 8 - leftMargin, labelHeight)];
             descriptionLabel.text = BC_STRING_DESCRIPTION;
             descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-            descriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+            descriptionLabel.textColor = UIColor.gray5;
             
             [cell.contentView addSubview:descriptionLabel];
             
             CGFloat descriptionFieldHeight = 20;
             self.descriptionField = [[BCSecureTextField alloc] initWithFrame:CGRectMake(self.frame.size.width/2 + 16, cellHeight/2 - descriptionFieldHeight/2, self.frame.size.width/2 - 16 - 15, descriptionFieldHeight)];
             self.descriptionField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-            self.descriptionField.textColor = COLOR_TEXT_DARK_GRAY;
+            self.descriptionField.textColor = UIColor.gray5;
             self.descriptionField.textAlignment = NSTextAlignmentRight;
             self.descriptionField.returnKeyType = UIReturnKeyDone;
             

@@ -67,7 +67,7 @@
     BCPriceMarker *marker = [[BCPriceMarker alloc]
                              initWithColor: [UIColor whiteColor]
                              font: [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:14]
-                             textColor: COLOR_PRICE_PREVIEW_CHART_MARKER
+                             textColor: UIColor.gray4
                              insets: UIEdgeInsetsMake(10, 10, 10, 10)];
     marker.chartView = self.chartView;
     self.chartView.marker = marker;
@@ -85,17 +85,17 @@
     CGFloat legendKeyWidth = (legendKeyContainerView.frame.size.width - legendKeySpacing*2)/3;
     CGFloat legendKeyHeight = legendKeyContainerView.frame.size.height;
     
-    self.bitcoinLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(0, 0, legendKeyWidth, legendKeyHeight) assetColor:COLOR_BLOCKCHAIN_BLUE assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]];
+    self.bitcoinLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(0, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandPrimary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]];
     UITapGestureRecognizer *tapGestureBitcoin = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinLegendTapped)];
     [self.bitcoinLegendKey addGestureRecognizer:tapGestureBitcoin];
     [legendKeyContainerView addSubview:self.bitcoinLegendKey];
     
-     self.etherLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(legendKeyWidth + legendKeySpacing, 0, legendKeyWidth, legendKeyHeight) assetColor:COLOR_BLOCKCHAIN_LIGHT_BLUE assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum]];
+     self.etherLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(legendKeyWidth + legendKeySpacing, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandSecondary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum]];
     UITapGestureRecognizer *tapGestureEther = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(etherLegendTapped)];
     [self.etherLegendKey addGestureRecognizer:tapGestureEther];
      [legendKeyContainerView addSubview:self.etherLegendKey];
 
-    self.bitcoinCashLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake((legendKeyWidth + legendKeySpacing)*2, 0, legendKeyWidth, legendKeyHeight) assetColor:COLOR_BLOCKCHAIN_LIGHTER_BLUE assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash]];
+    self.bitcoinCashLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake((legendKeyWidth + legendKeySpacing)*2, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandTertiary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash]];
     UITapGestureRecognizer *tapGestureBitcoinCash = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinCashLegendTapped)];
     [self.bitcoinCashLegendKey addGestureRecognizer:tapGestureBitcoinCash];
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
@@ -106,7 +106,7 @@
 - (void)setupLineSeparator
 {
     BCLine *line = [[BCLine alloc] initWithFrame:CGRectMake(self.legendKeyContainerView.frame.origin.x, self.legendKeyContainerView.frame.origin.y + self.legendKeyContainerView.frame.size.height + 8, self.legendKeyContainerView.frame.size.width, 1)];
-    line.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    line.backgroundColor = UIColor.grayLine;
     [self addSubview:line];
     self.lineSeparator = line;
 
@@ -253,7 +253,7 @@
     if (hasZeroBalances) {
         ChartDataEntry *emptyValue = [[PieChartDataEntry alloc] initWithValue:1];
         dataSet = [[PieChartDataSet alloc] initWithValues:@[emptyValue] label:BC_STRING_BALANCES];
-        dataSet.colors = @[COLOR_EMPTY_CHART_GRAY];
+        dataSet.colors = @[UIColor.emptyChart];
         dataSet.selectionShift = 5;
         self.chartView.highlightPerTapEnabled = NO;
     } else {
@@ -265,7 +265,7 @@
         ChartDataEntry *etherValue = [[PieChartDataEntry alloc] initWithValue:self.ether.fiatBalance data:ethChartEntryData];
         ChartDataEntry *bitcoinCashValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinCash.fiatBalance data:bchChartEntryData];
         dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue] label:BC_STRING_BALANCES];
-        dataSet.colors = @[COLOR_BLOCKCHAIN_BLUE, COLOR_BLOCKCHAIN_LIGHT_BLUE, COLOR_BLOCKCHAIN_LIGHTER_BLUE];
+        dataSet.colors = @[UIColor.brandPrimary, UIColor.brandSecondary, UIColor.brandTertiary];
         dataSet.selectionShift = 5;
         self.chartView.highlightPerTapEnabled = YES;
     }
@@ -305,7 +305,7 @@
 {
     UIFont *font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
     
-    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[COLOR_TEXT_DARK_GRAY, font] forKeys:@[NSForegroundColorAttributeName, NSFontAttributeName]];
+    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[UIColor.gray5, font] forKeys:@[NSForegroundColorAttributeName, NSFontAttributeName]];
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:attributesDictionary];
     

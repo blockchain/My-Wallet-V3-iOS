@@ -40,7 +40,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
     
     [self setupTableView];
 }
@@ -57,13 +57,13 @@
 {
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     searchBar.placeholder = BC_STRING_SEARCH;
-    searchBar.layer.borderColor = [COLOR_BLOCKCHAIN_BLUE CGColor];
+    searchBar.layer.borderColor = [UIColor.brandPrimary CGColor];
     searchBar.layer.borderWidth = 1;
     searchBar.searchBarStyle = UISearchBarStyleProminent;
     searchBar.translucent = NO;
     searchBar.backgroundImage = [UIImage new];
     searchBar.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
-    searchBar.barTintColor = COLOR_BLOCKCHAIN_BLUE;
+    searchBar.barTintColor = UIColor.brandPrimary;
     [[UIButton appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]]
      setTitle:BC_STRING_CANCEL forState:UIControlStateNormal];
     [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
@@ -85,7 +85,7 @@
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchBar.frame.origin.y + searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - topBarHeight - searchBar.frame.size.height) style:UITableViewStylePlain];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.sectionIndexColor = COLOR_BLOCKCHAIN_BLUE;
+    self.tableView.sectionIndexColor = UIColor.brandPrimary;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];

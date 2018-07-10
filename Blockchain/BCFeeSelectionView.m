@@ -8,6 +8,7 @@
 
 #import "BCFeeSelectionView.h"
 #import "FeeTableCell.h"
+#import "Blockchain-Swift.h"
 
 int rowRegular = 0;
 int rowPriority = 1;
@@ -47,7 +48,7 @@ int rowCustom = 2;
         FeeType feeType = indexPath.row;
         cell = [[FeeTableCell alloc] initWithFeeType:feeType];
         cell.accessoryType = feeType == [self.delegate selectedFeeType] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-        cell.tintColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        cell.tintColor = UIColor.brandSecondary;
         cell.backgroundColor = [UIColor whiteColor];
     }
     return cell;

@@ -29,7 +29,7 @@
         _labelTextField = [[BCSecureTextField alloc] initWithFrame:CGRectMake(20, 95, window.frame.size.width - 40, 30)];
         _labelTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:_labelTextField.font.pointSize];
         _labelTextField.borderStyle = UITextBorderStyleRoundedRect;
-        _labelTextField.textColor = COLOR_TEXT_DARK_GRAY;
+        _labelTextField.textColor = UIColor.gray5;
         _labelTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _labelTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         _labelTextField.spellCheckingType = UITextSpellCheckingTypeNo;
@@ -40,7 +40,7 @@
         
         UIButton *createAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         createAccountButton.frame = CGRectMake(0, 0, window.frame.size.width, 46);
-        createAccountButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        createAccountButton.backgroundColor = UIColor.brandSecondary;
         [createAccountButton setTitle:BC_STRING_SAVE forState:UIControlStateNormal];
         [createAccountButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         createAccountButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];

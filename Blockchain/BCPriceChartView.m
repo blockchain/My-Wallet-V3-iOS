@@ -59,7 +59,7 @@
         titleContainerView.center = CGPointMake(self.bounds.size.width/2, titleContainerView.center.y);
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-        titleLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+        titleLabel.textColor = UIColor.brandPrimary;
         titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_EXTRALIGHT size:FONT_SIZE_EXTRA_SMALL];
         [titleContainerView addSubview:titleLabel];
         self.titleLabel = titleLabel;
@@ -67,12 +67,12 @@
         self.priceContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
         self.priceLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.priceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_LARGE];
-        self.priceLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+        self.priceLabel.textColor = UIColor.brandPrimary;
         [self.priceContainerView addSubview:self.priceLabel];
         
         self.percentageChangeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
         self.percentageChangeLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-        self.percentageChangeLabel.textColor = COLOR_BLOCKCHAIN_BLUE;
+        self.percentageChangeLabel.textColor = UIColor.brandPrimary;
         [self.priceContainerView addSubview:self.percentageChangeLabel];
         
         self.arrowImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 15)];
@@ -106,7 +106,7 @@
         chartView.marker = marker;
         
         chartView.leftAxis.drawGridLinesEnabled = NO;
-        chartView.leftAxis.labelTextColor = COLOR_TEXT_GRAY;
+        chartView.leftAxis.labelTextColor = UIColor.gray3;
         chartView.leftAxis.labelFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL];
         chartView.leftAxis.labelCount = 4;
         
@@ -114,13 +114,13 @@
         
         chartView.xAxis.labelFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL];
         chartView.xAxis.drawGridLinesEnabled = NO;
-        chartView.xAxis.labelTextColor = COLOR_TEXT_GRAY;
+        chartView.xAxis.labelTextColor = UIColor.gray3;
         chartView.xAxis.labelPosition = XAxisLabelPositionBottom;
         chartView.xAxis.granularityEnabled = YES;
         chartView.xAxis.labelCount = 4;
         [chartView setExtraOffsetsWithLeft:8.0 top:0 right:0 bottom:10.0];
         chartView.noDataFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_EXTRA_SMALL];
-        chartView.noDataTextColor = COLOR_TEXT_GRAY;
+        chartView.noDataTextColor = UIColor.gray3;
         
         chartView.xAxis.valueFormatter = delegate;
         chartView.leftAxis.valueFormatter = delegate;
@@ -268,7 +268,7 @@
     double percentChange = (difference / firstPrice) * 100;
     
     self.arrowImageView.hidden = NO;
-    self.arrowImageView.tintColor = COLOR_BLOCKCHAIN_GREEN;
+    self.arrowImageView.tintColor = UIColor.green;
     [self.arrowImageView changeXPosition:self.priceLabel.frame.size.width + 8];
     [self.arrowImageView changeYPosition:self.priceLabel.frame.size.height - self.arrowImageView.frame.size.height - 3.5];
     
@@ -276,10 +276,10 @@
     
     if (percentChange > 0) {
         self.arrowImageView.image = [[UIImage imageWithCGImage:arrowImage.CGImage scale:1.0f orientation:UIImageOrientationDownMirrored] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        self.arrowImageView.tintColor = COLOR_BLOCKCHAIN_GREEN;
+        self.arrowImageView.tintColor = UIColor.green;
     } else {
         self.arrowImageView.image = [arrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        self.arrowImageView.tintColor = COLOR_BLOCKCHAIN_RED;
+        self.arrowImageView.tintColor = UIColor.red;
     }
     
     self.percentageChangeLabel.hidden = NO;
@@ -341,12 +341,12 @@
     
     LineChartDataSet *dataSet = [[LineChartDataSet alloc] initWithValues:finalValues label:nil];
     dataSet.lineWidth = 1.5f;
-    dataSet.colors = @[COLOR_BLOCKCHAIN_BLUE];
+    dataSet.colors = @[UIColor.brandPrimary];
     dataSet.mode = LineChartModeLinear;
     dataSet.drawValuesEnabled = NO;
     dataSet.circleRadius = 1.0f;
     dataSet.drawCircleHoleEnabled = NO;
-    dataSet.circleColors = @[COLOR_BLOCKCHAIN_BLUE];
+    dataSet.circleColors = @[UIColor.brandPrimary];
     dataSet.drawFilledEnabled = NO;
     dataSet.drawVerticalHighlightIndicatorEnabled = NO;
     dataSet.drawHorizontalHighlightIndicatorEnabled = NO;
@@ -363,8 +363,8 @@
     UIFont *normalFont = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_SMALL];
     UIFont *selectedFont = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     
-    NSAttributedString *attrNormal = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:normalFont, NSForegroundColorAttributeName:COLOR_BLOCKCHAIN_BLUE, NSUnderlineStyleAttributeName:[NSNumber numberWithInt:NSUnderlineStyleNone]}];
-    NSAttributedString *attrSelected = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:selectedFont, NSForegroundColorAttributeName:COLOR_BLOCKCHAIN_BLUE, NSUnderlineStyleAttributeName:[NSNumber numberWithInt:NSUnderlineStyleSingle]}];
+    NSAttributedString *attrNormal = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:normalFont, NSForegroundColorAttributeName:UIColor.brandPrimary, NSUnderlineStyleAttributeName:[NSNumber numberWithInt:NSUnderlineStyleNone]}];
+    NSAttributedString *attrSelected = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:selectedFont, NSForegroundColorAttributeName:UIColor.brandPrimary, NSUnderlineStyleAttributeName:[NSNumber numberWithInt:NSUnderlineStyleSingle]}];
     
     UIButton *button = [[UIButton alloc] initWithFrame:frame];
     [button setAttributedTitle:attrNormal forState:UIControlStateNormal];

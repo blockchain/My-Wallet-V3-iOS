@@ -140,6 +140,7 @@
 		516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
 		516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
 		516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */; };
+		5171E39020F4F98000E8913E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171E38F20F4F98000E8913E /* Colors.swift */; };
 		5185B18A208697F1003C9AC2 /* BCPriceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185B189208697F1003C9AC2 /* BCPriceMarker.swift */; };
 		5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
@@ -1421,6 +1422,7 @@
 		516594A6204F1C0400C50E78 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
+		5171E38F20F4F98000E8913E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		5185B189208697F1003C9AC2 /* BCPriceMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BCPriceMarker.swift; path = Views/BCPriceMarker.swift; sourceTree = "<group>"; };
 		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Enum+RawValued.swift"; path = "Extensions/Enum+RawValued.swift"; sourceTree = "<group>"; };
 		5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URI.swift"; sourceTree = "<group>"; };
@@ -2489,6 +2491,7 @@
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
 				511646C4208124E200C43522 /* AssetType.swift */,
 				AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */,
+				5171E38F20F4F98000E8913E /* Colors.swift */,
 				67D95A271B3DDC900012EBB1 /* Constants.swift */,
 				511646C7208129D800C43522 /* Environment.swift */,
 				AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */,
@@ -4022,6 +4025,7 @@
 				2322DCC01D771831000E5AC1 /* SRRandom.m in Sources */,
 				AA1E523A2097E2190099BD10 /* Strings.swift in Sources */,
 				C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
+				5171E39020F4F98000E8913E /* Colors.swift in Sources */,
 				23FB5C0D1D9ABB650008C6AB /* TransactionDetailFromCell.m in Sources */,
 				2322DCBA1D771831000E5AC1 /* SRConstants.m in Sources */,
 				A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */,

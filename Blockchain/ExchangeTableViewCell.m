@@ -20,17 +20,17 @@
     NSString *displayStatus;
     UIColor *statusColor;
     if ([status isEqualToString:TRADE_STATUS_COMPLETE]) {
-        statusColor = COLOR_BLOCKCHAIN_GREEN;
+        statusColor = UIColor.green;
         displayStatus = BC_STRING_COMPLETE;
     } else if ([status isEqualToString:TRADE_STATUS_NO_DEPOSITS] ||
                [status isEqualToString:TRADE_STATUS_RECEIVED]) {
-        statusColor = COLOR_BLOCKCHAIN_GRAY_BLUE;
+        statusColor = UIColor.grayBlue;
         displayStatus = BC_STRING_IN_PROGRESS;
     } else if ([status isEqualToString:TRADE_STATUS_CANCELLED] ||
                [status isEqualToString:TRADE_STATUS_FAILED] ||
                [status isEqualToString:TRADE_STATUS_EXPIRED] ||
                [status isEqualToString:TRADE_STATUS_RESOLVED]) {
-        statusColor = COLOR_BLOCKCHAIN_RED;
+        statusColor = UIColor.red;
         displayStatus = BC_STRING_EXCHANGE_TITLE_REFUNDED;
     }
     

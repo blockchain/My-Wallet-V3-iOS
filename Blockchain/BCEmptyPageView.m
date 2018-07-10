@@ -8,6 +8,7 @@
 
 #import "BCEmptyPageView.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCEmptyPageView
 
@@ -34,7 +35,7 @@
         subtitleTextView.editable = NO;
         subtitleTextView.selectable = NO;
         subtitleTextView.scrollEnabled = NO;
-        subtitleTextView.textColor = COLOR_TEXT_SUBHEADER_GRAY;
+        subtitleTextView.textColor = UIColor.gray2;
         subtitleTextView.textContainerInset = UIEdgeInsetsZero;
         subtitleTextView.frame = CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, subtitleTextView.frame.size.width, subtitleTextView.contentSize.height);
         [subtitleTextView sizeToFit];

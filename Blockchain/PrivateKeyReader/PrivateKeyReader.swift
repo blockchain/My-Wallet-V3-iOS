@@ -120,11 +120,7 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
         self.view.frame = viewFrame
 
         let topBar = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: Constants.Measurements.DefaultHeaderHeight))
-        if #available(iOS 11.0, *) {
-            topBar.backgroundColor = UIColor(named: "ColorBrandPrimary")
-        } else {
-            topBar.backgroundColor = Constants.Colors.ColorBrandPrimary
-        }
+        topBar.backgroundColor = UIColor.brandPrimary
         self.view.addSubview(topBar)
 
         let headerLabel = UILabel(frame: CGRect(x: 60, y: 26, width: 200, height: 30))

@@ -423,7 +423,7 @@ static PEViewController *VerifyController()
         self.debugButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [self.debugButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)];
         [self.debugButton setTitle:DEBUG_STRING_DEBUG forState:UIControlStateNormal];
-        [self.debugButton setTitleColor:COLOR_BLOCKCHAIN_BLUE forState:UIControlStateNormal];
+        [self.debugButton setTitleColor:UIColor.brandPrimary forState:UIControlStateNormal];
         [self.view addSubview:self.debugButton];
         [self.debugButton addGestureRecognizer:self.longPressGesture];
     }
@@ -522,8 +522,8 @@ static PEViewController *VerifyController()
 
     UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, swipeView.pageIndicatorYOrigin, 100, 30)];
     pageControl.center = CGPointMake(self.view.bounds.size.width/2, pageControl.center.y);
-    pageControl.pageIndicatorTintColor = COLOR_BLOCKCHAIN_LIGHTEST_BLUE;
-    pageControl.currentPageIndicatorTintColor = COLOR_BLOCKCHAIN_DARK_BLUE;
+    pageControl.pageIndicatorTintColor = UIColor.brandQuaternary;
+    pageControl.currentPageIndicatorTintColor = UIColor.brandPrimary;
     pageControl.numberOfPages = 1 + assets.count;
     return pageControl;
 }

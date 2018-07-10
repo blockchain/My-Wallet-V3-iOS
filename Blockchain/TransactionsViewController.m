@@ -35,19 +35,19 @@
     self.filterIndex = FILTER_INDEX_ALL;
     
     self.filterSelectorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
-    self.filterSelectorView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.filterSelectorView.backgroundColor = UIColor.lightGray;
     
     CGFloat padding = 8;
     CGFloat imageViewWidth = 10;
     self.filterSelectorLabel = [[UILabel alloc] initWithFrame:CGRectMake(padding, 0, self.filterSelectorView.bounds.size.width - padding*3 - imageViewWidth, self.filterSelectorView.bounds.size.height)];
     self.filterSelectorLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-    self.filterSelectorLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.filterSelectorLabel.textColor = UIColor.gray5;
     self.filterSelectorLabel.text = BC_STRING_ALL_WALLETS;
     [self.filterSelectorView addSubview:self.filterSelectorLabel];
     
     UIImageView *chevronImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.filterSelectorView.frame.size.width - imageViewWidth - padding, (self.filterSelectorView.frame.size.height - imageViewWidth)/2, imageViewWidth, imageViewWidth + 2)];
     chevronImageView.image = [[UIImage imageNamed:@"chevron_right_white"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    chevronImageView.tintColor = COLOR_DARK_GRAY;
+    chevronImageView.tintColor = UIColor.gray5;
     [self.filterSelectorView addSubview:chevronImageView];
     
     BCLine *lineAboveButtonsView = [[BCLine alloc] initWithYPosition:self.filterSelectorView.bounds.size.height - 1];
@@ -84,7 +84,7 @@
     noTransactionsTitle.textAlignment = NSTextAlignmentCenter;
     noTransactionsTitle.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     noTransactionsTitle.text = BC_STRING_NO_TRANSACTIONS_TITLE;
-    noTransactionsTitle.textColor = COLOR_BLOCKCHAIN_BLUE;
+    noTransactionsTitle.textColor = UIColor.brandPrimary;
     [noTransactionsTitle sizeToFit];
     CGFloat noTransactionsViewCenterY = (view.frame.size.height - self.noTransactionsView.frame.origin.y)/2 - noTransactionsTitle.frame.size.height;
     noTransactionsTitle.center = CGPointMake(self.noTransactionsView.center.x, noTransactionsViewCenterY);
@@ -97,7 +97,7 @@
     noTransactionsDescription.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_SMALL];
     noTransactionsDescription.numberOfLines = 0;
     noTransactionsDescription.text = descriptionText;
-    noTransactionsDescription.textColor = COLOR_TEXT_DARK_GRAY;
+    noTransactionsDescription.textColor = UIColor.gray5;
     [noTransactionsDescription sizeToFit];
     CGSize labelSize = [noTransactionsDescription sizeThatFits:CGSizeMake(170, CGFLOAT_MAX)];
     CGRect labelFrame = noTransactionsDescription.frame;
@@ -112,7 +112,7 @@
     self.getBitcoinButton = [[UIButton alloc] initWithFrame:CGRectMake(0, noTransactionsDescription.frame.origin.y + noTransactionsDescription.frame.size.height + 16, 240, 44)];
     self.getBitcoinButton.clipsToBounds = YES;
     self.getBitcoinButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-    self.getBitcoinButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    self.getBitcoinButton.backgroundColor = UIColor.brandSecondary;
     self.getBitcoinButton.center = CGPointMake(self.noTransactionsView.center.x, self.getBitcoinButton.center.y);
     self.getBitcoinButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
     [self.getBitcoinButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

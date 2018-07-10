@@ -45,7 +45,7 @@ NSMutableArray *visitedPages;
     self.view.frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
     
     UIView *topBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_HEADER_HEIGHT)];
-    topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    topBar.backgroundColor = UIColor.brandPrimary;
     [self.view addSubview:topBar];
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:FRAME_HEADER_LABEL];

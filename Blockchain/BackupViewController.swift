@@ -42,11 +42,7 @@ import UIKit
         backupIconImageView.center = CGPoint(x: view.center.x, y: backupIconImageView.center.y)
         if let image = backupIconImageView.image {
             backupIconImageView.image? = image.withRenderingMode(.alwaysTemplate)
-            if #available(iOS 11.0, *) {
-                backupIconImageView.tintColor = UIColor(named: "ColorError")
-            } else {
-                backupIconImageView.tintColor = Constants.Colors.ColorError
-            }
+            backupIconImageView.tintColor = UIColor.error
         }
 
         summaryLabel.text = NSLocalizedString("Backup Needed", comment: "")
@@ -61,11 +57,7 @@ import UIKit
             summaryLabel.text = NSLocalizedString("Backup Complete", comment: "")
             explanation.text = NSLocalizedString("Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure.", comment: "")
             backupIconImageView.image = UIImage(named: "success")?.withRenderingMode(.alwaysTemplate)
-            if #available(iOS 11.0, *) {
-                backupIconImageView.tintColor = UIColor(named: "ColorSuccess")
-            } else {
-                backupIconImageView.tintColor = Constants.Colors.ColorSuccess
-            }
+            backupIconImageView.tintColor = UIColor.green
             backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControlState())
 
             if wallet!.didUpgradeToHd() &&

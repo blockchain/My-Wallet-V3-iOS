@@ -98,7 +98,7 @@ const int aboutCookiePolicy = 3;
 {
     [super viewDidLoad];
 
-    self.tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.tableView.backgroundColor = UIColor.lightGray;
 
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:USER_DEFAULTS_KEY_LOADED_SETTINGS];
     [self updateEmailAndMobileStrings];
@@ -1163,7 +1163,7 @@ const int aboutCookiePolicy = 3;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         } else {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-            cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+            cell.textLabel.textColor = UIColor.gray5;
             cell.textLabel.font = [SettingsTableViewController fontForCell];
             cell.detailTextLabel.font = [SettingsTableViewController fontForCell];
             cell.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -1176,7 +1176,7 @@ const int aboutCookiePolicy = 3;
             switch (indexPath.row) {
                 case profileWalletIdentifier: {
                     cell.textLabel.font = [SettingsTableViewController fontForCell];
-                    cell.textLabel.textColor = COLOR_TEXT_DARK_GRAY;
+                    cell.textLabel.textColor = UIColor.gray5;
                     cell.textLabel.text = BC_STRING_SETTINGS_WALLET_ID;
                     cell.detailTextLabel.text = WalletManager.sharedInstance.wallet.guid;
                     cell.detailTextLabel.font = [SettingsTableViewController fontForCellSubtitle];
@@ -1190,10 +1190,10 @@ const int aboutCookiePolicy = 3;
 
                     if ([self getUserEmail] != nil && [WalletManager.sharedInstance.wallet getEmailVerifiedStatus] == YES) {
                         cell.detailTextLabel.text = BC_STRING_SETTINGS_VERIFIED;
-                        cell.detailTextLabel.textColor = COLOR_BUTTON_GREEN;
+                        cell.detailTextLabel.textColor = UIColor.green;
                     } else {
                         cell.detailTextLabel.text = BC_STRING_SETTINGS_UNVERIFIED;
-                        cell.detailTextLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                        cell.detailTextLabel.textColor = UIColor.error;
                     }
                     return [self adjustFontForCell:cell];
                 }
@@ -1201,10 +1201,10 @@ const int aboutCookiePolicy = 3;
                     cell.textLabel.text = BC_STRING_SETTINGS_MOBILE_NUMBER;
                     if ([WalletManager.sharedInstance.wallet hasVerifiedMobileNumber]) {
                         cell.detailTextLabel.text = BC_STRING_SETTINGS_VERIFIED;
-                        cell.detailTextLabel.textColor = COLOR_BUTTON_GREEN;
+                        cell.detailTextLabel.textColor = UIColor.green;
                     } else {
                         cell.detailTextLabel.text = BC_STRING_SETTINGS_UNVERIFIED;
-                        cell.detailTextLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                        cell.detailTextLabel.textColor = UIColor.error;
                     }
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     return [self adjustFontForCell:cell];
@@ -1246,7 +1246,7 @@ const int aboutCookiePolicy = 3;
                 cell.textLabel.text = BC_STRING_SETTINGS_SECURITY_TWO_STEP_VERIFICATION;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 int authType = [WalletManager.sharedInstance.wallet getTwoStepType];
-                cell.detailTextLabel.textColor = COLOR_BUTTON_GREEN;
+                cell.detailTextLabel.textColor = UIColor.green;
                 if (authType == TWO_STEP_AUTH_TYPE_SMS) {
                     cell.detailTextLabel.text = BC_STRING_SETTINGS_SECURITY_TWO_STEP_VERIFICATION_SMS;
                 } else if (authType == TWO_STEP_AUTH_TYPE_GOOGLE) {
@@ -1255,7 +1255,7 @@ const int aboutCookiePolicy = 3;
                     cell.detailTextLabel.text = BC_STRING_SETTINGS_SECURITY_TWO_STEP_VERIFICATION_YUBI_KEY;
                 } else if (authType == TWO_STEP_AUTH_TYPE_NONE) {
                     cell.detailTextLabel.text = BC_STRING_DISABLED;
-                    cell.detailTextLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                    cell.detailTextLabel.textColor = UIColor.error;
                 } else {
                     cell.detailTextLabel.text = BC_STRING_UNKNOWN;
                 }
@@ -1271,10 +1271,10 @@ const int aboutCookiePolicy = 3;
                 cell.textLabel.text = BC_STRING_WALLET_RECOVERY_PHRASE;
                 if (WalletManager.sharedInstance.wallet.isRecoveryPhraseVerified) {
                     cell.detailTextLabel.text = BC_STRING_SETTINGS_VERIFIED;
-                    cell.detailTextLabel.textColor = COLOR_BUTTON_GREEN;
+                    cell.detailTextLabel.textColor = UIColor.green;
                 } else {
                     cell.detailTextLabel.text = BC_STRING_SETTINGS_UNCONFIRMED;
-                    cell.detailTextLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+                    cell.detailTextLabel.textColor = UIColor.error;
                 }
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 return [self adjustFontForCell:cell];
@@ -1340,10 +1340,10 @@ const int aboutCookiePolicy = 3;
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    view.backgroundColor = UIColor.lightGray;
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, self.view.frame.size.width, 14)];
-    label.textColor = COLOR_BLOCKCHAIN_BLUE;
+    label.textColor = UIColor.brandPrimary;
     label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
 
     NSString *labelString = [self titleForHeaderInSection:section];

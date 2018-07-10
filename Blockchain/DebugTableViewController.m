@@ -58,7 +58,7 @@ typedef enum {
     self.navigationItem.titleView = control;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:BC_STRING_DONE style:UIBarButtonItemStyleDone target:self action:@selector(dismiss)];
-    self.navigationController.navigationBar.barTintColor = COLOR_BLOCKCHAIN_BLUE;
+    self.navigationController.navigationBar.barTintColor = UIColor.brandPrimary;
     NSString *presenter;
     if (self.presenter == DEBUG_PRESENTER_SETTINGS_ABOUT) {
         presenter = BC_STRING_SETTINGS_ABOUT;
@@ -153,7 +153,7 @@ typedef enum {
         case RowWalletJSON: {
             cell.textLabel.text = DEBUG_STRING_WALLET_JSON;
             cell.detailTextLabel.text = self.filteredWalletJSON == nil ? DEBUG_STRING_PLEASE_LOGIN : nil;
-            cell.detailTextLabel.textColor = COLOR_BUTTON_RED;
+            cell.detailTextLabel.textColor = UIColor.red;
             cell.accessoryType = self.filteredWalletJSON == nil ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
             break;
         }

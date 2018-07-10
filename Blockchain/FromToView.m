@@ -21,7 +21,7 @@
         UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 40, 21)];
         fromLabel.adjustsFontSizeToFitWidth = YES;
         fromLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-        fromLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        fromLabel.textColor = UIColor.gray5;
         fromLabel.text = BC_STRING_FROM;
         fromLabel.center = CGPointMake(fromLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW/2);
         [self addSubview:fromLabel];
@@ -31,7 +31,7 @@
         CGFloat fromPlaceholderLabelOriginX = fromLabel.frame.origin.x + fromLabel.frame.size.width + 13;
         UILabel *fromPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(fromPlaceholderLabelOriginX, 0, self.frame.size.width - fromPlaceholderLabelOriginX - 8 - imageViewWidth - 8, 30)];
         fromPlaceholderLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-        fromPlaceholderLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        fromPlaceholderLabel.textColor = UIColor.gray5;
         fromPlaceholderLabel.center = CGPointMake(fromPlaceholderLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW/2);
         [self addSubview:fromPlaceholderLabel];
         self.fromLabel = fromPlaceholderLabel;
@@ -51,7 +51,7 @@
         
         UILabel *toLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 40, 21)];
         toLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-        toLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        toLabel.textColor = UIColor.gray5;
         toLabel.text = BC_STRING_TO;
         toLabel.center = CGPointMake(toLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW*1.5);
         [self addSubview:toLabel];
@@ -65,7 +65,7 @@
             BCSecureTextField *toField = [[BCSecureTextField alloc] initWithFrame:toTextFrame];
             toField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
             toField.placeholder = BC_STRING_ENTER_ETHER_ADDRESS;
-            toField.textColor = COLOR_TEXT_DARK_GRAY;
+            toField.textColor = UIColor.gray5;
             toField.clearButtonMode = UITextFieldViewModeWhileEditing;
             toField.center = CGPointMake(toField.center.x, ROW_HEIGHT_FROM_TO_VIEW*1.5);
             [self addSubview:toField];
@@ -74,7 +74,7 @@
         } else {
             UILabel *toPlaceHolderLabel = [[UILabel alloc] initWithFrame:toTextFrame];
             toPlaceHolderLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-            toPlaceHolderLabel.textColor = COLOR_TEXT_DARK_GRAY;
+            toPlaceHolderLabel.textColor = UIColor.gray5;
             toPlaceHolderLabel.center = CGPointMake(toPlaceHolderLabel.center.x, ROW_HEIGHT_FROM_TO_VIEW*1.5);
             [self addSubview:toPlaceHolderLabel];
             self.toLabel = toPlaceHolderLabel;

@@ -75,7 +75,7 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height + 32, biometricView.frame.size.width - 50, 50)];
     titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_LARGE];
-    titleLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    titleLabel.textColor = UIColor.gray5;
     titleLabel.text = _biometricType.title;
     titleLabel.center = CGPointMake(biometricView.center.x, titleLabel.center.y);
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -87,7 +87,7 @@
     body.editable = NO;
     body.scrollEnabled = NO;
     body.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-    body.textColor = COLOR_TEXT_DARK_GRAY;
+    body.textColor = UIColor.gray5;
     body.text = biometricInstructions;
     body.center = CGPointMake(biometricView.center.x, body.center.y);
     body.textAlignment = NSTextAlignmentCenter;
@@ -117,7 +117,7 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height + 32, emailView.frame.size.width - 50, 50)];
     titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_EXTRA_LARGE];
-    titleLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    titleLabel.textColor = UIColor.gray5;
     titleLabel.text = BC_STRING_REMINDER_CHECK_EMAIL_TITLE;
     titleLabel.center = CGPointMake(emailView.center.x - self.view.frame.size.width, titleLabel.center.y);
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -126,7 +126,7 @@
     self.emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 8, emailView.frame.size.width - 50, 30)];
     self.emailLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_SEMIBOLD size:FONT_SIZE_SMALL_MEDIUM];
     self.emailLabel.text = [WalletManager.sharedInstance.wallet getEmail];
-    self.emailLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.emailLabel.textColor = UIColor.gray5;
     self.emailLabel.center = CGPointMake(emailView.center.x - self.view.frame.size.width, self.emailLabel.center.y);
     self.emailLabel.textAlignment = NSTextAlignmentCenter;
     [emailView addSubview:self.emailLabel];
@@ -136,7 +136,7 @@
     body.editable = NO;
     body.scrollEnabled = NO;
     body.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-    body.textColor = COLOR_TEXT_DARK_GRAY;
+    body.textColor = UIColor.gray5;
     body.text = BC_STRING_REMINDER_CHECK_EMAIL_MESSAGE;
     body.center = CGPointMake(emailView.center.x - self.view.frame.size.width, body.center.y);
     body.textAlignment = NSTextAlignmentCenter;
@@ -162,7 +162,7 @@
     actionButton.frame = CGRectMake(0, self.view.frame.size.height - 60 - 30 - 16, self.view.frame.size.width - 100, 40);
     actionButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     actionButton.center = CGPointMake(self.view.frame.size.width/2, actionButton.center.y);
-    actionButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    actionButton.backgroundColor = UIColor.brandSecondary;
     [actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     return actionButton;
 }
@@ -172,7 +172,7 @@
     UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 60, self.view.frame.size.width - 100, 40)];
     doneButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     doneButton.center = CGPointMake(self.view.frame.size.width/2, doneButton.center.y);
-    [doneButton setTitleColor:COLOR_LIGHT_GRAY forState:UIControlStateNormal];
+    [doneButton setTitleColor:UIColor.gray2 forState:UIControlStateNormal];
     [doneButton setTitle:BC_STRING_ILL_DO_THIS_LATER forState:UIControlStateNormal];
     return doneButton;
 }
@@ -187,7 +187,7 @@
     CGFloat headerHeight = [ConstantsObjcBridge defaultNavigationBarHeight] + safeAreaInsetTop + 80;
 
     UIView *bannerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, headerHeight)];
-    bannerView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    bannerView.backgroundColor = UIColor.brandPrimary;
 
     CGFloat imageHeight = 72;
     CGFloat imageWidth = 72;
@@ -221,7 +221,7 @@
     [self.delegate enableTouchIDClicked:^(BOOL success) {
         if (success) {
             [sender setTitle:[BC_STRING_ENABLED_EXCLAMATION uppercaseString] forState:UIControlStateNormal];
-            sender.backgroundColor = COLOR_BLOCKCHAIN_GREEN;
+            sender.backgroundColor = UIColor.green;
 
             [self performSelector:@selector(goToSecondPage) withObject:nil afterDelay:0.3f];
         }

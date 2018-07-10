@@ -32,7 +32,7 @@
 
     CGRect topBarFrame = CGRectMake(0, 0, self.view.frame.size.width, ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop);
     UIView *topBar = [[UIView alloc] initWithFrame:topBarFrame];
-    topBar.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    topBar.backgroundColor = UIColor.brandPrimary;
     [self.view addSubview:topBar];
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, safeAreaInsetTop + 6, 200, 30)];

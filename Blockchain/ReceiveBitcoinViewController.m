@@ -122,7 +122,7 @@
 
 - (void)setupTotalAmountView
 {
-    self.view.topView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:COLOR_BLOCKCHAIN_AQUA amount:0];
+    self.view.topView = [[BCTotalAmountView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TOTAL_AMOUNT_VIEW_HEIGHT) color:UIColor.aqua amount:0];
     self.view.topView.hidden = YES;
     [self.view addSubview:self.view.topView];
 }
@@ -140,7 +140,7 @@
     
     doneButton = [[UIButton alloc] initWithFrame:CGRectMake(amountKeyboardAccessoryView.frame.size.width - 68, 0, 60, BUTTON_HEIGHT)];
     doneButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:13.0];
-    [doneButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [doneButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [doneButton setTitle:BC_STRING_DONE forState:UIControlStateNormal];
     [doneButton addTarget:self action:@selector(doneButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [amountKeyboardAccessoryView addSubview:doneButton];
@@ -159,7 +159,7 @@
     
     UIButton *doneDescriptionButton = [[UIButton alloc] initWithFrame:CGRectMake(inputAccessoryView.frame.size.width - 68, 0, 60, BUTTON_HEIGHT)];
     doneDescriptionButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:13.0];
-    [doneDescriptionButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [doneDescriptionButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [doneDescriptionButton setTitle:BC_STRING_DONE forState:UIControlStateNormal];
     [doneDescriptionButton addTarget:self action:@selector(endEditingDescription) forControlEvents:UIControlEventTouchUpInside];
     [inputAccessoryView addSubview:doneDescriptionButton];
@@ -178,24 +178,24 @@
     if (self.assetType == LegacyAssetTypeBitcoin) {
         leftPadding = 15;
         BCLine *lineAboveAmounts = [[BCLine alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-        lineAboveAmounts.backgroundColor = [ConstantsObjcBridge grayLineColor];
+        lineAboveAmounts.backgroundColor = UIColor.grayLine;
         [self.bottomContainerView addSubview:lineAboveAmounts];
     }
 
     BCLine *lineBelowAmounts = [[BCLine alloc] initWithFrame:CGRectMake(leftPadding, 50, self.view.frame.size.width - leftPadding, 1)];
-    lineBelowAmounts.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    lineBelowAmounts.backgroundColor = UIColor.grayLine;
     [self.bottomContainerView addSubview:lineBelowAmounts];
     
     BCLine *lineBelowToField = [[BCLine alloc] initWithFrame:CGRectMake(0, lineBelowAmounts.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    lineBelowToField.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    lineBelowToField.backgroundColor = UIColor.grayLine;
     [self.bottomContainerView addSubview:lineBelowToField];
     
     self.lineBelowFromField = [[BCLine alloc] initWithFrame:CGRectMake(0, lineBelowToField.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    self.lineBelowFromField.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    self.lineBelowFromField.backgroundColor = UIColor.grayLine;
     [self.bottomContainerView addSubview:self.lineBelowFromField];
     
     BCLine *lineBelowDescripton = [[BCLine alloc] initWithFrame:CGRectMake(0, self.lineBelowFromField.frame.origin.y + 50, self.view.frame.size.width, 1)];
-    lineBelowDescripton.backgroundColor = [ConstantsObjcBridge grayLineColor];
+    lineBelowDescripton.backgroundColor = UIColor.grayLine;
     [self.bottomContainerView addSubview:lineBelowDescripton];
     
     if (self.assetType == LegacyAssetTypeBitcoin) {
@@ -211,7 +211,7 @@
 
     UILabel *toLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 65, 50, 21)];
     toLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    toLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    toLabel.textColor = UIColor.gray5;
     toLabel.text = BC_STRING_TO;
     toLabel.adjustsFontSizeToFitWidth = YES;
     [self.bottomContainerView addSubview:toLabel];
@@ -224,7 +224,7 @@
     
     self.receiveToLabel = [[UILabel alloc] initWithFrame:CGRectMake(toLabel.frame.origin.x + toLabel.frame.size.width + 16, 65, selectDestinationButton.frame.origin.x - (toLabel.frame.origin.x + toLabel.frame.size.width + 16), 21)];
     self.receiveToLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.receiveToLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.receiveToLabel.textColor = UIColor.gray5;
     [self.bottomContainerView addSubview:self.receiveToLabel];
     UITapGestureRecognizer *tapGestureReceiveTo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDestination)];
     [self.receiveToLabel addGestureRecognizer:tapGestureReceiveTo];
@@ -232,7 +232,7 @@
     
     UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(lineBelowToField.frame.origin.x, lineBelowToField.frame.origin.y + 15, 50, 21)];
     fromLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    fromLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    fromLabel.textColor = UIColor.gray5;
     fromLabel.text = BC_STRING_FROM;
     fromLabel.adjustsFontSizeToFitWidth = YES;
     [self.bottomContainerView addSubview:fromLabel];
@@ -249,13 +249,13 @@
     
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, self.view.frame.size.width/2 - 15, 21)];
     descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    descriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    descriptionLabel.textColor = UIColor.gray5;
     descriptionLabel.text = BC_STRING_DESCRIPTION;
     [self.descriptionContainerView addSubview:descriptionLabel];
     
     self.descriptionField = [[BCSecureTextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 + 16, 15, self.view.frame.size.width/2 - 16 - 15, 20)];
     self.descriptionField.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_SMALL];
-    self.descriptionField.textColor = COLOR_TEXT_DARK_GRAY;
+    self.descriptionField.textColor = UIColor.gray5;
     self.descriptionField.textAlignment = NSTextAlignmentRight;
     self.descriptionField.returnKeyType = UIReturnKeyDone;
     self.descriptionField.delegate = self;
@@ -265,7 +265,7 @@
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.bottomContainerView.center.x, requestButton.center.y);
     [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
-    requestButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    requestButton.backgroundColor = UIColor.brandSecondary;
     requestButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     requestButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [requestButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -357,7 +357,7 @@
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, headerTopOffset, self.view.frame.size.width, self.bottomContainerView.frame.origin.y - headerTopOffset)];
     UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 42)];
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
-    instructionsLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    instructionsLabel.textColor = UIColor.gray5;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
     instructionsLabel.text = (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
@@ -393,7 +393,7 @@
         
         self.mainAddressLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
         self.mainAddressLabel.textAlignment = NSTextAlignmentCenter;
-        self.mainAddressLabel.textColor = COLOR_TEXT_DARK_GRAY;;
+        self.mainAddressLabel.textColor = UIColor.gray5;
         [self.mainAddressLabel setMinimumScaleFactor:.5f];
         [self.mainAddressLabel setAdjustsFontSizeToFitWidth:YES];
         [self.headerView addSubview:self.mainAddressLabel];

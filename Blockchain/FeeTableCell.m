@@ -7,6 +7,7 @@
 //
 
 #import "FeeTableCell.h"
+#import "Blockchain-Swift.h"
 
 @implementation FeeTableCell
 
@@ -25,13 +26,13 @@
     CGFloat offset = IS_USING_SCREEN_SIZE_LARGER_THAN_5S ? 8 : 3;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, self.contentView.center.y - leftLabelHeight + offset, 100, leftLabelHeight)];
-    self.nameLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    self.nameLabel.textColor = UIColor.gray5;
     self.nameLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     [self.contentView addSubview:self.nameLabel];
 
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, self.contentView.center.y + offset, 200, leftLabelHeight)];
     self.descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
-    self.descriptionLabel.textColor = COLOR_LIGHT_GRAY;
+    self.descriptionLabel.textColor = UIColor.gray2;
     [self.contentView addSubview:self.descriptionLabel];
 
     if (self.feeType != FeeTypeCustom) {

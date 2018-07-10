@@ -47,7 +47,7 @@
     promptLabel.textAlignment = NSTextAlignmentCenter;
     promptLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_MEDIUM];
     promptLabel.text = BC_STRING_SETTINGS_SMS_PROMPT;
-    promptLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    promptLabel.textColor = UIColor.gray5;
     [self.view addSubview:promptLabel];
     
     [promptLabel sizeToFit];
@@ -56,7 +56,7 @@
     
     self.mobileNumberField = [[BCSecureTextField alloc] initWithFrame:CGRectMake(0, promptLabel.frame.origin.y + promptLabel.frame.size.height + 16 + textFieldFrameAdjustY, promptLabel.frame.size.width, 26)];
     self.mobileNumberField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_LARGE];
-    self.mobileNumberField.textColor = COLOR_TEXT_DARK_GRAY;
+    self.mobileNumberField.textColor = UIColor.gray5;
     self.mobileNumberField.placeholder = BC_STRING_SETTINGS_MOBILE_NUMBER;
     self.mobileNumberField.keyboardType = UIKeyboardTypePhonePad;
     self.mobileNumberField.textAlignment = NSTextAlignmentCenter;
@@ -66,7 +66,7 @@
     
     UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     updateButton.frame = CGRectMake(0, 0, self.view.frame.size.width, 46);
-    updateButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+    updateButton.backgroundColor = UIColor.brandSecondary;
     [updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     updateButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     [updateButton setTitle:BC_STRING_UPDATE forState:UIControlStateNormal];
@@ -117,10 +117,10 @@
     self.mobileNumberField.text = self.mobileNumberField.text.length > 0 && [mobileNumber isEqualToString:@""] ? self.mobileNumberField.text : mobileNumber;
     
     if ([self getVerifiedStatus]) {
-        self.verifiedStatusLabel.textColor = COLOR_BLOCKCHAIN_GREEN;
+        self.verifiedStatusLabel.textColor = UIColor.green;
         self.verifiedStatusLabel.text = BC_STRING_SETTINGS_VERIFIED;
     } else {
-        self.verifiedStatusLabel.textColor = COLOR_BLOCKCHAIN_RED_WARNING;
+        self.verifiedStatusLabel.textColor = UIColor.error;
         self.verifiedStatusLabel.text = BC_STRING_SETTINGS_UNVERIFIED;
     }
 }

@@ -83,7 +83,7 @@
     [self.moreButton setTitle:BC_STRING_LOAD_MORE_TRANSACTIONS forState:UIControlStateNormal];
     self.moreButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     self.moreButton.backgroundColor = [UIColor whiteColor];
-    [self.moreButton setTitleColor:COLOR_BLOCKCHAIN_BLUE forState:UIControlStateNormal];
+    [self.moreButton setTitleColor:UIColor.brandPrimary forState:UIControlStateNormal];
     [self.view addSubview:self.moreButton];
     [self.moreButton addTarget:self action:@selector(fetchMoreClicked) forControlEvents:UIControlEventTouchUpInside];
     self.moreButton.hidden = YES;
@@ -526,7 +526,7 @@
 {
     // Selected cell color
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
-    [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+    [v setBackgroundColor:UIColor.brandPrimary];
     return v;
 }
 

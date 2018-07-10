@@ -201,7 +201,7 @@ typedef enum {
         CGRect tableViewFrame = mainView.frame;
         tableViewFrame.size.height = mainView.frame.size.height + [UIView rootViewSafeAreaInsets].bottom;
         tableView.frame = tableViewFrame;
-        tableView.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+        tableView.backgroundColor = UIColor.lightGray;
     }
     return self;
 }
@@ -323,10 +323,10 @@ typedef enum {
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainView.frame.size.width, 45)];
-    view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    view.backgroundColor = UIColor.lightGray;
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 12, mainView.frame.size.width, 30)];
-    label.textColor = COLOR_BLOCKCHAIN_BLUE;
+    label.textColor = UIColor.brandPrimary;
     label.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL_MEDIUM];
     
     [view addSubview:label];
@@ -590,7 +590,7 @@ typedef enum {
         
         // Selected cell color
         UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0,0,cell.frame.size.width,cell.frame.size.height)];
-        [v setBackgroundColor:COLOR_BLOCKCHAIN_BLUE];
+        [v setBackgroundColor:UIColor.brandPrimary];
         [cell setSelectedBackgroundView:v];
     }
     

@@ -9,6 +9,7 @@
 #import "ExchangeProgressViewController.h"
 #import "ExchangeDetailView.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @interface ExchangeProgressViewController () <ExchangeDetailViewDelegate>
 
@@ -22,7 +23,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.view.backgroundColor = COLOR_TABLE_VIEW_BACKGROUND_LIGHT_GRAY;
+    self.view.backgroundColor = UIColor.lightGray;
 
     CGFloat windowWidth = self.view.frame.size.width;
 
@@ -72,7 +73,7 @@
 
 - (UIColor *)titleTextColorForTrade:(ExchangeTrade *)trade
 {
-    return COLOR_TEXT_DARK_GRAY;
+    return UIColor.gray5;
 }
 
 - (UIFont *)descriptionFontForTrade:(ExchangeTrade *)trade
@@ -89,14 +90,14 @@
 - (UIColor *)descriptionTextColorForTrade:(ExchangeTrade *)trade
 {
     if ([trade.status isEqualToString:TRADE_STATUS_COMPLETE]) {
-        return COLOR_LIGHT_GRAY;
+        return UIColor.gray2;
     } else if ([trade.status isEqualToString:TRADE_STATUS_RECEIVED] || [trade.status isEqualToString:TRADE_STATUS_NO_DEPOSITS]) {
-        return COLOR_LIGHT_GRAY;
+        return UIColor.gray2;
     } else if ([trade.status isEqualToString:TRADE_STATUS_RESOLVED] || [trade.status isEqualToString:TRADE_STATUS_FAILED]) {
-        return COLOR_TEXT_DARK_GRAY;
+        return UIColor.gray5;
     }
     
-    return COLOR_TEXT_DARK_GRAY;
+    return UIColor.gray5;
 }
 
 - (UIImage *)imageForTrade:(ExchangeTrade *)trade

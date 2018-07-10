@@ -8,6 +8,7 @@
 
 #import "ExchangeModalView.h"
 #import "UIView+ChangeFrameAttribute.h"
+#import "Blockchain-Swift.h"
 
 @implementation ExchangeModalView
 
@@ -20,7 +21,7 @@
         UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, windowWidth, 100)];
         descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
         descriptionLabel.textAlignment = NSTextAlignmentCenter;
-        descriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        descriptionLabel.textColor = UIColor.gray5;
         descriptionLabel.numberOfLines = 0;
         descriptionLabel.text = description;
         [descriptionLabel sizeToFit];
@@ -43,7 +44,7 @@
         UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, descriptionLabel.frame.size.width, 40)];
         bottomLabel.center = CGPointMake(self.center.x, bottomLabel.center.y);
         bottomLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_EXTRA_SMALL];
-        bottomLabel.textColor = COLOR_TEXT_DARK_GRAY;
+        bottomLabel.textColor = UIColor.gray5;
         bottomLabel.text = bottomText;
         [bottomLabel changeYPosition:imageView.frame.origin.y + imageView.frame.size.height + 16];
         bottomLabel.textAlignment = NSTextAlignmentCenter;
@@ -51,7 +52,7 @@
         
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, windowWidth - 40, BUTTON_HEIGHT)];
         closeButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
-        closeButton.backgroundColor = COLOR_BLOCKCHAIN_LIGHT_BLUE;
+        closeButton.backgroundColor = UIColor.brandSecondary;
         closeButton.center = CGPointMake(self.center.x, closeButton.center.y);
         [closeButton setTitle:closeButtonText forState:UIControlStateNormal];
         closeButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];

@@ -9,6 +9,7 @@
 #import "BCDescriptionView.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "BCLine.h"
+#import "Blockchain-Swift.h"
 
 @implementation BCDescriptionView
 
@@ -95,7 +96,7 @@
     
     UIButton *doneDescriptionButton = [[UIButton alloc] initWithFrame:CGRectMake(inputAccessoryView.frame.size.width - 68, 0, 60, BUTTON_HEIGHT)];
     doneDescriptionButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:13.0];
-    [doneDescriptionButton setTitleColor:COLOR_BLOCKCHAIN_LIGHT_BLUE forState:UIControlStateNormal];
+    [doneDescriptionButton setTitleColor:UIColor.brandSecondary forState:UIControlStateNormal];
     [doneDescriptionButton setTitle:BC_STRING_DONE forState:UIControlStateNormal];
     [doneDescriptionButton addTarget:self action:@selector(endEditingDescription) forControlEvents:UIControlEventTouchUpInside];
     [inputAccessoryView addSubview:doneDescriptionButton];
@@ -106,7 +107,7 @@
 - (UITextView *)configureTextViewWithFrame:(CGRect)frame
 {
     UITextView *descriptionTextView = [[UITextView alloc] initWithFrame:frame];
-    descriptionTextView.textColor = COLOR_TEXT_DARK_GRAY;
+    descriptionTextView.textColor = UIColor.gray5;
     descriptionTextView.textContainerInset = UIEdgeInsetsZero;
     descriptionTextView.textAlignment = NSTextAlignmentRight;
     descriptionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -125,7 +126,7 @@
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftMargin, 14, self.frame.size.width/2 - 8 - leftMargin, labelHeight)];
     descriptionLabel.text = BC_STRING_DESCRIPTION;
     descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    descriptionLabel.textColor = COLOR_TEXT_DARK_GRAY;
+    descriptionLabel.textColor = UIColor.gray5;
     
     [cell.contentView addSubview:descriptionLabel];
     
