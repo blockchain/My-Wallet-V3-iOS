@@ -264,7 +264,9 @@
     [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
-    continueButton.center = CGPointMake(self.view.center.x, self.view.frame.size.height - 24 - BUTTON_HEIGHT/2);
+    CGFloat safeAreaInsetTop = UIView.rootViewSafeAreaInsets.top;
+    CGFloat continueButtonCenterY = self.view.frame.size.height - 24 - BUTTON_HEIGHT/2 - safeAreaInsetTop - ConstantsObjcBridge.defaultNavigationBarHeight;
+    continueButton.center = CGPointMake(self.view.center.x, continueButtonCenterY);
     [self.view addSubview:continueButton];
     [continueButton addTarget:self action:@selector(continueButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     self.continueButton = continueButton;
@@ -993,26 +995,11 @@
     
     [self updateAvailableBalance];
 
-    [self showKeyboardOnAutoFillIfNeeded];
+    [self hideKeyboard];
     
     [self disablePaymentButtons];
     
     [self performSelector:@selector(getApproximateQuote) withObject:nil afterDelay:0.5];
-}
-
-/**
- Conditionally displays the keyboard when the fields are autofilled. This is necessary because
- the continue button is only visible while the keyboard is shown.
- */
-- (void)showKeyboardOnAutoFillIfNeeded
-{
-    if (self.topLeftField.isFirstResponder ||
-        self.topRightField.isFirstResponder ||
-        self.bottomLeftField.isFirstResponder ||
-        self.bottomRightField.isFirstResponder) {
-        return;
-    }
-    [self.topLeftField becomeFirstResponder];
 }
 
 - (void)showErrorText:(NSString *)errorText
