@@ -31,19 +31,20 @@ final class AppReviewPrompt: NSObject {
     }
 
     /// Ask to show the prompt, else handle failure silently
-    @objc func askToShow() {
-        if WalletManager.shared.wallet.getAllTransactionsCount() < numberOfTransactionsBeforePrompt {
+    @objc func showIfNeeded() {
+        let transactionsCount = WalletManager.shared.wallet.getAllTransactionsCount()
+        if transactionsCount < numberOfTransactionsBeforePrompt {
             #if DEBUG
             print("App review prompt will not show because the user needs at least \(numberOfTransactionsBeforePrompt) transactions.")
             #endif
             return
         }
-
-        // TODO: support overriding appOpenedCount for debugging
-        let count = BlockchainSettings.App.shared.appOpenedCount
+        // TODO: support overriding appBecameActiveCount for debugging
+        let count = BlockchainSettings.App.shared.appBecameActiveCount
         switch count {
-        case 10, 50: requestReview()
-        case _ where (count >= 100) && (count % 100 == 0): requestReview()
+        case 10, 50,
+             _ where (count >= 100) && (count % 100 == 0),
+             _ where transactionsCount == numberOfTransactionsBeforePrompt: requestReview()
         default:
             #if DEBUG
             print("App review prompt will not show because the application open count is too low (\(count)).")

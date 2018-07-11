@@ -42,12 +42,12 @@ final class BlockchainSettings: NSObject {
 
         // MARK: - Properties
 
-        @objc var appOpenedCount: Int {
+        @objc var appBecameActiveCount: Int {
             get {
-                return defaults.integer(forKey: UserDefaults.Keys.appOpenedCount.rawValue)
+                return defaults.integer(forKey: UserDefaults.Keys.appBecameActiveCount.rawValue)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.appOpenedCount.rawValue)
+                defaults.set(newValue, forKey: UserDefaults.Keys.appBecameActiveCount.rawValue)
             }
         }
 

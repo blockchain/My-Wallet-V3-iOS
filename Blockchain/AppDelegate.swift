@@ -40,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
 
+        BlockchainSettings.App.shared.appBecameActiveCount += 1
+
         // MARK: - Global Appearance
 
         //: Status Bar
@@ -153,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("applicationWillEnterForeground")
 
-        BlockchainSettings.App.shared.appOpenedCount += 1
+        BlockchainSettings.App.shared.appBecameActiveCount += 1
 
         BuySellCoordinator.shared.start()
 

@@ -513,7 +513,7 @@ BOOL displayingLocalSymbolSend;
              DLog(@"SendViewController: on_success");
              UIAlertController *paymentSentAlert = [UIAlertController alertControllerWithTitle:[LocalizationConstantsObjcBridge success] message:BC_STRING_PAYMENT_SENT preferredStyle:UIAlertControllerStyleAlert];
              [paymentSentAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                 [[AppReviewPrompt sharedInstance] askToShow];
+                 [[AppReviewPrompt sharedInstance] showIfNeeded];
              }]];
              
              [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:paymentSentAlert animated:YES completion:nil];

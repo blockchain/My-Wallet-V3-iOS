@@ -20,7 +20,7 @@ extension UserDefaults {
     }
 
     enum Keys: String {
-        case appOpenedCount = "appOpenedCount"
+        case appBecameActiveCount = "appBecameActiveCount"
         case assetType = "assetType"
         case didFailBiometrySetup = "didFailBiometrySetup"
         case encryptedPinPassword = "encryptedPINPassword"
