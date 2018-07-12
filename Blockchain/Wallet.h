@@ -439,7 +439,6 @@
 - (uint64_t)getBchBalance;
 - (NSString *)bitcoinCashExchangeRate;
 - (uint64_t)getBitcoinCashConversion;
-- (uint64_t)bitcoinCashTotalBalance;
 - (NSArray *)getBitcoinCashTransactions:(NSInteger)filterType;
 - (NSString *_Nullable)getLabelForDefaultBchAccount;
 

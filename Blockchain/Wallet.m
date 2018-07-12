@@ -2805,15 +2805,6 @@
     return 0;
 }
 
-- (uint64_t)bitcoinCashTotalBalance
-{
-    if ([self isInitialized]) {
-        return [[[self.context evaluateScript:@"MyWalletPhone.bch.totalBalance()"] toNumber] longLongValue];
-    }
-
-    return 0;
-}
-
 - (BOOL)hasBchAccount
 {
     if ([self isInitialized]) {

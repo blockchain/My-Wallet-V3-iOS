@@ -541,7 +541,7 @@ typedef enum {
                         if (bchAccounts.count == row - 1) {
                             bchBalance = [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoinCash];
                         } else if (row == 0) {
-                            bchBalance = [WalletManager.sharedInstance.wallet bitcoinCashTotalBalance];
+                            bchBalance = [WalletManager.sharedInstance.wallet getBchBalance];
                         } else {
                             bchBalance = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[bchAccounts objectAtIndex:indexPath.row - 1] intValue] assetType:LegacyAssetTypeBitcoinCash] assetType:LegacyAssetTypeBitcoinCash] longLongValue];
                         }

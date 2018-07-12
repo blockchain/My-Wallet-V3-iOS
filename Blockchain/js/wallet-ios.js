@@ -2966,10 +2966,6 @@ MyWalletPhone.bch = {
         account.archived = !account.archived;
     },
     
-    totalBalance : function() {
-        return MyWallet.wallet.bch.balance;
-    },
-    
     balanceActiveLegacy : function() {
         return MyWallet.wallet.bch.importedAddresses.balance;
     },

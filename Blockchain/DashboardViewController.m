@@ -159,7 +159,7 @@
         // Balances
         [self.balancesChartView updateBitcoinBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getTotalActiveBalance] localCurrency:NO]];
         [self.balancesChartView updateEtherBalance:[WalletManager.sharedInstance.wallet getEthBalanceTruncated]];
-        [self.balancesChartView updateBitcoinCashBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet bitcoinCashTotalBalance] localCurrency:NO]];
+        [self.balancesChartView updateBitcoinCashBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getBchBalance] localCurrency:NO]];
 
         // Watch only balances
         CGFloat previewViewSpacing = PRICE_PREVIEW_SPACING;
@@ -402,7 +402,7 @@
 
 - (double)getBchBalance
 {
-    return [self doubleFromString:[NSNumberFormatter formatBch:[WalletManager.sharedInstance.wallet bitcoinCashTotalBalance] localCurrency:YES]];
+    return [self doubleFromString:[NSNumberFormatter formatBch:[WalletManager.sharedInstance.wallet getBchBalance] localCurrency:YES]];
 }
 
 - (double)getBtcWatchOnlyBalance
