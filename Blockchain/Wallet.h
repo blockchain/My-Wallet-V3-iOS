@@ -143,6 +143,7 @@
 - (void)walletDidGetAccountInfoAndExchangeRates:(Wallet *)wallet;
 - (void)getSecondPasswordWithSuccess:(id<WalletSuccessCallback>)success;
 - (void)getPrivateKeyPasswordWithSuccess:(id<WalletSuccessCallback>)success;
+- (void)walletUpgraded:(Wallet *)wallet;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {
@@ -328,7 +329,6 @@
 - (void)setPbkdf2Iterations:(int)iterations;
 
 - (void)loading_start_get_history;
-- (void)loading_start_upgrade_to_hd;
 - (void)loading_start_recover_wallet;
 - (void)loading_stop;
 - (void)upgrade_success;

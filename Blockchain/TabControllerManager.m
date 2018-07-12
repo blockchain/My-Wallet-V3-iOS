@@ -38,6 +38,12 @@
     walletManager.fiatAtTimeDelegate = self;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [AppCoordinator.sharedInstance showHdUpgradeViewIfNeeded];
+}
+
 - (void)didSetAssetType:(LegacyAssetType)assetType
 {
     self.assetType = assetType;

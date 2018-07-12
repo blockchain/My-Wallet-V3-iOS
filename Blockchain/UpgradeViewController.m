@@ -11,7 +11,7 @@
 #import "UILabel+MultiLineAutoSize.h"
 #import "Blockchain-Swift.h"
 
-@interface UpgradeViewController ()
+@interface UpgradeViewController () <WalletUpgradeDelegate>
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
@@ -37,15 +37,10 @@
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
         return;
     }
-    
-    [WalletManager.sharedInstance.wallet loading_start_upgrade_to_hd];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[AppCoordinator sharedInstance] closeSideMenu];
-        [WalletManager.sharedInstance.wallet performSelector:@selector(upgradeToV3Wallet) withObject:nil afterDelay:0.1f];
-    });
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [LoadingViewPresenter.sharedInstance showBusyViewWithLoadingText:BC_STRING_LOADING_CREATING_V3_WALLET];
+
+    [WalletManager.sharedInstance.wallet upgradeToV3Wallet];
 }
 
 - (NSArray *)imageNamesArray
@@ -153,6 +148,8 @@
     [self setTextForCaptionLabel];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+
+    WalletManager.sharedInstance.upgradeWalletDelegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -217,6 +214,19 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self setTextForCaptionLabel];
+}
+
+#pragma mark - WalletUpgradeDelegate
+
+- (void)onWalletUpgraded
+{
+    __weak UpgradeViewController *weakSelf = self;
+    [AlertViewPresenter.sharedInstance standardErrorWithMessage:LocalizationConstantsObjcBridge.upgradeSuccess
+                                                          title:LocalizationConstantsObjcBridge.upgradeSuccessTitle
+                                                             in:self
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+                                                            [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                        }];
 }
 
 @end

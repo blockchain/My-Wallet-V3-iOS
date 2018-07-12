@@ -175,8 +175,6 @@ extension AuthenticationCoordinator: WalletPinEntryDelegate {
         if walletManager.wallet.isInitialized() && !inSettings {
             AlertViewPresenter.shared.showMobileNoticeIfNeeded()
         }
-
-        AppCoordinator.shared.showHdUpgradeViewIfNeeded()
     }
 
     private func askIfUserWantsToResetPIN() {

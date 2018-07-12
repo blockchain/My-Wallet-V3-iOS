@@ -46,6 +46,7 @@ class WalletManager: NSObject {
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
     @objc weak var watchOnlyDelegate: WalletWatchOnlyDelegate?
+    @objc weak var upgradeWalletDelegate: WalletUpgradeDelegate?
     weak var swipeAddressDelegate: WalletSwipeAddressDelegate?
     weak var keyImportDelegate: WalletKeyImportDelegate?
     weak var secondPasswordDelegate: WalletSecondPasswordDelegate?
@@ -624,5 +625,13 @@ extension WalletManager: WalletDelegate {
 
     @objc func getPrivateKeyPassword(withSuccess success: WalletSuccessCallback) {
         secondPasswordDelegate?.getPrivateKeyPassword(success: success)
+    }
+
+    // MARK: - Upgrade
+
+    func walletUpgraded(_ wallet: Wallet!) {
+        DispatchQueue.main.async {
+            self.upgradeWalletDelegate?.onWalletUpgraded()
+        }
     }
 }

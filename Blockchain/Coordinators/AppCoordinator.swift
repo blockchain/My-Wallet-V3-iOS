@@ -92,7 +92,7 @@ import Foundation
     }
 
     /// Shows an upgrade to HD wallet prompt if the user has a legacy wallet
-    func showHdUpgradeViewIfNeeded() {
+    @objc func showHdUpgradeViewIfNeeded() {
         guard !walletManager.wallet.didUpgradeToHd() else { return }
         showHdUpgradeView()
     }
