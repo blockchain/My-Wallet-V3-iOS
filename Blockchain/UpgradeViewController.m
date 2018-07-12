@@ -221,12 +221,12 @@
 - (void)onWalletUpgraded
 {
     __weak UpgradeViewController *weakSelf = self;
-    [AlertViewPresenter.sharedInstance standardErrorWithMessage:LocalizationConstantsObjcBridge.upgradeSuccess
-                                                          title:LocalizationConstantsObjcBridge.upgradeSuccessTitle
-                                                             in:self
-                                                        handler:^(UIAlertAction * _Nonnull action) {
-                                                            [weakSelf dismissViewControllerAnimated:YES completion:nil];
-                                                        }];
+    [AlertViewPresenter.sharedInstance standardNotifyWithMessage:LocalizationConstantsObjcBridge.upgradeSuccess
+                                                           title:LocalizationConstantsObjcBridge.upgradeSuccessTitle
+                                                              in:self
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                         }];
 }
 
 @end
