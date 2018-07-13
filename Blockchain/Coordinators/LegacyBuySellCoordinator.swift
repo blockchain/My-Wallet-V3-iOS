@@ -1,5 +1,5 @@
 //
-//  BuySellCoordinator.swift
+//  LegacyBuySellCoordinator.swift
 //  Blockchain
 //
 //  Created by kevinwu on 6/6/18.
@@ -9,8 +9,9 @@
 import Foundation
 import RxSwift
 
-@objc class BuySellCoordinator: NSObject, Coordinator {
-    static let shared = BuySellCoordinator()
+/// Coordinator for the (legacy) buy/sell flow
+@objc class LegacyBuySellCoordinator: NSObject, Coordinator {
+    static let shared = LegacyBuySellCoordinator()
 
     @objc private(set) var buyBitcoinViewController: BuyBitcoinViewController?
 
@@ -20,9 +21,9 @@ import RxSwift
 
     private var disposable: Disposable?
 
-    // class function declared so that the BuySellCoordinator singleton can be accessed from obj-C
-    @objc class func sharedInstance() -> BuySellCoordinator {
-        return BuySellCoordinator.shared
+    // class function declared so that the LegacyBuySellCoordinator singleton can be accessed from obj-C
+    @objc class func sharedInstance() -> LegacyBuySellCoordinator {
+        return LegacyBuySellCoordinator.shared
     }
 
     private init(
@@ -105,7 +106,7 @@ import RxSwift
     }
 }
 
-extension BuySellCoordinator: WalletBuySellDelegate {
+extension LegacyBuySellCoordinator: WalletBuySellDelegate {
     func didCompleteTrade(trade: Trade) {
         let actions = [UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil),
                        UIAlertAction(title: LocalizationConstants.BuySell.viewDetails, style: .default, handler: { _ in

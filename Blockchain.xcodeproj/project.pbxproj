@@ -295,6 +295,8 @@
 		AA94965E20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94965F20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */; };
+		AA9B310120F8022700A7F809 /* BuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B310020F8022600A7F809 /* BuySellCoordinator.swift */; };
+		AA9B310220F8022700A7F809 /* BuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B310020F8022600A7F809 /* BuySellCoordinator.swift */; };
 		AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */; };
 		AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */; };
 		AAA3316B2089650B00BBD292 /* AlertViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316A2089650B00BBD292 /* AlertViewPresenter.swift */; };
@@ -373,6 +375,10 @@
 		AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADB023820C0A871000FFFEC /* HttpMethod.swift */; };
 		AADB027E20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADB027D20C0BACA000FFFEC /* WalletCryptoService.swift */; };
 		AADB027F20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADB027D20C0BACA000FFFEC /* WalletCryptoService.swift */; };
+		AADF28D820F8039F00879382 /* BuySellCreateAccountCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADF28D720F8039F00879382 /* BuySellCreateAccountCoordinator.swift */; };
+		AADF28D920F8039F00879382 /* BuySellCreateAccountCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADF28D720F8039F00879382 /* BuySellCreateAccountCoordinator.swift */; };
+		AADF28F520F8187200879382 /* BuySellOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADF28F420F8187200879382 /* BuySellOverviewCoordinator.swift */; };
+		AADF28F620F8187200879382 /* BuySellOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADF28F420F8187200879382 /* BuySellOverviewCoordinator.swift */; };
 		AAE9113120A51C900093A431 /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113020A51C900093A431 /* ReminderType.swift */; };
 		AAE9113220A51C900093A431 /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113020A51C900093A431 /* ReminderType.swift */; };
 		AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */; };
@@ -518,8 +524,8 @@
 		C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */; };
 		C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE12F20C720CA0096003B /* BitcoinCashURLPayload.swift */; };
 		C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE12F20C720CA0096003B /* BitcoinCashURLPayload.swift */; };
-		C7BEE13B20C828B20096003B /* BuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */; };
-		C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */; };
+		C7BEE13B20C828B20096003B /* LegacyBuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE13A20C828B20096003B /* LegacyBuySellCoordinator.swift */; };
+		C7BEE13C20C828B20096003B /* LegacyBuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE13A20C828B20096003B /* LegacyBuySellCoordinator.swift */; };
 		C7BEE14A20C9775B0096003B /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE14920C9775B0096003B /* WalletOptions.swift */; };
 		C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE14920C9775B0096003B /* WalletOptions.swift */; };
 		C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34B71F4DCB7E00032806 /* CardsViewController.m */; };
@@ -1623,6 +1629,7 @@
 		AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressRepository.swift; sourceTree = "<group>"; };
 		AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactory.swift; sourceTree = "<group>"; };
 		AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactoryTests.swift; sourceTree = "<group>"; };
+		AA9B310020F8022600A7F809 /* BuySellCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuySellCoordinator.swift; sourceTree = "<group>"; };
 		AAA3314D20893CE100BBD292 /* PairingInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingInstructionsView.swift; sourceTree = "<group>"; };
 		AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewPresenter.swift; sourceTree = "<group>"; };
 		AAA3316A2089650B00BBD292 /* AlertViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewPresenter.swift; sourceTree = "<group>"; };
@@ -1656,6 +1663,8 @@
 		AADB01E820C09FA7000FFFEC /* WalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletService.swift; sourceTree = "<group>"; };
 		AADB023820C0A871000FFFEC /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
 		AADB027D20C0BACA000FFFEC /* WalletCryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCryptoService.swift; sourceTree = "<group>"; };
+		AADF28D720F8039F00879382 /* BuySellCreateAccountCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuySellCreateAccountCoordinator.swift; sourceTree = "<group>"; };
+		AADF28F420F8187200879382 /* BuySellOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuySellOverviewCoordinator.swift; sourceTree = "<group>"; };
 		AAE9113020A51C900093A431 /* ReminderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderType.swift; sourceTree = "<group>"; };
 		AAE9113420A520D40093A431 /* WalletAccountInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoDelegate.swift; sourceTree = "<group>"; };
 		AAE9113C20A640A40093A431 /* PinPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PinPayload.swift; path = Authentication/Models/PinPayload.swift; sourceTree = "<group>"; };
@@ -1810,7 +1819,7 @@
 		C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCEmptyPageView.m; sourceTree = "<group>"; };
 		C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Assets.swift"; sourceTree = "<group>"; };
 		C7BEE12F20C720CA0096003B /* BitcoinCashURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCashURLPayload.swift; sourceTree = "<group>"; };
-		C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuySellCoordinator.swift; sourceTree = "<group>"; };
+		C7BEE13A20C828B20096003B /* LegacyBuySellCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBuySellCoordinator.swift; sourceTree = "<group>"; };
 		C7BEE14920C9775B0096003B /* WalletOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletOptions.swift; sourceTree = "<group>"; };
 		C7CE34B51F4DB8C100032806 /* Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assets.h; sourceTree = "<group>"; };
 		C7CE34B61F4DCB7E00032806 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
@@ -2165,6 +2174,9 @@
 		517536D520F3B632002275A7 /* BuySell */ = {
 			isa = PBXGroup;
 			children = (
+				AA9B310020F8022600A7F809 /* BuySellCoordinator.swift */,
+				AADF28D720F8039F00879382 /* BuySellCreateAccountCoordinator.swift */,
+				AADF28F420F8187200879382 /* BuySellOverviewCoordinator.swift */,
 				517536F020F3B6DC002275A7 /* KYC */,
 			);
 			path = BuySell;
@@ -2743,7 +2755,7 @@
 		AAA33338208811460019AD55 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */,
+				C7BEE13A20C828B20096003B /* LegacyBuySellCoordinator.swift */,
 				C74E866020B3272B00F7263D /* TransferAllCoordinator.swift */,
 				AAA3333C208813040019AD55 /* OnboardingCoordinator.swift */,
 				AA69F6582086A2720054EFCE /* AppCoordinator.swift */,
@@ -3771,6 +3783,7 @@
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
 				AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
+				AADF28D920F8039F00879382 /* BuySellCreateAccountCoordinator.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
@@ -3821,6 +3834,7 @@
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,
+				AA9B310220F8022700A7F809 /* BuySellCoordinator.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
@@ -3829,8 +3843,9 @@
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
-				C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */,
+				C7BEE13C20C828B20096003B /* LegacyBuySellCoordinator.swift in Sources */,
 				AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */,
+				AADF28F620F8187200879382 /* BuySellOverviewCoordinator.swift in Sources */,
 				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
 				AACE31C52092A99B00B7B806 /* Environment.swift in Sources */,
 				AABB74C920D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
@@ -3961,6 +3976,7 @@
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
 				AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */,
 				C74E866120B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
+				AA9B310120F8022700A7F809 /* BuySellCoordinator.swift in Sources */,
 				84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */,
 				9F765F3D14BC7C4F00048EFB /* Transaction.m in Sources */,
 				C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
@@ -4033,12 +4049,14 @@
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
 				C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
 				C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
+				AADF28D820F8039F00879382 /* BuySellCreateAccountCoordinator.swift in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
 				6762507D1A2CC5800052B63F /* BCEditAccountView.m in Sources */,
 				C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */,
 				AA63F87720A39DCF002B719B /* AppFeature.swift in Sources */,
 				C7F041961E3BD4A6004E8B4A /* BuyBitcoinViewController.m in Sources */,
 				C7448A9C2034DDF80041947E /* AssetSelectorView.m in Sources */,
+				AADF28F520F8187200879382 /* BuySellOverviewCoordinator.swift in Sources */,
 				C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */,
 				AA722C1420B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
@@ -4117,7 +4135,7 @@
 				6750389B1B4D832F00F7B488 /* SideMenuViewCell.m in Sources */,
 				9F1831EE151744EB00FB3D52 /* ReceiveTableCell.m in Sources */,
 				C72D6CBF1EC0B4AB0000F922 /* BCFeeSelectionView.m in Sources */,
-				C7BEE13B20C828B20096003B /* BuySellCoordinator.swift in Sources */,
+				C7BEE13B20C828B20096003B /* LegacyBuySellCoordinator.swift in Sources */,
 				67EE1DCB19E3325900DBBFC9 /* ECSlidingAnimationController.m in Sources */,
 				67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */,
 				C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */,

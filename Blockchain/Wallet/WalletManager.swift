@@ -103,7 +103,7 @@ class WalletManager: NSObject {
 
         AppCoordinator.shared.tabControllerManager.transition(to: 1)
 
-        BuySellCoordinator.shared.start()
+        LegacyBuySellCoordinator.shared.start()
     }
 
     private var backgroundUpdateTaskIdentifer: UIBackgroundTaskIdentifier?

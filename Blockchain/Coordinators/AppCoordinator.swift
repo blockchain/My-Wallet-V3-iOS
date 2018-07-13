@@ -81,7 +81,7 @@ import Foundation
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
 
-        BuySellCoordinator.shared.start()
+        LegacyBuySellCoordinator.shared.start()
 
         // Display welcome screen if no wallet is authenticated
         if BlockchainSettings.App.shared.guid == nil || BlockchainSettings.App.shared.sharedKey == nil {
@@ -313,7 +313,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     }
 
     private func handleBuyBitcoin() {
-        BuySellCoordinator.shared.showBuyBitcoinView()
+        LegacyBuySellCoordinator.shared.showBuyBitcoinView()
     }
 
     private func handleExchange() {

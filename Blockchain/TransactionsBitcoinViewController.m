@@ -145,7 +145,7 @@
 - (void)getAssetButtonClicked
 {
     if ([WalletManager.sharedInstance.wallet isBuyEnabled]) {
-        [BuySellCoordinator.sharedInstance showBuyBitcoinView];
+        [LegacyBuySellCoordinator.sharedInstance showBuyBitcoinView];
     } else {
         TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
         [tabControllerManager receiveCoinClicked:nil];

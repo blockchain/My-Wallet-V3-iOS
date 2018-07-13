@@ -155,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         BlockchainSettings.App.shared.appOpenedCount += 1
 
-        BuySellCoordinator.shared.start()
+        LegacyBuySellCoordinator.shared.start()
 
         if !WalletManager.shared.wallet.isInitialized() {
             if BlockchainSettings.App.shared.guid != nil && BlockchainSettings.App.shared.sharedKey != nil {

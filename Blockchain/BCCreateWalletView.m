@@ -209,7 +209,7 @@
     [WalletManager.sharedInstance.wallet loadWalletWithGuid:guid sharedKey:sharedKey password:password];
     
     WalletManager.sharedInstance.wallet.isNew = YES;
-    BuySellCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
+    LegacyBuySellCoordinator.sharedInstance.buyBitcoinViewController.isNew = YES;
 
     BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards = NO;
     
