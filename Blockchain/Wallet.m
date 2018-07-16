@@ -3351,7 +3351,7 @@
 - (void)on_error_import_key_for_sending_from_watch_only:(NSString *)error
 {
     // TODO: remove bridging function call
-    [[KeyImportCoordinator sharedInstance] on_error_adding_private_key_watch_onlyWithError:error];
+    [[KeyImportCoordinator sharedInstance] on_error_import_key_for_sending_from_watch_onlyWithError:error];
 }
 
 /* End Key Importer */

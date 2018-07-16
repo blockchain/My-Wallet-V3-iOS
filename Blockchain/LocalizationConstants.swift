@@ -227,7 +227,7 @@ struct LocalizationConstants {
         static let importedKeyButForIncorrectAddress = NSLocalizedString("You've successfully imported a private key.", comment: "")
         static let importedKeyDoesNotCorrespondToAddress = NSLocalizedString("NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.", comment: "")
         static let importedKeySuccess = NSLocalizedString("You can now spend from this address.", comment: "")
-        static let incorrectPrivateKey = NSLocalizedString("", comment: "Incorrect private key")
+        static let incorrectPrivateKey = NSLocalizedString("Incorrect private key", comment: "Incorrect private key")
         static let keyAlreadyImported = NSLocalizedString("Key already imported", comment: "")
         static let keyNeedsBip38Password = NSLocalizedString("Needs BIP38 Password", comment: "")
         static let incorrectBip38Password = NSLocalizedString("Wrong BIP38 Password", comment: "")
