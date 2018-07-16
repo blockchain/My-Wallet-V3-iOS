@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14269.14" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,12 +24,12 @@
             </navigationBar>
             <viewControllers>
                 <viewController nibName="" id="M9G-7G-NQi" userLabel="Tab Controller" customClass="TabViewController">
-                    <view key="view" contentMode="scaleToFill" id="Qnx-9f-Qq8">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Qnx-9f-Qq8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tli-7G-UCs">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
+                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="tli-7G-UCs">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="640"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfD-UP-O73">
@@ -37,36 +37,50 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sNc-FJ-eAH">
-                                <rect key="frame" x="0.0" y="641" width="375" height="83"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <items>
-                                    <tabBarItem title="Send" image="send" selectedImage="send_blue" id="4mt-zm-WqX">
-                                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
-                                    </tabBarItem>
-                                    <tabBarItem title="Dashboard" image="dashboard" selectedImage="dashboard_blue" id="Icz-Co-Kl6">
-                                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
-                                    </tabBarItem>
-                                    <tabBarItem title="Overview" image="tx" selectedImage="tx_blue" id="7Jb-L2-tcX">
-                                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
-                                    </tabBarItem>
-                                    <tabBarItem title="Request" image="receive" selectedImage="receive_blue" id="WtV-wW-2qZ">
-                                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
-                                    </tabBarItem>
-                                </items>
-                                <color key="tintColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="selectedImageTintColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
-                            </tabBar>
+                            <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="caO-H4-dl4">
+                                <rect key="frame" x="0.0" y="640" width="375" height="84"/>
+                                <subviews>
+                                    <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sNc-FJ-eAH">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="83"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <items>
+                                            <tabBarItem title="Send" image="send" selectedImage="send_blue" id="4mt-zm-WqX">
+                                                <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                                            </tabBarItem>
+                                            <tabBarItem title="Dashboard" image="dashboard" selectedImage="dashboard_blue" id="Icz-Co-Kl6">
+                                                <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                                            </tabBarItem>
+                                            <tabBarItem title="Overview" image="tx" selectedImage="tx_blue" id="7Jb-L2-tcX">
+                                                <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                                            </tabBarItem>
+                                            <tabBarItem title="Request" image="receive" selectedImage="receive_blue" id="WtV-wW-2qZ">
+                                                <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                                            </tabBarItem>
+                                        </items>
+                                        <color key="tintColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="selectedImageTintColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tabBar>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="sNc-FJ-eAH" firstAttribute="width" secondItem="caO-H4-dl4" secondAttribute="width" id="X3I-8r-tFD"/>
+                                    <constraint firstItem="sNc-FJ-eAH" firstAttribute="centerX" secondItem="caO-H4-dl4" secondAttribute="centerX" id="a4F-kz-ctE"/>
+                                    <constraint firstAttribute="bottom" secondItem="sNc-FJ-eAH" secondAttribute="bottom" constant="1" id="bsg-xG-LQx"/>
+                                    <constraint firstItem="sNc-FJ-eAH" firstAttribute="height" secondItem="caO-H4-dl4" secondAttribute="height" constant="-1" id="n6u-8s-D5t"/>
+                                    <constraint firstItem="sNc-FJ-eAH" firstAttribute="top" secondItem="caO-H4-dl4" secondAttribute="top" id="twH-F8-T2L"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="sNc-FJ-eAH" firstAttribute="leading" secondItem="LYU-sy-chi" secondAttribute="leading" id="EBL-vM-yDU"/>
+                            <constraint firstItem="caO-H4-dl4" firstAttribute="width" secondItem="Qnx-9f-Qq8" secondAttribute="width" id="0bi-at-Tsu"/>
                             <constraint firstItem="tli-7G-UCs" firstAttribute="top" secondItem="LYU-sy-chi" secondAttribute="top" id="Ith-F5-ukz"/>
                             <constraint firstItem="LYU-sy-chi" firstAttribute="trailing" secondItem="tli-7G-UCs" secondAttribute="trailing" id="LIH-se-Hwe"/>
-                            <constraint firstItem="tli-7G-UCs" firstAttribute="bottom" secondItem="sNc-FJ-eAH" secondAttribute="top" id="XH4-XU-byC"/>
+                            <constraint firstItem="caO-H4-dl4" firstAttribute="centerX" secondItem="Qnx-9f-Qq8" secondAttribute="centerX" id="R7V-sS-ZLK"/>
+                            <constraint firstAttribute="bottom" secondItem="caO-H4-dl4" secondAttribute="bottom" id="SMv-al-0cP"/>
+                            <constraint firstItem="caO-H4-dl4" firstAttribute="centerX" secondItem="Qnx-9f-Qq8" secondAttribute="centerX" id="aN1-tD-3oq"/>
                             <constraint firstItem="tli-7G-UCs" firstAttribute="leading" secondItem="LYU-sy-chi" secondAttribute="leading" id="hBV-Vc-8y1"/>
-                            <constraint firstItem="sNc-FJ-eAH" firstAttribute="bottom" secondItem="LYU-sy-chi" secondAttribute="bottom" constant="34" id="tjD-Gz-vUx"/>
-                            <constraint firstItem="LYU-sy-chi" firstAttribute="trailing" secondItem="sNc-FJ-eAH" secondAttribute="trailing" id="yzo-gN-SPA"/>
+                            <constraint firstItem="caO-H4-dl4" firstAttribute="top" secondItem="tli-7G-UCs" secondAttribute="bottom" id="op3-zG-3Tf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LYU-sy-chi"/>
                     </view>
@@ -90,7 +104,6 @@
                         <outlet property="requestButton" destination="WtV-wW-2qZ" id="cZk-y9-gI7"/>
                         <outlet property="sendButton" destination="4mt-zm-WqX" id="kZE-8Z-P5g"/>
                         <outlet property="tabBar" destination="sNc-FJ-eAH" id="Iu6-5f-kN2"/>
-                        <outlet property="tabBarBottomConstraint" destination="tjD-Gz-vUx" id="tZv-8F-7QX"/>
                     </connections>
                 </viewController>
             </viewControllers>
