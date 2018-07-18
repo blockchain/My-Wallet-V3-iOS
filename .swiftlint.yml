@@ -42,6 +42,7 @@ required_enum_case: true
 sorted_imports: true
 strict_fileprivate: true
 switch_case_on_newline: true
+todo: false
 trailing_closure: true
 type_body_length:
   warning: 500

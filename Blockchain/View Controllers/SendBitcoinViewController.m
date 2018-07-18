@@ -70,10 +70,10 @@ typedef enum {
 @property (nonatomic) BOOL isReloading;
 @property (nonatomic) BOOL shouldReloadFeeAmountLabel;
 
-@property (nonatomic, copy) void (^getTransactionFeeSuccess)();
-@property (nonatomic, copy) void (^getDynamicFeeError)();
+@property (nonatomic, copy) void (^getTransactionFeeSuccess)(void);
+@property (nonatomic, copy) void (^getDynamicFeeError)(void);
 
-@property (nonatomic, copy) void (^onViewDidLoad)();
+@property (nonatomic, copy) void (^onViewDidLoad)(void);
 
 @property (nonatomic) TransferAllFundsBuilder *transferAllPaymentBuilder;
 
@@ -496,17 +496,17 @@ BOOL displayingLocalSymbolSend;
          listener.on_start = ^() {
          };
          
-         listener.on_begin_signing = ^() {
-             sendProgressModalText.text = BC_STRING_SIGNING_INPUTS;
+         listener.on_begin_signing = ^(NSString* intput) {
+             self->sendProgressModalText.text = BC_STRING_SIGNING_INPUTS;
          };
          
          listener.on_sign_progress = ^(int input) {
              DLog(@"Signing input: %d", input);
-             sendProgressModalText.text = [NSString stringWithFormat:BC_STRING_SIGNING_INPUT, input];
+             self->sendProgressModalText.text = [NSString stringWithFormat:BC_STRING_SIGNING_INPUT, input];
          };
          
-         listener.on_finish_signing = ^() {
-             sendProgressModalText.text = BC_STRING_FINISHED_SIGNING_INPUTS;
+         listener.on_finish_signing = ^(NSString* intput) {
+             self->sendProgressModalText.text = BC_STRING_FINISHED_SIGNING_INPUTS;
          };
          
          listener.on_success = ^(NSString*secondPassword, NSString *transactionHash) {
@@ -518,7 +518,7 @@ BOOL displayingLocalSymbolSend;
              
              [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:paymentSentAlert animated:YES completion:nil];
              
-             [sendProgressActivityIndicator stopAnimating];
+             [self->sendProgressActivityIndicator stopAnimating];
              
              [self enablePaymentButtons];
              
@@ -560,7 +560,7 @@ BOOL displayingLocalSymbolSend;
                  [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:self handler: nil];
              }
              
-             [sendProgressActivityIndicator stopAnimating];
+             [self->sendProgressActivityIndicator stopAnimating];
              
              [self enablePaymentButtons];
              
@@ -779,7 +779,7 @@ BOOL displayingLocalSymbolSend;
         
         self.confirmPaymentView = [[BCConfirmPaymentView alloc] initWithFrame:self.view.frame
                                                                      viewModel:confirmPaymentViewModel
-                                                               sendButtonFrame:continuePaymentButton.frame];
+                                                              sendButtonFrame:self->continuePaymentButton.frame];
         
         self.confirmPaymentView.confirmDelegate = self;
         
@@ -1013,35 +1013,35 @@ BOOL displayingLocalSymbolSend;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         
         if (IS_USING_SCREEN_SIZE_4S) {
-            [lineBelowFromField changeYPosition:38];
+            [self->lineBelowFromField changeYPosition:38];
             
-            [toLabel changeYPosition:42];
-            [toField changeYPosition:38];
-            [addressBookButton changeYPosition:38];
-            [lineBelowToField changeYPosition:66];
+            [self->toLabel changeYPosition:42];
+            [self->toField changeYPosition:38];
+            [self->addressBookButton changeYPosition:38];
+            [self->lineBelowToField changeYPosition:66];
             
-            [bottomContainerView changeYPosition:83];
-            [btcLabel changeYPosition:-11];
-            [btcAmountField changeYPosition:-15];
-            [fiatLabel changeYPosition:-11];
-            [fiatAmountField changeYPosition:-15];
-            [lineBelowAmountFields changeYPosition:28];
+            [self->bottomContainerView changeYPosition:83];
+            [self->btcLabel changeYPosition:-11];
+            [self->btcAmountField changeYPosition:-15];
+            [self->fiatLabel changeYPosition:-11];
+            [self->fiatAmountField changeYPosition:-15];
+            [self->lineBelowAmountFields changeYPosition:28];
             
-            [feeTappableView changeYPosition:28];
-            [feeField changeYPosition:38];
-            [feeLabel changeYPosition:41];
+            [self->feeTappableView changeYPosition:28];
+            [self->feeField changeYPosition:38];
+            [self->feeLabel changeYPosition:41];
             [self.feeTypeLabel changeYPosition:37];
             [self.feeDescriptionLabel changeYPosition:51];
             [self.feeAmountLabel changeYPosition:51 - self.feeAmountLabel.frame.size.height/2];
-            [feeOptionsButton changeYPosition:37];
-            [lineBelowFeeField changeYPosition:76];
+            [self->feeOptionsButton changeYPosition:37];
+            [self->lineBelowFeeField changeYPosition:76];
             
-            [fundsAvailableButton changeYPosition:6];
+            [self->fundsAvailableButton changeYPosition:6];
         }
         
-        feeLabel.hidden = NO;
-        feeOptionsButton.hidden = self.assetType == LegacyAssetTypeBitcoinCash;
-        lineBelowFeeField.hidden = NO;
+        self->feeLabel.hidden = NO;
+        self->feeOptionsButton.hidden = self.assetType == LegacyAssetTypeBitcoinCash;
+        self->lineBelowFeeField.hidden = NO;
         
         self.feeAmountLabel.hidden = NO;
         self.feeDescriptionLabel.hidden = NO;
@@ -1632,7 +1632,7 @@ BOOL displayingLocalSymbolSend;
 
 #pragma mark - Fee Calculation
 
-- (void)getTransactionFeeWithSuccess:(void (^)())success error:(void (^)())error
+- (void)getTransactionFeeWithSuccess:(void (^)(void))success error:(void (^)(void))error
 {
     self.getTransactionFeeSuccess = success;
     
@@ -1691,7 +1691,7 @@ BOOL displayingLocalSymbolSend;
             } else {
                 [self setupFeeWarningLabelFrameLarge];
             }
-            self.feeWarningLabel.hidden = lineBelowFeeField.frame.origin.y == warningLabelYPosition;
+            self.feeWarningLabel.hidden = self->lineBelowFeeField.frame.origin.y == warningLabelYPosition;
         }];
         self.feeWarningLabel.text = BC_STRING_NOT_ENOUGH_FUNDS_TO_USE_FEE;
     } else {
@@ -1773,7 +1773,7 @@ BOOL displayingLocalSymbolSend;
                 if (IS_USING_SCREEN_SIZE_LARGER_THAN_5S) {
                     [lineBelowFeeField changeYPositionAnimated:warningLabelYPosition + 12 completion:^(BOOL finished) {
                         [self setupFeeWarningLabelFrameSmall];
-                        self.feeWarningLabel.hidden = lineBelowFeeField.frame.origin.y == warningLabelYPosition;
+                        self.feeWarningLabel.hidden = self->lineBelowFeeField.frame.origin.y == warningLabelYPosition;
                     }];
                 } else {
                     [lineBelowFeeField changeYPositionAnimated:[self defaultYPositionForWarningLabel] completion:^(BOOL finished) {
@@ -1792,7 +1792,7 @@ BOOL displayingLocalSymbolSend;
                 if (IS_USING_SCREEN_SIZE_LARGER_THAN_5S) {
                     [lineBelowFeeField changeYPositionAnimated:warningLabelYPosition + 12 completion:^(BOOL finished) {
                         [self setupFeeWarningLabelFrameSmall];
-                        self.feeWarningLabel.hidden = lineBelowFeeField.frame.origin.y == warningLabelYPosition;
+                        self.feeWarningLabel.hidden = self->lineBelowFeeField.frame.origin.y == warningLabelYPosition;
                     }];
                 } else {
                     [lineBelowFeeField changeYPositionAnimated:[self defaultYPositionForWarningLabel] completion:^(BOOL finished) {
@@ -1924,7 +1924,7 @@ BOOL displayingLocalSymbolSend;
                     return;
                 }
 
-                toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:address assetType:self.assetType];
+                self->toField.text = [WalletManager.sharedInstance.wallet labelForLegacyAddress:address assetType:self.assetType];
                 self.toAddress = address;
                 self.sendToAddress = true;
                 DLog(@"toAddress: %@", self.toAddress);
@@ -1953,9 +1953,9 @@ BOOL displayingLocalSymbolSend;
                 
                 // If the amount is empty, open the amount field
                 if (amountInSatoshi == 0) {
-                    btcAmountField.text = nil;
-                    fiatAmountField.text = nil;
-                    [fiatAmountField becomeFirstResponder];
+                    self->btcAmountField.text = nil;
+                    self->fiatAmountField.text = nil;
+                    [self->fiatAmountField becomeFirstResponder];
                 }
                 
                 [self performSelector:@selector(doCurrencyConversion) withObject:nil afterDelay:0.1f];

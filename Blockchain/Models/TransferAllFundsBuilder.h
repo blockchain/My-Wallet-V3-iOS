@@ -29,14 +29,14 @@
 @property (nonatomic) BOOL userCancelledNext;
 
 // Callbacks for each transfer
-@property(nonatomic, copy) void (^on_before_send)();
+@property(nonatomic, copy) void (^on_before_send)(void);
 @property(nonatomic, copy) void (^on_prepare_next_transfer)(NSArray *transferAllAddressesToTransfer);
 @property(nonatomic, copy) void (^on_success)(NSString*secondPassword);
 @property(nonatomic, copy) void (^on_error)(NSString*error, NSString*secondPassword);
-@property(nonatomic, copy) void (^on_start)();
-@property(nonatomic, copy) void (^on_begin_signing)(int input);
-@property(nonatomic, copy) void (^on_sign_progress)();
-@property(nonatomic, copy) void (^on_finish_signing)();
+@property(nonatomic, copy) void (^on_start)(void);
+@property(nonatomic, copy) void (^on_begin_signing)(NSString* input);
+@property(nonatomic, copy) void (^on_sign_progress)(int);
+@property(nonatomic, copy) void (^on_finish_signing)(NSString*);
 
 
 - (id)initWithAssetType:(LegacyAssetType)assetType usingSendScreen:(BOOL)usesSendScreen;

@@ -28,7 +28,6 @@
 
     CGFloat safeAreaInsetTop = UIView.rootViewSafeAreaInsets.top;
     CGFloat navBarHeight = [ConstantsObjcBridge defaultNavigationBarHeight];
-    CGFloat assetSelectorHeight = [ConstantsObjcBridge assetSelectorHeight];
 
     self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:YES];
 
@@ -40,7 +39,6 @@
 
     WalletManager.sharedInstance.addressesDelegate = self;
 
-    CGFloat assetSelectorViewHorizontalPadding = 8;
     self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(0, safeAreaInsetTop + navBarHeight, self.view.frame.size.width, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
     [self.view addSubview:self.assetSelectorView];
     

@@ -57,9 +57,9 @@
     [view.layer addSublayer:_videoPreviewLayer];
 
     [[ModalPresenter sharedInstance] showModalWithContent:view closeType:ModalCloseTypeClose showHeader:YES headerText:[LocalizationConstantsObjcBridge scanQRCode] onDismiss:^{
-        [_captureSession stopRunning];
-        _captureSession = nil;
-        [_videoPreviewLayer removeFromSuperlayer];
+        [self->_captureSession stopRunning];
+        self->_captureSession = nil;
+        [self->_videoPreviewLayer removeFromSuperlayer];
     } onResume:nil];
     
     [_captureSession startRunning];

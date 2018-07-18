@@ -50,7 +50,7 @@
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (![[UIApplication sharedApplication].keyWindow.rootViewController presentedViewController]) {
-            [walletIdentifierTextField becomeFirstResponder];
+            [self->walletIdentifierTextField becomeFirstResponder];
         }
     });
     
@@ -148,13 +148,13 @@
     }]];
     [alertForVerifyingMobileNumber addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
     [alertForVerifyingMobileNumber addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        verifyTwoFactorTextField = (BCSecureTextField *)textField;
-        verifyTwoFactorTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        verifyTwoFactorTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-        verifyTwoFactorTextField.spellCheckingType = UITextSpellCheckingTypeNo;
-        verifyTwoFactorTextField.delegate = self;
-        verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
-        verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
+        self->verifyTwoFactorTextField = (BCSecureTextField *)textField;
+        self->verifyTwoFactorTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self->verifyTwoFactorTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+        self->verifyTwoFactorTextField.spellCheckingType = UITextSpellCheckingTypeNo;
+        self->verifyTwoFactorTextField.delegate = self;
+        self->verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
+        self->verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
 
     [self presentAlertController:alertForVerifyingMobileNumber];
@@ -179,12 +179,12 @@
     }]];
     [alertForVerifying addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
     [alertForVerifying addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        verifyTwoFactorTextField = (BCSecureTextField *)textField;
-        verifyTwoFactorTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        verifyTwoFactorTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-        verifyTwoFactorTextField.spellCheckingType = UITextSpellCheckingTypeNo;
-        verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
-        verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
+        self->verifyTwoFactorTextField = (BCSecureTextField *)textField;
+        self->verifyTwoFactorTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self->verifyTwoFactorTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+        self->verifyTwoFactorTextField.spellCheckingType = UITextSpellCheckingTypeNo;
+        self->verifyTwoFactorTextField.returnKeyType = UIReturnKeyDone;
+        self->verifyTwoFactorTextField.placeholder = BC_STRING_ENTER_VERIFICATION_CODE;
     }];
     [self presentAlertController:alertForVerifying];
 }

@@ -24,20 +24,20 @@
 #import "Assets.h"
 
 @interface transactionProgressListeners : NSObject
-@property(nonatomic, copy) void (^on_start)();
-@property(nonatomic, copy) void (^on_begin_signing)();
-@property(nonatomic, copy) void (^on_sign_progress)(int input);
-@property(nonatomic, copy) void (^on_finish_signing)();
-@property(nonatomic, copy) void (^on_success)(NSString*secondPassword, NSString*transactionHash);
-@property(nonatomic, copy) void (^on_error)(NSString*error, NSString*secondPassword);
+@property(nonatomic, copy) void (^ _Nonnull on_start)(void);
+@property(nonatomic, copy) void (^ _Nullable on_begin_signing)(NSString*);
+@property(nonatomic, copy) void (^ _Nullable on_sign_progress)(int input);
+@property(nonatomic, copy) void (^ _Nullable on_finish_signing)(NSString*);
+@property(nonatomic, copy) void (^ _Nullable on_success)(NSString* _Nullable secondPassword, NSString* _Nullable transactionHash);
+@property(nonatomic, copy) void (^ _Nonnull on_error)(NSString* _Nullable error, NSString* _Nullable secondPassword);
 @end
 
 @interface Key : NSObject {
     int tag;
 }
-@property(nonatomic, strong) NSString *addr;
-@property(nonatomic, strong) NSString *priv;
-@property(nonatomic, strong) NSString *label;
+@property(nonatomic, strong) NSString * _Nullable addr;
+@property(nonatomic, strong) NSString * _Nullable priv;
+@property(nonatomic, strong) NSString * _Nullable label;
 @property(nonatomic, assign) int tag;
 @end
 
@@ -47,7 +47,7 @@
 
 @protocol ExchangeAccountDelegate
 - (void)watchPendingTrades:(BOOL)shouldSync;
-- (void)showCompletedTrade:(NSString *)txHash;
+- (void)showCompletedTrade:(NSString *_Nullable)txHash;
 @end
 
 @protocol WalletDelegate <NSObject>

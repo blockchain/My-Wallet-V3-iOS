@@ -1196,12 +1196,12 @@
         self.btcSwipeAddressToSubscribe = nil;
 
         if (amountReceived > 0) {
-            if ([delegate respondsToSelector:@selector(paymentReceivedOnPINScreen:assetType:)]) {
+            if ([self->delegate respondsToSelector:@selector(paymentReceivedOnPINScreen:assetType:)]) {
                 if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-                    [delegate paymentReceivedOnPINScreen:amountString assetType:LegacyAssetTypeBitcoin];
+                    [self->delegate paymentReceivedOnPINScreen:amountString assetType:LegacyAssetTypeBitcoin];
                 }
             } else {
-                DLog(@"Error: delegate of class %@ does not respond to selector paymentReceivedOnPINScreen:!", [delegate class]);
+                DLog(@"Error: delegate of class %@ does not respond to selector paymentReceivedOnPINScreen:!", [self->delegate class]);
             }
         }
 
@@ -2841,7 +2841,7 @@
 
     if (listener) {
         if (listener.on_begin_signing) {
-            listener.on_begin_signing();
+            listener.on_begin_signing(txProgressID);
         }
     }
 }
@@ -2863,7 +2863,7 @@
 
     if (listener) {
         if (listener.on_finish_signing) {
-            listener.on_finish_signing();
+            listener.on_finish_signing(txProgressID);
         }
     }
 }
