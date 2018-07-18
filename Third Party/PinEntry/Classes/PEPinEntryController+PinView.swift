@@ -9,7 +9,16 @@
 import Foundation
 import RxSwift
 
-extension PEPinEntryController: PinView {
+extension PEViewController {
+    var pinValue: Pin? { return Pin(string: pin) }
+}
+
+extension PEPinEntryController {
+    @objc func didEnterFirstPinForChangePinFlow(from controller: PEViewController, previousPin: Pin) {
+        guard let pin = controller.pinValue else { return }
+        self.pinPresenter.validateFirstEntryForChangePin(pin: pin, previousPin: previousPin)
+    }
+
     @objc func validate(pin: Pin) {
         guard Reachability.hasInternetConnection() else {
             AlertViewPresenter.shared.showNoInternetConnectionAlert()
@@ -44,12 +53,14 @@ extension PEPinEntryController: PinView {
                 )
                 _ = strongSelf.pinPresenter.validatePin(payload)
             }, onError: { [weak self] error in
-                guard let strongSelf = self else { return }
-                strongSelf.hideLoadingView()
-                strongSelf.error(message: LocalizationConstants.Errors.invalidServerResponse)
+                    guard let strongSelf = self else { return }
+                    strongSelf.hideLoadingView()
+                    strongSelf.error(message: LocalizationConstants.Errors.invalidServerResponse)
             })
     }
+}
 
+extension PEPinEntryController: PinView {
     func showLoadingView(withText text: String) {
         LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
     }
@@ -77,5 +88,26 @@ extension PEPinEntryController: PinView {
         }
 
         self.pinDelegate.pinEntryControllerDidObtainPasswordDecryptionKey(pinPassword)
+    }
+
+    func alertCommonPin(continueHandler: @escaping (() -> Void)) {
+        let actions = [
+            UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { _ in
+                continueHandler()
+            }),
+            UIAlertAction(title: LocalizationConstants.tryAgain, style: .default, handler: { [unowned self] _ in
+                self.reset()
+            })
+        ]
+        AlertViewPresenter.shared.standardNotify(
+            message: LocalizationConstants.Pin.pinCodeCommonMessage,
+            title: LocalizationConstants.Errors.warning,
+            actions: actions,
+            in: self
+        )
+    }
+
+    func successFirstEntryForChangePin(pin: Pin) {
+        self.go(toEnter2Pin: pin)
     }
 }

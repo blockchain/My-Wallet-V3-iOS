@@ -13,9 +13,11 @@ class MockPinView: PinView {
 
     var didCallShowLoadingViewExpectation: XCTestExpectation?
     var didCallHideLoadingViewExpectation: XCTestExpectation?
+    var didCallAlertCommonPinExpectation: XCTestExpectation?
     var didCallErrorExpectation: XCTestExpectation?
     var didCallErrorPinRetryExceededExpectation: XCTestExpectation?
     var didCallSuccessPinValidExpectation: XCTestExpectation?
+    var didCallSuccessFirstEntryForChangePin: XCTestExpectation?
 
     init() {
     }
@@ -28,6 +30,10 @@ class MockPinView: PinView {
         didCallHideLoadingViewExpectation?.fulfill()
     }
 
+    func alertCommonPin(continueHandler: @escaping (() -> Void)) {
+        didCallAlertCommonPinExpectation?.fulfill()
+    }
+
     func error(message: String) {
         didCallErrorExpectation?.fulfill()
     }
@@ -38,5 +44,9 @@ class MockPinView: PinView {
 
     func successPinValid(pinPassword: String) {
         didCallSuccessPinValidExpectation?.fulfill()
+    }
+
+    func successFirstEntryForChangePin(pin: Pin) {
+        didCallSuccessFirstEntryForChangePin?.fulfill()
     }
 }

@@ -27,6 +27,7 @@
 #import "Assets.h"
 
 @class PEPinEntryController;
+@class Pin;
 @class PinPresenter;
 
 @protocol PEPinEntryControllerDelegate
@@ -70,6 +71,7 @@
 - (void)setupQRCode;
 - (void)reset;
 - (void)goToEnter1Pin;
+- (void)goToEnter2Pin:(Pin *)pin1;
 
 + (PEPinEntryController *)pinVerifyController;
 + (PEPinEntryController *)pinVerifyControllerClosable;

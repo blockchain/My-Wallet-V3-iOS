@@ -15,11 +15,15 @@ import RxSwift
 
     func hideLoadingView()
 
+    func alertCommonPin(continueHandler: @escaping (() -> Void))
+
     func error(message: String)
 
     func errorPinRetryLimitExceeded()
 
     func successPinValid(pinPassword: String)
+
+    func successFirstEntryForChangePin(pin: Pin)
 }
 
 /// Presenter for the pin flow.
@@ -38,6 +42,35 @@ import RxSwift
         self.interactor = interactor
         self.walletService = walletService
     }
+
+    // MARK: - Changing/First-time Setting Pin
+
+    /// Method invoked to validate that the 1st pin entered by the user during
+    /// the change pin flow (or the first time the user is setting a pin) is valid.
+    ///
+    /// - Parameter pin: the entered pin
+    func validateFirstEntryForChangePin(pin: Pin, previousPin: Pin) {
+        guard pin.isValid else {
+            self.view.error(message: LocalizationConstants.Pin.chooseAnotherPin)
+            return
+        }
+
+        guard pin != previousPin else {
+            self.view.error(message: LocalizationConstants.Pin.newPinMustBeDifferent)
+            return
+        }
+
+        guard !pin.isCommon else {
+            self.view.alertCommonPin { [unowned self] in
+                self.view.successFirstEntryForChangePin(pin: pin)
+            }
+            return
+        }
+
+        self.view.successFirstEntryForChangePin(pin: pin)
+    }
+
+    // MARK: - Pin Validation
 
     /// Validates if the provided pin payload (i.e. pin code and pin key combination) is correct.
     /// Calling this method will also fetch the WalletOptions to see if the server is under maintenance.

@@ -27,6 +27,37 @@ class PinPresenterTests: XCTestCase {
         presenter = PinPresenter(view: pinView, interactor: interactor, walletService: walletService)
     }
 
+    // MARK: - Pin Change Flows
+
+    /// Tests that entering a common pin during the change pin flow will show an error
+    func testFirstEntryPinIsCommonError() {
+        pinView.didCallAlertCommonPinExpectation = expectation(
+            description: "Alert is presented to the user that the pin is too common."
+        )
+        presenter.validateFirstEntryForChangePin(pin: Pin(code: 1111), previousPin: Pin(code: 3456))
+        waitForExpectations(timeout: 0.1)
+    }
+
+    /// Tests that entering a pin that is the same as the previous pin for the change pin flow will show an error
+    func testFirstEntryPinSameAsPreviousError() {
+        pinView.didCallErrorExpectation = expectation(
+            description: "Error is called alerting the user that they need to pick a pin different from their previous one."
+        )
+        presenter.validateFirstEntryForChangePin(pin: Pin(code: 3456), previousPin: Pin(code: 3456))
+        waitForExpectations(timeout: 0.1)
+    }
+
+    /// Tests that entering a valid pin for the change pin flow will succeeded
+    func testFirstEntryPinValid() {
+        pinView.didCallSuccessFirstEntryForChangePin = expectation(
+            description: "A valid pin should succeed during the change pin flow"
+        )
+        presenter.validateFirstEntryForChangePin(pin: Pin(code: 5555), previousPin: Pin(code: 5554))
+        waitForExpectations(timeout: 0.1)
+    }
+
+    // MARK: - Pin Validation Flows
+
     func testMaintenance() {
         let maintenanceMessage = "Site is down."
         walletService.mockWalletOptions = WalletOptions(json: [
