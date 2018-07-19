@@ -436,8 +436,6 @@ struct LocalizationConstants {
 
     @objc class func enableBiometrics() -> String { return LocalizationConstants.Biometrics.enableX }
 
-    @objc class func pinsDoNotMatch() -> String { return LocalizationConstants.Pin.pinsDoNotMatch }
-
     @objc class func nonSpendable() -> String { return LocalizationConstants.AddressAndKeyImport.nonSpendable }
 
     @objc class func dontShowAgain() -> String { return LocalizationConstants.dontShowAgain }

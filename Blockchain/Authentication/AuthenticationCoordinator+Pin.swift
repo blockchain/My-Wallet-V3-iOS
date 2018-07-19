@@ -23,20 +23,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
     // MARK: - PEPinEntryControllerDelegate
 
-    func pinEntryController(_ pinEntryController: PEPinEntryController!, changedPin pinInt: UInt) {
-        let pin = Pin(code: pinInt)
-        self.lastEnteredPIN = pin
-
-        guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Pin.cannotSaveInvalidWalletState)
-            return
-        }
-
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-
-        try? pin.save()
-    }
-
     func pinEntryControllerDidCancel(_ pinEntryController: PEPinEntryController!) {
         Logger.shared.info("Pin change cancelled!")
         closePinEntryView(animated: true)

@@ -19,6 +19,11 @@ extension PEPinEntryController {
         self.pinPresenter.validateFirstEntryForChangePin(pin: pin, previousPin: previousPin)
     }
 
+    @objc func didConfirmPinForChangePinFlow(from controller: PEViewController, firstPin: Pin) {
+        guard let pinToConfirm = controller.pinValue else { return }
+        self.pinPresenter.validateConfirmPinForChangePin(pin: pinToConfirm, firstPin: firstPin)
+    }
+
     @objc func validate(pin: Pin) {
         guard Reachability.hasInternetConnection() else {
             AlertViewPresenter.shared.showNoInternetConnectionAlert()
@@ -77,6 +82,21 @@ extension PEPinEntryController: PinView {
     func errorPinRetryLimitExceeded() {
         AuthenticationCoordinator.shared.logout(showPasswordView: true)
         error(message: LocalizationConstants.Pin.validationCannotBeCompleted)
+    }
+
+    func errorPinsDontMatch() {
+        let pinViewController = PEPinEntryController.newController()
+        pinViewController.delegate = self
+
+        var newViewControllers = [pinViewController as UIViewController]
+        if let firstViewController = self.viewControllers.first {
+            newViewControllers.append(firstViewController)
+        }
+        self.viewControllers = newViewControllers
+
+        self.popViewController(animated: false)
+
+        error(message: LocalizationConstants.Pin.pinsDoNotMatch)
     }
 
     func successPinValid(pinPassword: String) {

@@ -29,6 +29,15 @@ class PinPresenterTests: XCTestCase {
 
     // MARK: - Pin Change Flows
 
+    /// Tests that an error is encountered when the user tries to change their pin but the pins don't match
+    func testPinsDontMatch() {
+        pinView.didCallErrorPinsDontMatch = expectation(
+            description: "Error is called when pins don't match"
+        )
+        presenter.validateConfirmPinForChangePin(pin: Pin(code: 5555), firstPin: Pin(code: 5552))
+        waitForExpectations(timeout: 0.1)
+    }
+
     /// Tests that entering a common pin during the change pin flow will show an error
     func testFirstEntryPinIsCommonError() {
         pinView.didCallAlertCommonPinExpectation = expectation(

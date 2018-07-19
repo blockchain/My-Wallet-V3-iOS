@@ -21,6 +21,8 @@ import RxSwift
 
     func errorPinRetryLimitExceeded()
 
+    func errorPinsDontMatch()
+
     func successPinValid(pinPassword: String)
 
     func successFirstEntryForChangePin(pin: Pin)
@@ -45,8 +47,8 @@ import RxSwift
 
     // MARK: - Changing/First-time Setting Pin
 
-    /// Method invoked to validate that the 1st pin entered by the user during
-    /// the change pin flow (or the first time the user is setting a pin) is valid.
+    /// Validates that the 1st pin entered by the user during the change pin flow,
+    /// or the first time the user is setting a pin, is valid.
     ///
     /// - Parameter pin: the entered pin
     func validateFirstEntryForChangePin(pin: Pin, previousPin: Pin) {
@@ -68,6 +70,29 @@ import RxSwift
         }
 
         self.view.successFirstEntryForChangePin(pin: pin)
+    }
+
+    /// Validates that the 2nd pin entered during the change pin flow matches the
+    /// 1st pin entered, and if so, it will proceed to change the user's pin.
+    ///
+    /// - Parameters:
+    ///   - pin: the pin to confirm
+    ///   - firstPin: the 1st pin entered during the change pin flow
+    func validateConfirmPinForChangePin(pin: Pin, firstPin: Pin) {
+        guard pin == firstPin else {
+            self.view.errorPinsDontMatch()
+            return
+        }
+
+//        guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
+//            self.view.error(message: LocalizationConstants.Pin.cannotSaveInvalidWalletState)
+//            return
+//        }
+
+        // TODO update/change this
+//        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
+
+//        try? pin.save()
     }
 
     // MARK: - Pin Validation
