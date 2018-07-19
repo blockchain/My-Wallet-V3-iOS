@@ -163,7 +163,7 @@
 
         // Watch only balances
         CGFloat previewViewSpacing = PRICE_PREVIEW_SPACING;
-        if ([WalletManager.sharedInstance.wallet hasWatchOnlyAddresses]) {
+        if ([WalletManager.sharedInstance.wallet getWatchOnlyBalance] > 0) {
             // Update model
             [self.balancesChartView updateBitcoinWatchOnlyFiatBalance:watchOnlyFiatBalance];
             [self.balancesChartView updateBitcoinWatchOnlyBalance:[NSNumberFormatter formatAmount:[WalletManager.sharedInstance.wallet getWatchOnlyBalance] localCurrency:NO]];

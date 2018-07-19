@@ -286,11 +286,6 @@ MyWalletPhone.watchOnlyBalance = function() {
     .reduce(Helpers.add, 0);
 }
 
-MyWalletPhone.hasWatchOnlyAddresses = function() {
-    return MyWallet.wallet.activeKeys
-    .filter(function (k) { return k.isWatchOnly; }).length > 0;
-}
-
 MyWalletPhone.getLabelForAccount = function(num) {
     if (!MyWallet.wallet.isUpgradedToHD) {
         console.log('Warning: Getting accounts when wallet has not upgraded!');
