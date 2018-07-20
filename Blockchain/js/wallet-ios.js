@@ -2849,7 +2849,7 @@ MyWalletPhone.getExchangeRateForHardLimit = function(assetType) {
 }
 
 MyWalletPhone.currencyCodeForHardLimit = function() {
-    return MyWalletPhone.isCountryGuessWhitelistedForShapeshift() == 'US' ? 'USD' : 'EUR';
+    return MyWallet.wallet.accountInfo.countryCodeGuess == 'US' ? 'USD' : 'EUR';
 }
 
 MyWalletPhone.fiatExchangeHardLimit = function() {
