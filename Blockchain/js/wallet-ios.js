@@ -2581,10 +2581,25 @@ MyWalletPhone.getExchangeTrades = function() {
 MyWalletPhone.getRate = function(coinPair) {
 
     var success = function(result) {
-        MyWalletPhone.getEthExchangeRateForHardLimit().then(function(hardLimit) {
-             var currencyCode = MyWalletPhone.currencyCodeForHardLimit();
-             objc_on_get_exchange_rate_success(result.limit, result.minimum, result.minerFee, result.maxLimit, result.pair, result.rate, hardLimit[currencyCode].last);
-        });
+        var btcTicker = 'BTC';
+        var ethTicker = 'ETH';
+        var bchTicker = 'BCH';
+
+        var coins = coinPair.split('_');
+        var from = coins[0];
+
+        var fetchRateSuccess = function(hardLimit) {
+            var currencyCode = MyWalletPhone.currencyCodeForHardLimit();
+            objc_on_get_exchange_rate_success(result.limit, result.minimum, result.minerFee, result.maxLimit, result.pair, result.rate, hardLimit[currencyCode].last);
+        };
+
+        if (from.indexOf(btcTicker) !== -1) {
+            MyWalletPhone.getExchangeRateForHardLimit(btcTicker).then(fetchRateSuccess);
+        } else if (from.indexOf(ethTicker) !== -1) {
+            MyWalletPhone.getExchangeRateForHardLimit(ethTicker).then(fetchRateSuccess);
+        } else if (from.indexOf(bchTicker) !== -1) {
+            MyWalletPhone.getExchangeRateForHardLimit(bchTicker).then(fetchRateSuccess);
+        }
     }
 
     var error = function(e) {
@@ -2828,9 +2843,9 @@ MyWalletPhone.isWithdrawalTransaction = function(txHash) {
     return MyWallet.wallet.shapeshift.isWithdrawalTx(txHash);
 }
 
-MyWalletPhone.getEthExchangeRateForHardLimit = function() {
+MyWalletPhone.getExchangeRateForHardLimit = function(assetType) {
     var currencyCode = MyWalletPhone.currencyCodeForHardLimit();
-    return BlockchainAPI.getExchangeRate(currencyCode, 'ETH');
+    return BlockchainAPI.getExchangeRate(currencyCode, assetType);
 }
 
 MyWalletPhone.currencyCodeForHardLimit = function() {

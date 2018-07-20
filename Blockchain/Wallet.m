@@ -819,8 +819,8 @@
         [weakSelf on_get_exchange_trades_success:trades];
     };
 
-    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *ethHardLimit) {
-        [weakSelf on_get_exchange_rate_success:@{DICTIONARY_KEY_LIMIT : [limit toString], DICTIONARY_KEY_MINIMUM : [minimum toString], DICTIONARY_KEY_MINER_FEE : [minerFee toString], DICTIONARY_KEY_MAX_LIMIT : [maxLimit toString], DICTIONARY_KEY_RATE : [rate toString], DICTIONARY_KEY_ETH_HARD_LIMIT_RATE : [ethHardLimit toString]}];
+    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *hardLimit) {
+        [weakSelf on_get_exchange_rate_success:@{DICTIONARY_KEY_LIMIT : [limit toString], DICTIONARY_KEY_MINIMUM : [minimum toString], DICTIONARY_KEY_MINER_FEE : [minerFee toString], DICTIONARY_KEY_MAX_LIMIT : [maxLimit toString], DICTIONARY_KEY_RATE : [rate toString], DICTIONARY_KEY_HARD_LIMIT_RATE : [hardLimit toString]}];
     };
 
     self.context[@"objc_on_build_exchange_trade_success"] = ^(JSValue *from, JSValue *depositAmount, JSValue *fee, JSValue *rate, JSValue *minerFee, JSValue *withdrawalAmount, JSValue *expiration) {
@@ -4067,10 +4067,7 @@
 
 - (void)on_get_exchange_rate_success:(NSDictionary *)result
 {
-    NSNumber *btcRateNumber = [[[self.context evaluateScript:@"MyWalletPhone.currencyCodeForHardLimit()"] toString] isEqualToString:CURRENCY_CODE_USD] ? [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_USD] objectForKey:DICTIONARY_KEY_LAST] : [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_EUR] objectForKey:DICTIONARY_KEY_LAST];
-    
-    NSDecimalNumber *btcRate = [NSDecimalNumber decimalNumberWithDecimal:[btcRateNumber decimalValue]];
-    NSDecimalNumber *ethRate = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_ETH_HARD_LIMIT_RATE]];
+    NSDecimalNumber *hardLimitRate = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_HARD_LIMIT_RATE]];
 
     NSDecimalNumber *fiatHardLimit = [NSDecimalNumber decimalNumberWithString:[[self.context evaluateScript:@"MyWalletPhone.fiatExchangeHardLimit()"] toString]];
 
@@ -4079,12 +4076,10 @@
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US]];
 
-    NSString *btcHardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:btcRate]];
-    NSString *ethHardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:ethRate]];
+    NSString *hardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:hardLimitRate]];
 
     NSMutableDictionary *mutableCopy = [result mutableCopy];
-    [mutableCopy setObject:btcHardLimit forKey:DICTIONARY_KEY_BTC_HARD_LIMIT];
-    [mutableCopy setObject:ethHardLimit forKey:DICTIONARY_KEY_ETH_HARD_LIMIT];
+    [mutableCopy setObject:hardLimit forKey:DICTIONARY_KEY_HARD_LIMIT];
 
     if ([self.delegate respondsToSelector:@selector(didGetExchangeRate:)]) {
         [self.delegate didGetExchangeRate:mutableCopy];
