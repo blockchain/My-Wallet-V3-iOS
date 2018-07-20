@@ -4071,10 +4071,7 @@
 
     NSDecimalNumber *fiatHardLimit = [NSDecimalNumber decimalNumberWithString:[[self.context evaluateScript:@"MyWalletPhone.fiatExchangeHardLimit()"] toString]];
 
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setMaximumFractionDigits:8];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US]];
+    NSNumberFormatter *numberFormatter = [NSNumberFormatter assetFormatterWithUSLocale];
 
     NSString *hardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:hardLimitRate]];
 
