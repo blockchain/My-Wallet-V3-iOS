@@ -30,7 +30,6 @@ class WalletManager: NSObject {
 
     @objc weak var settingsDelegate: WalletSettingsDelegate?
     weak var authDelegate: WalletAuthDelegate?
-    weak var pinEntryDelegate: WalletPinEntryDelegate?
     weak var buySellDelegate: WalletBuySellDelegate?
     weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
@@ -251,21 +250,6 @@ extension WalletManager: WalletDelegate {
     func showCompletedTrade(_ txHash: String) {
         DispatchQueue.main.async { [unowned self] in
             self.buySellDelegate?.showCompletedTrade(tradeHash: txHash)
-        }
-    }
-
-    // MARK: - Pin Entry
-
-    func didFailPutPin(_ value: String!) {
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
-        }
-    }
-
-    func didPutPinSuccess(_ dictionary: [AnyHashable: Any]!) {
-        let response = PutPinResponse(response: dictionary)
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.putPinSuccess(response: response)
         }
     }
 

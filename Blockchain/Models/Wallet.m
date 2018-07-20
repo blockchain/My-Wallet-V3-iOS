@@ -304,10 +304,6 @@
         return SATOSHI;
     };
 
-    self.context[@"objc_on_error_pin_code_put_error"] = ^(NSString *error){
-        [weakSelf on_error_pin_code_put_error:error];
-    };
-
     self.context[@"objc_on_error_creating_new_account"] = ^(NSString *error) {
         [weakSelf on_error_creating_new_account:error];
     };
@@ -468,10 +464,6 @@
 
     self.context[@"objc_error_restoring_wallet"] = ^(){
         [weakSelf error_restoring_wallet];
-    };
-
-    self.context[@"objc_on_pin_code_put_response"] = ^(NSDictionary *response) {
-        [weakSelf on_pin_code_put_response:response];
     };
 
     self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *helperText) {
@@ -1236,14 +1228,6 @@
     return [[self.context evaluateScript:@"MyWalletPhone.hasEncryptedWalletData()"] toBool];
     else
     return NO;
-}
-
-- (void)pinServerPutKeyOnPinServerServer:(NSString*)key value:(NSString*)value pin:(NSString*)pin
-{
-    if (![self isInitialized]) {
-        return;
-    }
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.pinServerPutKeyOnPinServerServer(\"%@\", \"%@\", \"%@\")", key, value, pin]];
 }
 
 - (NSString*)encrypt:(NSString*)data password:(NSString*)_password pbkdf2_iterations:(int)pbkdf2_iterations
@@ -3374,28 +3358,6 @@
         [delegate errorCreatingNewAccount:message];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector errorCreatingNewAccount:!", [delegate class]);
-    }
-}
-
-- (void)on_error_pin_code_put_error:(NSString*)message
-{
-    DLog(@"on_error_pin_code_put_error:");
-
-    if ([delegate respondsToSelector:@selector(didFailPutPin:)]) {
-        [delegate didFailPutPin:message];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didFailPutPin:!", [delegate class]);
-    }
-}
-
-- (void)on_pin_code_put_response:(NSDictionary*)responseObject
-{
-    DLog(@"on_pin_code_put_response: %@", responseObject);
-
-    if ([delegate respondsToSelector:@selector(didPutPinSuccess:)]) {
-        [delegate didPutPinSuccess:responseObject];
-    } else {
-        DLog(@"Error: delegate of class %@ does not respond to selector didPutPinSuccess:!", [delegate class]);
     }
 }
 

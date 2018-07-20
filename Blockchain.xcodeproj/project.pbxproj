@@ -317,8 +317,6 @@
 		AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */; };
 		AA1E522D2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */; };
 		AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */; };
-		AA1E52312097CC1F0099BD10 /* WalletPinEntryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */; };
-		AA1E52322097CC230099BD10 /* WalletPinEntryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */; };
 		AA1E52332097CC260099BD10 /* WalletAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */; };
 		AA1E52342097CC2C0099BD10 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */; };
 		AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */; };
@@ -1999,7 +1997,6 @@
 		AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Pin.swift"; sourceTree = "<group>"; };
 		AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAuthDelegate.swift; sourceTree = "<group>"; };
-		AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPinEntryDelegate.swift; sourceTree = "<group>"; };
 		AA1E52372097D3C50099BD10 /* PutPinResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutPinResponse.swift; sourceTree = "<group>"; };
 		AA1E52392097E2190099BD10 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		AA1E523C2097E6AC0099BD10 /* GetPinResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPinResponse.swift; sourceTree = "<group>"; };
@@ -3336,7 +3333,6 @@
 				C74E865120B3043E00F7263D /* WalletHistoryDelegate.swift */,
 				51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */,
 				AABDED6B208EC330002D8BAC /* WalletManager.swift */,
-				AA1E52302097CC1F0099BD10 /* WalletPinEntryDelegate.swift */,
 				C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */,
 				C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */,
 				C78893ED20A4D690003C0A8F /* WalletSendBitcoinDelegate.swift */,
@@ -4277,7 +4273,6 @@
 				AA1E52332097CC260099BD10 /* WalletAuthDelegate.swift in Sources */,
 				AAE94DCF20C25F37005A3595 /* MockNetworkManager.swift in Sources */,
 				AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */,
-				AA1E52322097CC230099BD10 /* WalletPinEntryDelegate.swift in Sources */,
 				51135707209CF68500056D65 /* BackupViewController.swift in Sources */,
 				AA94965F20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */,
 				AACE31CA2092A99B00B7B806 /* AssetAddress.swift in Sources */,
@@ -4618,7 +4613,6 @@
 				C740FA89210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				23444F961DCD21C600573C8C /* BTCKeychain.m in Sources */,
 				2322DCB61D771831000E5AC1 /* SRIOConsumerPool.m in Sources */,
-				AA1E52312097CC1F0099BD10 /* WalletPinEntryDelegate.swift in Sources */,
 				AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */,
 				2322DCBB1D771831000E5AC1 /* SRError.m in Sources */,
 				9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */,
