@@ -33,6 +33,9 @@ struct LocalizationConstants {
         "My Ether Wallet",
         comment: "The default name of the ether wallet."
     )
+    
+    static let marketPriceTitle = NSLocalizedString("Current Price", comment: "")
+
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")

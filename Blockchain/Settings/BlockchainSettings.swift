@@ -8,6 +8,144 @@
 
 import Foundation
 
+protocol KeyNamespaceable { }
+
+protocol BCSettings: KeyNamespaceable {
+    associatedtype SettingsKey: RawRepresentable
+}
+
+extension KeyNamespaceable {
+    private static func namespace(_ key: String) -> String {
+        return key
+    }
+
+    static func namespace<T: RawRepresentable>(_ key: T) -> String where T.RawValue == String {
+        return namespace(key.rawValue)
+    }
+}
+
+extension BCSettings where SettingsKey.RawValue == String {
+
+    // Primitives
+    static func set(_ obj: Any, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(obj, forKey: key)
+    }
+
+    static func get(forKey key: SettingsKey) -> Any? {
+        let key = namespace(key)
+        return UserDefaults.standard.object(forKey: key)
+    }
+
+    static func remove(forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+
+    // Bools
+    static func set(_ bool: Bool, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(bool, forKey: key)
+    }
+
+    static func bool(forKey key: SettingsKey) -> Bool {
+        let key = namespace(key)
+        return UserDefaults.standard.bool(forKey: key)
+    }
+
+    // Strings
+    static func set(_ string: String, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(NSString(string: string), forKey: key)
+    }
+
+    static func string(forKey key: SettingsKey) -> String? {
+        let key = namespace(key)
+        return UserDefaults.standard.string(forKey: key)
+    }
+
+    // Floats
+    static func set(_ float: Float, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(float, forKey: key)
+    }
+
+    static func float(forKey key: SettingsKey) -> Float {
+        let key = namespace(key)
+        return UserDefaults.standard.float(forKey: key)
+    }
+
+    // Ints
+    static func set(_ integer: Int, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(integer, forKey: key)
+    }
+
+    static func integer(forKey key: SettingsKey) -> Int {
+        let key = namespace(key)
+        return UserDefaults.standard.integer(forKey: key)
+    }
+
+    // Objects
+    static func set(_ object: AnyObject, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(object, forKey: key)
+    }
+
+    static func object(forKey key: SettingsKey) -> Any? {
+        let key = namespace(key)
+        return UserDefaults.standard.object(forKey: key)
+    }
+
+    // Doubles
+    static func set(_ double: Double, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(double, forKey: key)
+    }
+
+    static func double(forKey key: SettingsKey) -> Double {
+        let key = namespace(key)
+        return UserDefaults.standard.double(forKey: key)
+    }
+
+    //URLs
+    static func set(_ url: URL, forKey key: SettingsKey) {
+        let key = namespace(key)
+        UserDefaults.standard.set(url, forKey: key)
+    }
+
+    static func url(forKey key: SettingsKey) -> URL? {
+        let key = namespace(key)
+        return UserDefaults.standard.url(forKey: key)
+    }
+}
+
+extension UserDefaults {
+    struct System: BCSettings {
+        private init() { }
+        //swiftlint:disable next nesting
+        enum SettingsKey: String {
+            case reminderModalDate,
+            certificatePinning,
+            symbolLocal,
+            appBecameActiveCount
+        }
+    }
+    struct User: BCSettings {
+        private init() { }
+        //swiftlint:disable next nesting
+        enum SettingsKey: String {
+            case encryptedPINPassword, reminderModalDate,
+            pinKey,
+            passwordPartHash,
+            defaultAccountLabelledAddressesCount,
+            hasEndedFirstSession, hasSeenEmailReminder, biometryEnabled,
+            swipeToReceive, hideTransferAllFundsAlert, dontAskUserToShowAppReviewPrompt,
+            didFailBiometrySetup, hasSeenUpgradeToHdScreen, shouldShowBiometrySetup,
+            firstRun, shouldHideBuySellNotificationCard, hasSeenAllCards, password, pin, guid, sharedKey
+        }
+    }
+}
 /**
  Settings for the current user.
  All settings are written and read from NSUserDefaults.
@@ -44,47 +182,60 @@ final class BlockchainSettings: NSObject {
 
         @objc var appBecameActiveCount: Int {
             get {
-                return defaults.integer(forKey: UserDefaults.Keys.appBecameActiveCount.rawValue)
+                return UserDefaults.System.integer(forKey: .appBecameActiveCount)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.appBecameActiveCount.rawValue)
+                UserDefaults.System.set(newValue, forKey: .appBecameActiveCount)
             }
         }
 
         /// The encrypted wallet password (encryption key was generated by the user's pin)
         @objc var encryptedPinPassword: String? {
             get {
-                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+                return UserDefaults.User.string(forKey: .encryptedPINPassword)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+                if let hasPin = newValue {
+                    UserDefaults.User.set(hasPin, forKey: .encryptedPINPassword)
+                }
+            }
+        }
+
+        @objc var walletGuid: String? {
+            get {
+                return UserDefaults.User.string(forKey: .guid)
+            }
+            set {
+                if let hasPin = newValue {
+                    UserDefaults.User.set(hasPin, forKey: .guid)
+                }
             }
         }
 
         @objc var enableCertificatePinning: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.DebugKeys.enableCertificatePinning.rawValue)
+                return UserDefaults.System.bool(forKey: .certificatePinning)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.DebugKeys.enableCertificatePinning.rawValue)
+                UserDefaults.System.set(newValue, forKey: .certificatePinning)
             }
         }
 
         @objc var hasEndedFirstSession: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasEndedFirstSession.rawValue)
+                return UserDefaults.User.bool(forKey: .hasEndedFirstSession)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasEndedFirstSession.rawValue)
+                UserDefaults.User.set(newValue, forKey: .hasEndedFirstSession)
             }
         }
 
         @objc var hasSeenEmailReminder: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasSeenEmailReminder.rawValue)
+                return UserDefaults.User.bool(forKey: .hasSeenEmailReminder)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenEmailReminder.rawValue)
+                UserDefaults.User.set(newValue, forKey: .hasSeenEmailReminder)
             }
         }
 
@@ -107,26 +258,26 @@ final class BlockchainSettings: NSObject {
 
         @objc var pinKey: String? {
             get {
-                return defaults.string(forKey: UserDefaults.Keys.pinKey.rawValue)
+                return UserDefaults.User.string(forKey: .pinKey)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.pinKey.rawValue)
+                if let pinKey = newValue {
+                    UserDefaults.User.set(pinKey, forKey: .pinKey)
+                }
             }
         }
 
-        var onSymbolLocalChanged: ((Bool) -> Void)?
+        var onSymbolLocalChanged: ((Bool) -> ())?
 
         /// Property indicating whether or not the currency symbol that should be used throughout the app
         /// should be fiat, if set to true, or the asset-specific symbol, if false.
         @objc var symbolLocal: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.symbolLocal.rawValue)
+                return UserDefaults.System.bool(forKey: .symbolLocal)
             }
             set {
                 let oldValue = symbolLocal
-
-                defaults.set(newValue, forKey: UserDefaults.Keys.symbolLocal.rawValue)
-
+                UserDefaults.System.set(newValue, forKey: .symbolLocal)
                 if oldValue != newValue {
                     onSymbolLocalChanged?(newValue)
                 }
@@ -136,19 +287,21 @@ final class BlockchainSettings: NSObject {
         /// The first 5 characters of SHA256 hash of the user's password
         @objc var passwordPartHash: String? {
             get {
-                return defaults.string(forKey: UserDefaults.Keys.passwordPartHash.rawValue)
+                return UserDefaults.User.string(forKey: .passwordPartHash)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.passwordPartHash.rawValue)
+                if let pph = newValue {
+                     UserDefaults.User.set(pph, forKey: .passwordPartHash)
+                }
             }
         }
 
         @objc var biometryEnabled: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.biometryEnabled.rawValue)
+                return UserDefaults.User.bool(forKey: .biometryEnabled)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.biometryEnabled.rawValue)
+                UserDefaults.User.set(newValue, forKey: .biometryEnabled)
             }
         }
 
@@ -167,14 +320,14 @@ final class BlockchainSettings: NSObject {
 
         @objc var reminderModalDate: NSDate? {
             get {
-                return defaults.object(forKey: UserDefaults.Keys.reminderModalDate.rawValue) as? NSDate
+                return UserDefaults.User.get(forKey: .reminderModalDate) as? NSDate
             }
             set {
                 guard let date = newValue else {
-                    defaults.removeObject(forKey: UserDefaults.Keys.reminderModalDate.rawValue)
+                    UserDefaults.User.remove(forKey: .reminderModalDate)
                     return
                 }
-                defaults.set(date, forKey: UserDefaults.Keys.reminderModalDate.rawValue)
+                UserDefaults.User.set(date, forKey: .reminderModalDate)
             }
         }
 
@@ -182,7 +335,6 @@ final class BlockchainSettings: NSObject {
             get {
                 return KeychainItemWrapper.sharedKey()
             }
-
             set {
                 guard let sharedKey = newValue else {
                     KeychainItemWrapper.removeSharedKeyFromKeychain()
@@ -194,19 +346,19 @@ final class BlockchainSettings: NSObject {
 
         @objc var swipeToReceiveEnabled: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.swipeToReceiveEnabled.rawValue)
+                return UserDefaults.User.bool(forKey: .swipeToReceive)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.swipeToReceiveEnabled.rawValue)
+                UserDefaults.User.set(newValue, forKey: .swipeToReceive)
             }
         }
 
         @objc var hideTransferAllFundsAlert: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.hideTransferAllFundsAlert.rawValue)
+                return UserDefaults.User.bool(forKey: .hideTransferAllFundsAlert)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hideTransferAllFundsAlert.rawValue)
+                UserDefaults.User.set(newValue, forKey: .hideTransferAllFundsAlert)
             }
         }
 
@@ -227,19 +379,19 @@ final class BlockchainSettings: NSObject {
         /// Number of labelled addresses for default account
         @objc var defaultAccountLabelledAddressesCount: Int {
             get {
-                return defaults.integer(forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
+                return UserDefaults.User.integer(forKey: .defaultAccountLabelledAddressesCount)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
+                UserDefaults.User.set(newValue, forKey: .defaultAccountLabelledAddressesCount)
             }
         }
 
         @objc var dontAskUserToShowAppReviewPrompt: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.dontAskUserToShowAppReviewPrompt.rawValue)
+                return UserDefaults.User.bool(forKey: .dontAskUserToShowAppReviewPrompt)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.dontAskUserToShowAppReviewPrompt.rawValue)
+                UserDefaults.User.set(newValue, forKey: .dontAskUserToShowAppReviewPrompt)
             }
         }
 
@@ -269,8 +421,8 @@ final class BlockchainSettings: NSObject {
 
         /// Migrates pin and password from NSUserDefaults to the Keychain
         func migratePasswordAndPinIfNeeded() {
-            guard let password = defaults.string(forKey: UserDefaults.Keys.password.rawValue),
-                let pinStr = defaults.string(forKey: UserDefaults.Keys.pin.rawValue),
+            guard let password = UserDefaults.User.string(forKey: .password),
+                let pinStr = UserDefaults.User.string(forKey: .pin),
                 let pinUInt = UInt(pinStr) else {
                     return
             }
@@ -278,9 +430,8 @@ final class BlockchainSettings: NSObject {
             WalletManager.shared.wallet.password = password
 
             try? Pin(code: pinUInt).save()
-
-            defaults.removeObject(forKey: UserDefaults.Keys.password.rawValue)
-            defaults.removeObject(forKey: UserDefaults.Keys.pin.rawValue)
+            UserDefaults.User.remove(forKey: .password)
+            UserDefaults.User.remove(forKey: .pin)
         }
 
         //: Handles settings migration when keys change
@@ -302,67 +453,66 @@ final class BlockchainSettings: NSObject {
         /// Property indicating if setting up biometric authentication failed
         var didFailBiometrySetup: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
+                return UserDefaults.User.bool(forKey: .didFailBiometrySetup)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.didFailBiometrySetup.rawValue)
+                UserDefaults.User.set(newValue, forKey: .didFailBiometrySetup)
             }
         }
 
         /// Property indicating if the user saw the HD wallet upgrade screen
         var hasSeenUpgradeToHdScreen: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+                return UserDefaults.User.bool(forKey: .hasSeenUpgradeToHdScreen)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenUpgradeToHdScreen.rawValue)
+                UserDefaults.User.set(newValue, forKey: .hasSeenUpgradeToHdScreen)
             }
         }
 
         /// Property indicating if the biometric authentication set-up should be shown to the user
         var shouldShowBiometrySetup: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
+                return UserDefaults.User.bool(forKey: .shouldShowBiometrySetup)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
+                UserDefaults.User.set(newValue, forKey: .shouldShowBiometrySetup)
             }
         }
 
         /// Property indicating if this is the first time the user is running the application
         var firstRun: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.firstRun.rawValue)
+                return UserDefaults.User.bool(forKey: .firstRun)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.firstRun.rawValue)
+                UserDefaults.User.set(newValue, forKey: .firstRun)
             }
         }
 
         /// Property indicating if the buy/sell onboarding card should be shown
         @objc var shouldHideBuySellCard: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+                return UserDefaults.User.bool(forKey: .shouldHideBuySellNotificationCard)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldHideBuySellCard.rawValue)
+                UserDefaults.User.set(newValue, forKey: .shouldHideBuySellNotificationCard)
             }
         }
 
         /// Property indicating if the user has seen all onboarding cards
         @objc var hasSeenAllCards: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
+                return UserDefaults.User.bool(forKey: .hasSeenAllCards)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenAllCards.rawValue)
+                UserDefaults.User.set(newValue, forKey: .hasSeenAllCards)
             }
         }
 
         private override init() {
             super.init()
         }
-
     }
 
     private override init() {

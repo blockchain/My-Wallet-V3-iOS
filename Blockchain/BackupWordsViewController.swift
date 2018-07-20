@@ -212,7 +212,6 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
             completionHandler()
         })
     }
-    // swiftlint:disable block_based_kvo
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let words = wallet!.recoveryPhrase.components(separatedBy: " ")
         for idx in 0 ..< Constants.Defaults.NumberOfRecoveryPhraseWords {

@@ -43,3 +43,9 @@
 #import "WalletSetupViewController.h"
 #import "WebLoginViewController.h"
 #import "BCInsetLabel.h"
+
+
+#import "KeychainItemWrapper+Credentials.h"
+#import "NSString+SHA256.h"
+#import "UIView+ChangeFrameAttribute.h"
+

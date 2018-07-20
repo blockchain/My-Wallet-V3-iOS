@@ -40,11 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
 
-        BlockchainSettings.App.shared.appBecameActiveCount += 1
-
+        let activeCount = UserDefaults.System.integer(forKey: .appBecameActiveCount) // 3
+        UserDefaults.System.set(activeCount + 1, forKey: .appBecameActiveCount)
         // MARK: - Global Appearance
 
-        //: Status Bar
+        //: Status Bar 
         UIApplication.shared.statusBarStyle = .default
 
         //: Navigation Bar
