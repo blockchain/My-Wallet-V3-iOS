@@ -86,6 +86,10 @@ struct LocalizationConstants {
     }
 
     struct Pin {
+        static let genericError = NSLocalizedString(
+            "An error occured. Please try again.",
+            comment: "Fallback error for all other errors that may occur during the pin validation/change flow."
+        )
         static let pinCodeCommonMessage = NSLocalizedString(
             "The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?",
             comment: "Error message displayed to the user when they enter a common pin and is asked if they would like to continue using that common pin or try another one."

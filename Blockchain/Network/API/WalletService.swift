@@ -54,27 +54,28 @@ import RxSwift
         }
     }
 
+    /// Creates a new pin in the remote pin store
+    ///
+    /// - Parameter pinPayload: the PinPayload
+    /// - Returns: a Single returning the response
+    func createPin(_ pinPayload: PinPayload) -> Single<PinStoreResponse> {
+        return pinStore(pinPayload: pinPayload, method: "put")
+    }
+
     /// Validates if the provided pin payload (i.e. pin code and pin key combination) is correct.
     ///
     /// - Parameter pinPayload: the PinPayload
     /// - Returns: an Single returning the response
-    func validatePin(_ pinPayload: PinPayload) -> Single<GetPinResponse> {
-        return pinStore(pinPayload: pinPayload, method: "get").map {
-            guard let responseJson = $1 as? JSON else {
-                let errorMessage = $1 as? String
-                throw WalletServiceError.generic(message: errorMessage)
-            }
-            return GetPinResponse(response: responseJson)
-        }
+    func validatePin(_ pinPayload: PinPayload) -> Single<PinStoreResponse> {
+        return pinStore(pinPayload: pinPayload, method: "get")
     }
 
     // MARK: - Private
 
     private func pinStore(
         pinPayload: PinPayload,
-        method: String,
-        value: String? = nil
-    ) -> Single<(HTTPURLResponse, Any)> {
+        method: String
+    ) -> Single<PinStoreResponse> {
         var parameters = [
             "format": "json",
             "method": method,
@@ -82,13 +83,19 @@ import RxSwift
             "key": pinPayload.pinKey,
             "api_code": BlockchainAPI.Parameters.apiCode
         ]
-        if let value = value {
-            parameters[value] = value
+        if let value = pinPayload.pinValue {
+            parameters["value"] = value
         }
         return networkManager.requestJsonOrString(
             BlockchainAPI.shared.pinStore,
             method: .post,
             parameters: parameters
-        )
+        ).map {
+            guard let responseJson = $1 as? JSON else {
+                let errorMessage = $1 as? String
+                throw WalletServiceError.generic(message: errorMessage)
+            }
+            return PinStoreResponse(response: responseJson)
+        }
     }
 }

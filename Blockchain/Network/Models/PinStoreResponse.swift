@@ -1,5 +1,5 @@
 //
-//  GetPinResponse.swift
+//  PinStoreResponse.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 4/30/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GetPinResponse {
+struct PinStoreResponse {
     enum StatusCode: Int {
         case success = 0
         case deleted = 1 // Pin retry succeeded
@@ -23,9 +23,15 @@ struct GetPinResponse {
 
     // The PIN decryption value from the server
     let pinDecryptionValue: String?
+
+    /// Pin code lookup key
+    let key: String?
+
+    /// Encryption string
+    let value: String?
 }
 
-extension GetPinResponse {
+extension PinStoreResponse {
     var statusCode: StatusCode? {
         guard let code = code else {
             return nil
@@ -37,5 +43,7 @@ extension GetPinResponse {
         self.code = response["code"] as? Int
         self.error = response["error"] as? String
         self.pinDecryptionValue = response["success"] as? String
+        self.key = response["key"] as? String
+        self.value = response["value"] as? String
     }
 }

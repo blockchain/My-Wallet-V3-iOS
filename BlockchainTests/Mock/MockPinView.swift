@@ -19,6 +19,7 @@ class MockPinView: PinView {
     var didCallErrorPinsDontMatch: XCTestExpectation?
     var didCallSuccessPinValidExpectation: XCTestExpectation?
     var didCallSuccessFirstEntryForChangePin: XCTestExpectation?
+    var didCallSuccessPinCreatedOrChanged: XCTestExpectation?
 
     init() {
     }
@@ -53,5 +54,9 @@ class MockPinView: PinView {
 
     func successFirstEntryForChangePin(pin: Pin) {
         didCallSuccessFirstEntryForChangePin?.fulfill()
+    }
+
+    func successPinCreatedOrChanged() {
+        didCallSuccessPinCreatedOrChanged?.fulfill()
     }
 }

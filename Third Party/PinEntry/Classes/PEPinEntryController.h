@@ -33,9 +33,9 @@
 @protocol PEPinEntryControllerDelegate
 
 @required
-- (void)pinEntryControllerDidCancel:(PEPinEntryController *)c;
+- (void)pinEntryControllerDidCancel:(PEPinEntryController * _Nonnull)c;
 - (void)pinEntryControllerDidObtainPasswordDecryptionKey:(NSString * _Nonnull)decryptionKey;
-
+- (void)pinEntryControllerDidChangePin:(PEPinEntryController * _Nonnull)controller;
 @end
 
 

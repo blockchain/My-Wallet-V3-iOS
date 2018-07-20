@@ -21,7 +21,7 @@ extension PEPinEntryController {
 
     @objc func didConfirmPinForChangePinFlow(from controller: PEViewController, firstPin: Pin) {
         guard let pinToConfirm = controller.pinValue else { return }
-        self.pinPresenter.validateConfirmPinForChangePin(pin: pinToConfirm, firstPin: firstPin)
+        _ = self.pinPresenter.validateConfirmPinForChangePin(pin: pinToConfirm, firstPin: firstPin)
     }
 
     @objc func validate(pin: Pin) {
@@ -129,5 +129,9 @@ extension PEPinEntryController: PinView {
 
     func successFirstEntryForChangePin(pin: Pin) {
         self.go(toEnter2Pin: pin)
+    }
+
+    func successPinCreatedOrChanged() {
+        self.pinDelegate.pinEntryControllerDidChangePin(self)
     }
 }

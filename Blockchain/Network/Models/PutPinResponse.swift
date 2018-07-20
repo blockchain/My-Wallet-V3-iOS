@@ -8,6 +8,7 @@
 
 import Foundation
 
+// REMOVE
 struct PutPinResponse {
     /// The status code from the server
     let code: Int?

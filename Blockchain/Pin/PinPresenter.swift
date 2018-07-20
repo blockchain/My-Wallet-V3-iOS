@@ -26,6 +26,8 @@ import RxSwift
     func successPinValid(pinPassword: String)
 
     func successFirstEntryForChangePin(pin: Pin)
+
+    func successPinCreatedOrChanged()
 }
 
 /// Presenter for the pin flow.
@@ -45,7 +47,7 @@ import RxSwift
         self.walletService = walletService
     }
 
-    // MARK: - Changing/First-time Setting Pin
+    // MARK: - Changing/First Time Setting Pin
 
     /// Validates that the 1st pin entered by the user during the change pin flow,
     /// or the first time the user is setting a pin, is valid.
@@ -78,21 +80,45 @@ import RxSwift
     /// - Parameters:
     ///   - pin: the pin to confirm
     ///   - firstPin: the 1st pin entered during the change pin flow
-    func validateConfirmPinForChangePin(pin: Pin, firstPin: Pin) {
+    func validateConfirmPinForChangePin(pin: Pin, firstPin: Pin) -> Disposable {
         guard pin == firstPin else {
             self.view.errorPinsDontMatch()
-            return
+            return Disposables.create()
         }
 
-//        guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
-//            self.view.error(message: LocalizationConstants.Pin.cannotSaveInvalidWalletState)
-//            return
-//        }
+        guard let keyPair = try? PinStoreKeyPair.generateNewKeyPair() else {
+            self.view.error(message: LocalizationConstants.Pin.genericError)
+            return Disposables.create()
+        }
 
-        // TODO update/change this
-//        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
+        self.view.showLoadingView(withText: LocalizationConstants.verifying)
 
-//        try? pin.save()
+        let isBiometryFeatureEnabled = AppFeatureConfigurator.shared.configuration(
+            for: .biometry
+        )?.isEnabled ?? false
+        let shouldPersist = isBiometryFeatureEnabled && BlockchainSettings.App.shared.biometryEnabled
+
+        let pinPayload = PinPayload(pinCode: pin.toString, keyPair: keyPair, persistLocally: shouldPersist)
+
+        return interactor.createPin(pinPayload)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] _ in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.handleCreatePinSuccess()
+            }, onError: { [weak self] error in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.handleServerError(error: error)
+            })
+    }
+
+    private func handleCreatePinSuccess() {
+        view.hideLoadingView()
+        view.successPinCreatedOrChanged()
     }
 
     // MARK: - Pin Validation
@@ -109,7 +135,7 @@ import RxSwift
         return Observable.combineLatest(
             walletService.walletOptions.asObservable(),
             interactor.validatePin(pinPayload).asObservable()
-        ) { (walletOptions, pinResponse) -> (WalletOptions, GetPinResponse) in
+        ) { (walletOptions, pinResponse) -> (WalletOptions, PinStoreResponse) in
             return (walletOptions, pinResponse)
         }.subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -125,27 +151,36 @@ import RxSwift
                     return
                 }
 
-                strongSelf.handle(getPinResponse: response)
+                strongSelf.handleValidatePin(response: response)
             }, onError: { [weak self] error in
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.view.hideLoadingView()
-
-                // Display error message from server, if any
-                if let walletServiceError = error as? WalletServiceError {
-                    if case let WalletServiceError.generic(message) = walletServiceError {
-                        let errorMessage = message ?? LocalizationConstants.Errors.invalidServerResponse
-                        strongSelf.view.error(message: errorMessage)
-                        return
-                    }
-                }
-
-                strongSelf.view.error(message: LocalizationConstants.Errors.invalidServerResponse)
+                strongSelf.handleServerError(error: error)
             })
     }
 
-    private func handle(getPinResponse response: GetPinResponse) {
+    private func handleServerError(error: Error) {
+        view.hideLoadingView()
+
+        // Display error message from server, if any
+        if let walletServiceError = error as? WalletServiceError {
+            if case let WalletServiceError.generic(message) = walletServiceError {
+                let errorMessage = message ?? LocalizationConstants.Errors.invalidServerResponse
+                view.error(message: errorMessage)
+                return
+            }
+        }
+
+        if let pinError = error as? PinError {
+            view.error(message: pinError.localizedDescription)
+            return
+        }
+
+        view.error(message: LocalizationConstants.Errors.invalidServerResponse)
+    }
+
+    private func handleValidatePin(response: PinStoreResponse) {
         guard let statusCode = response.statusCode else {
             view.hideLoadingView()
             view.error(message: LocalizationConstants.Pin.incorrect)
