@@ -2581,10 +2581,6 @@ MyWalletPhone.getExchangeTrades = function() {
 MyWalletPhone.getRate = function(coinPair) {
 
     var success = function(result) {
-        var btcTicker = 'BTC';
-        var ethTicker = 'ETH';
-        var bchTicker = 'BCH';
-
         var coins = coinPair.split('_');
         var from = coins[0];
 
@@ -2593,13 +2589,7 @@ MyWalletPhone.getRate = function(coinPair) {
             objc_on_get_exchange_rate_success(result.limit, result.minimum, result.minerFee, result.maxLimit, result.pair, result.rate, hardLimit[currencyCode].last);
         };
 
-        if (from.indexOf(btcTicker) !== -1) {
-            MyWalletPhone.getExchangeRateForHardLimit(btcTicker).then(fetchRateSuccess);
-        } else if (from.indexOf(ethTicker) !== -1) {
-            MyWalletPhone.getExchangeRateForHardLimit(ethTicker).then(fetchRateSuccess);
-        } else if (from.indexOf(bchTicker) !== -1) {
-            MyWalletPhone.getExchangeRateForHardLimit(bchTicker).then(fetchRateSuccess);
-        }
+        MyWalletPhone.getExchangeRateForHardLimit(from).then(fetchRateSuccess);
     }
 
     var error = function(e) {
