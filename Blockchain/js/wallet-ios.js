@@ -2581,8 +2581,7 @@ MyWalletPhone.getExchangeTrades = function() {
 MyWalletPhone.getRate = function(coinPair) {
 
     var success = function(result) {
-        var coins = coinPair.split('_');
-        var from = coins[0];
+        var from = coinPair.split('_')[0];
 
         var fetchRateSuccess = function(hardLimit) {
             var currencyCode = MyWalletPhone.currencyCodeForHardLimit();
