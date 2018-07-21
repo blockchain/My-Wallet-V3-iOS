@@ -819,8 +819,14 @@
         [weakSelf on_get_exchange_trades_success:trades];
     };
 
-    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *hardLimit) {
-        [weakSelf on_get_exchange_rate_success:@{DICTIONARY_KEY_LIMIT : [limit toString], DICTIONARY_KEY_MINIMUM : [minimum toString], DICTIONARY_KEY_MINER_FEE : [minerFee toString], DICTIONARY_KEY_MAX_LIMIT : [maxLimit toString], DICTIONARY_KEY_RATE : [rate toString], DICTIONARY_KEY_HARD_LIMIT_RATE : [hardLimit toString]}];
+    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *hardLimitRate) {
+        ExchangeRate *exchangeRate = [[ExchangeRate alloc] initWithJson:@{[ExchangeRate limitKey] : [limit toString],
+                                                                          [ExchangeRate minimumKey] : [minimum toString],
+                                                                          [ExchangeRate minerFeeKey] : [minerFee toString],
+                                                                          [ExchangeRate maxLimitKey] : [maxLimit toString],
+                                                                          [ExchangeRate rateKey] : [rate toString],
+                                                                          [ExchangeRate hardLimitRateKey] : [hardLimitRate toString]}];
+        [weakSelf on_get_exchange_rate_success:exchangeRate];
     };
 
     self.context[@"objc_on_build_exchange_trade_success"] = ^(JSValue *from, JSValue *depositAmount, JSValue *fee, JSValue *rate, JSValue *minerFee, JSValue *withdrawalAmount, JSValue *expiration) {
@@ -4065,9 +4071,9 @@
     }
 }
 
-- (void)on_get_exchange_rate_success:(NSDictionary *)result
+- (void)on_get_exchange_rate_success:(ExchangeRate *)exchangeRate
 {
-    NSDecimalNumber *hardLimitRate = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_HARD_LIMIT_RATE]];
+    NSDecimalNumber *hardLimitRate = [NSDecimalNumber decimalNumberWithString:exchangeRate.hardLimitRate];
 
     NSDecimalNumber *fiatHardLimit = [NSDecimalNumber decimalNumberWithString:[[self.context evaluateScript:@"MyWalletPhone.fiatExchangeHardLimit()"] toString]];
 
@@ -4075,11 +4081,15 @@
 
     NSString *hardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:hardLimitRate]];
 
-    NSMutableDictionary *mutableCopy = [result mutableCopy];
-    [mutableCopy setObject:hardLimit forKey:DICTIONARY_KEY_HARD_LIMIT];
+    ExchangeRate *exchangeRateWithHardLimit = [[ExchangeRate alloc] initWithJson:@{[ExchangeRate limitKey] : exchangeRate.limit,
+                                                                                   [ExchangeRate minimumKey] : exchangeRate.minimum,
+                                                                                   [ExchangeRate minerFeeKey] : exchangeRate.minerFee,
+                                                                                   [ExchangeRate maxLimitKey] : exchangeRate.maxLimit,
+                                                                                   [ExchangeRate rateKey] : exchangeRate.rate,
+                                                                                   [ExchangeRate hardLimitKey] : hardLimit}];
 
     if ([self.delegate respondsToSelector:@selector(didGetExchangeRate:)]) {
-        [self.delegate didGetExchangeRate:mutableCopy];
+        [self.delegate didGetExchangeRate:exchangeRateWithHardLimit];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didGetExchangeRate:!", [delegate class]);
     }

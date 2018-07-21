@@ -274,17 +274,17 @@
 
 #pragma mark - JS Callbacks
 
-- (void)didGetExchangeRate:(NSDictionary *)result
+- (void)didGetExchangeRate:(ExchangeRate *)exchangeRate
 {
     [self enableAssetToggleButton];
     [self.spinner stopAnimating];
     
     if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BTC] || [self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BCH]) {
-        NSString *minNumberString = [result objectForKey:DICTIONARY_KEY_TRADE_MINIMUM];
+        NSString *minNumberString = exchangeRate.minimum;
         self.minimum = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:minNumberString]];
-        NSString *maxNumberString = [result objectForKey:DICTIONARY_KEY_TRADE_MAX_LIMIT];
+        NSString *maxNumberString = exchangeRate.maxLimit;
         self.maximum = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:maxNumberString]];
-        NSString *hardLimitString = [result objectForKey:DICTIONARY_KEY_HARD_LIMIT];
+        NSString *hardLimitString = exchangeRate.hardLimit;
         self.maximumHardLimit = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:hardLimitString]];
         if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BTC]) {
             [WalletManager.sharedInstance.wallet getAvailableBtcBalanceForAccount:self.btcAccount];
@@ -294,9 +294,9 @@
             self.availableBalanceFromSymbol = self.fromSymbol;
         }
     } else if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_ETH]) {
-        self.minimum = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_TRADE_MINIMUM]];
-        self.maximum = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_TRADE_MAX_LIMIT]];
-        self.maximumHardLimit = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_HARD_LIMIT]];
+        self.minimum = [NSDecimalNumber decimalNumberWithString:exchangeRate.minimum];
+        self.maximum = [NSDecimalNumber decimalNumberWithString:exchangeRate.maxLimit];
+        self.maximumHardLimit = [NSDecimalNumber decimalNumberWithString:exchangeRate.hardLimit];
         [WalletManager.sharedInstance.wallet getAvailableEthBalance];
     }
 }

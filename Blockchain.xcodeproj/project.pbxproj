@@ -469,6 +469,8 @@
 		C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */; };
 		C77217ED20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
 		C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */; };
+		C774A1262102B87300DCCC17 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C774A1252102B87300DCCC17 /* ExchangeRate.swift */; };
+		C774A1272102B87300DCCC17 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C774A1252102B87300DCCC17 /* ExchangeRate.swift */; };
 		C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
 		C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
@@ -1755,6 +1757,7 @@
 		C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAccountInfoAndExchangeRatesDelegate.swift; sourceTree = "<group>"; };
 		C77217E720AFCC3C0087836A /* WalletBackupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupDelegate.swift; sourceTree = "<group>"; };
 		C77217EC20AFCF940087836A /* WalletRecoveryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRecoveryDelegate.swift; sourceTree = "<group>"; };
+		C774A1252102B87300DCCC17 /* ExchangeRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRate.swift; sourceTree = "<group>"; };
 		C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSecondPasswordDelegate.swift; sourceTree = "<group>"; };
 		C780A444202228A400E49274 /* BCPriceChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPriceChartView.h; sourceTree = "<group>"; };
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
@@ -2405,6 +2408,7 @@
 				6780DB971A40BDF40048EED2 /* AccountInOut.m */,
 				9F2D934814C05DD00053F0FF /* Address.h */,
 				9F2D934914C05DD00053F0FF /* Address.m */,
+				C774A1252102B87300DCCC17 /* ExchangeRate.swift */,
 				6780DB901A40BDA70048EED2 /* AddressInOut.h */,
 				6780DB911A40BDA70048EED2 /* AddressInOut.m */,
 				C7CE34B51F4DB8C100032806 /* Assets.h */,
@@ -3834,6 +3838,7 @@
 				AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
 				AA9B30D220F6D85000A7F809 /* WalletUpgradeDelegate.swift in Sources */,
+				C774A1272102B87300DCCC17 /* ExchangeRate.swift in Sources */,
 				C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */,
 				AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */,
 				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
@@ -3939,6 +3944,7 @@
 				AA63F86720A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AA2D000120D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */,
+				C774A1262102B87300DCCC17 /* ExchangeRate.swift in Sources */,
 				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */,
 				516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
