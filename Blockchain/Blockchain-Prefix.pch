@@ -469,14 +469,9 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/
 #define DICTIONARY_KEY_MULTIADDRESS_SYMBOL_LOCAL @"symbol_local"
 #define DICTIONARY_KEY_MULTIADDRESS_SYMBOL_BTC @"symbol_btc"
 
-#define DICTIONARY_KEY_LIMIT @"limit"
-#define DICTIONARY_KEY_MINIMUM @"minimum"
-#define DICTIONARY_KEY_MAX_LIMIT @"maxLimit"
 #define DICTIONARY_KEY_PAIR @"pair"
 #define DICTIONARY_KEY_RATE @"rate"
 #define DICTIONARY_KEY_MINER_FEE @"minerFee"
-#define DICTIONARY_KEY_HARD_LIMIT @"hardLimit"
-#define DICTIONARY_KEY_HARD_LIMIT_RATE @"hardLimitRate"
 
 #define DICTIONARY_KEY_BITCOIN @"bitcoin"
 #define DICTIONARY_KEY_BITCOIN_CASH @"bitcoinCash"
