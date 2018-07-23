@@ -2585,7 +2585,8 @@ MyWalletPhone.getRate = function(coinPair) {
 
         const fetchRateSuccess = function(hardLimit) {
             var currencyCode = MyWalletPhone.currencyCodeForHardLimit();
-            objc_on_get_exchange_rate_success(result.limit, result.minimum, result.minerFee, result.maxLimit, result.pair, result.rate, hardLimit[currencyCode].last);
+            result.hardLimitRate = hardLimit[currencyCode].last;
+            objc_on_get_exchange_rate_success(result);
         };
 
         MyWalletPhone.getExchangeRateForHardLimit(from).then(fetchRateSuccess);

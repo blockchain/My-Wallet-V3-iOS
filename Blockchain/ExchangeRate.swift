@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import JavaScriptCore
 
 /// Used to return exchange information from the ShapeShift API and wallet-options to the ExchangeCreateViewController.
 @objc class ExchangeRate: NSObject {
@@ -29,7 +30,7 @@ import Foundation
     @objc let hardLimit: String? // Maximum amount allowed to exchange, defined by wallet-options
     @objc let hardLimitRate: String? // Fiat value for the current 'from' asset type
 
-    private init(
+    @objc init(
         limit: String?,
         minimum: String?,
         minerFee: String?,
@@ -48,23 +49,26 @@ import Foundation
 }
 
 @objc extension ExchangeRate {
-    convenience init(json: JSON) {
-        self.init(limit: json[Keys.limit] as? String,
-                  minimum: json[Keys.minimum] as? String,
-                  minerFee: json[Keys.minerFee] as? String,
-                  maxLimit: json[Keys.maxLimit] as? String,
-                  rate: json[Keys.rate] as? String,
-                  hardLimit: json[Keys.hardLimit] as? String,
-                  hardLimitRate: json[Keys.hardLimitRate] as? String)
-    }
-}
+    convenience init?(javaScriptValue: JSValue) {
+        guard let dictionary = javaScriptValue.toDictionary() else {
+            print("Could not create dictionary from JSValue")
+            return nil
+        }
 
-@objc extension ExchangeRate {
-    class func limitKey() -> String { return Keys.limit }
-    class func minimumKey() -> String { return Keys.minimum }
-    class func minerFeeKey() -> String { return Keys.minerFee }
-    class func maxLimitKey() -> String { return Keys.maxLimit }
-    class func rateKey() -> String { return Keys.rate }
-    class func hardLimitKey() -> String { return Keys.hardLimit }
-    class func hardLimitRateKey() -> String { return Keys.hardLimitRate }
+        let stringFromDictValue = { (_ value: Any?) -> String? in
+            guard let number = value as? NSNumber else {
+                print("Could not convert dictionary value to NSNumber!")
+                return nil
+            }
+            return NumberFormatter.assetFormatterWithUSLocale.string(from: number)
+        }
+
+        self.init(limit: stringFromDictValue(dictionary[Keys.limit]),
+                  minimum: stringFromDictValue(dictionary[Keys.minimum]),
+                  minerFee: stringFromDictValue(dictionary[Keys.minerFee]),
+                  maxLimit: stringFromDictValue(dictionary[Keys.maxLimit]),
+                  rate: stringFromDictValue(dictionary[Keys.rate]),
+                  hardLimit: stringFromDictValue(dictionary[Keys.hardLimit]),
+                  hardLimitRate: stringFromDictValue(dictionary[Keys.hardLimitRate]))
+    }
 }

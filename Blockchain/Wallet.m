@@ -819,13 +819,8 @@
         [weakSelf on_get_exchange_trades_success:trades];
     };
 
-    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *hardLimitRate) {
-        ExchangeRate *exchangeRate = [[ExchangeRate alloc] initWithJson:@{[ExchangeRate limitKey] : [limit toString],
-                                                                          [ExchangeRate minimumKey] : [minimum toString],
-                                                                          [ExchangeRate minerFeeKey] : [minerFee toString],
-                                                                          [ExchangeRate maxLimitKey] : [maxLimit toString],
-                                                                          [ExchangeRate rateKey] : [rate toString],
-                                                                          [ExchangeRate hardLimitRateKey] : [hardLimitRate toString]}];
+    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *rate) {
+        ExchangeRate *exchangeRate = [[ExchangeRate alloc] initWithJavaScriptValue:rate];
         [weakSelf on_get_exchange_rate_success:exchangeRate];
     };
 
@@ -4081,12 +4076,13 @@
 
     NSString *hardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:hardLimitRate]];
 
-    ExchangeRate *exchangeRateWithHardLimit = [[ExchangeRate alloc] initWithJson:@{[ExchangeRate limitKey] : exchangeRate.limit,
-                                                                                   [ExchangeRate minimumKey] : exchangeRate.minimum,
-                                                                                   [ExchangeRate minerFeeKey] : exchangeRate.minerFee,
-                                                                                   [ExchangeRate maxLimitKey] : exchangeRate.maxLimit,
-                                                                                   [ExchangeRate rateKey] : exchangeRate.rate,
-                                                                                   [ExchangeRate hardLimitKey] : hardLimit}];
+    ExchangeRate *exchangeRateWithHardLimit = [[ExchangeRate alloc] initWithLimit: exchangeRate.limit
+                                                                    minimum: exchangeRate.minimum
+                                                                    minerFee: exchangeRate.minerFee
+                                                                    maxLimit: exchangeRate.maxLimit
+                                                                    rate: exchangeRate.rate
+                                                                    hardLimit: hardLimit
+                                                                    hardLimitRate: nil];
 
     if ([self.delegate respondsToSelector:@selector(didGetExchangeRate:)]) {
         [self.delegate didGetExchangeRate:exchangeRateWithHardLimit];
