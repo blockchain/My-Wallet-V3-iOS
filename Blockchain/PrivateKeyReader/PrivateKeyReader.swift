@@ -120,12 +120,12 @@ final class PrivateKeyReader: UIViewController & AVCaptureMetadataOutputObjectsD
         self.view.frame = viewFrame
 
         let topBar = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: Constants.Measurements.DefaultHeaderHeight))
-        topBar.backgroundColor = UIColor.brandPrimary
+        topBar.backgroundColor = .brandPrimary
         self.view.addSubview(topBar)
 
         let headerLabel = UILabel(frame: CGRect(x: 60, y: 26, width: 200, height: 30))
         headerLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraLarge)
-        headerLabel.textColor = UIColor.white
+        headerLabel.textColor = .white
         headerLabel.textAlignment = .center
         headerLabel.adjustsFontSizeToFitWidth = true
         headerLabel.text = LocalizationConstants.scanQRCode

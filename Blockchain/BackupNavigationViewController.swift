@@ -55,7 +55,7 @@ import UIKit
         }
         let hasTopPadding = topPadding > 0
         topBar = UIView(frame: CGRect(x: 0, y: topPadding, width: viewWidth, height: hasTopPadding ? 44 : Constants.Measurements.DefaultHeaderHeight))
-        topBar.backgroundColor = UIColor.brandPrimary
+        topBar.backgroundColor = .brandPrimary
         self.view.addSubview(topBar)
 
         setUpHeaderLabel(useSafeAreas: hasTopPadding)
@@ -68,7 +68,7 @@ import UIKit
         busyView = BCFadeView(frame: view.frame)
         busyView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         let textWithSpinnerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 110))
-        textWithSpinnerView.backgroundColor = UIColor.white
+        textWithSpinnerView.backgroundColor = .white
         busyView!.addSubview(textWithSpinnerView)
         textWithSpinnerView.center = busyView!.center
 
@@ -121,7 +121,7 @@ import UIKit
     func setUpHeaderLabel(useSafeAreas: Bool) {
         headerLabel = UILabel(frame: CGRect(x: 60, y: 26, width: 200, height: 30))
         headerLabel.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.ExtraExtraLarge)
-        headerLabel.textColor = UIColor.white
+        headerLabel.textColor = .white
         headerLabel.textAlignment = .center
         headerLabel.adjustsFontSizeToFitWidth = true
         headerLabel.text = NSLocalizedString("Backup Funds", comment: "")

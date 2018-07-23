@@ -65,7 +65,7 @@ import Foundation
     private init(walletManager: WalletManager = WalletManager.shared) {
         self.walletManager = walletManager
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window.backgroundColor = UIColor.white
+        self.window.backgroundColor = .white
         super.init()
         self.walletManager.accountInfoAndExchangeRatesDelegate = self
         self.walletManager.backupDelegate = self

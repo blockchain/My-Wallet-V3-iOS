@@ -48,7 +48,7 @@ import UIKit
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        imageViewAsset.tintColor = UIColor.gray5
+        imageViewAsset.tintColor = .gray5
 
         buttonRequest.titleLabel?.font = UIFont(
             name: Constants.FontNames.montserratLight,
@@ -57,10 +57,10 @@ import UIKit
         buttonRequest.layer.borderWidth = 1.0
         buttonRequest.layer.borderColor = UIColor.brandSecondary.cgColor
         buttonRequest.layer.cornerRadius = 8.0
-        buttonRequest.backgroundColor = UIColor.brandQuaternary
+        buttonRequest.backgroundColor = .brandQuaternary
         buttonRequest.setTitleColor(UIColor.brandSecondary, for: .normal)
 
-        labelAddress.textColor = UIColor.gray5
+        labelAddress.textColor = .gray5
         labelAddress.font = UIFont(
             name: Constants.FontNames.montserratRegular,
             size: Constants.FontSizes.ExtraSmall

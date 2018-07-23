@@ -52,7 +52,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
         word1.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
         word2.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
         word3.addTarget(self, action: #selector(BackupVerifyViewController.textFieldDidChange), for: .editingChanged)
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.tintColor = .white
 
         if !wallet!.needsSecondPassword() && isVerifying {
             // if you don't need a second password but you are verifying, get recovery phrase
@@ -72,7 +72,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
         verifyButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 46))
         verifyButton?.setTitle(NSLocalizedString("Verify", comment: ""), for: UIControlState())
         verifyButton?.setTitle(NSLocalizedString("Verify", comment: ""), for: .disabled)
-        verifyButton?.backgroundColor = UIColor.gray1
+        verifyButton?.backgroundColor = .gray1
         verifyButton?.setTitleColor(UIColor.lightGray, for: .disabled)
         verifyButton?.titleLabel!.font = UIFont(name: "Montserrat-Regular", size: Constants.FontSizes.Medium)
 
@@ -119,15 +119,15 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
                 valid = false
             } else { // Don't mark words as invalid until the user has entered all three
                 if word1.text != randomWord1 {
-                    word1.textColor = UIColor.error
+                    word1.textColor = .error
                     valid = false
                 }
                 if word2.text != randomWord2 {
-                    word2.textColor = UIColor.error
+                    word2.textColor = .error
                     valid = false
                 }
                 if word3.text != randomWord3 {
-                    word3.textColor = UIColor.error
+                    word3.textColor = .error
                     valid = false
                 }
                 if !valid {
@@ -150,7 +150,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        textField.textColor = UIColor.gray5
+        textField.textColor = .gray5
         return true
     }
 
@@ -170,11 +170,11 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
 
     @objc func textFieldDidChange() {
         if !word1.text!.isEmpty && !word2.text!.isEmpty && !word3.text!.isEmpty {
-            verifyButton?.backgroundColor = UIColor.brandSecondary
+            verifyButton?.backgroundColor = .brandSecondary
             verifyButton?.isEnabled = true
             verifyButton?.setTitleColor(UIColor.white, for: UIControlState())
         } else if word1.text!.isEmpty || word2.text!.isEmpty || word3.text!.isEmpty {
-            verifyButton?.backgroundColor = UIColor.gray1
+            verifyButton?.backgroundColor = .gray1
             verifyButton?.isEnabled = false
             verifyButton?.setTitleColor(UIColor.lightGray, for: .disabled)
         }

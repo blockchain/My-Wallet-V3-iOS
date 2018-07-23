@@ -40,7 +40,7 @@ import UIKit
                                                 width: self.frame.size.width + 15, height: onePixelHeight))
         onePixelLine.frame = self.superview!.convert(onePixelLine.frame, from: self)
         onePixelLine.isUserInteractionEnabled = false
-        onePixelLine.backgroundColor = UIColor.gray2
+        onePixelLine.backgroundColor = .gray2
         self.superview!.addSubview(onePixelLine)
     }
 }

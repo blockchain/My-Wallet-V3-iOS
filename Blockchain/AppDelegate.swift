@@ -51,8 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.isTranslucent = false
-        navigationBarAppearance.barTintColor = UIColor.brandPrimary
-        navigationBarAppearance.tintColor = UIColor.white
+        navigationBarAppearance.barTintColor = .brandPrimary
+        navigationBarAppearance.tintColor = .white
         navigationBarAppearance.titleTextAttributes = UINavigationBar.standardTitleTextAttributes
 
         #if DEBUG

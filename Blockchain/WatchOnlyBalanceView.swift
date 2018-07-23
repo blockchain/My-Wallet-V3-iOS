@@ -17,14 +17,14 @@ import Foundation
         self.assetLabel = UILabel(frame: CGRect(x: 0, y: 8, width: 0, height: 0))
         self.assetLabel.text = AssetType.bitcoin.description
         self.assetLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraExtraSmall)
-        self.assetLabel.textColor = UIColor.gray5
+        self.assetLabel.textColor = .gray5
         self.assetLabel.sizeToFit()
 
         self.balanceLabel = BCInsetLabel(frame: CGRect(x: assetLabel.frame.origin.x + assetLabel.frame.size.width + 8, y: 4, width: 0, height: 0))
         self.balanceLabel.layer.cornerRadius = 5
         self.balanceLabel.layer.borderWidth = 1
-        self.balanceLabel.textColor = UIColor.gray5
-        self.balanceLabel.backgroundColor = UIColor.gray6
+        self.balanceLabel.textColor = .gray5
+        self.balanceLabel.backgroundColor = .gray6
         self.balanceLabel.layer.borderColor = UIColor.gray2.cgColor
         self.balanceLabel.clipsToBounds = true
         self.balanceLabel.customEdgeInsets = UIEdgeInsets(top: 3.5, left: 11, bottom: 3.5, right: 11)

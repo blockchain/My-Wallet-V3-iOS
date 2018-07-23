@@ -34,7 +34,7 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
 
         wallet!.addObserver(self, forKeyPath: "recoveryPhrase", options: .new, context: nil)
 
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.tintColor = .white
 
         wordLabel.text = ""
 
@@ -112,11 +112,11 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
         if wordsPageControl.currentPage == 0 {
             previousWordButton.isEnabled = false
             previousWordButton.setTitleColor(UIColor.darkGray, for: UIControlState())
-            previousWordButton.backgroundColor = UIColor.gray1
+            previousWordButton.backgroundColor = .gray1
         } else {
             previousWordButton.isEnabled = true
             previousWordButton.setTitleColor(UIColor.white, for: UIControlState())
-            previousWordButton.backgroundColor = UIColor.brandSecondary
+            previousWordButton.backgroundColor = .brandSecondary
         }
     }
 
@@ -147,11 +147,11 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
         wordsProgressLabel.text = progressLabelText
         if let count = wordLabels?.count {
             if wordsPageControl.currentPage == count-1 {
-                nextWordButton.backgroundColor = UIColor.brandPrimary
+                nextWordButton.backgroundColor = .brandPrimary
                 nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
                 nextWordButton.setTitle(NSLocalizedString("Done", comment: ""), for: UIControlState())
             } else if wordsPageControl.currentPage == count-2 {
-                nextWordButton.backgroundColor = UIColor.brandSecondary
+                nextWordButton.backgroundColor = .brandSecondary
                 nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
                 nextWordButton.setTitle(NSLocalizedString("NEXT", comment: ""), for: UIControlState())
             }

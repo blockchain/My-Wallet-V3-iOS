@@ -15,7 +15,7 @@ class BCChartMarkerView: MarkerView {
         self.layer.borderColor = UIColor.brandTertiary.cgColor
         self.layer.cornerRadius = self.frame.width / 2
         self.layer.masksToBounds = true
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = .white
     }
 
     required init?(coder aDecoder: NSCoder) {
