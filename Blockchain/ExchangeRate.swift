@@ -55,6 +55,19 @@ import JavaScriptCore
             return nil
         }
 
+        /*
+         Numeric values inside a JSValue converted to [AnyHashable: Any]! with toDictionary()
+         cannot be casted to a string - the following error will print:
+
+         Could not cast value of type '__NSCFNumber' to 'NSString'.
+
+         The documentation for JSValue's toDictionary() says "All enumerable properties of the object
+         are copied to the dictionary, with JSValues converted to equivalent Objective-C objects
+         as specified."
+
+         Ideally we would specify that the JSValues would be converted to strings to completely eliminate
+         any possibility of precision errors.
+        */
         let stringFromNumericDictValue = { (_ value: Any?) -> String? in
             guard let number = value as? NSNumber else {
                 print("Could not convert dictionary value to NSNumber!")
