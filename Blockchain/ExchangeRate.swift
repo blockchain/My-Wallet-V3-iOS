@@ -55,7 +55,7 @@ import JavaScriptCore
             return nil
         }
 
-        let stringFromDictValue = { (_ value: Any?) -> String? in
+        let stringFromNumericDictValue = { (_ value: Any?) -> String? in
             guard let number = value as? NSNumber else {
                 print("Could not convert dictionary value to NSNumber!")
                 return nil
@@ -63,12 +63,12 @@ import JavaScriptCore
             return NumberFormatter.assetFormatterWithUSLocale.string(from: number)
         }
 
-        self.init(limit: stringFromDictValue(dictionary[Keys.limit]),
-                  minimum: stringFromDictValue(dictionary[Keys.minimum]),
-                  minerFee: stringFromDictValue(dictionary[Keys.minerFee]),
-                  maxLimit: stringFromDictValue(dictionary[Keys.maxLimit]),
-                  rate: stringFromDictValue(dictionary[Keys.rate]),
-                  hardLimit: stringFromDictValue(dictionary[Keys.hardLimit]),
-                  hardLimitRate: stringFromDictValue(dictionary[Keys.hardLimitRate]))
+        self.init(limit: stringFromNumericDictValue(dictionary[Keys.limit]),
+                  minimum: stringFromNumericDictValue(dictionary[Keys.minimum]),
+                  minerFee: stringFromNumericDictValue(dictionary[Keys.minerFee]),
+                  maxLimit: stringFromNumericDictValue(dictionary[Keys.maxLimit]),
+                  rate: stringFromNumericDictValue(dictionary[Keys.rate]),
+                  hardLimit: stringFromNumericDictValue(dictionary[Keys.hardLimit]),
+                  hardLimitRate: stringFromNumericDictValue(dictionary[Keys.hardLimitRate]))
     }
 }
