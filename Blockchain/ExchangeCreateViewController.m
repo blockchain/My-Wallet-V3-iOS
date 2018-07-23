@@ -280,11 +280,11 @@
     [self.spinner stopAnimating];
     
     if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BTC] || [self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BCH]) {
-        NSString *minNumberString = exchangeRate.minimum;
+        NSString *minNumberString = exchangeRate.minimum.stringValue;
         self.minimum = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:minNumberString]];
-        NSString *maxNumberString = exchangeRate.maxLimit;
+        NSString *maxNumberString = exchangeRate.maxLimit.stringValue;
         self.maximum = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:maxNumberString]];
-        NSString *hardLimitString = exchangeRate.hardLimit;
+        NSString *hardLimitString = exchangeRate.hardLimit.stringValue;
         self.maximumHardLimit = [NSNumber numberWithLongLong:[NSNumberFormatter parseBtcValueFromString:hardLimitString]];
         if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_BTC]) {
             [WalletManager.sharedInstance.wallet getAvailableBtcBalanceForAccount:self.btcAccount];
@@ -294,9 +294,9 @@
             self.availableBalanceFromSymbol = self.fromSymbol;
         }
     } else if ([self.fromSymbol isEqualToString:CURRENCY_SYMBOL_ETH]) {
-        self.minimum = [NSDecimalNumber decimalNumberWithString:exchangeRate.minimum];
-        self.maximum = [NSDecimalNumber decimalNumberWithString:exchangeRate.maxLimit];
-        self.maximumHardLimit = [NSDecimalNumber decimalNumberWithString:exchangeRate.hardLimit];
+        self.minimum = exchangeRate.minimum;
+        self.maximum = exchangeRate.maxLimit;
+        self.maximumHardLimit = exchangeRate.hardLimit;
         [WalletManager.sharedInstance.wallet getAvailableEthBalance];
     }
 }

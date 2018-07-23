@@ -4068,7 +4068,7 @@
 
 - (void)on_get_exchange_rate_success:(ExchangeRate *)exchangeRate
 {
-    NSDecimalNumber *hardLimitRate = [NSDecimalNumber decimalNumberWithString:exchangeRate.hardLimitRate];
+    NSDecimalNumber *hardLimitRate = exchangeRate.hardLimitRate;
 
     NSDecimalNumber *fiatHardLimit = [NSDecimalNumber decimalNumberWithString:[[self.context evaluateScript:@"MyWalletPhone.fiatExchangeHardLimit()"] toString]];
 
@@ -4081,7 +4081,7 @@
                                                                     minerFee: exchangeRate.minerFee
                                                                     maxLimit: exchangeRate.maxLimit
                                                                     rate: exchangeRate.rate
-                                                                    hardLimit: hardLimit
+                                                                    hardLimit: [NSDecimalNumber decimalNumberWithString:hardLimit]
                                                                     hardLimitRate: nil];
 
     if ([self.delegate respondsToSelector:@selector(didGetExchangeRate:)]) {

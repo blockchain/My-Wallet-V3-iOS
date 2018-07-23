@@ -22,22 +22,22 @@ import JavaScriptCore
         static let hardLimitRate = "hardLimitRate"
     }
 
-    @objc let limit: String? // Not currently used on web, so not used for iOS, but added for documentation
-    @objc let minimum: String? // Minimum amount required to exchange
-    @objc let minerFee: String? // Fee for exchange
-    @objc let maxLimit: String? // Maximum amount allowed to exchange, defined by ShapeShift
-    @objc let rate: String? // Exchange rate between the 'from' and 'to' asset types
-    @objc let hardLimit: String? // Maximum amount allowed to exchange, defined by wallet-options
-    @objc let hardLimitRate: String? // Fiat value for the current 'from' asset type
+    @objc let limit: NSDecimalNumber? // Not currently used on web, so not used for iOS, but added for documentation
+    @objc let minimum: NSDecimalNumber? // Minimum amount required to exchange
+    @objc let minerFee: NSDecimalNumber? // Fee for exchange
+    @objc let maxLimit: NSDecimalNumber? // Maximum amount allowed to exchange, defined by ShapeShift
+    @objc let rate: NSDecimalNumber? // Exchange rate between the 'from' and 'to' asset types
+    @objc let hardLimit: NSDecimalNumber? // Maximum amount allowed to exchange, defined by wallet-options
+    @objc let hardLimitRate: NSDecimalNumber? // Fiat value for the current 'from' asset type
 
     @objc init(
-        limit: String?,
-        minimum: String?,
-        minerFee: String?,
-        maxLimit: String?,
-        rate: String?,
-        hardLimit: String?,
-        hardLimitRate: String?) {
+        limit: NSDecimalNumber?,
+        minimum: NSDecimalNumber?,
+        minerFee: NSDecimalNumber?,
+        maxLimit: NSDecimalNumber?,
+        rate: NSDecimalNumber?,
+        hardLimit: NSDecimalNumber?,
+        hardLimitRate: NSDecimalNumber?) {
         self.limit = limit
         self.minimum = minimum
         self.minerFee = minerFee
@@ -55,33 +55,20 @@ import JavaScriptCore
             return nil
         }
 
-        /*
-         Numeric values inside a JSValue converted to [AnyHashable: Any]! with toDictionary()
-         cannot be casted to a string - the following error will print:
-
-         Could not cast value of type '__NSCFNumber' to 'NSString'.
-
-         The documentation for JSValue's toDictionary() says "All enumerable properties of the object
-         are copied to the dictionary, with JSValues converted to equivalent Objective-C objects
-         as specified."
-
-         Ideally we would specify that the JSValues would be converted to strings to completely eliminate
-         any possibility of precision errors.
-        */
-        let stringFromNumericDictValue = { (_ value: Any?) -> String? in
+        let convertToDecimalNumber = { (value: Any?) -> NSDecimalNumber? in
             guard let number = value as? NSNumber else {
-                print("Could not convert dictionary value to NSNumber!")
+                print("Could not create NSNumber from dictionary value")
                 return nil
             }
-            return NumberFormatter.assetFormatterWithUSLocale.string(from: number)
+            return NSDecimalNumber(decimal: number.decimalValue)
         }
 
-        self.init(limit: stringFromNumericDictValue(dictionary[Keys.limit]),
-                  minimum: stringFromNumericDictValue(dictionary[Keys.minimum]),
-                  minerFee: stringFromNumericDictValue(dictionary[Keys.minerFee]),
-                  maxLimit: stringFromNumericDictValue(dictionary[Keys.maxLimit]),
-                  rate: stringFromNumericDictValue(dictionary[Keys.rate]),
-                  hardLimit: stringFromNumericDictValue(dictionary[Keys.hardLimit]),
-                  hardLimitRate: stringFromNumericDictValue(dictionary[Keys.hardLimitRate]))
+        self.init(limit: convertToDecimalNumber(dictionary[Keys.limit]),
+                  minimum: convertToDecimalNumber(dictionary[Keys.minimum]),
+                  minerFee: convertToDecimalNumber(dictionary[Keys.minerFee]),
+                  maxLimit: convertToDecimalNumber(dictionary[Keys.maxLimit]),
+                  rate: convertToDecimalNumber(dictionary[Keys.rate]),
+                  hardLimit: convertToDecimalNumber(dictionary[Keys.hardLimit]),
+                  hardLimitRate: convertToDecimalNumber(dictionary[Keys.hardLimitRate]))
     }
 }
