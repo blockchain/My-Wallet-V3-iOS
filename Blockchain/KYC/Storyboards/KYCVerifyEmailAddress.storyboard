@@ -18,13 +18,13 @@
         <!--Verify Email Address View Controller-->
         <scene sceneID="ytS-GV-WN8">
             <objects>
-                <viewController storyboardIdentifier="VerifyEmailAddress" title="Verify Email Address View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5zT-vI-ywR" customClass="VerifyEmailAddressController" customModule="BlockchainKYC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KYCVerifyEmailAddress" title="Verify Email Address View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5zT-vI-ywR" customClass="KYCVerifyEmailAddressController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YLp-pk-Ifj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="175-Cr-pwr">
-                                <rect key="frame" x="140.33333333333334" y="219" width="95" height="31"/>
+                                <rect key="frame" x="140" y="219" width="95" height="31"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="15"/>
                                 <state key="normal" title="OPEN EMAIL">
                                     <color key="titleColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -97,10 +97,10 @@
             </objects>
             <point key="canvasLocation" x="-607.20000000000005" y="41.379310344827587"/>
         </scene>
-        <!--VerifyPhoneNumber-->
+        <!--KYCVerifyPhoneNumber-->
         <scene sceneID="VZ9-Kx-Y4O">
             <objects>
-                <viewControllerPlaceholder storyboardName="VerifyPhoneNumber" id="alX-0d-EJ7" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="alX-0d-EJ7" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2HN-5L-hWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="122" y="-11"/>

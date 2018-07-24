@@ -1,6 +1,6 @@
 //
-//  VerifyEmailAddressController.swift
-//  BlockchainKYC
+//  KYCVerifyEmailAddressController.swift
+//  Blockchain
 //
 //  Created by Maurice A. on 7/19/18.
 //  Copyright © 2018 Blockchain. All rights reserved.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VerifyEmailAddressController: UIViewController & OnboardingNavigation {
+final class KYCVerifyEmailAddressController: UIViewController, KYCOnboardingNavigation {
 
     // MARK: - Properties
 
@@ -20,13 +20,8 @@ class VerifyEmailAddressController: UIViewController & OnboardingNavigation {
         self.performSegue(withIdentifier: segueIdentifier!, sender: self)
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     // MARK: - Navigation

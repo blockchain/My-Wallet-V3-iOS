@@ -1,5 +1,5 @@
 //
-//  PersonalDetailsController.swift
+//  KYCPersonalDetailsController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/9/18.
@@ -9,17 +9,23 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-open class PersonalDetailsController: UIViewController {
+final class KYCPersonalDetailsController: UIViewController, KYCOnboardingNavigation {
 
     // MARK: - Properties
 
+    var segueIdentifier: String?
+
+    // MARK: - IBOutlets
+
+    @IBOutlet var primaryButton: PrimaryButton!
+
     // MARK: - View Lifecycle
 
-    override open func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    override open func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
@@ -27,9 +33,9 @@ open class PersonalDetailsController: UIViewController {
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         let verifyAccountController = UIStoryboard.instantiate(
-            child: VerifyAccountController.self,
-            from: OnboardingController.self,
-            in: UIStoryboard(name: "OnboardingScreen", bundle: Bundle(identifier: "com.rainydayapps.BlockchainKYC")),
+            child: KYCVerifyAccountController.self,
+            from: KYCOnboardingController.self,
+            in: UIStoryboard(name: "KYCOnboardingScreen", bundle: nil),
             identifier: "OnboardingScreen"
         )
         self.navigationController?.pushViewController(verifyAccountController, animated: true)

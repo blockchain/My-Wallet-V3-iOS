@@ -51,11 +51,6 @@
                                 <state key="normal" title="Continue">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
-                                        <real key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="primaryButtonTapped:" destination="Wxb-GC-OcZ" eventType="touchUpInside" id="lUT-kh-29K"/>
                                 </connections>
@@ -103,10 +98,10 @@
             </objects>
             <point key="canvasLocation" x="66" y="173"/>
         </scene>
-        <!--VerifyEmailAddress-->
+        <!--KYCVerifyEmailAddress-->
         <scene sceneID="D8o-S1-zXY">
             <objects>
-                <viewControllerPlaceholder storyboardName="VerifyEmailAddress" id="egE-32-RaC" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCVerifyEmailAddress" id="egE-32-RaC" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xT9-5c-ade" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="804" y="120"/>

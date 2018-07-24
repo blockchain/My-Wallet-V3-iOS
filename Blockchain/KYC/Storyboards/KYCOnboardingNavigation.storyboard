@@ -12,7 +12,7 @@
         <!--KYC Root Navigation Controller-->
         <scene sceneID="93l-fT-Ygy">
             <objects>
-                <navigationController storyboardIdentifier="OnboardingNavigation" title="KYC Root Navigation Controller" automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="currentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pfh-gd-RRa" customClass="OnboardingNavigationController" customModule="BlockchainKYC" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OnboardingNavigation" title="KYC Root Navigation Controller" automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="currentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pfh-gd-RRa" customClass="KYCOnboardingNavigationController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="IgS-Mb-Hq9">

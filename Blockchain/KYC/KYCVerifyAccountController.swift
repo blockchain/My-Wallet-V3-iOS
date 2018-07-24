@@ -1,5 +1,5 @@
 //
-//  VerifyAccountController.swift
+//  KYCVerifyAccountController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/17/18.
@@ -9,36 +9,29 @@
 import UIKit
 
 /// Account verification screen in KYC flow
-open class VerifyAccountController: OnboardingController {
+final class KYCVerifyAccountController: KYCOnboardingController {
 
     // MARK: - Properties
 
     fileprivate enum DocumentType {
-        case passport, driversLicense, identityCard, residencePermitCard
+        case driversLicense, identityCard, passport, residencePermitCard
     }
-
-    private var documentDialog: UIAlertController!
 
     // MARK: - View Lifecycle
 
-    override open func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Verify your identity"
+        navigationItem.title = "Verify your identity"
         // Depends on Onfido SDK integration...
         segueIdentifier = ""
         imageView.image = UIImage(named: "IdentityVerification")
         titleLabel.text = "Photo Verification Needed"
         descriptionLabel.text = "You're almost there! Just grab your government issued photo ID to complete your verification."
         primaryButton.setTitle("Continue", for: .normal)
-        setUpDocumentDialog()
     }
 
-    override open func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
-    private func setUpDocumentDialog() {
-        documentDialog = UIAlertController(title: "Which document are you using?", message: nil, preferredStyle: .actionSheet)
+    private func setUpAndShowDocumentDialog() {
+        let documentDialog = UIAlertController(title: "Which document are you using?", message: nil, preferredStyle: .actionSheet)
         let passportAction = UIAlertAction(title: "Passport", style: .default, handler: { _ in
             self.didSelect(.passport)
         })
@@ -57,30 +50,26 @@ open class VerifyAccountController: OnboardingController {
         documentDialog.addAction(identityCardAction)
         documentDialog.addAction(residencePermitCardAction)
         documentDialog.addAction(cancelAction)
+
+        present(documentDialog, animated: true)
     }
 
+    // MARK: - Private Methods
+
     private func didSelect(_ document: DocumentType) {
-        let verifyAccountController = UIStoryboard.instantiate(
-            child: AccountStatusController.self,
-            from: OnboardingController.self,
-            in: UIStoryboard(name: "OnboardingScreen", bundle: Bundle(identifier: "com.rainydayapps.BlockchainKYC")),
+        let accountStatusController = UIStoryboard.instantiate(
+            child: KYCAccountStatusController.self,
+            from: KYCOnboardingController.self,
+            in: UIStoryboard(name: "KYCOnboardingScreen", bundle: nil),
             identifier: "OnboardingScreen"
         )
-        self.navigationController?.pushViewController(verifyAccountController, animated: true)
+        accountStatusController.accountStatus = .inReview
+        navigationController?.pushViewController(accountStatusController, animated: true)
     }
 
     // MARK: - Actions
 
-    override open func primaryButtonTapped(_ sender: Any) {
-        self.present(documentDialog, animated: true)
-    }
-
-    // MARK: - Navigation
-
-    override open func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let accountVerificationController = segue.destination as? AccountStatusController else {
-            fatalError()
-        }
-        // accountVerificationController.
+    override func primaryButtonTapped(_ sender: Any) {
+        setUpAndShowDocumentDialog()
     }
 }

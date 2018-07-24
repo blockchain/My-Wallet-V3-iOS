@@ -21,7 +21,7 @@
         <!--Personal Details View Controller-->
         <scene sceneID="7y7-ht-Q1u">
             <objects>
-                <viewController storyboardIdentifier="PersonalDetails" title="Personal Details View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VK4-jv-eiz" customClass="PersonalDetailsController" customModule="BlockchainKYC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KYCPersonalDetails" title="Personal Details View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VK4-jv-eiz" customClass="KYCPersonalDetailsController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T9T-7i-ym7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -35,7 +35,7 @@
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="continue"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a2-YO-4u9" customClass="PrimaryButton" customModule="BlockchainKYC" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a2-YO-4u9" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -44,7 +44,7 @@
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                                 <state key="normal" title="Continue"/>
                                 <connections>
-                                    <action selector="primaryButtonTapped:" destination="VK4-jv-eiz" eventType="touchUpInside" id="iXd-zX-M1g"/>
+                                    <action selector="primaryButtonTapped:" destination="VK4-jv-eiz" eventType="touchUpInside" id="K4z-pF-XWd"/>
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zo4-1d-1re">
@@ -81,6 +81,9 @@
                         <barButtonItem key="backBarButtonItem" id="KIB-TR-30p"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="primaryButton" destination="5a2-YO-4u9" id="bkL-go-wpB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPZ-Fa-q8L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
