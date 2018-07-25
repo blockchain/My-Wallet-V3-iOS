@@ -3,15 +3,15 @@
 
 # Building
 
-## Setup git submodules
-
-Prepare SocketRocket:
+## Install Git submodules
 
     git submodule update --init
 
-Prepare the MyWallet Javascript:
+## Install JS Dependencies
 
-    # use node v7.9.0 by using a node version manager such as [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)
+Install a node version manager such as [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
+    
+    # use node v7.9.0
     npm install -g n
     n v7.9.0
 
@@ -24,12 +24,12 @@ Prepare the MyWallet Javascript:
     # build js files, watch My-Wallet-V3 for changes
     sh scripts/watch-js.sh
 
-Prepare OpenSSL:
+## Prepare OpenSSL
 
     cd ../OpenSSL-for-iPhone
     ./build-libssl.sh
 
-Add production Config file
+## Add production Config file
 
     #create a directory named Config in the root
     mkdir Config

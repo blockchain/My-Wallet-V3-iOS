@@ -37,7 +37,7 @@
     CGFloat safeAreaInsetTop = UIView.rootViewSafeAreaInsets.top;
     CGFloat topBarHeight = ConstantsObjcBridge.defaultNavigationBarHeight + safeAreaInsetTop;
     UIView *topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topBarHeight)];
-    topBarView.backgroundColor = COLOR_BLOCKCHAIN_BLUE;
+    topBarView.backgroundColor = UIColor.brandPrimary;
     [self.view addSubview:topBarView];
     topBar = topBarView;
     

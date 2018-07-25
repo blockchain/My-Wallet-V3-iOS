@@ -25,18 +25,18 @@ import Foundation
         labelMain.font = UIFont(
             name: Constants.FontNames.montserratRegular,
             size: Constants.FontSizes.Medium)
-        labelMain.textColor = Constants.Colors.ColorBrandPrimary
+        labelMain.textColor = .brandPrimary
         labelMain.text = """
             Blockchain Wallet \(Bundle.applicationVersion ?? "")
             © 2018 Blockchain Luxembourg S.A.
             \(LocalizationConstants.Settings.allRightsReserved)
         """
 
-        buttonRateUs.setTitleColor(Constants.Colors.ColorBrandPrimary, for: .normal)
+        buttonRateUs.setTitleColor(UIColor.brandPrimary, for: .normal)
 
         let closeImage = UIImage(named: "close")?.withRenderingMode(.alwaysTemplate)
         buttonClose.setImage(closeImage, for: .normal)
-        buttonClose.imageView?.tintColor = Constants.Colors.ColorBrandPrimary
+        buttonClose.imageView?.tintColor = .brandPrimary
     }
 
     override func viewWillDisappear(_ animated: Bool) {

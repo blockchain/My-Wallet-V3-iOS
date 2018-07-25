@@ -51,12 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.isTranslucent = false
-        if #available(iOS 11.0, *) {
-            navigationBarAppearance.barTintColor = UIColor(named: "ColorBrandPrimary")
-        } else {
-            navigationBarAppearance.barTintColor = Constants.Colors.ColorBrandPrimary
-        }
-        navigationBarAppearance.tintColor = UIColor.white
+        navigationBarAppearance.barTintColor = .brandPrimary
+        navigationBarAppearance.tintColor = .white
         navigationBarAppearance.titleTextAttributes = UINavigationBar.standardTitleTextAttributes
 
         #if DEBUG
