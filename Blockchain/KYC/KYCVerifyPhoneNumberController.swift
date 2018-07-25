@@ -16,12 +16,6 @@ final class KYCVerifyPhoneNumberController: UIViewController, KYCOnboardingNavig
 
     @IBOutlet var primaryButton: PrimaryButton!
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
@@ -31,7 +25,6 @@ final class KYCVerifyPhoneNumberController: UIViewController, KYCOnboardingNavig
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }

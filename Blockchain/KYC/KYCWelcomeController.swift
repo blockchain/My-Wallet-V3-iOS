@@ -25,14 +25,6 @@ final class KYCWelcomeController: KYCOnboardingController {
         primaryButton.setTitle("Verify My Identity", for: .normal)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
-    override func prepareForInterfaceBuilder() {
-        super.prepareForInterfaceBuilder()
-    }
-
     // MARK: - Actions
 
     override func primaryButtonTapped(_ sender: Any) {
@@ -42,7 +34,6 @@ final class KYCWelcomeController: KYCOnboardingController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }

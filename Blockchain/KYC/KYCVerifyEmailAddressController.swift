@@ -20,14 +20,9 @@ final class KYCVerifyEmailAddressController: UIViewController, KYCOnboardingNavi
         self.performSegue(withIdentifier: segueIdentifier!, sender: self)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }

@@ -19,16 +19,6 @@ final class KYCPersonalDetailsController: UIViewController, KYCOnboardingNavigat
 
     @IBOutlet var primaryButton: PrimaryButton!
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {

@@ -37,8 +37,7 @@ class KYCCountrySelectionController: UIViewController, KYCOnboardingNavigation {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }
 
@@ -56,7 +55,7 @@ extension KYCCountrySelectionController: UIPickerViewDataSource {
 // MARK: - UIPickerViewDelegate
 extension KYCCountrySelectionController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-
+        // TODO: implement method body
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

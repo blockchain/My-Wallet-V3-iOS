@@ -26,11 +26,6 @@ class KYCContactDetailsController: UIViewController, KYCOnboardingNavigation {
         super.viewDidLoad()
         self.navigationItem.title = "Your Contact Details"
         primaryButton.setTitle("Continue", for: .normal)
-        // firstNameField.becomeFirstResponder()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     // MARK: - Actions
@@ -42,7 +37,6 @@ class KYCContactDetailsController: UIViewController, KYCOnboardingNavigation {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }

@@ -17,16 +17,6 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     @IBOutlet var primaryButton: PrimaryButton!
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
@@ -36,7 +26,6 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        // TODO: implement method body
     }
 }

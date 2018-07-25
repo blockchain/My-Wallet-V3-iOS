@@ -20,10 +20,5 @@ protocol KYCOnboardingNavigation: class {
 
 /// Entry point to the KYC flow
 final class KYCOnboardingNavigationController: UINavigationController {
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    // TODO: implement class body
 }
