@@ -157,6 +157,18 @@
 		51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
 		51578AEE20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
 		51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
+		5159C2DC2109149500955BD6 /* KYCAccountStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383548210253A700767B2E /* KYCAccountStatusController.swift */; };
+		5159C2DD2109149500955BD6 /* KYCAddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383545210253A700767B2E /* KYCAddressController.swift */; };
+		5159C2DE2109149500955BD6 /* KYCContactDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383537210253A700767B2E /* KYCContactDetailsController.swift */; };
+		5159C2DF2109149500955BD6 /* KYCCountrySelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5138354C210253A700767B2E /* KYCCountrySelectionController.swift */; };
+		5159C2E02109149500955BD6 /* KYCOnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383543210253A700767B2E /* KYCOnboardingController.swift */; };
+		5159C2E12109149500955BD6 /* KYCOnboardingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383549210253A700767B2E /* KYCOnboardingNavigationController.swift */; };
+		5159C2E22109149500955BD6 /* KYCPersonalDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383542210253A700767B2E /* KYCPersonalDetailsController.swift */; };
+		5159C2E32109149500955BD6 /* KYCVerifyAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383544210253A700767B2E /* KYCVerifyAccountController.swift */; };
+		5159C2E42109149500955BD6 /* KYCVerifyEmailAddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383541210253A700767B2E /* KYCVerifyEmailAddressController.swift */; };
+		5159C2E52109149500955BD6 /* KYCVerifyPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */; };
+		5159C2E62109149500955BD6 /* KYCWelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383546210253A700767B2E /* KYCWelcomeController.swift */; };
+		5159C3012109149A00955BD6 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5138354B210253A700767B2E /* PrimaryButton.swift */; };
 		515EFAD7210282B4002350B6 /* Upgrade.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF91B210282B4002350B6 /* Upgrade.strings */; };
 		515EFAD8210282B4002350B6 /* ReceiveCoins.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF91D210282B4002350B6 /* ReceiveCoins.strings */; };
 		515EFAD9210282B4002350B6 /* Backup.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF91F210282B4002350B6 /* Backup.strings */; };
@@ -4173,6 +4185,7 @@
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
 				AA2BA64420DC754600F01954 /* BitcoinAddressTests.swift in Sources */,
 				51C2ADD420BDD3EA00D66108 /* AddressValidatorTests.swift in Sources */,
+				5159C2DF2109149500955BD6 /* KYCCountrySelectionController.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
 				AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
@@ -4192,6 +4205,7 @@
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				AAD27A29209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
+				5159C2E62109149500955BD6 /* KYCWelcomeController.swift in Sources */,
 				AA1E523B2097E2190099BD10 /* Strings.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
@@ -4213,6 +4227,7 @@
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
 				AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
+				5159C2E52109149500955BD6 /* KYCVerifyPhoneNumberController.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
@@ -4237,8 +4252,11 @@
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
+				5159C2E32109149500955BD6 /* KYCVerifyAccountController.swift in Sources */,
+				5159C2DC2109149500955BD6 /* KYCAccountStatusController.swift in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				AACF56C620EAC87A0039978B /* OnboardingSettings.swift in Sources */,
+				5159C2DE2109149500955BD6 /* KYCContactDetailsController.swift in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* GetPinResponse.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
@@ -4254,6 +4272,7 @@
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */,
+				5159C2E42109149500955BD6 /* KYCVerifyEmailAddressController.swift in Sources */,
 				AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */,
 				51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
@@ -4261,12 +4280,15 @@
 				51135704209CF5D800056D65 /* PutPinResponse.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
+				5159C2E02109149500955BD6 /* KYCOnboardingController.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
+				5159C2E12109149500955BD6 /* KYCOnboardingNavigationController.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
 				C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
+				5159C3012109149A00955BD6 /* PrimaryButton.swift in Sources */,
 				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
@@ -4283,6 +4305,7 @@
 				AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */,
 				AAE9113E20A640A40093A431 /* PinPayload.swift in Sources */,
 				511BF4EE20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */,
+				5159C2E22109149500955BD6 /* KYCPersonalDetailsController.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
@@ -4291,6 +4314,7 @@
 				AAD27A31209D22FD00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,
 				AA56423C20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift in Sources */,
 				AA1E525A2098374A0099BD10 /* AuthenticationCoordinator+Biometrics.swift in Sources */,
+				5159C2DD2109149500955BD6 /* KYCAddressController.swift in Sources */,
 				51135706209CF64900056D65 /* BackupNavigationViewController.swift in Sources */,
 				AA1E52342097CC2C0099BD10 /* AuthenticationCoordinator.swift in Sources */,
 				C78893EF20A4D690003C0A8F /* WalletSendBitcoinDelegate.swift in Sources */,
