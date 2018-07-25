@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A destination wherein log statements are outputted to standard output (i.e. XCode's console)
 class ConsoleLogDestination: LogDestination {
     func log(statement: String) {
         print(statement)

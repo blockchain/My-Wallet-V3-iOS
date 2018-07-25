@@ -8,11 +8,13 @@
 
 import Foundation
 
+/// Enumerates the level/severity of a log statement
 enum LogLevel {
     case debug, info, warning, error
 }
 
 extension LogLevel {
+
     var emoji: String {
         switch self {
         case .debug: return "🏗"

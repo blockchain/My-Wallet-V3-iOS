@@ -13,6 +13,12 @@ import Foundation
 
     private var destinations = [LogDestination]()
 
+    private lazy var timestampFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        return formatter
+    }()
+
     static let shared: Logger = {
         let logger = Logger()
         #if DEBUG
@@ -22,6 +28,8 @@ import Foundation
     }()
 
     @objc class func sharedInstance() -> Logger { return shared }
+
+    // MARK: - Public
 
     func debug(
         _ message: String,
@@ -78,6 +86,8 @@ import Foundation
         }
     }
 
+    // MARK: - Private
+
     private func formatMessage(
         _ message: String,
         level: LogLevel,
@@ -85,8 +95,9 @@ import Foundation
         function: String = #function,
         line: Int = #line
     ) -> String {
+        let timestamp = timestampFormatter.string(from: Date())
         let logLevelTitle = "\(level)".uppercased()
-        return "\(level.emoji) \(logLevelTitle) \(filename(from: file)).\(function):\(line) - \(message)"
+        return "\(timestamp) \(level.emoji) \(logLevelTitle) \(filename(from: file)).\(function):\(line) - \(message)"
     }
 
     private func filename(from file: String) -> String {
