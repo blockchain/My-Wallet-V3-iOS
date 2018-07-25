@@ -12,7 +12,7 @@ extension HTTPCookieStorage {
     func deleteAllCookies() {
         let cookieStorage = HTTPCookieStorage.shared
         guard let cookies = cookieStorage.cookies else {
-            print("No cookies to delete")
+            Logger.shared.info("No cookies to delete")
             return
         }
         cookies.forEach { cookieStorage.deleteCookie($0) }

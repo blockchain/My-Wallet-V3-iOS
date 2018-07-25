@@ -34,9 +34,7 @@ final class AppReviewPrompt: NSObject {
     @objc func showIfNeeded() {
         let transactionsCount = WalletManager.shared.wallet.getAllTransactionsCount()
         if transactionsCount < numberOfTransactionsBeforePrompt {
-            #if DEBUG
-            print("App review prompt will not show because the user needs at least \(numberOfTransactionsBeforePrompt) transactions.")
-            #endif
+            Logger.shared.info("App review prompt will not show because the user needs at least \(numberOfTransactionsBeforePrompt) transactions.")
             return
         }
         // TODO: support overriding appBecameActiveCount for debugging
@@ -46,9 +44,7 @@ final class AppReviewPrompt: NSObject {
              _ where (count >= 100) && (count % 100 == 0),
              _ where transactionsCount == numberOfTransactionsBeforePrompt: requestReview()
         default:
-            #if DEBUG
-            print("App review prompt will not show because the application open count is too low (\(count)).")
-            #endif
+            Logger.shared.info("App review prompt will not show because the application open count is too low (\(count)).")
             return
         }
     }
@@ -60,9 +56,7 @@ final class AppReviewPrompt: NSObject {
         }
         let settings = BlockchainSettings.App.shared
         if settings.dontAskUserToShowAppReviewPrompt {
-            #if DEBUG
-            print("App review prompt will not show because the user does not want to be asked.")
-            #endif
+            Logger.shared.info("App review prompt will not show because the user does not want to be asked.")
             return
         }
         let affirmativeAction = UIAlertAction(

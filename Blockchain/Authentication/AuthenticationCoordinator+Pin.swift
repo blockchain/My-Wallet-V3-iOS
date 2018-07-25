@@ -38,7 +38,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
     }
 
     func pinEntryControllerDidCancel(_ pinEntryController: PEPinEntryController!) {
-        print("Pin change cancelled!")
+        Logger.shared.info("Pin change cancelled!")
         closePinEntryView(animated: true)
     }
 

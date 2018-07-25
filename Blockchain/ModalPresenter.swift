@@ -65,7 +65,7 @@ typealias OnModalResumed = () -> Void
 
     @objc func closeModal(withTransition transition: String) {
         guard let modalView = modalView else {
-            print("Cannot close modal. modalView is nil.")
+            Logger.shared.warning("Cannot close modal. modalView is nil.")
             return
         }
 

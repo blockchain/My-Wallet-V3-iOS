@@ -30,11 +30,11 @@ class PushNotificationManager: NSObject {
         let userNotificationCenter = UNUserNotificationCenter.current()
         userNotificationCenter.requestAuthorization(options: [.sound, .alert, .badge]) { _, error in
             guard error == nil else {
-                print("Push registration FAILED")
-                print("ERROR: \(error!.localizedDescription)")
+                Logger.shared.error("Push registration FAILED")
+                Logger.shared.error("ERROR: \(error!.localizedDescription)")
                 return
             }
-            print("Push registration success.")
+            Logger.shared.info("Push registration success.")
             DispatchQueue.main.async {
                 UIApplication.shared.registerForRemoteNotifications()
             }

@@ -32,19 +32,19 @@ import Foundation
         // Perform guard checks
         let appSettings = BlockchainSettings.App.shared
         guard appSettings.swipeToReceiveEnabled else {
-            print("Swipe to receive is disabled.")
+            Logger.shared.info("Swipe to receive is disabled.")
             return
         }
 
         let wallet = walletManager.wallet
 
         guard wallet.isInitialized() else {
-            print("Wallet is not yet initialized.")
+            Logger.shared.warning("Wallet is not yet initialized.")
             return
         }
 
         guard wallet.didUpgradeToHd() else {
-            print("Wallet has not yet been upgraded to HD.")
+            Logger.shared.warning("Wallet has not yet been upgraded to HD.")
             return
         }
 
@@ -124,7 +124,7 @@ extension AssetAddressRepository {
         errorHandler: @escaping (() -> Void)
     ) {
         guard assetType != .ethereum else {
-            print("Ethereum addresses not supported for checking if it is unused.")
+            Logger.shared.info("Ethereum addresses not supported for checking if it is unused.")
             return
         }
 
@@ -135,7 +135,7 @@ extension AssetAddressRepository {
         }
 
         guard let urlString = BlockchainAPI.shared.assetInfoURL(for: assetAddress), let url = URL(string: urlString) else {
-            print("Cannot construct URL to check if the address '\(address)' is unused.")
+            Logger.shared.warning("Cannot construct URL to check if the address '\(address)' is unused.")
             return
         }
 

@@ -41,12 +41,12 @@ import RxSwift
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { walletOptions in
                 guard let rootURL = walletOptions.mobile?.walletRoot else {
-                    print("Error with wallet options response when starting buy sell webview")
+                    Logger.shared.warning("Error with wallet options response when starting buy sell webview")
                     return
                 }
                 self.initializeWebView(rootURL: rootURL)
             }, onError: { _ in
-                print("Error getting wallet options to start buy sell webview")
+                Logger.shared.error("Error getting wallet options to start buy sell webview")
             })
     }
 
@@ -56,7 +56,7 @@ import RxSwift
 
     @objc func showBuyBitcoinView() {
         guard let buyBitcoinViewController = buyBitcoinViewController else {
-            print("buyBitcoinViewController not yet initialized")
+            Logger.shared.warning("buyBitcoinViewController not yet initialized")
             return
         }
 
@@ -64,22 +64,22 @@ import RxSwift
         guard let loginDataDict = walletManager.wallet.executeJSSynchronous(
             "MyWalletPhone.getWebViewLoginData()"
             ).toDictionary() else {
-                print("loginData from wallet is empty")
+                Logger.shared.warning("loginData from wallet is empty")
                 return
         }
 
         guard let walletJson = loginDataDict["walletJson"] as? String else {
-            print("walletJson is nil")
+            Logger.shared.warning("walletJson is nil")
             return
         }
 
         guard let externalJson = loginDataDict["externalJson"] is NSNull ? "" : loginDataDict["externalJson"] as? String else {
-            print("externalJson is nil")
+            Logger.shared.warning("externalJson is nil")
             return
         }
 
         guard let magicHash = loginDataDict["magicHash"] is NSNull ? "" : loginDataDict["magicHash"] as? String else {
-            print("magicHash is nil")
+            Logger.shared.warning("magicHash is nil")
             return
         }
 
