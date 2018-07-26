@@ -1,5 +1,5 @@
 //
-//  OnboardingNavigation.swift
+//  KYCOnboardingNavigationController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/17/18.
@@ -9,7 +9,7 @@
 import UIKit
 
 /// Set of requirements that every view controller in the KYC flow must conform to.
-public protocol OnboardingNavigation: class {
+protocol KYCOnboardingNavigation: class {
     /// Segue identifier of the proceeding screen.
     var segueIdentifier: String? { get }
     /// Primary button used to advance the on-boarding flow.
@@ -19,11 +19,6 @@ public protocol OnboardingNavigation: class {
 }
 
 /// Entry point to the KYC flow
-open class OnboardingNavigationController: UINavigationController {
-
-    // MARK: - View Lifecycle
-
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-    }
+final class KYCOnboardingNavigationController: UINavigationController {
+    // TODO: implement class body
 }

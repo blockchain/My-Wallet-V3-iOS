@@ -121,7 +121,7 @@
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 
-                [_videoPreviewLayer removeFromSuperlayer];
+                [self->_videoPreviewLayer removeFromSuperlayer];
                 
                 [self dismissViewControllerAnimated:YES completion:nil];
 

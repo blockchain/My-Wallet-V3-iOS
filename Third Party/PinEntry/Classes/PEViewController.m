@@ -139,7 +139,7 @@
         if([self.pin length] == 4) {
             // Short delay so the UI can update the PIN view before we go to the next page
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [delegate pinEntryControllerDidEnteredPin:self];
+                [self.delegate pinEntryControllerDidEnteredPin:self];
             });
         }
 	}

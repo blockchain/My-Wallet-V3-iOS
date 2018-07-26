@@ -819,8 +819,9 @@
         [weakSelf on_get_exchange_trades_success:trades];
     };
 
-    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *limit, JSValue *minimum, JSValue *minerFee, JSValue *maxLimit, JSValue *pair, JSValue *rate, JSValue *ethHardLimit) {
-        [weakSelf on_get_exchange_rate_success:@{DICTIONARY_KEY_LIMIT : [limit toString], DICTIONARY_KEY_MINIMUM : [minimum toString], DICTIONARY_KEY_MINER_FEE : [minerFee toString], DICTIONARY_KEY_MAX_LIMIT : [maxLimit toString], DICTIONARY_KEY_RATE : [rate toString], DICTIONARY_KEY_ETH_HARD_LIMIT_RATE : [ethHardLimit toString]}];
+    self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *rate) {
+        ExchangeRate *exchangeRate = [[ExchangeRate alloc] initWithJavaScriptValue:rate];
+        [weakSelf on_get_exchange_rate_success:exchangeRate];
     };
 
     self.context[@"objc_on_build_exchange_trade_success"] = ^(JSValue *from, JSValue *depositAmount, JSValue *fee, JSValue *rate, JSValue *minerFee, JSValue *withdrawalAmount, JSValue *expiration) {
@@ -1196,12 +1197,12 @@
         self.btcSwipeAddressToSubscribe = nil;
 
         if (amountReceived > 0) {
-            if ([delegate respondsToSelector:@selector(paymentReceivedOnPINScreen:assetType:)]) {
+            if ([self->delegate respondsToSelector:@selector(paymentReceivedOnPINScreen:assetType:)]) {
                 if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-                    [delegate paymentReceivedOnPINScreen:amountString assetType:LegacyAssetTypeBitcoin];
+                    [self->delegate paymentReceivedOnPINScreen:amountString assetType:LegacyAssetTypeBitcoin];
                 }
             } else {
-                DLog(@"Error: delegate of class %@ does not respond to selector paymentReceivedOnPINScreen:!", [delegate class]);
+                DLog(@"Error: delegate of class %@ does not respond to selector paymentReceivedOnPINScreen:!", [self->delegate class]);
             }
         }
 
@@ -2841,7 +2842,7 @@
 
     if (listener) {
         if (listener.on_begin_signing) {
-            listener.on_begin_signing();
+            listener.on_begin_signing(txProgressID);
         }
     }
 }
@@ -2863,7 +2864,7 @@
 
     if (listener) {
         if (listener.on_finish_signing) {
-            listener.on_finish_signing();
+            listener.on_finish_signing(txProgressID);
         }
     }
 }
@@ -4065,29 +4066,26 @@
     }
 }
 
-- (void)on_get_exchange_rate_success:(NSDictionary *)result
+- (void)on_get_exchange_rate_success:(ExchangeRate *)exchangeRate
 {
-    NSNumber *btcRateNumber = [[[self.context evaluateScript:@"MyWalletPhone.currencyCodeForHardLimit()"] toString] isEqualToString:CURRENCY_CODE_USD] ? [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_USD] objectForKey:DICTIONARY_KEY_LAST] : [[[WalletManager.sharedInstance.wallet btcRates] objectForKey:CURRENCY_CODE_EUR] objectForKey:DICTIONARY_KEY_LAST];
-    
-    NSDecimalNumber *btcRate = [NSDecimalNumber decimalNumberWithDecimal:[btcRateNumber decimalValue]];
-    NSDecimalNumber *ethRate = [NSDecimalNumber decimalNumberWithString:[result objectForKey:DICTIONARY_KEY_ETH_HARD_LIMIT_RATE]];
+    NSDecimalNumber *hardLimitRate = exchangeRate.hardLimitRate;
 
     NSDecimalNumber *fiatHardLimit = [NSDecimalNumber decimalNumberWithString:[[self.context evaluateScript:@"MyWalletPhone.fiatExchangeHardLimit()"] toString]];
 
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setMaximumFractionDigits:8];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:LOCALE_IDENTIFIER_EN_US]];
+    NSNumberFormatter *numberFormatter = [NSNumberFormatter assetFormatterWithUSLocale];
 
-    NSString *btcHardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:btcRate]];
-    NSString *ethHardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:ethRate]];
+    NSString *hardLimit = [numberFormatter stringFromNumber:[fiatHardLimit decimalNumberByDividingBy:hardLimitRate]];
 
-    NSMutableDictionary *mutableCopy = [result mutableCopy];
-    [mutableCopy setObject:btcHardLimit forKey:DICTIONARY_KEY_BTC_HARD_LIMIT];
-    [mutableCopy setObject:ethHardLimit forKey:DICTIONARY_KEY_ETH_HARD_LIMIT];
+    ExchangeRate *exchangeRateWithHardLimit = [[ExchangeRate alloc] initWithLimit: exchangeRate.limit
+                                                                    minimum: exchangeRate.minimum
+                                                                    minerFee: exchangeRate.minerFee
+                                                                    maxLimit: exchangeRate.maxLimit
+                                                                    rate: exchangeRate.rate
+                                                                    hardLimit: [NSDecimalNumber decimalNumberWithString:hardLimit]
+                                                                    hardLimitRate: nil];
 
     if ([self.delegate respondsToSelector:@selector(didGetExchangeRate:)]) {
-        [self.delegate didGetExchangeRate:mutableCopy];
+        [self.delegate didGetExchangeRate:exchangeRateWithHardLimit];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didGetExchangeRate:!", [delegate class]);
     }
@@ -4319,15 +4317,6 @@
     }
 
     return [[[self.context evaluateScript:@"MyWalletPhone.watchOnlyBalance()"] toNumber] longLongValue];
-}
-
-- (BOOL)hasWatchOnlyAddresses
-{
-    if (![self isInitialized]) {
-        return NO;
-    }
-
-    return [[self.context evaluateScript:@"MyWalletPhone.hasWatchOnlyAddresses()"] toBool];
 }
 
 - (uint64_t)getTotalBalanceForActiveLegacyAddresses:(LegacyAssetType)assetType

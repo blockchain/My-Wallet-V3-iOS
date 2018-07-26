@@ -110,7 +110,7 @@
             self.frame = frame;
         }
         
-        [emailTextField becomeFirstResponder];
+        [self->emailTextField becomeFirstResponder];
     });
 }
 
@@ -347,11 +347,11 @@
     self.passwordStrength = passwordStrength;
     
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        passwordFeedbackLabel.text = description;
-        passwordFeedbackLabel.textColor = color;
-        passwordStrengthMeter.progress = passwordStrength/100;
-        passwordStrengthMeter.progressTintColor = color;
-        passwordTextField.layer.borderColor = color.CGColor;
+        self->passwordFeedbackLabel.text = description;
+        self->passwordFeedbackLabel.textColor = color;
+        self->passwordStrengthMeter.progress = passwordStrength/100;
+        self->passwordStrengthMeter.progressTintColor = color;
+        self->passwordTextField.layer.borderColor = color.CGColor;
     }];
 }
 

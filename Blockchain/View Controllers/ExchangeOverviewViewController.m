@@ -208,7 +208,7 @@
     }
 }
 
-- (void)didGetExchangeRateWithRate:(NSDictionary * _Nonnull)rate
+- (void)didGetExchangeRateWithRate:(ExchangeRate * _Nonnull)rate
 {
     [self.createViewController didGetExchangeRate:rate];
 }

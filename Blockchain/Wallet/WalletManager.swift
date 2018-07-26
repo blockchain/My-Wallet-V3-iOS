@@ -458,9 +458,9 @@ extension WalletManager: WalletDelegate {
         }
     }
 
-    func didGetExchangeRate(_ result: [AnyHashable: Any]!) {
+    func didGet(_ rate: ExchangeRate!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetExchangeRate(rate: result as NSDictionary)
+            self.exchangeDelegate?.didGetExchangeRate(rate: rate)
         }
     }
 

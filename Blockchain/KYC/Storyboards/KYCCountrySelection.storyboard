@@ -18,7 +18,7 @@
         <!--Country Selection View Controller-->
         <scene sceneID="dVi-ac-mH2">
             <objects>
-                <viewController storyboardIdentifier="CountrySelection" title="Country Selection View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HFD-oV-Usp" customClass="CountrySelectionController" customModule="BlockchainKYC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CountrySelection" title="Country Selection View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HFD-oV-Usp" customClass="KYCCountrySelectionController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Cc-Na-LbV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -30,7 +30,7 @@
                                     <outlet property="delegate" destination="HFD-oV-Usp" id="bmq-tA-djM"/>
                                 </connections>
                             </pickerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7t8-SA-tG4" customClass="PrimaryButton" customModule="BlockchainKYC" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7t8-SA-tG4" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -40,11 +40,6 @@
                                 <state key="normal" title="Continue">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
-                                        <real key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="primaryButtonTapped:" destination="HFD-oV-Usp" eventType="touchUpInside" id="BwM-Oc-c1C"/>
                                 </connections>
@@ -76,10 +71,10 @@
             </objects>
             <point key="canvasLocation" x="39" y="209"/>
         </scene>
-        <!--ContactDetails-->
+        <!--KYCContactDetails-->
         <scene sceneID="uPe-kt-Szi">
             <objects>
-                <viewControllerPlaceholder storyboardName="ContactDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCContactDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HKM-cD-64E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="703" y="153"/>

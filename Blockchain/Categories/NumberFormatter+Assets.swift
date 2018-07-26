@@ -67,6 +67,7 @@ extension NumberFormatter {
     }()
 
     // Used to create QR code string from amount
+    // Used to convert values from returned from APIs
     static let assetFormatterWithUSLocale: NumberFormatter = {
         let formatter = decimalStyleFormatter(withMinfractionDigits: 0,
                                               maxfractionDigits: assetFractionDigits,

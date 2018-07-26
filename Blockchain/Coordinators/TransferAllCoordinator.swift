@@ -49,9 +49,9 @@ import Foundation
 extension TransferAllCoordinator: WalletTransferAllDelegate {
     func updateTransferAll(amount: NSNumber, fee: NSNumber, addressesUsed: NSArray) {
         if transferAllController != nil {
-            transferAllController?.updateTransferAllAmount(amount, fee: fee, addressesUsed: addressesUsed as! [Any])
+            transferAllController?.updateTransferAllAmount(amount, fee: fee, addressesUsed: addressesUsed as? [Any])
         } else {
-            AppCoordinator.shared.tabControllerManager.updateTransferAllAmount(amount, fee: fee, addressesUsed: addressesUsed as! [Any])
+            AppCoordinator.shared.tabControllerManager.updateTransferAllAmount(amount, fee: fee, addressesUsed: addressesUsed as? [Any])
         }
     }
 

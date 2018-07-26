@@ -18,15 +18,15 @@ typedef enum {
 
 @interface BCModalView : UIView
 
-@property(nullable, nonatomic, copy) void (^onDismiss)();
-@property(nullable, nonatomic, copy) void (^onResume)();
-@property(nonatomic, strong) IBOutlet UIView *myHolderView;
-@property(nonatomic, strong) IBOutlet UIButton *closeButton;
-@property(nonatomic, strong) IBOutlet UIButton *backButton;
+@property(nullable, nonatomic, copy) void (^onDismiss)(void);
+@property(nullable, nonatomic, copy) void (^onResume)(void);
+@property(nonatomic, strong) IBOutlet UIView * _Nullable myHolderView;
+@property(nonatomic, strong) IBOutlet UIButton * _Nullable closeButton;
+@property(nonatomic, strong) IBOutlet UIButton * _Nullable backButton;
 
 @property(nonatomic) ModalCloseType closeType;
 
-- (id)initWithCloseType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *)headerText;
-- (IBAction)closeModalClicked:(id)sender;
+- (id _Nonnull )initWithCloseType:(ModalCloseType)closeType showHeader:(BOOL)showHeader headerText:(NSString *_Nullable)headerText;
+- (IBAction)closeModalClicked:(id _Nullable )sender;
 
 @end

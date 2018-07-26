@@ -397,7 +397,7 @@ import RxSwift
         self.pinEntryViewController = pinViewController
 
         LoadingViewPresenter.shared.hideBusyView()
-
+        
         UIApplication.shared.statusBarStyle = .default
     }
 

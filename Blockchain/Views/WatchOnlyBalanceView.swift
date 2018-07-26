@@ -24,7 +24,7 @@ import Foundation
         self.balanceLabel.layer.cornerRadius = 5
         self.balanceLabel.layer.borderWidth = 1
         self.balanceLabel.textColor = .gray5
-        self.balanceLabel.backgroundColor = .gray6
+        self.balanceLabel.backgroundColor = .gray1
         self.balanceLabel.layer.borderColor = UIColor.gray2.cgColor
         self.balanceLabel.clipsToBounds = true
         self.balanceLabel.customEdgeInsets = UIEdgeInsets(top: 3.5, left: 11, bottom: 3.5, right: 11)

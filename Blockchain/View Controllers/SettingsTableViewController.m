@@ -404,6 +404,7 @@ const int aboutCookiePolicy = 3;
 {
     SettingsWebViewController *aboutViewController = [[SettingsWebViewController alloc] init];
     aboutViewController.urlTargetString = [ConstantsObjcBridge termsOfServiceURLString];
+
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:aboutViewController title:BC_STRING_SETTINGS_TERMS_OF_SERVICE];
     [self presentViewController:navigationController animated:YES completion:nil];
 }

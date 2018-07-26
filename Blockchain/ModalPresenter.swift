@@ -55,8 +55,8 @@ typealias OnModalResumed = () -> Void
         self.modalView = nil
 
         for modalView in modalChain {
-            modalView.myHolderView.subviews.forEach { $0.removeFromSuperview() }
-            modalView.myHolderView.removeFromSuperview()
+            modalView.myHolderView?.subviews.forEach { $0.removeFromSuperview() }
+            modalView.myHolderView?.removeFromSuperview()
             modalView.onDismiss?()
         }
 
@@ -129,7 +129,7 @@ typealias OnModalResumed = () -> Void
         }
 
         // Show modal
-        let modalViewToShow = BCModalView(closeType: closeType, showHeader: showHeader, headerText: headerText)!
+        let modalViewToShow = BCModalView(closeType: closeType, showHeader: showHeader, headerText: headerText)
         modalViewToShow.onDismiss = onDismiss
         modalViewToShow.onResume = onResume
 
@@ -142,8 +142,8 @@ typealias OnModalResumed = () -> Void
         content.frame = CGRect(
             x: 0,
             y: 0,
-            width: modalViewToShow.myHolderView.frame.size.width,
-            height: modalViewToShow.myHolderView.frame.size.height
+            width: modalViewToShow.myHolderView?.frame.size.width ?? 0,
+            height: modalViewToShow.myHolderView?.frame.size.height ?? 0
         )
 
         //: The pairing instructions view requires a custom background color
@@ -153,7 +153,7 @@ typealias OnModalResumed = () -> Void
             modalViewToShow.backgroundColor = .gray1
         }
 
-        modalViewToShow.myHolderView.addSubview(content)
+        modalViewToShow.myHolderView?.addSubview(content)
         topMostView?.addSubview(modalViewToShow)
         topMostView?.endEditing(true)
 

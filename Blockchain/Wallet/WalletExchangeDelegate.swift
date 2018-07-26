@@ -14,7 +14,7 @@ import Foundation
     func didGetExchangeTrades(trades: NSArray)
 
     /// Method invoked when rate has been fetched
-    func didGetExchangeRate(rate: NSDictionary)
+    func didGetExchangeRate(rate: ExchangeRate)
 
     /// Method invoked when the BTC balance has been fetched
     func didGetAvailableBtcBalance(result: NSDictionary?)

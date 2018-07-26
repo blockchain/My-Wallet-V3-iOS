@@ -14,7 +14,7 @@
 @property (nonatomic) UILabel *headerLabel;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) BCFadeView *busyView;
-@property(nonatomic, copy) void (^onDismissViewController)();
+@property(nonatomic, copy) void (^onDismissViewController)(void);
 
 - (void)reload;
 - (void)reloadAfterMultiAddressResponse;

@@ -167,7 +167,7 @@ UILabel *titleLabel;
     tabBar.selectedItem = nil;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        tabBar.selectedItem = [[tabBar items] objectAtIndex:selectedIndex];
+        self->tabBar.selectedItem = [[self->tabBar items] objectAtIndex:selectedIndex];
     });
 
     NSArray *titles = @[BC_STRING_SEND, BC_STRING_DASHBOARD, BC_STRING_TRANSACTIONS, BC_STRING_REQUEST];
@@ -287,9 +287,9 @@ UILabel *titleLabel;
         CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
         self.activeViewController.view.frame = CGRectMake(0,
                                                           offsetForAssetSelector,
-                                                          contentView.frame.size.width,
-                                                          contentView.frame.size.height - offsetForAssetSelector);
-        [bannerView changeHeight:offsetForAssetSelector];
+                                                          self->contentView.frame.size.width,
+                                                          self->contentView.frame.size.height - offsetForAssetSelector);
+        [self->bannerView changeHeight:offsetForAssetSelector];
     }];
 
     [self selectAsset:assetType];
@@ -301,9 +301,9 @@ UILabel *titleLabel;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         self.activeViewController.view.frame = CGRectMake(0,
                                                           offsetForAssetSelector,
-                                                          contentView.frame.size.width,
-                                                          contentView.frame.size.height - offsetForAssetSelector);
-        [bannerView changeHeight:offsetForAssetSelector];
+                                                          self->contentView.frame.size.width,
+                                                          self->contentView.frame.size.height - offsetForAssetSelector);
+        [self->bannerView changeHeight:offsetForAssetSelector];
     }];
 }
 

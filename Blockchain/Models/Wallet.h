@@ -24,30 +24,30 @@
 #import "Assets.h"
 
 @interface transactionProgressListeners : NSObject
-@property(nonatomic, copy) void (^on_start)();
-@property(nonatomic, copy) void (^on_begin_signing)();
-@property(nonatomic, copy) void (^on_sign_progress)(int input);
-@property(nonatomic, copy) void (^on_finish_signing)();
-@property(nonatomic, copy) void (^on_success)(NSString*secondPassword, NSString*transactionHash);
-@property(nonatomic, copy) void (^on_error)(NSString*error, NSString*secondPassword);
+@property(nonatomic, copy) void (^ _Nonnull on_start)(void);
+@property(nonatomic, copy) void (^ _Nullable on_begin_signing)(NSString*);
+@property(nonatomic, copy) void (^ _Nullable on_sign_progress)(int input);
+@property(nonatomic, copy) void (^ _Nullable on_finish_signing)(NSString*);
+@property(nonatomic, copy) void (^ _Nullable on_success)(NSString* _Nullable secondPassword, NSString* _Nullable transactionHash);
+@property(nonatomic, copy) void (^ _Nonnull on_error)(NSString* _Nullable error, NSString* _Nullable secondPassword);
 @end
 
 @interface Key : NSObject {
     int tag;
 }
-@property(nonatomic, strong) NSString *addr;
-@property(nonatomic, strong) NSString *priv;
-@property(nonatomic, strong) NSString *label;
+@property(nonatomic, strong) NSString * _Nullable addr;
+@property(nonatomic, strong) NSString * _Nullable priv;
+@property(nonatomic, strong) NSString * _Nullable label;
 @property(nonatomic, assign) int tag;
 @end
 
-@class Wallet, Transaction, JSValue, JSContext;
+@class Wallet, Transaction, JSValue, JSContext, ExchangeRate;
 
 @protocol WalletSuccessCallback;
 
 @protocol ExchangeAccountDelegate
 - (void)watchPendingTrades:(BOOL)shouldSync;
-- (void)showCompletedTrade:(NSString *)txHash;
+- (void)showCompletedTrade:(NSString *_Nullable)txHash;
 @end
 
 @protocol WalletDelegate <NSObject>
@@ -128,7 +128,7 @@
 - (void)didErrorDuringEtherSend:(NSString *)error;
 - (void)didGetEtherAddressWithSecondPassword;
 - (void)didGetExchangeTrades:(NSArray *)trades;
-- (void)didGetExchangeRate:(NSDictionary *)result;
+- (void)didGetExchangeRate:(ExchangeRate *)result;
 - (void)didGetAvailableEthBalance:(NSDictionary *)result;
 - (void)didGetAvailableBtcBalance:(NSDictionary *)result;
 - (void)didBuildExchangeTrade:(NSDictionary *)tradeInfo;
@@ -310,7 +310,6 @@
 
 - (uint64_t)getTotalActiveBalance;
 - (uint64_t)getWatchOnlyBalance;
-- (BOOL)hasWatchOnlyAddresses;
 - (uint64_t)getTotalBalanceForActiveLegacyAddresses:(LegacyAssetType)assetType;
 - (uint64_t)getTotalBalanceForSpendableActiveLegacyAddresses;
 - (id)getBalanceForAccount:(int)account assetType:(LegacyAssetType)assetType;

@@ -18,7 +18,7 @@
         <!--Address View Controller-->
         <scene sceneID="wXx-xN-o6q">
             <objects>
-                <viewController title="Address View Controller" id="1m4-Wz-u3W" customClass="AddressController" customModule="BlockchainKYC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Address View Controller" id="1m4-Wz-u3W" customClass="KYCAddressController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6kS-bR-6h1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -68,7 +68,7 @@
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" textContentType="postal-code"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XUW-TX-8oU" customClass="PrimaryButton" customModule="BlockchainKYC" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XUW-TX-8oU" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="718" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -78,11 +78,6 @@
                                 <state key="normal" title="Continue">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
-                                        <real key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="primaryButtonTapped:" destination="1m4-Wz-u3W" eventType="touchUpInside" id="jOC-4O-3a6"/>
                                 </connections>
@@ -124,10 +119,10 @@
             </objects>
             <point key="canvasLocation" x="86" y="152"/>
         </scene>
-        <!--PersonalDetails-->
+        <!--KYCPersonalDetails-->
         <scene sceneID="Mum-mC-SLc">
             <objects>
-                <viewControllerPlaceholder storyboardName="PersonalDetails" id="QUH-Ks-fjK" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCPersonalDetails" id="QUH-Ks-fjK" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ezJ-5L-utg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="810" y="115"/>
