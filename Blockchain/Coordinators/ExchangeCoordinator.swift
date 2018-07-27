@@ -27,7 +27,7 @@ class ExchangeCoordinator: NSObject, Coordinator {
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared
-        ) {
+    ) {
         self.walletManager = walletManager
         self.walletService = walletService
         super.init()
