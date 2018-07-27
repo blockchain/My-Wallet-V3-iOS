@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-class ExchangeCoordinator: NSObject, Coordinator {
+@objc class ExchangeCoordinator: NSObject, Coordinator {
 
     private enum ExchangeType: Int {
         case homebrew
@@ -17,6 +17,11 @@ class ExchangeCoordinator: NSObject, Coordinator {
     }
 
     static let shared = ExchangeCoordinator()
+
+    // class function declared so that the ExchangeCoordinator singleton can be accessed from obj-C
+    @objc class func sharedInstance() -> ExchangeCoordinator {
+        return ExchangeCoordinator.shared
+    }
 
     private let walletManager: WalletManager
 
@@ -38,7 +43,7 @@ class ExchangeCoordinator: NSObject, Coordinator {
         disposable = nil
     }
 
-    func start() {
+    @objc func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {

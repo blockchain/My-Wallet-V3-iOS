@@ -11,7 +11,7 @@
 #import "Transaction.h"
 #import "Blockchain-Swift.h"
 
-@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletTransactionDelegate, WalletWatchOnlyDelegate, WalletFiatAtTimeDelegate>
+@interface TabControllerManager () <WalletSettingsDelegate, WalletSendBitcoinDelegate, WalletSendEtherDelegate, WalletExchangeIntermediateDelegate, WalletTransactionDelegate, WalletWatchOnlyDelegate, WalletFiatAtTimeDelegate>
 @end
 @implementation TabControllerManager
 
@@ -32,6 +32,7 @@
     walletManager.settingsDelegate = self;
     walletManager.sendBitcoinDelegate = self;
     walletManager.sendEtherDelegate = self;
+    walletManager.exchangeIntermediateDelegate = self;
     walletManager.transactionDelegate = self;
     walletManager.watchOnlyDelegate = self;
     walletManager.fiatAtTimeDelegate = self;
@@ -810,6 +811,11 @@
 - (void)showHomebrew
 {
     // TODO
+}
+
+- (void)didCreateEthAccountForExchange
+{
+    [ExchangeCoordinator.sharedInstance start];
 }
 
 - (void)showGetAssetsAlert
