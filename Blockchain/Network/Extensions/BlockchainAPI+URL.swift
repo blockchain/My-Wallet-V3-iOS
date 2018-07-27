@@ -47,7 +47,7 @@ extension BlockchainAPI {
         return "\(walletUrl)/pin-store"
     }
 
-    enum Kyc {
+    enum KYC {
         static var countries: String {
             return BlockchainAPI.shared.apiUrl + "/kyc/config/countries"
         }

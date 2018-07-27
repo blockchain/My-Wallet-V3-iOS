@@ -41,7 +41,7 @@ import RxSwift
 
     func isCountryInHomebrewRegion(countryCode: String) -> Single<Bool> {
         return networkManager.requestJsonOrString(
-            BlockchainAPI.Kyc.countries,
+            BlockchainAPI.KYC.countries,
             method: .get
         ).map {
             guard $0.statusCode == 200 else {
