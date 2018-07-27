@@ -33,6 +33,11 @@ class ExchangeCoordinator: NSObject, Coordinator {
         super.init()
     }
 
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
+
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { (isHomebrewAvailable: Bool) in
