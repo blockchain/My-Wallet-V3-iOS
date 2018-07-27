@@ -51,13 +51,13 @@ import JavaScriptCore
 @objc extension ExchangeRate {
     convenience init?(javaScriptValue: JSValue) {
         guard let dictionary = javaScriptValue.toDictionary() else {
-            print("Could not create dictionary from JSValue")
+            Logger.shared.error("Could not create dictionary from JSValue")
             return nil
         }
 
         let convertToDecimalNumber = { (value: Any?) -> NSDecimalNumber? in
             guard let number = value as? NSNumber else {
-                print("Could not create NSNumber from dictionary value")
+                Logger.shared.error("Could not create NSNumber from dictionary value")
                 return nil
             }
             return NSDecimalNumber(decimal: number.decimalValue)
