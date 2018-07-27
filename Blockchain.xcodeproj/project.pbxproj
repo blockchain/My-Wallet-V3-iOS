@@ -376,6 +376,8 @@
 		AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */; };
 		AA722C1920B4BBA900262A5F /* AssetAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */; };
 		AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */; };
+		AA7E7751210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */; };
+		AA7E7752210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */; };
 		AA94965E20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94965F20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */; };
@@ -2026,6 +2028,7 @@
 		AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSettings.swift; sourceTree = "<group>"; };
 		AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwipeAddressDelegate.swift; sourceTree = "<group>"; };
 		AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressRepository.swift; sourceTree = "<group>"; };
+		AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCCoordinator.swift; sourceTree = "<group>"; };
 		AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactory.swift; sourceTree = "<group>"; };
 		AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactoryTests.swift; sourceTree = "<group>"; };
 		AA9B30D020F6D85000A7F809 /* WalletUpgradeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletUpgradeDelegate.swift; sourceTree = "<group>"; };
@@ -2550,6 +2553,7 @@
 				51383548210253A700767B2E /* KYCAccountStatusController.swift */,
 				51383545210253A700767B2E /* KYCAddressController.swift */,
 				51383537210253A700767B2E /* KYCContactDetailsController.swift */,
+				AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */,
 				5138354C210253A700767B2E /* KYCCountrySelectionController.swift */,
 				51383543210253A700767B2E /* KYCOnboardingController.swift */,
 				51383549210253A700767B2E /* KYCOnboardingNavigationController.swift */,
@@ -4252,6 +4256,7 @@
 				AA3CA9B62107F36800C2AD46 /* LogLevel.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
 				AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */,
+				AA7E7752210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
 				5159C2E52109149500955BD6 /* KYCVerifyPhoneNumberController.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
@@ -4503,6 +4508,7 @@
 				23C95EA61C0779C600E4692A /* SettingsChangePasswordViewController.m in Sources */,
 				51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */,
+				AA7E7751210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */,
 				5138375A210264F000767B2E /* BCPriceMarker.swift in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
 				23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */,
