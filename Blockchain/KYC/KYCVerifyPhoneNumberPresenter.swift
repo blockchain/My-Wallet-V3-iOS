@@ -31,6 +31,17 @@ class KYCVerifyPhoneNumberPresenter {
     }
 
     func sendVerificationCode(to number: String) {
-        // TODO
+        // TODO: replace with actual network call
+        NetworkManager.shared.requestJsonOrString(
+            "http://www.mocky.io/v2/5b5ba96c3200006500426247",
+            method: .post
+        ).map {
+            guard $0.statusCode == 200 else {
+                throw NetworkError.generic(message: nil)
+            }
+            guard let json = $1 as? JSON else {
+                throw NetworkError.jsonParseError
+            }
+        }
     }
 }

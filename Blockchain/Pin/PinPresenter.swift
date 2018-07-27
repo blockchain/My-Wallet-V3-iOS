@@ -75,8 +75,8 @@ import RxSwift
                 strongSelf.view.hideLoadingView()
 
                 // Display error message from server, if any
-                if let walletServiceError = error as? WalletServiceError {
-                    if case let WalletServiceError.generic(message) = walletServiceError {
+                if let networkError = error as? NetworkError {
+                    if case let NetworkError.generic(message) = networkError {
                         let errorMessage = message ?? LocalizationConstants.Errors.invalidServerResponse
                         strongSelf.view.error(message: errorMessage)
                         return
