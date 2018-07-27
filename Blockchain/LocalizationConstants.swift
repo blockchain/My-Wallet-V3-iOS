@@ -80,7 +80,7 @@ struct LocalizationConstants {
         static let manualPairingAuthorizationRequiredTitle = NSLocalizedString("Authorization Required", comment: "")
         static let manualPairingAuthorizationRequiredMessage = NSLocalizedString("Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again", comment: "")
         static let secondPasswordRequired = NSLocalizedString("Second Password Required", comment: "")
-        static let etherSecondPasswordPrompt = NSLocalizedString("To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet.", comment: "")
+        static let etherSecondPasswordPrompt = NSLocalizedString("To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet.", comment: "Text shown when a user whose wallet requires a second password needs to create an ether account to proceed")
         static let secondPasswordIncorrect = NSLocalizedString("Second Password Incorrect", comment: "")
         static let secondPasswordDefaultDescription = NSLocalizedString("This action requires the second password for your wallet. Please enter it below and press continue.", comment: "")
         static let privateKeyNeeded = NSLocalizedString("Private Key Needed", comment: "")
@@ -214,7 +214,7 @@ struct LocalizationConstants {
     }
 
     struct Exchange {
-        static let loading = NSLocalizedString("Loading Exchange", comment: "")
+        static let loading = NSLocalizedString("Loading Exchange", comment: "Text presented when the wallet is loading the exchange")
         static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
         static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
         static let confirming = NSLocalizedString("Confirming", comment: "")
