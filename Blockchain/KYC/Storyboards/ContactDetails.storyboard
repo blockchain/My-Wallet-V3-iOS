@@ -96,17 +96,17 @@
                         <outlet property="firstNameField" destination="UTI-kj-FjM" id="JJ3-Id-6sK"/>
                         <outlet property="lastNameField" destination="Shl-NJ-1UV" id="0j4-Ar-Pfg"/>
                         <outlet property="primaryButton" destination="msl-yB-edZ" id="qfq-NJ-xLi"/>
-                        <segue destination="egE-32-RaC" kind="show" identifier="verifyEmailAddress" id="HWb-N9-I76"/>
+                        <segue destination="egE-32-RaC" kind="show" identifier="verifyPhoneNumber" id="HWb-N9-I76"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="06l-L2-akQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="66" y="173"/>
         </scene>
-        <!--VerifyEmailAddress-->
+        <!--KYCVerifyPhoneNumber-->
         <scene sceneID="D8o-S1-zXY">
             <objects>
-                <viewControllerPlaceholder storyboardName="VerifyEmailAddress" id="egE-32-RaC" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="egE-32-RaC" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xT9-5c-ade" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="804" y="120"/>

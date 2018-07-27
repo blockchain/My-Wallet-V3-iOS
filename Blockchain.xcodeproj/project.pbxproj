@@ -383,6 +383,8 @@
 		AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */; };
 		AA7E7751210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */; };
 		AA7E7752210BC0C0009DFB4C /* KYCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */; };
+		AA7E7771210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7770210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift */; };
+		AA7E7772210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E7770210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift */; };
 		AA94965E20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94965F20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */; };
 		AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */; };
@@ -2036,6 +2038,7 @@
 		AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwipeAddressDelegate.swift; sourceTree = "<group>"; };
 		AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressRepository.swift; sourceTree = "<group>"; };
 		AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCCoordinator.swift; sourceTree = "<group>"; };
+		AA7E7770210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCVerifyPhoneNumberPresenter.swift; sourceTree = "<group>"; };
 		AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactory.swift; sourceTree = "<group>"; };
 		AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactoryTests.swift; sourceTree = "<group>"; };
 		AA9B30D020F6D85000A7F809 /* WalletUpgradeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletUpgradeDelegate.swift; sourceTree = "<group>"; };
@@ -2568,6 +2571,7 @@
 				51383542210253A700767B2E /* KYCPersonalDetailsController.swift */,
 				51383544210253A700767B2E /* KYCVerifyAccountController.swift */,
 				51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */,
+				AA7E7770210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift */,
 				51383546210253A700767B2E /* KYCWelcomeController.swift */,
 				51979122210A25470096E50B /* Models */,
 				51383538210253A700767B2E /* Storyboards */,
@@ -4328,6 +4332,7 @@
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
+				AA7E7772210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
@@ -4735,6 +4740,7 @@
 				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				AADB027E20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */,
 				2390C10B1D87376E00342C38 /* TransactionRecipientsViewController.m in Sources */,
+				AA7E7771210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
 				C7618B611F66C817003E7589 /* QRCodeScannerSendViewController.m in Sources */,
 				AA63F87420A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
 				AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,

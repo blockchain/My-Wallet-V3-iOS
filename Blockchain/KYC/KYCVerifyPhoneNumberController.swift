@@ -14,12 +14,21 @@ final class KYCVerifyPhoneNumberController: UIViewController, KYCOnboardingNavig
 
     var segueIdentifier: String? = "promptForAddress"
 
+    @IBOutlet var textFieldMobileNumber: UITextField!
     @IBOutlet var primaryButton: PrimaryButton!
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textFieldMobileNumber.becomeFirstResponder()
+    }
 
     // MARK: - Actions
 
+    @IBAction func textFieldDidChange(_ sender: UITextField) {
+    }
+
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        self.performSegue(withIdentifier: segueIdentifier!, sender: self)
+//        self.performSegue(withIdentifier: segueIdentifier!, sender: self)
     }
 
     // MARK: - Navigation
