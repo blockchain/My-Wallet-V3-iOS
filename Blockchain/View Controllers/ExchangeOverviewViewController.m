@@ -44,6 +44,7 @@
     NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
     
     if (availableStates.count > 0) {
+        [[LoadingViewPresenter sharedInstance] hideBusyView];
         [self showStates:availableStates];
     } else {
         [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingExchange]];
