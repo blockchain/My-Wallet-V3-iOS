@@ -54,9 +54,11 @@ class ExchangeCoordinator: NSObject, Coordinator {
             checkForHomebrewAvailability(success: success, error: error)
         } else {
             if WalletManager.shared.wallet.needsSecondPassword() {
-                AuthenticationCoordinator.shared.showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
-                 headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                 validateSecondPassword: true) { (secondPassword) in
+                AuthenticationCoordinator.shared.showPasswordConfirm(
+                    withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
+                    headerText: LocalizationConstants.Authentication.secondPasswordRequired,
+                    validateSecondPassword: true
+                ) { (secondPassword) in
                     WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
                 }
             } else {
