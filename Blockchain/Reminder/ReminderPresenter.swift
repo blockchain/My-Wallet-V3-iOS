@@ -95,7 +95,7 @@ import Foundation
 
     func checkIfSettingsLoadedAndShowTwoFactorReminder() {
         guard !walletManager.wallet.hasEnabledTwoStep() else {
-            print("Two factor already enabled, no need to show a reminder.")
+            Logger.shared.info("Two factor already enabled, no need to show a reminder.")
             return
         }
 

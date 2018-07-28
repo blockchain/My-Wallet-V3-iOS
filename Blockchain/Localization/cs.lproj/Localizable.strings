@@ -1809,7 +1809,7 @@
 "Log in to Web Wallet" = "Přihlásit se na webovou peněženku";
 
 /* (No Commment) */
-"Go to blockchain.info/wallet/login on your computer." = "Přejděte na svém počítači na blockchain.info/wallet/login.";
+"Go to login.blockchain.com on your computer." = "Přejděte na svém počítači na login.blockchain.com.";
 
 /* (No Commment) */
 "Select Log in via mobile." = "Vyberte přes mobilní zařízení protokol.";
@@ -2439,7 +2439,7 @@
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Spolupracujeme s výměnou partnerů po celém světě, takže si můžete koupit a prodat bitcoin přímo z vaší peněženky.";
 
 /* (No Commment) */
-"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "Mobilní Nákup A Prodej je podporován pro iOS 9 a nahoru. Spusťte aktualizaci softwaru, nebo se přihlásit na blockchain.info/wallet/login na vašem počítači.";
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Mobilní Nákup A Prodej je podporován pro iOS 9 a nahoru. Spusťte aktualizaci softwaru, nebo se přihlásit na login.blockchain.com na vašem počítači.";
 
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Koupit a prodat bitcoin přímo z vašeho Blockchain peněženky. Začněte tím, že vytvoří účet na Nákup A Prodej tab.";

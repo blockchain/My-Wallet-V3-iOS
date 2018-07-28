@@ -54,7 +54,7 @@ class JSContextWithDOM: JSContext {
 
         consoleNames.forEach { name in
             let consoleLog: @convention(block) (String) -> Void = { message in
-                print("Javascript \(name): \(message)")
+                Logger.shared.debug("Javascript \(name): \(message)")
             }
             self.objectForKeyedSubscript("console").setObject(consoleLog, forKeyedSubscript: name as NSString)
         }
@@ -63,24 +63,24 @@ class JSContextWithDOM: JSContext {
     private func setupExceptionHandler() {
         self.exceptionHandler = { context, exception in
             guard let exception = exception else {
-                print("Exception handler error: could not get exception")
+                Logger.shared.error("Exception handler error: could not get exception")
                 return
             }
             guard let message = exception.toString() else {
-                print("Exception handler error: could not get message")
+                Logger.shared.error("Exception handler error: could not get message")
                 return
             }
             guard let stackTrace = exception.objectForKeyedSubscript("stack").toString() else {
-                print("Exception handler error: could not get stack trace")
-                print("Message: \(message)")
+                Logger.shared.error("Exception handler error: could not get stack trace")
+                Logger.shared.error("Message: \(message)")
                 return
             }
             guard let lineNumber = exception.objectForKeyedSubscript("line").toString() else {
-                print("Exception handler error: could not get line number")
-                print("Message: \(message) \nstack:\(stackTrace)")
+                Logger.shared.error("Exception handler error: could not get line number")
+                Logger.shared.error("Message: \(message) \nstack:\(stackTrace)")
                 return
             }
-            print("\(message) \nstack: \(stackTrace)\nline number: \(lineNumber)")
+            Logger.shared.error("\(message) \nstack: \(stackTrace)\nline number: \(lineNumber)")
         }
     }
 

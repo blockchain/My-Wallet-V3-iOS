@@ -1734,7 +1734,7 @@
 "Log in to Web Wallet" = "Kirjaudu sisään Web-Lompakko";
 
 /* (No Commment) */
-"Go to blockchain.info/wallet/login on your computer." = "Mene blockchain.info/wallet/login teidän tietokone.";
+"Go to login.blockchain.com on your computer." = "Mene login.blockchain.com teidän tietokone.";
 
 /* (No Commment) */
 "Select Log in via mobile." = "Valitse Kirjaudu sisään kautta mobiili.";
@@ -2103,7 +2103,7 @@
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Työskentelemme vaihto kumppaneita ympäri maailmaa, joten voit ostaa ja myydä bitcoin suoraan lompakon.";
 
 /* (No Commment) */
-"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "Mobile Ostaa Ja Myydä on tuettu iOS 9 ja ylös. Suorita ohjelmiston päivitys tai kirjautuminen klo blockchain.info/wallet/login teidän tietokone.";
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Mobile Ostaa Ja Myydä on tuettu iOS 9 ja ylös. Suorita ohjelmiston päivitys tai kirjautuminen klo login.blockchain.com teidän tietokone.";
 
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Ostaa ja myydä bitcoin suoraan Blockchain lompakko. Aloita luomalla tilin Ostaa Ja Myydä-välilehti.";

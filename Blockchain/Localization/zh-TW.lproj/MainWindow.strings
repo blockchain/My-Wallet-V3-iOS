@@ -23,7 +23,7 @@
 "360.text" = "1";
 
 /* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
-"361.text" = "登錄到您通過您的 PC 或 Mac 的 Blockchain Wallet 在 HTTPs://blockchain.info/wallet/login";
+"361.text" = "登錄到您通過您的 PC 或 Mac 的 Blockchain Wallet 在 HTTPs://login.blockchain.com";
 
 /* Class = "UILabel"; text = "2"; ObjectID = "363"; */
 "363.text" = "2";

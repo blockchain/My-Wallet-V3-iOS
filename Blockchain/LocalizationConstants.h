@@ -551,10 +551,10 @@
 #define BC_STRING_CUSTOM_FEE_WARNING NSLocalizedString(@"This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck.", nil)
 
 #define BC_STRING_AVAILABLE_NOW_TITLE NSLocalizedString(@"Available now", nil)
-#define BC_STRING_BUY_SELL_NOT_SUPPORTED_IOS_8_WEB_LOGIN NSLocalizedString(@"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer.", nil)
+#define BC_STRING_BUY_SELL_NOT_SUPPORTED_IOS_8_WEB_LOGIN NSLocalizedString(@"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer.", nil)
 
 #define BC_STRING_LOG_IN_TO_WEB_WALLET NSLocalizedString(@"Log in to Web Wallet", nil)
-#define BC_STRING_WEB_LOGIN_INSTRUCTION_STEP_ONE NSLocalizedString(@"Go to blockchain.info/wallet/login on your computer.", nil)
+#define BC_STRING_WEB_LOGIN_INSTRUCTION_STEP_ONE NSLocalizedString(@"Go to login.blockchain.com on your computer.", nil)
 #define BC_STRING_WEB_LOGIN_INSTRUCTION_STEP_TWO NSLocalizedString(@"Select Log in via mobile.", nil)
 #define BC_STRING_WEB_LOGIN_INSTRUCTION_STEP_THREE NSLocalizedString(@"Using your computer's camera, scan the QR code below.", nil)
 #define BC_STRING_WEB_LOGIN_QR_INSTRUCTION_LABEL_HIDDEN NSLocalizedString(@"Keep this QR code hidden until you're ready.", nil)

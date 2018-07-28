@@ -1734,7 +1734,7 @@
 "Log in to Web Wallet" = "Đăng nhập Ví trên Web";
 
 /* (No Commment) */
-"Go to blockchain.info/wallet/login on your computer." = "Truy cập blockchain.info/wallet/login trên máy tính của bạn.";
+"Go to login.blockchain.com on your computer." = "Truy cập login.blockchain.com trên máy tính của bạn.";
 
 /* (No Commment) */
 "Select Log in via mobile." = "Chọn Đăng nhập bằng di động.";
@@ -2103,7 +2103,7 @@
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Chúng tôi làm việc trao đổi với các đối tác, tất cả các nơi trên thế giới, do đó bạn có thể mua cho tiền trực tiếp từ ví của bạn.";
 
 /* (No Commment) */
-"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "Điện thoại di động Mua Và Bán được hỗ trợ cho trên windows 9 và lên. Xin vui lòng chạy một phần hoặc nhập vào blockchain.info/wallet/login trên máy tính.";
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Điện thoại di động Mua Và Bán được hỗ trợ cho trên windows 9 và lên. Xin vui lòng chạy một phần hoặc nhập vào login.blockchain.com trên máy tính.";
 
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Mua cho tiền trực tiếp từ Tiểu ví. Bắt đầu bằng cách tạo ra một tài khoản ở đảo Mua Và Bán tab.";

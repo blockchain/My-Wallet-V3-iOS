@@ -7,7 +7,7 @@ echo "Cleaning..."
 rm -rf build dist
 
 echo "Resetting index.js..."
-git co -- src/index.js
+git checkout -- src/index.js
 
 echo "Injecting navigator and global.crypto into index.js..."
 buffer='var Buffer = require('"'"'buffer'"'"').Buffer;'

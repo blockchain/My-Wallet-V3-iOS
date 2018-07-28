@@ -12,8 +12,7 @@ import Foundation
 internal enum WalletServiceError: Error {
     /// Error parsing a JSON response from the server
     case jsonParseError
-    
+
     /// A generic error with an optional error message
-    // swiftlint:disable next identifier_name
     case generic(message: String?)
 }

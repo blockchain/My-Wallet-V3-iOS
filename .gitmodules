@@ -1,21 +1,28 @@
 [submodule "Submodules/My-Wallet-V3"]
 	path = Submodules/My-Wallet-V3
 	url = git@github.com:blockchain/My-Wallet-V3.git
+	ignore = dirty
 [submodule "Submodules/OpenSSL-for-iPhone"]
 	path = Submodules/OpenSSL-for-iPhone
 	url = git@github.com:x2on/OpenSSL-for-iPhone.git
+	ignore = dirty
 [submodule "Submodules/SocketRocket"]
 	path = Submodules/SocketRocket
 	url = git@github.com:blockchain/SocketRocket.git
+	ignore = dirty
 [submodule "Submodules/CoreBitcoin"]
 	path = Submodules/CoreBitcoin
 	url = git@github.com:oleganza/CoreBitcoin.git
+	ignore = dirty
 [submodule "Submodules/Charts"]
 	path = Submodules/Charts
 	url = https://github.com/danielgindi/Charts
+	ignore = dirty
 [submodule "Submodules/Alamofire"]
 	path = Submodules/Alamofire
 	url = https://github.com/Alamofire/Alamofire.git
+	ignore = dirty
 [submodule "Submodules/RxSwift"]
 	path = Submodules/RxSwift
 	url = git@github.com:ReactiveX/RxSwift.git
+	ignore = dirty

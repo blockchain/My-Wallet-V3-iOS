@@ -26,7 +26,7 @@
 "360.text" = "1";
 
 /* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
-"361.text" = "अपने पीसी या मैक के जरिए अपने Blockchain बटुए में, https://blockchain.info/wallet/login में प्रवेश करें";
+"361.text" = "अपने पीसी या मैक के जरिए अपने Blockchain बटुए में, https://login.blockchain.com में प्रवेश करें";
 
 /* Class = "UILabel"; text = "2"; ObjectID = "363"; */
 "363.text" = "2";

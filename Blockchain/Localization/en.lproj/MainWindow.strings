@@ -14,8 +14,8 @@
 /* Class = "IBUILabel"; text = "1"; ObjectID = "360"; */
 "360.text" = "1";
 
-/* Class = "IBUITextView"; text = "Login to your Blockchain Wallet via your PC or Mac at https://blockchain.info/wallet/login"; ObjectID = "361"; */
-"361.text" = "Log in to your Blockchain Wallet via your PC or Mac at\nhttps://blockchain.info/wallet/login";
+/* Class = "IBUITextView"; text = "Login to your Blockchain Wallet via your PC or Mac at https://login.blockchain.com"; ObjectID = "361"; */
+"361.text" = "Log in to your Blockchain Wallet via your PC or Mac at\nlogin.blockchain.com";
 
 /* Class = "IBUILabel"; text = "2"; ObjectID = "363"; */
 "363.text" = "2";

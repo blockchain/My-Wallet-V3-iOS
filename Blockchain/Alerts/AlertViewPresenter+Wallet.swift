@@ -16,7 +16,7 @@ extension AlertViewPresenter {
     /// - Parameter walletOptions: the WalletOptions
     func showMaintenanceError(from walletOptions: WalletOptions) {
         guard walletOptions.downForMaintenance else {
-            print("Not showing site maintenance alert. WalletOptions `downForMaintenance` flag is not set.")
+            Logger.shared.info("Not showing site maintenance alert. WalletOptions `downForMaintenance` flag is not set.")
             return
         }
         let message = walletOptions.mobileInfo?.message ?? LocalizationConstants.Errors.siteMaintenanceError

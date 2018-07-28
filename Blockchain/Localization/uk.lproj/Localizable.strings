@@ -1759,7 +1759,7 @@
 "Log in to Web Wallet" = "Вхід у веб-гаманець";
 
 /* (No Commment) */
-"Go to blockchain.info/wallet/login on your computer." = "Перейдіть на blockchain.info/wallet/login на своєму комп'ютері.";
+"Go to login.blockchain.com on your computer." = "Перейдіть на login.blockchain.com на своєму комп'ютері.";
 
 /* (No Commment) */
 "Select Log in via mobile." = "Виберіть увійти через мобільний пристрій.";
@@ -2128,7 +2128,7 @@
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Ми працюємо з діловими партнерами по всьому світу, так що ви можете купити і продати bitcoin безпосередньо з Вашого гаманця.";
 
 /* (No Commment) */
-"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "Мобільний Купити і продати підтримується на iOS 9 і вище. Будь ласка, виконайте оновлення програмного забезпечення або увійдіть на blockchain.info/wallet/login на вашому комп'ютері.";
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Мобільний Купити і продати підтримується на iOS 9 і вище. Будь ласка, виконайте оновлення програмного забезпечення або увійдіть на login.blockchain.com на вашому комп'ютері.";
 
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Купувати і продавати біткойни прямо зі свого гаманця blockchain. Почніть зі створення облікового запису в розділі Купити і продати.";

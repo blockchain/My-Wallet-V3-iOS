@@ -1759,7 +1759,7 @@
 "Log in to Web Wallet" = "Web Cüzdanında Oturum Açmak";
 
 /* (No Commment) */
-"Go to blockchain.info/wallet/login on your computer." = "Bilgisayarınızda blockchain.info/wallet/login adresine gidin.";
+"Go to login.blockchain.com on your computer." = "Bilgisayarınızda login.blockchain.com adresine gidin.";
 
 /* (No Commment) */
 "Select Log in via mobile." = "Bir mobil cihazla oturum açmayı seçin.";
@@ -2128,7 +2128,7 @@
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Exchange ortakları ile çalışıyoruz tüm dünyada, doğrudan cüzdanından bitcoin satın almak ve satmak.";
 
 /* (No Commment) */
-"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at blockchain.info/wallet/login on your computer." = "Mobil Satın almak Ve Satmak, 9 ve iOS için desteklenir. Bilgisayarınızda blockchain.info/wallet/login yazılım güncellemesi veya giriş çalıştırın.";
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Mobil Satın almak Ve Satmak, 9 ve iOS için desteklenir. Bilgisayarınızda login.blockchain.com yazılım güncellemesi veya giriş çalıştırın.";
 
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Doğrudan Blockchain cüzdanından bitcoin satın almak ve satmak. Satın almak Ve Satmak sekmesinde bir hesap oluşturarak başlayın.";
