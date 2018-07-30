@@ -70,7 +70,6 @@
 - (void)setupQRCode;
 - (void)reset;
 - (void)goToEnter1Pin;
-- (void)goToEnter2Pin:(Pin *_Nonnull)pin1;
 
 + (PEViewController *_Nonnull)newController;
 + (PEPinEntryController *)pinVerifyController;
