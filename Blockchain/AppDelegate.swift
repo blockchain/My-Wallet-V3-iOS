@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
+
         BlockchainSettings.App.shared.appBecameActiveCount += 1
         // MARK: - Global Appearance
         //: Status Bar
@@ -86,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        print("applicationWillResignActive")
+        Logger.shared.debug("applicationWillResignActive")
         if !AuthenticationCoordinator.shared.isPromptingForBiometricAuthentication {
             showPrivacyScreen()
         }
@@ -96,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        print("applicationDidEnterBackground")
+        Logger.shared.debug("applicationDidEnterBackground")
 
         // Wallet-related background actions
 
@@ -141,12 +142,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         NetworkManager.shared.session.reset {
-            print("URLSession reset completed.")
+            Logger.shared.debug("URLSession reset completed.")
         }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        print("applicationWillEnterForeground")
+        Logger.shared.debug("applicationWillEnterForeground")
 
         BlockchainSettings.App.shared.appBecameActiveCount += 1
 
@@ -162,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("applicationDidBecomeActive")
+        Logger.shared.debug("applicationDidBecomeActive")
         hidePrivacyScreen()
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
@@ -235,7 +236,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         guard !onboardingSettings.firstRun else {
-            print("This is not the 1st time the user is running the app.")
+            Logger.shared.info("This is not the 1st time the user is running the app.")
             return
         }
 

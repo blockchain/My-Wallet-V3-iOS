@@ -246,7 +246,7 @@ import RxSwift
         alert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel))
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { [unowned self] _ in
-                print("Forgetting wallet")
+                Logger.shared.info("Forgetting wallet")
                 ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
                 self.walletManager.forgetWallet()
                 OnboardingCoordinator.shared.start()
@@ -570,7 +570,7 @@ extension AuthenticationCoordinator: ManualPairViewDelegate {
         case .sms:
             view.verifyTwoFactorSMS()
         default:
-            print("Unhandled 2FA type: \(twoFactorAuthType)")
+            Logger.shared.error("Unhandled 2FA type: \(twoFactorAuthType)")
         }
     }
 }

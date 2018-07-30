@@ -35,7 +35,7 @@ import Foundation
     @objc func hideBusyView() {
 
         guard self.isLoadingShown else {
-            print("[LoadingViewPresenter]: Cannot hide busy view, already not shown.")
+            Logger.shared.info("Cannot hide busy view, already not shown.")
             return
         }
 
@@ -50,14 +50,14 @@ import Foundation
     @objc func showBusyView(withLoadingText text: String) {
 
         if AppCoordinator.shared.tabControllerManager.isSending() && ModalPresenter.shared.modalView != nil {
-            print("Send progress modal is presented - will not show busy view")
+            Logger.shared.info("Send progress modal is presented - will not show busy view")
             return
         }
 
         self.busyView.labelBusy.text = text
 
         guard !self.isLoadingShown else {
-            print("[LoadingViewPresenter]: cannot show busy view already shown.")
+            Logger.shared.info("Cannot show busy view already shown.")
             return
         }
 
@@ -75,7 +75,7 @@ import Foundation
         }
 
         guard self.isLoadingShown else {
-            print("[LoadingViewPresenter]: Cannot update busy view with text: '\(text)', busy view should be shown.")
+            Logger.shared.info("Cannot update busy view with text: '\(text)', busy view should be shown.")
             return
         }
 
@@ -84,7 +84,7 @@ import Foundation
 
     private func attachToMainWindow() {
         guard !isLoadingShown else {
-            print("Loading view already attached.")
+            Logger.shared.info("Loading view already attached.")
             return
         }
 
