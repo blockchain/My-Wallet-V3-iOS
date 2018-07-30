@@ -803,7 +803,7 @@
 
 - (void)didCreateEthAccountForExchange
 {
-    [ExchangeCoordinator.sharedInstance start];
+    [ExchangeCoordinator.sharedInstance startWithRootViewController:self];
 }
 
 - (void)showGetAssetsAlert

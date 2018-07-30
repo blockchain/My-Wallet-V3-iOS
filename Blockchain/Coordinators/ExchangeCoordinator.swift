@@ -30,6 +30,7 @@ import RxSwift
     private var disposable: Disposable?
 
     private var exchangeViewController: ExchangeOverviewViewController?
+    private var rootViewController: UIViewController?
 
     private init(
         walletManager: WalletManager = WalletManager.shared,
@@ -45,7 +46,7 @@ import RxSwift
         disposable = nil
     }
 
-    @objc func start() {
+    func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
@@ -105,11 +106,23 @@ import RxSwift
                 print("Could not create navigation controller")
                 return
             }
-            AppCoordinator.shared.tabControllerManager.present(navigationController, animated: true)
+            guard let viewController = rootViewController else {
+                // TODO - use Logger.shared.error
+                print("View controller to present on is nil")
+                return
+            }
+            viewController.present(navigationController, animated: true)
         }
     }
+}
 
-    @objc func reloadSymbols() {
+@objc extension ExchangeCoordinator {
+    func start(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+        start()
+    }
+
+    func reloadSymbols() {
         exchangeViewController?.reloadSymbols()
     }
 }

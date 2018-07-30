@@ -336,7 +336,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     }
 
     private func handleExchange() {
-        ExchangeCoordinator.shared.start()
+        ExchangeCoordinator.shared.start(rootViewController: self.tabControllerManager)
     }
 }
 
