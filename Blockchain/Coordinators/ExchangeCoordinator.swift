@@ -56,8 +56,7 @@ import RxSwift
                 }
             }
             let error = { (error: Error) in
-                // TODO - use Logger.shared.error
-                print("Error checking if homebrew is available: \(error) - showing shapeshift")
+                Logger.shared.error("Error checking if homebrew is available: \(error) - showing shapeshift")
                 self.showExchange(type: .shapeshift)
             }
             checkForHomebrewAvailability(success: success, error: error)
@@ -94,21 +93,18 @@ import RxSwift
     private func showExchange(type: ExchangeType) {
         switch type {
         case .homebrew:
-            // TODO - use Logger.shared.info
-            print("Not implemented yet")
+            Logger.shared.info("Not implemented yet")
         default:
             exchangeViewController = ExchangeOverviewViewController()
             guard let navigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             ) else {
-                // TODO - use Logger.shared.error
-                print("Could not create navigation controller")
+                Logger.shared.error("Could not create navigation controller")
                 return
             }
             guard let viewController = rootViewController else {
-                // TODO - use Logger.shared.error
-                print("View controller to present on is nil")
+                Logger.shared.error("View controller to present on is nil")
                 return
             }
             viewController.present(navigationController, animated: true)
