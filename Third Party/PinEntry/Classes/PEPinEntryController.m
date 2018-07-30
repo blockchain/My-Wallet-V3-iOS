@@ -300,6 +300,16 @@ static PEViewController *VerifyController()
     self.viewControllers = [NSArray arrayWithObject:c];
 }
 
+- (void)goToEnter2Pin:(Pin *_Nonnull)pin1
+{
+    pinEntry1 = pin1;
+    PEViewController *c = VerifyController();
+    c.delegate = self;
+    [[self navigationController] pushViewController:c animated:NO];
+    self.viewControllers = [NSArray arrayWithObject:c];
+    pinStage = PS_ENTER2;
+}
+
 - (void)errorAndResetWithMessage:(NSString *)errorMessage
 {
     __weak PEPinEntryController *weakSelf = self;
