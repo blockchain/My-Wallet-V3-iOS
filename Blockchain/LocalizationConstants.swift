@@ -323,6 +323,13 @@ struct LocalizationConstants {
             comment: "The title for the secondary prompt action."
         )
     }
+
+    struct KYC {
+        static let countrySelectionTitle = NSLocalizedString(
+            "Select Your Country",
+            comment: "The title of the navigation item in the country selection screen."
+        )
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this

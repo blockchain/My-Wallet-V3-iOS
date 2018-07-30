@@ -25,10 +25,7 @@ final class KYCCountrySelectionController: UIViewController, KYCOnboardingNaviga
     override func viewDidLoad() {
         super.viewDidLoad()
         countryPicker.dataSource = KYCCountrySelectionDataSource.dataSource
-        navigationItem.title = NSLocalizedString(
-            "Select Your Country",
-            comment: "The title of the navigation item in the country selection screen."
-        )
+        navigationItem.title = LocalizationConstants.KYC.countrySelectionTitle
     }
 
     // MARK: - Actions
