@@ -34,6 +34,6 @@ final class KYCWelcomeController: KYCOnboardingController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TODO: implement method body
+        // let countrySelectionVC = segue.destination as? KYCCountrySelectionController
     }
 }

@@ -26,7 +26,6 @@
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mgd-IY-ekq">
                                 <rect key="frame" x="0.0" y="237" width="375" height="216"/>
                                 <connections>
-                                    <outlet property="dataSource" destination="HFD-oV-Usp" id="BBR-1t-II0"/>
                                     <outlet property="delegate" destination="HFD-oV-Usp" id="bmq-tA-djM"/>
                                 </connections>
                             </pickerView>
