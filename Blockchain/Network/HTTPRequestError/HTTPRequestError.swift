@@ -28,6 +28,7 @@ enum HTTPURLResponseError: HTTPRequestError {
     }
 }
 
+// TODO: use protocol extension to add KYC specific error codes 💭
 enum HTTPRequestPayloadError: HTTPRequestError {
     case badData, emptyData, invalidMimeType(type: String)
     var debugDescription: String {
