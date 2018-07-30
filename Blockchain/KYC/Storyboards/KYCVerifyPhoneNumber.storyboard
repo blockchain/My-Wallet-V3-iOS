@@ -45,9 +45,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="continue" textContentType="tel"/>
-                                <connections>
-                                    <action selector="textFieldDidChange:" destination="7WR-uN-K1i" eventType="editingChanged" id="Jhe-Y8-JXD"/>
-                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lXd-eX-J03" userLabel="Description Label">
                                 <rect key="frame" x="16" y="504.33333333333343" width="343" height="50.666666666666686"/>

@@ -12,7 +12,9 @@ import RxSwift
 protocol KYCVerifyPhoneNumberView: class {
     func showLoadingView(with text: String)
 
-    func showEnterVerificationCodeAlert()
+    func showEnterVerificationCodeView()
+
+    func showError(message: String)
 
     func hideLoadingView()
 }
@@ -28,20 +30,50 @@ class KYCVerifyPhoneNumberPresenter {
 
     deinit {
         disposable?.dispose()
+        disposable = nil
     }
 
-    func sendVerificationCode(to number: String) {
-        // TODO: replace with actual network call
-        NetworkManager.shared.requestJsonOrString(
-            "http://www.mocky.io/v2/5b5ba96c3200006500426247",
-            method: .post
-        ).map {
-            guard $0.statusCode == 200 else {
+    func verify(number: String, userId: String) {
+        view?.showLoadingView(with: LocalizationConstants.loading)
+        disposable = sendVerificationCode(to: number, for: userId)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] _ in
+                self?.handleSendVerificationCodeSuccess()
+            }, onError: { [weak self] error in
+                self?.handleSendVerificationCodeError(error)
+            })
+    }
+
+    // MARK: - Private
+
+    private func handleSendVerificationCodeSuccess() {
+        view?.hideLoadingView()
+        view?.showEnterVerificationCodeView()
+    }
+
+    private func handleSendVerificationCodeError(_ error: Error) {
+        Logger.shared.error("Could not complete mobile verification. Error: \(error)")
+        view?.hideLoadingView()
+        view?.showError(message: LocalizationConstants.KYC.failedToConfirmNumber)
+    }
+
+    private func sendVerificationCode(to number: String, for userId: String) -> Single<Bool> {
+        // TODO: Consolidate with Maurice's networking
+        // Note: PATCH /users/{userId} endpoint is still in development
+        let endPoint = "https://api.dev.blockchain.info/nabu-app/users/\(userId)"
+        let parameters = [
+            "mobile": number
+        ]
+        return NetworkManager.shared.requestJsonOrString(
+            endPoint,
+            method: .patch,
+            parameters: parameters
+        ).map { (response, _) in
+            guard response.statusCode == 200 else {
                 throw NetworkError.generic(message: nil)
             }
-            guard let json = $1 as? JSON else {
-                throw NetworkError.jsonParseError
-            }
+            return true
         }
     }
 }
