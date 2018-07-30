@@ -43,3 +43,11 @@
 #import "WalletSetupViewController.h"
 #import "WebLoginViewController.h"
 #import "BCInsetLabel.h"
+
+
+// Settings
+#import "SettingsWebViewController.h"
+#import "KeychainItemWrapper+SwipeAddresses.h"
+#import "BCVerifyEmailViewController.h"
+#import "BCVerifyMobileNumberViewController.h"
+#import "SettingsSelectorTableViewController.h"

@@ -31,7 +31,6 @@
 		2322DCC21D771831000E5AC1 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA81D771831000E5AC1 /* SRURLUtilities.m */; };
 		2322DCC31D771831000E5AC1 /* NSRunLoop+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCAA1D771831000E5AC1 /* NSRunLoop+SRWebSocket.m */; };
 		2322DCC41D771831000E5AC1 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCAC1D771831000E5AC1 /* NSURLRequest+SRWebSocket.m */; };
-		2322DCC51D771831000E5AC1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2322DCAE1D771831000E5AC1 /* Info.plist */; };
 		2322DCC61D771831000E5AC1 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCB11D771831000E5AC1 /* SRSecurityPolicy.m */; };
 		2322DCC71D771831000E5AC1 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCB31D771831000E5AC1 /* SRWebSocket.m */; };
 		23256A591DF1CFF7002B7A04 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 23256A581DF1CFF7002B7A04 /* Invitation.m */; };
@@ -58,7 +57,6 @@
 		2390C10B1D87376E00342C38 /* TransactionRecipientsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2390C10A1D87376E00342C38 /* TransactionRecipientsViewController.m */; };
 		239539831B486C7100989667 /* UILabel+MultiLineAutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 239539821B486C7100989667 /* UILabel+MultiLineAutoSize.m */; };
 		23964C031DCA3F19001323BE /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 23964C021DCA3F19001323BE /* KeyPair.m */; };
-		239CD5681C122BDE00997DF5 /* SettingsTwoStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239CD5671C122BDE00997DF5 /* SettingsTwoStepViewController.m */; };
 		23B731D31E01AC1100129770 /* ReminderModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B731D21E01AC1100129770 /* ReminderModalViewController.m */; };
 		23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 23BA220D1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m */; };
 		23BA22111D6B736900D0472B /* NSNumberFormatter+Currencies.m in Sources */ = {isa = PBXBuildFile; fileRef = 23BA22101D6B736900D0472B /* NSNumberFormatter+Currencies.m */; };
@@ -72,9 +70,7 @@
 		23DF4EFC1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 23DF4EFB1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m */; };
 		23E2FC081C7F60E7004CFF79 /* BCInsetLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2FC071C7F60E7004CFF79 /* BCInsetLabel.m */; };
 		23E579541DB45F3A00220542 /* TransferAmountTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E579531DB45F3A00220542 /* TransferAmountTableCell.m */; };
-		23EA61C51B54258D0032B907 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA61C41B54258D0032B907 /* SettingsTableViewController.m */; };
 		23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA61C71B54282D0032B907 /* SettingsNavigationController.m */; };
-		23EA61CB1B5591260032B907 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA61CA1B5591260032B907 /* SettingsSelectorTableViewController.m */; };
 		23F601A41D09C931009102BF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F601A31D09C931009102BF /* Reachability.m */; };
 		23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F720F11C32DC0A00577738 /* DebugTableViewController.m */; };
 		23F8DE531DAEB11C001899AE /* BCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F8DE521DAEB11C001899AE /* BCNavigationController.m */; };
@@ -254,6 +250,20 @@
 		51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DC2F5F20B7312600E03AF2 /* EthereumAddress.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
+		603582A420EBD1180077AFFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603582A320EBD1180077AFFB /* SettingsViewController.swift */; };
+		603582A620EBFB110077AFFB /* ToggleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 603582A520EBFB110077AFFB /* ToggleCell.xib */; };
+		6055D36D210F6801000B8E95 /* Settings+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D36B210F6800000B8E95 /* Settings+Helpers.swift */; };
+		6055D36E210F6801000B8E95 /* Settings+Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D36C210F6801000B8E95 /* Settings+Table.swift */; };
+		6055D370210F689C000B8E95 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D36F210F689C000B8E95 /* Currency.swift */; };
+		6055D372210F692D000B8E95 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D371210F692D000B8E95 /* UIView.swift */; };
+		6055D392210F6D7B000B8E95 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6055D391210F6D7A000B8E95 /* SettingsSelectorTableViewController.m */; };
+		605A900F20F3AFCE008F5E1A /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A900E20F3AFCE008F5E1A /* SettingsTwoStepVC.swift */; };
+		605A901320F3BCA6008F5E1A /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A901220F3BCA6008F5E1A /* SettingsCell.swift */; };
+		605A901520F3BD0D008F5E1A /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A901420F3BD0D008F5E1A /* SettingsProtocols.swift */; };
+		60EA8905210A06AC009021F2 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A901220F3BCA6008F5E1A /* SettingsCell.swift */; };
+		60EA8920210A06AF009021F2 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A901420F3BD0D008F5E1A /* SettingsProtocols.swift */; };
+		60EA8923210A06B7009021F2 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A900E20F3AFCE008F5E1A /* SettingsTwoStepVC.swift */; };
+		60EA8924210A06BA009021F2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603582A320EBD1180077AFFB /* SettingsViewController.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -797,48 +807,6 @@
 			remoteGlobalIDString = C88FA52E1C25C4C000CCFEA4;
 			remoteInfo = "RxTest-tvOS";
 		};
-		51D0676721065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88FA53F1C25C4CC00CCFEA4;
-			remoteInfo = "RxTest-watchOS";
-		};
-		51D0676921065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83508C31C386F6F0027C24C;
-			remoteInfo = "AllTests-iOS";
-		};
-		51D0676B21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83509841C38740E0027C24C;
-			remoteInfo = "AllTests-tvOS";
-		};
-		51D0676D21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83509941C38742C0027C24C;
-			remoteInfo = "AllTests-macOS";
-		};
-		51D0676F21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C85BA04B1C3878740075D68E;
-			remoteInfo = Microoptimizations;
-		};
-		51D0677121065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8E8BA551E2C181A00A4AC2C;
-			remoteInfo = Benchmarks;
-		};
 		51D0677521065F5200EFEF7F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
@@ -873,6 +841,48 @@
 			proxyType = 1;
 			remoteGlobalIDString = C8093B4B1B8A71F00088E94D;
 			remoteInfo = "RxBlocking-iOS";
+		};
+		6008FDFA210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C88FA53F1C25C4CC00CCFEA4;
+			remoteInfo = "RxTest-watchOS";
+		};
+		6008FDFC210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83508C31C386F6F0027C24C;
+			remoteInfo = "AllTests-iOS";
+		};
+		6008FDFE210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83509841C38740E0027C24C;
+			remoteInfo = "AllTests-tvOS";
+		};
+		6008FE00210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C83509941C38742C0027C24C;
+			remoteInfo = "AllTests-macOS";
+		};
+		6008FE02210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C85BA04B1C3878740075D68E;
+			remoteInfo = Microoptimizations;
+		};
+		6008FE04210F674500B8B582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C8E8BA551E2C181A00A4AC2C;
+			remoteInfo = Benchmarks;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1093,8 +1103,6 @@
 		239CD5611C12223100997DF5 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/Upgrade.strings"; sourceTree = "<group>"; };
 		239CD5631C12223200997DF5 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Upgrade.strings"; sourceTree = "<group>"; };
 		239CD5651C12223300997DF5 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Upgrade.strings"; sourceTree = "<group>"; };
-		239CD5661C122BDE00997DF5 /* SettingsTwoStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTwoStepViewController.h; sourceTree = "<group>"; };
-		239CD5671C122BDE00997DF5 /* SettingsTwoStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTwoStepViewController.m; sourceTree = "<group>"; };
 		23B731D11E01AC1100129770 /* ReminderModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderModalViewController.h; sourceTree = "<group>"; };
 		23B731D21E01AC1100129770 /* ReminderModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderModalViewController.m; sourceTree = "<group>"; };
 		23BA220C1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KeychainItemWrapper+Credentials.h"; sourceTree = "<group>"; };
@@ -1165,12 +1173,8 @@
 		23E2FC071C7F60E7004CFF79 /* BCInsetLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCInsetLabel.m; sourceTree = "<group>"; };
 		23E579521DB45F3A00220542 /* TransferAmountTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferAmountTableCell.h; sourceTree = "<group>"; };
 		23E579531DB45F3A00220542 /* TransferAmountTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransferAmountTableCell.m; sourceTree = "<group>"; };
-		23EA61C31B54258D0032B907 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
-		23EA61C41B54258D0032B907 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		23EA61C61B54282D0032B907 /* SettingsNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsNavigationController.h; sourceTree = "<group>"; };
 		23EA61C71B54282D0032B907 /* SettingsNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsNavigationController.m; sourceTree = "<group>"; };
-		23EA61C91B5591260032B907 /* SettingsSelectorTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSelectorTableViewController.h; sourceTree = "<group>"; };
-		23EA61CA1B5591260032B907 /* SettingsSelectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSelectorTableViewController.m; sourceTree = "<group>"; };
 		23F341871C52C37C000E53AB /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Upgrade.strings"; sourceTree = "<group>"; };
 		23F341881C52C37C000E53AB /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Settings.strings"; sourceTree = "<group>"; };
 		23F3418A1C52C37C000E53AB /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Backup.strings"; sourceTree = "<group>"; };
@@ -1419,7 +1423,7 @@
 		515EF9D1210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Backup.strings; sourceTree = "<group>"; };
 		515EF9D2210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		515EF9D3210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		515EF9D4210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		515EF9D4210282B4002350B6 /* sv */ = {isa = PBXFileReference; explicitFileType = text.plist.strings; name = sv; path = "sv-SE.lproj/MainWindow.strings"; sourceTree = "<group>"; };
 		515EF9D5210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/AccountsAndAddresses.strings; sourceTree = "<group>"; };
 		515EF9D6210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/BCAddressSelectionView.strings; sourceTree = "<group>"; };
 		515EF9D7210282B4002350B6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Settings.strings; sourceTree = "<group>"; };
@@ -1429,7 +1433,7 @@
 		515EF9DB210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Backup.strings; sourceTree = "<group>"; };
 		515EF9DC210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		515EF9DD210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		515EF9DE210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		515EF9DE210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "sv-SE.lproj/MainWindow.strings"; sourceTree = "<group>"; };
 		515EF9DF210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/AccountsAndAddresses.strings; sourceTree = "<group>"; };
 		515EF9E0210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/BCAddressSelectionView.strings; sourceTree = "<group>"; };
 		515EF9E1210282B4002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Settings.strings; sourceTree = "<group>"; };
@@ -1850,6 +1854,17 @@
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		603582A320EBD1180077AFFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		603582A520EBFB110077AFFB /* ToggleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleCell.xib; sourceTree = "<group>"; };
+		6055D36B210F6800000B8E95 /* Settings+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Settings+Helpers.swift"; path = "Blockchain/Settings/Settings+Helpers.swift"; sourceTree = SOURCE_ROOT; };
+		6055D36C210F6801000B8E95 /* Settings+Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Settings+Table.swift"; path = "Blockchain/Settings/Settings+Table.swift"; sourceTree = SOURCE_ROOT; };
+		6055D36F210F689C000B8E95 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Currency.swift; path = Blockchain/Currency.swift; sourceTree = SOURCE_ROOT; };
+		6055D371210F692D000B8E95 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		6055D376210F6CBD000B8E95 /* SettingsSelectorTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsSelectorTableViewController.h; sourceTree = "<group>"; };
+		6055D391210F6D7A000B8E95 /* SettingsSelectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSelectorTableViewController.m; sourceTree = "<group>"; };
+		605A900E20F3AFCE008F5E1A /* SettingsTwoStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTwoStepVC.swift; sourceTree = "<group>"; };
+		605A901220F3BCA6008F5E1A /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		605A901420F3BD0D008F5E1A /* SettingsProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsProtocols.swift; sourceTree = "<group>"; };
 		670595A21AB0F59D00D2D6D9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		6710DA0C1A8E82D80089DDED /* BCLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCLine.h; sourceTree = "<group>"; };
@@ -2492,6 +2507,7 @@
 		510EA19620811FF100A63AB8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6055D371210F692D000B8E95 /* UIView.swift */,
 				AACE314B209152D800B7B806 /* Application+Helpers.swift */,
 				511646DE20851BC600C43522 /* Bundle.swift */,
 				516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */,
@@ -2750,14 +2766,27 @@
 				51D0676221065EF300EFEF7F /* RxTest.framework */,
 				51D0676421065EF300EFEF7F /* RxTest.framework */,
 				51D0676621065EF300EFEF7F /* RxTest.framework */,
-				51D0676821065EF300EFEF7F /* RxTest.framework */,
-				51D0676A21065EF300EFEF7F /* AllTests-iOS.xctest */,
-				51D0676C21065EF300EFEF7F /* AllTests-tvOS.xctest */,
-				51D0676E21065EF300EFEF7F /* AllTests-macOS.xctest */,
-				51D0677021065EF300EFEF7F /* PerformanceTests.app */,
-				51D0677221065EF300EFEF7F /* Benchmarks.xctest */,
+				6008FDFB210F674500B8B582 /* RxTest.framework */,
+				6008FDFD210F674500B8B582 /* AllTests-iOS.xctest */,
+				6008FDFF210F674500B8B582 /* AllTests-tvOS.xctest */,
+				6008FE01210F674500B8B582 /* AllTests-macOS.xctest */,
+				6008FE03210F674500B8B582 /* PerformanceTests.app */,
+				6008FE05210F674500B8B582 /* Benchmarks.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6035828820EBD0DD0077AFFB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				605A901220F3BCA6008F5E1A /* SettingsCell.swift */,
+				605A901420F3BD0D008F5E1A /* SettingsProtocols.swift */,
+				6055D36B210F6800000B8E95 /* Settings+Helpers.swift */,
+				6055D36C210F6801000B8E95 /* Settings+Table.swift */,
+				605A900E20F3AFCE008F5E1A /* SettingsTwoStepVC.swift */,
+				603582A320EBD1180077AFFB /* SettingsViewController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */ = {
@@ -2913,6 +2942,7 @@
 		9F765F3A14BC7C3100048EFB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6055D36F210F689C000B8E95 /* Currency.swift */,
 				6780DB961A40BDF40048EED2 /* AccountInOut.h */,
 				6780DB971A40BDF40048EED2 /* AccountInOut.m */,
 				9F2D934814C05DD00053F0FF /* Address.h */,
@@ -3114,12 +3144,9 @@
 				23C95EA51C0779C600E4692A /* SettingsChangePasswordViewController.m */,
 				23EA61C61B54282D0032B907 /* SettingsNavigationController.h */,
 				23EA61C71B54282D0032B907 /* SettingsNavigationController.m */,
-				23EA61C91B5591260032B907 /* SettingsSelectorTableViewController.h */,
-				23EA61CA1B5591260032B907 /* SettingsSelectorTableViewController.m */,
-				23EA61C31B54258D0032B907 /* SettingsTableViewController.h */,
-				23EA61C41B54258D0032B907 /* SettingsTableViewController.m */,
-				239CD5661C122BDE00997DF5 /* SettingsTwoStepViewController.h */,
-				239CD5671C122BDE00997DF5 /* SettingsTwoStepViewController.m */,
+				6055D376210F6CBD000B8E95 /* SettingsSelectorTableViewController.h */,
+				6055D391210F6D7A000B8E95 /* SettingsSelectorTableViewController.m */,
+				6035828820EBD0DD0077AFFB /* Settings */,
 				231FF2CB1B56F9F1009EEB02 /* SettingsWebViewController.h */,
 				231FF2CC1B56F9F1009EEB02 /* SettingsWebViewController.m */,
 				67E9674C19DF285000305358 /* SideMenuViewController.h */,
@@ -3295,6 +3322,7 @@
 		AABB74C420D44ACA00C0F7C5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				603582A520EBFB110077AFFB /* ToggleCell.xib */,
 				AABB74C520D44AE300C0F7C5 /* AboutUsView.storyboard */,
 				AABB74C720D44B0600C0F7C5 /* AboutUsViewController.swift */,
 			);
@@ -3976,47 +4004,47 @@
 			remoteRef = 51D0676521065EF300EFEF7F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0676821065EF300EFEF7F /* RxTest.framework */ = {
+		6008FDFB210F674500B8B582 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxTest.framework;
-			remoteRef = 51D0676721065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FDFA210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0676A21065EF300EFEF7F /* AllTests-iOS.xctest */ = {
+		6008FDFD210F674500B8B582 /* AllTests-iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-iOS.xctest";
-			remoteRef = 51D0676921065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FDFC210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0676C21065EF300EFEF7F /* AllTests-tvOS.xctest */ = {
+		6008FDFF210F674500B8B582 /* AllTests-tvOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-tvOS.xctest";
-			remoteRef = 51D0676B21065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FDFE210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0676E21065EF300EFEF7F /* AllTests-macOS.xctest */ = {
+		6008FE01210F674500B8B582 /* AllTests-macOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-macOS.xctest";
-			remoteRef = 51D0676D21065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FE00210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0677021065EF300EFEF7F /* PerformanceTests.app */ = {
+		6008FE03210F674500B8B582 /* PerformanceTests.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			name = PerformanceTests.app;
 			path = Microoptimizations.app;
-			remoteRef = 51D0676F21065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FE02210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51D0677221065EF300EFEF7F /* Benchmarks.xctest */ = {
+		6008FE05210F674500B8B582 /* Benchmarks.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = Benchmarks.xctest;
-			remoteRef = 51D0677121065EF300EFEF7F /* PBXContainerItemProxy */;
+			remoteRef = 6008FE04210F674500B8B582 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4068,7 +4096,6 @@
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				515EFADE210282B4002350B6 /* BCAddressSelectionView.strings in Resources */,
-				2322DCC51D771831000E5AC1 /* Info.plist in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
@@ -4089,6 +4116,7 @@
 				C7559CB41F5705D5005B2375 /* TransactionEtherCell.xib in Resources */,
 				C9BE91851945D8F600FD516D /* PEKeyboard-2-dot.png in Resources */,
 				C9BE91881945D8F600FD516D /* PEKeyboard-2.png in Resources */,
+				603582A620EBFB110077AFFB /* ToggleCell.xib in Resources */,
 				515EFAD9210282B4002350B6 /* Backup.strings in Resources */,
 				67EEE7731A8E547900288753 /* PEPin-on@3x.png in Resources */,
 				5138354E210253A800767B2E /* KYCOnboardingScreen.storyboard in Resources */,
@@ -4143,7 +4171,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && yarn test --single-run";
+			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && yarn test --single-run\n";
 		};
 		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4157,7 +4185,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect ${WALLET_SERVER}:443 -showcerts < /dev/null | openssl x509 -outform DER > ${LOCAL_CERTIFICATE_FILE}.der";
+			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect ${WALLET_SERVER}:443 -showcerts < /dev/null | openssl x509 -outform DER > ${LOCAL_CERTIFICATE_FILE}.der\n";
 		};
 		51B9D9272063EA1D007DED65 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4171,11 +4199,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		C718594D1F460C4A00745A87 /* Run Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -4227,6 +4255,7 @@
 				C74E866220B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
 				AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
+				60EA8924210A06BA009021F2 /* SettingsViewController.swift in Sources */,
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				AAD27A29209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
@@ -4247,12 +4276,14 @@
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */,
+				60EA8920210A06AF009021F2 /* SettingsProtocols.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
 				C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				AA3CA9B62107F36800C2AD46 /* LogLevel.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
 				AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */,
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
+				60EA8905210A06AC009021F2 /* SettingsCell.swift in Sources */,
 				5159C2E52109149500955BD6 /* KYCVerifyPhoneNumberController.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
@@ -4335,6 +4366,7 @@
 				5159C2E22109149500955BD6 /* KYCPersonalDetailsController.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
+				60EA8923210A06B7009021F2 /* SettingsTwoStepVC.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
 				51C2ADD720BDECE700D66108 /* String+EscapeJS.swift in Sources */,
 				5114EA2020CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */,
@@ -4378,7 +4410,6 @@
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
 				AAE9113120A51C900093A431 /* ReminderType.swift in Sources */,
 				9F1831EB1516AE3500FB3D52 /* NSString+URLEncode.m in Sources */,
-				23EA61CB1B5591260032B907 /* SettingsSelectorTableViewController.m in Sources */,
 				23BA22111D6B736900D0472B /* NSNumberFormatter+Currencies.m in Sources */,
 				23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */,
 				51A862D920921E7600B338E0 /* BitcoinAddress.swift in Sources */,
@@ -4415,6 +4446,7 @@
 				C9BE917D1945D8F600FD516D /* PEViewController.m in Sources */,
 				674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */,
 				67D95A281B3DDC900012EBB1 /* Constants.swift in Sources */,
+				605A900F20F3AFCE008F5E1A /* SettingsTwoStepVC.swift in Sources */,
 				AA3CA9B82107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */,
 				9F765F3214BC622E00048EFB /* TransactionsBitcoinViewController.m in Sources */,
 				2322DCC21D771831000E5AC1 /* SRURLUtilities.m in Sources */,
@@ -4452,6 +4484,7 @@
 				23256A591DF1CFF7002B7A04 /* Invitation.m in Sources */,
 				9F765F3914BC7BAC00048EFB /* TransactionTableCell.m in Sources */,
 				AADB023920C0A871000FFFEC /* HttpMethod.swift in Sources */,
+				6055D392210F6D7B000B8E95 /* SettingsSelectorTableViewController.m in Sources */,
 				511BF4ED20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */,
 				51A7349120891EB3009727D5 /* CertificatePinner.swift in Sources */,
 				AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */,
@@ -4471,7 +4504,6 @@
 				C780A446202228A400E49274 /* BCPriceChartView.m in Sources */,
 				FA6323391A433B1C00EB3974 /* Foundation-Utility.m in Sources */,
 				AA9B30D120F6D85000A7F809 /* WalletUpgradeDelegate.swift in Sources */,
-				239CD5681C122BDE00997DF5 /* SettingsTwoStepViewController.m in Sources */,
 				23BF73391C454B8C00204503 /* AccountsAndAddressesNavigationController.m in Sources */,
 				51383559210253A800767B2E /* KYCVerifyAccountController.swift in Sources */,
 				AA3CA9B52107F36800C2AD46 /* LogLevel.swift in Sources */,
@@ -4490,6 +4522,7 @@
 				9F0CBAAA151351F400CD945D /* Wallet.m in Sources */,
 				9F0CBAD81513CA2600CD945D /* BCFadeView.m in Sources */,
 				C78893EE20A4D690003C0A8F /* WalletSendBitcoinDelegate.swift in Sources */,
+				605A901320F3BCA6008F5E1A /* SettingsCell.swift in Sources */,
 				51383556210253A800767B2E /* KYCVerifyEmailAddressController.swift in Sources */,
 				C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
 				511646C5208124E200C43522 /* AssetType.swift in Sources */,
@@ -4538,6 +4571,7 @@
 				5185E12A208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */,
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
+				603582A420EBD1180077AFFB /* SettingsViewController.swift in Sources */,
 				C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
 				C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
@@ -4611,6 +4645,7 @@
 				67EE1DCE19E3325900DBBFC9 /* ECSlidingViewController.m in Sources */,
 				51578AEE20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
 				FCB33B721FC36EA200317E6B /* ExchangeProgressViewController.m in Sources */,
+				6055D36D210F6801000B8E95 /* Settings+Helpers.swift in Sources */,
 				6780DB981A40BDF40048EED2 /* AccountInOut.m in Sources */,
 				51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				5138355D210253A800767B2E /* KYCAccountStatusController.swift in Sources */,
@@ -4634,6 +4669,7 @@
 				67EE1DCB19E3325900DBBFC9 /* ECSlidingAnimationController.m in Sources */,
 				67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */,
 				C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */,
+				605A901520F3BD0D008F5E1A /* SettingsProtocols.swift in Sources */,
 				51383557210253A800767B2E /* KYCPersonalDetailsController.swift in Sources */,
 				AA1E52382097D3C50099BD10 /* PutPinResponse.swift in Sources */,
 				6E2D90A21BBEC34800B719EC /* BCRecoveryView.m in Sources */,
@@ -4662,6 +4698,7 @@
 				23BD046A1D7761C000DB69E6 /* UITextView+AssertionFailureFix.m in Sources */,
 				23D423991D0878BE000054AA /* ModuleXMLHttpRequest.m in Sources */,
 				C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */,
+				6055D372210F692D000B8E95 /* UIView.swift in Sources */,
 				AAA3333320880A2C0019AD55 /* AppDelegate.swift in Sources */,
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
@@ -4676,10 +4713,10 @@
 				510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */,
 				AAE9113D20A640A40093A431 /* PinPayload.swift in Sources */,
 				23444F931DCD21B700573C8C /* BTCBase58.m in Sources */,
-				23EA61C51B54258D0032B907 /* SettingsTableViewController.m in Sources */,
 				C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */,
 				23FB5C161D9ABBB20008C6AB /* TransactionDetailValueCell.m in Sources */,
 				23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */,
+				6055D36E210F6801000B8E95 /* Settings+Table.swift in Sources */,
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				2322DCB81D771831000E5AC1 /* SRRunLoopThread.m in Sources */,
 				C790E1241E5358540063D141 /* BCVerifyMobileNumberViewController.m in Sources */,
@@ -4698,6 +4735,7 @@
 				23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */,
 				23DEF96E1DB11C98004AAAB6 /* TransferAllFundsBuilder.m in Sources */,
 				C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */,
+				6055D370210F689C000B8E95 /* Currency.swift in Sources */,
 				AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */,
 				A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */,
 				C76D732C20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
