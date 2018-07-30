@@ -114,10 +114,6 @@ struct LocalizationConstants {
             "PIN Response Object key or value length 0",
             comment: "Error message displayed to the user when the pin-store endpoint is returning an invalid response."
         )
-        static let encryptedStringIsNil = NSLocalizedString(
-            "PIN Encrypted String is nil",
-            comment: "Error message displayed when the encrypted pin is invalid."
-        )
         static let validationCannotBeCompleted = NSLocalizedString(
             "PIN Validation cannot be completed. Please enter your wallet password manually.",
             comment: "Error message displayed when the user's pin cannot be validated and instead they are prompted to enter their password."

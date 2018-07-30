@@ -24,8 +24,8 @@ class PinPresenterTests: XCTestCase {
         super.setUp()
         wallet = MockWallet()
         pinView = MockPinView()
-        interactor = MockPinInteractor(wallet: wallet)
         walletService = MockWalletService()
+        interactor = MockPinInteractor(walletService: walletService, wallet: wallet)
         presenter = PinPresenter(view: pinView, interactor: interactor, walletService: walletService)
     }
 
@@ -88,6 +88,7 @@ class PinPresenterTests: XCTestCase {
 
     /// Tests that a valid response from the pin store flow will succeed
     func testCreatePinSuccess() {
+        wallet.password = "password"
         walletService.mockCreatePinResponse = Single.just(
             PinStoreResponse(
                 code: PinStoreResponse.StatusCode.success.rawValue,

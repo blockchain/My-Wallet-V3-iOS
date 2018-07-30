@@ -64,13 +64,7 @@ import RxSwift
         }
 
         // Encrypt the wallet password with the random value
-        guard let encryptedPinPassword = wallet.encrypt(
-            password,
-            password: pinValue,
-            pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
-        ) else {
-            throw PinError(localizedDescription: LocalizationConstants.Pin.encryptedStringIsNil)
-        }
+        let encryptedPinPassword = wallet.encrypt(password, password: pinValue)
 
         // Update the cache
         let appSettings = BlockchainSettings.App.shared
@@ -111,5 +105,15 @@ import RxSwift
         default:
             return
         }
+    }
+}
+
+extension Wallet {
+    @objc func encrypt(_ data: String, password: String) -> String {
+        return self.encrypt(
+            data,
+            password: password,
+            pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
+        )
     }
 }
