@@ -55,8 +55,8 @@ typealias OnModalResumed = () -> Void
         self.modalView = nil
 
         for modalView in modalChain {
-            modalView.myHolderView.subviews.forEach { $0.removeFromSuperview() }
-            modalView.myHolderView.removeFromSuperview()
+            modalView.myHolderView?.subviews.forEach { $0.removeFromSuperview() }
+            modalView.myHolderView?.removeFromSuperview()
             modalView.onDismiss?()
         }
 
@@ -65,7 +65,7 @@ typealias OnModalResumed = () -> Void
 
     @objc func closeModal(withTransition transition: String) {
         guard let modalView = modalView else {
-            print("Cannot close modal. modalView is nil.")
+            Logger.shared.warning("Cannot close modal. modalView is nil.")
             return
         }
 
@@ -129,7 +129,7 @@ typealias OnModalResumed = () -> Void
         }
 
         // Show modal
-        let modalViewToShow = BCModalView(closeType: closeType, showHeader: showHeader, headerText: headerText)!
+        let modalViewToShow = BCModalView(closeType: closeType, showHeader: showHeader, headerText: headerText)
         modalViewToShow.onDismiss = onDismiss
         modalViewToShow.onResume = onResume
 
@@ -142,22 +142,18 @@ typealias OnModalResumed = () -> Void
         content.frame = CGRect(
             x: 0,
             y: 0,
-            width: modalViewToShow.myHolderView.frame.size.width,
-            height: modalViewToShow.myHolderView.frame.size.height
+            width: modalViewToShow.myHolderView?.frame.size.width ?? 0,
+            height: modalViewToShow.myHolderView?.frame.size.height ?? 0
         )
 
         //: The pairing instructions view requires a custom background color
         //: due to bottom insets on the iPhone X
         // TODO: remove this stopgap solution when the modal view presenter is deprecated
         if content is PairingInstructionsView {
-            if #available(iOS 11.0, *) {
-                modalViewToShow.backgroundColor = UIColor(named: "ColorGray1")
-            } else {
-                modalViewToShow.backgroundColor = Constants.Colors.ColorGray1
-            }
+            modalViewToShow.backgroundColor = .gray1
         }
 
-        modalViewToShow.myHolderView.addSubview(content)
+        modalViewToShow.myHolderView?.addSubview(content)
         topMostView?.addSubview(modalViewToShow)
         topMostView?.endEditing(true)
 

@@ -1,0 +1,172 @@
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Ke Pengaturan / Umum.";
+
+/* (No Commment) */
+"2je-u4-PB2.text" = "Transaksi";
+
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Lupa Dompet";
+
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1,12345 BTC";
+
+/* (No Commment) */
+"257.text" = "0 BTC";
+
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "memuat";
+
+/* (No Commment) */
+"353.text" = "Pemasangan Otomatis";
+
+/* (No Commment) */
+"358.text" = "Buat Dompet Baru";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "Masuk ke Dompet Blockchain Anda melalui PC atau Mac di
+https://login.blockchain.com";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Klik Tampilkan Kode Pemasangan untuk memunculkan Kode QR, sebuah kode palang persegi berwarna hitam putih. Pindai kode dengan kamera Anda.";
+
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Pindai Kode Pemasangan";
+
+/* (No Commment) */
+"376.normalTitle" = "Tombol 2";
+
+/* (No Commment) */
+"377.normalTitle" = "Tombol 1";
+
+/* (No Commment) */
+"378.text" = "Jika Anda sudah memiliki Dompet Blockchain, pilih Pasangkan Perangkat; jika tidak, pilih Buat Dompet.    Ini Gratis! Tidak perlu surel.";
+
+/* (No Commment) */
+"380.text" = "Selamat datang di Dompet Blockchain";
+
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "Tidak ada transaksi baru";
+
+/* (No Commment) */
+"394.text" = "Kata Sandi:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "Kata Sandi";
+
+/* (No Commment) */
+"396.text" = "Konfirmasi:";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "Konfirmasi kata sandi";
+
+/* (No Commment) */
+"398.normalTitle" = "Buat Dompet";
+
+/* (No Commment) */
+"465.text" = "Kata Sandi Diperlukan";
+
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Keterangan Permintaan Kata Sandi";
+
+/* (No Commment) */
+"468.text" = "Kata sandi:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "Kata sandi";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Lanjutkan";
+
+/* (No Commment) */
+"586.text" = "Pengenal Dompet:";
+
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "Pengenal dompet";
+
+/* (No Commment) */
+"588.text" = "Anda telah memilih untuk memasangkan secara manual (atau pemasangan otomatis tidak didukung perangkat Anda). Silakan masukkan rincian masuk Anda di bawah ini.";
+
+/* (No Commment) */
+"591.text" = "Kata sandi:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "Kata sandi";
+
+/* (No Commment) */
+"602.text" = "Anda harus menonaktifkan otentikasi dua faktor untuk pemasangan secara manual.";
+
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "Anda telah keluar atau ada kesalahan mendekripsi berkas dompet Anda. Masukkan kata sandi Anda di bawah ini untuk masuk.";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Lanjutkan";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "Kata sandi";
+
+/* (No Commment) */
+"627.text" = "Kata sandi:";
+
+/* (No Commment) */
+"630.text" = "Masuk";
+
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "Jika Anda ingin melupakan dompet ini dan mulai dari awal, tekan 'Lupakan Dompet'.";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "Judul";
+
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "Pulihkan kata kunci";
+
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "Surel Anda";
+
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "Lemah";
+
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "Tombol 3";
+
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "Dengan membuat sebuah dompet baru Anda menyetujui";
+
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "Lanjutkan";
+
+/* (No Commment) */
+"VcH-wh-BEs.text" = "Surel:";
+
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345,68 USD";
+
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "Saya tidak dapat mengakses kamera";
+
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* Diperlukan";
+
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 Transaksi";
+
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Masukkan 12 kata pemulihan Anda dengan spasi untuk memulihkan dana dan transaksi Anda";
+
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "Pemasangan Manual";
+
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Ketentuan Layanan Blockchain";
+
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* Minimal 10 karakter";
+

@@ -37,7 +37,7 @@ import Foundation
 
     private func play(systemSoundID: SystemSoundID?) {
         guard let systemSoundID = systemSoundID else {
-            print("Cannot play sound with nil SystemSoundID")
+            Logger.shared.warning("Cannot play sound with nil SystemSoundID")
             return
         }
         AudioServicesPlaySystemSound(systemSoundID)
@@ -45,7 +45,7 @@ import Foundation
 
     private func systemSoundID(forSoundFileName name: String) -> SystemSoundID? {
         guard let soundPath = Bundle.main.path(forResource: name, ofType: "wav") else {
-            print("Could not retrieve file URL path for the sound '\(name).wav'")
+            Logger.shared.warning("Could not retrieve file URL path for the sound '\(name).wav'")
             return nil
         }
         var soundID: SystemSoundID = 0

@@ -70,14 +70,13 @@ class NetworkManager: NSObject, URLSessionDelegate {
     ///   - url: the URL for the request (e.g. "http://blockchain.info/uuid-generator?n=3")
     ///   - method: the HTTP method
     ///   - parameters: the parameters for the request
-    /// - Returns: the Observable returning the HTTPURLResponse and the decoded response data
+    /// - Returns: a Single returning the HTTPURLResponse and the decoded response data
     func requestJsonOrString(
         _ url: String,
         method: HttpMethod,
         parameters: URLParameters? = nil
-    ) -> Observable<(HTTPURLResponse, Any)> {
-
-        let dataRequestObservable = Observable.create { (observer: AnyObserver<DataRequest>) -> Disposable in
+    ) -> Single<(HTTPURLResponse, Any)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
             let request = SessionManager.default.request(
                 url,
                 method: method.toAlamofireHTTPMethod,
@@ -85,14 +84,13 @@ class NetworkManager: NSObject, URLSessionDelegate {
                 encoding: URLEncoding.default,
                 headers: nil
             )
-            observer.onNext(request)
-            observer.onCompleted()
+            observer(.success(request))
             return Disposables.create()
         }
-        return dataRequestObservable.flatMap { request -> Observable<(HTTPURLResponse, Any)> in
-            return request.responseJSONObservable()
-                .catchError { _ -> Observable<(HTTPURLResponse, Any)> in
-                    return request.responseStringObservable()
+        return dataRequestSingle.flatMap { request -> Single<(HTTPURLResponse, Any)> in
+            return request.responseJSONSingle()
+                .catchError { _ -> Single<(HTTPURLResponse, Any)> in
+                    return request.responseStringSingle()
                 }
         }
     }
@@ -105,7 +103,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
 
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping AuthChallengeHandler) {
         let host = challenge.protectionSpace.host
-        print("Received challenge from \(host)")
+        Logger.shared.info("Received challenge from \(host)")
         if BlockchainAPI.Endpoints.rawValues.contains(host) ||
             BlockchainAPI.PartnerEndpoints.rawValues.contains(host) {
             completionHandler(.performDefaultHandling, nil)
@@ -129,20 +127,18 @@ class NetworkManager: NSObject, URLSessionDelegate {
 }
 
 extension DataRequest {
-    func responseJSONObservable() -> Observable<(HTTPURLResponse, Any)> {
-        return Observable.create { [unowned self] observer -> Disposable in
+    func responseJSONSingle() -> Single<(HTTPURLResponse, Any)> {
+        return Single.create { [unowned self] observer -> Disposable in
             self.responseJSON { jsonResponse in
                 if let error = jsonResponse.result.error {
-                    observer.onError(error)
+                    observer(.error(error))
                     return
                 }
                 guard let response = jsonResponse.response, let result = jsonResponse.result.value else {
-                    observer.onError(NetworkManager.unknownNetworkError)
+                    observer(.error(NetworkManager.unknownNetworkError))
                     return
                 }
-                observer.onNext((response, result))
-                observer.onCompleted()
-
+                observer(.success((response, result)))
             }
             return Disposables.create {
                 self.cancel()
@@ -150,20 +146,18 @@ extension DataRequest {
         }
     }
 
-    func responseStringObservable() -> Observable<(HTTPURLResponse, Any)> {
-        return Observable.create { [unowned self] observer -> Disposable in
+    func responseStringSingle() -> Single<(HTTPURLResponse, Any)> {
+        return Single.create { [unowned self] observer -> Disposable in
             self.responseString { stringResponse in
                 if let error = stringResponse.result.error {
-                    observer.onError(error)
+                    observer(.error(error))
                     return
                 }
                 guard let response = stringResponse.response, let result = stringResponse.result.value else {
-                    observer.onError(NetworkManager.unknownNetworkError)
+                    observer(.error(NetworkManager.unknownNetworkError))
                     return
                 }
-                observer.onNext((response, result))
-                observer.onCompleted()
-
+                observer(.success((response, result)))
             }
             return Disposables.create {
                 self.cancel()

@@ -35,12 +35,12 @@ class MockNetworkManager: NetworkManager {
         _ url: String,
         method: HttpMethod,
         parameters: URLParameters? = nil
-    ) -> Observable<(HTTPURLResponse, Any)> {
+    ) -> Single<(HTTPURLResponse, Any)> {
         guard let mockResponse = mockResponse else {
             print("No mock response set, performing actual network call")
             return super.requestJsonOrString(url, method: method, parameters: parameters)
         }
-        return Observable.just(mockResponse)
+        return Single.just(mockResponse)
     }
 
 }

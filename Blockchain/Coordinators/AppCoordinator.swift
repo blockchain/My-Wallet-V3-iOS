@@ -65,7 +65,7 @@ import Foundation
     private init(walletManager: WalletManager = WalletManager.shared) {
         self.walletManager = walletManager
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window.backgroundColor = UIColor.white
+        self.window.backgroundColor = .white
         super.init()
         self.walletManager.accountInfoAndExchangeRatesDelegate = self
         self.walletManager.backupDelegate = self
@@ -80,6 +80,24 @@ import Foundation
         window.rootViewController = slidingViewController
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
+
+        /* 🚧 KYC Flow - Under Construction 🚧 */
+        // TODO: move this to correct KYC entry point
+//        let welcomeViewController = UIStoryboard.instantiate(
+//            child: WelcomeController.self,
+//            from: OnboardingController.self,
+//            in: UIStoryboard(name: "OnboardingScreen", bundle: nil),
+//            identifier: "OnboardingScreen"
+//        )
+//
+//        let navigationController = UIStoryboard(name: "OnboardingNavigation", bundle: nil)
+//            .instantiateViewController(withIdentifier: "OnboardingNavigation") as! OnboardingNavigationController
+//
+//        navigationController.pushViewController(welcomeViewController, animated: true)
+//        navigationController.modalTransitionStyle = .coverVertical
+//
+//        UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+//        return
 
         BuySellCoordinator.shared.start()
 
@@ -113,7 +131,7 @@ import Foundation
         let debugViewController = DebugTableViewController()
         debugViewController.presenter = presenter
         let navigationController = UINavigationController(rootViewController: debugViewController)
-        window.rootViewController?.present(navigationController, animated: true)
+        UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(navigationController, animated: true)
     }
 
     @objc func showBackupView() {
@@ -204,7 +222,7 @@ import Foundation
 extension AppCoordinator: SideMenuViewControllerDelegate {
     func onSideMenuItemTapped(_ identifier: String!) {
         guard let sideMenuItem = SideMenuItem(rawValue: identifier) else {
-            print("Unrecognized SideMenuItem with identifier: \(identifier)")
+            Logger.shared.warning("Unrecognized SideMenuItem with identifier: \(String(describing: identifier))")
             return
         }
 

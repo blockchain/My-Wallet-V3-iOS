@@ -1,0 +1,2299 @@
+/* No comment provided by engineer. */
+" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = "ผู้ใดก็ตามซึ่งมีการเข้าถึงวลีเพื่อการกู้คืนของคุณจะสามารถเข้าถึง bitcoin ของคุณได้ ดังนั้นโปรดทำให้มั่นใจว่าคุณเก็บมันไว้นอกคอมพิวเตอร์ในที่ที่ปลอดภัย";
+
+/* (No Commment) */
+" We recommend the fee below for the transaction at this time." = "เราแนะนำค่าธรรมเนียมด้านล่างสำหรับธุรกรรมในตอนนี้";
+
+/* (No Commment) */
+"%@ BTC" = "%@ BTC";
+
+/* (No Commment) */
+"%@ Confirmations" = "%@ การยืนยัน";
+
+/* (No Commment) */
+"%@ copied to clipboard" = "%@ คัดลอกไปยังคลิปบอร์ดแล้ว";
+
+/* (No Commment) */
+"%d Confirmations" = "%d การยืนยัน";
+
+/* (No Commment) */
+"%d Transactions" = "%d ธุรกรรม";
+
+/* (No Commment) */
+"%d address" = "%d ที่อยู่";
+
+/* (No Commment) */
+"%d addresses" = "%d ที่อยู่";
+
+/* No comment provided by engineer. */
+"%lld hours ago" = "%lld ชั่วโมงก่อนหน้า";
+
+/* No comment provided by engineer. */
+"%lld minutes ago" = "%lld นาทีก่อนหน้า";
+
+/* No comment provided by engineer. */
+"%lld seconds ago" = "%lld วินาทีก่อนหน้า";
+
+/* (No Commment) */
+"%lu Recipients" = "%lu ผู้รับ";
+
+/* No comment provided by engineer. */
+"1 hour ago" = "1 ชั่วโมงก่อนหน้า";
+
+/* No comment provided by engineer. */
+"1 minute ago" = "1 นาทีก่อนหน้า";
+
+/* (No Commment) */
+"2-Step Enabled" = "เปิดใช้งาน 2 ขั้นตอนแล้ว";
+
+/* (No Commment) */
+"2-Step has been disabled." = "ปิดใช้งาน 2 ขั้นตอนแล้ว";
+
+/* (No Commment) */
+"2-Step has been enabled for SMS." = "เปิดใช้งาน 2 ขั้นตอนสำหรับ SMS แล้ว";
+
+/* (No Commment) */
+"2-step Verification" = "การยืนยัน 2 ขั้นตอน";
+
+/* (No Commment) */
+"2-step Verification is currently disabled." = "การยืนยัน 2 ขั้นตอนปิดอยู่ในขณะนี้";
+
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "การยืนยัน 2 ขั้นตอนเปิดสำหรับ %@ อยู่ในขณะนี้";
+
+/* (No Commment) */
+"2-step Verification is currently enabled." = "การยืนยัน 2 ขั้นตอนเปิดอยู่ในขณะนี้";
+
+/* (No Commment) */
+"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "ไม่สามารถสร้างการเชื่อมต่อได้เพราะว่าไม่สามารถตรวจสอบความสมบูรณ์ของใบอนุญาตเซิร์ฟเวอร์ได้ โปรดตรวจสอบการตั้งค่าเครือข่ายและตรวจสอบให้มั่นใจว่าคุณกำลังใช้งานการเชื่อมต่อที่ปลอดภัย";
+
+/* (No Commment) */
+"API URL" = "API URL";
+
+/* (No Commment) */
+"About" = "เกี่ยวกับ";
+
+/* (No Commment) */
+"Account Details" = "รายละเอียดบัญชี";
+
+/* (No Commment) */
+"Accounts" = "บัญชี";
+
+/* (No Commment) */
+"Add Email" = "เพิ่มอีเมล";
+
+/* (No Commment) */
+"Add to Address book?" = "เพิ่มไปยังสมุดที่อยู่?";
+
+/* (No Commment) */
+"Address" = "ที่อยู่";
+
+/* (No Commment) */
+"Address book" = "สมุดที่อยู่";
+
+/* (No Commment) */
+"Address is not valid" = "ที่อยู่ไม่ถูกต้อง";
+
+/* (No Commment) */
+"Addresses" = "ที่อยู่";
+
+/* (No Commment) */
+"Adjust Fee" = "ปรับค่าธรรมเนียม";
+
+/* (No Commment) */
+"Allow" = "อนุญาต";
+
+/* (No Commment) */
+"Allowed" = "อนุญาตแล้ว";
+
+/* (No Commment) */
+"Amount" = "จำนวน";
+
+/* (No Commment) */
+"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "จำนวนจำเป็นต้องมากกว่าหรือเท่ากับดัสเทรชโฮลด์ (%lld Satoshi)";
+
+/* (No Commment) */
+"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "มีข้อผิดพลาดเกิดขึ้นเนื่องจากการหยุดชะงักระหว่างการยืนยัน PIN โปรดเลือกแอปแล้วลองอีกครั้ง";
+
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "มีข้อผิดพลาดเกิดขึ้นในการตรวจสอบรหัส PIN กับเซิร์ฟเวอร์ระยะไกล คุณอาจจะไม่ได้เชื่อมต่อออนไลน์ หรือ Blockchain อาจกำลังประสบปัญหา คุณต้องการทดลองการตรวจสอบอีกครั้งหรือกรอกรหัสผ่านของคุณด้วยตนเองหรือไม่?";
+
+/* (No Commment) */
+"An error occurred while changing 2-Step verification." = "มีข้อผิดพลาดเกิดขึ้นระหว่างเปลี่ยนการยืนยัน 2 ขั้นตอน";
+
+/* (No Commment) */
+"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "มีข้อผิดพลาดเกิดขึ้นระหว่างการคัดลอกที่อยู่ของคุณไปยังคลิปบอร์ด โปรดเลือกที่อยู่ปลายทางอีกครั้ง หรือเปิดแอปใหม่และลองอีกครั้ง";
+
+/* (No Commment) */
+"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "มีข้อผิดพลาดเกิดขึ้นระหว่างการบันทึกการเปลี่ยนแปลงของคุณ โปรดตรวจสอบให้มั่นใจว่าคุณไม่ได้เข้าสู่ระบบกระเป๋าเงินของคุณบนอุปกรณ์อื่น";
+
+/* (No Commment) */
+"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "มีข้อผิดพลาดเกิดขึ้นระหว่างการอัปเดตยอดเงินที่ใช้จ่ายได้ของคุณ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณและลองอีกครั้ง";
+
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "มีข้อผิดพลาดเกิดขึ้นระหว่างการโหลดกระเป๋าเงินของคุณ คุณอาจจะไม่ได้เชื่อมต่อออนไลน์ หรือ Blockchain อาจกำลังประสบปัญหา โปรดปิดแอปพลิเคชันและลองอีกครั้งในภายหลัง หรือจับคู่อุปกรณ์ของคุณอีกครั้ง";
+
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "มีข้อผิดพลาดเกิดขึ้นในการรับตัวบ่งชี้กระเป๋าเงินของคุณจาก keychain โปรดปิดแอปพลิเคชันและลองอีกครั้ง";
+
+/* (No Commment) */
+"Any address" = "ที่อยู่ใด ๆ";
+
+/* (No Commment) */
+"App Store review prompt timer (seconds)" = "เครื่องจับเวลาการแจ้งเตือนการรีวิว App Store (วินาที)";
+
+/* (No Commment) */
+"Archive" = "เก็บเข้าคลัง";
+
+/* (No Commment) */
+"Archive Address" = "เก็บที่อยู่เข้าคลัง";
+
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "เก็บสิ่งนี้เข้าคลังหากคุณไม่ต้องการใช้มันอีก เงินของคุณจะปลอดภัยและคุณสามารถดึงออกจากคลังได้ตลอดเวลา";
+
+/* (No Commment) */
+"Archived" = "เก็บเอกสารแล้ว";
+
+/* (No Commment) */
+"Archiving addresses" = "กำลังเก็บที่อยู่เข้าคลัง";
+
+/* (No Commment) */
+"Ask Me Later" = "ถามฉันในภายหลัง";
+
+/* (No Commment) */
+"Authenticate with Touch ID" = "พิสูจน์ตัวตนด้วย Touch ID";
+
+/* (No Commment) */
+"Authorization Required" = "จำเป็นต้องพิสูจน์ตัวตน";
+
+/* (No Commment) */
+"Automatic Pairing" = "จับคู่อัตโนมัติ";
+
+/* (No Commment) */
+"Automatically" = "อัตโนมัติ";
+
+/* No comment provided by engineer. */
+"BACKUP FUNDS" = "สำรองเงิน";
+
+/* (No Commment) */
+"Backup" = "สำรอง";
+
+/* No comment provided by engineer. */
+"Backup Funds" = "สำรองเงิน";
+
+/* (No Commment) */
+"Backup Phrase" = "วลีสำรอง";
+
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "ก่อนการเข้าถึงกระเป๋าเงินของคุณ โปรดเลือกหมายเลข PIN เพื่อใช้ปลดล็อกกระเป๋าเงินของคุณ เป็นสิ่งสำคัญที่คุณจะต้องจดจำ PIN นี้เพราะว่าคุณจะไม่สามารถรีเซ็ตหรือเปลี่ยน PIN นี้ได้หากไม่ได้ปลดล็อกแอปก่อน";
+
+/* (No Commment) */
+"Bitcoin Unit" = "หน่วย Bitcoin";
+
+/* (No Commment) */
+"Bitcoin payment request" = "คำร้องขอการชำระเงิน Bitcoin";
+
+/* (No Commment) */
+"Block" = "บล็อก";
+
+/* (No Commment) */
+"Block Tor" = "บล็อก Tor";
+
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain ไม่สามารถเข้าถึงกล้องได้ เพื่อเปิดการเข้าถึง ไปยังการตั้งค่าอุปกรณ์ของคุณ";
+
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain กำลังปิดปรับปรุงในขณะนี้ โปรดลองอีกครั้งในภายหลัง";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain ต้องการให้มีการเปิดใช้งานบริการระบุตำแหน่งเพื่อเข้าถึงตำแหน่งของคุณ";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain ต้องการให้มีการเปิดใช้งานบริการระบุตำแหน่งเพื่อเข้าถึงตำแหน่งของคุณ คุณสามารถเปิดการเข้าถึงใน การตั้งค่า->ความเป็นส่วนตัว->บริการระบุตำแหน่ง";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain ต้องการให้มีการเปิดใช้งานบริการระบุตำแหน่งเพื่อเข้าถึงตำแหน่งของคุณ คุณสามารถเปิดการเข้าถึงใน การตั้งค่า->ความเป็นส่วนตัว->ตำแหน่ง->บริการระบุตำแหน่ง";
+
+/* (No Commment) */
+"Blocked" = "บล็อกแล้ว";
+
+/* (No Commment) */
+"Calculating: Address %@ of %@" = "กำลังคำนวณ: ที่อยู่ %1$@ of %2$@";
+
+/* (No Commment) */
+"Camera Access Denied" = "การเข้าถึงกล้องถูกปฏิเสธ";
+
+/* (No Commment) */
+"Cancel" = "ยกเลิก";
+
+/* (No Commment) */
+"Cancelling" = "กำลังยกเลิก";
+
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "ไม่สามารถบันทึกรหัส PIN ได้เมื่อไม่ได้มีการเริ่มต้นใช้กระเป๋าเงินหรือเมื่อรหัสผ่านเป็นศูนย์";
+
+/* (No Commment) */
+"Change Email" = "เปลี่ยนอีเมล";
+
+/* (No Commment) */
+"Change Mobile Number" = "เปลี่ยนหมายเลขมือถือ";
+
+/* (No Commment) */
+"Change PIN" = "เปลี่ยน PIN";
+
+/* (No Commment) */
+"Change Password" = "เปลี่ยนรหัสผ่าน";
+
+/* (No Commment) */
+"Change Password Hint" = "เปลี่ยนคำใบ้รหัสผ่าน";
+
+/* (No Commment) */
+"Change fee per kilobyte" = "เปลี่ยนค่าธรรมเนียมต่อกิโลไบต์";
+
+/* (No Commment) */
+"Checking for Wallet updates" = "กำลังตรวจสอบการอัปเดตกระเป๋าเงิน";
+
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "กำลังตรวจสอบเพิ่มเติม: ขั้นตอนที่ %1$d จาก %2$d";
+
+/* No comment provided by engineer. */
+"Close" = "ปิด";
+
+/* (No Commment) */
+"Close App" = "ปิดแอป";
+
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "ทำตามขั้นตอนด้านล่างให้เสร็จสิ้นเพื่อความปลอดภัยขั้นสูงสุด";
+
+/* (No Commment) */
+"Confirm Payment" = "ยืนยันการชำระเงิน";
+
+/* (No Commment) */
+"Confirm your PIN" = "ยืนยัน PIN ของคุณ";
+
+/* (No Commment) */
+"Confirmed" = "ยืนยันแล้ว";
+
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "หมดเวลาการเชื่อมต่อ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ";
+
+/* (No Commment) */
+"Continue" = "ดำเนินการต่อ";
+
+/* (No Commment) */
+"Copied to clipboard" = "คัดลอกไปยังคลิปบอร์ดแล้ว";
+
+/* (No Commment) */
+"Copy Address" = "คัดลอกที่อยู่";
+
+/* (No Commment) */
+"Copy Wallet ID" = "คัดลอก ID กระเป๋าเงิน";
+
+/* (No Commment) */
+"Copy to clipboard" = "คัดลอกไปยังคลิปบอร์ด";
+
+/* (No Commment) */
+"Copy xPub" = "คัดลอก xPub";
+
+/* (No Commment) */
+"Could not find transaction with hash %@ when reloading data" = "ไม่สามารถพบธุรกรรมซึ่งมีแฮช %@ เมื่อโหลดข้อมูลอีกครั้ง";
+
+/* (No Commment) */
+"Could not get value when sent - please check your internet connection and try again." = "ไม่สามารถรับค่าขณะส่ง - โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตและลองอีกครั้ง";
+
+/* (No Commment) */
+"Create" = "สร้าง";
+
+/* (No Commment) */
+"Create New Wallet" = "สร้างกระเป๋าเงินใหม่";
+
+/* (No Commment) */
+"Create Wallet" = "สร้างกระเป๋าเงิน";
+
+/* (No Commment) */
+"Create new address" = "สร้างที่อยู่ใหม่";
+
+/* (No Commment) */
+"Creating" = "กำลังสร้าง";
+
+/* (No Commment) */
+"Creating V3 Wallet" = "กำลังสร้างกระเป๋าเงินแบบ V3";
+
+/* (No Commment) */
+"Creating Wallet" = "กำลังสร้างกระเป๋าเงิน";
+
+/* (No Commment) */
+"Creating new Wallet" = "กำลังสร้างกระเป๋าเงินใหม่";
+
+/* (No Commment) */
+"Creating new address" = "กำลังสร้างที่อยู่ใหม่";
+
+/* (No Commment) */
+"Current rate: %@ BTC" = "อัตราปัจจุบัน: %@ BTC";
+
+/* (No Commment) */
+"Customize the way you organize your bitcoin in your Blockchain Wallet" = "ปรับแต่งวิธีการที่คุณจัดการ bitcoin ของคุณในกระเป๋าเงิน Blockchain";
+
+/* (No Commment) */
+"Date" = "วันที่";
+
+/* (No Commment) */
+"Debug" = "แก้ปัญหา";
+
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "ความยาวรหัสผ่าน PIN ที่ถอดรหัสออกมาเป็น 0";
+
+/* (No Commment) */
+"Decrypting Private Key" = "กำลังถอดรหัสคีย์ส่วนตัว";
+
+/* (No Commment) */
+"Decrypting Wallet" = "กำลังถอดรหัสกระเป๋าเงิน";
+
+/* (No Commment) */
+"Default" = "ค่าเริ่มต้น";
+
+/* (No Commment) */
+"Description" = "คำอธิบาย";
+
+/* (No Commment) */
+"Details" = "รายละเอียด";
+
+/* (No Commment) */
+"Disable" = "ปิดใช้งาน";
+
+/* (No Commment) */
+"Disabled" = "ปิดใช้งานแล้ว";
+
+/* (No Commment) */
+"Display" = "แสดง";
+
+/* (No Commment) */
+"Do you really want to log out?" = "คุณต้องการออกจากระบบจริง ๆ หรือไม่?";
+
+/* (No Commment) */
+"Don't show again" = "ไม่ต้องแสดงอีก";
+
+/* No comment provided by engineer. */
+"Done" = "เสร็จ";
+
+/* (No Commment) */
+"Downloading Wallet" = "กำลังดาวน์โหลดกระเป๋าเงิน";
+
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "การสำรองข้อมูลกระเป๋าเงินง่าย ๆ เพียงครั้งเดียวจะช่วยให้คุณควบคุมเงินของคุณได้";
+
+/* (No Commment) */
+"Edit" = "แก้ไข";
+
+/* (No Commment) */
+"Email" = "อีเมล";
+
+/* (No Commment) */
+"Email Notifications" = "การแจ้งเตือนอีเมล";
+
+/* (No Commment) */
+"Email Verified" = "ยืนยันอีเมลแล้ว";
+
+/* (No Commment) */
+"Empty response from server." = "ไร้การตอบสนองจากเซิร์ฟเวอร์";
+
+/* (No Commment) */
+"Enable" = "เปิดใช้งาน";
+
+/* (No Commment) */
+"Enable 2-Step" = "เปิด 2 ขั้นตอน";
+
+/* (No Commment) */
+"Enable 2-Step for SMS" = "เปิด 2 ขั้นตอนสำหรับ SMS";
+
+/* (No Commment) */
+"Enable Location Services" = "เปิดบริการระบุตำแหน่ง";
+
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "เปิดการแจ้งเตือนเพื่อรับอีเมลหรือข้อความ SMS เมื่อคุณได้รับ bitcoin มีเพียงที่อยู่ที่ได้รับการทำเครื่องหมายและที่อยู่ที่นำเข้าเท่านั้นที่มีสิทธิ์ที่จะกระตุ้นการแจ้งเตือนได้";
+
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "เปิดการใช้งานตัวเลือกนี้เพื่อบล็อกไม่ให้ที่อยู่ IP ซึ่งรู้ว่าเป็นส่วนหนึ่งของเครือข่ายที่ไม่เปิดเผย Tor ทำการเข้าถึงกระเป๋าเงินของคุณ เครือข่าย Tor มักจะถูกใช้งานโดยแฮกเกอร์ซึ่งพยายามที่จะเข้าถึงกระเป๋าเงินของผู้ใช้ Blockchain";
+
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "เปิดการใช้งานตัวเลือกนี้เพื่อเปิดเผยที่อยู่สำหรับที่อยู่สำหรับการรับเมื่อคุณปัดนิ้วไปทางซ้ายบนหน้าจอ PIN ทำให้การรับ bitcoin รวดเร็วยิ่งขึ้น ห้าที่อยู่ซึ่งจะได้รับการโหลดอย่างต่อเนื่องติดต่อกัน หลังจากนั้นจะจำเป็นต้องล็อกอินเพื่อแสดงที่อยู่ใหม่";
+
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "เปิดการใช้งานตัวเลือกนี้เพื่อเปิดเผยที่อยู่สำหรับที่อยู่สำหรับการรับเมื่อคุณปัดนิ้วไปทางซ้ายบนหน้าจอ PIN ทำให้การรับ bitcoin รวดเร็วยิ่งขึ้น จะมีการโหลดเพียงหนึ่งที่อยู่เท่านั้น จำเป็นต้องล็อกอินเพื่อแสดงที่อยู่ใหม่";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "การเปิดใช้งานฟีเจอร์นี้จะอนุญาตให้ผู้ใช้ทั้งหมดซึ่งมีการลงทะเบียนลายนิ้วมือ Touch ID บนอุปกรณ์นี้สามารถเข้าถึงกระเป๋าเงินของคุณได้";
+
+/* (No Commment) */
+"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "สนุกกับการใช้งานกระเป๋าเงิน Blockchain? โปรดใช้เวลาสักเล็กน้อยในการเขียนรีวิวใน App Store เพื่อให้ผู้อื่นได้รู้จักมัน";
+
+/* (No Commment) */
+"Enter %@ amount" = "กรอกจำนวน %@";
+
+/* (No Commment) */
+"Enter Bitcoin address or select" = "กรอกที่อยู่ Bitcoin หรือเลือก";
+
+/* (No Commment) */
+"Enter PIN" = "กรอก PIN";
+
+/* (No Commment) */
+"Enter Password" = "กรอกรหัสผ่าน";
+
+/* (No Commment) */
+"Enter Verification Code" = "กรอกรหัสยืนยัน";
+
+/* (No Commment) */
+"Enter your verification code" = "กรอกรหัสยืนยันนของคุณ";
+
+/* No comment provided by engineer. */
+"Error" = "ข้อผิดพลาด";
+
+/* (No Commment) */
+"Error loading settings" = "ข้อผิดพลาดในการโหลดการตั้งค่า";
+
+/* (No Commment) */
+"Error updating settings" = "ข้อผิดพลาดในการอัปเดตการตั้งค่า";
+
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "ทุกอย่างที่คุณต้องการเพื่อจัดเก็บ ใช้และรับ bitcoin ของคุณ";
+
+/* (No Commment) */
+"Extended Public Key" = "คีย์สาธารณะแบบขยาย";
+
+/* (No Commment) */
+"Failed To Load Wallet" = "การโหลดกระเป๋าเงินล้มเหลว";
+
+/* (No Commment) */
+"Failed to validate server certificate" = "การตรวจสอบความสมบูรณ์ของใบอนุญาตเซิร์ฟเวอร์ล้มเหลว";
+
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "ค่าธรรมเนียมสูงเกินไป (จำกัดที่ 0.01 BTC)";
+
+/* (No Commment) */
+"Fee per KB" = "ค่าธรรมเนียมต่อ KB";
+
+/* (No Commment) */
+"Fees" = "ค่าธรรมเนียม";
+
+/* (No Commment) */
+"Finished Signing Inputs" = "การลงนามข้อมูลเสร็จแล้ว";
+
+/* (No Commment) */
+"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "เราสร้างที่อยู่ที่เป็นเอกลักษณ์สำหรับการชำระเงินทุกครั้งเพื่อความเป็นส่วนตัวที่มากยิ่งขึ้น ที่อยู่ทั้งหมดซึ่งได้รับการสร้างในกระเป๋าเงินของคุณยังสามารถรับเงินได้ แม้กระทั่งเมื่อมันไม่ได้แสดงภายใต้ส่วนการรับแล้วก็ตาม";
+
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "เพื่อความปลอดภัย เราแนะนำให้คุณโอนยอดคงเหลือใด ๆ ในที่อยู่ที่นำเข้าของคุณไปยังกระเป๋าเงิน Blockchain ของคุณ";
+
+/* (No Commment) */
+"Forget Wallet" = "ลืมกระเป๋าเงิน";
+
+/* (No Commment) */
+"Found %d, with %@" = "พบ %1$d, ด้วย %2$@";
+
+/* (No Commment) */
+"From" = "จาก";
+
+/* (No Commment) */
+"From and destination address have to be different" = "ที่อยู่ที่ส่งออกมาและที่อยู่ปลายทางต้องแตกต่างกัน";
+
+/* (No Commment) */
+"From and destination have to be different" = "ที่อยู่ที่ส่งออกมาและที่อยู่ปลายทางต้องแตกต่างกัน";
+
+/* (No Commment) */
+"Go to Settings" = "ไปยังการตั้งค่า";
+
+/* (No Commment) */
+"Google Authenticator" = "Google Authenticator";
+
+/* (No Commment) */
+"Hint Stored" = "เก็บคำใบ้แล้ว";
+
+/* (No Commment) */
+"How would you like to pair?" = "คุณต้องการจับคู่อย่างไร?";
+
+/* (No Commment) */
+"Identifier" = "ตัวระบุ";
+
+/* (No Commment) */
+"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "หากคุณเป็นผู้ค้า โปรดชมคีย์สาธารณะแบบขยาย (xPub) และใช้แอปผู้ค้า Blockchain เพื่อรับเงิน";
+
+/* (No Commment) */
+"Import Private Key" = "นำเข้าคีย์ส่วนตัว";
+
+/* (No Commment) */
+"Import address" = "นำเข้าที่อยู่";
+
+/* (No Commment) */
+"Imported Addresses" = "ที่อยู่ที่นำเข้า";
+
+/* (No Commment) */
+"Imported Addresses (Archived)" = "ที่อยู่ที่นำเข้า (เก็บเข้าคลังแล้ว)";
+
+/* (No Commment) */
+"Imported Private Key %@" = "คีย์ส่วนตัวที่นำเข้า %@";
+
+/* (No Commment) */
+"Imported watch-only address %@" = "ที่อยู่แบบชมอย่างเดียวที่นำเข้า %@";
+
+/* (No Commment) */
+"Importing key" = "กำลังนำเข้าคีย์";
+
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "PIN ไม่ถูกต้อง โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Incorrect password" = "รหัสผ่านไม่ถูกต้อง";
+
+/* (No Commment) */
+"Incorrect private key" = "คีย์ส่วนตัวไม่ถูกต้อง";
+
+/* (No Commment) */
+"Increase fee" = "เพิ่มค่าธรรมเนียม";
+
+/* (No Commment) */
+"Information" = "ข้อมูล";
+
+/* (No Commment) */
+"Initializing Wallet" = "กำลังเริ่มใช้งานกระเป๋าเงิน";
+
+/* (No Commment) */
+"Insufficient Funds" = "เงินไม่เพียงพอ";
+
+/* (No Commment) */
+"Invalid Identifier" = "ตัวระบุไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid Pairing Code" = "รหัสจับคู่ไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid Send Value" = "มูลค่าการส่งไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid Shared Key" = "คีย์ที่แบ่งปันไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "รหัสสถานะที่ได้รับการส่งคืนไม่ถูกต้อง %@";
+
+/* (No Commment) */
+"Invalid Wallet ID" = "ID กระเป๋าเงินไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid address: %@" = "ที่อยู่ไม่ถูกต้อง: %@";
+
+/* (No Commment) */
+"Invalid email address." = "ที่อยู่อีเมลไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid mobile number." = "หมายเลขโทรศัพท์ไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "วลีเพื่อการกู้คืนไม่ถูกต้อง โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "การตอบสนองเซิร์ฟเวอร์ไม่ถูกต้อง โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ";
+
+/* (No Commment) */
+"Invalid to bitcoin address" = "ที่อยู่ bitcoin ไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid two-factor authentication type" = "ประเภทการพิสูจน์ตัวตนสองชั้นไม่ถูกต้อง";
+
+/* (No Commment) */
+"Invalid verification code. Please try again." = "รหัสการยืนยันไม่ถูกต้อง โปรดลองอีกครั้ง";
+
+/* No comment provided by engineer. */
+"It is important to make sure you write down your words exactly as they appear here and " = "เป็นสิ่งสำคัญที่จะทำให้แน่ใจว่าคุณเขียนคำให้แม่นยำดังที่มันแสดงที่นี่และ";
+
+/* No comment provided by engineer. */
+"Just now" = "เมื่อครู่นี้";
+
+/* (No Commment) */
+"Keep higher fee" = "รักษาค่าธรรมเนียมให้สูงขึ้น";
+
+/* (No Commment) */
+"Keep lower fee" = "รักษาค่าธรรมเนียมให้ต่ำลง";
+
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "เก็บ xPub ของคุณให้เป็นส่วนตัว ผู้ที่มีการเข้าถึง xPub จะสามารถเห็นเงินและธุรกรรมทั้งหมดของคุณได้";
+
+/* (No Commment) */
+"Key already imported" = "คีย์ได้รับการนำเข้าแล้ว";
+
+/* (No Commment) */
+"Label" = "ป้ายชื่อ";
+
+/* (No Commment) */
+"Label Address" = "ให้ป้ายชื่อที่อยู่";
+
+/* (No Commment) */
+"Label must contain letters and numbers only" = "ป้ายชื่อต้องประกอบไปด้วยตัวอักษรและตัวเลขเท่านั้น";
+
+/* (No Commment) */
+"Label must have less than 18 characters" = "ป้ายชื่อต้องมีตัวอักษรน้อยกว่า 18 ตัว";
+
+/* (No Commment) */
+"Large Transaction" = "ธุรกรรมขนาดใหญ่";
+
+/* (No Commment) */
+"Learn More" = "เรียนรู้เพิ่มเติม";
+
+/* (No Commment) */
+"Link Mobile" = "ลิงก์มือถือ";
+
+/* (No Commment) */
+"Load More Transactions" = "โหลดธุรกรรมเพิ่มเติม";
+
+/* (No Commment) */
+"Loading External Page" = "กำลังโหลดหน้าภายนอก";
+
+/* (No Commment) */
+"Loading transactions" = "กำลังโหลดธุรกรรม";
+
+/* (No Commment) */
+"Local Currency" = "สกุลเงินในประเทศ";
+
+/* (No Commment) */
+"Log in to my Wallet" = "ล็อกอินไปยังกระเป๋าเงินของฉัน";
+
+/* (No Commment) */
+"Login existing Wallet" = "ล็อกอินไปยังกระเป๋าเงินที่มีอยู่";
+
+/* (No Commment) */
+"Logout" = "ออกจากระบบ";
+
+/* (No Commment) */
+"Logout and forget wallet" = "ออกจากระบบและลืมกระเป๋าเงิน";
+
+/* (No Commment) */
+"Lower fee" = "ค่าธรรมเนียมที่ต่ำลง";
+
+/* (No Commment) */
+"Make Default" = "ทำให้เป็นค่าเริ่มต้น";
+
+/* (No Commment) */
+"Manual Pairing" = "จับคู่ด้วยตนเอง";
+
+/* (No Commment) */
+"Manually" = "ด้วยตนเอง";
+
+/* (No Commment) */
+"Merchant" = "ผู้ค้า";
+
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "ไดเรกทอรีผู้ค้าไม่สามารถใช้งานได้ในขณะนี้ โปรดลองอีกครั้งในภายหลัง";
+
+/* (No Commment) */
+"Merchant Map" = "แผนที่ผู้ค้า";
+
+/* (No Commment) */
+"Merchant URL" = "URL ผู้ค้า";
+
+/* (No Commment) */
+"Mobile Linked" = "เชื่อมต่อมือถือแล้ว";
+
+/* (No Commment) */
+"Mobile Number" = "หมายเลขมือถือ";
+
+/* No comment provided by engineer. */
+"My Bitcoin Wallet" = "กระเป๋าเงิน Bitcoin ของฉัน";
+
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "หมายเหตุ: คีย์ส่วนตัวที่ได้รับการสแกนไม่สอดคล้องกับที่อยู่แบบชมอย่างเดียวนี้ หากคุณต้องการใช้จ่ายจากที่อยู่นี้ โปรดตรวจสอบว่าคุณสแกนคีย์ส่วนตัวที่ถูกต้อง";
+
+/* (No Commment) */
+"Name" = "ชื่อ";
+
+/* (No Commment) */
+"Needs BIP38 Password" = "ต้องการรหัสผ่าน BIP38";
+
+/* (No Commment) */
+"New Address" = "ที่อยู่ใหม่";
+
+/* (No Commment) */
+"New Email Address" = "ที่อยู่อีเมลใหม่";
+
+/* (No Commment) */
+"New Mobile Number" = "หมายเลขโทรศัพท์ใหม่";
+
+/* (No Commment) */
+"New PIN must be different" = "PIN ใหม่จำเป็นต้องแตกต่าง";
+
+/* (No Commment) */
+"New password must be different" = "รหัสผ่านใหม่ต้องแตกต่างออกไป";
+
+/* (No Commment) */
+"New password must be different from your password hint" = "รหัสผ่านใหม่ต้องแตกต่างจากคำใบ้รหัสผ่านของคุณ";
+
+/* No comment provided by engineer. */
+"Next word" = "คำถัดไป";
+
+/* (No Commment) */
+"No" = "ไม่ใช่";
+
+/* (No Commment) */
+"No Label" = "ไม่มีป้ายชื่อ";
+
+/* No comment provided by engineer. */
+"No Password Entered" = "ไม่มีการกรอกรหัสผ่าน";
+
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "ไม่มีการเชื่อมต่ออินเทอร์เน็ตให้ใช้งาน โปรดตรวจสอบการตั้งค่าเครือข่ายของคุณ";
+
+/* (No Commment) */
+"No internet connection." = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
+
+/* (No Commment) */
+"Normal" = "ธรรมดา";
+
+/* (No Commment) */
+"Not Stored" = "ไม่ได้เก็บ";
+
+/* (No Commment) */
+"Not now" = "ไม่ใช่ตอนนี้";
+
+/* (No Commment) */
+"Notifications" = "การแจ้งเตือน";
+
+/* No comment provided by engineer. */
+"OK" = "ตกลง";
+
+/* (No Commment) */
+"Open %@?" = "เปิด %@?";
+
+/* (No Commment) */
+"Open Mail App" = "เปิดแอปเมล";
+
+/* (No Commment) */
+"PIN" = "PIN";
+
+/* (No Commment) */
+"PIN Encrypted String is nil" = "สตริง PIN ที่ได้รับการเข้ารหัสเป็นศูนย์";
+
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "วัตถุการตอบสนอง PIN คีย์หรือความยาวมีค่าเป็น 0";
+
+/* (No Commment) */
+"PIN Response Object success length 0" = "วัตถุการตอบสนอง PIN สำเร็จ ความยาวเป็น 0";
+
+/* (No Commment) */
+"PIN Saved Successfully" = "บันทึก PIN สำเร็จแล้ว";
+
+/* (No Commment) */
+"PIN Validation Error" = "ข้อผิดพลาดในการตรวจสอบความสมบูรณ์ของ PIN";
+
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "ไม่สามารถทำการตรวจสอบความสมบูรณ์ของ PIN ให้เสร็จสิ้นได้ โปรดกรอกรหัสผ่านกระเป๋าเงินของคุณด้วยตัวเอง";
+
+/* (No Commment) */
+"PINs do not match" = "PIN ไม่ตรงกัน";
+
+/* (No Commment) */
+"Parsing Pairing Code" = "กำลังแยกวิเคราะห์รหัสจับคู่";
+
+/* (No Commment) */
+"Password Hint" = "คำใบ้รหัสผ่าน";
+
+/* (No Commment) */
+"Password Required" = "จำเป็นต้องมีรหัสผ่าน";
+
+/* (No Commment) */
+"Password changed. Please login to continue." = "เปลี่ยนรหัสผ่านแล้ว โปรดล็อกอินเพื่อดำเนินการต่อ";
+
+/* (No Commment) */
+"Password must be different from your email" = "รหัสผ่านจำเป็นต้องแตกต่างจากอีเมลของคุณ";
+
+/* (No Commment) */
+"Password must be less than or equal to 255 characters" = "รหัสผ่านจำเป็นต้องสั้นกว่าหรือเท่ากับ 255 ตัวอักษร";
+
+/* (No Commment) */
+"Passwords do not match" = "รหัสผ่านไม่ตรงกัน";
+
+/* (No Commment) */
+"Payment Received" = "การชำระเงินที่ได้รับ";
+
+/* (No Commment) */
+"Payment Sent!" = "ส่งการชำระเงินแล้ว!";
+
+/* (No Commment) */
+"Payments Sent" = "ส่งการชำระเงินแล้ว";
+
+/* (No Commment) */
+"Pending" = "ระหว่างดำเนินการ";
+
+/* (No Commment) */
+"Pending (%@ Confirmations)" = "ระหว่างดำเนินการ (%@ การยืนยัน)";
+
+/* (No Commment) */
+"Phrase Backed" = "สำรองวลีแล้ว";
+
+/* (No Commment) */
+"Please Login" = "โปรดล็อกอิน";
+
+/* (No Commment) */
+"Please add an email address" = "โปรดเพิ่มที่อยู่อีเมล";
+
+/* (No Commment) */
+"Please check your email and click on the verification link." = "โปรดตรวจชมอีเมลของคุณและคลิกที่ลิงก์การยืนยัน";
+
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "โปรดตรวจชมอีเมลของคุณ หากคุณได้ยืนยันความพยายามในการล็อกอินแล้ว คุณควรเข้าสู่ระบบผ่านทางกระเป๋าเงินเว็บของเราและจับคู่โทรศัพท์ของคุณโดยการสแกนรหัส QR ภายใต้ การตั้งค่า -> ข้อมูลกระเป๋าเงิน";
+
+/* (No Commment) */
+"Please check your internet connection." = "โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ";
+
+/* (No Commment) */
+"Please choose another PIN" = "โปรดเลือก PIN อื่น";
+
+/* (No Commment) */
+"Please choose from the options below." = "โปรดเลือกจากตัวเลือกด้านล่าง";
+
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "โปรดกรอกค่าธรรมเนียมที่มากกว่า 0 BTC และมากที่สุ ด 0.01 BTC";
+
+/* (No Commment) */
+"Please enter a new PIN" = "โปรดกรอก PIN ใหม่";
+
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "โปรดกรอกรหัส %@ 2FA ของคุณ";
+
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "โปรดกรอกตัวระบุกระเป๋าเงินความยาว 36 ตัวอักษรของคุณให้ถูกต้อง สามารถค้นหามันได้ในอีเมลต้อนรับเมื่อตอนเริ่มต้น";
+
+/* (No Commment) */
+"Please enter your PIN" = "โปรดกรอก PIN ของคุณ";
+
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "โปรดกรอกวลีเพื่อการกู้คืนด้วยคำที่แบ่งด้วยช่องว่าง";
+
+/* (No Commment) */
+"Please login to load more addresses." = "โปรดล็อกอินเพื่อโหลดที่อยู่เพิ่มเติม";
+
+/* (No Commment) */
+"Please lower the fee to an amount that is less than your balance" = "โปรดลดค่าธรรมเนียมไปยังจำนวนที่น้อยกว่ายอดคงเหลือของคุณ";
+
+/* (No Commment) */
+"Please provide an email address." = "โปรดกรอกที่อยู่อีเมลของคุณ";
+
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "โปรดรีเฟรชรหัสการจับคู่และลองอีกครั้ง";
+
+/* (No Commment) */
+"Please select a different address to send from." = "โปรดเลือกที่อยู่ที่แตกต่างเพื่อใช้ในการส่ง";
+
+/* (No Commment) */
+"Please send %@ to bitcoin address.
+%@" = "โปรดส่ง %1$@ ไปยังที่อยู่ bitcoin.
+%2$@";
+
+/* (No Commment) */
+"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "โปรดส่งการชำระเงินไปยังที่อยู่ bitcoin (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">ช่วยเหลือ?</a>): %@";
+
+/* No comment provided by engineer. */
+"Please try again" = "โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Please verify your email address first." = "อย่างแรก โปรดยืนยันที่อยู่อีเมลของคุณ";
+
+/* (No Commment) */
+"Please verify your mobile number first." = "อย่างแรก โปรดยืนยันหมายเลขโทรศัพท์ของคุณ";
+
+/* (No Commment) */
+"Preferences" = "การตั้งค่า";
+
+/* (No Commment) */
+"Preparing transfer" = "กำลังเตรียมการโอน";
+
+/* (No Commment) */
+"Privacy Policy" = "นโยบายความเป็นส่วนตัว";
+
+/* (No Commment) */
+"Private Key Needed" = "จำเป็นต้องมีคีย์ส่วนตัว";
+
+/* (No Commment) */
+"Processing key" = "กำลังประมวลผลคีย์";
+
+/* (No Commment) */
+"Rate Blockchain Wallet" = "ให้คะแนนกระเป๋าเงิน Blockchain";
+
+/* (No Commment) */
+"Receive" = "รับ";
+
+/* (No Commment) */
+"Receive to..." = "รับไปยัง...";
+
+/* (No Commment) */
+"Received" = "ได้รับแล้ว";
+
+/* (No Commment) */
+"Recipients" = "ผู้รับ";
+
+/* (No Commment) */
+"Recover Funds" = "กู้คืนเงินทุน";
+
+/* (No Commment) */
+"Recovering Funds" = "กู้คืนเงิน";
+
+/* (No Commment) */
+"Regular" = "ปกติ";
+
+/* (No Commment) */
+"Request" = "ร้องขอ";
+
+/* (No Commment) */
+"Request Amount" = "จำนวนที่ร้องขอ";
+
+/* (No Commment) */
+"Request failed. Please check your internet connection." = "การร้องขอล้มเหลว โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ";
+
+/* (No Commment) */
+"Resend verification SMS" = "ส่ง SMS ยืนยันอีกครั้ง";
+
+/* (No Commment) */
+"Resend verification email" = "ส่งอีเมลยืนยันอีกครั้ง";
+
+/* (No Commment) */
+"Reset" = "รีเซ็ต";
+
+/* (No Commment) */
+"Retrieving recommended fee" = "กำลังรับข้อมูลค่าธรรมเนียมที่แนะนำ";
+
+/* (No Commment) */
+"Retry Validation" = "ลองตรวจสอบความสมบูรณ์อีกครั้ง";
+
+/* (No Commment) */
+"SMS" = "SMS";
+
+/* (No Commment) */
+"SMS Notifications" = "การแจ้งเตือน SMS";
+
+/* (No Commment) */
+"Save" = "บันทึก";
+
+/* (No Commment) */
+"Scan Pairing Code" = "สแกนรหัสจับคู่";
+
+/* (No Commment) */
+"Scan Private Key" = "สแกนคีย์ส่วนตัว";
+
+/* (No Commment) */
+"Scan QR Code" = "สแกนรหัส QR";
+
+/* (No Commment) */
+"Scan QR code" = "สแกนรหัส QR";
+
+/* (No Commment) */
+"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "สแกนหรือคัดลอกรหัสนี้ไปยังแอปผู้ค้า Blockchain ของคุณเพื่อรับ Bitcoin อย่างปลอดภัย";
+
+/* No comment provided by engineer. */
+"Second Password Incorrect" = "รหัสผ่านที่สองไม่ถูกต้อง";
+
+/* No comment provided by engineer. */
+"Second Password Required" = "จำเป็นต้องมีรหัสผ่านที่สอง";
+
+/* (No Commment) */
+"Security" = "ความปลอดภัย";
+
+/* (No Commment) */
+"Security Center" = "ศูนย์ความปลอดภัย";
+
+/* (No Commment) */
+"Security Center completed - your wallet is safe and secure" = "ศูนย์ความปลอดภัยเสร็จสิ้นแล้ว - กระเป๋าเงินของคุณปลอดภัย";
+
+/* (No Commment) */
+"Send" = "ส่ง";
+
+/* (No Commment) */
+"Send from..." = "ส่งจาก...";
+
+/* (No Commment) */
+"Send to..." = "ส่งถึง...";
+
+/* (No Commment) */
+"Send verification SMS" = "ส่ง SMS ยืนยัน";
+
+/* (No Commment) */
+"Sending Transaction" = "กำลังส่งธุรกรรม";
+
+/* (No Commment) */
+"Sent" = "ส่งแล้ว";
+
+/* (No Commment) */
+"Sent to %@" = "ส่งไปยัง %@";
+
+/* (No Commment) */
+"Server URL" = "URL เซิร์ฟเวอร์";
+
+/* (No Commment) */
+"Set as Default?" = "ตั้งเป็นค่าเริ่มต้น?";
+
+/* (No Commment) */
+"Settings" = "การตั้งค่า";
+
+/* (No Commment) */
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "การแชร์ xPub ของคุณจะเป็นการอนุญาตให้ผู้อื่นติดตามประวัติธุรกรรมของคุณ ผู้ที่ได้รับอนุญาตอาจจะสามารถขัดขวางคุณจากการเข้าถึงกระเป๋าเงินของคุณได้ โปรดแชร์ xPub กับคนที่คุณเชื่อใจเท่านั้น";
+
+/* (No Commment) */
+"Show all 'Dont Show Again' alerts" = "แสดงการแจ้งเตือน 'ไม่ต้องแสดงอีก' ทั้งหมด";
+
+/* No comment provided by engineer. */
+"Signal %d was raised." = "มีการปรับสัญญาณ %d ขึ้น";
+
+/* (No Commment) */
+"Signing Input %d" = "การลงนามต่อข้อมูล %d";
+
+/* (No Commment) */
+"Signing Inputs" = "การลงนามต่อข้อมูล";
+
+/* (No Commment) */
+"Simulate surge" = "จำลองการเพิ่มด่วน";
+
+/* (No Commment) */
+"Some funds cannot be transferred automatically." = "เงินบางส่วนไม่สามารถโอนได้โดยอัตโนมัติ";
+
+/* (No Commment) */
+"Status" = "สถานะ";
+
+/* (No Commment) */
+"Store Hint" = "คำใบ้ร้านค้า";
+
+/* (No Commment) */
+"Stored" = "เก็บแล้ว";
+
+/* (No Commment) */
+"Strong" = "แน่นหนา";
+
+/* (No Commment) */
+"Success" = "สำเร็จ";
+
+/* (No Commment) */
+"Success!" = "สำเร็จ!";
+
+/* (No Commment) */
+"Support" = "สนับสนุน";
+
+/* (No Commment) */
+"Surge Occurring" = "มีการเพิ่มด่วน";
+
+/* (No Commment) */
+"Swipe to Receive" = "ปัดนิ้วเพื่อรับ";
+
+/* No comment provided by engineer. */
+"Syncing Wallet" = "กำลังซิงค์กระเป๋าเงิน";
+
+/* (No Commment) */
+"Tap to copy this address. Share it with the sender via email or text." = "แตะเพื่อคัดลอกที่อยู่นี้ แชร์มันกับผู้ส่งผ่านอีเมลหรือข้อความ";
+
+/* (No Commment) */
+"Terms of Service" = "ข้อตกลงการให้บริการ";
+
+/* (No Commment) */
+"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "เครือข่ายการทำเหมือง Bitcoin กำลังประสบปัญหาเนื่องจากปริมาณกิจกรรมที่สูงซึ่งส่งผลให้ค่าธรรมเนียมที่แนะนำสูงกว่าปกติ";
+
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "PIN ที่คุณเลือกนั้นเป็น PIN ที่ธรรมดาเป็นอย่างยิ่งและใครก็ตามซึ่งสามารถเข้าถึงโทรศัพท์ของคุณอาจจะสามารถคาดเดาได้ง่ายโดยลองเพียงแค่ 3 ครั้ง คุณต้องการใช้ PIN นี้จริง ๆ หรือ?";
+
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "จำนวนที่คุณต้องการส่ง (%1$@) มากกว่าจำนวนสูงสุดที่คุณสามารถใช้จ่ายได้ โดยหักค่าธรรมเนียมออก (%2$@ - %3$@) คุณต้องการส่ง %4$@ หรือไม่?";
+
+/* (No Commment) */
+"The fee you have specified is too low." = "ค่าธรรมเนียมที่คุณระบุต่ำเกินไป";
+
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "คีย์ส่วนตัวที่คุณพยายามนำเข้านั้นได้รับการเข้ารหัส โปรดกรอกรหัสผ่านด้านล่าง";
+
+/* (No Commment) */
+"There was a problem verifying your identity." = "มีปัญหาเกิดขึ้นในการยืนยันตัวตนของคุณ";
+
+/* (No Commment) */
+"There was an error importing this private key" = "มีข้อผิดพลาดเกิดขึ้นในการนำเข้าคีย์ส่วนตัวนี้";
+
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "แนะนำตัวเลือกเหล่านี้สำหรับผู้ใช้ขั้นสูงเท่านั้น ดำเนินการต่อ?";
+
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "การดำเนินการนี้ต้องการคีย์ส่วนตัวสำหรับที่อยู่ Bitcoin %@ โปรดสแกนรหัส QR";
+
+/* (No Commment) */
+"This action requires the second password for your wallet. Please enter it below and press continue." = "การดำเนินการนี้ต้องการใช้รหัสผ่านที่สองสำหรับกระเป๋าเงิน ของคุณ โปรดกรอกมันด้านล่างและกด ดำเนินการต่อ";
+
+/* (No Commment) */
+"This address has already been used. Please login." = "ที่อยู่นี้ได้ถูกใช้แล้ว โปรดล็อกอิน";
+
+/* (No Commment) */
+"This address is not watch-only." = "ที่อยู่นี้ไม่ใช่แบบชมอย่างเดียว";
+
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "ที่อยู่นี้คือที่อยู่แบบชมอย่างเดียว เพื่อใช้จ่ายเงินของคุณจากกระเป๋าเงินนี้ โปรดสแกนคีย์ส่วนตัวของคุณ";
+
+/* (No Commment) */
+"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "ธุรกรรมนี้เป็นธุรกรรม bitcoin ที่ขนาดใหญ่เกินไป กระเป๋าเงินจำเป็นต้องรวบรวมการชำระเงินขนาดเล็กหลายการชำระเงินซึ่งคุณได้รับในอดีต การดำเนินการเช่นนี้ต้องการค่าธรรมเนียมที่สูงเพื่อให้ได้รับการยืนยันอย่างรวดเร็ว หากมันไม่มีปัญหาอะไรสำหรับการที่ธุรกรรมใช้เวลานานขึ้นในการยืนยัน คุณสามารถลดค่าธรรมเนียมได้ด้วยตนเองโดยการแตะ \"ปรับแต่งค่าธรรมเนียม\"";
+
+/* (No Commment) */
+"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "มันได้รับการจัดเก็บเข้าคลังแล้ว ถึงแม้ว่าคุณไม่สามารถส่งเงินจากที่นี่ได้ แต่เงินใด ๆ ทั้งหมดจะยังคงปลอดภัย เพียงแค่ดึงออกจากคลังเพื่อเริ่มใช้มันอีกครั้ง";
+
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "ชื่อนี้ได้ถูกใช้ไปแล้ว โปรดเลือกชื่ออื่น";
+
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "คีย์ส่วนตัวนี้เป็นของที่อยู่อื่นซึ่งไม่ใช่แบบชมอย่างเดียว";
+
+/* (No Commment) */
+"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "ธุรกรรมนี้ต้องการค่าธรรมเนียมที่สูงขึ้นสำหรับการใช้ดัส เนื่องจากจะมีการคืนเงินทอนเล็กน้อย";
+
+/* (No Commment) */
+"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "มันจะอนุญาตการแจ้งเตือนต่อไปนี้: รับเพื่อชมอย่างเดียว, การแจ้งเตือนการรีวิว App Store, และโอนเงินทั้งหมด";
+
+/* (No Commment) */
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "มันจะลบข้อมูลกระเป๋าเงินทั้งหมดบนอุปกรณ์นี้ โปรดยืนยันว่าคุณได้จัดเก็บข้อมูลกระเป๋าเงินของคุณไว้ที่อื่น ไม่เช่นนั้นจะไม่สามารถเข้าถึง bitcoin ใด ๆ ในกระเป๋าเงินนี้ได้!!";
+
+/* (No Commment) */
+"To" = "ถึง";
+
+/* (No Commment) */
+"Tor Requests" = "การร้องขอ Tor";
+
+/* (No Commment) */
+"Tor blocked" = "Tor ที่ถูกบล็อก";
+
+/* (No Commment) */
+"Tor requests allowed" = "อนุญาตการร้องขอ Tor แล้ว";
+
+/* (No Commment) */
+"Tor requests are currently allowed." = "การร้องขอ Tor ได้รับอนุญาตในขณะนี้";
+
+/* (No Commment) */
+"Tor requests are currently blocked." = "การร้องขอ Tor ถูกบล็อกในขณะนี้";
+
+/* (No Commment) */
+"Total Balance" = "ยอดคงเหลือทั้งหมด";
+
+/* (No Commment) */
+"Touch ID has been locked due to too many failed attempts." = "Touch ID ถูกล็อกเนื่องจากความพยายามที่ล้มเหลวหลายครั้งเกินไป";
+
+/* (No Commment) */
+"Touch ID is not available on this device." = "ไม่มี Touch ID ให้ใช้บนอุปกรณ์นี้";
+
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "Touch ID ไม่ได้เปิดใช้งานบนอุปกรณ์นี้ เพื่อเปิดใช้งาน Touch ID ไปยัง การตั้งค่า ->Touch ID & Passcode และเพิ่มลายนิ้วมือ";
+
+/* (No Commment) */
+"Transaction" = "ธุรกรรม";
+
+/* (No Commment) */
+"Transaction Fees" = "ค่าธรรมเนียมธุรกรรม";
+
+/* (No Commment) */
+"Transaction fee: %@" = "ค่าธรรมเนียมธุรกรรม: %@";
+
+/* (No Commment) */
+"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "ค่าธรรมเนียมธุรกรรมจะส่งผลต่อความเร็วที่เครือข่ายทำเหมือง Bitcoin จะยืนยันธุรกรรมของคุณ และมันขึ้นอยู่กับสภาพเครือข่ายในปัจจุบัน";
+
+/* (No Commment) */
+"Transactions" = "ธุรกรรม";
+
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "ธุรกรรมที่ไม่มีค่าธรรมเนียมจะใช้เวลานานกว่าในการยืนยัน หรืออาจจะไม่ได้รับการยืนยันเลย คุณต้องการดำเนินการต่อหรือไม่?";
+
+/* (No Commment) */
+"Transfer Funds" = "โอนเงิน";
+
+/* (No Commment) */
+"Transferred" = "โอนแล้ว";
+
+/* (No Commment) */
+"Transferred funds from %d %@" = "เงินที่โอนจาก %1$d %2$@";
+
+/* (No Commment) */
+"Transferred funds from %d %@. Outputs for %d %@ were too small." = "เงินที่โอนจาก %1$d %2$@ ผลลัพธ์สำหรับ %3$d %4$@ เล็กเกินไป";
+
+/* (No Commment) */
+"Transferring all funds: Address %i of %i" = "กำลังโอนเงินทั้งหมด: ที่อยู่ %1$i จาก %2$i";
+
+/* (No Commment) */
+"Try again" = "ลองอีกครั้ง";
+
+/* (No Commment) */
+"UPGRADE YOUR WALLET" = "อัปเกรดกระเป๋าเงินของคุณ";
+
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "ไม่สามารถโหลดกระเป๋าเงินของคุณได้เนื่องจากไม่มีการตอบสนองจากเซิร์ฟเวอร์ คุณอาจจะไม่ได้เชื่อมต่อออนไลน์ หรือ Blockchain อาจกำลังประสบปัญหา โปรดลองอีกครั้งในภายหลัง";
+
+/* (No Commment) */
+"Unarchive" = "เลิกการเก็บเข้าคลัง";
+
+/* (No Commment) */
+"Unarchive Address" = "เลิกการเก็บที่อยู่เข้าคลัง";
+
+/* (No Commment) */
+"Unconfirmed" = "ไม่ได้ยืนยัน";
+
+/* No comment provided by engineer. */
+"Unhandled exception" = "ข้อยกเว้นที่ไม่ได้จัดการ";
+
+/* (No Commment) */
+"Unknown" = "ไม่ทราบ";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "ข้อผิดพลาด Touch ID ที่ไม่เป็นที่รู้จัก รหัส: %ld";
+
+/* (No Commment) */
+"Unknown key format" = "รูปแบบคีย์ที่ไม่เป็นที่รู้จัด";
+
+/* (No Commment) */
+"Unsupported Private Key Format" = "รูปแบบคีย์ส่วนตัวที่ไม่รองรับ";
+
+/* (No Commment) */
+"Unverified" = "ไม่ได้ยืนยัน";
+
+/* (No Commment) */
+"Update" = "อัปเดต";
+
+/* (No Commment) */
+"Upgrade" = "อัปเกรด";
+
+/* (No Commment) */
+"Upgrade Wallet" = "อัปเกรดกระเป๋าเงิน";
+
+/* (No Commment) */
+"Upgrade to V3" = "อัปเกรดไปเป็นแบบ V3";
+
+/* (No Commment) */
+"Use Touch ID as PIN" = "ใช้ Touch ID เป็น PIN";
+
+/* (No Commment) */
+"Use all funds" = "ใช้เงินทั้งหมด";
+
+/* (No Commment) */
+"Use recommended values" = "ใช้มูลค่าที่แนะนำ";
+
+/* (No Commment) */
+"Use total available minus fee: %@" = "ใช้ทั้งหมดที่มีอยู่ หักค่าธรรมเนียมออก: %@";
+
+/* (No Commment) */
+"User Declined" = "ผู้ใช้ถูกปฏิเสธ";
+
+/* No comment provided by engineer. */
+"VERIFY BACKUP" = "ยืนยันการสำรองข้อมูล";
+
+/* (No Commment) */
+"Value when sent: %@" = "ค่าเมื่อส่ง: %@";
+
+/* (No Commment) */
+"Verification email has been sent to %@." = "ได้ส่งอีเมลยืนยันไปยัง %@ แล้ว";
+
+/* (No Commment) */
+"Verified" = "ยืนยันแล้ว";
+
+/* (No Commment) */
+"Verify" = "ยืนยัน";
+
+/* (No Commment) */
+"Verify Email" = "ยืนยันอีเมล";
+
+/* (No Commment) */
+"Verifying" = "กำลังยืนยัน";
+
+/* (No Commment) */
+"Wallet ID" = "ID กระเป๋าเงิน";
+
+/* (No Commment) */
+"Wallet Information" = "ข้อมูลกระเป๋าเงิน";
+
+/* (No Commment) */
+"Wallet JSON" = "JSON กระเป๋าเงิน";
+
+/* (No Commment) */
+"Wallet Paired Successfully." = "จับคู่กระเป๋าเงินสำเร็จแล้ว";
+
+/* (No Commment) */
+"Recovery Phrase" = "วลีเพื่อการกู้คืน";
+
+/* (No Commment) */
+"Warning" = "คำเตือน";
+
+/* (No Commment) */
+"Warning!!!" = "คำเตือน!!!";
+
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "คำเตือน: ตัวระบุกระเป๋าเงินของคุณเป็นข้อมูลที่ละเอียดอ่อน การคัดลอกมันอาจทำให้ความปลอดภัยของกระเป๋าเงินของคุณลดลง";
+
+/* (No Commment) */
+"Watch Only" = "ชมอย่างเดียว";
+
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "เราจะส่งคำใบ้ไปยังที่อยู่อีเมลซึ่งได้รับการยืนยันหากคุณร้องขอมัน";
+
+/* (No Commment) */
+"Weak" = "แย่";
+
+/* (No Commment) */
+"WebSocket URL" = "WebSocket URL";
+
+/* (No Commment) */
+"Welcome" = "ยินดีต้อนรับ";
+
+/* No comment provided by engineer. */
+"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "Well done! หากคุณทำรหัสผ่านสูญหาย คุณสามารถกู้คืนเงินในกระเป๋าเงินนี้ รวมถึงเงินที่ได้รับในอนาคต (ยกเว้นที่อยู่ที่นำเข้า) โดยใช้วลีเพื่อการกู้คืน 12 คำ อย่าลืมเก็บวลีเพื่อการกู้คืนของคุณไว้นอกคอมพิวเตอร์ในที่ที่ปลอดภัย ผู้ใดก็ตามซึ่งสามารถเข้าถึงวลีเพื่อการกู้คืนของคุณจะสามารถเข้าถึง bitcoin ของคุณได้";
+
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "เราได้ตรวจพบการติดตั้งกระเป๋าเงิน Blockchain บนโทรศัพท์ของคุณก่อนหน้านี้";
+
+/* (No Commment) */
+"What's this for?" = "สิ่งนี้มีไว้เพื่ออะไร?";
+
+/* (No Commment) */
+"Where" = "ที่ใด";
+
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "คุณต้องการเพิ่มที่อยู่ bitcoin %@ ไปยังสมุดที่อยู่หรือไม่?";
+
+/* (No Commment) */
+"Would you like to archive the addresses used?" = "คุณต้องการเก็บที่อยู่ที่ใช้แล้วเข้าคลังหรือไม่?";
+
+/* No comment provided by engineer. */
+"Write the following 12 words onto a " = "เขียนคำ 12 คำต่อไปนี้ไปยัง";
+
+/* (No Commment) */
+"Wrong BIP38 Password" = "รหัสผ่าน BIP38 ผิด";
+
+/* (No Commment) */
+"Yes" = "ใช่";
+
+/* (No Commment) */
+"Yes, rate Blockchain Wallet" = "ใช่แล้ว ให้คะแนนกระเป๋าเงิน Blockchain";
+
+/* No comment provided by engineer. */
+"Yesterday" = "เมื่อวาน";
+
+/* (No Commment) */
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "คุณกำลังจะนำเข้าที่อยู่แบบชมอย่างเดียว ที่อยู่ (หรือรหัสคีย์สาธารณะ) ซึ่งจัดเก็บในกระเป๋าเงินโดยไม่มีคีย์ส่วนตัวที่สอดคล้องกัน มันหมายความว่า คุณจะสามารถใช้เงินได้หากคุณจัดเก็บคีย์ส่วนตัวไว้ที่อื่นเท่านั้น หากคุณไม่ได้จัดเก็บคีย์ส่วนตัวไว้ อย่าขอให้ผู้ใด ๆ ส่ง bitcoin ให้คุณไปยังที่อยู่แบบชมอย่างเดียวนี้";
+
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "คุณกำลังจะได้รับ bitcoin ไปยังที่อยู่แบบชมอย่างเดียว คุณสามารถใช้เงินเหล่านี้ได้หากคุณสามารถเข้าถึงคีย์ส่วนตัวได้เท่านั้น ดำเนินการต่อ?";
+
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "คุณกำลังใช้งานกระเป๋าเงิน Bitcoin ที่ปลอดภัยที่สุดของเรา";
+
+/* No comment provided by engineer. */
+"You backed up your funds successfully." = "คุณได้ทำการสำรองเงินของคุณเรียบร้อยแล้ว";
+
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "คุณสามารถเปิดการใช้งานการยืนยัน 2 ขั้นตอนผ่านทาง SMS หรือโทรศัพท์ของคุณ เพื่อใช้วิธีการพิสูจน์ตัวตนอื่น โปรดล็อกอินไปยังกระเป๋าเงินเว็บของเรา";
+
+/* (No Commment) */
+"You can now spend from this address." = "คุณสามารถใช้จ่ายจากที่อยู่นี้ได้ตอนนี้";
+
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "คุณไม่ได้ตั้งค่าบัญชีสำหรับ Mail โปรดติดต่อ %@";
+
+/* (No Commment) */
+"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = "คุณไม่มีที่อยู่ซึ่งมียอดคงเหลือที่สามารถใช้จ่ายได้มากกว่าหรือเท่ากับดัสเทรชโฮลด์ที่ต้องการได้";
+
+/* (No Commment) */
+"You have no available funds to send from this address" = "คุณไม่มีเงินให้ใช้ในการส่งจากที่อยู่นี้";
+
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "คุณต้องปิดการใช้งานการยืนยัน 2 ขั้นตอนก่อนเปลี่ยนหมายเลขโทรศัพท์ของคุณ (%@)";
+
+/* (No Commment) */
+"You must enter a destination address" = "คุณต้องกรอกที่อยู่ปลายทาง";
+
+/* (No Commment) */
+"You must enter a label" = "คุณต้องกรอกป้ายชื่อ";
+
+/* (No Commment) */
+"You must have at least one active address" = "คุณต้องมีที่อยู่ที่ใช้งานอยู่อย่างน้อยหนึ่งแห่ง";
+
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "คุณต้องปิดการใช้งานการยืนยัน 2 ขั้นตอนเพื่อจับคู่ด้วยตนเอง";
+
+/* (No Commment) */
+"You must leave at least one active address" = "คุณต้องทิ้งที่อยู่ที่ใช้งานอยู่ไว้อย่างน้อยหนึ่งแห่ง";
+
+/* (No Commment) */
+"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "คุณควรจับคู่หรือล็อกอินหากคุณสามารถเข้าถึง ID กระเป๋าเงินหรือรหัสผ่านของคุณได้ การกู้คืนเงินจะสร้าง ID กระเป๋าเงินใหม่ คุณต้องการดำเนินการต่อหรือไม่?";
+
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "คุณระบุค่าธรรมเนียมธุรกรรมมูลค่า %1$@ ซึ่งน้อยเกินไปมาก ธุรกรรมของคุณอาจติดค้างและมีความเป็นไปได้ที่จะไม่ได้รับการยืนยัน เพื่อเพิ่มความเป็นไปได้ของการยืนยันธุรกรรมของคุณภายในหนึ่งชั่วโมง (หกบล็อก) เราแนะนำเป็นอย่างยิ่งให้คุณใช้ค่าธรรมเนียมไม่น้อยกว่า %2$@";
+
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "คุณระบุค่าธรรมเนียมธุรกรรมมูลค่า %1$@ ซึ่งน้อยเกินไปมาก ธุรกรรมของคุณอาจติดขัดและอาจไม่ได้รับการยืนยันเลยก็เป็นได้ เพื่อเพิ่มความเป็นไปได้ของการยืนยันธุรกรรมของคุณภายในหนึ่งชั่วโมง (หกบล็อก) เราแนะนำเป็นอย่างยิ่งให้คุณใช้ค่าธรรมเนียมไม่น้อยกว่า %2$@ เนื่องจากคุณมีเงินไม่เพียงพอ มันหมายความว่าจำนวนการส่งจะจำเป็นต้องถูกลดไปเป็น %3$@";
+
+/* (No Commment) */
+"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "คุณระบุค่าธรรมเนียมธุรกรรมมูลค่า %1$@ ซึ่งสูงผิดปกติ ถึงแม้ว่าคุณจะลดค่าธรรมเนียมไปเป็น %2$@ คุณยังสามารถคาดการณ์ได้ว่าธุรกรรมของคุณจะได้รับการยืนยันภายใน 10 นาที (หนึ่งบล็อก)";
+
+/* (No Commment) */
+"You will be leaving the app." = "คุณกำลังจะออกจากแอป";
+
+/* (No Commment) */
+"You've successfully imported a private key." = "คุณได้นำเข้าคีย์ส่วนตัวเรียบร้อยแล้ว";
+
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "คุณได้นำเข้าคีย์ส่วนตัวสำหรับ​ที่อยู่ %@ เรียบร้อยแล้วและคุณสามารถใช้จ่ายจากมันได้ในตอนนี้ หากคุณต้องการใช้จ่ายจากที่อยู่นี้ โปรดตรวจสอบว่าคุณสแกนคีย์ส่วนตัวที่ถูกต้อง";
+
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "อุปกรณ์ของคุณดูเหมือนว่าจะถูกเจลเบรก ความปลอดภัยของกระเป๋าเงินของคุณอาจตกอยู่ในความเสี่ยง";
+
+/* (No Commment) */
+"Your email has been verified." = "อีเมลของคุณได้รับการยืนยันแล้ว";
+
+/* (No Commment) */
+"Your identity does not match our records." = "ตัวตนของคุณไม่ตรงกับข้อมูลของเรา";
+
+/* (No Commment) */
+"Your mobile number has been verified." = "หมายเลขโทรศัพท์ของคุณได้รับการยืนยันแล้ว";
+
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "สามารถใช้โทรศัพท์มือถือของคุณในการเปิดใช้งานการพิสูจน์ตัวตนสองชั้นได้ เพื่อช่วยรักษาความปลอดภัยให้กับกระเป๋าเงินของคุณ ให้ปลอดภัยจากการเข้าถึงที่ไม่ได้รับการอนุญาต";
+
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "คำใบ้รหัสผ่านใหม่ของคุณมีอักษรที่ไม่ถูกต้อง โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "คำใบ้รหัสผ่านใหม่ของคุณไม่มีตัวอักษร คำใบ้รหัสผ่านของคุณจะถูกลบ";
+
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "คำใบ้รหัสผ่านของคุณต้องแตกต่างจากรหัสผ่านของคุณ โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "คำใบ้รหัสผ่านของคุณต้องแตกต่างจากรหัสผ่านที่สองของคุณ โปรดลองอีกครั้ง";
+
+/* (No Commment) */
+"Your password hint has been updated." = "คำใบ้รหัสผ่านของคุณได้รับการอัปเดตแล้ว";
+
+/* (No Commment) */
+"Your password is not strong enough. Please choose a different password." = "รหัสผ่านของคุณไม่แน่นหนาพอ โปรดเลือกรหัสผ่านอื่น";
+
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "เงินที่ได้รับการโอนของคุณจะปลอดภัยและคุณจะได้รับประโยชน์จากความเป็นส่วนตัวที่เพิ่มขึ้นและฟีเจอร์การสำรองและการกู้คืนที่ใช้งานสะดวก";
+
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "ที่อยู่อีเมลซึ่งได้รับการยืนยันของคุณจะใช้เพื่อส่งรหัสล็อกอินเมื่อตรวจพบกิจกรรมที่ผิดปกติ เพื่อเตือนคุณถึง ID ล็อกอินกระเป๋าเงินของคุณ และเพื่อส่งการแจ้งเตือนการชำระเงิน bitcoin เมื่อคุณได้รับเงิน เราจะไม่ใช้ที่อยู่อีเมลของคุณสำหรับวัตถุประสงค์ทางการตลาด";
+
+/* (No Commment) */
+"Your wallet does not contain this address." = "กระเป๋าเงินของคุณไม่มีที่อยู่นี้";
+
+/* (No Commment) */
+"Your wallet was successfully created." = "ได้สร้างกระเป๋าเงินของคุณเรียบร้อยแล้ว";
+
+/* (No Commment) */
+"Yubi Key" = "คีย์ Yubi";
+
+/* No comment provided by engineer. */
+"eighth word" = "คำที่แปด";
+
+/* No comment provided by engineer. */
+"eleventh word" = "คำที่สิบเอ็ด";
+
+/* No comment provided by engineer. */
+"fifth word" = "คำที่ห้า";
+
+/* No comment provided by engineer. */
+"first word" = "คำที่หนึ่ง";
+
+/* No comment provided by engineer. */
+"fourth word" = "คำที่สี่";
+
+/* (No Commment) */
+"from" = "จาก";
+
+/* No comment provided by engineer. */
+"in this order." = "ในลำดับนี้";
+
+/* No comment provided by engineer. */
+"ninth word" = "คำที่เก้า";
+
+/* (No Commment) */
+"or Continue" = "หรือดำเนินการต่อ";
+
+/* No comment provided by engineer. */
+"piece of paper." = "กระดาษ";
+
+/* No comment provided by engineer. */
+"second word" = "คำที่สอง";
+
+/* No comment provided by engineer. */
+"seventh word" = "คำที่เจ็ด";
+
+/* No comment provided by engineer. */
+"sixth word" = "คำที่หก";
+
+/* No comment provided by engineer. */
+"tenth word" = "คำที่สิบ";
+
+/* No comment provided by engineer. */
+"third word" = "คำที่สาม";
+
+/* No comment provided by engineer. */
+"twelfth word" = "คำที่สิบสอง";
+
+/* No comment provided by engineer. */
+" We recommend the fee shown for the transaction at this time." = " เราแนะนำค่าธรรมเนียมที่แสดงสำหรับธุรกรรมนี้ในตอนนี้";
+
+/* No comment provided by engineer. */
+"Fee" = "ค่าธรรมเนียม";
+
+/* No comment provided by engineer. */
+"Please contact support:\n%@" = "โปรดติดต่อแผนกสนับสนุน:\n%@";
+
+/* No comment provided by engineer. */
+"Transfer Amount" = "จำนวนการโอน";
+
+/* No comment provided by engineer. */
+"Value when received: %@" = "มูลค่าเมื่อได้รับ: %@";
+
+/* (No Commment) */
+"Transfer All Funds" = "โอนเงินทั้งหมด";
+
+/* (No Commment) */
+"Transfer all" = "โอนทั้งหมด";
+
+/* (No Commment) */
+"Transfer imported addresses?" = "โอนที่อยู่ที่นำเข้า?";
+
+/* (No Commment) */
+"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "ไม่ได้มีการสำรองที่อยู่ที่นำเข้าด้วยวลีเพื่อการกู้คืนของคุณ เพื่อทำให้เงินเหล่านี้ปลอดภัย เราแนะนำให้โอนยอดคงเหลือเหล่านี้เพื่อรวมไปในการสำรองข้อมูลของคุณ";
+
+/* (No Commment) */
+"About Us" = "เกี่ยวกับเรา";
+
+/* (No Commment) */
+"You currently have email notifications enabled. Changing your email will disable email notifications." = "คุณได้เปิดใช้งานการแจ้งเตือนอีเมลในขณะนี้ การเปลี่ยนอีเมลของคุณจะปิดการแจ้งเตือนอีเมล";
+
+/* (No Commment) */
+"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "คุณได้เปิดใช้งานการแจ้งเตือน SMS ในขณะนี้ การเปลี่ยนอีเมลของคุณจะปิดการแจ้งเตือน SMS";
+
+/* (No Commment) */
+"All rights reserved." = "สงวนลิขสิทธิ์";
+
+/* (No Commment) */
+"Rate us" = "ให้คะแนนเรา";
+
+/* (No Commment) */
+"Free Merchant app" = "ฟรีแอป Merchant";
+
+/* (No Commment) */
+"Cannot open Mail App" = "ไม่สามารถเปิดแอปเมลได้";
+
+/* (No Commment) */
+"Cannot open URL %@" = "ไม่สามารถเปิด URL %@";
+
+/* (No Commment) */
+"Would you like to tell us about your experience with Blockchain?" = "คุณต้องการบอกเราเกี่ยวกับประสบการณ์ของคุณกับ Blockchain หรือไม่?";
+
+/* (No Commment) */
+"You will be leaving the app." = "คุณจะออกจากแอป";
+
+/* (No Commment) */
+"Check Your Inbox" = "ตรวจสอบกล่องข้อความของคุณ";
+
+/* (No Commment) */
+"Continue To Mail" = "ดำเนินการต่อไปยังเมล";
+
+/* (No Commment) */
+"Look for an email from Blockchain and click the verification link to complete your wallet setup." = "มองหาอีเมลจาก Blockchain แล้วคลิกลิงก์ยืนยันเพื่อทำการตั้งค่ากระเป๋าเงินของคุณให้เสร็จสิ้น";
+
+/* (No Commment) */
+"Backup Your Funds" = "สำรองข้อมูลเงินทุนของคุณ";
+
+/* (No Commment) */
+"Backup Now" = "สำรองข้อมูลตอนนี้";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "ยินดีด้วย คุณมี bitcoin! ตอนนี้ มาสำรองข้อมูลกระเป๋าเงินของคุณกันเพื่อยืนยันว่าคุณจะสามารถเข้าถึง bitcoin ของคุณได้หากคุณลืมรหัสผ่าน";
+
+/* (No Commment) */
+"2-Step Verification" = "การยืนยัน 2 ขั้นตอน";
+
+/* (No Commment) */
+"Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "ป้องกันการเข้าถึงกระเป๋าเงินของคุณโดยไม่ได้รับอนุญาต เปิดใช้งานการยืนยัน 2 ขั้นตอนเพื่อเพิ่มความปลอดภัยของกระเป๋าเงิน";
+
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "เปิดใช้การแจ้งเตือนเพื่อรับอีเมลหรือข้อความ SMS เมื่อคุณได้รับ bitcoin";
+
+/* (No Commment) */
+"Not Now" = "ไม่ใช่ตอนนี้";
+
+/* (No Commment) */
+"I'll do this later" = "ฉันจะทำในภายหลัง";
+
+/* (No Commment) */
+"May be at risk for a double spend." = "อาจมีความเสี่ยงสำหรับการใช้จ่ายสองครั้ง";
+
+/* (No Commment) */
+"For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "เพื่อความปลอดภัย เราจะไม่เก็บรหัสผ่านใด ๆ บนไฟล์ สำรองข้อมูลกระเป๋าเงินของคุณเพื่อยืนยันว่า งเงิน ของคุณจะปลอดภัยหากคุณทำรหัสผ่านสูญหาย";
+
+/* (No Commment) */
+"Wallets" = "กระเป๋าสตางค์";
+
+/* (No Commment) */
+"START BACKUP" = "เริ่มการสำรองข้อมูล";
+
+/* (No Commment) */
+"Backup Needed" = "จำเป็นต้องมีการสำรองข้อมูล";
+
+/* (No Commment) */
+"Create a Wallet" = "สร้างกระเป๋าเงิน";
+
+/* (No Commment) */
+"Log In" = "เข้าสู่ระบบ";
+
+/* (No Commment) */
+"Please enter your password to log into your Blockchain wallet." = "โปรดกรอกรหัสผ่านของคุณเพื่อเข้าสู่ระบบกระเป๋าเงิน Blockchain ของคุณ";
+
+/* (No Commment) */
+"Forgot Password?" = "ลืมรหัสผ่าน?";
+
+/* (No Commment) */
+"Or start over and " = "หรือเริ่มใหม่และ ";
+
+/* (No Commment) */
+"Update Email" = "อัปเดตอีเมล";
+
+/* (No Commment) */
+"Enter Email Address" = "กรอกที่อยู่อีเมล";
+
+/* (No Commment) */
+"Update Mobile" = "อัปเดตหมายเลขโทรศัพท์มือถือ";
+
+/* (No Commment) */
+"Enter Mobile Number" = "กรอกหมายเลขโทรศัพท์มือถือ";
+
+/* (No Commment) */
+"Balances" = "ยอดคงเหลือ";
+
+/* (No Commment) */
+"Transactions occur when you send and receive bitcoin." = "ธุรกรรมเกิดขึ้นเมื่อคุณส่งและรับบิตคอยน์";
+
+/* (No Commment) */
+"Your Transactions" = "ธุรกรรมของคุณ";
+
+/* (No Commment) */
+"Backup Complete" = "การสำรองข้อมูลเสร็จสิ้น";
+
+/* (No Commment) */
+"Backup Needed" = "จำเป็นต้องมีการสำรองข้อมูล";
+
+/* (No Commment) */
+"Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "ใช้วลีเพื่อการกู้คืนของคุณเพื่อกู้คืนเงินของคุณในกรณีที่รหัสผ่านสูญหาย ผู้ใดก็ตามที่สามารถเข้าถึงวลีเพื่อการกู้คืนของคุณสามารถเข้าถึงเงินน์ของคุณได้ ดังนั้นเก็บมันไว้ในสถานที่ออฟไลน์ที่ปลอดภัยและมั่นคง";
+
+/* (No Commment) */
+"The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "วลีเพื่อการกู้คืน 12 คำต่อไปนี้จะมอบการเข้าถึงเงินของคุณในกรณีที่คุณทำรหัสผ่านของคุณสูญหาย";
+
+/* (No Commment) */
+"Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "โปรดตรวจสอบว่าคุณจดวลีของคุณไว้บนกระดาษและเก็บรักษามันไว้ในสถานที่ที่ปลอดภัยและมั่นคง";
+
+/* (No Commment) */
+"Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "จดวลีเพื่อการกู้คืน 12 คำต่อไปนี้อย่างแม่นยำให้เหมือนกับที่ปรากฏและในลำดับนี้:";
+
+/* (No Commment) */
+"PREVIOUS" = "ก่อนหน้า";
+
+/* (No Commment) */
+"NEXT" = "ถัดไป";
+
+/* (No Commment) */
+"BACKUP AGAIN" = "ทำการสำรองข้อมูลอีกครั้ง";
+
+/* (No Commment) */
+"Your verified email address is used to send payment alerts, ID reminders, and login codes." = "จะมีการใช้ที่อยู่อีเมลที่ได้รับการยืนยันของคุณเพื่อส่งการแจ้งเตือนการชำระเงิน การเตือน ID และรหัสเข้าสู่ระบบ";
+
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "สามารถใช้งานหมายเลขโทรศัพท์ของคุณเพื่อเปิดใช้งานการพิสูจน์ตัวตนแบบสองขั้นตอนหรือเพื่อรับการแจ้งเตือน";
+
+/* (No Commment) */
+"Trade Completed" = "การเทรดเสร็จสิ้นแล้ว";
+
+/* (No Commment) */
+"The trade you created on %@ has been completed!" = "การเทรดที่คุณสร้างบน %@ เสร็จสิ้นแล้ว!";
+
+/* (No Commment) */
+"View details" = "ชมรายละเอียด";
+
+/* (No Commment) */
+"Buy Bitcoin" = "ซื้อบิตคอยน์";
+
+/* (No Commment) */
+"Your Transactions" = "ธุรกรรมของคุณ";
+
+/* (No Commment) */
+"Transactions occur when you send and receive bitcoin." = "ธุรกรรมเกิดขึ้นเมื่อคุณส่งและรับบิตคอยน์";
+
+/* (No Commment) */
+"Custom" = "กำหนดเอง";
+
+/* (No Commment) */
+"Advanced users only" = "ผู้ใช้ขั้นสูงเท่านั้น";
+
+/* (No Commment) */
+"1+ hour" = "1+ ชั่วโมง";
+
+/* (No Commment) */
+"Priority" = "ระดับความสำคัญ";
+
+/* (No Commment) */
+"~0-60 min" = "~0-60 นาที";
+
+/* (No Commment) */
+"Satoshi per byte" = "Satoshi ต่อไบต์";
+
+/* (No Commment) */
+"sat/b" = "sat/b";
+
+/* (No Commment) */
+"High fee not necessary" = "ไม่จำเป็นต้องใช้ค่าธรรมเนียมสูง";
+
+/* (No Commment) */
+"Low fee not recommended" = "ไม่แนะนำให้ใช้ค่าธรรมเนียมต่ำ";
+
+/* (No Commment) */
+"This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck." = "แนะนำให้ใช้ฟีเจอร์นี้สำหรับผู้ใช้ขั้นสูงเท่านั้น ในการเลือกค่าธรรมเนียมแบบกำหนดเอง คุณมีความเสี่ยงในการชำระเงินมากเกินไป หากไม่เป็นเช่นนั้น ธุรกรรมของคุณอาจค้างอยู่";
+
+/* (No Commment) */
+"Available now" = "มีให้ใช้ตอนนี้";
+
+/* (No Commment) */
+"Buy bitcoin directly from your mobile wallet. It's simple, seamless, and secure." = "ซื้อบิตคอยน์โดยตรงจากกระเป๋าเงินมือถือ มันง่าย ราบรื่นและปลอดภัย";
+
+/* (No Commment) */
+"Log in to Web Wallet" = "ล็อกอินไปยังกระเป๋าเงินบนเว็บ";
+
+/* (No Commment) */
+"Go to login.blockchain.com on your computer." = "ไปยัง login.blockchain.com บนคอมพิวเตอร์ของคุณ";
+
+/* (No Commment) */
+"Select Log in via mobile." = "เลือกล็อกอินผ่านมือถือ";
+
+/* (No Commment) */
+"Using your computer's camera, scan the QR code below." = "ใช้กล้องคอมพิวเตอร์ของคุณสแกนรหัส QR ด้านล่าง";
+
+/* (No Commment) */
+"Keep this QR code hidden until you're ready." = "ซ่อนรหัส QR นี้ไว้จนกระทั่งคุณพร้อมแล้ว";
+
+/* (No Commment) */
+"Keep this QR code safe!" = "เก็บรักษารหัส QR นี้ให้ปลอดภัย!";
+
+/* (No Commment) */
+"Do not share it with others." = "อย่าแบ่งปันมันให้กับผู้อื่น";
+
+/* (No Commment) */
+"Show QR Code" = "แสดงรหัส QR";
+
+/* (No Commment) */
+"Hide QR Code" = "ซ่อนรหัส QR";
+
+/* (No Commment) */
+"U.S. Dollar" = "ดอลลาร์สหรัฐฯ";
+
+/* (No Commment) */
+"Euro" = "ยูโร";
+
+/* (No Commment) */
+"lcelandic Króna" = "โครนาไอซ์แลนด์";
+
+/* (No Commment) */
+"Hong Kong Dollar" = "ดอลลาร์ฮ่องกง";
+
+/* (No Commment) */
+"New Taiwan Dollar" = "ดอลลาร์ไต้หวันใหม่";
+
+/* (No Commment) */
+"Swiss Franc" = "ฟรังก์สวิส";
+
+/* (No Commment) */
+"Danish Krone" = "โครนเดนมาร์ก";
+
+/* (No Commment) */
+"Chilean Peso" = "เปโซชิลี";
+
+/* (No Commment) */
+"Canadian Dollar" = "ดอลลาร์แคนาดา";
+
+/* (No Commment) */
+"Indian Rupee" = "รูปีอินเดีย";
+
+/* (No Commment) */
+"Chinese Yuan" = "หยวนจีน";
+
+/* (No Commment) */
+"Thai Baht" = "บาทไทย";
+
+/* (No Commment) */
+"Australian Dollar" = "ดอลลาร์ออสเตรเลีย";
+
+/* (No Commment) */
+"Singapore Dollar" = "ดอลลาร์สิงคโปร์";
+
+/* (No Commment) */
+"South Korean Won" = "วอนเกาหลีใต้";
+
+/* (No Commment) */
+"Japanese Yen" = "เยนญี่ปุ่น";
+
+/* (No Commment) */
+"Polish Zloty" = "ซวอตือโปแลนด์";
+
+/* (No Commment) */
+"Great British Pound" = "ปอนด์สหราชอาณาจักร";
+
+/* (No Commment) */
+"Swedish Krona" = "ครูนาสวีเดน";
+
+/* (No Commment) */
+"New Zealand Dollar" = "ดอลลาร์นิวซีแลนด์";
+
+/* (No Commment) */
+"Brazil Real" = "เรอัลบราซิล";
+
+/* (No Commment) */
+"Russian Ruble" = "รูเบิลรัสเซีย";
+
+/* (No Commment) */
+"Bitcoin Balances" = "ยอดคงเหลือ Bitcoin";
+
+/* (No Commment) */
+"Enter Ether address or select" = "กรอกที่อยู่ Ether หรือเลือก";
+
+/* (No Commment) */
+"Payment Sent! Your balance and transactions will update soon." = "ส่งการชำระเงินแล้ว! ยอดคงเหลือและธุรกรรมของคุณจะอัปเดตในเร็ว ๆ นี้";
+
+/* (No Commment) */
+"Waiting for payment" = "กำลังรอการชำระเงิน";
+
+/* (No Commment) */
+"Please wait until your last ether transaction confirms." = "โปรดรอจนกว่าธุรกรรม ether ครั้งสุดท้ายของคุณได้รับการยืนยัน";
+
+/* (No Commment) */
+"Bitcoin Addresses" = "ที่อยู่ Bitcoin";
+
+/* (No Commment) */
+"Bitcoin Merchant Map" = "แผนที่ผู้ค้า Bitcoin";
+
+/* (No Commment) */
+"Invalid Ether address: %@" = "ที่อยู่ Ether ไม่ถูกต้อง: %@";
+
+/* (No Commment) */
+"An error occurred while retrieving the latest chart data. Please try again later." = "เกิดข้อผิดพลาดในขณะรับข้อมูลแผนภูมิล่าสุด โปรดลองอีกครั้งในภายหลัง";
+
+/* (No Commment) */
+"Transactions occur when you send and request ether." = "มีธุรกรรมระหว่างที่คุณส่งและร้องขอ ether";
+
+/* (No Commment) */
+"Request Ether" = "ร้องขอ Ether";
+
+/* (No Commment) */
+"Dashboard" = "แผงควบคุม";
+
+/* (No Commment) */
+"Week" = "สัปดาห์";
+
+/* (No Commment) */
+"Month" = "เดือน";
+
+/* (No Commment) */
+"Year" = "ปี";
+
+/* (No Commment) */
+"Bitcoin Price" = "ราคา Bitcoin";
+
+/* (No Commment) */
+"Ether Price" = "ราคา Ether ";
+
+/* (No Commment) */
+"Contract addresses are not supported." = "ไม่รองรับที่อยู่สัญญา";
+
+/* (No Commment) */
+"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "ในขณะนี้เรารองรับเพียง ETH เท่านั้น คุณไม่สามารถรับ REP, ICN, GNT, GNO, DGD, BCP ได้";
+
+/* (No Commment) */
+"Now supporting Ether" = "รองรับ Ether ในตอนนี้";
+
+/* (No Commment) */
+"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "คุณขอ เรารับฟัง เราตื่นเต้นที่จะประกาศว่ากระเป๋าเงิน Blockchain ของคุณจะอนุญาตให้คุณส่งและรับ ether ได้อย่างราบรื่นแล้วในตอนนี้!";
+
+/* (No Commment) */
+"Get Started with Ether" = "เริ่มต้นกับ Ether";
+
+/* (No Commment) */
+"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "ในการใช้บริการนี้ คุณจำเป็นต้องกรอกรหัสผ่านที่สองของคุณ คุณควรจะต้องกรอกรหัสนี้เพียงครั้งเดียวเพื่อตั้งค่ากระเป๋าเงิน Ether ของคุณ";
+
+/* (No Commment) */
+"Enter Ether address" = "กรอกที่อยู่ Ether";
+
+/* (No Commment) */
+"Day" = "วัน";
+
+/* (No Commment) */
+"All" = "ทั้งหมด";
+
+/* (No Commment) */
+"Please send ether to %@." = "โปรดส่ง ether ไปยัง %@";
+
+/* (No Commment) */
+"Bitcoin payment request" = "คำร้องขอการชำระเงิน Bitcoin";
+
+/* (No Commment) */
+"Ether payment request" = "คำร้องขอการชำระเงิน Ether";
+
+/* (No Commment) */
+"My Ether Wallet" = "กระเป๋าเงิน Ether ของฉัน";
+
+/* (No Commment) */
+"Miners receive this fee to process this transaction." = "นักทำเหมืองจะได้รับค่าธรรมเนียมนี้เพื่อประมวลผลต่อธุรกรรมนี้";
+
+/* (No Commment) */
+"Get Ether" = "รับ Ether";
+
+/* (No Commment) */
+"at" = "ที่";
+
+/* (No Commment) */
+"Exchange" = "การแลกเปลี่ยน";
+
+/* (No Commment) */
+"New Exchange" = "การแลกเปลี่ยนใหม่";
+
+/* (No Commment) */
+"Use minimum" = "ใช้ค่าขั้นต่ำ";
+
+/* (No Commment) */
+"Use maximum" = "ใช้ค่าสูงสุด";
+
+/* (No Commment) */
+"Sending Funds" = "กำลังส่งเงินทุน";
+
+/* (No Commment) */
+"Thanks for placing your trade!  Exchange trades can take up to two hours, and you can keep track of your trade’s progress in the Order History section." = "ขอบคุณสำหรับการจัดสรรการเทรดของคุณ! การเทรดแบบแลกเปลี่ยนสามารถใช้เวลาสูงถึงสองชั่วโมงและคุณสามารถติดตามความคืบหน้าของการเทรดของคุณในส่วนประวัติคำสั่งซื้อ";
+
+/* (No Commment) */
+"In Progress" = "กำลังดำเนินการ";
+
+/* (No Commment) */
+"Exchanges can take up to two hours, you can keep track of your exchange progress in the Order History. Once the trade is complete, your ether will arrive in your wallet." = "การแลกเปลี่ยนสามารถใช้เวลาได้สูงถึงสองชั่วโมง คุณสามารถติดตามความคืบหน้าของการแลกเปลี่ยนของคุณในประวัติคำสั่งซื้อ เมื่อการเทรดเสร็จสิ้น ether ของคุณจะเข้าไปยังกระเป๋าเงินของคุณ";
+
+/* (No Commment) */
+"Your trade has been canceled. Please return to the exchange tab to start your trade again." = "การเทรดของคุณถูกยกเลิก โปรดย้อนกลับไปยังแถบการแลกเปลี่ยนเพื่อเริ่มการเทรดของคุณอีกครั้ง";
+
+/* (No Commment) */
+"Failed" = "ล้มเหลว";
+
+/* (No Commment) */
+"Exchange Failed" = "การแลกเปลี่ยนล้มเหลว";
+
+/* (No Commment) */
+"This trade has failed. Any funds sent from your wallet will be returned minus the transaction fee. Please return to the exchange tab to start a new trade." = "การเทรดนี้ล้มเหลว เงินทุนใด ๆ ที่ส่งจากกระเป๋าเงินของคุณจะได้รับการส่งคืนโดยมีการหักค่าธรรมเนียมธุรกรรม โปรดย้อนกลับไปยังแถบการแลกเปลี่ยนเพื่อเริ่มการเทรดใหม่";
+
+/* (No Commment) */
+"Your trade has expired. Please return to the exchange tab to start a new trade." = "การเทรดของคุณหมดอายุแล้ว โปรดย้อนกลับไปยังแถบการแลกเปลี่ยนเพื่อเริ่มการเทรดใหม่";
+
+/* (No Commment) */
+"You can now exchange your bitcoin for ether and vice versa directly from your Blockchain wallet!" = "ตอนนี้คุณสามารถแลกเปลี่ยน bitcoin ของคุณเป็น ether และในทางกลับกันโดยตรงจากกระเป๋าเงิน Blockchain ของคุณ!";
+
+/* (No Commment) */
+"%@ to Deposit" = "จะมีการฝาก %@";
+
+/* (No Commment) */
+"%@ to be Received" = "จะได้รับ %@";
+
+/* (No Commment) */
+"Exchange Rate" = "อัตราแลกเปลี่ยน";
+
+/* (No Commment) */
+"Transaction Fee" = "ค่าธรรมเนียมธุรกรรม";
+
+/* (No Commment) */
+"Network Transaction Fee" = "ค่าธรรมเนียมธุรกรรมเครือข่าย";
+
+/* (No Commment) */
+"ShapeShift Withdrawal Fee" = "ค่าธรรมเนียมการถอน ShapeShift";
+
+/* (No Commment) */
+"Agree to ShapeShift" = "ยอมรับต่อ ShapeShift";
+
+/* (No Commment) */
+"terms and conditions" = "ข้อตกลงและเงื่อนไข";
+
+/* (No Commment) */
+"Exchange In Progress" = "กำลังดำเนินการการแลกเปลี่ยน";
+
+/* (No Commment) */
+"Exchange Completed" = "การแลกเปลี่ยนเสร็จสิ้นแล้ว";
+
+/* (No Commment) */
+"Get started" = "เริ่มต้น";
+
+/* (No Commment) */
+"Below minimum limit" = "ต่ำกว่าขีดจำกัดขั้นต่ำ";
+
+/* (No Commment) */
+"Above maximum limit" = "สูงกว่าขีดจำกัดสูงสุด";
+
+/* (No Commment) */
+"Not enough to exchange" = "ไม่เพียงพอสำหรับการแลกเปลี่ยน";
+
+/* (No Commment) */
+"Order ID" = "ID คำสั่ง";
+
+/* (No Commment) */
+"Total %@ spent" = "ยอดใช้จ่ายรวม %@";
+
+/* (No Commment) */
+"Getting quote" = "รับคำเสนอราคา";
+
+/* (No Commment) */
+"Confirming" = "กำลังยืนยัน";
+
+/* (No Commment) */
+"Exchange In Progress" = "กำลังดำเนินการการแลกเปลี่ยน";
+
+/* (No Commment) */
+"Complete" = "เสร็จสิ้น";
+
+/* (No Commment) */
+"Exchange Completed" = "การแลกเปลี่ยนเสร็จสิ้นแล้ว";
+
+/* (No Commment) */
+"Quote expires in %@" = "คำเสนอราคาหมดอายุใน %@";
+
+/* (No Commment) */
+"Step %d of %d" = "ขั้นตอนที่ %d จาก %d";
+
+/* (No Commment) */
+"Select your State:" = "เลือกรัฐของคุณ:";
+
+/* (No Commment) */
+"Select State" = "เลือกรัฐ";
+
+/* (No Commment) */
+"Not Available" = "ไม่มีให้ใช้งาน";
+
+/* (No Commment) */
+"Exchanging coins is not yet available in your state. We’ll be rolling out more states soon." = "การแลกเปลี่ยนคอยน์ยังไม่มีให้ใช้งานในรัฐของคุณ เราจะเปิดตัวในอีกหลายรัฐในเร็ว ๆ นี้";
+
+/* (No Commment) */
+"An error occurred when getting your %@ balance. Please try again later. Details: %@" = "มีข้อผิดพลาดเกิดขึ้นระหว่างการรับยอดคงเหลือ %@ ของคุณ โปรดลองอีกครั้งในภายหลัง รายละเอียด: %@";
+
+/* (No Commment) */
+"An error occurred when getting an approximate quote. Please try again later. Details: %@" = "มีข้อผิดพลาดเกิดขึ้นระหว่างการรับคำเสนอราคาโดยประมาณ โปรดลองอีกครั้งในภายหลัง รายละเอียด: %@";
+
+/* (No Commment) */
+"Deposited to ShapeShift" = "ฝากไปยัง ShapeShift แล้ว";
+
+/* (No Commment) */
+"Received from ShapeShift" = "ได้รับจาก ShapeShift แล้ว";
+
+/* (No Commment) */
+"Order History" = "ประวัติคำสั่งซื้อ";
+
+/* (No Commment) */
+"Incoming" = "ขาเข้า";
+
+/* (No Commment) */
+"Trade Expired" = "การเทรดหมดอายุแล้ว";
+
+/* (No Commment) */
+"Your trade has expired. Please return to the Exchange page to start your trade again." = "การเทรดของคุณหมดอายุแล้ว โปรดย้อนกลับไปยังหน้าการแลกเปลี่ยนเพื่อเริ่มการเทรดของคุณอีกครั้ง";
+
+/* (No Commment) */
+"No Funds to Exchange" = "ไม่มีเงินทุนให้แลกเปลี่ยน";
+
+/* (No Commment) */
+"You have no funds to exchange. Why not get started by receiving some funds?" = "คุณมีเงินทุนไม่เพียงพอสำหรับการแลกเปลี่ยน ลองเริ่มต้นโดยรับเงินทุนบางรายการดีหรือไม่?";
+
+/* (No Commment) */
+"Loading Exchange" = "กำลังโหลดการแลกเปลี่ยน";
+
+/* (No Commment) */
+"Select other %@ Wallet" = "เลือกกระเป๋าเงิน %@ อื่น ๆ";
+
+/* (No Commment) */
+"%@ needed to exchange" = "ต้องการ %@ สำหรับการแลกเปลี่ยน";
+
+/* (No Commment) */
+"Start trading" = "เริ่มแลกเปลี่ยน";
+
+/* (No Commment) */
+"Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "แลกเปลี่ bitcoin โดยตรงจากของคุณ Blockchain กระเป๋าคุมข้อมูลนะ เริ่มด้วยการสร้างบัญชีในการซื้อ-ขา&ขายแท็บอก";
+
+/* (No Commment) */
+"The wait is over" = "การรอคอยมา";
+
+/* (No Commment) */
+"Something went wrong, please try reopening Buy & Sell Bitcoin again." = "มีบางอย่างผิดพลาดเกิดขึ้น,ได้โปรดพยายามเปิดร้านใหม่ซื้อ À ขาย Bitcoin อีกครั้ง";
+
+/* (No Commment) */
+"Buy & Sell Bitcoin" = "ซื้อบัขาย Bitcoin";
+
+/* (No Commment) */
+"We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "เราทำงานกับการแลกเปลี่ยนคู่ทำแล็บทั่วโลกดังนั้นคุณสามารถซื้อและขาย bitcoin โดยตรงจากกระเป๋าเงินของนาย";
+
+/* (No Commment) */
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "เคลื่อนที่ซื้อของ&ขายคือการรองรับสำหรับ iOS 9 แล้ว ได้โปรดไปโปรแกรมปรับปรุงหรือล็อกอินที่ login.blockchain.com บนคอมพิวเตอร์ของคุณ.";
+
+/* (No Commment) */
+"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "ซื้อและขาย bitcoin โดยตรงจากของคุณ Blockchain กระเป๋าคุมข้อมูลนะ เริ่มด้วยการสร้างบัญชีในการซื้อ-ขา&ขายแท็บอก";
+
+/* (No Commment) */
+"All Wallets" = "ทั้งกระเป๋าคุมข้อมูลต่างๆ";
+
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "เก็บของคุณ xPub นเรื่องส่วนตัว ใครบางคนใช้งานของคุณ xPub สามารถมองเห็นทั้งหมดของคุณเงินทุนและการทำธุรกรรมจำน";
+
+/* (No Commment) */
+"Your xPub is an advanced feature that contains all of your public addresses." = "ของคุณ xPub เป็นขั้นสูงคุณสมบัติที่มีทั้งหมดของคุณสาธารณะที่อยู่นะ";
+
+/* (No Commment) */
+"Transactions occur when you send and request bitcoin cash." = "เกี่ยวกับธุรกรรมเกิดขึ้นตอนที่คุณส่งและการร้องขอ bitcoin เงินสด";
+
+/* (No Commment) */
+"Get Bitcoin Cash" = "เอา Bitcoin เงินสด";
+
+/* (No Commment) */
+"Request Bitcoin Cash" = "การร้องขอ Bitcoin เงินสด";
+
+/* (No Commment) */
+"Price" = "ราคา";
+
+/* (No Commment) */
+"See charts" = "เห็นชาร์ท";
+
+/* (No Commment) */
+"Price charts" = "คาชาร์ท";
+
+/* (No Commment) */
+"Bitcoin Cash" = "Bitcoin เงินสด";
+
+/* (No Commment) */
+"Bitcoin Cash Price" = "Bitcoin เงินราคา";
+
+/* (No Commment) */
+"Enter Bitcoin Cash address or select" = "ป้อน Bitcoin เงินที่อยู่หรือเลือก";
+
+/* (No Commment) */
+"Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "คัดลอกมันได้รับที่อยู่ไปยังคลิปบอร์ด? ถ้าอย่างนั้นจะได้รับคำแนะนำอีกคนโปรแกรมอาจจะสามารถดูข้อมูลนี้นะ";
+
+/* (No Commment) */
+"Please send BCH to the Bitcoin Cash address\n%@" = "โปรดส่ง BCH ที่ Bitcoin เงินสดที่อยู่\n%@";
+
+/* (No Commment) */
+"Transaction fees impact how quickly the mining network will confirm your transactions, and depend on the current network conditions." = "การต่อรองค่าธรรมเนียมกระทบว่ามันเร็วแค่ไหนที่ตื่นเครือข่ายจะยืนยันของคุณเกี่ยวกับธุรกรรม,และขึ้นอยู่กับปัจจุบันบนเครือข่ายเงื่อนไข";
+
+/* (No Commment) */
+"Trade Refunded" = "แลกเปลี่ Refunded";
+
+/* (No Commment) */
+"We are excited to announce that your Blockchain wallet will allow you to seamlessly send, receive, and exchange Bitcoin Cash!" = "เราตื่นเต้นมากเลยที่จะประกาศว่าคุณ Blockchain กระเป๋าคุมข้อมูลจะอนุญาตให้คุณ seamlessly องส่งได้รับและการแลกเปลี่ยน Bitcoin เงินสด!";
+
+/* (No Commment) */
+"Are you sure this is a bitcoin cash address?" = "คุณแน่ใจนะว่านี่เป็น bitcoin เงินสดที่อยู่ของเธอไหม?";
+
+/* (No Commment) */
+"Sending funds to a bitcoin address by accident will result in loss of funds." = "ส่งเงินทุนที่จะเป็น bitcoin ที่อยู่โดยบังเอิญจะส่งผลให้สูญเสียของเงิน.";
+
+/* (No Commment) */
+"All Wallets" = "กระเป๋าเงินทั้งหมด";
+
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "เก็บ xPub ของคุณให้เป็นส่วนตัว ผู้ที่มีการเข้าถึง xPub จะสามารถเห็นเงินและธุรกรรมทั้งหมดของคุณได้";
+
+/* (No Commment) */
+"Your xPub is an advanced feature that contains all of your public addresses." = "xPub ของคุณเป็นคุณสมบัติขั้นสูงที่มีที่อยู่สาธารณะของคุณทั้งหมด";
+
+/* (No Commment) */
+"Transactions occur when you send and request bitcoin cash." = "ธุรกรรมจะเกิดขึ้นเมื่อคุณส่งหรือรับ bitcoin cash";
+
+/* (No Commment) */
+"Get Bitcoin Cash" = "รับ Bitcoin Cash";
+
+/* (No Commment) */
+"Request Bitcoin Cash" = "ร้องขอ Bitcoin Cash";
+
+/* (No Commment) */
+"Price" = "ราคา";
+
+/* (No Commment) */
+"See charts" = "ชมแผนภูมิ";
+
+/* (No Commment) */
+"Price charts" = "แผนภูมิราคา";
+
+/* (No Commment) */
+"Bitcoin Cash" = "Bitcoin Cash";
+
+/* (No Commment) */
+"Bitcoin Cash Price" = "ราคา Bitcoin Cash";
+
+/* (No Commment) */
+"Enter Bitcoin Cash address or select" = "กรอกที่อยู่ Bitcoin Cash หรือเลือก";
+
+/* (No Commment) */
+"Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "คัดลอกที่อยู่การรับไปยังคลิปบอร์ด? หากทำเช่นนั้น โปรดทราบว่าแอปพลิเคชันอื่นอาจสามารถมองเห็นข้อมูลนี้ได้";
+
+/* (No Commment) */
+"Start trading" = "เริ่มทำการเทรด";
+
+/* (No Commment) */
+"Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "เทรด bitcoin โดยตรงจากกระเป๋าเงิน Blockchain ของคุณ เริ่มโดยการสร้างบัญชีในแถบ ซื้อ & ขาย";
+
+/* (No Commment) */
+"The wait is over" = "การรอคอยสิ้นสุดลงแล้ว";
+
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID ถูกล็อกเนื่องจากความพยายามที่ล้มเหลวหลายครั้งเกินไป";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID ไม่ได้เปิดใช้งานบนอุปกรณ์นี้ เพื่อเปิดใช้งาน Face ID ไปยัง การตั้งค่า ->Face ID & Passcode และเพิ่มลายนิ้วมือ";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "ไม่มี Face ID บนอุปกรณ์นี้";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "ข้อผิดพลาด Face ID ที่ไม่เป็นที่รู้จัก รหัส: %ld";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "ข้อผิดพลาด Touch ID ที่ไม่เป็นที่รู้จัก รหัส: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "กำลังบำรุงรักษาเซิร์ฟเวอร์ Blockchain อยู่ในปัจจุบันนี้ โปรดลองอีกครั้งภายหลัง";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากการพิสูจน์ตัวตนล้มเหลวหลายครั้งเกินไป";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากอุปกรณ์ไม่รองรับการพิสูจน์ตัวตนแบบไบโอแมทริกซ์";
+
+/* (No Commment) */
+"Unable to use biometrics." = "ไม่สามารถใช้ไบโอแมทริกซ์ได้";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "ไม่สามารถพิสูจน์ตัวตนได้เนื่องจากมีความพยามที่ล้มเหลวในการใช้ Touch ID หลายครั้งเกินไป ต้องมีรหัสผ่านเพื่อปลดล็อก Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "การเปิดใช้งานฟีเจอร์นี้จะอนุญาตให้ผู้ใช้ทั้งหมดซึ่งมีการลงทะเบียนลายนิ้วมือ %@ บนอุปกรณ์นี้สามารถเข้าถึงกระเป๋าเงินของคุณได้";
+
+/* (No Commment) */
+"Enable %@" = "เปิดใช้งาน %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "ใช้ %@ แทน PIN เพื่อพิสูจน์ตัวตนสำหรับ Blockchain และเข้าถึงกระเป๋าเงินของคุณ";
+
+/* (No Commment) */
+"Use %@ as PIN" = "ใช้ %@ เป็น PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "ยินดีด้วย คุณมี bitcoin! ตอนนี้มาสำรองข้อมูลให้กับกระเป๋าเงินของคุณเพื่อยืนยันว่าคุณจะสามารถเข้าถึงเงินทุนของคุณได้หากคุณลืมรหัสผ่านของคุณ";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "ที่อยู่ %@ ไม่ถูกต้อง: %@";
+
+/* (No Commment) */
+"%@ payment request" = "คำร้องขอการชำระเงิน %@";
+
+/* (No Commment) */
+"Cookie Policy" = "นโยบายคุกกี้";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "โปรดตรวจสอบอีเมลของคุณแล้วอนุญาตความพยายามในการล็อกอินครั้งนี้ หลังจากทำเช่นนั้นแล้ว โปรดกลับมาที่นี่แล้วลองล็อกอินอีกครั้ง";
+
+/* (No Commment) */
+"Non-Spendable" = "ไม่สามารถใช้จ่ายได้";

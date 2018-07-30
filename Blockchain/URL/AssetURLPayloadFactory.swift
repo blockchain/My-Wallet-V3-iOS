@@ -24,7 +24,7 @@ import Foundation
     @objc static func create(fromString string: String, assetType: AssetType) -> AssetURLPayload? {
         if string.contains(":") {
             guard let url = URL(string: string) else {
-                print("Could not create payload from URL \(string)")
+                Logger.shared.warning("Could not create payload from URL \(string)")
                 return nil
             }
             return create(from: url)
@@ -42,7 +42,7 @@ import Foundation
 
     @objc static func create(from url: URL) -> AssetURLPayload? {
         guard let scheme = url.scheme else {
-            print("Cannot create AssetURLPayload. Scheme is nil.")
+            Logger.shared.warning("Cannot create AssetURLPayload. Scheme is nil.")
             return nil
         }
 

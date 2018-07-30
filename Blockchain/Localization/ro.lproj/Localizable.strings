@@ -1,0 +1,2220 @@
+/* No comment provided by engineer. */
+" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = " Oricine cu acces la dumneavoastră fraza de recuperare are acces la bitcoin dumneavoastră astfel încât asiguraţi-vă că să-l păstraţi offline undeva foarte sigure şi garantate.";
+
+/* (No Commment) */
+" We recommend the fee below for the transaction at this time." = " Vă recomandăm să taxa de mai jos pentru tranzacţia în acest moment.";
+
+/* (No Commment) */
+"%@ BTC" = "%@ BTC";
+
+/* (No Commment) */
+"%@ Confirmations" = "%@ confirmari";
+
+/* (No Commment) */
+"%@ copied to clipboard" = "%@ copiate în clipboard";
+
+/* (No Commment) */
+"%d Confirmations" = "%d confirmări";
+
+/* (No Commment) */
+"%d Transactions" = "%d tranzacţii";
+
+/* (No Commment) */
+"%d address" = "adresa de %d";
+
+/* (No Commment) */
+"%d addresses" = "adrese %d";
+
+/* No comment provided by engineer. */
+"%lld hours ago" = "%lld ore în urmă";
+
+/* No comment provided by engineer. */
+"%lld minutes ago" = "%lld minute în urmă";
+
+/* No comment provided by engineer. */
+"%lld seconds ago" = "%lld secunde în urmă";
+
+/* (No Commment) */
+"%lu Recipients" = "%lu destinatari";
+
+/* No comment provided by engineer. */
+"1 hour ago" = "1 oră în urmă";
+
+/* No comment provided by engineer. */
+"1 minute ago" = "1 minut în urmă";
+
+/* (No Commment) */
+"2-Step Enabled" = "2-pas activat";
+
+/* (No Commment) */
+"2-Step has been disabled." = "2-pas a fost dezactivat.";
+
+/* (No Commment) */
+"2-Step has been enabled for SMS." = "2-pas a fost activată pentru SMS-uri.";
+
+/* (No Commment) */
+"2-step Verification" = "Verificare în 2 paşi";
+
+/* (No Commment) */
+"2-step Verification is currently disabled." = "Verificare în 2 paşi este în prezent dezactivată.";
+
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "Verificare în 2 paşi este activată pentru %@.";
+
+/* (No Commment) */
+"2-step Verification is currently enabled." = "Verificare în 2 paşi este activată.";
+
+/* (No Commment) */
+"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "O conexiune nu poate fi stabilită deoarece certificatul de server nu ar putea fi validat. Vă rugăm să verificaţi setările de reţea şi să se asigure că utilizaţi o conexiune sigură.";
+
+/* (No Commment) */
+"API URL" = "API URL-UL";
+
+/* (No Commment) */
+"About" = "Despre";
+
+/* (No Commment) */
+"Account Details" = "Detalii cont";
+
+/* (No Commment) */
+"Accounts" = "Conturi";
+
+/* (No Commment) */
+"Add Email" = "Adauga E-mail";
+
+/* (No Commment) */
+"Add to Address book?" = "Adauga agenda?";
+
+/* (No Commment) */
+"Address" = "Adresa";
+
+/* (No Commment) */
+"Address book" = "Agendă";
+
+/* (No Commment) */
+"Address is not valid" = "Adresa nu este validă";
+
+/* (No Commment) */
+"Addresses" = "Adrese";
+
+/* (No Commment) */
+"Adjust Fee" = "Ajustare cost";
+
+/* (No Commment) */
+"Allow" = "Permite";
+
+/* (No Commment) */
+"Allowed" = "Permis";
+
+/* (No Commment) */
+"Amount" = "Suma";
+
+/* (No Commment) */
+"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "Valoarea trebuie să fie mai mare sau egal cu pragul de praf (%lld Satoshi)";
+
+/* (No Commment) */
+"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "Eroare din cauza întreruperi în timpul verificării PIN. Închideţi aplicaţia şi încercaţi din nou.";
+
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "Eroare la validarea codul PIN cu serverul de la distanţă. Aţi putea fi deconectat sau Blockchain pot fi întâmpină dificultăţi. Doriţi Reîncercare validare sau în schimb să introduceţi parola manual?";
+
+/* (No Commment) */
+"An error occurred while changing 2-Step verification." = "Eroare în timp ce schimbarea verificare în 2 paşi.";
+
+/* (No Commment) */
+"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "Eroare la copierea adresei în clipboard. Vă rugăm să re-selectaţi adresa de destinaţie sau reporniți aplicația și încercați din nou.";
+
+/* (No Commment) */
+"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "Eroare la salvarea modificărilor. Asigurați-vă că nu sunteţi conectat în portofel pe un alt dispozitiv.";
+
+/* (No Commment) */
+"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "Eroare în timpul actualizării soldul spendable. Verificaţi conexiunea la internet şi încearcă din nou.";
+
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "Eroare la încărcarea portofel. Aţi putea fi deconectat sau Blockchain se confruntă cu dificultăți. Închideţi aplicaţia şi încercaţi din nou mai târziu sau re-asociaþi aparatul dvs.";
+
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "Eroare la regăsirea dumneavoastră identificator de portofel din keychain. Vă rugăm să închideți aplicația și încercați din nou.";
+
+/* (No Commment) */
+"Any address" = "Orice adresă";
+
+/* (No Commment) */
+"App Store review prompt timer (seconds)" = "App Store opinie prompta timer (secunde)";
+
+/* (No Commment) */
+"Archive" = "Arhiva";
+
+/* (No Commment) */
+"Archive Address" = "Arhiva adresa";
+
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "Arhiva-asta dacă nu vrei să-l utilizaţi mai. Fondurile dumneavoastră vor rămâne în siguranţă, şi vă pot unarchive în orice moment.";
+
+/* (No Commment) */
+"Archived" = "Arhivate";
+
+/* (No Commment) */
+"Archiving addresses" = "Arhivarea adreselor";
+
+/* (No Commment) */
+"Ask Me Later" = "Întreabă-mă mai târziu";
+
+/* (No Commment) */
+"Authenticate with Touch ID" = "Se autentifice cu ID-ul Touch";
+
+/* (No Commment) */
+"Authorization Required" = "Autorizaţii necesare";
+
+/* (No Commment) */
+"Automatic Pairing" = "Asocierea automată";
+
+/* (No Commment) */
+"Automatically" = "Automat";
+
+/* No comment provided by engineer. */
+"BACKUP FUNDS" = "FONDURILE DE REZERVĂ";
+
+/* (No Commment) */
+"Backup" = "Copie de rezervă";
+
+/* No comment provided by engineer. */
+"Backup Funds" = "Fondurile de rezervă";
+
+/* (No Commment) */
+"Backup Phrase" = "Fraza de rezervă";
+
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "Înainte de a accesa portofelul dumneavoastră, vă rugăm să alegeţi un număr PIN-ul pentru a utiliza pentru a debloca portofel. Este important să vă amintiţi acest pin, deoarece nu poate fi resetat sau schimbat fără prima deblocarea app.";
+
+/* (No Commment) */
+"Bitcoin Unit" = "Bitcoin unitate";
+
+/* (No Commment) */
+"Bitcoin payment request" = "Cererea de plată Bitcoin";
+
+/* (No Commment) */
+"Block" = "Bloc";
+
+/* (No Commment) */
+"Block Tor" = "Bloc Tor";
+
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain nu are acces la aparatul de fotografiat. Pentru a permite accesul, du-te la setările aparatului.";
+
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain este în prezent în jos pentru întreţinere. Vă rugăm să încercaţi din nou mai târziu.";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain are nevoie de servicii de localizare activat pentru a acces la locaţia dvs.";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain are nevoie de servicii de localizare activat pentru a acces la locaţia dvs. Puteţi permite accesul în Setări -> Privacy -> servicii de localizare";
+
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain are nevoie de servicii de localizare activat pentru a acces la locaţia dvs. Puteţi permite accesul în Setări -> Privacy -> locaţie -> servicii de localizare";
+
+/* (No Commment) */
+"Blocked" = "Blocat";
+
+/* (No Commment) */
+"Calculating: Address %@ of %@" = "Se calculează: %1$@ adresa de %2$@";
+
+/* (No Commment) */
+"Camera Access Denied" = "Aparat de fotografiat acces refuzat";
+
+/* (No Commment) */
+"Cancel" = "Revocare";
+
+/* (No Commment) */
+"Cancelling" = "Anularea";
+
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "Imposibil de salvat codul PIN în timp ce nu este inițializat portofel sau parola este null";
+
+/* (No Commment) */
+"Change Email" = "Schimba E-mail";
+
+/* (No Commment) */
+"Change Mobile Number" = "Schimba numărul de telefon mobil";
+
+/* (No Commment) */
+"Change PIN" = "Schimbare PIN";
+
+/* (No Commment) */
+"Change Password" = "Schimba parola";
+
+/* (No Commment) */
+"Change Password Hint" = "Indiciul pentru parolă schimbare";
+
+/* (No Commment) */
+"Change fee per kilobyte" = "Schimbare taxă pe kiloocteți";
+
+/* (No Commment) */
+"Checking for Wallet updates" = "Verificarea pentru portofel actualizări";
+
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "Verificarea pentru mai multe informaţii: pas %1$d de %2$d";
+
+/* No comment provided by engineer. */
+"Close" = "Închide";
+
+/* (No Commment) */
+"Close App" = "Închide App";
+
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "Finalizaţi paşii de mai jos pentru final de securitate";
+
+/* (No Commment) */
+"Confirm Payment" = "Confirma plata";
+
+/* (No Commment) */
+"Confirm your PIN" = "Confirma codul PIN";
+
+/* (No Commment) */
+"Confirmed" = "Confirmat";
+
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "Conexiunea a expirat. Vă rugăm să verificaţi conexiunea la internet.";
+
+/* (No Commment) */
+"Continue" = "Continua";
+
+/* (No Commment) */
+"Copied to clipboard" = "Copiat în clipboard";
+
+/* (No Commment) */
+"Copy Address" = "Copiaţi adresa";
+
+/* (No Commment) */
+"Copy Wallet ID" = "ID de portofel copie";
+
+/* (No Commment) */
+"Copy to clipboard" = "Copiaţi în clipboard";
+
+/* (No Commment) */
+"Copy xPub" = "Copie xPub";
+
+/* (No Commment) */
+"Could not find transaction with hash %@ when reloading data" = "Nu am putut găsi tranzacţie cu hash %@ atunci când descărcarea de date";
+
+/* (No Commment) */
+"Could not get value when sent - please check your internet connection and try again." = "Ar putea nu obţine valoarea pentru trimis - Verificaţi conexiunea la internet și încercați din nou.";
+
+/* (No Commment) */
+"Create" = "Crea";
+
+/* (No Commment) */
+"Create New Wallet" = "Portofel nou a crea";
+
+/* (No Commment) */
+"Create Wallet" = "Crea portofel";
+
+/* (No Commment) */
+"Create new address" = "Creare adresă";
+
+/* (No Commment) */
+"Creating" = "Crearea";
+
+/* (No Commment) */
+"Creating V3 Wallet" = "Crearea V3 portofel";
+
+/* (No Commment) */
+"Creating Wallet" = "Crearea de portofel";
+
+/* (No Commment) */
+"Creating new Wallet" = "Crearea de noi portofel";
+
+/* (No Commment) */
+"Creating new address" = "Creare adresă nouă";
+
+/* (No Commment) */
+"Current rate: %@ BTC" = "Rata: %@ BTC";
+
+/* (No Commment) */
+"Customize the way you organize your bitcoin in your Blockchain Wallet" = "Particularizați modul în care vă organizaţi dumneavoastră bitcoin în portofel Blockchain";
+
+/* (No Commment) */
+"Date" = "Data";
+
+/* (No Commment) */
+"Debug" = "Depanare";
+
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "Lungimea parolei PIN decriptat 0";
+
+/* (No Commment) */
+"Decrypting Private Key" = "Decriptarea cheie privată";
+
+/* (No Commment) */
+"Decrypting Wallet" = "Decriptarea portofel";
+
+/* (No Commment) */
+"Default" = "În mod implicit";
+
+/* (No Commment) */
+"Description" = "Descriere";
+
+/* (No Commment) */
+"Details" = "Detalii";
+
+/* (No Commment) */
+"Disable" = "Nu fi de acord";
+
+/* (No Commment) */
+"Disabled" = "Cu handicap";
+
+/* (No Commment) */
+"Display" = "Afişare";
+
+/* (No Commment) */
+"Do you really want to log out?" = "Într-adevăr doriţi să ieşiţi?";
+
+/* (No Commment) */
+"Don't show again" = "Nu se mai afișează";
+
+/* No comment provided by engineer. */
+"Done" = "Făcut";
+
+/* (No Commment) */
+"Downloading Wallet" = "Descărcare portofel";
+
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "Rezervă de portofel uşor o dată te ţine în controlul fondurile tale";
+
+/* (No Commment) */
+"Edit" = "Editare";
+
+/* (No Commment) */
+"Email" = "E-mail";
+
+/* (No Commment) */
+"Email Notifications" = "Notificări prin e-mail";
+
+/* (No Commment) */
+"Email Verified" = "E-mail verificată";
+
+/* (No Commment) */
+"Empty response from server." = "Gol de răspuns de la server.";
+
+/* (No Commment) */
+"Enable" = "Permite";
+
+/* (No Commment) */
+"Enable 2-Step" = "Activaţi 2-pas";
+
+/* (No Commment) */
+"Enable 2-Step for SMS" = "Activaţi 2-pas pentru SMS";
+
+/* (No Commment) */
+"Enable Location Services" = "Activare servicii de localizare";
+
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "Activare notificări pentru a primi un e-mail sau mesaj SMS ori de câte ori primiţi bitcoin. Numai etichetat adrese şi importate adrese sunt eligibile pentru a declanşa notificări.";
+
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "Activaţi această opţiune pentru a preveni adrese IP care sunt cunoscute a fi parte din reţeaua anonimizarea Tor la accesarea portofel. Reţeaua Tor este frecvent folosit de hackeri încearcă să acceseze Blockchain utilizatorilor portofele.";
+
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "Activaţi această opţiune pentru a dezvălui o adresa de primire, atunci când vă deplasați stânga pe ecranul de PIN, a face primirea bitcoin chiar mai repede. Cinci adrese va fi încărcat consecutiv, după care logarea este necesar pentru a indica noi adrese.";
+
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "Activaţi această opţiune pentru a dezvălui o adresa de primire, atunci când vă deplasați stânga pe ecranul de PIN, a face primirea bitcoin chiar mai repede. Doar o singură adresă vor fi încărcate, logarea este obligat să demonstreze o nouă adresă.";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "Activarea această facilitate va permite tuturor utilizatorilor cu o amprentă de Touch ID înregistraţi pe acest dispozitiv accesul la portofel.";
+
+/* (No Commment) */
+"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "Bucurându-se de portofel Blockchain? Vă rugăm să luaţi un moment să părăsească o revizuire în App Store şi lăsaţi pe alţii ştiu despre el.";
+
+/* (No Commment) */
+"Enter %@ amount" = "Introdu suma %@";
+
+/* (No Commment) */
+"Enter Bitcoin address or select" = "Introduceţi adresa de Bitcoin sau selectaţi";
+
+/* (No Commment) */
+"Enter PIN" = "Introduceţi codul PIN";
+
+/* (No Commment) */
+"Enter Password" = "Introduceţi parola";
+
+/* (No Commment) */
+"Enter Verification Code" = "Introduceţi codul de verificare";
+
+/* (No Commment) */
+"Enter your verification code" = "Introduceţi codul de verificare";
+
+/* No comment provided by engineer. */
+"Error" = "Eroare";
+
+/* (No Commment) */
+"Error loading settings" = "Eroare încărcare setări";
+
+/* (No Commment) */
+"Error updating settings" = "Eroare la actualizarea setările";
+
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "Tot ce ai nevoie pentru a stoca, petrece şi primi ţi bitcoin";
+
+/* (No Commment) */
+"Extended Public Key" = "Cheia publică a extins";
+
+/* (No Commment) */
+"Failed To Load Wallet" = "Nu a reușit încărcarea portofel";
+
+/* (No Commment) */
+"Failed to validate server certificate" = "Nu a reuşit să validaţi certificatul de server";
+
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "Taxa este prea mare (0,01 BTC limita)";
+
+/* (No Commment) */
+"Fee per KB" = "Taxa pe KB";
+
+/* (No Commment) */
+"Fees" = "Taxe";
+
+/* (No Commment) */
+"Finished Signing Inputs" = "Terminat semnarea intrări";
+
+/* (No Commment) */
+"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "Pentru creşterea de confidenţialitate, vom genera o adresă unică pentru fiecare plată. Toate adresele generate în portofel pot primi fonduri, chiar în cazul în care nu mai apar în primire.";
+
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "Pentru siguranţa dumneavoastră, vă recomandăm să transfere orice soldurile din adresele importate în portofel Blockchain.";
+
+/* (No Commment) */
+"Forget Wallet" = "Uita de portofel";
+
+/* (No Commment) */
+"Found %d, with %@" = "Găsit %1$d, cu %2$@";
+
+/* (No Commment) */
+"From" = "La";
+
+/* (No Commment) */
+"From and destination address have to be different" = "La şi adresa de destinaţie trebuie să fie diferite";
+
+/* (No Commment) */
+"From and destination have to be different" = "La şi destinaţie trebuie să fie diferite";
+
+/* (No Commment) */
+"Go to Settings" = "Du-te la setările";
+
+/* (No Commment) */
+"Google Authenticator" = "Google Authenticator";
+
+/* (No Commment) */
+"Hint Stored" = "Indiciu stocate";
+
+/* (No Commment) */
+"How would you like to pair?" = "Cum doriţi să pereche?";
+
+/* (No Commment) */
+"Identifier" = "Identificator";
+
+/* (No Commment) */
+"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "Dacă sunteţi un comerciant, Vezi cheia publică extinse (xPub) şi de a folosi app Blockchain comerciant să primească fonduri.";
+
+/* (No Commment) */
+"Import Private Key" = "Cheie privată de import";
+
+/* (No Commment) */
+"Import address" = "Adresa de import";
+
+/* (No Commment) */
+"Imported Addresses" = "Adrese importate";
+
+/* (No Commment) */
+"Imported Addresses (Archived)" = "Adrese importate de (arhivat)";
+
+/* (No Commment) */
+"Imported Private Key %@" = "Cheie privată importate %@";
+
+/* (No Commment) */
+"Imported watch-only address %@" = "Importate doar uita-te la adresa %@";
+
+/* (No Commment) */
+"Importing key" = "Importul cheie";
+
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "PIN incorect. Vă rugăm să încercaţi din nou.";
+
+/* (No Commment) */
+"Incorrect password" = "Parolă incorectă";
+
+/* (No Commment) */
+"Incorrect private key" = "Cheia privată incorecte";
+
+/* (No Commment) */
+"Increase fee" = "Taxa de creştere";
+
+/* (No Commment) */
+"Information" = "Informaţii";
+
+/* (No Commment) */
+"Initializing Wallet" = "Iniţializarea portofel";
+
+/* (No Commment) */
+"Insufficient Funds" = "Fonduri insuficiente";
+
+/* (No Commment) */
+"Invalid Identifier" = "Identificator invalid";
+
+/* (No Commment) */
+"Invalid Pairing Code" = "Codul de asociere nevalidă";
+
+/* (No Commment) */
+"Invalid Send Value" = "Valoare nevalidă a trimite";
+
+/* (No Commment) */
+"Invalid Shared Key" = "Comun de invalid cheie";
+
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "Codul de stare nevalidă %@ a revenit";
+
+/* (No Commment) */
+"Invalid Wallet ID" = "ID incorect portofel";
+
+/* (No Commment) */
+"Invalid address: %@" = "Adresă nevalidă: %@";
+
+/* (No Commment) */
+"Invalid email address." = "Adresă e-mail nevalidă.";
+
+/* (No Commment) */
+"Invalid mobile number." = "Numărul de mobil validă.";
+
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "Fraza de recuperare nevalid. Vă rugăm să încercaţi din nou";
+
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "Răspuns nevalid server. Vă rugăm să verificaţi conexiunea la internet.";
+
+/* (No Commment) */
+"Invalid to bitcoin address" = "Incorectă a bitcoin adresa";
+
+/* (No Commment) */
+"Invalid two-factor authentication type" = "Tip nevalid de autentificare dublu-factor";
+
+/* (No Commment) */
+"Invalid verification code. Please try again." = "Cod de verificare nevalidă. Vă rugăm să încercaţi din nou.";
+
+/* No comment provided by engineer. */
+"It is important to make sure you write down your words exactly as they appear here and " = "Este important să vă asiguraţi că vă notaţi cuvintele tale exact aşa cum apar aici şi ";
+
+/* No comment provided by engineer. */
+"Just now" = "Chiar acum";
+
+/* (No Commment) */
+"Keep higher fee" = "Păstraţi mai mare taxa";
+
+/* (No Commment) */
+"Keep lower fee" = "Păstraţi taxă redusă";
+
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Păstra al tău xPub privat. Cineva cu acces la xPub vă va fi capabil pentru a vedea toate fondurile şi tranzacţii.";
+
+/* (No Commment) */
+"Key already imported" = "Cheie deja importate";
+
+/* (No Commment) */
+"Label" = "Eticheta";
+
+/* (No Commment) */
+"Label Address" = "Eticheta adresa";
+
+/* (No Commment) */
+"Label must contain letters and numbers only" = "Eticheta trebuie să conţină litere şi numere numai";
+
+/* (No Commment) */
+"Label must have less than 18 characters" = "Eticheta trebuie să fie mai mică de 18 de caractere";
+
+/* (No Commment) */
+"Large Transaction" = "Mare tranzacţie";
+
+/* (No Commment) */
+"Learn More" = "află mai multe";
+
+/* (No Commment) */
+"Link Mobile" = "Link-ul mobil";
+
+/* (No Commment) */
+"Load More Transactions" = "Incarca mai multe tranzacţii";
+
+/* (No Commment) */
+"Loading External Page" = "Pagina de externe de încărcare";
+
+/* (No Commment) */
+"Loading transactions" = "Operațiunile de încărcare";
+
+/* (No Commment) */
+"Local Currency" = "Moneda locală";
+
+/* (No Commment) */
+"Log in to my Wallet" = "Conectaţi-vă la portofelul meu";
+
+/* (No Commment) */
+"Login existing Wallet" = "Conectare existente portofel";
+
+/* (No Commment) */
+"Logout" = "Deconectare";
+
+/* (No Commment) */
+"Logout and forget wallet" = "Deconectare şi să uitaţi de portofel";
+
+/* (No Commment) */
+"Lower fee" = "Taxă redusă";
+
+/* (No Commment) */
+"Make Default" = "Face implicit";
+
+/* (No Commment) */
+"Manual Pairing" = "Asocierea manuală";
+
+/* (No Commment) */
+"Manually" = "Manual";
+
+/* (No Commment) */
+"Merchant" = "Comerciant";
+
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "Comerciant Director este disponibilă în prezent. Vă rugăm să încercaţi din nou mai târziu.";
+
+/* (No Commment) */
+"Merchant Map" = "Comerciant hartă";
+
+/* (No Commment) */
+"Merchant URL" = "Comerciant URL";
+
+/* (No Commment) */
+"Mobile Linked" = "Mobile legate";
+
+/* (No Commment) */
+"Mobile Number" = "Numarul de telefon mobil";
+
+/* No comment provided by engineer. */
+"My Bitcoin Wallet" = "Portofelul meu Bitcoin";
+
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "Notă: Cheia privată scanate nu corespunde la această adresă numai de ceas. Dacă doriţi să petreceţi la această adresă, asiguraţi-vă că vă scana cheia privată corect.";
+
+/* (No Commment) */
+"Name" = "nume";
+
+/* (No Commment) */
+"Needs BIP38 Password" = "Are nevoie de BIP38 parola";
+
+/* (No Commment) */
+"New Address" = "Noua adresa";
+
+/* (No Commment) */
+"New Email Address" = "Noua adresa de E-mail";
+
+/* (No Commment) */
+"New Mobile Number" = "Numarul de telefon mobil nou";
+
+/* (No Commment) */
+"New PIN must be different" = "PIN nou trebuie să fie diferite";
+
+/* (No Commment) */
+"New password must be different" = "Noua parola trebuie să fie diferite";
+
+/* (No Commment) */
+"New password must be different from your password hint" = "Noua parola trebuie să fie diferite vă indiciu pentru parolă";
+
+/* No comment provided by engineer. */
+"Next word" = "Cuvântul următor";
+
+/* (No Commment) */
+"No" = "nu";
+
+/* (No Commment) */
+"No Label" = "Nici o eticheta";
+
+/* No comment provided by engineer. */
+"No Password Entered" = "Nici o parola introduse";
+
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "Nici o conexiune la internet disponibil. Vă rugăm să verificaţi setările de reţea.";
+
+/* (No Commment) */
+"No internet connection." = "Nici o conexiune la internet.";
+
+/* (No Commment) */
+"Normal" = "Normal";
+
+/* (No Commment) */
+"Not Stored" = "Nu sunt stocate";
+
+/* (No Commment) */
+"Not now" = "nu acum";
+
+/* (No Commment) */
+"Notifications" = "Notificări";
+
+/* No comment provided by engineer. */
+"OK" = "ok";
+
+/* (No Commment) */
+"Open %@?" = "%@ deschis?";
+
+/* (No Commment) */
+"Open Mail App" = "Deschide Mail App";
+
+/* (No Commment) */
+"PIN" = "CODUL PIN";
+
+/* (No Commment) */
+"PIN Encrypted String is nil" = "Şir de criptate PIN este nulă";
+
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "PIN răspuns obiect cheie sau o valoare lungime 0";
+
+/* (No Commment) */
+"PIN Response Object success length 0" = "PIN răspuns obiect succes lungime 0";
+
+/* (No Commment) */
+"PIN Saved Successfully" = "PIN-ul salvat cu succes";
+
+/* (No Commment) */
+"PIN Validation Error" = "Eroare de validare cod PIN";
+
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "Imposibil de finalizat PIN validarea. Vă rugăm să introduceţi parola de portofel manual.";
+
+/* (No Commment) */
+"PINs do not match" = "Ace nu se potrivesc";
+
+/* (No Commment) */
+"Parsing Pairing Code" = "Parsarea codul de asociere";
+
+/* (No Commment) */
+"Password Hint" = "Indiciul pentru parolă";
+
+/* (No Commment) */
+"Password Required" = "Parola necesare";
+
+/* (No Commment) */
+"Password changed. Please login to continue." = "S-a schimbat parola. Vă rugăm să login pentru a continua.";
+
+/* (No Commment) */
+"Password must be different from your email" = "Parola trebuie să fie diferită de adresa de email";
+
+/* (No Commment) */
+"Password must be less than or equal to 255 characters" = "Parola trebuie să fie mai mică sau egală cu 255 de caractere";
+
+/* (No Commment) */
+"Passwords do not match" = "Parolele nu se potrivesc";
+
+/* (No Commment) */
+"Payment Received" = "Plata primite";
+
+/* (No Commment) */
+"Payment Sent!" = "Trimis de plată!";
+
+/* (No Commment) */
+"Payments Sent" = "Plăţi trimis";
+
+/* (No Commment) */
+"Pending" = "În aşteptare";
+
+/* (No Commment) */
+"Pending (%@ Confirmations)" = "În aşteptarea (confirmari de%@)";
+
+/* (No Commment) */
+"Phrase Backed" = "Fraza susţinute";
+
+/* (No Commment) */
+"Please Login" = "Vă rugăm să Login";
+
+/* (No Commment) */
+"Please add an email address" = "Vă rugăm să adăugaţi o adresă de e-mail";
+
+/* (No Commment) */
+"Please check your email and click on the verification link." = "Te rog verifica email-ul şi faceţi clic pe link-ul de verificare.";
+
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "Vă rugăm să verificaţi adresa de email. Dacă aţi verificat deja o încercare de conectare, trebuie să vă conectaţi prin intermediul nostru web portofel şi împerechează telefonul scanează codul QR sub Setări-> informaţii de portofel.";
+
+/* (No Commment) */
+"Please check your internet connection." = "Vă rugăm să verificaţi conexiunea la internet.";
+
+/* (No Commment) */
+"Please choose another PIN" = "Vă rugăm să alegeţi un alt PIN";
+
+/* (No Commment) */
+"Please choose from the options below." = "Vă rugăm să selectaţi din opţiunile de mai jos.";
+
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "Vă rugăm să introduceţi o taxă mai mare decât 0 BTC şi cel 0.01 BTC";
+
+/* (No Commment) */
+"Please enter a new PIN" = "Vă rugăm să introduceţi un PIN nou";
+
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "Vă rugăm să introduceţi codul de 2FA %@";
+
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "Vă rugăm să introduceţi identificatorul dvs portofel de 36 caractere corect. Se pot fi găsite în e-mail bine ai venit pe startup.";
+
+/* (No Commment) */
+"Please enter your PIN" = "Vă rugăm să introduceţi PIN-ul";
+
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "Vă rugăm să introduceţi fraza ta de recuperare cu cuvinte separate prin spaţii";
+
+/* (No Commment) */
+"Please login to load more addresses." = "Rugam sa va logati pentru a încărca mai multe adrese.";
+
+/* (No Commment) */
+"Please lower the fee to an amount that is less than your balance" = "Vă rugăm să reduce taxa la o valoare care este mai mică decât soldul";
+
+/* (No Commment) */
+"Please provide an email address." = "Vă rugăm să furnizaţi o adresă de e-mail.";
+
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "Reîmprospătați codului de cuplare și încercați din nou.";
+
+/* (No Commment) */
+"Please select a different address to send from." = "Vă rugăm să selectaţi o altă adresă pentru a trimite la.";
+
+/* (No Commment) */
+"Please send %@ to bitcoin address.
+%@" = "Vă rugăm să trimiteţi %1$@ adresă bitcoin.
+%2$@";
+
+/* (No Commment) */
+"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "Vă rugăm să trimiteţi plata bitcoin adresa (< un href = \"https://blockchain.info/wallet/bitcoin-faq\" > ajutor? < /a >): %@";
+
+/* No comment provided by engineer. */
+"Please try again" = "Vă rugăm să încercaţi din nou";
+
+/* (No Commment) */
+"Please verify your email address first." = "Vă rugăm să verificaţi adresa de e-mail în primul rând.";
+
+/* (No Commment) */
+"Please verify your mobile number first." = "Va rugam sa verificati numarul mobil în primul rând.";
+
+/* (No Commment) */
+"Preferences" = "Preferinţe";
+
+/* (No Commment) */
+"Preparing transfer" = "Pregătirea de transfer";
+
+/* (No Commment) */
+"Privacy Policy" = "Politica de confidenţialitate";
+
+/* (No Commment) */
+"Private Key Needed" = "Cheie privată necesare";
+
+/* (No Commment) */
+"Processing key" = "Cheie de prelucrare";
+
+/* (No Commment) */
+"Rate Blockchain Wallet" = "Rata Blockchain portofel";
+
+/* (No Commment) */
+"Receive" = "Primi";
+
+/* (No Commment) */
+"Receive to..." = "Primi...";
+
+/* (No Commment) */
+"Received" = "Primit";
+
+/* (No Commment) */
+"Recipients" = "Destinatarii";
+
+/* (No Commment) */
+"Recover Funds" = "Recupera fondurile";
+
+/* (No Commment) */
+"Recovering Funds" = "Recuperarea fondurilor";
+
+/* (No Commment) */
+"Regular" = "Regulate";
+
+/* (No Commment) */
+"Request" = "Cerere";
+
+/* (No Commment) */
+"Request Amount" = "Solicita suma";
+
+/* (No Commment) */
+"Request failed. Please check your internet connection." = "Cererea nu a reuşit. Vă rugăm să verificaţi conexiunea la internet.";
+
+/* (No Commment) */
+"Resend verification SMS" = "Retrimite verificare SMS";
+
+/* (No Commment) */
+"Resend verification email" = "Retrimite e-mail de verificare";
+
+/* (No Commment) */
+"Reset" = "Resetare";
+
+/* (No Commment) */
+"Retrieving recommended fee" = "Regăsirea recomandat taxa";
+
+/* (No Commment) */
+"Retry Validation" = "Reîncercați validare";
+
+/* (No Commment) */
+"SMS" = "SMS-URI";
+
+/* (No Commment) */
+"SMS Notifications" = "SMS notificări";
+
+/* (No Commment) */
+"Save" = "Salvaţi";
+
+/* (No Commment) */
+"Scan Pairing Code" = "Scanaţi codul de asociere";
+
+/* (No Commment) */
+"Scan Private Key" = "Scanare cheie privată";
+
+/* (No Commment) */
+"Scan QR Code" = "Scanaţi codul QR";
+
+/* (No Commment) */
+"Scan QR code" = "Scanaţi codul QR";
+
+/* (No Commment) */
+"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "Scanare sau copiaţi acest cod în app Blockchain comerciant pentru a primi sigur Bitcoin.";
+
+/* No comment provided by engineer. */
+"Second Password Incorrect" = "A doua parolă incorectă";
+
+/* No comment provided by engineer. */
+"Second Password Required" = "A doua parolă necesară";
+
+/* (No Commment) */
+"Security" = "Securitate";
+
+/* (No Commment) */
+"Security Center" = "Centrul de securitate";
+
+/* (No Commment) */
+"Security Center completed - your wallet is safe and secure" = "Centrul de securitate completat - portofelul dumneavoastră este sigur";
+
+/* (No Commment) */
+"Send" = "Trimite";
+
+/* (No Commment) */
+"Send from..." = "Trimite la...";
+
+/* (No Commment) */
+"Send to..." = "Trimite la...";
+
+/* (No Commment) */
+"Send verification SMS" = "Trimite SMS-uri de verificare";
+
+/* (No Commment) */
+"Sending Transaction" = "Trimiterea de tranzacţii";
+
+/* (No Commment) */
+"Sent" = "Trimis";
+
+/* (No Commment) */
+"Sent to %@" = "Trimis la %@";
+
+/* (No Commment) */
+"Server URL" = "URL-ul serverului";
+
+/* (No Commment) */
+"Set as Default?" = "Setează ca implicite?";
+
+/* (No Commment) */
+"Settings" = "Setări";
+
+/* (No Commment) */
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "Partajare dumneavoastră xPub autorizează altora pentru a urmări Istoricul tranzactiei. Ca persoane autorizate ar putea să perturbe-vă la accesarea portofel, numai cota ta xPub cu oameni tu trust.";
+
+/* (No Commment) */
+"Show all 'Dont Show Again' alerts" = "Arată toate alertele 'Dont Arată nou'";
+
+/* No comment provided by engineer. */
+"Signal %d was raised." = "%d semnal a fost ridicat.";
+
+/* (No Commment) */
+"Signing Input %d" = "Semnarea intrare %d";
+
+/* (No Commment) */
+"Signing Inputs" = "Semnarea intrări";
+
+/* (No Commment) */
+"Simulate surge" = "Simula val";
+
+/* (No Commment) */
+"Some funds cannot be transferred automatically." = "Unele fonduri nu poate fi transferată în mod automat.";
+
+/* (No Commment) */
+"Status" = "Statutul";
+
+/* (No Commment) */
+"Store Hint" = "Magazin de sugestie";
+
+/* (No Commment) */
+"Stored" = "Stocate";
+
+/* (No Commment) */
+"Strong" = "Strong";
+
+/* (No Commment) */
+"Success" = "Succesul";
+
+/* (No Commment) */
+"Success!" = "Succes!";
+
+/* (No Commment) */
+"Support" = "Suport";
+
+/* (No Commment) */
+"Surge Occurring" = "La supratensiuni care apar";
+
+/* (No Commment) */
+"Swipe to Receive" = "Glisați pentru a Primi";
+
+/* No comment provided by engineer. */
+"Syncing Wallet" = "Sincronizarea portofel";
+
+/* (No Commment) */
+"Tap to copy this address. Share it with the sender via email or text." = "Atingeți pentru a copia aceasta adresa. Partajaţi-o cu expeditorul via poştă electronică sau text.";
+
+/* (No Commment) */
+"Terms of Service" = "Conditii de utilizare";
+
+/* (No Commment) */
+"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "Rețeaua Bitcoin miniere în prezent se confruntă cu un volum mare de activitate, care rezultă în recomandat taxele care sunt mai mari decât de obicei.";
+
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "PIN-ul le-aţi selectat este extrem de comună şi poate fi uşor de ghicit de cineva cu acces la telefon în 3 incearca. Doriţi să utilizaţi acest PIN oricum?";
+
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "Suma pe care doriţi să trimiteţi (%1$@) este mai mare decât suma maximă pe care vă puteţi petrece minus taxa (%2$@ - %3$@). Doriţi să trimiteţi %4$@?";
+
+/* (No Commment) */
+"The fee you have specified is too low." = "Taxa specificată este prea mică.";
+
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "Cheia privată care încercați să importați este criptat. Vă rugăm să introduceţi parola mai jos.";
+
+/* (No Commment) */
+"There was a problem verifying your identity." = "A fost o problemă de verificarea identităţii.";
+
+/* (No Commment) */
+"There was an error importing this private key" = "Eroare la importul de această cheie privată";
+
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "Aceste opţiuni sunt recomandate doar pentru utilizatorii avansați. Continuați?";
+
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "Această acţiune necesită acces la cheia privată pentru Bitcoin adresa %@. Vă rugăm să scanaţi codul QR.";
+
+/* (No Commment) */
+"This action requires the second password for your wallet. Please enter it below and press continue." = "Această acţiune necesită doua parola pentru portofel. Vă rugăm să introduceţi-l mai jos şi apăsaţi continuă.";
+
+/* (No Commment) */
+"This address has already been used. Please login." = "Aceasta adresa a fost deja utilizat. Rugam sa va logati.";
+
+/* (No Commment) */
+"This address is not watch-only." = "Aceasta adresa este nu numai de ceas.";
+
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "Aceasta este o adresă numai de ceas. Pentru a cheltui fondurile dumneavoastră la acest portofel, vă rugăm să scanaţi cheia privată.";
+
+/* (No Commment) */
+"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "Aceasta este o tranzacţie supradimensionate bitcoin. Portofelul dumneavoastră are nevoie să-şi consolideze multe plăţi mai mici le-aţi primit în trecut. Acest lucru necesită o taxă relativ mare pentru a fi confirmat rapid. Dacă este bine pentru tranzacţia să ia mai mult timp pentru a confirma, vă puteţi reduce taxa manual prin atingerea \"Customize taxa.\"";
+
+/* (No Commment) */
+"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "Aceasta este arhivată. Deşi nu puteţi trimite fonduri de aici, orice şi toate fondurile va rămâne în siguranţă. Unarchive pur şi simplu pentru a începe să utilizaţi-l din nou.";
+
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "Acest nume este deja în uz. Vă rugăm să alegeţi un nume diferit.";
+
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "Această cheie privată aparţine de o altă adresă care nu este doar ceas";
+
+/* (No Commment) */
+"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "Această operaţiune necesită o taxă mai mare consumului de praf din cauza cantităţii mici de schimbare să fie returnate.";
+
+/* (No Commment) */
+"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "Acest lucru va permite următoarele avertizări: primesc numai de ceas, App Store de revizuire prompt, şi toate fondurile de Transfer.";
+
+/* (No Commment) */
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "Aceasta va şterge toate datele de portofel pe acest aparat. Vă rugăm să confirmaţi aveţi informaţiile portofel altfel salvate în altă parte orice bitcoin în acest portofel se va fi inaccesibil!";
+
+/* (No Commment) */
+"To" = "Pentru a";
+
+/* (No Commment) */
+"Tor Requests" = "Tor cereri";
+
+/* (No Commment) */
+"Tor blocked" = "Tor blocat";
+
+/* (No Commment) */
+"Tor requests allowed" = "Tor cereri a permis";
+
+/* (No Commment) */
+"Tor requests are currently allowed." = "Tor cereri sunt acceptate în prezent.";
+
+/* (No Commment) */
+"Tor requests are currently blocked." = "Tor cereri în prezent sunt blocate.";
+
+/* (No Commment) */
+"Total Balance" = "Soldul total";
+
+/* (No Commment) */
+"Touch ID has been locked due to too many failed attempts." = "ID de atingere a fost blocat din cauza prea multe încercări nu a reuşit.";
+
+/* (No Commment) */
+"Touch ID is not available on this device." = "Atinge ID nu este disponibil pe acest aparat.";
+
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "Atinge ID nu este activată pe acest aparat. Pentru a activa Touch ID, du-te la Settings->Touch ID & parola şi se adaugă o amprentă digitală.";
+
+/* (No Commment) */
+"Transaction" = "Tranzactie";
+
+/* (No Commment) */
+"Transaction Fees" = "Comisioane de tranzacţii";
+
+/* (No Commment) */
+"Transaction fee: %@" = "Taxa de tranzactie: %@";
+
+/* (No Commment) */
+"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "Taxele tranzactiei pot avea un impact cât de repede rețeaua Bitcoin miniere vor confirma tranzacţiilor dumneavoastră, şi depinde de condiţiile de reţea.";
+
+/* (No Commment) */
+"Transactions" = "Tranzacţiile";
+
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "Tranzacţii fără taxe poate lua o lungă perioadă de timp pentru a confirma sau nu poate fi confirmat la toate. Doriţi să continuaţi?";
+
+/* (No Commment) */
+"Transfer Funds" = "Transferul fondurilor";
+
+/* (No Commment) */
+"Transferred" = "Transferat";
+
+/* (No Commment) */
+"Transferred funds from %d %@" = "Fonduri transferate de la %1$d %2$@";
+
+/* (No Commment) */
+"Transferred funds from %d %@. Outputs for %d %@ were too small." = "Fonduri transferate de la %1$d %2$@. Iesiri pentru %3$d %4$@ au fost prea mici.";
+
+/* (No Commment) */
+"Transferring all funds: Address %i of %i" = "Transferarea tuturor fondurilor: %1$i adresa de %2$i";
+
+/* (No Commment) */
+"Try again" = "încearcă din nou";
+
+/* (No Commment) */
+"UPGRADE YOUR WALLET" = "UPGRADE-UL DE PORTOFEL";
+
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "Imposibil de încărcat portofel din cauza nici un răspuns de server. Aţi putea fi deconectat sau Blockchain se confruntă cu dificultăți. Vă rugăm să încercaţi din nou mai târziu.";
+
+/* (No Commment) */
+"Unarchive" = "Unarchive";
+
+/* (No Commment) */
+"Unarchive Address" = "Unarchive adresa";
+
+/* (No Commment) */
+"Unconfirmed" = "Neconfirmate";
+
+/* No comment provided by engineer. */
+"Unhandled exception" = "Excepție netratată";
+
+/* (No Commment) */
+"Unknown" = "Necunoscut";
+
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Eroare necunoscută la Touch ID. Cod: %ld";
+
+/* (No Commment) */
+"Unknown key format" = "Format de cheie necunoscută";
+
+/* (No Commment) */
+"Unsupported Private Key Format" = "Neacceptat Format de cheie privată";
+
+/* (No Commment) */
+"Unverified" = "Neverificate";
+
+/* (No Commment) */
+"Update" = "Actualizare";
+
+/* (No Commment) */
+"Upgrade" = "Upgrade-ul";
+
+/* (No Commment) */
+"Upgrade Wallet" = "Upgrade-ul de portofel";
+
+/* (No Commment) */
+"Upgrade to V3" = "Upgrade-ul la V3";
+
+/* (No Commment) */
+"Use Touch ID as PIN" = "Folosiţi Touch ID ca PIN";
+
+/* (No Commment) */
+"Use all funds" = "Utilizaţi toate fondurile";
+
+/* (No Commment) */
+"Use recommended values" = "Utilizează valorile recomandate";
+
+/* (No Commment) */
+"Use total available minus fee: %@" = "Utilizarea total disponibil minus taxa: %@";
+
+/* (No Commment) */
+"User Declined" = "Utilizatorul a refuzat";
+
+/* No comment provided by engineer. */
+"VERIFY BACKUP" = "VERIFICA BACKUP";
+
+/* (No Commment) */
+"Value when sent: %@" = "Valoare atunci când a trimis: %@";
+
+/* (No Commment) */
+"Verification email has been sent to %@." = "Verificării e-mail a fost trimis la %@.";
+
+/* (No Commment) */
+"Verified" = "Verificate";
+
+/* (No Commment) */
+"Verify" = "Verifica";
+
+/* (No Commment) */
+"Verify Email" = "Verifica E-mail";
+
+/* (No Commment) */
+"Verifying" = "Verificarea";
+
+/* (No Commment) */
+"Wallet ID" = "Portofel ID";
+
+/* (No Commment) */
+"Wallet Information" = "Portofel informaţii";
+
+/* (No Commment) */
+"Wallet JSON" = "Portofel JSON";
+
+/* (No Commment) */
+"Wallet Paired Successfully." = "Portofel asociat cu succes.";
+
+/* (No Commment) */
+"Recovery Phrase" = "Fraza de recuperare";
+
+/* (No Commment) */
+"Warning" = "Avertisment";
+
+/* (No Commment) */
+"Warning!!!" = "Avertisment!";
+
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "Avertisment: Identificatorul dvs portofel este informaţii sensibile. Copierea poate compromite securitatea de portofel.";
+
+/* (No Commment) */
+"Watch Only" = "Uita-te doar";
+
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "Vă vom trimite indiciu la adresa ta de e-mail confirmată în cazul în care veţi solicita aceasta.";
+
+/* (No Commment) */
+"Weak" = "Slab";
+
+/* (No Commment) */
+"WebSocket URL" = "WebSocket URL";
+
+/* (No Commment) */
+"Welcome" = "bun venit";
+
+/* No comment provided by engineer. */
+"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "bine lucrat! Ar trebui să pierdeţi parola, poţi restaura fonduri în acest portofel chiar dacă a primit în viitor (cu excepţia adrese importate) folosind cuvântul 12 recuperare fraza. Amintiţi-vă să păstraţi dumneavoastră fraza de recuperare offline undeva foarte sigure şi garantate. Oricine cu acces la dumneavoastră fraza de recuperare are acces la dumneavoastră bitcoin.";
+
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "Ne-am detectat o instalare anterioară de portofel Blockchain pe telefon.";
+
+/* (No Commment) */
+"What's this for?" = "Ce este acest lucru pentru?";
+
+/* (No Commment) */
+"Where" = "În cazul în care";
+
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "Doriţi să adăugaţi bitcoin adresa %@ în agendă?";
+
+/* (No Commment) */
+"Would you like to archive the addresses used?" = "Doriţi să arhivaţi adresele utilizate?";
+
+/* No comment provided by engineer. */
+"Write the following 12 words onto a " = "Scrie următoarele 12 cuvinte pe o ";
+
+/* (No Commment) */
+"Wrong BIP38 Password" = "Gresit BIP38 parola";
+
+/* (No Commment) */
+"Yes" = "da";
+
+/* (No Commment) */
+"Yes, rate Blockchain Wallet" = "Da, rata Blockchain portofel";
+
+/* No comment provided by engineer. */
+"Yesterday" = "Ieri";
+
+/* (No Commment) */
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Intenţionaţi să importaţi o adresa doar uita-te la, o adresa (sau script de cheie publică) stocate în portofel fara privat corespunzător cheie. Acest lucru înseamnă că banii pot fi cheltuite numai dacă aveţi cheia privată stocate în altă parte. Dacă nu aveţi acces la cheia privată stocate, instrui oricui să vă trimită bitcoin la adresa numai de ceas.";
+
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "Veți primi bitcoin doar uita-te la adresa. Vă puteţi petrece doar acestor fonduri dacă aveţi acces la cheia privată. Continuați?";
+
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "Acum rulează nostru cel mai sigur portofel Bitcoin";
+
+/* No comment provided by engineer. */
+"You backed up your funds successfully." = "Aţi susţinut fondurile tale cu succes.";
+
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "Aveţi posibilitatea să activaţi verificare în 2 paşi prin SMS pe telefonul mobil. Pentru a utiliza alte metode de autentificare în schimb, vă rugăm să login la portofel noastre de web.";
+
+/* (No Commment) */
+"You can now spend from this address." = "Acum puteti petrece la această adresă.";
+
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "Nu aveţi un cont configurat pentru Mail. Vă rugăm să contactaţi %@";
+
+/* (No Commment) */
+"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = "Aveţi nicio adresă cu un sold de spendable mai mare sau egal cu pragul necesar praf.";
+
+/* (No Commment) */
+"You have no available funds to send from this address" = "Tu ai nu există fonduri disponibile pentru a trimite la aceasta adresa";
+
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "Trebuie să dezactivați confirmarea prin SMS 2-pas înainte de schimbarea numărului de telefon mobil (%@).";
+
+/* (No Commment) */
+"You must enter a destination address" = "Trebuie să introduceţi o adresă de destinaţie";
+
+/* (No Commment) */
+"You must enter a label" = "Introduceţi o etichetă";
+
+/* (No Commment) */
+"You must have at least one active address" = "Trebuie să aveţi cel puţin o adresă activ";
+
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "Trebuie să aveţi două-factor de autentificare cu handicap să pereche manual.";
+
+/* (No Commment) */
+"You must leave at least one active address" = "Trebuie să lăsaţi cel puţin o adresă activ";
+
+/* (No Commment) */
+"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "Tu ar trebui să întotdeauna pereche sau login dacă aveţi acces la portofel ID-ul şi parola. Recuperarea fondurilor dumneavoastră va crea un nou portofel ID. Doriţi să continuaţi?";
+
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "Aţi specificat o taxă de tranzacţie în mod excepţional mici de %1$@. Tranzacţia poate fi blocat şi, eventual, niciodată nu se confirmă. Pentru a creşte probabilitatea de tranzacţia ta pentru a confirma în termen de aproximativ o oră (şase blocuri), vă recomandăm o taxă de nu mai puţin %2$@.";
+
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "Aţi specificat o taxă de tranzacţie în mod excepţional mici de %1$@. Tranzacţia poate deveni blocat şi, eventual, niciodată nu confirma. Pentru a creşte probabilitatea de tranzacţia ta pentru a confirma în termen de aproximativ o oră (şase blocuri), vă recomandăm o taxă de nu mai puţin %2$@. Deoarece nu aveţi suficiente fonduri, asta înseamnă că suma de trimitere va trebui să fie redus la %3$@.";
+
+/* (No Commment) */
+"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "Aţi specificat o taxă de tranzacţie neobişnuit de mare de %1$@. Chiar dacă aţi mai mici taxa de la %2$@, vă puteţi aştepta la tranzacţie să confirme în următoarele 10 minute (un bloc).";
+
+/* (No Commment) */
+"You will be leaving the app." = "Te va lăsa app.";
+
+/* (No Commment) */
+"You've successfully imported a private key." = "Le-am importat cu succes o cheie privată.";
+
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "Le-am importat cu succes la cheia privată pentru adresa %@, şi acum puteţi petrece la ea. Dacă doriţi să-şi petreacă la această adresă, asiguraţi-vă că vă scana cheia privată corect.";
+
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "Aparatul pare să fie jailbroken. Securitatea portofel poate fi compromisă.";
+
+/* (No Commment) */
+"Your email has been verified." = "Adresa de email a fost verificat.";
+
+/* (No Commment) */
+"Your identity does not match our records." = "Identitatea dumneavoastră nu corespunde înregistrărilor noastre.";
+
+/* (No Commment) */
+"Your mobile number has been verified." = "Numărului de telefon mobil a fost verificat.";
+
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "Telefonul mobil poate fi folosit pentru a activa autentificarea dublu-factor, ajutând pentru a asigura portofel împotriva accesului neautorizat.";
+
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "Ta sugestie pentru noua parolă conține caractere nevalide. Vă rugăm să încercaţi din nou.";
+
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "Ta sugestie pentru noua parolă conţine nici un text. Indiciu pentru parolă vă vor fi eliminate.";
+
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "Ta sugestie pentru noua parolă trebuie să fie diferită de parola. Vă rugăm să încercaţi din nou.";
+
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "Ta sugestie pentru noua parolă trebuie să fie diferită de parola a doua. Vă rugăm să încercaţi din nou.";
+
+/* (No Commment) */
+"Your password hint has been updated." = "Indiciu dumneavoastră parola a fost actualizată.";
+
+/* (No Commment) */
+"Your password is not strong enough. Please choose a different password." = "Parola nu este suficient de puternic. Vă rugăm să alegeţi o parolă diferită.";
+
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "Fondurile transferate vor fi sigur, şi veţi beneficia de confidenţialitate sporită şi caracteristici convenabile de backup şi recuperare.";
+
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "Adresa ta de email verificate este folosit pentru a trimite coduri de conectare când detectează activitate suspecte sau neobişnuite, să vă reamintesc de ţi portofelul login ID-ul şi a trimite alerte de plată bitcoin când primiţi fonduri. Noi nu va folosi adresa de e-mail pentru scopuri de marketing.";
+
+/* (No Commment) */
+"Your wallet does not contain this address." = "Portofel nu conţine această adresă.";
+
+/* (No Commment) */
+"Your wallet was successfully created." = "Portofelul dumneavoastră a fost creat cu succes.";
+
+/* (No Commment) */
+"Yubi Key" = "Yubi cheie";
+
+/* No comment provided by engineer. */
+"eighth word" = "opta cuvântul";
+
+/* No comment provided by engineer. */
+"eleventh word" = "a unsprezecea cuvântul";
+
+/* No comment provided by engineer. */
+"fifth word" = "al cincilea cuvînt";
+
+/* No comment provided by engineer. */
+"first word" = "primul cuvânt";
+
+/* No comment provided by engineer. */
+"fourth word" = "a patra cuvântul";
+
+/* (No Commment) */
+"from" = "la";
+
+/* No comment provided by engineer. */
+"in this order." = "în această ordine.";
+
+/* No comment provided by engineer. */
+"ninth word" = "al nouălea cuvântul";
+
+/* (No Commment) */
+"or Continue" = "sau continua";
+
+/* No comment provided by engineer. */
+"piece of paper." = "bucată de hârtie.";
+
+/* No comment provided by engineer. */
+"second word" = "al doilea cuvânt";
+
+/* No comment provided by engineer. */
+"seventh word" = "a şaptea cuvântul";
+
+/* No comment provided by engineer. */
+"sixth word" = "a şasea cuvântul";
+
+/* No comment provided by engineer. */
+"tenth word" = "Zecea cuvântul";
+
+/* No comment provided by engineer. */
+"third word" = "treia cuvântul";
+
+/* No comment provided by engineer. */
+"twelfth word" = "a douăsprezecea cuvântul";
+
+/* No comment provided by engineer. */
+" We recommend the fee shown for the transaction at this time." = " Vă recomandăm taxa indicat pentru tranzacţia în acest moment.";
+
+/* No comment provided by engineer. */
+"Fee" = "Taxa";
+
+/* No comment provided by engineer. */
+"Please contact support:\n%@" = "Vă rugăm să contactaţi sprijin: \n%@";
+
+/* No comment provided by engineer. */
+"Transfer Amount" = "Suma transferului";
+
+/* No comment provided by engineer. */
+"Value when received: %@" = "Valoare atunci când a primit: %@";
+
+/* (No Commment) */
+"Transfer All Funds" = "Transfera fondurile toate";
+
+/* (No Commment) */
+"Transfer all" = "Transferul tuturor";
+
+/* (No Commment) */
+"Transfer imported addresses?" = "Adrese importate de transfer?";
+
+/* (No Commment) */
+"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "Adrese importate nu sunt susţinute de fraza de recuperare. Pentru a asigura aceste fonduri, se recomandă transferul soldurilor pentru a include în copia de rezervă.";
+
+/* (No Commment) */
+"About Us" = "despre noi";
+
+/* (No Commment) */
+"You currently have email notifications enabled. Changing your email will disable email notifications." = "În prezent aveţi notificări de e-mail activată. Schimbă adresa de email va dezactiva notificări prin e-mail.";
+
+/* (No Commment) */
+"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "În prezent aveţi notificări SMS activat. Schimbă adresa de email va fi de acord SMS notificări.";
+
+/* (No Commment) */
+"All rights reserved." = "Toate drepturile rezervate.";
+
+/* (No Commment) */
+"Rate us" = "Rata de noi";
+
+/* (No Commment) */
+"Free Merchant app" = "Drum liber app comerciant";
+
+/* (No Commment) */
+"Cannot open Mail App" = "Nu pot deschide Mail App";
+
+/* (No Commment) */
+"Cannot open URL %@" = "Nu pot deschide URL-ul %@";
+
+/* (No Commment) */
+"Would you like to tell us about your experience with Blockchain?" = "Doriţi să ne spuneţi despre experienţa dumneavoastră cu Blockchain?";
+
+/* (No Commment) */
+"You will be leaving the app." = "Te va lăsa app.";
+
+/* (No Commment) */
+"Check Your Inbox" = "Verificaţi Inbox";
+
+/* (No Commment) */
+"Continue To Mail" = "Continua să Mail";
+
+/* (No Commment) */
+"Look for an email from Blockchain and click the verification link to complete your wallet setup." = "Uita-te pentru un e-mail la Blockchain şi faceţi clic pe linkul de verificare pentru a finaliza configurarea de portofel.";
+
+/* (No Commment) */
+"Backup Your Funds" = "Fondurile de rezervă";
+
+/* (No Commment) */
+"Backup Now" = "Rezervă acum";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "Felicitari, ai bitcoin! Acum haideţi să spate portofel pentru a asigura puteţi accesa bitcoins dumneavoastră în cazul în care uitaţi parola.";
+
+/* (No Commment) */
+"2-Step Verification" = "Verificare în 2 paşi";
+
+/* (No Commment) */
+"Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "Prevenirea accesului neautorizat la portofel. Permite verificarea 2-pas pentru a spori securitatea portofel.";
+
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "Activare notificări pentru a primi un e-mail sau mesaj SMS ori de câte ori primiţi bitcoin.";
+
+/* (No Commment) */
+"Not Now" = "nu acum";
+
+/* (No Commment) */
+"I'll do this later" = "Voi face acest lucru mai târziu";
+
+/* (No Commment) */
+"May be at risk for a double spend." = "Poate fi la risc pentru un dublu de cheltuieli.";
+
+/* (No Commment) */
+"For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "Pentru securitate, nu păstrăm nici parolele pe dosar. Rezervă portofel pentru a asigura la fondurile dumneavoastră sunt în siguranţă în cazul în care ai pierdut parola.";
+
+/* (No Commment) */
+"Wallets" = "Portofele";
+
+"START BACKUP" = "START BACKUP";
+
+"Backup Needed" = "Copie de rezervă necesare";
+
+"Create a Wallet" = "Creaţi un portofel";
+
+"Log In" = "conectează-te";
+
+"Please enter your password to log into your Blockchain wallet." = "Vă rugăm să introduceţi parola pentru a intra în portofel Blockchain.";
+
+"Forgot Password?" = "Ai uitat parola?";
+
+"Or start over and " = "Sau de a începe peste şi ";
+
+"Update Email" = "Actualizare Email";
+
+"Enter Email Address" = "Introdu adresa de Email";
+
+"Update Mobile" = "Actualizare Mobile";
+
+"Enter Mobile Number" = "Introduceţi numărul de mobil";
+
+"Balances" = "Soldurile";
+
+"Transactions occur when you send and receive bitcoin." = "Tranzacţiile să apară când trimiteţi şi primiţi bitcoin.";
+
+"Your Transactions" = "Tranzactiile tale";
+
+"Backup Complete" = "Spate complet";
+
+"Backup Needed" = "Copie de rezervă necesare";
+
+"Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "Utilizaţi dumneavoastră fraza de recuperare pentru a restabili fondurile dumneavoastră în cazul în care o parolă pierdută.  Cineva cu acces la dumneavoastră fraza de recuperare poate accesa ţi fondurile, aşa-l păstraţi offline undeva sigur.";
+
+"The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "Următoarele 12 cuvântul fraza de recuperare va oferi acces la fondurile tale în cazul în care ai pierdut parola.";
+
+"Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "Asiguraţi-vă că notaţi fraza ta pe o bucată de hârtie şi păstraţi-l undeva în siguranţă şi sigur.";
+
+"Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "Notaţi următoarele cuvântul 12 recuperare fraza exact aşa cum apar si în această ordine:";
+
+"PREVIOUS" = "ANTERIOARE";
+
+"NEXT" = "URMĂTOAREA";
+
+"BACKUP AGAIN" = "COPIE DE REZERVĂ DIN NOU";
+
+"Your verified email address is used to send payment alerts, ID reminders, and login codes." = "Adresa ta de email verificate este folosit pentru a trimite alerte de plată, ID memento-uri si coduri de autentificare.";
+
+"Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "Telefonul mobil poate fi folosit pentru a activa autentificarea dublu-factor sau să primiţi alerte.";
+
+/* (No Commment) */
+"Trade Completed" = "Comerciale finalizate";
+
+/* (No Commment) */
+"The trade you created on %@ has been completed!" = "Comerciale pe care le-aţi creat pe %@ a fost finalizat!";
+
+/* (No Commment) */
+"View details" = "Vezi detalii";
+
+/* (No Commment) */
+"Buy Bitcoin" = "Cumpăra Bitcoin";
+
+/* (No Commment) */
+"Your Transactions" = "Tranzactiile tale";
+
+/* (No Commment) */
+"Transactions occur when you send and receive bitcoin." = "Tranzacţiile să apară când trimiteţi şi primiţi bitcoin.";
+
+/* (No Commment) */
+"Something went wrong, please try reopening Buy Bitcoin again." = "Ceva a mers prost, vă rugăm să încercaţi redeschiderea cumpăra Bitcoin din nou.";
+
+/* (No Commment) */
+"Custom" = "Personalizate";
+
+/* (No Commment) */
+"Advanced users only" = "Numai utilizatorilor avansați";
+
+/* (No Commment) */
+"1+ hour" = "1+ ore";
+
+/* (No Commment) */
+"Priority" = "Prioritate";
+
+/* (No Commment) */
+"~0-60 min" = "~0-60 min";
+
+/* (No Commment) */
+"Satoshi per byte" = "Satoshi pe octet";
+
+/* (No Commment) */
+"High fee not necessary" = "Mare taxa nu este necesar";
+
+/* (No Commment) */
+"Low fee not recommended" = "Low cost nu este recomandat";
+
+/* (No Commment) */
+"This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck." = "Această funcție este recomandată numai pentru utilizatorii avansați. Prin alegerea o taxa de personalizat, riscul de exces sau de tranzacție pot obține blocat.";
+
+/* (No Commment) */
+"Available now" = "Disponibil acum";
+
+/* (No Commment) */
+"Buy bitcoin directly from your mobile wallet. It's simple, seamless, and secure." = "Cumpara bitcoin direct de pe telefonul mobil portofel. E simplu, fără sudură, și sigur.";
+
+/* (No Commment) */
+"Log in to Web Wallet" = "Conectați-vă la Web Portofel";
+
+/* (No Commment) */
+"Go to login.blockchain.com on your computer." = "Du-te la login.blockchain.com de pe computer.";
+
+/* (No Commment) */
+"Select Log in via mobile." = "Selectați Conectați-vă prin intermediul telefoanelor mobile.";
+
+/* (No Commment) */
+"Using your computer's camera, scan the QR code below." = "Folosind camera computerului dvs., scana codul QR de mai jos.";
+
+/* (No Commment) */
+"Keep this QR code hidden until you're ready." = "Păstrați acest cod QR ascunse până când sunteți gata.";
+
+/* (No Commment) */
+"Keep this QR code safe!" = "Păstrați acest cod QR în condiții de siguranță!";
+
+/* (No Commment) */
+"Do not share it with others." = "Nu-l împărtășească cu alții.";
+
+/* (No Commment) */
+"Show QR Code" = "Show Cod QR";
+
+/* (No Commment) */
+"Hide QR Code" = "Ascunde Codul QR";
+
+/* (No Commment) */
+"U.S. Dollar" = "Dolarul AMERICAN";
+
+/* (No Commment) */
+"Euro" = "Euro";
+
+/* (No Commment) */
+"lcelandic Króna" = "islandez Króna";
+
+/* (No Commment) */
+"Hong Kong Dollar" = "Hong Kong Dolar";
+
+/* (No Commment) */
+"New Taiwan Dollar" = "Acest New Taiwan Dolar";
+
+/* (No Commment) */
+"Swiss Franc" = "Francul Elvețian";
+
+/* (No Commment) */
+"Danish Krone" = "Daneză Krone";
+
+/* (No Commment) */
+"Chilean Peso" = "Peso Chilian";
+
+/* (No Commment) */
+"Canadian Dollar" = "Dolarul Canadian";
+
+/* (No Commment) */
+"Indian Rupee" = "Rupie Indiană";
+
+/* (No Commment) */
+"Chinese Yuan" = "Yuani Chinezești";
+
+/* (No Commment) */
+"Thai Baht" = "Thai Baht";
+
+/* (No Commment) */
+"Australian Dollar" = "Dolarul Australian";
+
+/* (No Commment) */
+"Singapore Dollar" = "Singapore Dolar";
+
+/* (No Commment) */
+"South Korean Won" = "Coreea De Sud A Câștigat";
+
+/* (No Commment) */
+"Japanese Yen" = "Yeni Japonezi";
+
+/* (No Commment) */
+"Polish Zloty" = "Zlotul Polonez";
+
+/* (No Commment) */
+"Great British Pound" = "Lira Sterlină Mare";
+
+/* (No Commment) */
+"Swedish Krona" = "Coroana Suedeză";
+
+/* (No Commment) */
+"New Zealand Dollar" = "Noua Zeelandă Dolar";
+
+/* (No Commment) */
+"Brazil Real" = "Brazilia Real";
+
+/* (No Commment) */
+"Russian Ruble" = "Rubla Rusească";
+
+/* (No Commment) */
+"Bitcoin Balances" = "Bitcoin Soldurile";
+
+/* (No Commment) */
+"Enter Ether address or select" = "Introduceți Eter adresă sau selectați";
+
+/* (No Commment) */
+"Payment Sent! Your balance and transactions will update soon." = "De Plată A Trimis! Soldul și tranzacțiile se va actualiza în curând.";
+
+/* (No Commment) */
+"Waiting for payment" = "De așteptare pentru plata";
+
+/* (No Commment) */
+"Please wait until your last ether transaction confirms." = "Vă rugăm să așteptați până când ultimul eter tranzacție confirmă.";
+
+/* (No Commment) */
+"Bitcoin Addresses" = "Adrese Bitcoin";
+
+/* (No Commment) */
+"Bitcoin Merchant Map" = "Bitcoin Comerciant Hartă";
+
+/* (No Commment) */
+"Invalid Ether address: %@" = "Invalid Eter adresa: %@";
+
+/* (No Commment) */
+"An error occurred while retrieving the latest chart data. Please try again later." = "A survenit o eroare la preluarea celor mai recente date diagramă. Vă rugăm să încercați din nou mai târziu.";
+
+/* (No Commment) */
+"Transactions occur when you send and request ether." = "Tranzactiile apar atunci când trimiteți și să solicite eter.";
+
+/* (No Commment) */
+"Request Ether" = "Cerere Eter";
+
+/* (No Commment) */
+"Dashboard" = "Tabloul de bord";
+
+/* (No Commment) */
+"Week" = "Saptamana";
+
+/* (No Commment) */
+"Month" = "Luna";
+
+/* (No Commment) */
+"Year" = "An";
+
+/* (No Commment) */
+"Bitcoin Price" = "Prețul Bitcoin";
+
+/* (No Commment) */
+"Ether Price" = "Eter Pret";
+
+/* (No Commment) */
+"Contract addresses are not supported." = "Contract de adrese nu sunt acceptate.";
+
+/* (No Commment) */
+"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "În acest moment ne-am sprijini numai ETH. Nu puteți primi REP, ICN, GNT, GNO, DGD, BCP.";
+
+/* (No Commment) */
+"Now supporting Ether" = "Acum, sprijinirea Eter";
+
+/* (No Commment) */
+"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "Ați întrebat, am ascultat. Suntem încântați să anunțăm că Blockchain portofel va permite să perfect trimite și primi eter!";
+
+/* (No Commment) */
+"Get Started with Ether" = "Începeți cu Eter";
+
+/* (No Commment) */
+"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "Pentru a utiliza acest serviciu, aveți nevoie pentru a introduce a doua parola. Tu ar trebui să trebuie doar să introduceți această dată pentru a configura Eter portofel.";
+
+/* (No Commment) */
+"Enter Ether address" = "Introduceți adresa Eter";
+
+/* (No Commment) */
+"Day" = "Zi";
+
+/* (No Commment) */
+"All" = "Toate";
+
+/* (No Commment) */
+"Please send ether to %@." = "Vă rugăm să trimiteți-eter pentru a %@.";
+
+/* (No Commment) */
+"Bitcoin payment request" = "Bitcoin cerere de plată";
+
+/* (No Commment) */
+"Ether payment request" = "Eter cerere de plată";
+
+/* (No Commment) */
+"My Ether Wallet" = "Eterul Meu Portofel";
+
+/* (No Commment) */
+"Miners receive this fee to process this transaction." = "Minerii primesc această taxă pentru a procesa această tranzacție.";
+
+/* (No Commment) */
+"Get Ether" = "Obține Eter";
+
+/* (No Commment) */
+"at" = "la";
+
+/* (No Commment) */
+"Exchange" = "Schimb";
+
+/* (No Commment) */
+"New Exchange" = "De Schimb Noi";
+
+/* (No Commment) */
+"Use minimum" = "Utilizarea minimă";
+
+/* (No Commment) */
+"Use maximum" = "Utilizarea maximă";
+
+/* (No Commment) */
+"Sending Funds" = "Trimiterea De Fonduri";
+
+/* (No Commment) */
+"Thanks for placing your trade!  Exchange trades can take up to two hours, and you can keep track of your trade’s progress in the Order History section." = "Multumesc pentru introducerea comerțului! Schimb de meserii poate dura până la două ore, și puteți urmări dvs. de marcă de progres în secțiunea Istoric comenzi.";
+
+/* (No Commment) */
+"In Progress" = "În Curs De Desfășurare";
+
+/* (No Commment) */
+"Exchanges can take up to two hours, you can keep track of your exchange progress in the Order History. Once the trade is complete, your ether will arrive in your wallet." = "Schimburile pot dura până la două ore, puteți urmări de schimb progrese în Scopul de Istorie. Odată ce comerțul este completă, eter dumneavoastră va ajunge în portofel.";
+
+/* (No Commment) */
+"Your trade has been canceled. Please return to the exchange tab to start your trade again." = "Comerțul a fost anulat. Vă rugăm să reveniți la schimb tab-ul pentru a începe dvs. de comerț din nou.";
+
+/* (No Commment) */
+"Failed" = "Nu a reușit";
+
+/* (No Commment) */
+"Exchange Failed" = "Schimb Nu A Reușit";
+
+/* (No Commment) */
+"This trade has failed. Any funds sent from your wallet will be returned minus the transaction fee. Please return to the exchange tab to start a new trade." = "Acest comerț nu a reușit. Fondurile trimise din portofel vor fi returnate minus comision de tranzacție. Vă rugăm să reveniți la schimb tab-ul pentru a începe o nouă tranzacție.";
+
+/* (No Commment) */
+"Your trade has expired. Please return to the exchange tab to start a new trade." = "Comerțul a expirat. Vă rugăm să reveniți la schimb tab-ul pentru a începe o nouă tranzacție.";
+
+/* (No Commment) */
+"You can now exchange your bitcoin for ether and vice versa directly from your Blockchain wallet!" = "Acum puteți face schimb de bitcoin pentru eter și vice-versa direct de pe Blockchain portofel!";
+
+/* (No Commment) */
+"%@ to Deposit" = "%@ la Depozit";
+
+/* (No Commment) */
+"%@ to be Received" = "%@ să fie Primit";
+
+/* (No Commment) */
+"Exchange Rate" = "Rata De Schimb";
+
+/* (No Commment) */
+"Transaction Fee" = "Comision De Tranzacție";
+
+/* (No Commment) */
+"Network Transaction Fee" = "Rețea Comision De Tranzacție";
+
+/* (No Commment) */
+"ShapeShift Withdrawal Fee" = "ShapeShift Comision De Retragere";
+
+/* (No Commment) */
+"Agree to ShapeShift" = "Sunt de acord pentru a schimba forma";
+
+/* (No Commment) */
+"terms and conditions" = "termeni și condiții";
+
+/* (No Commment) */
+"Exchange In Progress" = "Schimb În Curs De Desfășurare";
+
+/* (No Commment) */
+"Exchange Completed" = "Schimb Finalizat";
+
+/* (No Commment) */
+"Get started" = "Începeți";
+
+/* (No Commment) */
+"Below minimum limit" = "Sub limita minimă";
+
+/* (No Commment) */
+"Above maximum limit" = "Peste limita maximă";
+
+/* (No Commment) */
+"Not enough to exchange" = "Nu suficient pentru a face schimb";
+
+/* (No Commment) */
+"Order ID" = "ID-ul comenzii";
+
+/* (No Commment) */
+"Total %@ spent" = "Total %@ petrecut";
+
+/* (No Commment) */
+"Getting quote" = "Obtinerea citat";
+
+/* (No Commment) */
+"Confirming" = "Confirmarea";
+
+/* (No Commment) */
+"Exchange In Progress" = "Schimb În Curs De Desfășurare";
+
+/* (No Commment) */
+"Complete" = "Complet";
+
+/* (No Commment) */
+"Exchange Completed" = "Schimb Finalizat";
+
+/* (No Commment) */
+"Quote expires in %@" = "Citat expiră în %@";
+
+/* (No Commment) */
+"Step %d of %d" = "Pas %d de %d";
+
+/* (No Commment) */
+"Select your State:" = "Selectați Stat:";
+
+/* (No Commment) */
+"Select State" = "Selectați Stat";
+
+/* (No Commment) */
+"Not Available" = "Nu Este Disponibil";
+
+/* (No Commment) */
+"Exchanging coins is not yet available in your state. We’ll be rolling out more states soon." = "Schimbul de monede nu este încă disponibil în stat. Vom fi rulare mai multe membre în curând.";
+
+/* (No Commment) */
+"An error occurred when getting your %@ balance. Please try again later. Details: %@" = "A apărut o eroare atunci când se %@ echilibru. Vă rugăm să încercați din nou mai târziu. Detalii: %@";
+
+/* (No Commment) */
+"An error occurred when getting an approximate quote. Please try again later. Details: %@" = "A apărut o eroare atunci când a obține un citat aproximativ. Vă rugăm să încercați din nou mai târziu. Detalii: %@";
+
+/* (No Commment) */
+"Deposited to ShapeShift" = "Depus pentru a schimba forma";
+
+/* (No Commment) */
+"Received from ShapeShift" = "Primit de la ShapeShift";
+
+/* (No Commment) */
+"Order History" = "Pentru Istorie";
+
+/* (No Commment) */
+"Incoming" = "Intrare";
+
+/* (No Commment) */
+"Trade Expired" = "Comerțul Expirat";
+
+/* (No Commment) */
+"Your trade has expired. Please return to the Exchange page to start your trade again." = "Comerțul a expirat. Vă rugăm să reveniți la pagina Exchange pentru a începe dvs. de comerț din nou.";
+
+/* (No Commment) */
+"No Funds to Exchange" = "Nu există Fonduri pentru a face Schimb";
+
+/* (No Commment) */
+"You have no funds to exchange. Why not get started by receiving some funds?" = "Nu aveți fonduri pentru a face schimb. de Ce nu începeți prin primirea unor fonduri?";
+
+/* (No Commment) */
+"Loading Exchange" = "Încărcare De Schimb";
+
+/* (No Commment) */
+"Select other %@ Wallet" = "Selectați alte %@ Portofel";
+
+/* (No Commment) */
+"%@ needed to exchange" = "%@ necesare pentru schimb";
+
+/* (No Commment) */
+"Start trading" = "Începe de tranzacționare";
+
+/* (No Commment) */
+"Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Schimb bitcoin direct de pe Blockchain portofel. Începeți prin crearea unui cont în Cumpar & vand tab.";
+
+/* (No Commment) */
+"The wait is over" = "Așteptați este de peste";
+
+/* (No Commment) */
+"Something went wrong, please try reopening Buy & Sell Bitcoin again." = "Ceva a mers greșit, vă rugăm să încercați redeschiderea Cumpăra Și Vinde Bitcoin din nou.";
+
+/* (No Commment) */
+"Buy & Sell Bitcoin" = "Cumpăra Și Vinde Bitcoin";
+
+/* (No Commment) */
+"We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Noi lucram cu parteneri de schimb peste tot în lume, astfel încât să puteți cumpăra și vinde bitcoin direct din portofel.";
+
+/* (No Commment) */
+"Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Mobile Cumpara Si Vinde este acceptată pentru iOS 9 și în sus. Vă rugăm să executați o actualizare de software sau de conectare la login.blockchain.com de pe computer.";
+
+/* (No Commment) */
+"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Cumpăra și vinde bitcoin direct de pe Blockchain portofel. Începeți prin crearea unui cont în Cumpar & vand tab.";
+
+/* (No Commment) */
+"All Wallets" = "Toate Portofelele";
+
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Ține-ți xPub privat. Cineva cu acces la xPub va fi capabil pentru a vedea toate fondurile și tranzacții.";
+
+/* (No Commment) */
+"Your xPub is an advanced feature that contains all of your public addresses." = "Ta xPub este o funcție avansată care conține toate adresele publice.";
+
+/* (No Commment) */
+"Transactions occur when you send and request bitcoin cash." = "Tranzactiile apar atunci când trimiteți și să solicite bitcoin numerar.";
+
+/* (No Commment) */
+"Get Bitcoin Cash" = "Obține Bitcoin Numerar";
+
+/* (No Commment) */
+"Request Bitcoin Cash" = "Cerere Bitcoin Numerar";
+
+/* (No Commment) */
+"Price" = "Pret";
+
+/* (No Commment) */
+"See charts" = "Vezi diagrame";
+
+/* (No Commment) */
+"Price charts" = "Grafice de preț";
+
+/* (No Commment) */
+"Bitcoin Cash" = "Bitcoin Numerar";
+
+/* (No Commment) */
+"Bitcoin Cash Price" = "Bitcoin Prețului În Numerar";
+
+/* (No Commment) */
+"Enter Bitcoin Cash address or select" = "Introduceți Bitcoin Numerar adresă sau selectați";
+
+/* (No Commment) */
+"Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "Copia asta a primi adresa în clipboard? Dacă este așa, să fie informat că alte aplicații ar putea fi capabil să se uite la aceste informații.";
+
+/* (No Commment) */
+"Please send BCH to the Bitcoin Cash address\n%@" = "Vă rugăm să trimiteți-BCH la Bitcoin Numerar adresa\n%@";
+
+/* (No Commment) */
+"Transaction fees impact how quickly the mining network will confirm your transactions, and depend on the current network conditions." = "Taxele de tranzacție impact cât de repede miniere de rețea va confirma tranzacțiile, și depinde de condițiile de rețea actuale.";
+
+/* (No Commment) */
+"Trade Refunded" = "Comerțul Rambursat";
+
+/* (No Commment) */
+"We are excited to announce that your Blockchain wallet will allow you to seamlessly send, receive, and exchange Bitcoin Cash!" = "Suntem încântați să anunțăm că Blockchain portofel va permite să perfect trimite, primi, și de schimb Bitcoin Bani!";
+
+/* (No Commment) */
+"Are you sure this is a bitcoin cash address?" = "Sunt sigur că acest lucru este un bitcoin numerar adresa?";
+
+/* (No Commment) */
+"Sending funds to a bitcoin address by accident will result in loss of funds." = "Trimiterea de fonduri de la o adresă bitcoin de accident va duce la pierderea de fonduri.";
+
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Fata ID-ul nu este permis pe acest dispozitiv. Pentru a activa Fata ID-ul, du-te la Setări -> Fata ID & Parolă și se adaugă o amprentă.";
+
+/* (No Commment) */
+"Face ID is not available on this device." = "Fata ID-ul nu este disponibil pe acest dispozitiv.";
+
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "Necunoscut Fața ID de eroare. Cod: %ld";
+
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain serverele sunt în prezent în curs de întreținere. Vă rugăm să încercați din nou mai târziu";
+
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "În imposibilitatea de a autentifica din cauza eșecului de autentificare de prea multe ori.";
+
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "În imposibilitatea de a autentifica deoarece aparatul nu are suport pentru autentificare biometrică.";
+
+/* (No Commment) */
+"Unable to use biometrics." = "În imposibilitatea de a utiliza datele biometrice.";
+
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "În imposibilitatea de a Autentifica pentru că au fost prea multe nu a reușit Touch ID încercări. Parolă este necesară pentru a debloca Touch ID";
+
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Activați această caracteristică va permite tuturor utilizatorilor cu un inregistrate %@ amprenta pe acest dispozitiv pentru accesul la portofel.";
+
+/* (No Commment) */
+"Enable %@" = "Permite %@";
+
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Utilizarea %@ în loc de PIN pentru autentificarea Blockchain și acces portofel.";
+
+/* (No Commment) */
+"Use %@ as PIN" = "Utilizarea %@ ca PIN";
+
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Felicitări, ai bitcoin! Acum hai să backup portofel pentru a vă asigura că poate accesa fonduri, dacă vă uitați parola.";
+
+/* (No Commment) */
+"Invalid %@ address: %@" = "Invalid %@ adresa: %@";
+
+/* (No Commment) */
+"%@ payment request" = "%@ cerere de plată";
+
+/* (No Commment) */
+"Cookie Policy" = "Politica Privind Cookie-Urile";
+
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vă rugăm să verificați adresa dvs. de email și de a autoriza acest log-in incercare. După ce face acest lucru, vă rugăm să reveniți aici și încercați să vă conectați din nou";
+
+/* (No Commment) */
+"Non-Spendable" = "Non-Spendable";

@@ -1,0 +1,126 @@
+
+/* Class = "IBUILabel"; text = "0 BTC"; ObjectID = "257"; */
+"257.text" = "0 BTC";
+
+/* Class = "IBUILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "loading";
+
+/* Class = "IBUILabel"; text = "Automatic Pairing"; ObjectID = "353"; */
+"353.text" = "Automatic Pairing";
+
+/* Class = "IBUILabel"; text = "Create Wallet"; ObjectID = "358"; */
+"358.text" = "Create a New Wallet";
+
+/* Class = "IBUILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "IBUITextView"; text = "Login to your Blockchain Wallet via your PC or Mac at https://login.blockchain.com"; ObjectID = "361"; */
+"361.text" = "Log in to your Blockchain Wallet via your PC or Mac at\nlogin.blockchain.com";
+
+/* Class = "IBUILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "IBUILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "IBUITextView"; text = "Click Show Pairing Code to reveal a QR Code, a square black & white barcode. Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Click Show Pairing Code to reveal a QR Code, a square black & white barcode. Scan the code with your camera.";
+
+/* Class = "IBUIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Scan Pairing Code";
+
+/* Class = "IBUIButton"; normalTitle = "Button 2"; ObjectID = "376"; */
+"376.normalTitle" = "Button 2";
+
+/* Class = "IBUIButton"; normalTitle = "Button 1"; ObjectID = "377"; */
+"377.normalTitle" = "Button 1";
+
+/* Class = "IBUILabel"; text = "If you already have a Blockchain Wallet, choose Pair Device; otherwise, choose Create Wallet.    It's Free! No email required."; ObjectID = "378"; */
+"378.text" = "If you already have a Blockchain Wallet, choose Pair Device; otherwise, choose Create Wallet.    It's Free! No email required.";
+
+/* Class = "IBUILabel"; text = "Welcome to Blockchain Wallet"; ObjectID = "380"; */
+"380.text" = "Welcome to Blockchain Wallet";
+
+/* Class = "IBUILabel"; text = "TRANSACTIONS"; ObjectID = "2je-u4-PB2"; */
+"2je-u4-PB2.text" = "Transactions";
+
+/* Class = "IBUILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "No recent transactions";
+
+/* Class = "IBUILabel"; text = "Password:"; ObjectID = "394"; */
+"394.text" = "Password:";
+
+/* Class = "IBUILabel"; text = "Confirm:"; ObjectID = "396"; */
+"396.text" = "Confirm:";
+
+/* Class = "IBUIButton"; normalTitle = "Create Wallet"; ObjectID = "398"; */
+"398.normalTitle" = "Create Wallet";
+
+/* Class = "IBUILabel"; text = "Password Required"; ObjectID = "465"; */
+"465.text" = "Password Required";
+
+/* Class = "IBUILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Password Request Description";
+
+/* Class = "IBUILabel"; text = "Password:"; ObjectID = "468"; */
+"468.text" = "Password:";
+
+/* Class = "IBUIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Continue";
+
+/* Class = "IBUILabel"; text = "Wallet Identifier:"; ObjectID = "586"; */
+"586.text" = "Wallet Identifier:";
+
+/* Class = "IBUILabel"; text = "You have chosen to pair manually (or automatic pairing is not supported with your device). Please enter your login details below."; ObjectID = "588"; */
+"588.text" = "You have chosen to pair manually (or automatic pairing is not supported with your device). Please enter your login details below.";
+
+/* Class = "IBUILabel"; text = "Password:"; ObjectID = "591"; */
+"591.text" = "Password:";
+
+/* Class = "IBUILabel"; text = "You must have two-factor authentication disabled to pair manually!"; ObjectID = "602"; */
+"602.text" = "You must have two-factor authentication disabled to pair manually.";
+
+/* Class = "IBUILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login.";
+
+/* Class = "IBUIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Continue";
+
+/* Class = "IBUILabel"; text = "Password:"; ObjectID = "627"; */
+"627.text" = "Password:";
+
+/* Class = "IBUILabel"; text = "Login"; ObjectID = "630"; */
+"630.text" = "Login";
+
+/* Class = "IBUIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Forget Wallet";
+
+/* Class = "IBUILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "If you would like to forget this wallet and start over, press 'Forget Wallet'.";
+
+/* Class = "IBUIButton"; normalTitle = "Button 3"; ObjectID = "OKS-md-gDQ"; */
+"OKS-md-gDQ.normalTitle" = "Button 3";
+
+/* Class = "IBUIButton"; normalTitle = "Continue"; ObjectID = "TzC-Tw-04r"; */
+"TzC-Tw-04r.normalTitle" = "Continue";
+
+/* Class = "IBUILabel"; text = "Email:"; ObjectID = "VcH-wh-BEs"; */
+"VcH-wh-BEs.text" = "Email:";
+
+/* Class = "IBUILabel"; text = "* required for wallet backups"; ObjectID = "jUZ-5W-4qw"; */
+"jUZ-5W-4qw.text" = "* Required";
+
+/* Class = "IBUILabel"; text = "0 Transactions"; ObjectID = "kK3-Xs-d3Q"; */
+"kK3-Xs-d3Q.text" = "0 Transactions";
+
+/* Class = "IBUILabel"; text = "Manual Pairing"; ObjectID = "qIf-DM-Gtq"; */
+"qIf-DM-Gtq.text" = "Manual Pairing";
+
+/* Class = "IBUILabel"; text = "* minimum 10 characters"; ObjectID = "wvh-x7-hB8"; */
+"wvh-x7-hB8.text" = "* Minimum 10 characters";
+
+/* Class = "IBUILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Enter your 12 recovery words with spaces to recover your funds & transactions";
+
+/* Class = "IBUITextView"; text = "Test"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Go to Settings / General.";

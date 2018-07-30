@@ -1,0 +1,172 @@
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "ไปยังการตั้งค่า / ทั่วไป";
+
+/* (No Commment) */
+"2je-u4-PB2.text" = "ธุรกรรม";
+
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "ลืมกระเป๋าเงิน";
+
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 BTC";
+
+/* (No Commment) */
+"257.text" = "0 BTC";
+
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "กำลังโหลด";
+
+/* (No Commment) */
+"353.text" = "จับคู่อัตโนมัติ";
+
+/* (No Commment) */
+"358.text" = "สร้างกระเป๋าเงินใหม่";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "ล็อกอินไปยังกระเป๋าเงิน Blockchain ของคุณผ่านทาง PC หรือ Mac ของคุณที่
+https://login.blockchain.com";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "คลิก แสดงรหัสจับคู่ เพื่อแสดงรหัส QR ซึ่งเป็นบาร์โค้ดขาว & ดำในรูปแบบช่องสี่เหลี่ยม สแกนรหัสด้วยกล้องของคุณ";
+
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "สแกนรหัสจับคู่";
+
+/* (No Commment) */
+"376.normalTitle" = "ปุ่ม 2";
+
+/* (No Commment) */
+"377.normalTitle" = "ปุ่ม 1";
+
+/* (No Commment) */
+"378.text" = "หากคุณมีกระเป๋าเงิน Blockchain อยู่แล้ว เลือก จับคู่อุปกรณ์; หากไม่ใช่เช่นนั้น เลือก สร้างกระเป๋าเงิน    มันฟรี! ไม่ต้องใช้อีเมล";
+
+/* (No Commment) */
+"380.text" = "ยินดีต้อนรับสู่กระเป๋าเงิน Blockchain";
+
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "ไม่มีธุรกรรมเมื่อเร็ว ๆ นี้";
+
+/* (No Commment) */
+"394.text" = "รหัสผ่าน:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "รหัสผ่าน";
+
+/* (No Commment) */
+"396.text" = "ยืนยัน:";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "ยืนยันรหัสผ่าน";
+
+/* (No Commment) */
+"398.normalTitle" = "สร้างกระเป๋าเงิน";
+
+/* (No Commment) */
+"465.text" = "จำเป็นต้องมีรหัสผ่าน";
+
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "คำอธิบายการร้องขอรหัสผ่าน";
+
+/* (No Commment) */
+"468.text" = "รหัสผ่าน:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "รหัสผ่าน";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "ดำเนินการต่อ";
+
+/* (No Commment) */
+"586.text" = "ตัวระบุกระเป๋าเงิน:";
+
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "ตัวระบุกระเป๋าเงิน";
+
+/* (No Commment) */
+"588.text" = "คุณได้เลือกให้จับคู่ด้วยตนเอง (หรืออุปกรณ์ของคุณไม่รองรับการจับคู่อัตโนมัติ) โปรดกรอกรายละเอียดการล็อกอินของคุณด้านล่าง";
+
+/* (No Commment) */
+"591.text" = "รหัสผ่าน:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "รหัสผ่าน";
+
+/* (No Commment) */
+"602.text" = "คุณต้องปิดการใช้งานการยืนยัน 2 ขั้นตอนเพื่อจับคู่ด้วยตนเอง";
+
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "คุณได้ออกจากระบบหรือมีข้อผิดพลาดในการถอดรหัสไฟล์กระเป๋าเงินของคุณ กรอกรหัสผ่านของคุณด้านล่างเพื่อล็อกอิน";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "ดำเนินการต่อ";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "รหัสผ่าน";
+
+/* (No Commment) */
+"627.text" = "รหัสผ่าน:";
+
+/* (No Commment) */
+"630.text" = "ล็อกอิน";
+
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "หากคุณต้องการลืมกระเป๋าเงินนี้แล้วเริ่มใหม่ทั้งหมด กด 'ลืมกระเป๋าเงิน'";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "ชื่อ";
+
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "วลีรหัสผ่านเพื่อการกู้คืน";
+
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "อีเมลของคุณ";
+
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "แย่";
+
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "ปุ่ม 3";
+
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "ในการสร้างกระเป๋าเงินใหม่ คุณยอมรับต่อ";
+
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "ดำเนินการต่อ";
+
+/* (No Commment) */
+"VcH-wh-BEs.text" = "อีเมล:";
+
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 USD";
+
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "ฉันไม่สามารถเข้าถึงกล้องของฉันได้";
+
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* จำเป็น";
+
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 ธุรกรรม";
+
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "กรอกคำเพื่อการกู้คืน 12 คำพร้อมช่องว่างเพื่อกู้คืนเงิน & ธุรกรรมของคุณ";
+
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "จับคู่ด้วยตนเอง";
+
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "ข้อตกลงการให้บริการของ Blockchain";
+
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* อย่างต่ำ 10 ตัวอักษร";
+

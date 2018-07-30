@@ -28,7 +28,7 @@ import RxSwift
         return networkManager.requestJsonOrString(
             BlockchainAPI.shared.walletOptionsUrl,
             method: .get
-        ).asSingle().map {
+        ).map {
             guard $0.statusCode == 200 else {
                 throw WalletServiceError.generic(message: nil)
             }
@@ -74,6 +74,6 @@ import RxSwift
             BlockchainAPI.shared.pinStore,
             method: .post,
             parameters: parameters
-        ).asSingle()
+        )
     }
 }

@@ -1,0 +1,172 @@
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "설정/일반으로 이동합니다.";
+
+/* (No Commment) */
+"2je-u4-PB2.text" = "거래들";
+
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "지갑 잊기";
+
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 BTC";
+
+/* (No Commment) */
+"257.text" = "0 BTC";
+
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "로딩";
+
+/* (No Commment) */
+"353.text" = "자동 페어링";
+
+/* (No Commment) */
+"358.text" = "새 지갑 만들기";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "
+https://login.blockchain.com에서 PC 또는 Mac으로 귀하 블록체인 지갑에 로그인 하세요";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "흑백 네모인 QR 코드가 보이게 하려면 '페어링 코드 보이기'를 클릭하세요 코드를 카메라로 스캔 하세요";
+
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "페어링 코드 스캔";
+
+/* (No Commment) */
+"376.normalTitle" = "단추 2";
+
+/* (No Commment) */
+"377.normalTitle" = "단추 1";
+
+/* (No Commment) */
+"378.text" = "이미 블록체인 지갑이 있으면 '장치 페어링'을 선택하고 아니면 '지갑 만들기'를 선택하세요    무료입니다! 이메일 필요 없습니다.";
+
+/* (No Commment) */
+"380.text" = "블록체인 지갑에 오신 것을 환영합니다";
+
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "최근 거래 없음";
+
+/* (No Commment) */
+"394.text" = "암호:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "암호";
+
+/* (No Commment) */
+"396.text" = "확인:";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "암호 확인";
+
+/* (No Commment) */
+"398.normalTitle" = "지갑 만들기";
+
+/* (No Commment) */
+"465.text" = "암호 필요";
+
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "암호 요청 설명";
+
+/* (No Commment) */
+"468.text" = "암호:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "암호";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "계속";
+
+/* (No Commment) */
+"586.text" = "지갑 식별자:";
+
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "지갑 식별자";
+
+/* (No Commment) */
+"588.text" = "수동 페어링을 선택했습니다 (또는 귀하 장치가 자동 페어링을 지원하지 않습니다) 로그인 상세를 아래 입력하세요";
+
+/* (No Commment) */
+"591.text" = "암호:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "암호";
+
+/* (No Commment) */
+"602.text" = "귀하는 수동 페어링을 위해 2 단계 인증을 해제한 것이 분명합니다.";
+
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "귀하가 로그아웃 했거나 지갑 파일 해독 중 오류가 있었습니다. 로그인 하려면 아래 암호를 입력하세요.";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "계속";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "암호";
+
+/* (No Commment) */
+"627.text" = "암호:";
+
+/* (No Commment) */
+"630.text" = "로그인";
+
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "이 지갑을 잊어버리고 다시 시작하고 싶으면 '지갑 잊기'를 누르세요";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "제목";
+
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "복구 암호 구절";
+
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "귀하 이메일";
+
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "약함";
+
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "단추 3";
+
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "새 지갑을 만들면 다음에 동의하는 것입니다";
+
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "계속";
+
+/* (No Commment) */
+"VcH-wh-BEs.text" = "이메일:";
+
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 USD";
+
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "카메라에 접근할 수 없습니다";
+
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* 필요함";
+
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "거래 수 0";
+
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "자금과 거래 복구를 위해 12 개 복구 단어를 공백과 같이 입력하세요";
+
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "수동 페어링";
+
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "블록체인 서비스 조건";
+
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* 최소 10자";
+

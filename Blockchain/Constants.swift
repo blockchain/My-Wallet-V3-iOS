@@ -13,27 +13,9 @@ struct Constants {
     struct AppStore {
         static let AppID = "id493253309"
     }
-
     struct Animation {
         static let duration = 0.2
         static let durationLong = 0.5
-    }
-    // TODO: remove once iOS < 11 is deprecated
-    //: Prefix colors with `Color` for easy filtering in asset catalog
-    //: Adding new color: create entry in Images.xcassets, then add constant here with same name
-    struct Colors {
-        static let ColorBrandPrimary = UIColorFromRGB(0x004A7C)    // previously BlockchainBlue
-        static let ColorBrandSecondary = UIColorFromRGB(0x10ADE4)  // previously BlockchainLightBlue
-        static let ColorBrandTertiary = UIColorFromRGB(0xB2D5E5)   // previously BlockchainLighterBlue
-        static let ColorBrandQuaternary = UIColorFromRGB(0xDAF2FB) // previously BlockchainLightestBlue
-        static let ColorError = UIColorFromRGB(0xCA3A3C)           // previously WarningRed
-        static let ColorGray1 = UIColorFromRGB(0xEAEAEA)           // previously DisabledGray, SecondaryGray
-        static let ColorGray2 = UIColorFromRGB(0xCCCCCC)           // previously TextFieldBorderGray
-        static let ColorGray5 = UIColorFromRGB(0x545456)           // previously DarkGray
-        static let ColorGray6 = UIColorFromRGB(0xEEEEEE)
-        static let ColorGrayLine = UIColorFromRGB(0xcdcdcd)
-        static let ColorSent = UIColorFromRGB(0xF26C57)            // previously SentRed
-        static let ColorSuccess = UIColorFromRGB(0x00A76F)         // previously SuccessGreen
     }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
@@ -207,22 +189,6 @@ struct Constants {
         return Constants.Measurements.MinimumTapTargetSize
     }
 
-    @objc class func colorGray2() -> UIColor {
-        return Constants.Colors.ColorGray2
-    }
-
-    @objc class func colorGray5() -> UIColor {
-        return Constants.Colors.ColorGray5
-    }
-
-    @objc class func colorGray6() -> UIColor {
-        return Constants.Colors.ColorGray6
-    }
-
-    @objc class func colorBrandPrimary() -> UIColor {
-        return Constants.Colors.ColorBrandPrimary
-    }
-
     @objc class func montserratLight() -> String {
         return Constants.FontNames.montserratLight
     }
@@ -234,19 +200,4 @@ struct Constants {
     @objc class func infoLabelEdgeInsets() -> UIEdgeInsets {
         return Constants.Measurements.infoLabelEdgeInsets
     }
-
-    @objc class func grayLineColor() -> UIColor {
-        return Constants.Colors.ColorGrayLine
-    }
-}
-
-// MARK: Helper functions
-
-func UIColorFromRGB(_ rgbValue: UInt) -> UIColor {
-    return UIColor(
-        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-        green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-        blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-        alpha: CGFloat(1.0)
-    )
 }

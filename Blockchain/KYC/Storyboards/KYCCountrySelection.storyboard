@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HFD-oV-Usp">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Country Selection View Controller-->
+        <scene sceneID="dVi-ac-mH2">
+            <objects>
+                <viewController storyboardIdentifier="CountrySelection" title="Country Selection View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HFD-oV-Usp" customClass="KYCCountrySelectionController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9Cc-Na-LbV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mgd-IY-ekq">
+                                <rect key="frame" x="0.0" y="237" width="375" height="216"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="HFD-oV-Usp" id="BBR-1t-II0"/>
+                                    <outlet property="delegate" destination="HFD-oV-Usp" id="bmq-tA-djM"/>
+                                </connections>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7t8-SA-tG4" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="630" width="343" height="44"/>
+                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="dGS-1L-IQM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Continue">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="primaryButtonTapped:" destination="HFD-oV-Usp" eventType="touchUpInside" id="BwM-Oc-c1C"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="4Kb-XV-JWN" firstAttribute="bottom" secondItem="7t8-SA-tG4" secondAttribute="bottom" constant="16" id="4xg-sk-IN5"/>
+                            <constraint firstItem="Mgd-IY-ekq" firstAttribute="centerX" secondItem="4Kb-XV-JWN" secondAttribute="centerX" id="SaK-RN-SvH"/>
+                            <constraint firstItem="Mgd-IY-ekq" firstAttribute="leading" secondItem="4Kb-XV-JWN" secondAttribute="leading" id="U0i-u9-d3D"/>
+                            <constraint firstItem="4Kb-XV-JWN" firstAttribute="trailing" secondItem="7t8-SA-tG4" secondAttribute="trailing" constant="16" id="ZVl-dn-HkK"/>
+                            <constraint firstItem="Mgd-IY-ekq" firstAttribute="centerY" secondItem="4Kb-XV-JWN" secondAttribute="centerY" id="qUc-4a-dgN"/>
+                            <constraint firstItem="4Kb-XV-JWN" firstAttribute="trailing" secondItem="Mgd-IY-ekq" secondAttribute="trailing" id="rgf-F3-YOJ"/>
+                            <constraint firstItem="7t8-SA-tG4" firstAttribute="leading" secondItem="4Kb-XV-JWN" secondAttribute="leading" constant="16" id="sMR-T6-QjD"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4Kb-XV-JWN"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Select Your Country" id="R7H-nZ-Ezx">
+                        <barButtonItem key="backBarButtonItem" id="dm5-TG-XBj"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="countryPicker" destination="Mgd-IY-ekq" id="J9v-Sm-Gd3"/>
+                        <outlet property="primaryButton" destination="7t8-SA-tG4" id="YaJ-IK-fkR"/>
+                        <segue destination="p5l-MX-35I" kind="show" identifier="promptForContactDetails" id="FIp-2M-ma7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OC3-UC-MXI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="39" y="209"/>
+        </scene>
+        <!--KYCContactDetails-->
+        <scene sceneID="uPe-kt-Szi">
+            <objects>
+                <viewControllerPlaceholder storyboardName="KYCContactDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HKM-cD-64E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="703" y="153"/>
+        </scene>
+    </scenes>
+</document>

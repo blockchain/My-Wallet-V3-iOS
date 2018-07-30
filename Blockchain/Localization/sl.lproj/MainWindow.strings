@@ -1,0 +1,171 @@
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Pojdite v Nastavitve / Splošno.";
+
+/* (No Commment) */
+"2je-u4-PB2.text" = "Transakcije";
+
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Pozabite denarnice";
+
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 BTC";
+
+/* (No Commment) */
+"257.text" = "0 BTC";
+
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "nalaganje";
+
+/* (No Commment) */
+"353.text" = "Samodejno seznanjanje";
+
+/* (No Commment) */
+"358.text" = "Ustvarite novo Denarnica";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "Prijavite se v denarnici Blockchain preko PC ali Mac na https://login.blockchain.com";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Kliknite Pokaži seznanjanje kodo da razkrije QR kode, črnimi kvadratnimi & belo črtno kodo. Preglejte kodo s fotoaparatom.";
+
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Skeniranje, seznanjanje kodo";
+
+/* (No Commment) */
+"376.normalTitle" = "Gumb 2";
+
+/* (No Commment) */
+"377.normalTitle" = "Gumb 1";
+
+/* (No Commment) */
+"378.text" = "Če že imate Blockchain denarnice, izberite seznani napravo; v nasprotnem primeru izberite ustvariti denarnico.    To je brezplačno! Ni potrebno email.";
+
+/* (No Commment) */
+"380.text" = "Dobrodošli na Blockchain Denarnica";
+
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "Ni zadnjih transakcij";
+
+/* (No Commment) */
+"394.text" = "Geslo:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "Geslo";
+
+/* (No Commment) */
+"396.text" = "Potrditev:";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "Potrditev gesla";
+
+/* (No Commment) */
+"398.normalTitle" = "Ustvarite denarnice";
+
+/* (No Commment) */
+"465.text" = "Zahtevano je geslo";
+
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Geslo zahtevo opis";
+
+/* (No Commment) */
+"468.text" = "Geslo:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "Geslo";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Še";
+
+/* (No Commment) */
+"586.text" = "Identifikator denarnico:";
+
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "Identifikator denarnice";
+
+/* (No Commment) */
+"588.text" = "Izbrali ste ročno par (ali avtomatsko parjenje ni podprta z napravo). Prosimo, vnesite vaš prepričevalnost podrobnost spodaj.";
+
+/* (No Commment) */
+"591.text" = "Geslo:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "Geslo";
+
+/* (No Commment) */
+"602.text" = "Morate imeti dva-činitelj authentication nesposoben za par ročno.";
+
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "Odjavili ste se, ali je prišlo do napake dešifriranja datoteke vaše denarnice. Vnesite svoje geslo, spodaj v prepričevalnost.";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Še";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "Geslo";
+
+/* (No Commment) */
+"627.text" = "Geslo:";
+
+/* (No Commment) */
+"630.text" = "Prijava";
+
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "Če bi radi pozabili to denarnico in začeti znova, pritisnite \"Pozabil denarnico\".";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "Naslov";
+
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "Geslo izterjave";
+
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "Vaš e-poštni";
+
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "Šibka";
+
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "Gumb 3";
+
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "Z ustvarjanjem nove denarnice se strinjate, da je";
+
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "Še";
+
+/* (No Commment) */
+"VcH-wh-BEs.text" = "E-pošta:";
+
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 USD";
+
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "Nima dostopa do fotoaparata";
+
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* Zahteva";
+
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 transakcije";
+
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Vnesite vaš 12 regres besed s prostori za izterjavo sredstev & transakcije";
+
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "Ročno seznanjanje";
+
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Blockchain pogoji uporabe";
+
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* Najmanj 10 znakov";
+

@@ -1,0 +1,171 @@
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Du-te la Setări / General.";
+
+/* (No Commment) */
+"2je-u4-PB2.text" = "Tranzacţii";
+
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Uita de portofel";
+
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 BTC";
+
+/* (No Commment) */
+"257.text" = "0 BTC";
+
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "încărcare";
+
+/* (No Commment) */
+"353.text" = "Asocierea automată";
+
+/* (No Commment) */
+"358.text" = "Creaţi un portofel nou";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "Conectaţi la portofel Blockchain prin intermediul PC sau Mac la https://login.blockchain.com";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Faceţi clic pe Arată asocierea de cod pentru a descoperi un cod QR, un pătrat negru & alb de coduri de bare. Scanaţi codul cu aparatul de fotografiat.";
+
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Scanaţi codul de asociere";
+
+/* (No Commment) */
+"376.normalTitle" = "Buton 2";
+
+/* (No Commment) */
+"377.normalTitle" = "Buton 1";
+
+/* (No Commment) */
+"378.text" = "Dacă aveţi deja un portofel Blockchain, alege perechea dispozitiv; în caz contrar, selectaţi creaţi portofel.    Este gratuit! Nici un e-mail necesare.";
+
+/* (No Commment) */
+"380.text" = "Bine ati venit la portofel Blockchain";
+
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "Nicio tranzactie recentă";
+
+/* (No Commment) */
+"394.text" = "Parola:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "Parola";
+
+/* (No Commment) */
+"396.text" = "Confirmare:";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "Confirma parola";
+
+/* (No Commment) */
+"398.normalTitle" = "Crea portofel";
+
+/* (No Commment) */
+"465.text" = "Parola necesare";
+
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Descriere de solicitare parola";
+
+/* (No Commment) */
+"468.text" = "Parola:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "Parola";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Continua";
+
+/* (No Commment) */
+"586.text" = "Portofel identificator:";
+
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "Portofel identificator";
+
+/* (No Commment) */
+"588.text" = "Aţi ales să împerechezi manual (sau asocierea automată nu este acceptată cu aparatul). Vă rugăm să introduceţi datele de conectare de mai jos.";
+
+/* (No Commment) */
+"591.text" = "Parola:";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "Parola";
+
+/* (No Commment) */
+"602.text" = "Trebuie să aveţi două-factor de autentificare cu handicap să pereche manual.";
+
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "Te-ai autentificat sau eroare la decriptarea fişierul de portofel. Introduceţi parola de mai jos pentru a va loga.";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Continua";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "Parola";
+
+/* (No Commment) */
+"627.text" = "Parola:";
+
+/* (No Commment) */
+"630.text" = "Autentificare";
+
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "Dacă doriţi să uite acest portofel şi începe peste, apăsaţi \"Uita portofelul\".";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "Titlu";
+
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "Recuperare parolă";
+
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "Adresa de email";
+
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "Slab";
+
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "Butonul 3";
+
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "Prin crearea un portofel nou sunteţi de acord să";
+
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "Continua";
+
+/* (No Commment) */
+"VcH-wh-BEs.text" = "E-mail:";
+
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 USD";
+
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "I abil accent meu aparat de fotografiat";
+
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* Cere";
+
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 tranzacţii";
+
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Introduceţi cuvintele tale 12 recuperare cu spaţii pentru a recupera fondurile dumneavoastră & tranzacţii";
+
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "Asocierea manuală";
+
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Blockchain termeni de serviciu";
+
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* Minim 10 caractere";
+

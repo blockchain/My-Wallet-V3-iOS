@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5zT-vI-ywR">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Light.ttf">
+            <string>Montserrat-Light</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Verify Email Address View Controller-->
+        <scene sceneID="ytS-GV-WN8">
+            <objects>
+                <viewController storyboardIdentifier="KYCVerifyEmailAddress" title="Verify Email Address View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5zT-vI-ywR" customClass="KYCVerifyEmailAddressController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YLp-pk-Ifj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="175-Cr-pwr">
+                                <rect key="frame" x="140" y="219" width="95" height="31"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="15"/>
+                                <state key="normal" title="OPEN EMAIL">
+                                    <color key="titleColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="primaryButtonTapped:" destination="5zT-vI-ywR" eventType="touchUpInside" id="aCY-od-DLk"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ac7-YG-Gbg" userLabel="Description Label">
+                                <rect key="frame" x="16" y="87" width="343" height="34"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="We sent a verification link to maurice@blockchain.com.">
+                                        <attributes>
+                                            <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Montserrat-Light"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LqC-U5-Uej" userLabel="Description Label">
+                                <rect key="frame" x="16" y="299" width="311" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Didn't get the email?">
+                                        <attributes>
+                                            <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Montserrat-Light"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hPF-72-T3j" userLabel="Description Label">
+                                <rect key="frame" x="16" y="153" width="343" height="34"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Click it and return here to continue with your transaction.">
+                                        <attributes>
+                                            <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Montserrat-Light"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="frl-CU-fe2" firstAttribute="trailing" secondItem="hPF-72-T3j" secondAttribute="trailing" constant="16" id="8pM-9v-B8J"/>
+                            <constraint firstItem="175-Cr-pwr" firstAttribute="top" secondItem="hPF-72-T3j" secondAttribute="bottom" constant="32" id="Dpt-aG-yVa"/>
+                            <constraint firstItem="175-Cr-pwr" firstAttribute="centerX" secondItem="frl-CU-fe2" secondAttribute="centerX" id="HNT-AZ-z8P"/>
+                            <constraint firstItem="frl-CU-fe2" firstAttribute="trailing" secondItem="ac7-YG-Gbg" secondAttribute="trailing" constant="16" id="HZu-2D-RYX"/>
+                            <constraint firstItem="hPF-72-T3j" firstAttribute="top" secondItem="ac7-YG-Gbg" secondAttribute="bottom" constant="32" id="T3i-v5-o36"/>
+                            <constraint firstItem="ac7-YG-Gbg" firstAttribute="leading" secondItem="frl-CU-fe2" secondAttribute="leading" constant="16" id="Wfc-bk-KUE"/>
+                            <constraint firstItem="ac7-YG-Gbg" firstAttribute="top" secondItem="frl-CU-fe2" secondAttribute="top" constant="87" id="kzk-M0-Gmt"/>
+                            <constraint firstItem="hPF-72-T3j" firstAttribute="leading" secondItem="frl-CU-fe2" secondAttribute="leading" constant="16" id="nJO-Nz-6w1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="frl-CU-fe2"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify Email Address" id="BTW-jV-2c8"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <segue destination="alX-0d-EJ7" kind="show" identifier="verifyPhoneNumber" id="azK-ZK-e8e"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Oo-mG-Q0P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-607.20000000000005" y="41.379310344827587"/>
+        </scene>
+        <!--KYCVerifyPhoneNumber-->
+        <scene sceneID="VZ9-Kx-Y4O">
+            <objects>
+                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="alX-0d-EJ7" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2HN-5L-hWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="122" y="-11"/>
+        </scene>
+    </scenes>
+</document>

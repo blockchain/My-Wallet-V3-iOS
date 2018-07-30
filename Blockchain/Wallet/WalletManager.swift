@@ -133,11 +133,11 @@ class WalletManager: NSObject {
 
     private func updateFiatSymbols() {
         guard let fiatCode = self.wallet.accountInfo["currency"] as? String else {
-            print("Could not get fiat code")
+            Logger.shared.warning("Could not get fiat code")
             return
         }
         guard let currencySymbols = self.wallet.btcRates[fiatCode] as? [AnyHashable: Any] else {
-            print("Currency symbols dictionary is nil")
+            Logger.shared.warning("Currency symbols dictionary is nil")
             return
         }
         let symbolLocalDict = NSMutableDictionary(dictionary: currencySymbols)
@@ -147,7 +147,7 @@ class WalletManager: NSObject {
 
     private func updateBtcSymbols() {
         guard let code = self.wallet.accountInfo["btc_currency"] as? String else {
-            print("Could not get btc code")
+            Logger.shared.warning("Could not get btc code")
             return
         }
         self.latestMultiAddressResponse?.symbol_btc = CurrencySymbol.btcSymbol(fromCode: code)
@@ -163,12 +163,12 @@ extension WalletManager: WalletDelegate {
     // MARK: - Auth
 
     func walletDidLoad() {
-        print("walletDidLoad()")
+        Logger.shared.info("walletDidLoad()")
         endBackgroundUpdateTask()
     }
 
     func walletDidDecrypt() {
-        print("walletDidDecrypt()")
+        Logger.shared.info("walletDidDecrypt()")
 
         DispatchQueue.main.async { [unowned self] in
             self.authDelegate?.didDecryptWallet(
@@ -182,7 +182,7 @@ extension WalletManager: WalletDelegate {
     }
 
     func walletDidFinishLoad() {
-        print("walletDidFinishLoad()")
+        Logger.shared.info("walletDidFinishLoad()")
 
         wallet.btcSwipeAddressToSubscribe = nil
         wallet.bchSwipeAddressToSubscribe = nil
@@ -194,7 +194,7 @@ extension WalletManager: WalletDelegate {
     }
 
     func walletFailedToDecrypt() {
-        print("walletFailedToDecrypt()")
+        Logger.shared.info("walletFailedToDecrypt()")
         DispatchQueue.main.async { [unowned self] in
             self.authDelegate?.authenticationError(error:
                 AuthenticationError(code: AuthenticationError.ErrorCode.errorDecryptingWallet.rawValue)
@@ -203,7 +203,7 @@ extension WalletManager: WalletDelegate {
     }
 
     func walletFailedToLoad() {
-        print("walletFailedToLoad()")
+        Logger.shared.info("walletFailedToLoad()")
         DispatchQueue.main.async { [unowned self] in
             self.authDelegate?.authenticationError(error: AuthenticationError(
                 code: AuthenticationError.ErrorCode.failedToLoadWallet.rawValue
@@ -240,7 +240,7 @@ extension WalletManager: WalletDelegate {
 
     func didCompleteTrade(_ tradeDict: [AnyHashable: Any]!) {
         guard let trade = Trade(dict: tradeDict as! [String: String]) else {
-            print("Failed to create Trade object.")
+            Logger.shared.warning("Failed to create Trade object.")
             return
         }
         DispatchQueue.main.async { [unowned self] in
@@ -458,9 +458,9 @@ extension WalletManager: WalletDelegate {
         }
     }
 
-    func didGetExchangeRate(_ result: [AnyHashable: Any]!) {
+    func didGet(_ rate: ExchangeRate!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetExchangeRate(rate: result as NSDictionary)
+            self.exchangeDelegate?.didGetExchangeRate(rate: rate)
         }
     }
 
