@@ -591,7 +591,7 @@
     [_transactionsEtherViewController reloadSymbols];
     [_transactionsBitcoinCashViewController reloadSymbols];
     [_tabViewController reloadSymbols];
-    [_exchangeOverviewViewController reloadSymbols];
+    [[ExchangeCoordinator sharedInstance] reloadSymbols];
 }
 
 - (void)reloadSendController
@@ -799,18 +799,6 @@
 
     [_tabViewController setActiveViewController:viewControllerToPresent animated:NO index:TAB_SEND];
     [viewControllerToPresent QRCodebuttonClicked:nil];
-}
-
-- (void)showShapeshift
-{
-    self.exchangeOverviewViewController = [ExchangeOverviewViewController new];
-    BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:self.exchangeOverviewViewController title:BC_STRING_EXCHANGE];
-    [self.tabViewController presentViewController:navigationController animated:YES completion:nil];
-}
-
-- (void)showHomebrew
-{
-    // TODO
 }
 
 - (void)didCreateEthAccountForExchange

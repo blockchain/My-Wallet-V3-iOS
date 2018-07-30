@@ -29,6 +29,8 @@ import RxSwift
 
     private var disposable: Disposable?
 
+    private var exchangeViewController: ExchangeOverviewViewController?
+
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared
@@ -53,6 +55,7 @@ import RxSwift
                 }
             }
             let error = { (error: Error) in
+                // TODO - use Logger.shared.error
                 print("Error checking if homebrew is available: \(error) - showing shapeshift")
                 self.showExchange(type: .shapeshift)
             }
@@ -78,6 +81,7 @@ import RxSwift
             return
         }
 
+        // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Exchange.loading)
 
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
@@ -88,8 +92,24 @@ import RxSwift
 
     private func showExchange(type: ExchangeType) {
         switch type {
-        case .homebrew: AppCoordinator.shared.tabControllerManager.showHomebrew()
-        default: AppCoordinator.shared.tabControllerManager.showShapeshift()
+        case .homebrew:
+            // TODO - use Logger.shared.info
+            print("Not implemented yet")
+        default:
+            exchangeViewController = ExchangeOverviewViewController()
+            guard let navigationController = BCNavigationController(
+                rootViewController: exchangeViewController,
+                title: LocalizationConstants.Exchange.navigationTitle
+            ) else {
+                // TODO - use Logger.shared.error
+                print("Could not create navigation controller")
+                return
+            }
+            AppCoordinator.shared.tabControllerManager.present(navigationController, animated: true)
         }
+    }
+
+    @objc func reloadSymbols() {
+        exchangeViewController?.reloadSymbols()
     }
 }

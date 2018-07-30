@@ -214,7 +214,14 @@ struct LocalizationConstants {
     }
 
     struct Exchange {
-        static let loading = NSLocalizedString("Loading Exchange", comment: "Text presented when the wallet is loading the exchange")
+        static let navigationTitle = NSLocalizedString(
+            "Exchange",
+            comment:"Title text shown on navigation bar for exchanging a crypto asset for another"
+        )
+        static let loading = NSLocalizedString(
+            "Loading Exchange",
+            comment: "Text presented when the wallet is loading the exchange"
+        )
         static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
         static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
         static let confirming = NSLocalizedString("Confirming", comment: "")
