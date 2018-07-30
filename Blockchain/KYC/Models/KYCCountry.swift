@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum JSONDecodeError: Error, Equatable {
-    case failedToDecodeContainer
-    case failedToDecodeValueForKey
-}
-
 struct KYCCountry: Codable {
     let code: String
     let name: String
