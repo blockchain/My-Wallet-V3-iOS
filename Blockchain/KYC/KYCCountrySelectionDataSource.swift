@@ -68,7 +68,7 @@ final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        guard let count = countries?.count else { return 1 }
+        guard let count = countries?.count else { return 0 }
         return count
     }
 }
