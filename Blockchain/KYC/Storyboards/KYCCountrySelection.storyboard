@@ -63,20 +63,20 @@
                     <connections>
                         <outlet property="countryPicker" destination="Mgd-IY-ekq" id="J9v-Sm-Gd3"/>
                         <outlet property="primaryButton" destination="7t8-SA-tG4" id="YaJ-IK-fkR"/>
-                        <segue destination="p5l-MX-35I" kind="show" identifier="promptForContactDetails" id="FIp-2M-ma7"/>
+                        <segue destination="p5l-MX-35I" kind="show" identifier="promptForPersonalDetails" id="FIp-2M-ma7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OC3-UC-MXI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="39" y="209"/>
         </scene>
-        <!--KYCContactDetails-->
+        <!--KYCPersonalDetails-->
         <scene sceneID="uPe-kt-Szi">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCContactDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCPersonalDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HKM-cD-64E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="703" y="153"/>
+            <point key="canvasLocation" x="715" y="131"/>
         </scene>
     </scenes>
 </document>

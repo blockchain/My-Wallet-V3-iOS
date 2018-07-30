@@ -13,7 +13,7 @@ final class KYCCountrySelectionController: UIViewController, KYCOnboardingNaviga
 
     // MARK: - Properties
 
-    var segueIdentifier: String? = "promptForContactDetails"
+    var segueIdentifier: String? = "promptForPersonalDetails"
 
     // MARK: - IBOutlets
 
