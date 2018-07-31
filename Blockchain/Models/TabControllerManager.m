@@ -591,7 +591,7 @@
     [_transactionsEtherViewController reloadSymbols];
     [_transactionsBitcoinCashViewController reloadSymbols];
     [_tabViewController reloadSymbols];
-    [_exchangeOverviewViewController reloadSymbols];
+    [[ExchangeCoordinator sharedInstance] reloadSymbols];
 }
 
 - (void)reloadSendController
@@ -801,26 +801,9 @@
     [viewControllerToPresent QRCodebuttonClicked:nil];
 }
 
-- (void)exchangeClicked
-{
-    if ([WalletManager.sharedInstance.wallet hasEthAccount]) {
-        self.exchangeOverviewViewController = [ExchangeOverviewViewController new];
-        BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:self.exchangeOverviewViewController title:BC_STRING_EXCHANGE];
-        [self.tabViewController presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        if ([WalletManager.sharedInstance.wallet needsSecondPassword]) {
-            [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT headerText:LocalizationConstantsObjcBridge.secondPasswordRequired validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPassword) {
-                [WalletManager.sharedInstance.wallet createEthAccountForExchange:secondPassword];
-            }];
-        } else {
-            [WalletManager.sharedInstance.wallet createEthAccountForExchange:nil];
-        }
-    }
-}
-
 - (void)didCreateEthAccountForExchange
 {
-    [self exchangeClicked];
+    [ExchangeCoordinator.sharedInstance startWithRootViewController:self];
 }
 
 - (void)showGetAssetsAlert

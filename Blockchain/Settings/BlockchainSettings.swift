@@ -277,7 +277,7 @@ final class BlockchainSettings: NSObject {
 
             WalletManager.shared.wallet.password = password
 
-            try? Pin(code: pinUInt).save()
+            Pin(code: pinUInt).saveToKeychain()
 
             defaults.removeObject(forKey: UserDefaults.Keys.password.rawValue)
             defaults.removeObject(forKey: UserDefaults.Keys.pin.rawValue)

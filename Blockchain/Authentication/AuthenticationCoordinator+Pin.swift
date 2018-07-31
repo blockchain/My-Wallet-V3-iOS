@@ -23,21 +23,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
     // MARK: - PEPinEntryControllerDelegate
 
-    func pinEntryController(_ pinEntryController: PEPinEntryController!, changedPin pinInt: UInt) {
-        let pin = Pin(code: pinInt)
-        self.lastEnteredPIN = pin
-
-        guard WalletManager.shared.wallet.isInitialized() || WalletManager.shared.wallet.password != nil else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Pin.cannotSaveInvalidWalletState)
-            return
-        }
-
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.verifying)
-
-        try? pin.save()
-    }
-
-    func pinEntryControllerDidCancel(_ pinEntryController: PEPinEntryController!) {
+    func pinEntryControllerDidCancel(_ pinEntryController: PEPinEntryController) {
         Logger.shared.info("Pin change cancelled!")
         closePinEntryView(animated: true)
     }
@@ -74,6 +60,15 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
         let passcodePayload = PasscodePayload(guid: guid, password: decryptedPassword, sharedKey: sharedKey)
         AuthenticationManager.shared.authenticate(using: passcodePayload, andReply: authHandler)
+    }
+
+    func pinEntryControllerDidChangePin(_ controller: PEPinEntryController) {
+        closePinEntryView(animated: true)
+
+        let inSettings = pinEntryViewController?.inSettings ?? false
+        if walletManager.wallet.isInitialized() && !inSettings {
+            AlertViewPresenter.shared.showMobileNoticeIfNeeded()
+        }
     }
 
     // MARK: - Private
@@ -113,69 +108,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         pinEntryViewController = pinViewController
         UIApplication.shared.keyWindow?.rootViewController?.present(pinViewController, animated: true)
     }
-}
 
-extension AuthenticationCoordinator: WalletPinEntryDelegate {
-    func errorDidFailPutPin(errorMessage: String) {
-        LoadingViewPresenter.shared.hideBusyView()
-
-        AlertViewPresenter.shared.standardError(message: errorMessage) { [unowned self] _ in
-            self.reopenChangePin()
-        }
-    }
-
-    func putPinSuccess(response: PutPinResponse) {
-        LoadingViewPresenter.shared.hideBusyView()
-
-        guard let password = walletManager.wallet.password else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Pin.cannotSaveInvalidWalletState)
-            return
-        }
-
-        walletManager.wallet.isNew = false
-
-        guard response.error == nil else {
-            errorDidFailPutPin(errorMessage: response.error!)
-            return
-        }
-
-        guard response.isStatusCodeOk else {
-            let message = String(
-                format: LocalizationConstants.Errors.invalidStatusCodeReturned,
-                response.code ?? -1
-            )
-            errorDidFailPutPin(errorMessage: message)
-            return
-        }
-
-        guard response.key.count != 0 && response.value.count != 0 else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Pin.responseKeyOrValueLengthZero)
-            return
-        }
-
-        // Encrypt the wallet password with the random value
-        guard let encryptedPinPassword = walletManager.wallet.encrypt(
-            password,
-            password: response.value,
-            pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
-        ) else {
-            errorDidFailPutPin(errorMessage: LocalizationConstants.Pin.encryptedStringIsNil)
-            return
-        }
-
-        let appSettings = BlockchainSettings.App.shared
-        appSettings.encryptedPinPassword = encryptedPinPassword
-        appSettings.pinKey = response.key
-        appSettings.passwordPartHash = password.passwordPartHash
-
-        // Update your info to new pin code
-        closePinEntryView(animated: true)
-
-        let inSettings = pinEntryViewController?.inSettings ?? false
-        if walletManager.wallet.isInitialized() && !inSettings {
-            AlertViewPresenter.shared.showMobileNoticeIfNeeded()
-        }
-    }
 
     private func askIfUserWantsToResetPIN() {
         let actions = [

@@ -15,4 +15,8 @@ class MockWallet: Wallet {
         self.delegate?.walletDidDecrypt!()
         self.delegate?.walletDidFinishLoad!()
     }
+
+    override func encrypt(_ data: String, password: String) -> String {
+        return password
+    }
 }

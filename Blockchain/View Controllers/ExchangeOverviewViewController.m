@@ -44,9 +44,10 @@
     NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
     
     if (availableStates.count > 0) {
+        [[LoadingViewPresenter sharedInstance] hideBusyView];
         [self showStates:availableStates];
     } else {
-        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:BC_STRING_LOADING_EXCHANGE];
+        [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingExchange]];
         [WalletManager.sharedInstance.wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
     }
 }

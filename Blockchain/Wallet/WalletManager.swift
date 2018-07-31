@@ -30,7 +30,6 @@ class WalletManager: NSObject {
 
     @objc weak var settingsDelegate: WalletSettingsDelegate?
     weak var authDelegate: WalletAuthDelegate?
-    weak var pinEntryDelegate: WalletPinEntryDelegate?
     weak var buySellDelegate: WalletBuySellDelegate?
     weak var accountInfoDelegate: WalletAccountInfoDelegate?
     @objc weak var addressesDelegate: WalletAddressesDelegate?
@@ -254,21 +253,6 @@ extension WalletManager: WalletDelegate {
         }
     }
 
-    // MARK: - Pin Entry
-
-    func didFailPutPin(_ value: String!) {
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.errorDidFailPutPin(errorMessage: value)
-        }
-    }
-
-    func didPutPinSuccess(_ dictionary: [AnyHashable: Any]!) {
-        let response = PutPinResponse(response: dictionary)
-        DispatchQueue.main.async { [unowned self] in
-            self.pinEntryDelegate?.putPinSuccess(response: response)
-        }
-    }
-
     // MARK: - Send Bitcoin/Bitcoin Cash
     func didCheck(forOverSpending amount: NSNumber!, fee: NSNumber!) {
         DispatchQueue.main.async { [unowned self] in
@@ -489,7 +473,7 @@ extension WalletManager: WalletDelegate {
     }
 
     func didCreateEthAccountForExchange() {
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async {
             self.exchangeIntermediateDelegate?.didCreateEthAccountForExchange()
         }
     }
