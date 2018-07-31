@@ -114,7 +114,5 @@
 
 - (void)updateBadgeNumber:(NSInteger)number forSelectedIndex:(int)index;
 
-- (void)showHomebrew;
-- (void)showShapeshift;
 - (void)showGetAssetsAlert;
 @end
