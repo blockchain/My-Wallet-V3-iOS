@@ -14,6 +14,7 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
+    // TODO: read from .xcconfig
     fileprivate let rootUrl = "https://api.dev.blockchain.info/nabu-app"
     private let timeoutInterval = TimeInterval(exactly: 30)!
 
