@@ -4,6 +4,7 @@ disabled_rules:
 excluded:
   - Submodules/
   - RxAlamofire/
+  - Pods/
 attributes: true
 closure_end_indentation: true
 closure_spacing: true
