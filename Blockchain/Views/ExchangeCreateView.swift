@@ -342,7 +342,7 @@ private extension ExchangeCreateView {
     }
 }
 
-// MARK: - Public methods
+// MARK: - View methods
 @objc extension ExchangeCreateView {
     func clearFields() {
         topLeftField?.text = nil
