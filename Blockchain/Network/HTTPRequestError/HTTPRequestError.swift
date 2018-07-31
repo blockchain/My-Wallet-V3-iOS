@@ -12,13 +12,18 @@ protocol HTTPRequestError: Error {
     var debugDescription: String { get }
 }
 
-protocol HTTPRequestErrorDelegate: class {
-    func handleClientError(_ error: Error)
-    func handleServerError(_ error: HTTPURLResponseError)
-    func handlePayloadError(_ error: HTTPRequestPayloadError)
+// TODO: add more specific client errors based on the error returned by URLSession data task
+// NOTE: the description argument refers to the localized description returned by URLSession data task.
+enum HTTPRequestClientError: HTTPRequestError {
+    case failedRequest(description: String)
+    var debugDescription: String {
+        switch self {
+        case .failedRequest(let description): return description
+        }
+    }
 }
 
-enum HTTPURLResponseError: HTTPRequestError {
+enum HTTPRequestServerError: HTTPRequestError {
     case badResponse, badStatusCode(code: Int)
     var debugDescription: String {
         switch self {
@@ -28,7 +33,7 @@ enum HTTPURLResponseError: HTTPRequestError {
     }
 }
 
-// TODO: use protocol extension to add KYC specific error codes 💭
+// NOTE: in future cases, we may want to allow empty payloads, but this is currently not applicable for the KYC flow.
 enum HTTPRequestPayloadError: HTTPRequestError {
     case badData, emptyData, invalidMimeType(type: String)
     var debugDescription: String {

@@ -16,8 +16,6 @@ final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
 
     var countries: Countries?
 
-    weak var delegate: HTTPRequestErrorDelegate?
-
     static let dataSource = KYCCountrySelectionDataSource()
 
     // MARK: - Initialization
@@ -27,38 +25,16 @@ final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
     }
 
     func fetchListOfCountries() {
-        let url = URL(string: "https://api.dev.blockchain.info/nabu-app/countries?filter=eea")!
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                self.delegate?.handleClientError(error); return
+        _ = KYCNetworkRequest(get: .listOfCountries, success: { responseData in
+            do {
+                self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
+            } catch {
+                // TODO: handle error
             }
-            guard let httpResponse = response as? HTTPURLResponse else {
-                self.delegate?.handleServerError(.badResponse); return
-            }
-            guard (200...299).contains(httpResponse.statusCode) else {
-                self.delegate?.handleServerError(.badStatusCode(code: httpResponse.statusCode)); return
-            }
-            if let mimeType = httpResponse.mimeType {
-                guard mimeType == "application/json" else {
-                    self.delegate?.handlePayloadError(.invalidMimeType(type: mimeType)); return
-                }
-            }
-            guard let responseData = data else {
-                self.delegate?.handlePayloadError(HTTPRequestPayloadError.emptyData); return
-            }
-            self.decode(json: responseData)
-        }
-        task.resume()
-    }
-
-    // MARK: - Private Methods
-
-    private func decode(json: Data) {
-        do {
-            countries = try JSONDecoder().decode(Countries.self, from: json)
-        } catch {
-            delegate?.handlePayloadError(.badData)
-        }
+        }, error: { error in
+            // TODO: handle error
+            Logger.shared.error(error.debugDescription)
+        })
     }
 
     // MARK: - UIPickerViewDataSource
