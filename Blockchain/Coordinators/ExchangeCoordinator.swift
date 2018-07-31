@@ -11,7 +11,7 @@ import RxSwift
 
 @objc class ExchangeCoordinator: NSObject, Coordinator {
 
-    private enum ExchangeType: Int {
+    private enum ExchangeType {
         case homebrew
         case shapeshift
     }
