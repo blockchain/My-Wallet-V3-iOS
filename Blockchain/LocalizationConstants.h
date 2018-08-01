@@ -574,7 +574,6 @@
 #define BC_STRING_ETHER_PRICE NSLocalizedString(@"Ether Price", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_TITLE NSLocalizedString(@"Contract addresses are not supported.", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_MESSAGE NSLocalizedString(@"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP.", nil)
-#define BC_STRING_ETHER_ACCOUNT_SECOND_PASSWORD_PROMPT NSLocalizedString(@"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet.", nil)
 #define BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS NSLocalizedString(@"Tap the Request tab to setup your ether address.", nil)
 
 #define BC_STRING_NOW_SUPPORTING_ETHER_TITLE NSLocalizedString(@"Now supporting Ether", nil)
@@ -632,7 +631,6 @@
 #define BC_STRING_TRADE_EXPIRED_MESSAGE NSLocalizedString(@"Your trade has expired. Please return to the Exchange page to start your trade again.", nil)
 #define BC_STRING_NO_FUNDS_TO_EXCHANGE_TITLE NSLocalizedString(@"No Funds to Exchange", nil)
 #define BC_STRING_NO_FUNDS_TO_EXCHANGE_MESSAGE NSLocalizedString(@"You have no funds to exchange. Why not get started by receiving some funds?", nil)
-#define BC_STRING_LOADING_EXCHANGE NSLocalizedString(@"Loading Exchange", nil)
 #define BC_STRING_SELECT_ARGUMENT_WALLET NSLocalizedString(@"Select other %@ Wallet", nil)
 #define BC_STRING_ARGUMENT_NEEDED_TO_EXCHANGE NSLocalizedString(@"%@ needed to exchange", nil)
 #define BC_STRING_FAILED_TO_LOAD_EXCHANGE_DATA NSLocalizedString(@"Failed to load exchange data", nil)

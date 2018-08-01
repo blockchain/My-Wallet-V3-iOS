@@ -30,11 +30,11 @@ extension BlockchainAPI {
     }
 
     var blockchairUrl: String {
-        return "https://\(PartnerEndpoints.blockchair.rawValue)"
+        return "https://\(PartnerHosts.blockchair.rawValue)"
     }
 
     var etherscanUrl: String {
-        return "https://\(PartnerEndpoints.etherscan.rawValue)"
+        return "https://\(PartnerHosts.etherscan.rawValue)"
     }
 
     var pushNotificationsUrl: String {
@@ -45,5 +45,11 @@ extension BlockchainAPI {
 
     var pinStore: String {
         return "\(walletUrl)/pin-store"
+    }
+
+    enum KYC {
+        static var countries: String {
+            return BlockchainAPI.shared.apiUrl + "/kyc/config/countries"
+        }
     }
 }

@@ -70,8 +70,6 @@
 - (void)errorMakingPairingCode:(NSString *)message;
 - (void)didCreateNewAccount:(NSString *)guid sharedKey:(NSString *)sharedKey password:(NSString *)password;
 - (void)errorCreatingNewAccount:(NSString *)message;
-- (void)didFailPutPin:(NSString *)value;
-- (void)didPutPinSuccess:(NSDictionary *)dictionary;;
 - (void)didImportKey:(NSString *)address;
 - (void)didImportIncorrectPrivateKey:(NSString *)address;
 - (void)didImportPrivateKeyToLegacyAddress;
@@ -279,8 +277,6 @@
 
 - (void)newAccount:(NSString *)password email:(NSString *)email;
 
-- (void)pinServerPutKeyOnPinServerServer:(NSString *)key value:(NSString *)value pin:(NSString *)pin;
-
 - (NSString *)encrypt:(NSString *)data password:(NSString *)password pbkdf2_iterations:(int)pbkdf2_iterations;
 - (NSString *)decrypt:(NSString *)data password:(NSString *)password pbkdf2_iterations:(int)pbkdf2_iterations;
 
@@ -352,6 +348,7 @@
 - (BOOL)getEmailVerifiedStatus;
 
 - (void)getAccountInfoAndExchangeRates;
+- (NSString *_Nullable)countryCodeGuess;
 
 - (void)changeEmail:(NSString *)newEmail;
 - (void)resendVerificationEmail:(NSString *)email;

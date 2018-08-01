@@ -44,3 +44,16 @@ extension String {
         return NSLocalizedString(self, tableName: tableName, value: self, comment: "")
     }
 }
+
+extension NSString {
+    @objc func isEmail() -> Bool {
+        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        var validated = false
+        let range = NSRange(location: 0, length: (self as NSString).length)
+        
+        detector?.enumerateMatches(in: self as String, options: [], range: range) { result, _, _ in
+            validated = result?.url?.scheme == "mailto"
+        }
+        return validated
+    }
+}

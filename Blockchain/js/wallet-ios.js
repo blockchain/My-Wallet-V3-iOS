@@ -1027,42 +1027,6 @@ MyWalletPhone.quickSend = function(id, onSendScreen, secondPassword, assetType) 
     return id;
 };
 
-MyWalletPhone.pinServerPutKeyOnPinServerServer = function(key, value, pin) {
-    var data = {
-    format: 'json',
-    method: 'put',
-        value : value,
-        pin : pin,
-        key : key
-    };
-    var success = function (responseObject) {
-
-        responseObject.key = key;
-        responseObject.value = value;
-
-        objc_on_pin_code_put_response(responseObject);
-    };
-    var error = function (res) {
-
-        if (!res || !res.responseText || res.responseText.length == 0) {
-          objc_on_error_pin_code_put_error('Unknown Error');
-        } else {
-          try {
-              var responseObject = JSON.parse(res.responseText);
-
-              responseObject.key = key;
-              responseObject.value = value;
-
-              objc_on_pin_code_put_response(responseObject);
-            } catch (e) {
-              objc_on_error_pin_code_put_error(res.responseText);
-            }
-        }
-    };
-
-    BlockchainAPI.request("POST", 'pin-store', data, true, false).then(success).catch(error);
-};
-
 MyWalletPhone.newAccount = function(password, email, firstAccountName) {
     var success = function(guid, sharedKey, password) {
         objc_loading_stop();

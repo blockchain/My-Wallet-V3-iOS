@@ -60,7 +60,7 @@ import RxSwift
         let tabControllerManager = AppCoordinator.shared.tabControllerManager
         tabControllerManager.sendBitcoinViewController?.reload()
         tabControllerManager.sendBitcoinCashViewController?.reload()
-                
+
         /// Prompt the user for push notification permission
         PushNotificationManager.shared.requestAuthorization()
 
@@ -141,7 +141,6 @@ import RxSwift
         self.walletManager = walletManager
         self.walletService = walletService
         super.init()
-        self.walletManager.pinEntryDelegate = self
         self.walletManager.secondPasswordDelegate = self
     }
 

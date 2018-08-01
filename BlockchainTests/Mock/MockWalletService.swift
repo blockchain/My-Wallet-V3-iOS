@@ -11,6 +11,7 @@ import RxSwift
 
 class MockWalletService: WalletService {
 
+    var mockCreatePinResponse: Single<PinStoreResponse>?
     var mockWalletOptions: WalletOptions?
 
     override var walletOptions: Single<WalletOptions> {
@@ -20,4 +21,10 @@ class MockWalletService: WalletService {
         return Single.just(WalletOptions(json: ["maintenance": false]))
     }
 
+    override func createPin(_ pinPayload: PinPayload) -> Single<PinStoreResponse> {
+        guard let mock = mockCreatePinResponse else {
+            return Single.just(PinStoreResponse(response: [:]))
+        }
+        return mock
+    }
 }
