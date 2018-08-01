@@ -12,10 +12,18 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     // MARK: - Private IBOutlets
 
-    @IBOutlet fileprivate var textFieldSeparator: UIView!
-    @IBOutlet fileprivate var addressTextField: UITextField!
+    @IBOutlet fileprivate var progressView: UIProgressView!
+    @IBOutlet fileprivate var searchBar: UISearchBar!
     @IBOutlet fileprivate var tableView: UITableView!
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
+
+    // MARK: Private IBOutlets (ValidationTextField)
+    @IBOutlet fileprivate var addressTextField: ValidationTextField!
+    @IBOutlet fileprivate var apartmentTextField: ValidationTextField!
+    @IBOutlet fileprivate var cityTextField: ValidationTextField!
+    @IBOutlet fileprivate var stateTextField: ValidationTextField!
+    @IBOutlet fileprivate var postalCodeTextField: ValidationTextField!
+    @IBOutlet fileprivate var countryTextField: ValidationTextField!
 
     // MARK: - Public IBOutlets
 
@@ -35,15 +43,29 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        textFieldSeparator.backgroundColor = .gray1
         coordinator = LocationSuggestionCoordinator(self, interface: self)
         dataProvider = LocationDataProvider(with: tableView)
-        addressTextField.delegate = self
+        searchBar.delegate = self
         tableView.delegate = self
 
-        addressTextField.placeholder = "Enter Address"
+        searchBar.barTintColor = .clear
+
+        // TODO: Localize
+        searchBar.placeholder = "Your Home Address"
+        progressView.tintColor = UIColor.green
+
+        validationFieldsSetup()
 
         searchDelegate?.onStart()
+    }
+
+    fileprivate func validationFieldsSetup() {
+        addressTextField.returnKeyType = .next
+        apartmentTextField.returnKeyType = .next
+        cityTextField.returnKeyType = .next
+        stateTextField.returnKeyType = .next
+        postalCodeTextField.returnKeyType = .next
+        countryTextField.returnKeyType = .done
     }
 
     // MARK: - Actions
@@ -68,18 +90,18 @@ extension KYCAddressController: UITableViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        addressTextField.resignFirstResponder()
+        searchBar.resignFirstResponder()
     }
 }
 
 extension KYCAddressController: LocationSuggestionInterface {
+    
     func updateActivityIndicator(_ visibility: Visibility) {
         visibility == .hidden ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
     }
 
-
     func primaryButton(_ visibility: Visibility) {
-        primaryButton.alpha = visibility.defaultAlpha
+//        primaryButton.alpha = visibility.defaultAlpha
     }
 
     func suggestionsList(_ visibility: Visibility) {
@@ -89,14 +111,14 @@ extension KYCAddressController: LocationSuggestionInterface {
     func searchFieldActive(_ isFirstResponder: Bool) {
         switch isFirstResponder {
         case true:
-            addressTextField.becomeFirstResponder()
+            searchBar.becomeFirstResponder()
         case false:
-            addressTextField.resignFirstResponder()
+            searchBar.resignFirstResponder()
         }
     }
 
     func searchFieldText(_ value: String?) {
-        addressTextField.text = value
+        searchBar.text = value
     }
 }
 
@@ -111,23 +133,24 @@ extension KYCAddressController: LocationSuggestionCoordinatorDelegate {
     }
 }
 
-extension KYCAddressController: UITextFieldDelegate {
+extension KYCAddressController: UISearchBarDelegate {
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let value = textField.text as NSString? {
-            let current = value.replacingCharacters(in: range, with: string)
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if let value = searchBar.text as NSString? {
+            let current = value.replacingCharacters(in: range, with: text)
             searchDelegate?.onSearchRequest(current)
         }
         return true
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), text.isEmpty == false else {
-            return false
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let value = searchBar.text {
+            searchDelegate?.onSearchRequest(value)
         }
+        searchBar.resignFirstResponder()
+    }
 
-        searchDelegate?.onSearchRequest(text)
-        textField.resignFirstResponder()
-        return true
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

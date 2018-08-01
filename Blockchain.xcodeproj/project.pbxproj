@@ -123,6 +123,9 @@
 		3AC975622110A678006A9263 /* ConfirmationFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC975612110A678006A9263 /* ConfirmationFooterView.xib */; };
 		3AC975632110A678006A9263 /* ConfirmationFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC975612110A678006A9263 /* ConfirmationFooterView.xib */; };
 		3AD7EE7321122612006B924F /* KYCAddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7221122612006B924F /* KYCAddressController.swift */; };
+		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
+		3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7EE9F21125156006B924F /* ValidationTextField.xib */; };
+		3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EEA121126578006B924F /* NibBasedView.swift */; };
 		3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
 		3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
@@ -1284,6 +1287,9 @@
 		3AC9755E2110A599006A9263 /* ConfirmationFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationFooterView.swift; sourceTree = "<group>"; };
 		3AC975612110A678006A9263 /* ConfirmationFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmationFooterView.xib; sourceTree = "<group>"; };
 		3AD7EE7221122612006B924F /* KYCAddressController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCAddressController.swift; sourceTree = "<group>"; };
+		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
+		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
+		3AD7EEA121126578006B924F /* NibBasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NibBasedView.swift; sourceTree = "<group>"; };
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF7770210A5BAE00938D42 /* SearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchControllerDelegate.swift; sourceTree = "<group>"; };
@@ -2652,6 +2658,15 @@
 			path = Footers;
 			sourceTree = "<group>";
 		};
+		3AD7EE7421124D56006B924F /* ValidationTextField */ = {
+			isa = PBXGroup;
+			children = (
+				3AD7EE7521124F0C006B924F /* ValidationTextField.swift */,
+				3AD7EE9F21125156006B924F /* ValidationTextField.xib */,
+			);
+			path = ValidationTextField;
+			sourceTree = "<group>";
+		};
 		3AE92BBF2110DAF1008D7BDC /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -3849,6 +3864,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3AD7EE7421124D56006B924F /* ValidationTextField */,
 				3A258C0B210A485D00C023F5 /* Cells */,
 				676250801A2DDF360052B63F /* AccountTableCell.h */,
 				676250811A2DDF360052B63F /* AccountTableCell.m */,
@@ -3933,6 +3949,7 @@
 				9F45F81C1514D81700018AED /* UIButtonPressAndHold.h */,
 				9F45F81D1514D81700018AED /* UIButtonPressAndHold.m */,
 				C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */,
+				3AD7EEA121126578006B924F /* NibBasedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -4363,6 +4380,7 @@
 				51383552210253A800767B2E /* KYCCountrySelection.storyboard in Resources */,
 				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
 				3A3047E4210B664800C09E6D /* LocationSuggestionCell.xib in Resources */,
+				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
 				515EFADD210282B4002350B6 /* AccountsAndAddresses.strings in Resources */,
 				ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */,
@@ -4745,6 +4763,7 @@
 				3AC9754A210FA963006A9263 /* TextEntry.swift in Sources */,
 				2322DCC21D771831000E5AC1 /* SRURLUtilities.m in Sources */,
 				C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */,
+				3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */,
 				C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				23964C031DCA3F19001323BE /* KeyPair.m in Sources */,
 				AA5B3B8020C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
@@ -4865,6 +4884,7 @@
 				3A258C14210A4EAC00C023F5 /* LocationDataProvider.swift in Sources */,
 				AACE31812092794D00B7B806 /* Pin.swift in Sources */,
 				23107F831BBEF0AC00A6A9D4 /* BCConfirmPaymentView.m in Sources */,
+				3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */,
 				23FB5C131D9ABB8B0008C6AB /* TransactionDetailStatusCell.m in Sources */,
 				CFA0671F1E65D426008456C1 /* WebLoginViewController.m in Sources */,
 				AA722C1920B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
