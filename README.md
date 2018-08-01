@@ -1,6 +1,5 @@
 # My-Wallet-V3-iOS
 
-
 # Building
 
 ## Install Git submodules
@@ -29,6 +28,12 @@ Install a node version manager such as [nvm](https://github.com/creationix/nvm) 
     cd ../OpenSSL-for-iPhone
     ./build-libssl.sh
 
+## Install Cocoapods
+`sudo gem install cocoapods`
+
+## Install Dependencies
+`pod install`
+
 ## Add production Config file
 
     #create a directory named Config in the root
@@ -56,13 +61,18 @@ Install a node version manager such as [nvm](https://github.com/creationix/nvm) 
 
     LOCAL_CERTIFICATE_FILE = blockchain
 
-    GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
+    GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 COCOAPODS=1
 
     OTHER_SWIFT_FLAGS = -DDEBUG
 
+## Add Config to Pods
+    In XCode, Go to Pods folder
+    open corresponding .xcconfig
+    Add the above to the config file at `Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.xcconfig`
+
 ## Open the project in Xcode
 
-    open Blockchain.xcodeproj
+    open Blockchain.xcworkspace
 
 ## Build the project
 
