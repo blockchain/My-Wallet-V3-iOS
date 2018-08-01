@@ -25,8 +25,7 @@ final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
     }
 
     func fetchListOfCountries() {
-        let request = KYCNetworkRequest(get: .listOfCountries)
-        request.send(taskSuccess: { responseData in
+        KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
             do {
                 self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
             } catch {

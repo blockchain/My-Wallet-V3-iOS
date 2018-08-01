@@ -60,12 +60,22 @@ final class KYCNetworkRequest {
     }
 
     /// HTTP GET Request
-    convenience init(get url: KYCEndpoints.GET) {
+    @discardableResult convenience init(
+        get url: KYCEndpoints.GET,
+        taskSuccess: @escaping TaskSuccess,
+        taskFailure: @escaping TaskFailure
+    ) {
         self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "GET")
+        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
     /// HTTP POST Request
-    convenience init(post url: KYCEndpoints.POST, parameters: [String: String]) {
+    @discardableResult convenience init(
+        post url: KYCEndpoints.POST,
+        parameters: [String: String],
+        taskSuccess: @escaping TaskSuccess,
+        taskFailure: @escaping TaskFailure
+    ) {
         self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "POST")
         let postBody = parameters.reduce("", { initialResult, nextPartialResult in
             let delimeter = initialResult.count > 0 ? "&" : ""
@@ -75,10 +85,16 @@ final class KYCNetworkRequest {
         request.httpBody = data
         request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
     /// HTTP PUT Request
-    convenience init(put url: KYCEndpoints.PUT, parameters: [String: String]) {
+    @discardableResult convenience init(
+        put url: KYCEndpoints.PUT,
+        parameters: [String: String],
+        taskSuccess: @escaping TaskSuccess,
+        taskFailure: @escaping TaskFailure
+    ) {
         self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "PUT")
         let postBody = parameters.reduce("", { initialResult, nextPartialResult in
             let delimeter = initialResult.count > 0 ? "&" : ""
@@ -88,30 +104,33 @@ final class KYCNetworkRequest {
         request.httpBody = data
         request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
     // MARK: - Public Methods
 
-    func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
+    private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-            if let error = error {
-                taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription)); return
-            }
-            guard let httpResponse = response as? HTTPURLResponse else {
-                taskFailure(HTTPRequestServerError.badResponse); return
-            }
-            guard (200...299).contains(httpResponse.statusCode) else {
-                taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
-            }
-            if let mimeType = httpResponse.mimeType {
-                guard mimeType == "application/json" else {
-                    taskFailure(HTTPRequestPayloadError.invalidMimeType(type: mimeType)); return
+            DispatchQueue.main.async {
+                if let error = error {
+                    taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription)); return
                 }
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    taskFailure(HTTPRequestServerError.badResponse); return
+                }
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
+                }
+                if let mimeType = httpResponse.mimeType {
+                    guard mimeType == "application/json" else {
+                        taskFailure(HTTPRequestPayloadError.invalidMimeType(type: mimeType)); return
+                    }
+                }
+                guard let responseData = data else {
+                    taskFailure(HTTPRequestPayloadError.emptyData); return
+                }
+                taskSuccess(responseData)
             }
-            guard let responseData = data else {
-                taskFailure(HTTPRequestPayloadError.emptyData); return
-            }
-            taskSuccess(responseData)
         })
         task.resume()
     }

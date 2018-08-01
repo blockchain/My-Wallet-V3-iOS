@@ -17,7 +17,11 @@ class KYCVerifyPhoneNumberInteractor {
         failure: @escaping KYCNetworkRequest.TaskFailure
     ) {
         let paramaters = ["mobile": number]
-        let request = KYCNetworkRequest(put: .updateMobileNumber(userId: userId), parameters: paramaters)
-        request.send(taskSuccess: success, taskFailure: failure)
+        KYCNetworkRequest(
+            put: .updateMobileNumber(userId: userId),
+            parameters: paramaters,
+            taskSuccess: success,
+            taskFailure: failure
+        )
     }
 }
