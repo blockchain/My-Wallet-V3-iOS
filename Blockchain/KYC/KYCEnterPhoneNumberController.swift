@@ -1,5 +1,5 @@
 //
-//  KYCVerifyPhoneNumberController.swift
+//  KYCEnterPhoneNumberController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/17/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class KYCVerifyPhoneNumberController: UIViewController {
+final class KYCEnterPhoneNumberController: UIViewController {
 
     // MARK: Properties
 
@@ -18,8 +18,8 @@ final class KYCVerifyPhoneNumberController: UIViewController {
 
     @IBOutlet var textFieldMobileNumber: UITextField!
 
-    private lazy var presenter: KYCVerifyPhoneNumberPresenter = { [unowned self] in
-        return KYCVerifyPhoneNumberPresenter(view: self)
+    private lazy var presenter: KYCEnterPhoneNumberPresenter = { [unowned self] in
+        return KYCEnterPhoneNumberPresenter(view: self)
     }()
 
     override func viewDidAppear(_ animated: Bool) {
@@ -52,7 +52,7 @@ final class KYCVerifyPhoneNumberController: UIViewController {
     }
 }
 
-extension KYCVerifyPhoneNumberController: KYCVerifyPhoneNumberView {
+extension KYCEnterPhoneNumberController: KYCEnterPhoneNumberView {
     func showError(message: String) {
         AlertViewPresenter.shared.standardError(message: message, in: self)
     }

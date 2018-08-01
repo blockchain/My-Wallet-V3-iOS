@@ -1,5 +1,5 @@
 //
-//  MockKYCVerifyPhoneNumberInteractor.swift
+//  MockKYCEnterPhoneNumberInteractor.swift
 //  BlockchainTests
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MockKYCVerifyPhoneNumberInteractor: KYCVerifyPhoneNumberInteractor {
+class MockKYCEnterPhoneNumberInteractor: KYCEnterPhoneNumberInteractor {
     var shouldSucceed = true
 
     override func verify(

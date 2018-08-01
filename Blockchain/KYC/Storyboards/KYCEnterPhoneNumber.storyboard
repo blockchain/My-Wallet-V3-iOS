@@ -15,10 +15,10 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Verify Mobile View Controller-->
+        <!--Enter Mobile View Controller-->
         <scene sceneID="Wjg-3S-uYV">
             <objects>
-                <viewController storyboardIdentifier="KYCVerifyPhoneNumber" title="Verify Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7WR-uN-K1i" customClass="KYCVerifyPhoneNumberController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KYCEnterPhoneNumber" title="Enter Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7WR-uN-K1i" customClass="KYCEnterPhoneNumberController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m4i-aL-8OI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

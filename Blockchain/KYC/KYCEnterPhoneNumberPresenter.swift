@@ -1,5 +1,5 @@
 //
-//  KYCVerifyPhoneNumberPresenter.swift
+//  KYCEnterPhoneNumberPresenter.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 7/27/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol KYCVerifyPhoneNumberView: class {
+protocol KYCEnterPhoneNumberView: class {
     func showLoadingView(with text: String)
 
     func showEnterVerificationCodeView()
@@ -18,14 +18,14 @@ protocol KYCVerifyPhoneNumberView: class {
     func hideLoadingView()
 }
 
-class KYCVerifyPhoneNumberPresenter {
+class KYCEnterPhoneNumberPresenter {
 
-    private let interactor: KYCVerifyPhoneNumberInteractor
-    private weak var view: KYCVerifyPhoneNumberView?
+    private let interactor: KYCEnterPhoneNumberInteractor
+    private weak var view: KYCEnterPhoneNumberView?
 
     init(
-        view: KYCVerifyPhoneNumberView,
-        interactor: KYCVerifyPhoneNumberInteractor = KYCVerifyPhoneNumberInteractor()
+        view: KYCEnterPhoneNumberView,
+        interactor: KYCEnterPhoneNumberInteractor = KYCEnterPhoneNumberInteractor()
     ) {
         self.view = view
         self.interactor = interactor

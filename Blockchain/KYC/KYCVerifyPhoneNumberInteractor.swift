@@ -1,5 +1,5 @@
 //
-//  KYCVerifyPhoneNumberInteractor.swift
+//  KYCEnterPhoneNumberInteractor.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class KYCVerifyPhoneNumberInteractor {
+class KYCEnterPhoneNumberInteractor {
 
     func verify(
         number: String,

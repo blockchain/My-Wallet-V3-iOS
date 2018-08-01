@@ -105,10 +105,10 @@
             </objects>
             <point key="canvasLocation" x="-47" y="194"/>
         </scene>
-        <!--KYCVerifyPhoneNumber-->
+        <!--KYCEnterPhoneNumber-->
         <scene sceneID="i1U-r4-6wf">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="ikb-aY-GZn" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCEnterPhoneNumber" id="ikb-aY-GZn" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BDp-2Y-wKI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="754" y="81"/>

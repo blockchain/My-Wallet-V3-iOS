@@ -1,5 +1,5 @@
 //
-//  KYCVerifyPhoneNumberPresenterTests.swift
+//  KYCEnterPhoneNumberPresenterTests.swift
 //  BlockchainTests
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -9,17 +9,17 @@
 import XCTest
 @testable import Blockchain
 
-class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
+class KYCEnterPhoneNumberPresenterTests: XCTestCase {
 
-    private var view: MockKYCVerifyPhoneNumberView!
-    private var interactor: MockKYCVerifyPhoneNumberInteractor!
-    private var presenter: KYCVerifyPhoneNumberPresenter!
+    private var view: MockKYCEnterPhoneNumberView!
+    private var interactor: MockKYCEnterPhoneNumberInteractor!
+    private var presenter: KYCEnterPhoneNumberPresenter!
 
     override func setUp() {
         super.setUp()
-        view = MockKYCVerifyPhoneNumberView()
-        interactor = MockKYCVerifyPhoneNumberInteractor()
-        presenter = KYCVerifyPhoneNumberPresenter(view: view, interactor: interactor)
+        view = MockKYCEnterPhoneNumberView()
+        interactor = MockKYCEnterPhoneNumberInteractor()
+        presenter = KYCEnterPhoneNumberPresenter(view: view, interactor: interactor)
     }
 
     func testSuccessfulVerification() {

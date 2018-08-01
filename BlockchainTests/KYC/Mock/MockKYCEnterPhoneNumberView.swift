@@ -1,5 +1,5 @@
 //
-//  MockKYCVerifyPhoneNumberView.swift
+//  MockKYCEnterPhoneNumberView.swift
 //  BlockchainTests
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 
-class MockKYCVerifyPhoneNumberView: KYCVerifyPhoneNumberView {
+class MockKYCEnterPhoneNumberView: KYCEnterPhoneNumberView {
     var didCallShowLoadingViewExpectation: XCTestExpectation?
     var didCallShowVerifCodeViewExpectation: XCTestExpectation?
     var didCallShowErrorExpectation: XCTestExpectation?
