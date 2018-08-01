@@ -20,20 +20,22 @@ protocol KYCVerifyPhoneNumberView: class {
 
 class KYCVerifyPhoneNumberPresenter {
 
+    private let interactor: KYCVerifyPhoneNumberInteractor
     private weak var view: KYCVerifyPhoneNumberView?
 
-    init(view: KYCVerifyPhoneNumberView) {
+    init(
+        view: KYCVerifyPhoneNumberView,
+        interactor: KYCVerifyPhoneNumberInteractor = KYCVerifyPhoneNumberInteractor()
+    ) {
         self.view = view
+        self.interactor = interactor
     }
 
     func verify(number: String, userId: String) {
         view?.showLoadingView(with: LocalizationConstants.loading)
-
-        let paramaters = ["mobile": number]
-        let request = KYCNetworkRequest(put: .updateMobileNumber(userId: userId), parameters: paramaters)
-        request.send(taskSuccess: { [weak self] _ in
+        interactor.verify(number: number, userId: userId, success: { [weak self] _ in
             self?.handleSendVerificationCodeSuccess()
-        }, taskFailure: { [weak self] error in
+        }, failure: { [weak self] error in
             self?.handleSendVerificationCodeError(error)
         })
     }
