@@ -107,7 +107,7 @@ final class KYCNetworkRequest {
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
-    // MARK: - Public Methods
+    // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
