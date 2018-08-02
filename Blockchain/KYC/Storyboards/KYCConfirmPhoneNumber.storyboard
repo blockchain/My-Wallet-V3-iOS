@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gEL-b2-YEu">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Confirm Mobile View Controller-->
+        <scene sceneID="O35-Mk-bkL">
+            <objects>
+                <viewController storyboardIdentifier="KYCConfirmPhoneNumber" title="Confirm Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gEL-b2-YEu" customClass="KYCConfirmPhoneNumberController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4y3-FY-dla">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="36T-B3-yyh" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="676" width="382" height="44"/>
+                                <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.89411764705882357" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="jDl-ln-Tjf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Next"/>
+                                <connections>
+                                    <action selector="primaryButtonTapped:" destination="gEL-b2-YEu" eventType="touchUpInside" id="XKR-39-zVB"/>
+                                    <segue destination="Kem-jm-UpZ" kind="show" identifier="promptForAddress" id="DiI-LB-7hm"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="36T-B3-yyh" secondAttribute="trailing" constant="16" id="6D8-hT-1ZS"/>
+                            <constraint firstItem="36T-B3-yyh" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="cQs-wq-eL8"/>
+                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="bottom" secondItem="36T-B3-yyh" secondAttribute="bottom" constant="16" id="lHo-bY-QRU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="IIQ-vZ-lk7"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify Your Device" id="cjv-4c-ncy"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="primaryButton" destination="36T-B3-yyh" id="Hpz-jy-GGJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x6m-Ye-sCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="126" y="112"/>
+        </scene>
+        <!--KYCAddress-->
+        <scene sceneID="Yd6-4J-UeZ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="KYCAddress" id="Kem-jm-UpZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-zE-QFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="672" y="33"/>
+        </scene>
+    </scenes>
+</document>

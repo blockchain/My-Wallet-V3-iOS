@@ -14,7 +14,6 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     // TODO: user ID needs to be passed in to this view controller from previous step
     var userId: String? = ""
-    var segueIdentifier: String? = "promptForAddress"
 
     @IBOutlet var textFieldMobileNumber: UITextField!
 

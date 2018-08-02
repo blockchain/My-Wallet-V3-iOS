@@ -98,7 +98,7 @@
                         <outlet property="firstNameField" destination="YyL-LD-6vz" id="Zuv-Qh-mI0"/>
                         <outlet property="lastNameField" destination="Zrq-9J-3by" id="6De-fY-t4Y"/>
                         <outlet property="primaryButton" destination="5a2-YO-4u9" id="bkL-go-wpB"/>
-                        <segue destination="ikb-aY-GZn" kind="show" identifier="verifyMobileNumber" id="EC8-k6-Erk"/>
+                        <segue destination="ikb-aY-GZn" kind="show" identifier="enterMobileNumber" id="EC8-k6-Erk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPZ-Fa-q8L" userLabel="First Responder" sceneMemberID="firstResponder"/>

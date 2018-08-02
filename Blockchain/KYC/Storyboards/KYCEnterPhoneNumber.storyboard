@@ -25,12 +25,12 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KX0-wF-bqu" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.29803921568627451" green="0.6705882352941176" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="oqh-8S-n9c"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="Continue">
+                                <state key="normal" title="Next">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -75,7 +75,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="icW-B4-iKS"/>
                     </view>
-                    <navigationItem key="navigationItem" title="What's your number?" id="zce-0p-WSv">
+                    <navigationItem key="navigationItem" title="Verify Your Device" id="zce-0p-WSv">
                         <barButtonItem key="backBarButtonItem" id="M4A-Bf-tAt"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
@@ -89,10 +89,10 @@
             </objects>
             <point key="canvasLocation" x="-73" y="218"/>
         </scene>
-        <!--KYCAddress-->
+        <!--KYCVerifyPhoneNumber-->
         <scene sceneID="fw5-HU-1bR">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCAddress" id="xVk-FG-HTS" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="xVk-FG-HTS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHo-TW-UGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="546" y="152"/>
