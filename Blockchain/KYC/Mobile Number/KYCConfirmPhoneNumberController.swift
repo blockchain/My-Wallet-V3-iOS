@@ -17,7 +17,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
     var phoneNumber: String = "" {
         didSet {
             guard isViewLoaded else { return }
-            self.labelPhoneNumber.text = phoneNumber
+            labelPhoneNumber.text = phoneNumber
         }
     }
 
@@ -29,7 +29,8 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.labelPhoneNumber.text = phoneNumber
+        labelPhoneNumber.text = phoneNumber
+        nextButton.isEnabled = false
     }
 
     // MARK: IBActions
@@ -43,7 +44,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
     }
 
     @IBAction func onTextFieldChanged(_ sender: Any) {
-        Logger.shared.debug("Text field changed!")
+        nextButton.isEnabled = !(textFieldConfirmationCode.text?.isEmpty ?? true)
     }
 }
 

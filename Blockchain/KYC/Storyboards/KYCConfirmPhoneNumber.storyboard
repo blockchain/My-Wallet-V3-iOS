@@ -73,7 +73,6 @@
                                 <state key="normal" title="Next"/>
                                 <connections>
                                     <action selector="onNextTapped:" destination="gEL-b2-YEu" eventType="touchUpInside" id="Bla-Qo-qkN"/>
-                                    <segue destination="Kem-jm-UpZ" kind="show" identifier="promptForAddress" id="DiI-LB-7hm"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -100,6 +99,7 @@
                         <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
                         <outlet property="nextButton" destination="36T-B3-yyh" id="SJJ-4H-hLO"/>
                         <outlet property="textFieldConfirmationCode" destination="XY9-D0-0ZJ" id="nOc-JG-To0"/>
+                        <segue destination="Kem-jm-UpZ" kind="show" id="4J4-wa-RZJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6m-Ye-sCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
