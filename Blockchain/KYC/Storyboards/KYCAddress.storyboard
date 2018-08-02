@@ -23,51 +23,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Address Line 1" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DAE-Oq-g6p">
-                                <rect key="frame" x="16" y="104" width="343" height="55"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KU7-D7-T3Q">
+                                <rect key="frame" x="18" y="88" width="339" height="65"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="NV5-Nm-mgB"/>
+                                    <constraint firstAttribute="height" constant="65" id="eSM-EM-nyS"/>
                                 </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" textContentType="address-line1"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" textContentType="location"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Address Line 2" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="v64-6I-7RN">
-                                <rect key="frame" x="16" y="167" width="343" height="55"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PUe-6V-wKN">
+                                <rect key="frame" x="0.0" y="153" width="375" height="1"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="RGS-3C-JJ6"/>
+                                    <constraint firstAttribute="height" constant="1" id="xtV-WY-5JX"/>
                                 </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" textContentType="address-line2"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="City" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ecx-KH-ygg">
-                                <rect key="frame" x="16" y="230" width="343" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="MLF-1g-iL9"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" textContentType="address-level2"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="State" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="mE8-xH-LPU">
-                                <rect key="frame" x="16" y="293" width="343" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="Xcd-0Z-IFg"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" textContentType="address-level1"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ZIP Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="G2O-SJ-ZNs">
-                                <rect key="frame" x="16" y="356" width="343" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="8ql-F6-Fqt"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" textContentType="postal-code"/>
-                            </textField>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-6J-r0r">
+                                <rect key="frame" x="0.0" y="159" width="375" height="619"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="scrollIndicatorInsets" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XUW-TX-8oU" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="718" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -82,27 +58,28 @@
                                     <action selector="primaryButtonTapped:" destination="1m4-Wz-u3W" eventType="touchUpInside" id="jOC-4O-3a6"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FFX-OX-l36">
+                                <rect key="frame" x="169" y="450" width="37" height="37"/>
+                                <color key="color" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="v64-6I-7RN" firstAttribute="top" secondItem="DAE-Oq-g6p" secondAttribute="bottom" constant="8" id="6FP-yh-osM"/>
-                            <constraint firstItem="mE8-xH-LPU" firstAttribute="top" secondItem="ecx-KH-ygg" secondAttribute="bottom" constant="8" id="8qA-86-LiM"/>
+                            <constraint firstItem="FFX-OX-l36" firstAttribute="centerX" secondItem="fkm-6J-r0r" secondAttribute="centerX" id="0Ut-0l-I7u"/>
                             <constraint firstItem="AxH-7G-UPE" firstAttribute="bottom" secondItem="XUW-TX-8oU" secondAttribute="bottom" constant="16" id="A0N-hp-sc1"/>
-                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="mE8-xH-LPU" secondAttribute="trailing" constant="16" id="EGS-ql-MMg"/>
-                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="DAE-Oq-g6p" secondAttribute="trailing" constant="16" id="FP3-me-p2C"/>
-                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="v64-6I-7RN" secondAttribute="trailing" constant="16" id="H8E-l6-RQU"/>
-                            <constraint firstItem="G2O-SJ-ZNs" firstAttribute="top" secondItem="mE8-xH-LPU" secondAttribute="bottom" constant="8" id="IMF-Vl-VBm"/>
-                            <constraint firstItem="v64-6I-7RN" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="LVr-QM-spd"/>
-                            <constraint firstItem="G2O-SJ-ZNs" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="Mhq-VW-Jwf"/>
-                            <constraint firstItem="ecx-KH-ygg" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="TS7-tm-lQg"/>
-                            <constraint firstItem="mE8-xH-LPU" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="V5u-Ir-ZSp"/>
-                            <constraint firstItem="ecx-KH-ygg" firstAttribute="top" secondItem="v64-6I-7RN" secondAttribute="bottom" constant="8" id="VWO-9C-vhL"/>
-                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="ecx-KH-ygg" secondAttribute="trailing" constant="16" id="Vlw-6n-vgo"/>
-                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="G2O-SJ-ZNs" secondAttribute="trailing" constant="16" id="WpG-lz-Jlr"/>
+                            <constraint firstItem="KU7-D7-T3Q" firstAttribute="top" secondItem="AxH-7G-UPE" secondAttribute="top" id="FbH-0a-pK9"/>
+                            <constraint firstItem="PUe-6V-wKN" firstAttribute="top" secondItem="KU7-D7-T3Q" secondAttribute="bottom" id="G6W-7x-Lgb"/>
+                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="fkm-6J-r0r" secondAttribute="trailing" id="IYJ-gN-uYx"/>
+                            <constraint firstItem="fkm-6J-r0r" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" id="bXa-KO-AG8"/>
+                            <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="KU7-D7-T3Q" secondAttribute="trailing" constant="18" id="fTZ-Y2-ncf"/>
+                            <constraint firstItem="FFX-OX-l36" firstAttribute="centerY" secondItem="fkm-6J-r0r" secondAttribute="centerY" id="gEx-Xs-EYn"/>
+                            <constraint firstItem="AxH-7G-UPE" firstAttribute="bottom" secondItem="fkm-6J-r0r" secondAttribute="bottom" id="gZO-b6-sp3"/>
+                            <constraint firstAttribute="trailing" secondItem="PUe-6V-wKN" secondAttribute="trailing" id="gkA-ZC-5ZG"/>
                             <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="XUW-TX-8oU" secondAttribute="trailing" constant="16" id="i5j-id-vyG"/>
                             <constraint firstItem="XUW-TX-8oU" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="ka2-xM-Cmh"/>
-                            <constraint firstItem="DAE-Oq-g6p" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="16" id="ngR-td-Izk"/>
-                            <constraint firstItem="DAE-Oq-g6p" firstAttribute="top" secondItem="AxH-7G-UPE" secondAttribute="top" constant="16" id="o40-ik-oMS"/>
+                            <constraint firstItem="fkm-6J-r0r" firstAttribute="top" secondItem="PUe-6V-wKN" secondAttribute="bottom" constant="5" id="lLR-ZZ-4Tk"/>
+                            <constraint firstItem="KU7-D7-T3Q" firstAttribute="leading" secondItem="AxH-7G-UPE" secondAttribute="leading" constant="18" id="q22-lX-IQY"/>
+                            <constraint firstItem="PUe-6V-wKN" firstAttribute="leading" secondItem="6kS-bR-6h1" secondAttribute="leading" id="zZ4-uP-Er1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="AxH-7G-UPE"/>
                     </view>
@@ -111,7 +88,11 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="FFX-OX-l36" id="1Ty-rM-Wgi"/>
+                        <outlet property="addressTextField" destination="KU7-D7-T3Q" id="Kuh-M9-aeq"/>
                         <outlet property="primaryButton" destination="XUW-TX-8oU" id="vk1-n7-T4P"/>
+                        <outlet property="tableView" destination="fkm-6J-r0r" id="yzI-gy-vZ7"/>
+                        <outlet property="textFieldSeparator" destination="PUe-6V-wKN" id="ggQ-gT-xoS"/>
                         <segue destination="QUH-Ks-fjK" kind="show" identifier="showPersonalDetails" id="Gpq-wr-SYc"/>
                     </connections>
                 </viewController>

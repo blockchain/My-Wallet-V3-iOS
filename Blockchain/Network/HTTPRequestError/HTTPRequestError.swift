@@ -22,7 +22,6 @@ enum HTTPRequestClientError: HTTPRequestError {
         }
     }
 }
-
 enum HTTPRequestServerError: HTTPRequestError {
     case badResponse, badStatusCode(code: Int)
     var debugDescription: String {

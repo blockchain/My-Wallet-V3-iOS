@@ -19,20 +19,15 @@ import Foundation
     }
 
     @objc func start(from viewController: UIViewController) {
-        let welcomeViewController = UIStoryboard.instantiate(
-            child: KYCWelcomeController.self,
-            from: KYCOnboardingController.self,
-            in: UIStoryboard(name: "KYCOnboardingScreen", bundle: nil),
-            identifier: "OnboardingScreen"
-        )
-
         let navigationController = UIStoryboard(name: "KYCOnboardingNavigation", bundle: nil)
             .instantiateViewController(withIdentifier: "OnboardingNavigation") as! KYCOnboardingNavigationController
+
+        let welcomeViewController = UIStoryboard(name: "KYCWelcome", bundle: nil)
+            .instantiateViewController(withIdentifier: "KYCWelcomeController") as! KYCWelcomeController
 
         navigationController.pushViewController(welcomeViewController, animated: true)
         navigationController.modalTransitionStyle = .coverVertical
 
         viewController.present(navigationController, animated: true)
     }
-
 }

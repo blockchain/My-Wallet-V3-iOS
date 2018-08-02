@@ -1,5 +1,5 @@
 //
-//  KYCVerifyAccountController.swift
+//  KYCVerifyIdentityController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/17/18.
@@ -9,25 +9,12 @@
 import UIKit
 
 /// Account verification screen in KYC flow
-final class KYCVerifyAccountController: KYCOnboardingController {
+final class KYCVerifyIdentityController: UIViewController {
 
     // MARK: - Properties
 
     fileprivate enum DocumentType {
         case driversLicense, identityCard, passport, residencePermitCard
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.title = "Verify your identity"
-        // Depends on Onfido SDK integration...
-        segueIdentifier = ""
-        imageView.image = UIImage(named: "IdentityVerification")
-        titleLabel.text = "Photo Verification Needed"
-        descriptionLabel.text = "You're almost there! Just grab your government issued photo ID to complete your verification."
-        primaryButton.setTitle("Continue", for: .normal)
     }
 
     private func setUpAndShowDocumentDialog() {
@@ -57,19 +44,12 @@ final class KYCVerifyAccountController: KYCOnboardingController {
     // MARK: - Private Methods
 
     private func didSelect(_ document: DocumentType) {
-        let accountStatusController = UIStoryboard.instantiate(
-            child: KYCAccountStatusController.self,
-            from: KYCOnboardingController.self,
-            in: UIStoryboard(name: "KYCOnboardingScreen", bundle: nil),
-            identifier: "OnboardingScreen"
-        )
-        accountStatusController.accountStatus = .inReview
-        navigationController?.pushViewController(accountStatusController, animated: true)
+        // TODO: Hook into Onfido SDK...
     }
 
     // MARK: - Actions
 
-    override func primaryButtonTapped(_ sender: Any) {
+    @IBAction private func primaryButtonTapped(_ sender: Any) {
         setUpAndShowDocumentDialog()
     }
 }

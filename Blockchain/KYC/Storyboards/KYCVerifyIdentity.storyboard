@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Light.ttf">
+            <string>Montserrat-Light</string>
+        </array>
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Verify Your Identity-->
+        <scene sceneID="MmE-tV-0ug">
+            <objects>
+                <viewController id="mNZ-Bz-WHI" customClass="KYCVerifyIdentityController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NYR-Tc-hGu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's Confirm It's You" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKX-KB-srT">
+                                <rect key="frame" x="16" y="30" width="343" height="22"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSW-uD-Za7">
+                                <rect key="frame" x="16" y="60" width="343" height="34.333333333333343"/>
+                                <string key="text">Grab your Passport, Driver’s License, Govt
+Issue ID or a Resident Permit Card.</string>
+                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IdentityVerification" translatesAutoresizingMaskIntoConstraints="NO" id="uin-Bk-g6x">
+                                <rect key="frame" x="47" y="142.33333333333334" width="280" height="150.00000000000003"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="E5s-Yl-bkf"/>
+                                    <constraint firstAttribute="width" constant="280" id="miD-OS-faf"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYL-dK-Xos">
+                                <rect key="frame" x="16" y="328.33333333333331" width="343" height="51.333333333333314"/>
+                                <string key="text">Once we verify your identity, you are approved
+to Buy, Sell and Transfer cryptocurrenices
+on the Blockchain app!</string>
+                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdd-nW-Qrc" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="630" width="343" height="44"/>
+                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="HcI-nJ-JMD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Next">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="primaryButtonTapped:" destination="mNZ-Bz-WHI" eventType="touchUpInside" id="LOe-UC-MXT"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="xdd-nW-Qrc" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="56t-c7-pUw"/>
+                            <constraint firstItem="uin-Bk-g6x" firstAttribute="top" secondItem="wSW-uD-Za7" secondAttribute="bottom" constant="48" id="AaY-7V-SCx"/>
+                            <constraint firstItem="wSW-uD-Za7" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="G2Q-SU-oOt"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="YYL-dK-Xos" secondAttribute="trailing" constant="16" id="JUN-MJ-uGY"/>
+                            <constraint firstItem="wSW-uD-Za7" firstAttribute="top" secondItem="cKX-KB-srT" secondAttribute="bottom" constant="8" id="KdY-VC-lDj"/>
+                            <constraint firstItem="cKX-KB-srT" firstAttribute="top" secondItem="Rfn-fs-48d" secondAttribute="top" constant="30" id="MA7-hp-82F"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="xdd-nW-Qrc" secondAttribute="trailing" constant="16" id="R3P-Nx-o3o"/>
+                            <constraint firstItem="YYL-dK-Xos" firstAttribute="top" secondItem="uin-Bk-g6x" secondAttribute="bottom" constant="36" id="Yrz-k3-9Mr"/>
+                            <constraint firstItem="YYL-dK-Xos" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="Ztg-TD-aCQ"/>
+                            <constraint firstItem="uin-Bk-g6x" firstAttribute="centerX" secondItem="Rfn-fs-48d" secondAttribute="centerX" id="hLV-lC-gKO"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="bottom" secondItem="xdd-nW-Qrc" secondAttribute="bottom" constant="16" id="hQ2-Bn-B5K"/>
+                            <constraint firstItem="cKX-KB-srT" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="kyB-V8-cMc"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="wSW-uD-Za7" secondAttribute="trailing" constant="16" id="v5A-9U-oF8"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="cKX-KB-srT" secondAttribute="trailing" constant="16" id="yQY-H3-cTM"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Rfn-fs-48d"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify Your Identity" id="fI3-4B-lT9">
+                        <barButtonItem key="backBarButtonItem" id="1b4-r2-q4k"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WfA-3V-bXw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-172" y="202.46305418719211"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="IdentityVerification" width="206" height="133"/>
+    </resources>
+</document>

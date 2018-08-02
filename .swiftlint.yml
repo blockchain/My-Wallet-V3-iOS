@@ -4,6 +4,7 @@ disabled_rules:
 excluded:
   - Submodules/
   - RxAlamofire/
+  - Pods/
 attributes: true
 closure_end_indentation: true
 closure_spacing: true
@@ -25,6 +26,7 @@ force_unwrapping: true
 function_body_length:
   warning: 40
   error: 50
+identifier_name: false
 implicit_return: true
 implicitly_unwrapped_optional: true
 let_var_whitespace: true

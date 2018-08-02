@@ -30,10 +30,10 @@ import RxSwift
             method: .get
         ).map {
             guard $0.statusCode == 200 else {
-                throw WalletServiceError.generic(message: nil)
+                throw NetworkError.generic(message: nil)
             }
             guard let json = $1 as? JSON else {
-                throw WalletServiceError.jsonParseError
+                throw NetworkError.jsonParseError
             }
             return WalletOptions(json: json)
         }
@@ -47,7 +47,7 @@ import RxSwift
         return pinStore(pinPayload: pinPayload, method: "get").map {
             guard let responseJson = $1 as? JSON else {
                 let errorMessage = $1 as? String
-                throw WalletServiceError.generic(message: errorMessage)
+                throw NetworkError.generic(message: errorMessage)
             }
             return GetPinResponse(response: responseJson)
         }

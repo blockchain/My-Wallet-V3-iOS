@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="qae-2a-0AC" customClass="ConfirmationFooterView" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5H-v7-ciU">
+                    <rect key="frame" x="16" y="16" width="343" height="43"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                    <state key="normal" title="Confirm &amp; Continue">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="confirmButtonTapped:" destination="qae-2a-0AC" eventType="touchUpInside" id="hFa-Ei-Buh"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="QPO-mL-6xu" firstAttribute="bottom" secondItem="A5H-v7-ciU" secondAttribute="bottom" constant="16" id="7NQ-zO-IST"/>
+                <constraint firstItem="A5H-v7-ciU" firstAttribute="top" secondItem="QPO-mL-6xu" secondAttribute="top" constant="16" id="QWw-ZJ-uoG"/>
+                <constraint firstItem="QPO-mL-6xu" firstAttribute="trailing" secondItem="A5H-v7-ciU" secondAttribute="trailing" constant="16" id="Ws0-0n-Hiu"/>
+                <constraint firstItem="A5H-v7-ciU" firstAttribute="leading" secondItem="QPO-mL-6xu" secondAttribute="leading" constant="16" id="uar-7a-P0i"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="QPO-mL-6xu"/>
+            <connections>
+                <outlet property="confirmButton" destination="A5H-v7-ciU" id="Mvk-J2-500"/>
+            </connections>
+            <point key="canvasLocation" x="14.5" y="439.5"/>
+        </view>
+    </objects>
+</document>
