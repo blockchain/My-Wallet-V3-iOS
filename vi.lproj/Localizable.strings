@@ -1,0 +1,7 @@
+"buy_sell_add_address_post_code_hint" = "Mã Bưu điện";
+"buy_sell_recurring_order_duration_title" = "Thời gian";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "Khóa riêng đã được quét không tương ứng với địa chỉ chỉ xem của bạn. Để sử dụng các khoản tiền của bạn từ địa chỉ này, vui lòng quét khóa riêng đúng.";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Bạn sắp nhập một địa chỉ chỉ-xem, địa chỉ (hay đoạn mã xPub) được lưu trữ trong ví mà không có khóa riêng tương ứng. Điều này có nghĩa các khoản tiền CHỈ CÓ THỂ sử dụng nếu bạn có khóa riêng được lưu trữ. Nếu bạn không có khóa riêng được lưu trữ, KHÔNG hướng dẫn bất kỳ ai gửi bitcoin cho bạn đến địa chỉ chỉ-xem.\
+\
+Các tùy chọn này chỉ được khuyến nghị cho người dùng cao cấp. Tiếp tục?";
+"coinifyexchangedata.addcustomerdetails.postcode" = "Mã Bưu điện";
