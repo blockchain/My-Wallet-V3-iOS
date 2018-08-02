@@ -74,7 +74,10 @@ extension KYCAddressDetailViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellModel = model.cellModels[indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellModel.cellType().identifier, for: indexPath) as? BaseTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: cellModel.cellType().identifier,
+            for: indexPath
+        ) as? BaseTableViewCell else { return UITableViewCell() }
         cell.configure(with: cellModel)
         if let textEntry = cell as? TextEntryCell {
             textEntry.delegate = self
@@ -97,7 +100,9 @@ extension KYCAddressDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ConfirmationFooterView.self)) as? ConfirmationFooterView else { return nil }
+        guard let footer = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: String(describing: ConfirmationFooterView.self)
+        ) as? ConfirmationFooterView else { return nil }
         footer.actionBlock = { [weak self] in
             // TODO: pass along updated address
             self?.performSegue(withIdentifier: "showPersonalDetails", sender: nil)
