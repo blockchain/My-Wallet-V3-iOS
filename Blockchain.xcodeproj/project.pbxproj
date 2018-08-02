@@ -2199,6 +2199,14 @@
 		3A258BF0210A478B00C023F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2322DC8B1D771831000E5AC1 /* NSRunLoop+SRWebSocketPrivate.h */,
+				2322DC8C1D771831000E5AC1 /* NSURLRequest+SRWebSocketPrivate.h */,
+				2322DC961D771831000E5AC1 /* SRConstants.h */,
+				2322DC971D771831000E5AC1 /* SRConstants.m */,
+				2322DC831D771831000E5AC1 /* Delegate */,
+				2322DC861D771831000E5AC1 /* IOConsumer */,
+				2322DC8D1D771831000E5AC1 /* Proxy */,
+				2322DC901D771831000E5AC1 /* RunLoop */,
 				3AC9755C2110A574006A9263 /* Cells */,
 				3AC9755D2110A581006A9263 /* Footers */,
 			);
@@ -2208,6 +2216,7 @@
 		3A258C0B210A485D00C023F5 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2322DC841D771831000E5AC1 /* SRDelegateController.h */,
 				3A258C0C210A486F00C023F5 /* ReusableView.swift */,
 			);
 			path = Cells;
@@ -2216,6 +2225,9 @@
 		3A258C12210A4E7A00C023F5 /* DataProvider */ = {
 			isa = PBXGroup;
 			children = (
+				2322DC871D771831000E5AC1 /* SRIOConsumer.h */,
+				2322DC881D771831000E5AC1 /* SRIOConsumer.m */,
+				2322DC891D771831000E5AC1 /* SRIOConsumerPool.h */,
 				3A258C13210A4EAC00C023F5 /* LocationDataProvider.swift */,
 			);
 			path = DataProvider;
@@ -2252,6 +2264,20 @@
 		3AC97546210FA928006A9263 /* TextEntry */ = {
 			isa = PBXGroup;
 			children = (
+				2322DC991D771831000E5AC1 /* SRError.h */,
+				2322DC9A1D771831000E5AC1 /* SRError.m */,
+				2322DC9B1D771831000E5AC1 /* SRHash.h */,
+				2322DC9C1D771831000E5AC1 /* SRHash.m */,
+				2322DC9D1D771831000E5AC1 /* SRHTTPConnectMessage.h */,
+				2322DC9E1D771831000E5AC1 /* SRHTTPConnectMessage.m */,
+				2322DC9F1D771831000E5AC1 /* SRLog.h */,
+				2322DCA01D771831000E5AC1 /* SRLog.m */,
+				2322DCA11D771831000E5AC1 /* SRMutex.h */,
+				2322DCA21D771831000E5AC1 /* SRMutex.m */,
+				2322DCA31D771831000E5AC1 /* SRRandom.h */,
+				2322DCA41D771831000E5AC1 /* SRRandom.m */,
+				2322DCA51D771831000E5AC1 /* SRSIMDHelpers.h */,
+				2322DCA61D771831000E5AC1 /* SRSIMDHelpers.m */,
 				3AC97539210FA315006A9263 /* TextEntryCell.swift */,
 				3AC9753C210FA362006A9263 /* TextEntryCell.xib */,
 			);
