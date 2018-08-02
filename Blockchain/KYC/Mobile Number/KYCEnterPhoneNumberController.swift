@@ -47,7 +47,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
     }
 
     private func goToNextStep() {
-        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
+        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
     }
 }
 

@@ -8,17 +8,11 @@
 
 import Foundation
 
-class KYCConfirmPhoneNumberController: UIViewController, KYCOnboardingNavigation {
-
-    var segueIdentifier: String? = "promptForAddress"
+class KYCConfirmPhoneNumberController: UIViewController {
 
     @IBOutlet var primaryButton: PrimaryButton!
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        guard let segueIdentifier = segueIdentifier else {
-            Logger.shared.info("segueIdentifier is nil. Can't go to next step.")
-            return
-        }
-        self.performSegue(withIdentifier: segueIdentifier, sender: nil)
+        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
     }
 }
