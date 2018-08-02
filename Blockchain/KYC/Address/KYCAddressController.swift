@@ -134,10 +134,25 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
         }
     }
 
+    fileprivate func checkFieldsValidity() -> Bool {
+        validationFields.forEach({ $0.validate() })
+        primaryButton.isEnabled = !validationFields.contains(where: { $0.isValid() == false })
+        guard primaryButton.isEnabled == false else { return true }
+        for field in validationFields {
+            if field.isValid() {
+                continue
+            } else {
+                field.becomeFocused()
+                return false
+            }
+        }
+        return true
+    }
+
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        guard let identifier = segueIdentifier else { return }
+        guard checkFieldsValidity(), let identifier = segueIdentifier else { return }
         performSegue(withIdentifier: identifier, sender: self)
     }
 
@@ -166,7 +181,7 @@ extension KYCAddressController: LocationSuggestionInterface {
     }
 
     func populateAddressEntryView(_ address: PostalAddress) {
-        addressTextField.text = "\(address.street ?? "") \(address.streetNumber ?? "")"
+        addressTextField.text = "\(address.streetNumber ?? "") \(address.street ?? "")"
         cityTextField.text = address.city
         stateTextField.text = address.state
         postalCodeTextField.text = address.postalCode
@@ -175,10 +190,6 @@ extension KYCAddressController: LocationSuggestionInterface {
 
     func updateActivityIndicator(_ visibility: Visibility) {
         visibility == .hidden ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
-    }
-
-    func primaryButton(_ visibility: Visibility) {
-        primaryButton.isEnabled = !visibility.isHidden
     }
 
     func suggestionsList(_ visibility: Visibility) {

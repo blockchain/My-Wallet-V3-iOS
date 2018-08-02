@@ -36,7 +36,6 @@ class LocationSuggestionCoordinator: NSObject {
         }
 
         self.interface?.searchFieldActive(true)
-        self.interface?.primaryButton(.hidden)
     }
 }
 
@@ -77,7 +76,6 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
                 this.interface?.updateActivityIndicator(.hidden)
                 this.interface?.searchFieldActive(false)
                 this.interface?.populateAddressEntryView(address)
-                this.interface?.primaryButton(.visible)
             }
         }
     }

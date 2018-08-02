@@ -41,7 +41,7 @@ class ValidationTextField: NibBasedView {
 
     // MARK: IBInspectable Properties
 
-    @IBInspectable var baselineFillColor: UIColor = UIColor.gray2 {
+    @IBInspectable var baselineFillColor: UIColor = UIColor.gray3 {
         didSet {
             baselineView.backgroundColor = baselineFillColor
         }
@@ -56,6 +56,12 @@ class ValidationTextField: NibBasedView {
     /// Fill color for placeholder text.
     @IBInspectable var placeholderFillColor: UIColor = UIColor.gray3
 
+    /// If the field is optional than this should be `true`.
+    /// This prevents you from having to check the field for
+    /// any input in the `validationBlock`. The `validationBlock`
+    /// should only be used for custom validation logic.
+    @IBInspectable var optionalField: Bool = true
+
     @IBInspectable var placeholder: String = "" {
         didSet {
             let font = UIFont(
@@ -68,6 +74,12 @@ class ValidationTextField: NibBasedView {
                              NSAttributedStringKey.foregroundColor: placeholderFillColor
                 ])
             textField.attributedPlaceholder = value
+        }
+    }
+
+    @IBInspectable var textColor: UIColor = UIColor.darkGray {
+        didSet {
+            textField.textColor = textColor
         }
     }
 
@@ -128,6 +140,28 @@ class ValidationTextField: NibBasedView {
         textField.resignFirstResponder()
     }
 
+    func validate() {
+        if let block = validationBlock {
+            validity = block(textField.text)
+        } else {
+            if (textField.text?.count == 0 || textField.text == nil) {
+                validity = optionalField ? .valid : .invalid(nil)
+            } else {
+                validity = .valid
+            }
+        }
+
+        applyValidity(animated: true)
+    }
+
+    func isValid() -> Bool {
+        if case .valid = validity {
+            return true
+        } else {
+            return false
+        }
+    }
+
     // MARK: Private Functions
 
     fileprivate func applyValidity(animated: Bool) {
@@ -168,7 +202,16 @@ extension ValidationTextField: UITextFieldDelegate {
         if let block = validationBlock {
             validity = block(textField.text)
             applyValidity(animated: true)
+            return
         }
+
+        if (textField.text?.count == 0 || textField.text == nil) {
+            validity = optionalField ? .valid : .invalid(nil)
+        } else {
+            validity = .valid
+        }
+
+        applyValidity(animated: true)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
