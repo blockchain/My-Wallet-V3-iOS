@@ -47,8 +47,10 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         case true:
             interface?.searchFieldText(nil)
             interface?.suggestionsList(.hidden)
+            interface?.addressEntryView(.visible)
         case false:
             interface?.suggestionsList(.visible)
+            interface?.addressEntryView(.hidden)
         }
     }
 
@@ -71,10 +73,17 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
             interface?.updateActivityIndicator(.visible)
             service.fetchAddress(from: input) { [weak self] (address) in
                 guard let this = self else { return }
+                this.interface?.addressEntryView(.visible)
                 this.interface?.updateActivityIndicator(.hidden)
-                this.delegate?.coordinator(this, generated: address)
+                this.interface?.searchFieldActive(false)
+                this.interface?.populateAddressEntryView(address)
+                this.interface?.primaryButton(.visible)
             }
         }
+    }
+
+    func onSubmission(_ address: PostalAddress) {
+        delegate?.coordinator(self, generated: address)
     }
 
     func onSearchRequest(_ query: String) {
@@ -82,8 +91,14 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         newModel.state = .loading
         model = newModel
 
+        if model.suggestions.isEmpty {
+            interface?.addressEntryView(.hidden)
+            interface?.updateActivityIndicator(.visible)
+        }
+
         service.search(for: query) { [weak self] (suggestions, error) in
             guard let this = self else { return }
+
             let state: LocationSearchResult.SearchUIState = error != nil ? .error(error) : .success
             let empty: [LocationSuggestion] = []
 
@@ -93,6 +108,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
             )
 
             let listVisibility: Visibility = suggestions != nil ? .visible: .hidden
+            this.interface?.updateActivityIndicator(.hidden)
             this.interface?.suggestionsList(listVisibility)
             this.model = result
         }

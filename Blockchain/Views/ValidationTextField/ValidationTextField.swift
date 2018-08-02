@@ -68,6 +68,12 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    var text: String? = "" {
+        didSet {
+            textField.text = text
+        }
+    }
+
     var returnTappedBlock: (() -> Void)? = nil
     var becomeFirstResponderBlock: ((ValidationTextField) -> Void)? = nil
 

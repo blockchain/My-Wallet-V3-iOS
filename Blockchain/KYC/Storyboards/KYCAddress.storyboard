@@ -202,7 +202,7 @@
                                 <rect key="frame" x="141.5" y="361.5" width="37" height="37"/>
                                 <color key="color" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
-                            <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-gf-4D1">
+                            <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-gf-4D1">
                                 <rect key="frame" x="8" y="134.5" width="304" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="Wz6-6Z-OCC"/>

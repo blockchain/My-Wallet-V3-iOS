@@ -135,7 +135,18 @@ extension KYCAddressController: UITableViewDelegate {
 }
 
 extension KYCAddressController: LocationSuggestionInterface {
-    
+    func addressEntryView(_ visibility: Visibility) {
+        scrollView.alpha = visibility.defaultAlpha
+    }
+
+    func populateAddressEntryView(_ address: PostalAddress) {
+        addressTextField.text = "\(address.street ?? "") \(address.streetNumber ?? "")"
+        cityTextField.text = address.city
+        stateTextField.text = address.state
+        postalCodeTextField.text = address.postalCode
+        countryTextField.text = address.country
+    }
+
     func updateActivityIndicator(_ visibility: Visibility) {
         visibility == .hidden ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
     }
@@ -175,6 +186,21 @@ extension KYCAddressController: LocationSuggestionCoordinatorDelegate {
 
 extension KYCAddressController: UISearchBarDelegate {
 
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(false, animated: true)
+        return true
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchDelegate?.onStart()
+        scrollView.setContentOffset(.zero, animated: true)
+    }
+
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if let value = searchBar.text as NSString? {
             let current = value.replacingCharacters(in: range, with: text)
@@ -192,5 +218,11 @@ extension KYCAddressController: UISearchBarDelegate {
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+extension KYCAddressController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        validationFields.forEach({$0.resignFocus()})
     }
 }
