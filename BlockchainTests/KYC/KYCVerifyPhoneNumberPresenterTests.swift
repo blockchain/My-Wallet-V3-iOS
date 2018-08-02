@@ -1,5 +1,5 @@
 //
-//  KYCEnterPhoneNumberPresenterTests.swift
+//  KYCVerifyPhoneNumberPresenterTests.swift
 //  BlockchainTests
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -9,17 +9,17 @@
 import XCTest
 @testable import Blockchain
 
-class KYCEnterPhoneNumberPresenterTests: XCTestCase {
+class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
 
-    private var view: MockKYCEnterPhoneNumberView!
-    private var interactor: MockKYCEnterPhoneNumberInteractor!
-    private var presenter: KYCEnterPhoneNumberPresenter!
+    private var view: MockKYCVerifyPhoneNumberView!
+    private var interactor: MockKYCVerifyPhoneNumberInteractor!
+    private var presenter: KYCVerifyPhoneNumberPresenter!
 
     override func setUp() {
         super.setUp()
-        view = MockKYCEnterPhoneNumberView()
-        interactor = MockKYCEnterPhoneNumberInteractor()
-        presenter = KYCEnterPhoneNumberPresenter(view: view, interactor: interactor)
+        view = MockKYCVerifyPhoneNumberView()
+        interactor = MockKYCVerifyPhoneNumberInteractor()
+        presenter = KYCVerifyPhoneNumberPresenter(view: view, interactor: interactor)
     }
 
     func testSuccessfulVerification() {
@@ -29,7 +29,7 @@ class KYCEnterPhoneNumberPresenterTests: XCTestCase {
         view.didCallShowVerifCodeViewExpectation = expectation(
             description: "Show verification code view shown when 1st step of verification succeeds"
         )
-        presenter.verify(number: "1234567890", userId: "aUserId")
+        presenter.startVerification(number: "1234567890", userId: "aUserId")
         waitForExpectations(timeout: 0.1)
     }
 
@@ -38,7 +38,7 @@ class KYCEnterPhoneNumberPresenterTests: XCTestCase {
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
         view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
-        presenter.verify(number: "1234567890", userId: "aUserId")
+        presenter.startVerification(number: "1234567890", userId: "aUserId")
         waitForExpectations(timeout: 0.1)
     }
 }

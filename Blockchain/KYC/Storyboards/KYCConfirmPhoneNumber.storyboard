@@ -97,7 +97,9 @@
                     <navigationItem key="navigationItem" title="Verify Your Device" id="cjv-4c-ncy"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
                         <outlet property="nextButton" destination="36T-B3-yyh" id="SJJ-4H-hLO"/>
+                        <outlet property="textFieldConfirmationCode" destination="XY9-D0-0ZJ" id="nOc-JG-To0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6m-Ye-sCf" userLabel="First Responder" sceneMemberID="firstResponder"/>

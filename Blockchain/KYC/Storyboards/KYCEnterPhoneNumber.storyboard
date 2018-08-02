@@ -82,17 +82,17 @@
                     <connections>
                         <outlet property="primaryButton" destination="KX0-wF-bqu" id="QyA-aZ-9U0"/>
                         <outlet property="textFieldMobileNumber" destination="Kwe-pA-MQg" id="30j-zZ-aGz"/>
-                        <segue destination="xVk-FG-HTS" kind="show" identifier="promptForAddress" id="Ppp-kU-LhA"/>
+                        <segue destination="xVk-FG-HTS" kind="show" identifier="verifyMobileNumber" id="Ppp-kU-LhA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSW-4d-mbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-73" y="218"/>
         </scene>
-        <!--KYCVerifyPhoneNumber-->
+        <!--KYCConfirmPhoneNumber-->
         <scene sceneID="fw5-HU-1bR">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCVerifyPhoneNumber" id="xVk-FG-HTS" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCConfirmPhoneNumber" id="xVk-FG-HTS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHo-TW-UGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="546" y="152"/>
