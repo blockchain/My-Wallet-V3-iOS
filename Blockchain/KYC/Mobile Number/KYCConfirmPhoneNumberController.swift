@@ -10,9 +10,20 @@ import Foundation
 
 class KYCConfirmPhoneNumberController: UIViewController {
 
-    @IBOutlet var primaryButton: PrimaryButton!
+    @IBOutlet var nextButton: PrimaryButton!
 
-    @IBAction func primaryButtonTapped(_ sender: Any) {
+    // MARK: IBActions
+    @IBAction func onResendCodeTapped(_ sender: Any) {
+    }
+
+    @IBAction func onNextTapped(_ sender: Any) {
         self.performSegue(withIdentifier: "promptForAddress", sender: nil)
     }
+    
+    @IBAction func onTextFieldChanged(_ sender: Any) {
+    }
+}
+
+extension KYCConfirmPhoneNumberController: UITextFieldDelegate {
+
 }
