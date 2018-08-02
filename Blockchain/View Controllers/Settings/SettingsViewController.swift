@@ -272,9 +272,9 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
     @objc func switchSwipeToReceiveTapped(_ sender: UISwitch) {
         let swipeToReceiveEnabled = BlockchainSettings.sharedAppInstance().swipeToReceiveEnabled
         if !swipeToReceiveEnabled {
-            let swipeToReceiveAlert = UIAlertController(title: LocalizationConstants.enable,
+            let swipeToReceiveAlert = UIAlertController(title: LocalizationConstants.swipeReceive,
                                                         message: LocalizationConstants.Pin.revealAddress, preferredStyle: .alert)
-            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.twostep, style: .default, handler: { action in
+            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.enable, style: .default, handler: { action in
                 BlockchainSettings.sharedAppInstance().swipeToReceiveEnabled = !swipeToReceiveEnabled
                 // Clear all swipe addresses in case default account has changed
                 if !swipeToReceiveEnabled {
@@ -317,7 +317,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
     @objc func biometrySwitchTapped(_ sender: UISwitch) {
         AuthenticationManager.sharedInstance().canAuthenticateUsingBiometry(andReply: { success, errorMessage in
             if success {
-                self.toggleBiometry()
+                self.toggleBiometry(sender)
             } else {
                 BlockchainSettings.sharedAppInstance().biometryEnabled = false
                 let alertBiometryError = UIAlertController(title: LocalizationConstants.Errors.error, message: errorMessage, preferredStyle: .alert)
@@ -328,14 +328,13 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
             }
         })
     }
-    func toggleBiometry() {
+    func toggleBiometry(_ sender: UISwitch) {
         let biometryEnabled = BlockchainSettings.sharedAppInstance().biometryEnabled
         if !(biometryEnabled == true) {
             let biometryWarning = String(format: LocalizationConstantsObjcBridge.biometryWarning(), biometryTypeDescription()!)
             let alertForTogglingBiometry = UIAlertController(title: biometryTypeDescription(), message: biometryWarning, preferredStyle: .alert)
-            alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { action in
-                let indexPath = IndexPath(row: self.pinBiometry(), section: self.sectionSecurity)
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
+                sender.isOn = false
             }))
             alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { action in
                 AuthenticationCoordinator.sharedInstance().validatePin()

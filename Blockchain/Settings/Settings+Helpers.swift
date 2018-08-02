@@ -51,8 +51,8 @@ extension SettingsTableViewController {
         reload()
     }
 
-    func alertUserOfError(_ errorMessage: String?) {
-        AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
+    func alertUserOfError(_ errorMessage: String) {
+        AlertViewPresenter.shared.standardError(message: errorMessage)
     }
 
     func walletIdentifierClicked() {

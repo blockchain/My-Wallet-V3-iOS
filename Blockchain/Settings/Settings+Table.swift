@@ -105,6 +105,7 @@ extension SettingsTableViewController {
         switchForSwipeToReceive.isOn = swipeToReceiveEnabled
         switchForSwipeToReceive.addTarget(self, action: #selector(self.switchSwipeToReceiveTapped), for: .touchUpInside)
         cell.accessoryView = switchForSwipeToReceive
+        cell.textLabel?.text = LocalizationConstants.swipeReceive
     }
     
     func prepare2FACell(_ cell: UITableViewCell) {
