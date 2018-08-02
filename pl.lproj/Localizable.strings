@@ -1,0 +1,6 @@
+"buy_sell_add_address_post_code_hint" = "Kod pocztowy";
+"buy_sell_recurring_order_duration_title" = "Czas trwania";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "Zeskanowany prywatny klucz nie odpowiada Twojemu adresowi tylko do odczytu. Aby móc wydać środki z tego adresu, zeskanuj prawidłowy prywatny klucz.";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Zamierzasz importować adres tylko do odczytu, adres (lub skrypt klucza publicznego) przechowywany w portfelu bez odpowiadającego mu klucza prywatnego. Oznacza to, że środki z tego adresu możesz wydawać tylko, jeśli masz klucz prywatny przechowywany gdzie indziej. Jeśli nie masz takiego klucza, NIE podawaj adresu tylko do odczytu jako adresu do otrzymywania bitcoinów. \
+\
+Te opcje są zalecane tylko dla zaawansowanych użytkowników. Kontynuować?";
