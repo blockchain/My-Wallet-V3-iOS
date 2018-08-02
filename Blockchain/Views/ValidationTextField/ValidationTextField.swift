@@ -13,13 +13,33 @@ enum ValidationResult {
     case invalid(Error?)
 }
 
+typealias ValidationBlock = ((String?) -> ValidationResult)
+
 @IBDesignable
 class ValidationTextField: NibBasedView {
+
+    // MARK: Private Class Properties
 
     fileprivate static let primaryFont: UIFont = UIFont(
         name: Constants.FontNames.montserratRegular,
         size: Constants.FontSizes.Small
     ) ?? UIFont.systemFont(ofSize: 16)
+
+    // MARK: Private Properties
+
+    fileprivate var validity: ValidationResult = .valid {
+        didSet {
+            // TODO: Show the `x` when it is invalid.
+            switch validity {
+            case .invalid:
+                baselineFillColor = UIColor.red
+            case .valid:
+                baselineFillColor = UIColor.gray2
+            }
+        }
+    }
+
+    // MARK: IBInspectable Properties
 
     @IBInspectable var baselineFillColor: UIColor = UIColor.gray2 {
         didSet {
@@ -50,6 +70,8 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    // MARK: Public Properties
+
     var font: UIFont = ValidationTextField.primaryFont {
         didSet {
             textField.font = font
@@ -74,8 +96,19 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    /// This closure is called when the user taps `next`
+    /// or `done` etc. and the `textField` resigns.
     var returnTappedBlock: (() -> Void)? = nil
+
+    /// This closure is called when a field is in
+    /// focus. You can use it to handle scrolling to
+    /// the particular textField.
     var becomeFirstResponderBlock: ((ValidationTextField) -> Void)? = nil
+
+    /// This closure is responsible for validation.
+    /// If the return value is invalid, the error state
+    /// is shown.
+    var validationBlock: ValidationBlock? = nil
 
     // MARK: Private IBOutlets
 
@@ -102,7 +135,9 @@ extension ValidationTextField: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        // TODO: Validation
+        if let block = validationBlock {
+            validity = block(textField.text)
+        }
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
