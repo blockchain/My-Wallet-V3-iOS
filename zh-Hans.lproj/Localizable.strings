@@ -1,0 +1,6 @@
+"buy_sell_add_address_post_code_hint" = "邮政编码";
+"buy_sell_recurring_order_duration_title" = "时间";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "注意：扫描到的私钥无法与您的只看地址相对应。 请扫描正确的私钥";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "您将导入一个只看地址,这个地址（或公钥脚本）存储在钱包中当没有对应的私钥。这意味着资金只有你拥有存储在其他地方的私钥时才能被支出，如果您没有私钥，请不要指导任何人向该地址发送资金。 \
+\
+这些选项仅推荐高级用户使用。继续？";

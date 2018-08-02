@@ -1,0 +1,6 @@
+"buy_sell_add_address_post_code_hint" = "郵便番号";
+"buy_sell_recurring_order_duration_title" = "期間";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "注: スキャンした秘密鍵は読み取り専用アドレスに対応するものではありません。このアドレスから資金を使用するには、正しい秘密鍵をスキャンしてください。";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "閲覧のみアドレス、対応する秘密鍵のない、財布に保存したアドレス（もしくは秘密鍵スクリプト）をインポートしようとしています。これは秘密鍵が別の場所に保管されている場合のみ、資金を使用できるという意味です。秘密鍵が保管されていない場合、閲覧のみアドレスにビットコインが送信されないように注意してください。\
+\
+これらのオプションは上級ユーザーにのみ推奨されています。続行しますか？";

@@ -1,0 +1,18 @@
+"buy_sell_add_address_post_code_hint" = "Código postal";
+"buy_sell_add_address_name_empty" = "El nombre no puede estar vacío";
+"buy_sell_add_address_street_empty" = "La calle no puede estar vacía";
+"buy_sell_add_address_city_empty" = "La ciudad no puede estar vacía";
+"buy_sell_add_address_postcode_empty" = "El código postal no puede estar vacío";
+"buy_sell_recurring_order_subtitle" = "Se ha programado su siguiente orden periódica";
+"buy_sell_recurring_order_description" = "Para administrar ordenes periódicas, inicie sesión en su monedero en el navegador web.";
+"buy_sell_recurring_order_duration_title" = "Duración";
+"buy_sell_recurring_order_duration_until_cancelled" = "%1$s o alcance su límite; lo que ocurra antes.";
+"buy_sell_recurring_order_duration_until" = "Hasta";
+"buy_sell_recurring_order_amount" = "%1$s %2$s (+%3$s %4$s Comisión de Pago)";
+"buy_sell_recurring_frequency_weekly" = "Semanalmente, cada %1$s";
+"buy_sell_recurring_frequency_daily" = "Cada día";
+"buy_sell_recurring_frequency_monthly" = "En el %1$s de cada mes";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "La clave privada escaneada no corresponde con st dirección de tipo \"solo ver\". Si deseas gastar los fondos de esta dirección, por favor escanea la clave privada correcta.";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Estás a punto de importar una dirección Sólo Ver, una dirección (o secuencia de comandos de clave pública) guardada en el monedero sin la clave privada correspondiente. Esto significa que se pueden gastar los fondos SÓLO si tienes la clave privada guardada en otro lugar. Si no tienes la clave privada guardada, NO le pidas a nadie que te envíe Bitcoin a la dirección Sólo Ver.\
+\
+Estas opciones sólo se recomiendan para usuarios avanzados. ¿Continuar?";
