@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1m4-Wz-u3W">
-    <device id="retina5_9" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -21,37 +21,37 @@
             <objects>
                 <viewController title="Address View Controller" id="1m4-Wz-u3W" customClass="KYCAddressController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6kS-bR-6h1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="What is my address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVk-mv-RzC">
-                                <rect key="frame" x="16" y="104" width="343" height="15"/>
+                                <rect key="frame" x="16" y="80" width="288" height="15"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LU7-BL-Zrb">
-                                <rect key="frame" x="0.0" y="88" width="375" height="8"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="8"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="Sev-w9-pJR"/>
                                 </constraints>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="999" text="We may send a verification postcard for added security." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zsH-tV-aX0">
-                                <rect key="frame" x="16" y="120.99999999999999" width="343" height="14.333333333333329"/>
+                                <rect key="frame" x="16" y="97" width="288" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-6J-r0r">
-                                <rect key="frame" x="0.0" y="200" width="375" height="578"/>
+                                <rect key="frame" x="0.0" y="190.5" width="320" height="377.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HTQ-Da-JDA">
-                                <rect key="frame" x="0.0" y="200" width="375" height="578"/>
+                                <rect key="frame" x="0.0" y="190.5" width="320" height="377.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HnA-P2-2Gj" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="0.0" width="343" height="56"/>
+                                        <rect key="frame" x="16" y="0.0" width="288" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="qiA-WP-2m1"/>
@@ -64,10 +64,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5mF-Bq-VW9" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="56" width="343" height="56"/>
+                                        <rect key="frame" x="16" y="56" width="288" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="OZn-hW-Aaj"/>
@@ -80,10 +81,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j8H-Lr-LlB" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="112" width="343" height="56"/>
+                                        <rect key="frame" x="16" y="112" width="288" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="vO7-yX-H6J"/>
@@ -96,10 +98,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQL-tY-eAz" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="168" width="163.66666666666666" height="56"/>
+                                        <rect key="frame" x="16" y="168" width="136" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="gxq-ds-nCp"/>
@@ -112,10 +115,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LF7-ax-XE2" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="195" y="168" width="164" height="56"/>
+                                        <rect key="frame" x="167.5" y="168" width="136.5" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="5Kb-Nc-YfN"/>
@@ -128,10 +132,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZL2-vY-uhQ" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="224" width="343.66666666666669" height="56"/>
+                                        <rect key="frame" x="16" y="224" width="288.5" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="elD-gS-93M"/>
@@ -144,10 +149,11 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
                                                 <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XUW-TX-8oU" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="312" width="343" height="44"/>
+                                        <rect key="frame" x="16" y="312" width="288" height="44"/>
                                         <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="Cwz-is-H2c"/>
@@ -176,7 +182,7 @@
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="trailing" secondItem="j8H-Lr-LlB" secondAttribute="centerX" constant="-8" id="QLk-Yl-ULp"/>
                                     <constraint firstItem="XUW-TX-8oU" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="X12-5Y-hyx"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="top" secondItem="j8H-Lr-LlB" secondAttribute="bottom" id="aPV-xw-zye"/>
-                                    <constraint firstAttribute="bottom" secondItem="XUW-TX-8oU" secondAttribute="bottom" constant="16" id="cyk-dA-ecj"/>
+                                    <constraint firstAttribute="bottom" secondItem="XUW-TX-8oU" secondAttribute="bottom" constant="30" id="cyk-dA-ecj"/>
                                     <constraint firstAttribute="trailing" secondItem="XUW-TX-8oU" secondAttribute="trailing" constant="16" id="g4Z-P6-hjg"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="gmy-jw-t42"/>
                                     <constraint firstItem="ZL2-vY-uhQ" firstAttribute="top" secondItem="MQL-tY-eAz" secondAttribute="bottom" id="meY-DE-dYh"/>
@@ -188,13 +194,16 @@
                                     <constraint firstItem="ZL2-vY-uhQ" firstAttribute="leading" secondItem="MQL-tY-eAz" secondAttribute="leading" id="yPr-80-8l4"/>
                                     <constraint firstItem="XUW-TX-8oU" firstAttribute="top" secondItem="ZL2-vY-uhQ" secondAttribute="bottom" constant="32" id="z5W-q4-fvP"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="1m4-Wz-u3W" id="GHu-es-UQT"/>
+                                </connections>
                             </scrollView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FFX-OX-l36">
-                                <rect key="frame" x="169" y="471" width="37" height="37"/>
+                                <rect key="frame" x="141.5" y="361.5" width="37" height="37"/>
                                 <color key="color" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
                             <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-gf-4D1">
-                                <rect key="frame" x="8" y="144" width="359" height="56"/>
+                                <rect key="frame" x="8" y="134.5" width="304" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="Wz6-6Z-OCC"/>
                                 </constraints>
@@ -244,9 +253,16 @@
                         <outlet property="postalCodeTextField" destination="LF7-ax-XE2" id="1zJ-7Y-SwY"/>
                         <outlet property="primaryButton" destination="XUW-TX-8oU" id="vk1-n7-T4P"/>
                         <outlet property="progressView" destination="LU7-BL-Zrb" id="0lU-I7-mIU"/>
+                        <outlet property="scrollView" destination="HTQ-Da-JDA" id="G6L-Lh-w2d"/>
                         <outlet property="searchBar" destination="6g6-gf-4D1" id="yeK-yd-vcm"/>
                         <outlet property="stateTextField" destination="MQL-tY-eAz" id="cXd-qe-uCX"/>
                         <outlet property="tableView" destination="fkm-6J-r0r" id="yzI-gy-vZ7"/>
+                        <outletCollection property="validationFields" destination="HnA-P2-2Gj" collectionClass="NSMutableArray" id="Xry-Lx-HTD"/>
+                        <outletCollection property="validationFields" destination="5mF-Bq-VW9" collectionClass="NSMutableArray" id="fIq-un-YgI"/>
+                        <outletCollection property="validationFields" destination="j8H-Lr-LlB" collectionClass="NSMutableArray" id="ukx-ji-1BG"/>
+                        <outletCollection property="validationFields" destination="MQL-tY-eAz" collectionClass="NSMutableArray" id="3b0-iw-cdl"/>
+                        <outletCollection property="validationFields" destination="LF7-ax-XE2" collectionClass="NSMutableArray" id="ThE-DO-3YN"/>
+                        <outletCollection property="validationFields" destination="ZL2-vY-uhQ" collectionClass="NSMutableArray" id="uep-hd-8oM"/>
                         <segue destination="QUH-Ks-fjK" kind="show" identifier="showPersonalDetails" id="Gpq-wr-SYc"/>
                     </connections>
                 </viewController>

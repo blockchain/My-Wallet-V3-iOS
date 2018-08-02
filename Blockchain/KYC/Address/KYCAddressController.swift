@@ -12,12 +12,14 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     // MARK: - Private IBOutlets
 
+    @IBOutlet fileprivate var scrollView: UIScrollView!
     @IBOutlet fileprivate var progressView: UIProgressView!
     @IBOutlet fileprivate var searchBar: UISearchBar!
     @IBOutlet fileprivate var tableView: UITableView!
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
 
     // MARK: Private IBOutlets (ValidationTextField)
+    @IBOutlet fileprivate var validationFields: [ValidationTextField]!
     @IBOutlet fileprivate var addressTextField: ValidationTextField!
     @IBOutlet fileprivate var apartmentTextField: ValidationTextField!
     @IBOutlet fileprivate var cityTextField: ValidationTextField!
@@ -55,6 +57,7 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
         progressView.tintColor = UIColor.green
 
         validationFieldsSetup()
+        setupNotifications()
 
         searchDelegate?.onStart()
     }
@@ -66,6 +69,43 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
         stateTextField.returnKeyType = .next
         postalCodeTextField.returnKeyType = .next
         countryTextField.returnKeyType = .done
+
+        addressTextField.returnTappedBlock = { [weak self] in
+            self?.apartmentTextField.becomeFocused()
+        }
+        apartmentTextField.returnTappedBlock = { [weak self] in
+            self?.cityTextField.becomeFocused()
+        }
+        cityTextField.returnTappedBlock = { [weak self] in
+            self?.stateTextField.becomeFocused()
+        }
+        stateTextField.returnTappedBlock = { [weak self] in
+            self?.postalCodeTextField.becomeFocused()
+        }
+        postalCodeTextField.returnTappedBlock = { [weak self] in
+            self?.countryTextField.becomeFocused()
+        }
+
+        validationFields.forEach { (field) in
+            field.becomeFirstResponderBlock = { [weak self] (validationField) in
+                guard let offset = self?.scrollView.contentOffset else { return }
+
+                let adjusted = CGPoint(
+                    x: offset.x,
+                    y: validationField.frame.origin.y
+                )
+                self?.scrollView.setContentOffset(
+                    adjusted,
+                    animated: true
+                )
+            }
+        }
+    }
+
+    fileprivate func setupNotifications() {
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) { [weak self] _ in
+            self?.scrollView.setContentOffset(.zero, animated: true)
+        }
     }
 
     // MARK: - Actions
@@ -101,7 +141,7 @@ extension KYCAddressController: LocationSuggestionInterface {
     }
 
     func primaryButton(_ visibility: Visibility) {
-//        primaryButton.alpha = visibility.defaultAlpha
+        primaryButton.isEnabled = !visibility.isHidden
     }
 
     func suggestionsList(_ visibility: Visibility) {

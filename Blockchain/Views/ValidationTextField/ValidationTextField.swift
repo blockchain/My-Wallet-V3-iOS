@@ -68,16 +68,43 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    var returnTappedBlock: (() -> Void)? = nil
+    var becomeFirstResponderBlock: ((ValidationTextField) -> Void)? = nil
+
     // MARK: Private IBOutlets
 
     @IBOutlet fileprivate var textField: UITextField!
     @IBOutlet fileprivate var baselineView: UIView!
 
+    // MARK: Public Functions
+
+    func becomeFocused() {
+        textField.becomeFirstResponder()
+    }
+
+    func resignFocus() {
+        textField.resignFirstResponder()
+    }
 }
 
 extension ValidationTextField: UITextFieldDelegate {
 
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if let responderBlock = becomeFirstResponderBlock {
+            responderBlock(self)
+        }
+    }
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         // TODO: Validation
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let block = returnTappedBlock {
+            block()
+        } else {
+            textField.resignFirstResponder()
+        }
+        return true
     }
 }
