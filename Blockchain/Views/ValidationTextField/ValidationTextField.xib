@@ -13,11 +13,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
             <connections>
                 <outlet property="baselineView" destination="mmX-sZ-7n0" id="ggk-dC-jsM"/>
+                <outlet property="errorImageView" destination="mhi-tK-KXy" id="bex-Dd-iZF"/>
                 <outlet property="textField" destination="7qq-vq-aw1" id="AE7-A8-fZ8"/>
+                <outlet property="textFieldTrailingConstraint" destination="AOS-7x-6jC" id="xRv-4i-GTu"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="tGB-iU-p5b">
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="tGB-iU-p5b">
             <rect key="frame" x="0.0" y="0.0" width="375" height="92"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -37,13 +39,22 @@
                         <constraint firstAttribute="height" constant="1" id="w1c-Fg-nQv"/>
                     </constraints>
                 </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon_form_invalid" translatesAutoresizingMaskIntoConstraints="NO" id="mhi-tK-KXy">
+                    <rect key="frame" x="375" y="37.5" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="0Zb-lR-rRf"/>
+                        <constraint firstAttribute="height" constant="16" id="6qH-Xi-vmY"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="mmX-sZ-7n0" firstAttribute="leading" secondItem="tGB-iU-p5b" secondAttribute="leading" id="879-f2-3Sj"/>
+                <constraint firstItem="mhi-tK-KXy" firstAttribute="centerY" secondItem="7qq-vq-aw1" secondAttribute="centerY" id="9Is-W1-LLy"/>
                 <constraint firstItem="LVp-DT-kSd" firstAttribute="trailing" secondItem="7qq-vq-aw1" secondAttribute="trailing" id="AOS-7x-6jC"/>
                 <constraint firstItem="mmX-sZ-7n0" firstAttribute="top" secondItem="7qq-vq-aw1" secondAttribute="bottom" id="AeM-vd-6L8"/>
                 <constraint firstAttribute="trailing" secondItem="mmX-sZ-7n0" secondAttribute="trailing" id="DTc-kT-wAX"/>
+                <constraint firstItem="mhi-tK-KXy" firstAttribute="leading" secondItem="7qq-vq-aw1" secondAttribute="trailing" id="JYx-WC-HdN"/>
                 <constraint firstItem="LVp-DT-kSd" firstAttribute="bottom" secondItem="mmX-sZ-7n0" secondAttribute="bottom" id="LUT-5R-SLl"/>
                 <constraint firstItem="7qq-vq-aw1" firstAttribute="top" secondItem="LVp-DT-kSd" secondAttribute="top" id="Q8U-is-CeF"/>
                 <constraint firstItem="7qq-vq-aw1" firstAttribute="leading" secondItem="LVp-DT-kSd" secondAttribute="leading" id="nae-Kv-sWK"/>
@@ -54,4 +65,7 @@
             <point key="canvasLocation" x="161.5" y="71"/>
         </view>
     </objects>
+    <resources>
+        <image name="Icon_form_invalid" width="16" height="16"/>
+    </resources>
 </document>

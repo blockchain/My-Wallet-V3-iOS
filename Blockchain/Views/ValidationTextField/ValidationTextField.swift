@@ -53,6 +53,7 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    /// Fill color for placeholder text.
     @IBInspectable var placeholderFillColor: UIColor = UIColor.gray3
 
     @IBInspectable var placeholder: String = "" {
@@ -114,6 +115,8 @@ class ValidationTextField: NibBasedView {
 
     @IBOutlet fileprivate var textField: UITextField!
     @IBOutlet fileprivate var baselineView: UIView!
+    @IBOutlet fileprivate var textFieldTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet fileprivate var errorImageView: UIImageView!
 
     // MARK: Public Functions
 
@@ -123,6 +126,33 @@ class ValidationTextField: NibBasedView {
 
     func resignFocus() {
         textField.resignFirstResponder()
+    }
+
+    // MARK: Private Functions
+
+    fileprivate func applyValidity(animated: Bool) {
+        switch validity {
+        case .valid:
+            guard textFieldTrailingConstraint.constant != 0 else { return }
+            textFieldTrailingConstraint.constant = 0
+
+        case .invalid:
+            guard textFieldTrailingConstraint.constant != errorImageView.bounds.width else { return }
+            textFieldTrailingConstraint.constant = errorImageView.bounds.width
+        }
+
+        setNeedsLayout()
+        guard animated == true else {
+            layoutIfNeeded()
+            return
+        }
+
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: [.beginFromCurrentState, .curveEaseOut], animations: {
+                self.layoutIfNeeded()
+        }, completion: nil)
     }
 }
 
@@ -137,6 +167,7 @@ extension ValidationTextField: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let block = validationBlock {
             validity = block(textField.text)
+            applyValidity(animated: true)
         }
     }
 

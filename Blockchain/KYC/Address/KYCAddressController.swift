@@ -40,6 +40,7 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
     
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
+    fileprivate var keyboard: KeyboardPayload? = nil
 
     // MARK: Lifecycle
 
@@ -70,6 +71,11 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
         postalCodeTextField.returnKeyType = .next
         countryTextField.returnKeyType = .done
 
+        addressTextField.validationBlock = { (value) in
+            guard value != nil, value?.count != 0 else { return .invalid(nil) }
+            return .valid
+        }
+
         addressTextField.returnTappedBlock = { [weak self] in
             self?.apartmentTextField.becomeFocused()
         }
@@ -88,23 +94,43 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
         validationFields.forEach { (field) in
             field.becomeFirstResponderBlock = { [weak self] (validationField) in
-                guard let offset = self?.scrollView.contentOffset else { return }
+                guard let this = self else { return }
+                guard let keyboardHeight = this.keyboard?.endingFrame.height else { return }
+                let insets = UIEdgeInsets(
+                    top: 0.0,
+                    left: 0.0,
+                    bottom: keyboardHeight,
+                    right: 0.0
+                )
+                this.scrollView.contentInset = insets
 
-                let adjusted = CGPoint(
-                    x: offset.x,
-                    y: validationField.frame.origin.y
+                let viewSize = CGSize(
+                    width: this.scrollView.frame.width,
+                    height: this.scrollView.frame.height - keyboardHeight
                 )
-                self?.scrollView.setContentOffset(
-                    adjusted,
-                    animated: true
+                let viewableFrame = CGRect(
+                    origin: this.scrollView.frame.origin,
+                    size: viewSize
                 )
+
+                if !viewableFrame.contains(validationField.frame.origin) {
+                    this.scrollView.scrollRectToVisible(
+                        validationField.frame,
+                        animated: true
+                    )
+                }
             }
         }
     }
 
     fileprivate func setupNotifications() {
         NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) { [weak self] _ in
+            self?.scrollView.contentInset = .zero
             self?.scrollView.setContentOffset(.zero, animated: true)
+        }
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) { [weak self] notification in
+            let keyboard = KeyboardPayload(notification: notification)
+            self?.keyboard = keyboard
         }
     }
 
