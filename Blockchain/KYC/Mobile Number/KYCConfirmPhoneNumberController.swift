@@ -10,10 +10,10 @@ import Foundation
 
 class KYCConfirmPhoneNumberController: UIViewController {
 
-    @IBOutlet var nextButton: PrimaryButton!
-    @IBOutlet var labelPhoneNumber: UILabel!
-    @IBOutlet var textFieldConfirmationCode: UITextField!
-    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
+    @IBOutlet private var nextButton: PrimaryButton!
+    @IBOutlet private var labelPhoneNumber: UILabel!
+    @IBOutlet private var textFieldConfirmationCode: UITextField!
+    @IBOutlet private var layoutConstraintBottomButton: NSLayoutConstraint!
 
     var phoneNumber: String = "" {
         didSet {
@@ -27,6 +27,11 @@ class KYCConfirmPhoneNumberController: UIViewController {
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
+    private var originalBottomButtonConstraint: CGFloat!
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: View Controller Lifecycle
 
@@ -34,6 +39,17 @@ class KYCConfirmPhoneNumberController: UIViewController {
         super.viewDidLoad()
         labelPhoneNumber.text = phoneNumber
         nextButton.isEnabled = false
+        originalBottomButtonConstraint = layoutConstraintBottomButton.constant
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) {
+            self.keyboardWillShow(with: KeyboardPayload(notification: $0))
+        }
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
+            self.keyboardWillHide(with: KeyboardPayload(notification: $0))
+        }
     }
 
     // MARK: IBActions
@@ -48,6 +64,24 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     @IBAction func onTextFieldChanged(_ sender: Any) {
         nextButton.isEnabled = !(textFieldConfirmationCode.text?.isEmpty ?? true)
+    }
+
+    // MARK: Private
+
+    private func keyboardWillShow(with payload: KeyboardPayload) {
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(payload.animationDuration)
+        UIView.setAnimationCurve(payload.animationCurve)
+        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
+        UIView.commitAnimations()
+    }
+
+    private func keyboardWillHide(with payload: KeyboardPayload) {
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(payload.animationDuration)
+        UIView.setAnimationCurve(payload.animationCurve)
+        layoutConstraintBottomButton.constant = originalBottomButtonConstraint
+        UIView.commitAnimations()
     }
 }
 

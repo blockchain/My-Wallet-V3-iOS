@@ -12,7 +12,6 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     // MARK: Properties
 
-    // TODO: user ID needs to be passed in to this view controller from previous step
     var userId: String = ""
 
     @IBOutlet var textFieldMobileNumber: UITextField!
@@ -45,16 +44,11 @@ final class KYCEnterPhoneNumberController: UIViewController {
         confirmPhoneNumberViewController.userId = userId
         confirmPhoneNumberViewController.phoneNumber = textFieldMobileNumber.text ?? ""
     }
-
-    private func goToNextStep() {
-        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
-    }
 }
 
 extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     func showError(message: String) {
         AlertViewPresenter.shared.standardError(message: message, in: self)
-        goToNextStep() // TESTING
     }
 
     func showLoadingView(with text: String) {
@@ -63,9 +57,7 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
 
     func startVerificationSuccess() {
         Logger.shared.info("Show verification view!")
-        // TODO: Decision on whether or not an alert or another view should be presented is TBD,
-        // for now, just go to the next step
-        goToNextStep()
+        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
     }
 
     func hideLoadingView() {
