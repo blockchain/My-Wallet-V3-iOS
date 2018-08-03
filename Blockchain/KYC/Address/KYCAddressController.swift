@@ -8,7 +8,7 @@
 
 import UIKit
 
-class KYCAddressController: UIViewController, KYCOnboardingNavigation {
+class KYCAddressController: UIViewController {
 
     // MARK: - Private IBOutlets
 
@@ -40,7 +40,7 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
     var segueIdentifier: String? = "showPersonalDetails"
 
     // MARK: Private Properties
-    
+
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
     fileprivate var keyboard: KeyboardPayload? = nil

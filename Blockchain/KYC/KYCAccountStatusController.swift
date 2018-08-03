@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class KYCAccountStatusController: KYCOnboardingController {
+final class KYCAccountStatusController: UIViewController {
 
     // MARK: - Properties
 
@@ -61,17 +61,12 @@ final class KYCAccountStatusController: KYCOnboardingController {
     // MARK: - Private Methods
 
     private func setUpInterfaceFor(_ accountStatus: AccountStatus) {
-        // This magic 🧙‍♂️✨ is required when using the UIStoryboard.instantiate extension
-        guard self.view != nil else { return }
-        titleLabel.text = accountStatus.title
-        descriptionLabel.text = accountStatus.description
-        imageView.image = accountStatus.image
-        primaryButton.setTitle(accountStatus.primaryButtonTitle, for: .normal)
+
     }
 
     // MARK: - Actions
 
-    override func primaryButtonTapped(_ sender: Any) {
+    @IBAction func primaryButtonTapped(_ sender: Any) {
         // TODO: implement primaryButtonTapped
     }
 

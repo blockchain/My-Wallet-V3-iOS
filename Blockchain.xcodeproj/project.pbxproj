@@ -14,26 +14,6 @@
 		231A66EE1DB9434B0043F862 /* HDNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 231A66ED1DB9434B0043F862 /* HDNode.m */; };
 		231FF2CD1B56F9F1009EEB02 /* SettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231FF2CC1B56F9F1009EEB02 /* SettingsWebViewController.m */; };
 		2322321A1B44D4CB00E5DF26 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 232232191B44D4CB00E5DF26 /* UpgradeViewController.m */; };
-		2322DCB41D771831000E5AC1 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC851D771831000E5AC1 /* SRDelegateController.m */; };
-		2322DCB51D771831000E5AC1 /* SRIOConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC881D771831000E5AC1 /* SRIOConsumer.m */; };
-		2322DCB61D771831000E5AC1 /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC8A1D771831000E5AC1 /* SRIOConsumerPool.m */; };
-		2322DCB71D771831000E5AC1 /* SRProxyConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC8F1D771831000E5AC1 /* SRProxyConnect.m */; };
-		2322DCB81D771831000E5AC1 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC921D771831000E5AC1 /* SRRunLoopThread.m */; };
-		2322DCB91D771831000E5AC1 /* SRPinningSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC951D771831000E5AC1 /* SRPinningSecurityPolicy.m */; };
-		2322DCBA1D771831000E5AC1 /* SRConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC971D771831000E5AC1 /* SRConstants.m */; };
-		2322DCBB1D771831000E5AC1 /* SRError.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC9A1D771831000E5AC1 /* SRError.m */; };
-		2322DCBC1D771831000E5AC1 /* SRHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC9C1D771831000E5AC1 /* SRHash.m */; };
-		2322DCBD1D771831000E5AC1 /* SRHTTPConnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DC9E1D771831000E5AC1 /* SRHTTPConnectMessage.m */; };
-		2322DCBE1D771831000E5AC1 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA01D771831000E5AC1 /* SRLog.m */; };
-		2322DCBF1D771831000E5AC1 /* SRMutex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA21D771831000E5AC1 /* SRMutex.m */; };
-		2322DCC01D771831000E5AC1 /* SRRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA41D771831000E5AC1 /* SRRandom.m */; };
-		2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA61D771831000E5AC1 /* SRSIMDHelpers.m */; };
-		2322DCC21D771831000E5AC1 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCA81D771831000E5AC1 /* SRURLUtilities.m */; };
-		2322DCC31D771831000E5AC1 /* NSRunLoop+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCAA1D771831000E5AC1 /* NSRunLoop+SRWebSocket.m */; };
-		2322DCC41D771831000E5AC1 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCAC1D771831000E5AC1 /* NSURLRequest+SRWebSocket.m */; };
-		2322DCC51D771831000E5AC1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2322DCAE1D771831000E5AC1 /* Info.plist */; };
-		2322DCC61D771831000E5AC1 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCB11D771831000E5AC1 /* SRSecurityPolicy.m */; };
-		2322DCC71D771831000E5AC1 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2322DCB31D771831000E5AC1 /* SRWebSocket.m */; };
 		23256A591DF1CFF7002B7A04 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 23256A581DF1CFF7002B7A04 /* Invitation.m */; };
 		2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 2326C6C11BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m */; };
 		232ACBF51DAE84720072FB5E /* TransferAllFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 232ACBF41DAE84720072FB5E /* TransferAllFundsViewController.m */; };
@@ -102,10 +82,6 @@
 		3A7F7EE7210F95C7001E20AF /* LocationSuggestionInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */; };
 		3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
-		3AC9755F2110A599006A9263 /* ConfirmationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC9755E2110A599006A9263 /* ConfirmationFooterView.swift */; };
-		3AC975602110A599006A9263 /* ConfirmationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC9755E2110A599006A9263 /* ConfirmationFooterView.swift */; };
-		3AC975622110A678006A9263 /* ConfirmationFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC975612110A678006A9263 /* ConfirmationFooterView.xib */; };
-		3AC975632110A678006A9263 /* ConfirmationFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC975612110A678006A9263 /* ConfirmationFooterView.xib */; };
 		3AD7EE7321122612006B924F /* KYCAddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7221122612006B924F /* KYCAddressController.swift */; };
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
 		3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7EE9F21125156006B924F /* ValidationTextField.xib */; };
@@ -125,12 +101,6 @@
 		3AEF9E9521091D1E006B1CF9 /* LocationSuggestionPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF9E9321091D1E006B1CF9 /* LocationSuggestionPageModel.swift */; };
 		3AEF9E9921091DA5006B1CF9 /* LocationSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF9E9821091DA5006B1CF9 /* LocationSuggestionService.swift */; };
 		3AEF9E9A21091DA5006B1CF9 /* LocationSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF9E9821091DA5006B1CF9 /* LocationSuggestionService.swift */; };
-		5107172C21066CDD007EAF21 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0671D21065EE200EFEF7F /* Alamofire.framework */; };
-		5107172D21066CDD007EAF21 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0672F21065EEB00EFEF7F /* Charts.framework */; };
-		5107172E21066CDD007EAF21 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675A21065EF300EFEF7F /* RxBlocking.framework */; };
-		5107172F21066CDD007EAF21 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675221065EF300EFEF7F /* RxCocoa.framework */; };
-		5107173021066CDD007EAF21 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0674A21065EF300EFEF7F /* RxSwift.framework */; };
-		5107173121066CDD007EAF21 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0676221065EF300EFEF7F /* RxTest.framework */; };
 		510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
 		511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
 		511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
@@ -158,15 +128,12 @@
 		511BF4ED20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
 		511BF4EE20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
-		5138354E210253A800767B2E /* KYCOnboardingScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51383539210253A700767B2E /* KYCOnboardingScreen.storyboard */; };
 		5138354F210253A800767B2E /* KYCAddress.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5138353A210253A700767B2E /* KYCAddress.storyboard */; };
 		51383551210253A800767B2E /* KYCPersonalDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5138353C210253A700767B2E /* KYCPersonalDetails.storyboard */; };
 		51383552210253A800767B2E /* KYCCountrySelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5138353D210253A700767B2E /* KYCCountrySelection.storyboard */; };
 		51383554210253A800767B2E /* KYCOnboardingNavigation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5138353F210253A700767B2E /* KYCOnboardingNavigation.storyboard */; };
 		51383555210253A800767B2E /* KYCVerifyPhoneNumber.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51383540210253A700767B2E /* KYCVerifyPhoneNumber.storyboard */; };
 		51383557210253A800767B2E /* KYCPersonalDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383542210253A700767B2E /* KYCPersonalDetailsController.swift */; };
-		51383558210253A800767B2E /* KYCOnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383543210253A700767B2E /* KYCOnboardingController.swift */; };
-		51383559210253A800767B2E /* KYCVerifyAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383544210253A700767B2E /* KYCVerifyAccountController.swift */; };
 		5138355B210253A800767B2E /* KYCWelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383546210253A700767B2E /* KYCWelcomeController.swift */; };
 		5138355C210253A800767B2E /* KYCVerifyPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */; };
 		5138355D210253A800767B2E /* KYCAccountStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383548210253A700767B2E /* KYCAccountStatusController.swift */; };
@@ -186,6 +153,8 @@
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
 		514B29A1210FFA9600D757B5 /* KYCNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514B29A0210FFA9600D757B5 /* KYCNetworkRequest.swift */; };
 		514B29A2210FFA9600D757B5 /* KYCNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514B29A0210FFA9600D757B5 /* KYCNetworkRequest.swift */; };
+		5150E52B21131C29000966BE /* KYCWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5150E52A21131C29000966BE /* KYCWelcome.storyboard */; };
+		5150E54921134251000966BE /* KYCAccountStatus.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5150E54821134251000966BE /* KYCAccountStatus.storyboard */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
 		51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
@@ -194,10 +163,8 @@
 		51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
 		5159C2DC2109149500955BD6 /* KYCAccountStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383548210253A700767B2E /* KYCAccountStatusController.swift */; };
 		5159C2DF2109149500955BD6 /* KYCCountrySelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5138354C210253A700767B2E /* KYCCountrySelectionController.swift */; };
-		5159C2E02109149500955BD6 /* KYCOnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383543210253A700767B2E /* KYCOnboardingController.swift */; };
 		5159C2E12109149500955BD6 /* KYCOnboardingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383549210253A700767B2E /* KYCOnboardingNavigationController.swift */; };
 		5159C2E22109149500955BD6 /* KYCPersonalDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383542210253A700767B2E /* KYCPersonalDetailsController.swift */; };
-		5159C2E32109149500955BD6 /* KYCVerifyAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383544210253A700767B2E /* KYCVerifyAccountController.swift */; };
 		5159C2E52109149500955BD6 /* KYCVerifyPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */; };
 		5159C2E62109149500955BD6 /* KYCWelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51383546210253A700767B2E /* KYCWelcomeController.swift */; };
 		5159C3012109149A00955BD6 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5138354B210253A700767B2E /* PrimaryButton.swift */; };
@@ -234,8 +201,8 @@
 		519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51943595208E3005001EF882 /* BlockchainAPI+URL.swift */; };
 		5197913E210A25960096E50B /* KYCCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5197913D210A25960096E50B /* KYCCountry.swift */; };
 		5197913F210A25960096E50B /* KYCCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5197913D210A25960096E50B /* KYCCountry.swift */; };
-		5197914A210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979149210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift */; };
-		5197914B210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979149210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift */; };
+		5197914A210B8BEB0096E50B /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979149210B8BEB0096E50B /* CountryDataProvider.swift */; };
+		5197914B210B8BEB0096E50B /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979149210B8BEB0096E50B /* CountryDataProvider.swift */; };
 		51979168210BA7AC0096E50B /* HTTPRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979167210BA7AC0096E50B /* HTTPRequestError.swift */; };
 		51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51979167210BA7AC0096E50B /* HTTPRequestError.swift */; };
 		51979189210F68940096E50B /* countries.json in Resources */ = {isa = PBXBuildFile; fileRef = 51979188210F68940096E50B /* countries.json */; };
@@ -277,16 +244,6 @@
 		51C2ADD720BDECE700D66108 /* String+EscapeJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C2ADD520BDECE700D66108 /* String+EscapeJS.swift */; };
 		51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */; };
 		51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C9EBB520DBE4A700AB521D /* UIView+SafeAreaFrame.swift */; };
-		51D0677321065F5200EFEF7F /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0674A21065EF300EFEF7F /* RxSwift.framework */; };
-		51D0677421065F5200EFEF7F /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0674A21065EF300EFEF7F /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D0677721065F6200EFEF7F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0671D21065EE200EFEF7F /* Alamofire.framework */; };
-		51D0677821065F6200EFEF7F /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0671D21065EE200EFEF7F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D0677F21065F7100EFEF7F /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0672F21065EEB00EFEF7F /* Charts.framework */; };
-		51D0678021065F7100EFEF7F /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0672F21065EEB00EFEF7F /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D0678321065F9800EFEF7F /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675221065EF300EFEF7F /* RxCocoa.framework */; };
-		51D0678421065F9800EFEF7F /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675221065EF300EFEF7F /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D0678721065F9800EFEF7F /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675A21065EF300EFEF7F /* RxBlocking.framework */; };
-		51D0678821065F9800EFEF7F /* RxBlocking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51D0675A21065EF300EFEF7F /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
 		51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D17A9820A33A700071E7E0 /* PrivateKeyReader.swift */; };
 		51DC2F5C20B72F4900E03AF2 /* AddressValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DC2F5B20B72F4900E03AF2 /* AddressValidator.swift */; };
@@ -295,6 +252,44 @@
 		51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DC2F5F20B7312600E03AF2 /* EthereumAddress.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
+		606399DC2110FC2D005B6DF5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AA2110FC2D005B6DF5 /* SRWebSocket.m */; };
+		606399DD2110FC2D005B6DF5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AA2110FC2D005B6DF5 /* SRWebSocket.m */; };
+		606399DE2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m */; };
+		606399DF2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m */; };
+		606399E22110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */; };
+		606399E32110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */; };
+		606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B32110FC2D005B6DF5 /* SRProxyConnect.m */; };
+		606399E52110FC2D005B6DF5 /* SRProxyConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B32110FC2D005B6DF5 /* SRProxyConnect.m */; };
+		606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */; };
+		606399E72110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */; };
+		606399E82110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */; };
+		606399E92110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */; };
+		606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BD2110FC2D005B6DF5 /* SRDelegateController.m */; };
+		606399EB2110FC2D005B6DF5 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BD2110FC2D005B6DF5 /* SRDelegateController.m */; };
+		606399EC2110FC2D005B6DF5 /* SRMutex.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C32110FC2D005B6DF5 /* SRMutex.m */; };
+		606399ED2110FC2D005B6DF5 /* SRMutex.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C32110FC2D005B6DF5 /* SRMutex.m */; };
+		606399EE2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */; };
+		606399EF2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */; };
+		606399F02110FC2D005B6DF5 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C72110FC2D005B6DF5 /* SRURLUtilities.m */; };
+		606399F12110FC2D005B6DF5 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C72110FC2D005B6DF5 /* SRURLUtilities.m */; };
+		606399F22110FC2D005B6DF5 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C92110FC2D005B6DF5 /* SRLog.m */; };
+		606399F32110FC2D005B6DF5 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C92110FC2D005B6DF5 /* SRLog.m */; };
+		606399F42110FC2D005B6DF5 /* SRHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CA2110FC2D005B6DF5 /* SRHash.m */; };
+		606399F52110FC2D005B6DF5 /* SRHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CA2110FC2D005B6DF5 /* SRHash.m */; };
+		606399F62110FC2D005B6DF5 /* SRError.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CD2110FC2D005B6DF5 /* SRError.m */; };
+		606399F72110FC2D005B6DF5 /* SRError.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CD2110FC2D005B6DF5 /* SRError.m */; };
+		606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CE2110FC2D005B6DF5 /* SRRandom.m */; };
+		606399F92110FC2D005B6DF5 /* SRRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CE2110FC2D005B6DF5 /* SRRandom.m */; };
+		606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */; };
+		606399FB2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */; };
+		606399FC2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D32110FC2D005B6DF5 /* SRIOConsumer.m */; };
+		606399FD2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D32110FC2D005B6DF5 /* SRIOConsumer.m */; };
+		606399FE2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */; };
+		606399FF2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */; };
+		60639A002110FC2D005B6DF5 /* SRConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D62110FC2D005B6DF5 /* SRConstants.m */; };
+		60639A012110FC2D005B6DF5 /* SRConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D62110FC2D005B6DF5 /* SRConstants.m */; };
+		60639A022110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */; };
+		60639A032110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -329,6 +324,7 @@
 		84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */; };
 		84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02FB19815F1B00B97D5B /* crypto_scrypt-nosse.c */; };
 		84FC02FE19815F1B00B97D5B /* sha256.c in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02FC19815F1B00B97D5B /* sha256.c */; };
+		9AAC62B111D37A57078DBCDC /* Pods_BlockchainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 433851E85AEED4B9438CEF2D /* Pods_BlockchainTests.framework */; };
 		9F0CBAAA151351F400CD945D /* Wallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0CBAA9151351F400CD945D /* Wallet.m */; };
 		9F0CBAD81513CA2600CD945D /* BCFadeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0CBAD71513CA2600CD945D /* BCFadeView.m */; };
 		9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1831E11516A39500FB3D52 /* NSData+Hex.m */; };
@@ -654,6 +650,7 @@
 		C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9BE918B1945F5FC00FD516D /* Images.xcassets */; };
 		CFA0671F1E65D426008456C1 /* WebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA0671E1E65D426008456C1 /* WebLoginViewController.m */; };
 		CFD602B11E64AC2D006F6208 /* wallet-ios.js in Resources */ = {isa = PBXBuildFile; fileRef = CFD602B01E64AC2D006F6208 /* wallet-ios.js */; };
+		DFCB6DD9C1552E267297B928 /* Pods_Blockchain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30778283296D8CB32C68C7EA /* Pods_Blockchain.framework */; };
 		ECD244EB19A8AC45004B1F40 /* PEKeyboard-3-done.png in Resources */ = {isa = PBXBuildFile; fileRef = ECD244E119A8AC45004B1F40 /* PEKeyboard-3-done.png */; };
 		ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */ = {isa = PBXBuildFile; fileRef = ECD244E219A8AC45004B1F40 /* PEKeyboard-3-dot.png */; };
 		ECD244ED19A8AC45004B1F40 /* PEKeyboard-3-edit.png in Resources */ = {isa = PBXBuildFile; fileRef = ECD244E319A8AC45004B1F40 /* PEKeyboard-3-edit.png */; };
@@ -678,251 +675,6 @@
 			remoteGlobalIDString = 9FB3637014B60128004BEA02;
 			remoteInfo = Blockchain;
 		};
-		51D0671C21065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
-			remoteInfo = "Alamofire iOS";
-		};
-		51D0671E21065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
-			remoteInfo = "Alamofire iOS Tests";
-		};
-		51D0672021065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
-			remoteInfo = "Alamofire macOS";
-		};
-		51D0672221065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F829C6B21A7A94F100A2CD59;
-			remoteInfo = "Alamofire macOS Tests";
-		};
-		51D0672421065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CF626EF1BA7CB3E0011A099;
-			remoteInfo = "Alamofire tvOS";
-		};
-		51D0672621065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CF626F81BA7CB3E0011A099;
-			remoteInfo = "Alamofire tvOS Tests";
-		};
-		51D0672821065EE200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E4202FE01B667AA100C997FB;
-			remoteInfo = "Alamofire watchOS";
-		};
-		51D0672E21065EEB00EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
-			remoteInfo = Charts;
-		};
-		51D0673021065EEB00EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
-			remoteInfo = ChartsTests;
-		};
-		51D0674921065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8A56AD71AD7424700B4673B;
-			remoteInfo = "RxSwift-iOS";
-		};
-		51D0674B21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88BB8711B07E5ED0064D411;
-			remoteInfo = "RxSwift-macOS";
-		};
-		51D0674D21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2EA280C1BB9B5A200880ED3;
-			remoteInfo = "RxSwift-tvOS";
-		};
-		51D0674F21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8F0C0021BBBFB8B001B112F;
-			remoteInfo = "RxSwift-watchOS";
-		};
-		51D0675121065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C809396D1B8A71760088E94D;
-			remoteInfo = "RxCocoa-iOS";
-		};
-		51D0675321065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C80939E71B8A71840088E94D;
-			remoteInfo = "RxCocoa-macOS";
-		};
-		51D0675521065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2138C751BB9BE9800339B5C;
-			remoteInfo = "RxCocoa-tvOS";
-		};
-		51D0675721065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8F0C04B1BBBFBB9001B112F;
-			remoteInfo = "RxCocoa-watchOS";
-		};
-		51D0675921065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8093BC71B8A71F00088E94D;
-			remoteInfo = "RxBlocking-iOS";
-		};
-		51D0675B21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8093C451B8A71FC0088E94D;
-			remoteInfo = "RxBlocking-macOS";
-		};
-		51D0675D21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2EBEB811BB9B99D003A27DC;
-			remoteInfo = "RxBlocking-tvOS";
-		};
-		51D0675F21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8F0C0581BBBFBCE001B112F;
-			remoteInfo = "RxBlocking-watchOS";
-		};
-		51D0676121065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88FA50C1C25C44800CCFEA4;
-			remoteInfo = "RxTest-iOS";
-		};
-		51D0676321065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88FA51D1C25C4B500CCFEA4;
-			remoteInfo = "RxTest-macOS";
-		};
-		51D0676521065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88FA52E1C25C4C000CCFEA4;
-			remoteInfo = "RxTest-tvOS";
-		};
-		51D0676721065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C88FA53F1C25C4CC00CCFEA4;
-			remoteInfo = "RxTest-watchOS";
-		};
-		51D0676921065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83508C31C386F6F0027C24C;
-			remoteInfo = "AllTests-iOS";
-		};
-		51D0676B21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83509841C38740E0027C24C;
-			remoteInfo = "AllTests-tvOS";
-		};
-		51D0676D21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C83509941C38742C0027C24C;
-			remoteInfo = "AllTests-macOS";
-		};
-		51D0676F21065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C85BA04B1C3878740075D68E;
-			remoteInfo = Microoptimizations;
-		};
-		51D0677121065EF300EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C8E8BA551E2C181A00A4AC2C;
-			remoteInfo = Benchmarks;
-		};
-		51D0677521065F5200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C8A56AD61AD7424700B4673B;
-			remoteInfo = "RxSwift-iOS";
-		};
-		51D0677921065F6200EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
-			remoteInfo = "Alamofire iOS";
-		};
-		51D0678121065F7100EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A58A4ED274A941CA248EA921;
-			remoteInfo = Charts;
-		};
-		51D0678521065F9800EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C80938F51B8A71760088E94D;
-			remoteInfo = "RxCocoa-iOS";
-		};
-		51D0678921065F9800EFEF7F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C8093B4B1B8A71F00088E94D;
-			remoteInfo = "RxBlocking-iOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -932,11 +684,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				51D0678421065F9800EFEF7F /* RxCocoa.framework in Embed Frameworks */,
-				51D0678821065F9800EFEF7F /* RxBlocking.framework in Embed Frameworks */,
-				51D0678021065F7100EFEF7F /* Charts.framework in Embed Frameworks */,
-				51D0677421065F5200EFEF7F /* RxSwift.framework in Embed Frameworks */,
-				51D0677821065F6200EFEF7F /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -958,48 +705,6 @@
 		231FF2CC1B56F9F1009EEB02 /* SettingsWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWebViewController.m; sourceTree = "<group>"; };
 		232232181B44D4CB00E5DF26 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeViewController.h; sourceTree = "<group>"; };
 		232232191B44D4CB00E5DF26 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
-		2322DC841D771831000E5AC1 /* SRDelegateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRDelegateController.h; sourceTree = "<group>"; };
-		2322DC851D771831000E5AC1 /* SRDelegateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRDelegateController.m; sourceTree = "<group>"; };
-		2322DC871D771831000E5AC1 /* SRIOConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRIOConsumer.h; sourceTree = "<group>"; };
-		2322DC881D771831000E5AC1 /* SRIOConsumer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRIOConsumer.m; sourceTree = "<group>"; };
-		2322DC891D771831000E5AC1 /* SRIOConsumerPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRIOConsumerPool.h; sourceTree = "<group>"; };
-		2322DC8A1D771831000E5AC1 /* SRIOConsumerPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRIOConsumerPool.m; sourceTree = "<group>"; };
-		2322DC8B1D771831000E5AC1 /* NSRunLoop+SRWebSocketPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSRunLoop+SRWebSocketPrivate.h"; sourceTree = "<group>"; };
-		2322DC8C1D771831000E5AC1 /* NSURLRequest+SRWebSocketPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+SRWebSocketPrivate.h"; sourceTree = "<group>"; };
-		2322DC8E1D771831000E5AC1 /* SRProxyConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRProxyConnect.h; sourceTree = "<group>"; };
-		2322DC8F1D771831000E5AC1 /* SRProxyConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRProxyConnect.m; sourceTree = "<group>"; };
-		2322DC911D771831000E5AC1 /* SRRunLoopThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRunLoopThread.h; sourceTree = "<group>"; };
-		2322DC921D771831000E5AC1 /* SRRunLoopThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRunLoopThread.m; sourceTree = "<group>"; };
-		2322DC941D771831000E5AC1 /* SRPinningSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPinningSecurityPolicy.h; sourceTree = "<group>"; };
-		2322DC951D771831000E5AC1 /* SRPinningSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRPinningSecurityPolicy.m; sourceTree = "<group>"; };
-		2322DC961D771831000E5AC1 /* SRConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRConstants.h; sourceTree = "<group>"; };
-		2322DC971D771831000E5AC1 /* SRConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRConstants.m; sourceTree = "<group>"; };
-		2322DC991D771831000E5AC1 /* SRError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRError.h; sourceTree = "<group>"; };
-		2322DC9A1D771831000E5AC1 /* SRError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRError.m; sourceTree = "<group>"; };
-		2322DC9B1D771831000E5AC1 /* SRHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHash.h; sourceTree = "<group>"; };
-		2322DC9C1D771831000E5AC1 /* SRHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHash.m; sourceTree = "<group>"; };
-		2322DC9D1D771831000E5AC1 /* SRHTTPConnectMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHTTPConnectMessage.h; sourceTree = "<group>"; };
-		2322DC9E1D771831000E5AC1 /* SRHTTPConnectMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHTTPConnectMessage.m; sourceTree = "<group>"; };
-		2322DC9F1D771831000E5AC1 /* SRLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRLog.h; sourceTree = "<group>"; };
-		2322DCA01D771831000E5AC1 /* SRLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRLog.m; sourceTree = "<group>"; };
-		2322DCA11D771831000E5AC1 /* SRMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRMutex.h; sourceTree = "<group>"; };
-		2322DCA21D771831000E5AC1 /* SRMutex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRMutex.m; sourceTree = "<group>"; };
-		2322DCA31D771831000E5AC1 /* SRRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRandom.h; sourceTree = "<group>"; };
-		2322DCA41D771831000E5AC1 /* SRRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRandom.m; sourceTree = "<group>"; };
-		2322DCA51D771831000E5AC1 /* SRSIMDHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSIMDHelpers.h; sourceTree = "<group>"; };
-		2322DCA61D771831000E5AC1 /* SRSIMDHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSIMDHelpers.m; sourceTree = "<group>"; };
-		2322DCA71D771831000E5AC1 /* SRURLUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRURLUtilities.h; sourceTree = "<group>"; };
-		2322DCA81D771831000E5AC1 /* SRURLUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRURLUtilities.m; sourceTree = "<group>"; };
-		2322DCA91D771831000E5AC1 /* NSRunLoop+SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSRunLoop+SRWebSocket.h"; sourceTree = "<group>"; };
-		2322DCAA1D771831000E5AC1 /* NSRunLoop+SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSRunLoop+SRWebSocket.m"; sourceTree = "<group>"; };
-		2322DCAB1D771831000E5AC1 /* NSURLRequest+SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+SRWebSocket.h"; sourceTree = "<group>"; };
-		2322DCAC1D771831000E5AC1 /* NSURLRequest+SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+SRWebSocket.m"; sourceTree = "<group>"; };
-		2322DCAE1D771831000E5AC1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2322DCAF1D771831000E5AC1 /* SocketRocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketRocket.h; sourceTree = "<group>"; };
-		2322DCB01D771831000E5AC1 /* SRSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSecurityPolicy.h; sourceTree = "<group>"; };
-		2322DCB11D771831000E5AC1 /* SRSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSecurityPolicy.m; sourceTree = "<group>"; };
-		2322DCB21D771831000E5AC1 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		2322DCB31D771831000E5AC1 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		23256A571DF1CFF7002B7A04 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		23256A581DF1CFF7002B7A04 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		2326C6C01BBD7A8100AB7C4D /* UIViewController+AutoDismiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutoDismiss.h"; sourceTree = "<group>"; };
@@ -1250,6 +955,7 @@
 		23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailTableCell.m; sourceTree = "<group>"; };
 		23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+SendSynchronousRequest.h"; sourceTree = "<group>"; };
 		23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+SendSynchronousRequest.m"; sourceTree = "<group>"; };
+		30778283296D8CB32C68C7EA /* Pods_Blockchain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Blockchain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A258C0C210A486F00C023F5 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		3A258C0F210A495700C023F5 /* LocationSuggestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionCell.swift; sourceTree = "<group>"; };
 		3A258C13210A4EAC00C023F5 /* LocationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataProvider.swift; sourceTree = "<group>"; };
@@ -1258,8 +964,6 @@
 		3A7F7EE2210F6C77001E20AF /* Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visibility.swift; sourceTree = "<group>"; };
 		3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionInterface.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
-		3AC9755E2110A599006A9263 /* ConfirmationFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationFooterView.swift; sourceTree = "<group>"; };
-		3AC975612110A678006A9263 /* ConfirmationFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmationFooterView.xib; sourceTree = "<group>"; };
 		3AD7EE7221122612006B924F /* KYCAddressController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCAddressController.swift; sourceTree = "<group>"; };
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
 		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
@@ -1273,6 +977,7 @@
 		3AEF9E9021091C37006B1CF9 /* LocationSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestion.swift; sourceTree = "<group>"; };
 		3AEF9E9321091D1E006B1CF9 /* LocationSuggestionPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionPageModel.swift; sourceTree = "<group>"; };
 		3AEF9E9821091DA5006B1CF9 /* LocationSuggestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionService.swift; sourceTree = "<group>"; };
+		433851E85AEED4B9438CEF2D /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePayload.swift; sourceTree = "<group>"; };
 		511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+Payload.swift"; sourceTree = "<group>"; };
 		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
@@ -1286,15 +991,12 @@
 		511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewPrompt.swift; sourceTree = "<group>"; };
 		513467FE2056BC6600DE6A1E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Frameworks/Fabric.framework; sourceTree = "<group>"; };
 		513467FF2056BC6700DE6A1E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
-		51383539210253A700767B2E /* KYCOnboardingScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingScreen.storyboard; sourceTree = "<group>"; };
 		5138353A210253A700767B2E /* KYCAddress.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCAddress.storyboard; sourceTree = "<group>"; };
 		5138353C210253A700767B2E /* KYCPersonalDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCPersonalDetails.storyboard; sourceTree = "<group>"; };
 		5138353D210253A700767B2E /* KYCCountrySelection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCCountrySelection.storyboard; sourceTree = "<group>"; };
 		5138353F210253A700767B2E /* KYCOnboardingNavigation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingNavigation.storyboard; sourceTree = "<group>"; };
 		51383540210253A700767B2E /* KYCVerifyPhoneNumber.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyPhoneNumber.storyboard; sourceTree = "<group>"; };
 		51383542210253A700767B2E /* KYCPersonalDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCPersonalDetailsController.swift; sourceTree = "<group>"; };
-		51383543210253A700767B2E /* KYCOnboardingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCOnboardingController.swift; sourceTree = "<group>"; };
-		51383544210253A700767B2E /* KYCVerifyAccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCVerifyAccountController.swift; sourceTree = "<group>"; };
 		51383546210253A700767B2E /* KYCWelcomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCWelcomeController.swift; sourceTree = "<group>"; };
 		51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCVerifyPhoneNumberController.swift; sourceTree = "<group>"; };
 		51383548210253A700767B2E /* KYCAccountStatusController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCAccountStatusController.swift; sourceTree = "<group>"; };
@@ -1311,6 +1013,8 @@
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Biometrics.swift"; sourceTree = "<group>"; };
 		514B29A0210FFA9600D757B5 /* KYCNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCNetworkRequest.swift; sourceTree = "<group>"; };
+		5150E52A21131C29000966BE /* KYCWelcome.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KYCWelcome.storyboard; sourceTree = "<group>"; };
+		5150E54821134251000966BE /* KYCAccountStatus.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KYCAccountStatus.storyboard; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyImportDelegate.swift; sourceTree = "<group>"; };
 		51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyImportCoordinator.swift; sourceTree = "<group>"; };
@@ -1781,7 +1485,6 @@
 		515EFB112102830E002350B6 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/MainWindow.strings; sourceTree = "<group>"; };
 		515EFB122102830F002350B6 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/MainWindow.strings; sourceTree = "<group>"; };
 		515EFB1321028311002350B6 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/MainWindow.strings; sourceTree = "<group>"; };
-		5164E4C920584D0700FC706A /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = ../Submodules/Charts/Charts.xcodeproj; sourceTree = "<group>"; };
 		516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkManager+UserAgent.swift"; sourceTree = "<group>"; };
 		516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Enum+Enumeratable.swift"; sourceTree = "<group>"; };
 		516594A5204F1A7400C50E78 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
@@ -1797,7 +1500,7 @@
 		519435A2208E61F3001EF882 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		519435AB208E6279001EF882 /* CertificatePinnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinnerTests.swift; sourceTree = "<group>"; };
 		5197913D210A25960096E50B /* KYCCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCCountry.swift; sourceTree = "<group>"; };
-		51979149210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCCountrySelectionDataSource.swift; sourceTree = "<group>"; };
+		51979149210B8BEB0096E50B /* CountryDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDataProvider.swift; sourceTree = "<group>"; };
 		51979167210BA7AC0096E50B /* HTTPRequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequestError.swift; sourceTree = "<group>"; };
 		51979188210F68940096E50B /* countries.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = countries.json; path = "BlockchainTests/Mock Data/countries.json"; sourceTree = SOURCE_ROOT; };
 		51A665C62080EBD80040EE7C /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
@@ -1923,6 +1626,48 @@
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		606399AA2110FC2D005B6DF5 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		606399AB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSRunLoop+SRWebSocket.m"; sourceTree = "<group>"; };
+		606399AD2110FC2D005B6DF5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSecurityPolicy.m; sourceTree = "<group>"; };
+		606399AF2110FC2D005B6DF5 /* SocketRocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketRocket.h; sourceTree = "<group>"; };
+		606399B12110FC2D005B6DF5 /* SRConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRConstants.h; sourceTree = "<group>"; };
+		606399B32110FC2D005B6DF5 /* SRProxyConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRProxyConnect.m; sourceTree = "<group>"; };
+		606399B42110FC2D005B6DF5 /* SRProxyConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRProxyConnect.h; sourceTree = "<group>"; };
+		606399B62110FC2D005B6DF5 /* SRRunLoopThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRunLoopThread.h; sourceTree = "<group>"; };
+		606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRunLoopThread.m; sourceTree = "<group>"; };
+		606399B92110FC2D005B6DF5 /* SRPinningSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPinningSecurityPolicy.h; sourceTree = "<group>"; };
+		606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRPinningSecurityPolicy.m; sourceTree = "<group>"; };
+		606399BB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocketPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSRunLoop+SRWebSocketPrivate.h"; sourceTree = "<group>"; };
+		606399BD2110FC2D005B6DF5 /* SRDelegateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRDelegateController.m; sourceTree = "<group>"; };
+		606399BE2110FC2D005B6DF5 /* SRDelegateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRDelegateController.h; sourceTree = "<group>"; };
+		606399BF2110FC2D005B6DF5 /* NSURLRequest+SRWebSocketPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+SRWebSocketPrivate.h"; sourceTree = "<group>"; };
+		606399C12110FC2D005B6DF5 /* SRHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHash.h; sourceTree = "<group>"; };
+		606399C22110FC2D005B6DF5 /* SRLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRLog.h; sourceTree = "<group>"; };
+		606399C32110FC2D005B6DF5 /* SRMutex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRMutex.m; sourceTree = "<group>"; };
+		606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHTTPConnectMessage.m; sourceTree = "<group>"; };
+		606399C52110FC2D005B6DF5 /* SRSIMDHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSIMDHelpers.h; sourceTree = "<group>"; };
+		606399C62110FC2D005B6DF5 /* SRRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRandom.h; sourceTree = "<group>"; };
+		606399C72110FC2D005B6DF5 /* SRURLUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRURLUtilities.m; sourceTree = "<group>"; };
+		606399C82110FC2D005B6DF5 /* SRError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRError.h; sourceTree = "<group>"; };
+		606399C92110FC2D005B6DF5 /* SRLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRLog.m; sourceTree = "<group>"; };
+		606399CA2110FC2D005B6DF5 /* SRHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHash.m; sourceTree = "<group>"; };
+		606399CB2110FC2D005B6DF5 /* SRMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRMutex.h; sourceTree = "<group>"; };
+		606399CC2110FC2D005B6DF5 /* SRHTTPConnectMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHTTPConnectMessage.h; sourceTree = "<group>"; };
+		606399CD2110FC2D005B6DF5 /* SRError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRError.m; sourceTree = "<group>"; };
+		606399CE2110FC2D005B6DF5 /* SRRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRandom.m; sourceTree = "<group>"; };
+		606399CF2110FC2D005B6DF5 /* SRURLUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRURLUtilities.h; sourceTree = "<group>"; };
+		606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSIMDHelpers.m; sourceTree = "<group>"; };
+		606399D22110FC2D005B6DF5 /* SRIOConsumerPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRIOConsumerPool.h; sourceTree = "<group>"; };
+		606399D32110FC2D005B6DF5 /* SRIOConsumer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRIOConsumer.m; sourceTree = "<group>"; };
+		606399D42110FC2D005B6DF5 /* SRIOConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRIOConsumer.h; sourceTree = "<group>"; };
+		606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRIOConsumerPool.m; sourceTree = "<group>"; };
+		606399D62110FC2D005B6DF5 /* SRConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRConstants.m; sourceTree = "<group>"; };
+		606399D72110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+SRWebSocket.h"; sourceTree = "<group>"; };
+		606399D82110FC2D005B6DF5 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		606399D92110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSRunLoop+SRWebSocket.h"; sourceTree = "<group>"; };
+		606399DA2110FC2D005B6DF5 /* SRSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSecurityPolicy.h; sourceTree = "<group>"; };
+		606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+SRWebSocket.m"; sourceTree = "<group>"; };
 		670595A21AB0F59D00D2D6D9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		6710DA0C1A8E82D80089DDED /* BCLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCLine.h; sourceTree = "<group>"; };
@@ -1975,6 +1720,7 @@
 		67FA1A4C1ABA092D000C9196 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
 		6E2D90A01BBEC34800B719EC /* BCRecoveryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCRecoveryView.h; sourceTree = "<group>"; };
 		6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCRecoveryView.m; sourceTree = "<group>"; };
+		764C0CFB5DA6F3820EB53870 /* Pods-Blockchain.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"; sourceTree = "<group>"; };
 		84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Blocks.h"; sourceTree = "<group>"; };
 		84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Blocks.m"; sourceTree = "<group>"; };
 		84B601C8197AD03800DA1829 /* BCModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCModalView.h; sourceTree = "<group>"; };
@@ -2144,8 +1890,6 @@
 		AAE9113C20A640A40093A431 /* PinPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPayload.swift; sourceTree = "<group>"; };
 		AAE94DC920C25124005A3595 /* WalletServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletServiceTests.swift; sourceTree = "<group>"; };
 		AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManager.swift; sourceTree = "<group>"; };
-		AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = ../Submodules/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
-		AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../Submodules/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		AAE94F2D20C644DE005A3595 /* PinPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenter.swift; sourceTree = "<group>"; };
 		AAE94F3020C64B49005A3595 /* PinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinInteractor.swift; sourceTree = "<group>"; };
 		AAE94F3420C70B96005A3595 /* AssetURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetURLPayload.swift; sourceTree = "<group>"; };
@@ -2155,6 +1899,7 @@
 		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
 		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
 		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
+		C37D276B4C565CFBA09B2EAE /* Pods-BlockchainTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug production.xcconfig"; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -2334,6 +2079,9 @@
 		CFA0671E1E65D426008456C1 /* WebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebLoginViewController.m; sourceTree = "<group>"; };
 		CFA067201E65D49C008456C1 /* WebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebLoginViewController.h; sourceTree = "<group>"; };
 		CFD602B01E64AC2D006F6208 /* wallet-ios.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "wallet-ios.js"; sourceTree = "<group>"; };
+		D1D2BE27E2EEFE7411546AEA /* Pods-BlockchainTests.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug testnet.xcconfig"; sourceTree = "<group>"; };
+		D71317CC5A32294E90362E83 /* Pods-Blockchain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"; sourceTree = "<group>"; };
+		DAC96BD384C528742EEC4E5D /* Pods-BlockchainTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		ECD244E119A8AC45004B1F40 /* PEKeyboard-3-done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-done.png"; sourceTree = "<group>"; };
 		ECD244E219A8AC45004B1F40 /* PEKeyboard-3-dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-dot.png"; sourceTree = "<group>"; };
 		ECD244E319A8AC45004B1F40 /* PEKeyboard-3-edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-edit.png"; sourceTree = "<group>"; };
@@ -2346,8 +2094,10 @@
 		ECD244EA19A8AC45004B1F40 /* PEKeyboard-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-4.png"; sourceTree = "<group>"; };
 		ECD244F519A8B444004B1F40 /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
 		ECD244F619A8B444004B1F40 /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utils.m"; sourceTree = "<group>"; };
+		F5F37BF8DBC9B473E218365C /* Pods-BlockchainTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA6323371A433B1C00EB3974 /* Foundation-Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Foundation-Utility.h"; sourceTree = "<group>"; };
 		FA6323381A433B1C00EB3974 /* Foundation-Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation-Utility.m"; sourceTree = "<group>"; };
+		FC2FC1205076F21A19EDE8FC /* Pods-BlockchainTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		FCB33B6D1FC369D700317E6B /* ExchangeDetailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeDetailView.h; sourceTree = "<group>"; };
 		FCB33B6E1FC369D700317E6B /* ExchangeDetailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeDetailView.m; sourceTree = "<group>"; };
 		FCB33B701FC36EA200317E6B /* ExchangeProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeProgressViewController.h; sourceTree = "<group>"; };
@@ -2359,12 +2109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5107172C21066CDD007EAF21 /* Alamofire.framework in Frameworks */,
-				5107172D21066CDD007EAF21 /* Charts.framework in Frameworks */,
-				5107172E21066CDD007EAF21 /* RxBlocking.framework in Frameworks */,
-				5107172F21066CDD007EAF21 /* RxCocoa.framework in Frameworks */,
-				5107173021066CDD007EAF21 /* RxSwift.framework in Frameworks */,
-				5107173121066CDD007EAF21 /* RxTest.framework in Frameworks */,
+				9AAC62B111D37A57078DBCDC /* Pods_BlockchainTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2373,135 +2118,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */,
-				51D0677321065F5200EFEF7F /* RxSwift.framework in Frameworks */,
-				51D0677721065F6200EFEF7F /* Alamofire.framework in Frameworks */,
 				5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */,
-				51D0677F21065F7100EFEF7F /* Charts.framework in Frameworks */,
-				51D0678321065F9800EFEF7F /* RxCocoa.framework in Frameworks */,
 				513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */,
 				515315F32056C1A0000161DF /* libcrypto.a in Frameworks */,
 				515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */,
-				51D0678721065F9800EFEF7F /* RxBlocking.framework in Frameworks */,
+				DFCB6DD9C1552E267297B928 /* Pods_Blockchain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2322DC811D771831000E5AC1 /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				2322DCA91D771831000E5AC1 /* NSRunLoop+SRWebSocket.h */,
-				2322DCAB1D771831000E5AC1 /* NSURLRequest+SRWebSocket.h */,
-				2322DCAF1D771831000E5AC1 /* SocketRocket.h */,
-				2322DCB01D771831000E5AC1 /* SRSecurityPolicy.h */,
-				2322DCB21D771831000E5AC1 /* SRWebSocket.h */,
-				2322DCAA1D771831000E5AC1 /* NSRunLoop+SRWebSocket.m */,
-				2322DCAC1D771831000E5AC1 /* NSURLRequest+SRWebSocket.m */,
-				2322DCB11D771831000E5AC1 /* SRSecurityPolicy.m */,
-				2322DCB31D771831000E5AC1 /* SRWebSocket.m */,
-				2322DC821D771831000E5AC1 /* Internal */,
-				2322DCAD1D771831000E5AC1 /* Resources */,
-			);
-			name = SocketRocket;
-			path = ../Submodules/SocketRocket/SocketRocket;
-			sourceTree = "<group>";
-		};
-		2322DC821D771831000E5AC1 /* Internal */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC8B1D771831000E5AC1 /* NSRunLoop+SRWebSocketPrivate.h */,
-				2322DC8C1D771831000E5AC1 /* NSURLRequest+SRWebSocketPrivate.h */,
-				2322DC961D771831000E5AC1 /* SRConstants.h */,
-				2322DC971D771831000E5AC1 /* SRConstants.m */,
-				2322DC831D771831000E5AC1 /* Delegate */,
-				2322DC861D771831000E5AC1 /* IOConsumer */,
-				2322DC8D1D771831000E5AC1 /* Proxy */,
-				2322DC901D771831000E5AC1 /* RunLoop */,
-				2322DC931D771831000E5AC1 /* Security */,
-				2322DC981D771831000E5AC1 /* Utilities */,
-			);
-			path = Internal;
-			sourceTree = "<group>";
-		};
-		2322DC831D771831000E5AC1 /* Delegate */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC841D771831000E5AC1 /* SRDelegateController.h */,
-				2322DC851D771831000E5AC1 /* SRDelegateController.m */,
-			);
-			path = Delegate;
-			sourceTree = "<group>";
-		};
-		2322DC861D771831000E5AC1 /* IOConsumer */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC871D771831000E5AC1 /* SRIOConsumer.h */,
-				2322DC881D771831000E5AC1 /* SRIOConsumer.m */,
-				2322DC891D771831000E5AC1 /* SRIOConsumerPool.h */,
-				2322DC8A1D771831000E5AC1 /* SRIOConsumerPool.m */,
-			);
-			path = IOConsumer;
-			sourceTree = "<group>";
-		};
-		2322DC8D1D771831000E5AC1 /* Proxy */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC8E1D771831000E5AC1 /* SRProxyConnect.h */,
-				2322DC8F1D771831000E5AC1 /* SRProxyConnect.m */,
-			);
-			path = Proxy;
-			sourceTree = "<group>";
-		};
-		2322DC901D771831000E5AC1 /* RunLoop */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC911D771831000E5AC1 /* SRRunLoopThread.h */,
-				2322DC921D771831000E5AC1 /* SRRunLoopThread.m */,
-			);
-			path = RunLoop;
-			sourceTree = "<group>";
-		};
-		2322DC931D771831000E5AC1 /* Security */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC941D771831000E5AC1 /* SRPinningSecurityPolicy.h */,
-				2322DC951D771831000E5AC1 /* SRPinningSecurityPolicy.m */,
-			);
-			path = Security;
-			sourceTree = "<group>";
-		};
-		2322DC981D771831000E5AC1 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				2322DC991D771831000E5AC1 /* SRError.h */,
-				2322DC9A1D771831000E5AC1 /* SRError.m */,
-				2322DC9B1D771831000E5AC1 /* SRHash.h */,
-				2322DC9C1D771831000E5AC1 /* SRHash.m */,
-				2322DC9D1D771831000E5AC1 /* SRHTTPConnectMessage.h */,
-				2322DC9E1D771831000E5AC1 /* SRHTTPConnectMessage.m */,
-				2322DC9F1D771831000E5AC1 /* SRLog.h */,
-				2322DCA01D771831000E5AC1 /* SRLog.m */,
-				2322DCA11D771831000E5AC1 /* SRMutex.h */,
-				2322DCA21D771831000E5AC1 /* SRMutex.m */,
-				2322DCA31D771831000E5AC1 /* SRRandom.h */,
-				2322DCA41D771831000E5AC1 /* SRRandom.m */,
-				2322DCA51D771831000E5AC1 /* SRSIMDHelpers.h */,
-				2322DCA61D771831000E5AC1 /* SRSIMDHelpers.m */,
-				2322DCA71D771831000E5AC1 /* SRURLUtilities.h */,
-				2322DCA81D771831000E5AC1 /* SRURLUtilities.m */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		2322DCAD1D771831000E5AC1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				2322DCAE1D771831000E5AC1 /* Info.plist */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		23444F7B1DCD210B00573C8C /* CoreBitcoin */ = {
 			isa = PBXGroup;
 			children = (
@@ -2538,7 +2165,6 @@
 			isa = PBXGroup;
 			children = (
 				3AC9755C2110A574006A9263 /* Cells */,
-				3AC9755D2110A581006A9263 /* Footers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2590,15 +2216,6 @@
 				3A3047E3210B664800C09E6D /* LocationSuggestionCell.xib */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		3AC9755D2110A581006A9263 /* Footers */ = {
-			isa = PBXGroup;
-			children = (
-				3AC9755E2110A599006A9263 /* ConfirmationFooterView.swift */,
-				3AC975612110A678006A9263 /* ConfirmationFooterView.xib */,
-			);
-			path = Footers;
 			sourceTree = "<group>";
 		};
 		3AD7EE7421124D56006B924F /* ValidationTextField */ = {
@@ -2744,22 +2361,19 @@
 		51383536210253A700767B2E /* KYC */ = {
 			isa = PBXGroup;
 			children = (
-				3A7F7EEB210F982B001E20AF /* Address */,
-				3AEF9E7021091B50006B1CF9 /* Search */,
 				51383548210253A700767B2E /* KYCAccountStatusController.swift */,
 				AA7E7750210BC0C0009DFB4C /* KYCCoordinator.swift */,
-				5138354C210253A700767B2E /* KYCCountrySelectionController.swift */,
-				51979149210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift */,
 				514B29A0210FFA9600D757B5 /* KYCNetworkRequest.swift */,
-				51383543210253A700767B2E /* KYCOnboardingController.swift */,
 				51383549210253A700767B2E /* KYCOnboardingNavigationController.swift */,
 				51383542210253A700767B2E /* KYCPersonalDetailsController.swift */,
-				51383544210253A700767B2E /* KYCVerifyAccountController.swift */,
 				51383547210253A700767B2E /* KYCVerifyPhoneNumberController.swift */,
 				AA74835521112825008F2768 /* KYCVerifyPhoneNumberInteractor.swift */,
 				AA7E7770210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift */,
 				51383546210253A700767B2E /* KYCWelcomeController.swift */,
+				3A7F7EEB210F982B001E20AF /* Address */,
+				5150E54A2113448D000966BE /* CountrySelector */,
 				51979122210A25470096E50B /* Models */,
+				3AEF9E7021091B50006B1CF9 /* Search */,
 				51383538210253A700767B2E /* Storyboards */,
 				5138354A210253A700767B2E /* Views */,
 			);
@@ -2769,12 +2383,13 @@
 		51383538210253A700767B2E /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				5150E54821134251000966BE /* KYCAccountStatus.storyboard */,
 				5138353A210253A700767B2E /* KYCAddress.storyboard */,
 				5138353D210253A700767B2E /* KYCCountrySelection.storyboard */,
 				5138353F210253A700767B2E /* KYCOnboardingNavigation.storyboard */,
-				51383539210253A700767B2E /* KYCOnboardingScreen.storyboard */,
 				5138353C210253A700767B2E /* KYCPersonalDetails.storyboard */,
 				51383540210253A700767B2E /* KYCVerifyPhoneNumber.storyboard */,
+				5150E52A21131C29000966BE /* KYCWelcome.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2794,6 +2409,15 @@
 				5138373921025AD100767B2E /* alert-received.wav */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		5150E54A2113448D000966BE /* CountrySelector */ = {
+			isa = PBXGroup;
+			children = (
+				51979149210B8BEB0096E50B /* CountryDataProvider.swift */,
+				5138354C210253A700767B2E /* KYCCountrySelectionController.swift */,
+			);
+			path = CountrySelector;
 			sourceTree = "<group>";
 		};
 		5159C3052109153600955BD6 /* KYC */ = {
@@ -2938,55 +2562,118 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		51D0671221065EE200EFEF7F /* Products */ = {
+		606399A92110FC2D005B6DF5 /* SocketRocket */ = {
 			isa = PBXGroup;
 			children = (
-				51D0671D21065EE200EFEF7F /* Alamofire.framework */,
-				51D0671F21065EE200EFEF7F /* Alamofire iOS Tests.xctest */,
-				51D0672121065EE200EFEF7F /* Alamofire.framework */,
-				51D0672321065EE200EFEF7F /* Alamofire macOS Tests.xctest */,
-				51D0672521065EE200EFEF7F /* Alamofire.framework */,
-				51D0672721065EE200EFEF7F /* Alamofire tvOS Tests.xctest */,
-				51D0672921065EE200EFEF7F /* Alamofire.framework */,
+				606399AA2110FC2D005B6DF5 /* SRWebSocket.m */,
+				606399AB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m */,
+				606399AC2110FC2D005B6DF5 /* Resources */,
+				606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */,
+				606399AF2110FC2D005B6DF5 /* SocketRocket.h */,
+				606399B02110FC2D005B6DF5 /* Internal */,
+				606399D72110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.h */,
+				606399D82110FC2D005B6DF5 /* SRWebSocket.h */,
+				606399D92110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.h */,
+				606399DA2110FC2D005B6DF5 /* SRSecurityPolicy.h */,
+				606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */,
 			);
-			name = Products;
+			name = SocketRocket;
+			path = Submodules/SocketRocket/SocketRocket;
+			sourceTree = SOURCE_ROOT;
+		};
+		606399AC2110FC2D005B6DF5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				606399AD2110FC2D005B6DF5 /* Info.plist */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
-		51D0672A21065EEA00EFEF7F /* Products */ = {
+		606399B02110FC2D005B6DF5 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				51D0672F21065EEB00EFEF7F /* Charts.framework */,
-				51D0673121065EEB00EFEF7F /* ChartsTests.xctest */,
+				606399B12110FC2D005B6DF5 /* SRConstants.h */,
+				606399B22110FC2D005B6DF5 /* Proxy */,
+				606399B52110FC2D005B6DF5 /* RunLoop */,
+				606399B82110FC2D005B6DF5 /* Security */,
+				606399BB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocketPrivate.h */,
+				606399BC2110FC2D005B6DF5 /* Delegate */,
+				606399BF2110FC2D005B6DF5 /* NSURLRequest+SRWebSocketPrivate.h */,
+				606399C02110FC2D005B6DF5 /* Utilities */,
+				606399D12110FC2D005B6DF5 /* IOConsumer */,
+				606399D62110FC2D005B6DF5 /* SRConstants.m */,
 			);
-			name = Products;
+			path = Internal;
 			sourceTree = "<group>";
 		};
-		51D0673221065EF300EFEF7F /* Products */ = {
+		606399B22110FC2D005B6DF5 /* Proxy */ = {
 			isa = PBXGroup;
 			children = (
-				51D0674A21065EF300EFEF7F /* RxSwift.framework */,
-				51D0674C21065EF300EFEF7F /* RxSwift.framework */,
-				51D0674E21065EF300EFEF7F /* RxSwift.framework */,
-				51D0675021065EF300EFEF7F /* RxSwift.framework */,
-				51D0675221065EF300EFEF7F /* RxCocoa.framework */,
-				51D0675421065EF300EFEF7F /* RxCocoa.framework */,
-				51D0675621065EF300EFEF7F /* RxCocoa.framework */,
-				51D0675821065EF300EFEF7F /* RxCocoa.framework */,
-				51D0675A21065EF300EFEF7F /* RxBlocking.framework */,
-				51D0675C21065EF300EFEF7F /* RxBlocking.framework */,
-				51D0675E21065EF300EFEF7F /* RxBlocking.framework */,
-				51D0676021065EF300EFEF7F /* RxBlocking.framework */,
-				51D0676221065EF300EFEF7F /* RxTest.framework */,
-				51D0676421065EF300EFEF7F /* RxTest.framework */,
-				51D0676621065EF300EFEF7F /* RxTest.framework */,
-				51D0676821065EF300EFEF7F /* RxTest.framework */,
-				51D0676A21065EF300EFEF7F /* AllTests-iOS.xctest */,
-				51D0676C21065EF300EFEF7F /* AllTests-tvOS.xctest */,
-				51D0676E21065EF300EFEF7F /* AllTests-macOS.xctest */,
-				51D0677021065EF300EFEF7F /* PerformanceTests.app */,
-				51D0677221065EF300EFEF7F /* Benchmarks.xctest */,
+				606399B32110FC2D005B6DF5 /* SRProxyConnect.m */,
+				606399B42110FC2D005B6DF5 /* SRProxyConnect.h */,
 			);
-			name = Products;
+			path = Proxy;
+			sourceTree = "<group>";
+		};
+		606399B52110FC2D005B6DF5 /* RunLoop */ = {
+			isa = PBXGroup;
+			children = (
+				606399B62110FC2D005B6DF5 /* SRRunLoopThread.h */,
+				606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */,
+			);
+			path = RunLoop;
+			sourceTree = "<group>";
+		};
+		606399B82110FC2D005B6DF5 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				606399B92110FC2D005B6DF5 /* SRPinningSecurityPolicy.h */,
+				606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		606399BC2110FC2D005B6DF5 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				606399BD2110FC2D005B6DF5 /* SRDelegateController.m */,
+				606399BE2110FC2D005B6DF5 /* SRDelegateController.h */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		606399C02110FC2D005B6DF5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				606399C12110FC2D005B6DF5 /* SRHash.h */,
+				606399C22110FC2D005B6DF5 /* SRLog.h */,
+				606399C32110FC2D005B6DF5 /* SRMutex.m */,
+				606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */,
+				606399C52110FC2D005B6DF5 /* SRSIMDHelpers.h */,
+				606399C62110FC2D005B6DF5 /* SRRandom.h */,
+				606399C72110FC2D005B6DF5 /* SRURLUtilities.m */,
+				606399C82110FC2D005B6DF5 /* SRError.h */,
+				606399C92110FC2D005B6DF5 /* SRLog.m */,
+				606399CA2110FC2D005B6DF5 /* SRHash.m */,
+				606399CB2110FC2D005B6DF5 /* SRMutex.h */,
+				606399CC2110FC2D005B6DF5 /* SRHTTPConnectMessage.h */,
+				606399CD2110FC2D005B6DF5 /* SRError.m */,
+				606399CE2110FC2D005B6DF5 /* SRRandom.m */,
+				606399CF2110FC2D005B6DF5 /* SRURLUtilities.h */,
+				606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		606399D12110FC2D005B6DF5 /* IOConsumer */ = {
+			isa = PBXGroup;
+			children = (
+				606399D22110FC2D005B6DF5 /* SRIOConsumerPool.h */,
+				606399D32110FC2D005B6DF5 /* SRIOConsumer.m */,
+				606399D42110FC2D005B6DF5 /* SRIOConsumer.h */,
+				606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */,
+			);
+			path = IOConsumer;
 			sourceTree = "<group>";
 		};
 		670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */ = {
@@ -3059,6 +2746,20 @@
 				67FA1A4C1ABA092D000C9196 /* RegExCategories.m */,
 			);
 			path = RegEx;
+			sourceTree = "<group>";
+		};
+		70E2704BCF29EC51A429FE67 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C37D276B4C565CFBA09B2EAE /* Pods-BlockchainTests.debug production.xcconfig */,
+				FC2FC1205076F21A19EDE8FC /* Pods-BlockchainTests.debug staging.xcconfig */,
+				DAC96BD384C528742EEC4E5D /* Pods-BlockchainTests.debug dev.xcconfig */,
+				D1D2BE27E2EEFE7411546AEA /* Pods-BlockchainTests.debug testnet.xcconfig */,
+				F5F37BF8DBC9B473E218365C /* Pods-BlockchainTests.release.xcconfig */,
+				D71317CC5A32294E90362E83 /* Pods-Blockchain.release.xcconfig */,
+				764C0CFB5DA6F3820EB53870 /* Pods-Blockchain.debug production.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		84C25678198109AF00F901D1 /* Keys */ = {
@@ -3201,6 +2902,7 @@
 				9FB3637414B60128004BEA02 /* Frameworks */,
 				9FB3637214B60128004BEA02 /* Products */,
 				C9D4B2AE193E020D00EDA9EA /* Third Party */,
+				70E2704BCF29EC51A429FE67 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3221,6 +2923,8 @@
 				513467FF2056BC6700DE6A1E /* Crashlytics.framework */,
 				513467FE2056BC6600DE6A1E /* Fabric.framework */,
 				23C543A21D0F4197007A5F58 /* libicucore.tbd */,
+				30778283296D8CB32C68C7EA /* Pods_Blockchain.framework */,
+				433851E85AEED4B9438CEF2D /* Pods_BlockchainTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3770,9 +3474,7 @@
 			children = (
 				9F2780B515343A7D0015F83F /* UncaughtExceptionHandler.h */,
 				9F2780B615343A7D0015F83F /* UncaughtExceptionHandler.m */,
-				AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */,
-				5164E4C920584D0700FC706A /* Charts.xcodeproj */,
-				AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */,
+				606399A92110FC2D005B6DF5 /* SocketRocket */,
 				23444F7B1DCD210B00573C8C /* CoreBitcoin */,
 				670595A11AB0F59D00D2D6D9 /* KeychainItemWrapper */,
 				84C25678198109AF00F901D1 /* Keys */,
@@ -3780,7 +3482,6 @@
 				670DF9481A43BCB200CEA1EA /* Reachability */,
 				67FA1A4A1ABA092D000C9196 /* RegEx */,
 				67E9673419DF1DD300305358 /* SideMenu */,
-				2322DC811D771831000E5AC1 /* SocketRocket */,
 			);
 			path = "Third Party";
 			sourceTree = "<group>";
@@ -3902,9 +3603,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 519435A5208E61F3001EF882 /* Build configuration list for PBXNativeTarget "BlockchainTests" */;
 			buildPhases = (
+				60B4C4ABC8C41D140468DAE7 /* [CP] Check Pods Manifest.lock */,
 				5194359A208E61F3001EF882 /* Sources */,
 				5194359B208E61F3001EF882 /* Frameworks */,
 				5194359C208E61F3001EF882 /* Resources */,
+				3803409BCEEE094F55D38355 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3920,6 +3623,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9FB3638914B60128004BEA02 /* Build configuration list for PBXNativeTarget "Blockchain" */;
 			buildPhases = (
+				7CAA81208661AF32C4FBC73E /* [CP] Check Pods Manifest.lock */,
 				9FB3636D14B60128004BEA02 /* Sources */,
 				9FB3636E14B60128004BEA02 /* Frameworks */,
 				23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */,
@@ -3928,15 +3632,11 @@
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
 				51B9D9272063EA1D007DED65 /* Run SwiftLint */,
 				C718594D1F460C4A00745A87 /* Run Fabric */,
+				653925E975EBF09C9B5C292E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				51D0677621065F5200EFEF7F /* PBXTargetDependency */,
-				51D0677A21065F6200EFEF7F /* PBXTargetDependency */,
-				51D0678221065F7100EFEF7F /* PBXTargetDependency */,
-				51D0678621065F9800EFEF7F /* PBXTargetDependency */,
-				51D0678A21065F9800EFEF7F /* PBXTargetDependency */,
 			);
 			name = Blockchain;
 			productName = Blockchain;
@@ -4027,20 +3727,6 @@
 			mainGroup = 9FB3636614B60128004BEA02;
 			productRefGroup = 9FB3637214B60128004BEA02 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 51D0671221065EE200EFEF7F /* Products */;
-					ProjectRef = AAE94E3020C5B733005A3595 /* Alamofire.xcodeproj */;
-				},
-				{
-					ProductGroup = 51D0672A21065EEA00EFEF7F /* Products */;
-					ProjectRef = 5164E4C920584D0700FC706A /* Charts.xcodeproj */;
-				},
-				{
-					ProductGroup = 51D0673221065EF300EFEF7F /* Products */;
-					ProjectRef = AAE94DEE20C5B71D005A3595 /* Rx.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				9FB3637014B60128004BEA02 /* Blockchain */,
@@ -4048,220 +3734,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		51D0671D21065EE200EFEF7F /* Alamofire.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Alamofire.framework;
-			remoteRef = 51D0671C21065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0671F21065EE200EFEF7F /* Alamofire iOS Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Alamofire iOS Tests.xctest";
-			remoteRef = 51D0671E21065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672121065EE200EFEF7F /* Alamofire.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Alamofire.framework;
-			remoteRef = 51D0672021065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672321065EE200EFEF7F /* Alamofire macOS Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Alamofire macOS Tests.xctest";
-			remoteRef = 51D0672221065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672521065EE200EFEF7F /* Alamofire.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Alamofire.framework;
-			remoteRef = 51D0672421065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672721065EE200EFEF7F /* Alamofire tvOS Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Alamofire tvOS Tests.xctest";
-			remoteRef = 51D0672621065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672921065EE200EFEF7F /* Alamofire.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Alamofire.framework;
-			remoteRef = 51D0672821065EE200EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0672F21065EEB00EFEF7F /* Charts.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Charts.framework;
-			remoteRef = 51D0672E21065EEB00EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0673121065EEB00EFEF7F /* ChartsTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ChartsTests.xctest;
-			remoteRef = 51D0673021065EEB00EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0674A21065EF300EFEF7F /* RxSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxSwift.framework;
-			remoteRef = 51D0674921065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0674C21065EF300EFEF7F /* RxSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxSwift.framework;
-			remoteRef = 51D0674B21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0674E21065EF300EFEF7F /* RxSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxSwift.framework;
-			remoteRef = 51D0674D21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675021065EF300EFEF7F /* RxSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxSwift.framework;
-			remoteRef = 51D0674F21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675221065EF300EFEF7F /* RxCocoa.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxCocoa.framework;
-			remoteRef = 51D0675121065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675421065EF300EFEF7F /* RxCocoa.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxCocoa.framework;
-			remoteRef = 51D0675321065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675621065EF300EFEF7F /* RxCocoa.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxCocoa.framework;
-			remoteRef = 51D0675521065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675821065EF300EFEF7F /* RxCocoa.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxCocoa.framework;
-			remoteRef = 51D0675721065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675A21065EF300EFEF7F /* RxBlocking.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxBlocking.framework;
-			remoteRef = 51D0675921065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675C21065EF300EFEF7F /* RxBlocking.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxBlocking.framework;
-			remoteRef = 51D0675B21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0675E21065EF300EFEF7F /* RxBlocking.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxBlocking.framework;
-			remoteRef = 51D0675D21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676021065EF300EFEF7F /* RxBlocking.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxBlocking.framework;
-			remoteRef = 51D0675F21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676221065EF300EFEF7F /* RxTest.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxTest.framework;
-			remoteRef = 51D0676121065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676421065EF300EFEF7F /* RxTest.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxTest.framework;
-			remoteRef = 51D0676321065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676621065EF300EFEF7F /* RxTest.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxTest.framework;
-			remoteRef = 51D0676521065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676821065EF300EFEF7F /* RxTest.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RxTest.framework;
-			remoteRef = 51D0676721065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676A21065EF300EFEF7F /* AllTests-iOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "AllTests-iOS.xctest";
-			remoteRef = 51D0676921065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676C21065EF300EFEF7F /* AllTests-tvOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "AllTests-tvOS.xctest";
-			remoteRef = 51D0676B21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0676E21065EF300EFEF7F /* AllTests-macOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "AllTests-macOS.xctest";
-			remoteRef = 51D0676D21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0677021065EF300EFEF7F /* PerformanceTests.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			name = PerformanceTests.app;
-			path = Microoptimizations.app;
-			remoteRef = 51D0676F21065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51D0677221065EF300EFEF7F /* Benchmarks.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = Benchmarks.xctest;
-			remoteRef = 51D0677121065EF300EFEF7F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5194359C208E61F3001EF882 /* Resources */ = {
@@ -4271,7 +3743,6 @@
 				51979189210F68940096E50B /* countries.json in Resources */,
 				AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */,
-				3AC975632110A678006A9263 /* ConfirmationFooterView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4310,7 +3781,6 @@
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				515EFADE210282B4002350B6 /* BCAddressSelectionView.strings in Resources */,
-				2322DCC51D771831000E5AC1 /* Info.plist in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
@@ -4319,6 +3789,7 @@
 				3A3047E4210B664800C09E6D /* LocationSuggestionCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
+				5150E52B21131C29000966BE /* KYCWelcome.storyboard in Resources */,
 				515EFADD210282B4002350B6 /* AccountsAndAddresses.strings in Resources */,
 				ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */,
 				515EFAE0210282B4002350B6 /* SendCoins.strings in Resources */,
@@ -4335,7 +3806,6 @@
 				C9BE91881945D8F600FD516D /* PEKeyboard-2.png in Resources */,
 				515EFAD9210282B4002350B6 /* Backup.strings in Resources */,
 				67EEE7731A8E547900288753 /* PEPin-on@3x.png in Resources */,
-				5138354E210253A800767B2E /* KYCOnboardingScreen.storyboard in Resources */,
 				C9BE91821945D8F600FD516D /* PEKeyboard-1-next.png in Resources */,
 				ECD244ED19A8AC45004B1F40 /* PEKeyboard-3-edit.png in Resources */,
 				C71859591F4B791600745A87 /* TabController.xib in Resources */,
@@ -4351,6 +3821,7 @@
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
 				5138354F210253A800767B2E /* KYCAddress.storyboard in Resources */,
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
+				5150E54921134251000966BE /* KYCAccountStatus.storyboard in Resources */,
 				C718595B1F4B85E800745A87 /* Transactions.xib in Resources */,
 				ECD244EB19A8AC45004B1F40 /* PEKeyboard-3-done.png in Resources */,
 				5138373B21025AD100767B2E /* alert-received.wav in Resources */,
@@ -4359,7 +3830,6 @@
 				5138373A21025AD100767B2E /* beep.wav in Resources */,
 				AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */,
 				515EFADB210282B4002350B6 /* InfoPlist.strings in Resources */,
-				3AC975622110A678006A9263 /* ConfirmationFooterView.xib in Resources */,
 				9F1831F0151744FC00FB3D52 /* ReceiveCell.xib in Resources */,
 				ECD244EE19A8AC45004B1F40 /* PEKeyboard-3-next.png in Resources */,
 				515EFAE6210282B4002350B6 /* Backup.storyboard in Resources */,
@@ -4405,6 +3875,28 @@
 			shellPath = /bin/sh;
 			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect ${WALLET_SERVER}:443 -showcerts < /dev/null | openssl x509 -outform DER > ${LOCAL_CERTIFICATE_FILE}.der";
 		};
+		3803409BCEEE094F55D38355 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		51B9D9272063EA1D007DED65 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4418,6 +3910,76 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		60B4C4ABC8C41D140468DAE7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BlockchainTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		653925E975EBF09C9B5C292E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${PODS_ROOT}/Onfido/Onfido.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
+				"${BUILT_PRODUCTS_DIR}/ZSWTaggedString/ZSWTaggedString.framework",
+				"${BUILT_PRODUCTS_DIR}/ZSWTappableLabel/ZSWTappableLabel.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZSWTaggedString.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZSWTappableLabel.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7CAA81208661AF32C4FBC73E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Blockchain-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		C718594D1F460C4A00745A87 /* Run Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4460,6 +4022,7 @@
 				51C2ADD420BDD3EA00D66108 /* AddressValidatorTests.swift in Sources */,
 				5159C2DF2109149500955BD6 /* KYCCountrySelectionController.swift in Sources */,
 				AA63F87520A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
+				606399E72110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */,
 				AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				AAE94F6C20C75C67005A3595 /* MockPinInteractor.swift in Sources */,
@@ -4472,6 +4035,7 @@
 				51135708209CF69C00056D65 /* BackupWordsViewController.swift in Sources */,
 				AACE31C42092A99B00B7B806 /* Constants.swift in Sources */,
 				AACE31382091220300B7B806 /* HTTPCookieStorage.swift in Sources */,
+				60639A012110FC2D005B6DF5 /* SRConstants.m in Sources */,
 				C74E866220B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
 				5197913F210A25960096E50B /* KYCCountry.swift in Sources */,
 				AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */,
@@ -4479,8 +4043,9 @@
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				AAD27A29209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
-				5197914B210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift in Sources */,
+				5197914B210B8BEB0096E50B /* CountryDataProvider.swift in Sources */,
 				5159C2E62109149500955BD6 /* KYCWelcomeController.swift in Sources */,
+				606399F12110FC2D005B6DF5 /* SRURLUtilities.m in Sources */,
 				AA1E523B2097E2190099BD10 /* Strings.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				3A0DD1362114A85B00B426B1 /* PostalAddress.swift in Sources */,
@@ -4489,8 +4054,10 @@
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				C74E865320B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */,
 				AACE31D62092A99B00B7B806 /* Bundle.swift in Sources */,
+				606399F52110FC2D005B6DF5 /* SRHash.m in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
 				51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */,
+				606399DF2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */,
 				5113570B209CF6D700056D65 /* BackupVerifyViewController.swift in Sources */,
 				3A7F7EE7210F95C7001E20AF /* LocationSuggestionInterface.swift in Sources */,
 				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
@@ -4498,6 +4065,7 @@
 				AA63F84C20A12AE9002B719B /* URLs.swift in Sources */,
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
+				606399DD2110FC2D005B6DF5 /* SRWebSocket.m in Sources */,
 				AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
 				C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
@@ -4512,8 +4080,10 @@
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
+				606399EF2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */,
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				51135703209CF5D000056D65 /* AuthenticationTwoFactorType.swift in Sources */,
+				606399F32110FC2D005B6DF5 /* SRLog.m in Sources */,
 				51DC2F5D20B72F4900E03AF2 /* AddressValidator.swift in Sources */,
 				AA56423B20DDBDBB0092A022 /* String+EscapeJSTests.swift in Sources */,
 				AA1E52332097CC260099BD10 /* WalletAuthDelegate.swift in Sources */,
@@ -4535,16 +4105,20 @@
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
-				5159C2E32109149500955BD6 /* KYCVerifyAccountController.swift in Sources */,
 				5159C2DC2109149500955BD6 /* KYCAccountStatusController.swift in Sources */,
+				606399E52110FC2D005B6DF5 /* SRProxyConnect.m in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
+				606399F72110FC2D005B6DF5 /* SRError.m in Sources */,
+				606399FD2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */,
 				3AEF9E9A21091DA5006B1CF9 /* LocationSuggestionService.swift in Sources */,
 				AACF56C620EAC87A0039978B /* OnboardingSettings.swift in Sources */,
+				606399ED2110FC2D005B6DF5 /* SRMutex.m in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* GetPinResponse.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
+				606399EB2110FC2D005B6DF5 /* SRDelegateController.m in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				AA7E7772210BDE1C009DFB4C /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
@@ -4563,19 +4137,19 @@
 				AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */,
 				AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */,
 				51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
+				606399FF2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */,
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
 				AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */,
 				51135704209CF5D800056D65 /* PutPinResponse.swift in Sources */,
-				3AC975602110A599006A9263 /* ConfirmationFooterView.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
-				5159C2E02109149500955BD6 /* KYCOnboardingController.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				3A258C15210A4EAC00C023F5 /* LocationDataProvider.swift in Sources */,
 				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				5159C2E12109149500955BD6 /* KYCOnboardingNavigationController.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
+				60639A032110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
 				3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */,
 				C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
@@ -4591,6 +4165,7 @@
 				C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */,
 				AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */,
 				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
+				606399FB2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */,
 				AABB74C920D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				AAE94F2F20C644DE005A3595 /* PinPresenter.swift in Sources */,
@@ -4601,6 +4176,7 @@
 				5159C2E22109149500955BD6 /* KYCPersonalDetailsController.swift in Sources */,
 				AA74835B21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
+				606399E92110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */,
 				3AEF9E9521091D1E006B1CF9 /* LocationSuggestionPageModel.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
@@ -4620,11 +4196,13 @@
 				AA63F85120A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
+				606399F92110FC2D005B6DF5 /* SRRandom.m in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
 				C74E865A20B31DE300F7263D /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				C7E1A2902108FDFC0072DDA0 /* Colors.swift in Sources */,
 				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				AA3CA9B02107F18D00C2AD46 /* Logger.swift in Sources */,
+				606399E32110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */,
 				C764372A20ED199500CA7CA4 /* BalanceChartModel.swift in Sources */,
 				AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
@@ -4653,29 +4231,28 @@
 				23BA22111D6B736900D0472B /* NSNumberFormatter+Currencies.m in Sources */,
 				23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */,
 				51A862D920921E7600B338E0 /* BitcoinAddress.swift in Sources */,
-				2322DCB51D771831000E5AC1 /* SRIOConsumer.m in Sources */,
 				23BD046D1D79F1EC00DB69E6 /* TransactionDetailNavigationController.m in Sources */,
 				AAE94F3520C70B97005A3595 /* AssetURLPayload.swift in Sources */,
 				678AD5E919D4610000E9A778 /* BCModalContentView.m in Sources */,
 				84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */,
 				23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */,
-				2322DCBC1D771831000E5AC1 /* SRHash.m in Sources */,
 				9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */,
 				9F7480E315140EF200BC4292 /* TabViewController.m in Sources */,
 				AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */,
 				AAA3316B2089650B00BBD292 /* AlertViewPresenter.swift in Sources */,
-				2322DCC71D771831000E5AC1 /* SRWebSocket.m in Sources */,
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,
 				C764372920ED199500CA7CA4 /* BalanceChartModel.swift in Sources */,
 				23FB5C101D9ABB730008C6AB /* TransactionDetailDateCell.m in Sources */,
+				606399EC2110FC2D005B6DF5 /* SRMutex.m in Sources */,
 				670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */,
+				606399F62110FC2D005B6DF5 /* SRError.m in Sources */,
+				606399F42110FC2D005B6DF5 /* SRHash.m in Sources */,
 				51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				C790E1211E5345160063D141 /* BCVerifyEmailViewController.m in Sources */,
 				AA3CA9B22107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				C71859571F4B695700745A87 /* TabControllerManager.m in Sources */,
 				51135701209CEEB900056D65 /* PushNotificationAuthPayload.swift in Sources */,
 				C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */,
-				2322DCB91D771831000E5AC1 /* SRPinningSecurityPolicy.m in Sources */,
 				AAC9FCE520ADF17100E28B7A /* SoundManager.swift in Sources */,
 				C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */,
 				23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */,
@@ -4688,7 +4265,6 @@
 				67D95A281B3DDC900012EBB1 /* Constants.swift in Sources */,
 				AA3CA9B82107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */,
 				9F765F3214BC622E00048EFB /* TransactionsBitcoinViewController.m in Sources */,
-				2322DCC21D771831000E5AC1 /* SRURLUtilities.m in Sources */,
 				C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */,
 				3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */,
 				C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
@@ -4706,16 +4282,17 @@
 				C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */,
 				C774A1262102B87300DCCC17 /* ExchangeRate.swift in Sources */,
 				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
+				606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */,
+				606399EE2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */,
 				C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */,
 				516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
 				84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */,
-				2322DCB71D771831000E5AC1 /* SRProxyConnect.m in Sources */,
 				C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */,
 				51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */,
+				606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */,
 				3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */,
 				C7559CB21F56FE09005B2375 /* TransactionsEtherViewController.m in Sources */,
 				AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */,
-				3AC9755F2110A599006A9263 /* ConfirmationFooterView.swift in Sources */,
 				514B29A1210FFA9600D757B5 /* KYCNetworkRequest.swift in Sources */,
 				23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */,
 				C74E865220B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */,
@@ -4734,6 +4311,7 @@
 				AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,
 				23B731D31E01AC1100129770 /* ReminderModalViewController.m in Sources */,
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
+				60639A022110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */,
 				AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */,
 				C74E866120B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
 				3AEF9E9421091D1E006B1CF9 /* LocationSuggestionPageModel.swift in Sources */,
@@ -4741,7 +4319,6 @@
 				9F765F3D14BC7C4F00048EFB /* Transaction.m in Sources */,
 				C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
-				2322DCC31D771831000E5AC1 /* NSRunLoop+SRWebSocket.m in Sources */,
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,
 				9F765F4714BC8AEF00048EFB /* MultiAddressResponse.m in Sources */,
 				AA63F87A20A3A198002B719B /* AppFeatureConfigurator.swift in Sources */,
@@ -4750,13 +4327,15 @@
 				AA9B30D120F6D85000A7F809 /* WalletUpgradeDelegate.swift in Sources */,
 				239CD5681C122BDE00997DF5 /* SettingsTwoStepViewController.m in Sources */,
 				23BF73391C454B8C00204503 /* AccountsAndAddressesNavigationController.m in Sources */,
-				51383559210253A800767B2E /* KYCVerifyAccountController.swift in Sources */,
 				AA3CA9B52107F36800C2AD46 /* LogLevel.swift in Sources */,
 				51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */,
+				606399FE2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */,
+				606399E82110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */,
 				AAE94F3120C64B49005A3595 /* PinInteractor.swift in Sources */,
 				235BD5661C58216000969B31 /* BCModalViewController.m in Sources */,
 				67FA1A4D1ABA092D000C9196 /* RegExCategories.m in Sources */,
+				606399F02110FC2D005B6DF5 /* SRURLUtilities.m in Sources */,
 				23DF4EFC1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m in Sources */,
 				C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */,
 				C71859541F4B647100745A87 /* SendEtherViewController.m in Sources */,
@@ -4770,8 +4349,8 @@
 				511646C5208124E200C43522 /* AssetType.swift in Sources */,
 				67E9674E19DF285000305358 /* SideMenuViewController.m in Sources */,
 				C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */,
+				606399FC2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */,
 				9FCA4D161514949500ECDFBE /* ReceiveBitcoinViewController.m in Sources */,
-				2322DCBD1D771831000E5AC1 /* SRHTTPConnectMessage.m in Sources */,
 				C790E0F81E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m in Sources */,
 				230FD2D31C5BD04000336683 /* BCEditAddressView.m in Sources */,
 				C75EE7D8201BBA820067BA16 /* UITextView+Animations.m in Sources */,
@@ -4782,7 +4361,7 @@
 				5138375A210264F000767B2E /* BCPriceMarker.swift in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
 				23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */,
-				5197914A210B8BEB0096E50B /* KYCCountrySelectionDataSource.swift in Sources */,
+				5197914A210B8BEB0096E50B /* CountryDataProvider.swift in Sources */,
 				FCB33B6F1FC369D700317E6B /* ExchangeDetailView.m in Sources */,
 				AAD27A28209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
 				51979168210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
@@ -4798,18 +4377,17 @@
 				AA3CA9AF2107F18C00C2AD46 /* Logger.swift in Sources */,
 				AA69F6592086A2720054EFCE /* AppCoordinator.swift in Sources */,
 				67D95A261B3DD86B0012EBB1 /* BCTextField.swift in Sources */,
-				2322DCC01D771831000E5AC1 /* SRRandom.m in Sources */,
 				AA1E523A2097E2190099BD10 /* Strings.swift in Sources */,
 				C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
 				5171E39020F4F98000E8913E /* Colors.swift in Sources */,
 				23FB5C0D1D9ABB650008C6AB /* TransactionDetailFromCell.m in Sources */,
-				2322DCBA1D771831000E5AC1 /* SRConstants.m in Sources */,
 				A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */,
 				C77217ED20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				C78893E520A36572003C0A8F /* Trade.swift in Sources */,
 				AA1E523D2097E6AC0099BD10 /* GetPinResponse.swift in Sources */,
 				3A258C14210A4EAC00C023F5 /* LocationDataProvider.swift in Sources */,
 				AACE31812092794D00B7B806 /* Pin.swift in Sources */,
+				606399E22110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */,
 				23107F831BBEF0AC00A6A9D4 /* BCConfirmPaymentView.m in Sources */,
 				3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */,
 				23FB5C131D9ABB8B0008C6AB /* TransactionDetailStatusCell.m in Sources */,
@@ -4836,6 +4414,7 @@
 				516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */,
 				23444F901DCD21AB00573C8C /* BTCCurvePoint.m in Sources */,
 				C75CBD041F1FB12F00CACE0D /* BCTotalAmountView.m in Sources */,
+				606399F22110FC2D005B6DF5 /* SRLog.m in Sources */,
 				513C828620EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				67EE1DCC19E3325900DBBFC9 /* ECSlidingInteractiveTransition.m in Sources */,
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
@@ -4844,15 +4423,16 @@
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
 				511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */,
+				606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */,
 				5138355F210253A800767B2E /* PrimaryButton.swift in Sources */,
 				67EE1DCD19E3325900DBBFC9 /* ECSlidingSegue.m in Sources */,
 				AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */,
+				606399DE2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */,
 				231FF2CD1B56F9F1009EEB02 /* SettingsWebViewController.m in Sources */,
 				C723F3461F61D35300A858A9 /* TransactionDetailViewModel.m in Sources */,
 				C79672841FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m in Sources */,
 				C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */,
 				51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
-				2322DCC61D771831000E5AC1 /* SRSecurityPolicy.m in Sources */,
 				C7BD107B209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
 				9F61B89E151519EF0083C57A /* BCAddressSelectionView.m in Sources */,
 				23FB5C0A1D9ABB590008C6AB /* TransactionDetailToCell.m in Sources */,
@@ -4864,7 +4444,6 @@
 				C7442E3A1FBB636300695E4C /* FromToView.m in Sources */,
 				C72D6CC21EC0B7F80000F922 /* FeeTableCell.m in Sources */,
 				51383560210253A800767B2E /* KYCCountrySelectionController.swift in Sources */,
-				2322DCBE1D771831000E5AC1 /* SRLog.m in Sources */,
 				238FC4D21DEC79E200591D5F /* TransactionDetailDoubleSpendWarningCell.m in Sources */,
 				23FDEF9A1D6CBC7000FC80D6 /* TransactionDetailViewController.m in Sources */,
 				67EE1DCA19E3325900DBBFC9 /* ECPercentDrivenInteractiveTransition.m in Sources */,
@@ -4882,10 +4461,8 @@
 				3A7F7EE6210F95C7001E20AF /* LocationSuggestionInterface.swift in Sources */,
 				511356E3209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				23444F961DCD21C600573C8C /* BTCKeychain.m in Sources */,
-				2322DCB61D771831000E5AC1 /* SRIOConsumerPool.m in Sources */,
 				AA1E52312097CC1F0099BD10 /* WalletPinEntryDelegate.swift in Sources */,
 				AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */,
-				2322DCBB1D771831000E5AC1 /* SRError.m in Sources */,
 				9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */,
 				6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */,
 				5138355E210253A800767B2E /* KYCOnboardingNavigationController.swift in Sources */,
@@ -4899,7 +4476,6 @@
 				5138355D210253A800767B2E /* KYCAccountStatusController.swift in Sources */,
 				23BF733C1C455DDB00204503 /* AccountsAndAddressesViewController.m in Sources */,
 				AA94965E20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */,
-				2322DCB41D771831000E5AC1 /* SRDelegateController.m in Sources */,
 				AACE31222091004A00B7B806 /* UIApplication+Suspend.m in Sources */,
 				5197913E210A25960096E50B /* KYCCountry.swift in Sources */,
 				AAE94F3F20C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */,
@@ -4914,8 +4490,8 @@
 				9F1831EE151744EB00FB3D52 /* ReceiveTableCell.m in Sources */,
 				C72D6CBF1EC0B4AB0000F922 /* BCFeeSelectionView.m in Sources */,
 				C7BEE13B20C828B20096003B /* BuySellCoordinator.swift in Sources */,
-				51383558210253A800767B2E /* KYCOnboardingController.swift in Sources */,
 				67EE1DCB19E3325900DBBFC9 /* ECSlidingAnimationController.m in Sources */,
+				60639A002110FC2D005B6DF5 /* SRConstants.m in Sources */,
 				67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */,
 				C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */,
 				51383557210253A800767B2E /* KYCPersonalDetailsController.swift in Sources */,
@@ -4932,16 +4508,13 @@
 				A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */,
 				9F4A5092152F585E00F9ED9D /* UIDevice+Hardware.m in Sources */,
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
-				2322DCC11D771831000E5AC1 /* SRSIMDHelpers.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
 				513913F02081206C002578FD /* UserDefaults.swift in Sources */,
-				2322DCBF1D771831000E5AC1 /* SRMutex.m in Sources */,
 				C7559CB71F570602005B2375 /* TransactionEtherTableViewCell.m in Sources */,
-				2322DCC41D771831000E5AC1 /* NSURLRequest+SRWebSocket.m in Sources */,
 				232E17F91C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
 				23BD046A1D7761C000DB69E6 /* UITextView+AssertionFailureFix.m in Sources */,
 				23D423991D0878BE000054AA /* ModuleXMLHttpRequest.m in Sources */,
@@ -4961,12 +4534,14 @@
 				3A7F7EE3210F6C77001E20AF /* Visibility.swift in Sources */,
 				23444F931DCD21B700573C8C /* BTCBase58.m in Sources */,
 				23EA61C51B54258D0032B907 /* SettingsTableViewController.m in Sources */,
+				606399DC2110FC2D005B6DF5 /* SRWebSocket.m in Sources */,
 				C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */,
 				23FB5C161D9ABBB20008C6AB /* TransactionDetailValueCell.m in Sources */,
 				3AEF9E9921091DA5006B1CF9 /* LocationSuggestionService.swift in Sources */,
 				23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */,
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
-				2322DCB81D771831000E5AC1 /* SRRunLoopThread.m in Sources */,
+				606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */,
+				606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */,
 				C790E1241E5358540063D141 /* BCVerifyMobileNumberViewController.m in Sources */,
 				C7448A962034BF2F0041947E /* AssetSelectionTableViewCell.m in Sources */,
 				AAE94F3C20C70F4B005A3595 /* BIP21URI.swift in Sources */,
@@ -5001,31 +4576,6 @@
 			isa = PBXTargetDependency;
 			target = 9FB3637014B60128004BEA02 /* Blockchain */;
 			targetProxy = 519435A3208E61F3001EF882 /* PBXContainerItemProxy */;
-		};
-		51D0677621065F5200EFEF7F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "RxSwift-iOS";
-			targetProxy = 51D0677521065F5200EFEF7F /* PBXContainerItemProxy */;
-		};
-		51D0677A21065F6200EFEF7F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Alamofire iOS";
-			targetProxy = 51D0677921065F6200EFEF7F /* PBXContainerItemProxy */;
-		};
-		51D0678221065F7100EFEF7F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Charts;
-			targetProxy = 51D0678121065F7100EFEF7F /* PBXContainerItemProxy */;
-		};
-		51D0678621065F9800EFEF7F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "RxCocoa-iOS";
-			targetProxy = 51D0678521065F9800EFEF7F /* PBXContainerItemProxy */;
-		};
-		51D0678A21065F9800EFEF7F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "RxBlocking-iOS";
-			targetProxy = 51D0678921065F9800EFEF7F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -6324,7 +5874,7 @@
 		};
 		517F5A44205811DF004826CA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51F6A9BB206964D6002968EC /* Release.xcconfig */;
+			baseConfigurationReference = D71317CC5A32294E90362E83 /* Pods-Blockchain.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON)";
@@ -6378,6 +5928,7 @@
 		};
 		519435A6208E61F3001EF882 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C37D276B4C565CFBA09B2EAE /* Pods-BlockchainTests.debug production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -6453,6 +6004,7 @@
 		};
 		519435A7208E61F3001EF882 /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC2FC1205076F21A19EDE8FC /* Pods-BlockchainTests.debug staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -6528,6 +6080,7 @@
 		};
 		519435A8208E61F3001EF882 /* Debug Dev */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DAC96BD384C528742EEC4E5D /* Pods-BlockchainTests.debug dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -6603,6 +6156,7 @@
 		};
 		519435A9208E61F3001EF882 /* Debug Testnet */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1D2BE27E2EEFE7411546AEA /* Pods-BlockchainTests.debug testnet.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -6678,6 +6232,7 @@
 		};
 		519435AA208E61F3001EF882 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5F37BF8DBC9B473E218365C /* Pods-BlockchainTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6775,7 +6330,7 @@
 		};
 		9FB3638A14B60128004BEA02 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 516594A6204F1C0400C50E78 /* Production.xcconfig */;
+			baseConfigurationReference = 764C0CFB5DA6F3820EB53870 /* Pods-Blockchain.debug production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON)";

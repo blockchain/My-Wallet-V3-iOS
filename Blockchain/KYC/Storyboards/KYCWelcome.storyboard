@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jKB-tY-Hco">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Welcome View Controller-->
+        <scene sceneID="GcT-ZP-7yK">
+            <objects>
+                <viewController storyboardIdentifier="KYCWelcomeController" title="Welcome View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jKB-tY-Hco" customClass="KYCWelcomeController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hVW-du-4yg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Welcome" translatesAutoresizingMaskIntoConstraints="NO" id="sgf-OY-RMl">
+                                <rect key="frame" x="52" y="150" width="270" height="136"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="136" id="0zR-8f-EfP"/>
+                                    <constraint firstAttribute="width" constant="270" id="TER-cZ-g2L"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv9-ck-b0t" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="24" y="409.33333333333331" width="327" height="44"/>
+                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="pw6-gR-4vR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Apply Now">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="primaryButtonTapped:" destination="jKB-tY-Hco" eventType="touchUpInside" id="G2x-11-One"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JCK-ZN-BpY" userLabel="Terms of Service Label">
+                                <rect key="frame" x="32" y="636.66666666666663" width="311" height="29.333333333333371"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="By hitting “Apply Now”, you agree to Blockchain’s Terms of Serice &amp; Privacy Policy">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Montserrat-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dC5-hc-bdm" userLabel="Description Label">
+                                <rect key="frame" x="16" y="316" width="343" height="55.333333333333314"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">Complete your Blockchain profile and
+identity verification to start buying and selling cryptocurrencies. This will only take 4 minutes.</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="14" name="Montserrat-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="28">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="56">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="84">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="112">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="140">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="168">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="196">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="224">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="252">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="280">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="308">
+                                                        <options/>
+                                                    </textTab>
+                                                    <textTab alignment="left" location="336">
+                                                        <options/>
+                                                    </textTab>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JCK-ZN-BpY" firstAttribute="leading" secondItem="AzT-gm-yhf" secondAttribute="leading" constant="32" id="5ot-dU-sxu"/>
+                            <constraint firstItem="sgf-OY-RMl" firstAttribute="top" secondItem="AzT-gm-yhf" secondAttribute="top" constant="150" id="6o9-X8-Xft"/>
+                            <constraint firstItem="dC5-hc-bdm" firstAttribute="leading" secondItem="AzT-gm-yhf" secondAttribute="leading" constant="16" id="D0g-sB-ONm"/>
+                            <constraint firstItem="dC5-hc-bdm" firstAttribute="top" secondItem="sgf-OY-RMl" secondAttribute="bottom" constant="30" id="SC3-Cj-6f0"/>
+                            <constraint firstItem="AzT-gm-yhf" firstAttribute="trailing" secondItem="dv9-ck-b0t" secondAttribute="trailing" constant="24" id="ZlE-fY-qm1"/>
+                            <constraint firstItem="dv9-ck-b0t" firstAttribute="leading" secondItem="AzT-gm-yhf" secondAttribute="leading" constant="24" id="epm-Yp-IEN"/>
+                            <constraint firstItem="AzT-gm-yhf" firstAttribute="trailing" secondItem="dC5-hc-bdm" secondAttribute="trailing" constant="16" id="fK5-Zg-CQv"/>
+                            <constraint firstItem="AzT-gm-yhf" firstAttribute="trailing" secondItem="JCK-ZN-BpY" secondAttribute="trailing" constant="32" id="jhO-Jo-kw4"/>
+                            <constraint firstItem="dv9-ck-b0t" firstAttribute="top" secondItem="dC5-hc-bdm" secondAttribute="bottom" constant="38" id="sCz-zV-9tu"/>
+                            <constraint firstItem="sgf-OY-RMl" firstAttribute="centerX" secondItem="AzT-gm-yhf" secondAttribute="centerX" id="sO0-ST-h4R"/>
+                            <constraint firstItem="AzT-gm-yhf" firstAttribute="bottom" secondItem="JCK-ZN-BpY" secondAttribute="bottom" constant="24" id="zFH-Jq-smv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="AzT-gm-yhf"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Exchange" id="PEt-7H-7Yn">
+                        <barButtonItem key="backBarButtonItem" id="EAJ-Wl-eES"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <segue destination="31U-7w-PIG" kind="show" identifier="showCountrySelector" id="34J-X5-jhz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hhI-V4-oK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-183.19999999999999" y="172.90640394088672"/>
+        </scene>
+        <!--KYCCountrySelection-->
+        <scene sceneID="dSA-td-FOr">
+            <objects>
+                <viewControllerPlaceholder storyboardName="KYCCountrySelection" id="31U-7w-PIG" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jRF-fQ-mhs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="497" y="75"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Welcome" width="272" height="137"/>
+    </resources>
+</document>

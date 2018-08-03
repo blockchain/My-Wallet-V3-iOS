@@ -8,17 +8,15 @@
 
 import UIKit
 
-final class KYCVerifyPhoneNumberController: UIViewController, KYCOnboardingNavigation {
+final class KYCVerifyPhoneNumberController: UIViewController {
 
     // MARK: Properties
 
     // TODO: user ID needs to be passed in to this view controller from previous step
     var userId: String? = ""
-
     var segueIdentifier: String? = "promptForAddress"
 
     @IBOutlet var textFieldMobileNumber: UITextField!
-    @IBOutlet var primaryButton: PrimaryButton!
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = { [unowned self] in
         return KYCVerifyPhoneNumberPresenter(view: self)
@@ -50,11 +48,7 @@ final class KYCVerifyPhoneNumberController: UIViewController, KYCOnboardingNavig
     }
 
     private func goToNextStep() {
-        guard let segueIdentifier = segueIdentifier else {
-            Logger.shared.info("segueIdentifier is nil. Can't go to next step.")
-            return
-        }
-        self.performSegue(withIdentifier: segueIdentifier, sender: nil)
+        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
     }
 }
 

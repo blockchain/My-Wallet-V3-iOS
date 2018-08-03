@@ -1,5 +1,5 @@
 //
-//  KYCCountrySelectionDataSource.swift
+//  CountryDataProvider.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/27/18.
@@ -8,21 +8,13 @@
 
 import Foundation
 
-final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
+final class CountryDataProvider {
 
     typealias Countries = [KYCCountry]
 
     // MARK: - Properties
 
     var countries: Countries?
-
-    static let dataSource = KYCCountrySelectionDataSource()
-
-    // MARK: - Initialization
-
-    override private init() {
-        super.init()
-    }
 
     func fetchListOfCountries() {
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
@@ -35,16 +27,5 @@ final class KYCCountrySelectionDataSource: NSObject, UIPickerViewDataSource {
             // TODO: handle error
             Logger.shared.error(error.debugDescription)
         })
-    }
-
-    // MARK: - UIPickerViewDataSource
-
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        guard let count = countries?.count else { return 0 }
-        return count
     }
 }

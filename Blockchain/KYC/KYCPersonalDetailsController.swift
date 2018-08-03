@@ -9,12 +9,11 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: UIViewController, KYCOnboardingNavigation {
+final class KYCPersonalDetailsController: UIViewController {
 
     // MARK: - Properties
 
     private let birthdatePicker: UIDatePicker!
-    var segueIdentifier: String? = "verifyMobileNumber"
 
     // MARK: - IBOutlets
 
@@ -78,7 +77,7 @@ final class KYCPersonalDetailsController: UIViewController, KYCOnboardingNavigat
             )
             return
         }
-        performSegue(withIdentifier: segueIdentifier!, sender: self)
+        performSegue(withIdentifier: "verifyMobileNumber", sender: self)
     }
 
     // MARK: - Navigation

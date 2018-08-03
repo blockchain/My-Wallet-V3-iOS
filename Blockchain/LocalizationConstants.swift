@@ -329,11 +329,6 @@ struct LocalizationConstants {
     }
 
     struct KYC {
-        static let countrySelectionTitle = NSLocalizedString(
-            "Select Your Country",
-            comment: "The title of the navigation item in the country selection screen."
-        )
-
         static let failedToConfirmNumber = NSLocalizedString(
             "Failed to confirm number. Please try again.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."

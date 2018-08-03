@@ -20,8 +20,9 @@ public extension NSAttributedString {
         return ceil(rect.size.width)
     }
 
-    public func boundingRectForWidth(_ width : CGFloat) -> CGRect {
-        return boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesDeviceMetrics], context: .none)
+    public func boundingRectForWidth(_ width: CGFloat) -> CGRect {
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        return boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesDeviceMetrics], context: .none)
     }
 
     public func fontAttribute() -> UIFont? {
@@ -37,7 +38,7 @@ public extension NSAttributedString {
     }
 
     public func withFont(_ font: UIFont) -> NSAttributedString {
-        if (fontAttribute() == .none) {
+        if fontAttribute() == .none {
             let copy = NSMutableAttributedString(attributedString: self)
             copy.addAttribute(NSAttributedStringKey.font, value: font, range: NSMakeRange(0, copy.length))
             return copy

@@ -77,7 +77,9 @@ extension LocationDataProvider: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard locationResult.suggestions.isEmpty == false else { return UITableViewCell() }
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationSuggestionCell.identifier) as? LocationSuggestionCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: LocationSuggestionCell.identifier
+        ) as? LocationSuggestionCell else { return UITableViewCell() }
 
         cell.configure(with: locationResult.suggestions[indexPath.row])
         return cell
