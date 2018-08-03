@@ -158,6 +158,7 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard checkFieldsValidity(), let identifier = segueIdentifier else { return }
+        // TODO: Generate `PostalAddress` to pass along through KYC flow.
         performSegue(withIdentifier: identifier, sender: self)
     }
 
@@ -217,8 +218,7 @@ extension KYCAddressController: LocationSuggestionInterface {
 
 extension KYCAddressController: LocationSuggestionCoordinatorDelegate {
     func coordinator(_ locationCoordinator: LocationSuggestionCoordinator, generated address: PostalAddress) {
-        let detailController = KYCAddressDetailViewController.make(address)
-        navigationController?.pushViewController(detailController, animated: true)
+        // TODO: May not be needed depending on how we pass along the `PostalAddress`
     }
 
     func coordinator(_ locationCoordinator: LocationSuggestionCoordinator, updated model: LocationSearchResult) {
@@ -259,7 +259,7 @@ extension KYCAddressController: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        searchDelegate?.onSearchViewCancel()
     }
 }
 

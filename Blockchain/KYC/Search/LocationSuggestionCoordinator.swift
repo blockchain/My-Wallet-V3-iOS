@@ -115,5 +115,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
     func onSearchViewCancel() {
         guard service.isExecuting else { return }
         service.cancel()
+        interface?.searchFieldActive(false)
+        interface?.suggestionsList(.hidden)
     }
 }
