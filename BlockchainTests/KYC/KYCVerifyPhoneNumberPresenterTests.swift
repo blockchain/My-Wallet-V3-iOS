@@ -11,13 +11,13 @@ import XCTest
 
 class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
 
-    private var view: MockKYCVerifyPhoneNumberView!
+    private var view: MockKYCConfirmPhoneNumberView!
     private var interactor: MockKYCVerifyPhoneNumberInteractor!
     private var presenter: KYCVerifyPhoneNumberPresenter!
 
     override func setUp() {
         super.setUp()
-        view = MockKYCVerifyPhoneNumberView()
+        view = MockKYCConfirmPhoneNumberView()
         interactor = MockKYCVerifyPhoneNumberInteractor()
         presenter = KYCVerifyPhoneNumberPresenter(view: view, interactor: interactor)
     }
@@ -26,14 +26,32 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
         interactor.shouldSucceed = true
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
-        view.didCallShowVerifCodeViewExpectation = expectation(
+        view.didCallConfirmCodeExpectation = expectation(description: "Verification succeeds")
+        presenter.verify(number: "1234567890", userId: "aUserId", code: "12345")
+        waitForExpectations(timeout: 0.1)
+    }
+
+    func testFailedVerification() {
+        interactor.shouldSucceed = false
+        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
+        presenter.verify(number: "1234567890", userId: "aUserId", code: "12345")
+        waitForExpectations(timeout: 0.1)
+    }
+
+    func testSuccessfulStartVerification() {
+        interactor.shouldSucceed = true
+        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        view.didCallStartVerifSuccessExpectation = expectation(
             description: "Show verification code view shown when 1st step of verification succeeds"
         )
         presenter.startVerification(number: "1234567890", userId: "aUserId")
         waitForExpectations(timeout: 0.1)
     }
 
-    func testFailedVerification() {
+    func testFailedStartVerification() {
         interactor.shouldSucceed = false
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")

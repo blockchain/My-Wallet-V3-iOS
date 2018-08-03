@@ -13,6 +13,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
     @IBOutlet var nextButton: PrimaryButton!
     @IBOutlet var labelPhoneNumber: UILabel!
     @IBOutlet var textFieldConfirmationCode: UITextField!
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 
     var phoneNumber: String = "" {
         didSet {
@@ -26,6 +27,8 @@ class KYCConfirmPhoneNumberController: UIViewController {
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
+
+    // MARK: View Controller Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
