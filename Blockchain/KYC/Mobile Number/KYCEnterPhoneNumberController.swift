@@ -12,7 +12,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     // MARK: Properties
 
-    var userId: String = ""
+    var userId: String?
 
     @IBOutlet var textFieldMobileNumber: UITextField!
 
@@ -30,6 +30,10 @@ final class KYCEnterPhoneNumberController: UIViewController {
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard let number = textFieldMobileNumber.text else {
             Logger.shared.warning("number is nil.")
+            return
+        }
+        guard let userId = userId else {
+            Logger.shared.warning("userIs is nil.")
             return
         }
         presenter.startVerification(number: number, userId: userId)

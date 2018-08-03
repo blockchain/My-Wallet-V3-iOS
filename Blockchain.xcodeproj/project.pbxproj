@@ -383,7 +383,6 @@
 		AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
 		AA2F97012118C04700EE7F21 /* KYCAddressDetailViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA2F96FE2118C04600EE7F21 /* KYCAddressDetailViewController.storyboard */; };
 		AA2F97022118C04700EE7F21 /* KYCVerifyIdentity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */; };
-		AA2F97032118C04700EE7F21 /* ContactDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA2F97002118C04700EE7F21 /* ContactDetails.storyboard */; };
 		AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
@@ -1865,7 +1864,6 @@
 		AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReceiveAddressView.swift; sourceTree = "<group>"; };
 		AA2F96FE2118C04600EE7F21 /* KYCAddressDetailViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCAddressDetailViewController.storyboard; sourceTree = "<group>"; };
 		AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentity.storyboard; sourceTree = "<group>"; };
-		AA2F97002118C04700EE7F21 /* ContactDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ContactDetails.storyboard; sourceTree = "<group>"; };
 		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuItem.swift; sourceTree = "<group>"; };
 		AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBuySellDelegate.swift; sourceTree = "<group>"; };
@@ -2472,7 +2470,6 @@
 		51383538210253A700767B2E /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				AA2F97002118C04700EE7F21 /* ContactDetails.storyboard */,
 				AA2F96FE2118C04600EE7F21 /* KYCAddressDetailViewController.storyboard */,
 				AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */,
 				5150E54821134251000966BE /* KYCAccountStatus.storyboard */,
@@ -3887,7 +3884,6 @@
 				51B767AE2106369A003CCD46 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
 				3AC9754D210FAA47006A9263 /* PlainCell.xib in Resources */,
 				51B767AF2106369A003CCD46 /* Montserrat-ExtraLight.ttf in Resources */,
-				AA2F97032118C04700EE7F21 /* ContactDetails.storyboard in Resources */,
 				51B767B02106369A003CCD46 /* Montserrat-ExtraLightItalic.ttf in Resources */,
 				AAD0D2522112908F002E63BF /* KYCConfirmPhoneNumber.storyboard in Resources */,
 				51B767B12106369A003CCD46 /* Montserrat-Italic.ttf in Resources */,

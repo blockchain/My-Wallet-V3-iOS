@@ -22,7 +22,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
         }
     }
 
-    var userId: String = ""
+    var userId: String?
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
@@ -54,11 +54,22 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     // MARK: IBActions
     @IBAction func onResendCodeTapped(_ sender: Any) {
+        guard let userId = userId else {
+            Logger.shared.warning("userIs is nil.")
+            return
+        }
         presenter.startVerification(number: phoneNumber, userId: userId)
     }
 
     @IBAction func onNextTapped(_ sender: Any) {
-        guard let code = textFieldConfirmationCode.text else { return }
+        guard let code = textFieldConfirmationCode.text else {
+            Logger.shared.warning("code is nil.")
+            return
+        }
+        guard let userId = userId else {
+            Logger.shared.warning("userIs is nil.")
+            return
+        }
         presenter.verify(number: phoneNumber, userId: userId, code: code)
     }
 
