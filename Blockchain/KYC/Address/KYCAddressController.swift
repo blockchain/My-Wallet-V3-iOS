@@ -136,8 +136,6 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
 
     fileprivate func checkFieldsValidity() -> Bool {
         validationFields.forEach({ $0.validate() })
-        primaryButton.isEnabled = !validationFields.contains(where: { $0.isValid() == false })
-        guard primaryButton.isEnabled == false else { return true }
         for field in validationFields {
             if field.isValid() {
                 continue
