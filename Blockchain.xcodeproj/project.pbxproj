@@ -116,7 +116,6 @@
 		3AEF7771210A5BAE00938D42 /* SearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF7770210A5BAE00938D42 /* SearchControllerDelegate.swift */; };
 		3AEF7772210A5BAE00938D42 /* SearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF7770210A5BAE00938D42 /* SearchControllerDelegate.swift */; };
 		3AEF7774210A5DA400938D42 /* LocationSuggestionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF7773210A5DA400938D42 /* LocationSuggestionCoordinator.swift */; };
-		3AEF7775210A5DA400938D42 /* LocationSuggestionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF7773210A5DA400938D42 /* LocationSuggestionCoordinator.swift */; };
 		3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AEF9E8B21091B71006B1CF9 /* MapKit.framework */; };
 		3AEF9E8E21091BBA006B1CF9 /* LocationSuggestionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF9E8D21091BBA006B1CF9 /* LocationSuggestionAPI.swift */; };
 		3AEF9E8F21091BBA006B1CF9 /* LocationSuggestionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF9E8D21091BBA006B1CF9 /* LocationSuggestionAPI.swift */; };
@@ -4575,7 +4574,6 @@
 				3A258C15210A4EAC00C023F5 /* LocationDataProvider.swift in Sources */,
 				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
-				3AEF7775210A5DA400938D42 /* LocationSuggestionCoordinator.swift in Sources */,
 				5159C2E12109149500955BD6 /* KYCOnboardingNavigationController.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,

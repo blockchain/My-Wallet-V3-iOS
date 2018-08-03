@@ -60,7 +60,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
 
         if let input = selection as? LocationSuggestion {
             service.fetchAddress(from: input) { (address) in
-                print(address)
+                // TODO: May no longer be necessary 
             }
         }
     }
