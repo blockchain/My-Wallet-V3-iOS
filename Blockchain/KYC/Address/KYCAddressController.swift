@@ -19,6 +19,9 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
 
     // MARK: Private IBOutlets (ValidationTextField)
+    /// `validationFields` are all the fields listed below in a collection.
+    /// This is just for convenience purposes when iterating over the fields
+    /// and checking validation etc.
     @IBOutlet fileprivate var validationFields: [ValidationTextField]!
     @IBOutlet fileprivate var addressTextField: ValidationTextField!
     @IBOutlet fileprivate var apartmentTextField: ValidationTextField!
@@ -63,18 +66,19 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
         searchDelegate?.onStart()
     }
 
+    // MARK: Private Functions
+
     fileprivate func validationFieldsSetup() {
+
+        /// Given that this is a form, we want all the fields
+        /// except for the last one to prompt the user to
+        /// continue to the next field
         addressTextField.returnKeyType = .next
         apartmentTextField.returnKeyType = .next
         cityTextField.returnKeyType = .next
         stateTextField.returnKeyType = .next
         postalCodeTextField.returnKeyType = .next
         countryTextField.returnKeyType = .done
-
-        addressTextField.validationBlock = { (value) in
-            guard value != nil, value?.count != 0 else { return .invalid(nil) }
-            return .valid
-        }
 
         addressTextField.returnTappedBlock = { [weak self] in
             self?.apartmentTextField.becomeFocused()
@@ -92,6 +96,9 @@ class KYCAddressController: UIViewController, KYCOnboardingNavigation {
             self?.countryTextField.becomeFocused()
         }
 
+        /// This is for handling when the `VerificationTextField`
+        /// is covered by the keyboard. Depending on how many
+        /// forms we have in the app this could be a candidate for abstraction.
         validationFields.forEach { (field) in
             field.becomeFirstResponderBlock = { [weak self] (validationField) in
                 guard let this = self else { return }
