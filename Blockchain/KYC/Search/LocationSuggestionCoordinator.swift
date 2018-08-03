@@ -94,6 +94,10 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
             interface?.updateActivityIndicator(.visible)
         }
 
+        if service.isExecuting {
+            service.cancel()
+        }
+
         service.search(for: query) { [weak self] (suggestions, error) in
             guard let this = self else { return }
 
@@ -113,9 +117,10 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
     }
 
     func onSearchViewCancel() {
-        guard service.isExecuting else { return }
-        service.cancel()
         interface?.searchFieldActive(false)
         interface?.suggestionsList(.hidden)
+        interface?.addressEntryView(.visible)
+        guard service.isExecuting else { return }
+        service.cancel()
     }
 }
