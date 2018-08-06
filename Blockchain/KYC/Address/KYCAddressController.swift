@@ -81,13 +81,25 @@ class KYCAddressController: UIViewController {
 
         /// Given that this is a form, we want all the fields
         /// except for the last one to prompt the user to
-        /// continue to the next field
+        /// continue to the next field.
+        /// We also set the contentType that the field is expecting.
         addressTextField.returnKeyType = .next
+        addressTextField.contentType = .streetAddressLine1
+
         apartmentTextField.returnKeyType = .next
+        apartmentTextField.contentType = .streetAddressLine2
+
         cityTextField.returnKeyType = .next
+        cityTextField.contentType = .addressCity
+
         stateTextField.returnKeyType = .next
+        stateTextField.contentType = .addressState
+
         postalCodeTextField.returnKeyType = .next
+        postalCodeTextField.contentType = .postalCode
+
         countryTextField.returnKeyType = .done
+        countryTextField.contentType = .countryName
 
         validationFields.enumerated().forEach { (index, field) in
             field.returnTappedBlock = { [weak self] in

@@ -103,6 +103,12 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    var contentType: UITextContentType? {
+        didSet {
+            textField.textContentType = contentType
+        }
+    }
+
     var text: String? = "" {
         didSet {
             textField.text = text
