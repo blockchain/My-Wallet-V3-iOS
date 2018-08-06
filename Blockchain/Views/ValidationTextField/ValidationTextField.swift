@@ -132,6 +132,10 @@ class ValidationTextField: NibBasedView {
 
     // MARK: Public Functions
 
+    func isFocused() -> Bool {
+        return textField.isFirstResponder
+    }
+
     func becomeFocused() {
         textField.becomeFirstResponder()
     }
@@ -140,7 +144,7 @@ class ValidationTextField: NibBasedView {
         textField.resignFirstResponder()
     }
 
-    func validate() {
+    func validate() -> ValidationResult {
         if let block = validationBlock {
             validity = block(textField.text)
         } else {
@@ -152,14 +156,7 @@ class ValidationTextField: NibBasedView {
         }
 
         applyValidity(animated: true)
-    }
-
-    func isValid() -> Bool {
-        if case .valid = validity {
-            return true
-        } else {
-            return false
-        }
+        return validity
     }
 
     // MARK: Private Functions

@@ -33,7 +33,6 @@ class KYCAddressController: UIViewController {
     // MARK: - KYCOnboardingNavigation
 
     weak var searchDelegate: SearchControllerDelegate?
-    var segueIdentifier: String? = "showPersonalDetails"
 
     // MARK: Private Properties
 
@@ -148,24 +147,24 @@ class KYCAddressController: UIViewController {
     }
 
     fileprivate func checkFieldsValidity() -> Bool {
-        validationFields.forEach({ $0.validate() })
+        var valid: Bool = true
         for field in validationFields {
-            if field.isValid() {
-                continue
-            } else {
+            guard case .valid = field.validate() else {
+                valid = false
+                guard !validationFields.contains(where: {$0.isFocused() == true}) else { continue }
                 field.becomeFocused()
-                return false
+                continue
             }
         }
-        return true
+        return valid
     }
 
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        guard checkFieldsValidity(), let identifier = segueIdentifier else { return }
+        guard checkFieldsValidity() else { return }
         // TODO: Generate `PostalAddress` to pass along through KYC flow.
-        performSegue(withIdentifier: identifier, sender: self)
+        performSegue(withIdentifier: "showPersonalDetails", sender: self)
     }
 
     // MARK: - Navigation
