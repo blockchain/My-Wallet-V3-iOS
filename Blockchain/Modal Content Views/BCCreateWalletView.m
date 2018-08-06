@@ -265,6 +265,15 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    if (textField == emailTextField) {
+        if (!emailTextField.text.isEmail) {
+            self.createButton.backgroundColor = UIColor.keyPadButton;
+            self.createButton.userInteractionEnabled = NO;
+        } else {
+            self.createButton.backgroundColor = UIColor.brandSecondary;
+            self.createButton.userInteractionEnabled = YES;
+        }
+    }
     if (textField == passwordTextField) {
         [self performSelector:@selector(checkPasswordStrength) withObject:nil afterDelay:0.01];
     }
@@ -357,20 +366,13 @@
 
 - (BOOL)isReadyToSubmitForm
 {
-    if ([emailTextField.text length] == 0) {
+    
+    if (!emailTextField.text.isEmail) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_PLEASE_PROVIDE_AN_EMAIL_ADDRESS title:BC_STRING_ERROR in:nil handler: nil];
         [emailTextField becomeFirstResponder];
         return NO;
     }
-    
-    if ([emailTextField.text hasPrefix:@"@"] ||
-        [emailTextField.text hasSuffix:@"@"] ||
-        [[emailTextField.text componentsSeparatedByString:@"@"] count] != 2) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR in:nil handler: nil];
-        [emailTextField becomeFirstResponder];
-        return NO;
-    }
-    
+
     self.tmpPassword = passwordTextField.text;
     
     if (!self.tmpPassword || [self.tmpPassword length] == 0) {

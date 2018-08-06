@@ -1,5 +1,5 @@
 //
-//  KYCVerifyPhoneNumberController.swift
+//  KYCEnterPhoneNumberController.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 7/17/18.
@@ -8,13 +8,11 @@
 
 import UIKit
 
-final class KYCVerifyPhoneNumberController: UIViewController {
+final class KYCEnterPhoneNumberController: UIViewController {
 
     // MARK: Properties
 
-    // TODO: user ID needs to be passed in to this view controller from previous step
-    var userId: String? = ""
-    var segueIdentifier: String? = "promptForAddress"
+    var userId: String?
 
     @IBOutlet var textFieldMobileNumber: UITextField!
 
@@ -35,24 +33,24 @@ final class KYCVerifyPhoneNumberController: UIViewController {
             return
         }
         guard let userId = userId else {
-            Logger.shared.warning("userId is nil.")
+            Logger.shared.warning("userIs is nil.")
             return
         }
-        presenter.verify(number: number, userId: userId)
+        presenter.startVerification(number: number, userId: userId)
     }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TODO: implement method body
-    }
-
-    private func goToNextStep() {
-        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
+        guard let confirmPhoneNumberViewController = segue.destination as? KYCConfirmPhoneNumberController else {
+            return
+        }
+        confirmPhoneNumberViewController.userId = userId
+        confirmPhoneNumberViewController.phoneNumber = textFieldMobileNumber.text ?? ""
     }
 }
 
-extension KYCVerifyPhoneNumberController: KYCVerifyPhoneNumberView {
+extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     func showError(message: String) {
         AlertViewPresenter.shared.standardError(message: message, in: self)
     }
@@ -61,11 +59,9 @@ extension KYCVerifyPhoneNumberController: KYCVerifyPhoneNumberView {
         LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
     }
 
-    func showEnterVerificationCodeView() {
+    func startVerificationSuccess() {
         Logger.shared.info("Show verification view!")
-        // TODO: Decision on whether or not an alert or another view should be presented is TBD,
-        // for now, just go to the next step
-        goToNextStep()
+        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
     }
 
     func hideLoadingView() {

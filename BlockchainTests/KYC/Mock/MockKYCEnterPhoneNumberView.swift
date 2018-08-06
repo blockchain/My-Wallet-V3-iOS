@@ -1,5 +1,5 @@
 //
-//  MockKYCVerifyPhoneNumberView.swift
+//  MockKYCConfirmPhoneNumberView.swift
 //  BlockchainTests
 //
 //  Created by Chris Arriola on 7/31/18.
@@ -9,18 +9,19 @@
 import Foundation
 import XCTest
 
-class MockKYCVerifyPhoneNumberView: KYCVerifyPhoneNumberView {
+class MockKYCConfirmPhoneNumberView: KYCConfirmPhoneNumberView {
     var didCallShowLoadingViewExpectation: XCTestExpectation?
-    var didCallShowVerifCodeViewExpectation: XCTestExpectation?
+    var didCallStartVerifSuccessExpectation: XCTestExpectation?
     var didCallShowErrorExpectation: XCTestExpectation?
     var didCallHideLoadingViewExpectation: XCTestExpectation?
+    var didCallConfirmCodeExpectation: XCTestExpectation?
 
     func showLoadingView(with text: String) {
         didCallShowLoadingViewExpectation?.fulfill()
     }
 
-    func showEnterVerificationCodeView() {
-        didCallShowVerifCodeViewExpectation?.fulfill()
+    func startVerificationSuccess() {
+        didCallStartVerifSuccessExpectation?.fulfill()
     }
 
     func showError(message: String) {
@@ -29,5 +30,9 @@ class MockKYCVerifyPhoneNumberView: KYCVerifyPhoneNumberView {
 
     func hideLoadingView() {
         didCallHideLoadingViewExpectation?.fulfill()
+    }
+
+    func confirmCodeSuccess() {
+        didCallConfirmCodeExpectation?.fulfill()
     }
 }

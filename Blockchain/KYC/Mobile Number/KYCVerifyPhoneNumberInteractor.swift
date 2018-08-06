@@ -10,7 +10,7 @@ import Foundation
 
 class KYCVerifyPhoneNumberInteractor {
 
-    func verify(
+    func startVerification(
         number: String,
         userId: String,
         success: @escaping KYCNetworkRequest.TaskSuccess,
@@ -19,6 +19,27 @@ class KYCVerifyPhoneNumberInteractor {
         let paramaters = ["mobile": number]
         KYCNetworkRequest(
             put: .updateMobileNumber(userId: userId),
+            parameters: paramaters,
+            taskSuccess: success,
+            taskFailure: failure
+        )
+    }
+
+    func verify(
+        number: String,
+        userId: String,
+        code: String,
+        success: @escaping KYCNetworkRequest.TaskSuccess,
+        failure: @escaping KYCNetworkRequest.TaskFailure
+    ) {
+        let paramaters = [
+            "value": number,
+            "userId": userId,
+            "type": "MOBILE",
+            "code": code
+        ]
+        KYCNetworkRequest(
+            post: .verifications,
             parameters: paramaters,
             taskSuccess: success,
             taskFailure: failure

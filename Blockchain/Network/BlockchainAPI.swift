@@ -36,13 +36,13 @@ final class BlockchainAPI: NSObject {
      Instead, retrieve the wallet and API hostname from the main Bundle in the URL
      extension of this class.
      */
-    enum Endpoints: String, RawValued {
+    enum Hosts: String, RawValued {
         case blockchainAPI  = "api.blockchain.info"
         case blockchainWallet = "blockchain.info"
     }
 
-    /// Public endpoints used for partner API calls.
-    enum PartnerEndpoints: String, RawValued {
+    /// Public hosts used for partner API calls.
+    enum PartnerHosts: String, RawValued {
         case blockchair = "blockchair.com"
         case coinify = "app-api.coinify.com"
         case etherscan = "etherscan.io"
@@ -70,36 +70,36 @@ final class BlockchainAPI: NSObject {
 
     // TODO: remove these once migration is complete
     @objc func blockchainAPI() -> String {
-        return Endpoints.blockchainAPI.rawValue
+        return Hosts.blockchainAPI.rawValue
     }
     @objc func blockchainWallet() -> String {
-        return Endpoints.blockchainWallet.rawValue
+        return Hosts.blockchainWallet.rawValue
     }
     @objc func blockchair() -> String {
-        return PartnerEndpoints.blockchair.rawValue
+        return PartnerHosts.blockchair.rawValue
     }
     @objc func coinify() -> String {
-        return PartnerEndpoints.coinify.rawValue
+        return PartnerHosts.coinify.rawValue
     }
     @objc func etherscan() -> String {
-        return PartnerEndpoints.etherscan.rawValue
+        return PartnerHosts.etherscan.rawValue
     }
     @objc func googleAnalytics() -> String {
-        return PartnerEndpoints.googleAnalytics.rawValue
+        return PartnerHosts.googleAnalytics.rawValue
     }
     @objc func iSignThis() -> String {
-        return PartnerEndpoints.iSignThis.rawValue
+        return PartnerHosts.iSignThis.rawValue
     }
     @objc func sfox() -> String {
-        return PartnerEndpoints.sfox.rawValue
+        return PartnerHosts.sfox.rawValue
     }
     @objc func sfoxKYC() -> String {
-        return PartnerEndpoints.sfoxKYC.rawValue
+        return PartnerHosts.sfoxKYC.rawValue
     }
     @objc func sfoxQuotes() -> String {
-        return PartnerEndpoints.sfoxQuotes.rawValue
+        return PartnerHosts.sfoxQuotes.rawValue
     }
     @objc func shapeshift() -> String {
-        return PartnerEndpoints.shapeshift.rawValue
+        return PartnerHosts.shapeshift.rawValue
     }
 }

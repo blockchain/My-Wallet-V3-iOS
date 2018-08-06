@@ -45,35 +45,6 @@ struct SavePinError: Error {}
 
     // MARK: - Public
 
-    // TODO: not the best place for this - move elsewhere
-    func save() throws {
-        //32 Random bytes for key
-        let data = [__uint8_t](repeating: 0, count: 32)
-        let dataPointer = UnsafeMutableRawPointer(mutating: data)
-        var error = SecRandomCopyBytes(kSecRandomDefault, data.count, dataPointer)
-        guard error == noErr else {
-            throw SavePinError()
-        }
-
-        let key = NSData(bytes: dataPointer, length: data.count).hexadecimalString()
-
-        //32 random bytes for value
-        error = SecRandomCopyBytes(kSecRandomDefault, data.count, dataPointer)
-        guard error == noErr else {
-            throw SavePinError()
-        }
-
-        let value = NSData(bytes: dataPointer, length: data.count).hexadecimalString()
-
-        WalletManager.shared.wallet.pinServerPutKey(onPinServerServer: key, value: value, pin: self.toString)
-
-        if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
-            config.isEnabled,
-            BlockchainSettings.App.shared.biometryEnabled {
-            saveToKeychain()
-        }
-    }
-
     func saveToKeychain() {
         BlockchainSettings.App.shared.pin = self.toString
     }

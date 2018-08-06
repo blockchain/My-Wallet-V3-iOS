@@ -77,7 +77,7 @@ final class KYCPersonalDetailsController: UIViewController {
             )
             return
         }
-        performSegue(withIdentifier: "verifyMobileNumber", sender: self)
+        performSegue(withIdentifier: "enterMobileNumber", sender: self)
     }
 
     // MARK: - Navigation
