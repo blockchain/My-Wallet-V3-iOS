@@ -129,6 +129,10 @@ class ValidationTextField: NibBasedView {
     /// is shown.
     var validationBlock: ValidationBlock?
 
+    /// This closure is called whenever the text is changed
+    /// inside the contained UITextField
+    var textChangedBlock: ((String?) -> Void)?
+
     // MARK: Private IBOutlets
 
     @IBOutlet fileprivate var textField: UITextField!
@@ -163,6 +167,12 @@ class ValidationTextField: NibBasedView {
 
         applyValidity(animated: true)
         return validity
+    }
+
+    // MARK: Private IBActions
+
+    @IBAction fileprivate func onTextFieldChanged(_ sender: Any) {
+        textChangedBlock?(textField.text)
     }
 
     // MARK: Private Functions
@@ -208,7 +218,7 @@ extension ValidationTextField: UITextFieldDelegate {
             return
         }
 
-        if (textField.text?.count == 0 || textField.text == nil) {
+        if textField.text?.count == 0 || textField.text == nil {
             validity = optionalField ? .valid : .invalid(nil)
         } else {
             validity = .valid

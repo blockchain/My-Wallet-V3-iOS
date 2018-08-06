@@ -15,8 +15,13 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     var userId: String?
 
-    @IBOutlet var textFieldMobileNumber: UITextField!
-    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
+    // MARK: IBOutlets
+
+    @IBOutlet private var validationTextFieldMobileNumber: ValidationTextField!
+    @IBOutlet private var buttonNext: PrimaryButton!
+    @IBOutlet private var layoutConstraintBottomButton: NSLayoutConstraint!
+
+    // MARK: Private Properties
 
     private var originalBottomButtonConstraint: CGFloat!
 
@@ -24,12 +29,29 @@ final class KYCEnterPhoneNumberController: UIViewController {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
 
+    private lazy var phoneNumberPartialFormatter: PartialFormatter = {
+        return PartialFormatter()
+    }()
+
+    // MARK: UIViewController Lifecycle Methods
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TICKET: IOS-1141 display correct % in the progress view
+        buttonNext.isEnabled = false
+        validationTextFieldMobileNumber.contentType = .telephoneNumber
+        validationTextFieldMobileNumber.textChangedBlock = { [unowned self] text in
+            guard let text = text else {
+                self.buttonNext.isEnabled = false
+                return
+            }
+            self.buttonNext.isEnabled = text.count > 0
+            self.validationTextFieldMobileNumber.text = self.phoneNumberPartialFormatter.formatPartial(text)
+        }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
     }
 
@@ -41,13 +63,13 @@ final class KYCEnterPhoneNumberController: UIViewController {
         NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
             self.keyboardWillHide(with: KeyboardPayload(notification: $0))
         }
-        textFieldMobileNumber.becomeFirstResponder()
+        validationTextFieldMobileNumber.becomeFirstResponder()
     }
 
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        guard let number = textFieldMobileNumber.text else {
+        guard let number = validationTextFieldMobileNumber.text else {
             Logger.shared.warning("number is nil.")
             return
         }
@@ -65,10 +87,10 @@ final class KYCEnterPhoneNumberController: UIViewController {
             return
         }
         confirmPhoneNumberViewController.userId = userId
-        confirmPhoneNumberViewController.phoneNumber = textFieldMobileNumber.text ?? ""
+        confirmPhoneNumberViewController.phoneNumber = validationTextFieldMobileNumber.text ?? ""
     }
 
-    // MARK: - Private
+    // MARK: - Private Methods
 
     private func keyboardWillShow(with payload: KeyboardPayload) {
         UIView.beginAnimations(nil, context: nil)

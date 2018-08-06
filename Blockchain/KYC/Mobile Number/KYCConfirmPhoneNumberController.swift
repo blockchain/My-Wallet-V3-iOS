@@ -38,6 +38,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TICKET: IOS-1141 display correct % in the progress view
         labelPhoneNumber.text = phoneNumber
         nextButton.isEnabled = false
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant

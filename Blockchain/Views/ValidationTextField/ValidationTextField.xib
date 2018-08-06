@@ -34,6 +34,7 @@
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
+                        <action selector="onTextFieldChanged:" destination="-1" eventType="editingChanged" id="Bsn-iK-xW0"/>
                         <outlet property="delegate" destination="-1" id="GrD-iU-cbW"/>
                     </connections>
                 </textField>
