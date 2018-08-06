@@ -43,6 +43,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
         super.viewDidLoad()
         // TICKET: IOS-1141 display correct % in the progress view
         buttonNext.isEnabled = false
+        validationTextFieldMobileNumber.keyboardType = .numberPad
         validationTextFieldMobileNumber.contentType = .telephoneNumber
         validationTextFieldMobileNumber.textChangedBlock = { [unowned self] text in
             guard let text = text else {
