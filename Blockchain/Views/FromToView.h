@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define ROW_HEIGHT_FROM_TO_VIEW 48
-
 @protocol FromToButtonDelegate
 - (void)fromButtonClicked;
 - (void)toButtonClicked;
@@ -26,4 +24,5 @@
 
 // Default height 96
 - (id)initWithFrame:(CGRect)frame enableToTextField:(BOOL)enableToTextField;
++ (CGFloat)rowHeight;
 @end

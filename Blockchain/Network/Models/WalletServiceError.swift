@@ -14,6 +14,5 @@ internal enum WalletServiceError: Error {
     case jsonParseError
 
     /// A generic error with an optional error message
-    //swiftlint:disable next identifier_name
     case generic(message: String?)
 }

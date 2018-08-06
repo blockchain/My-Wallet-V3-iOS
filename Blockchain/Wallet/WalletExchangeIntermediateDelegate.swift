@@ -2,7 +2,7 @@
 //  WalletExchangeIntermediateDelegate.swift
 //  Blockchain
 //
-//  Created by kevinwu on 5/21/18.
+//  Created by kevinwu on 7/27/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 

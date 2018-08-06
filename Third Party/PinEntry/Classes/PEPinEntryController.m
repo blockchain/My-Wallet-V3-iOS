@@ -35,7 +35,6 @@
 
 static PEViewController *EnterController()
 {
-
 	PEViewController *c = [[PEViewController alloc] init];
 	c.prompt = BC_STRING_PLEASE_ENTER_PIN;
 	c.title = @"";
@@ -44,17 +43,6 @@ static PEViewController *EnterController()
     c.versionLabel.hidden = NO;
     
 	return c;
-}
-
-static PEViewController *NewController()
-{
-	PEViewController *c = [[PEViewController alloc] init];
-	c.prompt = BC_STRING_PLEASE_ENTER_NEW_PIN;
-	c.title = @"";
-
-    c.versionLabel.text = [NSBundle applicationVersion];
-
-    return c;
 }
 
 static PEViewController *VerifyController()
@@ -75,6 +63,17 @@ static PEViewController *VerifyController()
 @implementation PEPinEntryController
 
 @synthesize pinDelegate, verifyOnly, verifyOptional, inSettings;
+
++ (PEViewController *)newController
+{
+    PEViewController *c = [[PEViewController alloc] init];
+    c.prompt = BC_STRING_PLEASE_ENTER_NEW_PIN;
+    c.title = @"";
+
+    c.versionLabel.text = [NSBundle applicationVersion];
+
+    return c;
+}
 
 + (PEPinEntryController *)pinVerifyController
 {
@@ -122,7 +121,7 @@ static PEViewController *VerifyController()
 
 + (PEPinEntryController *)pinCreateController
 {
-	PEViewController *c = NewController();
+    PEViewController *c = [PEPinEntryController newController];
 	PEPinEntryController *n = [[self alloc] initWithRootViewController:c];
 	c.delegate = n;
     n->pinController = c;
@@ -281,79 +280,29 @@ static PEViewController *VerifyController()
 			break;
         }
 		case PS_ENTER1: {
-            [self didEnter1Pin:controller];
+            [self didEnterFirstPinForChangePinFlowFrom:controller previousPin:self.lastEnteredPIN];
 			break;
 		}
 		case PS_ENTER2:
-			if([controller.pin intValue] != pinEntry1) {
-				PEViewController *c = NewController();
-				c.delegate = self;
-				self.viewControllers = [NSArray arrayWithObjects:c, [self.viewControllers objectAtIndex:0], nil];
-				[self popViewControllerAnimated:NO];
-                [AlertViewPresenter.sharedInstance standardErrorWithMessage:LocalizationConstantsObjcBridge.pinsDoNotMatch
-                                                                      title:LocalizationConstantsObjcBridge.error
-                                                                         in:self
-                                                                    handler:nil];
-			} else {
-				[self.pinDelegate pinEntryController:self changedPin:[controller.pin intValue]];
-			}
+            [self didConfirmPinForChangePinFlowFrom:controller firstPin: pinEntry1];
 			break;
 		default:
 			break;
 	}
 }
 
-- (void)didEnter1Pin:(PEViewController *)controller
-{
-    Pin *pin = [[Pin alloc] initWithCode: [controller.pin intValue]];
-
-    // Check that the selected pin passes checks
-    if (!pin.isValid) {
-        [self errorAndResetWithMessage:[LocalizationConstantsObjcBridge chooseAnotherPin]];
-        return;
-    }
-
-    if ([pin isEqual:self.lastEnteredPIN]) {
-        [self errorAndResetWithMessage:[LocalizationConstantsObjcBridge newPinMustBeDifferent]];
-        return;
-    }
-
-    if (pin.isCommon) {
-        __weak PEPinEntryController *weakSelf = self;
-        NSArray *actions = @[
-            [UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge continueString]
-                                     style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf goToEnter2Pin:controller];
-            }],
-            [UIAlertAction actionWithTitle:[LocalizationConstantsObjcBridge tryAgain]
-                                     style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf reset];
-            }],
-        ];
-        [AlertViewPresenter.sharedInstance standardNotifyWithMessage:[LocalizationConstantsObjcBridge pinCodeCommonMessage]
-                                                               title:[LocalizationConstantsObjcBridge warning]
-                                                             actions:actions
-                                                                  in:self];
-        return;
-    }
-
-    [self goToEnter2Pin:controller];
-}
-
 - (void)goToEnter1Pin
 {
-    PEViewController *c = NewController();
+    PEViewController *c = [PEPinEntryController newController];
     c.delegate = self;
     pinStage = PS_ENTER1;
     [[self navigationController] pushViewController:c animated:NO];
     self.viewControllers = [NSArray arrayWithObject:c];
 }
 
-- (void)goToEnter2Pin:(PEViewController *)controller
+- (void)goToEnter2Pin:(Pin *_Nonnull)pin1
 {
-    pinEntry1 = [controller.pin intValue];
+    pinEntry1 = pin1;
     PEViewController *c = VerifyController();
     c.delegate = self;
     [[self navigationController] pushViewController:c animated:NO];

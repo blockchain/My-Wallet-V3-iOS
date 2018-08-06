@@ -45,8 +45,6 @@
 
 @property (strong, nonatomic) TransactionsBitcoinCashViewController *transactionsBitcoinCashViewController;
 
-@property (strong, nonatomic) ExchangeOverviewViewController *exchangeOverviewViewController;
-
 - (void)reload;
 - (void)reloadAfterMultiAddressResponse;
 - (void)reloadMessageViews;
@@ -116,6 +114,5 @@
 
 - (void)updateBadgeNumber:(NSInteger)number forSelectedIndex:(int)index;
 
-- (void)exchangeClicked;
 - (void)showGetAssetsAlert;
 @end

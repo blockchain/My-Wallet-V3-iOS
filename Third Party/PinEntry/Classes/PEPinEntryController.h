@@ -27,15 +27,15 @@
 #import "Assets.h"
 
 @class PEPinEntryController;
+@class Pin;
 @class PinPresenter;
 
 @protocol PEPinEntryControllerDelegate
 
 @required
-- (void)pinEntryController:(PEPinEntryController *)c changedPin:(NSUInteger)pin;
-- (void)pinEntryControllerDidCancel:(PEPinEntryController *)c;
+- (void)pinEntryControllerDidCancel:(PEPinEntryController * _Nonnull)c;
 - (void)pinEntryControllerDidObtainPasswordDecryptionKey:(NSString * _Nonnull)decryptionKey;
-
+- (void)pinEntryControllerDidChangePin:(PEPinEntryController * _Nonnull)controller;
 @end
 
 
@@ -47,7 +47,7 @@
 	BOOL verifyOnly;
     BOOL verifyOptional;
 	NSUInteger pinStage;
-	NSUInteger pinEntry1;
+	Pin *pinEntry1;
 	PEViewController *pinController;
     PinPresenter *pinPresenter;
 	id <PEPinEntryControllerDelegate> __weak pinDelegate;
@@ -70,7 +70,9 @@
 - (void)setupQRCode;
 - (void)reset;
 - (void)goToEnter1Pin;
+- (void)goToEnter2Pin:(Pin *_Nonnull)pin1;
 
++ (PEViewController *_Nonnull)newController;
 + (PEPinEntryController *)pinVerifyController;
 + (PEPinEntryController *)pinVerifyControllerClosable;
 + (PEPinEntryController *)pinChangeController;

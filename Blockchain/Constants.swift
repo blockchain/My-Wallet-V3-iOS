@@ -36,6 +36,8 @@ struct Constants {
         static let MinimumTapTargetSize: CGFloat = 22.0
 
         static let infoLabelEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 9.5, bottom: 2, right: 9.5)
+        static let buttonHeight: CGFloat = 40.0
+        static let buttonCornerRadius: CGFloat = 4.0
     }
     struct FontSizes {
         static let ExtraExtraExtraSmall: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 13.0 : 11.0

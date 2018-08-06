@@ -48,4 +48,15 @@ extension AssetType {
             return "Ether"
         }
     }
+
+    var symbol: String {
+        switch self {
+        case .bitcoin:
+            return "BTC"
+        case .bitcoinCash:
+            return "BCH"
+        case .ethereum:
+            return "ETH"
+        }
+    }
 }

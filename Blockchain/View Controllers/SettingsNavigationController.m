@@ -7,7 +7,6 @@
 //
 
 #import "SettingsNavigationController.h"
-#import "SettingsTableViewController.h"
 #import "Blockchain-Swift.h"
 
 @interface SettingsNavigationController ()
