@@ -10,8 +10,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Montserrat-Medium.ttf">
+            <string>Montserrat-Medium</string>
+        </array>
         <array key="Montserrat-Regular.ttf">
             <string>Montserrat-Regular</string>
+        </array>
+        <array key="Montserrat-SemiBold.ttf">
+            <string>Montserrat-SemiBold</string>
         </array>
     </customFonts>
     <scenes>
@@ -23,6 +29,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iDg-3K-PTa">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="8"/>
+                                <color key="tintColor" red="0.011764705882352941" green="0.66274509803921566" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="f2X-6v-9TL"/>
+                                </constraints>
+                            </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Why do you need this?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PtR-Ju-hsT">
+                                <rect key="frame" x="16" y="23" width="343" height="14"/>
+                                <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
+                                <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your device to secure your wallet." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxC-dO-8GT">
+                                <rect key="frame" x="16" y="39" width="343" height="14"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="12"/>
+                                <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Mobile Number" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Kwe-pA-MQg">
+                                <rect key="frame" x="16" y="69" width="343" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="fhw-Jw-qx4"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="continue" textContentType="tel"/>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KX0-wF-bqu" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.29803921568627451" green="0.6705882352941176" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -37,41 +71,24 @@
                                     <action selector="primaryButtonTapped:" destination="7WR-uN-K1i" eventType="touchUpInside" id="mPE-5e-fgU"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Mobile Number" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Kwe-pA-MQg">
-                                <rect key="frame" x="16" y="16" width="343" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="fhw-Jw-qx4"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="continue" textContentType="tel"/>
-                            </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lXd-eX-J03" userLabel="Description Label">
-                                <rect key="frame" x="16" y="504.33333333333343" width="343" height="50.666666666666686"/>
-                                <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">Confirming your phone number allows us to secure your account. Don't worry, we won't double text you (unless you have to resend your code)</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" metaFont="system"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="iDg-3K-PTa" secondAttribute="trailing" id="3fE-xr-1dJ"/>
+                            <constraint firstItem="PtR-Ju-hsT" firstAttribute="top" secondItem="iDg-3K-PTa" secondAttribute="bottom" constant="15" id="B6q-H9-Ov8"/>
+                            <constraint firstItem="iDg-3K-PTa" firstAttribute="top" secondItem="icW-B4-iKS" secondAttribute="top" id="LTO-Db-Zfp"/>
+                            <constraint firstItem="fxC-dO-8GT" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="MAY-oN-SGQ"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="bottom" secondItem="KX0-wF-bqu" secondAttribute="bottom" constant="16" id="SXE-nw-OlT"/>
-                            <constraint firstItem="lXd-eX-J03" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="Yq0-6Z-oJ3"/>
+                            <constraint firstItem="PtR-Ju-hsT" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="VO6-ZC-OAT"/>
+                            <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="PtR-Ju-hsT" secondAttribute="trailing" constant="16" id="XuD-GS-eJm"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="Kwe-pA-MQg" secondAttribute="trailing" constant="16" id="ajR-3v-Hcl"/>
                             <constraint firstItem="KX0-wF-bqu" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="clN-WD-rx6"/>
                             <constraint firstItem="Kwe-pA-MQg" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="gLX-zu-pov"/>
-                            <constraint firstItem="Kwe-pA-MQg" firstAttribute="top" secondItem="icW-B4-iKS" secondAttribute="top" constant="16" id="jgS-Rg-PnN"/>
+                            <constraint firstItem="iDg-3K-PTa" firstAttribute="leading" secondItem="m4i-aL-8OI" secondAttribute="leading" id="lyM-53-dJg"/>
+                            <constraint firstItem="Kwe-pA-MQg" firstAttribute="top" secondItem="fxC-dO-8GT" secondAttribute="bottom" constant="16" id="pDw-pN-huO"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="KX0-wF-bqu" secondAttribute="trailing" constant="16" id="tP6-WH-8XD"/>
-                            <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="lXd-eX-J03" secondAttribute="trailing" constant="16" id="uzR-te-vBJ"/>
-                            <constraint firstItem="KX0-wF-bqu" firstAttribute="top" secondItem="lXd-eX-J03" secondAttribute="bottom" constant="75" id="yop-Fd-ZtT"/>
+                            <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="fxC-dO-8GT" secondAttribute="trailing" constant="16" id="typ-jK-hlr"/>
+                            <constraint firstItem="fxC-dO-8GT" firstAttribute="top" secondItem="PtR-Ju-hsT" secondAttribute="bottom" constant="2" id="vMC-hS-pLe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="icW-B4-iKS"/>
                     </view>
@@ -80,6 +97,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="layoutConstraintBottomButton" destination="SXE-nw-OlT" id="B4p-XA-yz6"/>
                         <outlet property="textFieldMobileNumber" destination="Kwe-pA-MQg" id="30j-zZ-aGz"/>
                         <segue destination="xVk-FG-HTS" kind="show" identifier="verifyMobileNumber" id="Ppp-kU-LhA"/>
                     </connections>

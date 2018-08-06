@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import PhoneNumberKit
 import UIKit
 
 final class KYCEnterPhoneNumberController: UIViewController {
@@ -15,13 +16,31 @@ final class KYCEnterPhoneNumberController: UIViewController {
     var userId: String?
 
     @IBOutlet var textFieldMobileNumber: UITextField!
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
+
+    private var originalBottomButtonConstraint: CGFloat!
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = { [unowned self] in
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        originalBottomButtonConstraint = layoutConstraintBottomButton.constant
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) {
+            self.keyboardWillShow(with: KeyboardPayload(notification: $0))
+        }
+        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
+            self.keyboardWillHide(with: KeyboardPayload(notification: $0))
+        }
         textFieldMobileNumber.becomeFirstResponder()
     }
 
@@ -47,6 +66,24 @@ final class KYCEnterPhoneNumberController: UIViewController {
         }
         confirmPhoneNumberViewController.userId = userId
         confirmPhoneNumberViewController.phoneNumber = textFieldMobileNumber.text ?? ""
+    }
+
+    // MARK: - Private
+
+    private func keyboardWillShow(with payload: KeyboardPayload) {
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(payload.animationDuration)
+        UIView.setAnimationCurve(payload.animationCurve)
+        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
+        UIView.commitAnimations()
+    }
+
+    private func keyboardWillHide(with payload: KeyboardPayload) {
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(payload.animationDuration)
+        UIView.setAnimationCurve(payload.animationCurve)
+        layoutConstraintBottomButton.constant = originalBottomButtonConstraint
+        UIView.commitAnimations()
     }
 }
 

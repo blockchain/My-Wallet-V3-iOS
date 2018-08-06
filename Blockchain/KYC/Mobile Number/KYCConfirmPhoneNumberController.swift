@@ -27,6 +27,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
+
     private var originalBottomButtonConstraint: CGFloat!
 
     deinit {
