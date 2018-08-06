@@ -262,12 +262,6 @@
                         <outlet property="searchBar" destination="6g6-gf-4D1" id="yeK-yd-vcm"/>
                         <outlet property="stateTextField" destination="MQL-tY-eAz" id="cXd-qe-uCX"/>
                         <outlet property="tableView" destination="fkm-6J-r0r" id="yzI-gy-vZ7"/>
-                        <outletCollection property="validationFields" destination="HnA-P2-2Gj" collectionClass="NSMutableArray" id="Xry-Lx-HTD"/>
-                        <outletCollection property="validationFields" destination="5mF-Bq-VW9" collectionClass="NSMutableArray" id="fIq-un-YgI"/>
-                        <outletCollection property="validationFields" destination="j8H-Lr-LlB" collectionClass="NSMutableArray" id="ukx-ji-1BG"/>
-                        <outletCollection property="validationFields" destination="MQL-tY-eAz" collectionClass="NSMutableArray" id="3b0-iw-cdl"/>
-                        <outletCollection property="validationFields" destination="LF7-ax-XE2" collectionClass="NSMutableArray" id="ThE-DO-3YN"/>
-                        <outletCollection property="validationFields" destination="ZL2-vY-uhQ" collectionClass="NSMutableArray" id="uep-hd-8oM"/>
                         <segue destination="QUH-Ks-fjK" kind="show" identifier="showPersonalDetails" id="Gpq-wr-SYc"/>
                     </connections>
                 </viewController>

@@ -19,10 +19,6 @@ class KYCAddressController: UIViewController {
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
 
     // MARK: Private IBOutlets (ValidationTextField)
-    /// `validationFields` are all the fields listed below in a collection.
-    /// This is just for convenience purposes when iterating over the fields
-    /// and checking validation etc.
-    @IBOutlet fileprivate var validationFields: [ValidationTextField]!
     @IBOutlet fileprivate var addressTextField: ValidationTextField!
     @IBOutlet fileprivate var apartmentTextField: ValidationTextField!
     @IBOutlet fileprivate var cityTextField: ValidationTextField!
@@ -41,6 +37,20 @@ class KYCAddressController: UIViewController {
 
     // MARK: Private Properties
 
+    /// `validationFields` are all the fields listed below in a collection.
+    /// This is just for convenience purposes when iterating over the fields
+    /// and checking validation etc.
+    fileprivate var validationFields: [ValidationTextField] {
+        get {
+            return [addressTextField,
+                    apartmentTextField,
+                    cityTextField,
+                    stateTextField,
+                    postalCodeTextField,
+                    countryTextField
+            ]
+        }
+    }
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
     fileprivate var keyboard: KeyboardPayload? = nil
@@ -58,7 +68,7 @@ class KYCAddressController: UIViewController {
 
         // TODO: Localize
         searchBar.placeholder = "Your Home Address"
-        progressView.tintColor = UIColor.green
+        progressView.tintColor = .green
 
         validationFieldsSetup()
         setupNotifications()
@@ -80,20 +90,16 @@ class KYCAddressController: UIViewController {
         postalCodeTextField.returnKeyType = .next
         countryTextField.returnKeyType = .done
 
-        addressTextField.returnTappedBlock = { [weak self] in
-            self?.apartmentTextField.becomeFocused()
-        }
-        apartmentTextField.returnTappedBlock = { [weak self] in
-            self?.cityTextField.becomeFocused()
-        }
-        cityTextField.returnTappedBlock = { [weak self] in
-            self?.stateTextField.becomeFocused()
-        }
-        stateTextField.returnTappedBlock = { [weak self] in
-            self?.postalCodeTextField.becomeFocused()
-        }
-        postalCodeTextField.returnTappedBlock = { [weak self] in
-            self?.countryTextField.becomeFocused()
+        validationFields.enumerated().forEach { (index, field) in
+            field.returnTappedBlock = { [weak self] in
+                guard let this = self else { return }
+                guard this.validationFields.count > index + 1 else {
+                    field.resignFocus()
+                    return
+                }
+                let next = this.validationFields[index + 1]
+                next.becomeFocused()
+            }
         }
 
         /// This is for handling when the `VerificationTextField`
@@ -131,11 +137,11 @@ class KYCAddressController: UIViewController {
     }
 
     fileprivate func setupNotifications() {
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) { [weak self] _ in
+        NotificationCenter.when(.UIKeyboardWillHide) { [weak self] _ in
             self?.scrollView.contentInset = .zero
             self?.scrollView.setContentOffset(.zero, animated: true)
         }
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) { [weak self] notification in
+        NotificationCenter.when(.UIKeyboardWillShow) { [weak self] notification in
             let keyboard = KeyboardPayload(notification: notification)
             self?.keyboard = keyboard
         }

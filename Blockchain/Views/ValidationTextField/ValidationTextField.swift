@@ -111,17 +111,17 @@ class ValidationTextField: NibBasedView {
 
     /// This closure is called when the user taps `next`
     /// or `done` etc. and the `textField` resigns.
-    var returnTappedBlock: (() -> Void)? = nil
+    var returnTappedBlock: (() -> Void)?
 
     /// This closure is called when a field is in
     /// focus. You can use it to handle scrolling to
     /// the particular textField.
-    var becomeFirstResponderBlock: ((ValidationTextField) -> Void)? = nil
+    var becomeFirstResponderBlock: ((ValidationTextField) -> Void)?
 
     /// This closure is responsible for validation.
     /// If the return value is invalid, the error state
     /// is shown.
-    var validationBlock: ValidationBlock? = nil
+    var validationBlock: ValidationBlock?
 
     // MARK: Private IBOutlets
 
@@ -144,7 +144,7 @@ class ValidationTextField: NibBasedView {
         if let block = validationBlock {
             validity = block(textField.text)
         } else {
-            if (textField.text?.count == 0 || textField.text == nil) {
+            if textField.text?.count == 0 || textField.text == nil {
                 validity = optionalField ? .valid : .invalid(nil)
             } else {
                 validity = .valid
