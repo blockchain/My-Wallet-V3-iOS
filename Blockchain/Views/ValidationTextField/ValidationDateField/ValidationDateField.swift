@@ -13,17 +13,12 @@
 /// but due to time constraints I am using a `UIDatePicker`.
 class ValidationDateField: ValidationTextField {
 
-    fileprivate static let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
-
     lazy var pickerView: UIDatePicker = {
         let picker = UIDatePicker(frame: .zero)
         return picker
     }()
+
+    var minimumDate: Date = Date()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +30,7 @@ class ValidationDateField: ValidationTextField {
     }
     
     @objc func datePickerUpdated(_ sender: UIDatePicker) {
-        text = ValidationDateField.formatter.string(from: sender.date)
+        text = DateFormatter.birthday.string(from: sender.date)
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {

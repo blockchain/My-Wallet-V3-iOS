@@ -8,9 +8,14 @@
 
 import UIKit
 
+enum ValidationError: Error {
+    case unknown
+    case minimumDateRequirement
+}
+
 enum ValidationResult {
     case valid
-    case invalid(Error?)
+    case invalid(ValidationError?)
 }
 
 extension ValidationResult {

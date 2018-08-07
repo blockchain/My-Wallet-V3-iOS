@@ -70,6 +70,7 @@ extension ValidationFormView where Self: UIViewController {
 
     func checkFieldsValidity() -> Bool {
         var valid: Bool = true
+        validationFields.forEach({$0.resignFocus()})
         for field in validationFields {
             guard case .valid = field.validate(withStyling: true) else {
                 valid = false

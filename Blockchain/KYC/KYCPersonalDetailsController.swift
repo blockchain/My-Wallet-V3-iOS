@@ -18,7 +18,7 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var progressView: UIProgressView!
-    
+
     // MARK: - IBOutlets
 
     @IBOutlet fileprivate var firstNameField: ValidationTextField!
@@ -70,6 +70,17 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
         lastNameField.returnKeyType = .next
         lastNameField.contentType = .familyName
+
+        birthdayField.validationBlock = { value in
+            guard let birthday = value else { return .invalid(nil) }
+            guard let date = DateFormatter.birthday.date(from: birthday) else { return .invalid(nil) }
+            if date <= Date.eighteenYears {
+                return .valid
+            } else {
+                
+                return .invalid(.minimumDateRequirement)
+            }
+        }
     }
 
     fileprivate func setupNotifications() {
@@ -107,4 +118,11 @@ extension KYCPersonalDetailsController: UIScrollViewDelegate {
         // TODO: May not be necessary. 
         validationFields.forEach({$0.resignFocus()})
     }
+}
+
+extension Date {
+    static let eighteenYears: Date = Calendar.current.date(
+        byAdding: .year,
+        value: -18,
+        to: Date()) ?? Date()
 }
