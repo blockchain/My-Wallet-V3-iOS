@@ -77,7 +77,6 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
             if date <= Date.eighteenYears {
                 return .valid
             } else {
-                
                 return .invalid(.minimumDateRequirement)
             }
         }
