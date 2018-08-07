@@ -28,6 +28,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="VjU-hs-80k"/>
                                 </constraints>
+                                <color key="progressTintColor" red="0.13725490196078433" green="0.58823529411764708" blue="0.42352941176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="trackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="What is my address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tmZ-Mg-6Kp">
                                 <rect key="frame" x="16" y="16" width="343" height="15"/>
@@ -161,6 +163,7 @@
                         <outlet property="firstNameField" destination="dFe-4p-8Bl" id="L3G-QR-mVR"/>
                         <outlet property="lastNameField" destination="6Nk-Gd-qS1" id="trs-Iy-Ecy"/>
                         <outlet property="primaryButton" destination="5a2-YO-4u9" id="bkL-go-wpB"/>
+                        <outlet property="progressView" destination="sxl-FD-HTb" id="Op0-Xj-T3U"/>
                         <outlet property="scrollView" destination="oDQ-tQ-rDw" id="RFu-VN-Nho"/>
                         <segue destination="ikb-aY-GZn" kind="show" identifier="enterMobileNumber" id="EC8-k6-Erk"/>
                     </connections>

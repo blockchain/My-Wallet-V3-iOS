@@ -76,6 +76,7 @@
 		3A76F8F52119EDD5002F7946 /* ValidationDateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */; };
 		3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */; };
 		3A76F8FE211A067A002F7946 /* ValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8FD211A067A002F7946 /* ValidationFormView.swift */; };
+		3A76F900211A255F002F7946 /* ProgressableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8FF211A255F002F7946 /* ProgressableView.swift */; };
 		3A7F7EE3210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
 		3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
 		3A7F7EE6210F95C7001E20AF /* LocationSuggestionInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */; };
@@ -983,6 +984,7 @@
 		3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationDateField.swift; sourceTree = "<group>"; };
 		3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationDateField.xib; sourceTree = "<group>"; };
 		3A76F8FD211A067A002F7946 /* ValidationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationFormView.swift; sourceTree = "<group>"; };
+		3A76F8FF211A255F002F7946 /* ProgressableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressableView.swift; sourceTree = "<group>"; };
 		3A7F7EE2210F6C77001E20AF /* Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visibility.swift; sourceTree = "<group>"; };
 		3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionInterface.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
@@ -1844,7 +1846,6 @@
 		AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTypeLegacyHelper.swift; sourceTree = "<group>"; };
 		AA2BA64320DC754600F01954 /* BitcoinAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAddressTests.swift; sourceTree = "<group>"; };
 		AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReceiveAddressView.swift; sourceTree = "<group>"; };
-		AA2F96FE2118C04600EE7F21 /* KYCAddressDetailViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCAddressDetailViewController.storyboard; sourceTree = "<group>"; };
 		AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentity.storyboard; sourceTree = "<group>"; };
 		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuItem.swift; sourceTree = "<group>"; };
@@ -2438,7 +2439,6 @@
 		51383538210253A700767B2E /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				AA2F96FE2118C04600EE7F21 /* KYCAddressDetailViewController.storyboard */,
 				AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */,
 				5150E54821134251000966BE /* KYCAccountStatus.storyboard */,
 				5138353A210253A700767B2E /* KYCAddress.storyboard */,
@@ -2456,6 +2456,7 @@
 			isa = PBXGroup;
 			children = (
 				5138354B210253A700767B2E /* PrimaryButton.swift */,
+				3A76F8FF211A255F002F7946 /* ProgressableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -4557,6 +4558,7 @@
 				23FB5C0A1D9ABB590008C6AB /* TransactionDetailToCell.m in Sources */,
 				AACE32002093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
 				C76D730420B2052000040B57 /* WalletExchangeDelegate.swift in Sources */,
+				3A76F900211A255F002F7946 /* ProgressableView.swift in Sources */,
 				9F91B607151666EC00ACB32D /* BCCreateWalletView.m in Sources */,
 				AAE94F2E20C644DE005A3595 /* PinPresenter.swift in Sources */,
 				23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */,

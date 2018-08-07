@@ -9,12 +9,16 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: UIViewController, ValidationFormView {
+final class KYCPersonalDetailsController: UIViewController, ValidationFormView, ProgressableView {
+
+    var barColor: UIColor = .green
+    var startingValue: Float = 0.14
 
     // MARK: - Public IBOutlets
 
     @IBOutlet var scrollView: UIScrollView!
-
+    @IBOutlet var progressView: UIProgressView!
+    
     // MARK: - IBOutlets
 
     @IBOutlet fileprivate var firstNameField: ValidationTextField!
@@ -42,6 +46,20 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView {
         setupTextFields()
         handleKeyboardOffset()
         setupNotifications()
+        setupProgressView()
+
+        validationFields.enumerated().forEach { (index, field) in
+            field.returnTappedBlock = { [weak self] in
+                guard let this = self else { return }
+                this.updateProgress(this.progression())
+                guard this.validationFields.count > index + 1 else {
+                    field.resignFocus()
+                    return
+                }
+                let next = this.validationFields[index + 1]
+                next.becomeFocused()
+            }
+        }
     }
 
     // MARK: - Private Methods
@@ -63,6 +81,13 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView {
             let keyboard = KeyboardPayload(notification: notification)
             self?.keyboard = keyboard
         }
+    }
+
+    fileprivate func progression() -> Float {
+        let newProgression: Float = validationFields.map({
+            return $0.validate() == .valid ? 0.14 : 0.0
+        }).reduce(startingValue, +)
+        return max(newProgression, startingValue)
     }
 
     // MARK: - Actions

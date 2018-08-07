@@ -13,6 +13,21 @@ enum ValidationResult {
     case invalid(Error?)
 }
 
+extension ValidationResult {
+    static func ==(lhs: ValidationResult, rhs: ValidationResult) -> Bool {
+        switch (lhs, rhs) {
+        case (.valid, .valid):
+            return true
+        case (.valid, .invalid):
+            return false
+        case (.invalid, .valid):
+            return false
+        case (.invalid, .invalid):
+            return true
+        }
+    }
+}
+
 typealias ValidationBlock = ((String?) -> ValidationResult)
 
 @IBDesignable
@@ -27,17 +42,7 @@ class ValidationTextField: NibBasedView {
 
     // MARK: Private Properties
 
-    fileprivate var validity: ValidationResult = .valid {
-        didSet {
-            // TODO: Show the `x` when it is invalid.
-            switch validity {
-            case .invalid:
-                baselineFillColor = UIColor.red
-            case .valid:
-                baselineFillColor = UIColor.gray2
-            }
-        }
-    }
+    fileprivate var validity: ValidationResult = .valid
 
     // MARK: IBInspectable Properties
 
@@ -156,7 +161,7 @@ class ValidationTextField: NibBasedView {
         textField.resignFirstResponder()
     }
 
-    func validate() -> ValidationResult {
+    func validate(withStyling: Bool = false) -> ValidationResult {
         if let block = validationBlock {
             validity = block(textField.text)
         } else {
@@ -166,7 +171,8 @@ class ValidationTextField: NibBasedView {
                 validity = .valid
             }
         }
-
+        guard withStyling == true else { return validity }
+        
         applyValidity(animated: true)
         return validity
     }
@@ -178,10 +184,12 @@ class ValidationTextField: NibBasedView {
         case .valid:
             guard textFieldTrailingConstraint.constant != 0 else { return }
             textFieldTrailingConstraint.constant = 0
+            baselineFillColor = .gray2
 
         case .invalid:
             guard textFieldTrailingConstraint.constant != errorImageView.bounds.width else { return }
             textFieldTrailingConstraint.constant = errorImageView.bounds.width
+            baselineFillColor = .red
         }
 
         setNeedsLayout()
