@@ -95,18 +95,15 @@ import RxSwift
         case .homebrew:
             Logger.shared.info("Not implemented yet")
         default:
-            exchangeViewController = ExchangeOverviewViewController()
-            guard let navigationController = BCNavigationController(
-                rootViewController: exchangeViewController,
-                title: LocalizationConstants.Exchange.navigationTitle
-            ) else {
-                Logger.shared.error("Could not create navigation controller")
-                return
-            }
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
+            exchangeViewController = ExchangeOverviewViewController()
+            let navigationController = BCNavigationController(
+                rootViewController: exchangeViewController,
+                title: LocalizationConstants.Exchange.navigationTitle
+            )
             viewController.present(navigationController, animated: true)
         }
     }
