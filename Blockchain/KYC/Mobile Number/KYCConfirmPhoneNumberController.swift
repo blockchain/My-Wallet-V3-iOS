@@ -86,6 +86,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
         layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
+        view.layoutIfNeeded()
         UIView.commitAnimations()
     }
 
@@ -94,6 +95,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
         layoutConstraintBottomButton.constant = originalBottomButtonConstraint
+        view.layoutIfNeeded()
         UIView.commitAnimations()
     }
 }
