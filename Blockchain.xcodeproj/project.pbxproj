@@ -491,6 +491,14 @@
 		AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE320A20978EB100B7B806 /* MockWallet.swift */; };
 		AACF56C520EAC87A0039978B /* OnboardingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF56C420EAC87A0039978B /* OnboardingSettings.swift */; };
 		AACF56C620EAC87A0039978B /* OnboardingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF56C420EAC87A0039978B /* OnboardingSettings.swift */; };
+		AAD0D2522112908F002E63BF /* KYCConfirmPhoneNumber.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAD0D2512112908E002E63BF /* KYCConfirmPhoneNumber.storyboard */; };
+		AAD0D26F21129319002E63BF /* KYCConfirmPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0D26E21129319002E63BF /* KYCConfirmPhoneNumberController.swift */; };
+		AAD0D27021129319002E63BF /* KYCConfirmPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0D26E21129319002E63BF /* KYCConfirmPhoneNumberController.swift */; };
+		AAD0D29B2113B0AD002E63BF /* KYCVerifyPhoneNumberPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0D29A2113B0AD002E63BF /* KYCVerifyPhoneNumberPresenter.swift */; };
+		AAD0D29D2113B118002E63BF /* KYCVerifyPhoneNumberPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0D29C2113B118002E63BF /* KYCVerifyPhoneNumberPresenterTests.swift */; };
+		AAD0D29E2113D092002E63BF /* KYCVerifyPhoneNumberPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0D29A2113B0AD002E63BF /* KYCVerifyPhoneNumberPresenter.swift */; };
+		AAD0D29F2113D173002E63BF /* PostalAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3047E5210B8E1300C09E6D /* PostalAddress.swift */; };
+		AAD0D2A22113D1FB002E63BF /* KYCAddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7221122612006B924F /* KYCAddressController.swift */; };
 		AAD279B0209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279AF209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift */; };
 		AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */; };
 		AAD27A28209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */; };
@@ -6695,6 +6703,7 @@
 				C72B851B210FC098002EBDB9 /* ExchangeCreateView.swift in Sources */,
 				602B9D0F2118E23C00BD3D60 /* KYCPersonalDetailsController.swift in Sources */,
 				C74E866220B3272B00F7263D /* TransferAllCoordinator.swift in Sources */,
+				5197913F210A25960096E50B /* KYCCountry.swift in Sources */,
 				AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
