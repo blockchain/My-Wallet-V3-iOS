@@ -9,74 +9,66 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: UIViewController {
+final class KYCPersonalDetailsController: UIViewController, ValidationFormView {
 
-    // MARK: - Properties
+    // MARK: - Public IBOutlets
 
-    private let birthdatePicker: UIDatePicker!
+    @IBOutlet var scrollView: UIScrollView!
 
     // MARK: - IBOutlets
 
-    @IBOutlet private var firstNameField: UITextField!
-    @IBOutlet private var lastNameField: UITextField!
-    @IBOutlet private var birthdateField: UITextField!
-    @IBOutlet var primaryButton: PrimaryButton!
+    @IBOutlet fileprivate var firstNameField: ValidationTextField!
+    @IBOutlet fileprivate var lastNameField: ValidationTextField!
+    @IBOutlet fileprivate var birthdayField: ValidationDateField!
+    @IBOutlet fileprivate var primaryButton: PrimaryButton!
 
-    override func viewDidLoad() {
-        setUpBirthdatePicker()
-        birthdateField.inputView = birthdatePicker
+    // MARK: Public Properties
+
+    var validationFields: [ValidationTextField] {
+        get {
+            return [firstNameField,
+                    lastNameField,
+                    birthdayField]
+        }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        birthdatePicker = UIDatePicker()
-        birthdatePicker.datePickerMode = .date
-        birthdatePicker.maximumDate = Date()
-        super.init(coder: aDecoder)
+    var keyboard: KeyboardPayload? = nil
+
+    // MARK: Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupTextFields()
+        handleKeyboardOffset()
+        setupNotifications()
     }
 
     // MARK: - Private Methods
 
-    private func setUpBirthdatePicker() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(submitBirthdate))
-        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(hideBirthdatePicker))
-        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
-        birthdateField.inputAccessoryView = toolBar
+    fileprivate func setupTextFields() {
+        firstNameField.returnKeyType = .next
+        firstNameField.contentType = .name
+
+        lastNameField.returnKeyType = .next
+        lastNameField.contentType = .familyName
     }
 
-    @objc private func submitBirthdate() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        birthdateField.text = dateFormatter.string(from: birthdatePicker.date)
-        birthdateField.resignFirstResponder()
-    }
-
-    @objc private func hideBirthdatePicker() {
-        birthdateField.resignFirstResponder()
+    fileprivate func setupNotifications() {
+        NotificationCenter.when(.UIKeyboardWillHide) { [weak self] _ in
+            self?.scrollView.contentInset = .zero
+            self?.scrollView.setContentOffset(.zero, animated: true)
+        }
+        NotificationCenter.when(.UIKeyboardWillShow) { [weak self] notification in
+            let keyboard = KeyboardPayload(notification: notification)
+            self?.keyboard = keyboard
+        }
     }
 
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        let dateOfBirth = birthdatePicker.date
-        let calendar = Calendar(identifier: .gregorian)
-        let age = calendar.dateComponents([.year], from: dateOfBirth, to: Date())
-        guard let year = age.year, year >= 18 else {
-            AlertViewPresenter.shared.standardNotify(
-                message: "You must be at least 18 years old to have your identity verified",
-                title: "A bit too young",
-                actions: [
-                    UIAlertAction(title: "OK, I understand", style: .default, handler: { _ in
-                        // TODO: exit KYC flow and send user back to dashboard
-                    })
-                ],
-                in: self
-            )
-            return
-        }
+        guard checkFieldsValidity() else { return }
         performSegue(withIdentifier: "enterMobileNumber", sender: self)
     }
 
@@ -85,13 +77,9 @@ final class KYCPersonalDetailsController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
 }
 
-extension KYCPersonalDetailsController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        switch textField {
-        case firstNameField: lastNameField.becomeFirstResponder()
-        case lastNameField: birthdateField.becomeFirstResponder()
-        default: return false
-        }
-        return false
+extension KYCPersonalDetailsController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // TODO: May not be necessary. 
+        validationFields.forEach({$0.resignFocus()})
     }
 }

@@ -73,6 +73,9 @@
 		3A258C15210A4EAC00C023F5 /* LocationDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A258C13210A4EAC00C023F5 /* LocationDataProvider.swift */; };
 		3A3047E4210B664800C09E6D /* LocationSuggestionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A3047E3210B664800C09E6D /* LocationSuggestionCell.xib */; };
 		3A3047E6210B8E1300C09E6D /* PostalAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3047E5210B8E1300C09E6D /* PostalAddress.swift */; };
+		3A76F8F52119EDD5002F7946 /* ValidationDateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */; };
+		3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */; };
+		3A76F8FE211A067A002F7946 /* ValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8FD211A067A002F7946 /* ValidationFormView.swift */; };
 		3A7F7EE3210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
 		3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
 		3A7F7EE6210F95C7001E20AF /* LocationSuggestionInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */; };
@@ -977,6 +980,9 @@
 		3A258C13210A4EAC00C023F5 /* LocationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataProvider.swift; sourceTree = "<group>"; };
 		3A3047E3210B664800C09E6D /* LocationSuggestionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationSuggestionCell.xib; sourceTree = "<group>"; };
 		3A3047E5210B8E1300C09E6D /* PostalAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostalAddress.swift; sourceTree = "<group>"; };
+		3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationDateField.swift; sourceTree = "<group>"; };
+		3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationDateField.xib; sourceTree = "<group>"; };
+		3A76F8FD211A067A002F7946 /* ValidationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationFormView.swift; sourceTree = "<group>"; };
 		3A7F7EE2210F6C77001E20AF /* Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visibility.swift; sourceTree = "<group>"; };
 		3A7F7EE5210F95C7001E20AF /* LocationSuggestionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionInterface.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
@@ -2218,6 +2224,23 @@
 			path = DataProvider;
 			sourceTree = "<group>";
 		};
+		3A76F8F32119EDC4002F7946 /* ValidationDateField */ = {
+			isa = PBXGroup;
+			children = (
+				3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */,
+				3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */,
+			);
+			path = ValidationDateField;
+			sourceTree = "<group>";
+		};
+		3A76F8FC211A0665002F7946 /* ValidationForm */ = {
+			isa = PBXGroup;
+			children = (
+				3A76F8FD211A067A002F7946 /* ValidationFormView.swift */,
+			);
+			path = ValidationForm;
+			sourceTree = "<group>";
+		};
 		3A7F7EC7210F6C20001E20AF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -2254,6 +2277,7 @@
 		3AD7EE7421124D56006B924F /* ValidationTextField */ = {
 			isa = PBXGroup;
 			children = (
+				3A76F8F32119EDC4002F7946 /* ValidationDateField */,
 				3AD7EE7521124F0C006B924F /* ValidationTextField.swift */,
 				3AD7EE9F21125156006B924F /* ValidationTextField.xib */,
 			);
@@ -3573,6 +3597,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3A76F8FC211A0665002F7946 /* ValidationForm */,
 				3AD7EE7421124D56006B924F /* ValidationTextField */,
 				C72B8519210FC098002EBDB9 /* ExchangeCreateView.swift */,
 				3A258C0B210A485D00C023F5 /* Cells */,
@@ -3850,6 +3875,7 @@
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				515EFADE210282B4002350B6 /* BCAddressSelectionView.strings in Resources */,
+				3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
@@ -4298,6 +4324,7 @@
 			files = (
 				C7442E3A1FBB636300695E4C /* FromToView.m in Sources */,
 				AACE31582091681100B7B806 /* WalletManager.swift in Sources */,
+				3A76F8FE211A067A002F7946 /* ValidationFormView.swift in Sources */,
 				AACE31572091680B00B7B806 /* PushNotificationManager.swift in Sources */,
 				3A3047E6210B8E1300C09E6D /* PostalAddress.swift in Sources */,
 				2343E4031CB434BC008DC7D1 /* NSArray+EncodedJSONString.m in Sources */,
@@ -4584,6 +4611,7 @@
 				C7BEE13B20C828B20096003B /* BuySellCoordinator.swift in Sources */,
 				67EE1DCB19E3325900DBBFC9 /* ECSlidingAnimationController.m in Sources */,
 				60639A002110FC2D005B6DF5 /* SRConstants.m in Sources */,
+				3A76F8F52119EDD5002F7946 /* ValidationDateField.swift in Sources */,
 				67470A0819D43AFE00757D46 /* BCManualPairView.m in Sources */,
 				C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */,
 				51383557210253A800767B2E /* KYCPersonalDetailsController.swift in Sources */,

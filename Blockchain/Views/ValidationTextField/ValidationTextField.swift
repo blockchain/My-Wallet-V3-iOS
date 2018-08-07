@@ -115,6 +115,12 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    var textFieldInputView: UIView? = nil {
+        didSet {
+            textField.inputView = textFieldInputView
+        }
+    }
+
     /// This closure is called when the user taps `next`
     /// or `done` etc. and the `textField` resigns.
     var returnTappedBlock: (() -> Void)?

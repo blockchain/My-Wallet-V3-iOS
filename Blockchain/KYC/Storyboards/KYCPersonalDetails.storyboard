@@ -23,69 +23,132 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="YyL-LD-6vz">
-                                <rect key="frame" x="16" y="16" width="343" height="55"/>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sxl-FD-HTb">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="8"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="kaW-x4-l0B"/>
+                                    <constraint firstAttribute="height" constant="8" id="VjU-hs-80k"/>
                                 </constraints>
+                            </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="What is my address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tmZ-Mg-6Kp">
+                                <rect key="frame" x="16" y="16" width="343" height="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
-                                <connections>
-                                    <outlet property="delegate" destination="VK4-jv-eiz" id="CZq-c7-1Uw"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Zrq-9J-3by" userLabel="Last Name Field">
-                                <rect key="frame" x="16" y="79" width="343" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="fNA-cZ-BBm"/>
-                                </constraints>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="999" text="We may send a verification postcard for added security." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMs-GD-oqE">
+                                <rect key="frame" x="16" y="33" width="343" height="14.333333333333336"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
-                                <connections>
-                                    <outlet property="delegate" destination="VK4-jv-eiz" id="6Zw-88-iAq"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Birthdate" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R8u-2L-YQa" userLabel="Birthdate Field">
-                                <rect key="frame" x="16" y="142" width="343" height="55"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oDQ-tQ-rDw">
+                                <rect key="frame" x="0.0" y="47.333333333333314" width="375" height="642.66666666666674"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFe-4p-8Bl" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="0.0" width="343" height="56"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="unQ-2Z-OTz"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="First Name"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Nk-Gd-qS1" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="55.666666666666657" width="343" height="56"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="JbJ-Qu-aif"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Last Name"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="38g-Ci-yOA" customClass="ValidationDateField" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="112" width="343" height="56"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="wLH-Yd-Id7"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Birthday"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a2-YO-4u9" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="175.99999999999997" width="343" height="44"/>
+                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="c0L-MU-eN2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                        <state key="normal" title="Next"/>
+                                        <connections>
+                                            <action selector="primaryButtonTapped:" destination="VK4-jv-eiz" eventType="touchUpInside" id="K4z-pF-XWd"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="ZEO-vI-zHu"/>
+                                    <constraint firstAttribute="trailing" secondItem="38g-Ci-yOA" secondAttribute="trailing" constant="16" id="2Nv-Xp-mtz"/>
+                                    <constraint firstItem="38g-Ci-yOA" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="CTl-rG-4bv"/>
+                                    <constraint firstItem="6Nk-Gd-qS1" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="Ml9-p3-cbv"/>
+                                    <constraint firstAttribute="trailing" secondItem="dFe-4p-8Bl" secondAttribute="trailing" constant="16" id="NVi-mF-g0o"/>
+                                    <constraint firstItem="dFe-4p-8Bl" firstAttribute="top" secondItem="oDQ-tQ-rDw" secondAttribute="top" id="NXv-A1-W8C"/>
+                                    <constraint firstItem="38g-Ci-yOA" firstAttribute="top" secondItem="6Nk-Gd-qS1" secondAttribute="bottom" id="QQC-DJ-NmU"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Nk-Gd-qS1" secondAttribute="trailing" constant="16" id="UuH-7W-WIs"/>
+                                    <constraint firstItem="6Nk-Gd-qS1" firstAttribute="width" secondItem="dFe-4p-8Bl" secondAttribute="width" id="V5R-nI-Lz9"/>
+                                    <constraint firstItem="dFe-4p-8Bl" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="Vgt-w3-Sgq"/>
+                                    <constraint firstItem="38g-Ci-yOA" firstAttribute="width" secondItem="6Nk-Gd-qS1" secondAttribute="width" id="XCo-fP-XdL"/>
+                                    <constraint firstItem="6Nk-Gd-qS1" firstAttribute="top" secondItem="dFe-4p-8Bl" secondAttribute="bottom" id="b1j-iP-iOP"/>
+                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="trailing" secondItem="38g-Ci-yOA" secondAttribute="trailing" id="hmn-30-aLv"/>
+                                    <constraint firstAttribute="bottom" secondItem="5a2-YO-4u9" secondAttribute="bottom" constant="16" id="nmi-wZ-5ah"/>
+                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="leading" secondItem="38g-Ci-yOA" secondAttribute="leading" id="t3H-jr-8El"/>
+                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="top" secondItem="38g-Ci-yOA" secondAttribute="bottom" constant="8" id="wQ6-Ei-gBC"/>
                                 </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="continue"/>
                                 <connections>
-                                    <outlet property="delegate" destination="VK4-jv-eiz" id="b3o-DG-j0M"/>
+                                    <outlet property="delegate" destination="VK4-jv-eiz" id="oke-kY-her"/>
                                 </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a2-YO-4u9" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="8cv-Fd-Sh6"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="Continue"/>
-                                <connections>
-                                    <action selector="primaryButtonTapped:" destination="VK4-jv-eiz" eventType="touchUpInside" id="K4z-pF-XWd"/>
-                                </connections>
-                            </button>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="bottom" secondItem="5a2-YO-4u9" secondAttribute="bottom" constant="16" id="8bd-OA-FHI"/>
-                            <constraint firstItem="YyL-LD-6vz" firstAttribute="top" secondItem="A6g-7V-Tpb" secondAttribute="top" constant="16" id="Ijr-am-8zd"/>
-                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="R8u-2L-YQa" secondAttribute="trailing" constant="16" id="Jvi-S6-Qvy"/>
-                            <constraint firstItem="Zrq-9J-3by" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="OVR-uK-MP3"/>
-                            <constraint firstItem="5a2-YO-4u9" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="QLf-Mi-P0f"/>
-                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="5a2-YO-4u9" secondAttribute="trailing" constant="16" id="XTZ-2n-B9E"/>
-                            <constraint firstItem="R8u-2L-YQa" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="ge1-nP-6SQ"/>
-                            <constraint firstItem="R8u-2L-YQa" firstAttribute="top" secondItem="Zrq-9J-3by" secondAttribute="bottom" constant="8" id="h7F-er-qk1"/>
-                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="YyL-LD-6vz" secondAttribute="trailing" constant="16" id="kYE-DI-klq"/>
-                            <constraint firstItem="Zrq-9J-3by" firstAttribute="top" secondItem="YyL-LD-6vz" secondAttribute="bottom" constant="8" id="mtG-ot-tNd"/>
-                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="Zrq-9J-3by" secondAttribute="trailing" constant="16" id="qaU-1n-Ykq"/>
-                            <constraint firstItem="YyL-LD-6vz" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="wYM-KB-aia"/>
+                            <constraint firstItem="tmZ-Mg-6Kp" firstAttribute="top" secondItem="sxl-FD-HTb" secondAttribute="bottom" constant="8" id="2d9-Mo-WIr"/>
+                            <constraint firstItem="sxl-FD-HTb" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" id="7Cp-VL-P0Z"/>
+                            <constraint firstItem="IMs-GD-oqE" firstAttribute="trailing" secondItem="tmZ-Mg-6Kp" secondAttribute="trailing" id="889-1g-2Ck"/>
+                            <constraint firstItem="oDQ-tQ-rDw" firstAttribute="top" secondItem="IMs-GD-oqE" secondAttribute="bottom" id="MyY-WO-lW9"/>
+                            <constraint firstItem="IMs-GD-oqE" firstAttribute="leading" secondItem="tmZ-Mg-6Kp" secondAttribute="leading" id="NP6-i7-SFD"/>
+                            <constraint firstItem="oDQ-tQ-rDw" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" id="NS6-cv-AqF"/>
+                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="bottom" secondItem="oDQ-tQ-rDw" secondAttribute="bottom" id="Ngv-iE-i4Q"/>
+                            <constraint firstItem="dFe-4p-8Bl" firstAttribute="width" secondItem="IMs-GD-oqE" secondAttribute="width" id="Ost-xi-8cb"/>
+                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="oDQ-tQ-rDw" secondAttribute="trailing" id="TaS-qG-rfa"/>
+                            <constraint firstItem="sxl-FD-HTb" firstAttribute="top" secondItem="A6g-7V-Tpb" secondAttribute="top" id="bsI-YJ-JKf"/>
+                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="sxl-FD-HTb" secondAttribute="trailing" id="iy1-0F-Ect"/>
+                            <constraint firstItem="A6g-7V-Tpb" firstAttribute="trailing" secondItem="tmZ-Mg-6Kp" secondAttribute="trailing" constant="16" id="mVs-oS-QDE"/>
+                            <constraint firstItem="tmZ-Mg-6Kp" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="odu-5Q-U5d"/>
+                            <constraint firstItem="IMs-GD-oqE" firstAttribute="top" secondItem="tmZ-Mg-6Kp" secondAttribute="bottom" constant="2" id="xfM-Eo-Bki"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="A6g-7V-Tpb"/>
                     </view>
@@ -94,16 +157,17 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="birthdateField" destination="R8u-2L-YQa" id="faJ-q2-1Iu"/>
-                        <outlet property="firstNameField" destination="YyL-LD-6vz" id="Zuv-Qh-mI0"/>
-                        <outlet property="lastNameField" destination="Zrq-9J-3by" id="6De-fY-t4Y"/>
+                        <outlet property="birthdayField" destination="38g-Ci-yOA" id="aQP-L4-4V9"/>
+                        <outlet property="firstNameField" destination="dFe-4p-8Bl" id="L3G-QR-mVR"/>
+                        <outlet property="lastNameField" destination="6Nk-Gd-qS1" id="trs-Iy-Ecy"/>
                         <outlet property="primaryButton" destination="5a2-YO-4u9" id="bkL-go-wpB"/>
+                        <outlet property="scrollView" destination="oDQ-tQ-rDw" id="RFu-VN-Nho"/>
                         <segue destination="ikb-aY-GZn" kind="show" identifier="enterMobileNumber" id="EC8-k6-Erk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPZ-Fa-q8L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-47" y="194"/>
+            <point key="canvasLocation" x="-47.200000000000003" y="193.5960591133005"/>
         </scene>
         <!--KYCEnterPhoneNumber-->
         <scene sceneID="i1U-r4-6wf">
