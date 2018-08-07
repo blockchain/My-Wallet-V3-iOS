@@ -55,6 +55,10 @@ struct LocalizationConstants {
         "My Ether Wallet",
         comment: "The default name of the ether wallet."
     )
+    static let loading = NSLocalizedString(
+        "Loading",
+        comment: "Text displayed when there is an asynchronous action that needs to complete before the user can take further action."
+    )
 
     struct Errors {
         static let error = NSLocalizedString("Error", comment: "")
@@ -414,6 +418,13 @@ struct LocalizationConstants {
         static let secondaryActionTitle = NSLocalizedString(
             "Ask Me Later",
             comment: "The title for the secondary prompt action."
+        )
+    }
+
+    struct KYC {
+        static let failedToConfirmNumber = NSLocalizedString(
+            "Failed to confirm number. Please try again.",
+            comment: "Error message displayed to the user when the mobile confirmation steps fails."
         )
     }
 }

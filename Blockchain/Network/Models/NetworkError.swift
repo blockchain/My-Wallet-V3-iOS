@@ -1,5 +1,5 @@
 //
-//  WalletServiceError.swift
+//  NetworkError.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 6/12/18.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// An error when interacting with the WalletService
-internal enum WalletServiceError: Error {
+/// An error when interacting with the NetworkError
+internal enum NetworkError: Error {
     /// Error parsing a JSON response from the server
     case jsonParseError
 

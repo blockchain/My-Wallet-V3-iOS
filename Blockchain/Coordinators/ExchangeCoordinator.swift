@@ -77,7 +77,7 @@ import RxSwift
 
     private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
         guard let countryCode = WalletManager.sharedInstance().wallet.countryCodeGuess() else {
-            error(WalletServiceError.generic(message: "No country code found"))
+            error(NetworkError.generic(message: "No country code found"))
             return
         }
 

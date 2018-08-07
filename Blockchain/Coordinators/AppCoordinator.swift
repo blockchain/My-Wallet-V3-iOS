@@ -81,24 +81,6 @@ import Foundation
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
 
-        /* 🚧 KYC Flow - Under Construction 🚧 */
-        // TODO: move this to correct KYC entry point
-//        let welcomeViewController = UIStoryboard.instantiate(
-//            child: WelcomeController.self,
-//            from: OnboardingController.self,
-//            in: UIStoryboard(name: "OnboardingScreen", bundle: nil),
-//            identifier: "OnboardingScreen"
-//        )
-//
-//        let navigationController = UIStoryboard(name: "OnboardingNavigation", bundle: nil)
-//            .instantiateViewController(withIdentifier: "OnboardingNavigation") as! OnboardingNavigationController
-//
-//        navigationController.pushViewController(welcomeViewController, animated: true)
-//        navigationController.modalTransitionStyle = .coverVertical
-//
-//        UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
-//        return
-
         BuySellCoordinator.shared.start()
 
         // Display welcome screen if no wallet is authenticated

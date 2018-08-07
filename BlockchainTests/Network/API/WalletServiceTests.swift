@@ -28,7 +28,7 @@ class WalletServiceTests: XCTestCase {
         XCTAssertThrowsError(
             try walletService.validatePin(PinPayload(pinCode: "1111", pinKey: "pinKey")
         ).toBlocking().first()) { error in
-            XCTAssertTrue(error is WalletServiceError)
+            XCTAssertTrue(error is NetworkError)
         }
     }
 
@@ -41,7 +41,7 @@ class WalletServiceTests: XCTestCase {
                 .toBlocking()
                 .first()
         ) { error in
-            XCTAssertTrue(error is WalletServiceError)
+            XCTAssertTrue(error is NetworkError)
         }
     }
 

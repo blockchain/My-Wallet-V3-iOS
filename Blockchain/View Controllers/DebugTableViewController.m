@@ -15,12 +15,14 @@
 #define DICTIONARY_KEY_BUY_WEBVIEW @"buyWebView"
 
 typedef NS_ENUM(NSInteger, DebugTableViewRow) {
-    RowWalletJSON,
+    RowWalletJSON = 0,
     RowSurgeToggle,
     RowDontShowAgain,
     RowCertificatePinning,
     RowSecurityReminderTimer,
-    RowZeroTickerValue
+    RowZeroTickerValue,
+    RowKYC,
+    RowTotalCount
 };
 
 typedef enum {
@@ -141,7 +143,7 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 7;
+    return RowTotalCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -192,6 +194,10 @@ typedef enum {
             zeroTickerToggle.on = zeroTickerOn;
             [zeroTickerToggle addTarget:self action:@selector(toggleZeroTicker) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = zeroTickerToggle;
+            break;
+        }
+        case RowKYC: {
+            cell.textLabel.text = @"Launch KYC";
         }
         default:
             break;
@@ -240,6 +246,11 @@ typedef enum {
                 textField.text = [NSString stringWithFormat:@"%i", customTimeValue ? [customTimeValue intValue] : TIME_INTERVAL_SECURITY_REMINDER_PROMPT];
             }];
             [self presentViewController:alert animated:YES completion:nil];
+            break;
+        }
+        case RowKYC: {
+            KYCCoordinator *coordinator = [[KYCCoordinator alloc] init];
+            [coordinator startFrom:self];
             break;
         }
         default:

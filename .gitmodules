@@ -14,15 +14,3 @@
 	path = Submodules/CoreBitcoin
 	url = git@github.com:oleganza/CoreBitcoin.git
 	ignore = dirty
-[submodule "Submodules/Charts"]
-	path = Submodules/Charts
-	url = https://github.com/danielgindi/Charts
-	ignore = dirty
-[submodule "Submodules/Alamofire"]
-	path = Submodules/Alamofire
-	url = https://github.com/Alamofire/Alamofire.git
-	ignore = dirty
-[submodule "Submodules/RxSwift"]
-	path = Submodules/RxSwift
-	url = git@github.com:ReactiveX/RxSwift.git
-	ignore = dirty

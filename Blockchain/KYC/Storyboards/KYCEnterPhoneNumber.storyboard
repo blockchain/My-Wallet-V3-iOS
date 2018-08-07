@@ -15,22 +15,22 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Verify Mobile View Controller-->
+        <!--Enter Mobile View Controller-->
         <scene sceneID="Wjg-3S-uYV">
             <objects>
-                <viewController storyboardIdentifier="KYCVerifyPhoneNumber" title="Verify Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7WR-uN-K1i" customClass="KYCVerifyPhoneNumberController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KYCEnterPhoneNumber" title="Enter Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7WR-uN-K1i" customClass="KYCEnterPhoneNumberController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m4i-aL-8OI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KX0-wF-bqu" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.29803921568627451" green="0.6705882352941176" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="oqh-8S-n9c"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="Continue">
+                                <state key="normal" title="Next">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -47,13 +47,13 @@
                                 <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="continue" textContentType="tel"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lXd-eX-J03" userLabel="Description Label">
-                                <rect key="frame" x="16" y="503.33333333333343" width="343" height="51.666666666666686"/>
+                                <rect key="frame" x="16" y="504.33333333333343" width="343" height="50.666666666666686"/>
                                 <attributedString key="attributedText">
                                     <fragment>
                                         <string key="content">Confirming your phone number allows us to secure your account. Don't worry, we won't double text you (unless you have to resend your code)</string>
                                         <attributes>
                                             <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13" name="Montserrat-Light"/>
+                                            <font key="NSFont" metaFont="system"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                         </attributes>
                                     </fragment>
@@ -75,23 +75,23 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="icW-B4-iKS"/>
                     </view>
-                    <navigationItem key="navigationItem" title="What's your number?" id="zce-0p-WSv">
+                    <navigationItem key="navigationItem" title="Verify Your Device" id="zce-0p-WSv">
                         <barButtonItem key="backBarButtonItem" id="M4A-Bf-tAt"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="primaryButton" destination="KX0-wF-bqu" id="QyA-aZ-9U0"/>
-                        <segue destination="xVk-FG-HTS" kind="show" identifier="promptForAddress" id="Ppp-kU-LhA"/>
+                        <outlet property="textFieldMobileNumber" destination="Kwe-pA-MQg" id="30j-zZ-aGz"/>
+                        <segue destination="xVk-FG-HTS" kind="show" identifier="verifyMobileNumber" id="Ppp-kU-LhA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSW-4d-mbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-73" y="218"/>
         </scene>
-        <!--KYCAddress-->
+        <!--KYCConfirmPhoneNumber-->
         <scene sceneID="fw5-HU-1bR">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCAddress" id="xVk-FG-HTS" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCConfirmPhoneNumber" id="xVk-FG-HTS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHo-TW-UGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="546" y="152"/>

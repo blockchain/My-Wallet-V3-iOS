@@ -178,6 +178,8 @@ extension HttpMethod {
             return HTTPMethod.post
         case .put:
             return HTTPMethod.put
+        case .patch:
+            return HTTPMethod.patch
         }
     }
 }

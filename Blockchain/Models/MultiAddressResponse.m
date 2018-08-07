@@ -7,7 +7,6 @@
 //
 
 #import "MultiAddressResponse.h"
-#import "Address.h"
 #import "Transaction.h"
 #import "Wallet.h"
 #import "NSString+SHA256.h"
