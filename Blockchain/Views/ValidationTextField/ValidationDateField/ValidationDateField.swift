@@ -18,8 +18,6 @@ class ValidationDateField: ValidationTextField {
         return picker
     }()
 
-    var minimumDate: Date = Date()
-
     override func awakeFromNib() {
         super.awakeFromNib()
 
