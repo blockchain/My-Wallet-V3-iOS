@@ -29,7 +29,6 @@ class SocketManager {
     var webSocketMessageObservable: Observable<SocketMessage> {
         return webSocketMessageSubject.asObservable()
     }
-
     private let webSocketMessageSubject: PublishSubject<SocketMessage>
     private var pendingSocketMessages = [SocketMessage]()
 
@@ -41,6 +40,23 @@ class SocketManager {
         }
     }
 
+    func connect(socketType: SocketMessageType) {
+        switch socketType {
+        case .exchange:
+            self.exchangeSocket.advancedDelegate = self
+            self.exchangeSocket.connect()
+        default: Logger.shared.error("Connect socketType: unsupported socket type")
+        }
+    }
+
+    func disconnect(socketType: SocketMessageType) {
+        switch socketType {
+        case .exchange: exchangeSocket.disconnect()
+        default: Logger.shared.error("Disconnect socketType: unsupported socket type")
+        }
+    }
+
+    // MARK: - Private methods
     private func tryToSend(message: SocketMessage, socket: WebSocket) {
         guard socket.isConnected else {
             Logger.shared.info("Exchange socket is not connected - will append message to pending messages")
@@ -62,22 +78,6 @@ class SocketManager {
             socket.write(string: string)
         } catch {
             onError()
-        }
-    }
-
-    func connect(socketType: SocketMessageType) {
-        switch socketType {
-        case .exchange:
-            self.exchangeSocket.advancedDelegate = self
-            self.exchangeSocket.connect()
-        default: Logger.shared.error("Connect socketType: unsupported socket type")
-        }
-    }
-
-    func disconnect(socketType: SocketMessageType) {
-        switch socketType {
-        case .exchange: exchangeSocket.disconnect()
-        default: Logger.shared.error("Disconnect socketType: unsupported socket type")
         }
     }
 }
