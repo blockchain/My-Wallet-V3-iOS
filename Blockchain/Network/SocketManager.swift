@@ -125,6 +125,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
             return
         }
 
+        // TODO: figure out a way to minimize computation here, such as by decoding to JSON type first and inspecting a certain key-value pair
         Quote.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
         Rate.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
         // more structs of type SocketMessageCodable...
