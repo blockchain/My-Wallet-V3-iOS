@@ -95,6 +95,12 @@ class ValidationTextField: NibBasedView {
 
     // MARK: Public Properties
 
+    var autocapitalizationType: UITextAutocapitalizationType = .words {
+        didSet {
+            textField.autocapitalizationType = autocapitalizationType
+        }
+    }
+
     var font: UIFont = ValidationTextField.primaryFont {
         didSet {
             textField.font = font

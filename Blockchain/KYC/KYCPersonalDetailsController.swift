@@ -11,12 +11,11 @@ import UIKit
 /// Personal details entry screen in KYC flow
 final class KYCPersonalDetailsController: UIViewController, ValidationFormView, ProgressableView {
 
+    // MARK: - ProgressableView
+
     var barColor: UIColor = .green
     var startingValue: Float = 0.14
 
-    // MARK: - Public IBOutlets
-
-    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var progressView: UIProgressView!
 
     // MARK: - IBOutlets
@@ -26,7 +25,9 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
     @IBOutlet fileprivate var birthdayField: ValidationDateField!
     @IBOutlet fileprivate var primaryButton: PrimaryButton!
 
-    // MARK: Public Properties
+    // MARK: ValidationFormView
+
+    @IBOutlet var scrollView: UIScrollView!
 
     var validationFields: [ValidationTextField] {
         get {
