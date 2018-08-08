@@ -13,7 +13,7 @@ import RxSwift
 class SocketManager {
     static let shared = SocketManager()
 
-    private let exchangeSocket: WebSocket
+    private var exchangeSocket: WebSocket?
     // Add the following properties when removing the websocket from Wallet class
     // private let btcSocket: Websocket
     // private let ethSocket: Websocket
@@ -21,7 +21,6 @@ class SocketManager {
 
     // MARK: - Initialization
     init() {
-        self.exchangeSocket = WebSocket(url: URL(string: BlockchainAPI.Nabu.quotes)!)
         self.webSocketMessageSubject = PublishSubject<SocketMessage>()
     }
 
@@ -31,28 +30,50 @@ class SocketManager {
     }
     private let webSocketMessageSubject: PublishSubject<SocketMessage>
     private var pendingSocketMessages = [SocketMessage]()
+    private let errorUnsupportedSocketType = "Unsupported socket type"
 
     // MARK: - Public methods
+    func setupSocket(socketType: SocketType, url: URL) {
+        switch socketType {
+        case .exchange: self.exchangeSocket = WebSocket(url: url)
+        default: Logger.shared.error(errorUnsupportedSocketType)
+        }
+    }
+
     func send(message: SocketMessage) {
         switch message.type {
-        case .exchange: tryToSend(message: message, socket: exchangeSocket)
-        default: Logger.shared.error("Send message: unsupported socket message type")
+        case .exchange:
+            guard let socket = exchangeSocket else {
+                Logger.shared.error(errorNeedsSocketSetup(socketType: message.type))
+                return
+            }
+            tryToSend(message: message, socket: socket)
+        default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
 
-    func connect(socketType: SocketMessageType) {
+    func connect(socketType: SocketType) {
         switch socketType {
         case .exchange:
-            self.exchangeSocket.advancedDelegate = self
-            self.exchangeSocket.connect()
-        default: Logger.shared.error("Connect socketType: unsupported socket type")
+            guard let socket = exchangeSocket else {
+                Logger.shared.error(errorNeedsSocketSetup(socketType: socketType))
+                return
+            }
+            socket.advancedDelegate = self
+            socket.connect()
+        default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
 
-    func disconnect(socketType: SocketMessageType) {
+    func disconnect(socketType: SocketType) {
         switch socketType {
-        case .exchange: exchangeSocket.disconnect()
-        default: Logger.shared.error("Disconnect socketType: unsupported socket type")
+        case .exchange:
+            guard let socket = exchangeSocket else {
+                Logger.shared.error(errorNeedsSocketSetup(socketType: socketType))
+                return
+            }
+            socket.disconnect()
+        default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
 
@@ -79,6 +100,10 @@ class SocketManager {
         } catch {
             onError()
         }
+    }
+
+    private func errorNeedsSocketSetup(socketType: SocketType) -> String {
+        return "\(socketType.rawValue) socket needs setup, call setupSocket first"
     }
 }
 

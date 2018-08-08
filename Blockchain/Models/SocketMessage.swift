@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum SocketMessageType {
+enum SocketType: String {
     case unassigned
     case exchange
     case bitcoin
@@ -17,7 +17,7 @@ enum SocketMessageType {
 }
 
 struct SocketMessage {
-    let type: SocketMessageType
+    let type: SocketType
     let JSONMessage: Codable
 }
 
