@@ -72,6 +72,7 @@
 		3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */; };
 		3A3D5D8E211B454000E6C241 /* ValidationDateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */; };
 		3A3D5D8F211B455D00E6C241 /* DateFormatter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F901211A3BA5002F7946 /* DateFormatter+Conveniences.swift */; };
+		3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */; };
 		3A76F8F52119EDD5002F7946 /* ValidationDateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */; };
 		3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */; };
 		3A76F8FE211A067A002F7946 /* ValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8FD211A067A002F7946 /* ValidationFormView.swift */; };
@@ -339,7 +340,6 @@
 		67EEE7731A8E547900288753 /* PEPin-on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 67EEE7711A8E547900288753 /* PEPin-on@3x.png */; };
 		67FA1A4D1ABA092D000C9196 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FA1A4C1ABA092D000C9196 /* RegExCategories.m */; };
 		6E2D90A21BBEC34800B719EC /* BCRecoveryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */; };
-		7570543E13E69766BF8552A0 /* Pods_BlockchainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AA7843695F30B69F3112F4 /* Pods_BlockchainTests.framework */; };
 		84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */; };
 		84B601CA197AD03800DA1829 /* BCModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C9197AD03800DA1829 /* BCModalView.m */; };
 		84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */; };
@@ -1048,6 +1048,7 @@
 		32AA7843695F30B69F3112F4 /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A258C0C210A486F00C023F5 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressableView.swift; sourceTree = "<group>"; };
+		3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdateAPI.swift; sourceTree = "<group>"; };
 		3A76F8F42119EDD5002F7946 /* ValidationDateField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationDateField.swift; sourceTree = "<group>"; };
 		3A76F8F62119EDE0002F7946 /* ValidationDateField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationDateField.xib; sourceTree = "<group>"; };
 		3A76F8FD211A067A002F7946 /* ValidationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationFormView.swift; sourceTree = "<group>"; };
@@ -3108,6 +3109,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		3A3D5DAB211B964F00E6C241 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		3A76F8F32119EDC4002F7946 /* ValidationDateField */ = {
 			isa = PBXGroup;
 			children = (
@@ -3512,6 +3521,7 @@
 		602B9CCF2118E15200BD3D60 /* Address */ = {
 			isa = PBXGroup;
 			children = (
+				3A3D5DAB211B964F00E6C241 /* API */,
 				602B9CD02118E15200BD3D60 /* KYCAddressController.swift */,
 			);
 			path = Address;
@@ -6934,6 +6944,7 @@
 				2343E4031CB434BC008DC7D1 /* NSArray+EncodedJSONString.m in Sources */,
 				511646DF20851BC600C43522 /* Bundle.swift in Sources */,
 				237C9E901C482132000754F7 /* AccountsAndAddressesDetailViewController.m in Sources */,
+				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
 				60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */,
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,

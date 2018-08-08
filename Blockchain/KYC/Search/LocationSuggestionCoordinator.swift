@@ -16,6 +16,7 @@ protocol LocationSuggestionCoordinatorDelegate: class {
 class LocationSuggestionCoordinator: NSObject {
 
     fileprivate let service: LocationSuggestionService
+    fileprivate let api: LocationUpdateAPI
     fileprivate var model: LocationSearchResult {
         didSet {
             delegate?.coordinator(self, updated: model)
@@ -26,6 +27,7 @@ class LocationSuggestionCoordinator: NSObject {
 
     init(_ delegate: LocationSuggestionCoordinatorDelegate, interface: LocationSuggestionInterface) {
         self.service = LocationSuggestionService()
+        self.api = LocationUpdateService()
         self.delegate = delegate
         self.interface = interface
         self.model = .empty

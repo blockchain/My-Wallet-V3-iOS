@@ -16,3 +16,23 @@ struct PostalAddress {
     let state: String?
     var unit: String?
 }
+
+struct UserAddress: Encodable {
+    let lineOne: String
+    let lineTwo: String
+    let postalCode: String
+    let city: String
+    let country: String
+}
+
+extension UserAddress {
+    func stringRepresentation() -> String? {
+        do {
+            let data = try JSONEncoder().encode(self)
+            let value = String(data: data, encoding: .utf8)
+            return value
+        } catch {
+            return nil
+        }
+    }
+}
