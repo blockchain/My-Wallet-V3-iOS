@@ -306,6 +306,7 @@
 		6090D09A2118C74B009371CB /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0992118C74B009371CB /* RxTest.framework */; };
 		6090D09C2118C750009371CB /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D09B2118C750009371CB /* Charts.framework */; };
 		60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60A08C572118F733006DB9E8 /* Settings.storyboard */; };
+		60AAD2D5211B75D7001CFDB4 /* KYC+Onfido.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601F5EE0211B32AA002697AB /* KYC+Onfido.swift */; };
 		60AEA56721125AB00053A753 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
 		60AEA56821125AB20053A753 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */; };
 		60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE083211258F300AD514A /* SettingsCell.swift */; };
@@ -6836,6 +6837,7 @@
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				602B9D1D2118E26900BD3D60 /* KYCCountry.swift in Sources */,
 				602B9D0A2118E22B00BD3D60 /* KYCNetworkRequest.swift in Sources */,
+				60AAD2D5211B75D7001CFDB4 /* KYC+Onfido.swift in Sources */,
 				602B9D152118E25400BD3D60 /* LocationSuggestionCell.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
