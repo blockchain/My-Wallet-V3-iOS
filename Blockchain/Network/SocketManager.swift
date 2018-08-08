@@ -31,7 +31,7 @@ class SocketManager {
     }
 
     private let webSocketMessageSubject: PublishSubject<SocketMessage>
-    private lazy var pendingSocketMessages = [SocketMessage]()
+    private var pendingSocketMessages = [SocketMessage]()
 
     // MARK: - Public methods
     func send(message: SocketMessage) {
