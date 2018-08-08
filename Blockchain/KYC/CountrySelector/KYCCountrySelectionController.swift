@@ -19,6 +19,12 @@ final class KYCCountrySelectionController: UITableViewController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // TODO: Remove debug
+        performSegue(withIdentifier: "promptForPersonalDetails", sender: self)
+    }
+
     // MARK: UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
