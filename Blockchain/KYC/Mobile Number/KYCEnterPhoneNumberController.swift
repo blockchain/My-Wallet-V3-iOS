@@ -43,11 +43,8 @@ final class KYCEnterPhoneNumberController: UIViewController {
         // TICKET: IOS-1141 display correct % in the progress view
         validationTextFieldMobileNumber.keyboardType = .numberPad
         validationTextFieldMobileNumber.contentType = .telephoneNumber
-        validationTextFieldMobileNumber.textChangedBlock = { [unowned self] text in
-            guard let text = text else {
-                return
-            }
-            self.validationTextFieldMobileNumber.text = self.phoneNumberPartialFormatter.formatPartial(text)
+        validationTextFieldMobileNumber.textReplacementBlock = { [unowned self] in
+            return self.phoneNumberPartialFormatter.formatPartial($0)
         }
         validationTextFieldMobileNumber.returnTappedBlock = { [unowned self] in
             self.validationTextFieldMobileNumber.resignFocus()

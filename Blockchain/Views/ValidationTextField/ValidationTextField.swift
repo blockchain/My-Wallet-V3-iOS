@@ -133,6 +133,11 @@ class ValidationTextField: NibBasedView {
     /// inside the contained UITextField
     var textChangedBlock: ((String?) -> Void)?
 
+    /// This closure is called before the text in the text field is replaced.
+    /// You can use this replacement block if you wish to format the text
+    /// before it gets replaced.
+    var textReplacementBlock: ((String) -> String)?
+
     // MARK: Private IBOutlets
 
     @IBOutlet fileprivate var textField: UITextField!
@@ -204,6 +209,18 @@ class ValidationTextField: NibBasedView {
 }
 
 extension ValidationTextField: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return true
+        }
+        guard let textReplacementBlock = textReplacementBlock else {
+            return true
+        }
+
+        let replacedString = (text as NSString).replacingCharacters(in: range, with: string)
+        textField.text = textReplacementBlock(replacedString)
+        return false
+    }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if let responderBlock = becomeFirstResponderBlock {
