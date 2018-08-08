@@ -18,4 +18,5 @@ enum SideMenuItem: String, RawValued {
     case logout = "logout"
     case buyBitcoin = "buy_bitcoin"
     case exchange = "exchange"
+    case kyc = "kyc"
 }

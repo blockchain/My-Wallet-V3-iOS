@@ -108,7 +108,17 @@ import Foundation
             animated: true
         )
     }
-
+    
+    @objc func showKYCView() {
+        let storyboard = UIStoryboard(name: "KYCVerifyIdentity", bundle: nil)
+       let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "KYCVerifyIdentity")
+        upgradeViewController.modalTransitionStyle = .coverVertical
+        UIApplication.shared.keyWindow?.rootViewController?.present(
+            upgradeViewController,
+            animated: true
+        )
+    }
+    
     @objc func showDebugView(presenter: Int32) {
         let debugViewController = DebugTableViewController()
         debugViewController.presenter = presenter
@@ -225,6 +235,8 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleBuyBitcoin()
         case .exchange:
             handleExchange()
+        case .kyc:
+            handleLaunchKYC()
         }
     }
 
@@ -316,7 +328,11 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     private func handleBuyBitcoin() {
         BuySellCoordinator.shared.showBuyBitcoinView()
     }
-
+    
+    private func handleLaunchKYC() {
+        AppCoordinator.sharedInstance().showKYCView()
+    }
+    
     private func handleExchange() {
         ExchangeCoordinator.shared.start(rootViewController: self.tabControllerManager)
     }

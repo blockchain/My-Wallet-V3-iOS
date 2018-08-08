@@ -201,6 +201,7 @@
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
 		600E18BB2118D46B003C1846 /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
+		601F5EEB211B32AA002697AB /* KYC+Onfido.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601F5EE0211B32AA002697AB /* KYC+Onfido.swift */; };
 		602B9CD72118E15300BD3D60 /* KYCAccountStatus.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA82118E15200BD3D60 /* KYCAccountStatus.storyboard */; };
 		602B9CD82118E15300BD3D60 /* KYCOnboardingNavigation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA92118E15200BD3D60 /* KYCOnboardingNavigation.storyboard */; };
 		602B9CD92118E15300BD3D60 /* KYCVerifyIdentity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAA2118E15200BD3D60 /* KYCVerifyIdentity.storyboard */; };
@@ -295,6 +296,7 @@
 		6090D0982118C745009371CB /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0972118C745009371CB /* RxBlocking.framework */; };
 		6090D09A2118C74B009371CB /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0992118C74B009371CB /* RxTest.framework */; };
 		6090D09C2118C750009371CB /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D09B2118C750009371CB /* Charts.framework */; };
+		60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60A08C572118F733006DB9E8 /* Settings.storyboard */; };
 		60AEA56721125AB00053A753 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
 		60AEA56821125AB20053A753 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */; };
 		60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE083211258F300AD514A /* SettingsCell.swift */; };
@@ -1671,6 +1673,7 @@
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		57B4ACE5CC925A8170598624 /* Pods-BlockchainTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug production.xcconfig"; sourceTree = "<group>"; };
+		601F5EE0211B32AA002697AB /* KYC+Onfido.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KYC+Onfido.swift"; sourceTree = "<group>"; };
 		602B9CA82118E15200BD3D60 /* KYCAccountStatus.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCAccountStatus.storyboard; sourceTree = "<group>"; };
 		602B9CA92118E15200BD3D60 /* KYCOnboardingNavigation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingNavigation.storyboard; sourceTree = "<group>"; };
 		602B9CAA2118E15200BD3D60 /* KYCVerifyIdentity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentity.storyboard; sourceTree = "<group>"; };
@@ -2554,6 +2557,7 @@
 		6090D0972118C745009371CB /* RxBlocking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxBlocking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6090D0992118C74B009371CB /* RxTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6090D09B2118C750009371CB /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Charts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60A08C582118F733006DB9E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSelectorTableViewController.m; sourceTree = "<group>"; };
 		60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSelectorTableViewController.h; sourceTree = "<group>"; };
 		60B10D432118EC84003F945F /* CountryDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryDataProvider.swift; sourceTree = "<group>"; };
@@ -3237,6 +3241,7 @@
 				515EF921210282B4002350B6 /* Localizable.strings */,
 				515EF925210282B4002350B6 /* MainWindow.strings */,
 				515EF9ED210282B4002350B6 /* MainWindow.xib */,
+				60A08C572118F733006DB9E8 /* Settings.storyboard */,
 				515EF91D210282B4002350B6 /* ReceiveCoins.strings */,
 				515EF9FB210282B4002350B6 /* ReceiveCoins.xib */,
 				515EF92D210282B4002350B6 /* SendCoins.strings */,
@@ -3354,6 +3359,7 @@
 				602B9CD32118E15200BD3D60 /* Views */,
 				602B9CD52118E15200BD3D60 /* KYCPersonalDetailsController.swift */,
 				602B9CD62118E15200BD3D60 /* KYCWelcomeController.swift */,
+				601F5EE0211B32AA002697AB /* KYC+Onfido.swift */,
 			);
 			path = KYC;
 			sourceTree = "<group>";
@@ -6437,6 +6443,7 @@
 				515EFADE210282B4002350B6 /* BCAddressSelectionView.strings in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
+				60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
 				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
@@ -7101,6 +7108,7 @@
 				9F91B607151666EC00ACB32D /* BCCreateWalletView.m in Sources */,
 				AAE94F2E20C644DE005A3595 /* PinPresenter.swift in Sources */,
 				23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */,
+				601F5EEB211B32AA002697AB /* KYC+Onfido.swift in Sources */,
 				C72D6CC21EC0B7F80000F922 /* FeeTableCell.m in Sources */,
 				AA7E7723210BA487009DFB4C /* Strings.swift in Sources */,
 				238FC4D21DEC79E200591D5F /* TransactionDetailDoubleSpendWarningCell.m in Sources */,
@@ -8100,6 +8108,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				60FBE0802112572B00AD514A /* Base */,
+			);
+			name = Settings.storyboard;
+			sourceTree = "<group>";
+		};
+		60A08C572118F733006DB9E8 /* Settings.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				60A08C582118F733006DB9E8 /* Base */,
 			);
 			name = Settings.storyboard;
 			sourceTree = "<group>";

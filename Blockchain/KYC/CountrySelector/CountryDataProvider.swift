@@ -15,10 +15,15 @@ final class CountryDataProvider {
     // MARK: - Properties
 
     var countries: Countries?
-
+    init() {
+        fetchListOfCountries()
+    }
+    
     func fetchListOfCountries() {
+        print("fetching countries")
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
             do {
+                print("decoding..", responseData)
                 self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
             } catch {
                 // TODO: handle error

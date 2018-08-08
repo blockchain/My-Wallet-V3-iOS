@@ -268,6 +268,7 @@ struct LocalizationConstants {
     struct SideMenu {
         static let loginToWebWallet = NSLocalizedString("Log in to Web Wallet", comment: "")
         static let logout = NSLocalizedString("Logout", comment: "")
+        static let debug = NSLocalizedString("Debug", comment: "")
         static let logoutConfirm = NSLocalizedString("Do you really want to log out?", comment: "")
         static let buySellBitcoin = NSLocalizedString("Buy & Sell Bitcoin", comment: "")
     }
@@ -457,6 +458,8 @@ struct LocalizationConstants {
     @objc class func incorrectPin() -> String { return LocalizationConstants.Pin.incorrect }
 
     @objc class func logout() -> String { return LocalizationConstants.SideMenu.logout }
+
+    @objc class func debug() -> String { return LocalizationConstants.SideMenu.debug }
 
     @objc class func noPasswordEntered() -> String { return LocalizationConstants.Authentication.noPasswordEntered }
 
