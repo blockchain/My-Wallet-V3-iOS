@@ -41,7 +41,7 @@ class ValidationDateField: ValidationTextField {
         pickerView.isHidden = false
     }
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return false
     }
 }

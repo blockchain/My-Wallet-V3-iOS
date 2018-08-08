@@ -110,7 +110,13 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     // MARK: - Navigation
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let enterPhoneNumberController = segue.destination as? KYCEnterPhoneNumberController else {
+            return
+        }
+        // TODO: pass in actual userID
+        enterPhoneNumberController.userId = "userId"
+    }
 }
 
 extension KYCPersonalDetailsController: UIScrollViewDelegate {

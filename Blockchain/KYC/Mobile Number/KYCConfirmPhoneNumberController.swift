@@ -27,6 +27,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
+
     private var originalBottomButtonConstraint: CGFloat!
 
     deinit {
@@ -37,6 +38,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TICKET: IOS-1141 display correct % in the progress view
         labelPhoneNumber.text = phoneNumber
         nextButton.isEnabled = false
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
@@ -84,6 +86,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
         layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
+        view.layoutIfNeeded()
         UIView.commitAnimations()
     }
 
@@ -92,6 +95,7 @@ class KYCConfirmPhoneNumberController: UIViewController {
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
         layoutConstraintBottomButton.constant = originalBottomButtonConstraint
+        view.layoutIfNeeded()
         UIView.commitAnimations()
     }
 }
