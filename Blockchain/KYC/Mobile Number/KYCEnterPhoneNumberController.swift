@@ -18,7 +18,6 @@ final class KYCEnterPhoneNumberController: UIViewController {
     // MARK: IBOutlets
 
     @IBOutlet private var validationTextFieldMobileNumber: ValidationTextField!
-    @IBOutlet private var buttonNext: PrimaryButton!
     @IBOutlet private var layoutConstraintBottomButton: NSLayoutConstraint!
 
     // MARK: Private Properties
@@ -42,16 +41,16 @@ final class KYCEnterPhoneNumberController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // TICKET: IOS-1141 display correct % in the progress view
-        buttonNext.isEnabled = false
         validationTextFieldMobileNumber.keyboardType = .numberPad
         validationTextFieldMobileNumber.contentType = .telephoneNumber
         validationTextFieldMobileNumber.textChangedBlock = { [unowned self] text in
             guard let text = text else {
-                self.buttonNext.isEnabled = false
                 return
             }
-            self.buttonNext.isEnabled = text.count > 0
             self.validationTextFieldMobileNumber.text = self.phoneNumberPartialFormatter.formatPartial(text)
+        }
+        validationTextFieldMobileNumber.returnTappedBlock = { [unowned self] in
+            self.validationTextFieldMobileNumber.resignFocus()
         }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
     }
@@ -64,18 +63,22 @@ final class KYCEnterPhoneNumberController: UIViewController {
         NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
             self.keyboardWillHide(with: KeyboardPayload(notification: $0))
         }
-        validationTextFieldMobileNumber.becomeFirstResponder()
+        validationTextFieldMobileNumber.becomeFocused()
     }
 
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
+        guard case .valid = validationTextFieldMobileNumber.validate() else {
+            Logger.shared.warning("phone number field is invalid.")
+            return
+        }
         guard let number = validationTextFieldMobileNumber.text else {
             Logger.shared.warning("number is nil.")
             return
         }
         guard let userId = userId else {
-            Logger.shared.warning("userIs is nil.")
+            Logger.shared.warning("userId is nil.")
             return
         }
         presenter.startVerification(number: number, userId: userId)

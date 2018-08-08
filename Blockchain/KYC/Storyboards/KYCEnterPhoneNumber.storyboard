@@ -106,7 +106,6 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="buttonNext" destination="KX0-wF-bqu" id="ZYo-RT-HwX"/>
                         <outlet property="layoutConstraintBottomButton" destination="SXE-nw-OlT" id="B4p-XA-yz6"/>
                         <outlet property="validationTextFieldMobileNumber" destination="VGy-nv-chh" id="ary-Gi-hlU"/>
                         <segue destination="xVk-FG-HTS" kind="show" identifier="verifyMobileNumber" id="Ppp-kU-LhA"/>
