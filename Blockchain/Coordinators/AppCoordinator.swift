@@ -275,10 +275,10 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
 
     private func handleWebLogin() {
         let webLoginViewController = WebLoginViewController()
-        guard let navigationViewController = BCNavigationController(
+        let navigationViewController = BCNavigationController(
             rootViewController: webLoginViewController,
             title: LocalizationConstants.SideMenu.loginToWebWallet
-        ) else { return }
+        )
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             navigationViewController,
             animated: true

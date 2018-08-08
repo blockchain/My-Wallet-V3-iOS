@@ -177,22 +177,22 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
     }
     func termsOfServiceClicked() {
         let aboutViewController = SettingsWebViewController()
-        aboutViewController.urlTargetString = ConstantsObjcBridge.termsOfServiceURLString()
+        aboutViewController.urlTargetString = Constants.Url.termsOfService
         let navigationController = BCNavigationController(rootViewController: aboutViewController, title: LocalizationConstants.tos)
-        present(navigationController!, animated: true)
+        present(navigationController, animated: true)
     }
     func showPrivacyPolicy() {
         let aboutViewController = SettingsWebViewController()
-        aboutViewController.urlTargetString = ConstantsObjcBridge.privacyPolicyURLString()
+        aboutViewController.urlTargetString = Constants.Url.privacyPolicy
         let navigationController = BCNavigationController(rootViewController: aboutViewController, title: LocalizationConstants.privacyPolicy)
-        present(navigationController!, animated: true)
+        present(navigationController, animated: true)
     }
     func showCookiePolicy() {
         let aboutViewController = SettingsWebViewController()
-        aboutViewController.urlTargetString = ConstantsObjcBridge.cookiePolicyURLString()
+        aboutViewController.urlTargetString = Constants.Url.privacyPolicy
         let navigationController = BCNavigationController(rootViewController: aboutViewController,
                                                           title: LocalizationConstantsObjcBridge.cookiePolicy())
-        present(navigationController!, animated: true)
+        present(navigationController, animated: true)
     }
     func convertFloat(toString floatNumber: Float, forDisplay isForDisplay: Bool) -> String? {
         let feePerKbFormatter = NumberFormatter()

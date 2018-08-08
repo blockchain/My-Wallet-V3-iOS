@@ -36,6 +36,7 @@ final class KYCCountrySelectionController: UITableViewController {
 
             } catch {
                 // TODO: handle error
+        // TODO: Remove debug
             }
         }, taskFailure: { error in
             // TODO: handle error
@@ -43,6 +44,7 @@ final class KYCCountrySelectionController: UITableViewController {
         })
         
     }
+
     // MARK: UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

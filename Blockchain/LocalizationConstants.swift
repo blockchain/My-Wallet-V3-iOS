@@ -22,7 +22,7 @@ struct LocalizationConstants {
     static let disable = NSLocalizedString ("Disable", comment: "")
     static let disabled = NSLocalizedString ("Disabled", comment: "")
     static let unknown = NSLocalizedString ("Unknown", comment: "")
-    static let unconfirmed = NSLocalizedString("Unconfirmed", comment:"")
+    static let unconfirmed = NSLocalizedString("Unconfirmed", comment: "")
     static let enable = NSLocalizedString ("Enable", comment: "")
     static let changeEmail = NSLocalizedString ("Change Email", comment: "")
     static let addEmail = NSLocalizedString ("Add Email", comment: "")
@@ -426,6 +426,10 @@ struct LocalizationConstants {
         static let failedToConfirmNumber = NSLocalizedString(
             "Failed to confirm number. Please try again.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."
+        )
+        static let termsOfServiceAndPrivacyPolicyNotice = NSLocalizedString(
+            "By tapping on \"Apply Now\", you agree to Blockchain's %@ & %@",
+            comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain's terms of service and privacy policy when they start the KYC process."
         )
     }
 }
