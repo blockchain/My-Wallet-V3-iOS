@@ -13,6 +13,23 @@ extension Encodable {
         encoder.outputFormatting = .prettyPrinted
         return try encoder.encode(self)
     }
+
+    func tryToEncode(
+        encoding: String.Encoding,
+        onSuccess: (String) -> Void,
+        onError: () -> Void
+    ) {
+        do {
+            let encodedData = try self.encode()
+            guard let string = String(data: encodedData, encoding: encoding) else {
+                onError()
+                return
+            }
+            onSuccess(string)
+        } catch {
+            onError()
+        }
+    }
 }
 
 extension Decodable {
