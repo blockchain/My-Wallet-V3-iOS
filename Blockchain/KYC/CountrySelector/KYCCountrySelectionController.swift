@@ -15,23 +15,14 @@ final class KYCCountrySelectionController: UITableViewController {
     // MARK: - Properties
     var countries: Countries?
     
-    var dataProvider: CountryDataProvider? {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-       // dataProvider?.fetchListOfCountries()
         
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
             do {
-                print("decoding in viewDidLoad..", responseData)
                 self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
-                print("codedCountries", self.countries)
                 self.tableView.reloadData()
 
             } catch {
@@ -48,9 +39,6 @@ final class KYCCountrySelectionController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        guard let `countries` = countries else {
-//            return 0
-//        }
         if let hasCountries = countries {
             return hasCountries.count
         }
