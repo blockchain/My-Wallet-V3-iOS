@@ -8,9 +8,9 @@
 
 import Foundation
 import XCTest
-@testable import Blockchain
-@testable import RxBlocking
-@testable import RxSwift
+import Blockchain
+import RxBlocking
+import RxSwift
 
 class PinPresenterTests: XCTestCase {
 

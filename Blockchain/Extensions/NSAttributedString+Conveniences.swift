@@ -8,6 +8,27 @@
 
 import UIKit
 
+public extension NSMutableAttributedString {
+
+    /// Sets the foreground color of the substring `text` to the provided `color`
+    /// if `text` is within this attributed string's range.
+    ///
+    /// - Parameters:
+    ///   - color: the foreground color to set
+    ///   - text: the text to set a foreground color to
+    public func addForegroundColor(_ color: UIColor, to text: String) {
+        guard let range = string.range(of: text) else {
+            Logger.shared.info("Cannot add color to attributed string. Text is not in range.")
+            return
+        }
+        addAttribute(
+            NSAttributedStringKey.foregroundColor,
+            value: color,
+            range: NSRange(range, in: string)
+        )
+    }
+}
+
 public extension NSAttributedString {
 
     var height: CGFloat {
