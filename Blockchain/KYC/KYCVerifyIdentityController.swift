@@ -63,8 +63,8 @@ final class KYCVerifyIdentityController: UIViewController {
     private func onfidoConfigurator(_ document: DocumentType, countryCode: String) -> OnfidoConfig {
         //swiftlint:disable next force_try
         let config = try! OnfidoConfig.builder()
-            .withToken("123345")
-            .withApplicantId("somebody once told me")
+            .withToken("")
+            .withApplicantId("")
             .withDocumentStep(ofType: document, andCountryCode: countryCode)
             .withFaceStep(ofVariant: .photo) // specify the face capture variant here
             .build()
