@@ -12,7 +12,7 @@ target 'Blockchain' do
 	pod 'Charts'
 	pod 'RxSwift',    '~> 4.0'
 	pod 'RxCocoa',    '~> 4.0'
-
+       pod 'Starscream', '~> 3.0.2'
   target 'BlockchainTests' do
     inherit! :search_paths
     # Pods for testing
