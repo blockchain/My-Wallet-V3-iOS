@@ -92,8 +92,8 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
             } else {
-                this.interface?.rightBarButton(.hidden)
-                this.interface?.updateBarButtonActivityIndicator(.visible)
+                this.interface?.rightBarButton(.visible)
+                this.interface?.updateBarButtonActivityIndicator(.hidden)
                 this.interface?.nextPage()
             }
         }

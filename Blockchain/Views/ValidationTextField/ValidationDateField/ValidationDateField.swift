@@ -18,6 +18,10 @@ class ValidationDateField: ValidationTextField {
         return picker
     }()
 
+    var selectedDate: Date {
+        return pickerView.date
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
 

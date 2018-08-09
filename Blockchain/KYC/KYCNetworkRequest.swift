@@ -37,13 +37,18 @@ final class KYCNetworkRequest {
         }
 
         enum PUT {
+            case updateUserDetails(userId: String)
             case updateMobileNumber(userId: String)
             case updateAddress(userId: String)
 
             var path: String {
                 switch self {
-                case let .updateMobileNumber(userId): return "/users/\(userId)/mobile"
-                case let .updateAddress(userId): return "/users/\(userId)/address"
+                case .updateUserDetails(let userID):
+                    return "/users/\(userID)"
+                case .updateMobileNumber(let userId):
+                    return "/users/\(userId)/mobile"
+                case .updateAddress(let userId):
+                    return "/users/\(userId)/address"
                 }
             }
         }

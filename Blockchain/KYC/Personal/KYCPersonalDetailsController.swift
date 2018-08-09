@@ -39,6 +39,15 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     var keyboard: KeyboardPayload? = nil
 
+    // MARK: Public Properties
+
+    weak var delegate: PersonalDetailsDelegate?
+
+    // MARK: Private Properties
+
+    fileprivate var nextBarButton: UIBarButtonItem!
+    fileprivate var barButtonActivityIndicator: UIActivityIndicatorView!
+
     // MARK: Lifecycle
 
     override func viewDidLoad() {
@@ -61,6 +70,8 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
                 next.becomeFocused()
             }
         }
+
+        delegate?.onStart()
     }
 
     // MARK: - Private Methods
@@ -105,7 +116,16 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard checkFieldsValidity() else { return }
-        performSegue(withIdentifier: "enterMobileNumber", sender: self)
+        guard let email = WalletManager.shared.wallet.getEmail() else { return }
+
+        let details = PersonalDetails(
+            identifier: "",
+            firstName: firstNameField.text ?? "",
+            lastName: lastNameField.text ?? "",
+            email: email,
+            birthday: birthdayField.selectedDate
+        )
+        delegate?.onSubmission(details)
     }
 
     // MARK: - Navigation
@@ -116,6 +136,35 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
         }
         // TODO: pass in actual userID
         enterPhoneNumberController.userId = "userId"
+    }
+}
+
+extension KYCPersonalDetailsController: PersonalDetailsInterface {
+    func nextPage() {
+        performSegue(withIdentifier: "enterMobileNumber", sender: self)
+    }
+
+    func rightBarButton(_ visibility: Visibility) {
+        switch visibility {
+        case .hidden:
+            navigationItem.rightBarButtonItem = nextBarButton
+            scrollView.isUserInteractionEnabled = true
+        case .visible:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
+            barButtonActivityIndicator.startAnimating()
+        }
+    }
+
+    func updateBarButtonActivityIndicator(_ visibility: Visibility) {
+        navigationItem.rightBarButtonItem = visibility == .hidden ? nil: nextBarButton
+        scrollView.isUserInteractionEnabled = visibility == .hidden
+    }
+
+    func populatePersonalDetailFields(_ details: PersonalDetails) {
+        firstNameField.text = details.firstName
+        lastNameField.text = details.lastName
+        let birthday = DateFormatter.birthday.string(from: details.birthday)
+        birthdayField.text = birthday
     }
 }
 

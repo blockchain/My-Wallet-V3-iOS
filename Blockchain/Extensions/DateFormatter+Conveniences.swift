@@ -15,4 +15,10 @@ extension DateFormatter {
         formatter.timeStyle = .none
         return formatter
     }()
+
+    static let kycFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-mm-dd"
+        return formatter
+    }()
 }
