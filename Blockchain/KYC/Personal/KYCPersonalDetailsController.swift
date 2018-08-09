@@ -131,6 +131,7 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard checkFieldsValidity() else { return }
         guard let email = WalletManager.shared.wallet.getEmail() else { return }
+        validationFields.forEach({$0.resignFocus()})
 
         let details = PersonalDetails(
             identifier: "",

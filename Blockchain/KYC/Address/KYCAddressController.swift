@@ -147,6 +147,8 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard checkFieldsValidity() else { return }
+        validationFields.forEach({$0.resignFocus()})
+        
         let address = UserAddress(
             lineOne: addressTextField.text ?? "",
             lineTwo: apartmentTextField.text ?? "",
