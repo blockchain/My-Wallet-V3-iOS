@@ -8,8 +8,8 @@
 import Onfido
 
 class OnfidoManager: UIViewController {
-    static let shared = OnfidoManager()
-    var config: OnfidoConfig?
+    static let shared = OnfidoController()
+    private var config: OnfidoConfig?
 
     convenience init() {
         //swiftlint:disable next force_try

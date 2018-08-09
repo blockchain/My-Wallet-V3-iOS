@@ -110,10 +110,6 @@ final class KYCEnterPhoneNumberController: UIViewController {
         view.layoutIfNeeded()
         UIView.commitAnimations()
     }
-
-    private func goToNextStep() {
-        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
-    }
 }
 
 extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {

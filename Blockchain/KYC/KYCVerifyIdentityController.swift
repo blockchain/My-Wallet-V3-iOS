@@ -115,7 +115,7 @@ final class KYCVerifyIdentityController: UIViewController {
             }
             cedentialsRequest(provider: provider) { credentials in
                 let currentConfig = self.onfidoConfigurator(selectedOption, countryCode: "USD", credentials)
-                let onfidoController = OnfidoManager(config: currentConfig)
+                let onfidoController = OnfidoController(config: currentConfig)
                 onfidoController.modalPresentationStyle = .overCurrentContext
                 self.present(onfidoController, animated: true)
             }
