@@ -21,11 +21,11 @@ final class KYCVerifyIdentityController: UIViewController {
         case onfido
     }
 
-    
+
     // MARK: - Properties
     
     var currentProvider = VerificationProviders.onfido
-    
+
     fileprivate enum DocumentMap {
         case driversLicense, identityCard, passport, residencePermitCard
     }
@@ -59,7 +59,7 @@ final class KYCVerifyIdentityController: UIViewController {
     }
 
     // MARK: - Private Methods
-    
+
     /// Sets up the Onfido config depending on user selection
     ///
     /// - Parameters:
@@ -121,13 +121,13 @@ final class KYCVerifyIdentityController: UIViewController {
             }
         }
     }
-    
+
     private func didSelect(_ document: DocumentMap) {
         startVerificationFlow(document, provider: currentProvider)
     }
-    
+
     // MARK: - Actions
-    
+
     @IBAction private func primaryButtonTapped(_ sender: Any) {
         DispatchQueue.main.async {
             self.setUpAndShowDocumentDialog()
