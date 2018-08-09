@@ -82,6 +82,23 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         }
     }
 
+    func onSubmission(_ address: UserAddress) {
+        interface?.rightBarButton(.hidden)
+        interface?.updateBarButtonActivityIndicator(.visible)
+        // TODO: Pass in correct userID
+        api.updateAddress(address: address, for: "userID") { [weak self] (error) in
+            guard let this = self else { return }
+            if let err = error {
+                // TODO: Error state
+                Logger.shared.error("\(err)")
+            } else {
+                this.interface?.rightBarButton(.hidden)
+                this.interface?.updateBarButtonActivityIndicator(.visible)
+                this.interface?.nextPage()
+            }
+        }
+    }
+
     func onSubmission(_ address: PostalAddress) {
         delegate?.coordinator(self, generated: address)
     }

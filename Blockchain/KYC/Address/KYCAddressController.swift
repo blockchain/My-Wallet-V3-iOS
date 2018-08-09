@@ -34,8 +34,6 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
     weak var searchDelegate: SearchControllerDelegate?
 
-    // MARK: Private Properties
-
     /// `validationFields` are all the fields listed below in a collection.
     /// This is just for convenience purposes when iterating over the fields
     /// and checking validation etc.
@@ -50,9 +48,15 @@ class KYCAddressController: UIViewController, ValidationFormView {
             ]
         }
     }
+
+    var keyboard: KeyboardPayload? = nil
+
+    // MARK: Private Properties
+
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
-    var keyboard: KeyboardPayload? = nil
+    fileprivate var nextBarButton: UIBarButtonItem!
+    fileprivate var barButtonActivityIndicator: UIActivityIndicatorView!
 
     // MARK: Lifecycle
 
@@ -71,6 +75,16 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
         validationFieldsSetup()
         setupNotifications()
+
+        nextBarButton = UIBarButtonItem(
+            barButtonSystemItem: .action,
+            target: self,
+            action: #selector(primaryButtonTapped(_:))
+        )
+        nextBarButton.tintColor = .white
+        navigationItem.rightBarButtonItem = nextBarButton
+
+        barButtonActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
 
         searchDelegate?.onStart()
     }
@@ -131,8 +145,14 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard checkFieldsValidity() else { return }
-        // TODO: Generate `PostalAddress` to pass along through KYC flow.
-        performSegue(withIdentifier: "showPersonalDetails", sender: self)
+        let address = UserAddress(
+            lineOne: addressTextField.text ?? "",
+            lineTwo: apartmentTextField.text ?? "",
+            postalCode: postalCodeTextField.text ?? "",
+            city: cityTextField.text ?? "",
+            country: countryTextField.text ?? ""
+        )
+        searchDelegate?.onSubmission(address)
     }
 
     // MARK: - Navigation
@@ -155,6 +175,27 @@ extension KYCAddressController: UITableViewDelegate {
 }
 
 extension KYCAddressController: LocationSuggestionInterface {
+
+    func nextPage() {
+        performSegue(withIdentifier: "showPersonalDetails", sender: self)
+    }
+
+    func updateBarButtonActivityIndicator(_ visibility: Visibility) {
+        navigationItem.rightBarButtonItem = visibility == .hidden ? nil: nextBarButton
+        scrollView.isUserInteractionEnabled = visibility == .hidden
+    }
+
+    func rightBarButton(_ visibility: Visibility) {
+        switch visibility {
+        case .hidden:
+            navigationItem.rightBarButtonItem = nextBarButton
+            scrollView.isUserInteractionEnabled = true
+        case .visible:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
+            barButtonActivityIndicator.startAnimating()
+        }
+    }
+
     func addressEntryView(_ visibility: Visibility) {
         scrollView.alpha = visibility.defaultAlpha
     }
