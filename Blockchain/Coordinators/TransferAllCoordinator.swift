@@ -32,7 +32,7 @@ import Foundation
                                      comment: "")
         )
         let tabViewController = AppCoordinator.shared.tabControllerManager.tabViewController
-        tabViewController?.topMostViewController!.present(navigationController!, animated: true, completion: nil)
+        tabViewController?.topMostViewController!.present(navigationController, animated: true, completion: nil)
     }
 
     @objc func start(withDelegate delegate: TransferAllPromptDelegate) {

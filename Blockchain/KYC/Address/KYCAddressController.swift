@@ -8,11 +8,10 @@
 
 import UIKit
 
-class KYCAddressController: UIViewController {
+class KYCAddressController: UIViewController, ValidationFormView {
 
     // MARK: - Private IBOutlets
 
-    @IBOutlet fileprivate var scrollView: UIScrollView!
     @IBOutlet fileprivate var progressView: UIProgressView!
     @IBOutlet fileprivate var searchBar: UISearchBar!
     @IBOutlet fileprivate var tableView: UITableView!
@@ -25,10 +24,11 @@ class KYCAddressController: UIViewController {
     @IBOutlet fileprivate var stateTextField: ValidationTextField!
     @IBOutlet fileprivate var postalCodeTextField: ValidationTextField!
     @IBOutlet fileprivate var countryTextField: ValidationTextField!
+    @IBOutlet fileprivate var primaryButton: PrimaryButton!
 
     // MARK: - Public IBOutlets
 
-    @IBOutlet var primaryButton: PrimaryButton!
+    @IBOutlet var scrollView: UIScrollView!
 
     // MARK: - KYCOnboardingNavigation
 
@@ -39,7 +39,7 @@ class KYCAddressController: UIViewController {
     /// `validationFields` are all the fields listed below in a collection.
     /// This is just for convenience purposes when iterating over the fields
     /// and checking validation etc.
-    fileprivate var validationFields: [ValidationTextField] {
+    var validationFields: [ValidationTextField] {
         get {
             return [addressTextField,
                     apartmentTextField,
@@ -113,38 +113,7 @@ class KYCAddressController: UIViewController {
             }
         }
 
-        /// This is for handling when the `VerificationTextField`
-        /// is covered by the keyboard. Depending on how many
-        /// forms we have in the app this could be a candidate for abstraction.
-        validationFields.forEach { (field) in
-            field.becomeFirstResponderBlock = { [weak self] (validationField) in
-                guard let this = self else { return }
-                guard let keyboardHeight = this.keyboard?.endingFrame.height else { return }
-                let insets = UIEdgeInsets(
-                    top: 0.0,
-                    left: 0.0,
-                    bottom: keyboardHeight,
-                    right: 0.0
-                )
-                this.scrollView.contentInset = insets
-
-                let viewSize = CGSize(
-                    width: this.scrollView.frame.width,
-                    height: this.scrollView.frame.height - keyboardHeight
-                )
-                let viewableFrame = CGRect(
-                    origin: this.scrollView.frame.origin,
-                    size: viewSize
-                )
-
-                if !viewableFrame.contains(validationField.frame.origin) {
-                    this.scrollView.scrollRectToVisible(
-                        validationField.frame,
-                        animated: true
-                    )
-                }
-            }
-        }
+        handleKeyboardOffset()
     }
 
     fileprivate func setupNotifications() {
@@ -156,19 +125,6 @@ class KYCAddressController: UIViewController {
             let keyboard = KeyboardPayload(notification: notification)
             self?.keyboard = keyboard
         }
-    }
-
-    fileprivate func checkFieldsValidity() -> Bool {
-        var valid: Bool = true
-        for field in validationFields {
-            guard case .valid = field.validate() else {
-                valid = false
-                guard !validationFields.contains(where: {$0.isFocused() == true}) else { continue }
-                field.becomeFocused()
-                continue
-            }
-        }
-        return valid
     }
 
     // MARK: - Actions
