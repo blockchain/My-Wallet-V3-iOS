@@ -48,9 +48,11 @@ class OnfidoManager: UIViewController {
         let responseHandler: (OnfidoResponse) -> Void = { response in
             if case let OnfidoResponse.error(innerError) = response {
                 DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true, completion: {
+                        self.showErrorMessage(forError: innerError)
+
+                    })
                 }
-                self.showErrorMessage(forError: innerError)
             } else if case OnfidoResponse.success = response {
                 UIView.animate(withDuration: 0.24, animations: {
                     self.view.alpha = 0

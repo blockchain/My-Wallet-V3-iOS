@@ -9,12 +9,19 @@
 import UIKit
 import Onfido
 
+struct VerificationPayload: Codable {
+    var provider: String
+    var key: String
+}
+
 /// Account verification screen in KYC flow
 final class KYCVerifyIdentityController: UIViewController {
     
     enum VerificationProviders {
         case onfido
     }
+
+    
     // MARK: - Properties
     
     var currentProvider = VerificationProviders.onfido
@@ -22,7 +29,7 @@ final class KYCVerifyIdentityController: UIViewController {
     fileprivate enum DocumentMap {
         case driversLicense, identityCard, passport, residencePermitCard
     }
-    
+
     fileprivate var onfidoMap = [DocumentMap.driversLicense: DocumentType.drivingLicence,
                                  DocumentMap.identityCard: DocumentType.nationalIdentityCard,
                                  DocumentMap.passport: DocumentType.passport,
@@ -48,10 +55,9 @@ final class KYCVerifyIdentityController: UIViewController {
         documentDialog.addAction(identityCardAction)
         documentDialog.addAction(residencePermitCardAction)
         documentDialog.addAction(cancelAction)
-        
         present(documentDialog, animated: true)
     }
-    
+
     // MARK: - Private Methods
     
     /// Sets up the Onfido config depending on user selection
@@ -60,17 +66,42 @@ final class KYCVerifyIdentityController: UIViewController {
     ///   - document: Onfido document type
     ///   - countryCode: Users locale
     /// - Returns: a configuration determining the onfido document verification
-    private func onfidoConfigurator(_ document: DocumentType, countryCode: String) -> OnfidoConfig {
+    private func onfidoConfigurator(_ document: DocumentType, countryCode: String, _ providerCredentials: VerificationPayload) -> OnfidoConfig {
         //swiftlint:disable next force_try
         let config = try! OnfidoConfig.builder()
-            .withToken("token")
+            .withToken(providerCredentials.key)
             .withApplicantId("applicant")
             .withDocumentStep(ofType: document, andCountryCode: countryCode)
             .withFaceStep(ofVariant: .photo) // specify the face capture variant here
             .build()
         return config
     }
-    
+
+    /// Asks for credentials for a given identity verification provider
+    ///
+    /// - Parameters:
+    ///   - provider: Object with a provider and API key
+    ///   - completion: @param VerificationPayload
+    func cedentialsRequest(provider: VerificationProviders, completion: @escaping (VerificationPayload) -> Void) {
+        switch provider {
+        case .onfido:
+            KYCNetworkRequest(get: .credentials, taskSuccess: { responseData in
+                do {
+                    let decoder = JSONDecoder()
+                    let verificationVendors = try decoder.decode([VerificationPayload].self, from: responseData)
+                    guard let firstProvider = verificationVendors.first else {
+                        return
+                    }
+                    completion(firstProvider)
+                } catch {
+                    Logger.shared.error(error.debugDescription)
+                }
+            }, taskFailure: { error in
+                // TODO: handle error
+                Logger.shared.error(error.debugDescription)
+            })
+        }
+    }
     /// Begins identity verification and presents the view
     ///
     /// - Parameters:
@@ -82,10 +113,12 @@ final class KYCVerifyIdentityController: UIViewController {
             guard let selectedOption = onfidoMap[document] else {
                 return
             }
-            let currentConfig = onfidoConfigurator(selectedOption, countryCode: "USD")
-            let onfidoController = OnfidoManager(config: currentConfig)
-            onfidoController.modalPresentationStyle = .overCurrentContext
-            present(onfidoController, animated: true)
+            cedentialsRequest(provider: provider) { credentials in
+                let currentConfig = self.onfidoConfigurator(selectedOption, countryCode: "USD", credentials)
+                let onfidoController = OnfidoManager(config: currentConfig)
+                onfidoController.modalPresentationStyle = .overCurrentContext
+                self.present(onfidoController, animated: true)
+            }
         }
     }
     

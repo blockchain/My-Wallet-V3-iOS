@@ -90,6 +90,8 @@
 	<false/>
 	<key>WALLET_SERVER</key>
 	<string>$(WALLET_SERVER)</string>
+	<key>KYC_ENDPOINT</key>
+	<string>$(KYC_ENDPOINT)</string>
 	<key>WEBSOCKET_SERVER</key>
 	<string>$(WEBSOCKET_SERVER)</string>
 	<key>WEBSOCKET_SERVER_BCH</key>

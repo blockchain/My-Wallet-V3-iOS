@@ -226,7 +226,6 @@
 		602B9CE32118E15300BD3D60 /* KYCVerifyPhoneNumberPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB52118E15200BD3D60 /* KYCVerifyPhoneNumberPresenter.swift */; };
 		602B9CE42118E15300BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB62118E15200BD3D60 /* KYCVerifyPhoneNumberInteractor.swift */; };
 		602B9CE52118E15300BD3D60 /* KYCCountrySelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB82118E15200BD3D60 /* KYCCountrySelectionController.swift */; };
-		602B9CE62118E15300BD3D60 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		602B9CE72118E15300BD3D60 /* KYCCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CBB2118E15200BD3D60 /* KYCCountry.swift */; };
 		602B9CE82118E15300BD3D60 /* LocationSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CBE2118E15200BD3D60 /* LocationSuggestion.swift */; };
 		602B9CE92118E15300BD3D60 /* LocationSuggestionPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CBF2118E15200BD3D60 /* LocationSuggestionPageModel.swift */; };
@@ -314,7 +313,6 @@
 		60AEA5BF21125DDD0053A753 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */; };
 		60B10D442118EC85003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
 		60B10D452118ED26003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
-		60FBE0812112572B00AD514A /* (null) in Resources */ = {isa = PBXBuildFile; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -6519,7 +6517,6 @@
 				515EFAE2210282B4002350B6 /* MainWindow.xib in Resources */,
 				515EFADF210282B4002350B6 /* Settings.strings in Resources */,
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
-				60FBE0812112572B00AD514A /* (null) in Resources */,
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				C718595B1F4B85E800745A87 /* Transactions.xib in Resources */,
 				ECD244EB19A8AC45004B1F40 /* PEKeyboard-3-done.png in Resources */,
@@ -7242,7 +7239,6 @@
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
-				602B9CE62118E15300BD3D60 /* (null) in Sources */,
 				AAC9FCEE20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AACF56C520EAC87A0039978B /* OnboardingSettings.swift in Sources */,
 				AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
