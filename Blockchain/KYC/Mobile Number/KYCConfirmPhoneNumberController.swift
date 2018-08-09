@@ -44,7 +44,6 @@ final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonConta
     override func viewDidLoad() {
         super.viewDidLoad()
         // TICKET: IOS-1141 display correct % in the progress view
-        validationTextFieldConfirmationCode.keyboardType = .namePhonePad
         validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
         labelPhoneNumber.text = phoneNumber
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
