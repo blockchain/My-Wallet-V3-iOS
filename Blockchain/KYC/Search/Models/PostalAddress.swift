@@ -17,6 +17,7 @@ struct PostalAddress {
     var unit: String?
 }
 
+// TICKET: IOS-1145 - Combine PostalAddress and UserAddress models.
 struct UserAddress: Encodable {
     let lineOne: String
     let lineTwo: String
