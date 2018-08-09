@@ -32,14 +32,17 @@ extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
     func onSubmission(_ input: PersonalDetails) {
         interface?.rightBarButton(.hidden)
         interface?.updateBarButtonActivityIndicator(.visible)
+        interface?.primaryButtonEnabled(false)
         service.update(personalDetails: input) { [weak self] (error) in
             guard let this = self else { return }
+            this.interface?.primaryButtonEnabled(true)
+            this.interface?.rightBarButton(.visible)
+            this.interface?.updateBarButtonActivityIndicator(.hidden)
+
             if let err = error {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
             } else {
-                this.interface?.rightBarButton(.visible)
-                this.interface?.updateBarButtonActivityIndicator(.hidden)
                 this.interface?.nextPage()
             }
         }

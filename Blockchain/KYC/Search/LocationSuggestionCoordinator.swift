@@ -85,17 +85,18 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
     func onSubmission(_ address: UserAddress) {
         interface?.rightBarButton(.hidden)
         interface?.updateBarButtonActivityIndicator(.visible)
+        interface?.primaryButtonEnabled(false)
         // TODO: Pass in correct userID
         api.updateAddress(address: address, for: "userID") { [weak self] (error) in
             guard let this = self else { return }
+            this.interface?.rightBarButton(.visible)
+            this.interface?.updateBarButtonActivityIndicator(.hidden)
+            this.interface?.primaryButtonEnabled(true)
+
             if let err = error {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
-                this.interface?.rightBarButton(.hidden)
-                this.interface?.updateBarButtonActivityIndicator(.visible)
             } else {
-                this.interface?.rightBarButton(.visible)
-                this.interface?.updateBarButtonActivityIndicator(.hidden)
                 this.interface?.nextPage()
             }
         }

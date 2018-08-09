@@ -154,6 +154,10 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 }
 
 extension KYCPersonalDetailsController: PersonalDetailsInterface {
+    func primaryButtonEnabled(_ enabled: Bool) {
+        primaryButton.isEnabled = enabled
+    }
+
     func nextPage() {
         performSegue(withIdentifier: "enterMobileNumber", sender: self)
     }
@@ -161,6 +165,7 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
     func rightBarButton(_ visibility: Visibility) {
         switch visibility {
         case .hidden:
+            navigationItem.rightBarButtonItem = nil
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
         case .visible:
             navigationItem.rightBarButtonItem = nextBarButton

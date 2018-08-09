@@ -177,6 +177,9 @@ extension KYCAddressController: UITableViewDelegate {
 }
 
 extension KYCAddressController: LocationSuggestionInterface {
+    func primaryButtonEnabled(_ enabled: Bool) {
+        primaryButton.isEnabled = enabled
+    }
 
     func nextPage() {
         performSegue(withIdentifier: "showPersonalDetails", sender: self)

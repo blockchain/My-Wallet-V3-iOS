@@ -11,6 +11,7 @@ protocol LocationSuggestionInterface: class {
     func suggestionsList(_ visibility: Visibility)
     func addressEntryView(_ visibility: Visibility)
     func rightBarButton(_ visibility: Visibility)
+    func primaryButtonEnabled(_ enabled: Bool)
     func updateBarButtonActivityIndicator(_ visibility: Visibility)
     func nextPage()
     func populateAddressEntryView(_ address: PostalAddress)

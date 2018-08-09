@@ -104,7 +104,7 @@ final class KYCNetworkRequest {
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.kycFormatter)
-            let body = try JSONEncoder().encode(parameters)
+            let body = try encoder.encode(parameters)
             request.httpBody = body
             request.allHTTPHeaderFields = ["Content-Type":"application/json",
                                            "Accept": "application/json"]

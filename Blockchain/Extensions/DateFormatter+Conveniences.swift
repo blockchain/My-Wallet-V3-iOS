@@ -18,7 +18,7 @@ extension DateFormatter {
 
     static let kycFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-mm-dd"
+        formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
 }
