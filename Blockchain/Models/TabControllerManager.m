@@ -757,7 +757,10 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_SURVEY_ALERT_TITLE message:BC_STRING_SURVEY_ALERT_MESSAGE preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_YES style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSURL *settingsURL = [NSURL URLWithString:URL_SURVEY];
-        [[UIApplication sharedApplication] openURL:settingsURL];
+        
+        UIApplication *application = [UIApplication sharedApplication];
+        [application openURL:settingsURL options:@{} completionHandler:nil];
+        
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_NOT_NOW style:UIAlertActionStyleCancel handler:nil]];
     

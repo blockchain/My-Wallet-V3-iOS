@@ -125,6 +125,7 @@
     if (self.underRightViewControllerStoryboardId) {
         self.underRightViewController = [self.storyboard instantiateViewControllerWithIdentifier:self.underRightViewControllerStoryboardId];
     }
+    [super awakeFromNib];
 }
 
 - (void)viewDidLoad {

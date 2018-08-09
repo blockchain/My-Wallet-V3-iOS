@@ -283,7 +283,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
                 guard let url = URL(string: Constants.Url.blockchainSupport) else { return }
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url)
             }
         )
         alert.addAction(

@@ -22,7 +22,7 @@ struct LocalizationConstants {
     static let disable = NSLocalizedString ("Disable", comment: "")
     static let disabled = NSLocalizedString ("Disabled", comment: "")
     static let unknown = NSLocalizedString ("Unknown", comment: "")
-    static let unconfirmed = NSLocalizedString("Unconfirmed", comment:"")
+    static let unconfirmed = NSLocalizedString("Unconfirmed", comment: "")
     static let enable = NSLocalizedString ("Enable", comment: "")
     static let changeEmail = NSLocalizedString ("Change Email", comment: "")
     static let addEmail = NSLocalizedString ("Add Email", comment: "")
@@ -87,7 +87,7 @@ struct LocalizationConstants {
     }
 
     struct Authentication {
-        static let recoveryPhrase = NSLocalizedString("Recovery Phrase", comment:"")
+        static let recoveryPhrase = NSLocalizedString("Recovery Phrase", comment: "")
         static let twoStepSMS = NSLocalizedString("2-Step has been enabled for SMS", comment: "")
         static let twoStepOff = NSLocalizedString("2-Step has been disabled.", comment: "")
         static let checkLink = NSLocalizedString("Please check your email and click on the verification link.", comment: "")
@@ -282,7 +282,7 @@ struct LocalizationConstants {
     struct Exchange {
         static let navigationTitle = NSLocalizedString(
             "Exchange",
-            comment:"Title text shown on navigation bar for exchanging a crypto asset for another"
+            comment: "Title text shown on navigation bar for exchanging a crypto asset for another"
         )
         static let loading = NSLocalizedString(
             "Loading Exchange",

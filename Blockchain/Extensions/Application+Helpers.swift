@@ -21,14 +21,14 @@ extension UIApplication {
             )
             return
         }
-        openURL(mailURL)
+        open(mailURL)
     }
 
     // MARK: - Rate Application
 
     @objc func rateApp() {
         let url = URL(string: "\(Constants.Url.appStoreLinkPrefix)\(Constants.AppStore.AppID)")!
-        self.openURL(url)
+        self.open(url)
     }
 }
 

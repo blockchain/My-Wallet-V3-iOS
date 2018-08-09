@@ -208,7 +208,7 @@ extension ValidationTextField: UITextFieldDelegate {
             return
         }
 
-        if (textField.text?.count == 0 || textField.text == nil) {
+        if textField.text?.count == 0 || textField.text == nil {
             validity = optionalField ? .valid : .invalid(nil)
         } else {
             validity = .valid

@@ -109,7 +109,6 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
         UIApplication.shared.keyWindow?.rootViewController?.present(pinViewController, animated: true)
     }
 
-
     private func askIfUserWantsToResetPIN() {
         let actions = [
             UIAlertAction(title: LocalizationConstants.Authentication.enterPassword, style: .cancel) { [unowned self] _ in
