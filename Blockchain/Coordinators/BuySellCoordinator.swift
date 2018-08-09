@@ -91,12 +91,10 @@ import RxSwift
         )
         buyBitcoinViewController.delegate = walletManager.wallet // TODO fix this
 
-        guard let navigationController = BuyBitcoinNavigationController(
+        let navigationController = BuyBitcoinNavigationController(
             rootViewController: buyBitcoinViewController,
             title: LocalizationConstants.SideMenu.buySellBitcoin
-            ) else {
-                return
-        }
+        )
 
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             navigationController,

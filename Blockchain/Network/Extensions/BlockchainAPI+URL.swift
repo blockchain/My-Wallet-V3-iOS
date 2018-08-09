@@ -52,4 +52,10 @@ extension BlockchainAPI {
             return BlockchainAPI.shared.apiUrl + "/kyc/config/countries"
         }
     }
+
+    enum Nabu {
+        static var quotes: String {
+            return BlockchainAPI.shared.apiUrl + "/nabu-app/markets/quotes"
+        }
+    }
 }

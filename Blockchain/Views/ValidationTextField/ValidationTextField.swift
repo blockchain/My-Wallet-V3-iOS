@@ -8,9 +8,29 @@
 
 import UIKit
 
+enum ValidationError: Error {
+    case unknown
+    case minimumDateRequirement
+}
+
 enum ValidationResult {
     case valid
-    case invalid(Error?)
+    case invalid(ValidationError?)
+}
+
+extension ValidationResult {
+    static func ==(lhs: ValidationResult, rhs: ValidationResult) -> Bool {
+        switch (lhs, rhs) {
+        case (.valid, .valid):
+            return true
+        case (.valid, .invalid):
+            return false
+        case (.invalid, .valid):
+            return false
+        case (.invalid, .invalid):
+            return true
+        }
+    }
 }
 
 typealias ValidationBlock = ((String?) -> ValidationResult)
@@ -27,17 +47,7 @@ class ValidationTextField: NibBasedView {
 
     // MARK: Private Properties
 
-    fileprivate var validity: ValidationResult = .valid {
-        didSet {
-            // TODO: Show the `x` when it is invalid.
-            switch validity {
-            case .invalid:
-                baselineFillColor = UIColor.red
-            case .valid:
-                baselineFillColor = UIColor.gray2
-            }
-        }
-    }
+    fileprivate var validity: ValidationResult = .valid
 
     // MARK: IBInspectable Properties
 
@@ -85,6 +95,12 @@ class ValidationTextField: NibBasedView {
 
     // MARK: Public Properties
 
+    var autocapitalizationType: UITextAutocapitalizationType = .words {
+        didSet {
+            textField.autocapitalizationType = autocapitalizationType
+        }
+    }
+
     var font: UIFont = ValidationTextField.primaryFont {
         didSet {
             textField.font = font
@@ -115,6 +131,12 @@ class ValidationTextField: NibBasedView {
         }
     }
 
+    var textFieldInputView: UIView? = nil {
+        didSet {
+            textField.inputView = textFieldInputView
+        }
+    }
+
     /// This closure is called when the user taps `next`
     /// or `done` etc. and the `textField` resigns.
     var returnTappedBlock: (() -> Void)?
@@ -128,6 +150,15 @@ class ValidationTextField: NibBasedView {
     /// If the return value is invalid, the error state
     /// is shown.
     var validationBlock: ValidationBlock?
+
+    /// This closure is called whenever the text is changed
+    /// inside the contained UITextField
+    var textChangedBlock: ((String?) -> Void)?
+
+    /// This closure is called before the text in the text field is replaced.
+    /// You can use this replacement block if you wish to format the text
+    /// before it gets replaced.
+    var textReplacementBlock: ((String) -> String)?
 
     // MARK: Private IBOutlets
 
@@ -150,7 +181,7 @@ class ValidationTextField: NibBasedView {
         textField.resignFirstResponder()
     }
 
-    func validate() -> ValidationResult {
+    func validate(withStyling: Bool = false) -> ValidationResult {
         if let block = validationBlock {
             validity = block(textField.text)
         } else {
@@ -160,9 +191,16 @@ class ValidationTextField: NibBasedView {
                 validity = .valid
             }
         }
-
+        guard withStyling == true else { return validity }
+        
         applyValidity(animated: true)
         return validity
+    }
+
+    // MARK: Private IBActions
+
+    @IBAction fileprivate func onTextFieldChanged(_ sender: Any) {
+        textChangedBlock?(textField.text)
     }
 
     // MARK: Private Functions
@@ -172,10 +210,12 @@ class ValidationTextField: NibBasedView {
         case .valid:
             guard textFieldTrailingConstraint.constant != 0 else { return }
             textFieldTrailingConstraint.constant = 0
+            baselineFillColor = .gray2
 
         case .invalid:
             guard textFieldTrailingConstraint.constant != errorImageView.bounds.width else { return }
             textFieldTrailingConstraint.constant = errorImageView.bounds.width
+            baselineFillColor = .red
         }
 
         setNeedsLayout()
@@ -194,6 +234,18 @@ class ValidationTextField: NibBasedView {
 }
 
 extension ValidationTextField: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return true
+        }
+        guard let textReplacementBlock = textReplacementBlock else {
+            return true
+        }
+
+        let replacedString = (text as NSString).replacingCharacters(in: range, with: string)
+        textField.text = textReplacementBlock(replacedString)
+        return false
+    }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if let responderBlock = becomeFirstResponderBlock {
@@ -208,7 +260,7 @@ extension ValidationTextField: UITextFieldDelegate {
             return
         }
 
-        if (textField.text?.count == 0 || textField.text == nil) {
+        if textField.text?.count == 0 || textField.text == nil {
             validity = optionalField ? .valid : .invalid(nil)
         } else {
             validity = .valid
