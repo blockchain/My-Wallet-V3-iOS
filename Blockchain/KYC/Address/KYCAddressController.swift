@@ -52,7 +52,7 @@ class KYCAddressController: UIViewController, ValidationFormView {
     }
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
-    fileprivate var keyboard: KeyboardPayload?
+    internal var keyboard: KeyboardPayload?
 
     // MARK: Lifecycle
 
