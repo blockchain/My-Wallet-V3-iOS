@@ -7,7 +7,7 @@
 
 import Onfido
 
-class OnfidoManager: UIViewController {
+class OnfidoController: UIViewController {
     static let shared = OnfidoController()
     private var config: OnfidoConfig?
 

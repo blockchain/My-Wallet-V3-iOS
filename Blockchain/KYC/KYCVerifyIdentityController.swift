@@ -94,7 +94,7 @@ final class KYCVerifyIdentityController: UIViewController {
                     }
                     completion(firstProvider)
                 } catch {
-                    Logger.shared.error(error.debugDescription)
+                    Logger.shared.error("Decoding Failed")
                 }
             }, taskFailure: { error in
                 // TODO: handle error
