@@ -85,8 +85,12 @@ final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContain
         guard let confirmPhoneNumberViewController = segue.destination as? KYCConfirmPhoneNumberController else {
             return
         }
+        guard let phoneNumber = validationTextFieldMobileNumber.text else {
+            Logger.shared.warning("phone number is nil.")
+            return
+        }
         confirmPhoneNumberViewController.userId = userId
-        confirmPhoneNumberViewController.phoneNumber = validationTextFieldMobileNumber.text ?? ""
+        confirmPhoneNumberViewController.phoneNumber = phoneNumber
     }
 }
 

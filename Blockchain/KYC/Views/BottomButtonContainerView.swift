@@ -22,10 +22,10 @@ extension BottomButtonContainerView where Self: UIViewController {
     /// Sets up this view so that it can respond to keyboard show/hide events.
     /// This should be called in viewDidAppear()
     func setUpBottomButtonContainerView() {
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) {
+        NotificationCenter.when(.UIKeyboardWillShow) {
             self.keyboardWillShow(with: KeyboardPayload(notification: $0))
         }
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
+        NotificationCenter.when(.UIKeyboardWillHide) {
             self.keyboardWillHide(with: KeyboardPayload(notification: $0))
         }
     }
