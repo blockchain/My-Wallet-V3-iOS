@@ -94,22 +94,25 @@ final class KYCNetworkRequest {
     }
 
     /// HTTP PUT Request
-    @discardableResult convenience init(
+    @discardableResult convenience init<T: Encodable>(
         put url: KYCEndpoints.PUT,
-        parameters: [String: String],
+        parameters: T,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
         self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "PUT")
-        let postBody = parameters.reduce("", { initialResult, nextPartialResult in
-            let delimeter = initialResult.count > 0 ? "&" : ""
-            return "\(initialResult)\(delimeter)\(nextPartialResult.key)=\(nextPartialResult.value)"
-        })
-        let data = postBody.data(using: .utf8)
-        request.httpBody = data
-        request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .formatted(DateFormatter.kycFormatter)
+            let body = try JSONEncoder().encode(parameters)
+            request.httpBody = body
+            request.allHTTPHeaderFields = ["Content-Type":"application/json",
+                                           "Accept": "application/json"]
+            send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        } catch let error {
+            taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
+            return
+        }
     }
 
     // MARK: - Private Methods

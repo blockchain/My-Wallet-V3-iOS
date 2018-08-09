@@ -24,12 +24,8 @@ protocol LocationUpdateAPI {
 class LocationUpdateService: NSObject, LocationUpdateAPI {
     
     func updateAddress(address: UserAddress, for userID: String, with completion: @escaping LocationUpdateCompletion) {
-        guard let value = address.stringRepresentation() else {
-            completion(NetworkError.generic(message: "Failed to parse address"))
-            return
-        }
 
-        let payload = ["address": value]
+        let payload = ["address": address]
 
         KYCNetworkRequest(
             put: .updateAddress(userId: userID),

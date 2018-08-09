@@ -8,10 +8,18 @@
 
 import Foundation
 
-struct PersonalDetails {
+struct PersonalDetails: Encodable {
     let identifier: String
     let firstName: String
     let lastName: String
     let email: String
     let birthday: Date
+
+    enum CodingKeys: String, CodingKey {
+        case identifier = "id"
+        case firstName = "firstname"
+        case lastName = "lastname"
+        case email = "email"
+        case birthday = "dateOfBirth"
+    }
 }

@@ -45,6 +45,7 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     // MARK: Private Properties
 
+    fileprivate var coordinator: PersonalDetailsCoordinator!
     fileprivate var nextBarButton: UIBarButtonItem!
     fileprivate var barButtonActivityIndicator: UIActivityIndicatorView!
 
@@ -53,10 +54,23 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        coordinator = PersonalDetailsCoordinator(interface: self)
         setupTextFields()
         handleKeyboardOffset()
         setupNotifications()
         setupProgressView()
+
+        nextBarButton = UIBarButtonItem(
+            title: "Next",
+            style: .plain,
+            target: self,
+            action: #selector(primaryButtonTapped(_:))
+        )
+
+        nextBarButton.tintColor = .white
+        navigationItem.rightBarButtonItem = nextBarButton
+
+        barButtonActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
 
         validationFields.enumerated().forEach { (index, field) in
             field.returnTappedBlock = { [weak self] in
@@ -147,17 +161,21 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
     func rightBarButton(_ visibility: Visibility) {
         switch visibility {
         case .hidden:
-            navigationItem.rightBarButtonItem = nextBarButton
-            scrollView.isUserInteractionEnabled = true
-        case .visible:
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
-            barButtonActivityIndicator.startAnimating()
+        case .visible:
+            navigationItem.rightBarButtonItem = nextBarButton
         }
     }
 
     func updateBarButtonActivityIndicator(_ visibility: Visibility) {
-        navigationItem.rightBarButtonItem = visibility == .hidden ? nil: nextBarButton
         scrollView.isUserInteractionEnabled = visibility == .hidden
+        guard navigationItem.rightBarButtonItem != nextBarButton else { return }
+        switch visibility {
+        case .visible:
+            barButtonActivityIndicator.startAnimating()
+        case .hidden:
+            barButtonActivityIndicator.stopAnimating()
+        }
     }
 
     func populatePersonalDetailFields(_ details: PersonalDetails) {

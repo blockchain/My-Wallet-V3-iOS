@@ -23,16 +23,32 @@ struct UserAddress: Encodable {
     let postalCode: String
     let city: String
     let country: String
+
+    enum CodingKeys: String, CodingKey {
+        case lineOne = "line1"
+        case lineTwo = "line2"
+        case postalCode = "postCode"
+        case city = "city"
+        case country = "country"
+    }
 }
 
-extension UserAddress {
-    func stringRepresentation() -> String? {
-        do {
-            let data = try JSONEncoder().encode(self)
-            let value = String(data: data, encoding: .utf8)
-            return value
-        } catch {
-            return nil
-        }
+extension UserAddress: Equatable {
+    static func ==(lhs: UserAddress, rhs: UserAddress) -> Bool {
+        return lhs.lineOne == rhs.lineOne &&
+            lhs.lineTwo == rhs.lineTwo &&
+            lhs.postalCode == rhs.postalCode &&
+            lhs.city == rhs.city &&
+            lhs.country == rhs.country
+    }
+}
+
+extension UserAddress: Hashable {
+    var hashValue: Int {
+        return lineOne.hashValue ^
+            lineTwo.hashValue ^
+            postalCode.hashValue ^
+            city.hashValue ^
+            country.hashValue
     }
 }

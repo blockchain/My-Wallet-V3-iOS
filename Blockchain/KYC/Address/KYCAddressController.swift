@@ -77,10 +77,12 @@ class KYCAddressController: UIViewController, ValidationFormView {
         setupNotifications()
 
         nextBarButton = UIBarButtonItem(
-            barButtonSystemItem: .action,
+            title: "Next",
+            style: .plain,
             target: self,
             action: #selector(primaryButtonTapped(_:))
         )
+
         nextBarButton.tintColor = .white
         navigationItem.rightBarButtonItem = nextBarButton
 
@@ -181,18 +183,22 @@ extension KYCAddressController: LocationSuggestionInterface {
     }
 
     func updateBarButtonActivityIndicator(_ visibility: Visibility) {
-        navigationItem.rightBarButtonItem = visibility == .hidden ? nil: nextBarButton
         scrollView.isUserInteractionEnabled = visibility == .hidden
+        guard navigationItem.rightBarButtonItem != nextBarButton else { return }
+        switch visibility {
+        case .visible:
+            barButtonActivityIndicator.startAnimating()
+        case .hidden:
+            barButtonActivityIndicator.stopAnimating()
+        }
     }
 
     func rightBarButton(_ visibility: Visibility) {
         switch visibility {
         case .hidden:
-            navigationItem.rightBarButtonItem = nextBarButton
-            scrollView.isUserInteractionEnabled = true
-        case .visible:
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
-            barButtonActivityIndicator.startAnimating()
+        case .visible:
+            navigationItem.rightBarButtonItem = nextBarButton
         }
     }
 

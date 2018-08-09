@@ -17,12 +17,16 @@ class PersonalDetailsCoordinator: NSObject {
         self.service = PersonalDetailsService()
         self.interface = interface
         super.init()
+
+        if let controller = interface as? KYCPersonalDetailsController {
+            controller.delegate = self
+        }
     }
 }
 
 extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
     func onStart() {
-        // TODO: Pre-populate fields from already fetched data. 
+        // TODO: Pre-populate fields from already fetched data.
     }
 
     func onSubmission(_ input: PersonalDetails) {
