@@ -431,6 +431,54 @@ struct LocalizationConstants {
             "By tapping on \"Apply Now\", you agree to Blockchain's %@ & %@",
             comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain's terms of service and privacy policy when they start the KYC process."
         )
+        static let verificationInProgress = NSLocalizedString(
+            "Verification in Progress",
+            comment: "Text displayed when KYC verification is in progress."
+        )
+        static let verificationInProgressDescription = NSLocalizedString(
+            "Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange.",
+            comment: "Description for when KYC verification is in progress."
+        )
+        static let accountApproved = NSLocalizedString(
+            "Account Approved",
+            comment: "Text displayed when KYC verification is approved."
+        )
+        static let accountApprovedDescription = NSLocalizedString(
+            "Congratulations! We successfully verified your identity. You can now Exchange cryptocurrencies at Blockchain.",
+            comment: "Description for when KYC verification is approved."
+        )
+        static let verificationFailed = NSLocalizedString(
+            "Verification Failed",
+            comment: "Text displayed when KYC verification failed."
+        )
+        static let verificationFailedDescription = NSLocalizedString(
+            "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
+            comment: "Description for when KYC verification failed."
+        )
+        static let verificationUnderReview = NSLocalizedString(
+            "Verification Under Review",
+            comment: "Text displayed when KYC verification is under review."
+        )
+        static let verificationUnderReviewDescription = NSLocalizedString(
+            "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
+            comment: "Description for when KYC verification is under review."
+        )
+        static let notifyMe = NSLocalizedString(
+            "Notify Me",
+            comment: "Title of the button the user can tap when they want to be notified of update with their KYC verification process."
+        )
+        static let getStarted = NSLocalizedString(
+            "Get Started",
+            comment: "Title of the button the user can tap when they want to start trading on the Exchange. This is displayed after their KYC verification has been approved."
+        )
+        static let contactSupport = NSLocalizedString(
+            "Contact Support",
+            comment: "Title of the button the user can tap when they want to contact support as a result of a failed KYC verification."
+        )
+        static let whatHappensNext = NSLocalizedString(
+            "What happens next?",
+            comment: "Text displayed (subtitle) when KYC verification is under progress"
+        )
     }
 }
 
