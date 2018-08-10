@@ -15,7 +15,10 @@ final class CountryDataProvider {
     // MARK: - Properties
 
     var countries: Countries?
-
+    init() {
+        fetchListOfCountries()
+    }
+    
     func fetchListOfCountries() {
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
             do {

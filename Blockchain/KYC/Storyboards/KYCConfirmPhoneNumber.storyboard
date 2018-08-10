@@ -48,18 +48,24 @@
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirmation Code" textAlignment="natural" minimumFontSize="16" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="XY9-D0-0ZJ">
-                                <rect key="frame" x="16" y="71.666666666666657" width="343" height="56"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eU2-Mk-gi2" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="71" width="343" height="56"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="u3q-gM-O0w"/>
+                                    <constraint firstAttribute="height" constant="56" id="k5k-oQ-VeA"/>
                                 </constraints>
-                                <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue"/>
-                                <connections>
-                                    <action selector="onTextFieldChanged:" destination="gEL-b2-YEu" eventType="editingChanged" id="LPy-Pu-5Sh"/>
-                                </connections>
-                            </textField>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
+                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Confirmation Code"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYo-qh-R2k">
                                 <rect key="frame" x="134.66666666666666" y="574" width="106" height="32"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="16"/>
@@ -85,19 +91,19 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="XY9-D0-0ZJ" firstAttribute="top" secondItem="cDf-1e-GvH" secondAttribute="bottom" constant="16" id="4hP-SW-w97"/>
+                            <constraint firstItem="eU2-Mk-gi2" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="3ny-n6-04w"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="36T-B3-yyh" secondAttribute="trailing" constant="16" id="6D8-hT-1ZS"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="wiv-Pe-rE0" secondAttribute="trailing" id="9eL-GR-wOY"/>
+                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="eU2-Mk-gi2" secondAttribute="trailing" constant="16" id="9iF-tY-9wp"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="top" secondItem="IIQ-vZ-lk7" secondAttribute="top" id="BEn-HB-WCV"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="top" secondItem="IIQ-vZ-lk7" secondAttribute="top" id="CoK-xA-XIb"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" id="K9p-cd-ZWj"/>
+                            <constraint firstItem="eU2-Mk-gi2" firstAttribute="top" secondItem="cDf-1e-GvH" secondAttribute="bottom" constant="16" id="OLO-Gx-9ol"/>
                             <constraint firstItem="cDf-1e-GvH" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="RmE-gg-2ja"/>
                             <constraint firstItem="5ml-0c-co0" firstAttribute="top" secondItem="wiv-Pe-rE0" secondAttribute="bottom" constant="16" id="bCs-MV-efH"/>
-                            <constraint firstItem="XY9-D0-0ZJ" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="bMw-Ek-e8a"/>
                             <constraint firstItem="36T-B3-yyh" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="cQs-wq-eL8"/>
                             <constraint firstItem="KYo-qh-R2k" firstAttribute="centerX" secondItem="IIQ-vZ-lk7" secondAttribute="centerX" id="fsr-0d-Jfv"/>
                             <constraint firstItem="5ml-0c-co0" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="gbg-c0-ylX"/>
-                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="XY9-D0-0ZJ" secondAttribute="trailing" constant="16" id="iSH-hg-xVk"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="bottom" secondItem="36T-B3-yyh" secondAttribute="bottom" constant="16" id="lHo-bY-QRU"/>
                             <constraint firstItem="36T-B3-yyh" firstAttribute="top" secondItem="KYo-qh-R2k" secondAttribute="bottom" constant="24" id="mHU-NG-Jq2"/>
                             <constraint firstItem="cDf-1e-GvH" firstAttribute="top" secondItem="5ml-0c-co0" secondAttribute="bottom" constant="2" id="q6L-9H-yLO"/>
@@ -109,8 +115,7 @@
                     <connections>
                         <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
                         <outlet property="layoutConstraintBottomButton" destination="lHo-bY-QRU" id="amU-3n-8B8"/>
-                        <outlet property="nextButton" destination="36T-B3-yyh" id="SJJ-4H-hLO"/>
-                        <outlet property="textFieldConfirmationCode" destination="XY9-D0-0ZJ" id="nOc-JG-To0"/>
+                        <outlet property="validationTextFieldConfirmationCode" destination="eU2-Mk-gi2" id="y9B-YN-lFc"/>
                         <segue destination="Kem-jm-UpZ" kind="show" id="4J4-wa-RZJ"/>
                     </connections>
                 </viewController>

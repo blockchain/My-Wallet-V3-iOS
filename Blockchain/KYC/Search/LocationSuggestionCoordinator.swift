@@ -16,6 +16,7 @@ protocol LocationSuggestionCoordinatorDelegate: class {
 class LocationSuggestionCoordinator: NSObject {
 
     fileprivate let service: LocationSuggestionService
+    fileprivate let api: LocationUpdateAPI
     fileprivate var model: LocationSearchResult {
         didSet {
             delegate?.coordinator(self, updated: model)
@@ -26,6 +27,7 @@ class LocationSuggestionCoordinator: NSObject {
 
     init(_ delegate: LocationSuggestionCoordinatorDelegate, interface: LocationSuggestionInterface) {
         self.service = LocationSuggestionService()
+        self.api = LocationUpdateService()
         self.delegate = delegate
         self.interface = interface
         self.model = .empty
@@ -76,6 +78,24 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
                 this.interface?.updateActivityIndicator(.hidden)
                 this.interface?.searchFieldActive(false)
                 this.interface?.populateAddressEntryView(address)
+            }
+        }
+    }
+
+    func onSubmission(_ address: UserAddress) {
+        interface?.primaryButtonActivityIndicator(.visible)
+        interface?.primaryButtonEnabled(false)
+        // TODO: Pass in correct userID
+        api.updateAddress(address: address, for: "userID") { [weak self] (error) in
+            guard let this = self else { return }
+            this.interface?.primaryButtonActivityIndicator(.hidden)
+            this.interface?.primaryButtonEnabled(true)
+
+            if let err = error {
+                // TODO: Error state
+                Logger.shared.error("\(err)")
+            } else {
+                this.interface?.nextPage()
             }
         }
     }

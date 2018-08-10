@@ -10,11 +10,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Montserrat-Regular.ttf">
-            <string>Montserrat-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Address View Controller-->
         <scene sceneID="wXx-xN-o6q">
@@ -157,20 +152,13 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XUW-TX-8oU" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="312" width="288" height="44"/>
-                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhb-q7-xBR" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="312" width="288.5" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="Cwz-is-H2c"/>
+                                            <constraint firstAttribute="height" constant="44" id="7OT-yL-tsy"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Continue">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="primaryButtonTapped:" destination="1m4-Wz-u3W" eventType="touchUpInside" id="jOC-4O-3a6"/>
-                                        </connections>
-                                    </button>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -178,26 +166,26 @@
                                     <constraint firstItem="LF7-ax-XE2" firstAttribute="trailing" secondItem="j8H-Lr-LlB" secondAttribute="trailing" id="1l7-Cb-xaE"/>
                                     <constraint firstItem="j8H-Lr-LlB" firstAttribute="top" secondItem="5mF-Bq-VW9" secondAttribute="bottom" id="9dF-M6-NLJ"/>
                                     <constraint firstItem="j8H-Lr-LlB" firstAttribute="width" secondItem="5mF-Bq-VW9" secondAttribute="width" id="9hf-ex-7fK"/>
+                                    <constraint firstItem="bhb-q7-xBR" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="C8u-Of-jg4"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="top" secondItem="HnA-P2-2Gj" secondAttribute="bottom" id="Db8-K7-5xO"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="leading" secondItem="j8H-Lr-LlB" secondAttribute="leading" id="Egi-9K-lbW"/>
                                     <constraint firstItem="ZL2-vY-uhQ" firstAttribute="trailing" secondItem="LF7-ax-XE2" secondAttribute="trailing" id="Epb-FU-gzE"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="width" secondItem="HTQ-Da-JDA" secondAttribute="width" constant="-32" id="Jyz-vG-0JH"/>
-                                    <constraint firstItem="XUW-TX-8oU" firstAttribute="width" secondItem="HnA-P2-2Gj" secondAttribute="width" id="Llr-i5-qBj"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="top" secondItem="HTQ-Da-JDA" secondAttribute="top" id="MC2-SN-VnN"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="trailing" secondItem="j8H-Lr-LlB" secondAttribute="centerX" constant="-8" id="QLk-Yl-ULp"/>
-                                    <constraint firstItem="XUW-TX-8oU" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="X12-5Y-hyx"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="top" secondItem="j8H-Lr-LlB" secondAttribute="bottom" id="aPV-xw-zye"/>
-                                    <constraint firstAttribute="bottom" secondItem="XUW-TX-8oU" secondAttribute="bottom" constant="30" id="cyk-dA-ecj"/>
-                                    <constraint firstAttribute="trailing" secondItem="XUW-TX-8oU" secondAttribute="trailing" constant="16" id="g4Z-P6-hjg"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="gmy-jw-t42"/>
+                                    <constraint firstAttribute="trailing" secondItem="bhb-q7-xBR" secondAttribute="trailing" constant="16" id="hAo-we-trs"/>
                                     <constraint firstItem="ZL2-vY-uhQ" firstAttribute="top" secondItem="MQL-tY-eAz" secondAttribute="bottom" id="meY-DE-dYh"/>
                                     <constraint firstItem="LF7-ax-XE2" firstAttribute="top" secondItem="j8H-Lr-LlB" secondAttribute="bottom" id="nLG-mU-QFX"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="leading" secondItem="HnA-P2-2Gj" secondAttribute="leading" id="nT3-YY-MhI"/>
+                                    <constraint firstItem="bhb-q7-xBR" firstAttribute="width" secondItem="ZL2-vY-uhQ" secondAttribute="width" id="phP-U6-Qdw"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="height" secondItem="HnA-P2-2Gj" secondAttribute="height" id="qJ0-ut-CxM"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="width" secondItem="HnA-P2-2Gj" secondAttribute="width" id="sWF-2c-nZN"/>
                                     <constraint firstItem="LF7-ax-XE2" firstAttribute="leading" secondItem="j8H-Lr-LlB" secondAttribute="centerX" constant="8" id="uub-Jl-NzC"/>
+                                    <constraint firstAttribute="bottom" secondItem="bhb-q7-xBR" secondAttribute="bottom" constant="30" id="vG7-JH-3YO"/>
+                                    <constraint firstItem="bhb-q7-xBR" firstAttribute="top" secondItem="ZL2-vY-uhQ" secondAttribute="bottom" constant="32" id="wdJ-bf-SZb"/>
                                     <constraint firstItem="ZL2-vY-uhQ" firstAttribute="leading" secondItem="MQL-tY-eAz" secondAttribute="leading" id="yPr-80-8l4"/>
-                                    <constraint firstItem="XUW-TX-8oU" firstAttribute="top" secondItem="ZL2-vY-uhQ" secondAttribute="bottom" constant="32" id="z5W-q4-fvP"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="1m4-Wz-u3W" id="GHu-es-UQT"/>
@@ -256,7 +244,7 @@
                         <outlet property="cityTextField" destination="j8H-Lr-LlB" id="C3k-xF-5Hp"/>
                         <outlet property="countryTextField" destination="ZL2-vY-uhQ" id="1MF-yD-Xle"/>
                         <outlet property="postalCodeTextField" destination="LF7-ax-XE2" id="1zJ-7Y-SwY"/>
-                        <outlet property="primaryButton" destination="XUW-TX-8oU" id="vk1-n7-T4P"/>
+                        <outlet property="primaryButtonContainer" destination="bhb-q7-xBR" id="0UF-pO-SuD"/>
                         <outlet property="progressView" destination="LU7-BL-Zrb" id="0lU-I7-mIU"/>
                         <outlet property="scrollView" destination="HTQ-Da-JDA" id="G6L-Lh-w2d"/>
                         <outlet property="searchBar" destination="6g6-gf-4D1" id="yeK-yd-vcm"/>
@@ -267,7 +255,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Df-d3-fO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="85.599999999999994" y="151.47783251231527"/>
+            <point key="canvasLocation" x="84.375" y="151.05633802816902"/>
         </scene>
         <!--KYCPersonalDetails-->
         <scene sceneID="Mum-mC-SLc">
