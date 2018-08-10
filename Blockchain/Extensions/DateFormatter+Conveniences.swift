@@ -9,14 +9,16 @@
 import Foundation
 
 extension DateFormatter {
-    static let birthday: DateFormatter = {
+    static let medium: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
     }()
 
-    static let kycFormatter: DateFormatter = {
+    /// The API expects the user's DOB to be formatted
+    /// this way.
+    static let birthday: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter

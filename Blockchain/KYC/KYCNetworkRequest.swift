@@ -103,7 +103,7 @@ final class KYCNetworkRequest {
         self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "PUT")
         do {
             let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .formatted(DateFormatter.kycFormatter)
+            encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
             let body = try encoder.encode(parameters)
             request.httpBody = body
             request.allHTTPHeaderFields = ["Content-Type":"application/json",

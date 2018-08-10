@@ -32,7 +32,7 @@ class ValidationDateField: ValidationTextField {
     }
     
     @objc func datePickerUpdated(_ sender: UIDatePicker) {
-        text = DateFormatter.birthday.string(from: sender.date)
+        text = DateFormatter.medium.string(from: sender.date)
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
