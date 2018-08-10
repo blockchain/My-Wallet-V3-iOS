@@ -24,7 +24,7 @@ class KYCAddressController: UIViewController, ValidationFormView {
     @IBOutlet fileprivate var stateTextField: ValidationTextField!
     @IBOutlet fileprivate var postalCodeTextField: ValidationTextField!
     @IBOutlet fileprivate var countryTextField: ValidationTextField!
-    @IBOutlet fileprivate var primaryButton: PrimaryButton!
+    @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
 
     // MARK: - Public IBOutlets
 
@@ -55,8 +55,6 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
     fileprivate var coordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
-    fileprivate var nextBarButton: UIBarButtonItem!
-    fileprivate var barButtonActivityIndicator: UIActivityIndicatorView!
 
     // MARK: Lifecycle
 
@@ -76,17 +74,10 @@ class KYCAddressController: UIViewController, ValidationFormView {
         validationFieldsSetup()
         setupNotifications()
 
-        nextBarButton = UIBarButtonItem(
-            title: "Next",
-            style: .plain,
-            target: self,
-            action: #selector(primaryButtonTapped(_:))
-        )
-
-        nextBarButton.tintColor = .white
-        navigationItem.rightBarButtonItem = nextBarButton
-
-        barButtonActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        primaryButtonContainer.actionBlock = { [weak self] in
+            guard let this = self else { return }
+            this.primaryButtonTapped()
+        }
 
         searchDelegate?.onStart()
     }
@@ -143,9 +134,7 @@ class KYCAddressController: UIViewController, ValidationFormView {
         }
     }
 
-    // MARK: - Actions
-
-    @IBAction func primaryButtonTapped(_ sender: Any) {
+    fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
         validationFields.forEach({$0.resignFocus()})
         
@@ -179,32 +168,16 @@ extension KYCAddressController: UITableViewDelegate {
 }
 
 extension KYCAddressController: LocationSuggestionInterface {
+    func primaryButtonActivityIndicator(_ visibility: Visibility) {
+        primaryButtonContainer.isLoading = visibility == .visible
+    }
+
     func primaryButtonEnabled(_ enabled: Bool) {
-        primaryButton.isEnabled = enabled
+        primaryButtonContainer.isEnabled = enabled
     }
 
     func nextPage() {
         performSegue(withIdentifier: "showPersonalDetails", sender: self)
-    }
-
-    func updateBarButtonActivityIndicator(_ visibility: Visibility) {
-        scrollView.isUserInteractionEnabled = visibility == .hidden
-        guard navigationItem.rightBarButtonItem != nextBarButton else { return }
-        switch visibility {
-        case .visible:
-            barButtonActivityIndicator.startAnimating()
-        case .hidden:
-            barButtonActivityIndicator.stopAnimating()
-        }
-    }
-
-    func rightBarButton(_ visibility: Visibility) {
-        switch visibility {
-        case .hidden:
-            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: barButtonActivityIndicator)
-        case .visible:
-            navigationItem.rightBarButtonItem = nextBarButton
-        }
     }
 
     func addressEntryView(_ visibility: Visibility) {
