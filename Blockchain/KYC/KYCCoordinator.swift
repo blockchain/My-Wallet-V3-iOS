@@ -51,8 +51,7 @@ import Foundation
                 PushNotificationManager.shared.requestAuthorization()
             case .failed:
                 // Confirm with design that this is how we should handle this
-                guard let url = URL(string: Constants.Url.blockchainSupport) else { return }
-                UIApplication.shared.open(url)
+                URL(string: Constants.Url.blockchainSupport)?.launch()
             default:
                 return
             }
