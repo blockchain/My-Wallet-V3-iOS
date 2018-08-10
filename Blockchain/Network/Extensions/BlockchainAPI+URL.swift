@@ -19,6 +19,11 @@ extension BlockchainAPI {
         let host = Bundle.main.infoDictionary!["WALLET_SERVER"] as! String
         return "https://\(host)"
     }
+    
+    var kycCredentials: String {
+        let host = Bundle.main.infoDictionary!["KYC_ENDPOINT"] as! String
+        return "https://\(host)"
+    }
 
     var walletOptionsUrl: String {
         return "\(walletUrl)/Resources/wallet-options.json"

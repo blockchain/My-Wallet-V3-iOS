@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOA-vy-LXW" userLabel="Content Container View">
-                                <rect key="frame" x="0.0" y="189.99999999999997" width="375" height="310.33333333333326"/>
+                                <rect key="frame" x="0.0" y="190.33333333333334" width="375" height="310.33333333333326"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Welcome" translatesAutoresizingMaskIntoConstraints="NO" id="sgf-OY-RMl">
                                         <rect key="frame" x="52.666666666666657" y="0.0" width="270" height="136"/>
@@ -51,7 +51,7 @@ identity verification to start buying and selling cryptocurrencies. This will on
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv9-ck-b0t" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="24" y="259.33333333333337" width="327" height="44"/>
+                                        <rect key="frame" x="24" y="259.33333333333331" width="327" height="44"/>
                                         <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="pw6-gR-4vR"/>

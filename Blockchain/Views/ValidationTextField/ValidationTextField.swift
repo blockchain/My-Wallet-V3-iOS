@@ -192,7 +192,7 @@ class ValidationTextField: NibBasedView {
             }
         }
         guard withStyling == true else { return validity }
-        
+
         applyValidity(animated: true)
         return validity
     }

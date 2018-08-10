@@ -67,6 +67,8 @@ public class PrimaryButton: UIButton {
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         layer.cornerRadius = 4.0
+        titleLabel?.font = UIFont(name: Constants.FontNames.montserratMedium, size: 20.0)
+        backgroundColor = UIColor.brandSecondary
     }
 
     override public func setTitle(_ title: String?, for state: UIControlState) {

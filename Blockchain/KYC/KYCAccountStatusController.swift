@@ -8,72 +8,88 @@
 
 import UIKit
 
+struct KYCAccountStatusViewConfig {
+    let titleColor: UIColor
+    let isPrimaryButtonEnabled: Bool
+}
+
+extension KYCAccountStatusViewConfig {
+    static let defaultConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig(
+        titleColor: UIColor.gray5,
+        isPrimaryButtonEnabled: false
+    )
+
+    static func create(for accountStatus: KYCAccountStatus) -> KYCAccountStatusViewConfig {
+        let titleColor: UIColor
+        let isPrimaryButtonEnabled: Bool
+        switch accountStatus {
+        case .approved:
+            titleColor = UIColor.green
+            isPrimaryButtonEnabled = true
+        case .failed:
+            titleColor = UIColor.error
+            isPrimaryButtonEnabled = true
+        case .inProgress:
+            titleColor = UIColor.orange
+            isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
+        case .underReview:
+            titleColor = UIColor.orange
+            isPrimaryButtonEnabled = false
+        }
+        return KYCAccountStatusViewConfig(
+            titleColor: titleColor,
+            isPrimaryButtonEnabled: isPrimaryButtonEnabled
+        )
+    }
+}
+
 final class KYCAccountStatusController: UIViewController {
+
+    /// typealias for an action to be taken when the primary button/CTA is tapped
+    typealias PrimaryButtonAction = ((KYCAccountStatusController) -> Void)
 
     // MARK: - Properties
 
-    enum AccountStatus {
-        case approved, failed, inReview
-        /// Graphic which visually represents the account status
-        var image: UIImage {
-            switch self {
-            case .approved: return UIImage(named: "AccountApproved")!
-            case .failed:   return UIImage(named: "AccountFailed")!
-            case .inReview: return UIImage(named: "AccountInReview")!
-            }
-        }
-        /// Title which represents the account status
-        var title: String {
-            switch self {
-            case .approved: return "Account Approved!"
-            case .failed:   return "Verification Failed"
-            case .inReview: return "Account In Review"
-            }
-        }
-        /// Description of the account status
-        var description: String {
-            switch self {
-            case .approved: return "Congratulations! We verified your identity and you can now buy, sell, and exchange."
-            case .failed:   return """
-                We had some trouble verifying your account with the documents provided.
-                Our support team will contact you shortly to help you with this issue.
-                """
-            case .inReview: return "Great job - you are now done. Your account should be approved in minutes."
-            }
-        }
-        /// Title of the primary button
-        var primaryButtonTitle: String? {
-            switch self {
-            case .approved: return "Get Started"
-            case .failed:   return nil
-            case .inReview: return "Notify Me"
-            }
-        }
-    }
+    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private var labelTitle: UILabel!
+    @IBOutlet private var labelSubtitle: UILabel!
+    @IBOutlet private var labelDescription: UILabel!
+    @IBOutlet private var buttonPrimary: PrimaryButton!
+
+    /// Action invoked when the primary button is tapped
+    var primaryButtonAction: PrimaryButtonAction?
 
     /// Describes the status of the user's account
-    var accountStatus: AccountStatus = .failed {
+    var accountStatus: KYCAccountStatus = .failed {
         didSet {
-            setUpInterfaceFor(accountStatus)
+            viewConfig = KYCAccountStatusViewConfig.create(for: accountStatus)
         }
     }
 
-    // MARK: - Private Methods
+    /// The view configuration for this view
+    var viewConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig.defaultConfig
 
-    private func setUpInterfaceFor(_ accountStatus: AccountStatus) {
+    // MARK: - Lifecycle Methods
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        imageView.image = accountStatus.image
+        labelTitle.text = accountStatus.title
+        if let subtitle = accountStatus.subtitle {
+            labelSubtitle.text = subtitle
+        } else {
+            labelSubtitle.superview?.removeFromSuperview()
+        }
+        labelDescription.text = accountStatus.description
+        buttonPrimary.setTitle(accountStatus.primaryButtonTitle, for: .normal)
+
+        labelTitle.textColor = viewConfig.titleColor
+        buttonPrimary.isHidden = !viewConfig.isPrimaryButtonEnabled
     }
 
     // MARK: - Actions
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
-        // TODO: implement primaryButtonTapped
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        primaryButtonAction?(self)
     }
 }

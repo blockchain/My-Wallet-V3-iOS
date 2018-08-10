@@ -14,6 +14,12 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
+    /*
+     let kycUrl = BlockchainAPI.shared.kycCredentials
+     guard let url = URL(string: kycUrl) else {
+     fatalError("Failed to get kyc url from Bundle.")
+     }
+     */
     // TODO: read from .xcconfig
     fileprivate static let rootUrl = "https://api.dev.blockchain.info/nabu-app"
     private let timeoutInterval = TimeInterval(exactly: 30)!

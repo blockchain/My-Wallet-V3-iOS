@@ -10,33 +10,44 @@ import UIKit
 
 /// Country selection screen in KYC flow
 final class KYCCountrySelectionController: UITableViewController {
+    typealias Countries = [KYCCountry]
 
     // MARK: - Properties
+    var countries: Countries?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
+            do {
+                self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
+                self.tableView.reloadData()
 
-    var dataProvider: CountryDataProvider? {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+            } catch {
+                // TODO: handle error
         // TODO: Remove debug
-        performSegue(withIdentifier: "promptForPersonalDetails", sender: self)
+            }
+        }, taskFailure: { error in
+            // TODO: handle error
+            Logger.shared.error(error.debugDescription)
+        })
+        
     }
 
     // MARK: UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let countries = dataProvider?.countries else {
-            return 0
+        if let hasCountries = countries {
+            return hasCountries.count
         }
-        return countries.count
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let countryCell = tableView.dequeueReusableCell(withIdentifier: "CountryCell"),
-            let countries = dataProvider?.countries else {
+            let countries = countries else {
                 return UITableViewCell()
         }
         countryCell.textLabel?.text = countries[indexPath.row].name

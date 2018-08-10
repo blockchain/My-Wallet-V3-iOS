@@ -55,6 +55,7 @@ struct Constants {
         static let montserratRegular = "Montserrat-Regular"
         static let montserratSemiBold = "Montserrat-SemiBold"
         static let montserratLight = "Montserrat-Light"
+        static let montserratMedium = "Montserrat-Medium"
         static let montserratSemiExtraLight = "Montserrat-ExtraLight"
         static let gillSans = "GillSans"
         static let gillSansLight = "GillSans-Light"
