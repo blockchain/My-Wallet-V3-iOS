@@ -11,15 +11,23 @@ import UIKit
 @IBDesignable
 class PrimaryButtonContainer: NibBasedView {
 
+    // MARK: Private IBOutlets
+
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
     @IBOutlet fileprivate var primaryButton: UIButton!
 
+    // MARK: Public
+
+    /// Simple block for handling the call back when the
+    /// `primaryButton` is tapped.
     var actionBlock: (() -> Void)?
 
     override func layoutSubviews() {
         super.layoutSubviews()
         primaryButton.layer.cornerRadius = 4.0
     }
+
+    // MARK: IBInspectable
 
     @IBInspectable var buttonBackgroundColor: UIColor = UIColor.brandSecondary {
         didSet {
