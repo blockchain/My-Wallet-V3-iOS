@@ -257,10 +257,10 @@
             </objects>
             <point key="canvasLocation" x="84.375" y="151.05633802816902"/>
         </scene>
-        <!--KYCPersonalDetails-->
+        <!--KYCPersonalDetailsController-->
         <scene sceneID="Mum-mC-SLc">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCPersonalDetails" id="QUH-Ks-fjK" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCPersonalDetailsController" id="QUH-Ks-fjK" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ezJ-5L-utg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="810" y="115"/>

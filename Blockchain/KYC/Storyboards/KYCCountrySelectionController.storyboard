@@ -1,81 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lzQ-iT-CIj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="maQ-p3-MjV">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Medium.ttf">
+            <string>Montserrat-Medium</string>
+        </array>
+        <array key="Montserrat-SemiBold.ttf">
+            <string>Montserrat-SemiBold</string>
+        </array>
+    </customFonts>
     <scenes>
-        <!--KYCPersonalDetails-->
+        <!--KYCPersonalDetailsController-->
         <scene sceneID="uPe-kt-Szi">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCPersonalDetails" id="p5l-MX-35I" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCPersonalDetailsController" id="p5l-MX-35I" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HKM-cD-64E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="709" y="146"/>
         </scene>
         <!--Country Selection Controller-->
-        <scene sceneID="rXn-im-jZz">
+        <scene sceneID="UvY-Qd-gbg">
             <objects>
-                <tableViewController storyboardIdentifier="CountrySelection" title="Country Selection Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lzQ-iT-CIj" customClass="KYCCountrySelectionController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="vGe-6j-xwG">
+                <viewController title="Country Selection Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="maQ-p3-MjV" customClass="KYCCountrySelectionController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aMz-CM-PzM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" placeholder="Search" id="fW9-CK-PzN">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="search" textContentType="country-name"/>
-                            <connections>
-                                <outlet property="delegate" destination="lzQ-iT-CIj" id="sBk-xN-TNf"/>
-                            </connections>
-                        </searchBar>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryCell" textLabel="hxI-sm-sTC" style="IBUITableViewCellStyleDefault" id="5lM-54-JtF" userLabel="Country Cell">
-                                <rect key="frame" x="0.0" y="84" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5lM-54-JtF" id="5FL-PB-5cU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hxI-sm-sTC">
-                                            <rect key="frame" x="16" y="0.0" width="343" height="43.666666666666664"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HiL-Ft-99J">
+                                <rect key="frame" x="0.0" y="88.000000000000014" width="375" height="134.33333333333337"/>
+                                <subviews>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DD7-KN-SsY">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="8"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="8" id="ix6-or-VDv"/>
+                                        </constraints>
+                                    </progressView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Why do you need this?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ON-l9-pXa">
+                                        <rect key="frame" x="16" y="23" width="343" height="14"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
+                                        <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Right now, digital crypto currency conversions on Blockchain are only available in select countries." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wZm-cR-Ltr">
+                                        <rect key="frame" x="16" y="39" width="343" height="29.333333333333329"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="12"/>
+                                        <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="UXv-PD-jDX">
+                                        <rect key="frame" x="0.0" y="78.333333333333343" width="375" height="56"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="ES9-uO-pYD"/>
+                                        </constraints>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="wZm-cR-Ltr" firstAttribute="top" secondItem="2ON-l9-pXa" secondAttribute="bottom" constant="2" id="BAR-vO-UvC"/>
+                                    <constraint firstAttribute="trailing" secondItem="DD7-KN-SsY" secondAttribute="trailing" id="DzG-vR-IPC"/>
+                                    <constraint firstItem="DD7-KN-SsY" firstAttribute="top" secondItem="HiL-Ft-99J" secondAttribute="top" id="Gna-hq-pCf"/>
+                                    <constraint firstItem="UXv-PD-jDX" firstAttribute="top" secondItem="wZm-cR-Ltr" secondAttribute="bottom" constant="10" id="HlC-oJ-eeG"/>
+                                    <constraint firstItem="2ON-l9-pXa" firstAttribute="leading" secondItem="HiL-Ft-99J" secondAttribute="leading" constant="16" id="M7e-ti-eph"/>
+                                    <constraint firstAttribute="trailing" secondItem="2ON-l9-pXa" secondAttribute="trailing" constant="16" id="OOU-46-L3Y"/>
+                                    <constraint firstItem="UXv-PD-jDX" firstAttribute="leading" secondItem="HiL-Ft-99J" secondAttribute="leading" id="SC2-W4-0Yh"/>
+                                    <constraint firstAttribute="trailing" secondItem="UXv-PD-jDX" secondAttribute="trailing" id="YcR-LM-NMY"/>
+                                    <constraint firstAttribute="bottom" secondItem="UXv-PD-jDX" secondAttribute="bottom" id="f0U-7s-C4y"/>
+                                    <constraint firstAttribute="trailing" secondItem="wZm-cR-Ltr" secondAttribute="trailing" constant="16" id="nmc-WL-sK7"/>
+                                    <constraint firstItem="wZm-cR-Ltr" firstAttribute="leading" secondItem="HiL-Ft-99J" secondAttribute="leading" constant="16" id="p1n-O3-tkK"/>
+                                    <constraint firstItem="2ON-l9-pXa" firstAttribute="top" secondItem="DD7-KN-SsY" secondAttribute="bottom" constant="15" id="vUl-q4-FZS"/>
+                                    <constraint firstItem="DD7-KN-SsY" firstAttribute="leading" secondItem="HiL-Ft-99J" secondAttribute="leading" id="wpv-xO-hR3"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vGe-6j-xwG">
+                                <rect key="frame" x="0.0" y="222" width="375" height="590"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryCell" textLabel="hxI-sm-sTC" style="IBUITableViewCellStyleDefault" id="5lM-54-JtF" userLabel="Country Cell">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5lM-54-JtF" id="5FL-PB-5cU">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="lzQ-iT-CIj" id="iWc-Q7-MMZ"/>
-                            <outlet property="delegate" destination="lzQ-iT-CIj" id="dmZ-8u-hkk"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Select Your Country" id="Jew-Xs-w6G"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hxI-sm-sTC">
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.666666666666664"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vGe-6j-xwG" firstAttribute="top" secondItem="HiL-Ft-99J" secondAttribute="bottom" id="1Ez-eQ-rcg"/>
+                            <constraint firstItem="vGe-6j-xwG" firstAttribute="leading" secondItem="Z4F-OY-daj" secondAttribute="leading" id="31s-jS-z3q"/>
+                            <constraint firstAttribute="bottom" secondItem="vGe-6j-xwG" secondAttribute="bottom" id="BEo-x0-oka"/>
+                            <constraint firstItem="vGe-6j-xwG" firstAttribute="trailing" secondItem="Z4F-OY-daj" secondAttribute="trailing" id="Krc-ek-R5q"/>
+                            <constraint firstItem="HiL-Ft-99J" firstAttribute="leading" secondItem="Z4F-OY-daj" secondAttribute="leading" id="vMY-fK-dLq"/>
+                            <constraint firstItem="Z4F-OY-daj" firstAttribute="top" secondItem="HiL-Ft-99J" secondAttribute="top" id="vW5-Pt-CNJ"/>
+                            <constraint firstItem="HiL-Ft-99J" firstAttribute="trailing" secondItem="Z4F-OY-daj" secondAttribute="trailing" id="ywk-GH-XJn"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Z4F-OY-daj"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Select Your Country" id="lqm-oI-6In"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="searchDisplayController" destination="nau-4k-vuu" id="6qX-WV-PTp"/>
-                        <segue destination="p5l-MX-35I" kind="show" identifier="promptForPersonalDetails" id="ONx-9e-1Zp"/>
+                        <outlet property="progressView" destination="DD7-KN-SsY" id="48v-s6-3Ce"/>
+                        <outlet property="searchBar" destination="UXv-PD-jDX" id="gf9-8J-U61"/>
+                        <outlet property="searchDisplayController" destination="hXY-z4-wfj" id="Bf7-I5-xOW"/>
+                        <outlet property="tableView" destination="vGe-6j-xwG" id="FK8-Rv-9FL"/>
+                        <segue destination="p5l-MX-35I" kind="show" identifier="promptForPersonalDetails" id="c27-ro-Ao3"/>
                     </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="R19-3d-fIi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="nau-4k-vuu">
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Wa-Ab-JKR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="hXY-z4-wfj">
                     <connections>
-                        <outlet property="delegate" destination="lzQ-iT-CIj" id="qeS-Iz-8s2"/>
-                        <outlet property="searchBar" destination="fW9-CK-PzN" id="a5T-H3-jIx"/>
-                        <outlet property="searchContentsController" destination="lzQ-iT-CIj" id="cqK-oS-XHb"/>
-                        <outlet property="searchResultsDataSource" destination="lzQ-iT-CIj" id="ocS-yt-hM3"/>
-                        <outlet property="searchResultsDelegate" destination="lzQ-iT-CIj" id="hOX-7h-ftT"/>
+                        <outlet property="delegate" destination="maQ-p3-MjV" id="Qjh-4Q-afK"/>
+                        <outlet property="searchContentsController" destination="maQ-p3-MjV" id="GQq-Hk-51T"/>
+                        <outlet property="searchResultsDataSource" destination="maQ-p3-MjV" id="26Q-c5-npN"/>
+                        <outlet property="searchResultsDelegate" destination="maQ-p3-MjV" id="tCA-mg-RYd"/>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="14" y="256"/>
+            <point key="canvasLocation" x="100" y="248"/>
         </scene>
     </scenes>
 </document>

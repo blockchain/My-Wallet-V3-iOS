@@ -6,16 +6,37 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import RxSwift
 import UIKit
 
 /// Country selection screen in KYC flow
-final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDataSource, UITableViewDelegate {
+final class KYCCountrySelectionController: KYCBaseViewController, ProgressableView {
+
     typealias Countries = [KYCCountry]
 
+    // MARK: - ProgressableView
+
+    @IBOutlet var progressView: UIProgressView!
+    var barColor: UIColor = .green
+    var startingValue: Float = 0.1
+
+    // MARK: - IBOutlets
+
+    @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private var tableView: UITableView!
 
     // MARK: - Properties
-    var countries: Countries?
+    private var countries: Countries? {
+        didSet {
+            countries?.sort(by: { $0.name < $1.name })
+        }
+    }
+
+    private var selectedCountry: KYCCountry?
+
+    private lazy var presenter: KYCCountrySelectorPresenter = {
+        return KYCCountrySelectorPresenter(view: self)
+    }()
 
     // MARK: Factory
 
@@ -25,28 +46,38 @@ final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDat
         controller.pageType = .country
         return controller
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: Placeholder.
-        guard tableView != nil else { return }
+        setupProgressView()
         tableView.dataSource = self
         tableView.delegate = self
-        
-        KYCNetworkRequest(get: .listOfCountries, taskSuccess: { responseData in
-            do {
-                self.countries = try JSONDecoder().decode(Countries.self, from: responseData)
-                self.tableView.reloadData()
+        fetchListOfCountries()
+    }
 
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // TICKET: IOS-1142 - call coordinator?
+    }
+
+    // MARK: - Private Methods
+
+    private func fetchListOfCountries() {
+        KYCNetworkRequest(get: .listOfCountries, taskSuccess: { [weak self] responseData in
+            do {
+                self?.countries = try JSONDecoder().decode(Countries.self, from: responseData)
+                self?.tableView.reloadData()
             } catch {
-                // TODO: handle error
-        // TODO: Remove debug
+                Logger.shared.error("Failed to parse countries list.")
             }
         }, taskFailure: { error in
-            // TODO: handle error
             Logger.shared.error(error.debugDescription)
         })
     }
+}
+
+extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDelegate {
 
     // MARK: UITableViewDataSource
 
@@ -69,12 +100,26 @@ final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDat
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let selectedCountry = countries?[indexPath.row] else {
+            Logger.shared.warning("Could not infer selected country.")
+            return
+        }
+        Logger.shared.info("User selected '\(selectedCountry.name)'")
+        presenter.selected(country: selectedCountry)
+    }
+}
+
+extension KYCCountrySelectionController: KYCCountrySelectorView {
+    func continueKycFlow(country: KYCCountry) {
+        // TICKET: IOS-1142 - move to coordinator
         performSegue(withIdentifier: "promptForPersonalDetails", sender: self)
     }
 
-    // MARK: - Navigation
+    func startPartnerExchangeFlow(country: KYCCountry) {
+        ExchangeCoordinator.shared.start()
+    }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TODO: implement method body
+    func showExchangeNotAvailable(country: KYCCountry) {
+        // TICKET: IOS-1150
     }
 }

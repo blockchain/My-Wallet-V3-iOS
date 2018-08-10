@@ -115,10 +115,10 @@
             </objects>
             <point key="canvasLocation" x="-73" y="218"/>
         </scene>
-        <!--KYCConfirmPhoneNumber-->
+        <!--KYCConfirmPhoneNumberController-->
         <scene sceneID="fw5-HU-1bR">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCConfirmPhoneNumber" id="xVk-FG-HTS" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCConfirmPhoneNumberController" id="xVk-FG-HTS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHo-TW-UGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="546" y="152"/>
