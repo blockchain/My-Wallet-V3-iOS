@@ -14,12 +14,10 @@ struct KYCAccountStatusViewConfig {
 }
 
 extension KYCAccountStatusViewConfig {
-    static func defaultConfig() -> KYCAccountStatusViewConfig {
-        return KYCAccountStatusViewConfig(
-            titleColor: UIColor.gray5,
-            isPrimaryButtonEnabled: false
-        )
-    }
+    static let defaultConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig(
+        titleColor: UIColor.gray5,
+        isPrimaryButtonEnabled: false
+    )
 
     static func create(for accountStatus: KYCAccountStatus) -> KYCAccountStatusViewConfig {
         let titleColor: UIColor
@@ -69,7 +67,7 @@ final class KYCAccountStatusController: UIViewController {
     }
 
     /// The view configuration for this view
-    var viewConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig.defaultConfig()
+    var viewConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig.defaultConfig
 
     // MARK: - Lifecycle Methods
 
