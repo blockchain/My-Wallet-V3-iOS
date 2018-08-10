@@ -12,12 +12,12 @@ enum KYCAccountStatus: Int {
     case approved, failed, underReview, inProgress
 
     /// Graphic which visually represents the account status
-    var image: UIImage? {
+    var image: UIImage {
         switch self {
-        case .approved: return UIImage(named: "AccountApproved")
-        case .failed:   return UIImage(named: "AccountFailed")
-        case .underReview: return UIImage(named: "AccountInReview")
-        case .inProgress: return UIImage(named: "AccountInReview")
+        case .approved: return #imageLiteral(resourceName: "AccountApproved")
+        case .failed:   return #imageLiteral(resourceName: "AccountFailed")
+        case .underReview: return #imageLiteral(resourceName: "AccountInReview")
+        case .inProgress: return #imageLiteral(resourceName: "AccountInReview")
         }
     }
 

@@ -52,7 +52,7 @@ import Foundation
             case .failed:
                 // Confirm with design that this is how we should handle this
                 URL(string: Constants.Url.blockchainSupport)?.launch()
-            default:
+            case .underReview:
                 return
             }
         }
