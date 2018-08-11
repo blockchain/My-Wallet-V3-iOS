@@ -19,7 +19,12 @@ extension URL {
         return query.queryArgs
     }
 
-    public static func endpoint(_ baseURL: URL, pathComponents: [String]?, queryParameters:[String: String]?) -> URL? {
+    /// Attempts to launch this URL
+    func launch() {
+        UIApplication.shared.open(self, options: [:])
+    }
+
+    public static func endpoint(_ baseURL: URL, pathComponents: [String]?, queryParameters: [String: String]?) -> URL? {
         guard var mutableBaseURL: URL = (baseURL as NSURL).copy() as? URL else { return nil }
 
         if let pathComponents = pathComponents {

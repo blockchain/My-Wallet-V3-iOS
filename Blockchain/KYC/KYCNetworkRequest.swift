@@ -14,8 +14,6 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
-    // TODO: read from .xcconfig
-    fileprivate static let rootUrl = "https://api.dev.blockchain.info/nabu-app"
     private let timeoutInterval = TimeInterval(exactly: 30)!
     private var request: URLRequest
 
@@ -37,13 +35,18 @@ final class KYCNetworkRequest {
         }
 
         enum PUT {
+            case updateUserDetails(userId: String)
             case updateMobileNumber(userId: String)
             case updateAddress(userId: String)
 
             var path: String {
                 switch self {
-                case let .updateMobileNumber(userId): return "/users/\(userId)/mobile"
-                case let .updateAddress(userId): return "/users/\(userId)/address"
+                case .updateUserDetails(let userID):
+                    return "/users/\(userID)"
+                case .updateMobileNumber(let userId):
+                    return "/users/\(userId)/mobile"
+                case .updateAddress(let userId):
+                    return "/users/\(userId)/address"
                 }
             }
         }
@@ -65,7 +68,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "GET")
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.rawValue)!, httpMethod: "GET")
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
@@ -76,7 +79,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "POST")
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.rawValue)!, httpMethod: "POST")
         let postBody = parameters.reduce("", { initialResult, nextPartialResult in
             let delimeter = initialResult.count > 0 ? "&" : ""
             return "\(initialResult)\(delimeter)\(nextPartialResult.key)=\(nextPartialResult.value)"
@@ -89,22 +92,25 @@ final class KYCNetworkRequest {
     }
 
     /// HTTP PUT Request
-    @discardableResult convenience init(
+    @discardableResult convenience init<T: Encodable>(
         put url: KYCEndpoints.PUT,
-        parameters: [String: String],
+        parameters: T,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "PUT")
-        let postBody = parameters.reduce("", { initialResult, nextPartialResult in
-            let delimeter = initialResult.count > 0 ? "&" : ""
-            return "\(initialResult)\(delimeter)\(nextPartialResult.key)=\(nextPartialResult.value)"
-        })
-        let data = postBody.data(using: .utf8)
-        request.httpBody = data
-        request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.path)!, httpMethod: "PUT")
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
+            let body = try encoder.encode(parameters)
+            request.httpBody = body
+            request.allHTTPHeaderFields = ["Content-Type":"application/json",
+                                           "Accept": "application/json"]
+            send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        } catch let error {
+            taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
+            return
+        }
     }
 
     // MARK: - Private Methods

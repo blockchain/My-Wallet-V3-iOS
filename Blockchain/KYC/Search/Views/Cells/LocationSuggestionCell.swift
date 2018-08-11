@@ -22,7 +22,6 @@ class LocationSuggestionCell: UITableViewCell {
         let subtitleHighlightedAttributes = [NSAttributedStringKey.font: LocationSuggestionCell.highlightedSubtitleFont(),
                                              NSAttributedStringKey.foregroundColor: UIColor.gray5]
 
-
         let attributedTitle = NSMutableAttributedString(string: suggestion.title, attributes: titleAttributes)
         let attributedSubtitle = NSMutableAttributedString(string: suggestion.subtitle, attributes: subtitleAttributes)
 

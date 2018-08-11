@@ -1,6 +1,8 @@
 disabled_rules:
   - force_cast
   - void_return
+  - trailing_whitespace
+  - todo
 excluded:
   - Submodules/
   - RxAlamofire/

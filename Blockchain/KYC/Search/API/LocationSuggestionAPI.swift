@@ -17,4 +17,3 @@ protocol LocationSuggestionAPI {
     func cancel()
     var isExecuting: Bool { get }
 }
-

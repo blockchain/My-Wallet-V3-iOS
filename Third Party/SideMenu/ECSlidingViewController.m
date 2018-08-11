@@ -114,6 +114,7 @@
 #pragma mark - UIViewController
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     if (self.topViewControllerStoryboardId) {
         self.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:self.topViewControllerStoryboardId];
     }

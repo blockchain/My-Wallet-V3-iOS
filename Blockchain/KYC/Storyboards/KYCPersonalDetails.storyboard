@@ -9,11 +9,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Montserrat-Regular.ttf">
-            <string>Montserrat-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Personal Details View Controller-->
         <scene sceneID="7y7-ht-Q1u">
@@ -100,23 +95,21 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a2-YO-4u9" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vzT-Yr-4Pj" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="16" y="175.99999999999997" width="343" height="44"/>
-                                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="c0L-MU-eN2"/>
+                                            <constraint firstAttribute="height" constant="44" id="bSS-7M-SFM"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Next"/>
-                                        <connections>
-                                            <action selector="primaryButtonTapped:" destination="VK4-jv-eiz" eventType="touchUpInside" id="K4z-pF-XWd"/>
-                                        </connections>
-                                    </button>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="38g-Ci-yOA" secondAttribute="trailing" constant="16" id="2Nv-Xp-mtz"/>
+                                    <constraint firstItem="vzT-Yr-4Pj" firstAttribute="top" secondItem="38g-Ci-yOA" secondAttribute="bottom" constant="8" id="4O8-WT-eh2"/>
+                                    <constraint firstAttribute="bottom" secondItem="vzT-Yr-4Pj" secondAttribute="bottom" constant="16" id="62l-VR-Ycl"/>
                                     <constraint firstItem="38g-Ci-yOA" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="CTl-rG-4bv"/>
                                     <constraint firstItem="6Nk-Gd-qS1" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="Ml9-p3-cbv"/>
+                                    <constraint firstItem="vzT-Yr-4Pj" firstAttribute="trailing" secondItem="38g-Ci-yOA" secondAttribute="trailing" id="NTE-fx-E8F"/>
                                     <constraint firstAttribute="trailing" secondItem="dFe-4p-8Bl" secondAttribute="trailing" constant="16" id="NVi-mF-g0o"/>
                                     <constraint firstItem="dFe-4p-8Bl" firstAttribute="top" secondItem="oDQ-tQ-rDw" secondAttribute="top" id="NXv-A1-W8C"/>
                                     <constraint firstItem="38g-Ci-yOA" firstAttribute="top" secondItem="6Nk-Gd-qS1" secondAttribute="bottom" id="QQC-DJ-NmU"/>
@@ -125,10 +118,7 @@
                                     <constraint firstItem="dFe-4p-8Bl" firstAttribute="leading" secondItem="oDQ-tQ-rDw" secondAttribute="leading" constant="16" id="Vgt-w3-Sgq"/>
                                     <constraint firstItem="38g-Ci-yOA" firstAttribute="width" secondItem="6Nk-Gd-qS1" secondAttribute="width" id="XCo-fP-XdL"/>
                                     <constraint firstItem="6Nk-Gd-qS1" firstAttribute="top" secondItem="dFe-4p-8Bl" secondAttribute="bottom" id="b1j-iP-iOP"/>
-                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="trailing" secondItem="38g-Ci-yOA" secondAttribute="trailing" id="hmn-30-aLv"/>
-                                    <constraint firstAttribute="bottom" secondItem="5a2-YO-4u9" secondAttribute="bottom" constant="16" id="nmi-wZ-5ah"/>
-                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="leading" secondItem="38g-Ci-yOA" secondAttribute="leading" id="t3H-jr-8El"/>
-                                    <constraint firstItem="5a2-YO-4u9" firstAttribute="top" secondItem="38g-Ci-yOA" secondAttribute="bottom" constant="8" id="wQ6-Ei-gBC"/>
+                                    <constraint firstItem="vzT-Yr-4Pj" firstAttribute="leading" secondItem="38g-Ci-yOA" secondAttribute="leading" id="jB4-tk-HAT"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="VK4-jv-eiz" id="oke-kY-her"/>
@@ -162,7 +152,7 @@
                         <outlet property="birthdayField" destination="38g-Ci-yOA" id="aQP-L4-4V9"/>
                         <outlet property="firstNameField" destination="dFe-4p-8Bl" id="L3G-QR-mVR"/>
                         <outlet property="lastNameField" destination="6Nk-Gd-qS1" id="trs-Iy-Ecy"/>
-                        <outlet property="primaryButton" destination="5a2-YO-4u9" id="bkL-go-wpB"/>
+                        <outlet property="primaryButtonContainer" destination="vzT-Yr-4Pj" id="n9C-WS-a5a"/>
                         <outlet property="progressView" destination="sxl-FD-HTb" id="Op0-Xj-T3U"/>
                         <outlet property="scrollView" destination="oDQ-tQ-rDw" id="RFu-VN-Nho"/>
                         <segue destination="ikb-aY-GZn" kind="show" identifier="enterMobileNumber" id="EC8-k6-Erk"/>

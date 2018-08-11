@@ -41,6 +41,7 @@ NSString *entryKeySupport = @"support";
 NSString *entryKeyLogout = @"logout";
 NSString *entryKeyBuyBitcoin = @"buy_bitcoin";
 NSString *entryKeyExchange = @"exchange";
+NSString *entryKeyKyc = @"kyc";
 
 CGFloat safeAreaInsetTop = 20;
 CGFloat safeAreaInsetBottom = 0;
@@ -134,7 +135,9 @@ int accountEntries = 0;
     [self addMenuEntry:entryKeyWebLogin text:BC_STRING_LOG_IN_TO_WEB_WALLET icon:@"web"];
     [self addMenuEntry:entryKeySupport text:BC_STRING_SUPPORT icon:@"help"];
     [self addMenuEntry:entryKeyLogout text:LocalizationConstantsObjcBridge.logout icon:@"logout"];
-
+    #if DEBUG
+    [self addMenuEntry:entryKeyKyc text:LocalizationConstantsObjcBridge.debug icon:@"web"];
+    #endif
     [self setSideMenuGestures];
     [self reload];
 }

@@ -44,7 +44,7 @@ extension SettingsTableViewController {
             UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil)
         ]
         AlertViewPresenter.shared.standardNotify(
-            message:  successMessage ?? "",
+            message: successMessage ?? "",
             title: LocalizationConstantsObjcBridge.success(),
             actions: actions
         )
@@ -59,7 +59,7 @@ extension SettingsTableViewController {
         let alert = UIAlertController(title: LocalizationConstants.AddressAndKeyImport.copyWalletId,
                                       message: LocalizationConstants.AddressAndKeyImport.copyWarning,
                                       preferredStyle: .actionSheet)
-        let copyAction = UIAlertAction(title: LocalizationConstants.AddressAndKeyImport.copyCTA, style: .destructive, handler: { action in
+        let copyAction = UIAlertAction(title: LocalizationConstants.AddressAndKeyImport.copyCTA, style: .destructive, handler: { _ in
             UIPasteboard.general.string = WalletManager.shared.wallet.guid
         })
         let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil)
@@ -111,7 +111,8 @@ extension SettingsTableViewController {
         UserDefaults.standard.set(1, forKey: "loadedSettings")
         updateEmailAndMobileStrings()
         reload()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reload), name: NSNotification.Name(rawValue: "reloadSettings"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reload), name:
+            NSNotification.Name(rawValue: "reloadSettings"), object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.reloadAfterMultiAddressResponse),
                                                name: NSNotification.Name(rawValue: "reloadSettingsAfterMultiAddress"),
@@ -120,12 +121,12 @@ extension SettingsTableViewController {
 }
 
 extension AppSettingsController {
-    // MARK: -getUserEmail
+    /// MARK: -getUserEmail
     func getUserEmail() -> String? {
         return WalletManager.shared.wallet.getEmail()
     }
     
-    // MARK: -formatDetailCell
+    /// MARK: -formatDetailCell
     func formatDetailCell(_ verified: Bool, _ cell: UITableViewCell) {
         if verified {
             cell.detailTextLabel?.text = LocalizationConstants.verified
@@ -136,12 +137,12 @@ extension AppSettingsController {
         }
     }
     
-    // MARK: -isMobileVerified
+    /// MARK: -isMobileVerified
     func isMobileVerified() -> Bool {
         return WalletManager.shared.wallet.hasVerifiedMobileNumber()
     }
     
-    // MARK: -getMobileNumber
+    /// MARK: -getMobileNumber
     func getMobileNumber() -> String? {
         return WalletManager.shared.wallet.getSMSNumber()
     }

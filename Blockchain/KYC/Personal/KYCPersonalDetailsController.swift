@@ -23,7 +23,7 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
     @IBOutlet fileprivate var firstNameField: ValidationTextField!
     @IBOutlet fileprivate var lastNameField: ValidationTextField!
     @IBOutlet fileprivate var birthdayField: ValidationDateField!
-    @IBOutlet fileprivate var primaryButton: PrimaryButton!
+    @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
 
     // MARK: ValidationFormView
 
@@ -39,15 +39,29 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     var keyboard: KeyboardPayload? = nil
 
+    // MARK: Public Properties
+
+    weak var delegate: PersonalDetailsDelegate?
+
+    // MARK: Private Properties
+
+    fileprivate var coordinator: PersonalDetailsCoordinator!
+
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        coordinator = PersonalDetailsCoordinator(interface: self)
         setupTextFields()
         handleKeyboardOffset()
         setupNotifications()
         setupProgressView()
+
+        primaryButtonContainer.actionBlock = { [weak self] in
+            guard let this = self else { return }
+            this.primaryButtonTapped()
+        }
 
         validationFields.enumerated().forEach { (index, field) in
             field.returnTappedBlock = { [weak self] in
@@ -61,6 +75,8 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
                 next.becomeFocused()
             }
         }
+
+        delegate?.onStart()
     }
 
     // MARK: - Private Methods
@@ -101,11 +117,19 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
         return max(newProgression, startingValue)
     }
 
-    // MARK: - Actions
-
-    @IBAction func primaryButtonTapped(_ sender: Any) {
+    fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
-        performSegue(withIdentifier: "enterMobileNumber", sender: self)
+        guard let email = WalletManager.shared.wallet.getEmail() else { return }
+        validationFields.forEach({$0.resignFocus()})
+
+        let details = PersonalDetails(
+            identifier: "",
+            firstName: firstNameField.text ?? "",
+            lastName: lastNameField.text ?? "",
+            email: email,
+            birthday: birthdayField.selectedDate
+        )
+        delegate?.onSubmission(details)
     }
 
     // MARK: - Navigation
@@ -116,6 +140,27 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
         }
         // TODO: pass in actual userID
         enterPhoneNumberController.userId = "userId"
+    }
+}
+
+extension KYCPersonalDetailsController: PersonalDetailsInterface {
+    func primaryButtonActivityIndicator(_ visibility: Visibility) {
+        primaryButtonContainer.isLoading = visibility == .visible
+    }
+
+    func primaryButtonEnabled(_ enabled: Bool) {
+        primaryButtonContainer.isEnabled = enabled
+    }
+
+    func nextPage() {
+        performSegue(withIdentifier: "enterMobileNumber", sender: self)
+    }
+
+    func populatePersonalDetailFields(_ details: PersonalDetails) {
+        firstNameField.text = details.firstName
+        lastNameField.text = details.lastName
+        let birthday = DateFormatter.birthday.string(from: details.birthday)
+        birthdayField.text = birthday
     }
 }
 

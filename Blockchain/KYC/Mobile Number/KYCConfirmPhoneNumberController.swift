@@ -8,12 +8,9 @@
 
 import Foundation
 
-class KYCConfirmPhoneNumberController: UIViewController {
+final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonContainerView {
 
-    @IBOutlet private var nextButton: PrimaryButton!
-    @IBOutlet private var labelPhoneNumber: UILabel!
-    @IBOutlet private var textFieldConfirmationCode: UITextField!
-    @IBOutlet private var layoutConstraintBottomButton: NSLayoutConstraint!
+    // MARK: Public Properties
 
     var phoneNumber: String = "" {
         didSet {
@@ -24,14 +21,22 @@ class KYCConfirmPhoneNumberController: UIViewController {
 
     var userId: String?
 
+    // MARK: BottomButtonContainerView
+
+    var originalBottomButtonConstraint: CGFloat!
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
+
+    // MARK: IBOutlets
+
+    @IBOutlet private var labelPhoneNumber: UILabel!
+    @IBOutlet private var validationTextFieldConfirmationCode: ValidationTextField!
+
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
     }()
 
-    private var originalBottomButtonConstraint: CGFloat!
-
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        cleanUp()
     }
 
     // MARK: View Controller Lifecycle
@@ -39,19 +44,15 @@ class KYCConfirmPhoneNumberController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // TICKET: IOS-1141 display correct % in the progress view
+        validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
         labelPhoneNumber.text = phoneNumber
-        nextButton.isEnabled = false
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) {
-            self.keyboardWillShow(with: KeyboardPayload(notification: $0))
-        }
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
-            self.keyboardWillHide(with: KeyboardPayload(notification: $0))
-        }
+        setUpBottomButtonContainerView()
+        validationTextFieldConfirmationCode.becomeFocused()
     }
 
     // MARK: IBActions
@@ -64,39 +65,20 @@ class KYCConfirmPhoneNumberController: UIViewController {
     }
 
     @IBAction func onNextTapped(_ sender: Any) {
-        guard let code = textFieldConfirmationCode.text else {
+        guard case .valid = validationTextFieldConfirmationCode.validate() else {
+            validationTextFieldConfirmationCode.becomeFocused()
+            Logger.shared.warning("text field is invalid.")
+            return
+        }
+        guard let code = validationTextFieldConfirmationCode.text else {
             Logger.shared.warning("code is nil.")
             return
         }
         guard let userId = userId else {
-            Logger.shared.warning("userIs is nil.")
+            Logger.shared.warning("userId is nil.")
             return
         }
         presenter.verify(number: phoneNumber, userId: userId, code: code)
-    }
-
-    @IBAction func onTextFieldChanged(_ sender: Any) {
-        nextButton.isEnabled = !(textFieldConfirmationCode.text?.isEmpty ?? true)
-    }
-
-    // MARK: Private
-
-    private func keyboardWillShow(with payload: KeyboardPayload) {
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(payload.animationDuration)
-        UIView.setAnimationCurve(payload.animationCurve)
-        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
-        view.layoutIfNeeded()
-        UIView.commitAnimations()
-    }
-
-    private func keyboardWillHide(with payload: KeyboardPayload) {
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(payload.animationDuration)
-        UIView.setAnimationCurve(payload.animationCurve)
-        layoutConstraintBottomButton.constant = originalBottomButtonConstraint
-        view.layoutIfNeeded()
-        UIView.commitAnimations()
     }
 }
 

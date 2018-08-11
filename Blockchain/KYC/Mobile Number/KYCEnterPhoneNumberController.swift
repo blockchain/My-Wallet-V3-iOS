@@ -9,20 +9,22 @@
 import PhoneNumberKit
 import UIKit
 
-final class KYCEnterPhoneNumberController: UIViewController {
+final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContainerView {
 
     // MARK: Properties
 
     var userId: String?
 
+    // MARK: BottomButtonContainerView
+
+    var originalBottomButtonConstraint: CGFloat!
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
+
     // MARK: IBOutlets
 
     @IBOutlet private var validationTextFieldMobileNumber: ValidationTextField!
-    @IBOutlet private var layoutConstraintBottomButton: NSLayoutConstraint!
 
     // MARK: Private Properties
-
-    private var originalBottomButtonConstraint: CGFloat!
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = { [unowned self] in
         return KYCVerifyPhoneNumberPresenter(view: self)
@@ -35,7 +37,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
     // MARK: UIViewController Lifecycle Methods
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        cleanUp()
     }
 
     override func viewDidLoad() {
@@ -54,12 +56,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillShow) {
-            self.keyboardWillShow(with: KeyboardPayload(notification: $0))
-        }
-        NotificationCenter.when(NSNotification.Name.UIKeyboardWillHide) {
-            self.keyboardWillHide(with: KeyboardPayload(notification: $0))
-        }
+        setUpBottomButtonContainerView()
         validationTextFieldMobileNumber.becomeFocused()
     }
 
@@ -67,6 +64,7 @@ final class KYCEnterPhoneNumberController: UIViewController {
 
     @IBAction func primaryButtonTapped(_ sender: Any) {
         guard case .valid = validationTextFieldMobileNumber.validate() else {
+            validationTextFieldMobileNumber.becomeFocused()
             Logger.shared.warning("phone number field is invalid.")
             return
         }
@@ -87,28 +85,12 @@ final class KYCEnterPhoneNumberController: UIViewController {
         guard let confirmPhoneNumberViewController = segue.destination as? KYCConfirmPhoneNumberController else {
             return
         }
+        guard let phoneNumber = validationTextFieldMobileNumber.text else {
+            Logger.shared.warning("phone number is nil.")
+            return
+        }
         confirmPhoneNumberViewController.userId = userId
-        confirmPhoneNumberViewController.phoneNumber = validationTextFieldMobileNumber.text ?? ""
-    }
-
-    // MARK: - Private Methods
-
-    private func keyboardWillShow(with payload: KeyboardPayload) {
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(payload.animationDuration)
-        UIView.setAnimationCurve(payload.animationCurve)
-        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
-        view.layoutIfNeeded()
-        UIView.commitAnimations()
-    }
-
-    private func keyboardWillHide(with payload: KeyboardPayload) {
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(payload.animationDuration)
-        UIView.setAnimationCurve(payload.animationCurve)
-        layoutConstraintBottomButton.constant = originalBottomButtonConstraint
-        view.layoutIfNeeded()
-        UIView.commitAnimations()
+        confirmPhoneNumberViewController.phoneNumber = phoneNumber
     }
 }
 

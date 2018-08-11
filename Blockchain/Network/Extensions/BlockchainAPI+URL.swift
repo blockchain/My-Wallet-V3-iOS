@@ -19,6 +19,11 @@ extension BlockchainAPI {
         let host = Bundle.main.infoDictionary!["WALLET_SERVER"] as! String
         return "https://\(host)"
     }
+    
+    var retailCoreUrl: String {
+        let host = Bundle.main.infoDictionary!["RETAIL_CORE_URL"] as! String
+        return "https://\(host)"
+    }
 
     var walletOptionsUrl: String {
         return "\(walletUrl)/Resources/wallet-options.json"
@@ -55,7 +60,7 @@ extension BlockchainAPI {
 
     enum Nabu {
         static var quotes: String {
-            return BlockchainAPI.shared.apiUrl + "/nabu-app/markets/quotes"
+            return BlockchainAPI.shared.retailCoreUrl + "/markets/quotes"
         }
     }
 }

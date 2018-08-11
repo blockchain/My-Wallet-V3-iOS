@@ -11,7 +11,8 @@ import LocalAuthentication
 import CoreFoundation
 
 @IBDesignable @objc class SettingsTableViewController: UITableViewController,
-AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate, WalletAccountInfoDelegate {
+AppSettingsController, UITextFieldDelegate, EmailDelegate,
+MobileNumberDelegate, WalletAccountInfoDelegate {
     // Row References
     let sectionProfile = 0
     let profileWalletIdentifier = 0
@@ -113,13 +114,13 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
             message: String(format: "Sent to %@", mobileNumberString),
             preferredStyle: .alert)
         alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.Authentication.resendVerification,
-                                                              style: .default, handler: { action in
+                                                              style: .default, handler: { _ in
             self.changeMobileNumber(self.mobileNumberString)
         }))
-        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { action in
+        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { _ in
             self.verifyMobileNumber(alertForVerifyingMobileNumber.textFields?.first?.text)
         }))
-        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { action in
+        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
             // If the user cancels right after adding a legitimate number, update accountInfo
             self.isEnablingTwoStepSMS = false
             self.getAccountInfo()
@@ -160,7 +161,8 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
         if walletManager.wallet.getTwoStepType() == AuthenticationTwoFactorType.sms.rawValue {
             let alertToDisableTwoFactorSMS = UIAlertController(title:
                 String(format: "2-step Verification is currently enabled for %@.", "SMS"), message:
-                String(format: "You must disable SMS 2-Step Verification before changing your mobile number (%@).", mobileNumberString), preferredStyle: .alert)
+                String(format: "You must disable SMS 2-Step Verification before changing your mobile number (%@).",
+                       mobileNumberString), preferredStyle: .alert)
             alertToDisableTwoFactorSMS.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil))
             if alertTargetViewController != nil {
                 alertTargetViewController?.present(alertToDisableTwoFactorSMS, animated: true)
@@ -274,14 +276,14 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
         if !swipeToReceiveEnabled {
             let swipeToReceiveAlert = UIAlertController(title: LocalizationConstants.swipeReceive,
                                                         message: LocalizationConstants.Pin.revealAddress, preferredStyle: .alert)
-            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.enable, style: .default, handler: { action in
+            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.enable, style: .default, handler: { _ in
                 BlockchainSettings.sharedAppInstance().swipeToReceiveEnabled = !swipeToReceiveEnabled
                 // Clear all swipe addresses in case default account has changed
                 if !swipeToReceiveEnabled {
                     AssetAddressRepository.sharedInstance().removeAllSwipeAddresses()
                 }
             }))
-            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { action in
+            swipeToReceiveAlert.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
                 sender.isOn = false
             }))
             present(swipeToReceiveAlert, animated: true)
@@ -321,7 +323,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
             } else {
                 BlockchainSettings.sharedAppInstance().biometryEnabled = false
                 let alertBiometryError = UIAlertController(title: LocalizationConstants.Errors.error, message: errorMessage, preferredStyle: .alert)
-                alertBiometryError.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: { action in
+                alertBiometryError.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: { _ in
                     sender.isOn = false
                 }))
                 self.present(alertBiometryError, animated: true)
@@ -336,7 +338,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
             alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
                 sender.isOn = false
             }))
-            alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { action in
+            alertForTogglingBiometry.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { _ in
                 AuthenticationCoordinator.sharedInstance().validatePin()
             }))
             present(alertForTogglingBiometry, animated: true)
@@ -427,7 +429,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
         alertForChangingTwoStep.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
         alertForChangingTwoStep.addAction(UIAlertAction(title:
             isTwoStepEnabled ? LocalizationConstants.disable : LocalizationConstants.enable,
-                                                        style: .default, handler: { action in
+                                                        style: .default, handler: { _ in
             self.changeTwoStepVerification()
         }))
         if alertTargetViewController != nil {
@@ -488,7 +490,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
     func alertUser(toChangeEmail hasAddedEmail: Bool) {
         let alertViewTitle = hasAddedEmail ? LocalizationConstants.changeEmail : LocalizationConstants.addEmail
         let alertForChangingEmail = UIAlertController(title: alertViewTitle, message: LocalizationConstants.Errors.noEmail, preferredStyle: .alert)
-        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { action in
+        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
             // If the user cancels right after adding a legitimate email address, update accountInfo
             let emailCell: UITableViewCell? = self.tableView.cellForRow(at: IndexPath(row: self.profileEmail, section: self.sectionProfile))
             if ((emailCell?.detailTextLabel?.text == LocalizationConstants.unverified) &&
@@ -497,7 +499,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
                 self.getAccountInfo()
             }
         }))
-        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { action in
+        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { _ in
             let newEmail = alertForChangingEmail.textFields?.first?.text
             if (newEmail?.lowercased().replacingOccurrences(of: " ", with: "") ==
                 self.getUserEmail()?.lowercased().replacingOccurrences(of: " ", with: "")) {
@@ -530,7 +532,7 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
             message: LocalizationConstants.Settings.notificationsDisabled,
             preferredStyle: .alert)
         alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
-        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { action in
+        alertForChangingEmail.addAction(UIAlertAction(title: LocalizationConstants.continueString, style: .default, handler: { _ in
             self.disableNotificationsThenChangeEmail(newEmail)
         }))
         if alertTargetViewController != nil {
@@ -559,13 +561,13 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, MobileNumberDelegate,
                                                        preferredStyle: .alert)
         alertForVerifyingEmail.addAction(UIAlertAction(title:
             LocalizationConstants.Authentication.resendVerificationEmail,
-                                                       style: .default, handler: { action in
+                                                       style: .default, handler: { _ in
             self.resendVerificationEmail()
         }))
-        alertForVerifyingEmail.addAction(UIAlertAction(title: LocalizationConstants.openMailApp, style: .default, handler: { action in
+        alertForVerifyingEmail.addAction(UIAlertAction(title: LocalizationConstants.openMailApp, style: .default, handler: { _ in
             UIApplication.shared.openMailApplication()
         }))
-        alertForVerifyingEmail.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: { action in
+        alertForVerifyingEmail.addAction(UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: { _ in
             self.getAccountInfo()
         }))
         if alertTargetViewController != nil {
