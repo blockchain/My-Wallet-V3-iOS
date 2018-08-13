@@ -460,6 +460,8 @@
 		AA7133D221222D2C00CB2AA9 /* PersonalDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DC9211C9A8300E6C241 /* PersonalDetails.swift */; };
 		AA7133D321222D3000CB2AA9 /* PersonalDetailsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DC5211C992B00E6C241 /* PersonalDetailsAPI.swift */; };
 		AA7133D421222D3000CB2AA9 /* PersonalDetailsInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */; };
+		AA7133D921223AE000CB2AA9 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7133D821223AE000CB2AA9 /* Arrays.swift */; };
+		AA7133DA21223AE000CB2AA9 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7133D821223AE000CB2AA9 /* Arrays.swift */; };
 		AA722C1420B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */; };
 		AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */; };
 		AA722C1920B4BBA900262A5F /* AssetAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */; };
@@ -2813,6 +2815,7 @@
 		AA7133B7212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCVerifyPhoneNumberPresenterTests.swift; sourceTree = "<group>"; };
 		AA7133BF21222A7300CB2AA9 /* KYCCountrySelectionPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCCountrySelectionPresenterTests.swift; sourceTree = "<group>"; };
 		AA7133CA21222AFC00CB2AA9 /* MockKYCCountrySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKYCCountrySelectionView.swift; sourceTree = "<group>"; };
+		AA7133D821223AE000CB2AA9 /* Arrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrays.swift; sourceTree = "<group>"; };
 		AA722C1320B4B9F300262A5F /* WalletSwipeAddressDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwipeAddressDelegate.swift; sourceTree = "<group>"; };
 		AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressRepository.swift; sourceTree = "<group>"; };
 		AA748358211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKYCEnterPhoneNumberView.swift; sourceTree = "<group>"; };
@@ -5674,6 +5677,7 @@
 				9FB3638314B60128004BEA02 /* Blockchain-Prefix.pch */,
 				9FB3637D14B60128004BEA02 /* Blockchain-Info.plist */,
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
+				AA7133D821223AE000CB2AA9 /* Arrays.swift */,
 				511646C4208124E200C43522 /* AssetType.swift */,
 				AA24D4C620D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift */,
 				5171E38F20F4F98000E8913E /* Colors.swift */,
@@ -6989,6 +6993,7 @@
 				AACE31C72092A99B00B7B806 /* LocalizationConstants.swift in Sources */,
 				AA7E773E210BA487009DFB4C /* Strings.swift in Sources */,
 				AACE31CC2092A99B00B7B806 /* BitcoinAddress.swift in Sources */,
+				AA7133DA21223AE000CB2AA9 /* Arrays.swift in Sources */,
 				AAFA97B02115110000D19ED3 /* SettingsProtocols.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
 				602B9D132118E24C00BD3D60 /* SearchControllerDelegate.swift in Sources */,
@@ -7436,6 +7441,7 @@
 				3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */,
 				3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */,
+				AA7133D921223AE000CB2AA9 /* Arrays.swift in Sources */,
 				AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */,
 				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,

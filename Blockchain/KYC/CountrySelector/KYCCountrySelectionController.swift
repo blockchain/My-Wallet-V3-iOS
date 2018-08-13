@@ -6,7 +6,6 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import RxSwift
 import UIKit
 
 /// Country selection screen in KYC flow
@@ -25,10 +24,58 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private var tableView: UITableView!
 
-    // MARK: - Properties
+    // MARK: - Private Properties
+
+    private var countriesMap = [String: Countries]()
+
+    private var allCountries: Countries? {
+        didSet {
+            allCountries?.sort(by: { $0.name < $1.name })
+            countries = allCountries
+        }
+    }
+
     private var countries: Countries? {
         didSet {
-            countries?.sort(by: { $0.name < $1.name })
+            countriesMap.removeAll()
+
+            guard let countries = countries else {
+                return
+            }
+
+            let countrySectionHeaders = countries.compactMap({ country -> String? in
+                guard let firstChar = country.name.first else {
+                    return nil
+                }
+                return String(firstChar).uppercased()
+            }).unique
+
+            for firstLetter in countrySectionHeaders {
+                let countriesInHeader = countries.filter {
+                    guard let firstChar = $0.name.first else { return false }
+                    return String(firstChar).uppercased() == firstLetter
+                }
+                countriesMap[firstLetter] = countriesInHeader
+            }
+
+            tableView.reloadData()
+        }
+    }
+
+    private var countrySectionHeaders: [String] {
+        return Array(countriesMap.keys).sorted(by: { $0 < $1 })
+    }
+
+    private var searchText: String? {
+        didSet {
+            guard let allCountries = allCountries else {
+                return
+            }
+            guard let searchText = searchText?.lowercased() else {
+                self.countries = allCountries
+                return
+            }
+            self.countries = allCountries.filter { $0.name.lowercased().starts(with: searchText) }
         }
     }
 
@@ -52,6 +99,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
         setupProgressView()
         tableView.dataSource = self
         tableView.delegate = self
+        searchBar.delegate = self
         fetchListOfCountries()
     }
 
@@ -66,8 +114,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     private func fetchListOfCountries() {
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { [weak self] responseData in
             do {
-                self?.countries = try JSONDecoder().decode(Countries.self, from: responseData)
-                self?.tableView.reloadData()
+                self?.allCountries = try JSONDecoder().decode(Countries.self, from: responseData)
             } catch {
                 Logger.shared.error("Failed to parse countries list.")
             }
@@ -77,35 +124,67 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     }
 }
 
+extension KYCCountrySelectionController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+}
+
 extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDelegate {
 
     // MARK: UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let hasCountries = countries {
-            return hasCountries.count
-        }
-        return 0
+        let firstLetter = countrySectionHeaders[section]
+        return countriesMap[firstLetter]?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let countryCell = tableView.dequeueReusableCell(withIdentifier: "CountryCell"),
-            let countries = countries else {
-                return UITableViewCell()
+        guard let countryCell = tableView.dequeueReusableCell(withIdentifier: "CountryCell") else {
+            return UITableViewCell()
         }
-        countryCell.textLabel?.text = countries[indexPath.row].name
+
+        guard let country = country(at: indexPath) else {
+            return UITableViewCell()
+        }
+
+        countryCell.textLabel?.text = country.name
+
         return countryCell
+    }
+
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return index
+    }
+
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        guard searchText?.isEmpty ?? true else {
+            return nil
+        }
+        return countrySectionHeaders
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return countriesMap.keys.count
     }
 
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let selectedCountry = countries?[indexPath.row] else {
+        guard let selectedCountry = country(at: indexPath) else {
             Logger.shared.warning("Could not infer selected country.")
             return
         }
         Logger.shared.info("User selected '\(selectedCountry.name)'")
         presenter.selected(country: selectedCountry)
+    }
+
+    private func country(at indexPath: IndexPath) -> KYCCountry? {
+        let firstLetter = countrySectionHeaders[indexPath.section]
+        guard let countriesInSection = countriesMap[firstLetter] else {
+            return nil
+        }
+        return countriesInSection[indexPath.row]
     }
 }
 
