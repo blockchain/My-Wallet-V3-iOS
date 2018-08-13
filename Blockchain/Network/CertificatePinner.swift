@@ -111,8 +111,14 @@ final class CertificatePinner: NSObject {
         }
     }
 
-    // TODO: implement when required changes are merged into `swift` branch.
     func didFailToValidate() {
-
+        let action = UIAlertAction(title: LocalizationConstants.okString, style: .cancel) { _ in
+            UIApplication.shared.suspendApp()
+        }
+        AlertViewPresenter.shared.standardNotify(
+            message: LocalizationConstants.Errors.failedToValidateCertificateMessage,
+            title: LocalizationConstants.Errors.failedToValidateCertificateTitle,
+            actions: [action]
+        )
     }
 }

@@ -84,6 +84,11 @@ struct LocalizationConstants {
         static let inputError = NSLocalizedString("There was an error with the device input.", comment: "AVCaptureDeviceError: inputError")
         static let noEmail = NSLocalizedString("Please provide an email address.", comment: "")
         static let differentEmail = NSLocalizedString("New email must be different", comment: "")
+        static let failedToValidateCertificateTitle = NSLocalizedString("Failed to validate server certificate", comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
+        static let failedToValidateCertificateMessage = NSLocalizedString(
+            """
+            A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.
+            """, comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
     }
 
     struct Authentication {
