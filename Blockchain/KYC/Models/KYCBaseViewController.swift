@@ -1,5 +1,5 @@
 //
-//  KYCPage.swift
+//  KYCBaseViewController.swift
 //  Blockchain
 //
 //  Created by Alex McGregor on 8/13/18.

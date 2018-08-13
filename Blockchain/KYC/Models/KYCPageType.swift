@@ -1,5 +1,5 @@
 //
-//  KYCPageType.swift
+//  KYCPage.swift
 //  Blockchain
 //
 //  Created by Alex McGregor on 8/10/18.
