@@ -1,5 +1,5 @@
 //
-//  KYCCountrySelectorPresenter.swift
+//  KYCCountrySelectionPresenter.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 8/13/18.
@@ -9,7 +9,7 @@
 import RxSwift
 
 /// Protocol definition for the country selection view during the KYC flow
-protocol KYCCountrySelectorView: class {
+protocol KYCCountrySelectionView: class {
 
     /// Method invoked once the user selects a native KYC-supported country
     func continueKycFlow(country: KYCCountry)
@@ -24,17 +24,17 @@ protocol KYCCountrySelectorView: class {
     func showExchangeNotAvailable(country: KYCCountry)
 }
 
-class KYCCountrySelectorPresenter {
+class KYCCountrySelectionPresenter {
 
     // MARK: - Private Properties
 
     private let walletService: WalletService
-    private weak var view: KYCCountrySelectorView?
+    private weak var view: KYCCountrySelectionView?
     private var disposable: Disposable?
 
     // MARK: - Initializer
 
-    init(view: KYCCountrySelectorView, walletService: WalletService = WalletService.shared) {
+    init(view: KYCCountrySelectionView, walletService: WalletService = WalletService.shared) {
         self.view = view
         self.walletService = walletService
     }

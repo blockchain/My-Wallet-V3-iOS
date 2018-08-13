@@ -48,16 +48,10 @@ import RxSwift
     /// If WalletOptions has already been fetched, this property will return the cached value
     var walletOptions: Single<WalletOptions> {
         return Single.deferred { [unowned self] in
-            let startEmission: Observable<WalletOptions>
-            if let cachedValue = self.cachedWalletOptions.value {
-                startEmission = Observable.just(cachedValue)
-            } else {
-                startEmission = Observable.empty()
+            guard let cachedValue = self.cachedWalletOptions.value else {
+                return self.networkFetchedWalletOptions
             }
-
-            return startEmission.concat(self.networkFetchedWalletOptions.asObservable())
-                .elementAt(0)
-                .asSingle()
+            return Single.just(cachedValue)
         }
     }
 

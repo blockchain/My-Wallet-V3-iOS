@@ -34,8 +34,8 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
 
     private var selectedCountry: KYCCountry?
 
-    private lazy var presenter: KYCCountrySelectorPresenter = {
-        return KYCCountrySelectorPresenter(view: self)
+    private lazy var presenter: KYCCountrySelectionPresenter = {
+        return KYCCountrySelectionPresenter(view: self)
     }()
 
     // MARK: Factory
@@ -109,7 +109,7 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
     }
 }
 
-extension KYCCountrySelectionController: KYCCountrySelectorView {
+extension KYCCountrySelectionController: KYCCountrySelectionView {
     func continueKycFlow(country: KYCCountry) {
         // TICKET: IOS-1142 - move to coordinator
         performSegue(withIdentifier: "promptForPersonalDetails", sender: self)
