@@ -18,11 +18,12 @@ struct PostalAddress {
 }
 
 // TICKET: IOS-1145 - Combine PostalAddress and UserAddress models.
-struct UserAddress: Encodable {
+struct UserAddress: Codable {
     let lineOne: String
     let lineTwo: String
     let postalCode: String
     let city: String
+    let state: String? = nil
     let country: String
 
     enum CodingKeys: String, CodingKey {
@@ -30,6 +31,7 @@ struct UserAddress: Encodable {
         case lineTwo = "line2"
         case postalCode = "postCode"
         case city = "city"
+        case state = "state"
         case country = "country"
     }
 }
@@ -40,7 +42,8 @@ extension UserAddress: Equatable {
             lhs.lineTwo == rhs.lineTwo &&
             lhs.postalCode == rhs.postalCode &&
             lhs.city == rhs.city &&
-            lhs.country == rhs.country
+            lhs.country == rhs.country &&
+            lhs.state == rhs.state
     }
 }
 

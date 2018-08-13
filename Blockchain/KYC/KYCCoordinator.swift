@@ -13,6 +13,8 @@ import Foundation
 /// will handle recovering where they left off.
 @objc class KYCCoordinator: NSObject, Coordinator {
 
+    fileprivate var user: KYCUser?
+
     func start() {
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
             Logger.shared.warning("Cannot start KYC. rootViewController is nil.")
@@ -22,6 +24,21 @@ import Foundation
     }
 
     @objc func start(from viewController: UIViewController) {
+
+        if user == nil {
+            KYCNetworkRequest(
+                get: .users(userID: "userID"),
+                taskSuccess: { [weak self] (result) in
+                    guard let this = self else { return }
+                    do {
+                        this.user = try JSONDecoder().decode(KYCUser.self, from: result)
+                    } catch {
+                        // TODO
+                    }
+            }) { (error) in
+                // TODO
+            }
+        }
         guard let welcomeViewController = UIStoryboard(
             name: "KYCWelcome",
             bundle: Bundle.main
@@ -72,5 +89,24 @@ import Foundation
         navigationController.pushViewController(viewController, animated: false)
         navigationController.modalTransitionStyle = .coverVertical
         presentingViewController.present(navigationController, animated: true)
+    }
+
+    private func pageTypeForUser() -> KYCPageType {
+        guard let currentUser = user else { return .welcome }
+        guard currentUser.personalDetails != nil else { return .welcome }
+        
+        if let address = currentUser.address {
+            if let mobile = currentUser.mobile {
+                switch mobile.verified {
+                case true:
+                    return .verifyIdentity
+                case false:
+                    return .enterPhone(mobile.phone)
+                }
+            }
+            return .address(address)
+        }
+
+        return .address(currentUser.address)
     }
 }

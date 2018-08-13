@@ -10,7 +10,7 @@ import Foundation
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
-
+    
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
@@ -27,13 +27,30 @@ final class KYCNetworkRequest {
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
-        enum GET: String {
-            case credentials = "/kyc/credentials"
-            case credentialsForProvider = "/kyc/credentials/provider"
-            case healthCheck = "/healthz"
-            case listOfCountries = "/countries?filter=eea"
-            case nextKYCMethod = "/kyc/next-method"
-            case users, userDetails = "/users"
+        enum GET {
+            case credentials
+            case credentialsForProvider
+            case healthCheck
+            case listOfCountries
+            case nextKYCMethod
+            case users(userID: String)
+
+            var path: String {
+                switch self {
+                case .credentials:
+                    return "/kyc/credentials"
+                case .credentialsForProvider:
+                    return "/kyc/credentials/provider"
+                case .healthCheck:
+                    return "/healthz"
+                case .listOfCountries:
+                    return "/countries?filter=eea"
+                case .nextKYCMethod:
+                    return "/kyc/next-method"
+                case .users(let userID):
+                    return "/users/\(userID)"
+                }
+            }
         }
 
         enum POST: String {
@@ -76,7 +93,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "GET")
+        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "GET")
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 

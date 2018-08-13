@@ -122,13 +122,14 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
         guard let email = WalletManager.shared.wallet.getEmail() else { return }
         validationFields.forEach({$0.resignFocus()})
 
-        let details = PersonalDetails(
-            identifier: "",
-            firstName: firstNameField.text ?? "",
-            lastName: lastNameField.text ?? "",
+        guard let details = PersonalDetails(
+            id: "",
+            first: firstNameField.text,
+            last: lastNameField.text,
             email: email,
             birthday: birthdayField.selectedDate
-        )
+            ) else { return }
+        
         delegate?.onSubmission(details)
     }
 
