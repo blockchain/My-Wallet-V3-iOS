@@ -43,7 +43,7 @@ extension KYCAccountStatusViewConfig {
     }
 }
 
-final class KYCAccountStatusController: UIViewController {
+final class KYCAccountStatusController: KYCBaseViewController {
 
     /// typealias for an action to be taken when the primary button/CTA is tapped
     typealias PrimaryButtonAction = ((KYCAccountStatusController) -> Void)
@@ -68,6 +68,16 @@ final class KYCAccountStatusController: UIViewController {
 
     /// The view configuration for this view
     var viewConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig.defaultConfig
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCAccountStatusController {
+        let storyboard = UIStoryboard(name: "KYCAccountStatus", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCAccountStatusController
+        controller.coordinator = coordinator
+        controller.pageType = .accountStatus
+        return controller
+    }
 
     // MARK: - Lifecycle Methods
 

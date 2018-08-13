@@ -9,14 +9,24 @@
 import UIKit
 
 /// Welcome screen in KYC flow
-final class KYCWelcomeController: UIViewController {
-
-    // MARK: - Properties
+final class KYCWelcomeController: KYCBaseViewController {
+    
+    // MARK: - IBOutlets
 
     @IBOutlet private var labelTermsOfService: UILabel!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCWelcomeController {
+        let storyboard = UIStoryboard(name: "KYCWelcome", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCWelcomeController
+        controller.coordinator = coordinator
+        controller.pageType = .welcome
+        return controller
     }
 
     // MARK: - UIViewController Lifecycle
@@ -61,6 +71,7 @@ final class KYCWelcomeController: UIViewController {
     }
 
     @IBAction private func primaryButtonTapped(_ sender: Any) {
+
         self.performSegue(withIdentifier: "showCountrySelector", sender: self)
     }
 

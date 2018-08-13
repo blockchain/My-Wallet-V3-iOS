@@ -8,7 +8,7 @@
 
 import UIKit
 
-class KYCAddressController: UIViewController, ValidationFormView {
+class KYCAddressController: KYCBaseViewController, ValidationFormView {
 
     // MARK: - Private IBOutlets
 
@@ -29,6 +29,16 @@ class KYCAddressController: UIViewController, ValidationFormView {
     // MARK: - Public IBOutlets
 
     @IBOutlet var scrollView: UIScrollView!
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCAddressController {
+        let storyboard = UIStoryboard(name: "KYCAddress", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCAddressController
+        controller.coordinator = coordinator
+        controller.pageType = .address
+        return controller
+    }
 
     // MARK: - KYCOnboardingNavigation
 
@@ -53,14 +63,14 @@ class KYCAddressController: UIViewController, ValidationFormView {
 
     // MARK: Private Properties
 
-    fileprivate var coordinator: LocationSuggestionCoordinator!
+    fileprivate var locationCoordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        coordinator = LocationSuggestionCoordinator(self, interface: self)
+        locationCoordinator = LocationSuggestionCoordinator(self, interface: self)
         dataProvider = LocationDataProvider(with: tableView)
         searchBar.delegate = self
         tableView.delegate = self
@@ -143,6 +153,7 @@ class KYCAddressController: UIViewController, ValidationFormView {
             lineTwo: apartmentTextField.text ?? "",
             postalCode: postalCodeTextField.text ?? "",
             city: cityTextField.text ?? "",
+            state: stateTextField.text ?? "",
             country: countryTextField.text ?? ""
         )
         searchDelegate?.onSubmission(address)
@@ -159,7 +170,7 @@ extension KYCAddressController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selection = dataProvider.locationResult.suggestions[indexPath.row]
-        coordinator.onSelection(selection)
+        locationCoordinator.onSelection(selection)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

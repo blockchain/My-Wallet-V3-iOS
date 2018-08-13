@@ -9,11 +9,23 @@
 import UIKit
 
 /// Country selection screen in KYC flow
-final class KYCCountrySelectionController: UITableViewController {
+final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDataSource, UITableViewDelegate {
     typealias Countries = [KYCCountry]
+
+    @IBOutlet private var tableView: UITableView!
 
     // MARK: - Properties
     var countries: Countries?
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCCountrySelectionController {
+        let storyboard = UIStoryboard(name: "KYCCountrySelection", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCCountrySelectionController
+        controller.coordinator = coordinator
+        controller.pageType = .country
+        return controller
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,14 +50,14 @@ final class KYCCountrySelectionController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let hasCountries = countries {
             return hasCountries.count
         }
         return 0
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let countryCell = tableView.dequeueReusableCell(withIdentifier: "CountryCell"),
             let countries = countries else {
                 return UITableViewCell()
@@ -56,7 +68,7 @@ final class KYCCountrySelectionController: UITableViewController {
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "promptForPersonalDetails", sender: self)
     }
 

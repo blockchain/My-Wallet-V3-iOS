@@ -9,7 +9,7 @@
 import PhoneNumberKit
 import UIKit
 
-final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContainerView {
+final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
     // MARK: Properties
 
@@ -33,6 +33,16 @@ final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContain
     private lazy var phoneNumberPartialFormatter: PartialFormatter = {
         return PartialFormatter()
     }()
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCEnterPhoneNumberController {
+        let storyboard = UIStoryboard(name: "KYCEnterPhoneNumber", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCEnterPhoneNumberController
+        controller.coordinator = coordinator
+        controller.pageType = .enterPhone
+        return controller
+    }
 
     // MARK: UIViewController Lifecycle Methods
 

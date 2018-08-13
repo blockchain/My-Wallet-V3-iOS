@@ -2,18 +2,26 @@
 //  KYCPage.swift
 //  Blockchain
 //
-//  Created by Alex McGregor on 8/10/18.
+//  Created by Alex McGregor on 8/13/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
 import Foundation
 
-enum KYCPageType {
-    typealias PhoneNumber = String
+class KYCBaseViewController: UIViewController {
 
-    case welcome
-    case profile
-    case address(UserAddress?)
-    case enterPhone(PhoneNumber?)
-    case verifyIdentity
+    var coordinator: KYCCoordinator!
+    var pageType: KYCPageType = .welcome
+
+    class func make(with coordinator: KYCCoordinator) -> KYCBaseViewController {
+        assertionFailure("Should be implemented by subclasses")
+        return KYCBaseViewController()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        coordinator.handle(event: .pageWillAppear(pageType))
+    }
+
 }
+

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonContainerView {
+final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
     // MARK: Public Properties
 
@@ -37,6 +37,16 @@ final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonConta
 
     deinit {
         cleanUp()
+    }
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCConfirmPhoneNumberController {
+        let storyboard = UIStoryboard(name: "KYCConfirmPhoneNumber", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCConfirmPhoneNumberController
+        controller.coordinator = coordinator
+        controller.pageType = .confirmPhone
+        return controller
     }
 
     // MARK: View Controller Lifecycle

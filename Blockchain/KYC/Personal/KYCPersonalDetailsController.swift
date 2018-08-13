@@ -9,7 +9,7 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: UIViewController, ValidationFormView, ProgressableView {
+final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormView, ProgressableView {
 
     // MARK: - ProgressableView
 
@@ -45,14 +45,24 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     // MARK: Private Properties
 
-    fileprivate var coordinator: PersonalDetailsCoordinator!
+    fileprivate var detailsCoordinator: PersonalDetailsCoordinator!
+
+    // MARK: Overrides
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCPersonalDetailsController {
+        let storyboard = UIStoryboard(name: "KYCPersonalDetails", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! KYCPersonalDetailsController
+        controller.coordinator = coordinator
+        controller.pageType = .profile
+        return controller
+    }
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        coordinator = PersonalDetailsCoordinator(interface: self)
+        detailsCoordinator = PersonalDetailsCoordinator(interface: self)
         setupTextFields()
         handleKeyboardOffset()
         setupNotifications()

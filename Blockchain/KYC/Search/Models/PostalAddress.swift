@@ -23,7 +23,7 @@ struct UserAddress: Codable {
     let lineTwo: String
     let postalCode: String
     let city: String
-    let state: String? = nil
+    let state: String?
     let country: String
 
     enum CodingKeys: String, CodingKey {

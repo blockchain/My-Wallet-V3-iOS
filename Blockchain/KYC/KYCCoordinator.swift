@@ -8,10 +8,17 @@
 
 import Foundation
 
+enum KYCEvent {
+    case pageWillAppear(KYCPageType)
+    case primaryButtonTapped(KYCPageType)
+}
+
 /// Coordinates the KYC flow. This component can be used to start a new KYC flow, or if
 /// the user drops off mid-KYC and decides to continue through it again, the coordinator
 /// will handle recovering where they left off.
 @objc class KYCCoordinator: NSObject, Coordinator {
+
+    fileprivate var navController: KYCOnboardingNavigationController!
 
     fileprivate var user: KYCUser?
 
@@ -24,7 +31,6 @@ import Foundation
     }
 
     @objc func start(from viewController: UIViewController) {
-
         if user == nil {
             KYCNetworkRequest(
                 get: .users(userID: "userID"),
@@ -47,6 +53,17 @@ import Foundation
             return
         }
         presentInNavigationController(welcomeViewController, in: viewController)
+    }
+
+    func handle(event: KYCEvent) {
+        switch event {
+        case .pageWillAppear(let type):
+            // TODO:
+            break
+        case .primaryButtonTapped(let type):
+            // TODO:
+            break
+        }
     }
 
     func presentAccountStatusView(for status: KYCAccountStatus, in viewController: UIViewController) {
@@ -79,34 +96,53 @@ import Foundation
     // MARK: Private Methods
 
     private func presentInNavigationController(_ viewController: UIViewController, in presentingViewController: UIViewController) {
-        guard let navigationController = UIStoryboard(
+        navController = UIStoryboard(
             name: "KYCOnboardingNavigation",
             bundle: Bundle.main
-        ).instantiateInitialViewController() as? KYCOnboardingNavigationController else {
-            Logger.shared.warning("Could not instantiated KYCOnboardingNavigationController")
-            return
+        ).instantiateInitialViewController() as? KYCOnboardingNavigationController
+
+        navController.pushViewController(viewController, animated: false)
+        navController.modalTransitionStyle = .coverVertical
+        presentingViewController.present(navController, animated: true)
+    }
+
+    private func screenFor(pageType: KYCPageType) -> KYCBaseViewController {
+        switch pageType {
+        case .welcome:
+            return KYCWelcomeController.make(with: self)
+        case .country:
+            return KYCCountrySelectionController.make(with: self)
+        case .profile:
+            return KYCPersonalDetailsController.make(with: self)
+        case .address:
+            return KYCAddressController.make(with: self)
+        case .enterPhone:
+            return KYCEnterPhoneNumberController.make(with: self)
+        case .confirmPhone:
+            return KYCConfirmPhoneNumberController.make(with: self)
+        case .verifyIdentity:
+            return KYCVerifyIdentityController.make(with: self)
+        case .accountStatus:
+            return KYCAccountStatusController.make(with: self)
         }
-        navigationController.pushViewController(viewController, animated: false)
-        navigationController.modalTransitionStyle = .coverVertical
-        presentingViewController.present(navigationController, animated: true)
     }
 
     private func pageTypeForUser() -> KYCPageType {
         guard let currentUser = user else { return .welcome }
         guard currentUser.personalDetails != nil else { return .welcome }
-        
-        if let address = currentUser.address {
+
+        if currentUser.address != nil {
             if let mobile = currentUser.mobile {
                 switch mobile.verified {
                 case true:
                     return .verifyIdentity
                 case false:
-                    return .enterPhone(mobile.phone)
+                    return .enterPhone
                 }
             }
-            return .address(address)
+            return .address
         }
 
-        return .address(currentUser.address)
+        return .address
     }
 }

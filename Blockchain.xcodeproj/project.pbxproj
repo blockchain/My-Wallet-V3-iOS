@@ -87,8 +87,9 @@
 		3A8B224C211CA7990091E706 /* PersonalDetailsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B224B211CA7990091E706 /* PersonalDetailsDelegate.swift */; };
 		3A8B227C211DFE110091E706 /* PrimaryButtonContainer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A8B227B211DFE110091E706 /* PrimaryButtonContainer.xib */; };
 		3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2289211E0B380091E706 /* KYCPersonalDetailsController.swift */; };
-		3A8B2292211E228C0091E706 /* KYCPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2291211E228C0091E706 /* KYCPage.swift */; };
+		3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2291211E228C0091E706 /* KYCPageType.swift */; };
 		3A8B229D211E2A960091E706 /* KYCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229C211E2A960091E706 /* KYCUser.swift */; };
+		3A8B229F2122117A0091E706 /* KYCPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCPage.swift */; };
 		3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
@@ -1075,8 +1076,9 @@
 		3A8B224B211CA7990091E706 /* PersonalDetailsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsDelegate.swift; sourceTree = "<group>"; };
 		3A8B227B211DFE110091E706 /* PrimaryButtonContainer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrimaryButtonContainer.xib; sourceTree = "<group>"; };
 		3A8B2289211E0B380091E706 /* KYCPersonalDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCPersonalDetailsController.swift; sourceTree = "<group>"; };
-		3A8B2291211E228C0091E706 /* KYCPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPage.swift; sourceTree = "<group>"; };
+		3A8B2291211E228C0091E706 /* KYCPageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageType.swift; sourceTree = "<group>"; };
 		3A8B229C211E2A960091E706 /* KYCUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCUser.swift; sourceTree = "<group>"; };
+		3A8B229E2122117A0091E706 /* KYCPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPage.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
 		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
@@ -3530,8 +3532,9 @@
 			children = (
 				AA4770B6211BA984006356B1 /* KYCAccountStatus.swift */,
 				602B9CBB2118E15200BD3D60 /* KYCCountry.swift */,
-				3A8B2291211E228C0091E706 /* KYCPage.swift */,
+				3A8B2291211E228C0091E706 /* KYCPageType.swift */,
 				3A8B229C211E2A960091E706 /* KYCUser.swift */,
+				3A8B229E2122117A0091E706 /* KYCPage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7040,6 +7043,7 @@
 				23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */,
 				9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */,
 				9F7480E315140EF200BC4292 /* TabViewController.m in Sources */,
+				3A8B229F2122117A0091E706 /* KYCPage.swift in Sources */,
 				AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */,
 				AAA3316B2089650B00BBD292 /* AlertViewPresenter.swift in Sources */,
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,
@@ -7262,7 +7266,7 @@
 				9F61B89E151519EF0083C57A /* BCAddressSelectionView.m in Sources */,
 				23FB5C0A1D9ABB590008C6AB /* TransactionDetailToCell.m in Sources */,
 				AACE32002093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
-				3A8B2292211E228C0091E706 /* KYCPage.swift in Sources */,
+				3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */,
 				C76D730420B2052000040B57 /* WalletExchangeDelegate.swift in Sources */,
 				602B9CE02118E15300BD3D60 /* KYCNetworkRequest.swift in Sources */,
 				9F91B607151666EC00ACB32D /* BCCreateWalletView.m in Sources */,
