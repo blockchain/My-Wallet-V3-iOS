@@ -156,7 +156,10 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
             state: stateTextField.text ?? "",
             country: countryTextField.text ?? ""
         )
-        searchDelegate?.onSubmission(address)
+        searchDelegate?.onSubmission(address, completion: { [weak self] in
+            guard let this = self else { return }
+            this.coordinator.handle(event: .nextPageFromPageType(this.pageType))
+        })
     }
 
     // MARK: - Navigation
@@ -185,10 +188,6 @@ extension KYCAddressController: LocationSuggestionInterface {
 
     func primaryButtonEnabled(_ enabled: Bool) {
         primaryButtonContainer.isEnabled = enabled
-    }
-
-    func nextPage() {
-        performSegue(withIdentifier: "showPersonalDetails", sender: self)
     }
 
     func addressEntryView(_ visibility: Visibility) {

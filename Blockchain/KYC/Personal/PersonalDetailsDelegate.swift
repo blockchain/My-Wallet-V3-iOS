@@ -9,6 +9,5 @@
 import Foundation
 
 protocol PersonalDetailsDelegate: class {
-    func onStart()
-    func onSubmission(_ input: PersonalDetails)
+    func onSubmission(_ input: PersonalDetails, completion: @escaping () -> Void)
 }

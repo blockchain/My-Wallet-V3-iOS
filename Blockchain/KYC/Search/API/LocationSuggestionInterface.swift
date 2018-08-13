@@ -12,7 +12,6 @@ protocol LocationSuggestionInterface: class {
     func addressEntryView(_ visibility: Visibility)
     func primaryButtonEnabled(_ enabled: Bool)
     func primaryButtonActivityIndicator(_ visibility: Visibility)
-    func nextPage()
     func populateAddressEntryView(_ address: PostalAddress)
     func searchFieldActive(_ isFirstResponder: Bool)
     func searchFieldText(_ value: String?)

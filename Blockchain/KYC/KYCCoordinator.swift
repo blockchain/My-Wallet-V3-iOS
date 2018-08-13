@@ -10,7 +10,11 @@ import Foundation
 
 enum KYCEvent {
     case pageWillAppear(KYCPageType)
-    case primaryButtonTapped(KYCPageType)
+    case nextPageFromPageType(KYCPageType)
+}
+
+protocol KYCCoordinatorDelegate: class {
+    func apply(model: KYCPageModel)
 }
 
 /// Coordinates the KYC flow. This component can be used to start a new KYC flow, or if
@@ -21,6 +25,10 @@ enum KYCEvent {
     fileprivate var navController: KYCOnboardingNavigationController!
 
     fileprivate var user: KYCUser?
+
+    // MARK: Public
+
+    weak var delegate: KYCCoordinatorDelegate?
 
     func start() {
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
@@ -45,24 +53,39 @@ enum KYCEvent {
                 // TODO
             }
         }
-        guard let welcomeViewController = UIStoryboard(
-            name: "KYCWelcome",
-            bundle: Bundle.main
-        ).instantiateInitialViewController() as? KYCWelcomeController else {
-            Logger.shared.warning("Could not instantiated KYCWelcomeController")
-            return
-        }
+
+        guard let welcomeViewController = screenFor(pageType: .welcome) as? KYCWelcomeController else { return }
         presentInNavigationController(welcomeViewController, in: viewController)
     }
 
     func handle(event: KYCEvent) {
         switch event {
         case .pageWillAppear(let type):
-            // TODO:
-            break
-        case .primaryButtonTapped(let type):
-            // TODO:
-            break
+            switch type {
+            case .welcome,
+                 .country,
+                 .confirmPhone,
+                 .verifyIdentity,
+                 .accountStatus:
+                break
+            case .profile:
+                guard let current = user else { return }
+                guard let details = current.personalDetails else { return }
+                delegate?.apply(model: .personalDetails(details))
+            case .address:
+                guard let current = user else { return }
+                guard let address = current.address else { return }
+                delegate?.apply(model: .address(address))
+
+            case .enterPhone:
+                guard let current = user else { return }
+                guard let mobile = current.mobile else { return }
+                delegate?.apply(model: .phone(mobile))
+            }
+        case .nextPageFromPageType(let type):
+            guard let nextPage = type.next else { return }
+            let controller = screenFor(pageType: nextPage)
+            navController.pushViewController(controller, animated: true)
         }
     }
 

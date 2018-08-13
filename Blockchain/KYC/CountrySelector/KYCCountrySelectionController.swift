@@ -29,6 +29,8 @@ final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TODO: Placeholder.
+        guard tableView != nil else { return }
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -45,7 +47,6 @@ final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDat
             // TODO: handle error
             Logger.shared.error(error.debugDescription)
         })
-        
     }
 
     // MARK: UITableViewDataSource

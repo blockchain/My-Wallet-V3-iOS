@@ -94,7 +94,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
 extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     func confirmCodeSuccess() {
-        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
+        coordinator.handle(event: .nextPageFromPageType(pageType))
     }
 
     func startVerificationSuccess() {

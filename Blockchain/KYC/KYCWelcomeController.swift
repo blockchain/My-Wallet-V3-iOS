@@ -71,8 +71,7 @@ final class KYCWelcomeController: KYCBaseViewController {
     }
 
     @IBAction private func primaryButtonTapped(_ sender: Any) {
-
-        self.performSegue(withIdentifier: "showCountrySelector", sender: self)
+        coordinator.handle(event: .nextPageFromPageType(pageType))
     }
 
     // MARK: - Private Methods

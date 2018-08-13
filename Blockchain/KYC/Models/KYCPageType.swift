@@ -20,3 +20,26 @@ enum KYCPageType {
     case verifyIdentity
     case accountStatus
 }
+
+extension KYCPageType {
+    var next: KYCPageType? {
+        switch self {
+        case .welcome:
+            return .country
+        case .country:
+            return .profile
+        case .profile:
+            return .address
+        case .address:
+            return .enterPhone
+        case .enterPhone:
+            return .confirmPhone
+        case .confirmPhone:
+            return .verifyIdentity
+        case .verifyIdentity:
+            return .accountStatus
+        case .accountStatus:
+            return nil
+        }
+    }
+}

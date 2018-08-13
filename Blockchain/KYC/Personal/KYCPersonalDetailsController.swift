@@ -85,8 +85,6 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
                 next.becomeFocused()
             }
         }
-
-        delegate?.onStart()
     }
 
     // MARK: - Private Methods
@@ -139,8 +137,11 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
             email: email,
             birthday: birthdayField.selectedDate
             ) else { return }
-        
-        delegate?.onSubmission(details)
+
+        delegate?.onSubmission(details, completion: { [weak self] in
+            guard let this = self else { return }
+            this.coordinator.handle(event: .nextPageFromPageType(this.pageType))
+        })
     }
 
     // MARK: - Navigation
@@ -161,10 +162,6 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
 
     func primaryButtonEnabled(_ enabled: Bool) {
         primaryButtonContainer.isEnabled = enabled
-    }
-
-    func nextPage() {
-        performSegue(withIdentifier: "enterMobileNumber", sender: self)
     }
 
     func populatePersonalDetailFields(_ details: PersonalDetails) {

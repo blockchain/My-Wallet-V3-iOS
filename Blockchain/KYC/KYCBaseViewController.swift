@@ -22,6 +22,5 @@ class KYCBaseViewController: UIViewController {
         super.viewWillAppear(animated)
         coordinator.handle(event: .pageWillAppear(pageType))
     }
-
 }
 

@@ -99,6 +99,8 @@
 		3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AEF9E8B21091B71006B1CF9 /* MapKit.framework */; };
+		3AFD18AD21221D40007145EA /* KYCBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */; };
+		3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFD18AE21221D95007145EA /* KYCPageModel.swift */; };
 		510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
 		511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
 		511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
@@ -1086,6 +1088,7 @@
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		3AFD18AE21221D95007145EA /* KYCPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageModel.swift; sourceTree = "<group>"; };
 		486E55BBDEE5AAF28E48BB13 /* Pods-Blockchain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"; sourceTree = "<group>"; };
 		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePayload.swift; sourceTree = "<group>"; };
 		511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+Payload.swift"; sourceTree = "<group>"; };
@@ -3472,6 +3475,7 @@
 		602B9CA62118E15200BD3D60 /* KYC */ = {
 			isa = PBXGroup;
 			children = (
+				3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */,
 				3A3D5DBA211C98DE00E6C241 /* Personal */,
 				602B9CCD2118E15200BD3D60 /* KYCAccountStatusController.swift */,
 				602B9CCE2118E15200BD3D60 /* KYCCoordinator.swift */,
@@ -3534,7 +3538,7 @@
 				602B9CBB2118E15200BD3D60 /* KYCCountry.swift */,
 				3A8B2291211E228C0091E706 /* KYCPageType.swift */,
 				3A8B229C211E2A960091E706 /* KYCUser.swift */,
-				3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */,
+				3AFD18AE21221D95007145EA /* KYCPageModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -6805,6 +6809,7 @@
 				51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */,
 				C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */,
 				AACE32012093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
+				3AFD18AD21221D40007145EA /* KYCBaseViewController.swift in Sources */,
 				AA63F87B20A3A198002B719B /* AppFeatureConfigurator.swift in Sources */,
 				AACE31DA2092A99B00B7B806 /* Application+Helpers.swift in Sources */,
 				602B9D252118E27100BD3D60 /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
@@ -7359,6 +7364,7 @@
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
+				3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */,
 				AAC9FCEE20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AACF56C520EAC87A0039978B /* OnboardingSettings.swift in Sources */,
 				AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,

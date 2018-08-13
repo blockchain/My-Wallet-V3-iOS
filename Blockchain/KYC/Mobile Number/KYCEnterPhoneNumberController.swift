@@ -115,7 +115,7 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
 
     func startVerificationSuccess() {
         Logger.shared.info("Show verification view!")
-        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
+        coordinator.handle(event: .nextPageFromPageType(pageType))
     }
 
     func hideLoadingView() {

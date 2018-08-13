@@ -82,7 +82,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         }
     }
 
-    func onSubmission(_ address: UserAddress) {
+    func onSubmission(_ address: UserAddress, completion: @escaping () -> Void) {
         interface?.primaryButtonActivityIndicator(.visible)
         interface?.primaryButtonEnabled(false)
         // TODO: Pass in correct userID
@@ -95,7 +95,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
             } else {
-                this.interface?.nextPage()
+                completion()
             }
         }
     }
