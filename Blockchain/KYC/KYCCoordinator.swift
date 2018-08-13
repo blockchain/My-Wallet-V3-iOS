@@ -9,8 +9,20 @@
 import Foundation
 
 enum KYCEvent {
+
+    /// When a particular screen appears, we need to
+    /// look at the `KYCUser` object and determine if
+    /// there is data there for pre-populate the screen with.
     case pageWillAppear(KYCPageType)
+
+    /// This will push on the next page in the KYC flow.
     case nextPageFromPageType(KYCPageType)
+
+    // TODO:
+    /// Should the user go back in the KYC flow, we need to
+    /// prepopulate the screens with the data they already entered.
+    /// We may need another event type for this and hook into
+    /// `viewWillDisappear`. 
 }
 
 protocol KYCCoordinatorDelegate: class {
