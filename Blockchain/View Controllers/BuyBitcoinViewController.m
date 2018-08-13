@@ -64,13 +64,16 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
         
         if (![[reqUrl.absoluteString lowercaseString] hasPrefix:@"http://"] &&
             ![[reqUrl.absoluteString lowercaseString] hasPrefix:@"https://"]) {
-            [[UIApplication sharedApplication] openURL:reqUrl];
+            UIApplication *application = [UIApplication sharedApplication];
+            [application openURL:reqUrl options:@{} completionHandler:nil];
+            
         } else {
             SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:reqUrl];
             if (safariViewController) {
                 [self.navigationController presentViewController:safariViewController animated:YES completion:nil];
             } else {
-                [[UIApplication sharedApplication] openURL:reqUrl];
+                UIApplication *application = [UIApplication sharedApplication];
+                [application openURL:reqUrl options:@{} completionHandler:nil];
             }
         }
         
@@ -86,7 +89,8 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
     if (safariViewController) {
         [self.navigationController presentViewController:safariViewController animated:YES completion:nil];
     } else {
-        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+        UIApplication *application = [UIApplication sharedApplication];
+        [application openURL:navigationAction.request.URL options:@{} completionHandler:nil];
     }
     
     return nil;

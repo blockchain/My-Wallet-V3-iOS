@@ -21,17 +21,17 @@
 		232E17F91C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232E17F81C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift */; };
 		23321D7A1BB0730C0005624F /* my-wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 23321D791BB0730C0005624F /* my-wallet.js */; };
 		2343E4031CB434BC008DC7D1 /* NSArray+EncodedJSONString.m in Sources */ = {isa = PBXBuildFile; fileRef = 2343E4021CB434BC008DC7D1 /* NSArray+EncodedJSONString.m */; };
-		23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F7D1DCD213D00573C8C /* BTCKey.m */; };
-		23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F801DCD214800573C8C /* BTCBigNumber.m */; };
+		23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F7D1DCD213D00573C8C /* BTCKey.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F801DCD214800573C8C /* BTCBigNumber.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F831DCD217000573C8C /* NSData+BTCData.m */; };
-		23444F871DCD217E00573C8C /* BTCNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F861DCD217E00573C8C /* BTCNetwork.m */; };
-		23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F891DCD218F00573C8C /* BTCAddress.m */; };
-		23444F8D1DCD219E00573C8C /* BTCData.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F8C1DCD219E00573C8C /* BTCData.m */; };
-		23444F901DCD21AB00573C8C /* BTCCurvePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F8F1DCD21AB00573C8C /* BTCCurvePoint.m */; };
-		23444F931DCD21B700573C8C /* BTCBase58.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F921DCD21B700573C8C /* BTCBase58.m */; };
-		23444F961DCD21C600573C8C /* BTCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F951DCD21C600573C8C /* BTCKeychain.m */; };
-		23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F9B1DCD221A00573C8C /* BTCErrors.m */; };
-		23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F9D1DCD221A00573C8C /* BTCProtocolSerialization.m */; };
+		23444F871DCD217E00573C8C /* BTCNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F861DCD217E00573C8C /* BTCNetwork.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F891DCD218F00573C8C /* BTCAddress.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F8D1DCD219E00573C8C /* BTCData.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F8C1DCD219E00573C8C /* BTCData.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F901DCD21AB00573C8C /* BTCCurvePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F8F1DCD21AB00573C8C /* BTCCurvePoint.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F931DCD21B700573C8C /* BTCBase58.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F921DCD21B700573C8C /* BTCBase58.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F961DCD21C600573C8C /* BTCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F951DCD21C600573C8C /* BTCKeychain.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F9E1DCD221A00573C8C /* BTCErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F9B1DCD221A00573C8C /* BTCErrors.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 23444F9D1DCD221A00573C8C /* BTCProtocolSerialization.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		235BD5661C58216000969B31 /* BCModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BD5651C58216000969B31 /* BCModalViewController.m */; };
 		2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237827191B7E472D00E9EE03 /* BCSecureTextField.swift */; };
 		237C9E901C482132000754F7 /* AccountsAndAddressesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 237C9E8F1C482132000754F7 /* AccountsAndAddressesDetailViewController.m */; };
@@ -290,31 +290,25 @@
 		604598B22118BB2A00AE08C8 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D36F210F689C000B8E95 /* Currency.swift */; };
 		6055D370210F689C000B8E95 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D36F210F689C000B8E95 /* Currency.swift */; };
 		6055D372210F692D000B8E95 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D371210F692D000B8E95 /* UIView.swift */; };
-		606399DC2110FC2D005B6DF5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AA2110FC2D005B6DF5 /* SRWebSocket.m */; };
+		606399DC2110FC2D005B6DF5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AA2110FC2D005B6DF5 /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		606399DE2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AB2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m */; };
-		606399E22110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */; };
-		606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B32110FC2D005B6DF5 /* SRProxyConnect.m */; };
-		606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */; };
-		606399E82110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */; };
-		606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BD2110FC2D005B6DF5 /* SRDelegateController.m */; };
-		606399EC2110FC2D005B6DF5 /* SRMutex.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C32110FC2D005B6DF5 /* SRMutex.m */; };
-		606399EE2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */; };
-		606399F02110FC2D005B6DF5 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C72110FC2D005B6DF5 /* SRURLUtilities.m */; };
-		606399F22110FC2D005B6DF5 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C92110FC2D005B6DF5 /* SRLog.m */; };
-		606399F42110FC2D005B6DF5 /* SRHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CA2110FC2D005B6DF5 /* SRHash.m */; };
-		606399F62110FC2D005B6DF5 /* SRError.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CD2110FC2D005B6DF5 /* SRError.m */; };
-		606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CE2110FC2D005B6DF5 /* SRRandom.m */; };
-		606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */; };
-		606399FC2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D32110FC2D005B6DF5 /* SRIOConsumer.m */; };
-		606399FE2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */; };
-		60639A002110FC2D005B6DF5 /* SRConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D62110FC2D005B6DF5 /* SRConstants.m */; };
-		60639A022110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */; };
-		6090D0922118C734009371CB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0912118C734009371CB /* Alamofire.framework */; };
-		6090D0942118C73F009371CB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0932118C73F009371CB /* RxSwift.framework */; };
-		6090D0962118C742009371CB /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0952118C742009371CB /* RxCocoa.framework */; };
-		6090D0982118C745009371CB /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0972118C745009371CB /* RxBlocking.framework */; };
-		6090D09A2118C74B009371CB /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D0992118C74B009371CB /* RxTest.framework */; };
-		6090D09C2118C750009371CB /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6090D09B2118C750009371CB /* Charts.framework */; };
+		606399E22110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399AE2110FC2D005B6DF5 /* SRSecurityPolicy.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B32110FC2D005B6DF5 /* SRProxyConnect.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399B72110FC2D005B6DF5 /* SRRunLoopThread.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399E82110FC2D005B6DF5 /* SRPinningSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BA2110FC2D005B6DF5 /* SRPinningSecurityPolicy.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399BD2110FC2D005B6DF5 /* SRDelegateController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399EC2110FC2D005B6DF5 /* SRMutex.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C32110FC2D005B6DF5 /* SRMutex.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399EE2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C42110FC2D005B6DF5 /* SRHTTPConnectMessage.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399F02110FC2D005B6DF5 /* SRURLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C72110FC2D005B6DF5 /* SRURLUtilities.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399F22110FC2D005B6DF5 /* SRLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399C92110FC2D005B6DF5 /* SRLog.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399F42110FC2D005B6DF5 /* SRHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CA2110FC2D005B6DF5 /* SRHash.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399F62110FC2D005B6DF5 /* SRError.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CD2110FC2D005B6DF5 /* SRError.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399CE2110FC2D005B6DF5 /* SRRandom.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D02110FC2D005B6DF5 /* SRSIMDHelpers.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399FC2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D32110FC2D005B6DF5 /* SRIOConsumer.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		606399FE2110FC2D005B6DF5 /* SRIOConsumerPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D52110FC2D005B6DF5 /* SRIOConsumerPool.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		60639A002110FC2D005B6DF5 /* SRConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399D62110FC2D005B6DF5 /* SRConstants.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		60639A022110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 606399DB2110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60A08C572118F733006DB9E8 /* Settings.storyboard */; };
 		60AAD2D5211B75D7001CFDB4 /* OnfidoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601F5EE0211B32AA002697AB /* OnfidoController.swift */; };
 		60AEA56721125AB00053A753 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
@@ -324,6 +318,8 @@
 		60AEA5BF21125DDD0053A753 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */; };
 		60B10D442118EC85003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
 		60B10D452118ED26003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
+		60B6A5E12121C10800CEBFA2 /* LocationUpdateAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */; };
+		60B6A5EC2121C12400CEBFA2 /* PrimaryButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CD42118E15200BD3D60 /* PrimaryButtonContainer.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -357,7 +353,7 @@
 		84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */; };
 		84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */; };
 		84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02FB19815F1B00B97D5B /* crypto_scrypt-nosse.c */; };
-		84FC02FE19815F1B00B97D5B /* sha256.c in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02FC19815F1B00B97D5B /* sha256.c */; };
+		84FC02FE19815F1B00B97D5B /* sha256.c in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02FC19815F1B00B97D5B /* sha256.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9F0CBAAA151351F400CD945D /* Wallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0CBAA9151351F400CD945D /* Wallet.m */; };
 		9F0CBAD81513CA2600CD945D /* BCFadeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0CBAD71513CA2600CD945D /* BCFadeView.m */; };
 		9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1831E11516A39500FB3D52 /* NSData+Hex.m */; };
@@ -515,8 +511,6 @@
 		AACE32012093FA1A00B7B806 /* ReminderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderPresenter.swift */; };
 		AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */; };
 		AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE320A20978EB100B7B806 /* MockWallet.swift */; };
-		AACF56C520EAC87A0039978B /* OnboardingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF56C420EAC87A0039978B /* OnboardingSettings.swift */; };
-		AACF56C620EAC87A0039978B /* OnboardingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF56C420EAC87A0039978B /* OnboardingSettings.swift */; };
 		AAD279B0209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279AF209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift */; };
 		AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */; };
 		AAD27A28209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */; };
@@ -2820,7 +2814,6 @@
 		AACE31FF2093FA1A00B7B806 /* ReminderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderPresenter.swift; sourceTree = "<group>"; };
 		AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
 		AACE320A20978EB100B7B806 /* MockWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWallet.swift; sourceTree = "<group>"; };
-		AACF56C420EAC87A0039978B /* OnboardingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSettings.swift; sourceTree = "<group>"; };
 		AAD279AF209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTwoFactorType.swift; sourceTree = "<group>"; };
 		AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVCaptureDeviceInput.swift; sourceTree = "<group>"; };
 		AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordConfirmView.swift; sourceTree = "<group>"; };
@@ -3058,12 +3051,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6090D09C2118C750009371CB /* Charts.framework in Frameworks */,
-				6090D09A2118C74B009371CB /* RxTest.framework in Frameworks */,
-				6090D0982118C745009371CB /* RxBlocking.framework in Frameworks */,
-				6090D0962118C742009371CB /* RxCocoa.framework in Frameworks */,
-				6090D0942118C73F009371CB /* RxSwift.framework in Frameworks */,
-				6090D0922118C734009371CB /* Alamofire.framework in Frameworks */,
 				B1EB0454CD403507A35A5FBC /* Pods_BlockchainTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5866,7 +5853,6 @@
 			isa = PBXGroup;
 			children = (
 				AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */,
-				AACF56C420EAC87A0039978B /* OnboardingSettings.swift */,
 				AAFA97B3211511D000D19ED3 /* Settings+Helpers.swift */,
 				AAFA97B4211511D000D19ED3 /* Settings+Table.swift */,
 				AABB74C420D44ACA00C0F7C5 /* Views */,
@@ -6859,6 +6845,7 @@
 				AAFA97AE2115110000D19ED3 /* SettingsCell.swift in Sources */,
 				602B9D182118E25A00BD3D60 /* LocationSuggestionAPI.swift in Sources */,
 				602B9D122118E24800BD3D60 /* KYCAddressController.swift in Sources */,
+				60B6A5E12121C10800CEBFA2 /* LocationUpdateAPI.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				602B9D242118E27100BD3D60 /* KYCConfirmPhoneNumberController.swift in Sources */,
 				C74E865320B3043E00F7263D /* WalletHistoryDelegate.swift in Sources */,
@@ -6881,6 +6868,7 @@
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
 				3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
+				60B6A5EC2121C12400CEBFA2 /* PrimaryButtonContainer.swift in Sources */,
 				AAE9113220A51C900093A431 /* ReminderType.swift in Sources */,
 				AA7E7740210BA48B009DFB4C /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
@@ -6911,7 +6899,6 @@
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
-				AACF56C620EAC87A0039978B /* OnboardingSettings.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* PinStoreResponse.swift in Sources */,
@@ -7366,7 +7353,6 @@
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
 				3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */,
 				AAC9FCEE20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
-				AACF56C520EAC87A0039978B /* OnboardingSettings.swift in Sources */,
 				AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
 				AA63F84B20A12AE9002B719B /* URLs.swift in Sources */,
 				23F601A41D09C931009102BF /* Reachability.m in Sources */,
@@ -8363,10 +8349,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -8414,6 +8400,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Blockchain/Blockchain.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8476,10 +8463,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -8527,6 +8514,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Blockchain/Blockchain.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8589,10 +8577,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -8640,6 +8628,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Blockchain/Blockchain.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8702,10 +8691,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -8753,6 +8742,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Blockchain/Blockchain.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -9148,10 +9138,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -9199,6 +9189,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Blockchain/Blockchain.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

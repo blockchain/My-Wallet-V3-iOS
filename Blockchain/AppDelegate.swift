@@ -12,9 +12,23 @@ import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    // The view used as an intermediary privacy screen when the application state changes to inactive
+    fileprivate lazy var visualEffectView: UIVisualEffectView = self.lazyVisualEffectView()
 
+    /// Adds a privacy screen during inactive->activate state transitions
+    ///
+    /// - Returns: UIVisualEffectView added to keyWindow
+    fileprivate func lazyVisualEffectView() -> UIVisualEffectView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
+        view.frame = UIScreen.main.bounds
+        view.alpha = 0
+        return view
+    }
+    
     // MARK: - Properties
-
     // NOTE: Xcode automatically creates the file name for each launch image
     /// The overlay shown when the application resigns active state.
     lazy var privacyScreen: UIImageView? = {
@@ -88,9 +102,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         Logger.shared.debug("applicationWillResignActive")
-        if !AuthenticationCoordinator.shared.isPromptingForBiometricAuthentication {
-            showPrivacyScreen()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if application.applicationState != .active {
+                self.showBlurCurtain()
+            }
         }
+     
         if let pinEntryViewController = AuthenticationCoordinator.shared.pinEntryViewController, pinEntryViewController.verifyOnly {
             pinEntryViewController.reset()
         }
@@ -140,7 +157,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if appSettings.isPinSet {
             AuthenticationCoordinator.shared.showPinEntryView()
         }
-
+        if !AuthenticationCoordinator.shared.isPromptingForBiometricAuthentication {
+            showPrivacyScreen()
+        }
         NetworkManager.shared.session.reset {
             Logger.shared.debug("URLSession reset completed.")
         }
@@ -148,6 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         Logger.shared.debug("applicationWillEnterForeground")
+        hidePrivacyScreen()
 
         BlockchainSettings.App.shared.appBecameActiveCount += 1
 
@@ -163,6 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        hideBlurCurtain()
         Logger.shared.debug("applicationDidBecomeActive")
         hidePrivacyScreen()
         UIApplication.shared.applicationIconBadgeNumber = 0
@@ -253,11 +274,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /// Fades out the privacy overlay and removes it from its superview.
     func hidePrivacyScreen() {
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: 0.12, animations: {
             self.privacyScreen?.alpha = 0
         }, completion: { _ in
             self.privacyScreen?.removeFromSuperview()
         })
+    }
+
+    func hideBlurCurtain() {
+        UIView.animate(withDuration: 0.12, animations: {
+            self.visualEffectView.alpha = 0
+        }, completion: { _ in
+            self.visualEffectView.removeFromSuperview()
+        })
+    }
+    
+    func showBlurCurtain() {
+        UIApplication.shared.keyWindow?.addSubview(visualEffectView)
+        UIView.animate(withDuration: 0.64) {
+            self.visualEffectView.alpha = 1
+        }
     }
 
     func showPrivacyScreen() {

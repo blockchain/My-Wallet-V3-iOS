@@ -252,15 +252,14 @@
     self.context[@"objc_pbkdf2_sync"] = ^(NSString *mnemonicBuffer, NSString *saltBuffer, int iterations, int keylength, NSString *digest) {
         // Salt data getting from salt string.
         NSData *saltData = [saltBuffer dataUsingEncoding:NSUTF8StringEncoding];
-
+        
         // Data of String to generate Hash key(hexa decimal string).
         NSData *passwordData = [mnemonicBuffer dataUsingEncoding:NSUTF8StringEncoding];
-
+        
         // Hash key (hexa decimal) string data length.
         NSMutableData *hashKeyData = [NSMutableData dataWithLength:keylength];
-
-        // Key Derivation using PBKDF2 algorithm.
-        int result = CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, saltData.bytes, saltData.length, kCCPRFHmacAlgSHA512, iterations, hashKeyData.mutableBytes, hashKeyData.length);
+        
+        CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, saltData.bytes, saltData.length, kCCPRFHmacAlgSHA512, iterations, hashKeyData.mutableBytes, hashKeyData.length);
 
         return [hashKeyData hexadecimalString];
     };

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// MARK - UIColorFromRGB
+/// MARK - UIColorFromRGB
 
 func UIColorFromRGB(_ rgbValue: UInt) -> UIColor {
     return UIColor(

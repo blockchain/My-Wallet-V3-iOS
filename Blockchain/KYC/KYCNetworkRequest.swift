@@ -14,14 +14,6 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
-    /*
-     let kycUrl = BlockchainAPI.shared.kycCredentials
-     guard let url = URL(string: kycUrl) else {
-     fatalError("Failed to get kyc url from Bundle.")
-     }
-     */
-    // TODO: read from .xcconfig
-    fileprivate static let rootUrl = "https://api.dev.blockchain.info/nabu-app"
     private let timeoutInterval = TimeInterval(exactly: 30)!
     private var request: URLRequest
 
@@ -93,7 +85,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "GET")
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.path)!, httpMethod: "GET")
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
@@ -104,7 +96,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.rawValue)!, httpMethod: "POST")
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.rawValue)!, httpMethod: "POST")
         let postBody = parameters.reduce("", { initialResult, nextPartialResult in
             let delimeter = initialResult.count > 0 ? "&" : ""
             return "\(initialResult)\(delimeter)\(nextPartialResult.key)=\(nextPartialResult.value)"
@@ -123,7 +115,7 @@ final class KYCNetworkRequest {
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: KYCNetworkRequest.rootUrl + url.path)!, httpMethod: "PUT")
+        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.path)!, httpMethod: "PUT")
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)

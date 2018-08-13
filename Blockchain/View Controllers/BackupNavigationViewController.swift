@@ -59,7 +59,6 @@ import UIKit
         self.view.addSubview(topBar)
 
         setUpHeaderLabel(useSafeAreas: hasTopPadding)
-
         setUpCloseButton(useSafeAreas: hasTopPadding)
 
         let backupViewController = self.viewControllers.first as! BackupViewController

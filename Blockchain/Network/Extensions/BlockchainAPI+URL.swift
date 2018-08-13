@@ -20,8 +20,8 @@ extension BlockchainAPI {
         return "https://\(host)"
     }
     
-    var kycCredentials: String {
-        let host = Bundle.main.infoDictionary!["KYC_ENDPOINT"] as! String
+    var retailCoreUrl: String {
+        let host = Bundle.main.infoDictionary!["RETAIL_CORE_URL"] as! String
         return "https://\(host)"
     }
 
@@ -60,7 +60,7 @@ extension BlockchainAPI {
 
     enum Nabu {
         static var quotes: String {
-            return BlockchainAPI.shared.apiUrl + "/nabu-app/markets/quotes"
+            return BlockchainAPI.shared.retailCoreUrl + "/markets/quotes"
         }
     }
 }

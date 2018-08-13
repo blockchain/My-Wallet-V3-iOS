@@ -133,6 +133,10 @@
 
 - (void)keyboardViewDidEnteredNumber:(int)num
 {
+    UIImpactFeedbackGenerator *myGen = [[UIImpactFeedbackGenerator alloc] initWithStyle:(UIImpactFeedbackStyleMedium)];
+    [myGen impactOccurred];
+    myGen = NULL;
+    
 	if([self.pin length] < 4) {
 		self.pin = [NSString stringWithFormat:@"%@%d", self.pin, num];
 		[self redrawPins];
