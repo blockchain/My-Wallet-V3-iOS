@@ -27,20 +27,33 @@ final class KYCNetworkRequest {
             case nextKYCMethod
             case users(userID: String)
 
-            var path: String {
+            var pathComponents: [String] {
                 switch self {
                 case .credentials:
-                    return "/kyc/credentials"
+                    return ["kyc", "credentials"]
                 case .credentialsForProvider:
-                    return "/kyc/credentials/provider"
+                    return ["kyc", "credentials", "provider"]
                 case .healthCheck:
-                    return "/healthz"
+                    return ["healthz"]
                 case .listOfCountries:
-                    return "/countries?filter=eea"
+                    return ["countries"]
                 case .nextKYCMethod:
-                    return "/kyc/next-method"
+                    return ["kyc", "next-method"]
                 case .users(let userID):
-                    return "/users/\(userID)"
+                    return ["users", userID]
+                }
+            }
+
+            var parameters: [String: String]? {
+                switch self {
+                case .credentials,
+                     .credentialsForProvider,
+                     .healthCheck,
+                     .nextKYCMethod,
+                     .users:
+                    return nil
+                case .listOfCountries:
+                    return ["filter": "eea"]
                 }
             }
         }
@@ -80,12 +93,19 @@ final class KYCNetworkRequest {
     }
 
     /// HTTP GET Request
-    @discardableResult convenience init(
+    @discardableResult convenience init?(
         get url: KYCEndpoints.GET,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.path)!, httpMethod: "GET")
+        guard let base = URL(string: BlockchainAPI.shared.retailCoreUrl) else { return nil }
+        guard let endpoint = URL.endpoint(
+            base,
+            pathComponents: url.pathComponents,
+            queryParameters: url.parameters
+            ) else { return nil }
+
+        self.init(url: endpoint, httpMethod: "GET")
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 

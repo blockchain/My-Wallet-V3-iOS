@@ -102,13 +102,7 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     func presentAccountStatusView(for status: KYCAccountStatus, in viewController: UIViewController) {
-        guard let accountStatusViewController = UIStoryboard(
-            name: "KYCAccountStatus",
-            bundle: Bundle.main
-        ).instantiateInitialViewController() as? KYCAccountStatusController else {
-            Logger.shared.warning("Could not instantiated KYCAccountStatusController")
-            return
-        }
+        let accountStatusViewController = KYCAccountStatusController.make(with: self)
         accountStatusViewController.accountStatus = status
         accountStatusViewController.primaryButtonAction = { viewController in
             switch viewController.accountStatus {
@@ -131,11 +125,7 @@ protocol KYCCoordinatorDelegate: class {
     // MARK: Private Methods
 
     private func presentInNavigationController(_ viewController: UIViewController, in presentingViewController: UIViewController) {
-        navController = UIStoryboard(
-            name: "KYCOnboardingNavigation",
-            bundle: Bundle.main
-        ).instantiateInitialViewController() as? KYCOnboardingNavigationController
-
+        navController = KYCOnboardingNavigationController.make()
         navController.pushViewController(viewController, animated: false)
         navController.modalTransitionStyle = .coverVertical
         presentingViewController.present(navController, animated: true)
