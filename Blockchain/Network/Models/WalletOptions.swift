@@ -30,8 +30,8 @@ struct WalletOptions {
     }
 
     struct Shapeshift {
-        let countriesBlacklist: [String]
-        let statesWhitelist: [String]
+        let countriesBlacklist: [String]?
+        let statesWhitelist: [String]?
     }
 
     // MARK: - Properties
@@ -76,8 +76,8 @@ extension WalletOptions.Shapeshift {
             self.statesWhitelist = []
             return
         }
-        self.countriesBlacklist = shapeshiftJson["countriesBlacklist"] as? [String] ?? []
-        self.statesWhitelist = shapeshiftJson["statesWhitelist"] as? [String] ?? []
+        self.countriesBlacklist = shapeshiftJson["countriesBlacklist"] as? [String]
+        self.statesWhitelist = shapeshiftJson["statesWhitelist"] as? [String]
     }
 }
 

@@ -10,7 +10,7 @@ import UIKit
 
 typealias Countries = [KYCCountry]
 
-fileprivate class CountriesMap {
+private class CountriesMap {
     private var allCountries: Countries?
     private var backingMap = [String: Countries]()
 
@@ -23,11 +23,11 @@ fileprivate class CountriesMap {
                 return
             }
             guard let searchText = searchText?.lowercased() else {
-                set(countries: countries)
+                updateMap(with: countries)
                 return
             }
             let filteredCountries = countries.filter { $0.name.lowercased().starts(with: searchText) }
-            set(countries: filteredCountries)
+            updateMap(with: filteredCountries)
         }
     }
 
@@ -46,7 +46,7 @@ fileprivate class CountriesMap {
     func setAllCountries(_ countries: Countries) {
         allCountries = countries
         allCountries?.sort(by: { $0.name < $1.name })
-        set(countries: countries)
+        updateMap(with: countries)
     }
 
     func country(at indexPath: IndexPath) -> KYCCountry? {
@@ -57,7 +57,7 @@ fileprivate class CountriesMap {
         return countriesInSection[indexPath.row]
     }
 
-    private func set(countries: Countries) {
+    private func updateMap(with countries: Countries) {
         backingMap.removeAll()
 
         let countrySectionHeaders = countries.compactMap({ country -> String? in
@@ -67,12 +67,11 @@ fileprivate class CountriesMap {
             return String(firstChar).uppercased()
         }).unique
 
-        for firstLetter in countrySectionHeaders {
-            let countriesInHeader = countries.filter {
+        countrySectionHeaders.forEach { firstLetter in
+            backingMap[firstLetter] = countries.filter {
                 guard let firstChar = $0.name.first else { return false }
                 return String(firstChar).uppercased() == firstLetter
             }
-            backingMap[firstLetter] = countriesInHeader
         }
     }
 }
