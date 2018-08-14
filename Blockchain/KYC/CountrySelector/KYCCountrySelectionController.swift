@@ -8,10 +8,77 @@
 
 import UIKit
 
+typealias Countries = [KYCCountry]
+
+fileprivate class CountriesMap {
+    private var allCountries: Countries?
+    private var backingMap = [String: Countries]()
+
+    init() {
+    }
+
+    var searchText: String? {
+        didSet {
+            guard let countries = allCountries else {
+                return
+            }
+            guard let searchText = searchText?.lowercased() else {
+                set(countries: countries)
+                return
+            }
+            let filteredCountries = countries.filter { $0.name.lowercased().starts(with: searchText) }
+            set(countries: filteredCountries)
+        }
+    }
+
+    var firstLetters: [String] {
+        return Array(backingMap.keys).sorted(by: { $0 < $1 })
+    }
+
+    var keys: Dictionary<String, Countries>.Keys {
+        return backingMap.keys
+    }
+
+    func countries(firstLetter: String) -> Countries? {
+        return backingMap[firstLetter]
+    }
+
+    func setAllCountries(_ countries: Countries) {
+        allCountries = countries
+        allCountries?.sort(by: { $0.name < $1.name })
+        set(countries: countries)
+    }
+
+    func country(at indexPath: IndexPath) -> KYCCountry? {
+        let firstLetter = firstLetters[indexPath.section]
+        guard let countriesInSection = backingMap[firstLetter] else {
+            return nil
+        }
+        return countriesInSection[indexPath.row]
+    }
+
+    private func set(countries: Countries) {
+        backingMap.removeAll()
+
+        let countrySectionHeaders = countries.compactMap({ country -> String? in
+            guard let firstChar = country.name.first else {
+                return nil
+            }
+            return String(firstChar).uppercased()
+        }).unique
+
+        for firstLetter in countrySectionHeaders {
+            let countriesInHeader = countries.filter {
+                guard let firstChar = $0.name.first else { return false }
+                return String(firstChar).uppercased() == firstLetter
+            }
+            backingMap[firstLetter] = countriesInHeader
+        }
+    }
+}
+
 /// Country selection screen in KYC flow
 final class KYCCountrySelectionController: KYCBaseViewController, ProgressableView {
-
-    typealias Countries = [KYCCountry]
 
     // MARK: - ProgressableView
 
@@ -26,58 +93,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
 
     // MARK: - Private Properties
 
-    private var countriesMap = [String: Countries]()
-
-    private var allCountries: Countries? {
-        didSet {
-            allCountries?.sort(by: { $0.name < $1.name })
-            countries = allCountries
-        }
-    }
-
-    private var countries: Countries? {
-        didSet {
-            countriesMap.removeAll()
-
-            guard let countries = countries else {
-                return
-            }
-
-            let countrySectionHeaders = countries.compactMap({ country -> String? in
-                guard let firstChar = country.name.first else {
-                    return nil
-                }
-                return String(firstChar).uppercased()
-            }).unique
-
-            for firstLetter in countrySectionHeaders {
-                let countriesInHeader = countries.filter {
-                    guard let firstChar = $0.name.first else { return false }
-                    return String(firstChar).uppercased() == firstLetter
-                }
-                countriesMap[firstLetter] = countriesInHeader
-            }
-
-            tableView.reloadData()
-        }
-    }
-
-    private var countrySectionHeaders: [String] {
-        return Array(countriesMap.keys).sorted(by: { $0 < $1 })
-    }
-
-    private var searchText: String? {
-        didSet {
-            guard let allCountries = allCountries else {
-                return
-            }
-            guard let searchText = searchText?.lowercased() else {
-                self.countries = allCountries
-                return
-            }
-            self.countries = allCountries.filter { $0.name.lowercased().starts(with: searchText) }
-        }
-    }
+    private var countriesMap = CountriesMap()
 
     private var selectedCountry: KYCCountry?
 
@@ -114,7 +130,9 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     private func fetchListOfCountries() {
         KYCNetworkRequest(get: .listOfCountries, taskSuccess: { [weak self] responseData in
             do {
-                self?.allCountries = try JSONDecoder().decode(Countries.self, from: responseData)
+                let allCountries = try JSONDecoder().decode(Countries.self, from: responseData)
+                self?.countriesMap.setAllCountries(allCountries)
+                self?.tableView.reloadData()
             } catch {
                 Logger.shared.error("Failed to parse countries list.")
             }
@@ -126,7 +144,8 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
 
 extension KYCCountrySelectionController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
+        countriesMap.searchText = searchText
+        tableView.reloadData()
     }
 }
 
@@ -135,8 +154,8 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
     // MARK: UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let firstLetter = countrySectionHeaders[section]
-        return countriesMap[firstLetter]?.count ?? 0
+        let firstLetter = countriesMap.firstLetters[section]
+        return countriesMap.countries(firstLetter: firstLetter)?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -144,7 +163,7 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
             return UITableViewCell()
         }
 
-        guard let country = country(at: indexPath) else {
+        guard let country = countriesMap.country(at: indexPath) else {
             return UITableViewCell()
         }
 
@@ -158,10 +177,10 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
     }
 
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        guard searchText?.isEmpty ?? true else {
+        guard countriesMap.searchText?.isEmpty ?? true else {
             return nil
         }
-        return countrySectionHeaders
+        return countriesMap.firstLetters
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -171,20 +190,12 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let selectedCountry = country(at: indexPath) else {
+        guard let selectedCountry = countriesMap.country(at: indexPath) else {
             Logger.shared.warning("Could not infer selected country.")
             return
         }
         Logger.shared.info("User selected '\(selectedCountry.name)'")
         presenter.selected(country: selectedCountry)
-    }
-
-    private func country(at indexPath: IndexPath) -> KYCCountry? {
-        let firstLetter = countrySectionHeaders[indexPath.section]
-        guard let countriesInSection = countriesMap[firstLetter] else {
-            return nil
-        }
-        return countriesInSection[indexPath.row]
     }
 }
 
