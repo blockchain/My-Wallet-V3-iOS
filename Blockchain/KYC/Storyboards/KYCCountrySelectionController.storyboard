@@ -121,20 +121,11 @@
                     <connections>
                         <outlet property="progressView" destination="DD7-KN-SsY" id="48v-s6-3Ce"/>
                         <outlet property="searchBar" destination="UXv-PD-jDX" id="gf9-8J-U61"/>
-                        <outlet property="searchDisplayController" destination="hXY-z4-wfj" id="Bf7-I5-xOW"/>
                         <outlet property="tableView" destination="vGe-6j-xwG" id="FK8-Rv-9FL"/>
                         <segue destination="p5l-MX-35I" kind="show" identifier="promptForPersonalDetails" id="c27-ro-Ao3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Wa-Ab-JKR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="hXY-z4-wfj">
-                    <connections>
-                        <outlet property="delegate" destination="maQ-p3-MjV" id="Qjh-4Q-afK"/>
-                        <outlet property="searchContentsController" destination="maQ-p3-MjV" id="GQq-Hk-51T"/>
-                        <outlet property="searchResultsDataSource" destination="maQ-p3-MjV" id="26Q-c5-npN"/>
-                        <outlet property="searchResultsDelegate" destination="maQ-p3-MjV" id="tCA-mg-RYd"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="100" y="248"/>
         </scene>

@@ -186,6 +186,10 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
         return countriesMap.keys.count
     }
 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        searchBar.resignFirstResponder()
+    }
+
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
