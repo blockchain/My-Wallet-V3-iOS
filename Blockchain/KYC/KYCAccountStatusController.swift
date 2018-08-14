@@ -26,15 +26,12 @@ extension KYCAccountStatusViewConfig {
         case .approved:
             titleColor = UIColor.green
             isPrimaryButtonEnabled = true
-        case .failed:
+        case .failed, .expired, .none:
             titleColor = UIColor.error
             isPrimaryButtonEnabled = true
-        case .inProgress:
+        case .pending:
             titleColor = UIColor.orange
             isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
-        case .underReview:
-            titleColor = UIColor.orange
-            isPrimaryButtonEnabled = false
         }
         return KYCAccountStatusViewConfig(
             titleColor: titleColor,

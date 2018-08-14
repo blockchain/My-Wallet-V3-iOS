@@ -110,13 +110,11 @@ protocol KYCCoordinatorDelegate: class {
                 viewController.dismiss(animated: true) {
                     ExchangeCoordinator.shared.start()
                 }
-            case .inProgress:
+            case .pending:
                 PushNotificationManager.shared.requestAuthorization()
-            case .failed:
+            case .failed, .expired, .none:
                 // Confirm with design that this is how we should handle this
                 URL(string: Constants.Url.blockchainSupport)?.launch()
-            case .underReview:
-                return
             }
         }
         presentInNavigationController(accountStatusViewController, in: viewController)

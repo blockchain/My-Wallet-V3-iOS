@@ -20,7 +20,7 @@ struct PersonalDetails: Codable {
         case firstName = "firstname"
         case lastName = "lastname"
         case email = "email"
-        case birthday = "dateOfBirth"
+        case birthday = "dob"
     }
 
     init?(id: String?, first: String?, last: String?, email: String?, birthday: Date?) {
