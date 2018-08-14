@@ -460,14 +460,6 @@ struct LocalizationConstants {
             "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
             comment: "Description for when KYC verification failed."
         )
-        static let verificationUnderReview = NSLocalizedString(
-            "Verification Under Review",
-            comment: "Text displayed when KYC verification is under review."
-        )
-        static let verificationUnderReviewDescription = NSLocalizedString(
-            "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
-            comment: "Description for when KYC verification is under review."
-        )
         static let notifyMe = NSLocalizedString(
             "Notify Me",
             comment: "Title of the button the user can tap when they want to be notified of update with their KYC verification process."
@@ -483,6 +475,18 @@ struct LocalizationConstants {
         static let whatHappensNext = NSLocalizedString(
             "What happens next?",
             comment: "Text displayed (subtitle) when KYC verification is under progress"
+        )
+        static let unsupportedCountryTitle = NSLocalizedString(
+            "Coming soon to %@!",
+            comment: "Title text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
+        )
+        static let unsupportedCountryDescription = NSLocalizedString(
+            "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes pealed, we'll let you know as soon as we launch in %@!",
+            comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
+        )
+        static let backToDashboard = NSLocalizedString(
+            "Back to Dashboard",
+            comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
         )
     }
 }

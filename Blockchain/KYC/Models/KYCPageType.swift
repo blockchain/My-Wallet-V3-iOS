@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum KYCPageError {
+    case countryNotSupported(KYCCountry)
+}
+
 enum KYCPageType {
     typealias PhoneNumber = String
 
@@ -22,6 +26,8 @@ enum KYCPageType {
 }
 
 extension KYCPageType {
+    /// The next page provided that the user successfully entered/selected
+    /// information in this page.
     var next: KYCPageType? {
         switch self {
         case .welcome:
