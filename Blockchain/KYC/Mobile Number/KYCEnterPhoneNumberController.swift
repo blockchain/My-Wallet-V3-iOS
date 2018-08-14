@@ -37,8 +37,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCEnterPhoneNumberController {
-        let storyboard = UIStoryboard(name: "KYCEnterPhoneNumber", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCEnterPhoneNumberController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .enterPhone
         return controller

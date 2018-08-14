@@ -22,8 +22,7 @@ final class KYCWelcomeController: KYCBaseViewController {
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCWelcomeController {
-        let storyboard = UIStoryboard(name: "KYCWelcome", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCWelcomeController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .welcome
         return controller

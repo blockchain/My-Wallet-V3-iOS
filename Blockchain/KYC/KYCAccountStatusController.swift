@@ -72,8 +72,7 @@ final class KYCAccountStatusController: KYCBaseViewController {
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCAccountStatusController {
-        let storyboard = UIStoryboard(name: "KYCAccountStatus", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCAccountStatusController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .accountStatus
         return controller

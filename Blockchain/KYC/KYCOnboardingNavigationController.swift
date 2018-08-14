@@ -13,6 +13,11 @@ final class KYCOnboardingNavigationController: UINavigationController {
 
     // MARK: - Initialization
 
+    class func make() -> KYCOnboardingNavigationController {
+        let controller = makeFromStoryboard()
+        return controller
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // TODO: prefetch data...

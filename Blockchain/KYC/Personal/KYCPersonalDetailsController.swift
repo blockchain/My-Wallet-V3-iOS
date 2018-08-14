@@ -50,8 +50,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
     // MARK: Overrides
 
     override class func make(with coordinator: KYCCoordinator) -> KYCPersonalDetailsController {
-        let storyboard = UIStoryboard(name: "KYCPersonalDetails", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCPersonalDetailsController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .profile
         return controller

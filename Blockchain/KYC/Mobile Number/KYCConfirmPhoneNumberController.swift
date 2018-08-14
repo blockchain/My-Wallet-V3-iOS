@@ -42,8 +42,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCConfirmPhoneNumberController {
-        let storyboard = UIStoryboard(name: "KYCConfirmPhoneNumber", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCConfirmPhoneNumberController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .confirmPhone
         return controller

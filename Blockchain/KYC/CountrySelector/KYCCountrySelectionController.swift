@@ -20,8 +20,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, UITableViewDat
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCCountrySelectionController {
-        let storyboard = UIStoryboard(name: "KYCCountrySelection", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCCountrySelectionController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .country
         return controller

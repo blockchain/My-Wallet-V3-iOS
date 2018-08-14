@@ -24,8 +24,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCVerifyIdentityController {
-        let storyboard = UIStoryboard(name: "KYCVerifyIdentity", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCVerifyIdentityController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .verifyIdentity
         return controller
