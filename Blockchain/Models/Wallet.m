@@ -2591,7 +2591,7 @@
 
 # pragma mark - Retail Core
 
-- (void)updateKYCUserCredentials:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^)(NSString *))success error: (void (^)(NSString *))error
+- (void)updateKYCUserCredentialsWithUserId:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^)(NSString *))success error: (void (^)(NSString *))error
 {
     if ([self isInitialized]) {
         self.context[@"objc_updateUserCredentials_success"] = success;
@@ -2603,7 +2603,9 @@
 - (NSString *_Nullable)KYCUserId
 {
     if ([self isInitialized]) {
-        return [[self.context evaluateScript:@"MyWalletPhone.KYC.userId()"] toString];
+        JSValue *userId = [self.context evaluateScript:@"MyWalletPhone.KYC.userId()"];
+        if ([userId isNull] || [userId isUndefined]) return nil;
+        return [userId toString];
     }
     return nil;
 }
@@ -2611,7 +2613,9 @@
 - (NSString *_Nullable)KYCLifetimeToken
 {
     if ([self isInitialized]) {
-        return [[self.context evaluateScript:@"MyWalletPhone.KYC.lifetimeToken()"] toString];
+        JSValue *lifetimeToken = [self.context evaluateScript:@"MyWalletPhone.KYC.lifetimeToken()"];
+        if ([lifetimeToken isNull] || [lifetimeToken isUndefined]) return nil;
+        return [lifetimeToken toString];
     }
     return nil;
 }
