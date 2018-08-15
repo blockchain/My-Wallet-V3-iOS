@@ -26,7 +26,7 @@ final class KYCAuthenticationAPI {
             // get the userId and lifetime token from the data
             success("userId", "lifetimeToken")
         }
-        KYCNetworkRequest.init(
+        KYCNetworkRequest(
             post: KYCNetworkRequest.KYCEndpoints.POST.registerUser,
             parameters: [Keys.email: email, Keys.guid: guid],
             taskSuccess: taskSuccess,
@@ -39,7 +39,7 @@ final class KYCAuthenticationAPI {
         success: @escaping (Data) -> Void,
         error: @escaping (HTTPRequestError) -> Void
     ) {
-        KYCNetworkRequest.init(
+        KYCNetworkRequest(
             post: KYCNetworkRequest.KYCEndpoints.POST.apiKey,
             parameters: [Keys.userId: userId],
             taskSuccess: success,
@@ -52,7 +52,7 @@ final class KYCAuthenticationAPI {
         success: @escaping (Data) -> Void,
         error: @escaping (HTTPRequestError) -> Void
         ) {
-        KYCNetworkRequest.init(
+        KYCNetworkRequest(
             post: KYCNetworkRequest.KYCEndpoints.POST.sessionToken,
             parameters: [Keys.userId: userId],
             taskSuccess: success,
