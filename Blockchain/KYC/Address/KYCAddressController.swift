@@ -145,6 +145,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
             self?.scrollView.setContentOffset(.zero, animated: true)
             guard let keyboard = self?.keyboard else { return }
             self?.keyboardWillHide(with: keyboard)
+            self?.keyboard = nil
         }
         NotificationCenter.when(.UIKeyboardWillShow) { [weak self] notification in
             let keyboard = KeyboardPayload(notification: notification)
