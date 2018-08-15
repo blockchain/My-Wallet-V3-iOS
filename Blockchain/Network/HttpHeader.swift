@@ -13,10 +13,10 @@ struct HttpHeaderField {
     static let accept = "Accept"
     static let contentLength = "Content-Length"
     static let contentType = "Content-Type"
+    static let authorization = "Authorization"
 }
 
 struct HttpHeaderValue {
     static let json = "application/json"
-    static let accept = "Accept"
     static let formEncoded = "application/x-www-form-urlencoded"
 }
