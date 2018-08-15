@@ -9,7 +9,7 @@
 import Foundation
 
 /// Handles network requests for the KYC flow
-final class KYCNetworkRequest: NSObject {
+final class KYCNetworkRequest {
     
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
@@ -17,7 +17,6 @@ final class KYCNetworkRequest: NSObject {
     fileprivate static let rootUrl = BlockchainAPI.shared.apiUrl
     private let timeoutInterval = TimeInterval(exactly: 30)!
     private var request: URLRequest!
-    private var session: URLSession!
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
@@ -89,14 +88,6 @@ final class KYCNetworkRequest: NSObject {
     // MARK: - Initialization
 
     private init(url: URL, httpMethod: String) {
-        super.init()
-
-        let sessionConfiguration = URLSessionConfiguration.default
-        if let userAgent = NetworkManager.userAgent {
-            sessionConfiguration.httpAdditionalHeaders = [HttpHeaderField.userAgent: userAgent]
-        }
-        session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
-
         self.request = URLRequest(url: url)
         request.httpMethod = httpMethod
         request.addValue(HttpHeaderValue.json, forHTTPHeaderField: HttpHeaderField.accept)
@@ -164,7 +155,7 @@ final class KYCNetworkRequest: NSObject {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+        let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
                     taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription)); return
@@ -187,13 +178,5 @@ final class KYCNetworkRequest: NSObject {
             }
         })
         task.resume()
-    }
-}
-
-extension KYCNetworkRequest: URLSessionDelegate {
-    func urlSession(_ session: URLSession,
-                    didReceive challenge: URLAuthenticationChallenge,
-                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        CertificatePinner.shared.didReceive(challenge, completion: completionHandler)
     }
 }
