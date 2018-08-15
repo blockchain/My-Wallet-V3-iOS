@@ -2369,6 +2369,24 @@ MyWalletPhone.hasEthAccount = function() {
     return eth && eth.defaultAccount;
 }
 
+MyWalletPhone.KYC = {
+    updateUserCredentials: function(userId, lifetimeToken) {
+        MyWallet.wallet.retailCore.updateUserCredentials(
+            {userId: userId, lifetimeToken: lifetimeToken},
+            objc_updateUserCredentials_success,
+            objc_updateUserCredentials_error
+        )
+    },
+
+    userId: function() {
+        return MyWallet.wallet.retailCore.userId;
+    },
+
+    lifetimeToken: function() {
+        return MyWallet.wallet.retailCore.lifetimeToken;
+    }
+}
+
 MyWalletPhone.createEthAccountForExchange = function(secondPassword, helperText) {
 
     var eth = MyWallet.wallet.eth;

@@ -14,8 +14,9 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
+    fileprivate static let rootUrl = BlockchainAPI.shared.apiUrl
     private let timeoutInterval = TimeInterval(exactly: 30)!
-    private var request: URLRequest
+    private var request: URLRequest!
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
@@ -58,7 +59,9 @@ final class KYCNetworkRequest {
         }
 
         enum POST: String {
-            case registerUser = "/users"
+            case registerUser = "/internal/users"
+            case apiKey = "/internal/auth"
+            case sessionToken = "/auth"
             case verifications = "/verifications"
             case submitVerification = "/kyc/verifications"
         }
@@ -87,7 +90,7 @@ final class KYCNetworkRequest {
     private init(url: URL, httpMethod: String) {
         self.request = URLRequest(url: url)
         request.httpMethod = httpMethod
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(HttpHeaderValue.json, forHTTPHeaderField: HttpHeaderField.accept)
         request.timeoutInterval = timeoutInterval
     }
 
@@ -122,8 +125,8 @@ final class KYCNetworkRequest {
         })
         let data = postBody.data(using: .utf8)
         request.httpBody = data
-        request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.addValue(String(describing: data?.count), forHTTPHeaderField: HttpHeaderField.contentLength)
+        request.addValue(HttpHeaderValue.formEncoded, forHTTPHeaderField: HttpHeaderField.contentType)
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
@@ -140,8 +143,8 @@ final class KYCNetworkRequest {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
             let body = try encoder.encode(parameters)
             request.httpBody = body
-            request.allHTTPHeaderFields = ["Content-Type": "application/json",
-                                           "Accept": "application/json"]
+            request.allHTTPHeaderFields = [HttpHeaderField.contentType: HttpHeaderValue.json,
+                                           HttpHeaderField.accept: HttpHeaderValue.json]
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
             taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
@@ -152,7 +155,7 @@ final class KYCNetworkRequest {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
-        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+        let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
                     taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription)); return
@@ -164,7 +167,7 @@ final class KYCNetworkRequest {
                     taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
                 }
                 if let mimeType = httpResponse.mimeType {
-                    guard mimeType == "application/json" else {
+                    guard mimeType == HttpHeaderValue.json else {
                         taskFailure(HTTPRequestPayloadError.invalidMimeType(type: mimeType)); return
                     }
                 }
