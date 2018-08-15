@@ -1,5 +1,5 @@
 //
-//  KYCDataRepository.swift
+//  BlockchainDataRepository.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 8/14/18.
@@ -8,16 +8,16 @@
 
 import RxSwift
 
-/// Repository for KYC related data. Accessing properties in this repository
+/// Repository for fetching Blockchain data. Accessing properties in this repository
 /// will be fetched from the cache (if available), otherwise, data will be fetched over
 /// the network and subsequently cached for faster access.
-@objc class KYCDataRepository: NSObject {
+@objc class BlockchainDataRepository: NSObject {
 
-    static let shared = KYCDataRepository()
+    static let shared = BlockchainDataRepository()
 
     // MARK: - Public Properties
 
-    var user: Single<KYCUser> {
+    var kycUser: Single<KYCUser> {
         // TODO: need to fetch userID from wallet metadata
         // TICKET: IOS-1104
         return fetchData(

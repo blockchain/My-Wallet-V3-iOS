@@ -137,7 +137,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     // MARK: - Private Methods
 
     private func fetchListOfCountries() {
-        disposable = KYCDataRepository.shared.countries
+        disposable = BlockchainDataRepository.shared.countries
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] countries in

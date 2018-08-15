@@ -523,7 +523,7 @@
 		AACE32012093FA1A00B7B806 /* ReminderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31FF2093FA1A00B7B806 /* ReminderPresenter.swift */; };
 		AACE32082097835F00B7B806 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */; };
 		AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE320A20978EB100B7B806 /* MockWallet.swift */; };
-		AAD158DE2123740C0058B3C8 /* KYCDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* KYCDataRepository.swift */; };
+		AAD158DE2123740C0058B3C8 /* BlockchainDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */; };
 		AAD279B0209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279AF209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift */; };
 		AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */; };
 		AAD27A28209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */; };
@@ -566,7 +566,7 @@
 		AAF2AEC4212379D800687E30 /* PersonalDetailsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B224B211CA7990091E706 /* PersonalDetailsDelegate.swift */; };
 		AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */; };
 		AAF2AEC621237A1F00687E30 /* PersonalDetailsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */; };
-		AAF2AEE52123863200687E30 /* KYCDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* KYCDataRepository.swift */; };
+		AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */; };
 		AAFA97AE2115110000D19ED3 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE083211258F300AD514A /* SettingsCell.swift */; };
 		AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */; };
 		AAFA97B02115110000D19ED3 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
@@ -2841,7 +2841,7 @@
 		AACE31FF2093FA1A00B7B806 /* ReminderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderPresenter.swift; sourceTree = "<group>"; };
 		AACE32072097835F00B7B806 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
 		AACE320A20978EB100B7B806 /* MockWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWallet.swift; sourceTree = "<group>"; };
-		AAD158DD2123740C0058B3C8 /* KYCDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCDataRepository.swift; sourceTree = "<group>"; };
+		AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainDataRepository.swift; sourceTree = "<group>"; };
 		AAD279AF209A5E7C00C0EAFC /* AuthenticationTwoFactorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTwoFactorType.swift; sourceTree = "<group>"; };
 		AAD279DF209A99D900C0EAFC /* AVCaptureDeviceInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVCaptureDeviceInput.swift; sourceTree = "<group>"; };
 		AAD27A27209CFE2100C0EAFC /* PasswordConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordConfirmView.swift; sourceTree = "<group>"; };
@@ -3495,7 +3495,6 @@
 				602B9CCD2118E15200BD3D60 /* KYCAccountStatusController.swift */,
 				3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */,
 				602B9CCE2118E15200BD3D60 /* KYCCoordinator.swift */,
-				AAD158DD2123740C0058B3C8 /* KYCDataRepository.swift */,
 				602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */,
 				602B9CD12118E15200BD3D60 /* KYCOnboardingNavigationController.swift */,
 				602B9CD22118E15200BD3D60 /* KYCVerifyIdentityController.swift */,
@@ -5687,6 +5686,7 @@
 				AAD279DE209A99CA00C0EAFC /* AV */,
 				9F1831F315176F2200FB3D52 /* Categories */,
 				AAA33338208811460019AD55 /* Coordinators */,
+				AAF2AF0B2124946F00687E30 /* Data */,
 				510EA19620811FF100A63AB8 /* Extensions */,
 				AA63F87220A39D4E002B719B /* Feature Configuration */,
 				9F0CBAAB15135DF200CD945D /* JavaScript */,
@@ -6099,6 +6099,14 @@
 				AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */,
 			);
 			path = Pin;
+			sourceTree = "<group>";
+		};
+		AAF2AF0B2124946F00687E30 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -7035,7 +7043,7 @@
 				AAE9113620A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				AAF2AEC22123799800687E30 /* KYCPersonalDetailsController.swift in Sources */,
 				AA47709D211B7BC3006356B1 /* BottomButtonContainerView.swift in Sources */,
-				AAF2AEE52123863200687E30 /* KYCDataRepository.swift in Sources */,
+				AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */,
 				AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
 				513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				AAF2AEC12123798C00687E30 /* PersonalDetailsAPI.swift in Sources */,
@@ -7447,7 +7455,7 @@
 				AA7E773F210BA48B009DFB4C /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */,
 				C76D732C20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
-				AAD158DE2123740C0058B3C8 /* KYCDataRepository.swift in Sources */,
+				AAD158DE2123740C0058B3C8 /* BlockchainDataRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
