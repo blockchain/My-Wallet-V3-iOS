@@ -36,8 +36,6 @@ class LocationSuggestionCoordinator: NSObject {
         if let controller = delegate as? KYCAddressController {
             controller.searchDelegate = self
         }
-
-        self.interface?.searchFieldActive(true)
     }
 }
 

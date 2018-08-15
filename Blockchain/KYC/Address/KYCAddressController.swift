@@ -8,7 +8,12 @@
 
 import UIKit
 
-class KYCAddressController: KYCBaseViewController, ValidationFormView {
+class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomButtonContainerView {
+
+    // MARK: BottomButtonContainerView
+
+    var originalBottomButtonConstraint: CGFloat!
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 
     // MARK: - Private IBOutlets
 
@@ -80,13 +85,20 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
 
         validationFieldsSetup()
         setupNotifications()
+        setUpBottomButtonContainerView()
 
         primaryButtonContainer.actionBlock = { [weak self] in
             guard let this = self else { return }
             this.primaryButtonTapped()
         }
 
+        originalBottomButtonConstraint = layoutConstraintBottomButton.constant
+
         searchDelegate?.onStart()
+    }
+
+    deinit {
+        cleanUp()
     }
 
     // MARK: Private Functions
@@ -131,9 +143,12 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
         NotificationCenter.when(.UIKeyboardWillHide) { [weak self] _ in
             self?.scrollView.contentInset = .zero
             self?.scrollView.setContentOffset(.zero, animated: true)
+            guard let keyboard = self?.keyboard else { return }
+            self?.keyboardWillHide(with: keyboard)
         }
         NotificationCenter.when(.UIKeyboardWillShow) { [weak self] notification in
             let keyboard = KeyboardPayload(notification: notification)
+            self?.keyboardWillShow(with: keyboard)
             self?.keyboard = keyboard
         }
     }
