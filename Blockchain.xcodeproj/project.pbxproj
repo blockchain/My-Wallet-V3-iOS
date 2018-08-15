@@ -103,9 +103,9 @@
 		3AC4F982212349BF003AA207 /* PersonalDetailsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */; };
 		3AC4F983212349CB003AA207 /* PersonalDetailsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DC5211C992B00E6C241 /* PersonalDetailsAPI.swift */; };
 		3AC4F9A42124B4BA003AA207 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F9A32124B4BA003AA207 /* AsyncOperation.swift */; };
-		3AC4F9A62124B77D003AA207 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F9A52124B77D003AA207 /* Result.swift */; };
 		3AC4F9A92124B893003AA207 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F9A82124B893003AA207 /* NetworkOperation.swift */; };
 		3AC4F9AC2124B8CE003AA207 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F9AB2124B8CE003AA207 /* NetworkRequest.swift */; };
+		3AC4F9C52124CCC5003AA207 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F9C42124CCC5003AA207 /* Result.swift */; };
 		3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
@@ -1107,9 +1107,9 @@
 		3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCBaseViewController.swift; sourceTree = "<group>"; };
 		3AC4F97721234040003AA207 /* Storyboardable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboardable.swift; sourceTree = "<group>"; };
 		3AC4F9A32124B4BA003AA207 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
-		3AC4F9A52124B77D003AA207 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		3AC4F9A82124B893003AA207 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
 		3AC4F9AB2124B8CE003AA207 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
+		3AC4F9C42124CCC5003AA207 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
 		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
@@ -3267,7 +3267,7 @@
 		3AC4F9AA2124B8B5003AA207 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3AC4F9A52124B77D003AA207 /* Result.swift */,
+				3AC4F9C42124CCC5003AA207 /* Result.swift */,
 				3AC4F9AB2124B8CE003AA207 /* NetworkRequest.swift */,
 			);
 			path = Models;
@@ -7199,7 +7199,6 @@
 				51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */,
 				606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */,
 				3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */,
-				3AC4F9A62124B77D003AA207 /* Result.swift in Sources */,
 				C7559CB21F56FE09005B2375 /* TransactionsEtherViewController.m in Sources */,
 				AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */,
 				23FDEFAC1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m in Sources */,
@@ -7347,6 +7346,7 @@
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
 				511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */,
+				3AC4F9C52124CCC5003AA207 /* Result.swift in Sources */,
 				606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */,
 				67EE1DCD19E3325900DBBFC9 /* ECSlidingSegue.m in Sources */,
 				AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */,
