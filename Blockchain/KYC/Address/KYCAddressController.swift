@@ -218,6 +218,10 @@ extension KYCAddressController: LocationSuggestionInterface {
         tableView.alpha = visibility.defaultAlpha
     }
 
+    func primaryButton(_ visibility: Visibility) {
+        primaryButtonContainer.alpha = visibility.defaultAlpha
+    }
+
     func searchFieldActive(_ isFirstResponder: Bool) {
         switch isFirstResponder {
         case true:
