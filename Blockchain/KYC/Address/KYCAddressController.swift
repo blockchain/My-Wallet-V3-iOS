@@ -157,7 +157,9 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
     fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
         validationFields.forEach({$0.resignFocus()})
-        
+
+        // TODO: ⚠️ The address country should be injected
+        // into this screen. 
         let address = UserAddress(
             lineOne: addressTextField.text ?? "",
             lineTwo: apartmentTextField.text ?? "",
