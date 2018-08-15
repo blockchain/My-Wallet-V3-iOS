@@ -567,6 +567,12 @@
 		AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */; };
 		AAF2AEC621237A1F00687E30 /* PersonalDetailsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */; };
 		AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */; };
+		AAF2AF3B2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */; };
+		AAF2AF3C2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */; };
+		AAF2AF3E2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */; };
+		AAF2AF3F2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */; };
+		AAF2AF412124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */; };
+		AAF2AF422124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */; };
 		AAFA97AE2115110000D19ED3 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE083211258F300AD514A /* SettingsCell.swift */; };
 		AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */; };
 		AAFA97B02115110000D19ED3 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
@@ -686,8 +692,8 @@
 		C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BA1F4DE14500032806 /* DashboardViewController.m */; };
 		C7CE34BE1F4E128900032806 /* BCAmountInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BD1F4E128900032806 /* BCAmountInputView.m */; };
 		C7D5115C21237DE000359651 /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733A89221236F02007DADE0 /* HttpHeader.swift */; };
-		C7D5116621237DFA00359651 /* KYCAuthenticationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationAPI.swift */; };
-		C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationAPI.swift */; };
+		C7D5116621237DFA00359651 /* KYCAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationService.swift */; };
+		C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationService.swift */; };
 		C7E1A2902108FDFC0072DDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171E38F20F4F98000E8913E /* Colors.swift */; };
 		C7E1A2E8210A45B30072DDA0 /* ExchangeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1A2E7210A45B20072DDA0 /* ExchangeCoordinator.swift */; };
 		C7E1A2E9210A45B30072DDA0 /* ExchangeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1A2E7210A45B20072DDA0 /* ExchangeCoordinator.swift */; };
@@ -2867,6 +2873,9 @@
 		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
 		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
 		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
+		AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KYCCreateUserResponse.swift; path = Blockchain/KYC/Models/Network/KYCCreateUserResponse.swift; sourceTree = SOURCE_ROOT; };
+		AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCApiTokenResponse.swift; path = Blockchain/KYC/Models/Network/KYCApiTokenResponse.swift; sourceTree = SOURCE_ROOT; };
+		AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCSessionTokenResponse.swift; path = Blockchain/KYC/Models/Network/KYCSessionTokenResponse.swift; sourceTree = SOURCE_ROOT; };
 		AAFA97B3211511D000D19ED3 /* Settings+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Helpers.swift"; sourceTree = "<group>"; };
 		AAFA97B4211511D000D19ED3 /* Settings+Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Table.swift"; sourceTree = "<group>"; };
 		AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreKeyPair.swift; sourceTree = "<group>"; };
@@ -3021,7 +3030,7 @@
 		C7CE34BA1F4DE14500032806 /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
 		C7CE34BC1F4E128900032806 /* BCAmountInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCAmountInputView.h; sourceTree = "<group>"; };
 		C7CE34BD1F4E128900032806 /* BCAmountInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCAmountInputView.m; sourceTree = "<group>"; };
-		C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCAuthenticationAPI.swift; sourceTree = "<group>"; };
+		C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCAuthenticationService.swift; sourceTree = "<group>"; };
 		C7E1A2E7210A45B20072DDA0 /* ExchangeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeCoordinator.swift; sourceTree = "<group>"; };
 		C7E275091F589C8D0054EFA5 /* ReceiveEtherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiveEtherViewController.h; sourceTree = "<group>"; };
 		C7E2750A1F589C8D0054EFA5 /* ReceiveEtherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceiveEtherViewController.m; sourceTree = "<group>"; };
@@ -3499,8 +3508,8 @@
 		602B9CA62118E15200BD3D60 /* KYC */ = {
 			isa = PBXGroup;
 			children = (
-				C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationAPI.swift */,
 				602B9CCD2118E15200BD3D60 /* KYCAccountStatusController.swift */,
+				C7E0FCCD211E12AE00B85D37 /* KYCAuthenticationService.swift */,
 				3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */,
 				602B9CCE2118E15200BD3D60 /* KYCCoordinator.swift */,
 				602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */,
@@ -3562,9 +3571,10 @@
 			children = (
 				AA4770B6211BA984006356B1 /* KYCAccountStatus.swift */,
 				602B9CBB2118E15200BD3D60 /* KYCCountry.swift */,
+				3AFD18AE21221D95007145EA /* KYCPageModel.swift */,
 				3A8B2291211E228C0091E706 /* KYCPageType.swift */,
 				3A8B229C211E2A960091E706 /* KYCUser.swift */,
-				3AFD18AE21221D95007145EA /* KYCPageModel.swift */,
+				AAF2AF392124AFBC00687E30 /* Network */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -6134,6 +6144,17 @@
 			path = Exchange;
 			sourceTree = "<group>";
 		};
+		AAF2AF392124AFBC00687E30 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */,
+				AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */,
+				AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */,
+			);
+			name = Network;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -6983,10 +7004,12 @@
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				602B9D262118E27100BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
+				AAF2AF422124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
 				AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */,
 				AACE31DF2092A99B00B7B806 /* CertificatePinner.swift in Sources */,
+				AAF2AF3C2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */,
 				AAE94F3620C70B97005A3595 /* AssetURLPayload.swift in Sources */,
 				AAFE9E9321016132002E4E1E /* PinError.swift in Sources */,
 				51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
@@ -7020,7 +7043,7 @@
 				3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */,
 				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				5159C3212109156400955BD6 /* KYCCountrySelectionControllerTests.swift in Sources */,
-				C7D5116621237DFA00359651 /* KYCAuthenticationAPI.swift in Sources */,
+				C7D5116621237DFA00359651 /* KYCAuthenticationService.swift in Sources */,
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */,
 				AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
@@ -7068,6 +7091,7 @@
 				AACE31C62092A99B00B7B806 /* LoadingViewPresenter.swift in Sources */,
 				AAE9113620A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				C7D5115C21237DE000359651 /* HttpHeader.swift in Sources */,
+				AAF2AF3F2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */,
 				AAF2AEC22123799800687E30 /* KYCPersonalDetailsController.swift in Sources */,
 				AA47709D211B7BC3006356B1 /* BottomButtonContainerView.swift in Sources */,
 				AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */,
@@ -7138,7 +7162,7 @@
 				AAFE9E9221016132002E4E1E /* PinError.swift in Sources */,
 				C790E1211E5345160063D141 /* BCVerifyEmailViewController.m in Sources */,
 				AA3CA9B22107F2B700C2AD46 /* LogDestination.swift in Sources */,
-				C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationAPI.swift in Sources */,
+				C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationService.swift in Sources */,
 				3A3D5D8B211B44BD00E6C241 /* ProgressableView.swift in Sources */,
 				C71859571F4B695700745A87 /* TabControllerManager.m in Sources */,
 				3A76F902211A3BA5002F7946 /* DateFormatter+Conveniences.swift in Sources */,
@@ -7165,6 +7189,7 @@
 				C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */,
 				3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */,
 				C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
+				AAF2AF3B2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */,
 				23964C031DCA3F19001323BE /* KeyPair.m in Sources */,
 				AA5B3B8020C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				230FD2DC1C5BFB4300336683 /* QRCodeGenerator.m in Sources */,
@@ -7376,6 +7401,7 @@
 				602B9CF82118E15300BD3D60 /* PrimaryButtonContainer.swift in Sources */,
 				3A8B224C211CA7990091E706 /* PersonalDetailsDelegate.swift in Sources */,
 				AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */,
+				AAF2AF412124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */,
 				9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */,
 				6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */,
 				C79B27B120A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */,
@@ -7423,6 +7449,7 @@
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
+				AAF2AF3E2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
