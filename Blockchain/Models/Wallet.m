@@ -2589,6 +2589,33 @@
     return NO;
 }
 
+# pragma mark - Retail Core
+
+- (void)updateKYCUserCredentials:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^)(NSString *))success error: (void (^)(NSString *))error
+{
+    if ([self isInitialized]) {
+        self.context[@"objc_updateUserCredentials_success"] = success;
+        self.context[@"objc_updateUserCredentials_error"] = error;
+        [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.KYC.updateUserCredentials(\"%@\", \"%@\")", [userId escapedForJS], [lifetimeToken escapedForJS]]];
+    }
+}
+
+- (NSString *_Nullable)KYCUserId
+{
+    if ([self isInitialized]) {
+        return [[self.context evaluateScript:@"MyWalletPhone.KYC.userId()"] toString];
+    }
+    return nil;
+}
+
+- (NSString *_Nullable)KYCLifetimeToken
+{
+    if ([self isInitialized]) {
+        return [[self.context evaluateScript:@"MyWalletPhone.KYC.lifetimeToken()"] toString];
+    }
+    return nil;
+}
+
 # pragma mark - Ethereum
 
 - (void)createEthAccountForExchange:(NSString *)secondPassword

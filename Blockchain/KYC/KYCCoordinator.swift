@@ -168,4 +168,53 @@ protocol KYCCoordinatorDelegate: class {
 
         return .address
     }
+
+    func authenticate() {
+        let error: (Any) -> Void = { error in
+            Logger.shared.error("Could not authenticate user")
+        }
+
+        let getSessionTokenSuccess: (Any) -> Void = { _ in
+            Logger.shared.info("Session token obtained")
+        }
+
+        let getSessionToken: (Any) -> Void = { _ in
+            KYCAuthenticationAPI.getSessionToken(
+                userId: "userId",
+                success: getSessionTokenSuccess,
+                error: error
+            )
+        }
+
+        let getApiKey: (String) -> Void = { userId in
+            KYCAuthenticationAPI.getApiKey(
+                userId: userId,
+                success: getSessionToken,
+                error: error
+            )
+        }
+
+        let updateKYCUserCredentials: ((String, String)) -> Void = { (arg) in
+            let (userId, lifetimeToken) = arg
+            WalletManager.shared.wallet.updateKYCUserCredentials(
+                withUserId: userId,
+                lifetimeToken: lifetimeToken,
+                success: getApiKey,
+                error: error
+            )
+        }
+
+        guard let userId = WalletManager.shared.wallet.kycUserId() else {
+            Logger.shared.error("No user ID found, creating user")
+            KYCAuthenticationAPI.createUser(
+                email: WalletManager.shared.wallet.getEmail(),
+                guid: WalletManager.shared.wallet.guid,
+                success: updateKYCUserCredentials,
+                error: error
+            )
+            return
+        }
+
+        getApiKey(userId)
+    }
 }
