@@ -23,7 +23,6 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
     @IBOutlet fileprivate var cityTextField: ValidationTextField!
     @IBOutlet fileprivate var stateTextField: ValidationTextField!
     @IBOutlet fileprivate var postalCodeTextField: ValidationTextField!
-    @IBOutlet fileprivate var countryTextField: ValidationTextField!
     @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
 
     // MARK: - Public IBOutlets
@@ -33,8 +32,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
     // MARK: Factory
 
     override class func make(with coordinator: KYCCoordinator) -> KYCAddressController {
-        let storyboard = UIStoryboard(name: "KYCAddress", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! KYCAddressController
+        let controller = makeFromStoryboard()
         controller.coordinator = coordinator
         controller.pageType = .address
         return controller
@@ -53,8 +51,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
                     apartmentTextField,
                     cityTextField,
                     stateTextField,
-                    postalCodeTextField,
-                    countryTextField
+                    postalCodeTextField
             ]
         }
     }
@@ -112,11 +109,8 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
         stateTextField.returnKeyType = .next
         stateTextField.contentType = .addressState
 
-        postalCodeTextField.returnKeyType = .next
+        postalCodeTextField.returnKeyType = .done
         postalCodeTextField.contentType = .postalCode
-
-        countryTextField.returnKeyType = .done
-        countryTextField.contentType = .countryName
 
         validationFields.enumerated().forEach { (index, field) in
             field.returnTappedBlock = { [weak self] in
@@ -154,7 +148,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView {
             postalCode: postalCodeTextField.text ?? "",
             city: cityTextField.text ?? "",
             state: stateTextField.text ?? "",
-            country: countryTextField.text ?? ""
+            country: ""
         )
         searchDelegate?.onSubmission(address, completion: { [weak self] in
             guard let this = self else { return }
@@ -199,7 +193,6 @@ extension KYCAddressController: LocationSuggestionInterface {
         cityTextField.text = address.city
         stateTextField.text = address.state
         postalCodeTextField.text = address.postalCode
-        countryTextField.text = address.country
     }
 
     func updateActivityIndicator(_ visibility: Visibility) {
