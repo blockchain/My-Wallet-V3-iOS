@@ -5690,6 +5690,7 @@
 				510EA19620811FF100A63AB8 /* Extensions */,
 				AA63F87220A39D4E002B719B /* Feature Configuration */,
 				9F0CBAAB15135DF200CD945D /* JavaScript */,
+				C75F64F52124BB9000396B65 /* Homebrew */,
 				602B9CA62118E15200BD3D60 /* KYC */,
 				515EF91A210282B4002350B6 /* Localization */,
 				AA3CA9932107F10000C2AD46 /* Logging */,
@@ -6107,6 +6108,22 @@
 				AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		C75F64F52124BB9000396B65 /* Homebrew */ = {
+			isa = PBXGroup;
+			children = (
+				C75F64F62124BB9000396B65 /* Exchange */,
+			);
+			name = Homebrew;
+			path = Blockchain/Homebrew;
+			sourceTree = SOURCE_ROOT;
+		};
+		C75F64F62124BB9000396B65 /* Exchange */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Exchange;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
