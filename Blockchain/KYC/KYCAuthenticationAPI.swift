@@ -12,19 +12,30 @@ final class KYCAuthenticationAPI {
 
     private struct Keys {
         static let email = "email"
-        static let guid = "guid"
+        static let guid = "walletGuid"
         static let userId = "userId"
     }
 
     static func createUser(
         email: String,
         guid: String,
-        success: @escaping (String, String) -> Void,
+        success: @escaping (String) -> Void,
         error: @escaping (HTTPRequestError) -> Void
     ) {
         let taskSuccess: (Data) -> Void = { data in
-            // get the userId and lifetime token from the data
-            success("userId", "lifetimeToken")
+            do {
+                guard let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
+                    Logger.shared.error("Could not create JSON from data")
+                    return
+                }
+                guard let userId = json[Keys.userId] as? String else {
+                    Logger.shared.error("Could not get userId from data")
+                    return
+                }
+                success(userId)
+            } catch {
+                Logger.shared.error("Could not create JSON from data")
+            }
         }
         KYCNetworkRequest(
             post: KYCNetworkRequest.KYCEndpoints.POST.registerUser,

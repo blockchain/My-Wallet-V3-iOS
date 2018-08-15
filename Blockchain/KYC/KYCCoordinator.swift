@@ -194,11 +194,10 @@ protocol KYCCoordinatorDelegate: class {
             )
         }
 
-        let updateKYCUserCredentials: ((String, String)) -> Void = { (arg) in
-            let (userId, lifetimeToken) = arg
+        let updateKYCUserCredentials: (String) -> Void = { (userId) in
             WalletManager.shared.wallet.updateKYCUserCredentials(
                 withUserId: userId,
-                lifetimeToken: lifetimeToken,
+                lifetimeToken: nil,
                 success: getApiKey,
                 error: error
             )
