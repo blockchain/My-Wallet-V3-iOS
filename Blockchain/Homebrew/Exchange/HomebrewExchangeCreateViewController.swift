@@ -11,7 +11,7 @@ import Foundation
 class HomebrewExchangeCreateViewController: UIViewController {
 
     // MARK: Public Properties
-    
+
     weak var delegate: ExchangeTradeDelegate?
 
     // MARK: Private Properties
@@ -28,7 +28,7 @@ class HomebrewExchangeCreateViewController: UIViewController {
         let exchangeCreateView = ExchangeCreateView(frame: view.bounds)
         view.addSubview(exchangeCreateView)
 
-        let fromToButtonCoordinator = FromToButtonCoordinator(
+        let fromToButtonCoordinator = FromToButtonDelegateIntermediate(
             wallet: WalletManager.shared.wallet,
             navigationController: self.navigationController as! BCNavigationController,
             addressSelectionDelegate: self
@@ -55,13 +55,13 @@ extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
 extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
     func assetToggleButtonClicked() {
     }
-    
+
     func useMinButtonClicked() {
     }
-    
+
     func useMaxButtonClicked() {
     }
-    
+
     func continueButtonClicked() {
         delegate?.onContinueButtonClicked()
     }

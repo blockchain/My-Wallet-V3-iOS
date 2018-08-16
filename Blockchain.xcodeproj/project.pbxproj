@@ -683,7 +683,7 @@
 		C7A0E92E1FA8FFBF004F4267 /* ExchangeConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E92D1FA8FFBF004F4267 /* ExchangeConfirmViewController.m */; };
 		C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */; };
 		C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */; };
-		C7AEB1D02125CF4900320A32 /* FromToButtonCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AEB1CF2125CF4900320A32 /* FromToButtonCoordinator.swift */; };
+		C7AEB1D02125CF4900320A32 /* FromToButtonDelegateIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AEB1CF2125CF4900320A32 /* FromToButtonDelegateIntermediate.swift */; };
 		C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */; };
 		C7BD107B209A01690062269E /* NumberFormatter+Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */; };
 		C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */; };
@@ -3026,7 +3026,7 @@
 		C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphTimeFrame.m; sourceTree = "<group>"; };
 		C7A9E7A41FAB5FF600027F22 /* UILabel+CGRectForSubstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+CGRectForSubstring.h"; sourceTree = "<group>"; };
 		C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+CGRectForSubstring.m"; sourceTree = "<group>"; };
-		C7AEB1CF2125CF4900320A32 /* FromToButtonCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromToButtonCoordinator.swift; sourceTree = "<group>"; };
+		C7AEB1CF2125CF4900320A32 /* FromToButtonDelegateIntermediate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromToButtonDelegateIntermediate.swift; sourceTree = "<group>"; };
 		C7B685591F17AE2A00A18A5C /* BCEmptyPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCEmptyPageView.h; sourceTree = "<group>"; };
 		C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCEmptyPageView.m; sourceTree = "<group>"; };
 		C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Assets.swift"; sourceTree = "<group>"; };
@@ -5968,7 +5968,6 @@
 		AAA33338208811460019AD55 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				C7AEB1CF2125CF4900320A32 /* FromToButtonCoordinator.swift */,
 				AA69F6582086A2720054EFCE /* AppCoordinator.swift */,
 				C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */,
 				AAA3333A2088115C0019AD55 /* Coordinator.swift */,
@@ -6139,6 +6138,17 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		AAF2AF392124AFBC00687E30 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */,
+				AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */,
+				AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */,
+			);
+			name = Network;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		C75F64F52124BB9000396B65 /* Homebrew */ = {
 			isa = PBXGroup;
 			children = (
@@ -6151,6 +6161,7 @@
 		C75F64F62124BB9000396B65 /* Exchange */ = {
 			isa = PBXGroup;
 			children = (
+				C7AEB1CF2125CF4900320A32 /* FromToButtonDelegateIntermediate.swift */,
 				C75F65072124DDB900396B65 /* ExchangeTradeDelegate.swift */,
 				C75F65042124D95600396B65 /* ExchangeTradeInterface.swift */,
 				C75F65002124BEDF00396B65 /* HomebrewExchangeCreateViewController.swift */,
@@ -6161,17 +6172,6 @@
 				C7AEB1B32125CAB100320A32 /* Views */,
 			);
 			path = Exchange;
-			sourceTree = "<group>";
-		};
-		AAF2AF392124AFBC00687E30 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */,
-				AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */,
-				AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */,
-			);
-			name = Network;
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -7208,7 +7208,7 @@
 				51C9EBB620DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				AAFE9E9221016132002E4E1E /* PinError.swift in Sources */,
 				C790E1211E5345160063D141 /* BCVerifyEmailViewController.m in Sources */,
-				C7AEB1D02125CF4900320A32 /* FromToButtonCoordinator.swift in Sources */,
+				C7AEB1D02125CF4900320A32 /* FromToButtonDelegateIntermediate.swift in Sources */,
 				AA3CA9B22107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationService.swift in Sources */,
 				3A3D5D8B211B44BD00E6C241 /* ProgressableView.swift in Sources */,

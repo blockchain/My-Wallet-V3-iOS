@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class FromToButtonCoordinator: NSObject {
+@objc class FromToButtonDelegateIntermediate: NSObject {
     private let wallet: Wallet
     private let navigationController: BCNavigationController
     private weak var addressSelectionDelegate: AddressSelectionDelegate?
@@ -34,7 +34,7 @@ import Foundation
         viewController.automaticallyAdjustsScrollViewInsets = false
         viewController.view.addSubview(selectorView)
         self.navigationController.pushViewController(viewController, animated: true)
-        
+
         switch selectMode {
         case SelectModeExchangeAccountTo: self.navigationController.headerTitle = LocalizationConstants.Exchange.to
         case SelectModeExchangeAccountFrom: self.navigationController.headerTitle = LocalizationConstants.Exchange.from
@@ -43,11 +43,11 @@ import Foundation
     }
 }
 
-@objc extension FromToButtonCoordinator: FromToButtonDelegate {
+@objc extension FromToButtonDelegateIntermediate: FromToButtonDelegate {
     func fromButtonClicked() {
         selectAccount(selectMode: SelectModeExchangeAccountFrom)
     }
-    
+
     func toButtonClicked() {
         selectAccount(selectMode: SelectModeExchangeAccountTo)
     }
