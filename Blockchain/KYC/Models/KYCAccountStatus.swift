@@ -67,6 +67,16 @@ enum KYCAccountStatus: Int {
         case .inProgress: return LocalizationConstants.KYC.verificationInProgressDescription
         }
     }
+    
+    /// A badged display item of the account status
+    var badge: String {
+        switch self {
+        case .approved: return LocalizationConstants.KYC.accounVerifiedBadge
+        case .failed:   return LocalizationConstants.KYC.verificationFailedBadge
+        case .underReview: return LocalizationConstants.KYC.accountUnderReviewBadge
+        case .inProgress: return LocalizationConstants.KYC.accountPendingBadge
+        }
+    }
 
     /// Title of the primary button.
     var primaryButtonTitle: String? {

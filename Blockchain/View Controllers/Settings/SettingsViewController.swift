@@ -56,7 +56,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var delegate: (UIViewController & EmailDelegate)!
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
-    var userIdentityStatus: KYCUserResponse?
+    var userIdentityStatus: KYCUser?
 
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
     @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!

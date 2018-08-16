@@ -122,10 +122,10 @@ extension SettingsTableViewController {
         cell.accessoryView = switchForEmailNotifications
     }
 
-    func getUserVerificationStatus(handler: @escaping (KYCUserResponse?, Bool) -> Void) {
+    func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
         KYCNetworkRequest(get: .users(userID: "userID"), taskSuccess: { responseData in
             do {
-                self.userIdentityStatus = try KYCUserResponse.decode(data: responseData)
+                self.userIdentityStatus = try KYCUser.decode(data: responseData)
                 guard let kycStatus = self.userIdentityStatus else {
                     return
                 }
@@ -145,11 +145,9 @@ extension SettingsTableViewController {
         self.getUserVerificationStatus { status, success in
             DispatchQueue.main.async {
                 if success {
-                    if let hasDetail = status?.kycState {
+                    if let hasDetail = status?.status {
                         self.createBadge(cell, status)
-                        let asLowercased = hasDetail.lowercased()
-                        let formattedString = asLowercased.capitalizingFirstLetter()
-                        cell.detailTextLabel?.text = "\(formattedString)"
+                        cell.detailTextLabel?.text = "\(hasDetail.badge)"
                     }
                 } else {
                     cell.detailTextLabel?.text = ""
