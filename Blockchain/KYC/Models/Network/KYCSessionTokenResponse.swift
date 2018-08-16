@@ -16,12 +16,18 @@ struct KYCSessionTokenResponse: Decodable {
         case userId = "userId"
         case token = "token"
         case isActive = "isActive"
+        case expiresAt = "expiresAt"
+        case insertedAt = "insertedAt"
+        case updatedAt = "updatedAt"
     }
 
     let identifier: String
     let userId: String
     let token: String
     let isActive: Bool
+    let expiresAt: Date
+    let insertedAt: Date
+    let updatedAt: Date
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)

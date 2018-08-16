@@ -17,8 +17,6 @@ final class KYCAuthenticationService {
         static let userId = "userId"
     }
 
-    static let shared = KYCAuthenticationService()
-
     private let wallet: Wallet
 
     // MARK: - Initialization
@@ -35,13 +33,12 @@ final class KYCAuthenticationService {
     /// - Returns: a Single returning the sesion token
     func getKycSessionToken() -> Single<KYCSessionTokenResponse> {
         // TODO: cache this
-        // TODO: pass in valid device ID
         return getOrCreateApiTokenResponse().flatMap { [unowned self] apiToken in
             let headers: [String: String] = [
                 HttpHeaderField.authorization: apiToken.token,
                 HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
                 HttpHeaderField.clientType: HttpHeaderValue.clientTypeIos,
-                HttpHeaderField.deviceId: "ID GOES HERE",
+                HttpHeaderField.deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
                 HttpHeaderField.walletGuid: self.wallet.guid,
                 HttpHeaderField.walletEmail: self.wallet.getEmail()
             ]
