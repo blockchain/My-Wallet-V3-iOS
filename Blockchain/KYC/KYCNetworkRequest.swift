@@ -146,9 +146,7 @@ final class KYCNetworkRequest {
         guard let endpoint = URL.endpoint(base, pathComponents: nil, queryParameters: url.queryParameters) else { return nil }
         self.init(url: endpoint, httpMethod: "POST")
         do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            let body = try encoder.encode(parameters)
+            let body = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
             request.httpBody = body
 
             var allHeaders = [HttpHeaderField.contentType: HttpHeaderValue.json]

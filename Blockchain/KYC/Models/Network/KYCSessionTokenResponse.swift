@@ -17,17 +17,13 @@ struct KYCSessionTokenResponse: Decodable {
         case token = "token"
         case isActive = "isActive"
         case expiresAt = "expiresAt"
-        case insertedAt = "insertedAt"
-        case updatedAt = "updatedAt"
     }
 
     let identifier: String
     let userId: String
     let token: String
     let isActive: Bool
-    let expiresAt: Date
-    let insertedAt: Date
-    let updatedAt: Date
+    let expiresAt: Date?
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -35,6 +31,7 @@ struct KYCSessionTokenResponse: Decodable {
         userId = try values.decode(String.self, forKey: .userId)
         token = try values.decode(String.self, forKey: .token)
         isActive = try values.decode(Bool.self, forKey: .isActive)
-        // TODO: Parse expiresAt, insertedAt, updatedAt
+        let expiresAtString = try values.decode(String.self, forKey: .expiresAt)
+        expiresAt = DateFormatter.sessionDateFormat.date(from: expiresAtString)
     }
 }
