@@ -62,8 +62,8 @@ protocol KYCCoordinatorDelegate: class {
             disposable = BlockchainDataRepository.shared.kycUser
                 .subscribeOn(MainScheduler.asyncInstance)
                 .observeOn(MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] in
-                    self?.user = $0
+                .subscribe(onSuccess: { [unowned self] in
+                    self.user = $0
                     Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
