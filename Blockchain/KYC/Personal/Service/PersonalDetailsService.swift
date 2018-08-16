@@ -11,8 +11,12 @@ import Foundation
 class PersonalDetailsService: NSObject, PersonalDetailsAPI {
 
     func update(personalDetails: PersonalDetails, with completion: @escaping PersonalDetailsUpdateCompletion) {
+        guard let userID = personalDetails.identifier else {
+            completion(HTTPRequestClientError.failedRequest(description: "No valid userID"))
+            return
+        }
         KYCNetworkRequest(
-            put: .updateUserDetails(userId: personalDetails.identifier),
+            put: .updateUserDetails(userId: userID),
             parameters: personalDetails,
             taskSuccess: { _ in
                 completion(nil)

@@ -123,10 +123,10 @@
             </objects>
             <point key="canvasLocation" x="125.59999999999999" y="111.57635467980296"/>
         </scene>
-        <!--KYCAddress-->
+        <!--KYCAddressController-->
         <scene sceneID="Yd6-4J-UeZ">
             <objects>
-                <viewControllerPlaceholder storyboardName="KYCAddress" id="Kem-jm-UpZ" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="KYCAddressController" id="Kem-jm-UpZ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-zE-QFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="672" y="33"/>

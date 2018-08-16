@@ -10,7 +10,7 @@ import Foundation
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
-
+    
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
@@ -19,13 +19,42 @@ final class KYCNetworkRequest {
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
-        enum GET: String {
-            case credentials = "/kyc/credentials"
-            case credentialsForProvider = "/kyc/credentials/provider"
-            case healthCheck = "/healthz"
-            case listOfCountries = "/countries?filter=eea"
-            case nextKYCMethod = "/kyc/next-method"
-            case users, userDetails = "/users"
+        enum GET {
+            case credentials
+            case credentialsForProvider
+            case healthCheck
+            case listOfCountries
+            case nextKYCMethod
+            case users(userID: String)
+
+            var pathComponents: [String] {
+                switch self {
+                case .credentials:
+                    return ["kyc", "credentials"]
+                case .credentialsForProvider:
+                    return ["kyc", "credentials", "provider"]
+                case .healthCheck:
+                    return ["healthz"]
+                case .listOfCountries:
+                    return ["countries"]
+                case .nextKYCMethod:
+                    return ["kyc", "next-method"]
+                case .users(let userID):
+                    return ["users", userID]
+                }
+            }
+
+            var parameters: [String: String]? {
+                switch self {
+                case .credentials,
+                     .credentialsForProvider,
+                     .healthCheck,
+                     .listOfCountries,
+                     .nextKYCMethod,
+                     .users:
+                    return nil
+                }
+            }
         }
 
         enum POST: String {
@@ -63,12 +92,19 @@ final class KYCNetworkRequest {
     }
 
     /// HTTP GET Request
-    @discardableResult convenience init(
+    @discardableResult convenience init?(
         get url: KYCEndpoints.GET,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.rawValue)!, httpMethod: "GET")
+        guard let base = URL(string: BlockchainAPI.shared.retailCoreUrl) else { return nil }
+        guard let endpoint = URL.endpoint(
+            base,
+            pathComponents: url.pathComponents,
+            queryParameters: url.parameters
+            ) else { return nil }
+
+        self.init(url: endpoint, httpMethod: "GET")
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
@@ -104,7 +140,7 @@ final class KYCNetworkRequest {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
             let body = try encoder.encode(parameters)
             request.httpBody = body
-            request.allHTTPHeaderFields = ["Content-Type":"application/json",
+            request.allHTTPHeaderFields = ["Content-Type": "application/json",
                                            "Accept": "application/json"]
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {

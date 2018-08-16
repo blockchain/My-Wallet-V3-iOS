@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOA-vy-LXW" userLabel="Content Container View">
-                                <rect key="frame" x="0.0" y="190.33333333333334" width="375" height="310.33333333333326"/>
+                                <rect key="frame" x="0.0" y="190.99999999999997" width="375" height="309.33333333333326"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Welcome" translatesAutoresizingMaskIntoConstraints="NO" id="sgf-OY-RMl">
                                         <rect key="frame" x="52.666666666666657" y="0.0" width="270" height="136"/>
@@ -36,14 +36,14 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dC5-hc-bdm" userLabel="Description Label">
-                                        <rect key="frame" x="24" y="166" width="327" height="55.333333333333343"/>
+                                        <rect key="frame" x="24" y="166" width="327" height="54.333333333333343"/>
                                         <attributedString key="attributedText">
                                             <fragment>
                                                 <string key="content">Complete your Blockchain profile and
 identity verification to start buying and selling cryptocurrencies. This will only take 4 minutes.</string>
                                                 <attributes>
                                                     <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="14" name="Montserrat-Regular"/>
+                                                    <font key="NSFont" metaFont="system" size="14"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                 </attributes>
                                             </fragment>
@@ -51,7 +51,7 @@ identity verification to start buying and selling cryptocurrencies. This will on
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv9-ck-b0t" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="24" y="259.33333333333331" width="327" height="44"/>
+                                        <rect key="frame" x="24" y="258.33333333333337" width="327" height="44"/>
                                         <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="pw6-gR-4vR"/>
@@ -79,13 +79,13 @@ identity verification to start buying and selling cryptocurrencies. This will on
                                 </constraints>
                             </view>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JCK-ZN-BpY" userLabel="Terms of Service Label">
-                                <rect key="frame" x="24" y="632.66666666666663" width="327" height="33.333333333333371"/>
+                                <rect key="frame" x="24" y="633.33333333333337" width="327" height="32.666666666666629"/>
                                 <gestureRecognizers/>
                                 <attributedString key="attributedText">
                                     <fragment content="By tapping on “Apply Now”, you agree to Blockchain’s Terms of Service &amp; Privacy Policy">
                                         <attributes>
                                             <color key="NSColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Montserrat-Regular"/>
+                                            <font key="NSFont" metaFont="cellTitle"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -114,7 +114,6 @@ identity verification to start buying and selling cryptocurrencies. This will on
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="labelTermsOfService" destination="JCK-ZN-BpY" id="kvi-Na-ELd"/>
-                        <segue destination="31U-7w-PIG" kind="show" identifier="showCountrySelector" id="34J-X5-jhz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hhI-V4-oK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -125,14 +124,6 @@ identity verification to start buying and selling cryptocurrencies. This will on
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-183.19999999999999" y="172.90640394088672"/>
-        </scene>
-        <!--KYCCountrySelection-->
-        <scene sceneID="dSA-td-FOr">
-            <objects>
-                <viewControllerPlaceholder storyboardName="KYCCountrySelection" id="31U-7w-PIG" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jRF-fQ-mhs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="497" y="75"/>
         </scene>
     </scenes>
     <resources>

@@ -9,7 +9,7 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: UIViewController, ValidationFormView, ProgressableView {
+final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormView, ProgressableView {
 
     // MARK: - ProgressableView
 
@@ -45,14 +45,23 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
 
     // MARK: Private Properties
 
-    fileprivate var coordinator: PersonalDetailsCoordinator!
+    fileprivate var detailsCoordinator: PersonalDetailsCoordinator!
+
+    // MARK: Overrides
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCPersonalDetailsController {
+        let controller = makeFromStoryboard()
+        controller.coordinator = coordinator
+        controller.pageType = .profile
+        return controller
+    }
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        coordinator = PersonalDetailsCoordinator(interface: self)
+        detailsCoordinator = PersonalDetailsCoordinator(interface: self)
         setupTextFields()
         handleKeyboardOffset()
         setupNotifications()
@@ -75,8 +84,6 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
                 next.becomeFocused()
             }
         }
-
-        delegate?.onStart()
     }
 
     // MARK: - Private Methods
@@ -122,14 +129,18 @@ final class KYCPersonalDetailsController: UIViewController, ValidationFormView, 
         guard let email = WalletManager.shared.wallet.getEmail() else { return }
         validationFields.forEach({$0.resignFocus()})
 
-        let details = PersonalDetails(
-            identifier: "",
-            firstName: firstNameField.text ?? "",
-            lastName: lastNameField.text ?? "",
+        guard let details = PersonalDetails(
+            id: "",
+            first: firstNameField.text,
+            last: lastNameField.text,
             email: email,
             birthday: birthdayField.selectedDate
-        )
-        delegate?.onSubmission(details)
+            ) else { return }
+
+        delegate?.onSubmission(details, completion: { [weak self] in
+            guard let this = self else { return }
+            this.coordinator.handle(event: .nextPageFromPageType(this.pageType))
+        })
     }
 
     // MARK: - Navigation
@@ -150,10 +161,6 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
 
     func primaryButtonEnabled(_ enabled: Bool) {
         primaryButtonContainer.isEnabled = enabled
-    }
-
-    func nextPage() {
-        performSegue(withIdentifier: "enterMobileNumber", sender: self)
     }
 
     func populatePersonalDetailFields(_ details: PersonalDetails) {

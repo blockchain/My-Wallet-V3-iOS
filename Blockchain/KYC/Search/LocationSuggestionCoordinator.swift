@@ -36,8 +36,6 @@ class LocationSuggestionCoordinator: NSObject {
         if let controller = delegate as? KYCAddressController {
             controller.searchDelegate = self
         }
-
-        self.interface?.searchFieldActive(true)
     }
 }
 
@@ -47,9 +45,11 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         switch model.suggestions.isEmpty {
         case true:
             interface?.searchFieldText(nil)
+            interface?.primaryButton(.visible)
             interface?.suggestionsList(.hidden)
             interface?.addressEntryView(.visible)
         case false:
+            interface?.primaryButton(.hidden)
             interface?.suggestionsList(.visible)
             interface?.addressEntryView(.hidden)
         }
@@ -71,6 +71,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         if let input = selection as? LocationSuggestion {
             interface?.searchFieldText("\(input.title) \(input.subtitle)")
             interface?.suggestionsList(.hidden)
+            interface?.primaryButton(.visible)
             interface?.updateActivityIndicator(.visible)
             service.fetchAddress(from: input) { [weak self] (address) in
                 guard let this = self else { return }
@@ -82,7 +83,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
         }
     }
 
-    func onSubmission(_ address: UserAddress) {
+    func onSubmission(_ address: UserAddress, completion: @escaping () -> Void) {
         interface?.primaryButtonActivityIndicator(.visible)
         interface?.primaryButtonEnabled(false)
         // TODO: Pass in correct userID
@@ -95,7 +96,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
             } else {
-                this.interface?.nextPage()
+                completion()
             }
         }
     }
@@ -139,6 +140,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
     func onSearchViewCancel() {
         interface?.searchFieldActive(false)
         interface?.suggestionsList(.hidden)
+        interface?.primaryButton(.visible)
         interface?.addressEntryView(.visible)
         guard service.isExecuting else { return }
         service.cancel()

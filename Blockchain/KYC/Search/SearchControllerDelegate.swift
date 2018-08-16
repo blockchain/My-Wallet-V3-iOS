@@ -12,7 +12,7 @@ protocol SearchControllerDelegate: class {
     func onStart()
     func onSubmission(_ selection: SearchSelection)
     func onSelection(_ selection: SearchSelection)
-    func onSubmission(_ address: UserAddress)
+    func onSubmission(_ address: UserAddress, completion: @escaping () -> Void)
     func onSearchRequest(_ query: String)
     func onSearchViewCancel()
 }

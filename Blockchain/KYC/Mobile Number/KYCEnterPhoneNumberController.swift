@@ -9,7 +9,7 @@
 import PhoneNumberKit
 import UIKit
 
-final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContainerView {
+final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
     // MARK: Properties
 
@@ -33,6 +33,15 @@ final class KYCEnterPhoneNumberController: UIViewController, BottomButtonContain
     private lazy var phoneNumberPartialFormatter: PartialFormatter = {
         return PartialFormatter()
     }()
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCEnterPhoneNumberController {
+        let controller = makeFromStoryboard()
+        controller.coordinator = coordinator
+        controller.pageType = .enterPhone
+        return controller
+    }
 
     // MARK: UIViewController Lifecycle Methods
 
@@ -105,7 +114,7 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
 
     func startVerificationSuccess() {
         Logger.shared.info("Show verification view!")
-        self.performSegue(withIdentifier: "verifyMobileNumber", sender: nil)
+        coordinator.handle(event: .nextPageFromPageType(pageType))
     }
 
     func hideLoadingView() {

@@ -8,16 +8,19 @@
 
 import Foundation
 
-enum KYCAccountStatus: Int {
-    case approved, failed, underReview, inProgress
+enum KYCAccountStatus: String {
+    case none = "NONE"
+    case expired = "EXPIRED"
+    case approved = "VERIFIED"
+    case failed = "REJECTED"
+    case pending = "PENDING"
 
     /// Graphic which visually represents the account status
     var image: UIImage {
         switch self {
         case .approved: return #imageLiteral(resourceName: "AccountApproved")
-        case .failed:   return #imageLiteral(resourceName: "AccountFailed")
-        case .underReview: return #imageLiteral(resourceName: "AccountInReview")
-        case .inProgress: return #imageLiteral(resourceName: "AccountInReview")
+        case .failed, .none, .expired:   return #imageLiteral(resourceName: "AccountFailed")
+        case .pending: return #imageLiteral(resourceName: "AccountInReview")
         }
     }
 
@@ -25,16 +28,18 @@ enum KYCAccountStatus: Int {
     var title: String {
         switch self {
         case .approved: return LocalizationConstants.KYC.accountApproved
-        case .failed:   return LocalizationConstants.KYC.verificationFailed
-        case .underReview: return LocalizationConstants.KYC.verificationUnderReview
-        case .inProgress: return LocalizationConstants.KYC.verificationInProgress
+        case .pending: return LocalizationConstants.KYC.verificationUnderReview
+        case .failed,
+             .expired,
+             .none:
+            return LocalizationConstants.KYC.verificationFailed
         }
     }
 
     /// Subtitle for the account status
     var subtitle: String? {
         switch self {
-        case .inProgress: return LocalizationConstants.KYC.whatHappensNext
+        case .pending: return LocalizationConstants.KYC.whatHappensNext
         default: return nil
         }
     }
@@ -43,9 +48,11 @@ enum KYCAccountStatus: Int {
     var description: String {
         switch self {
         case .approved: return LocalizationConstants.KYC.accountApprovedDescription
-        case .failed:   return LocalizationConstants.KYC.verificationFailedDescription
-        case .underReview: return LocalizationConstants.KYC.verificationUnderReviewDescription
-        case .inProgress: return LocalizationConstants.KYC.verificationInProgressDescription
+        case .pending: return LocalizationConstants.KYC.verificationInProgressDescription
+        case .expired,
+             .none,
+             .failed:
+            return LocalizationConstants.KYC.verificationFailedDescription
         }
     }
 
@@ -54,8 +61,8 @@ enum KYCAccountStatus: Int {
         switch self {
         case .approved: return LocalizationConstants.KYC.getStarted
         case .failed:   return LocalizationConstants.KYC.contactSupport
-        case .underReview: return nil
-        case .inProgress: return LocalizationConstants.KYC.notifyMe
+        case .pending: return LocalizationConstants.KYC.notifyMe
+        case .none, .expired: return nil
         }
     }
 }

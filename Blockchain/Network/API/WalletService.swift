@@ -21,10 +21,11 @@ import RxSwift
         self.networkManager = networkManager
     }
 
-    // MARK: - Public
+    // MARK: - Private Properties
 
-    /// A Single returning the WalletOptions which contains dynamic flags for configuring the app.
-    var walletOptions: Single<WalletOptions> {
+    private var cachedWalletOptions = Variable<WalletOptions?>(nil)
+
+    private var networkFetchedWalletOptions: Single<WalletOptions> {
         return networkManager.requestJsonOrString(
             BlockchainAPI.shared.walletOptionsUrl,
             method: .get
@@ -36,6 +37,21 @@ import RxSwift
                 throw NetworkError.jsonParseError
             }
             return WalletOptions(json: json)
+        }.do(onSuccess: { [weak self] in
+            self?.cachedWalletOptions.value = $0
+        })
+    }
+
+    // MARK: - Public
+
+    /// A Single returning the WalletOptions which contains dynamic flags for configuring the app.
+    /// If WalletOptions has already been fetched, this property will return the cached value
+    var walletOptions: Single<WalletOptions> {
+        return Single.deferred { [unowned self] in
+            guard let cachedValue = self.cachedWalletOptions.value else {
+                return self.networkFetchedWalletOptions
+            }
+            return Single.just(cachedValue)
         }
     }
 

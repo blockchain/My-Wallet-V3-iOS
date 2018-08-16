@@ -25,11 +25,8 @@ class PersonalDetailsCoordinator: NSObject {
 }
 
 extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
-    func onStart() {
-        // TODO: Pre-populate fields from already fetched data.
-    }
 
-    func onSubmission(_ input: PersonalDetails) {
+    func onSubmission(_ input: PersonalDetails, completion: @escaping () -> Void) {
         interface?.primaryButtonEnabled(false)
         interface?.primaryButtonActivityIndicator(.visible)
         service.update(personalDetails: input) { [weak self] (error) in
@@ -40,7 +37,7 @@ extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
                 // TODO: Error state
                 Logger.shared.error("\(err)")
             } else {
-                this.interface?.nextPage()
+                completion()
             }
             this.interface?.primaryButtonEnabled(true)
         }

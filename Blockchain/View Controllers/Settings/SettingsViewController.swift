@@ -372,6 +372,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
             AlertViewPresenter.sharedInstance().showNoInternetConnectionAlert()
         }
     }
+
     func addObserversForChangingNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.changeNotificationsSuccess),
@@ -381,6 +382,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
                                                selector: #selector(self.changeNotificationsError),
                                                name: NSNotification.Name(rawValue: "ChangeEmailNotificationsError"), object: nil)
     }
+
     func removeObserversForChangingNotifications() {
         NotificationCenter.default.removeObserver(self,
                                                   name: NSNotification.Name(rawValue: "ChangeEmailNotifications"), object: nil)

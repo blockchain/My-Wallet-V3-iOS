@@ -9,7 +9,6 @@
 import Foundation
 
 protocol PersonalDetailsInterface: class {
-    func nextPage()
     func primaryButtonActivityIndicator(_ visibility: Visibility)
     func primaryButtonEnabled(_ enabled: Bool)
     func populatePersonalDetailFields(_ details: PersonalDetails)

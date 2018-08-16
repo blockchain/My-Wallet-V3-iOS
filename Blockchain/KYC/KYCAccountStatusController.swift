@@ -26,15 +26,12 @@ extension KYCAccountStatusViewConfig {
         case .approved:
             titleColor = UIColor.green
             isPrimaryButtonEnabled = true
-        case .failed:
+        case .failed, .expired, .none:
             titleColor = UIColor.error
             isPrimaryButtonEnabled = true
-        case .inProgress:
+        case .pending:
             titleColor = UIColor.orange
             isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
-        case .underReview:
-            titleColor = UIColor.orange
-            isPrimaryButtonEnabled = false
         }
         return KYCAccountStatusViewConfig(
             titleColor: titleColor,
@@ -43,7 +40,7 @@ extension KYCAccountStatusViewConfig {
     }
 }
 
-final class KYCAccountStatusController: UIViewController {
+final class KYCAccountStatusController: KYCBaseViewController {
 
     /// typealias for an action to be taken when the primary button/CTA is tapped
     typealias PrimaryButtonAction = ((KYCAccountStatusController) -> Void)
@@ -68,6 +65,15 @@ final class KYCAccountStatusController: UIViewController {
 
     /// The view configuration for this view
     var viewConfig: KYCAccountStatusViewConfig = KYCAccountStatusViewConfig.defaultConfig
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCAccountStatusController {
+        let controller = makeFromStoryboard()
+        controller.coordinator = coordinator
+        controller.pageType = .accountStatus
+        return controller
+    }
 
     // MARK: - Lifecycle Methods
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonContainerView {
+final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
     // MARK: Public Properties
 
@@ -37,6 +37,15 @@ final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonConta
 
     deinit {
         cleanUp()
+    }
+
+    // MARK: Factory
+
+    override class func make(with coordinator: KYCCoordinator) -> KYCConfirmPhoneNumberController {
+        let controller = makeFromStoryboard()
+        controller.coordinator = coordinator
+        controller.pageType = .confirmPhone
+        return controller
     }
 
     // MARK: View Controller Lifecycle
@@ -84,7 +93,7 @@ final class KYCConfirmPhoneNumberController: UIViewController, BottomButtonConta
 
 extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     func confirmCodeSuccess() {
-        self.performSegue(withIdentifier: "promptForAddress", sender: nil)
+        coordinator.handle(event: .nextPageFromPageType(pageType))
     }
 
     func startVerificationSuccess() {
