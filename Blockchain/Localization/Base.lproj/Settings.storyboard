@@ -30,8 +30,8 @@
                         <sections>
                             <tableViewSection headerTitle="Profile" id="e81-EZ-4as">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="4WQ-id-JSm" detailTextLabel="uKc-pD-0Gk" rowHeight="56" style="IBUITableViewCellStyleValue1" id="mDE-EA-VXB" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.333333333333343" width="375" height="56"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="4WQ-id-JSm" detailTextLabel="uKc-pD-0Gk" rowHeight="56" style="IBUITableViewCellStyleValue1" id="mDE-EA-VXB" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="55.333333333333336" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mDE-EA-VXB" id="SZd-jz-qxe">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -92,7 +92,7 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="detailTextLabel.text" value="Copy"/>
                                         </userDefinedRuntimeAttributes>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="62q-nT-IF2" detailTextLabel="tw2-fH-0Wp" rowHeight="56" style="IBUITableViewCellStyleValue1" id="fYY-UW-ohq" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="62q-nT-IF2" detailTextLabel="tw2-fH-0Wp" rowHeight="56" style="IBUITableViewCellStyleValue1" id="fYY-UW-ohq" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="167.33333333333334" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fYY-UW-ohq" id="fM2-eL-y35">
@@ -144,7 +144,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="t8e-6f-k1Q" detailTextLabel="Vjr-DM-VSG" rowHeight="56" style="IBUITableViewCellStyleValue1" id="n3W-Iu-8sg" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="t8e-6f-k1Q" detailTextLabel="Vjr-DM-VSG" rowHeight="56" style="IBUITableViewCellStyleValue1" id="n3W-Iu-8sg" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="223.33333333333334" width="375" height="56.000000000000028"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="n3W-Iu-8sg" id="rQ2-6D-oCl">
@@ -251,7 +251,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Security" id="Ilb-ag-zDr">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="twoStep" textLabel="w9O-TJ-0iq" detailTextLabel="BN7-0Q-fUZ" rowHeight="56" style="IBUITableViewCellStyleValue1" id="L9V-jq-1tD" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="twoStep" textLabel="w9O-TJ-0iq" detailTextLabel="BN7-0Q-fUZ" rowHeight="56" style="IBUITableViewCellStyleValue1" id="L9V-jq-1tD" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="543.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="L9V-jq-1tD" id="lS8-PN-hNv">
@@ -314,7 +314,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="sZ9-93-MJf" detailTextLabel="q7A-2K-VRu" rowHeight="56" style="IBUITableViewCellStyleValue1" id="CNP-CU-0iZ" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="sZ9-93-MJf" detailTextLabel="q7A-2K-VRu" rowHeight="56" style="IBUITableViewCellStyleValue1" id="CNP-CU-0iZ" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="655.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CNP-CU-0iZ" id="Hw2-jb-4Kz">
@@ -407,11 +407,11 @@
                                         <rect key="frame" x="0.0" y="927.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mBb-so-AP3" id="R4I-wz-TgP">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="About Us" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kLW-uQ-yIO">
-                                                    <rect key="frame" x="15" y="0.0" width="325" height="55.666666666666664"/>
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="55.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -421,14 +421,14 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="4K4-LK-KWj" rowHeight="56" style="IBUITableViewCellStyleDefault" id="6iK-nt-yB4" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="983.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="983.33333333333337" width="375" height="56.000000000000114"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6iK-nt-yB4" id="7Uc-7m-DG4">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Terms of Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4K4-LK-KWj">
-                                                    <rect key="frame" x="15" y="0.0" width="325" height="55.666666666666664"/>
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="55.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -441,11 +441,11 @@
                                         <rect key="frame" x="0.0" y="1039.3333333333335" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gA6-C9-Noi" id="4zE-HC-9fK">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Privacy Policy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uax-tr-3ko">
-                                                    <rect key="frame" x="15" y="0.0" width="325" height="55.666666666666664"/>
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="55.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
