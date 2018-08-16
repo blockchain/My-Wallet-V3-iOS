@@ -76,11 +76,12 @@ import UIKit
         super.setSelected(selected, animated: animated)
     }
 }
+
 @IBDesignable class SettingsTableViewBadge: SettingsTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
-        let viewHeight = contentView.frame.size.height
-        let labelHeight = detailTextLabel?.frame.size.height
+        let viewHeight = self.contentView.frame.size.height
+        let labelHeight = self.detailTextLabel?.frame.size.height
         let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
         self.detailTextLabel?.frame.origin.y = ypos
     }

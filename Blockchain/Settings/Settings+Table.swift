@@ -144,7 +144,8 @@ extension SettingsTableViewController {
                     cell.detailTextLabel?.text = userModel.badge
                 }
             } else {
-                cell.detailTextLabel?.text = ""
+                self.createBadge(cell, status)
+                cell.detailTextLabel?.text = "Unknown"
             }
         }
     }
@@ -183,7 +184,7 @@ extension SettingsTableViewController {
         prepareRow(cell, .base)
         switch (indexPath.section, indexPath.row) {
         case (sectionProfile, identityVerification):
-            prepareRow(cell, .identity)
+            self.prepareRow(cell, .identity)
         case (sectionProfile, profileWalletIdentifier):
             prepareRow(cell, .wallet)
         case (sectionProfile, profileEmail):
@@ -324,19 +325,12 @@ class EdgeInsetBadge: EdgeInsetLabel {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInit()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
     }
-    
-    func commonInit() {
-//        self.centerYAnchor.constraint(equalTo: (superview?.centerYAnchor)!).isActive = true
-        self.frame = CGRect(origin: CGPoint(x: 0, y: -50), size: CGSize(width: 60.0, height: 70.0))
-    }
-    
+
     @IBInspectable
     var background: UIColor {
         set { self.backgroundColor = newValue }
@@ -397,21 +391,3 @@ extension EdgeInsetLabel {
         get { return textInsets.bottom }
     }
 }
-
-//class customRightDetailText: UITableViewCell {
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        commonInit()
-//    }
-//    
-//    override init(style: UITableViewCellStyle,
-//         reuseIdentifier: String?) {
-//        super.init(style: .value2, reuseIdentifier:reuseIdentifier)
-//        commonInit()
-//    }
-//    
-//    func commonInit() {
-//        self.detailTextLabel?.frame = CGRect(origin: CGPoint(x: 0, y: -50), size: CGSize(width: 60.0, height: 70.0))
-//    }
-//}
