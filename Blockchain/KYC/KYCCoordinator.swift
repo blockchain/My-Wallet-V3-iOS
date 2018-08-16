@@ -17,7 +17,10 @@ enum KYCEvent {
 
     /// This will push on the next page in the KYC flow.
     case nextPageFromPageType(KYCPageType)
-    
+
+    /// Event emitted when the provided page type emits an error
+    case failurePageForPageType(KYCPageType, KYCPageError)
+
     // TODO:
     /// Should the user go back in the KYC flow, we need to
     /// prepopulate the screens with the data they already entered.
@@ -62,41 +65,23 @@ protocol KYCCoordinatorDelegate: class {
             disposable = BlockchainDataRepository.shared.kycUser
                 .subscribeOn(MainScheduler.asyncInstance)
                 .observeOn(MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] in
-                    self?.user = $0
+                .subscribe(onSuccess: { [unowned self] in
+                    self.user = $0
                     Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
                 })
         }
         guard let welcomeViewController = screenFor(pageType: .welcome) as? KYCWelcomeController else { return }
-        presentInNavigationController(welcomeViewController, in: viewController)
+        navController = presentInNavigationController(welcomeViewController, in: viewController)
     }
 
     func handle(event: KYCEvent) {
         switch event {
         case .pageWillAppear(let type):
-            switch type {
-            case .welcome,
-                 .country,
-                 .confirmPhone,
-                 .verifyIdentity,
-                 .accountStatus:
-                break
-            case .profile:
-                guard let current = user else { return }
-                guard let details = current.personalDetails else { return }
-                delegate?.apply(model: .personalDetails(details))
-            case .address:
-                guard let current = user else { return }
-                guard let address = current.address else { return }
-                delegate?.apply(model: .address(address))
-
-            case .enterPhone:
-                guard let current = user else { return }
-                guard let mobile = current.mobile else { return }
-                delegate?.apply(model: .phone(mobile))
-            }
+            handlePageWillAppear(for: type)
+        case .failurePageForPageType(_, let error):
+            handleFailurePage(for: error)
         case .nextPageFromPageType(let type):
             guard let nextPage = type.next else { return }
             let controller = screenFor(pageType: nextPage)
@@ -105,10 +90,11 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     func presentAccountStatusView(for status: KYCAccountStatus, in viewController: UIViewController) {
-        let accountStatusViewController = KYCAccountStatusController.make(with: self)
-        accountStatusViewController.accountStatus = status
+        let accountStatusViewController = KYCInformationController.make(with: self)
+        accountStatusViewController.viewModel = KYCInformationViewModel.create(for: status)
+        accountStatusViewController.viewConfig = KYCInformationViewConfig.create(for: status)
         accountStatusViewController.primaryButtonAction = { viewController in
-            switch viewController.accountStatus {
+            switch status {
             case .approved:
                 viewController.dismiss(animated: true) {
                     ExchangeCoordinator.shared.start()
@@ -125,11 +111,55 @@ protocol KYCCoordinatorDelegate: class {
 
     // MARK: Private Methods
 
-    private func presentInNavigationController(_ viewController: UIViewController, in presentingViewController: UIViewController) {
-        navController = KYCOnboardingNavigationController.make()
+    private func handleFailurePage(for error: KYCPageError) {
+        switch error {
+        case .countryNotSupported(let country):
+            let informationViewController = KYCInformationController.make(with: self)
+            informationViewController.viewModel = KYCInformationViewModel.createForUnsupportedCountry(country)
+            informationViewController.viewConfig = KYCInformationViewConfig(
+                titleColor: UIColor.gray5,
+                isPrimaryButtonEnabled: true
+            )
+            informationViewController.primaryButtonAction = { [unowned self] viewController in
+                viewController.presentingViewController?.presentingViewController?.dismiss(animated: true)
+            }
+            presentInNavigationController(informationViewController, in: navController)
+        }
+    }
+
+    private func handlePageWillAppear(for type: KYCPageType) {
+        switch type {
+        case .welcome,
+             .country,
+             .confirmPhone,
+             .verifyIdentity,
+             .accountStatus:
+            break
+        case .profile:
+            guard let current = user else { return }
+            guard let details = current.personalDetails else { return }
+            delegate?.apply(model: .personalDetails(details))
+        case .address:
+            guard let current = user else { return }
+            guard let address = current.address else { return }
+            delegate?.apply(model: .address(address))
+
+        case .enterPhone:
+            guard let current = user else { return }
+            guard let mobile = current.mobile else { return }
+            delegate?.apply(model: .phone(mobile))
+        }
+    }
+
+    @discardableResult private func presentInNavigationController(
+        _ viewController: UIViewController,
+        in presentingViewController: UIViewController
+    ) -> KYCOnboardingNavigationController {
+        let navController = KYCOnboardingNavigationController.make()
         navController.pushViewController(viewController, animated: false)
         navController.modalTransitionStyle = .coverVertical
         presentingViewController.present(navController, animated: true)
+        return navController
     }
 
     private func screenFor(pageType: KYCPageType) -> KYCBaseViewController {
@@ -149,7 +179,7 @@ protocol KYCCoordinatorDelegate: class {
         case .verifyIdentity:
             return KYCVerifyIdentityController.make(with: self)
         case .accountStatus:
-            return KYCAccountStatusController.make(with: self)
+            return KYCInformationController.make(with: self)
         }
     }
 

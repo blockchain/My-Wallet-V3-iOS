@@ -14,7 +14,7 @@ enum KYCAccountStatus: String {
     case approved = "VERIFIED"
     case failed = "REJECTED"
     case pending = "PENDING"
-
+    
     /// Graphic which visually represents the account status
     var image: UIImage {
         switch self {
@@ -23,7 +23,7 @@ enum KYCAccountStatus: String {
         case .pending: return #imageLiteral(resourceName: "AccountInReview")
         }
     }
-
+    
     /// Title which represents the account status
     var title: String {
         switch self {
@@ -35,7 +35,7 @@ enum KYCAccountStatus: String {
             return LocalizationConstants.KYC.verificationFailed
         }
     }
-
+    
     /// Subtitle for the account status
     var subtitle: String? {
         switch self {
@@ -43,7 +43,7 @@ enum KYCAccountStatus: String {
         default: return nil
         }
     }
-
+    
     /// Description of the account status
     var description: String {
         switch self {
@@ -55,7 +55,7 @@ enum KYCAccountStatus: String {
             return LocalizationConstants.KYC.verificationFailedDescription
         }
     }
-
+    
     /// Title of the primary button.
     var primaryButtonTitle: String? {
         switch self {
@@ -65,8 +65,8 @@ enum KYCAccountStatus: String {
         case .none, .expired: return nil
         }
     }
-
- var badge: String {
+    
+    var badge: String {
         switch self {
         case .approved: return LocalizationConstants.KYC.accounVerifiedBadge
         case .failed:   return LocalizationConstants.KYC.verificationFailedBadge

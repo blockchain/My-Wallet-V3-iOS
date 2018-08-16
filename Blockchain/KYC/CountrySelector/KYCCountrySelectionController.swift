@@ -220,6 +220,6 @@ extension KYCCountrySelectionController: KYCCountrySelectionView {
     }
 
     func showExchangeNotAvailable(country: KYCCountry) {
-        // TICKET: IOS-1150
+        coordinator.handle(event: .failurePageForPageType(pageType, .countryNotSupported(country)))
     }
 }
