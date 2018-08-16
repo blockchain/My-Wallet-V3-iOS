@@ -123,7 +123,7 @@ extension SettingsTableViewController {
     }
 
     func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
-        KYCNetworkRequest(get: .users(userID: "userID"), taskSuccess: { responseData in
+        KYCNetworkRequest(get: .currentUser, taskSuccess: { responseData in
             do {
                 self.userIdentityStatus = try KYCUser.decode(data: responseData)
                 guard let kycStatus = self.userIdentityStatus else {

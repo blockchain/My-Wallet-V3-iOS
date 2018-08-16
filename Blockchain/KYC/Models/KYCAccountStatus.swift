@@ -70,8 +70,8 @@ enum KYCAccountStatus: String {
         switch self {
         case .approved: return LocalizationConstants.KYC.accounVerifiedBadge
         case .failed:   return LocalizationConstants.KYC.verificationFailedBadge
-        case .underReview: return LocalizationConstants.KYC.accountUnderReviewBadge
-        case .inProgress: return LocalizationConstants.KYC.accountPendingBadge
+        case .pending: return LocalizationConstants.KYC.accountUnderReviewBadge
+        default: return LocalizationConstants.KYC.accountPendingBadge
         }
     }
 }
