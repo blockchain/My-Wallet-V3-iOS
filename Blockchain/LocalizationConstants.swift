@@ -468,6 +468,14 @@ struct LocalizationConstants {
             comment: "KYC verification is Under Review."
         )
         
+        static let verificationUnderReview = NSLocalizedString(
+            "Verification Under Review",
+            comment: "Text displayed when KYC verification is under review."
+        )
+        static let verificationUnderReviewDescription = NSLocalizedString(
+            "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
+            comment: "Description for when KYC verification is under review."
+        )
         
         static let accountUnconfirmedBadge = NSLocalizedString(
             "Unconfirmed",

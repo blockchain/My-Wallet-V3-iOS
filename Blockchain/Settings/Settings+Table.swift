@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 extension SettingsTableViewController {
 
@@ -124,22 +125,14 @@ extension SettingsTableViewController {
     }
 
     func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
-        KYCNetworkRequest(get: .currentUser, taskSuccess: { responseData in
-            do {
-                self.userIdentityStatus = try KYCUser.decode(data: responseData)
-                guard let kycStatus = self.userIdentityStatus else {
-                    return
-                }
-                handler(kycStatus, true)
-            } catch {
-                // TODO: handle error
-                // TODO: Remove debug
-            }
-        }, taskFailure: { error in
-            // TODO: handle error
-            handler(nil, false)
-            Logger.shared.error(error.debugDescription)
-        })
+        disposable = BlockchainDataRepository.shared.kycUser
+            .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
+            .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
+            .subscribe(onSuccess: { user in
+                handler(user, true)
+            }, onError: {  error in
+                handler(nil, false)
+            })
     }
     
     func prepareIdentityCell(_ cell: UITableViewCell) {

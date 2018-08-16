@@ -9,6 +9,7 @@
 import UIKit
 import LocalAuthentication
 import CoreFoundation
+import RxSwift
 
 @IBDesignable @objc class SettingsTableViewController: UITableViewController,
 AppSettingsController, UITextFieldDelegate, EmailDelegate,
@@ -58,11 +59,15 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     let walletManager: WalletManager
     var userIdentityStatus: KYCUser?
 
+    var disposable: Disposable?
+    
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
     @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        disposable?.dispose()
+
     }
 
     required init?(coder aDecoder: NSCoder) {
