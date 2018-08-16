@@ -138,7 +138,8 @@ extension SettingsTableViewController {
     func prepareIdentityCell(_ cell: UITableViewCell) {
         self.getUserVerificationStatus { status, success in
             if success {
-                if let hasDetail = status?.status, let userModel = KYCInformationViewModel.create(for: hasDetail) {
+                if let hasDetail = status?.status {
+                    let userModel = KYCInformationViewModel.create(for: hasDetail)
                     self.createBadge(cell, status)
                     cell.detailTextLabel?.text = userModel.badge
                 }
