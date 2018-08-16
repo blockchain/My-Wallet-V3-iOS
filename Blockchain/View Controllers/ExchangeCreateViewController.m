@@ -48,7 +48,7 @@
 @property (nonatomic) id fee;
 
 @property (nonatomic) ExchangeCreateView *exchangeView;
-@property (nonatomic) FromToButtonCoordinator *fromToButtonCoordinator; // strong reference required to prevent it from becoming nil
+@property (nonatomic) FromToButtonDelegateIntermediate *fromToButtonDelegateIntermediate; // strong reference required to prevent it from becoming nil
 @end
 
 @implementation ExchangeCreateViewController
@@ -60,9 +60,9 @@
     self.exchangeView = [[ExchangeCreateView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.exchangeView];
 
-    self.fromToButtonCoordinator = [[FromToButtonCoordinator alloc] initWithWallet:WalletManager.sharedInstance.wallet navigationController:(BCNavigationController *)self.navigationController addressSelectionDelegate:self];
+    self.fromToButtonDelegateIntermediate = [[FromToButtonDelegateIntermediate alloc] initWithWallet:WalletManager.sharedInstance.wallet navigationController:(BCNavigationController *)self.navigationController addressSelectionDelegate:self];
 
-    [self.exchangeView setupWithCreateViewDelegate:self fromToButtonDelegate:self.fromToButtonCoordinator continueButtonInputAccessoryDelegate:self textFieldDelegate:self];
+    [self.exchangeView setupWithCreateViewDelegate:self fromToButtonDelegate:self.fromToButtonDelegateIntermediate continueButtonInputAccessoryDelegate:self textFieldDelegate:self];
 
     self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:LegacyAssetTypeBitcoin];
     
