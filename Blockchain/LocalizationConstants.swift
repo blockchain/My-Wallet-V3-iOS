@@ -305,6 +305,8 @@ struct LocalizationConstants {
             "Use maximum",
             comment: "Text displayed on button for user to tap to create a trade with the maximum amount of crypto allowed"
         )
+        static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
+        static let from = NSLocalizedString("From", comment: "Label for exchanging from a specific type of crypto")
     }
 
     struct AddressAndKeyImport {

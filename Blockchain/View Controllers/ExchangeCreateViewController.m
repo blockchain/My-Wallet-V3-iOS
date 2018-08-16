@@ -20,7 +20,7 @@
 
 #define IMAGE_NAME_SWITCH_CURRENCIES @"switch_currencies"
 
-@interface ExchangeCreateViewController () <UITextFieldDelegate, FromToButtonDelegate, AddressSelectionDelegate, ContinueButtonInputAccessoryViewDelegate, ExchangeCreateViewDelegate>
+@interface ExchangeCreateViewController () <UITextFieldDelegate, AddressSelectionDelegate, ContinueButtonInputAccessoryViewDelegate, ExchangeCreateViewDelegate>
 
 @property (nonatomic) NSTimer *quoteTimer;
 
@@ -48,6 +48,7 @@
 @property (nonatomic) id fee;
 
 @property (nonatomic) ExchangeCreateView *exchangeView;
+@property (nonatomic) FromToButtonCoordinator *fromToButtonCoordinator; // strong reference required to prevent it from becoming nil
 @end
 
 @implementation ExchangeCreateViewController
@@ -58,8 +59,11 @@
     
     self.exchangeView = [[ExchangeCreateView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.exchangeView];
-    [self.exchangeView setupWithCreateViewDelegate:self fromToButtonDelegate:self continueButtonInputAccessoryDelegate:self textFieldDelegate:self];
-    
+
+    self.fromToButtonCoordinator = [[FromToButtonCoordinator alloc] initWithWallet:WalletManager.sharedInstance.wallet navigationController:(BCNavigationController *)self.navigationController addressSelectionDelegate:self];
+
+    [self.exchangeView setupWithCreateViewDelegate:self fromToButtonDelegate:self.fromToButtonCoordinator continueButtonInputAccessoryDelegate:self textFieldDelegate:self];
+
     self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:LegacyAssetTypeBitcoin];
     
     [self selectFromBitcoin];
@@ -1027,30 +1031,6 @@
     } else if ([toSymbol isEqualToString:CURRENCY_SYMBOL_BCH]) {
         [self selectFromBitcoinCash];
     }
-}
-
-- (void)fromButtonClicked
-{
-    [self selectAccountClicked:SelectModeExchangeAccountFrom];
-}
-
-- (void)toButtonClicked
-{
-    [self selectAccountClicked:SelectModeExchangeAccountTo];
-}
-
-- (void)selectAccountClicked:(SelectMode)selectMode
-{
-    BCAddressSelectionView *selectorView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:selectMode delegate:self];
-    selectorView.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:NO assetSelector:NO];
-    
-    UIViewController *viewController = [UIViewController new];
-    viewController.automaticallyAdjustsScrollViewInsets = NO;
-    [viewController.view addSubview:selectorView];
-    
-    [self.navigationController pushViewController:viewController animated:YES];
-    BCNavigationController *navigationController = (BCNavigationController *)self.navigationController;
-    navigationController.headerTitle = selectMode == SelectModeExchangeAccountTo ? BC_STRING_TO : BC_STRING_FROM;
 }
 
 - (void)useMinButtonClicked
