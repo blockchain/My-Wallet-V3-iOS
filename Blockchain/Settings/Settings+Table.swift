@@ -35,6 +35,7 @@ extension SettingsTableViewController {
         biometrySwitch.isOn = biometryEnabled
         biometrySwitch.addTarget(self, action: #selector(self.biometrySwitchTapped), for: .touchUpInside)
         cell.accessoryView = biometrySwitch
+        cell.updateConstraintsIfNeeded()
     }
     
     func prepareWalletCell(_ cell: UITableViewCell) {
@@ -226,7 +227,7 @@ extension SettingsTableViewController {
         if section == 0 {
             headerView.frame = CGRect(x: 18, y: 43, width:
                 tableView.bounds.size.width, height: 65)
-            headerLabel.frame.origin.y += 16
+                headerLabel.frame.origin.y += 16
         }
         
         headerLabel.sizeToFit()
@@ -239,7 +240,7 @@ extension SettingsTableViewController {
          if section == 0 {
                 return 50
         }
-        return 32
+        return 40
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {

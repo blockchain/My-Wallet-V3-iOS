@@ -696,14 +696,21 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         switch (indexPath.section, indexPath.row) {
         case (sectionSecurity, pinBiometry):
             if !(biometryTypeDescription() != nil) {
+                touchIDAsPin.isHidden = true
                 return 0
+            } else {
+                touchIDAsPin.isHidden = false
+                return UITableViewAutomaticDimension
             }
         case (sectionSecurity, pinSwipeToReceive):
             let swipeToReceiveCall: AppFeatureConfiguration? = AppFeatureConfigurator.sharedInstance().configuration(for: .swipeToReceive)
             if swipeToReceiveCall?.isEnabled == nil {
                 swipeToReceive?.isHidden = true
+                return 0
+            } else {
+                swipeToReceive?.isHidden = false
+                return UITableViewAutomaticDimension
             }
-            return 0
         default:
             break
         }
