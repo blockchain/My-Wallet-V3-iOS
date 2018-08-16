@@ -142,8 +142,8 @@ extension SettingsTableViewController {
     }
     
     func prepareIdentityCell(_ cell: UITableViewCell) {
+        DispatchQueue.main.async {
         self.getUserVerificationStatus { status, success in
-            DispatchQueue.main.async {
                 if success {
                     if let hasDetail = status?.status {
                         self.createBadge(cell, status)
