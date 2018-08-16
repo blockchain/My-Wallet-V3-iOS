@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 enum KYCEvent {
 
@@ -38,6 +38,13 @@ protocol KYCCoordinatorDelegate: class {
 
     fileprivate var user: KYCUser?
 
+    private var disposable: Disposable?
+
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
+
     // MARK: Public
 
     weak var delegate: KYCCoordinatorDelegate?
@@ -52,20 +59,16 @@ protocol KYCCoordinatorDelegate: class {
 
     @objc func start(from viewController: UIViewController) {
         if user == nil {
-            KYCNetworkRequest(
-                get: .users(userID: "userID"),
-                taskSuccess: { [weak self] (result) in
-                    guard let this = self else { return }
-                    do {
-                        this.user = try JSONDecoder().decode(KYCUser.self, from: result)
-                    } catch {
-                        // TODO
-                    }
-            }) { (error) in
-                // TODO
-            }
+            disposable = BlockchainDataRepository.shared.kycUser
+                .subscribeOn(MainScheduler.asyncInstance)
+                .observeOn(MainScheduler.instance)
+                .subscribe(onSuccess: { [weak self] in
+                    self?.user = $0
+                    Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
+                }, onError: { error in
+                    Logger.shared.error("Failed to get user: \(error.localizedDescription)")
+                })
         }
-
         guard let welcomeViewController = screenFor(pageType: .welcome) as? KYCWelcomeController else { return }
         presentInNavigationController(welcomeViewController, in: viewController)
     }
