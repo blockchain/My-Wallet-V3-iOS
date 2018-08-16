@@ -146,7 +146,6 @@ extension AppSettingsController {
         cell.detailTextLabel?.textColor = .white
         cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
         cell.detailTextLabel?.layoutIfNeeded()
-    //    cell.detailTextLabel?.sizeToFit()
     }
     
     /// MARK: -isMobileVerified
