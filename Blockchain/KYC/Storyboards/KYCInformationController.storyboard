@@ -11,9 +11,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Montserrat-Medium.ttf">
-            <string>Montserrat-Medium</string>
-        </array>
         <array key="Montserrat-Regular.ttf">
             <string>Montserrat-Regular</string>
         </array>
@@ -22,10 +19,10 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Account Status View Controller-->
+        <!--Information View Controller-->
         <scene sceneID="e4w-8P-Gec">
             <objects>
-                <viewController title="Account Status View Controller" id="uMm-1o-bGV" customClass="KYCAccountStatusController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Information View Controller" id="uMm-1o-bGV" customClass="KYCInformationController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="udR-Wr-SpO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -34,10 +31,10 @@
                                 <rect key="frame" x="0.0" y="123" width="375" height="293"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1cf-8E-ugK">
-                                        <rect key="frame" x="120.5" y="0.0" width="134" height="134"/>
+                                        <rect key="frame" x="53.5" y="0.0" width="268" height="134"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AccountApproved" translatesAutoresizingMaskIntoConstraints="NO" id="Kbm-ay-Ji2">
-                                                <rect key="frame" x="0.0" y="0.0" width="134" height="110"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="268" height="110"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -47,7 +44,7 @@
                                             <constraint firstAttribute="trailing" secondItem="Kbm-ay-Ji2" secondAttribute="trailing" id="NAH-gP-bOE"/>
                                             <constraint firstItem="Kbm-ay-Ji2" firstAttribute="top" secondItem="1cf-8E-ugK" secondAttribute="top" id="Toa-wt-PuJ"/>
                                             <constraint firstItem="Kbm-ay-Ji2" firstAttribute="leading" secondItem="1cf-8E-ugK" secondAttribute="leading" id="rtn-Cr-Xsg"/>
-                                            <constraint firstAttribute="width" secondItem="1cf-8E-ugK" secondAttribute="height" multiplier="1:1" id="sR6-XD-st3"/>
+                                            <constraint firstAttribute="width" secondItem="1cf-8E-ugK" secondAttribute="height" multiplier="2:1" id="sR6-XD-st3"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gxK-9R-lKT">
@@ -86,7 +83,7 @@
                                             <constraint firstItem="esv-ja-LNX" firstAttribute="leading" secondItem="9EL-4t-eLH" secondAttribute="leading" id="bvB-4c-Y3k"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfj-zv-olj">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfj-zv-olj">
                                         <rect key="frame" x="16" y="234" width="343" height="59"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -106,26 +103,26 @@
                                     <constraint firstItem="gxK-9R-lKT" firstAttribute="top" secondItem="1cf-8E-ugK" secondAttribute="bottom" id="wWo-or-kpe"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5rk-Y8-Nij" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                            <view contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Dk0-09-A2d" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="543" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.29803921568627451" green="0.6705882352941176" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="5su-re-LrJ"/>
+                                    <constraint firstAttribute="height" constant="44" id="I3B-iY-06U"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="20"/>
-                                <state key="normal" title="Hello"/>
-                                <connections>
-                                    <action selector="primaryButtonTapped:" destination="uMm-1o-bGV" eventType="touchUpInside" id="rgh-3G-4jt"/>
-                                </connections>
-                            </button>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="Hello"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isLoading" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="okp-Sf-YF7" secondAttribute="trailing" id="1ZZ-xn-qZp"/>
-                            <constraint firstItem="VtZ-bg-pfR" firstAttribute="bottom" secondItem="5rk-Y8-Nij" secondAttribute="bottom" constant="16" id="AeG-Zs-Kb3"/>
-                            <constraint firstItem="5rk-Y8-Nij" firstAttribute="leading" secondItem="VtZ-bg-pfR" secondAttribute="leading" constant="16" id="CPS-Ce-7rn"/>
-                            <constraint firstItem="5rk-Y8-Nij" firstAttribute="top" relation="greaterThanOrEqual" secondItem="okp-Sf-YF7" secondAttribute="bottom" constant="16" id="OJ2-EY-FgZ"/>
-                            <constraint firstItem="VtZ-bg-pfR" firstAttribute="trailing" secondItem="5rk-Y8-Nij" secondAttribute="trailing" constant="16" id="Yza-7n-QyD"/>
+                            <constraint firstItem="VtZ-bg-pfR" firstAttribute="trailing" secondItem="Dk0-09-A2d" secondAttribute="trailing" constant="16" id="CIQ-pa-Y5o"/>
+                            <constraint firstItem="Dk0-09-A2d" firstAttribute="leading" secondItem="VtZ-bg-pfR" secondAttribute="leading" constant="16" id="IEJ-GK-VYC"/>
+                            <constraint firstItem="VtZ-bg-pfR" firstAttribute="bottom" secondItem="Dk0-09-A2d" secondAttribute="bottom" constant="16" id="YlW-nb-9rc"/>
+                            <constraint firstItem="Dk0-09-A2d" firstAttribute="top" relation="greaterThanOrEqual" secondItem="okp-Sf-YF7" secondAttribute="bottom" constant="16" id="gBX-yY-pOB"/>
                             <constraint firstItem="okp-Sf-YF7" firstAttribute="centerY" secondItem="VtZ-bg-pfR" secondAttribute="centerY" constant="-32" id="q1a-PW-imt"/>
                             <constraint firstItem="okp-Sf-YF7" firstAttribute="leading" secondItem="VtZ-bg-pfR" secondAttribute="leading" id="rU6-oe-CzS"/>
                         </constraints>
@@ -136,7 +133,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="buttonPrimary" destination="5rk-Y8-Nij" id="yW8-iZ-ac4"/>
+                        <outlet property="buttonPrimaryContainer" destination="Dk0-09-A2d" id="zEB-Iq-Ny3"/>
                         <outlet property="imageView" destination="Kbm-ay-Ji2" id="K04-41-urf"/>
                         <outlet property="labelDescription" destination="rfj-zv-olj" id="uyX-uh-hMb"/>
                         <outlet property="labelSubtitle" destination="esv-ja-LNX" id="ih4-rb-5jA"/>
