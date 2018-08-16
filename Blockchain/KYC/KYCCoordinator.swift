@@ -17,7 +17,7 @@ enum KYCEvent {
 
     /// This will push on the next page in the KYC flow.
     case nextPageFromPageType(KYCPageType)
-
+    
     // TODO:
     /// Should the user go back in the KYC flow, we need to
     /// prepopulate the screens with the data they already entered.
@@ -37,7 +37,7 @@ protocol KYCCoordinatorDelegate: class {
     fileprivate var navController: KYCOnboardingNavigationController!
 
     fileprivate var user: KYCUser?
-
+    
     // MARK: Public
 
     weak var delegate: KYCCoordinatorDelegate?

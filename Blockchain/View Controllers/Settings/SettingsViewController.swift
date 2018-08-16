@@ -57,10 +57,9 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
     var userIdentityStatus: KYCUserResponse?
-    
+
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
     @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!
-    
     
     deinit {
         NotificationCenter.default.removeObserver(self)

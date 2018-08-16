@@ -329,7 +329,31 @@ extension SettingsTableViewController {
     }
 }
 
+class EdgeInsetBadge: EdgeInsetLabel {
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    @IBInspectable
+    var background: UIColor {
+        set { self.backgroundColor = newValue }
+        get { return backgroundColor ?? .clear }
+    }
+}
+
 class EdgeInsetLabel: UILabel {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
     
     var textInsets = UIEdgeInsets.zero {
         didSet { invalidateIntrinsicContentSize() }
