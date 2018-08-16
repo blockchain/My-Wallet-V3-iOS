@@ -41,6 +41,7 @@ class KYCVerifyPhoneNumberInteractor {
         KYCNetworkRequest(
             post: .verifications,
             parameters: paramaters,
+            headers: [:], // TODO: pass in authorization token
             taskSuccess: success,
             taskFailure: failure
         )

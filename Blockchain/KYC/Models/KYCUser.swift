@@ -9,10 +9,19 @@
 import Foundation
 
 struct KYCUser: Decodable {
+
+    enum UserState: String {
+        case none = "NONE"
+        case created = "CREATED"
+        case active = "ACTIVE"
+        case blocked = "BLOCKED"
+    }
+
     let personalDetails: PersonalDetails?
     let address: UserAddress?
     let mobile: Mobile?
     let status: KYCAccountStatus
+    let state: UserState
 
     // MARK: - Decodable
 
@@ -24,20 +33,24 @@ struct KYCUser: Decodable {
         case email = "email"
         case mobile = "mobile"
         case mobileVerified = "mobileVerified"
+        case identifier = "id"
+        case state = "state"
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        let userID = try values.decodeIfPresent(String.self, forKey: .identifier)
         let firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
         let lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
         let email = try values.decode(String.self, forKey: .email)
         let phoneNumber = try values.decodeIfPresent(String.self, forKey: .mobile)
         let phoneVerified = try values.decodeIfPresent(Bool.self, forKey: .mobileVerified)
+        let statusValue = try values.decode(String.self, forKey: .status)
+        let userState = try values.decode(String.self, forKey: .state)
         address = try values.decodeIfPresent(UserAddress.self, forKey: .address)
 
-        // TODO: Ask about userID and DOB returning from API
         personalDetails = PersonalDetails(
-            id: nil,
+            id: userID,
             first: firstName,
             last: lastName,
             email: email,
@@ -53,9 +66,8 @@ struct KYCUser: Decodable {
             mobile = nil
         }
 
-        // TODO: Ask what the different states are
-        // and how they are represented in the API
-        status = .inProgress
+        status = KYCAccountStatus(rawValue: statusValue) ?? .none
+        state = UserState(rawValue: userState) ?? .none
     }
 }
 

@@ -49,21 +49,11 @@ extension ValidationFormView where Self: UIViewController {
                 )
                 this.scrollView.contentInset = insets
 
-                let viewSize = CGSize(
-                    width: this.scrollView.frame.width,
-                    height: this.scrollView.frame.height - height
+                let offset = CGPoint(
+                    x: 0.0,
+                    y: validationField.frame.minY
                 )
-                let viewableFrame = CGRect(
-                    origin: this.scrollView.frame.origin,
-                    size: viewSize
-                )
-
-                if !viewableFrame.contains(validationField.frame.origin) {
-                    this.scrollView.scrollRectToVisible(
-                        validationField.frame,
-                        animated: true
-                    )
-                }
+                this.scrollView.setContentOffset(offset, animated: true)
             }
         }
     }

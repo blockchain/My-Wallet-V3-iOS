@@ -166,8 +166,10 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
     func populatePersonalDetailFields(_ details: PersonalDetails) {
         firstNameField.text = details.firstName
         lastNameField.text = details.lastName
-        let birthday = DateFormatter.birthday.string(from: details.birthday)
-        birthdayField.text = birthday
+        if let birthday = details.birthday {
+            let birthdayText = DateFormatter.birthday.string(from: birthday)
+            birthdayField.text = birthdayText
+        }
     }
 }
 

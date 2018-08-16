@@ -13,8 +13,10 @@ private struct Keys {
     static let walletRoot = "walletRoot"
     static let maintenance = "maintenance"
     static let mobileInfo = "mobileInfo"
+    static let shapeshift = "shapeshift"
 }
 
+// TODO: Conform to Decodable
 struct WalletOptions {
 
     // MARK: - Internal Structs
@@ -27,6 +29,11 @@ struct WalletOptions {
         let message: String?
     }
 
+    struct Shapeshift {
+        let countriesBlacklist: [String]?
+        let statesWhitelist: [String]?
+    }
+
     // MARK: - Properties
 
     let downForMaintenance: Bool
@@ -34,6 +41,8 @@ struct WalletOptions {
     let mobileInfo: MobileInfo?
 
     let mobile: Mobile?
+
+    let shapeshift: Shapeshift?
 }
 
 extension WalletOptions.Mobile {
@@ -60,10 +69,23 @@ extension WalletOptions.MobileInfo {
     }
 }
 
+extension WalletOptions.Shapeshift {
+    init(json: JSON) {
+        guard let shapeshiftJson = json[Keys.shapeshift] as? JSON else {
+            self.countriesBlacklist = []
+            self.statesWhitelist = []
+            return
+        }
+        self.countriesBlacklist = shapeshiftJson["countriesBlacklist"] as? [String]
+        self.statesWhitelist = shapeshiftJson["statesWhitelist"] as? [String]
+    }
+}
+
 extension WalletOptions {
     init(json: JSON) {
         self.downForMaintenance = json[Keys.maintenance] as? Bool ?? false
         self.mobile = WalletOptions.Mobile(json: json)
         self.mobileInfo = WalletOptions.MobileInfo(json: json)
+        self.shapeshift = WalletOptions.Shapeshift(json: json)
     }
 }

@@ -16,12 +16,14 @@ class KYCCountrySelectionControllerTests: XCTestCase {
             {
                 "code": "ASC",
                 "name": "Ascension Island",
-                "regions": []
+                "regions": [],
+                "scopes": []
             },
             {
                 "code": "AND",
                 "name": "Andorra",
-                "regions": []
+                "regions": [],
+                "scopes": []
             }
         ]
     """

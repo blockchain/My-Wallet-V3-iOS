@@ -455,6 +455,11 @@
 - (BOOL)isDepositTransaction:(NSString *)txHash;
 - (BOOL)isWithdrawalTransaction:(NSString *)txHash;
 
+// Retail Core
+- (void)updateKYCUserCredentialsWithUserId:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^ _Nonnull)(NSString *_Nonnull))success error: (void (^ _Nonnull)(NSString *_Nullable))error;
+- (NSString *_Nullable)KYCUserId;
+- (NSString *_Nullable)KYCLifetimeToken;
+
 // Top Bar Display
 - (NSDecimalNumber *)btcDecimalBalance;
 - (NSDecimalNumber *)ethDecimalBalance;

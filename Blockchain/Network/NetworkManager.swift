@@ -50,7 +50,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
         super.init()
         sessionConfiguration = URLSessionConfiguration.default
         if let userAgent = NetworkManager.userAgent {
-            sessionConfiguration.httpAdditionalHeaders = ["User-Agent": userAgent]
+            sessionConfiguration.httpAdditionalHeaders = [HttpHeaderField.userAgent: userAgent]
         }
         if #available(iOS 11.0, *) {
             sessionConfiguration.waitsForConnectivity = true

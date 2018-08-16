@@ -35,7 +35,7 @@ extension BottomButtonContainerView where Self: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-    private func keyboardWillShow(with payload: KeyboardPayload) {
+    func keyboardWillShow(with payload: KeyboardPayload) {
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
@@ -44,7 +44,7 @@ extension BottomButtonContainerView where Self: UIViewController {
         UIView.commitAnimations()
     }
 
-    private func keyboardWillHide(with payload: KeyboardPayload) {
+    func keyboardWillHide(with payload: KeyboardPayload) {
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
