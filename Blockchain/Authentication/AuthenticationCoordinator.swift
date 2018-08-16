@@ -216,6 +216,8 @@ import RxSwift
 
         WalletManager.shared.close()
 
+        BlockchainDataRepository.shared.clearCache()
+
         let appCoordinator = AppCoordinator.shared
         appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
         appCoordinator.closeSideMenu()
