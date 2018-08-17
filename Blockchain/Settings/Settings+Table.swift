@@ -136,38 +136,33 @@ extension SettingsTableViewController {
     }
     
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        if preparedIdentityStatus == true {
-            return
-        }
         cell.detailTextLabel?.alpha = 0
+        self.createBadge(cell, color: .clear)
 
         self.getUserVerificationStatus { status, success in
             if success {
                 if let hasDetail = status?.status {
                     let userModel = KYCInformationViewModel.create(for: hasDetail)
-                    cell.detailTextLabel?.text = userModel.badge
-                  
                     self.createBadge(cell, status)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                        UIView.animate(withDuration: 0.24, animations: {
-                            cell.detailTextLabel?.alpha = 1
-                        })
-
+                    cell.detailTextLabel?.text = userModel.badge
+                    UIView.animate(withDuration: 0.2, delay: 0.5, options: [], animations: {
+                        cell.detailTextLabel?.alpha = 1
+                        cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
+                    }, completion: { _ in
+                        self.preparedIdentityStatus = true
                     })
                 }
-
+                
             } else {
-                self.preparedIdentityStatus = true
                 cell.detailTextLabel?.text = "Unknown"
-                self.createBadge(cell, status)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                    UIView.animate(withDuration: 0.24, animations: {
-                        cell.detailTextLabel?.alpha = 1
-                    })
-                    
+                self.createBadge(cell, color: .unverified)
+                UIView.animate(withDuration: 0.2, delay: 0.5, options: [], animations: {
+                    cell.detailTextLabel?.alpha = 1
+                    cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
+                    cell.detailTextLabel?.backgroundColor = .unverified
+                }, completion: { _ in
+                    self.preparedIdentityStatus = true
                 })
-                
             }
         }
     }
@@ -276,18 +271,23 @@ extension SettingsTableViewController {
 
 class EdgeInsetBadge: EdgeInsetLabel {
     
+//    override func awakeFromNib() {
+//        super.awakeFromNib()
+//        self.layer.cornerRadius = 4
+//        self.layer.masksToBounds = true
+//        self.backgroundColor = .white
+//        self.textColor = .white
+//        self.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
+//        sizeToFit()
+//        layoutIfNeeded()
+//    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-
-    @IBInspectable
-    var background: UIColor {
-        set { self.backgroundColor = newValue }
-        get { return backgroundColor ?? .green }
     }
 }
 
