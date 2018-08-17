@@ -53,22 +53,22 @@ extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
 }
 
 extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
-    func assetToggleButtonClicked() {
+    func assetToggleButtonTapped() {
     }
 
-    func useMinButtonClicked() {
+    func useMinButtonTapped() {
     }
 
-    func useMaxButtonClicked() {
+    func useMaxButtonTapped() {
     }
 
-    func continueButtonClicked() {
-        delegate?.onContinueButtonClicked()
+    func continueButtonTapped() {
+        delegate?.onContinueButtonTapped()
     }
 }
 
 extension HomebrewExchangeCreateViewController: ContinueButtonInputAccessoryViewDelegate {
-    func closeButtonClicked() {
+    func closeButtonTapped() {
         exchangeCreateView.hideKeyboard()
     }
 }

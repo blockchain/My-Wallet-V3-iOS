@@ -9,5 +9,5 @@
 import Foundation
 
 protocol ExchangeTradeDelegate: class {
-    func onContinueButtonClicked()
+    func onContinueButtonTapped()
 }
