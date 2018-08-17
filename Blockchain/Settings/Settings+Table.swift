@@ -150,61 +150,40 @@ extension SettingsTableViewController {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func prepareRow(_ cell: UITableViewCell, _ format: SettingsCell) {
         switch format {
-        case .identity:
-            prepareIdentityCell(cell)
-        case .base:
-            prepareBaseCell(cell)
-        case .biometry:
-            prepareBiometryCell(cell)
-        case .wallet:
-            prepareWalletCell(cell)
-        case .email:
-           prepareEmailCell(cell)
-        case .phoneNumber:
-           preparePhoneNumberCell(cell)
-        case .currency:
-           prepareCurrencyCell(cell)
-        case .swipeReceive:
-            prepareSwipeReceiveCell(cell)
-        case .twoFA:
-            prepare2FACell(cell)
-        case .recovery:
-            prepareRecoveryCell(cell)
-        case .emailNotifications:
-          prepareEmailNotificationsCell(cell)
+        case .identity: prepareIdentityCell(cell)
+        case .base: prepareBaseCell(cell)
+        case .biometry: prepareBiometryCell(cell)
+        case .wallet: prepareWalletCell(cell)
+        case .email: prepareEmailCell(cell)
+        case .phoneNumber: preparePhoneNumberCell(cell)
+        case .currency: prepareCurrencyCell(cell)
+        case .swipeReceive: prepareSwipeReceiveCell(cell)
+        case .twoFA: prepare2FACell(cell)
+        case .recovery: prepareRecoveryCell(cell)
+        case .emailNotifications: prepareEmailNotificationsCell(cell)
         }
     }
-    
-    override func tableView(_ tableView: UITableView,
-                            willDisplay cell: UITableViewCell,
-                            forRowAt indexPath: IndexPath) {
 
+    // MARK: - UITableViewDelegate
+
+    // swiftlint:disable:next cyclomatic_complexity
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         prepareRow(cell, .base)
         switch (indexPath.section, indexPath.row) {
-        case (sectionProfile, identityVerification):
-            self.prepareRow(cell, .identity)
-        case (sectionProfile, profileWalletIdentifier):
-            prepareRow(cell, .wallet)
-        case (sectionProfile, profileEmail):
-            prepareRow(cell, .email)
-        case (sectionProfile, profileMobileNumber):
-            prepareRow(cell, .phoneNumber)
-        case (sectionPreferences, preferencesEmailNotifications):
-            prepareRow(cell, .emailNotifications)
-        case (sectionPreferences, preferencesLocalCurrency):
-            prepareRow(cell, .currency)
-        case (sectionSecurity, securityTwoStep):
-            prepareRow(cell, .twoFA)
-        case (sectionSecurity, securityWalletRecoveryPhrase):
-            prepareRow(cell, .recovery)
-        case (sectionSecurity, pinBiometry):
-            prepareRow(cell, .biometry)
-        case (sectionSecurity, pinSwipeToReceive):
-            prepareRow(cell, .swipeReceive)
-        default:
-            break
+        case (sectionProfile, identityVerification): self.prepareRow(cell, .identity)
+        case (sectionProfile, profileWalletIdentifier): prepareRow(cell, .wallet)
+        case (sectionProfile, profileEmail): prepareRow(cell, .email)
+        case (sectionProfile, profileMobileNumber): prepareRow(cell, .phoneNumber)
+        case (sectionPreferences, preferencesEmailNotifications): prepareRow(cell, .emailNotifications)
+        case (sectionPreferences, preferencesLocalCurrency): prepareRow(cell, .currency)
+        case (sectionSecurity, securityTwoStep): prepareRow(cell, .twoFA)
+        case (sectionSecurity, securityWalletRecoveryPhrase): prepareRow(cell, .recovery)
+        case (sectionSecurity, pinBiometry): prepareRow(cell, .biometry)
+        case (sectionSecurity, pinSwipeToReceive): prepareRow(cell, .swipeReceive)
+        default: break
         }
     }
 
@@ -230,75 +209,44 @@ extension SettingsTableViewController {
             return indexPath
         }
     }
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         switch indexPath.section {
         case sectionProfile:
             switch indexPath.row {
-            case identityVerification:
-                KYCCoordinator().start()
-                return
-            case profileWalletIdentifier:
-                walletIdentifierClicked()
-                return
-            case profileEmail:
-                emailClicked()
-                return
-            case profileMobileNumber:
-                mobileNumberClicked()
-                return
-            case profileWebLogin:
-                webLoginClicked()
-                return
-            default:
-                break
+            case identityVerification: KYCCoordinator().start()
+            case profileWalletIdentifier: walletIdentifierClicked()
+            case profileEmail: emailClicked()
+            case profileMobileNumber: mobileNumberClicked()
+            case profileWebLogin: webLoginClicked()
+            default: return
             }
-            return
         case sectionPreferences:
             switch indexPath.row {
             case preferencesLocalCurrency:
                 performSingleSegue(withIdentifier: "currency", sender: nil)
-                return
-            default:
-                break
+            default: return
             }
-            return
         case sectionSecurity:
             if indexPath.row == securityTwoStep {
                 showTwoStep()
-                return
             } else if indexPath.row == securityPasswordChange {
                 changePassword()
-                return
             } else if indexPath.row == securityWalletRecoveryPhrase {
                 showBackup()
-                return
             } else if indexPath.row == PINChangePIN {
                 AuthenticationCoordinator.shared.changePin()
-                return
             }
-            return
         case aboutSection:
             switch indexPath.row {
-            case aboutUs:
-                aboutUsClicked()
-                return
-            case aboutTermsOfService:
-                termsOfServiceClicked()
-                return
-            case aboutPrivacyPolicy:
-                showPrivacyPolicy()
-                return
-            case aboutCookiePolicy:
-                showCookiePolicy()
-                return
-            default:
-                break
+            case aboutUs: aboutUsClicked()
+            case aboutTermsOfService: termsOfServiceClicked()
+            case aboutPrivacyPolicy: showPrivacyPolicy()
+            case aboutCookiePolicy: showCookiePolicy()
+            default: return
             }
-            return
-        default:
-            break
+        default: return
         }
     }
 }
