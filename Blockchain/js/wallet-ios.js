@@ -2721,6 +2721,11 @@ MyWalletPhone.countryCodeGuess = function() {
     return codeGuess;
 }
 
+MyWalletPhone.stateCodeGuess = function() {
+    var accountInfo = MyWallet.wallet.accountInfo;
+    return accountInfo && accountInfo.stateCodeGuess;
+}
+
 MyWalletPhone.availableUSStates = function() {
     var codeGuess = MyWalletPhone.countryCodeGuess();
     var storedState = MyWallet.wallet.shapeshift.USAState;

@@ -16,9 +16,14 @@ import RxSwift
     @objc class func sharedInstance() -> WalletService { return shared }
 
     private let networkManager: NetworkManager
+    private let dataRepository: BlockchainDataRepository
 
-    init(networkManager: NetworkManager = NetworkManager.shared) {
+    init(
+        networkManager: NetworkManager = NetworkManager.shared,
+        dataRepository: BlockchainDataRepository = BlockchainDataRepository.shared
+    ) {
         self.networkManager = networkManager
+        self.dataRepository = dataRepository
     }
 
     // MARK: - Private Properties
@@ -55,18 +60,41 @@ import RxSwift
         }
     }
 
+    /// Returns true if the provided country code is in the homebrew region
+    ///
+    /// - Parameter countryCode: the country code
+    /// - Returns: a Single returning a boolean indicating whether or not the provided country is
+    ///            supported by homebrew
     func isCountryInHomebrewRegion(countryCode: String) -> Single<Bool> {
-        return networkManager.requestJsonOrString(
-            BlockchainAPI.KYC.countries,
-            method: .get
-        ).map {
-            guard $0.statusCode == 200 else {
-                throw NetworkError.generic(message: nil)
+        return dataRepository.countries.map { countries in
+            let kycCountries = countries.filter { $0.isKycSupported }
+            return kycCountries.contains(where: { $0.code == countryCode })
+        }
+    }
+
+    ///  Returns true if the provided country code and state is in the homebrew region
+    ///
+    /// - Parameters:
+    ///   - countryCode: the country code
+    ///   - state: the state code if applicable
+    /// - Returns: a Single returning a boolean indicating whether or not the provided country code
+    ///            and state is supported by a partner
+    func isInPartnerRegionForExchange(countryCode: String, state: String?) -> Single<Bool> {
+        return walletOptions.map { walletOptions in
+            guard let shapeshift = walletOptions.shapeshift else {
+                return false
             }
-            guard let json = $1 as? JSON else {
-                throw NetworkError.jsonParseError
+
+            let blacklistedCountries = shapeshift.countriesBlacklist ?? []
+            let isCountrySupported = !blacklistedCountries.contains(countryCode)
+
+            if let state = state {
+                let whitelistedStates = shapeshift.statesWhitelist ?? []
+                let isStateSupported = whitelistedStates.contains(state)
+                return isCountrySupported && isStateSupported
+            } else {
+                return isCountrySupported
             }
-            return json.keys.contains(countryCode)
         }
     }
 

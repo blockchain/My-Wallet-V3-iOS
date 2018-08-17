@@ -275,7 +275,30 @@ struct LocalizationConstants {
         static let logout = NSLocalizedString("Logout", comment: "")
         static let debug = NSLocalizedString("Debug", comment: "")
         static let logoutConfirm = NSLocalizedString("Do you really want to log out?", comment: "")
-        static let buySellBitcoin = NSLocalizedString("Buy & Sell Bitcoin", comment: "")
+        static let buySellBitcoin = NSLocalizedString(
+            "Buy & Sell Bitcoin",
+            comment: "Item displayed on the side menu of the app for when the user wants to buy and sell Bitcoin."
+        )
+        static let addresses = NSLocalizedString(
+            "Addresses",
+            comment: "Item displayed on the side menu of the app for when the user wants to view their crypto addresses."
+        )
+        static let backupFunds = NSLocalizedString(
+            "Backup Funds",
+            comment: "Item displayed on the side menu of the app for when the user wants to back up their funds by saving their 12 word mneumonic phrase."
+        )
+        static let exchange = NSLocalizedString(
+            "Exchange",
+            comment: "Item displayed on the side menu of the app for when the user wants to exchange crypto-to-crypto."
+        )
+        static let settings = NSLocalizedString(
+            "Settings",
+            comment: "Item displayed on the side menu of the app for when the user wants to view their wallet settings."
+        )
+        static let support = NSLocalizedString(
+            "Support",
+            comment: "Item displayed on the side menu of the app for when the user wants to contact support."
+        )
     }
 
     struct BuySell {

@@ -49,6 +49,8 @@ class KYCCountrySelectionPresenter {
     func selected(country: KYCCountry) {
         // There are 3 scenarios once a user picks a country:
 
+        // TODO: Update to use WalletService
+
         // 1. if the country is supported by our native KYC, proceed
         if country.isKycSupported {
             Logger.shared.info("Selected country is supported by our native KYC.")

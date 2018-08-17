@@ -20,11 +20,11 @@ extension Storyboardable where Self: UIViewController {
     static func makeFromStoryboard() -> Self {
         let storyboard = UIStoryboard(name: defaultStoryboardName, bundle: nil)
 
-        guard let vc = storyboard.instantiateInitialViewController() as? Self else {
+        guard let viewController = storyboard.instantiateInitialViewController() as? Self else {
             fatalError("Could not instantiate initial storyboard with name: \(defaultStoryboardName)")
         }
 
-        return vc
+        return viewController
     }
 }
 
