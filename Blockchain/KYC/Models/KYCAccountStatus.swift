@@ -15,5 +15,3 @@ enum KYCAccountStatus: String {
     case failed = "REJECTED"
     case pending = "PENDING"
 }
-
-
