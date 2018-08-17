@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TICKET: 1159 Combine this protocol with other delegates in setup method
 @objc protocol ExchangeCreateViewDelegate {
     func assetToggleButtonClicked()
     func useMinButtonClicked()
