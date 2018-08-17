@@ -8,9 +8,7 @@
 
 import Foundation
 
-//: Pro tip: prefix color names in assets catalog with `Color` for easy filtering
-//: Adding a new color: create entry in Images.xcassets, then add constant here
-//: Colors in Images.xcassets will be used once iOS 11 is the minimum targeted version
+//: Colors in Colors.xcassets will be used once iOS 11 is the minimum targeted version.
 @objc
 extension UIColor {
 
