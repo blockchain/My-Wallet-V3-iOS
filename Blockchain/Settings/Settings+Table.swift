@@ -209,33 +209,15 @@ extension SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        let headerLabel = UILabel(frame: CGRect(x: 18, y: 3, width:
-            tableView.bounds.size.width, height: 32))
-        headerLabel.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.ExtraExtraExtraSmall)
-        headerLabel.textColor = .gray5
-        headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
-
-        if section == 0 {
-            headerView.frame = CGRect(x: 18, y: 43, width:
-                tableView.bounds.size.width, height: 65)
-                headerLabel.frame.origin.y += 16
-        }
-        
-        headerLabel.sizeToFit()
-        headerView.addSubview(headerLabel)
-        headerView.layoutIfNeeded()
-        return headerView
+        let sectionHeaderView = SettingsTableSectionHeader.fromNib() as SettingsTableSectionHeader
+        sectionHeaderView.label.text = self.tableView(self.tableView, titleForHeaderInSection: section)
+        return sectionHeaderView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-         if section == 0 {
-                return 50
-        }
-        return 40
+        return 50
     }
-    
+
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.section == sectionProfile && indexPath.row == profileWalletIdentifier {
             return indexPath

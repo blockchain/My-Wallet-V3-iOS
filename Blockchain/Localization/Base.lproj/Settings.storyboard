@@ -23,7 +23,7 @@
         <scene sceneID="Ijh-vG-muQ">
             <objects>
                 <tableViewController storyboardIdentifier="SettingsTableViewController" id="pmH-cw-L2Z" customClass="SettingsTableViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="d6u-zt-fQ3">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="40" sectionFooterHeight="1" id="d6u-zt-fQ3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -229,7 +229,7 @@
                             <tableViewSection headerTitle="Preferences" id="bSX-bt-LDy">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsToggle" rowHeight="56" id="K1H-Zr-FqL" customClass="SettingsToggleTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="383.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="374.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K1H-Zr-FqL" id="o37-c6-F2u">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="55.666666666666664"/>
@@ -241,7 +241,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="7VO-BM-dHf" detailTextLabel="IyD-hN-HxN" rowHeight="56" style="IBUITableViewCellStyleValue1" id="F7g-RG-cTf" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="439.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="430.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="F7g-RG-cTf" id="Bdp-wa-58J">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -269,7 +269,7 @@
                             <tableViewSection headerTitle="Security" id="Ilb-ag-zDr">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="twoStep" textLabel="w9O-TJ-0iq" detailTextLabel="BN7-0Q-fUZ" rowHeight="56" style="IBUITableViewCellStyleValue1" id="L9V-jq-1tD" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="543.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="525.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="L9V-jq-1tD" id="lS8-PN-hNv">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -315,7 +315,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="8X3-ef-zoe" rowHeight="56" style="IBUITableViewCellStyleDefault" id="xjH-MN-Np4" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="599.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="581.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xjH-MN-Np4" id="FT8-Ht-B3W">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -332,7 +332,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="sZ9-93-MJf" detailTextLabel="q7A-2K-VRu" rowHeight="56" style="IBUITableViewCellStyleValue1" id="CNP-CU-0iZ" customClass="SettingsTableViewBadge" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="655.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="637.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CNP-CU-0iZ" id="Hw2-jb-4Kz">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -378,7 +378,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="settingsCell" textLabel="H1g-y1-mIr" rowHeight="56" style="IBUITableViewCellStyleDefault" id="NYJ-NU-wAU">
-                                        <rect key="frame" x="0.0" y="711.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="693.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NYJ-NU-wAU" id="ozM-Xu-kqS">
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="55.666666666666664"/>
@@ -395,7 +395,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="56" id="esY-8P-rga" customClass="SettingsToggleTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="767.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="749.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="esY-8P-rga" id="ajf-j9-kf3">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="55.666666666666664"/>
@@ -406,7 +406,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="56" id="cur-nq-32H" customClass="SettingsToggleTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="823.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="805.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cur-nq-32H" id="4Qk-J6-Hr4">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="55.666666666666664"/>
@@ -421,7 +421,7 @@
                             <tableViewSection headerTitle="About" id="bAO-cg-Zl5">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="kLW-uQ-yIO" rowHeight="56" style="IBUITableViewCellStyleDefault" id="mBb-so-AP3">
-                                        <rect key="frame" x="0.0" y="927.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="900.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mBb-so-AP3" id="R4I-wz-TgP">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
@@ -438,7 +438,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="4K4-LK-KWj" rowHeight="56" style="IBUITableViewCellStyleDefault" id="6iK-nt-yB4" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="983.33333333333337" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="956.33333333333337" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6iK-nt-yB4" id="7Uc-7m-DG4">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
@@ -455,7 +455,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="uax-tr-3ko" rowHeight="56" style="IBUITableViewCellStyleDefault" id="gA6-C9-Noi" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="1039.3333333333335" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="1012.3333333333334" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gA6-C9-Noi" id="4zE-HC-9fK">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
@@ -472,7 +472,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="fOm-2p-jlx" rowHeight="56" style="IBUITableViewCellStyleDefault" id="EbC-TF-Efd" customClass="SettingsTableViewCell" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="1095.3333333333335" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="1068.3333333333335" width="375" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EbC-TF-Efd" id="t4r-gI-tMt">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="55.666666666666664"/>
