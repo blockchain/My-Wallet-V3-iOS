@@ -144,8 +144,8 @@ extension SettingsTableViewController {
                     cell.detailTextLabel?.text = userModel.badge
                 }
             } else {
-                self.createBadge(cell, status)
-                cell.detailTextLabel?.text = "Unknown"
+                self.createBadge(cell, color: .unverified)
+                cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
             }
         }
     }
