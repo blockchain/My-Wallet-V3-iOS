@@ -8,8 +8,16 @@
 
 import Foundation
 
-/// The FromToView has a weakly referenced delegate that is called when gestures are received. Normally the view controller would implement the delegate methods, but their implementation in this case (which involves presenting a BCAddressSelectionView) is shared between ExchangeCreateViewController and HomebrewExchangeCreateViewController. This class is intended to be that shared implementation as the FromToView's delegate.
-/// To keep an instance of this in memory, it must be strongly referenced because both this class' addressSelectionDelegate and the FromToView's delegate are weakly referenced.
+/*
+The FromToView has a weakly referenced delegate that is called when gestures are received.
+Normally the view controller would implement the delegate methods, but their implementation
+in this case (which involves presenting a BCAddressSelectionView) is shared between
+ExchangeCreateViewController and HomebrewExchangeCreateViewController. This class is intended
+to be that shared implementation as the FromToView's delegate.
+
+To keep an instance of this in memory, it must be strongly referenced because both this class'
+addressSelectionDelegate and the FromToView's delegate are weakly referenced.
+*/
 @objc class FromToButtonDelegateIntermediate: NSObject {
     private let wallet: Wallet
     private let navigationController: BCNavigationController
