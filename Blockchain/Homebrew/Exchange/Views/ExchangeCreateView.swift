@@ -15,6 +15,11 @@ import Foundation
     func continueButtonClicked()
 }
 
+/*
+This view is intended to provide subviews and gesture/input-related methods
+required for a general Exchange user interface.
+To use it, create an instance using init(frame:), add it as a subview, and call the setup method.
+*/
 @objc class ExchangeCreateView: UIView {
     // Digital asset input
     @objc var topLeftField: BCSecureTextField?
@@ -47,6 +52,8 @@ import Foundation
     private weak var continueButtonInputAccessoryDelegate: ContinueButtonInputAccessoryViewDelegate?
     private weak var textFieldDelegate: UITextFieldDelegate?
 }
+
+// MARK: - Setup
 
 extension ExchangeCreateView {
     @objc func setup(
@@ -295,6 +302,8 @@ private extension ExchangeCreateView {
     }
 }
 
+// MARK: - Button actions
+
 @objc private extension ExchangeCreateView {
     func assetToggleButtonClicked() {
         createViewDelegate?.assetToggleButtonClicked()
@@ -312,6 +321,8 @@ private extension ExchangeCreateView {
         createViewDelegate?.continueButtonClicked()
     }
 }
+
+// MARK: - View Helpers
 
 private extension ExchangeCreateView {
     var fiatPlaceholder: String {
