@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 @protocol ContinueButtonInputAccessoryViewDelegate
-- (void)continueButtonClicked;
-- (void)closeButtonClicked;
+- (void)continueButtonTapped;
+- (void)closeButtonTapped;
 @end
 @interface ContinueButtonInputAccessoryView : UIView
 @property (nonatomic, weak) id <ContinueButtonInputAccessoryViewDelegate> delegate;

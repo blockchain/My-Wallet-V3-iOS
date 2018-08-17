@@ -22,7 +22,7 @@
         UIButton *continueButton = [[UIButton alloc] initWithFrame:self.bounds];
         [continueButton setTitle:BC_STRING_CONTINUE forState:UIControlStateNormal];
         continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
-        [continueButton addTarget:self action:@selector(continueButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [continueButton addTarget:self action:@selector(continueButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         continueButton.backgroundColor = UIColor.brandSecondary;
         [self addSubview:continueButton];
         self.continueButton = continueButton;
@@ -30,7 +30,7 @@
         CGFloat closeButtonWidth = 50;
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - closeButtonWidth, 0, closeButtonWidth, BUTTON_HEIGHT)];
         [closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-        [closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [closeButton addTarget:self action:@selector(closeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         closeButton.backgroundColor = UIColor.gray4;
         [self addSubview:closeButton];
         self.closeButton = closeButton;
@@ -38,14 +38,14 @@
     return self;
 }
 
-- (void)continueButtonClicked
+- (void)continueButtonTapped
 {
-    [self.delegate continueButtonClicked];
+    [self.delegate continueButtonTapped];
 }
 
-- (void)closeButtonClicked
+- (void)closeButtonTapped
 {
-    [self.delegate closeButtonClicked];
+    [self.delegate closeButtonTapped];
 }
 
 - (void)enableContinueButton

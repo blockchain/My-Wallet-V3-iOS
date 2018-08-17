@@ -10,10 +10,10 @@ import Foundation
 
 // TICKET: 1159 Combine this protocol with other delegates in setup method and rename 'clicked' to 'tapped'
 @objc protocol ExchangeCreateViewDelegate {
-    func assetToggleButtonClicked()
-    func useMinButtonClicked()
-    func useMaxButtonClicked()
-    func continueButtonClicked()
+    func assetToggleButtonTapped()
+    func useMinButtonTapped()
+    func useMaxButtonTapped()
+    func continueButtonTapped()
 }
 
 /*
@@ -128,7 +128,7 @@ private extension ExchangeCreateView {
     func setupToggleButtonWithSpinner(amountView: UIView) {
         let assetToggleButton = UIButton(frame: toggleButtonFrame)
         assetToggleButton.center = CGPoint(x: windowWidth / 2, y: assetToggleButton.center.y)
-        assetToggleButton.addTarget(self, action: #selector(self.assetToggleButtonClicked), for: .touchUpInside)
+        assetToggleButton.addTarget(self, action: #selector(self.assetToggleButtonTapped), for: .touchUpInside)
         assetToggleButton.setImage(#imageLiteral(resourceName: "switch_currencies"), for: .normal)
         assetToggleButton.imageView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
         assetToggleButton.center = CGPoint(x: assetToggleButton.center.x, y: FromToView.self.rowHeight() / 2)
@@ -252,7 +252,7 @@ private extension ExchangeCreateView {
         useMinButton.backgroundColor = UIColor.white
         useMinButton.setTitleColor(UIColor.brandSecondary, for: .normal)
         useMinButton.setTitle(LocalizationConstants.Exchange.useMinimum, for: .normal)
-        useMinButton.addTarget(self, action: #selector(self.useMinButtonClicked), for: .touchUpInside)
+        useMinButton.addTarget(self, action: #selector(self.useMinButtonTapped), for: .touchUpInside)
         buttonsView.addSubview(useMinButton)
 
         let useMaxButtonOriginX: CGFloat = buttonsView.frame.size.width / 2 + dividerLineWidth / 2
@@ -266,7 +266,7 @@ private extension ExchangeCreateView {
         useMaxButton.backgroundColor = UIColor.white
         useMaxButton.setTitleColor(UIColor.brandSecondary, for: .normal)
         useMaxButton.setTitle(LocalizationConstants.Exchange.useMaximum, for: .normal)
-        useMaxButton.addTarget(self, action: #selector(self.useMaxButtonClicked), for: .touchUpInside)
+        useMaxButton.addTarget(self, action: #selector(self.useMaxButtonTapped), for: .touchUpInside)
         buttonsView.addSubview(useMaxButton)
     }
 
@@ -299,27 +299,27 @@ private extension ExchangeCreateView {
             - safeAreaInsetTop - ConstantsObjcBridge.defaultNavigationBarHeight()
         continueButton?.center = CGPoint(x: center.x, y: continueButtonCenterY)
         addSubview(continueButton!)
-        continueButton?.addTarget(self, action: #selector(self.continueButtonClicked), for: .touchUpInside)
+        continueButton?.addTarget(self, action: #selector(self.continueButtonTapped), for: .touchUpInside)
     }
 }
 
 // MARK: - Button actions
 
 @objc private extension ExchangeCreateView {
-    func assetToggleButtonClicked() {
-        createViewDelegate?.assetToggleButtonClicked()
+    func assetToggleButtonTapped() {
+        createViewDelegate?.assetToggleButtonTapped()
     }
 
-    func useMinButtonClicked() {
-        createViewDelegate?.useMinButtonClicked()
+    func useMinButtonTapped() {
+        createViewDelegate?.useMinButtonTapped()
     }
 
-    func useMaxButtonClicked() {
-        createViewDelegate?.useMaxButtonClicked()
+    func useMaxButtonTapped() {
+        createViewDelegate?.useMaxButtonTapped()
     }
 
-    func continueButtonClicked() {
-        createViewDelegate?.continueButtonClicked()
+    func continueButtonTapped() {
+        createViewDelegate?.continueButtonTapped()
     }
 }
 
