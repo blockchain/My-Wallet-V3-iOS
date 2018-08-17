@@ -58,7 +58,8 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
     var userIdentityStatus: KYCUser?
-
+    var preparedIdentityStatus: Bool?
+    
     var disposable: Disposable?
     
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
@@ -67,7 +68,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
         disposable?.dispose()
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -79,6 +79,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         super.viewDidAppear(animated)
         tableView.reloadData()
         self.walletManager.accountInfoDelegate = self
+        preparedIdentityStatus == false
     }
 
     convenience init(walletManager: WalletManager = WalletManager.shared) {

@@ -136,16 +136,38 @@ extension SettingsTableViewController {
     }
     
     func prepareIdentityCell(_ cell: UITableViewCell) {
+        if preparedIdentityStatus == true {
+            return
+        }
+        cell.detailTextLabel?.alpha = 0
+
         self.getUserVerificationStatus { status, success in
             if success {
                 if let hasDetail = status?.status {
                     let userModel = KYCInformationViewModel.create(for: hasDetail)
-                    self.createBadge(cell, status)
                     cell.detailTextLabel?.text = userModel.badge
+                  
+                    self.createBadge(cell, status)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                        UIView.animate(withDuration: 0.24, animations: {
+                            cell.detailTextLabel?.alpha = 1
+                        })
+
+                    })
                 }
+
             } else {
-                self.createBadge(cell, status)
+                self.preparedIdentityStatus = true
                 cell.detailTextLabel?.text = "Unknown"
+                self.createBadge(cell, status)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    UIView.animate(withDuration: 0.24, animations: {
+                        cell.detailTextLabel?.alpha = 1
+                    })
+                    
+                })
+                
             }
         }
     }
@@ -184,6 +206,7 @@ extension SettingsTableViewController {
         case (sectionSecurity, pinBiometry): prepareRow(cell, .biometry)
         case (sectionSecurity, pinSwipeToReceive): prepareRow(cell, .swipeReceive)
         default: break
+
         }
     }
 
