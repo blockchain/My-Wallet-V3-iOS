@@ -20,7 +20,7 @@ addressSelectionDelegate and the FromToView's delegate are weakly referenced.
 */
 @objc class FromToButtonDelegateIntermediate: NSObject {
     private let wallet: Wallet
-    private let navigationController: BCNavigationController
+    private weak var navigationController: BCNavigationController?
     private weak var addressSelectionDelegate: AddressSelectionDelegate?
 
     @objc init(
@@ -43,11 +43,16 @@ addressSelectionDelegate and the FromToView's delegate are weakly referenced.
         let viewController = UIViewController()
         viewController.automaticallyAdjustsScrollViewInsets = false
         viewController.view.addSubview(selectorView)
-        self.navigationController.pushViewController(viewController, animated: true)
+
+        guard let presentingController = self.navigationController else {
+            Logger.shared.error("No view controller to present Address Selection View on!")
+            return
+        }
+        presentingController.pushViewController(viewController, animated: true)
 
         switch selectMode {
-        case SelectModeExchangeAccountTo: self.navigationController.headerTitle = LocalizationConstants.Exchange.to
-        case SelectModeExchangeAccountFrom: self.navigationController.headerTitle = LocalizationConstants.Exchange.from
+        case SelectModeExchangeAccountTo: presentingController.headerTitle = LocalizationConstants.Exchange.to
+        case SelectModeExchangeAccountFrom: presentingController.headerTitle = LocalizationConstants.Exchange.from
         default: Logger.shared.warning("Unsupported address select mode")
         }
     }
