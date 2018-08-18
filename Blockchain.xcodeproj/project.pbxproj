@@ -709,6 +709,7 @@
 		C7E2AE512128849700F4887F /* AssetConversionRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE502128849700F4887F /* AssetConversionRateView.swift */; };
 		C7E2AE5B212884A100F4887F /* AssetConversionRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE502128849700F4887F /* AssetConversionRateView.swift */; };
 		C7E2AE622128946D00F4887F /* UIView+Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE612128946D00F4887F /* UIView+Center.swift */; };
+		C7E2AE6D212897FA00F4887F /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */; };
 		C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */; };
 		C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */; };
 		C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */; };
@@ -3054,6 +3055,7 @@
 		C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Animations.m"; sourceTree = "<group>"; };
 		C7E2AE502128849700F4887F /* AssetConversionRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetConversionRateView.swift; sourceTree = "<group>"; };
 		C7E2AE612128946D00F4887F /* UIView+Center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Center.swift"; sourceTree = "<group>"; };
+		C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetConversionRateViewModel.swift; sourceTree = "<group>"; };
 		C7E4D291203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransactionsBitcoinCashViewController.h; sourceTree = "<group>"; };
 		C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransactionsBitcoinCashViewController.m; sourceTree = "<group>"; };
 		C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchOnlyBalanceView.swift; sourceTree = "<group>"; };
@@ -6228,6 +6230,7 @@
 		C7AEB1B32125CAB100320A32 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */,
 				C72B8519210FC098002EBDB9 /* ExchangeCreateView.swift */,
 				C7E2AE502128849700F4887F /* AssetConversionRateView.swift */,
 			);
@@ -7560,6 +7563,7 @@
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */,
 				606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */,
+				C7E2AE6D212897FA00F4887F /* AssetConversionRateViewModel.swift in Sources */,
 				C790E1241E5358540063D141 /* BCVerifyMobileNumberViewController.m in Sources */,
 				C7448A962034BF2F0041947E /* AssetSelectionTableViewCell.m in Sources */,
 				AAE94F3C20C70F4B005A3595 /* BIP21URI.swift in Sources */,
