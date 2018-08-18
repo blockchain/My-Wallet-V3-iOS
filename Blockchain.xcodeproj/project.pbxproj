@@ -6229,6 +6229,7 @@
 			isa = PBXGroup;
 			children = (
 				C72B8519210FC098002EBDB9 /* ExchangeCreateView.swift */,
+				C7E2AE502128849700F4887F /* AssetConversionRateView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -6365,7 +6366,6 @@
 				3A258C0B210A485D00C023F5 /* Cells */,
 				676250801A2DDF360052B63F /* AccountTableCell.h */,
 				676250811A2DDF360052B63F /* AccountTableCell.m */,
-				C7E2AE502128849700F4887F /* AssetConversionRateView.swift */,
 				C7448A942034BF2F0041947E /* AssetSelectionTableViewCell.h */,
 				C7448A952034BF2F0041947E /* AssetSelectionTableViewCell.m */,
 				C7448A9A2034DDF80041947E /* AssetSelectorView.h */,
