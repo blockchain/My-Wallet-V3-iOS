@@ -225,12 +225,23 @@ private extension ExchangeCreateView {
         amountView.addSubview(fiatLabel!)
     }
 
-    var minMaxButtonHeight: CGFloat { return 50 }
+    var conversionRateViewHeight: CGFloat { return 50 }
 
-    func setupMinAndMaxButtons(amountView: UIView) {
+    func setupConversionRateView(amountView: UIView) {
         let lineAboveButtonsView = BCLine(yPosition: amountView.frame.origin.y + amountView.frame.size.height)
         addSubview(lineAboveButtonsView!)
 
+        let conversionRateView = UIView(frame: CGRect(
+            x: 0,
+            y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
+            width: windowWidth,
+            height: minMaxButtonHeight
+        ))
+    }
+
+    var minMaxButtonHeight: CGFloat { return 50 }
+
+    func setupMinAndMaxButtons(amountView: UIView) {
         let buttonsView = UIView(frame: CGRect(
             x: 0,
             y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
