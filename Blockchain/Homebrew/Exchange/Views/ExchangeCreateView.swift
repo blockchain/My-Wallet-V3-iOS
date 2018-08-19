@@ -58,6 +58,7 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
 extension ExchangeCreateView {
     @objc func setup(
+        withConversionView: Bool,
         createViewDelegate: ExchangeCreateViewDelegate,
         fromToButtonDelegate: FromToButtonDelegate,
         continueButtonInputAccessoryDelegate: ContinueButtonInputAccessoryViewDelegate,
@@ -69,12 +70,12 @@ extension ExchangeCreateView {
         self.textFieldDelegate = textFieldDelegate
 
         backgroundColor = UIColor.lightGray
-        setupSubviews()
+        setupSubviews(withConversionView: withConversionView)
     }
 }
 
 private extension ExchangeCreateView {
-    func setupSubviews() {
+    func setupSubviews(withConversionView: Bool) {
         setupFromToView()
 
         let amountView = UIView(frame: CGRect(
@@ -93,8 +94,22 @@ private extension ExchangeCreateView {
         setupTopFields(amountView: amountView)
         setupBottomFields(amountView: amountView)
         setupFiatLabel(amountView: amountView)
-        setupMinAndMaxButtons(amountView: amountView)
-        setupErrorTextView(amountView: amountView)
+        setupLineBelow(view: amountView)
+        if withConversionView {
+            setupConversionRateView(amountView: amountView)
+            let newReferenceView = UIView(frame: CGRect(
+                x: amountView.frame.origin.x,
+                y: amountView.frame.origin.y,
+                width: amountView.frame.size.width,
+                height: amountView.frame.size.height + conversionRateViewHeight)
+            )
+            setupLineBelow(view: newReferenceView)
+            setupMinAndMaxButtons(amountView: newReferenceView)
+            setupErrorTextView(amountView: newReferenceView)
+        } else {
+            setupMinAndMaxButtons(amountView: amountView)
+            setupErrorTextView(amountView: amountView)
+        }
         setupContinueButton()
     }
 
@@ -225,18 +240,21 @@ private extension ExchangeCreateView {
         amountView.addSubview(fiatLabel!)
     }
 
-    var conversionRateViewHeight: CGFloat { return 50 }
+    func setupLineBelow(view: UIView) {
+        let lineAboveButtonsView = BCLine(yPosition: view.frame.origin.y + view.frame.size.height)
+        addSubview(lineAboveButtonsView!)
+    }
+
+    var conversionRateViewHeight: CGFloat { return 70 }
 
     func setupConversionRateView(amountView: UIView) {
-        let lineAboveButtonsView = BCLine(yPosition: amountView.frame.origin.y + amountView.frame.size.height)
-        addSubview(lineAboveButtonsView!)
-
-        let conversionRateView = UIView(frame: CGRect(
+        let conversionRateView = AssetConversionRateView(frame: CGRect(
             x: 0,
             y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
             width: windowWidth,
-            height: minMaxButtonHeight
+            height: conversionRateViewHeight
         ))
+        addSubview(conversionRateView)
     }
 
     var minMaxButtonHeight: CGFloat { return 50 }

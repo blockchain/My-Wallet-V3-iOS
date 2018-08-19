@@ -10,9 +10,9 @@ import Foundation
 
 class AssetConversionRateView: UIView {
     private struct Measurements {
-        static let largeLabelHeight: CGFloat = 32
-        static let largeLabelOriginY: CGFloat = 16
-        static let smallLabelHeight: CGFloat = 24
+        static let largeLabelHeight: CGFloat = 24
+        static let largeLabelOriginY: CGFloat = 8
+        static let smallLabelHeight: CGFloat = 18
         static let horizontalEdgeSpacing: CGFloat = 16
     }
 
@@ -31,9 +31,14 @@ class AssetConversionRateView: UIView {
             y: Measurements.largeLabelOriginY + Measurements.largeLabelHeight + 8,
             width: frame.size.width - Measurements.horizontalEdgeSpacing*2,
             height: Measurements.smallLabelHeight))
+
         super.init(frame: frame)
+
+        self.backgroundColor = UIColor.white
+
         addSubview(self.largeLabel)
         addSubview(self.smallLabel)
+
         self.largeLabel.centerHorizontallyInSuperview()
         self.smallLabel.centerHorizontallyInSuperview()
 

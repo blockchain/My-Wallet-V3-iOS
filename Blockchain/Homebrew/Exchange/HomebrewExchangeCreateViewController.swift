@@ -25,7 +25,7 @@ class HomebrewExchangeCreateViewController: UIViewController {
         super.viewDidLoad()
         tradeCoordinator = ExchangeTradeCoordinator(interface: self)
 
-        let exchangeCreateView = ExchangeCreateView(frame: view.bounds)
+        exchangeCreateView = ExchangeCreateView(frame: view.bounds)
         view.addSubview(exchangeCreateView)
 
         let fromToButtonCoordinator = FromToButtonDelegateIntermediate(
@@ -34,11 +34,13 @@ class HomebrewExchangeCreateViewController: UIViewController {
             addressSelectionDelegate: self
         )
         exchangeCreateView.setup(
+            withConversionView: true,
             createViewDelegate: self,
             fromToButtonDelegate: fromToButtonCoordinator,
             continueButtonInputAccessoryDelegate: self,
             textFieldDelegate: self
         )
+        LoadingViewPresenter.shared.hideBusyView()
     }
 }
 
