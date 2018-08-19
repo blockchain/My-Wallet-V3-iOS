@@ -58,7 +58,8 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
     var userIdentityStatus: KYCUser?
-
+    var preparedIdentityStatus: Bool = false
+    
     var disposable: Disposable?
     
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
@@ -67,7 +68,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
         disposable?.dispose()
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -79,6 +79,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         super.viewDidAppear(animated)
         tableView.reloadData()
         self.walletManager.accountInfoDelegate = self
+        preparedIdentityStatus == false
     }
 
     convenience init(walletManager: WalletManager = WalletManager.shared) {
@@ -705,7 +706,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
                 return 0
             } else {
                 touchIDAsPin.isHidden = false
-                return UITableViewAutomaticDimension
+                return 56
             }
         case (sectionSecurity, pinSwipeToReceive):
             let swipeToReceiveCall: AppFeatureConfiguration? = AppFeatureConfigurator.sharedInstance().configuration(for: .swipeToReceive)
@@ -714,12 +715,12 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
                 return 0
             } else {
                 swipeToReceive?.isHidden = false
-                return UITableViewAutomaticDimension
+                return 56
             }
         default:
             break
         }
-        return UITableViewAutomaticDimension
+        return 56
     }
 
     @objc func reload() {
