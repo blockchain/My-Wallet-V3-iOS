@@ -28,14 +28,20 @@ class KYCCountrySelectionPresenter {
 
     // MARK: - Private Properties
 
+    private let wallet: Wallet
     private let walletService: WalletService
     private weak var view: KYCCountrySelectionView?
     private var disposable: Disposable?
 
     // MARK: - Initializer
 
-    init(view: KYCCountrySelectionView, walletService: WalletService = WalletService.shared) {
+    init(
+        view: KYCCountrySelectionView,
+        wallet: Wallet = WalletManager.shared.wallet,
+        walletService: WalletService = WalletService.shared
+    ) {
         self.view = view
+        self.wallet = wallet
         self.walletService = walletService
     }
 
@@ -49,8 +55,6 @@ class KYCCountrySelectionPresenter {
     func selected(country: KYCCountry) {
         // There are 3 scenarios once a user picks a country:
 
-        // TODO: Update to use WalletService
-
         // 1. if the country is supported by our native KYC, proceed
         if country.isKycSupported {
             Logger.shared.info("Selected country is supported by our native KYC.")
@@ -58,14 +62,12 @@ class KYCCountrySelectionPresenter {
             return
         }
 
-        // TODO: make sure to dispose disposable when moving to coordinator
-        disposable = walletService.walletOptions
+        let stateCodeGuess = wallet.stateCodeGuess()
+        disposable = walletService.isInPartnerRegionForExchange(countryCode: country.code, state: stateCodeGuess)
+            .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { [weak self] walletOptions in
-                let shapeshiftBlacklistedCountries = walletOptions.shapeshift?.countriesBlacklist ?? []
-
-                // TODO: check for state if selection is in the states
-                if !shapeshiftBlacklistedCountries.contains(country.code) {
+            .subscribe(onSuccess: { [weak self] in
+                if $0 {
                     // 2. if the country is supported by shapeshift, use shapeshift
                     Logger.shared.info("Selected country can use shapeshift.")
                     self?.view?.startPartnerExchangeFlow(country: country)
