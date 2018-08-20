@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 
 /// Component in charge of authenticating the KYC user.
@@ -17,8 +18,7 @@ final class KYCAuthenticationService {
         static let userId = "userId"
     }
 
-    static let shared = KYCAuthenticationService()
-
+    private var cachedSessionToken = BehaviorRelay<KYCSessionTokenResponse?>(value: nil)
     private let wallet: Wallet
 
     // MARK: - Initialization
@@ -34,27 +34,36 @@ final class KYCAuthenticationService {
     ///
     /// - Returns: a Single returning the sesion token
     func getKycSessionToken() -> Single<KYCSessionTokenResponse> {
-        // TODO: cache this
-        // TODO: pass in valid device ID
         return getOrCreateApiTokenResponse().flatMap { [unowned self] apiToken in
-            let headers: [String: String] = [
-                HttpHeaderField.authorization: apiToken.token,
-                HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
-                HttpHeaderField.clientType: HttpHeaderValue.clientTypeIos,
-                HttpHeaderField.deviceId: "ID GOES HERE",
-                HttpHeaderField.walletGuid: self.wallet.guid,
-                HttpHeaderField.walletEmail: self.wallet.getEmail()
-            ]
-            return KYCNetworkRequest.request(
-                post: .sessionToken(userId: apiToken.userId),
-                parameters: [:],
-                headers: headers,
-                type: KYCSessionTokenResponse.self
-            )
+            self.getKycSessionTokenIfNeeded(from: apiToken)
         }
     }
 
     // MARK: - Private Methods
+
+    private func getKycSessionTokenIfNeeded(from apiToken: KYCApiTokenResponse) -> Single<KYCSessionTokenResponse> {
+        // Use cached session token if not expired, otherwise, request a new one
+        guard let sessionToken = cachedSessionToken.value,
+            let expiresAt = sessionToken.expiresAt, Date() < expiresAt else {
+                let headers: [String: String] = [
+                    HttpHeaderField.authorization: apiToken.token,
+                    HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
+                    HttpHeaderField.clientType: HttpHeaderValue.clientTypeIos,
+                    HttpHeaderField.deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
+                    HttpHeaderField.walletGuid: self.wallet.guid,
+                    HttpHeaderField.walletEmail: self.wallet.getEmail()
+                ]
+                return KYCNetworkRequest.request(
+                    post: .sessionToken(userId: apiToken.userId),
+                    parameters: [:],
+                    headers: headers,
+                    type: KYCSessionTokenResponse.self
+                ).do(onSuccess: { [unowned self] in
+                    self.cachedSessionToken.accept($0)
+                })
+        }
+        return Single.just(sessionToken)
+    }
 
     /// Retrieves the user's KYC user ID and API token from the wallet metadata if the KYC user ID
     /// and api token had already been created. Otherwise, this method will create a new KYC user ID
