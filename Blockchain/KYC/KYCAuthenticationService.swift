@@ -81,6 +81,16 @@ final class KYCAuthenticationService {
     }
 
     private func createKycUserId() -> Single<KYCCreateUserResponse> {
+        // prevents a crash when backgrounding the app when in the middle of KYC
+       if UIApplication.shared.applicationState != .active {
+            return KYCNetworkRequest.request(
+                post: .registerUser,
+                parameters: [:],
+                headers: [:],
+                type: KYCCreateUserResponse.self
+            )
+        }
+        
         let parameters: [String: String] = [
             "email": wallet.getEmail(),
             "walletGuid": wallet.guid

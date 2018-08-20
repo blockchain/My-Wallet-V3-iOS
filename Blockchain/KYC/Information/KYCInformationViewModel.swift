@@ -14,6 +14,7 @@ struct KYCInformationViewModel {
     let subtitle: String?
     let description: String
     let buttonTitle: String?
+    var badge: String?
 }
 
 struct KYCInformationViewConfig {
@@ -28,7 +29,8 @@ extension KYCInformationViewModel {
             title: String(format: LocalizationConstants.KYC.unsupportedCountryTitle, country.name),
             subtitle: nil,
             description: String(format: LocalizationConstants.KYC.unsupportedCountryDescription, country.name),
-            buttonTitle: LocalizationConstants.KYC.backToDashboard
+            buttonTitle: LocalizationConstants.KYC.backToDashboard,
+            badge: nil
         )
     }
 
@@ -40,7 +42,8 @@ extension KYCInformationViewModel {
                 title: LocalizationConstants.KYC.accountApproved,
                 subtitle: nil,
                 description: LocalizationConstants.KYC.accountApprovedDescription,
-                buttonTitle: LocalizationConstants.KYC.getStarted
+                buttonTitle: LocalizationConstants.KYC.getStarted,
+                badge: LocalizationConstants.KYC.accounVerifiedBadge
             )
         case .expired, .failed, .none:
             return KYCInformationViewModel(
@@ -48,7 +51,8 @@ extension KYCInformationViewModel {
                 title: LocalizationConstants.KYC.verificationFailed,
                 subtitle: nil,
                 description: LocalizationConstants.KYC.verificationFailedDescription,
-                buttonTitle: nil
+                buttonTitle: nil,
+                badge: LocalizationConstants.KYC.verificationFailedBadge
             )
         case.pending:
             return KYCInformationViewModel(
@@ -56,7 +60,8 @@ extension KYCInformationViewModel {
                 title: LocalizationConstants.KYC.verificationInProgress,
                 subtitle: LocalizationConstants.KYC.whatHappensNext,
                 description: LocalizationConstants.KYC.verificationInProgressDescription,
-                buttonTitle: LocalizationConstants.KYC.notifyMe
+                buttonTitle: LocalizationConstants.KYC.notifyMe,
+                badge: LocalizationConstants.KYC.accountUnderReviewBadge
             )
         }
     }

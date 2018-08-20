@@ -51,7 +51,18 @@ protocol KYCCoordinatorDelegate: class {
     // MARK: Public
 
     weak var delegate: KYCCoordinatorDelegate?
+    var exchangeService: NetworkClient!
+    let exchangeFuture = CompletableFuture<NetworkClient>()
 
+    func embed() {
+      let topController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+        guard let rootViewController = topController else {
+            Logger.shared.warning("Cannot start KYC. topMostViewController is nil.")
+            return
+        }
+        start(from: rootViewController)
+    }
+    
     func start() {
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
             Logger.shared.warning("Cannot start KYC. rootViewController is nil.")
@@ -59,7 +70,11 @@ protocol KYCCoordinatorDelegate: class {
         }
         start(from: rootViewController)
     }
-
+    
+    struct CurrencyPair: Decodable {
+        var pairs: [String]
+    }
+    
     @objc func start(from viewController: UIViewController) {
         if user == nil {
             disposable = BlockchainDataRepository.shared.kycUser
@@ -67,6 +82,25 @@ protocol KYCCoordinatorDelegate: class {
                 .observeOn(MainScheduler.instance)
                 .subscribe(onSuccess: { [unowned self] in
                     self.user = $0
+                    self.exchangeService = NetworkClient(session: URLSession.shared)
+                    
+                    var url = URL(string: BlockchainAPI.shared.retailCoreUrl)!
+                    url.appendPathComponent("markets/quotes/pairs")
+
+                    var req = URLRequest(url: url)
+                    req.setValue(WalletManager.shared.wallet.kycLifetimeToken(), forHTTPHeaderField: "authorization")
+                    self.exchangeFuture.then { (client) in
+                        client.getAndParse(request: req, model: CurrencyPair.self) { result in
+                            switch result {
+                            case .success(let model):
+                                self.exchangeFuture.complete(value: self.exchangeService)
+                            case .failure(let error):
+                                Logger.shared.error("Failed to parse model: \(error.localizedDescription)")
+                                break
+                            }
+                        }
+                        }.then { (client) in }
+
                     Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
