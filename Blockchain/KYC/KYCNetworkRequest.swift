@@ -10,20 +10,13 @@ import RxSwift
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
-
+    
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
     fileprivate static let rootUrl = BlockchainAPI.shared.apiUrl
     private let timeoutInterval = TimeInterval(exactly: 30)!
     private var request: URLRequest!
-
-    private var disposable: Disposable?
-    
-    deinit {
-        disposable?.dispose()
-        disposable = nil
-    }
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
@@ -121,21 +114,6 @@ final class KYCNetworkRequest {
         request.httpMethod = httpMethod
         request.addValue(HttpHeaderValue.json, forHTTPHeaderField: HttpHeaderField.accept)
         request.timeoutInterval = timeoutInterval
-        
-        disposable = BlockchainDataRepository.shared.kycUser
-            .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
-            .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
-            .subscribe(onSuccess: { user in
-             //   handler(user, true)
-                
-            
-                request.setValue(disposable, forHTTPHeaderField: "authorization")
-
-                
-            }, onError: {  error in
-              //  handler(nil, false)
-            })
-        
     }
 
     /// HTTP GET Request
@@ -178,7 +156,6 @@ final class KYCNetworkRequest {
                 }
             }
             request.allHTTPHeaderFields = allHeaders
-       //     request.setValue(KYCAuthenticationService(wallet: WalletManager.shared.wallet).getKycSessionToken(), forHTTPHeaderField: "authorization")
 
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
@@ -204,9 +181,6 @@ final class KYCNetworkRequest {
                 HttpHeaderField.contentType: HttpHeaderValue.json,
                 HttpHeaderField.accept: HttpHeaderValue.json
             ]
-            
-      //      request.setValue(KYCAuthenticationService(wallet: WalletManager.shared.wallet).getKycSessionToken(), forHTTPHeaderField: "authorization")
-
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
             taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))

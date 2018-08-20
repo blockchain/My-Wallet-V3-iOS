@@ -26,10 +26,9 @@ class CompletableFutureTest: XCTestCase {
         let testFuture = CompletableFuture<NSNumber>()
         let triggerPeriod = TimeInterval(0.1)
         
-        
         let completeExpectation = expectation(description: "Completion triggered")
         testFuture.then { (givenValue : NSNumber) in
-            XCTAssertEqual(testValue, givenValue,"Given Value does not equal test value")
+            XCTAssertEqual(testValue, givenValue, "Given Value does not equal test value")
             completeExpectation.fulfill()
         }
         
@@ -46,13 +45,13 @@ class CompletableFutureTest: XCTestCase {
         
         let completeExpectation1 = expectation(description: "Completion 1 triggered")
         testFuture.then { (givenValue : NSNumber) in
-            XCTAssertEqual(testValue, givenValue,"Given Value does not equal test value")
+            XCTAssertEqual(testValue, givenValue, "Given Value does not equal test value")
             completeExpectation1.fulfill()
         }
         
         let completeExpectation2 = expectation(description: "Completion 2 triggered")
-        testFuture.then { (givenValue : NSNumber) in
-            XCTAssertEqual(testValue, givenValue,"Given Value does not equal test value")
+        testFuture.then { (givenValue: NSNumber) in
+            XCTAssertEqual(testValue, givenValue, "Given Value does not equal test value")
             completeExpectation2.fulfill()
         }
         
@@ -68,7 +67,7 @@ class CompletableFutureTest: XCTestCase {
         
         let cancelCheckDone = expectation(description: "Cancellation check done")
         
-        testFuture.then { (givenValue : NSNumber) in
+        testFuture.then { (givenValue: NSNumber) in
             XCTFail("Completion shouldn't get called. givenValue: \(givenValue)")
         }
         

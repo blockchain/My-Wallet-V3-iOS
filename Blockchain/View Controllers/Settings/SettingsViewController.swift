@@ -60,7 +60,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     var userIdentityStatus: KYCUser?
     
     var disposable: Disposable?
-    
+
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
     @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!
     
@@ -78,6 +78,8 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         super.viewDidAppear(animated)
         tableView.reloadData()
         self.walletManager.accountInfoDelegate = self
+    
+        
     }
 
     convenience init(walletManager: WalletManager = WalletManager.shared) {

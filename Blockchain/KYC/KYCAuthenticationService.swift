@@ -78,7 +78,7 @@ final class KYCAuthenticationService {
         }
         return Single.just(KYCApiTokenResponse(userId: kycUserId, token: kycToken))
     }
-
+    
     /// Creates a KYC user ID and API token followed by updating the wallet metadata with
     /// the KYC user ID and API token.
     private func createAndSaveApiTokenResponse() -> Single<KYCApiTokenResponse> {
@@ -121,6 +121,7 @@ final class KYCAuthenticationService {
             HttpHeaderField.walletGuid: wallet.guid,
             HttpHeaderField.walletEmail: wallet.getEmail()
         ]
+        
         return KYCNetworkRequest.request(
             post: .apiKey(userId: response.userId),
             parameters: [:],
