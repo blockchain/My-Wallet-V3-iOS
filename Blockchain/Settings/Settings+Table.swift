@@ -257,16 +257,13 @@ extension SettingsTableViewController {
 
 class EdgeInsetBadge: EdgeInsetLabel {
 
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        self.layer.cornerRadius = 4
-//        self.layer.masksToBounds = true
-//        self.backgroundColor = .white
-//        self.textColor = .white
-//        self.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-//        sizeToFit()
-//        layoutIfNeeded()
-//    }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.layer.cornerRadius = 4
+        self.layer.masksToBounds = true
+        sizeToFit()
+        layoutIfNeeded()
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
