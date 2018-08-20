@@ -86,9 +86,9 @@ protocol KYCCoordinatorDelegate: class {
                     
                     var url = URL(string: BlockchainAPI.shared.retailCoreUrl)!
                     url.appendPathComponent("markets/quotes/pairs")
-
+                    
                     var req = URLRequest(url: url)
-                    req.setValue(WalletManager.shared.wallet.kycLifetimeToken(), forHTTPHeaderField: "authorization")
+ 
                     self.exchangeFuture.then { (client) in
                         client.getAndParse(request: req, model: CurrencyPair.self) { result in
                             switch result {
