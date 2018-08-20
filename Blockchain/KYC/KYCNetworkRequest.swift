@@ -10,16 +10,6 @@ import RxSwift
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
-    
-    
-    private var disposable: Disposable?
-    
-    // MARK: - View Controller Lifecycle
-    
-    deinit {
-        disposable?.dispose()
-        disposable = nil
-    }
 
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
