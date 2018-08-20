@@ -83,8 +83,6 @@ import UIKit
         let viewHeight = self.contentView.frame.size.height
         let labelHeight = self.detailTextLabel?.frame.size.height
         let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
-        let detailWidth =  self.detailTextLabel?.frame.size.width
-        let screenWidth = UIScreen.main.bounds.width
         self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
         self.detailTextLabel?.frame.origin.y = ypos
         sizeToFit()
