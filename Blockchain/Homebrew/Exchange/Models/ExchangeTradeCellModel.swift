@@ -8,7 +8,13 @@
 
 import Foundation
 
-struct ExchangeTradeCellModel {
+struct ExchangeTradeCellModel: Decodable {
+
+    enum Currency: String, Decodable {
+        case btc = "BTC"
+        case eth = "ETH"
+        case bch = "BCH"
+    }
 
     enum TradeStatus: String {
         case noDeposits = "no_deposits"
@@ -22,13 +28,34 @@ struct ExchangeTradeCellModel {
     }
 
     let status: TradeStatus
+    let currency: Currency
     let transactionDate: Date
     let displayValue: String
 
     init(with trade: ExchangeTrade) {
         status = TradeStatus(rawValue: trade.status) ?? .failed
+        currency = Currency(rawValue: trade.withdrawalCurrency()) ?? .btc
         transactionDate = trade.date
         displayValue = trade.displayAmount() ?? ""
+    }
+
+    // MARK: - Decodable
+
+    enum CodingKeys: String, CodingKey {
+        case currency = "currency"
+        case createdAt = "createdAt"
+        case quantity = "quantity"
+        case status = "state"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        transactionDate = try values.decode(Date.self, forKey: .createdAt)
+        currency = try values.decode(Currency.self, forKey: .currency)
+        displayValue = try values.decode(String.self, forKey: .quantity)
+
+        // TODO: Map progress state for HB
+        status = .inProgress
     }
 }
 

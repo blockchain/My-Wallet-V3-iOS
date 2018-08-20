@@ -8,6 +8,12 @@
 
 class ExchangeListViewCell: UITableViewCell {
 
+    fileprivate static let separatorHeight: CGFloat = 3.0
+    fileprivate static let timestampVerticalPadding: CGFloat = 16.0
+    fileprivate static let timestampToStatusPadding: CGFloat = 4.0
+    fileprivate static let statusToBottomPadding: CGFloat = 16.0
+
+
     // MARK: Private IBOutlets
 
     @IBOutlet fileprivate var timestamp: UILabel!
@@ -24,5 +30,10 @@ class ExchangeListViewCell: UITableViewCell {
 
         amountButton.backgroundColor = cellModel.status.tintColor
         amountButton.setTitle(cellModel.displayValue, for: .normal)
+    }
+
+    class func estimatedHeight() -> CGFloat {
+        // TODO: Calculate height given string values/model
+        return 75.0
     }
 }
