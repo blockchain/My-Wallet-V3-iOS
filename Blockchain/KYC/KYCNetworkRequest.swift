@@ -11,6 +11,16 @@ import RxSwift
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
     
+    
+    private var disposable: Disposable?
+    
+    // MARK: - View Controller Lifecycle
+    
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
+
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
@@ -114,6 +124,7 @@ final class KYCNetworkRequest {
         request.httpMethod = httpMethod
         request.addValue(HttpHeaderValue.json, forHTTPHeaderField: HttpHeaderField.accept)
         request.timeoutInterval = timeoutInterval
+        request.setValue(WalletManager.shared.wallet.kycLifetimeToken(), forHTTPHeaderField: "authorization")
     }
 
     /// HTTP GET Request
@@ -156,6 +167,7 @@ final class KYCNetworkRequest {
                 }
             }
             request.allHTTPHeaderFields = allHeaders
+            request.setValue(WalletManager.shared.wallet.kycLifetimeToken(), forHTTPHeaderField: "authorization")
 
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
@@ -181,6 +193,9 @@ final class KYCNetworkRequest {
                 HttpHeaderField.contentType: HttpHeaderValue.json,
                 HttpHeaderField.accept: HttpHeaderValue.json
             ]
+            
+            request.setValue(WalletManager.shared.wallet.kycLifetimeToken(), forHTTPHeaderField: "authorization")
+
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
             taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
