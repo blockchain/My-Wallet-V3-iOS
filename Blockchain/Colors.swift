@@ -8,9 +8,7 @@
 
 import Foundation
 
-//: Pro tip: prefix color names in assets catalog with `Color` for easy filtering
-//: Adding a new color: create entry in Images.xcassets, then add constant here
-//: Colors in Images.xcassets will be used once iOS 11 is the minimum targeted version
+//: Colors in Colors.xcassets will be used once iOS 11 is the minimum targeted version.
 @objc
 extension UIColor {
 
@@ -63,6 +61,10 @@ extension UIColor {
     static let keyPadButton = #colorLiteral(red: 0.831372549, green: 0.8509803922, blue: 0.8666666667, alpha: 1)
 
     static let lightGray = #colorLiteral(red: 0.9607843137, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
-    
-    static let unverified = #colorLiteral(red: 0.86, green: 0.16, blue: 0.16, alpha: 1.0)
+
+    static let pending = #colorLiteral(red: 0.9490196078, green: 0.5450980392, blue: 0.1882352941, alpha: 1)
+
+    static let verified = #colorLiteral(red: 0.01176470588, green: 0.662745098, blue: 0.4470588235, alpha: 1)
+
+    static let unverified = #colorLiteral(red: 0.86, green: 0.16, blue: 0.16, alpha: 1)
 }

@@ -25,7 +25,7 @@ extension SettingsTableViewController {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
     }
-    
+
     func prepareBiometryCell(_ cell: UITableViewCell) {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
@@ -38,21 +38,21 @@ extension SettingsTableViewController {
         cell.accessoryView = biometrySwitch
         cell.updateConstraintsIfNeeded()
     }
-    
+
     func prepareWalletCell(_ cell: UITableViewCell) {
         cell.detailTextLabel?.textColor = .brandPrimary
         cell.detailTextLabel?.text = "Copy".localized()
     }
-    
+
     func prepareEmailCell(_ cell: UITableViewCell) {
         getUserEmail() != nil &&
             WalletManager.shared.wallet.getEmailVerifiedStatus() == true ? formatDetailCell(true, cell) : formatDetailCell(false, cell)
     }
-    
+
     func preparePhoneNumberCell(_ cell: UITableViewCell) {
          WalletManager.shared.wallet.hasVerifiedMobileNumber() ? formatDetailCell(true, cell) : formatDetailCell(false, cell)
     }
-    
+
     func prepareCurrencyCell(_ cell: UITableViewCell) {
         let selectedCurrencyCode = getLocalSymbolFromLatestResponse()?.code
         let selectedCurrencySymbol = getLocalSymbolFromLatestResponse()?.symbol
@@ -63,18 +63,18 @@ extension SettingsTableViewController {
                 updateAccountInfo()
             }
         }
-        
+
         if selectedCurrencySymbol == nil {
             cell.detailTextLabel?.text = ""
         }
-        
+
         if let currencyCode = selectedCurrencyCode,
             let fiatRepresentable = allCurrencySymbolsDictionary[currencyCode] as? [String: Any] {
             let parsedFiat = FiatCurrency(dictionary: fiatRepresentable)
             cell.detailTextLabel?.text = parsedFiat.description
         }
     }
-    
+
     func prepareSwipeReceiveCell(_ cell: UITableViewCell) {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
@@ -84,7 +84,7 @@ extension SettingsTableViewController {
         switchForSwipeToReceive.addTarget(self, action: #selector(self.switchSwipeToReceiveTapped), for: .touchUpInside)
         cell.accessoryView = switchForSwipeToReceive
     }
-    
+
     func prepare2FACell(_ cell: UITableViewCell) {
         let authType = WalletManager.shared.wallet.getTwoStepType()
         cell.detailTextLabel?.textColor = .white
@@ -104,7 +104,7 @@ extension SettingsTableViewController {
             cell.detailTextLabel?.text = LocalizationConstants.unknown
         }
     }
-    
+
     func prepareRecoveryCell(_ cell: UITableViewCell) {
         if WalletManager.shared.wallet.isRecoveryPhraseVerified() {
             cell.detailTextLabel?.text = LocalizationConstants.verified
@@ -116,7 +116,7 @@ extension SettingsTableViewController {
             createBadge(cell, color: .unverified)
         }
     }
-    
+
     func prepareEmailNotificationsCell(_ cell: UITableViewCell) {
         let switchForEmailNotifications = UISwitch()
         switchForEmailNotifications.isOn = emailNotificationsEnabled()
@@ -134,39 +134,25 @@ extension SettingsTableViewController {
                 handler(nil, false)
             })
     }
-    
-    func prepareIdentityCell(_ cell: UITableViewCell) {
-        cell.detailTextLabel?.alpha = 0
-        self.createBadge(cell, color: .clear)
 
+    func prepareIdentityCell(_ cell: UITableViewCell) {
+        if preparedIdentityStatus { return }
+        self.createBadge(cell, color: .clear)
         self.getUserVerificationStatus { status, success in
             if success {
                 if let hasDetail = status?.status {
                     let userModel = KYCInformationViewModel.create(for: hasDetail)
                     self.createBadge(cell, status)
                     cell.detailTextLabel?.text = userModel.badge
-                    UIView.animate(withDuration: 0.2, delay: 0.5, options: [], animations: {
-                        cell.detailTextLabel?.alpha = 1
-                        cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-                    }, completion: { _ in
-                        self.preparedIdentityStatus = true
-                    })
-                }
-                
-            } else {
-                cell.detailTextLabel?.text = "Unknown"
-                self.createBadge(cell, color: .unverified)
-                UIView.animate(withDuration: 0.2, delay: 0.5, options: [], animations: {
-                    cell.detailTextLabel?.alpha = 1
-                    cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-                    cell.detailTextLabel?.backgroundColor = .unverified
-                }, completion: { _ in
                     self.preparedIdentityStatus = true
-                })
+                }
+            } else {
+                self.createBadge(cell, color: .unverified)
+                cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
             }
         }
     }
-    
+
     // swiftlint:disable:next cyclomatic_complexity
     func prepareRow(_ cell: UITableViewCell, _ format: SettingsCell) {
         switch format {
@@ -270,7 +256,7 @@ extension SettingsTableViewController {
 }
 
 class EdgeInsetBadge: EdgeInsetLabel {
-    
+
 //    override func awakeFromNib() {
 //        super.awakeFromNib()
 //        self.layer.cornerRadius = 4
@@ -281,11 +267,11 @@ class EdgeInsetBadge: EdgeInsetLabel {
 //        sizeToFit()
 //        layoutIfNeeded()
 //    }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -295,11 +281,11 @@ class EdgeInsetLabel: UILabel {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     var textInsets = UIEdgeInsets.zero {
         didSet { invalidateIntrinsicContentSize() }
     }
@@ -313,7 +299,7 @@ class EdgeInsetLabel: UILabel {
                                           right: -textInsets.right)
         return UIEdgeInsetsInsetRect(textRect, invertedInsets)
     }
-    
+
     override func drawText(in rect: CGRect) {
         super.drawText(in: UIEdgeInsetsInsetRect(rect, textInsets))
     }
@@ -325,19 +311,19 @@ extension EdgeInsetLabel {
         set { textInsets.left = newValue }
         get { return textInsets.left }
     }
-    
+
     @IBInspectable
     var rightTextInset: CGFloat {
         set { textInsets.right = newValue }
         get { return textInsets.right }
     }
-    
+
     @IBInspectable
     var topTextInset: CGFloat {
         set { textInsets.top = newValue }
         get { return textInsets.top }
     }
-    
+
     @IBInspectable
     var bottomTextInset: CGFloat {
         set { textInsets.bottom = newValue }
