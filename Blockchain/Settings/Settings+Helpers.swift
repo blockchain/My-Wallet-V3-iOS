@@ -9,19 +9,19 @@
 import Foundation
 
 extension SettingsTableViewController {
-    
+
     func getAllCurrencySymbols() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.didGetCurrencySymbols),
                                                name: NSNotification.Name(rawValue: "GetAllCurrencySymbols"), object: nil)
         WalletManager.shared.wallet.getBtcExchangeRates()
     }
-    
+
     @objc func didGetCurrencySymbols() {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "GetAllCurrencySymbols"), object: nil)
         updateCurrencySymbols()
     }
-    
+
     func getLocalSymbolFromLatestResponse() -> CurrencySymbol? {
         return WalletManager.shared.latestMultiAddressResponse?.symbol_local
     }
@@ -31,7 +31,7 @@ extension SettingsTableViewController {
         ]
         let title = "\(LocalizationConstants.Errors.error) \(LocalizationConstants.Errors.loadingSettings)"
         let message = LocalizationConstants.Errors.checkConnection
-        
+
         AlertViewPresenter.shared.standardNotify(
             message: message,
             title: title,
@@ -125,23 +125,43 @@ extension AppSettingsController {
     func getUserEmail() -> String? {
         return WalletManager.shared.wallet.getEmail()
     }
-    
+
     /// MARK: -formatDetailCell
     func formatDetailCell(_ verified: Bool, _ cell: UITableViewCell) {
         if verified {
+            self.createBadge(cell, color: .green)
             cell.detailTextLabel?.text = LocalizationConstants.verified
             cell.detailTextLabel?.textColor = .green
         } else {
+            createBadge(cell, color: .unverified)
             cell.detailTextLabel?.text = LocalizationConstants.unverified
-            cell.detailTextLabel?.textColor = .error
+            cell.detailTextLabel?.textColor = .white
         }
     }
-    
+
+    func createBadge(_ cell: UITableViewCell, color: UIColor? = nil, _ using: KYCUser? = nil) {
+        cell.detailTextLabel?.layer.cornerRadius = 4
+        cell.detailTextLabel?.layer.masksToBounds = true
+        if let status = using?.status {
+            switch status {
+            case .approved: cell.detailTextLabel?.backgroundColor = .verified
+            case .expired, .failed, .none: cell.detailTextLabel?.backgroundColor = .unverified
+            case .pending: cell.detailTextLabel?.backgroundColor = .pending
+            }
+        } else {
+            cell.detailTextLabel?.backgroundColor = color
+        }
+        cell.detailTextLabel?.textColor = .white
+        cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
+        cell.detailTextLabel?.sizeToFit()
+        cell.detailTextLabel?.layoutIfNeeded()
+    }
+
     /// MARK: -isMobileVerified
     func isMobileVerified() -> Bool {
         return WalletManager.shared.wallet.hasVerifiedMobileNumber()
     }
-    
+
     /// MARK: -getMobileNumber
     func getMobileNumber() -> String? {
         return WalletManager.shared.wallet.getSMSNumber()
@@ -150,7 +170,7 @@ extension AppSettingsController {
 
 extension CustomSettingCell {
     func styleCell() {
-        title?.textColor = .darkGray
+        title?.textColor = .brandPrimary
         title?.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.MediumLarge)
     }
 }
@@ -159,6 +179,7 @@ extension CustomDetailCell {
     func formatDetails() {
         subtitle?.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.Small)
     }
+
     func mockCell() {
         // Only for Interface Builder
         subtitle?.text = LocalizationConstants.more

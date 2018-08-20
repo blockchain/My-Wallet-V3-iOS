@@ -8,8 +8,7 @@
 
 import Foundation
 
-// TICKET: 1159 Combine this protocol with other delegates in setup method and rename 'clicked' to 'tapped'
-@objc protocol ExchangeCreateViewDelegate {
+@objc protocol ExchangeCreateViewDelegate: AddressSelectionDelegate, UITextFieldDelegate, ContinueButtonInputAccessoryViewDelegate {
     func assetToggleButtonTapped()
     func useMinButtonTapped()
     func useMaxButtonTapped()
@@ -48,10 +47,8 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
     @objc var errorTextView: UITextView?
 
-    private weak var createViewDelegate: ExchangeCreateViewDelegate?
-    private weak var fromToButtonDelegate: FromToButtonDelegate?
-    private weak var continueButtonInputAccessoryDelegate: ContinueButtonInputAccessoryViewDelegate?
-    private weak var textFieldDelegate: UITextFieldDelegate?
+    private weak var delegate: ExchangeCreateViewDelegate?
+    private var fromToButtonDelegate: FromToButtonDelegateIntermediate?
 }
 
 // MARK: - Setup
@@ -59,15 +56,16 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 extension ExchangeCreateView {
     @objc func setup(
         withConversionView: Bool,
-        createViewDelegate: ExchangeCreateViewDelegate,
-        fromToButtonDelegate: FromToButtonDelegate,
-        continueButtonInputAccessoryDelegate: ContinueButtonInputAccessoryViewDelegate,
-        textFieldDelegate: UITextFieldDelegate
+        delegate: ExchangeCreateViewDelegate,
+        navigationController: BCNavigationController
     ) {
-        self.createViewDelegate = createViewDelegate
-        self.fromToButtonDelegate = fromToButtonDelegate
-        self.continueButtonInputAccessoryDelegate = continueButtonInputAccessoryDelegate
-        self.textFieldDelegate = textFieldDelegate
+        self.delegate = delegate
+
+        fromToButtonDelegate = FromToButtonDelegateIntermediate(
+            wallet: WalletManager.shared.wallet,
+            navigationController: navigationController,
+            addressSelectionDelegate: self
+        )
 
         backgroundColor = UIColor.lightGray
         setupSubviews(withConversionView: withConversionView)
@@ -175,7 +173,7 @@ private extension ExchangeCreateView {
 
     func setupInputAccessoryView() {
         let inputAccessoryView = ContinueButtonInputAccessoryView()
-        inputAccessoryView.delegate = continueButtonInputAccessoryDelegate
+        inputAccessoryView.delegate = self
         continuePaymentAccessoryView = inputAccessoryView
     }
 
@@ -336,19 +334,19 @@ private extension ExchangeCreateView {
 
 @objc private extension ExchangeCreateView {
     func assetToggleButtonTapped() {
-        createViewDelegate?.assetToggleButtonTapped()
+        delegate?.assetToggleButtonTapped()
     }
 
     func useMinButtonTapped() {
-        createViewDelegate?.useMinButtonTapped()
+        delegate?.useMinButtonTapped()
     }
 
     func useMaxButtonTapped() {
-        createViewDelegate?.useMaxButtonTapped()
+        delegate?.useMaxButtonTapped()
     }
 
-    func continueButtonTapped() {
-        createViewDelegate?.continueButtonTapped()
+    internal func continueButtonTapped() {
+        delegate?.continueButtonTapped()
     }
 }
 
@@ -377,7 +375,7 @@ private extension ExchangeCreateView {
         textField.keyboardType = .decimalPad
         textField.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.Small)
         textField.textColor = UIColor.gray5
-        textField.delegate = textFieldDelegate
+        textField.delegate = delegate
         textField.inputAccessoryView = continuePaymentAccessoryView
         return textField
     }
@@ -474,5 +472,39 @@ private extension ExchangeCreateView {
         } else {
             clearRightFields()
         }
+    }
+}
+
+extension ExchangeCreateView: ContinueButtonInputAccessoryViewDelegate {
+    func closeButtonTapped() {
+        delegate?.closeButtonTapped()
+    }
+}
+
+extension ExchangeCreateView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let delegate = delegate else {
+            Logger.shared.debug("No delegate, do not allow changing of characters")
+            return false
+        }
+        return delegate.textField!(textField, shouldChangeCharactersIn: range, replacementString: string)
+    }
+}
+
+extension ExchangeCreateView: AddressSelectionDelegate {
+    func getAssetType() -> LegacyAssetType {
+        guard let delegate = delegate else {
+            Logger.shared.debug("Delegate is nil - allowing selection of all asset types by default.")
+            return LegacyAssetType(rawValue: -1)!
+        }
+        return delegate.getAssetType!()
+    }
+
+    func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
+        delegate?.didSelect?(fromAccount: account, assetType: asset)
+    }
+
+    func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
+        delegate?.didSelect?(toAccount: account, assetType: asset)
     }
 }

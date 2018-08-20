@@ -9,7 +9,15 @@
 import Foundation
 
 extension String {
-
+    
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).uppercased() + dropFirst()
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+    
     /// Returns the first 5 characters of the SHA256 hash of this string
     var passwordPartHash: String? {
         guard let hashedString = NSString(string: self).sha256() else { return nil }
