@@ -136,7 +136,6 @@ extension SettingsTableViewController {
     }
 
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        if preparedIdentityStatus { return }
         self.createBadge(cell, color: .clear)
         self.getUserVerificationStatus { status, success in
             if success {
@@ -144,9 +143,8 @@ extension SettingsTableViewController {
                     let userModel = KYCInformationViewModel.create(for: hasDetail)
                     self.createBadge(cell, status)
                     cell.detailTextLabel?.text = userModel.badge
-                    self.preparedIdentityStatus = true
                 }
-            } else {
+            } else if !success {
                 self.createBadge(cell, color: .unverified)
                 cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
             }

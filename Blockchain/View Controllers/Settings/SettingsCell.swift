@@ -78,14 +78,23 @@ import UIKit
 }
 
 @IBDesignable class SettingsTableViewBadge: SettingsTableViewCell {
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        let viewHeight = self.contentView.frame.size.height
-        let labelHeight = self.detailTextLabel?.frame.size.height
-        let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
         self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-        self.detailTextLabel?.frame.origin.y = ypos
-        sizeToFit()
+  //      self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
+        self.detailTextLabel?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+//        let viewHeight = self.contentView.frame.size.height
+//        let labelHeight = self.detailTextLabel?.frame.size.height
+//        let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
+//        self.detailTextLabel?.frame.origin.y = ypos
+//       self.detailTextLabel?.layoutIfNeeded()
+//        self.detailTextLabel?.sizeToFit()
+ //       layoutIfNeeded()
     }
 }
 
