@@ -86,15 +86,11 @@ import UIKit
     override func layoutSubviews() {
         super.layoutSubviews()
         self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-  //      self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-        self.detailTextLabel?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        let viewHeight = self.contentView.frame.size.height
-//        let labelHeight = self.detailTextLabel?.frame.size.height
-//        let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
-//        self.detailTextLabel?.frame.origin.y = ypos
-//       self.detailTextLabel?.layoutIfNeeded()
-//        self.detailTextLabel?.sizeToFit()
- //       layoutIfNeeded()
+        let viewHeight = self.contentView.frame.size.height
+        let labelHeight = self.detailTextLabel?.frame.size.height
+        let ypos = (viewHeight / 2.0) - (labelHeight! / 2.0)
+        self.detailTextLabel?.frame.origin.y = ypos
+        self.detailTextLabel?.frame.origin.x = (UIScreen.main.bounds.size.width - (self.detailTextLabel?.frame.size.width)! - 50)
     }
 }
 
