@@ -181,6 +181,7 @@
 @property BOOL didPairAutomatically;
 @property BOOL isFilteringTransactions;
 @property BOOL isFetchingTransactions;
+@property BOOL isFetchingExchangeTrades;
 @property BOOL isSyncing;
 @property BOOL isNew;
 @property NSString *twoFactorInput;

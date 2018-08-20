@@ -2480,6 +2480,7 @@
 
 - (void)getExchangeTrades
 {
+    self.isFetchingExchangeTrades = YES;
      if ([self isInitialized]) [self.context evaluateScript:@"MyWalletPhone.getExchangeTrades()"];
 }
 
@@ -4060,6 +4061,7 @@
         [exchangeTrades addObject:exchangeTrade];
     }
 
+    self.isFetchingExchangeTrades = NO;
     if ([self.delegate respondsToSelector:@selector(didGetExchangeTrades:)]) {
         [self.delegate didGetExchangeTrades:exchangeTrades];
     } else {

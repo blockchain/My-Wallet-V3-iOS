@@ -72,6 +72,10 @@
 		3A26AF5821273BC9003A8A08 /* ExchangeListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF5721273BC9003A8A08 /* ExchangeListViewCell.swift */; };
 		3A26AF5A21273BD5003A8A08 /* ExchangeListViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A26AF5921273BD5003A8A08 /* ExchangeListViewCell.xib */; };
 		3A26AF7221274EF9003A8A08 /* ExchangeTradeCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */; };
+		3A26AF7421277931003A8A08 /* ExchangeListOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7321277931003A8A08 /* ExchangeListOrderCell.swift */; };
+		3A26AF7621277944003A8A08 /* ExchangeListOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A26AF7521277944003A8A08 /* ExchangeListOrderCell.xib */; };
+		3A26AF7A212B0CCB003A8A08 /* ExchangeListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */; };
+		3A26AF7D212B13FA003A8A08 /* ExchangeListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7C212B13FA003A8A08 /* ExchangeListService.swift */; };
 		3A3D5D8B211B44BD00E6C241 /* ProgressableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */; };
 		3A3D5D8C211B453400E6C241 /* ValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F8FD211A067A002F7946 /* ValidationFormView.swift */; };
 		3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */; };
@@ -1100,6 +1104,10 @@
 		3A26AF5721273BC9003A8A08 /* ExchangeListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListViewCell.swift; sourceTree = "<group>"; };
 		3A26AF5921273BD5003A8A08 /* ExchangeListViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExchangeListViewCell.xib; sourceTree = "<group>"; };
 		3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTradeCellModel.swift; sourceTree = "<group>"; };
+		3A26AF7321277931003A8A08 /* ExchangeListOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListOrderCell.swift; sourceTree = "<group>"; };
+		3A26AF7521277944003A8A08 /* ExchangeListOrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExchangeListOrderCell.xib; sourceTree = "<group>"; };
+		3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListAPI.swift; sourceTree = "<group>"; };
+		3A26AF7C212B13FA003A8A08 /* ExchangeListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListService.swift; sourceTree = "<group>"; };
 		3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressableView.swift; sourceTree = "<group>"; };
 		3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdateAPI.swift; sourceTree = "<group>"; };
 		3A3D5DC5211C992B00E6C241 /* PersonalDetailsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsAPI.swift; sourceTree = "<group>"; };
@@ -3187,6 +3195,8 @@
 			children = (
 				3A26AF5721273BC9003A8A08 /* ExchangeListViewCell.swift */,
 				3A26AF5921273BD5003A8A08 /* ExchangeListViewCell.xib */,
+				3A26AF7321277931003A8A08 /* ExchangeListOrderCell.swift */,
+				3A26AF7521277944003A8A08 /* ExchangeListOrderCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3197,6 +3207,31 @@
 				3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		3A26AF7721277E6E003A8A08 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */,
+				3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3A26AF78212B0CB6003A8A08 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		3A26AF7B212B13EC003A8A08 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3A26AF7C212B13FA003A8A08 /* ExchangeListService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		3A3D5DAB211B964F00E6C241 /* API */ = {
@@ -6190,10 +6225,11 @@
 		C75F64F62124BB9000396B65 /* Exchange */ = {
 			isa = PBXGroup;
 			children = (
+				3A26AF7B212B13EC003A8A08 /* Services */,
+				3A26AF78212B0CB6003A8A08 /* API */,
+				3A26AF7721277E6E003A8A08 /* Controllers */,
 				3A26AF6721274EEA003A8A08 /* Models */,
 				3A26AF5621273BB7003A8A08 /* Views */,
-				3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */,
-				3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */,
 			);
 			path = Exchange;
 			sourceTree = "<group>";
@@ -6742,6 +6778,7 @@
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				C718595B1F4B85E800745A87 /* Transactions.xib in Resources */,
+				3A26AF7621277944003A8A08 /* ExchangeListOrderCell.xib in Resources */,
 				ECD244EB19A8AC45004B1F40 /* PEKeyboard-3-done.png in Resources */,
 				5138373B21025AD100767B2E /* alert-received.wav in Resources */,
 				ECD244F019A8AC45004B1F40 /* PEKeyboard-4-done.png in Resources */,
@@ -7221,6 +7258,7 @@
 				C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */,
 				23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */,
 				23E2FC081C7F60E7004CFF79 /* BCInsetLabel.m in Sources */,
+				3A26AF7A212B0CCB003A8A08 /* ExchangeListAPI.swift in Sources */,
 				AA1E522D2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
 				23444F871DCD217E00573C8C /* BTCNetwork.m in Sources */,
 				C7BEE14A20C9775B0096003B /* WalletOptions.swift in Sources */,
@@ -7404,6 +7442,7 @@
 				60B10D442118EC85003F945F /* CountryDataProvider.swift in Sources */,
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
 				C7442E341FBA1E7800695E4C /* ExchangeTableViewCell.m in Sources */,
+				3A26AF7D212B13FA003A8A08 /* ExchangeListService.swift in Sources */,
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
 				511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */,
@@ -7552,6 +7591,7 @@
 				AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				23FB5C071D9ABB450008C6AB /* TransactionDetailDescriptionCell.m in Sources */,
 				23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */,
+				3A26AF7421277931003A8A08 /* ExchangeListOrderCell.swift in Sources */,
 				23DEF96E1DB11C98004AAAB6 /* TransferAllFundsBuilder.m in Sources */,
 				C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */,
 				6055D370210F689C000B8E95 /* Currency.swift in Sources */,
