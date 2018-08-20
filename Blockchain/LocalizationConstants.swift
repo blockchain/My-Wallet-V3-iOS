@@ -454,8 +454,53 @@ struct LocalizationConstants {
             "Congratulations! We successfully verified your identity. You can now Exchange cryptocurrencies at Blockchain.",
             comment: "Description for when KYC verification is approved."
         )
+        
+        static let accountApprovedBadge = NSLocalizedString(
+            "Approved",
+            comment: "KYC verification is approved."
+        )
+        
+        static let accountPendingBadge = NSLocalizedString(
+            "Pending",
+            comment: "KYC verification is Pending."
+        )
+        
+        static let accountUnderReviewBadge = NSLocalizedString(
+            "Under Review",
+            comment: "KYC verification is Under Review."
+        )
+        
+        static let verificationUnderReview = NSLocalizedString(
+            "Verification Under Review",
+            comment: "Text displayed when KYC verification is under review."
+        )
+        static let verificationUnderReviewDescription = NSLocalizedString(
+            "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
+            comment: "Description for when KYC verification is under review."
+        )
+        
+        static let accountUnconfirmedBadge = NSLocalizedString(
+            "Unconfirmed",
+            comment: "KYC verification is unconfirmed."
+        )
+        
+        static let accountUnverifiedBadge = NSLocalizedString(
+            "Unverified",
+            comment: "KYC verification is unverified."
+        )
+        
+        static let accounVerifiedBadge = NSLocalizedString(
+            "Verified",
+            comment: "KYC verification is complete."
+        )
+        
         static let verificationFailed = NSLocalizedString(
             "Verification Failed",
+            comment: "Text displayed when KYC verification failed."
+        )
+        
+        static let verificationFailedBadge = NSLocalizedString(
+            "Failed",
             comment: "Text displayed when KYC verification failed."
         )
         static let verificationFailedDescription = NSLocalizedString(

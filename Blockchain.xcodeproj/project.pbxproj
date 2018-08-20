@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1BDA5D14A82AAF81021B48C8 /* Pods_Blockchain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F62892080A1D7CE7EC5FED0 /* Pods_Blockchain.framework */; };
 		230FD2D31C5BD04000336683 /* BCEditAddressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 230FD2D21C5BD04000336683 /* BCEditAddressView.m */; };
 		230FD2D91C5BF1A700336683 /* BCQRCodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 230FD2D81C5BF1A700336683 /* BCQRCodeView.m */; };
 		230FD2DC1C5BFB4300336683 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 230FD2DB1C5BFB4300336683 /* QRCodeGenerator.m */; };
@@ -228,6 +227,10 @@
 		51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DC2F5F20B7312600E03AF2 /* EthereumAddress.swift */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
+		51FC1AFE21270D0D007BEB18 /* SettingsTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */; };
+		51FC1B0921270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
+		51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
+		51FC1B112127473D007BEB18 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D371210F692D000B8E95 /* UIView.swift */; };
 		600E18BB2118D46B003C1846 /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
 		601F5EEB211B32AA002697AB /* OnfidoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601F5EE0211B32AA002697AB /* OnfidoController.swift */; };
 		602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */; };
@@ -350,6 +353,7 @@
 		67EEE7721A8E547900288753 /* PEPin-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 67EEE7701A8E547900288753 /* PEPin-on@2x.png */; };
 		67EEE7731A8E547900288753 /* PEPin-on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 67EEE7711A8E547900288753 /* PEPin-on@3x.png */; };
 		67FA1A4D1ABA092D000C9196 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FA1A4C1ABA092D000C9196 /* RegExCategories.m */; };
+		680CC422908E206C1581D626 /* Pods_Blockchain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08968EB2BC575FB3EBD71B28 /* Pods_Blockchain.framework */; };
 		6E2D90A21BBEC34800B719EC /* BCRecoveryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */; };
 		84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */; };
 		84B601CA197AD03800DA1829 /* BCModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C9197AD03800DA1829 /* BCModalView.m */; };
@@ -567,14 +571,14 @@
 		AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */; };
 		AAF2AEC621237A1F00687E30 /* PersonalDetailsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */; };
 		AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD158DD2123740C0058B3C8 /* BlockchainDataRepository.swift */; };
+		AAF2AF062123952500687E30 /* KYCInformationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */; };
+		AAF2AF072123952500687E30 /* KYCInformationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */; };
 		AAF2AF3B2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */; };
 		AAF2AF3C2124D8E900687E30 /* KYCCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */; };
 		AAF2AF3E2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */; };
 		AAF2AF3F2124D8F700687E30 /* KYCApiTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */; };
 		AAF2AF412124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */; };
 		AAF2AF422124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */; };
-		AAF2AF062123952500687E30 /* KYCInformationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */; };
-		AAF2AF072123952500687E30 /* KYCInformationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */; };
 		AAFA97AE2115110000D19ED3 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE083211258F300AD514A /* SettingsCell.swift */; };
 		AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */; };
 		AAFA97B02115110000D19ED3 /* SettingsProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE085211258F300AD514A /* SettingsProtocols.swift */; };
@@ -585,7 +589,7 @@
 		AAFE9E762100D169002E4E1E /* PinStoreKeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */; };
 		AAFE9E9221016132002E4E1E /* PinError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFE9E9121016132002E4E1E /* PinError.swift */; };
 		AAFE9E9321016132002E4E1E /* PinError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFE9E9121016132002E4E1E /* PinError.swift */; };
-		B1EB0454CD403507A35A5FBC /* Pods_BlockchainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AA7843695F30B69F3112F4 /* Pods_BlockchainTests.framework */; };
+		C6FFCE3372082DAB9DA7021E /* Pods_BlockchainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -833,8 +837,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1F62892080A1D7CE7EC5FED0 /* Pods_Blockchain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Blockchain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		221747A6550F83BB47C69687 /* Pods-Blockchain.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"; sourceTree = "<group>"; };
+		08968EB2BC575FB3EBD71B28 /* Pods_Blockchain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Blockchain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F382300C1E5E6192A207AA9 /* Pods-BlockchainTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug dev.xcconfig"; sourceTree = "<group>"; };
+		12597546BEA6220AA11F7A62 /* Pods-BlockchainTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug production.xcconfig"; sourceTree = "<group>"; };
 		230FD2D11C5BD04000336683 /* BCEditAddressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCEditAddressView.h; sourceTree = "<group>"; };
 		230FD2D21C5BD04000336683 /* BCEditAddressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCEditAddressView.m; sourceTree = "<group>"; };
 		230FD2D71C5BF1A700336683 /* BCQRCodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCQRCodeView.h; sourceTree = "<group>"; };
@@ -1093,7 +1098,6 @@
 		23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailTableCell.m; sourceTree = "<group>"; };
 		23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+SendSynchronousRequest.h"; sourceTree = "<group>"; };
 		23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+SendSynchronousRequest.m"; sourceTree = "<group>"; };
-		32AA7843695F30B69F3112F4 /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A258C0C210A486F00C023F5 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		3A3D5D8A211B44BD00E6C241 /* ProgressableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressableView.swift; sourceTree = "<group>"; };
 		3A3D5DB5211B96FA00E6C241 /* LocationUpdateAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdateAPI.swift; sourceTree = "<group>"; };
@@ -1122,7 +1126,7 @@
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3AFD18AE21221D95007145EA /* KYCPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageModel.swift; sourceTree = "<group>"; };
-		486E55BBDEE5AAF28E48BB13 /* Pods-Blockchain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"; sourceTree = "<group>"; };
+		404A01EFD6ABF02E4F6F337A /* Pods-Blockchain.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"; sourceTree = "<group>"; };
 		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePayload.swift; sourceTree = "<group>"; };
 		511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+Payload.swift"; sourceTree = "<group>"; };
 		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
@@ -1753,7 +1757,8 @@
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		57B4ACE5CC925A8170598624 /* Pods-BlockchainTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug production.xcconfig"; sourceTree = "<group>"; };
+		51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
+		51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
 		601F5EE0211B32AA002697AB /* OnfidoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoController.swift; sourceTree = "<group>"; };
 		602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCInformationController.storyboard; sourceTree = "<group>"; };
 		602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingNavigationController.storyboard; sourceTree = "<group>"; };
@@ -2698,7 +2703,7 @@
 		67FA1A4C1ABA092D000C9196 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
 		6E2D90A01BBEC34800B719EC /* BCRecoveryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCRecoveryView.h; sourceTree = "<group>"; };
 		6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCRecoveryView.m; sourceTree = "<group>"; };
-		728AC74FBC94D367EC8D4594 /* Pods-BlockchainTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug dev.xcconfig"; sourceTree = "<group>"; };
+		730695CB650E8C203CE31D50 /* Pods-BlockchainTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.release.xcconfig"; sourceTree = "<group>"; };
 		84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Blocks.h"; sourceTree = "<group>"; };
 		84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Blocks.m"; sourceTree = "<group>"; };
 		84B601C8197AD03800DA1829 /* BCModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCModalView.h; sourceTree = "<group>"; };
@@ -2714,7 +2719,7 @@
 		84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSONParser_NSString.m"; sourceTree = "<group>"; };
 		84FC02FB19815F1B00B97D5B /* crypto_scrypt-nosse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "crypto_scrypt-nosse.c"; path = "src/crypto_scrypt-nosse.c"; sourceTree = "<group>"; };
 		84FC02FC19815F1B00B97D5B /* sha256.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha256.c; path = src/sha256.c; sourceTree = "<group>"; };
-		936299F36CC018003ABC9E62 /* Pods-BlockchainTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.release.xcconfig"; sourceTree = "<group>"; };
+		8D45B1ADEBD6D8FC96A37724 /* Pods-Blockchain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"; sourceTree = "<group>"; };
 		9F0CBAA8151351F400CD945D /* Wallet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wallet.h; sourceTree = "<group>"; };
 		9F0CBAA9151351F400CD945D /* Wallet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wallet.m; sourceTree = "<group>"; };
 		9F0CBAD61513CA2600CD945D /* BCFadeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCFadeView.h; sourceTree = "<group>"; };
@@ -2786,6 +2791,7 @@
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A2AADC041B0B98720085144B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Backup.strings; sourceTree = "<group>"; };
 		A2AADC071B0B999F0085144B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Backup.strings; sourceTree = "<group>"; };
+		A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Pin.swift"; sourceTree = "<group>"; };
 		AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAuthDelegate.swift; sourceTree = "<group>"; };
@@ -2880,10 +2886,10 @@
 		AAE94F6720C75B8D005A3595 /* PinPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPresenterTests.swift; sourceTree = "<group>"; };
 		AAE94F6920C75C4E005A3595 /* MockPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinView.swift; sourceTree = "<group>"; };
 		AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinInteractor.swift; sourceTree = "<group>"; };
+		AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCInformationViewModel.swift; sourceTree = "<group>"; };
 		AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KYCCreateUserResponse.swift; path = Blockchain/KYC/Models/Network/KYCCreateUserResponse.swift; sourceTree = SOURCE_ROOT; };
 		AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCApiTokenResponse.swift; path = Blockchain/KYC/Models/Network/KYCApiTokenResponse.swift; sourceTree = SOURCE_ROOT; };
 		AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCSessionTokenResponse.swift; path = Blockchain/KYC/Models/Network/KYCSessionTokenResponse.swift; sourceTree = SOURCE_ROOT; };
-		AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCInformationViewModel.swift; sourceTree = "<group>"; };
 		AAFA97B3211511D000D19ED3 /* Settings+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Helpers.swift"; sourceTree = "<group>"; };
 		AAFA97B4211511D000D19ED3 /* Settings+Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Table.swift"; sourceTree = "<group>"; };
 		AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreKeyPair.swift; sourceTree = "<group>"; };
@@ -3056,6 +3062,7 @@
 		C7EEB8441EA95505002F28B9 /* UIView+ChangeFrameAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ChangeFrameAttribute.m"; sourceTree = "<group>"; };
 		C7F041941E3BD4A6004E8B4A /* BuyBitcoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinViewController.h; sourceTree = "<group>"; };
 		C7F041951E3BD4A6004E8B4A /* BuyBitcoinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinViewController.m; sourceTree = "<group>"; };
+		C90A0884126BB17EBBDCFD8A /* Pods-BlockchainTests.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug testnet.xcconfig"; sourceTree = "<group>"; };
 		C9BE91671945D8F600FD516D /* PENumpadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PENumpadView.h; sourceTree = "<group>"; };
 		C9BE91681945D8F600FD516D /* PENumpadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PENumpadView.m; sourceTree = "<group>"; };
 		C9BE91691945D8F600FD516D /* PEPinEntryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEPinEntryController.h; sourceTree = "<group>"; };
@@ -3079,8 +3086,7 @@
 		CFA0671E1E65D426008456C1 /* WebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebLoginViewController.m; sourceTree = "<group>"; };
 		CFA067201E65D49C008456C1 /* WebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebLoginViewController.h; sourceTree = "<group>"; };
 		CFD602B01E64AC2D006F6208 /* wallet-ios.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "wallet-ios.js"; sourceTree = "<group>"; };
-		DD8EDB6CC710538B3396ECBB /* Pods-BlockchainTests.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug testnet.xcconfig"; sourceTree = "<group>"; };
-		DDF135A50B1CEC84243E561B /* Pods-Blockchain.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug testnet.xcconfig"; sourceTree = "<group>"; };
+		DEEFE947AD4F35A82B5D29CB /* Pods-Blockchain.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug testnet.xcconfig"; sourceTree = "<group>"; };
 		ECD244E119A8AC45004B1F40 /* PEKeyboard-3-done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-done.png"; sourceTree = "<group>"; };
 		ECD244E219A8AC45004B1F40 /* PEKeyboard-3-dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-dot.png"; sourceTree = "<group>"; };
 		ECD244E319A8AC45004B1F40 /* PEKeyboard-3-edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-edit.png"; sourceTree = "<group>"; };
@@ -3093,7 +3099,7 @@
 		ECD244EA19A8AC45004B1F40 /* PEKeyboard-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-4.png"; sourceTree = "<group>"; };
 		ECD244F519A8B444004B1F40 /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
 		ECD244F619A8B444004B1F40 /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utils.m"; sourceTree = "<group>"; };
-		F0259BE7A6072D92B9F73007 /* Pods-BlockchainTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug staging.xcconfig"; sourceTree = "<group>"; };
+		F0C7614B42E9F9CE6B371C8E /* Pods-BlockchainTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		FA6323371A433B1C00EB3974 /* Foundation-Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Foundation-Utility.h"; sourceTree = "<group>"; };
 		FA6323381A433B1C00EB3974 /* Foundation-Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation-Utility.m"; sourceTree = "<group>"; };
 		FCB33B6D1FC369D700317E6B /* ExchangeDetailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeDetailView.h; sourceTree = "<group>"; };
@@ -3107,7 +3113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1EB0454CD403507A35A5FBC /* Pods_BlockchainTests.framework in Frameworks */,
+				C6FFCE3372082DAB9DA7021E /* Pods_BlockchainTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3120,28 +3126,13 @@
 				513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */,
 				515315F32056C1A0000161DF /* libcrypto.a in Frameworks */,
 				515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */,
-				1BDA5D14A82AAF81021B48C8 /* Pods_Blockchain.framework in Frameworks */,
+				680CC422908E206C1581D626 /* Pods_Blockchain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0A0B7B23D8DF7938F9E9CD06 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				221747A6550F83BB47C69687 /* Pods-Blockchain.debug production.xcconfig */,
-				DDF135A50B1CEC84243E561B /* Pods-Blockchain.debug testnet.xcconfig */,
-				486E55BBDEE5AAF28E48BB13 /* Pods-Blockchain.release.xcconfig */,
-				F0259BE7A6072D92B9F73007 /* Pods-BlockchainTests.debug staging.xcconfig */,
-				57B4ACE5CC925A8170598624 /* Pods-BlockchainTests.debug production.xcconfig */,
-				728AC74FBC94D367EC8D4594 /* Pods-BlockchainTests.debug dev.xcconfig */,
-				DD8EDB6CC710538B3396ECBB /* Pods-BlockchainTests.debug testnet.xcconfig */,
-				936299F36CC018003ABC9E62 /* Pods-BlockchainTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		23444F7B1DCD210B00573C8C /* CoreBitcoin */ = {
 			isa = PBXGroup;
 			children = (
@@ -5650,7 +5641,7 @@
 				9FB3637414B60128004BEA02 /* Frameworks */,
 				9FB3637214B60128004BEA02 /* Products */,
 				C9D4B2AE193E020D00EDA9EA /* Third Party */,
-				0A0B7B23D8DF7938F9E9CD06 /* Pods */,
+				FA02948BFA299F1E3FB4F9BB /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5683,8 +5674,8 @@
 				513467FF2056BC6700DE6A1E /* Crashlytics.framework */,
 				513467FE2056BC6600DE6A1E /* Fabric.framework */,
 				23C543A21D0F4197007A5F58 /* libicucore.tbd */,
-				1F62892080A1D7CE7EC5FED0 /* Pods_Blockchain.framework */,
-				32AA7843695F30B69F3112F4 /* Pods_BlockchainTests.framework */,
+				08968EB2BC575FB3EBD71B28 /* Pods_Blockchain.framework */,
+				A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -6001,9 +5992,11 @@
 		AABB74C420D44ACA00C0F7C5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				603582A520EBFB110077AFFB /* ToggleCell.xib */,
 				AABB74C520D44AE300C0F7C5 /* AboutUsView.storyboard */,
 				AABB74C720D44B0600C0F7C5 /* AboutUsViewController.swift */,
+				51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */,
+				51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */,
+				603582A520EBFB110077AFFB /* ToggleCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -6133,6 +6126,15 @@
 			path = Pin;
 			sourceTree = "<group>";
 		};
+		AAF2AEFB2123930A00687E30 /* Information */ = {
+			isa = PBXGroup;
+			children = (
+				602B9CCD2118E15200BD3D60 /* KYCInformationController.swift */,
+				AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */,
+			);
+			path = Information;
+			sourceTree = "<group>";
+		};
 		AAF2AF0B2124946F00687E30 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -6175,26 +6177,6 @@
 				C7AEB1B32125CAB100320A32 /* Views */,
 			);
 			path = Exchange;
-			sourceTree = "<group>";
-		};
-		AAF2AF392124AFBC00687E30 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				AAF2AF3D2124D8F700687E30 /* KYCApiTokenResponse.swift */,
-				AAF2AF3A2124D8E900687E30 /* KYCCreateUserResponse.swift */,
-				AAF2AF402124E70500687E30 /* KYCSessionTokenResponse.swift */,
-			);
-			name = Network;
-			path = "New Group";
-			sourceTree = "<group>";
-		};
-		AAF2AEFB2123930A00687E30 /* Information */ = {
-			isa = PBXGroup;
-			children = (
-				602B9CCD2118E15200BD3D60 /* KYCInformationController.swift */,
-				AAF2AF052123952500687E30 /* KYCInformationViewModel.swift */,
-			);
-			path = Information;
 			sourceTree = "<group>";
 		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
@@ -6456,6 +6438,21 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		FA02948BFA299F1E3FB4F9BB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				404A01EFD6ABF02E4F6F337A /* Pods-Blockchain.debug production.xcconfig */,
+				DEEFE947AD4F35A82B5D29CB /* Pods-Blockchain.debug testnet.xcconfig */,
+				8D45B1ADEBD6D8FC96A37724 /* Pods-Blockchain.release.xcconfig */,
+				12597546BEA6220AA11F7A62 /* Pods-BlockchainTests.debug production.xcconfig */,
+				F0C7614B42E9F9CE6B371C8E /* Pods-BlockchainTests.debug staging.xcconfig */,
+				0F382300C1E5E6192A207AA9 /* Pods-BlockchainTests.debug dev.xcconfig */,
+				C90A0884126BB17EBBDCFD8A /* Pods-BlockchainTests.debug testnet.xcconfig */,
+				730695CB650E8C203CE31D50 /* Pods-BlockchainTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -6463,11 +6460,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 519435A5208E61F3001EF882 /* Build configuration list for PBXNativeTarget "BlockchainTests" */;
 			buildPhases = (
-				6AC842BEBB6E7A88963BCAF6 /* [CP] Check Pods Manifest.lock */,
+				CC48054CDB56EC35B93831BF /* [CP] Check Pods Manifest.lock */,
 				5194359A208E61F3001EF882 /* Sources */,
 				5194359B208E61F3001EF882 /* Frameworks */,
 				5194359C208E61F3001EF882 /* Resources */,
-				4732D67978B53EBA4EE7C742 /* [CP] Embed Pods Frameworks */,
+				16032241D6A3B629A155786C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6483,7 +6480,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9FB3638914B60128004BEA02 /* Build configuration list for PBXNativeTarget "Blockchain" */;
 			buildPhases = (
-				808ED30BB56EC186BC2C4D52 /* [CP] Check Pods Manifest.lock */,
+				CDE074730218D067FD5239E6 /* [CP] Check Pods Manifest.lock */,
 				9FB3636D14B60128004BEA02 /* Sources */,
 				9FB3636E14B60128004BEA02 /* Frameworks */,
 				23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */,
@@ -6492,7 +6489,7 @@
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
 				51B9D9272063EA1D007DED65 /* Run SwiftLint */,
 				C718594D1F460C4A00745A87 /* Run Fabric */,
-				8080DB1E8468ADE3DC1D8259 /* [CP] Embed Pods Frameworks */,
+				D069129EFBA0297B3CA548DB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6517,7 +6514,7 @@
 					5194359D208E61F3001EF882 = {
 						CreatedOnToolsVersion = 9.3;
 						DevelopmentTeam = NZ6PH75U7K;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						TestTargetID = 9FB3637014B60128004BEA02;
 					};
 					9FB3637014B60128004BEA02 = {
@@ -6764,6 +6761,7 @@
 				515EFADC210282B4002350B6 /* MainWindow.strings in Resources */,
 				C9BE91871945D8F600FD516D /* PEKeyboard-2-next.png in Resources */,
 				515EFAE2210282B4002350B6 /* MainWindow.xib in Resources */,
+				51FC1AFE21270D0D007BEB18 /* SettingsTableSectionHeader.xib in Resources */,
 				515EFADF210282B4002350B6 /* Settings.strings in Resources */,
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
@@ -6792,6 +6790,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		16032241D6A3B629A155786C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -6820,28 +6840,6 @@
 			shellPath = /bin/sh;
 			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect ${WALLET_SERVER}:443 -showcerts < /dev/null | openssl x509 -outform DER > ${LOCAL_CERTIFICATE_FILE}.der\n";
 		};
-		4732D67978B53EBA4EE7C742 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		51B9D9272063EA1D007DED65 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -6856,7 +6854,21 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		6AC842BEBB6E7A88963BCAF6 /* [CP] Check Pods Manifest.lock */ = {
+		C718594D1F460C4A00745A87 /* Run Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Fabric";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -z \"${FABRIC_API_KEY}\" ] || [ -z \"${FABRIC_SECRET_KEY}\" ]; then\necho \"Fabric key(s) missing/empty - will not run Fabric.\";\nelse\n./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY};\nfi";
+		};
+		CC48054CDB56EC35B93831BF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -6874,7 +6886,25 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8080DB1E8468ADE3DC1D8259 /* [CP] Embed Pods Frameworks */ = {
+		CDE074730218D067FD5239E6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Blockchain-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D069129EFBA0297B3CA548DB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -6911,38 +6941,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		808ED30BB56EC186BC2C4D52 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Blockchain-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C718594D1F460C4A00745A87 /* Run Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ -z \"${FABRIC_API_KEY}\" ] || [ -z \"${FABRIC_SECRET_KEY}\" ]; then\necho \"Fabric key(s) missing/empty - will not run Fabric.\";\nelse\n./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY};\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7075,6 +7073,7 @@
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				602B9D262118E27100BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
+				51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */,
 				AAF2AF422124E70500687E30 /* KYCSessionTokenResponse.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
@@ -7086,6 +7085,7 @@
 				51D17A9A20A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				51135705209CF5E200056D65 /* WalletBuySellDelegate.swift in Sources */,
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
+				51FC1B112127473D007BEB18 /* UIView.swift in Sources */,
 				51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
 				AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */,
 				AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */,
@@ -7368,6 +7368,7 @@
 				51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */,
 				3AC4F97821234040003AA207 /* Storyboardable.swift in Sources */,
+				51FC1B0921270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */,
 				C72B851A210FC098002EBDB9 /* ExchangeCreateView.swift in Sources */,
 				5138375A210264F000767B2E /* BCPriceMarker.swift in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
@@ -8818,7 +8819,7 @@
 		};
 		517F5A41205811B9004826CA /* Debug Testnet */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DDF135A50B1CEC84243E561B /* Pods-Blockchain.debug testnet.xcconfig */;
+			baseConfigurationReference = DEEFE947AD4F35A82B5D29CB /* Pods-Blockchain.debug testnet.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON)";
@@ -8932,7 +8933,7 @@
 		};
 		517F5A44205811DF004826CA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 486E55BBDEE5AAF28E48BB13 /* Pods-Blockchain.release.xcconfig */;
+			baseConfigurationReference = 8D45B1ADEBD6D8FC96A37724 /* Pods-Blockchain.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON)";
@@ -8987,7 +8988,7 @@
 		};
 		519435A6208E61F3001EF882 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 57B4ACE5CC925A8170598624 /* Pods-BlockchainTests.debug production.xcconfig */;
+			baseConfigurationReference = 12597546BEA6220AA11F7A62 /* Pods-BlockchainTests.debug production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -9020,7 +9021,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
@@ -9061,7 +9062,7 @@
 		};
 		519435A7208E61F3001EF882 /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0259BE7A6072D92B9F73007 /* Pods-BlockchainTests.debug staging.xcconfig */;
+			baseConfigurationReference = F0C7614B42E9F9CE6B371C8E /* Pods-BlockchainTests.debug staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -9094,7 +9095,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
@@ -9135,7 +9136,7 @@
 		};
 		519435A8208E61F3001EF882 /* Debug Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 728AC74FBC94D367EC8D4594 /* Pods-BlockchainTests.debug dev.xcconfig */;
+			baseConfigurationReference = 0F382300C1E5E6192A207AA9 /* Pods-BlockchainTests.debug dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -9168,7 +9169,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
@@ -9209,7 +9210,7 @@
 		};
 		519435A9208E61F3001EF882 /* Debug Testnet */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD8EDB6CC710538B3396ECBB /* Pods-BlockchainTests.debug testnet.xcconfig */;
+			baseConfigurationReference = C90A0884126BB17EBBDCFD8A /* Pods-BlockchainTests.debug testnet.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -9242,7 +9243,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
@@ -9283,7 +9284,7 @@
 		};
 		519435AA208E61F3001EF882 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 936299F36CC018003ABC9E62 /* Pods-BlockchainTests.release.xcconfig */;
+			baseConfigurationReference = 730695CB650E8C203CE31D50 /* Pods-BlockchainTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -9296,7 +9297,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -9379,7 +9380,7 @@
 		};
 		9FB3638A14B60128004BEA02 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 221747A6550F83BB47C69687 /* Pods-Blockchain.debug production.xcconfig */;
+			baseConfigurationReference = 404A01EFD6ABF02E4F6F337A /* Pods-Blockchain.debug production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON)";

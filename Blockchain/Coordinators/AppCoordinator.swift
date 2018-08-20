@@ -110,8 +110,8 @@ import Foundation
     }
     
     @objc func showKYCView() {
-        let storyboard = UIStoryboard(name: "KYCVerifyIdentity", bundle: nil)
-       let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "KYCVerifyIdentity")
+        let storyboard = UIStoryboard(name: "KYCVerifyIdentityController", bundle: nil)
+        let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "KYCVerifyIdentity")
         upgradeViewController.modalTransitionStyle = .coverVertical
         UIApplication.shared.keyWindow?.rootViewController?.present(
             upgradeViewController,
