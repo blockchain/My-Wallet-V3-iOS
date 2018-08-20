@@ -36,7 +36,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SideMenuCell" textLabel="GOI-Ww-29D" imageView="KYL-By-psN" rowHeight="54" style="IBUITableViewCellStyleDefault" id="YYw-Di-RgP" customClass="SideMenuCell" customModule="Blockchain" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="SideMenuCell" textLabel="GOI-Ww-29D" imageView="KYL-By-psN" rowHeight="54" style="IBUITableViewCellStyleDefault" id="YYw-Di-RgP" customClass="SideMenuCell" customModule="Blockchain" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="375" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YYw-Di-RgP" id="rIg-Iy-aer">

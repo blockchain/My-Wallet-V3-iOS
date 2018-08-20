@@ -1374,7 +1374,9 @@
         return nil;
     }
 
-    return [[self.context evaluateScript:@"MyWalletPhone.stateCodeGuess()"] toString];
+    JSValue *stateCodeGuessValue = [self.context evaluateScript:@"MyWalletPhone.stateCodeGuess()"];
+    if ([stateCodeGuessValue isNull] || [stateCodeGuessValue isUndefined]) return nil;
+    return [stateCodeGuessValue toString];
 }
 
 - (NSString *)getEmail
