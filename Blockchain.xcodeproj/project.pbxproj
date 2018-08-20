@@ -591,6 +591,11 @@
 		AAFE9E9221016132002E4E1E /* PinError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFE9E9121016132002E4E1E /* PinError.swift */; };
 		AAFE9E9321016132002E4E1E /* PinError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFE9E9121016132002E4E1E /* PinError.swift */; };
 		C6FFCE3372082DAB9DA7021E /* Pods_BlockchainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */; };
+		C7057660212B4DD70027C6AA /* FromToButtonDelegateIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AEB1CF2125CF4900320A32 /* FromToButtonDelegateIntermediate.swift */; };
+		C705766A212B4DE00027C6AA /* HomebrewExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65002124BEDF00396B65 /* HomebrewExchangeCreateViewController.swift */; };
+		C705766B212B4E010027C6AA /* ExchangeTradeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65072124DDB900396B65 /* ExchangeTradeDelegate.swift */; };
+		C705766C212B4E060027C6AA /* ExchangeTradeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65022124CE1B00396B65 /* ExchangeTradeCoordinator.swift */; };
+		C705766D212B4E1C0027C6AA /* ExchangeTradeInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65042124D95600396B65 /* ExchangeTradeInterface.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -7001,6 +7006,7 @@
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
 				AAD27A29209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
+				C7057660212B4DD70027C6AA /* FromToButtonDelegateIntermediate.swift in Sources */,
 				C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				602B9D1C2118E26300BD3D60 /* PostalAddress.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
@@ -7071,6 +7077,7 @@
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* PinStoreResponse.swift in Sources */,
+				C705766D212B4E1C0027C6AA /* ExchangeTradeInterface.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
@@ -7126,6 +7133,7 @@
 				602B9D0C2118E23400BD3D60 /* KYCCoordinator.swift in Sources */,
 				AA7133B8212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
+				C705766C212B4E060027C6AA /* ExchangeTradeCoordinator.swift in Sources */,
 				C76143AC211A80D30041411E /* Codable+Coding.swift in Sources */,
 				AA748359211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift in Sources */,
 				AA9B30D220F6D85000A7F809 /* WalletUpgradeDelegate.swift in Sources */,
@@ -7148,6 +7156,7 @@
 				602B9D1B2118E26300BD3D60 /* LocationSuggestionPageModel.swift in Sources */,
 				AA74835B21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift in Sources */,
 				602B9D1A2118E26300BD3D60 /* LocationSuggestion.swift in Sources */,
+				C705766B212B4E010027C6AA /* ExchangeTradeDelegate.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				AACE31CB2092A99B00B7B806 /* AssetType.swift in Sources */,
@@ -7184,6 +7193,7 @@
 				600E18BB2118D46B003C1846 /* KeyboardPayload.swift in Sources */,
 				C764372A20ED199500CA7CA4 /* BalanceChartModel.swift in Sources */,
 				AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */,
+				C705766A212B4DE00027C6AA /* HomebrewExchangeCreateViewController.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 				3AC4F97A2123493A003AA207 /* KYCUser.swift in Sources */,
 				AAF2AEC02123797300687E30 /* PersonalDetails.swift in Sources */,
