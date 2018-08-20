@@ -14,6 +14,7 @@ private struct Keys {
     static let maintenance = "maintenance"
     static let mobileInfo = "mobileInfo"
     static let shapeshift = "shapeshift"
+    static let ios = "ios"
 }
 
 // TODO: Conform to Decodable
@@ -34,6 +35,10 @@ struct WalletOptions {
         let statesWhitelist: [String]?
     }
 
+    struct IosConfig {
+        let showShapeshift: Bool
+    }
+
     // MARK: - Properties
 
     let downForMaintenance: Bool
@@ -43,6 +48,8 @@ struct WalletOptions {
     let mobile: Mobile?
 
     let shapeshift: Shapeshift?
+
+    let iosConfig: IosConfig?
 }
 
 extension WalletOptions.Mobile {
@@ -72,12 +79,21 @@ extension WalletOptions.MobileInfo {
 extension WalletOptions.Shapeshift {
     init(json: JSON) {
         guard let shapeshiftJson = json[Keys.shapeshift] as? JSON else {
-            self.countriesBlacklist = []
-            self.statesWhitelist = []
+            self.countriesBlacklist = nil
+            self.statesWhitelist = nil
             return
         }
         self.countriesBlacklist = shapeshiftJson["countriesBlacklist"] as? [String]
         self.statesWhitelist = shapeshiftJson["statesWhitelist"] as? [String]
+    }
+}
+
+extension WalletOptions.IosConfig {
+    init?(json: JSON) {
+        guard let iosJson = json[Keys.ios] as? JSON else {
+            return nil
+        }
+        self.showShapeshift = iosJson["showShapeshift"] as? Bool ?? false
     }
 }
 
@@ -87,5 +103,6 @@ extension WalletOptions {
         self.mobile = WalletOptions.Mobile(json: json)
         self.mobileInfo = WalletOptions.MobileInfo(json: json)
         self.shapeshift = WalletOptions.Shapeshift(json: json)
+        self.iosConfig = WalletOptions.IosConfig(json: json)
     }
 }

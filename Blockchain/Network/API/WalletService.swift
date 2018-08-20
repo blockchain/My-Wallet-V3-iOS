@@ -85,7 +85,16 @@ import RxSwift
                 return false
             }
 
-            let blacklistedCountries = shapeshift.countriesBlacklist ?? []
+            guard let blacklistedCountries = shapeshift.countriesBlacklist else {
+                Logger.shared.warning("Shapeshift countriesBlacklist is nil")
+                return false
+            }
+
+            guard walletOptions.iosConfig?.showShapeshift ?? false else {
+                Logger.shared.warning("Shapeshift is disabled in WalletOptions")
+                return false
+            }
+
             let isCountrySupported = !blacklistedCountries.contains(countryCode)
 
             if let state = state {
