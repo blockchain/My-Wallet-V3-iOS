@@ -9,16 +9,22 @@
 import UIKit
 import LocalAuthentication
 import CoreFoundation
+import RxSwift
 
 @IBDesignable @objc class SettingsTableViewController: UITableViewController,
 AppSettingsController, UITextFieldDelegate, EmailDelegate,
 MobileNumberDelegate, WalletAccountInfoDelegate {
     // Row References
+    
+    //Profile
     let sectionProfile = 0
-    let profileWalletIdentifier = 0
-    let profileEmail = 1
-    let profileMobileNumber = 2
-    let profileWebLogin = 3
+    let identityVerification = 0
+    let profileWalletIdentifier = 1
+    let profileEmail = 2
+    let profileMobileNumber = 3
+    let profileWebLogin = 4
+    
+    //Preferenes
     let sectionPreferences = 1
     let preferencesEmailNotifications = 0
     let preferencesLocalCurrency = 1
@@ -32,6 +38,9 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     let aboutTermsOfService = 1
     let aboutPrivacyPolicy = 2
     let aboutCookiePolicy = 3
+    let pinBiometry = 4
+    let pinSwipeToReceive = 5
+    
     var settingsController: SettingsTableViewController?
     var availableCurrenciesDictionary: [AnyHashable: Any] = [:]
     var allCurrencySymbolsDictionary: [AnyHashable: Any] = [:]
@@ -48,9 +57,17 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var delegate: (UIViewController & EmailDelegate)!
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
-
+    var userIdentityStatus: KYCUser?
+    var preparedIdentityStatus: Bool = false
+    
+    var disposable: Disposable?
+    
+    @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
+    @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
+        disposable?.dispose()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -62,6 +79,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         super.viewDidAppear(animated)
         tableView.reloadData()
         self.walletManager.accountInfoDelegate = self
+        preparedIdentityStatus == false
     }
 
     convenience init(walletManager: WalletManager = WalletManager.shared) {
@@ -75,28 +93,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
 
     func changeTwoStepTapped() {
         alertUserToChangeTwoStepVerification()
-    }
-
-    func pinBiometry() -> Int {
-        //: Don't show the option to enable biometric authentication if the user is not enrolled
-        if !(biometryTypeDescription() != nil) {
-            return -1
-        }
-        //: As long as the user is enrolled in biometric authentication, the row index will be 4
-        return 4
-    }
-
-    func pinSwipeToReceive() -> Int {
-        let swipeToReceive: AppFeatureConfiguration? = AppFeatureConfigurator.sharedInstance().configuration(for: .swipeToReceive)
-        if swipeToReceive?.isEnabled == nil {
-            return -1
-        }
-        //: If the user is enrolled in biometric authentication, account for the additional row
-        if biometryTypeDescription() != nil {
-            return 5
-        }
-        //: Otherwise it will be the forth item
-        return 4
     }
 
     func isMobileVerified() -> Bool {
@@ -700,6 +696,33 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
             reload()
         }
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        switch (indexPath.section, indexPath.row) {
+        case (sectionSecurity, pinBiometry):
+            if !(biometryTypeDescription() != nil) {
+                touchIDAsPin.isHidden = true
+                return 0
+            } else {
+                touchIDAsPin.isHidden = false
+                return 56
+            }
+        case (sectionSecurity, pinSwipeToReceive):
+            let swipeToReceiveCall: AppFeatureConfiguration? = AppFeatureConfigurator.sharedInstance().configuration(for: .swipeToReceive)
+            if swipeToReceiveCall?.isEnabled == nil {
+                swipeToReceive?.isHidden = true
+                return 0
+            } else {
+                swipeToReceive?.isHidden = false
+                return 56
+            }
+        default:
+            break
+        }
+        return 56
+    }
+
     @objc func reload() {
         backupController?.reload()
         getAccountInfo()

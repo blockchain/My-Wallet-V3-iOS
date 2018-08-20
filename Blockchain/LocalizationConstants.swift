@@ -305,6 +305,8 @@ struct LocalizationConstants {
             "Use maximum",
             comment: "Text displayed on button for user to tap to create a trade with the maximum amount of crypto allowed"
         )
+        static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
+        static let from = NSLocalizedString("From", comment: "Label for exchanging from a specific type of crypto")
     }
 
     struct AddressAndKeyImport {
@@ -452,14 +454,22 @@ struct LocalizationConstants {
             "Congratulations! We successfully verified your identity. You can now Exchange cryptocurrencies at Blockchain.",
             comment: "Description for when KYC verification is approved."
         )
-        static let verificationFailed = NSLocalizedString(
-            "Verification Failed",
-            comment: "Text displayed when KYC verification failed."
+        
+        static let accountApprovedBadge = NSLocalizedString(
+            "Approved",
+            comment: "KYC verification is approved."
         )
-        static let verificationFailedDescription = NSLocalizedString(
-            "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
-            comment: "Description for when KYC verification failed."
+        
+        static let accountPendingBadge = NSLocalizedString(
+            "Pending",
+            comment: "KYC verification is Pending."
         )
+        
+        static let accountUnderReviewBadge = NSLocalizedString(
+            "Under Review",
+            comment: "KYC verification is Under Review."
+        )
+        
         static let verificationUnderReview = NSLocalizedString(
             "Verification Under Review",
             comment: "Text displayed when KYC verification is under review."
@@ -467,6 +477,35 @@ struct LocalizationConstants {
         static let verificationUnderReviewDescription = NSLocalizedString(
             "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
             comment: "Description for when KYC verification is under review."
+        )
+        
+        static let accountUnconfirmedBadge = NSLocalizedString(
+            "Unconfirmed",
+            comment: "KYC verification is unconfirmed."
+        )
+        
+        static let accountUnverifiedBadge = NSLocalizedString(
+            "Unverified",
+            comment: "KYC verification is unverified."
+        )
+        
+        static let accounVerifiedBadge = NSLocalizedString(
+            "Verified",
+            comment: "KYC verification is complete."
+        )
+        
+        static let verificationFailed = NSLocalizedString(
+            "Verification Failed",
+            comment: "Text displayed when KYC verification failed."
+        )
+        
+        static let verificationFailedBadge = NSLocalizedString(
+            "Failed",
+            comment: "Text displayed when KYC verification failed."
+        )
+        static let verificationFailedDescription = NSLocalizedString(
+            "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
+            comment: "Description for when KYC verification failed."
         )
         static let notifyMe = NSLocalizedString(
             "Notify Me",
@@ -483,6 +522,18 @@ struct LocalizationConstants {
         static let whatHappensNext = NSLocalizedString(
             "What happens next?",
             comment: "Text displayed (subtitle) when KYC verification is under progress"
+        )
+        static let unsupportedCountryTitle = NSLocalizedString(
+            "Coming soon to %@!",
+            comment: "Title text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
+        )
+        static let unsupportedCountryDescription = NSLocalizedString(
+            "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we'll let you know as soon as we launch in %@!",
+            comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
+        )
+        static let backToDashboard = NSLocalizedString(
+            "Back to Dashboard",
+            comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
         )
     }
 }

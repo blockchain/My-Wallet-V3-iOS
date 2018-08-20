@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {
@@ -14,8 +14,9 @@ final class KYCNetworkRequest {
     typealias TaskSuccess = (Data) -> Void
     typealias TaskFailure = (HTTPRequestError) -> Void
 
+    fileprivate static let rootUrl = BlockchainAPI.shared.apiUrl
     private let timeoutInterval = TimeInterval(exactly: 30)!
-    private var request: URLRequest
+    private var request: URLRequest!
 
     // swiftlint:disable nesting
     struct KYCEndpoints {
@@ -25,7 +26,7 @@ final class KYCNetworkRequest {
             case healthCheck
             case listOfCountries
             case nextKYCMethod
-            case users(userID: String)
+            case currentUser
 
             var pathComponents: [String] {
                 switch self {
@@ -39,8 +40,8 @@ final class KYCNetworkRequest {
                     return ["countries"]
                 case .nextKYCMethod:
                     return ["kyc", "next-method"]
-                case .users(let userID):
-                    return ["users", userID]
+                case .currentUser:
+                    return ["users", "current"]
                 }
             }
 
@@ -51,16 +52,40 @@ final class KYCNetworkRequest {
                      .healthCheck,
                      .listOfCountries,
                      .nextKYCMethod,
-                     .users:
+                     .currentUser:
                     return nil
                 }
             }
         }
 
-        enum POST: String {
-            case registerUser = "/users"
-            case verifications = "/verifications"
-            case submitVerification = "/kyc/verifications"
+        enum POST {
+            case registerUser
+            case apiKey(userId: String)
+            case sessionToken(userId: String)
+            case verifications
+            case submitVerification
+
+            var path: String {
+                switch self {
+                case .registerUser: return "/internal/users"
+                case .apiKey: return "/internal/auth"
+                case .sessionToken: return "/auth"
+                case .verifications: return "/verifications"
+                case .submitVerification: return "/kyc/verifications"
+                }
+            }
+
+            var queryParameters: [String: String]? {
+                switch self {
+                case .apiKey(let userId),
+                     .sessionToken(let userId):
+                    return ["userId": userId]
+                case .registerUser,
+                     .verifications,
+                     .submitVerification:
+                        return nil
+                }
+            }
         }
 
         enum PUT {
@@ -87,13 +112,14 @@ final class KYCNetworkRequest {
     private init(url: URL, httpMethod: String) {
         self.request = URLRequest(url: url)
         request.httpMethod = httpMethod
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(HttpHeaderValue.json, forHTTPHeaderField: HttpHeaderField.accept)
         request.timeoutInterval = timeoutInterval
     }
 
     /// HTTP GET Request
     @discardableResult convenience init?(
         get url: KYCEndpoints.GET,
+        headers: [String: String]? = nil,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
@@ -102,29 +128,40 @@ final class KYCNetworkRequest {
             base,
             pathComponents: url.pathComponents,
             queryParameters: url.parameters
-            ) else { return nil }
-
+        ) else { return nil }
         self.init(url: endpoint, httpMethod: "GET")
+        request.allHTTPHeaderFields = headers
         send(taskSuccess: taskSuccess, taskFailure: taskFailure)
     }
 
     /// HTTP POST Request
-    @discardableResult convenience init(
+    @discardableResult convenience init?(
         post url: KYCEndpoints.POST,
         parameters: [String: String],
+        headers: [String: String]? = nil,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
-        self.init(url: URL(string: BlockchainAPI.shared.retailCoreUrl + url.rawValue)!, httpMethod: "POST")
-        let postBody = parameters.reduce("", { initialResult, nextPartialResult in
-            let delimeter = initialResult.count > 0 ? "&" : ""
-            return "\(initialResult)\(delimeter)\(nextPartialResult.key)=\(nextPartialResult.value)"
-        })
-        let data = postBody.data(using: .utf8)
-        request.httpBody = data
-        request.addValue(String(describing: data?.count), forHTTPHeaderField: "Content-Length")
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        guard let base = URL(string: BlockchainAPI.shared.retailCoreUrl + url.path) else { return nil }
+        guard let endpoint = URL.endpoint(base, pathComponents: nil, queryParameters: url.queryParameters) else { return nil }
+        self.init(url: endpoint, httpMethod: "POST")
+        do {
+            let body = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+            request.httpBody = body
+
+            var allHeaders = [HttpHeaderField.contentType: HttpHeaderValue.json]
+            if let headers = headers {
+                for (headerKey, headerValue) in headers {
+                    allHeaders[headerKey] = headerValue
+                }
+            }
+            request.allHTTPHeaderFields = allHeaders
+
+            send(taskSuccess: taskSuccess, taskFailure: taskFailure)
+        } catch let error {
+            taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
+            return
+        }
     }
 
     /// HTTP PUT Request
@@ -140,8 +177,10 @@ final class KYCNetworkRequest {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
             let body = try encoder.encode(parameters)
             request.httpBody = body
-            request.allHTTPHeaderFields = ["Content-Type": "application/json",
-                                           "Accept": "application/json"]
+            request.allHTTPHeaderFields = [
+                HttpHeaderField.contentType: HttpHeaderValue.json,
+                HttpHeaderField.accept: HttpHeaderValue.json
+            ]
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
             taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
@@ -152,7 +191,7 @@ final class KYCNetworkRequest {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
-        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+        let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
                     taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription)); return
@@ -164,7 +203,7 @@ final class KYCNetworkRequest {
                     taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
                 }
                 if let mimeType = httpResponse.mimeType {
-                    guard mimeType == "application/json" else {
+                    guard mimeType == HttpHeaderValue.json else {
                         taskFailure(HTTPRequestPayloadError.invalidMimeType(type: mimeType)); return
                     }
                 }
@@ -175,5 +214,50 @@ final class KYCNetworkRequest {
             }
         })
         task.resume()
+    }
+}
+
+// MARK: Rx Extensions
+
+extension KYCNetworkRequest {
+    static func request<ResponseType: Decodable>(
+        post url: KYCNetworkRequest.KYCEndpoints.POST,
+        parameters: [String: String],
+        headers: [String: String]? = nil,
+        type: ResponseType.Type
+    ) -> Single<ResponseType> {
+        return Single.create(subscribe: { observer -> Disposable in
+            KYCNetworkRequest(post: url, parameters: parameters, headers: headers, taskSuccess: { responseData in
+                do {
+                    let response = try JSONDecoder().decode(type.self, from: responseData)
+                    observer(.success(response))
+                } catch {
+                    observer(.error(error))
+                }
+            }, taskFailure: { error in
+                observer(.error(error))
+            })
+            return Disposables.create()
+        })
+    }
+
+    static func request<ResponseType: Decodable>(
+        get url: KYCNetworkRequest.KYCEndpoints.GET,
+        headers: [String: String]? = nil,
+        type: ResponseType.Type
+    ) -> Single<ResponseType> {
+        return Single.create(subscribe: { observer -> Disposable in
+            KYCNetworkRequest(get: url, headers: headers, taskSuccess: { responseData in
+                do {
+                    let response = try JSONDecoder().decode(type.self, from: responseData)
+                    observer(.success(response))
+                } catch {
+                    observer(.error(error))
+                }
+            }, taskFailure: { error in
+                observer(.error(error))
+            })
+            return Disposables.create()
+        })
     }
 }

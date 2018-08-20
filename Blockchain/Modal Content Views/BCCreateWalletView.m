@@ -92,7 +92,7 @@
     [self clearSensitiveTextFields];
 
 #ifdef DEBUG
-    emailTextField.text = @"test@doesnotexist.tld";
+    emailTextField.text = @"test@doesnotexist.com";
     passwordTextField.text = @"testpassword!";
     password2TextField.text = @"testpassword!";
     [self checkPasswordStrength];

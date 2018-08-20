@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 
 /// Repository for fetching Blockchain data. Accessing properties in this repository
@@ -15,33 +16,41 @@ import RxSwift
 
     static let shared = BlockchainDataRepository()
 
+    private let authenticationService: KYCAuthenticationService
+
+    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService.shared) {
+        self.authenticationService = authenticationService
+    }
+
     // MARK: - Public Properties
 
     var kycUser: Single<KYCUser> {
-        // TODO: need to fetch userID from wallet metadata
-        // TICKET: IOS-1104
         return fetchData(
             cachedValue: cachedUser,
-            networkValue: networkRequest(get: .users(userID: "userID"), type: KYCUser.self)
+            networkValue: authenticationService.getKycSessionToken().flatMap { token in
+                let headers = [HttpHeaderField.authorization: token.token]
+                return KYCNetworkRequest.request(get: .currentUser, headers: headers, type: KYCUser.self)
+            }
         )
     }
 
     var countries: Single<Countries> {
         return fetchData(
             cachedValue: cachedCountries,
-            networkValue: networkRequest(get: .listOfCountries, type: Countries.self)
+            networkValue: KYCNetworkRequest.request(get: .listOfCountries, type: Countries.self)
         )
     }
 
     // MARK: - Private Properties
 
-    private var cachedCountries = Variable<Countries?>(nil)
-    private var cachedUser = Variable<KYCUser?>(nil)
+    private var cachedCountries = BehaviorRelay<Countries?>(value: nil)
+
+    private var cachedUser = BehaviorRelay<KYCUser?>(value: nil)
 
     // MARK: - Private Methods
 
     private func fetchData<ResponseType: Decodable>(
-        cachedValue: Variable<ResponseType?>,
+        cachedValue: BehaviorRelay<ResponseType?>,
         networkValue: Single<ResponseType>
     ) -> Single<ResponseType> {
         return Single.deferred {
@@ -50,26 +59,7 @@ import RxSwift
             }
             return Single.just(cachedValue)
         }.do(onSuccess: { response in
-            cachedValue.value = response
-        })
-    }
-
-    private func networkRequest<ResponseType: Decodable>(
-        get url: KYCNetworkRequest.KYCEndpoints.GET,
-        type: ResponseType.Type
-    ) -> Single<ResponseType> {
-        return Single.create(subscribe: { observer -> Disposable in
-            KYCNetworkRequest(get: url, taskSuccess: { responseData in
-                do {
-                    let response = try JSONDecoder().decode(type.self, from: responseData)
-                    observer(.success(response))
-                } catch {
-                    observer(.error(error))
-                }
-            }, taskFailure: { error in
-                observer(.error(error))
-            })
-            return Disposables.create()
+            cachedValue.accept(response)
         })
     }
 }
