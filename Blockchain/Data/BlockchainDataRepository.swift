@@ -18,7 +18,7 @@ import RxSwift
 
     private let authenticationService: KYCAuthenticationService
 
-    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService()) {
         self.authenticationService = authenticationService
     }
 
@@ -46,6 +46,14 @@ import RxSwift
     private var cachedCountries = BehaviorRelay<Countries?>(value: nil)
 
     private var cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+
+    // MARK: - Public Methods
+
+    /// Clears cached data in this repository
+    func clearCache() {
+        cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+        cachedCountries = BehaviorRelay<Countries?>(value: nil)
+    }
 
     // MARK: - Private Methods
 
