@@ -9,8 +9,8 @@
 import Foundation
 
 class AssetConversionRateViewModel {
-    fileprivate var internalBase: AssetType?
-    fileprivate var internalCounter: AssetType?
+    private var internalBase: AssetType?
+    private var internalCounter: AssetType?
 
     fileprivate(set) var base: AssetType? {
         get {
