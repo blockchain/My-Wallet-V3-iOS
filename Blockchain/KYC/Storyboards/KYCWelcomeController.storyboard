@@ -109,7 +109,12 @@ identity verification to start buying and selling cryptocurrencies. This will on
                         <viewLayoutGuide key="safeArea" id="AzT-gm-yhf"/>
                     </view>
                     <navigationItem key="navigationItem" title="Exchange" id="PEt-7H-7Yn">
-                        <barButtonItem key="backBarButtonItem" id="EAJ-Wl-eES"/>
+                        <barButtonItem key="rightBarButtonItem" title="asdf" image="close" id="hvI-Vv-SE2">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="onCloseTapped:" destination="jKB-tY-Hco" id="Rkh-bF-xde"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
@@ -128,5 +133,6 @@ identity verification to start buying and selling cryptocurrencies. This will on
     </scenes>
     <resources>
         <image name="Welcome" width="272" height="137"/>
+        <image name="close" width="18" height="18"/>
     </resources>
 </document>

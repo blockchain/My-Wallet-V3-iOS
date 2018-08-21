@@ -54,6 +54,9 @@ final class KYCWelcomeController: KYCBaseViewController {
     }
 
     // MARK: - Actions
+    @IBAction func onCloseTapped(_ sender: Any) {
+        self.presentingViewController?.dismiss(animated: true)
+    }
 
     @IBAction private func onLabelTapped(_ sender: UITapGestureRecognizer) {
         guard let text = labelTermsOfService.text else {

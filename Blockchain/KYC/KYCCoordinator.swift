@@ -120,7 +120,7 @@ protocol KYCCoordinatorDelegate: class {
                 titleColor: UIColor.gray5,
                 isPrimaryButtonEnabled: true
             )
-            informationViewController.primaryButtonAction = { [unowned self] viewController in
+            informationViewController.primaryButtonAction = { viewController in
                 viewController.presentingViewController?.presentingViewController?.dismiss(animated: true)
             }
             presentInNavigationController(informationViewController, in: navController)
