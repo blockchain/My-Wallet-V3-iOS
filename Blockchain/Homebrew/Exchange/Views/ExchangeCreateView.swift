@@ -49,8 +49,11 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
     private var infoTextView: UITextView?
 
+    private var conversionRateView: AssetConversionRateView?
+
     private weak var delegate: ExchangeCreateViewDelegate?
-    private var fromToButtonDelegate: FromToButtonDelegateIntermediate?
+
+    private var fromToButtonDelegateIntermediate: FromToButtonDelegateIntermediate?
 }
 
 // MARK: - Setup
@@ -63,7 +66,7 @@ extension ExchangeCreateView {
     ) {
         self.delegate = delegate
 
-        fromToButtonDelegate = FromToButtonDelegateIntermediate(
+        fromToButtonDelegateIntermediate = FromToButtonDelegateIntermediate(
             wallet: WalletManager.shared.wallet,
             navigationController: navigationController,
             addressSelectionDelegate: self
@@ -118,12 +121,15 @@ private extension ExchangeCreateView {
     var windowWidth: CGFloat { return frame.size.width }
 
     func setupFromToView() {
-        let fromToView = FromToView(frame: CGRect(x: 0, y: 16, width: windowWidth, height: 96), enableToTextField: false)
-        fromToView!.fromImageView.image = #imageLiteral(resourceName: "chevron_right")
-        fromToView!.toImageView.image = #imageLiteral(resourceName: "chevron_right")
-        fromToView!.delegate = fromToButtonDelegate
-        addSubview(fromToView!)
-        self.fromToView = fromToView
+        guard let view = FromToView(frame: CGRect(x: 0, y: 16, width: windowWidth, height: 96), enableToTextField: false) else {
+            Logger.shared.warning("Could not create FromToView")
+            return
+        }
+        view.fromImageView.image = #imageLiteral(resourceName: "chevron_right")
+        view.toImageView.image = #imageLiteral(resourceName: "chevron_right")
+        view.delegate = fromToButtonDelegateIntermediate
+        addSubview(view)
+        fromToView = view
     }
 
     var smallFont: UIFont { return UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)! }
@@ -250,13 +256,14 @@ private extension ExchangeCreateView {
     var conversionRateViewHeight: CGFloat { return 70 }
 
     func setupConversionRateView(amountView: UIView) {
-        let conversionRateView = AssetConversionRateView(frame: CGRect(
+        let view = AssetConversionRateView(frame: CGRect(
             x: 0,
             y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
             width: windowWidth,
             height: conversionRateViewHeight
         ))
-        addSubview(conversionRateView)
+        addSubview(view)
+        conversionRateView = view
     }
 
     var minMaxButtonHeight: CGFloat { return 50 }
@@ -559,5 +566,11 @@ extension ExchangeCreateView: AddressSelectionDelegate {
 
     func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
         delegate?.didSelect?(toAccount: account, assetType: asset)
+    }
+}
+
+extension ExchangeCreateView {
+    func updateConversionRateView(quote: Quote) {
+        conversionRateView?.updateViewModelWithQuote(quote: quote)
     }
 }
