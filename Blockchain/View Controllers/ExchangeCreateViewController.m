@@ -228,14 +228,14 @@
     }
     
     if (zeroAmount) {
-        self.exchangeView.errorTextView.hidden = YES;
+        [self.exchangeView hideErrorTextView];
         [self.exchangeView disablePaymentButtons];
     } else if (overAvailable || overMax || underMin || notEnoughToExchange || isWaitingOnTransaction) {
         [self.exchangeView showErrorWithText:errorText];
     } else {
         [self.exchangeView removeHighlightFromAmounts];
         [self.exchangeView enablePaymentButtons];
-        self.exchangeView.errorTextView.hidden = YES;
+        [self.exchangeView hideErrorTextView];
     }
 }
 
@@ -577,7 +577,7 @@
 {
     self.availableBalance = 0;
     
-    self.exchangeView.errorTextView.hidden = YES;
+    [self.exchangeView hideErrorTextView];
     [self.exchangeView disablePaymentButtons];
 }
 

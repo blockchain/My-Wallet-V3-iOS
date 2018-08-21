@@ -47,6 +47,8 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
     @objc var errorTextView: UITextView?
 
+    private var infoTextView: UITextView?
+
     private weak var delegate: ExchangeCreateViewDelegate?
     private var fromToButtonDelegate: FromToButtonDelegateIntermediate?
 }
@@ -103,12 +105,14 @@ private extension ExchangeCreateView {
             )
             setupLineBelow(view: newReferenceView)
             setupMinAndMaxButtons(amountView: newReferenceView)
+            setupContinueButton()
             setupErrorTextView(amountView: newReferenceView)
+            setupInfoTextViewBelow(view: errorTextView!)
         } else {
             setupMinAndMaxButtons(amountView: amountView)
+            setupContinueButton()
             setupErrorTextView(amountView: amountView)
         }
-        setupContinueButton()
     }
 
     var windowWidth: CGFloat { return frame.size.width }
@@ -297,23 +301,6 @@ private extension ExchangeCreateView {
         buttonsView.addSubview(useMaxButton)
     }
 
-    func setupErrorTextView(amountView: UIView) {
-        let errorTextView = UITextView(frame: CGRect(
-            x: 15,
-            y: amountView.frame.origin.y + amountView.frame.size.height + 0.5 + minMaxButtonHeight + 8,
-            width: windowWidth - 30,
-            height: 60
-        ))
-        errorTextView.isEditable = false
-        errorTextView.isScrollEnabled = false
-        errorTextView.isSelectable = false
-        errorTextView.textColor = UIColor.error
-        errorTextView.font = smallFont
-        errorTextView.backgroundColor = UIColor.clear
-        addSubview(errorTextView)
-        errorTextView.isHidden = true
-    }
-
     func setupContinueButton() {
         continueButton = UIButton(frame: CGRect(x: 0, y: 0, width: frame.size.width - 40, height: Constants.Measurements.buttonHeight))
         continueButton?.backgroundColor = UIColor.brandSecondary
@@ -327,6 +314,52 @@ private extension ExchangeCreateView {
         continueButton?.center = CGPoint(x: center.x, y: continueButtonCenterY)
         addSubview(continueButton!)
         continueButton?.addTarget(self, action: #selector(self.continueButtonTapped), for: .touchUpInside)
+    }
+
+    func setupErrorTextView(amountView: UIView) {
+        // Red error text below the min/max buttons
+        let textView = staticTextView(frame: CGRect(
+            x: 15,
+            y: amountView.frame.origin.y + amountView.frame.size.height + 0.5 + minMaxButtonHeight + 8,
+            width: windowWidth - 30,
+            height: 60
+        ))
+        textView.textColor = UIColor.error
+        textView.font = smallFont
+        textView.backgroundColor = UIColor.clear
+        addSubview(textView)
+        textView.isHidden = true
+        errorTextView = textView
+    }
+
+    // Dark text above the continue button
+    func setupInfoTextViewBelow(view: UIView) {
+        guard let continueButton = continueButton else {
+            Logger.shared.warning("Continue button is nil - will not setup information text view")
+            return
+        }
+        let textView = staticTextView(frame: CGRect(
+            x: continueButton.frame.origin.x,
+            y: view.frame.origin.y,
+            width: continueButton.frame.size.width,
+            height: continueButton.frame.size.height
+        ))
+
+        textView.textColor = UIColor.gray5
+        textView.backgroundColor = UIColor.clear
+        textView.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraSmall)
+        textView.text = LocalizationConstants.Exchange.homebrewInformationText
+
+        // Set height according to content, stretching to the use min/max buttons at the most
+        let fittedSize = textView.sizeThatFits(CGSize(
+            width: continueButton.frame.size.width,
+            height: view.frame.origin.y - continueButton.frame.origin.y
+        ))
+        textView.changeWidth(continueButton.frame.size.width)
+        textView.changeHeight(fittedSize.height)
+        textView.changeYPosition(continueButton.frame.origin.y - textView.frame.size.height - 12)
+        addSubview(textView)
+        infoTextView = textView
     }
 }
 
@@ -378,6 +411,14 @@ private extension ExchangeCreateView {
         textField.delegate = delegate
         textField.inputAccessoryView = continuePaymentAccessoryView
         return textField
+    }
+
+    func staticTextView(frame: CGRect) -> UITextView {
+        let textView = UITextView(frame: frame)
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.isSelectable = false
+        return textView
     }
 }
 
@@ -449,6 +490,18 @@ private extension ExchangeCreateView {
         errorTextView?.isHidden = false
         errorTextView?.text = text
         disablePaymentButtons()
+
+        if !Constants.Booleans.IsUsingScreenSizeLargerThan5s {
+            infoTextView?.isHidden = true
+        }
+    }
+
+    func hideErrorTextView() {
+        errorTextView?.isHidden = true
+
+        if !Constants.Booleans.IsUsingScreenSizeLargerThan5s {
+            infoTextView?.isHidden = false
+        }
     }
 
     func clearRightFields() {

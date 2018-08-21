@@ -307,6 +307,10 @@ struct LocalizationConstants {
         )
         static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
         static let from = NSLocalizedString("From", comment: "Label for exchanging from a specific type of crypto")
+        static let homebrewInformationText = NSLocalizedString(
+            "All amounts are correct at this time but might change depending on the market price and transaction rates at the time your order is processed",
+            comment: "Text displayed on exchange screen to inform user of changing market rates"
+        )
     }
 
     struct AddressAndKeyImport {
