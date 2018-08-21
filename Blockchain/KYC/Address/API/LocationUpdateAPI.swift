@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 typealias LocationUpdateCompletion = ((Error?) -> Void)
 
@@ -18,22 +18,30 @@ enum LocationUpdateError: Error {
 }
 
 protocol LocationUpdateAPI {
-    func updateAddress(address: UserAddress, for userID: String, with completion: @escaping LocationUpdateCompletion)
+    func updateAddress(address: UserAddress, with completion: @escaping LocationUpdateCompletion)
 }
 
 class LocationUpdateService: NSObject, LocationUpdateAPI {
-    
-    func updateAddress(address: UserAddress, for userID: String, with completion: @escaping LocationUpdateCompletion) {
 
-        let payload = ["address": address]
+    private var disposable: Disposable?
 
-        KYCNetworkRequest(
-            put: .updateAddress(userId: userID),
-            parameters: payload,
-            taskSuccess: { _ in
-                completion(nil)
-        }) { (error) in
+    deinit {
+        disposable?.dispose()
+    }
+
+    func updateAddress(address: UserAddress, with completion: @escaping LocationUpdateCompletion) {
+        disposable = KYCAuthenticationService.shared.getKycSessionToken().flatMapCompletable { token in
+            let headers = [HttpHeaderField.authorization: token.token]
+            let payload = KYCUpdateAddressRequest(address: address)
+            return KYCNetworkRequest.request(
+                put: .updateAddress,
+                parameters: payload,
+                headers: headers
+            )
+        }.subscribeOn(MainScheduler.asyncInstance).observeOn(MainScheduler.instance).subscribe(onCompleted: {
+            completion(nil)
+        }, onError: { error in
             completion(error)
-        }
+        })
     }
 }

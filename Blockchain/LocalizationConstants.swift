@@ -562,6 +562,10 @@ struct LocalizationConstants {
             "Back to Dashboard",
             comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
         )
+        static let yourHomeAddress = NSLocalizedString(
+            "Your Home Address",
+            comment: "Text displayed on the search bar when adding an address during KYC."
+        )
     }
 }
 

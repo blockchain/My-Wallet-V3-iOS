@@ -10,6 +10,6 @@ import Foundation
 
 enum KYCPageModel {
     case personalDetails(KYCUser)
-    case address(UserAddress)
-    case phone(Mobile)
+    case address(KYCUser, KYCCountry)
+    case phone(KYCUser)
 }

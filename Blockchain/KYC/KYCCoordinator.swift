@@ -41,6 +41,8 @@ protocol KYCCoordinatorDelegate: class {
 
     private(set) var user: KYCUser?
 
+    private(set) var country: KYCCountry?
+
     weak var delegate: KYCCoordinatorDelegate?
 
     // MARK: - Private Properties
@@ -92,6 +94,7 @@ protocol KYCCoordinatorDelegate: class {
         case .failurePageForPageType(_, let error):
             handleFailurePage(for: error)
         case .nextPageFromPageType(let type, let payload):
+            handlePayloadFromPageType(type, payload)
             guard let nextPage = type.next else { return }
             let controller = pageFactory.createFrom(
                 pageType: nextPage,
@@ -124,6 +127,14 @@ protocol KYCCoordinatorDelegate: class {
 
     // MARK: Private Methods
 
+    private func handlePayloadFromPageType(_ pageType: KYCPageType, _ payload: KYCPagePayload?) {
+        guard let payload = payload else { return }
+        switch payload {
+        case .countrySelected(let country):
+            self.country = country
+        }
+    }
+
     private func handleFailurePage(for error: KYCPageError) {
         switch error {
         case .countryNotSupported(let country):
@@ -153,13 +164,11 @@ protocol KYCCoordinatorDelegate: class {
             delegate?.apply(model: .personalDetails(current))
         case .address:
             guard let current = user else { return }
-            guard let address = current.address else { return }
-            delegate?.apply(model: .address(address))
-
+            guard let country = country else { return }
+            delegate?.apply(model: .address(current, country))
         case .enterPhone:
             guard let current = user else { return }
-            guard let mobile = current.mobile else { return }
-            delegate?.apply(model: .phone(mobile))
+            delegate?.apply(model: .phone(current))
         }
     }
 

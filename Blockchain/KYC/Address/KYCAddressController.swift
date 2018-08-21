@@ -51,22 +51,30 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
     /// This is just for convenience purposes when iterating over the fields
     /// and checking validation etc.
     var validationFields: [ValidationTextField] {
-        get {
-            return [addressTextField,
-                    apartmentTextField,
-                    cityTextField,
-                    stateTextField,
-                    postalCodeTextField
-            ]
-        }
+        return [addressTextField,
+                apartmentTextField,
+                cityTextField,
+                stateTextField,
+                postalCodeTextField
+        ]
     }
 
-    var keyboard: KeyboardPayload? = nil
+    var keyboard: KeyboardPayload?
 
     // MARK: Private Properties
 
     fileprivate var locationCoordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
+    private var user: KYCUser?
+    private var country: KYCCountry?
+
+    // MARK: KYCCoordinatorDelegate
+
+    override func apply(model: KYCPageModel) {
+        guard case let .address(user, country) = model else { return }
+        self.user = user
+        self.country = country
+    }
 
     // MARK: Lifecycle
 
@@ -78,9 +86,8 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
         tableView.delegate = self
 
         searchBar.barTintColor = .clear
+        searchBar.placeholder = LocalizationConstants.KYC.yourHomeAddress
 
-        // TODO: Localize
-        searchBar.placeholder = "Your Home Address"
         progressView.tintColor = .green
 
         validationFieldsSetup()
@@ -156,17 +163,19 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
 
     fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
+        guard let country = country else {
+            Logger.shared.debug("country is nil. Cannot proceed.")
+            return
+        }
         validationFields.forEach({$0.resignFocus()})
 
-        // TODO: ⚠️ The address country should be injected
-        // into this screen. 
         let address = UserAddress(
             lineOne: addressTextField.text ?? "",
             lineTwo: apartmentTextField.text ?? "",
             postalCode: postalCodeTextField.text ?? "",
             city: cityTextField.text ?? "",
             state: stateTextField.text ?? "",
-            country: ""
+            country: country.name
         )
         searchDelegate?.onSubmission(address, completion: { [weak self] in
             guard let this = self else { return }
