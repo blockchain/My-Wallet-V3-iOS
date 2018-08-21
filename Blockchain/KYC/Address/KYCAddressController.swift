@@ -170,14 +170,8 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
         )
         searchDelegate?.onSubmission(address, completion: { [weak self] in
             guard let this = self else { return }
-            this.coordinator.handle(event: .nextPageFromPageType(this.pageType))
+            this.coordinator.handle(event: .nextPageFromPageType(this.pageType, nil))
         })
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TODO: implement method body
     }
 }
 

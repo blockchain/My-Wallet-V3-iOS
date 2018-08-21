@@ -16,7 +16,7 @@ enum KYCEvent {
     case pageWillAppear(KYCPageType)
 
     /// This will push on the next page in the KYC flow.
-    case nextPageFromPageType(KYCPageType)
+    case nextPageFromPageType(KYCPageType, KYCPagePayload?)
 
     /// Event emitted when the provided page type emits an error
     case failurePageForPageType(KYCPageType, KYCPageError)
@@ -37,9 +37,17 @@ protocol KYCCoordinatorDelegate: class {
 /// will handle recovering where they left off.
 @objc class KYCCoordinator: NSObject, Coordinator {
 
+    // MARK: - Public Properties
+
+    private(set) var user: KYCUser?
+
+    weak var delegate: KYCCoordinatorDelegate?
+
+    // MARK: - Private Properties
+
     fileprivate var navController: KYCOnboardingNavigationController!
 
-    fileprivate var user: KYCUser?
+    private let pageFactory = KYCPageViewFactory()
 
     private var disposable: Disposable?
 
@@ -49,8 +57,6 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     // MARK: Public
-
-    weak var delegate: KYCCoordinatorDelegate?
 
     func start() {
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
@@ -72,7 +78,10 @@ protocol KYCCoordinatorDelegate: class {
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
                 })
         }
-        guard let welcomeViewController = screenFor(pageType: .welcome) as? KYCWelcomeController else { return }
+        guard let welcomeViewController = pageFactory.createFrom(
+            pageType: .welcome,
+            in: self
+        ) as? KYCWelcomeController else { return }
         navController = presentInNavigationController(welcomeViewController, in: viewController)
     }
 
@@ -82,9 +91,13 @@ protocol KYCCoordinatorDelegate: class {
             handlePageWillAppear(for: type)
         case .failurePageForPageType(_, let error):
             handleFailurePage(for: error)
-        case .nextPageFromPageType(let type):
+        case .nextPageFromPageType(let type, let payload):
             guard let nextPage = type.next else { return }
-            let controller = screenFor(pageType: nextPage)
+            let controller = pageFactory.createFrom(
+                pageType: nextPage,
+                in: self,
+                payload: payload
+            )
             navController.pushViewController(controller, animated: true)
         }
     }
@@ -137,8 +150,7 @@ protocol KYCCoordinatorDelegate: class {
             break
         case .profile:
             guard let current = user else { return }
-            guard let details = current.personalDetails else { return }
-            delegate?.apply(model: .personalDetails(details))
+            delegate?.apply(model: .personalDetails(current))
         case .address:
             guard let current = user else { return }
             guard let address = current.address else { return }
@@ -160,27 +172,6 @@ protocol KYCCoordinatorDelegate: class {
         navController.modalTransitionStyle = .coverVertical
         presentingViewController.present(navController, animated: true)
         return navController
-    }
-
-    private func screenFor(pageType: KYCPageType) -> KYCBaseViewController {
-        switch pageType {
-        case .welcome:
-            return KYCWelcomeController.make(with: self)
-        case .country:
-            return KYCCountrySelectionController.make(with: self)
-        case .profile:
-            return KYCPersonalDetailsController.make(with: self)
-        case .address:
-            return KYCAddressController.make(with: self)
-        case .enterPhone:
-            return KYCEnterPhoneNumberController.make(with: self)
-        case .confirmPhone:
-            return KYCConfirmPhoneNumberController.make(with: self)
-        case .verifyIdentity:
-            return KYCVerifyIdentityController.make(with: self)
-        case .accountStatus:
-            return KYCInformationController.make(with: self)
-        }
     }
 
     private func pageTypeForUser() -> KYCPageType {

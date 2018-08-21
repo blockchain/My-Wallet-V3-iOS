@@ -73,7 +73,7 @@ final class KYCWelcomeController: KYCBaseViewController {
     }
 
     @IBAction private func primaryButtonTapped(_ sender: Any) {
-        coordinator.handle(event: .nextPageFromPageType(pageType))
+        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
     }
 
     // MARK: - Private Methods

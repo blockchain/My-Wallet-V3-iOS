@@ -93,7 +93,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
 extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     func confirmCodeSuccess() {
-        coordinator.handle(event: .nextPageFromPageType(pageType))
+        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
     }
 
     func startVerificationSuccess() {

@@ -11,5 +11,5 @@ import Foundation
 typealias PersonalDetailsUpdateCompletion = ((Error?) -> Void)
 
 protocol PersonalDetailsAPI {
-    func update(personalDetails: PersonalDetails, with completion: @escaping PersonalDetailsUpdateCompletion)
+    func update(personalDetails: KYCUpdatePersonalDetailsRequest, with completion: @escaping PersonalDetailsUpdateCompletion)
 }

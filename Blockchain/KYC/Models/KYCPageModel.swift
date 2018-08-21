@@ -9,7 +9,7 @@
 import Foundation
 
 enum KYCPageModel {
-    case personalDetails(PersonalDetails)
+    case personalDetails(KYCUser)
     case address(UserAddress)
     case phone(Mobile)
 }

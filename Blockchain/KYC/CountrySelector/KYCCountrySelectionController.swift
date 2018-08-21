@@ -213,7 +213,8 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
 
 extension KYCCountrySelectionController: KYCCountrySelectionView {
     func continueKycFlow(country: KYCCountry) {
-        coordinator.handle(event: .nextPageFromPageType(pageType))
+        let payload = KYCPagePayload.countrySelected(country: country)
+        coordinator.handle(event: .nextPageFromPageType(pageType, payload))
     }
 
     func startPartnerExchangeFlow(country: KYCCountry) {

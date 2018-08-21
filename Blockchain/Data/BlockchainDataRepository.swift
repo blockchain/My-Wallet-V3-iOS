@@ -18,7 +18,7 @@ import RxSwift
 
     private let authenticationService: KYCAuthenticationService
 
-    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService()) {
+    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService.shared) {
         self.authenticationService = authenticationService
     }
 

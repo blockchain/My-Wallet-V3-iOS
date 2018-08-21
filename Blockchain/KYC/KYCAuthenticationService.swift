@@ -18,6 +18,8 @@ final class KYCAuthenticationService {
         static let userId = "userId"
     }
 
+    static let shared = KYCAuthenticationService()
+
     private var cachedSessionToken = BehaviorRelay<KYCSessionTokenResponse?>(value: nil)
     private let wallet: Wallet
 

@@ -125,9 +125,12 @@ class ValidationTextField: NibBasedView {
         }
     }
 
-    var text: String? = "" {
-        didSet {
-            textField.text = text
+    var text: String? {
+        set {
+            textField.text = newValue
+        }
+        get {
+            return textField.text
         }
     }
 
