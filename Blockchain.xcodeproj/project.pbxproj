@@ -602,6 +602,7 @@
 		C705766B212B4E010027C6AA /* ExchangeTradeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65072124DDB900396B65 /* ExchangeTradeDelegate.swift */; };
 		C705766C212B4E060027C6AA /* ExchangeTradeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65022124CE1B00396B65 /* ExchangeTradeCoordinator.swift */; };
 		C705766D212B4E1C0027C6AA /* ExchangeTradeInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65042124D95600396B65 /* ExchangeTradeInterface.swift */; };
+		C705769E212CA2280027C6AA /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -7177,6 +7178,7 @@
 				AAFE9E762100D169002E4E1E /* PinStoreKeyPair.swift in Sources */,
 				602B9D1B2118E26300BD3D60 /* LocationSuggestionPageModel.swift in Sources */,
 				AA74835B21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift in Sources */,
+				C705769E212CA2280027C6AA /* AssetConversionRateViewModel.swift in Sources */,
 				602B9D1A2118E26300BD3D60 /* LocationSuggestion.swift in Sources */,
 				C705766B212B4E010027C6AA /* ExchangeTradeDelegate.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,

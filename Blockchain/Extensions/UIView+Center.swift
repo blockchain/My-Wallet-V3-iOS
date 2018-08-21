@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension UIView {
+public extension UIView {
     func centerInSuperview() {
         guard let parentView = self.superview else { return }
         self.center = CGPoint(x: parentView.bounds.width/2, y: parentView.bounds.height/2)
