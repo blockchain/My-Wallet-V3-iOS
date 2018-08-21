@@ -39,11 +39,14 @@ class AssetConversionRateView: UIView {
         addSubview(self.largeLabel)
         addSubview(self.smallLabel)
 
+        self.largeLabel.textAlignment = .center
+        self.smallLabel.textAlignment = .center
+
         self.largeLabel.centerHorizontallyInSuperview()
         self.smallLabel.centerHorizontallyInSuperview()
 
-        self.largeLabel.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Large)
-        self.smallLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.Small)
+        self.largeLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
+        self.smallLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.ExtraSmall)
 
         self.largeLabel.textColor = UIColor.gray5
         self.smallLabel.textColor = UIColor.gray5
@@ -69,7 +72,7 @@ extension AssetConversionRateView {
             Logger.shared.error("Missing view model information. Cannot update UI")
             return
         }
-        let prefix = "1 " + base.symbol + "= "
+        let prefix = "1 " + base.symbol + " = "
         self.largeLabel.text = prefix + counterAssetValue.stringValue + counter.symbol
         self.smallLabel.text = prefix + fiatSymbol + counterFiatValue.stringValue
     }
