@@ -323,8 +323,8 @@ private extension ExchangeCreateView {
         continueButton?.addTarget(self, action: #selector(self.continueButtonTapped), for: .touchUpInside)
     }
 
+    // Red error text below the min/max buttons
     func setupErrorTextView(amountView: UIView) {
-        // Red error text below the min/max buttons
         let textView = staticTextView(frame: CGRect(
             x: 15,
             y: amountView.frame.origin.y + amountView.frame.size.height + 0.5 + minMaxButtonHeight + 8,
