@@ -73,7 +73,7 @@ extension AssetConversionRateView {
             return
         }
         let prefix = "1 " + base.symbol + " = "
-        self.largeLabel.text = prefix + counterAssetValue.stringValue + counter.symbol
+        self.largeLabel.text = prefix + counterAssetValue.stringValue + " " + counter.symbol
         self.smallLabel.text = prefix + fiatSymbol + counterFiatValue.stringValue
     }
 }
