@@ -9,10 +9,13 @@
 import Foundation
 
 protocol ExchangeListDataProviderDelegate: class {
-    func dataProvider(_ dataProvider: ExchangeListDataProvider, requestsNextPageBefore timetstamp: Date)
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, requestsNextPageBefore timestamp: Date)
+    func newOrderTapped(_ dataProvider: ExchangeListDataProvider)
 }
 
 class ExchangeListDataProvider: NSObject {
+
+    fileprivate static let estimatedCellHeight: CGFloat = 75.0
 
     weak var delegate: ExchangeListDataProviderDelegate?
 
@@ -25,16 +28,18 @@ class ExchangeListDataProvider: NSObject {
     init(table: UITableView) {
         tableView = table
         super.init()
+        tableView?.estimatedRowHeight = ExchangeListDataProvider.estimatedCellHeight
         tableView?.delegate = self
         tableView?.dataSource = self
+        registerAllCellTypes()
     }
 
     fileprivate func registerAllCellTypes() {
         guard let table = tableView else { return }
-        let orderCell = UINib(nibName: ExchangeListOrderCell.identifier, bundle: nil)
+        let headerView = UINib(nibName: String(describing: ExchangeListOrderHeaderView.self), bundle: nil)
         let listCell = UINib(nibName: ExchangeListViewCell.identifier, bundle: nil)
-        table.register(orderCell, forCellReuseIdentifier: ExchangeListOrderCell.identifier)
         table.register(listCell, forCellReuseIdentifier: ExchangeListViewCell.identifier)
+        table.register(headerView, forHeaderFooterViewReuseIdentifier: String(describing: ExchangeListOrderHeaderView.self))
     }
 
     func display(page: Page<[ExchangeTradeCellModel]>) {
@@ -75,8 +80,22 @@ extension ExchangeListDataProvider: UITableViewDataSource {
 
 extension ExchangeListDataProvider: UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ExchangeListOrderHeaderView.self)) as? ExchangeListOrderHeaderView else { return nil }
+        header.actionHandler = { [weak self] in
+            guard let this = self else { return }
+            this.delegate?.newOrderTapped(this)
+        }
+
+        return header
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ExchangeListViewCell.estimatedHeight()
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return ExchangeListOrderHeaderView.estimatedHeight()
     }
 }
 

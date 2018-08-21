@@ -25,6 +25,52 @@ struct ExchangeTradeCellModel: Decodable {
         case cancelled = "CANCELLED"
         case failed = "failed"
         case expired = "EXPIRED"
+        case none = "NONE"
+
+        /// This isn't ideal but `Homebrew` and `Shapeshift` map their
+        /// trade status values differently.
+        init(homebrew: String) {
+            switch homebrew {
+            case "NONE":
+                self = .none
+            case "PENDING_EXECUTION",
+                 "PENDING_DEPOSIT",
+                 "PENDING_REFUND",
+                 "PENDING_WITHDRAWAL":
+                self = .inProgress
+            case "FINISHED":
+                self = .complete
+            case "FAILED":
+                self = .failed
+            case "REFUNDED":
+                self = .cancelled
+            default:
+                self = .none
+            }
+        }
+
+        init(shapeshift: String) {
+            switch shapeshift {
+            case "no_deposits":
+                self = .noDeposits
+            case "received":
+                self = .received
+            case "complete":
+                self = .complete
+            case "resolved":
+                self = .resolved
+            case "IN_PROGRESS":
+                self = .inProgress
+            case "CANCELLED":
+                self = .cancelled
+            case "failed":
+                self = .failed
+            case "EXPIRED":
+                self = .expired
+            default:
+                self = .none
+            }
+        }
     }
 
     let status: TradeStatus
@@ -33,7 +79,7 @@ struct ExchangeTradeCellModel: Decodable {
     let displayValue: String
 
     init(with trade: ExchangeTrade) {
-        status = TradeStatus(rawValue: trade.status) ?? .failed
+        status = TradeStatus(shapeshift: trade.status)
         currency = Currency(rawValue: trade.withdrawalCurrency()) ?? .btc
         transactionDate = trade.date
         displayValue = trade.displayAmount() ?? ""
@@ -53,9 +99,8 @@ struct ExchangeTradeCellModel: Decodable {
         transactionDate = try values.decode(Date.self, forKey: .createdAt)
         currency = try values.decode(Currency.self, forKey: .currency)
         displayValue = try values.decode(String.self, forKey: .quantity)
-
-        // TODO: Map progress state for HB
-        status = .inProgress
+        let statusValue = try values.decode(String.self, forKey: .status)
+        status = TradeStatus(homebrew: statusValue)
     }
 }
 
@@ -73,7 +118,8 @@ extension ExchangeTradeCellModel.TradeStatus {
             return .green
         case .noDeposits,
              .received,
-             .inProgress:
+             .inProgress,
+             .none:
             return .grayBlue
         case .cancelled,
              .failed,
@@ -89,7 +135,8 @@ extension ExchangeTradeCellModel.TradeStatus {
             return NSLocalizedString("Complete", comment: "").uppercased()
         case .noDeposits,
              .received,
-             .inProgress:
+             .inProgress,
+             .none:
             return NSLocalizedString("In Progress", comment: "").uppercased()
         case .cancelled,
              .failed,

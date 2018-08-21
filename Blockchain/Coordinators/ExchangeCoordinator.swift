@@ -84,8 +84,6 @@ import RxSwift
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Exchange.loading)
 
-        // TODO: 
-
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)

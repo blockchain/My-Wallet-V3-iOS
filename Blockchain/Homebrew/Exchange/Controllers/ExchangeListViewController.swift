@@ -16,30 +16,21 @@ class ExchangeListViewController: UIViewController {
 
     // MARK: Private Properties
 
-    fileprivate var refreshControl: UIRefreshControl!
-    fileprivate lazy var wallet: Wallet = {
-        let wallet = WalletManager.shared.wallet
-        return wallet
-    }()
+    fileprivate var dataProvider: ExchangeListDataProvider?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupRefreshControl()
-        setupTableViewCells()
+        dataProvider = ExchangeListDataProvider(table: tableView)
+        dataProvider?.delegate = self
+    }
+}
+
+extension ExchangeListViewController: ExchangeListDataProviderDelegate {
+    func newOrderTapped(_ dataProvider: ExchangeListDataProvider) {
+        // TODO
     }
 
-    fileprivate func setupRefreshControl() {
-        guard refreshControl == nil else { return }
-        refreshControl = UIRefreshControl()
-        // TODO: Hook up selector. 
-        tableView.refreshControl = refreshControl
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, requestsNextPageBefore timestamp: Date) {
+        // TODO
     }
-
-    fileprivate func setupTableViewCells() {
-        let orderCell = UINib(nibName: ExchangeListOrderCell.identifier, bundle: nil)
-        let listCell = UINib(nibName: ExchangeListViewCell.identifier, bundle: nil)
-        tableView.register(orderCell, forCellReuseIdentifier: ExchangeListOrderCell.identifier)
-        tableView.register(listCell, forCellReuseIdentifier: ExchangeListViewCell.identifier)
-    }
-
 }

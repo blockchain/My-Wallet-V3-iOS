@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-class ExchangeListOrderCell: UITableViewCell {
+class ExchangeListOrderHeaderView: UITableViewHeaderFooterView {
 
     // MARK: Static Properties
 

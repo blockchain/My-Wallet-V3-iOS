@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// `Page` isn't ideal but, the way we page means we need to know
+/// what the maximum number of items we could receive per page is.
+/// Only by knowing the pageSize and comparing it to the result can
+/// we determine if there are more items that need to be fetched.
 struct Page<T> {
     let pageSize: Int
     let error: Error?
