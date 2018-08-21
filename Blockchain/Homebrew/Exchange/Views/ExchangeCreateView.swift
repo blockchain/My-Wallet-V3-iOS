@@ -498,6 +498,7 @@ private extension ExchangeCreateView {
         errorTextView?.text = text
         disablePaymentButtons()
 
+        // On the 5s, the error text view and information text view can overlap, so hide one when the other is shown
         if !Constants.Booleans.IsUsingScreenSizeLargerThan5s {
             infoTextView?.isHidden = true
         }
@@ -506,6 +507,7 @@ private extension ExchangeCreateView {
     func hideErrorTextView() {
         errorTextView?.isHidden = true
 
+        // On the 5s, the error text view and information text view can overlap, so hide one when the other is shown
         if !Constants.Booleans.IsUsingScreenSizeLargerThan5s {
             infoTextView?.isHidden = false
         }
