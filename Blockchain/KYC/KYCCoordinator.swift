@@ -94,35 +94,29 @@ protocol KYCCoordinatorDelegate: class {
                 .subscribe(onSuccess: { [unowned self] in
                     self.user = $0
                     
+                    var exchangeService: NetworkClient
+                    let exchangeFuture = CompletableFuture<NetworkClient>()
                     var url = URL(string: BlockchainAPI.shared.retailCoreUrl)!
                     url.appendPathComponent("markets/quotes/pairs")
                     
+                   // let url = URL(string: "https://api.dev.blockchain.info/nabu-app/markets/quotes/pairs")!
                     var req = URLRequest(url: url)
-           //         req.addValue("application/json", forHTTPHeaderField: "Accept")
-                    req.addValue("APP", forHTTPHeaderField: "X-CLIENT-TYPE")
-                    req.addValue("389ufd89y7ery798347efu89", forHTTPHeaderField: "X-DEVICE-ID")
-                    req.addValue("7050fc43-ec01-462a-be7c-8880e1701fce", forHTTPHeaderField: "authorization")
-                    req.addValue("aa8cca2e-fb67-43fc-9965-1d42768adca8", forHTTPHeaderField: "X-WALLET-GUID")
-                    req.addValue("6.11.1", forHTTPHeaderField: "X-APP-VERSION")
-                    
-                    print("request vals", req)
-                    
-                    self.exchangeFuture.then { (client) in
-                        print("getting to future")
-                        client.getAndParse(request: req, model: CurrencyPair.self) { result in
-                            switch result {
-                            case .success(let model):
-                                print("hello", model)
-                                self.exchangeFuture.complete(value: self.exchangeService)
-                            case .failure(let error):
-                                Logger.shared.error("Failed to parse model: \(error.localizedDescription)")
-                                break
-                            }
+ 
+                    exchangeService = NetworkClient(session: URLSession.shared)
+                    exchangeService.getAndParse(request: req, model: CurrencyPair.self) { result in
+                        switch result {
+                        case .success(let kycToken):
+                            print(kycToken)
+                            exchangeFuture.complete(value: exchangeService)
+                        case .failure(let _):
+                            exchangeFuture.failure()
                         }
-                        }
-                    
-                    self.exchangeService = NetworkClient(session: URLSession.shared)
-
+                    }
+                    exchangeFuture.then { client in
+                        print("Did something yes")
+                        }.then(handler: { (client) in
+                            print("then did something else")
+                        })
                     Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
