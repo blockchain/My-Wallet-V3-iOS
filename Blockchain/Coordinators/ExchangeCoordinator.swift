@@ -95,15 +95,20 @@ import RxSwift
         case .homebrew:
             Logger.shared.info("Not implemented yet")
         default:
-            guard let viewController = rootViewController else {
-                Logger.shared.error("View controller to present on is nil")
-                return
-            }
             exchangeViewController = ExchangeOverviewViewController()
             let navigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             )
+            
+            guard let viewController = rootViewController else {
+                Logger.shared.error("When showing exchange the View controller to present on is nil")
+                let topController =
+                    UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.presentedViewController
+                
+                topController?.present(navigationController, animated: true)
+                return
+            }
             viewController.present(navigationController, animated: true)
         }
     }

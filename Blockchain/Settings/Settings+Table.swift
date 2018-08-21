@@ -123,8 +123,65 @@ extension SettingsTableViewController {
         switchForEmailNotifications.addTarget(self, action: #selector(self.toggleEmailNotifications), for: .touchUpInside)
         cell.accessoryView = switchForEmailNotifications
     }
+    
 
     func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
+        var authService: NetworkClient!
+        var url = URLComponents(string: BlockchainAPI.shared.retailCoreUrl)!
+        authService = NetworkClient(session: URLSession.shared)
+        let authFuture = CompletableFuture<NetworkClient>()
+
+        url.path = "/nabu-app/internal/auth"
+        url.queryItems = [
+            URLQueryItem(name: "userId", value: WalletManager.shared.wallet.kycUserId())
+        ]
+    //   var url = URL(string: BlockchainAPI.shared.retailCoreUrl)!
+   //     url.appendPathComponent("/internal/auth")
+        
+        var req = URLRequest(url: url.url!)
+        req.httpMethod = "POST"
+        req.httpBody = nil
+   //     req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        req.addValue("application/json", forHTTPHeaderField: "Accept")
+        req.addValue("APP", forHTTPHeaderField: "X-CLIENT-TYPE")
+        req.addValue("389ufd89y7ery798347efu89", forHTTPHeaderField: "X-DEVICE-ID")
+        req.addValue("7050fc43-ec01-462a-be7c-8880e1701fce", forHTTPHeaderField: "authorization")
+        req.addValue("aa8cca2e-fb67-43fc-9965-1d42768adca8", forHTTPHeaderField: "X-WALLET-GUID")
+        req.addValue("6.11.1", forHTTPHeaderField: "X-APP-VERSION")
+        
+        
+        authFuture.then { (client: NetworkClient) in
+            print("lets try", client)
+        }
+
+//        authService.getAndParse(request: req, model: KYCApiTokenResponse.self) { result in
+//            switch result {
+//            case .success(let model):
+//                print("did we get it?", model)
+//                authFuture.complete(value: self.authService)
+//            case .failure(let error):
+//                Logger.shared.error("Failed to parse model without promise: \(error.localizedDescription)")
+//                break
+//            }
+//        }
+        
+        authFuture.then { (client: NetworkClient) in
+            
+            client.getAndParse(request: req, model: KYCApiTokenResponse.self) { result in
+                switch result {
+                case .success(let model):
+                    print("did we get it?", model)
+                    authFuture.complete(value: authService)
+                case .failure(let error):
+                    Logger.shared.error("Failed to parse model in then: \(error.localizedDescription)")
+                    break
+                }
+            }
+            }.then { (client) in
+                print("got here!")
+        }
+        
+
         disposable = BlockchainDataRepository.shared.kycUser
             .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
             .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
@@ -136,7 +193,6 @@ extension SettingsTableViewController {
     }
 
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        if preparedIdentityStatus { return }
         self.createBadge(cell, color: .clear)
         self.getUserVerificationStatus { status, success in
             if success {
@@ -144,9 +200,8 @@ extension SettingsTableViewController {
                     let userModel = KYCInformationViewModel.create(for: hasDetail)
                     self.createBadge(cell, status)
                     cell.detailTextLabel?.text = userModel.badge
-                    self.preparedIdentityStatus = true
                 }
-            } else {
+            } else if !success {
                 self.createBadge(cell, color: .unverified)
                 cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
             }
@@ -219,7 +274,7 @@ extension SettingsTableViewController {
         switch indexPath.section {
         case sectionProfile:
             switch indexPath.row {
-            case identityVerification: KYCCoordinator().start()
+            case identityVerification: KYCCoordinator().embed()
             case profileWalletIdentifier: walletIdentifierClicked()
             case profileEmail: emailClicked()
             case profileMobileNumber: mobileNumberClicked()
@@ -257,16 +312,13 @@ extension SettingsTableViewController {
 
 class EdgeInsetBadge: EdgeInsetLabel {
 
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        self.layer.cornerRadius = 4
-//        self.layer.masksToBounds = true
-//        self.backgroundColor = .white
-//        self.textColor = .white
-//        self.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-//        sizeToFit()
-//        layoutIfNeeded()
-//    }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.layer.cornerRadius = 4
+        self.layer.masksToBounds = true
+        sizeToFit()
+        layoutIfNeeded()
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

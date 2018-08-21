@@ -90,6 +90,15 @@ import Foundation
         } else {
             AuthenticationCoordinator.shared.start()
         }
+        
+        var authService: NetworkClient!
+        var url = URLComponents(string: BlockchainAPI.shared.retailCoreUrl)!
+        let authFuture = CompletableFuture<NetworkClient>()
+        authService = NetworkClient(session: URLSession.shared)
+
+        authFuture.then { (client: NetworkClient) in
+            print("lets try", client)
+        }
     }
 
     /// Shows an upgrade to HD wallet prompt if the user has a legacy wallet

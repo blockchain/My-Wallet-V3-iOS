@@ -51,7 +51,18 @@ protocol KYCCoordinatorDelegate: class {
     // MARK: Public
 
     weak var delegate: KYCCoordinatorDelegate?
+    var exchangeService: NetworkClient!
+    let exchangeFuture = CompletableFuture<NetworkClient>()
 
+    func embed() {
+      let topController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController
+        guard let rootViewController = topController else {
+            Logger.shared.warning("Cannot start KYC. topMostViewController is nil.")
+            return
+        }
+        start(from: rootViewController)
+    }
+    
     func start() {
         guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
             Logger.shared.warning("Cannot start KYC. rootViewController is nil.")
@@ -59,7 +70,22 @@ protocol KYCCoordinatorDelegate: class {
         }
         start(from: rootViewController)
     }
-
+    
+    struct CurrencyPair: Decodable {
+        var pairs: [String]
+    }
+    
+    func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
+        disposable = BlockchainDataRepository.shared.kycUser
+            .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
+            .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
+            .subscribe(onSuccess: { user in
+                handler(user, true)
+            }, onError: {  error in
+                handler(nil, false)
+            })
+    }
+    
     @objc func start(from viewController: UIViewController) {
         if user == nil {
             disposable = BlockchainDataRepository.shared.kycUser
@@ -67,9 +93,34 @@ protocol KYCCoordinatorDelegate: class {
                 .observeOn(MainScheduler.instance)
                 .subscribe(onSuccess: { [unowned self] in
                     self.user = $0
+                    
+                    var exchangeService: NetworkClient
+                    let exchangeFuture = CompletableFuture<NetworkClient>()
+                    var url = URL(string: BlockchainAPI.shared.retailCoreUrl)!
+                    url.appendPathComponent("markets/quotes/pairs")
+                    
+                   // let url = URL(string: "https://api.dev.blockchain.info/nabu-app/markets/quotes/pairs")!
+                    var req = URLRequest(url: url)
+ 
+                    exchangeService = NetworkClient(session: URLSession.shared)
+                    exchangeService.getAndParse(request: req, model: CurrencyPair.self) { result in
+                        switch result {
+                        case .success(let kycToken):
+                            print(kycToken)
+                            exchangeFuture.complete(value: exchangeService)
+                        case .failure(let _):
+                            exchangeFuture.failure()
+                        }
+                    }
+                    exchangeFuture.then { client in
+                        print("Did something yes")
+                        }.then(handler: { (client) in
+                            print("then did something else")
+                        })
                     Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
+                    self.exchangeFuture.failure()
                 })
         }
         guard let welcomeViewController = screenFor(pageType: .welcome) as? KYCWelcomeController else { return }

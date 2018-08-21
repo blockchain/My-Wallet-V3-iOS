@@ -33,3 +33,7 @@ struct FiatCurrency: CustomStringConvertible {
         self.init(data: Data(string.utf8))
     }
 }
+
+struct CurrencyPair: Decodable {
+    var pairs: [String]
+}

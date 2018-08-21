@@ -328,6 +328,11 @@
 		60AEA5BF21125DDD0053A753 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */; };
 		60B10D442118EC85003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
 		60B10D452118ED26003F945F /* CountryDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B10D432118EC84003F945F /* CountryDataProvider.swift */; };
+		60B941F421272162002DF50B /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B941E821272162002DF50B /* Promise.swift */; };
+		60B941F521272162002DF50B /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B941F321272162002DF50B /* NetworkClient.swift */; };
+		60B941F621272383002DF50B /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B941F321272162002DF50B /* NetworkClient.swift */; };
+		60B941F7212723A5002DF50B /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B941E821272162002DF50B /* Promise.swift */; };
+		60CD9164212B14FE00865AE6 /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CD9163212B14FE00865AE6 /* PromiseTests.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -2660,6 +2665,9 @@
 		60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSelectorTableViewController.m; sourceTree = "<group>"; };
 		60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSelectorTableViewController.h; sourceTree = "<group>"; };
 		60B10D432118EC84003F945F /* CountryDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryDataProvider.swift; sourceTree = "<group>"; };
+		60B941E821272162002DF50B /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		60B941F321272162002DF50B /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		60CD9163212B14FE00865AE6 /* PromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PromiseTests.swift; path = Network/PromiseTests.swift; sourceTree = "<group>"; };
 		60FBE0802112572B00AD514A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		60FBE083211258F300AD514A /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTwoStepVC.swift; sourceTree = "<group>"; };
@@ -3449,6 +3457,7 @@
 			children = (
 				519435A2208E61F3001EF882 /* Info.plist */,
 				51C2ADD320BDD3EA00D66108 /* AddressValidatorTests.swift */,
+				60CD9163212B14FE00865AE6 /* PromiseTests.swift */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
 				51A862E32092686300B338E0 /* CheckForUnusedAddressTests.swift */,
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
@@ -3476,6 +3485,8 @@
 		51A7348B20891EB3009727D5 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				60B941F321272162002DF50B /* NetworkClient.swift */,
+				60B941E821272162002DF50B /* Promise.swift */,
 				C733A89221236F02007DADE0 /* HttpHeader.swift */,
 				C7614398211A7FD70041411E /* SocketManager.swift */,
 				51A7349020891EB3009727D5 /* BlockchainAPI.swift */,
@@ -6463,6 +6474,7 @@
 				0F382300C1E5E6192A207AA9 /* Pods-BlockchainTests.debug dev.xcconfig */,
 				12597546BEA6220AA11F7A62 /* Pods-BlockchainTests.debug production.xcconfig */,
 				F0C7614B42E9F9CE6B371C8E /* Pods-BlockchainTests.debug staging.xcconfig */,
+				0F382300C1E5E6192A207AA9 /* Pods-BlockchainTests.debug dev.xcconfig */,
 				C90A0884126BB17EBBDCFD8A /* Pods-BlockchainTests.debug testnet.xcconfig */,
 				730695CB650E8C203CE31D50 /* Pods-BlockchainTests.release.xcconfig */,
 			);
@@ -7081,6 +7093,7 @@
 				602B9D232118E27100BD3D60 /* KYCEnterPhoneNumberController.swift in Sources */,
 				AA3CA9B32107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				AADB027F20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */,
+				60CD9164212B14FE00865AE6 /* PromiseTests.swift in Sources */,
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
@@ -7140,6 +7153,7 @@
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */,
 				AA1E52352097CC2E0099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
+				60B941F621272383002DF50B /* NetworkClient.swift in Sources */,
 				C761439A211A7FD70041411E /* SocketManager.swift in Sources */,
 				602B9D0C2118E23400BD3D60 /* KYCCoordinator.swift in Sources */,
 				AA7133B8212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift in Sources */,
@@ -7152,6 +7166,7 @@
 				C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */,
 				AAE94F3220C64B49005A3595 /* PinInteractor.swift in Sources */,
 				511356E1209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift in Sources */,
+				60B941F7212723A5002DF50B /* Promise.swift in Sources */,
 				602B9D192118E25F00BD3D60 /* LocationDataProvider.swift in Sources */,
 				AABB74C920D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
@@ -7360,6 +7375,7 @@
 				C7E1A2E8210A45B30072DDA0 /* ExchangeCoordinator.swift in Sources */,
 				23BF73391C454B8C00204503 /* AccountsAndAddressesNavigationController.m in Sources */,
 				AA3CA9B52107F36800C2AD46 /* LogLevel.swift in Sources */,
+				60B941F421272162002DF50B /* Promise.swift in Sources */,
 				51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */,
 				602B9CF02118E15300BD3D60 /* LocationSuggestionCoordinator.swift in Sources */,
@@ -7490,6 +7506,7 @@
 				67EE1DCA19E3325900DBBFC9 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */,
 				602B9CE52118E15300BD3D60 /* KYCCountrySelectionController.swift in Sources */,
+				60B941F521272162002DF50B /* NetworkClient.swift in Sources */,
 				5114EA1F20CB2BA90098E26E /* TabControllerManager+Nib.swift in Sources */,
 				C75F65082124DDB900396B65 /* ExchangeTradeDelegate.swift in Sources */,
 				C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */,

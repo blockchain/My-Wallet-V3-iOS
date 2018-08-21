@@ -78,7 +78,7 @@ final class KYCAuthenticationService {
         }
         return Single.just(KYCApiTokenResponse(userId: kycUserId, token: kycToken))
     }
-
+    
     /// Creates a KYC user ID and API token followed by updating the wallet metadata with
     /// the KYC user ID and API token.
     private func createAndSaveApiTokenResponse() -> Single<KYCApiTokenResponse> {
@@ -90,6 +90,16 @@ final class KYCAuthenticationService {
     }
 
     private func createKycUserId() -> Single<KYCCreateUserResponse> {
+        // prevents a crash when backgrounding the app when in the middle of KYC
+       if UIApplication.shared.applicationState != .active {
+            return KYCNetworkRequest.request(
+                post: .registerUser,
+                parameters: [:],
+                headers: [:],
+                type: KYCCreateUserResponse.self
+            )
+        }
+        
         let parameters: [String: String] = [
             "email": wallet.getEmail(),
             "walletGuid": wallet.guid
@@ -111,6 +121,7 @@ final class KYCAuthenticationService {
             HttpHeaderField.walletGuid: wallet.guid,
             HttpHeaderField.walletEmail: wallet.getEmail()
         ]
+        
         return KYCNetworkRequest.request(
             post: .apiKey(userId: response.userId),
             parameters: [:],
