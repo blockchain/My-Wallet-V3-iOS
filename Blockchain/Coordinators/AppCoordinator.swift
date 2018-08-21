@@ -27,6 +27,7 @@ import Foundation
     private(set) var window: UIWindow
 
     private let walletManager: WalletManager
+    private var kycCoordinator: KYCCoordinator?
 
     // MARK: - UIViewController Properties
 
@@ -44,9 +45,9 @@ import Foundation
     }()
 
     private lazy var sideMenuViewController: SideMenuViewController = { [unowned self] in
-        let sideMenu = SideMenuViewController()
-        sideMenu.delegate = self
-        return sideMenu
+        let viewController = SideMenuViewController.makeFromStoryboard()
+        viewController.delegate = self
+        return viewController
     }()
 
     private lazy var accountsAndAddressesNavigationController: AccountsAndAddressesNavigationController = { [unowned self] in
@@ -108,17 +109,7 @@ import Foundation
             animated: true
         )
     }
-    
-    @objc func showKYCView() {
-        let storyboard = UIStoryboard(name: "KYCVerifyIdentityController", bundle: nil)
-        let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "KYCVerifyIdentity")
-        upgradeViewController.modalTransitionStyle = .coverVertical
-        UIApplication.shared.keyWindow?.rootViewController?.present(
-            upgradeViewController,
-            animated: true
-        )
-    }
-    
+
     @objc func showDebugView(presenter: Int32) {
         let debugViewController = DebugTableViewController()
         debugViewController.presenter = presenter
@@ -212,15 +203,12 @@ import Foundation
 }
 
 extension AppCoordinator: SideMenuViewControllerDelegate {
-    func onSideMenuItemTapped(_ identifier: String!) {
-        guard let sideMenuItem = SideMenuItem(rawValue: identifier) else {
-            Logger.shared.warning("Unrecognized SideMenuItem with identifier: \(String(describing: identifier))")
-            return
-        }
-
-        switch sideMenuItem {
-        case .upgradeBackup:
-            handleUpgradeBackup()
+    func sideMenuViewController(_ viewController: SideMenuViewController, didTapOn item: SideMenuItem) {
+        switch item {
+        case .upgrade:
+            handleUpgrade()
+        case .backup:
+            handleBackup()
         case .accountsAndAddresses:
             handleAccountsAndAddresses()
         case .settings:
@@ -240,12 +228,12 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         }
     }
 
-    private func handleUpgradeBackup() {
-        if walletManager.wallet.didUpgradeToHd() {
-            showBackupView()
-        } else {
-            AppCoordinator.shared.showHdUpgradeView()
-        }
+    private func handleUpgrade() {
+        AppCoordinator.shared.showHdUpgradeView()
+    }
+
+    private func handleBackup() {
+        showBackupView()
     }
 
     private func handleAccountsAndAddresses() {
@@ -330,7 +318,8 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     }
     
     private func handleLaunchKYC() {
-        AppCoordinator.sharedInstance().showKYCView()
+        kycCoordinator = KYCCoordinator()
+        kycCoordinator?.start()
     }
     
     private func handleExchange() {

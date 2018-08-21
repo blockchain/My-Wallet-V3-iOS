@@ -1368,6 +1368,17 @@
     return [[self.context evaluateScript:@"MyWalletPhone.countryCodeGuess()"] toString];
 }
 
+- (NSString *_Nullable)stateCodeGuess
+{
+    if (![self isInitialized]) {
+        return nil;
+    }
+
+    JSValue *stateCodeGuessValue = [self.context evaluateScript:@"MyWalletPhone.stateCodeGuess()"];
+    if ([stateCodeGuessValue isNull] || [stateCodeGuessValue isUndefined]) return nil;
+    return [stateCodeGuessValue toString];
+}
+
 - (NSString *)getEmail
 {
     if (![self isInitialized]) {
