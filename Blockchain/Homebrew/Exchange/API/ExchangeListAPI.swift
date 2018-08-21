@@ -8,8 +8,8 @@
 
 import Foundation
 
-typealias ExchangeListCompletion = (([ExchangeTradeCellModel]?, Error?) -> Void)
+typealias PartnerExchangeCompletion = (([ExchangeTradeCellModel]?, Error?) -> Void)
 
-protocol ExchangeListAPI {
-    func fetchTransactions(with completion: @escaping ExchangeListCompletion)
+protocol PartnerExchangeAPI {
+    func fetchTransactions(with completion: @escaping PartnerExchangeCompletion)
 }

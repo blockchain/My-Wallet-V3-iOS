@@ -8,14 +8,14 @@
 
 import Foundation
 
-protocol ExchangeListServiceDelegate {
-    func exchangeService(_ service: ExchangeListService, didGet exchangeRate: ExchangeRate)
-    func exchangeService(_ service: ExchangeListService, didGetBTC availableBalance: NSDictionary)
-    func exchangeService(_ service: ExchangeListService, didGetETH availableBalance: NSDictionary)
-    func exchangeService(_ service: ExchangeListService, didBuild tradeInfo: NSDictionary)
+protocol PartnerExchangeServiceDelegate {
+    func partnerExchange(_ service: PartnerExchangeService, didGet exchangeRate: ExchangeRate)
+    func partnerExchange(_ service: PartnerExchangeService, didGetBTC availableBalance: NSDictionary)
+    func partnerExchange(_ service: PartnerExchangeService, didGetETH availableBalance: NSDictionary)
+    func partnerExchange(_ service: PartnerExchangeService, didBuild tradeInfo: NSDictionary)
 }
 
-class ExchangeListService: ExchangeListAPI {
+class PartnerExchangeService: PartnerExchangeAPI {
 
     // MARK: Lazy Properties
 
@@ -26,11 +26,11 @@ class ExchangeListService: ExchangeListAPI {
 
     // MARK: Public Properties
 
-    var delegate: ExchangeListServiceDelegate?
+    var delegate: PartnerExchangeServiceDelegate?
 
     // MARK: Private Properties
 
-    fileprivate var completionBlock: ExchangeListCompletion?
+    fileprivate var completionBlock: PartnerExchangeCompletion?
 
     // MARK: Lifecycle
 
@@ -40,14 +40,14 @@ class ExchangeListService: ExchangeListAPI {
 
     // MARK: ExchangeListAPI
 
-    func fetchTransactions(with completion: @escaping ExchangeListCompletion) {
+    func fetchTransactions(with completion: @escaping PartnerExchangeCompletion) {
         completionBlock = completion
         guard wallet.isFetchingExchangeTrades == false else { return }
         wallet.getExchangeTrades()
     }
 }
 
-extension ExchangeListService: WalletExchangeDelegate {
+extension PartnerExchangeService: WalletExchangeDelegate {
     func didGetExchangeTrades(trades: NSArray) {
         guard let input = trades as? [ExchangeTrade] else { return }
         let models: [ExchangeTradeCellModel] = input.map({ return ExchangeTradeCellModel(with: $0) })
@@ -57,20 +57,20 @@ extension ExchangeListService: WalletExchangeDelegate {
     }
 
     func didGetExchangeRate(rate: ExchangeRate) {
-        delegate?.exchangeService(self, didGet: rate)
+        delegate?.partnerExchange(self, didGet: rate)
     }
 
     func didGetAvailableBtcBalance(result: NSDictionary?) {
         guard let value = result else { return }
-        delegate?.exchangeService(self, didGetBTC: value)
+        delegate?.partnerExchange(self, didGetBTC: value)
     }
 
     func didGetAvailableEthBalance(result: NSDictionary) {
-        delegate?.exchangeService(self, didGetETH: result)
+        delegate?.partnerExchange(self, didGetETH: result)
     }
 
     func didBuildExchangeTrade(tradeInfo: NSDictionary) {
-        delegate?.exchangeService(self, didBuild: tradeInfo)
+        delegate?.partnerExchange(self, didBuild: tradeInfo)
     }
 
     func didShiftPayment() {
