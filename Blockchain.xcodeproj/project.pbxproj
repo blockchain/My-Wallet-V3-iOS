@@ -603,6 +603,8 @@
 		C705766C212B4E060027C6AA /* ExchangeTradeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65022124CE1B00396B65 /* ExchangeTradeCoordinator.swift */; };
 		C705766D212B4E1C0027C6AA /* ExchangeTradeInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F65042124D95600396B65 /* ExchangeTradeInterface.swift */; };
 		C705769E212CA2280027C6AA /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */; };
+		C70576B2212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
+		C70576B3212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -2913,6 +2915,7 @@
 		AAFA97B4211511D000D19ED3 /* Settings+Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Table.swift"; sourceTree = "<group>"; };
 		AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreKeyPair.swift; sourceTree = "<group>"; };
 		AAFE9E9121016132002E4E1E /* PinError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinError.swift; sourceTree = "<group>"; };
+		C70576B1212CFFFC0027C6AA /* Nibable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nibable.swift; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -6374,6 +6377,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C70576B1212CFFFC0027C6AA /* Nibable.swift */,
 				3A76F8FC211A0665002F7946 /* ValidationForm */,
 				3AD7EE7421124D56006B924F /* ValidationTextField */,
 				3A258C0B210A485D00C023F5 /* Cells */,
@@ -7224,6 +7228,7 @@
 				AAF2AEC02123797300687E30 /* PersonalDetails.swift in Sources */,
 				AA447BDA2127BC1100EC0FA0 /* SideMenuCell.swift in Sources */,
 				60B10D452118ED26003F945F /* CountryDataProvider.swift in Sources */,
+				C70576B3212CFFFC0027C6AA /* Nibable.swift in Sources */,
 				AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */,
 				C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 			);
@@ -7360,6 +7365,7 @@
 				9F765F3D14BC7C4F00048EFB /* Transaction.m in Sources */,
 				C79DD06E20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
+				C70576B2212CFFFC0027C6AA /* Nibable.swift in Sources */,
 				AA7133B521220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,
 				602B9CE42118E15300BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
