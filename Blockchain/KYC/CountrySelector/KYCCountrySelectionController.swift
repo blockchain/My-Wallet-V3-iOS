@@ -128,12 +128,6 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
         fetchListOfCountries()
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TICKET: IOS-1142 - call coordinator?
-    }
-
     // MARK: - Private Methods
 
     private func fetchListOfCountries() {
@@ -207,16 +201,18 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
         }
         Logger.shared.info("User selected '\(selectedCountry.name)'")
         presenter.selected(country: selectedCountry)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 extension KYCCountrySelectionController: KYCCountrySelectionView {
     func continueKycFlow(country: KYCCountry) {
-        coordinator.handle(event: .nextPageFromPageType(pageType))
+        let payload = KYCPagePayload.countrySelected(country: country)
+        coordinator.handle(event: .nextPageFromPageType(pageType, payload))
     }
 
     func startPartnerExchangeFlow(country: KYCCountry) {
-        ExchangeCoordinator.shared.start()
+        ExchangeCoordinator.shared.start(rootViewController: self)
     }
 
     func showExchangeNotAvailable(country: KYCCountry) {

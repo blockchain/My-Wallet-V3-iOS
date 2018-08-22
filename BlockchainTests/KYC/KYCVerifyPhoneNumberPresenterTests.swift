@@ -27,7 +27,7 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
         view.didCallConfirmCodeExpectation = expectation(description: "Verification succeeds")
-        presenter.verify(number: "1234567890", userId: "aUserId", code: "12345")
+        presenter.verify(number: "1234567890", code: "12345")
         waitForExpectations(timeout: 0.1)
     }
 
@@ -36,7 +36,7 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
         view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
-        presenter.verify(number: "1234567890", userId: "aUserId", code: "12345")
+        presenter.verify(number: "1234567890", code: "12345")
         waitForExpectations(timeout: 0.1)
     }
 
@@ -47,7 +47,7 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
         view.didCallStartVerifSuccessExpectation = expectation(
             description: "Show verification code view shown when 1st step of verification succeeds"
         )
-        presenter.startVerification(number: "1234567890", userId: "aUserId")
+        presenter.startVerification(number: "1234567890")
         waitForExpectations(timeout: 0.1)
     }
 
@@ -56,7 +56,7 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
         view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
         view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
         view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
-        presenter.startVerification(number: "1234567890", userId: "aUserId")
+        presenter.startVerification(number: "1234567890")
         waitForExpectations(timeout: 0.1)
     }
 }

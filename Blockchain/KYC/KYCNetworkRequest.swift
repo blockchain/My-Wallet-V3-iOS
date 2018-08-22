@@ -89,18 +89,18 @@ final class KYCNetworkRequest {
         }
 
         enum PUT {
-            case updateUserDetails(userId: String)
-            case updateMobileNumber(userId: String)
-            case updateAddress(userId: String)
+            case updateUserDetails
+            case updateMobileNumber
+            case updateAddress
 
             var path: String {
                 switch self {
-                case .updateUserDetails(let userID):
-                    return "/users/\(userID)"
-                case .updateMobileNumber(let userId):
-                    return "/users/\(userId)/mobile"
-                case .updateAddress(let userId):
-                    return "/users/\(userId)/address"
+                case .updateUserDetails:
+                    return "/users/current"
+                case .updateMobileNumber:
+                    return "/users/current/mobile"
+                case .updateAddress:
+                    return "/users/current/address"
                 }
             }
         }
@@ -147,6 +147,7 @@ final class KYCNetworkRequest {
         self.init(url: endpoint, httpMethod: "POST")
         do {
             let body = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+            Logger.shared.debug("POST body: \(String(data: body, encoding: .utf8) ?? "")")
             request.httpBody = body
 
             var allHeaders = [HttpHeaderField.contentType: HttpHeaderValue.json]
@@ -168,6 +169,7 @@ final class KYCNetworkRequest {
     @discardableResult convenience init<T: Encodable>(
         put url: KYCEndpoints.PUT,
         parameters: T,
+        headers: [String: String]? = nil,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
@@ -175,12 +177,22 @@ final class KYCNetworkRequest {
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
+
             let body = try encoder.encode(parameters)
+            Logger.shared.debug("PUT body: \(String(data: body, encoding: .utf8) ?? "")")
             request.httpBody = body
-            request.allHTTPHeaderFields = [
-                HttpHeaderField.contentType: HttpHeaderValue.json,
-                HttpHeaderField.accept: HttpHeaderValue.json
+
+            var allHeaders = [
+                HttpHeaderField.accept: HttpHeaderValue.json,
+                HttpHeaderField.contentType: HttpHeaderValue.json
             ]
+            if let headers = headers {
+                for (headerKey, headerValue) in headers {
+                    allHeaders[headerKey] = headerValue
+                }
+            }
+            request.allHTTPHeaderFields = allHeaders
+
             send(taskSuccess: taskSuccess, taskFailure: taskFailure)
         } catch let error {
             taskFailure(HTTPRequestClientError.failedRequest(description: error.localizedDescription))
@@ -220,6 +232,36 @@ final class KYCNetworkRequest {
 // MARK: Rx Extensions
 
 extension KYCNetworkRequest {
+    static func request<RequestPayload: Encodable>(
+        put url: KYCNetworkRequest.KYCEndpoints.PUT,
+        parameters: RequestPayload,
+        headers: [String: String]? = nil
+    ) -> Completable {
+        return Completable.create(subscribe: { observer -> Disposable in
+            KYCNetworkRequest(put: url, parameters: parameters, headers: headers, taskSuccess: { _ in
+                observer(.completed)
+            }, taskFailure: {
+                observer(.error($0))
+            })
+            return Disposables.create()
+        })
+    }
+
+    static func request(
+        post url: KYCNetworkRequest.KYCEndpoints.POST,
+        parameters: [String: String],
+        headers: [String: String]? = nil
+    ) -> Completable {
+        return Completable.create(subscribe: { observer -> Disposable in
+            KYCNetworkRequest(post: url, parameters: parameters, headers: headers, taskSuccess: { _ in
+                observer(.completed)
+            }, taskFailure: {
+                observer(.error($0))
+            })
+            return Disposables.create()
+        })
+    }
+
     static func request<ResponseType: Decodable>(
         post url: KYCNetworkRequest.KYCEndpoints.POST,
         parameters: [String: String],

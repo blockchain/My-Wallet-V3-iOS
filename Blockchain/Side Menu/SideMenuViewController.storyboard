@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3cd-eN-tWk">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Side Menu View Controller-->
+        <scene sceneID="w5y-jP-MHo">
+            <objects>
+                <viewController storyboardIdentifier="SideMenuViewController" title="Side Menu View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3cd-eN-tWk" customClass="SideMenuViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="xiS-mB-oad">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjN-eE-cF5">
+                                <rect key="frame" x="0.0" y="44" width="375" height="768"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="0df-tG-myy">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_and_banner_white" translatesAutoresizingMaskIntoConstraints="NO" id="OrS-f1-zpW">
+                                            <rect key="frame" x="58" y="7" width="161" height="30"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.0" green="0.29019607843137252" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="OrS-f1-zpW" firstAttribute="centerY" secondItem="0df-tG-myy" secondAttribute="centerY" id="Jg6-41-c4C"/>
+                                        <constraint firstItem="OrS-f1-zpW" firstAttribute="leading" secondItem="0df-tG-myy" secondAttribute="leading" constant="58" id="xvR-61-rq8"/>
+                                    </constraints>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="SideMenuCell" textLabel="GOI-Ww-29D" imageView="KYL-By-psN" rowHeight="54" style="IBUITableViewCellStyleDefault" id="YYw-Di-RgP" customClass="SideMenuCell" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YYw-Di-RgP" id="rIg-Iy-aer">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GOI-Ww-29D">
+                                                    <rect key="frame" x="66" y="0.0" width="294" height="54"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.32941176470588235" green="0.32941176470588235" blue="0.33725490196078434" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="highlightedColor" red="0.32941176470588235" green="0.32941176470588235" blue="0.33725490196078434" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="settings" id="KYL-By-psN">
+                                                    <rect key="frame" x="15" y="9" width="36" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.29019607843137252" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="TjN-eE-cF5" firstAttribute="leading" secondItem="GGv-dh-Njx" secondAttribute="leading" id="KQ0-47-8J2"/>
+                            <constraint firstItem="TjN-eE-cF5" firstAttribute="trailing" secondItem="GGv-dh-Njx" secondAttribute="trailing" id="S96-T3-Voe"/>
+                            <constraint firstItem="TjN-eE-cF5" firstAttribute="bottom" secondItem="xiS-mB-oad" secondAttribute="bottom" id="l3U-G4-z39"/>
+                            <constraint firstItem="GGv-dh-Njx" firstAttribute="top" secondItem="TjN-eE-cF5" secondAttribute="top" id="s6F-5n-AH1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="GGv-dh-Njx"/>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="tableView" destination="TjN-eE-cF5" id="pJa-Ti-d44"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wrd-iS-rEp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="40.799999999999997" y="124.8768472906404"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo_and_banner_white" width="161" height="30"/>
+        <image name="settings" width="36" height="36"/>
+    </resources>
+</document>

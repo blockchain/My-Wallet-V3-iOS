@@ -6,22 +6,30 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 class PersonalDetailsService: NSObject, PersonalDetailsAPI {
 
-    func update(personalDetails: PersonalDetails, with completion: @escaping PersonalDetailsUpdateCompletion) {
-        guard let userID = personalDetails.identifier else {
-            completion(HTTPRequestClientError.failedRequest(description: "No valid userID"))
-            return
-        }
-        KYCNetworkRequest(
-            put: .updateUserDetails(userId: userID),
-            parameters: personalDetails,
-            taskSuccess: { _ in
+    private var disposable: Disposable?
+
+    deinit {
+        disposable?.dispose()
+    }
+
+    func update(personalDetails: KYCUpdatePersonalDetailsRequest, with completion: @escaping PersonalDetailsUpdateCompletion) {
+        disposable = KYCAuthenticationService.shared.getKycSessionToken().flatMapCompletable { token in
+            let headers = [HttpHeaderField.authorization: token.token]
+            return KYCNetworkRequest.request(
+                put: .updateUserDetails,
+                parameters: personalDetails,
+                headers: headers
+            )
+        }.subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onCompleted: {
                 completion(nil)
-        }) { (error) in
-            completion(error)
-        }
+            }, onError: { error in
+                completion(error)
+            })
     }
 }

@@ -25,8 +25,7 @@ class PersonalDetailsCoordinator: NSObject {
 }
 
 extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
-
-    func onSubmission(_ input: PersonalDetails, completion: @escaping () -> Void) {
+    func onSubmission(_ input: KYCUpdatePersonalDetailsRequest, completion: @escaping () -> Void) {
         interface?.primaryButtonEnabled(false)
         interface?.primaryButtonActivityIndicator(.visible)
         service.update(personalDetails: input) { [weak self] (error) in
@@ -35,7 +34,7 @@ extension PersonalDetailsCoordinator: PersonalDetailsDelegate {
 
             if let err = error {
                 // TODO: Error state
-                Logger.shared.error("\(err)")
+                Logger.shared.error("Failed to update personal details: \(err)")
             } else {
                 completion()
             }

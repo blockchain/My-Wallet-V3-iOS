@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum KYCPageError {
-    case countryNotSupported(KYCCountry)
-}
-
 enum KYCPageType {
     typealias PhoneNumber = String
 

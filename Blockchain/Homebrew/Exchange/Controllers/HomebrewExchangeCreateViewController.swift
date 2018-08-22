@@ -25,19 +25,13 @@ class HomebrewExchangeCreateViewController: UIViewController {
         super.viewDidLoad()
         tradeCoordinator = ExchangeTradeCoordinator(interface: self)
 
-        let exchangeCreateView = ExchangeCreateView(frame: view.bounds)
+        exchangeCreateView = ExchangeCreateView(frame: view.bounds)
         view.addSubview(exchangeCreateView)
 
-        let fromToButtonCoordinator = FromToButtonDelegateIntermediate(
-            wallet: WalletManager.shared.wallet,
-            navigationController: self.navigationController as! BCNavigationController,
-            addressSelectionDelegate: self
-        )
         exchangeCreateView.setup(
-            createViewDelegate: self,
-            fromToButtonDelegate: fromToButtonCoordinator,
-            continueButtonInputAccessoryDelegate: self,
-            textFieldDelegate: self
+            withConversionView: true,
+            delegate: self,
+            navigationController: self.navigationController as! BCNavigationController
         )
     }
 }
@@ -53,30 +47,42 @@ extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
 }
 
 extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
-    func assetToggleButtonClicked() {
+    func assetToggleButtonTapped() {
     }
 
-    func useMinButtonClicked() {
+    func useMinButtonTapped() {
     }
 
-    func useMaxButtonClicked() {
+    func useMaxButtonTapped() {
     }
 
-    func continueButtonClicked() {
-        delegate?.onContinueButtonClicked()
+    func continueButtonTapped() {
+        delegate?.onContinueButtonTapped()
     }
 }
 
 extension HomebrewExchangeCreateViewController: ContinueButtonInputAccessoryViewDelegate {
-    func closeButtonClicked() {
+    func closeButtonTapped() {
         exchangeCreateView.hideKeyboard()
     }
 }
 
 extension HomebrewExchangeCreateViewController: UITextFieldDelegate {
-
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return true
+    }
 }
 
 extension HomebrewExchangeCreateViewController: AddressSelectionDelegate {
+    func getAssetType() -> LegacyAssetType {
+        return LegacyAssetType(rawValue: -1)!
+    }
 
+    func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
+
+    }
+
+    func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
+
+    }
 }

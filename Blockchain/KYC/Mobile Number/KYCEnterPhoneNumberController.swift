@@ -13,7 +13,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     // MARK: Properties
 
-    var userId: String?
+    private var user: KYCUser?
 
     // MARK: BottomButtonContainerView
 
@@ -43,7 +43,14 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
         return controller
     }
 
-    // MARK: UIViewController Lifecycle Methods
+    // MARK: - KYCCoordinatorDelegate
+
+    override func apply(model: KYCPageModel) {
+        guard case let .phone(user) = model else { return }
+        self.user = user
+    }
+
+    // MARK: - UIViewController Lifecycle Methods
 
     deinit {
         cleanUp()
@@ -81,25 +88,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
             Logger.shared.warning("number is nil.")
             return
         }
-        guard let userId = userId else {
-            Logger.shared.warning("userId is nil.")
-            return
-        }
-        presenter.startVerification(number: number, userId: userId)
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let confirmPhoneNumberViewController = segue.destination as? KYCConfirmPhoneNumberController else {
-            return
-        }
-        guard let phoneNumber = validationTextFieldMobileNumber.text else {
-            Logger.shared.warning("phone number is nil.")
-            return
-        }
-        confirmPhoneNumberViewController.userId = userId
-        confirmPhoneNumberViewController.phoneNumber = phoneNumber
+        presenter.startVerification(number: number)
     }
 }
 
@@ -113,8 +102,13 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     }
 
     func startVerificationSuccess() {
+        guard let number = validationTextFieldMobileNumber.text else {
+            Logger.shared.warning("number is nil.")
+            return
+        }
         Logger.shared.info("Show verification view!")
-        coordinator.handle(event: .nextPageFromPageType(pageType))
+        let payload = KYCPagePayload.phoneNumberUpdated(phoneNumber: number)
+        coordinator.handle(event: .nextPageFromPageType(pageType, payload))
     }
 
     func hideLoadingView() {

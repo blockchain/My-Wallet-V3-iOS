@@ -350,6 +350,7 @@
 
 - (void)getAccountInfoAndExchangeRates;
 - (NSString *_Nullable)countryCodeGuess;
+- (NSString *_Nullable)stateCodeGuess;
 
 - (void)changeEmail:(NSString *)newEmail;
 - (void)resendVerificationEmail:(NSString *)email;
