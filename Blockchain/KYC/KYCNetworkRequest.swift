@@ -22,7 +22,7 @@ final class KYCNetworkRequest {
     struct KYCEndpoints {
         enum GET {
             case credentials
-            case credentialsForProvider
+            case credentialsForOnfido
             case healthCheck
             case listOfCountries
             case nextKYCMethod
@@ -32,8 +32,8 @@ final class KYCNetworkRequest {
                 switch self {
                 case .credentials:
                     return ["kyc", "credentials"]
-                case .credentialsForProvider:
-                    return ["kyc", "credentials", "provider"]
+                case .credentialsForOnfido:
+                    return ["kyc", "credentials", "onfido"]
                 case .healthCheck:
                     return ["healthz"]
                 case .listOfCountries:
@@ -48,7 +48,7 @@ final class KYCNetworkRequest {
             var parameters: [String: String]? {
                 switch self {
                 case .credentials,
-                     .credentialsForProvider,
+                     .credentialsForOnfido,
                      .healthCheck,
                      .listOfCountries,
                      .nextKYCMethod,
@@ -203,6 +203,7 @@ final class KYCNetworkRequest {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
+        Logger.shared.debug("Sending \(request.httpMethod ?? "") request to '\(request.url?.absoluteString ?? "")'")
         let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
