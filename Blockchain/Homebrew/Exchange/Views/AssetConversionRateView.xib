@@ -24,14 +24,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.9 ETH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUg-Wl-zhL">
-                    <rect key="frame" x="16" y="0.5" width="343" height="30"/>
-                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="24"/>
+                    <rect key="frame" x="16" y="5.5" width="343" height="24.5"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = $6500.23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jPE-dk-Ifk">
-                    <rect key="frame" x="16" y="30" width="343" height="22"/>
-                    <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="18"/>
+                    <rect key="frame" x="16" y="36.5" width="343" height="15"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="12"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -39,8 +39,8 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="LUg-Wl-zhL" secondAttribute="trailing" constant="16" id="1pY-Mb-yUK"/>
-                <constraint firstItem="LUg-Wl-zhL" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-15" id="ULe-Wj-PJ8"/>
-                <constraint firstItem="jPE-dk-Ifk" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="11" id="WLn-T0-fv7"/>
+                <constraint firstItem="LUg-Wl-zhL" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-12.5" id="ULe-Wj-PJ8"/>
+                <constraint firstItem="jPE-dk-Ifk" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="14" id="WLn-T0-fv7"/>
                 <constraint firstItem="jPE-dk-Ifk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="g3W-CW-jmK"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jPE-dk-Ifk" secondAttribute="trailing" constant="16" id="pjt-1p-xW5"/>
                 <constraint firstItem="LUg-Wl-zhL" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="xnV-De-svh"/>
