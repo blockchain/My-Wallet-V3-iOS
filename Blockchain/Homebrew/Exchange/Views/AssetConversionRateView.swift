@@ -9,52 +9,10 @@
 import Foundation
 
 class AssetConversionRateView: UIView {
-    private struct Measurements {
-        static let largeLabelHeight: CGFloat = 24
-        static let largeLabelOriginY: CGFloat = 8
-        static let smallLabelHeight: CGFloat = 18
-        static let horizontalEdgeSpacing: CGFloat = 16
-    }
+    @IBOutlet var largeLabel: UILabel!
+    @IBOutlet var smallLabel: UILabel!
 
-    private let largeLabel: UILabel
-    private let smallLabel: UILabel
     private let viewModel = AssetConversionRateViewModel()
-
-    override init(frame: CGRect) {
-        self.largeLabel = UILabel(frame: CGRect(
-            x: 0,
-            y: Measurements.largeLabelOriginY,
-            width: frame.size.width - Measurements.horizontalEdgeSpacing*2,
-            height: Measurements.largeLabelHeight))
-        self.smallLabel = UILabel(frame: CGRect(
-            x: 0,
-            y: Measurements.largeLabelOriginY + Measurements.largeLabelHeight + 8,
-            width: frame.size.width - Measurements.horizontalEdgeSpacing*2,
-            height: Measurements.smallLabelHeight))
-
-        super.init(frame: frame)
-
-        self.backgroundColor = UIColor.white
-
-        addSubview(self.largeLabel)
-        addSubview(self.smallLabel)
-
-        self.largeLabel.textAlignment = .center
-        self.smallLabel.textAlignment = .center
-
-        self.largeLabel.centerHorizontallyInSuperview()
-        self.smallLabel.centerHorizontallyInSuperview()
-
-        self.largeLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
-        self.smallLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.ExtraSmall)
-
-        self.largeLabel.textColor = UIColor.gray5
-        self.smallLabel.textColor = UIColor.gray5
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 extension AssetConversionRateView {

@@ -256,12 +256,13 @@ private extension ExchangeCreateView {
     var conversionRateViewHeight: CGFloat { return 70 }
 
     func setupConversionRateView(amountView: UIView) {
-        let view = AssetConversionRateView(frame: CGRect(
+        let view = AssetConversionRateView.makeFromNib()
+        view.frame = CGRect(
             x: 0,
             y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
             width: windowWidth,
             height: conversionRateViewHeight
-        ))
+        )
         addSubview(view)
         conversionRateView = view
     }

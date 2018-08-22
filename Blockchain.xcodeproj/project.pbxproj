@@ -605,6 +605,8 @@
 		C705769E212CA2280027C6AA /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */; };
 		C70576B2212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
 		C70576B3212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
+		C70576BE212D00960027C6AA /* AssetConversionRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70576BD212D00960027C6AA /* AssetConversionRateView.xib */; };
+		C70576BF212D00960027C6AA /* AssetConversionRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70576BD212D00960027C6AA /* AssetConversionRateView.xib */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -2916,6 +2918,7 @@
 		AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreKeyPair.swift; sourceTree = "<group>"; };
 		AAFE9E9121016132002E4E1E /* PinError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinError.swift; sourceTree = "<group>"; };
 		C70576B1212CFFFC0027C6AA /* Nibable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nibable.swift; sourceTree = "<group>"; };
+		C70576BD212D00960027C6AA /* AssetConversionRateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssetConversionRateView.xib; sourceTree = "<group>"; };
 		C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyBitcoinNavigationController.h; sourceTree = "<group>"; };
 		C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyBitcoinNavigationController.m; sourceTree = "<group>"; };
 		C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTransactionTableCell.xib; sourceTree = "<group>"; };
@@ -6243,6 +6246,7 @@
 		C7AEB1B32125CAB100320A32 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C70576BD212D00960027C6AA /* AssetConversionRateView.xib */,
 				C7E2AE6C212897FA00F4887F /* AssetConversionRateViewModel.swift */,
 				C72B8519210FC098002EBDB9 /* ExchangeCreateView.swift */,
 				C7E2AE502128849700F4887F /* AssetConversionRateView.swift */,
@@ -6709,6 +6713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51979189210F68940096E50B /* countries.json in Resources */,
+				C70576BF212D00960027C6AA /* AssetConversionRateView.xib in Resources */,
 				AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */,
 			);
@@ -6752,6 +6757,7 @@
 				C9BE91861945D8F600FD516D /* PEKeyboard-2-edit.png in Resources */,
 				ECD244F119A8AC45004B1F40 /* PEKeyboard-4-dot.png in Resources */,
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
+				C70576BE212D00960027C6AA /* AssetConversionRateView.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */,
 				602B9CF12118E15300BD3D60 /* LocationSuggestionCell.xib in Resources */,
