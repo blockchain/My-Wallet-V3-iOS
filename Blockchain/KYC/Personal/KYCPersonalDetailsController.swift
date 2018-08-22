@@ -134,7 +134,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
         let details = KYCUpdatePersonalDetailsRequest(
             firstName: firstNameField.text,
             lastName: lastNameField.text,
-            dob: birthdayField.selectedDate
+            birthday: birthdayField.selectedDate
         )
 
         delegate?.onSubmission(details, completion: { [weak self] in

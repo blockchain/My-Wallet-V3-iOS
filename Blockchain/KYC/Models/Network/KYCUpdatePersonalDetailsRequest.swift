@@ -12,17 +12,17 @@ import Foundation
 struct KYCUpdatePersonalDetailsRequest: Codable {
     let firstName: String?
     let lastName: String?
-    let dob: Date?
+    let birthday: Date?
 
     enum CodingKeys: String, CodingKey {
         case firstName = "firstName"
         case lastName = "lastName"
-        case dob = "dob"
+        case birthday = "dob"
     }
 
-    init(firstName: String?, lastName: String?, dob: Date?) {
+    init(firstName: String?, lastName: String?, birthday: Date?) {
         self.firstName = firstName
         self.lastName = lastName
-        self.dob = dob
+        self.birthday = birthday
     }
 }

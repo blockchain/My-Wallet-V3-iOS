@@ -19,7 +19,7 @@ class KYCBaseViewController: UIViewController, KYCCoordinatorDelegate {
     }
 
     func apply(model: KYCPageModel) {
-        Logger.shared.debug("Should be override to do something with KYCPageModel.")
+        Logger.shared.debug("Should be overriden to do something with KYCPageModel.")
     }
 
     override func viewDidLoad() {
