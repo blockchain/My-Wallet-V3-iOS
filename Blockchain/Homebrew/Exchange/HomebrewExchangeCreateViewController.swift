@@ -33,7 +33,6 @@ class HomebrewExchangeCreateViewController: UIViewController {
             delegate: self,
             navigationController: self.navigationController as! BCNavigationController
         )
-        LoadingViewPresenter.shared.hideBusyView()
     }
 }
 
