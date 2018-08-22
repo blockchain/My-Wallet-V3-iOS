@@ -8,6 +8,12 @@
 
 import Foundation
 
+protocol ExchangeListInterface: class {
+    func paginationActivityIndicatorVisibility(_ visibility: Visibility)
+    func activityIndicatorVisibility(_ visibility: Visibility)
+    func listVisibility(_ visibility: Visibility)
+}
+
 class ExchangeListViewController: UIViewController {
 
     // MARK: Private IBOutlets
