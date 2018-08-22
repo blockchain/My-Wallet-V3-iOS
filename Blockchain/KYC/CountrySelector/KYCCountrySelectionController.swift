@@ -207,6 +207,7 @@ extension KYCCountrySelectionController: UITableViewDataSource, UITableViewDeleg
         }
         Logger.shared.info("User selected '\(selectedCountry.name)'")
         presenter.selected(country: selectedCountry)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
