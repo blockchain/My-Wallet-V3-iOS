@@ -102,8 +102,13 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     }
 
     func startVerificationSuccess() {
+        guard let number = validationTextFieldMobileNumber.text else {
+            Logger.shared.warning("number is nil.")
+            return
+        }
         Logger.shared.info("Show verification view!")
-        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
+        let payload = KYCPagePayload.phoneNumberUpdated(phoneNumber: number)
+        coordinator.handle(event: .nextPageFromPageType(pageType, payload))
     }
 
     func hideLoadingView() {

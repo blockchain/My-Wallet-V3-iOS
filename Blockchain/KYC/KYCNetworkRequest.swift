@@ -247,6 +247,21 @@ extension KYCNetworkRequest {
         })
     }
 
+    static func request(
+        post url: KYCNetworkRequest.KYCEndpoints.POST,
+        parameters: [String: String],
+        headers: [String: String]? = nil
+    ) -> Completable {
+        return Completable.create(subscribe: { observer -> Disposable in
+            KYCNetworkRequest(post: url, parameters: parameters, headers: headers, taskSuccess: { _ in
+                observer(.completed)
+            }, taskFailure: {
+                observer(.error($0))
+            })
+            return Disposables.create()
+        })
+    }
+
     static func request<ResponseType: Decodable>(
         post url: KYCNetworkRequest.KYCEndpoints.POST,
         parameters: [String: String],

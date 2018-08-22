@@ -6,35 +6,24 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 class MockKYCVerifyPhoneNumberInteractor: KYCVerifyPhoneNumberInteractor {
     var shouldSucceed = true
 
-    override func startVerification(
-        number: String,
-        userId: String,
-        success: @escaping KYCNetworkRequest.TaskSuccess,
-        failure: @escaping KYCNetworkRequest.TaskFailure
-    ) {
+    override func startVerification(number: String) -> Completable {
         if shouldSucceed {
-            success(Data())
+            return Completable.empty()
         } else {
-            failure(HTTPRequestServerError.badResponse)
+            return Completable.error(HTTPRequestServerError.badResponse)
         }
     }
 
-    override func verify(
-        number: String,
-        userId: String,
-        code: String,
-        success: @escaping KYCNetworkRequest.TaskSuccess,
-        failure: @escaping KYCNetworkRequest.TaskFailure
-    ) {
+    override func verify(number: String, code: String) -> Completable {
         if shouldSucceed {
-            success(Data())
+            return Completable.empty()
         } else {
-            failure(HTTPRequestServerError.badResponse)
+            return Completable.error(HTTPRequestServerError.badResponse)
         }
     }
 }

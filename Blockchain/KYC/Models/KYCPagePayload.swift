@@ -11,4 +11,5 @@ import Foundation
 /// Enumerates the supported payload types as a result of completing completing a KYC page
 enum KYCPagePayload {
     case countrySelected(country: KYCCountry)
+    case phoneNumberUpdated(phoneNumber: String)
 }

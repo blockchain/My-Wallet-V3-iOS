@@ -50,18 +50,20 @@ class KYCVerifyPhoneNumberPresenter {
             .subscribe(onCompleted: { [unowned self] in
                 self.handleStartVerificationCodeSuccess()
             }, onError: { [unowned self] error in
-                Logger.shared.error("Could not complete mobile verification. Error: \(error)")
                 self.handleError(error)
             })
     }
 
-    func verify(number: String, userId: String, code: String) {
+    func verify(number: String, code: String) {
         view?.showLoadingView(with: LocalizationConstants.loading)
-        interactor.verify(number: number, userId: userId, code: code, success: { [weak self] _ in
-            self?.handleVerifyCodeSuccess()
-        }, failure: { [weak self] error in
-            self?.handleError(error)
-        })
+        disposable = interactor.verify(number: number, code: code)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onCompleted: { [unowned self] in
+                self.handleVerifyCodeSuccess()
+            }, onError: { [unowned self] error in
+                self.handleError(error)
+            })
     }
 
     // MARK: - Private

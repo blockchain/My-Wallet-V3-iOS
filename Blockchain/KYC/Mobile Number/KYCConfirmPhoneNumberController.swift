@@ -19,8 +19,6 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
         }
     }
 
-    var userId: String?
-
     // MARK: BottomButtonContainerView
 
     var originalBottomButtonConstraint: CGFloat!
@@ -66,10 +64,6 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
     // MARK: IBActions
     @IBAction func onResendCodeTapped(_ sender: Any) {
-        guard let userId = userId else {
-            Logger.shared.warning("userIs is nil.")
-            return
-        }
         presenter.startVerification(number: phoneNumber)
     }
 
@@ -83,11 +77,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
             Logger.shared.warning("code is nil.")
             return
         }
-        guard let userId = userId else {
-            Logger.shared.warning("userId is nil.")
-            return
-        }
-        presenter.verify(number: phoneNumber, userId: userId, code: code)
+        presenter.verify(number: phoneNumber, code: code)
     }
 }
 

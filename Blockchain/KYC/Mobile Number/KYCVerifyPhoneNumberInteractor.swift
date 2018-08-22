@@ -37,25 +37,32 @@ class KYCVerifyPhoneNumberInteractor {
         }
     }
 
-    func verify(
-        number: String,
-        userId: String,
-        code: String,
-        success: @escaping KYCNetworkRequest.TaskSuccess,
-        failure: @escaping KYCNetworkRequest.TaskFailure
-    ) {
-        let paramaters = [
-            "value": number,
-            "userId": userId,
-            "type": "MOBILE",
-            "code": code
-        ]
-        KYCNetworkRequest(
-            post: .verifications,
-            parameters: paramaters,
-            headers: [:], // TODO: pass in authorization token
-            taskSuccess: success,
-            taskFailure: failure
-        )
+    /// Verifies the mobile number entered by the user during the KYC flow.
+    ///
+    /// - Parameters:
+    ///   - number: the number to verify
+    ///   - code: the code sent to the mobile number
+    /// - Returns: a Completable which completes if the verification process succeeds
+    ///            otherwise, it will emit an error.
+    func verify(number: String, code: String) -> Completable {
+        return KYCAuthenticationService.shared.getKycSessionToken().flatMapCompletable { [unowned self] token in
+            do {
+                let phoneNumber = try self.phoneNumberKit.parse(number)
+                let formattedPhoneNumber = self.phoneNumberKit.format(phoneNumber, toType: .e164)
+                let headers = [HttpHeaderField.authorization: token.token]
+                let payload = [
+                    "type": "MOBILE",
+                    "value": formattedPhoneNumber,
+                    "code": code
+                ]
+                return KYCNetworkRequest.request(
+                    post: .verifications,
+                    parameters: payload,
+                    headers: headers
+                )
+            } catch {
+                return Completable.error(error)
+            }
+        }
     }
 }

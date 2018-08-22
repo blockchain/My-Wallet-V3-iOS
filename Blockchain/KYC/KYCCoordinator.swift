@@ -132,6 +132,9 @@ protocol KYCCoordinatorDelegate: class {
         switch payload {
         case .countrySelected(let country):
             self.country = country
+        case .phoneNumberUpdated:
+            // Not handled here
+            return
         }
     }
 
