@@ -159,7 +159,6 @@ protocol KYCCoordinatorDelegate: class {
         case .welcome,
              .country,
              .confirmPhone,
-             .verifyIdentity,
              .accountStatus:
             break
         case .profile:
@@ -172,6 +171,9 @@ protocol KYCCoordinatorDelegate: class {
         case .enterPhone:
             guard let current = user else { return }
             delegate?.apply(model: .phone(current))
+        case .verifyIdentity:
+            guard let country = country else { return }
+            delegate?.apply(model: .verifyIdentity(country))
         }
     }
 

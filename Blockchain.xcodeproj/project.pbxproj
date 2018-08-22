@@ -441,6 +441,14 @@
 		AA126D13212D1B2B005886A3 /* KYCUpdateAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */; };
 		AA126D2A212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */; };
 		AA126D2B212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */; };
+		AA126D91212E17A3005886A3 /* OnfidoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D90212E17A3005886A3 /* OnfidoService.swift */; };
+		AA126D92212E17A3005886A3 /* OnfidoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D90212E17A3005886A3 /* OnfidoService.swift */; };
+		AA126D9F212E189C005886A3 /* OnfidoUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D9E212E189C005886A3 /* OnfidoUser.swift */; };
+		AA126DA0212E189C005886A3 /* OnfidoUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D9E212E189C005886A3 /* OnfidoUser.swift */; };
+		AA126DA2212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126DA1212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift */; };
+		AA126DA3212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126DA1212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift */; };
+		AA126DA5212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126DA4212E2C3B005886A3 /* OnfidoCredentials.swift */; };
+		AA126DA6212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126DA4212E2C3B005886A3 /* OnfidoCredentials.swift */; };
 		AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */; };
 		AA1E522D2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */; };
 		AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */; };
@@ -2875,6 +2883,10 @@
 		AA126CFC212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdatePersonalDetailsRequest.swift; path = Network/KYCUpdatePersonalDetailsRequest.swift; sourceTree = "<group>"; };
 		AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdateAddressRequest.swift; path = Network/KYCUpdateAddressRequest.swift; sourceTree = "<group>"; };
 		AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdateMobileRequest.swift; path = Network/KYCUpdateMobileRequest.swift; sourceTree = "<group>"; };
+		AA126D90212E17A3005886A3 /* OnfidoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoService.swift; sourceTree = "<group>"; };
+		AA126D9E212E189C005886A3 /* OnfidoUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoUser.swift; sourceTree = "<group>"; };
+		AA126DA1212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoCreateApplicantRequest.swift; sourceTree = "<group>"; };
+		AA126DA4212E2C3B005886A3 /* OnfidoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoCredentials.swift; sourceTree = "<group>"; };
 		AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Pin.swift"; sourceTree = "<group>"; };
 		AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAuthDelegate.swift; sourceTree = "<group>"; };
@@ -3386,6 +3398,7 @@
 		3A3D5DC8211C9A7900E6C241 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA126DA1212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift */,
 				3A3D5DC9211C9A8300E6C241 /* PersonalDetails.swift */,
 			);
 			path = Models;
@@ -3708,11 +3721,11 @@
 				602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */,
 				602B9CD12118E15200BD3D60 /* KYCOnboardingNavigationController.swift */,
 				AA126CE4212C99FF005886A3 /* KYCPageViewFactory.swift */,
-				602B9CD22118E15200BD3D60 /* KYCVerifyIdentityController.swift */,
 				602B9CD62118E15200BD3D60 /* KYCWelcomeController.swift */,
 				601F5EE0211B32AA002697AB /* OnfidoController.swift */,
 				602B9CCF2118E15200BD3D60 /* Address */,
 				602B9CB72118E15200BD3D60 /* CountrySelector */,
+				AA126D77212DEAD4005886A3 /* Identity Verification */,
 				AAF2AEFB2123930A00687E30 /* Information */,
 				602B9CB22118E15200BD3D60 /* Mobile Number */,
 				602B9CBA2118E15200BD3D60 /* Models */,
@@ -6045,6 +6058,33 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
+		AA126D77212DEAD4005886A3 /* Identity Verification */ = {
+			isa = PBXGroup;
+			children = (
+				602B9CD22118E15200BD3D60 /* KYCVerifyIdentityController.swift */,
+				AA126D9D212E187F005886A3 /* Models */,
+				AA126D9C212E1875005886A3 /* Service */,
+			);
+			path = "Identity Verification";
+			sourceTree = "<group>";
+		};
+		AA126D9C212E1875005886A3 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				AA126D90212E17A3005886A3 /* OnfidoService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		AA126D9D212E187F005886A3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA126DA4212E2C3B005886A3 /* OnfidoCredentials.swift */,
+				AA126D9E212E189C005886A3 /* OnfidoUser.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		AA31A7B82098DFB900FE6268 /* Side Menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -7186,6 +7226,7 @@
 				C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				602B9D1C2118E26300BD3D60 /* PostalAddress.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
+				AA126D92212E17A3005886A3 /* OnfidoService.swift in Sources */,
 				3AC4F97921234930003AA207 /* Storyboardable.swift in Sources */,
 				602B9D0B2118E23200BD3D60 /* KYCInformationController.swift in Sources */,
 				AACE320B20978EB100B7B806 /* MockWallet.swift in Sources */,
@@ -7223,6 +7264,7 @@
 				AA7E7740210BA48B009DFB4C /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
+				AA126DA6212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
 				AA7133B621220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
 				AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */,
 				AAA6648B2123426A009C1C64 /* PrimaryButtonContainer.swift in Sources */,
@@ -7235,6 +7277,7 @@
 				AAE94DCF20C25F37005A3595 /* MockNetworkManager.swift in Sources */,
 				AA126CDD212C94CB005886A3 /* KYCSessionTokenResponse.swift in Sources */,
 				AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */,
+				AA126DA0212E189C005886A3 /* OnfidoUser.swift in Sources */,
 				51135707209CF68500056D65 /* BackupViewController.swift in Sources */,
 				AA94965F20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */,
 				AACE31CA2092A99B00B7B806 /* AssetAddress.swift in Sources */,
@@ -7262,6 +7305,7 @@
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
+				AA126DA3212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift in Sources */,
 				602B9D262118E27100BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
 				51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
@@ -7556,6 +7600,7 @@
 				23DF4EFC1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m in Sources */,
 				C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */,
 				C71859541F4B647100745A87 /* SendEtherViewController.m in Sources */,
+				AA126D91212E17A3005886A3 /* OnfidoService.swift in Sources */,
 				51DC2F6020B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				84B601CA197AD03800DA1829 /* BCModalView.m in Sources */,
 				51C2ADD620BDECE700D66108 /* String+EscapeJS.swift in Sources */,
@@ -7658,6 +7703,7 @@
 				231FF2CD1B56F9F1009EEB02 /* SettingsWebViewController.m in Sources */,
 				C723F3461F61D35300A858A9 /* TransactionDetailViewModel.m in Sources */,
 				C79672841FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m in Sources */,
+				AA126DA2212E1CE2005886A3 /* OnfidoCreateApplicantRequest.swift in Sources */,
 				C769B2DA1FC4ABA9009632B6 /* ContinueButtonInputAccessoryView.m in Sources */,
 				51D17A9920A33A700071E7E0 /* PrivateKeyReader.swift in Sources */,
 				3A26AFA2212B58A8003A8A08 /* ExchangeListDataProvider.swift in Sources */,
@@ -7749,6 +7795,7 @@
 				C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
 				3A26AF99212B36F2003A8A08 /* HomebrewExchangeCreateViewController.swift in Sources */,
+				AA126DA5212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
 				602B9CF72118E15300BD3D60 /* KYCVerifyIdentityController.swift in Sources */,
 				513913F02081206C002578FD /* UserDefaults.swift in Sources */,
@@ -7791,6 +7838,7 @@
 				3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */,
 				AA7133D921223AE000CB2AA9 /* Arrays.swift in Sources */,
 				AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
+				AA126D9F212E189C005886A3 /* OnfidoUser.swift in Sources */,
 				AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */,
 				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				3A26AF5821273BC9003A8A08 /* ExchangeListViewCell.swift in Sources */,

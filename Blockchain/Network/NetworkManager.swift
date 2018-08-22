@@ -60,41 +60,6 @@ class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
-    // MARK: - HTTP Requests
-
-    /// Performs a network request and returns an Observable emitting the HTTPURLResponse along with the
-    /// decoded response data. The response data will be attempted to be decoded as a JSON, however if it
-    /// fails, it will be attempted to be decoded as a String. It is up to the observer to check the type.
-    ///
-    /// - Parameters:
-    ///   - url: the URL for the request (e.g. "http://blockchain.info/uuid-generator?n=3")
-    ///   - method: the HTTP method
-    ///   - parameters: the parameters for the request
-    /// - Returns: a Single returning the HTTPURLResponse and the decoded response data
-    func requestJsonOrString(
-        _ url: String,
-        method: HttpMethod,
-        parameters: URLParameters? = nil
-    ) -> Single<(HTTPURLResponse, Any)> {
-        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
-            let request = SessionManager.default.request(
-                url,
-                method: method.toAlamofireHTTPMethod,
-                parameters: parameters,
-                encoding: URLEncoding.default,
-                headers: nil
-            )
-            observer(.success(request))
-            return Disposables.create()
-        }
-        return dataRequestSingle.flatMap { request -> Single<(HTTPURLResponse, Any)> in
-            return request.responseJSONSingle()
-                .catchError { _ -> Single<(HTTPURLResponse, Any)> in
-                    return request.responseStringSingle()
-                }
-        }
-    }
-
     // MARK: - URLSessionDelegate
 
     // TODO: find place to put UIApplication.shared.isNetworkActivityIndicatorVisible
@@ -126,7 +91,83 @@ class NetworkManager: NSObject, URLSessionDelegate {
     }
 }
 
+// MARK: - Rx
+
+extension NetworkManager {
+
+    func requestData(
+        _ url: String,
+        method: HttpMethod,
+        parameters: URLParameters? = nil,
+        headers: [String: String]? = nil
+    ) -> Single<(HTTPURLResponse, Data)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
+            let request = SessionManager.default.request(
+                url,
+                method: method.toAlamofireHTTPMethod,
+                parameters: parameters,
+                encoding: URLEncoding.default,
+                headers: headers
+            )
+            observer(.success(request))
+            return Disposables.create()
+        }
+        return dataRequestSingle.flatMap { $0.responseData() }
+    }
+
+    /// Performs a network request and returns an Observable emitting the HTTPURLResponse along with the
+    /// decoded response data. The response data will be attempted to be decoded as a JSON, however if it
+    /// fails, it will be attempted to be decoded as a String. It is up to the observer to check the type.
+    ///
+    /// - Parameters:
+    ///   - url: the URL for the request (e.g. "http://blockchain.info/uuid-generator?n=3")
+    ///   - method: the HTTP method
+    ///   - parameters: the parameters for the request
+    /// - Returns: a Single returning the HTTPURLResponse and the decoded response data
+    func requestJsonOrString(
+        _ url: String,
+        method: HttpMethod,
+        parameters: URLParameters? = nil,
+        headers: [String: String]? = nil
+    ) -> Single<(HTTPURLResponse, Any)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
+            let request = SessionManager.default.request(
+                url,
+                method: method.toAlamofireHTTPMethod,
+                parameters: parameters,
+                encoding: URLEncoding.default,
+                headers: headers
+            )
+            observer(.success(request))
+            return Disposables.create()
+        }
+        return dataRequestSingle.flatMap { request -> Single<(HTTPURLResponse, Any)> in
+            return request.responseJSONSingle()
+                .catchError { _ -> Single<(HTTPURLResponse, Any)> in
+                    return request.responseStringSingle()
+            }
+        }
+    }
+}
+
 extension DataRequest {
+    func responseData() -> Single<(HTTPURLResponse, Data)> {
+        return Single.create { [unowned self] observer -> Disposable in
+            self.responseData { dataResponse in
+                if let error = dataResponse.result.error {
+                    observer(.error(error))
+                    return
+                }
+                guard let response = dataResponse.response, let result = dataResponse.result.value else {
+                    observer(.error(NetworkManager.unknownNetworkError))
+                    return
+                }
+                observer(.success((response, result)))
+            }
+            return Disposables.create()
+        }
+    }
+
     func responseJSONSingle() -> Single<(HTTPURLResponse, Any)> {
         return Single.create { [unowned self] observer -> Disposable in
             self.responseJSON { jsonResponse in

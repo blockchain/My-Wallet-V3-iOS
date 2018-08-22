@@ -50,7 +50,7 @@ final class KYCAuthenticationService {
                 let headers: [String: String] = [
                     HttpHeaderField.authorization: apiToken.token,
                     HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
-                    HttpHeaderField.clientType: HttpHeaderValue.clientTypeIos,
+                    HttpHeaderField.clientType: HttpHeaderValue.clientTypeApp,
                     HttpHeaderField.deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
                     HttpHeaderField.walletGuid: self.wallet.guid,
                     HttpHeaderField.walletEmail: self.wallet.getEmail()

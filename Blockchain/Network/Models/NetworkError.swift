@@ -15,4 +15,7 @@ internal enum NetworkError: Error {
 
     /// A generic error with an optional error message
     case generic(message: String?)
+
+    /// An error when the response status code is not in the 200s
+    case badStatusCode
 }
