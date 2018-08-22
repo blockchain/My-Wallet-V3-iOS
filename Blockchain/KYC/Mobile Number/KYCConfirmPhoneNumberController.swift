@@ -70,7 +70,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
             Logger.shared.warning("userIs is nil.")
             return
         }
-        presenter.startVerification(number: phoneNumber, userId: userId)
+        presenter.startVerification(number: phoneNumber)
     }
 
     @IBAction func onNextTapped(_ sender: Any) {

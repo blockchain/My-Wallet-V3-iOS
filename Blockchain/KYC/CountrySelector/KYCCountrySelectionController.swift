@@ -128,12 +128,6 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
         fetchListOfCountries()
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TICKET: IOS-1142 - call coordinator?
-    }
-
     // MARK: - Private Methods
 
     private func fetchListOfCountries() {

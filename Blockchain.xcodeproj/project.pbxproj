@@ -402,6 +402,8 @@
 		AA126CFE212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126CFC212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift */; };
 		AA126D12212D1B2B005886A3 /* KYCUpdateAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */; };
 		AA126D13212D1B2B005886A3 /* KYCUpdateAddressRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */; };
+		AA126D2A212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */; };
+		AA126D2B212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */; };
 		AA1E522B2097CA360099BD10 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */; };
 		AA1E522D2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */; };
 		AA1E522F2097CC010099BD10 /* WalletAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */; };
@@ -2828,6 +2830,7 @@
 		AA126CE4212C99FF005886A3 /* KYCPageViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageViewFactory.swift; sourceTree = "<group>"; };
 		AA126CFC212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdatePersonalDetailsRequest.swift; path = Network/KYCUpdatePersonalDetailsRequest.swift; sourceTree = "<group>"; };
 		AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdateAddressRequest.swift; path = Network/KYCUpdateAddressRequest.swift; sourceTree = "<group>"; };
+		AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KYCUpdateMobileRequest.swift; path = Network/KYCUpdateMobileRequest.swift; sourceTree = "<group>"; };
 		AA1E522A2097CA360099BD10 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		AA1E522C2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Pin.swift"; sourceTree = "<group>"; };
 		AA1E522E2097CC010099BD10 /* WalletAuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAuthDelegate.swift; sourceTree = "<group>"; };
@@ -5888,6 +5891,7 @@
 				AA126CD6212C94CB005886A3 /* KYCCreateUserResponse.swift */,
 				AA126CD7212C94CB005886A3 /* KYCSessionTokenResponse.swift */,
 				AA126D11212D1B2B005886A3 /* KYCUpdateAddressRequest.swift */,
+				AA126D29212D23FE005886A3 /* KYCUpdateMobileRequest.swift */,
 				AA126CFC212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift */,
 			);
 			name = Network;
@@ -7149,6 +7153,7 @@
 				AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				51FC1B112127473D007BEB18 /* UIView.swift in Sources */,
 				51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
+				AA126D2B212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */,
 				AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */,
 				AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */,
 				51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */,
@@ -7287,6 +7292,7 @@
 				AAE94F3520C70B97005A3595 /* AssetURLPayload.swift in Sources */,
 				678AD5E919D4610000E9A778 /* BCModalContentView.m in Sources */,
 				84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */,
+				AA126D2A212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */,
 				23444F8A1DCD218F00573C8C /* BTCAddress.m in Sources */,
 				9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */,
 				9F7480E315140EF200BC4292 /* TabViewController.m in Sources */,
