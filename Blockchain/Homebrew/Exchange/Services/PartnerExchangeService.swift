@@ -21,6 +21,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
     lazy var wallet: Wallet = {
         let wallet = WalletManager.shared.wallet
+        WalletManager.shared.exchangeDelegate = self
         return wallet
     }()
 
@@ -31,12 +32,6 @@ class PartnerExchangeService: PartnerExchangeAPI {
     // MARK: Private Properties
 
     fileprivate var completionBlock: ExchangeCompletion?
-
-    // MARK: Lifecycle
-
-    init() {
-        WalletManager.shared.exchangeDelegate = self
-    }
 
     // MARK: ExchangeListAPI
 
