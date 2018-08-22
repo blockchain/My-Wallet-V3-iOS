@@ -13,6 +13,12 @@ class AssetConversionRateView: UIView {
     @IBOutlet var smallLabel: UILabel!
 
     private let viewModel = AssetConversionRateViewModel()
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        largeLabel.textColor = UIColor.gray5
+        smallLabel.textColor = UIColor.gray5
+    }
 }
 
 extension AssetConversionRateView {
@@ -31,7 +37,7 @@ extension AssetConversionRateView {
             return
         }
         let prefix = "1 " + base.symbol + " = "
-        self.largeLabel.text = prefix + counterAssetValue.stringValue + " " + counter.symbol
-        self.smallLabel.text = prefix + fiatSymbol + counterFiatValue.stringValue
+        largeLabel.text = prefix + counterAssetValue.stringValue + " " + counter.symbol
+        smallLabel.text = prefix + fiatSymbol + counterFiatValue.stringValue
     }
 }
