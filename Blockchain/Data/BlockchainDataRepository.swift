@@ -41,11 +41,22 @@ import RxSwift
         )
     }
 
+    var onfidoCredentials: Single<[VerificationPayload]> {
+        return fetchData(
+            cachedValue: cachedProviderCredentials,
+            networkValue: authenticationService.getKycSessionToken().flatMap { token in
+                let headers = [HttpHeaderField.authorization: token.token]
+                return KYCNetworkRequest.request(get: .credentials, headers: headers, type: [VerificationPayload].self)
+        })
+    }
+
     // MARK: - Private Properties
 
     private var cachedCountries = BehaviorRelay<Countries?>(value: nil)
 
     private var cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+
+    private var cachedProviderCredentials = BehaviorRelay<[VerificationPayload]?>(value: nil)
 
     // MARK: - Public Methods
 
@@ -53,6 +64,7 @@ import RxSwift
     func clearCache() {
         cachedUser = BehaviorRelay<KYCUser?>(value: nil)
         cachedCountries = BehaviorRelay<Countries?>(value: nil)
+        cachedProviderCredentials = BehaviorRelay<[VerificationPayload]?>(value: nil)
     }
 
     // MARK: - Private Methods

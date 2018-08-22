@@ -8,6 +8,7 @@
 
 import UIKit
 import Onfido
+import RxSwift
 
 struct VerificationPayload: Codable {
     var provider: String
@@ -93,21 +94,12 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     func cedentialsRequest(provider: VerificationProviders, completion: @escaping (VerificationPayload) -> Void) {
         switch provider {
         case .onfido:
-            KYCNetworkRequest(get: .credentials, taskSuccess: { responseData in
-                do {
-                    let decoder = JSONDecoder()
-                    let verificationVendors = try decoder.decode([VerificationPayload].self, from: responseData)
-                    guard let firstProvider = verificationVendors.first else {
-                        return
-                    }
-                    completion(firstProvider)
-                } catch {
-                    Logger.shared.error("Decoding Failed")
-                }
-            }, taskFailure: { error in
-                // TODO: handle error
-                Logger.shared.error(error.debugDescription)
-            })
+            _ = BlockchainDataRepository.shared.onfidoCredentials
+                .subscribeOn(MainScheduler.asyncInstance)
+                .observeOn(MainScheduler.instance)
+                .subscribe(onSuccess: nil, onError: { error in
+                    Logger.shared.error("Failed to fetch credentials. Error: \(error.localizedDescription)")
+                })
         }
     }
     /// Begins identity verification and presents the view
