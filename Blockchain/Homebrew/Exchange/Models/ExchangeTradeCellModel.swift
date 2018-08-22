@@ -10,12 +10,6 @@ import Foundation
 
 struct ExchangeTradeCellModel: Decodable {
 
-    enum Currency: String, Decodable {
-        case btc = "BTC"
-        case eth = "ETH"
-        case bch = "BCH"
-    }
-
     enum TradeStatus: String {
         case noDeposits = "no_deposits"
         case received = "received"
@@ -74,13 +68,13 @@ struct ExchangeTradeCellModel: Decodable {
     }
 
     let status: TradeStatus
-    let currency: Currency
+    let assetType: AssetType
     let transactionDate: Date
     let displayValue: String
 
     init(with trade: ExchangeTrade) {
         status = TradeStatus(shapeshift: trade.status)
-        currency = Currency(rawValue: trade.withdrawalCurrency()) ?? .btc
+        assetType = AssetType(stringValue: trade.withdrawalCurrency())
         transactionDate = trade.date
         displayValue = trade.displayAmount() ?? ""
     }
@@ -97,10 +91,29 @@ struct ExchangeTradeCellModel: Decodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         transactionDate = try values.decode(Date.self, forKey: .createdAt)
-        currency = try values.decode(Currency.self, forKey: .currency)
+        let asset = try values.decode(String.self, forKey: .currency)
         displayValue = try values.decode(String.self, forKey: .quantity)
         let statusValue = try values.decode(String.self, forKey: .status)
         status = TradeStatus(homebrew: statusValue)
+        assetType = AssetType(stringValue: asset)
+    }
+}
+
+extension ExchangeTradeCellModel: Equatable {
+    static func ==(lhs: ExchangeTradeCellModel, rhs: ExchangeTradeCellModel) -> Bool {
+        return lhs.assetType == rhs.assetType &&
+        lhs.displayValue == rhs.displayValue &&
+        lhs.status == rhs.status &&
+        lhs.transactionDate == rhs.transactionDate
+    }
+}
+
+extension ExchangeTradeCellModel: Hashable {
+    var hashValue: Int {
+        return assetType.hashValue ^
+        displayValue.hashValue ^
+        status.hashValue ^
+        transactionDate.hashValue
     }
 }
 

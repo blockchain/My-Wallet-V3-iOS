@@ -30,7 +30,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
     // MARK: Private Properties
 
-    fileprivate var completionBlock: PartnerExchangeCompletion?
+    fileprivate var completionBlock: ExchangeCompletion?
 
     // MARK: Lifecycle
 
@@ -40,7 +40,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
     // MARK: ExchangeListAPI
 
-    func fetchTransactions(with completion: @escaping PartnerExchangeCompletion) {
+    func fetchTransactions(with completion: @escaping ExchangeCompletion) {
         completionBlock = completion
         guard wallet.isFetchingExchangeTrades == false else { return }
         wallet.getExchangeTrades()
@@ -49,6 +49,10 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
 extension PartnerExchangeService: WalletExchangeDelegate {
     func didGetExchangeTrades(trades: NSArray) {
+        if let block = completionBlock, trades.count == 0 {
+            block(nil, nil)
+            return
+        }
         guard let input = trades as? [ExchangeTrade] else { return }
         let models: [ExchangeTradeCellModel] = input.map({ return ExchangeTradeCellModel(with: $0) })
         if let block = completionBlock {

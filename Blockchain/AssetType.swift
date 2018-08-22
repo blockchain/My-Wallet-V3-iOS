@@ -25,6 +25,20 @@ extension AssetType {
         }
     }
 
+    init(stringValue: String) {
+        switch stringValue {
+        case "BTC":
+            self = .bitcoin
+        case "BCH":
+            self = .bitcoinCash
+        case "ETH":
+            self = .ethereum
+        default:
+            assertionFailure("\(stringValue) is not a supported type")
+            self = .bitcoin
+        }
+    }
+
     var legacy: LegacyAssetType {
         switch self {
         case .bitcoin:
