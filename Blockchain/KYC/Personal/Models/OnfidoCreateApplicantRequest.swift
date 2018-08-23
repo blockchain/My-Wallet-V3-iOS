@@ -23,9 +23,11 @@ struct OnfidoCreateApplicantRequest: Codable {
 
 extension OnfidoCreateApplicantRequest {
     init?(kycUser: KYCUser) {
-        guard let personalDetails = kycUser.personalDetails else { return nil }
-        guard let first = personalDetails.firstName else { return nil }
-        guard let last = personalDetails.lastName else { return nil }
+        guard let personalDetails = kycUser.personalDetails,
+            let first = personalDetails.firstName,
+            let last = personalDetails.lastName else {
+                return nil
+        }
         self.firstName = first
         self.lastName = last
         self.email = personalDetails.email
