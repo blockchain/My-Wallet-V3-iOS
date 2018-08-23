@@ -25,26 +25,11 @@ import RxSwift
 
     private let walletManager: WalletManager
 
-    private let walletService: WalletService
-
     private var disposable: Disposable?
 
+    // MARK: - Navigation
     private var exchangeViewController: ExchangeOverviewViewController?
     private var rootViewController: UIViewController?
-
-    private init(
-        walletManager: WalletManager = WalletManager.shared,
-        walletService: WalletService = WalletService.shared
-    ) {
-        self.walletManager = walletManager
-        self.walletService = walletService
-        super.init()
-    }
-
-    deinit {
-        disposable?.dispose()
-        disposable = nil
-    }
 
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
@@ -107,8 +92,48 @@ import RxSwift
             viewController.present(navigationController, animated: true)
         }
     }
+
+    private func showCreateExchangetype(type: ExchangeType) {
+        switch type {
+        case .homebrew:
+            // show homebrew
+            let exchangeCreateViewController = HomebrewExchangeCreateViewController()
+            exchangeCreateViewController.delegate = self
+            self.createinterface = exchangeCreateViewController
+            // present view controller
+        default:
+            // show shapeshift
+            Logger.shared.debug("Not yet implemented")
+        }
+    }
+
+    // MARK: - Services
+    private let walletService: WalletService
+    private let marketsService: MarketsService
+    private let exchangeService: ExchangeService
+
+    // MARK: - Interfaces
+    fileprivate weak var createinterface: ExchangeCreateInterface?
+
+    // MARK: - Lifecycle
+    private init(
+        walletManager: WalletManager = WalletManager.shared,
+        walletService: WalletService = WalletService.shared
+        ) {
+        self.walletManager = walletManager
+        self.walletService = walletService
+        self.marketsService = MarketsService()
+        self.exchangeService = ExchangeService()
+        super.init()
+    }
+
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
 }
 
+// MARK: - Coordination
 @objc extension ExchangeCoordinator {
     func start(rootViewController: UIViewController) {
         self.rootViewController = rootViewController
@@ -117,5 +142,35 @@ import RxSwift
 
     func reloadSymbols() {
         exchangeViewController?.reloadSymbols()
+    }
+}
+
+// MARK: - Exchange Creation
+extension ExchangeCoordinator: ExchangeCreateDelegate {
+    func onChangeFrom(assetType: AssetType) {
+        marketsService.pair?.from = assetType
+    }
+
+    func onChangeTo(assetType: AssetType) {
+        marketsService.pair?.to = assetType
+    }
+
+    func onContinueButtonTapped() {
+
+    }
+
+    func onChangeAmountFieldText() {
+        marketsService.onChangeAmountFieldText()
+    }
+}
+
+extension ExchangeCoordinator {
+    func subscribeToRates() {
+        disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
+            // WIP
+            self.createinterface?.exchangeRateUpdated("rate")
+        }, onError: { (error) in
+            Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
+        })
     }
 }

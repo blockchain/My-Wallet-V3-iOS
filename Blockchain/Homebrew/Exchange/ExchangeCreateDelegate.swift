@@ -8,6 +8,9 @@
 
 import Foundation
 
-protocol ExchangeTradeDelegate: class {
+protocol ExchangeCreateDelegate: class {
     func onContinueButtonTapped()
+    func onChangeAmountFieldText()
+    func onChangeFrom(assetType: AssetType)
+    func onChangeTo(assetType: AssetType)
 }

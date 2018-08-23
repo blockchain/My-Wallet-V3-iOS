@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc protocol ExchangeCreateViewDelegate: AddressSelectionDelegate, UITextFieldDelegate, ContinueButtonInputAccessoryViewDelegate {
+@objc protocol ExchangeCreateViewDelegate: AddressSelectionDelegate, UITextFieldDelegate {
     func assetToggleButtonTapped()
     func useMinButtonTapped()
     func useMaxButtonTapped()
@@ -540,7 +540,7 @@ private extension ExchangeCreateView {
 
 extension ExchangeCreateView: ContinueButtonInputAccessoryViewDelegate {
     func closeButtonTapped() {
-        delegate?.closeButtonTapped()
+        hideKeyboard()
     }
 }
 

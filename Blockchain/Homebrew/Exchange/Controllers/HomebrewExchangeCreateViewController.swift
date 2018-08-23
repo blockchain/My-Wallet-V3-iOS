@@ -12,18 +12,16 @@ class HomebrewExchangeCreateViewController: UIViewController {
 
     // MARK: Public Properties
 
-    weak var delegate: ExchangeTradeDelegate?
+    weak var delegate: ExchangeCreateDelegate?
 
     // MARK: Private Properties
 
-    fileprivate var tradeCoordinator: ExchangeTradeCoordinator!
     fileprivate var exchangeCreateView: ExchangeCreateView!
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tradeCoordinator = ExchangeTradeCoordinator(interface: self)
 
         exchangeCreateView = ExchangeCreateView(frame: view.bounds)
         view.addSubview(exchangeCreateView)
@@ -36,13 +34,17 @@ class HomebrewExchangeCreateViewController: UIViewController {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
+extension HomebrewExchangeCreateViewController: ExchangeCreateInterface {
     func continueButtonEnabled(_ enabled: Bool) {
         if enabled {
             exchangeCreateView.enablePaymentButtons()
         } else {
             exchangeCreateView.disablePaymentButtons()
         }
+    }
+
+    func exchangeRateUpdated(_ rate: String) {
+
     }
 }
 
@@ -61,14 +63,9 @@ extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ContinueButtonInputAccessoryViewDelegate {
-    func closeButtonTapped() {
-        exchangeCreateView.hideKeyboard()
-    }
-}
-
 extension HomebrewExchangeCreateViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        delegate?.onChangeAmountFieldText()
         return true
     }
 }
@@ -79,10 +76,10 @@ extension HomebrewExchangeCreateViewController: AddressSelectionDelegate {
     }
 
     func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
-
+        delegate?.onChangeFrom(assetType: AssetType.from(legacyAssetType: asset))
     }
 
     func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
-
+        delegate?.onChangeTo(assetType: AssetType.from(legacyAssetType: asset))
     }
 }
