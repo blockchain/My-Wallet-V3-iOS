@@ -26,8 +26,10 @@ class HomebrewExchangeService: HomebrewExchangeAPI {
 
         var request = URLRequest(url: endpoint)
         request.httpMethod = "GET"
-        request.allHTTPHeaderFields = ["Content-Type":"application/json",
-                                       "Accept": "application/json"]
+        request.allHTTPHeaderFields = [
+            HttpHeaderField.contentType: HttpHeaderValue.json,
+            HttpHeaderField.accept: HttpHeaderValue.json
+        ]
         if let currentTask = task {
             guard currentTask.currentRequest != request else { return }
         }

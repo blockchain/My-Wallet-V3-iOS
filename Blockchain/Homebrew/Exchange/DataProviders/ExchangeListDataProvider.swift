@@ -64,7 +64,12 @@ extension ExchangeListDataProvider: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = models?[indexPath.row] else { return UITableViewCell() }
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ExchangeListViewCell.identifier, for: indexPath) as? ExchangeListViewCell else { return UITableViewCell() }
+        let identifier = ExchangeListViewCell.identifier
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: identifier,
+            for: indexPath
+            ) as? ExchangeListViewCell else { return UITableViewCell() }
+        
         cell.configure(with: model)
         return cell
     }
@@ -73,7 +78,11 @@ extension ExchangeListDataProvider: UITableViewDataSource {
 extension ExchangeListDataProvider: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: ExchangeListOrderHeaderView.self)) as? ExchangeListOrderHeaderView else { return nil }
+        let identifier = String(describing: ExchangeListOrderHeaderView.self)
+        guard let header = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: identifier
+            ) as? ExchangeListOrderHeaderView else { return nil }
+        
         header.actionHandler = { [weak self] in
             guard let this = self else { return }
             this.delegate?.newOrderTapped(this)
