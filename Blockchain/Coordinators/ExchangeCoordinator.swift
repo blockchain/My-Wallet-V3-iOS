@@ -99,7 +99,7 @@ import RxSwift
             // show homebrew
             let exchangeCreateViewController = HomebrewExchangeCreateViewController()
             exchangeCreateViewController.delegate = self
-            self.createinterface = exchangeCreateViewController
+            self.createInterface = exchangeCreateViewController
             // present view controller
         default:
             // show shapeshift
@@ -113,7 +113,7 @@ import RxSwift
     private let exchangeService: ExchangeService
 
     // MARK: - Interfaces
-    fileprivate weak var createinterface: ExchangeCreateInterface?
+    fileprivate weak var createInterface: ExchangeCreateInterface?
 
     // MARK: - Lifecycle
     private init(
@@ -168,7 +168,7 @@ extension ExchangeCoordinator {
     func subscribeToRates() {
         disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
             // WIP
-            self.createinterface?.exchangeRateUpdated("rate")
+            self.createInterface?.exchangeRateUpdated("rate")
         }, onError: { (error) in
             Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
         })
