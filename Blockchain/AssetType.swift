@@ -34,8 +34,7 @@ extension AssetType {
         case "ETH":
             self = .ethereum
         default:
-            assertionFailure("\(stringValue) is not a supported type")
-            self = .bitcoin
+            fatalError("This is not a supported value: \(stringValue)")
         }
     }
 
