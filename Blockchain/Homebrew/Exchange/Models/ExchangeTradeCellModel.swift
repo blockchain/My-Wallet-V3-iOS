@@ -98,6 +98,7 @@ struct ExchangeTradeCellModel: Decodable {
         if let asset = AssetType(stringValue: asset) {
             assetType = asset
         } else {
+            // TODO: Show error alert
             fatalError("Failed to map \(asset)")
         }
     }
