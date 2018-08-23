@@ -119,7 +119,7 @@ import RxSwift
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared
-        ) {
+    ) {
         self.walletManager = walletManager
         self.walletService = walletService
         self.marketsService = MarketsService()
