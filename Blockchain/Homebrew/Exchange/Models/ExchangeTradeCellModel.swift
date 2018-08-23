@@ -12,7 +12,6 @@ struct ExchangeTradeCellModel: Decodable {
 
     enum TradeStatus {
         case noDeposits
-        case received
         case complete
         case resolved
         case inProgress
@@ -45,16 +44,13 @@ struct ExchangeTradeCellModel: Decodable {
 
         init(shapeshift: String) {
             switch shapeshift {
-            case "no_deposits":
-                self = .noDeposits
-            case "received":
-                self = .received
+            case "no_deposits",
+                 "received":
+                self = .inProgress
             case "complete":
                 self = .complete
             case "resolved":
                 self = .resolved
-            case "IN_PROGRESS":
-                self = .inProgress
             case "CANCELLED":
                 self = .cancelled
             case "failed":
@@ -138,7 +134,6 @@ extension ExchangeTradeCellModel.TradeStatus {
         case .complete:
             return .green
         case .noDeposits,
-             .received,
              .inProgress,
              .none:
             return .grayBlue
@@ -155,7 +150,6 @@ extension ExchangeTradeCellModel.TradeStatus {
         case .complete:
             return LocalizationConstants.Exchange.complete
         case .noDeposits,
-             .received,
              .inProgress,
              .none:
             return LocalizationConstants.Exchange.inProgress
