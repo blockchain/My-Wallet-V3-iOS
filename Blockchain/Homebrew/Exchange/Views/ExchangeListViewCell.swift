@@ -33,7 +33,21 @@ class ExchangeListViewCell: UITableViewCell {
     }
 
     class func estimatedHeight(for model: ExchangeTradeCellModel) -> CGFloat {
-        // TODO: Calculate height given string values/model
-        return 75.0
+        let timestamp = model.formattedDate
+        let status = model.status.displayValue
+        
+        guard let timeFont = UIFont(name: Constants.FontNames.montserratRegular, size: 12) else { return 0.0 }
+        guard let statusFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16) else { return 0.0 }
+        
+        let timestampHeight = NSAttributedString(string: timestamp, attributes: [NSAttributedStringKey.font: timeFont]).height
+        let statusHeight = NSAttributedString(string: status, attributes: [NSAttributedStringKey.font: statusFont]).height
+        
+        let labelHeights = timestampHeight + statusHeight
+        
+        return separatorHeight +
+            timestampVerticalPadding +
+            timestampToStatusPadding +
+            statusToBottomPadding +
+            labelHeights
     }
 }

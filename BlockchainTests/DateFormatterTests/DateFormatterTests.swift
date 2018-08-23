@@ -2,7 +2,7 @@
 //  DateFormatterTests.swift
 //  Blockchain
 //
-//  Created by AlexM on 8/23/18.
+//  Created by Alex McGregor on 8/23/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
