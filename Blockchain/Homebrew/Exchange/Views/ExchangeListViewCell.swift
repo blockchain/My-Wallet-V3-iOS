@@ -32,7 +32,7 @@ class ExchangeListViewCell: UITableViewCell {
         amountButton.setTitle(cellModel.displayValue, for: .normal)
     }
 
-    class func estimatedHeight() -> CGFloat {
+    class func estimatedHeight(for model: ExchangeTradeCellModel) -> CGFloat {
         // TODO: Calculate height given string values/model
         return 75.0
     }

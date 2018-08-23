@@ -83,7 +83,8 @@ extension ExchangeListDataProvider: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ExchangeListViewCell.estimatedHeight()
+        guard let item = models?[indexPath.row] else { return tableView.estimatedRowHeight }
+        return ExchangeListViewCell.estimatedHeight(for: item)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
