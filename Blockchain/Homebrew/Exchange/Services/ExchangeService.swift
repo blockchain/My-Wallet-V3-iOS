@@ -31,8 +31,8 @@ class ExchangeService: NSObject {
     weak var delegate: ExchangeServiceDelegate?
 
     fileprivate var tradeModels: Set<ExchangeTradeCellModel> = []
-    fileprivate let partnerAPI: PartnerExchangeAPI
-    fileprivate let homebrewAPI: HomebrewExchangeAPI
+    fileprivate let partnerAPI: PartnerExchangeAPI = PartnerExchangeService()
+    fileprivate let homebrewAPI: HomebrewExchangeAPI = HomebrewExchangeService()
     
     fileprivate var partnerOperation: AsyncBlockOperation!
     fileprivate var homebrewOperation: AsyncBlockOperation!
@@ -41,12 +41,6 @@ class ExchangeService: NSObject {
         queue.qualityOfService = .userInitiated
         return queue
     }()
-    
-    override init() {
-        partnerAPI = PartnerExchangeService()
-        homebrewAPI = HomebrewExchangeService()
-        super.init()
-    }
     
     func getPartnerTrades() {
         delegate?.exchangeServiceDidBeginUpdates(self)

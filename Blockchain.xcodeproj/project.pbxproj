@@ -90,7 +90,7 @@
 		3A26AF7221274EF9003A8A08 /* ExchangeTradeCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */; };
 		3A26AF7421277931003A8A08 /* ExchangeListOrderHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7321277931003A8A08 /* ExchangeListOrderHeaderView.swift */; };
 		3A26AF7621277944003A8A08 /* ExchangeListOrderHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A26AF7521277944003A8A08 /* ExchangeListOrderHeaderView.xib */; };
-		3A26AF7A212B0CCB003A8A08 /* ExchangeListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */; };
+		3A26AF7A212B0CCB003A8A08 /* PartnerExchangeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */; };
 		3A26AF7D212B13FA003A8A08 /* PartnerExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7C212B13FA003A8A08 /* PartnerExchangeService.swift */; };
 		3A26AF94212B36B2003A8A08 /* ExchangeTradeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF90212B36B1003A8A08 /* ExchangeTradeCoordinator.swift */; };
 		3A26AF95212B36B2003A8A08 /* ExchangeTradeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF91212B36B1003A8A08 /* ExchangeTradeDelegate.swift */; };
@@ -1163,7 +1163,7 @@
 		3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTradeCellModel.swift; sourceTree = "<group>"; };
 		3A26AF7321277931003A8A08 /* ExchangeListOrderHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListOrderHeaderView.swift; sourceTree = "<group>"; };
 		3A26AF7521277944003A8A08 /* ExchangeListOrderHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExchangeListOrderHeaderView.xib; sourceTree = "<group>"; };
-		3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListAPI.swift; sourceTree = "<group>"; };
+		3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerExchangeAPI.swift; sourceTree = "<group>"; };
 		3A26AF7C212B13FA003A8A08 /* PartnerExchangeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerExchangeService.swift; sourceTree = "<group>"; };
 		3A26AF90212B36B1003A8A08 /* ExchangeTradeCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeTradeCoordinator.swift; sourceTree = "<group>"; };
 		3A26AF91212B36B1003A8A08 /* ExchangeTradeDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeTradeDelegate.swift; sourceTree = "<group>"; };
@@ -3314,7 +3314,7 @@
 		3A26AF78212B0CB6003A8A08 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				3A26AF79212B0CCB003A8A08 /* ExchangeListAPI.swift */,
+				3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -7452,7 +7452,7 @@
 				C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */,
 				23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */,
 				23E2FC081C7F60E7004CFF79 /* BCInsetLabel.m in Sources */,
-				3A26AF7A212B0CCB003A8A08 /* ExchangeListAPI.swift in Sources */,
+				3A26AF7A212B0CCB003A8A08 /* PartnerExchangeAPI.swift in Sources */,
 				AA1E522D2097CA480099BD10 /* AuthenticationCoordinator+Pin.swift in Sources */,
 				23444F871DCD217E00573C8C /* BTCNetwork.m in Sources */,
 				C7BEE14A20C9775B0096003B /* WalletOptions.swift in Sources */,

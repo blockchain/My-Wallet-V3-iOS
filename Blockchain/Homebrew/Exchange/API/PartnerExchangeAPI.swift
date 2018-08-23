@@ -1,5 +1,5 @@
 //
-//  ExchangeListAPI.swift
+//  PartnerExchangeAPI.swift
 //  Blockchain
 //
 //  Created by Alex McGregor on 8/20/18.
