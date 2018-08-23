@@ -20,9 +20,7 @@ class ExchangeListOrderHeaderView: UITableViewHeaderFooterView {
     // MARK: Actions
 
     @IBAction func newOrderTapped(_ sender: UIButton) {
-        if let block = actionHandler {
-            block()
-        }
+        actionHandler?()
     }
 
     static func estimatedHeight() -> CGFloat {
