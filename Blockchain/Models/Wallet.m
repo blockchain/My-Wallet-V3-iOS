@@ -4090,7 +4090,6 @@
     if ([self.delegate respondsToSelector:@selector(didFailToGetExchangeTrades:)]) {
         [self.delegate didFailToGetExchangeTrades:error];
     }
-    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_get_exchange_rate_success:(ExchangeRate *)exchangeRate
