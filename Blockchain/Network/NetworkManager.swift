@@ -60,47 +60,45 @@ class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
-    // MARK: - URLSessionDelegate
+    // MARK: - Rx
 
-    // TODO: find place to put UIApplication.shared.isNetworkActivityIndicatorVisible
-
-    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {}
-
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping AuthChallengeHandler) {
-        let host = challenge.protectionSpace.host
-        Logger.shared.info("Received challenge from \(host)")
-
-        if BlockchainAPI.PartnerHosts.rawValues.contains(host) {
-            completionHandler(.performDefaultHandling, nil)
-        } else {
-            CertificatePinner.shared.didReceive(challenge, completion: completionHandler)
+    func request<ResponseType: Decodable>(
+        _ request: URLRequest,
+        responseType: ResponseType.Type
+        ) -> Single<ResponseType> {
+        return requestData(request).map { (response, result) in
+            guard (200...299).contains(response.statusCode) else {
+                throw NetworkError.badStatusCode
+            }
+            return try JSONDecoder().decode(responseType.self, from: result)
         }
     }
 
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
-
-    // MARK: - Private Functions
-
-    fileprivate func persistServerSessionIDForNewUIWebViews() {
-        let cookieStorage = HTTPCookieStorage.shared
-        cookieStorage.cookieAcceptPolicy = .always
+    func requestData(_ request: URLRequest) -> Single<(HTTPURLResponse, Data)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
+            let dataRequest = SessionManager.default.request(request)
+            Logger.shared.debug("Sending \(request.httpMethod ?? "") to '\(request.url?.absoluteString ?? "")'")
+            observer(.success(dataRequest))
+            return Disposables.create()
+        }
+        return dataRequestSingle.flatMap { $0.responseData() }
     }
 
-    fileprivate func disableUIWebViewCaching() {
-        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
-    }
-}
-
-// MARK: - Rx
-
-extension NetworkManager {
-
+    /// Performs a network request and returns a Single emitting the HTTPURLResponse along with the
+    /// response decoded as a Data object.
+    ///
+    /// - Parameters:
+    ///   - url: the URL
+    ///   - method: the HTTP method
+    ///   - parameters: optional parameters for the request
+    ///   - headers: optional headers
+    /// - Returns: the Single
     func requestData(
         _ url: String,
         method: HttpMethod,
         parameters: URLParameters? = nil,
         headers: [String: String]? = nil
-    ) -> Single<(HTTPURLResponse, Data)> {
+        ) -> Single<(HTTPURLResponse, Data)> {
         let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
             let request = SessionManager.default.request(
                 url,
@@ -129,7 +127,7 @@ extension NetworkManager {
         method: HttpMethod,
         parameters: URLParameters? = nil,
         headers: [String: String]? = nil
-    ) -> Single<(HTTPURLResponse, Any)> {
+        ) -> Single<(HTTPURLResponse, Any)> {
         let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
             let request = SessionManager.default.request(
                 url,
@@ -147,6 +145,36 @@ extension NetworkManager {
                     return request.responseStringSingle()
             }
         }
+    }
+
+    // MARK: - URLSessionDelegate
+
+    // TODO: find place to put UIApplication.shared.isNetworkActivityIndicatorVisible
+
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {}
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping AuthChallengeHandler) {
+        let host = challenge.protectionSpace.host
+        Logger.shared.info("Received challenge from \(host)")
+
+        if BlockchainAPI.PartnerHosts.rawValues.contains(host) {
+            completionHandler(.performDefaultHandling, nil)
+        } else {
+            CertificatePinner.shared.didReceive(challenge, completion: completionHandler)
+        }
+    }
+
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}
+
+    // MARK: - Private Functions
+
+    fileprivate func persistServerSessionIDForNewUIWebViews() {
+        let cookieStorage = HTTPCookieStorage.shared
+        cookieStorage.cookieAcceptPolicy = .always
+    }
+
+    fileprivate func disableUIWebViewCaching() {
+        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
     }
 }
 
