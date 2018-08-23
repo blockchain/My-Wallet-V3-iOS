@@ -29,8 +29,7 @@ extension Encodable {
     }
 
     func toDictionary() throws -> [String: Any] {
-        let data = try self.encode()
-        guard let dictionary = try JSONSerialization.jsonObject(
+        guard let data = try? self.encode(), let dictionary = try JSONSerialization.jsonObject(
             with: data,
             options: .allowFragments
         ) as? [String: Any] else {
