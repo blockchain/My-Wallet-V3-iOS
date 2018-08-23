@@ -10,16 +10,16 @@ import Foundation
 
 struct ExchangeTradeCellModel: Decodable {
 
-    enum TradeStatus: String {
-        case noDeposits = "no_deposits"
-        case received = "received"
-        case complete = "complete"
-        case resolved = "resolved"
-        case inProgress = "IN_PROGRESS"
-        case cancelled = "CANCELLED"
-        case failed = "failed"
-        case expired = "EXPIRED"
-        case none = "NONE"
+    enum TradeStatus {
+        case noDeposits
+        case received
+        case complete
+        case resolved
+        case inProgress
+        case cancelled
+        case failed
+        case expired
+        case none
 
         /// This isn't ideal but `Homebrew` and `Shapeshift` map their
         /// trade status values differently.
@@ -145,17 +145,17 @@ extension ExchangeTradeCellModel.TradeStatus {
     var displayValue: String {
         switch self {
         case .complete:
-            return NSLocalizedString("Complete", comment: "").uppercased()
+            return LocalizationConstants.Exchange.complete
         case .noDeposits,
              .received,
              .inProgress,
              .none:
-            return NSLocalizedString("In Progress", comment: "").uppercased()
+            return LocalizationConstants.Exchange.inProgress
         case .cancelled,
              .failed,
              .expired,
              .resolved:
-            return NSLocalizedString("Trade Refunded", comment: "").uppercased()
+            return LocalizationConstants.Exchange.tradeRefunded
         }
     }
 }
@@ -164,23 +164,21 @@ fileprivate extension ExchangeTrade {
 
     fileprivate func displayAmount() -> String? {
         if BlockchainSettings.sharedAppInstance().symbolLocal {
-            let currencySymbol = withdrawalCurrency()
-            switch currencySymbol {
-            case "BTC":
+            guard let currencySymbol = withdrawalCurrency() else { return nil }
+            let assetType = AssetType(stringValue: currencySymbol)
+            switch assetType {
+            case .bitcoin:
                 let value = NumberFormatter.parseBtcValue(from: withdrawalAmount.stringValue)
                 return NumberFormatter.formatMoney(value.magnitude)
-            case "ETH":
+            case .ethereum:
                 guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
                 return NumberFormatter.formatEth(
                     withLocalSymbol: withdrawalAmount.stringValue,
                     exchangeRate: exchangeRate
                 )
-            case "BCH":
+            case .bitcoinCash:
                 let value = NumberFormatter.parseBtcValue(from: withdrawalAmount.stringValue)
                 return NumberFormatter.formatBch(withSymbol: value.magnitude)
-            default:
-                Logger.shared.warning("Unsupported withdrawal currency for trade \(withdrawalCurrency())")
-                return nil
             }
         } else {
             guard let toAsset = pair.components(separatedBy: "_").last else { return nil }

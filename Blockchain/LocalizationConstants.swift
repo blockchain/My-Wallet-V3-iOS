@@ -313,6 +313,19 @@ struct LocalizationConstants {
             "Exchange",
             comment: "Title text shown on navigation bar for exchanging a crypto asset for another"
         )
+        static let complete = NSLocalizedString(
+            "Complete",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let inProgress = NSLocalizedString(
+            "In Progress",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let tradeRefunded = NSLocalizedString(
+            "Trade Refunded",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        
         static let loading = NSLocalizedString(
             "Loading Exchange",
             comment: "Text presented when the wallet is loading the exchange"
