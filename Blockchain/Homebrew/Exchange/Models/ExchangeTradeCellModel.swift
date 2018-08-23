@@ -74,9 +74,13 @@ struct ExchangeTradeCellModel: Decodable {
 
     init(with trade: ExchangeTrade) {
         status = TradeStatus(shapeshift: trade.status)
-        assetType = AssetType(stringValue: trade.withdrawalCurrency())
         transactionDate = trade.date
         displayValue = trade.displayAmount() ?? ""
+        if let asset = AssetType(stringValue: trade.withdrawalCurrency()) {
+            assetType = asset
+        } else {
+            fatalError("Failed to map \(trade.withdrawalCurrency())")
+        }
     }
 
     // MARK: - Decodable
@@ -95,7 +99,11 @@ struct ExchangeTradeCellModel: Decodable {
         displayValue = try values.decode(String.self, forKey: .quantity)
         let statusValue = try values.decode(String.self, forKey: .status)
         status = TradeStatus(homebrew: statusValue)
-        assetType = AssetType(stringValue: asset)
+        if let asset = AssetType(stringValue: asset) {
+            assetType = asset
+        } else {
+            fatalError("Failed to map \(asset)")
+        }
     }
 }
 
@@ -165,7 +173,7 @@ fileprivate extension ExchangeTrade {
     fileprivate func displayAmount() -> String? {
         if BlockchainSettings.sharedAppInstance().symbolLocal {
             guard let currencySymbol = withdrawalCurrency() else { return nil }
-            let assetType = AssetType(stringValue: currencySymbol)
+            guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
             switch assetType {
             case .bitcoin:
                 let value = NumberFormatter.parseBtcValue(from: withdrawalAmount.stringValue)

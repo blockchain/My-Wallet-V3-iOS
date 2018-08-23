@@ -14,6 +14,13 @@ import Foundation
 }
 
 extension AssetType {
+    
+    private static let assetTypeToSymbolMap: [String: AssetType] = [
+        "BTC": .bitcoin,
+        "ETH": .ethereum,
+        "BCH": .bitcoinCash,
+        ]
+    
     static func from(legacyAssetType: LegacyAssetType) -> AssetType {
         switch legacyAssetType {
         case .bitcoin:
@@ -25,16 +32,12 @@ extension AssetType {
         }
     }
 
-    init(stringValue: String) {
-        switch stringValue {
-        case "BTC":
-            self = .bitcoin
-        case "BCH":
-            self = .bitcoinCash
-        case "ETH":
-            self = .ethereum
-        default:
-            fatalError("This is not a supported value: \(stringValue)")
+    init?(stringValue: String) {
+        let map = AssetType.assetTypeToSymbolMap
+        if let value = map[stringValue] {
+            self = value
+        } else {
+            return nil
         }
     }
 
