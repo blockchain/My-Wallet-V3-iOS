@@ -9,6 +9,7 @@
 import Foundation
 
 protocol PartnerExchangeServiceDelegate {
+    func partnerExchangeDidFailToGetTrades(_ service: PartnerExchangeService, errorDescription: String)
     func partnerExchange(_ service: PartnerExchangeService, didGet exchangeRate: ExchangeRate)
     func partnerExchange(_ service: PartnerExchangeService, didGetBTC availableBalance: NSDictionary)
     func partnerExchange(_ service: PartnerExchangeService, didGetETH availableBalance: NSDictionary)
@@ -43,6 +44,10 @@ class PartnerExchangeService: PartnerExchangeAPI {
 }
 
 extension PartnerExchangeService: WalletExchangeDelegate {
+    func didFailToGetExchangeTrades(errorDescription: String) {
+        delegate?.partnerExchangeDidFailToGetTrades(self, errorDescription: errorDescription)
+    }
+    
     func didGetExchangeTrades(trades: NSArray) {
         if let block = completionBlock, trades.count == 0 {
             block(nil, nil)

@@ -126,6 +126,7 @@
 - (void)didErrorDuringEtherSend:(NSString *)error;
 - (void)didGetEtherAddressWithSecondPassword;
 - (void)didGetExchangeTrades:(NSArray *)trades;
+- (void)didFailToGetExchangeTrades:(NSString *)errorDescription;
 - (void)didGetExchangeRate:(ExchangeRate *)result;
 - (void)didGetAvailableEthBalance:(NSDictionary *)result;
 - (void)didGetAvailableBtcBalance:(NSDictionary *)result;

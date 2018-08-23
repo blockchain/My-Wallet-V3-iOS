@@ -12,6 +12,9 @@ import Foundation
 
     /// Method invoked when trades have been fetched
     func didGetExchangeTrades(trades: NSArray)
+    
+    /// Method invoked when the fethc for trades fails
+    func didFailToGetExchangeTrades(errorDescription: String)
 
     /// Method invoked when rate has been fetched
     func didGetExchangeRate(rate: ExchangeRate)

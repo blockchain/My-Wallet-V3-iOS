@@ -809,6 +809,10 @@
     self.context[@"objc_on_get_exchange_trades_success"] = ^(NSArray *trades) {
         [weakSelf on_get_exchange_trades_success:trades];
     };
+    
+    self.context[@"objc_on_get_exchange_trades_error"] = ^(JSValue *result) {
+        [weakSelf on_get_exchange_trades_error:[result toString]];
+    };
 
     self.context[@"objc_on_get_exchange_rate_success"] = ^(JSValue *rate) {
         ExchangeRate *exchangeRate = [[ExchangeRate alloc] initWithJavaScriptValue:rate];
@@ -4078,6 +4082,15 @@
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector didGetExchangeTrades:!", [delegate class]);
     }
+}
+
+- (void)on_get_exchange_trades_error:(NSString *)error
+{
+    self.isFetchingExchangeTrades = NO;
+    if ([self.delegate respondsToSelector:@selector(didFailToGetExchangeTrades:)]) {
+        [self.delegate didFailToGetExchangeTrades:error];
+    }
+    [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:error title:BC_STRING_ERROR in:nil handler:nil];
 }
 
 - (void)on_get_exchange_rate_success:(ExchangeRate *)exchangeRate
