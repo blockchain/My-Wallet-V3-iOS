@@ -660,7 +660,6 @@
 		C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733A89221236F02007DADE0 /* HttpHeader.swift */; };
 		C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C73406211F54791C00143100 /* EtherAmountInputViewController.m */; };
 		C7350A1B212DEB98000E1457 /* HomebrewMarketsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7350A19212DEB98000E1457 /* HomebrewMarketsService.swift */; };
-		C7350A35212EFD56000E1457 /* TradingPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7350A34212EFD56000E1457 /* TradingPair.swift */; };
 		C7350A36212EFD56000E1457 /* TradingPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7350A34212EFD56000E1457 /* TradingPair.swift */; };
 		C740FA89210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
 		C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
@@ -752,6 +751,8 @@
 		C7BEE13C20C828B20096003B /* BuySellCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */; };
 		C7BEE14A20C9775B0096003B /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE14920C9775B0096003B /* WalletOptions.swift */; };
 		C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BEE14920C9775B0096003B /* WalletOptions.swift */; };
+		C7C0DC0F212F6594000EFE71 /* TradingPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C0DC05212F6594000EFE71 /* TradingPair.swift */; };
+		C7C0DC10212F6597000EFE71 /* TradingPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C0DC05212F6594000EFE71 /* TradingPair.swift */; };
 		C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34B71F4DCB7E00032806 /* CardsViewController.m */; };
 		C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BA1F4DE14500032806 /* DashboardViewController.m */; };
 		C7CE34BE1F4E128900032806 /* BCAmountInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BD1F4E128900032806 /* BCAmountInputView.m */; };
@@ -3133,6 +3134,7 @@
 		C7BEE12F20C720CA0096003B /* BitcoinCashURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCashURLPayload.swift; sourceTree = "<group>"; };
 		C7BEE13A20C828B20096003B /* BuySellCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuySellCoordinator.swift; sourceTree = "<group>"; };
 		C7BEE14920C9775B0096003B /* WalletOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletOptions.swift; sourceTree = "<group>"; };
+		C7C0DC05212F6594000EFE71 /* TradingPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TradingPair.swift; sourceTree = "<group>"; };
 		C7CE34B51F4DB8C100032806 /* Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assets.h; sourceTree = "<group>"; };
 		C7CE34B61F4DCB7E00032806 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
 		C7CE34B71F4DCB7E00032806 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
@@ -3302,6 +3304,7 @@
 		3A26AF6721274EEA003A8A08 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C7C0DC05212F6594000EFE71 /* TradingPair.swift */,
 				3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */,
 			);
 			path = Models;
@@ -7277,6 +7280,7 @@
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
+				C7C0DC10212F6597000EFE71 /* TradingPair.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
 				C7BEE13120C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				602B9D262118E27100BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
@@ -7487,6 +7491,7 @@
 				AA447BCA21276DA900EC0FA0 /* SideMenuPresenter.swift in Sources */,
 				AAFE9E752100D169002E4E1E /* PinStoreKeyPair.swift in Sources */,
 				C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */,
+				C7C0DC0F212F6594000EFE71 /* TradingPair.swift in Sources */,
 				3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */,
 				C7BEE13020C720CA0096003B /* BitcoinCashURLPayload.swift in Sources */,
 				23964C031DCA3F19001323BE /* KeyPair.m in Sources */,
@@ -7539,7 +7544,6 @@
 				AA126D12212D1B2B005886A3 /* KYCUpdateAddressRequest.swift in Sources */,
 				AA69F65F2086A7500054EFCE /* BlockchainSettings.swift in Sources */,
 				AAD279E0209A99DA00C0EAFC /* AVCaptureDeviceInput.swift in Sources */,
-				C7350A35212EFD56000E1457 /* TradingPair.swift in Sources */,
 				23B731D31E01AC1100129770 /* ReminderModalViewController.m in Sources */,
 				23444F9F1DCD221A00573C8C /* BTCProtocolSerialization.m in Sources */,
 				60639A022110FC2D005B6DF5 /* NSURLRequest+SRWebSocket.m in Sources */,
