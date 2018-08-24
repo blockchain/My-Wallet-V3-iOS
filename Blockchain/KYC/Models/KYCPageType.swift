@@ -24,7 +24,7 @@ enum KYCPageType {
 extension KYCPageType {
     /// The next page provided that the user successfully entered/selected
     /// information in this page.
-    var next: KYCPageType? {
+    func nextPage(for user: KYCUser?) -> KYCPageType? {
         switch self {
         case .welcome:
             return .country
@@ -33,6 +33,11 @@ extension KYCPageType {
         case .profile:
             return .address
         case .address:
+            // Skip the enter phone step if the user already has verified their
+            // phone number
+            if let user = user, let mobile = user.mobile, mobile.verified {
+                return .verifyIdentity
+            }
             return .enterPhone
         case .enterPhone:
             return .confirmPhone

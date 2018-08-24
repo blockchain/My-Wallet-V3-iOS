@@ -220,6 +220,9 @@ final class KYCNetworkRequest {
                 guard let responseData = data else {
                     taskFailure(HTTPRequestPayloadError.emptyData); return
                 }
+                if let responseString = String(data: responseData, encoding: .utf8) {
+                    Logger.shared.debug("Response received: \(responseString)")
+                }
                 taskSuccess(responseData)
             }
         })

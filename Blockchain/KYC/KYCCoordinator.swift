@@ -95,7 +95,7 @@ protocol KYCCoordinatorDelegate: class {
             handleFailurePage(for: error)
         case .nextPageFromPageType(let type, let payload):
             handlePayloadFromPageType(type, payload)
-            guard let nextPage = type.next else { return }
+            guard let nextPage = type.nextPage(for: self.user) else { return }
             let controller = pageFactory.createFrom(
                 pageType: nextPage,
                 in: self,
