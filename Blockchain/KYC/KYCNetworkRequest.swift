@@ -59,16 +59,14 @@ final class KYCNetworkRequest {
         }
 
         enum POST {
-            case registerUser
-            case apiKey(userId: String)
+            case createUser
             case sessionToken(userId: String)
             case verifications
             case submitVerification
 
             var path: String {
                 switch self {
-                case .registerUser: return "/internal/users"
-                case .apiKey: return "/internal/auth"
+                case .createUser: return "/users"
                 case .sessionToken: return "/auth"
                 case .verifications: return "/verifications"
                 case .submitVerification: return "/kyc/verifications"
@@ -77,10 +75,9 @@ final class KYCNetworkRequest {
 
             var queryParameters: [String: String]? {
                 switch self {
-                case .apiKey(let userId),
-                     .sessionToken(let userId):
+                case .sessionToken(let userId):
                     return ["userId": userId]
-                case .registerUser,
+                case .createUser,
                      .verifications,
                      .submitVerification:
                         return nil

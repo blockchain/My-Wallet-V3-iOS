@@ -84,6 +84,15 @@ class NetworkManager: NSObject, URLSessionDelegate {
         return dataRequestSingle.flatMap { $0.responseData() }
     }
 
+    /// Performs a network request and returns a Single emitting the HTTPURLResponse along with the
+    /// response decoded as a Data object.
+    ///
+    /// - Parameters:
+    ///   - url: the URL
+    ///   - method: the HTTP method
+    ///   - parameters: optional parameters for the request
+    ///   - headers: optional headers
+    /// - Returns: the Single
     func requestData(
         _ url: String,
         method: HttpMethod,
@@ -168,7 +177,6 @@ class NetworkManager: NSObject, URLSessionDelegate {
         URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
     }
 }
-
 
 extension DataRequest {
     func responseData() -> Single<(HTTPURLResponse, Data)> {
