@@ -40,8 +40,10 @@ extension KYCPageType {
         case .confirmPhone:
             return .verifyIdentity
         case .verifyIdentity:
+            return .applicationComplete
+        case .applicationComplete:
             return .accountStatus
-        case .accountStatus, .applicationComplete:
+        case .accountStatus:
             return nil
         }
     }
