@@ -11,7 +11,7 @@
 #import "Blockchain-Swift.h"
 #import "ContinueButtonInputAccessoryView.h"
 #import "ExchangeTrade.h"
-#import "ExchangeConfirmViewController.h"
+#import "PartnerExchangeConfirmViewController.h"
 #import "BCNavigationController.h"
 #import "NSNumberFormatter+Currencies.h"
 
@@ -296,7 +296,7 @@
     trade.exchangeRateString = [trade exchangeRateString];
     NSString *feeString = [NSNumberFormatter convertedDecimalString:[tradeInfo objectForKey:DICTIONARY_KEY_FEE]];
     trade.transactionFee = [NSDecimalNumber decimalNumberWithString:feeString];
-    ExchangeConfirmViewController *confirmViewController = [[ExchangeConfirmViewController alloc] initWithExchangeTrade:trade];
+    PartnerExchangeConfirmViewController *confirmViewController = [[PartnerExchangeConfirmViewController alloc] initWithExchangeTrade:trade];
     [self.navigationController pushViewController:confirmViewController animated:YES];
 }
 

@@ -1,12 +1,12 @@
 //
-//  ExchangeConfirmViewController.m
+//  PartnerExchangeConfirmViewController.m
 //  Blockchain
 //
 //  Created by kevinwu on 10/31/17.
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "ExchangeConfirmViewController.h"
+#import "PartnerExchangeConfirmViewController.h"
 #import "BCLine.h"
 #import "UILabel+CGRectForSubstring.h"
 #import "ExchangeDetailView.h"
@@ -18,7 +18,7 @@
 #define MARGIN_HORIZONTAL 20
 #define SHAPESHIFT_TERMS_AND_CONDITIONS_URL @"https://info.shapeshift.io/sites/default/files/ShapeShift_Terms_Conditions%20v1.1.pdf"
 
-@interface ExchangeConfirmViewController ()
+@interface PartnerExchangeConfirmViewController ()
 @property (nonatomic) ExchangeTrade *trade;
 @property (nonatomic) UIButton *confirmButton;
 @property (nonatomic) UISwitch *agreementSwitch;
@@ -26,7 +26,7 @@
 @property (nonatomic) UILabel *timerLabel;
 @end
 
-@implementation ExchangeConfirmViewController
+@implementation PartnerExchangeConfirmViewController
 
 - (id)initWithExchangeTrade:(ExchangeTrade *)trade
 {
