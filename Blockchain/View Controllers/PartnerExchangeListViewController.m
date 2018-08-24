@@ -6,8 +6,8 @@
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "ExchangeOverviewViewController.h"
-#import "ExchangeCreateViewController.h"
+#import "PartnerExchangeListViewController.h"
+#import "PartnerExchangeCreateViewController.h"
 #import "ExchangeProgressViewController.h"
 #import "ConfirmStateViewController.h"
 #import "ExchangeModalView.h"
@@ -23,15 +23,15 @@
 
 #define CELL_IDENTIFIER_EXCHANGE_CELL @"exchangeCell"
 
-@interface ExchangeOverviewViewController () <UITableViewDelegate, UITableViewDataSource, CloseButtonDelegate, ConfirmStateDelegate, WalletExchangeDelegate>
+@interface PartnerExchangeListViewController () <UITableViewDelegate, UITableViewDataSource, CloseButtonDelegate, ConfirmStateDelegate, WalletExchangeDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) NSArray *trades;
-@property (nonatomic) ExchangeCreateViewController *createViewController;
+@property (nonatomic) PartnerExchangeCreateViewController *createViewController;
 @property (nonatomic) BOOL didFinishShift;
 @property (nonatomic) UIRefreshControl *refreshControl;
 @end
 
-@implementation ExchangeOverviewViewController
+@implementation PartnerExchangeListViewController
 
 - (void)viewDidLoad
 {
@@ -178,7 +178,7 @@
 
 - (void)showCreateExchangeControllerAnimated:(BOOL)animated
 {
-    ExchangeCreateViewController *createViewController = [ExchangeCreateViewController new];
+    PartnerExchangeCreateViewController *createViewController = [PartnerExchangeCreateViewController new];
     [self.navigationController pushViewController:createViewController animated:animated];
     self.createViewController = createViewController;
 }
@@ -247,7 +247,7 @@
 
 - (void)didConfirmState:(UINavigationController *)navigationController
 {
-    ExchangeCreateViewController *createViewController = [ExchangeCreateViewController new];
+    PartnerExchangeCreateViewController *createViewController = [PartnerExchangeCreateViewController new];
     [navigationController pushViewController:createViewController animated:NO];
     self.createViewController = createViewController;
     navigationController.viewControllers = @[createViewController];

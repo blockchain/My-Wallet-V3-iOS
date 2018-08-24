@@ -28,7 +28,7 @@ import RxSwift
     private var disposable: Disposable?
 
     // MARK: - Navigation
-    private var exchangeViewController: ExchangeOverviewViewController?
+    private var exchangeViewController: PartnerExchangeListViewController?
     private var rootViewController: UIViewController?
 
     func start() {
@@ -84,7 +84,7 @@ import RxSwift
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            exchangeViewController = ExchangeOverviewViewController()
+            exchangeViewController = PartnerExchangeListViewController()
             let navigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -96,8 +96,7 @@ import RxSwift
     private func showCreateExchangetype(type: ExchangeType) {
         switch type {
         case .homebrew:
-            // show homebrew
-            let exchangeCreateViewController = HomebrewExchangeCreateViewController()
+            let exchangeCreateViewController = ExchangeCreateViewController()
             exchangeCreateViewController.delegate = self
             self.createInterface = exchangeCreateViewController
             // present view controller

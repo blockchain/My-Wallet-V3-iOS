@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HomebrewExchangeCreateViewController: UIViewController {
+class ExchangeCreateViewController: UIViewController {
 
     // MARK: Public Properties
 
@@ -34,7 +34,7 @@ class HomebrewExchangeCreateViewController: UIViewController {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ExchangeCreateInterface {
+extension ExchangeCreateViewController: ExchangeCreateInterface {
     func continueButtonEnabled(_ enabled: Bool) {
         if enabled {
             exchangeCreateView.enablePaymentButtons()
@@ -48,7 +48,7 @@ extension HomebrewExchangeCreateViewController: ExchangeCreateInterface {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
+extension ExchangeCreateViewController: ExchangeCreateViewDelegate {
     func assetToggleButtonTapped() {
     }
 
@@ -63,14 +63,14 @@ extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
     }
 }
 
-extension HomebrewExchangeCreateViewController: UITextFieldDelegate {
+extension ExchangeCreateViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         delegate?.onChangeAmountFieldText()
         return true
     }
 }
 
-extension HomebrewExchangeCreateViewController: AddressSelectionDelegate {
+extension ExchangeCreateViewController: AddressSelectionDelegate {
     func getAssetType() -> LegacyAssetType {
         return LegacyAssetType(rawValue: -1)!
     }

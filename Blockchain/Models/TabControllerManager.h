@@ -16,7 +16,7 @@
 #import "SendEtherViewController.h"
 #import "TransactionsEtherViewController.h"
 #import "ReceiveEtherViewController.h"
-#import "ExchangeOverviewViewController.h"
+#import "PartnerExchangeListViewController.h"
 #import "TransactionsBitcoinCashViewController.h"
 
 @protocol TabControllerDelegate
