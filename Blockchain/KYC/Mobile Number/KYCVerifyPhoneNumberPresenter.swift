@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxSwift
 
 protocol KYCVerifyPhoneNumberView: class {
     func showLoadingView(with text: String)
@@ -26,6 +26,11 @@ class KYCVerifyPhoneNumberPresenter {
 
     private let interactor: KYCVerifyPhoneNumberInteractor
     private weak var view: KYCVerifyPhoneNumberView?
+    private var disposable: Disposable?
+
+    deinit {
+        disposable?.dispose()
+    }
 
     init(
         view: KYCVerifyPhoneNumberView,
@@ -37,23 +42,28 @@ class KYCVerifyPhoneNumberPresenter {
 
     // MARK: - Public
 
-    func startVerification(number: String, userId: String) {
+    func startVerification(number: String) {
         view?.showLoadingView(with: LocalizationConstants.loading)
-        interactor.startVerification(number: number, userId: userId, success: { [weak self] _ in
-            self?.handleStartVerificationCodeSuccess()
-        }, failure: { [weak self] error in
-            Logger.shared.error("Could not complete mobile verification. Error: \(error)")
-            self?.handleError(error)
-        })
+        disposable = interactor.startVerification(number: number)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onCompleted: { [unowned self] in
+                self.handleStartVerificationCodeSuccess()
+            }, onError: { [unowned self] error in
+                self.handleError(error)
+            })
     }
 
-    func verify(number: String, userId: String, code: String) {
+    func verify(number: String, code: String) {
         view?.showLoadingView(with: LocalizationConstants.loading)
-        interactor.verify(number: number, userId: userId, code: code, success: { [weak self] _ in
-            self?.handleVerifyCodeSuccess()
-        }, failure: { [weak self] error in
-            self?.handleError(error)
-        })
+        disposable = interactor.verify(number: number, code: code)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onCompleted: { [unowned self] in
+                self.handleVerifyCodeSuccess()
+            }, onError: { [unowned self] error in
+                self.handleError(error)
+            })
     }
 
     // MARK: - Private

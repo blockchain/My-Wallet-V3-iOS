@@ -37,6 +37,9 @@ class KYCCountrySelectionPresenterTests: XCTestCase {
             json: [
                 "shapeshift": [
                     "countriesBlacklist": ["US"]
+                ],
+                "ios": [
+                    "showShapeshift": true
                 ]
             ]
         )
@@ -53,6 +56,9 @@ class KYCCountrySelectionPresenterTests: XCTestCase {
             json: [
                 "shapeshift": [
                     "countriesBlacklist": ["US"]
+                ],
+                "ios": [
+                    "showShapeshift": true
                 ]
             ]
         )

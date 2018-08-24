@@ -37,7 +37,7 @@ struct UserAddress: Codable {
 }
 
 extension UserAddress: Equatable {
-    static func ==(lhs: UserAddress, rhs: UserAddress) -> Bool {
+    static func == (lhs: UserAddress, rhs: UserAddress) -> Bool {
         return lhs.lineOne == rhs.lineOne &&
             lhs.lineTwo == rhs.lineTwo &&
             lhs.postalCode == rhs.postalCode &&

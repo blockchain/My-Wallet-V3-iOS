@@ -9,5 +9,5 @@
 import Foundation
 
 protocol PersonalDetailsDelegate: class {
-    func onSubmission(_ input: PersonalDetails, completion: @escaping () -> Void)
+    func onSubmission(_ input: KYCUpdatePersonalDetailsRequest, completion: @escaping () -> Void)
 }

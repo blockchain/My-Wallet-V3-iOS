@@ -275,7 +275,30 @@ struct LocalizationConstants {
         static let logout = NSLocalizedString("Logout", comment: "")
         static let debug = NSLocalizedString("Debug", comment: "")
         static let logoutConfirm = NSLocalizedString("Do you really want to log out?", comment: "")
-        static let buySellBitcoin = NSLocalizedString("Buy & Sell Bitcoin", comment: "")
+        static let buySellBitcoin = NSLocalizedString(
+            "Buy & Sell Bitcoin",
+            comment: "Item displayed on the side menu of the app for when the user wants to buy and sell Bitcoin."
+        )
+        static let addresses = NSLocalizedString(
+            "Addresses",
+            comment: "Item displayed on the side menu of the app for when the user wants to view their crypto addresses."
+        )
+        static let backupFunds = NSLocalizedString(
+            "Backup Funds",
+            comment: "Item displayed on the side menu of the app for when the user wants to back up their funds by saving their 12 word mneumonic phrase."
+        )
+        static let exchange = NSLocalizedString(
+            "Exchange",
+            comment: "Item displayed on the side menu of the app for when the user wants to exchange crypto-to-crypto."
+        )
+        static let settings = NSLocalizedString(
+            "Settings",
+            comment: "Item displayed on the side menu of the app for when the user wants to view their wallet settings."
+        )
+        static let support = NSLocalizedString(
+            "Support",
+            comment: "Item displayed on the side menu of the app for when the user wants to contact support."
+        )
     }
 
     struct BuySell {
@@ -290,6 +313,19 @@ struct LocalizationConstants {
             "Exchange",
             comment: "Title text shown on navigation bar for exchanging a crypto asset for another"
         )
+        static let complete = NSLocalizedString(
+            "Complete",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let inProgress = NSLocalizedString(
+            "In Progress",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let tradeRefunded = NSLocalizedString(
+            "Trade Refunded",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        
         static let loading = NSLocalizedString(
             "Loading Exchange",
             comment: "Text presented when the wallet is loading the exchange"
@@ -307,6 +343,10 @@ struct LocalizationConstants {
         )
         static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
         static let from = NSLocalizedString("From", comment: "Label for exchanging from a specific type of crypto")
+        static let homebrewInformationText = NSLocalizedString(
+            "All amounts are correct at this time but might change depending on the market price and transaction rates at the time your order is processed",
+            comment: "Text displayed on exchange screen to inform user of changing market rates"
+        )
     }
 
     struct AddressAndKeyImport {
@@ -534,6 +574,10 @@ struct LocalizationConstants {
         static let backToDashboard = NSLocalizedString(
             "Back to Dashboard",
             comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
+        )
+        static let yourHomeAddress = NSLocalizedString(
+            "Your Home Address",
+            comment: "Text displayed on the search bar when adding an address during KYC."
         )
     }
 }

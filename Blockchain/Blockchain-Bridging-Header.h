@@ -16,6 +16,7 @@
 #import "BuyBitcoinNavigationController.h"
 #import "BuyBitcoinViewController.h"
 #import "DebugTableViewController.h"
+#import "ECSlidingViewController.h"
 #import "KeychainItemWrapper+Credentials.h"
 #import "KeychainItemWrapper+SwipeAddresses.h"
 #import "KeychainItemWrapper.h"
@@ -31,7 +32,6 @@
 #import "Reachability.h"
 #import "ReminderModalViewController.h"
 #import "SettingsNavigationController.h"
-#import "SideMenuViewController.h"
 #import "TabControllerManager.h"
 #import "Transaction.h"
 #import "TransferAllFundsViewController.h"
@@ -53,3 +53,7 @@
 #import "FromToView.h"
 #import "ContinueButtonInputAccessoryView.h"
 #import "ExchangeOverviewViewController.h"
+
+#import "ExchangeTrade.h"
+#import "NSDateFormatter+TimeAgoString.h"
+#import "UIView+ChangeFrameAttribute.h"

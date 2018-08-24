@@ -62,7 +62,7 @@
 
     self.fromToButtonDelegateIntermediate = [[FromToButtonDelegateIntermediate alloc] initWithWallet:WalletManager.sharedInstance.wallet navigationController:(BCNavigationController *)self.navigationController addressSelectionDelegate:self];
 
-    [self.exchangeView setupWithCreateViewDelegate:self fromToButtonDelegate:self.fromToButtonDelegateIntermediate continueButtonInputAccessoryDelegate:self textFieldDelegate:self];
+    [self.exchangeView setupWithConversionView:NO delegate:self navigationController:(BCNavigationController *)self.navigationController];
 
     self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:LegacyAssetTypeBitcoin];
     
@@ -228,14 +228,14 @@
     }
     
     if (zeroAmount) {
-        self.exchangeView.errorTextView.hidden = YES;
+        [self.exchangeView hideErrorTextView];
         [self.exchangeView disablePaymentButtons];
     } else if (overAvailable || overMax || underMin || notEnoughToExchange || isWaitingOnTransaction) {
         [self.exchangeView showErrorWithText:errorText];
     } else {
         [self.exchangeView removeHighlightFromAmounts];
         [self.exchangeView enablePaymentButtons];
-        self.exchangeView.errorTextView.hidden = YES;
+        [self.exchangeView hideErrorTextView];
     }
 }
 
@@ -577,7 +577,7 @@
 {
     self.availableBalance = 0;
     
-    self.exchangeView.errorTextView.hidden = YES;
+    [self.exchangeView hideErrorTextView];
     [self.exchangeView disablePaymentButtons];
 }
 
@@ -1003,7 +1003,7 @@
 
 #pragma mark - Continue Button Input Accessory View Delegate
 
-- (void)continueButtonClicked
+- (void)continueButtonTapped
 {
     [self.exchangeView hideKeyboard];
     
@@ -1012,14 +1012,14 @@
     [self performSelector:@selector(buildTrade) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 }
 
-- (void)closeButtonClicked
+- (void)closeButtonTapped
 {
     [self.exchangeView hideKeyboard];
 }
 
 #pragma mark - Exchange Create View Delegate
 
-- (void)assetToggleButtonClicked
+- (void)assetToggleButtonTapped
 {
     [self clearFieldOfSymbol:self.fromSymbol];
     
@@ -1033,12 +1033,12 @@
     }
 }
 
-- (void)useMinButtonClicked
+- (void)useMinButtonTapped
 {
     [self autoFillFromAmount:self.minimum];
 }
 
-- (void)useMaxButtonClicked
+- (void)useMaxButtonTapped
 {
     id maximum = [self.maximum compare:self.maximumHardLimit] == NSOrderedAscending ? self.maximum : self.maximumHardLimit;
     

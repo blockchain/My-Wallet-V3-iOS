@@ -14,10 +14,6 @@
 
 *If the change is UI related, paste a screenshot here.*
 
-## Related Information
-
-* Ticket Number:
-
 ## Merge Checklist
 
 - [ ] The PR uses a title supported by [.changelogrc](https://github.com/blockchain/My-Wallet-V3-iOS/blob/dev/.changelogrc#L6...L69).

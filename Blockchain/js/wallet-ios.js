@@ -2550,6 +2550,7 @@ MyWalletPhone.getExchangeTrades = function() {
     var error = function(e) {
         console.log('Error getting trades');
         console.log(e);
+        on_get_exchange_trades_error(e)
     }
 
     return MyWallet.wallet.shapeshift.fetchFullTrades().then(success).catch(error);
@@ -2719,6 +2720,11 @@ MyWalletPhone.countryCodeGuess = function() {
     var accountInfo = MyWallet.wallet.accountInfo;
     var codeGuess = accountInfo && accountInfo.countryCodeGuess;
     return codeGuess;
+}
+
+MyWalletPhone.stateCodeGuess = function() {
+    var accountInfo = MyWallet.wallet.accountInfo;
+    return accountInfo && accountInfo.stateCodeGuess;
 }
 
 MyWalletPhone.availableUSStates = function() {

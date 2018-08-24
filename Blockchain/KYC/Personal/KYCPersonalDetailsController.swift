@@ -30,14 +30,10 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
     @IBOutlet var scrollView: UIScrollView!
 
     var validationFields: [ValidationTextField] {
-        get {
-            return [firstNameField,
-                    lastNameField,
-                    birthdayField]
-        }
+        return [firstNameField, lastNameField, birthdayField]
     }
 
-    var keyboard: KeyboardPayload? = nil
+    var keyboard: KeyboardPayload?
 
     // MARK: Public Properties
 
@@ -47,13 +43,21 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     fileprivate var detailsCoordinator: PersonalDetailsCoordinator!
 
+    private var user: KYCUser?
+
     // MARK: Overrides
 
     override class func make(with coordinator: KYCCoordinator) -> KYCPersonalDetailsController {
         let controller = makeFromStoryboard()
         controller.coordinator = coordinator
+        controller.user = coordinator.user
         controller.pageType = .profile
         return controller
+    }
+
+    override func apply(model: KYCPageModel) {
+        guard case let .personalDetails(user) = model else { return }
+        self.user = user
     }
 
     // MARK: Lifecycle
@@ -97,7 +101,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
         birthdayField.validationBlock = { value in
             guard let birthday = value else { return .invalid(nil) }
-            guard let date = DateFormatter.birthday.date(from: birthday) else { return .invalid(nil) }
+            guard let date = DateFormatter.medium.date(from: birthday) else { return .invalid(nil) }
             if date <= Date.eighteenYears {
                 return .valid
             } else {
@@ -126,31 +130,18 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
-        guard let email = WalletManager.shared.wallet.getEmail() else { return }
         validationFields.forEach({$0.resignFocus()})
 
-        guard let details = PersonalDetails(
-            id: "",
-            first: firstNameField.text,
-            last: lastNameField.text,
-            email: email,
+        let details = KYCUpdatePersonalDetailsRequest(
+            firstName: firstNameField.text,
+            lastName: lastNameField.text,
             birthday: birthdayField.selectedDate
-            ) else { return }
+        )
 
         delegate?.onSubmission(details, completion: { [weak self] in
             guard let this = self else { return }
-            this.coordinator.handle(event: .nextPageFromPageType(this.pageType))
+            this.coordinator.handle(event: .nextPageFromPageType(this.pageType, nil))
         })
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let enterPhoneNumberController = segue.destination as? KYCEnterPhoneNumberController else {
-            return
-        }
-        // TODO: pass in actual userID
-        enterPhoneNumberController.userId = "userId"
     }
 }
 
@@ -175,8 +166,6 @@ extension KYCPersonalDetailsController: PersonalDetailsInterface {
 
 extension KYCPersonalDetailsController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // TODO: May not be necessary. 
-        validationFields.forEach({$0.resignFocus()})
     }
 }
 
@@ -184,5 +173,6 @@ extension Date {
     static let eighteenYears: Date = Calendar.current.date(
         byAdding: .year,
         value: -18,
-        to: Date()) ?? Date()
+        to: Date()
+    ) ?? Date()
 }

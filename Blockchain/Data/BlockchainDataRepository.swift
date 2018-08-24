@@ -47,6 +47,14 @@ import RxSwift
 
     private var cachedUser = BehaviorRelay<KYCUser?>(value: nil)
 
+    // MARK: - Public Methods
+
+    /// Clears cached data in this repository
+    func clearCache() {
+        cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+        cachedCountries = BehaviorRelay<Countries?>(value: nil)
+    }
+
     // MARK: - Private Methods
 
     private func fetchData<ResponseType: Decodable>(

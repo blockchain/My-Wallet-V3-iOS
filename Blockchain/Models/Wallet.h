@@ -126,6 +126,7 @@
 - (void)didErrorDuringEtherSend:(NSString *)error;
 - (void)didGetEtherAddressWithSecondPassword;
 - (void)didGetExchangeTrades:(NSArray *)trades;
+- (void)didFailToGetExchangeTrades:(NSString *)errorDescription;
 - (void)didGetExchangeRate:(ExchangeRate *)result;
 - (void)didGetAvailableEthBalance:(NSDictionary *)result;
 - (void)didGetAvailableBtcBalance:(NSDictionary *)result;
@@ -181,6 +182,7 @@
 @property BOOL didPairAutomatically;
 @property BOOL isFilteringTransactions;
 @property BOOL isFetchingTransactions;
+@property BOOL isFetchingExchangeTrades;
 @property BOOL isSyncing;
 @property BOOL isNew;
 @property NSString *twoFactorInput;
@@ -349,6 +351,7 @@
 
 - (void)getAccountInfoAndExchangeRates;
 - (NSString *_Nullable)countryCodeGuess;
+- (NSString *_Nullable)stateCodeGuess;
 
 - (void)changeEmail:(NSString *)newEmail;
 - (void)resendVerificationEmail:(NSString *)email;

@@ -147,7 +147,6 @@
 #define BC_STRING_ADDRESSES NSLocalizedString(@"Addresses", nil)
 #define BC_STRING_SETTINGS NSLocalizedString(@"Settings", nil)
 #define BC_STRING_BACKUP NSLocalizedString(@"Backup", nil)
-#define BC_STRING_BACKUP_FUNDS NSLocalizedString(@"Backup Funds", nil)
 #define BC_STRING_START_BACKUP NSLocalizedString(@"START BACKUP", nil)
 #define BC_STRING_BACKUP_NEEDED NSLocalizedString(@"Backup Needed", nil)
 #define BC_STRING_ADD_EMAIL NSLocalizedString(@"Add Email", nil)
@@ -210,7 +209,6 @@
 #define BC_STRING_LOADING_CREATING_INVITATION NSLocalizedString(@"Creating invitation", nil)
 #define BC_STRING_IDENTIFIER NSLocalizedString(@"Identifier", nil)
 
-#define BC_STRING_SUPPORT NSLocalizedString(@"Support", nil)
 #define BC_STRING_OPEN_ARGUMENT NSLocalizedString(@"Open %@?", nil)
 #define BC_STRING_LEAVE_APP NSLocalizedString(@"You will be leaving the app.", nil)
 

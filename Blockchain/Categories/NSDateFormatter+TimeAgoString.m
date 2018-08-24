@@ -10,6 +10,16 @@
 
 @implementation NSDateFormatter (TimeAgoString)
 
++ (NSDateFormatter *)longFormatter {
+    static dispatch_once_t token = 0;
+    static NSDateFormatter *formatter = nil;
+    dispatch_once(&token, ^{
+        formatter = [NSDateFormatter new];
+        [formatter setDateFormat:@"MMMM d y"];
+    });
+    return formatter;
+}
+
 + (NSString *)timeAgoStringFromDate:(NSDate *)date
 {
     long long secondsAgo  = -round([date timeIntervalSinceNow]);
@@ -29,11 +39,8 @@
     } else if([[NSCalendar currentCalendar] respondsToSelector:@selector(isDateInYesterday:)] && [[NSCalendar currentCalendar] isDateInYesterday:date]) { // yesterday
         return NSLocalizedString(@"Yesterday", nil);
     } else {
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-        NSString *longFormatWithDateAndYear = [NSDateFormatter dateFormatFromTemplate:@"MMMM d y" options:0 locale:[NSLocale currentLocale]];
-        [dateFormatter setDateFormat:longFormatWithDateAndYear];
         
-        return [dateFormatter stringFromDate:date];
+        return [[NSDateFormatter longFormatter] stringFromDate:date];
     }
 }
 

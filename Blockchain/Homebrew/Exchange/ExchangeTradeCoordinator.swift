@@ -22,7 +22,7 @@ class ExchangeTradeCoordinator: NSObject {
 }
 
 extension ExchangeTradeCoordinator: ExchangeTradeDelegate {
-    func onContinueButtonClicked() {
+    func onContinueButtonTapped() {
         
     }
 }

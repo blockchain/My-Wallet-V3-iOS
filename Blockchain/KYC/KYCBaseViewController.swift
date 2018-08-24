@@ -8,7 +8,7 @@
 
 import Foundation
 
-class KYCBaseViewController: UIViewController {
+class KYCBaseViewController: UIViewController, KYCCoordinatorDelegate {
 
     var coordinator: KYCCoordinator!
     var pageType: KYCPageType = .welcome
@@ -18,9 +18,22 @@ class KYCBaseViewController: UIViewController {
         return KYCBaseViewController()
     }
 
+    func apply(model: KYCPageModel) {
+        Logger.shared.debug("Should be overriden to do something with KYCPageModel.")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        coordinator.delegate = self
         coordinator.handle(event: .pageWillAppear(pageType))
     }
-}
 
+    override func viewWillDisappear(_ animated: Bool) {
+        coordinator.delegate = nil
+        super.viewWillDisappear(animated)
+    }
+}

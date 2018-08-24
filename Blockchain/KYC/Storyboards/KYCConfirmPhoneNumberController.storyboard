@@ -67,8 +67,9 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYo-qh-R2k">
-                                <rect key="frame" x="134.66666666666666" y="574" width="106" height="32"/>
+                                <rect key="frame" x="118.66666666666669" y="574" width="138" height="44"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="16"/>
+                                <inset key="contentEdgeInsets" minX="16" minY="12" maxX="16" maxY="12"/>
                                 <state key="normal" title="Resend Code">
                                     <color key="titleColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="0.5" colorSpace="calibratedRGB"/>
                                 </state>
@@ -105,7 +106,7 @@
                             <constraint firstItem="KYo-qh-R2k" firstAttribute="centerX" secondItem="IIQ-vZ-lk7" secondAttribute="centerX" id="fsr-0d-Jfv"/>
                             <constraint firstItem="5ml-0c-co0" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="gbg-c0-ylX"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="bottom" secondItem="36T-B3-yyh" secondAttribute="bottom" constant="16" id="lHo-bY-QRU"/>
-                            <constraint firstItem="36T-B3-yyh" firstAttribute="top" secondItem="KYo-qh-R2k" secondAttribute="bottom" constant="24" id="mHU-NG-Jq2"/>
+                            <constraint firstItem="36T-B3-yyh" firstAttribute="top" secondItem="KYo-qh-R2k" secondAttribute="bottom" constant="12" id="mHU-NG-Jq2"/>
                             <constraint firstItem="cDf-1e-GvH" firstAttribute="top" secondItem="5ml-0c-co0" secondAttribute="bottom" constant="2" id="q6L-9H-yLO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IIQ-vZ-lk7"/>
