@@ -118,12 +118,14 @@ import RxSwift
     // MARK: - Lifecycle
     private init(
         walletManager: WalletManager = WalletManager.shared,
-        walletService: WalletService = WalletService.shared
+        walletService: WalletService = WalletService.shared,
+        marketsService: MarketsService = MarketsService(),
+        exchangeService: ExchangeService = ExchangeService()
     ) {
         self.walletManager = walletManager
         self.walletService = walletService
-        self.marketsService = MarketsService()
-        self.exchangeService = ExchangeService()
+        self.marketsService = marketsService
+        self.exchangeService = exchangeService
         super.init()
     }
 
