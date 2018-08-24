@@ -14,21 +14,18 @@ extension Encodable {
         return try encoder.encode(self)
     }
 
-    func tryToEncode(
-        encoding: String.Encoding,
-        onSuccess: (String) -> Void,
-        onError: () -> Void
-    ) {
-        do {
-            let encodedData = try self.encode()
-            guard let string = String(data: encodedData, encoding: encoding) else {
-                onError()
-                return
-            }
-            onSuccess(string)
-        } catch {
-            onError()
+    func encodeToString(encoding: String.Encoding) throws -> String {
+        let encodedData = try self.encode()
+        guard let string = String(data: encodedData, encoding: encoding) else {
+            throw EncodingError.invalidValue(
+                encodedData,
+                EncodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Could not create string with given encoding."
+                )
+            )
         }
+        return string
     }
 }
 

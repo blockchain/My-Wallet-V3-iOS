@@ -49,12 +49,13 @@ class MarketsService {
         switch dataSource {
         case .socket: do {
             let message = Quote(parameterOne: "parameterOne")
-            message.tryToEncode(encoding: .utf8, onSuccess: { encoded in
+            do {
+                let encoded = try message.encodeToString(encoding: .utf8)
                 let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
                 SocketManager.shared.send(message: socketMessage)
-            }, onError: {
+            } catch {
                 Logger.shared.error("Could not encode socket message")
-            })
+            }
         }
         case .rest: Logger.shared.debug("use REST endpoint")
         }
