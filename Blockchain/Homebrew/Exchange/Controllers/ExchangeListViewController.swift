@@ -8,13 +8,18 @@
 
 import Foundation
 
-protocol ExchangeListInterface: class {
-    func paginationActivityIndicatorVisibility(_ visibility: Visibility)
-    func activityIndicatorVisibility(_ visibility: Visibility)
-    func listVisibility(_ visibility: Visibility)
+protocol ExchangeListDelegate: class {
+    func onLoaded()
+    func onNextPageRequest(_ identifier: String)
+    func onNewOrderTapped()
+    func onPullToRefresh()
 }
 
 class ExchangeListViewController: UIViewController {
+    
+    // MARK: Public Properties
+    
+    weak var delegate: ExchangeListDelegate?
 
     // MARK: Private IBOutlets
 
@@ -23,20 +28,69 @@ class ExchangeListViewController: UIViewController {
     // MARK: Private Properties
 
     fileprivate var dataProvider: ExchangeListDataProvider?
+    fileprivate var presenter: ExchangeListPresenter!
+    fileprivate var dependencies: ExchangeDependencies!
+    
+    // MARK: Factory
+    
+    class func make(with dependencies: ExchangeDependencies) -> ExchangeListViewController {
+        let controller = ExchangeListViewController.makeFromStoryboard()
+        controller.dependencies = dependencies
+        return controller
+    }
+    
+    // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         dataProvider = ExchangeListDataProvider(table: tableView)
+        dependenciesSetup()
+        delegate?.onLoaded()
         dataProvider?.delegate = self
+    }
+    
+    fileprivate func dependenciesSetup() {
+        let interactor = ExchangeListInteractor(dependencies: dependencies)
+        presenter = ExchangeListPresenter(interactor: interactor)
+        presenter.interface = self
+        interactor.output = presenter
+        delegate = presenter
+    }
+}
+
+extension ExchangeListViewController: ExchangeListInterface {
+    func paginationActivityIndicatorVisibility(_ visibility: Visibility) {
+        dataProvider?.isPaging = visibility == .visible
+    }
+    
+    func refreshControlVisibility(_ visibility: Visibility) {
+        // TODO
+    }
+    
+    func display(results: [ExchangeTradeCellModel]) {
+        dataProvider?.append(tradeModels: results)
+    }
+    
+    func append(results: [ExchangeTradeCellModel]) {
+        dataProvider?.append(tradeModels: results)
+    }
+    
+    func enablePullToRefresh() {
+        // TODO
+    }
+    
+    func showNewExchange(animated: Bool) {
+        // TODO
     }
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
     func newOrderTapped(_ dataProvider: ExchangeListDataProvider) {
-        // TODO
+        delegate?.onNewOrderTapped()
     }
-
-    func dataProvider(_ dataProvider: ExchangeListDataProvider, requestsNextPageBefore timestamp: Date) {
-        // TODO
+    
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, nextPageBefore identifier: String) {
+        delegate?.onNextPageRequest(identifier)
     }
 }

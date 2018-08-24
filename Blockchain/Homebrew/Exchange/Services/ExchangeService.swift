@@ -8,29 +8,20 @@
 
 import Foundation
 
-enum ListPresentationUpdate<T: Equatable> {
-    typealias Deleted = IndexPath
-    typealias Inserted = IndexPath
+typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
 
-    case insert(IndexPath, T)
-    case delete(IndexPath)
-    case move(Deleted, Inserted, T)
-    case update(IndexPath, T)
-}
-
-protocol ExchangeServiceDelegate: class {
-    func exchangeServiceDidBeginUpdates(_ service: ExchangeService)
-    func exchangeServiceDidEndUpdates(_ service: ExchangeService)
-    func exchangeService(_ service: ExchangeService, didUpdate: [ListPresentationUpdate<ExchangeTradeCellModel>])
-    func exchangeService(_ service: ExchangeService, didReturn error: Error)
+protocol ExchangeHistoryAPI {
+    func getHomebrewTrades(before date: Date, completion: @escaping CompletionHandler)
+    func getAllTrades(with completion: @escaping CompletionHandler)
+    func isExecuting() -> Bool
 }
 
 // TODO: Note this is a WIP. 
 class ExchangeService: NSObject {
+    
+    typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
 
-    weak var delegate: ExchangeServiceDelegate?
-
-    fileprivate var tradeModels: Set<ExchangeTradeCellModel> = []
+    var tradeModels: [ExchangeTradeCellModel] = []
     fileprivate let partnerAPI: PartnerExchangeAPI = PartnerExchangeService()
     fileprivate let homebrewAPI: HomebrewExchangeAPI = HomebrewExchangeService()
     
@@ -42,63 +33,56 @@ class ExchangeService: NSObject {
         return queue
     }()
     
-    func getPartnerTrades() {
-        delegate?.exchangeServiceDidBeginUpdates(self)
-        
-        if let op = partnerOperation {
-            guard op.isExecuting == false else { return }
-        }
-        partnerOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
-            guard let this = self else { return }
-            this.partnerAPI.fetchTransactions(with: { (models, error) in
-                if let result = models {
-                    this.differentiateAndAppend(result)
-                }
-                complete()
-            })
-        })
-        partnerOperation.addCompletionBlock { [weak self] in
-            guard let this = self else { return }
-            this.sortAndUpdateTradeModels()
-            this.delegate?.exchangeServiceDidEndUpdates(this)
-        }
-        partnerOperation.start()
+    fileprivate func sort(models: [ExchangeTradeCellModel]) -> [ExchangeTradeCellModel] {
+        let sorted = models.sorted(by: { $0.transactionDate.compare($1.transactionDate) == .orderedDescending })
+        return sorted
     }
-    
-    func getHomebrewTrades(before date: Date = Date()) {
-        delegate?.exchangeServiceDidBeginUpdates(self)
+}
+
+extension ExchangeService: ExchangeHistoryAPI {
+    func getHomebrewTrades(before date: Date = Date(), completion: @escaping CompletionHandler) {
         
         if let op = homebrewOperation {
             guard op.isExecuting == false else { return }
         }
         
+        var result: Result<[ExchangeTradeCellModel]> = .error(nil)
         homebrewOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
             this.homebrewAPI.nextPage(fromTimestamp: date, completion: { (models, error) in
+                if let err = error {
+                    result = .error(err)
+                }
                 if let result = models {
-                    this.differentiateAndAppend(result)
+                    this.tradeModels.append(contentsOf: result)
                 }
                 complete()
             })
         })
         homebrewOperation.addCompletionBlock { [weak self] in
             guard let this = self else { return }
-            this.sortAndUpdateTradeModels()
-            this.delegate?.exchangeServiceDidEndUpdates(this)
+            if case let .success(value) = result {
+                let models = this.sort(models: value)
+                completion(.success(models))
+            } else {
+                completion(result)
+            }
         }
         homebrewOperation.start()
     }
     
-    func getAllTrades() {
+    func getAllTrades(with completion: @escaping CompletionHandler) {
         /// Trades are being fetched, bail early.
+        if let op = homebrewOperation {
+            op.cancel()
+        }
         guard tradeQueue.operations.count == 0 else { return }
-        delegate?.exchangeServiceDidBeginUpdates(self)
         
         partnerOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
             this.partnerAPI.fetchTransactions(with: { (models, error) in
                 if let result = models {
-                    this.differentiateAndAppend(result)
+                    this.tradeModels.append(contentsOf: result)
                 }
                 complete()
             })
@@ -108,37 +92,23 @@ class ExchangeService: NSObject {
             guard let this = self else { return }
             this.homebrewAPI.nextPage(fromTimestamp: Date(), completion: { (models, error) in
                 if let result = models {
-                    this.differentiateAndAppend(result)
+                    this.tradeModels.append(contentsOf: result)
                 }
                 complete()
             })
         })
         homebrewOperation.addCompletionBlock { [weak self] in
             guard let this = self else { return }
-            this.sortAndUpdateTradeModels()
-            this.delegate?.exchangeServiceDidEndUpdates(this)
+            this.tradeModels = this.sort(models: this.tradeModels)
+            completion(.success(this.tradeModels))
         }
         
-    }
-
-    fileprivate func differentiateAndAppend(_ models: [ExchangeTradeCellModel]) {
-        if tradeModels.filter({ models.contains($0) }).count > 0 {
-            models.forEach { [weak self] (model) in
-                guard let this = self else { return }
-                this.tradeModels.insert(model)
-            }
-        }
+        homebrewOperation.addDependency(partnerOperation)
+        
+        tradeQueue.addOperations([partnerOperation, homebrewOperation], waitUntilFinished: false)
     }
     
-    fileprivate func sortAndUpdateTradeModels() {
-        let sorted = tradeModels.sorted(by: { $0.transactionDate.compare($1.transactionDate) == .orderedDescending })
-        let insertions: [ListPresentationUpdate<ExchangeTradeCellModel>] = sorted
-            .enumerated()
-            .map { (index, model) -> ListPresentationUpdate<ExchangeTradeCellModel> in
-            let path = IndexPath(row: index, section: 0)
-            return .insert(path, model)
-        }
-        delegate?.exchangeService(self, didUpdate: insertions)
+    func isExecuting() -> Bool {
+        return tradeQueue.operations.count > 0 || homebrewOperation.isExecuting
     }
-
 }

@@ -71,7 +71,7 @@ class AsyncOperation: Operation {
     }
     
     override var isReady: Bool {
-        return executionState == .ready
+        return executionState == .ready && dependencies.filter({$0.isFinished == true}).count == dependencies.count
     }
     
     /// For custom operations, you should override this function. When your operation
@@ -86,7 +86,7 @@ class AsyncOperation: Operation {
     /// be called on the main thread. In fact is typically called on a
     /// secondary thread.
     func addCompletionBlock(_ block: @escaping () -> Void) {
-        guard isCancelled == false && executionState == .ready else { return }
+        guard isCancelled == false && executionState != .finished else { return }
         lock.lock()
         completionBlocks.append(block)
         lock.unlock()

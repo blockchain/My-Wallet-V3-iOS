@@ -63,12 +63,14 @@ struct ExchangeTradeCellModel: Decodable {
         }
     }
 
+    let identifier: String
     let status: TradeStatus
     let assetType: AssetType
     let transactionDate: Date
     let displayValue: String
 
     init(with trade: ExchangeTrade) {
+        identifier = trade.orderID
         status = TradeStatus(shapeshift: trade.status)
         transactionDate = trade.date
         displayValue = trade.displayAmount() ?? ""
@@ -82,6 +84,7 @@ struct ExchangeTradeCellModel: Decodable {
     // MARK: - Decodable
 
     enum CodingKeys: String, CodingKey {
+        case identifier = "id"
         case currency = "currency"
         case createdAt = "createdAt"
         case quantity = "quantity"
@@ -91,6 +94,7 @@ struct ExchangeTradeCellModel: Decodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         transactionDate = try values.decode(Date.self, forKey: .createdAt)
+        identifier = try values.decode(String.self, forKey: .identifier)
         let asset = try values.decode(String.self, forKey: .currency)
         displayValue = try values.decode(String.self, forKey: .quantity)
         let statusValue = try values.decode(String.self, forKey: .status)
@@ -164,7 +168,7 @@ extension ExchangeTradeCellModel.TradeStatus {
 }
 
 fileprivate extension ExchangeTrade {
-
+    
     fileprivate func displayAmount() -> String? {
         if BlockchainSettings.sharedAppInstance().symbolLocal {
             guard let currencySymbol = withdrawalCurrency() else { return nil }
@@ -188,5 +192,19 @@ fileprivate extension ExchangeTrade {
             return "\(NumberFormatter.localFormattedString(withdrawalAmount.stringValue)) \(toAsset))"
         }
     }
+}
 
+// MARK: Testing
+
+extension ExchangeTradeCellModel {
+    
+    init(identifier: String, status: TradeStatus = .inProgress, assetType: AssetType = .ethereum, date: Date = Date(), displayValue: String) {
+        self.identifier = identifier
+        self.status = status
+        self.assetType = assetType
+        self.transactionDate = date
+        self.displayValue = displayValue
+    }
+    
+    static let demo: ExchangeTradeCellModel = ExchangeTradeCellModel(identifier: "test", displayValue: "0.12345")
 }
