@@ -23,7 +23,7 @@ class MarketsService {
         }
     }
 
-    private var socketMessageSubject: Observable<SocketMessage> {
+    private var socketMessageObservable: Observable<SocketMessage> {
         return SocketManager.shared.webSocketMessageObservable
     }
     private let restMessageSubject = PublishSubject<ExchangeRate>()
@@ -31,7 +31,7 @@ class MarketsService {
     var rates: Observable<ExchangeRate> {
         switch dataSource {
         case .socket:
-            return socketMessageSubject.filter {
+            return socketMessageObservable.filter {
                 $0.type == .exchange &&
                 $0.JSONMessage is Quote
             }.map { message in
