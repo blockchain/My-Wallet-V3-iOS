@@ -1,5 +1,5 @@
 //
-//  HomebrewExchangeCreateViewController.swift
+//  ExchangeCreateViewController.swift
 //  Blockchain
 //
 //  Created by kevinwu on 8/15/18.
