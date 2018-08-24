@@ -25,7 +25,7 @@ enum KYCEvent {
     /// Should the user go back in the KYC flow, we need to
     /// prepopulate the screens with the data they already entered.
     /// We may need another event type for this and hook into
-    /// `viewWillDisappear`. 
+    /// `viewWillDisappear`.
 }
 
 protocol KYCCoordinatorDelegate: class {
@@ -159,7 +159,9 @@ protocol KYCCoordinatorDelegate: class {
         case .welcome,
              .country,
              .confirmPhone,
-             .accountStatus:
+             .verifyIdentity,
+             .accountStatus,
+             .applicationComplete:
             break
         case .profile:
             guard let current = user else { return }

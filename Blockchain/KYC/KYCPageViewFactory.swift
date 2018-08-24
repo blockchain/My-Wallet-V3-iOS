@@ -36,6 +36,8 @@ class KYCPageViewFactory {
             return KYCVerifyIdentityController.make(with: coordinator)
         case .accountStatus:
             return KYCInformationController.make(with: coordinator)
+        case .applicationComplete:
+            return KYCApplicationCompleteController.make(with: coordinator)
         }
     }
 }

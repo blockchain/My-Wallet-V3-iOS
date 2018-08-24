@@ -140,6 +140,9 @@
 		3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AEF9E8B21091B71006B1CF9 /* MapKit.framework */; };
 		3AFD18AD21221D40007145EA /* KYCBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */; };
 		3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFD18AE21221D95007145EA /* KYCPageModel.swift */; };
+		51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */; };
+		51058EFF212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */; };
+		51058F0B212F50C400AD8719 /* KYCApplicationCompleteController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */; };
 		510EA1702080F16100A63AB8 /* PasscodePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510EA16F2080F16100A63AB8 /* PasscodePayload.swift */; };
 		511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
 		511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */; };
@@ -1222,6 +1225,8 @@
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3AFD18AE21221D95007145EA /* KYCPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageModel.swift; sourceTree = "<group>"; };
 		404A01EFD6ABF02E4F6F337A /* Pods-Blockchain.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"; sourceTree = "<group>"; };
+		51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCApplicationCompleteController.swift; sourceTree = "<group>"; };
+		51058F0C212F50C400AD8719 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCApplicationCompleteController.storyboard; sourceTree = "<group>"; };
 		510EA16F2080F16100A63AB8 /* PasscodePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePayload.swift; sourceTree = "<group>"; };
 		511356BD209B7F6E00056D65 /* BlockchainAPI+Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+Payload.swift"; sourceTree = "<group>"; };
 		511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+PayloadTests.swift"; sourceTree = "<group>"; };
@@ -3738,6 +3743,7 @@
 		602B9CA62118E15200BD3D60 /* KYC */ = {
 			isa = PBXGroup;
 			children = (
+				51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */,
 				3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */,
 				602B9CCE2118E15200BD3D60 /* KYCCoordinator.swift */,
 				602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */,
@@ -3763,15 +3769,16 @@
 		602B9CA72118E15200BD3D60 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */,
-				602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */,
-				602B9CAA2118E15200BD3D60 /* KYCVerifyIdentityController.storyboard */,
+				602B9CAF2118E15200BD3D60 /* KYCAddressController.storyboard */,
+				51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */,
 				602B9CAB2118E15200BD3D60 /* KYCConfirmPhoneNumberController.storyboard */,
 				602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */,
 				602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */,
-				602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */,
-				602B9CAF2118E15200BD3D60 /* KYCAddressController.storyboard */,
+				602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */,
+				602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */,
 				602B9CB02118E15200BD3D60 /* KYCPersonalDetailsController.storyboard */,
+				602B9CAA2118E15200BD3D60 /* KYCVerifyIdentityController.storyboard */,
+				602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -6954,6 +6961,7 @@
 				51B767AB2106369A003CCD46 /* Montserrat-Bold.ttf in Resources */,
 				51B767AC2106369A003CCD46 /* Montserrat-BoldItalic.ttf in Resources */,
 				51B767AD2106369A003CCD46 /* Montserrat-ExtraBold.ttf in Resources */,
+				51058F0B212F50C400AD8719 /* KYCApplicationCompleteController.storyboard in Resources */,
 				51B767AE2106369A003CCD46 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
 				602B9CDD2118E15300BD3D60 /* KYCWelcomeController.storyboard in Resources */,
 				602B9CDA2118E15300BD3D60 /* KYCConfirmPhoneNumberController.storyboard in Resources */,
@@ -7308,6 +7316,7 @@
 				5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */,
 				3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */,
 				AA63F86820A27AC6002B719B /* PostAuthenticationRoute.swift in Sources */,
+				51058EFF212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */,
 				AA7133C021222A7300CB2AA9 /* KYCCountrySelectionPresenterTests.swift in Sources */,
 				C7C0DC28212F67E1000EFE71 /* PartnerExchangeService.swift in Sources */,
 				3AB4D8EA212F1F62004F0160 /* NSDateFormatter+TimeAgoString.m in Sources */,
@@ -7907,6 +7916,7 @@
 				2390C10B1D87376E00342C38 /* TransactionRecipientsViewController.m in Sources */,
 				C7618B611F66C817003E7589 /* QRCodeScannerSendViewController.m in Sources */,
 				AA63F87420A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
+				51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */,
 				AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				23FB5C071D9ABB450008C6AB /* TransactionDetailDescriptionCell.m in Sources */,
 				23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */,
@@ -8080,6 +8090,14 @@
 				239870331D805D690067546F /* zh */,
 			);
 			name = AccountsAndAddresses.storyboard;
+			sourceTree = "<group>";
+		};
+		51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51058F0C212F50C400AD8719 /* Base */,
+			);
+			name = KYCApplicationCompleteController.storyboard;
 			sourceTree = "<group>";
 		};
 		515EF91B210282B4002350B6 /* Upgrade.strings */ = {
