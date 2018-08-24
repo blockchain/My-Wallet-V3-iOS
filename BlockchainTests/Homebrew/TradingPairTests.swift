@@ -20,12 +20,12 @@ class TradingPairTests: XCTestCase {
 
     func testInitializerError() {
         let pair = TradingPair(from: .bitcoin, to: .bitcoin)
-        XCTAssert(pair == nil, "Initializer should allow different asset types")
+        XCTAssertNil(pair, "Initializer should allow different asset types")
     }
 
     func testInitializerSuccess() {
         let pair = TradingPair(from: .bitcoin, to: .ethereum)
-        XCTAssert(pair != nil, "Initializer should allow different asset types")
+        XCTAssertNotNil(pair, "Initializer should allow different asset types")
     }
 
     func testSetFrom() {
