@@ -159,7 +159,6 @@ protocol KYCCoordinatorDelegate: class {
         case .welcome,
              .country,
              .confirmPhone,
-             .verifyIdentity,
              .accountStatus,
              .applicationComplete:
             break

@@ -150,6 +150,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             return
         }
         let onfidoController = OnfidoController(config: currentConfig)
+        onfidoController.delegate = self
         onfidoController.modalPresentationStyle = .overCurrentContext
         self.present(onfidoController, animated: true)
     }
@@ -160,5 +161,22 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         DispatchQueue.main.async {
             self.setUpAndShowDocumentDialog()
         }
+    }
+}
+
+extension KYCVerifyIdentityController: OnfidoControllerDelegate {
+    func onOnfidoControllerCancelled(_ onfidoController: OnfidoController) {
+        onfidoController.dismiss(animated: true)
+    }
+
+    func onOnfidoControllerErrored(_ onfidoController: OnfidoController, error: Error) {
+        onfidoController.dismiss(animated: true) {
+            AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.error)
+        }
+    }
+
+    func onOnfidoControllerSuccess(_ onfidoController: OnfidoController) {
+        onfidoController.dismiss(animated: true)
+        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
     }
 }
