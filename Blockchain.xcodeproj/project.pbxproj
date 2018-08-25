@@ -70,12 +70,6 @@
 		3A01911F212DF0B700AED2BF /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01911A212DE57A00AED2BF /* AsyncOperation.swift */; };
 		3A019122212DF0EB00AED2BF /* AsyncBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019121212DF0EB00AED2BF /* AsyncBlockOperationTests.swift */; };
 		3A019124212DF24700AED2BF /* ExchangeCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */; };
-		3A019144212E171600AED2BF /* AssetConversionRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019141212E171500AED2BF /* AssetConversionRateView.swift */; };
-		3A019145212E171600AED2BF /* AssetConversionRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A019142212E171500AED2BF /* AssetConversionRateView.xib */; };
-		3A019146212E171600AED2BF /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */; };
-		3A019147212E178900AED2BF /* AssetConversionRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019141212E171500AED2BF /* AssetConversionRateView.swift */; };
-		3A019148212E179100AED2BF /* AssetConversionRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A019142212E171500AED2BF /* AssetConversionRateView.xib */; };
-		3A019149212E179500AED2BF /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */; };
 		3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */; };
 		3A01914B212E17EE00AED2BF /* ExchangeCreateInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF93212B36B2003A8A08 /* ExchangeCreateInterface.swift */; };
 		3A01914D212E17FE00AED2BF /* ExchangeCreateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF91212B36B1003A8A08 /* ExchangeCreateDelegate.swift */; };
@@ -731,6 +725,12 @@
 		C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C19B720C580E5005CB600 /* WalletSecondPasswordDelegate.swift */; };
 		C780A446202228A400E49274 /* BCPriceChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A445202228A400E49274 /* BCPriceChartView.m */; };
 		C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C780A44B20235E9500E49274 /* BCBalancesChartView.m */; };
+		C78238AF2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C78238AE2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard */; };
+		C78238B02131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C78238AE2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard */; };
+		C78238BB2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C78238BA2131F2F7008FCCAD /* NumberKeypadView.xib */; };
+		C78238BC2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C78238BA2131F2F7008FCCAD /* NumberKeypadView.xib */; };
+		C78238C42131FA08008FCCAD /* NumberKeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78238C32131FA08008FCCAD /* NumberKeypadView.swift */; };
+		C78238C52131FA08008FCCAD /* NumberKeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78238C32131FA08008FCCAD /* NumberKeypadView.swift */; };
 		C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
 		C787180220A22362000CC46E /* WalletAddressesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787180020A22362000CC46E /* WalletAddressesDelegate.swift */; };
 		C78893DA20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78893D920A34DF4003C0A8F /* WalletSettingsDelegate.swift */; };
@@ -1175,9 +1175,6 @@
 		3A01911A212DE57A00AED2BF /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		3A01911C212DEF8000AED2BF /* AsyncBlockOperaiton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperaiton.swift; sourceTree = "<group>"; };
 		3A019121212DF0EB00AED2BF /* AsyncBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperationTests.swift; sourceTree = "<group>"; };
-		3A019141212E171500AED2BF /* AssetConversionRateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetConversionRateView.swift; sourceTree = "<group>"; };
-		3A019142212E171500AED2BF /* AssetConversionRateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssetConversionRateView.xib; sourceTree = "<group>"; };
-		3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetConversionRateViewModel.swift; sourceTree = "<group>"; };
 		3A258C0C210A486F00C023F5 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListViewController.swift; sourceTree = "<group>"; };
 		3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExchangeListViewController.storyboard; sourceTree = "<group>"; };
@@ -3105,6 +3102,9 @@
 		C780A445202228A400E49274 /* BCPriceChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCPriceChartView.m; sourceTree = "<group>"; };
 		C780A44A20235E9500E49274 /* BCBalancesChartView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalancesChartView.h; sourceTree = "<group>"; };
 		C780A44B20235E9500E49274 /* BCBalancesChartView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCBalancesChartView.m; sourceTree = "<group>"; };
+		C78238AE2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExchangeCreateViewController.storyboard; sourceTree = "<group>"; };
+		C78238BA2131F2F7008FCCAD /* NumberKeypadView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NumberKeypadView.xib; sourceTree = "<group>"; };
+		C78238C32131FA08008FCCAD /* NumberKeypadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberKeypadView.swift; sourceTree = "<group>"; };
 		C787180020A22362000CC46E /* WalletAddressesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressesDelegate.swift; sourceTree = "<group>"; };
 		C78893D920A34DF4003C0A8F /* WalletSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSettingsDelegate.swift; sourceTree = "<group>"; };
 		C78893E420A36572003C0A8F /* Trade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trade.swift; sourceTree = "<group>"; };
@@ -3316,9 +3316,6 @@
 		3A26AF5621273BB7003A8A08 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3A019141212E171500AED2BF /* AssetConversionRateView.swift */,
-				3A019142212E171500AED2BF /* AssetConversionRateView.xib */,
-				3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */,
 				3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */,
 				3A26AF5721273BC9003A8A08 /* ExchangeListViewCell.swift */,
 				3A26AF5921273BD5003A8A08 /* ExchangeListViewCell.xib */,
@@ -3341,6 +3338,7 @@
 			isa = PBXGroup;
 			children = (
 				3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */,
+				C78238AE2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard */,
 				3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */,
 				3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */,
 			);
@@ -6474,6 +6472,15 @@
 			path = Exchange;
 			sourceTree = "<group>";
 		};
+		C78238CF2131FA34008FCCAD /* Keypad */ = {
+			isa = PBXGroup;
+			children = (
+				C78238BA2131F2F7008FCCAD /* NumberKeypadView.xib */,
+				C78238C32131FA08008FCCAD /* NumberKeypadView.swift */,
+			);
+			path = Keypad;
+			sourceTree = "<group>";
+		};
 		C790E0F91E5205620063D141 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -6614,6 +6621,7 @@
 			isa = PBXGroup;
 			children = (
 				C70576B1212CFFFC0027C6AA /* Nibable.swift */,
+				C78238CF2131FA34008FCCAD /* Keypad */,
 				3A76F8FC211A0665002F7946 /* ValidationForm */,
 				3AD7EE7421124D56006B924F /* ValidationTextField */,
 				3A258C0B210A485D00C023F5 /* Cells */,
@@ -6944,8 +6952,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C78238B02131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */,
 				51979189210F68940096E50B /* countries.json in Resources */,
-				3A019148212E179100AED2BF /* AssetConversionRateView.xib in Resources */,
+				C78238BC2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */,
 				AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */,
 			);
@@ -6991,7 +7000,6 @@
 				C9BE91861945D8F600FD516D /* PEKeyboard-2-edit.png in Resources */,
 				ECD244F119A8AC45004B1F40 /* PEKeyboard-4-dot.png in Resources */,
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
-				3A019145212E171600AED2BF /* AssetConversionRateView.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */,
 				602B9CF12118E15300BD3D60 /* LocationSuggestionCell.xib in Resources */,
@@ -7037,6 +7045,7 @@
 				51FC1AFE21270D0D007BEB18 /* SettingsTableSectionHeader.xib in Resources */,
 				515EFADF210282B4002350B6 /* Settings.strings in Resources */,
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
+				C78238BB2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */,
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				C718595B1F4B85E800745A87 /* Transactions.xib in Resources */,
 				3A26AF7621277944003A8A08 /* ExchangeListOrderHeaderView.xib in Resources */,
@@ -7049,6 +7058,7 @@
 				AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */,
 				515EFADB210282B4002350B6 /* InfoPlist.strings in Resources */,
 				9F1831F0151744FC00FB3D52 /* ReceiveCell.xib in Resources */,
+				C78238AF2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */,
 				ECD244EE19A8AC45004B1F40 /* PEKeyboard-3-next.png in Resources */,
 				515EFAE6210282B4002350B6 /* Backup.storyboard in Resources */,
 				ECD244F319A8AC45004B1F40 /* PEKeyboard-4-next.png in Resources */,
@@ -7411,11 +7421,11 @@
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
 				602B9D132118E24C00BD3D60 /* SearchControllerDelegate.swift in Sources */,
 				3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */,
-				3A019149212E179500AED2BF /* AssetConversionRateViewModel.swift in Sources */,
 				C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
 				3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */,
 				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				5159C3212109156400955BD6 /* KYCCountrySelectionControllerTests.swift in Sources */,
+				C78238C52131FA08008FCCAD /* NumberKeypadView.swift in Sources */,
 				C7D5116621237DFA00359651 /* KYCAuthenticationService.swift in Sources */,
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */,
@@ -7440,7 +7450,6 @@
 				602B9D282118E2A700BD3D60 /* NibBasedView.swift in Sources */,
 				3A3D5D8C211B453400E6C241 /* ValidationFormView.swift in Sources */,
 				C77217E920AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
-				3A019147212E178900AED2BF /* AssetConversionRateView.swift in Sources */,
 				3A01914E212E180500AED2BF /* FromToButtonDelegateIntermediate.swift in Sources */,
 				AAE94F4020C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */,
 				AAE9113E20A640A40093A431 /* PinPayload.swift in Sources */,
@@ -7600,7 +7609,6 @@
 				516546F5208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
 				84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */,
 				602B9CE82118E15300BD3D60 /* LocationSuggestion.swift in Sources */,
-				3A019144212E171600AED2BF /* AssetConversionRateView.swift in Sources */,
 				AA447BC82127679A00EC0FA0 /* SideMenuViewController.swift in Sources */,
 				C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */,
 				51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */,
@@ -7645,7 +7653,6 @@
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,
 				602B9CE42118E15300BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
 				9F765F4714BC8AEF00048EFB /* MultiAddressResponse.m in Sources */,
-				3A019146212E171600AED2BF /* AssetConversionRateViewModel.swift in Sources */,
 				AA63F87A20A3A198002B719B /* AppFeatureConfigurator.swift in Sources */,
 				602B9CEA2118E15300BD3D60 /* PostalAddress.swift in Sources */,
 				C780A446202228A400E49274 /* BCPriceChartView.m in Sources */,
@@ -7919,6 +7926,7 @@
 				51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */,
 				AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				23FB5C071D9ABB450008C6AB /* TransactionDetailDescriptionCell.m in Sources */,
+				C78238C42131FA08008FCCAD /* NumberKeypadView.swift in Sources */,
 				23BA220E1D6B4AB500D0472B /* KeychainItemWrapper+Credentials.m in Sources */,
 				3A26AF7421277931003A8A08 /* ExchangeListOrderHeaderView.swift in Sources */,
 				23DEF96E1DB11C98004AAAB6 /* TransferAllFundsBuilder.m in Sources */,

@@ -27,7 +27,6 @@ class ExchangeCreateViewController: UIViewController {
         view.addSubview(exchangeCreateView)
 
         exchangeCreateView.setup(
-            withConversionView: true,
             delegate: self,
             navigationController: self.navigationController as! BCNavigationController
         )
