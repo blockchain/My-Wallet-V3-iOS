@@ -8,8 +8,17 @@
 
 import Onfido
 
+protocol OnfidoControllerDelegate: class {
+    func onOnfidoControllerCancelled(_ onfidoController: OnfidoController)
+
+    func onOnfidoControllerErrored(_ onfidoController: OnfidoController, error: Error)
+
+    func onOnfidoControllerSuccess(_ onfidoController: OnfidoController)
+}
+
 class OnfidoController: UIViewController {
     static let shared = OnfidoController()
+    weak var delegate: OnfidoControllerDelegate?
     private var config: OnfidoConfig?
 
     convenience init() {
@@ -49,17 +58,14 @@ class OnfidoController: UIViewController {
         let responseHandler: (OnfidoResponse) -> Void = { response in
             if case let OnfidoResponse.error(innerError) = response {
                 DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: {
-                        self.showErrorMessage(forError: innerError)
-
-                    })
+                    self.delegate?.onOnfidoControllerErrored(self, error: innerError)
                 }
             } else if case OnfidoResponse.success = response {
                 UIView.animate(withDuration: 0.24, animations: {
                     self.view.alpha = 0
                 }, completion: { _ in
                     DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: nil)
+                        self.delegate?.onOnfidoControllerSuccess(self)
                     }
                 })
             } else if case OnfidoResponse.cancel = response {
@@ -67,7 +73,7 @@ class OnfidoController: UIViewController {
                     self.view.alpha = 0
                 }, completion: { _ in
                     DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: nil)
+                        self.delegate?.onOnfidoControllerCancelled(self)
                     }
                 })
             }

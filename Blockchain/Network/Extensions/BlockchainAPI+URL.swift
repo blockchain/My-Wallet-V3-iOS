@@ -48,6 +48,10 @@ extension BlockchainAPI {
 
     // MARK: - API Endpoints
 
+    var signedRetailTokenUrl: String {
+        return "\(walletUrl)/wallet/signed-retail-token"
+    }
+
     var pinStore: String {
         return "\(walletUrl)/pin-store"
     }

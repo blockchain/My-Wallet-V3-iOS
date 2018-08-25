@@ -22,7 +22,7 @@ final class KYCNetworkRequest {
     struct KYCEndpoints {
         enum GET {
             case credentials
-            case credentialsForProvider
+            case credentialsForOnfido
             case healthCheck
             case listOfCountries
             case nextKYCMethod
@@ -32,8 +32,8 @@ final class KYCNetworkRequest {
                 switch self {
                 case .credentials:
                     return ["kyc", "credentials"]
-                case .credentialsForProvider:
-                    return ["kyc", "credentials", "provider"]
+                case .credentialsForOnfido:
+                    return ["kyc", "credentials", "onfido"]
                 case .healthCheck:
                     return ["healthz"]
                 case .listOfCountries:
@@ -48,7 +48,7 @@ final class KYCNetworkRequest {
             var parameters: [String: String]? {
                 switch self {
                 case .credentials,
-                     .credentialsForProvider,
+                     .credentialsForOnfido,
                      .healthCheck,
                      .listOfCountries,
                      .nextKYCMethod,
@@ -59,16 +59,14 @@ final class KYCNetworkRequest {
         }
 
         enum POST {
-            case registerUser
-            case apiKey(userId: String)
+            case createUser
             case sessionToken(userId: String)
             case verifications
             case submitVerification
 
             var path: String {
                 switch self {
-                case .registerUser: return "/internal/users"
-                case .apiKey: return "/internal/auth"
+                case .createUser: return "/users"
                 case .sessionToken: return "/auth"
                 case .verifications: return "/verifications"
                 case .submitVerification: return "/kyc/verifications"
@@ -77,10 +75,9 @@ final class KYCNetworkRequest {
 
             var queryParameters: [String: String]? {
                 switch self {
-                case .apiKey(let userId),
-                     .sessionToken(let userId):
+                case .sessionToken(let userId):
                     return ["userId": userId]
-                case .registerUser,
+                case .createUser,
                      .verifications,
                      .submitVerification:
                         return nil
@@ -203,6 +200,7 @@ final class KYCNetworkRequest {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
+        Logger.shared.debug("Sending \(request.httpMethod ?? "") request to '\(request.url?.absoluteString ?? "")'")
         let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -221,6 +219,9 @@ final class KYCNetworkRequest {
                 }
                 guard let responseData = data else {
                     taskFailure(HTTPRequestPayloadError.emptyData); return
+                }
+                if let responseString = String(data: responseData, encoding: .utf8) {
+                    Logger.shared.debug("Response received: \(responseString)")
                 }
                 taskSuccess(responseData)
             }

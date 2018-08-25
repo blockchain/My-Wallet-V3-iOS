@@ -34,7 +34,8 @@ class MockNetworkManager: NetworkManager {
     override func requestJsonOrString(
         _ url: String,
         method: HttpMethod,
-        parameters: URLParameters? = nil
+        parameters: URLParameters? = nil,
+        headers: [String: String]? = nil
     ) -> Single<(HTTPURLResponse, Any)> {
         guard let mockResponse = mockResponse else {
             print("No mock response set, performing actual network call")
