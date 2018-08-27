@@ -10,14 +10,14 @@ import Foundation
 import RxSwift
 
 protocol ExchangeDependencies {
-    var service: ExchangeHistoryAPI { get }
+    var historyService: ExchangeHistoryAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
-    let service: ExchangeHistoryAPI
+    let historyService: ExchangeHistoryAPI
     
     init() {
-        service = ExchangeService()
+        historyService = ExchangeService()
     }
 }
 
@@ -55,7 +55,7 @@ struct ExchangeServices: ExchangeDependencies {
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if isHomebrewAvailable {
+                if !isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)

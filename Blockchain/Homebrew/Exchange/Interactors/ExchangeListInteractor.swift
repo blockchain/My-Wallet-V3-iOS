@@ -10,16 +10,16 @@ import Foundation
 
 class ExchangeListInteractor: ExchangeListInput {
     
-    fileprivate let service: ExchangeHistoryAPI
+    fileprivate let history: ExchangeHistoryAPI
     
     weak var output: ExchangeListOutput?
     
     init(dependencies: ExchangeDependencies) {
-        self.service = dependencies.service
+        self.history = dependencies.historyService
     }
     
     func fetchAllTrades() {
-        service.getAllTrades { [weak self] (result) in
+        history.getAllTrades { [weak self] (result) in
             switch result {
             case .success(let models):
                 self?.output?.loadedTrades(models)
@@ -30,8 +30,8 @@ class ExchangeListInteractor: ExchangeListInput {
     }
     
     func refresh() {
-        guard service.isExecuting() == false else { return }
-        service.getAllTrades { [weak self] (result) in
+        guard history.isExecuting() == false else { return }
+        history.getAllTrades { [weak self] (result) in
             switch result {
             case .success(let models):
                 self?.output?.refreshedTrades(models)
@@ -42,17 +42,17 @@ class ExchangeListInteractor: ExchangeListInput {
     }
     
     func canPage() -> Bool {
-        return service.canPage
+        return history.canPage
     }
     
     func tradeSelectedWith(identifier: String) -> ExchangeTradeCellModel? {
-        let model = service.tradeModels.filter({ $0.identifier == identifier }).first
+        let model = history.tradeModels.filter({ $0.identifier == identifier }).first
         return model
     }
     
     func nextPageBefore(identifier: String) {
-        guard let model = service.tradeModels.filter({ $0.identifier == identifier }).first else { return }
-        service.getHomebrewTrades(before: model.transactionDate) { [weak self] (result) in
+        guard let model = history.tradeModels.filter({ $0.identifier == identifier }).first else { return }
+        history.getHomebrewTrades(before: model.transactionDate) { [weak self] (result) in
             switch result {
             case .success(let models):
                 self?.output?.appendTrades(models)
