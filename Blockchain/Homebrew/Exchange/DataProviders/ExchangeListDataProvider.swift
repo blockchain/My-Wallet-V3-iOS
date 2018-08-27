@@ -10,6 +10,7 @@ import Foundation
 
 protocol ExchangeListDataProviderDelegate: class {
     func dataProvider(_ dataProvider: ExchangeListDataProvider, nextPageBefore identifier: String)
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel)
     func newOrderTapped(_ dataProvider: ExchangeListDataProvider)
     func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider)
 }
@@ -23,9 +24,6 @@ class ExchangeListDataProvider: NSObject {
     // MARK: Public
     
     weak var delegate: ExchangeListDataProviderDelegate?
-
-    // TODO: Selecting a trade should present the details screen
-    var selectionClosure: ((ExchangeTradeCellModel) -> Void)?
     
     // If this is `true` we should show the cell with
     // a loading indicator at the bottom of the `tableView`
@@ -175,6 +173,13 @@ extension ExchangeListDataProvider: UITableViewDataSource {
         }
         
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let items = models else { return }
+        guard items.count > indexPath.row else { return }
+        let model = items[indexPath.row]
+        delegate?.dataProvider(self, didSelect: model)
     }
 }
 
