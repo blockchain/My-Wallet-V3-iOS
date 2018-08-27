@@ -56,6 +56,8 @@ class ExchangeListDataProvider: NSObject {
         let newOrderCell = UINib(nibName: NewOrderTableViewCell.identifier, bundle: nil)
         let listCell = UINib(nibName: ExchangeListViewCell.identifier, bundle: nil)
         let loadingCell = UINib(nibName: LoadingTableViewCell.identifier, bundle: nil)
+        let headerView = UINib(nibName: String(describing: ExchangeListHeaderView.self), bundle: nil)
+        table.register(headerView, forHeaderFooterViewReuseIdentifier: String(describing: ExchangeListHeaderView.self))
         table.register(listCell, forCellReuseIdentifier: ExchangeListViewCell.identifier)
         table.register(loadingCell, forCellReuseIdentifier: LoadingTableViewCell.identifier)
         table.register(newOrderCell, forCellReuseIdentifier: NewOrderTableViewCell.identifier)
@@ -155,6 +157,27 @@ extension ExchangeListDataProvider: UITableViewDelegate {
         }
         
         return isPaging ? LoadingTableViewCell.height() : 0.0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let items = models else { return nil }
+        guard items.count > 0 else { return nil }
+        
+        let identifier = String(describing: ExchangeListHeaderView.self)
+        guard let header = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: identifier
+            ) as? ExchangeListHeaderView else { return nil }
+        
+        return header
+    }
+
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let items = models else { return 0.0 }
+        guard items.count > 0 else { return 0.0 }
+        guard section == 1 else { return 0.0 }
+        
+        return ExchangeListHeaderView.height()
     }
 }
 

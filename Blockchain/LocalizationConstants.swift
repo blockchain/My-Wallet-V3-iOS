@@ -326,6 +326,11 @@ struct LocalizationConstants {
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
         
+        static let orderHistory = NSLocalizedString(
+            "Order History",
+            comment: "Header for the exchange list"
+        )
+        
         static let loading = NSLocalizedString(
             "Loading Exchange",
             comment: "Text presented when the wallet is loading the exchange"
