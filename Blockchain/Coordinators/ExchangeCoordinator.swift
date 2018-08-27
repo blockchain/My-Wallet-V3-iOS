@@ -10,14 +10,14 @@ import Foundation
 import RxSwift
 
 protocol ExchangeDependencies {
-    var historyService: ExchangeHistoryAPI { get }
+    var service: ExchangeHistoryAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
-    let historyService: ExchangeHistoryAPI
+    let service: ExchangeHistoryAPI
     
     init() {
-        historyService = ExchangeService()
+        service = ExchangeService()
     }
 }
 
