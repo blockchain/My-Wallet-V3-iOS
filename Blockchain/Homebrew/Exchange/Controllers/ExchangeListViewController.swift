@@ -88,6 +88,10 @@ extension ExchangeListViewController: ExchangeListInterface {
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel) {
+        // TODO: Show order detail screen for trade.
+    }
+    
     func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider) {
         delegate?.onPullToRefresh()
     }
