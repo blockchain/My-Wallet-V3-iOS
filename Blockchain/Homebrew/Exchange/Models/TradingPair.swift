@@ -23,12 +23,13 @@ struct TradingPair {
     
     init?(string: String) {
         var components: [String] = []
-        for separator in ["-", "_"] {
-            if components.contains(separator) {
-                components = string.components(separatedBy: separator)
-                break
-            }
+        if string.contains("-") {
+            components = string.components(separatedBy: "-")
         }
+        if string.contains("_") {
+            components = string.components(separatedBy: "_")
+        }
+        
         guard let from = components.first else { return nil }
         guard let to = components.last else { return nil }
         guard let toAsset = AssetType(stringValue: to) else { return nil }
