@@ -10,11 +10,11 @@ import Foundation
 import RxSwift
 
 protocol ExchangeDependencies {
-    var service: ExchangeService { get }
+    var service: ExchangeHistoryAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
-    let service: ExchangeService
+    let service: ExchangeHistoryAPI
     
     init() {
         service = ExchangeService()
@@ -67,6 +67,7 @@ struct ExchangeServices: ExchangeDependencies {
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
+                // TODO: Only for testing.
                 if !isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
@@ -100,6 +101,7 @@ struct ExchangeServices: ExchangeDependencies {
         }
 
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
+        // TODO: Fix me.
 //        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Exchange.loading)
 
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)

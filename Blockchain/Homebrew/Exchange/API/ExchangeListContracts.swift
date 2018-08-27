@@ -18,6 +18,7 @@ protocol ExchangeListInterface: class {
 }
 
 protocol ExchangeListInput: class {
+    func canPage() -> Bool
     func fetchAllTrades()
     func refresh()
     func tradeSelectedWith(identifier: String) -> ExchangeTradeCellModel?

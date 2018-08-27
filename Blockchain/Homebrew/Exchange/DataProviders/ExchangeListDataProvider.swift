@@ -53,12 +53,12 @@ class ExchangeListDataProvider: NSObject {
 
     fileprivate func registerAllCellTypes() {
         guard let table = tableView else { return }
-        let headerView = UINib(nibName: String(describing: ExchangeListOrderHeaderView.self), bundle: nil)
+        let newOrderCell = UINib(nibName: NewOrderTableViewCell.identifier, bundle: nil)
         let listCell = UINib(nibName: ExchangeListViewCell.identifier, bundle: nil)
         let loadingCell = UINib(nibName: LoadingTableViewCell.identifier, bundle: nil)
         table.register(listCell, forCellReuseIdentifier: ExchangeListViewCell.identifier)
         table.register(loadingCell, forCellReuseIdentifier: LoadingTableViewCell.identifier)
-        table.register(headerView, forHeaderFooterViewReuseIdentifier: String(describing: ExchangeListOrderHeaderView.self))
+        table.register(newOrderCell, forCellReuseIdentifier: NewOrderTableViewCell.identifier)
     }
 
     func append(tradeModels: [ExchangeTradeCellModel]) {
@@ -75,35 +75,66 @@ class ExchangeListDataProvider: NSObject {
 extension ExchangeListDataProvider: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let current = models else { return 0 }
-        return isPaging ? current.count + 1 : current.count
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return isPaging ? current.count + 1 : current.count
+        default:
+            return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let items = models else { return UITableViewCell() }
-        if items.count > indexPath.row {
-            let model = items[indexPath.row]
-            let identifier = ExchangeListViewCell.identifier
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: identifier,
-                for: indexPath
-                ) as? ExchangeListViewCell else { return UITableViewCell() }
-            
-            cell.configure(with: model)
-            return cell
-        }
         
-        if indexPath.row == items.count && isPaging {
-            let identifier = LoadingTableViewCell.identifier
+        let newOrderIdentifier = NewOrderTableViewCell.identifier
+        let listIdentifier = ExchangeListViewCell.identifier
+        let loadingIdentifier = LoadingTableViewCell.identifier
+        
+        switch indexPath.section {
+        case 0:
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: identifier,
+                withIdentifier: newOrderIdentifier,
                 for: indexPath
-                ) as? LoadingTableViewCell else { return UITableViewCell() }
+                ) as? NewOrderTableViewCell else { return UITableViewCell() }
+            
+            cell.actionHandler = { [weak self] in
+                guard let this = self else { return }
+                this.delegate?.newOrderTapped(this)
+            }
+            
             return cell
+            
+        case 1:
+            guard items.count > indexPath.row else { return UITableViewCell() }
+            
+            if items.count > indexPath.row {
+                let model = items[indexPath.row]
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: listIdentifier,
+                    for: indexPath
+                    ) as? ExchangeListViewCell else { return UITableViewCell() }
+                
+                cell.configure(with: model)
+                return cell
+            }
+            
+            if indexPath.row == items.count && isPaging {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: loadingIdentifier,
+                    for: indexPath
+                    ) as? LoadingTableViewCell else { return UITableViewCell() }
+                return cell
+            }
+            
+        default:
+            break
         }
         
         return UITableViewCell()
@@ -111,32 +142,19 @@ extension ExchangeListDataProvider: UITableViewDataSource {
 }
 
 extension ExchangeListDataProvider: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let identifier = String(describing: ExchangeListOrderHeaderView.self)
-        guard let header = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: identifier
-            ) as? ExchangeListOrderHeaderView else { return nil }
-        
-        header.actionHandler = { [weak self] in
-            guard let this = self else { return }
-            this.delegate?.newOrderTapped(this)
-        }
-
-        return header
-    }
-
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let items = models else { return tableView.estimatedRowHeight }
+        
+        if indexPath.section == 0 {
+            return NewOrderTableViewCell.height()
+        }
+        
         if items.count > indexPath.row {
             let item = items[indexPath.row]
             return ExchangeListViewCell.estimatedHeight(for: item)
         }
+        
         return isPaging ? LoadingTableViewCell.height() : 0.0
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return ExchangeListOrderHeaderView.estimatedHeight()
     }
 }
 

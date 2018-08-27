@@ -24,6 +24,7 @@ extension ExchangeListPresenter: ExchangeListDelegate {
     }
     
     func onNextPageRequest(_ identifier: String) {
+        guard interactor.canPage() else { return }
         interface?.paginationActivityIndicatorVisibility(.visible)
         interactor.nextPageBefore(identifier: identifier)
     }

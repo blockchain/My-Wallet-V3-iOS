@@ -10,7 +10,7 @@ import Foundation
 
 class ExchangeListInteractor: ExchangeListInput {
     
-    fileprivate let service: ExchangeService
+    fileprivate let service: ExchangeHistoryAPI
     
     weak var output: ExchangeListOutput?
     
@@ -38,6 +38,10 @@ class ExchangeListInteractor: ExchangeListInput {
                 self?.output?.tradeFetchFailed(error: error)
             }
         }
+    }
+    
+    func canPage() -> Bool {
+        return service.canPage
     }
     
     func tradeSelectedWith(identifier: String) -> ExchangeTradeCellModel? {

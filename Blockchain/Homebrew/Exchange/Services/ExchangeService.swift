@@ -11,17 +11,21 @@ import Foundation
 typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
 
 protocol ExchangeHistoryAPI {
+    var tradeModels: [ExchangeTradeCellModel] { get set }
+    var canPage: Bool { get set }
+    
     func getHomebrewTrades(before date: Date, completion: @escaping CompletionHandler)
     func getAllTrades(with completion: @escaping CompletionHandler)
     func isExecuting() -> Bool
 }
 
-// TODO: Note this is a WIP. 
 class ExchangeService: NSObject {
     
     typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
 
     var tradeModels: [ExchangeTradeCellModel] = []
+    var canPage: Bool = false
+    
     fileprivate let partnerAPI: PartnerExchangeAPI = PartnerExchangeService()
     fileprivate let homebrewAPI: HomebrewExchangeAPI = HomebrewExchangeService()
     
@@ -40,6 +44,7 @@ class ExchangeService: NSObject {
 }
 
 extension ExchangeService: ExchangeHistoryAPI {
+    
     func getHomebrewTrades(before date: Date = Date(), completion: @escaping CompletionHandler) {
         
         if let op = homebrewOperation {
@@ -54,6 +59,7 @@ extension ExchangeService: ExchangeHistoryAPI {
                     result = .error(err)
                 }
                 if let result = models {
+                    this.canPage = result.count == 50
                     this.tradeModels.append(contentsOf: result)
                 }
                 complete()
@@ -92,6 +98,7 @@ extension ExchangeService: ExchangeHistoryAPI {
             guard let this = self else { return }
             this.homebrewAPI.nextPage(fromTimestamp: Date(), completion: { (models, error) in
                 if let result = models {
+                    this.canPage = result.count == 50
                     this.tradeModels.append(contentsOf: result)
                 }
                 complete()

@@ -8,7 +8,11 @@
 
 class LoadingTableViewCell: UITableViewCell {
     
+    // MARK: Static Properties
+    
     fileprivate static let standardHeight: CGFloat = 75.0
+    
+    // MARK: Static Functions
     
     static func height() -> CGFloat {
         return standardHeight

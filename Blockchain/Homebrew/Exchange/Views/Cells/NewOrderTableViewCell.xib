@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="96" id="xHD-ko-GKd" customClass="NewOrderTableViewCell" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="96"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xHD-ko-GKd" id="pho-YZ-fLA">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZAs-nN-7sA">
+                        <rect key="frame" x="16" y="19" width="343" height="56"/>
+                        <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="56" id="DCN-C7-RVz"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <state key="normal" title="Make a New Exchange">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <connections>
+                            <action selector="newExchangeTapped:" destination="xHD-ko-GKd" eventType="touchUpInside" id="y6M-Ia-ZCk"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="ZAs-nN-7sA" secondAttribute="trailing" constant="16" id="BMn-C7-h71"/>
+                    <constraint firstItem="ZAs-nN-7sA" firstAttribute="centerX" secondItem="pho-YZ-fLA" secondAttribute="centerX" id="M7i-pg-sFA"/>
+                    <constraint firstItem="ZAs-nN-7sA" firstAttribute="leading" secondItem="pho-YZ-fLA" secondAttribute="leading" constant="16" id="gjp-6p-EiK"/>
+                    <constraint firstItem="ZAs-nN-7sA" firstAttribute="centerY" secondItem="pho-YZ-fLA" secondAttribute="centerY" id="sXJ-Xk-x99"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="newExchangeButton" destination="ZAs-nN-7sA" id="FzI-fl-GIJ"/>
+            </connections>
+            <point key="canvasLocation" x="-113.5" y="-47"/>
+        </tableViewCell>
+    </objects>
+</document>
