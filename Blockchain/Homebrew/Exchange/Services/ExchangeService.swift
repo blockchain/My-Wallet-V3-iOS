@@ -83,6 +83,7 @@ extension ExchangeService: ExchangeHistoryAPI {
             op.cancel()
         }
         guard tradeQueue.operations.count == 0 else { return }
+        tradeModels = []
         
         partnerOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
