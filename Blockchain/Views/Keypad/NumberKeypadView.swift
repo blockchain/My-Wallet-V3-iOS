@@ -8,13 +8,14 @@
 
 import Foundation
 
-protocol NumberKeypadViewDelegate: class {
+// @objc is required for NumberKeypadViewDelegate property to be an IBOutlet
+@objc protocol NumberKeypadViewDelegate: class {
     func onNumberButtonTapped(value: String)
     func onBackspaceTapped()
 }
 
 class NumberKeypadView: UIView {
-    weak var delegate: NumberKeypadViewDelegate?
+    @IBOutlet weak var delegate: NumberKeypadViewDelegate?
 
     @IBOutlet var numberButtons: [UIButton]!
 

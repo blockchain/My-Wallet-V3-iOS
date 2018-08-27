@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Exchange Create View Controller-->
+        <!--Delegate-->
         <scene sceneID="azD-85-pcI">
             <objects>
                 <viewController id="ZL9-nX-8IY" customClass="ExchangeCreateViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
@@ -24,6 +24,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="378" width="343" height="231"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ZL9-nX-8IY" id="pb8-OK-o7P"/>
+                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBP-hF-UKz">
                                 <rect key="frame" x="16" y="340" width="343" height="30"/>
@@ -52,6 +55,9 @@
                                             <constraint firstAttribute="height" constant="42" id="reo-5s-btt"/>
                                         </constraints>
                                         <state key="normal" title="Fiat Toggle"/>
+                                        <connections>
+                                            <action selector="fiatToggleTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="8RY-92-F0K"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FgZ-oU-W6K">
                                         <rect key="frame" x="111" y="29" width="120.5" height="56.5"/>
@@ -137,6 +143,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FIv-WY-bvA"/>
                     </view>
+                    <connections>
+                        <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
+                        <outlet property="exchangeRateButton" destination="RBP-hF-UKz" id="U09-gZ-aBt"/>
+                        <outlet property="primaryAmountLabel" destination="cbA-yh-J0A" id="xGh-pL-sDT"/>
+                        <outlet property="secondaryAmountLabel" destination="okC-2w-xB9" id="K2v-uv-GkY"/>
+                        <outlet property="useMaximumButton" destination="kyX-88-NsD" id="1kX-WQ-I1q"/>
+                        <outlet property="useMinimumButton" destination="Gyg-rh-rE6" id="e6a-pn-89k"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J6x-Pe-arO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
