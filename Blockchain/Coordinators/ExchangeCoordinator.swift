@@ -55,7 +55,7 @@ struct ExchangeServices: ExchangeDependencies {
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if !isHomebrewAvailable {
+                if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)
