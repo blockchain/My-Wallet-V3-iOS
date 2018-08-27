@@ -6,12 +6,12 @@
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-#import "ExchangeCreateViewController.h"
+#import "PartnerExchangeCreateViewController.h"
 #import "FromToView.h"
 #import "Blockchain-Swift.h"
 #import "ContinueButtonInputAccessoryView.h"
 #import "ExchangeTrade.h"
-#import "ExchangeConfirmViewController.h"
+#import "PartnerExchangeConfirmViewController.h"
 #import "BCNavigationController.h"
 #import "NSNumberFormatter+Currencies.h"
 
@@ -20,7 +20,7 @@
 
 #define IMAGE_NAME_SWITCH_CURRENCIES @"switch_currencies"
 
-@interface ExchangeCreateViewController () <UITextFieldDelegate, AddressSelectionDelegate, ContinueButtonInputAccessoryViewDelegate, ExchangeCreateViewDelegate>
+@interface PartnerExchangeCreateViewController () <UITextFieldDelegate, AddressSelectionDelegate, ContinueButtonInputAccessoryViewDelegate, ExchangeCreateViewDelegate>
 
 @property (nonatomic) NSTimer *quoteTimer;
 
@@ -51,7 +51,7 @@
 @property (nonatomic) FromToButtonDelegateIntermediate *fromToButtonDelegateIntermediate; // strong reference required to prevent it from becoming nil
 @end
 
-@implementation ExchangeCreateViewController
+@implementation PartnerExchangeCreateViewController
 
 - (void)viewDidLoad
 {
@@ -296,7 +296,7 @@
     trade.exchangeRateString = [trade exchangeRateString];
     NSString *feeString = [NSNumberFormatter convertedDecimalString:[tradeInfo objectForKey:DICTIONARY_KEY_FEE]];
     trade.transactionFee = [NSDecimalNumber decimalNumberWithString:feeString];
-    ExchangeConfirmViewController *confirmViewController = [[ExchangeConfirmViewController alloc] initWithExchangeTrade:trade];
+    PartnerExchangeConfirmViewController *confirmViewController = [[PartnerExchangeConfirmViewController alloc] initWithExchangeTrade:trade];
     [self.navigationController pushViewController:confirmViewController animated:YES];
 }
 

@@ -1,5 +1,5 @@
 //
-//  ExchangeOverviewViewController.h
+//  PartnerExchangeListViewController.h
 //  Blockchain
 //
 //  Created by kevinwu on 10/11/17.

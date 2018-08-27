@@ -8,6 +8,7 @@
 
 import Foundation
 
-protocol ExchangeTradeInterface: class {
+protocol ExchangeCreateInterface: class {
     func continueButtonEnabled(_ enabled: Bool)
+    func exchangeRateUpdated(_ rate: String)
 }

@@ -1,5 +1,5 @@
 //
-//  HomebrewExchangeCreateViewController.swift
+//  ExchangeCreateViewController.swift
 //  Blockchain
 //
 //  Created by kevinwu on 8/15/18.
@@ -8,22 +8,20 @@
 
 import Foundation
 
-class HomebrewExchangeCreateViewController: UIViewController {
+class ExchangeCreateViewController: UIViewController {
 
     // MARK: Public Properties
 
-    weak var delegate: ExchangeTradeDelegate?
+    weak var delegate: ExchangeCreateDelegate?
 
     // MARK: Private Properties
 
-    fileprivate var tradeCoordinator: ExchangeTradeCoordinator!
     fileprivate var exchangeCreateView: ExchangeCreateView!
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tradeCoordinator = ExchangeTradeCoordinator(interface: self)
 
         exchangeCreateView = ExchangeCreateView(frame: view.bounds)
         view.addSubview(exchangeCreateView)
@@ -36,7 +34,7 @@ class HomebrewExchangeCreateViewController: UIViewController {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
+extension ExchangeCreateViewController: ExchangeCreateInterface {
     func continueButtonEnabled(_ enabled: Bool) {
         if enabled {
             exchangeCreateView.enablePaymentButtons()
@@ -44,9 +42,13 @@ extension HomebrewExchangeCreateViewController: ExchangeTradeInterface {
             exchangeCreateView.disablePaymentButtons()
         }
     }
+
+    func exchangeRateUpdated(_ rate: String) {
+
+    }
 }
 
-extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
+extension ExchangeCreateViewController: ExchangeCreateViewDelegate {
     func assetToggleButtonTapped() {
     }
 
@@ -61,28 +63,23 @@ extension HomebrewExchangeCreateViewController: ExchangeCreateViewDelegate {
     }
 }
 
-extension HomebrewExchangeCreateViewController: ContinueButtonInputAccessoryViewDelegate {
-    func closeButtonTapped() {
-        exchangeCreateView.hideKeyboard()
-    }
-}
-
-extension HomebrewExchangeCreateViewController: UITextFieldDelegate {
+extension ExchangeCreateViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        delegate?.onChangeAmountFieldText()
         return true
     }
 }
 
-extension HomebrewExchangeCreateViewController: AddressSelectionDelegate {
+extension ExchangeCreateViewController: AddressSelectionDelegate {
     func getAssetType() -> LegacyAssetType {
         return LegacyAssetType(rawValue: -1)!
     }
 
     func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
-
+        delegate?.onChangeFrom(assetType: AssetType.from(legacyAssetType: asset))
     }
 
     func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
-
+        delegate?.onChangeTo(assetType: AssetType.from(legacyAssetType: asset))
     }
 }

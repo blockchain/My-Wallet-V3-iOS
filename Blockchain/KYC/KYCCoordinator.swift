@@ -25,7 +25,7 @@ enum KYCEvent {
     /// Should the user go back in the KYC flow, we need to
     /// prepopulate the screens with the data they already entered.
     /// We may need another event type for this and hook into
-    /// `viewWillDisappear`. 
+    /// `viewWillDisappear`.
 }
 
 protocol KYCCoordinatorDelegate: class {
@@ -95,7 +95,7 @@ protocol KYCCoordinatorDelegate: class {
             handleFailurePage(for: error)
         case .nextPageFromPageType(let type, let payload):
             handlePayloadFromPageType(type, payload)
-            guard let nextPage = type.next else { return }
+            guard let nextPage = type.nextPage(for: self.user) else { return }
             let controller = pageFactory.createFrom(
                 pageType: nextPage,
                 in: self,
@@ -159,8 +159,8 @@ protocol KYCCoordinatorDelegate: class {
         case .welcome,
              .country,
              .confirmPhone,
-             .verifyIdentity,
-             .accountStatus:
+             .accountStatus,
+             .applicationComplete:
             break
         case .profile:
             guard let current = user else { return }
@@ -172,6 +172,9 @@ protocol KYCCoordinatorDelegate: class {
         case .enterPhone:
             guard let current = user else { return }
             delegate?.apply(model: .phone(current))
+        case .verifyIdentity:
+            guard let country = country else { return }
+            delegate?.apply(model: .verifyIdentity(country))
         }
     }
 

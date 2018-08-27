@@ -24,5 +24,5 @@ struct HttpHeaderField {
 struct HttpHeaderValue {
     static let json = "application/json"
     static let formEncoded = "application/x-www-form-urlencoded"
-    static let clientTypeIos = "IOS"
+    static let clientTypeApp = "APP"
 }

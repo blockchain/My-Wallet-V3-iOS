@@ -24,13 +24,11 @@ import RxSwift
 
     // MARK: - Public Properties
 
+    /// The KYCUser. This will use a cached value if available
     var kycUser: Single<KYCUser> {
         return fetchData(
             cachedValue: cachedUser,
-            networkValue: authenticationService.getKycSessionToken().flatMap { token in
-                let headers = [HttpHeaderField.authorization: token.token]
-                return KYCNetworkRequest.request(get: .currentUser, headers: headers, type: KYCUser.self)
-            }
+            networkValue: fetchKycUser()
         )
     }
 
@@ -53,6 +51,16 @@ import RxSwift
     func clearCache() {
         cachedUser = BehaviorRelay<KYCUser?>(value: nil)
         cachedCountries = BehaviorRelay<Countries?>(value: nil)
+    }
+
+    /// Fetches the KYCUser over the network
+    ///
+    /// - Returns: the fetched KYCUser
+    func fetchKycUser() -> Single<KYCUser> {
+        return authenticationService.getKycSessionToken().flatMap { token in
+            let headers = [HttpHeaderField.authorization: token.token]
+            return KYCNetworkRequest.request(get: .currentUser, headers: headers, type: KYCUser.self)
+        }
     }
 
     // MARK: - Private Methods

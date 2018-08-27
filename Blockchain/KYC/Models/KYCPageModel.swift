@@ -12,4 +12,5 @@ enum KYCPageModel {
     case personalDetails(KYCUser)
     case address(KYCUser, KYCCountry)
     case phone(KYCUser)
+    case verifyIdentity(KYCCountry)
 }
