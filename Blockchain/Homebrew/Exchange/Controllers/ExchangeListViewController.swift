@@ -67,7 +67,7 @@ extension ExchangeListViewController: ExchangeListInterface {
     }
     
     func refreshControlVisibility(_ visibility: Visibility) {
-        // TODO
+        dataProvider?.isRefreshing = visibility.isHidden == false
     }
     
     func display(results: [ExchangeTradeCellModel]) {
@@ -79,7 +79,7 @@ extension ExchangeListViewController: ExchangeListInterface {
     }
     
     func enablePullToRefresh() {
-        // TODO
+        dataProvider?.setupPullToRefresh()
     }
     
     func showNewExchange(animated: Bool) {
@@ -88,6 +88,10 @@ extension ExchangeListViewController: ExchangeListInterface {
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
+    func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider) {
+        delegate?.onPullToRefresh()
+    }
+    
     func newOrderTapped(_ dataProvider: ExchangeListDataProvider) {
         delegate?.onNewOrderTapped()
     }

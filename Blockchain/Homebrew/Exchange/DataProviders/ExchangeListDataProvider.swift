@@ -11,16 +11,24 @@ import Foundation
 protocol ExchangeListDataProviderDelegate: class {
     func dataProvider(_ dataProvider: ExchangeListDataProvider, nextPageBefore identifier: String)
     func newOrderTapped(_ dataProvider: ExchangeListDataProvider)
+    func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider)
 }
 
 class ExchangeListDataProvider: NSObject {
+    
+    // MARK: Private Static Properties
 
     fileprivate static let estimatedCellHeight: CGFloat = 75.0
-
+    
+    // MARK: Public
+    
     weak var delegate: ExchangeListDataProviderDelegate?
 
+    // TODO: Selecting a trade should present the details screen
     var selectionClosure: ((ExchangeTradeCellModel) -> Void)?
     
+    // If this is `true` we should show the cell with
+    // a loading indicator at the bottom of the `tableView`
     var isPaging: Bool = false {
         didSet {
             guard let table = tableView else { return }
@@ -37,8 +45,23 @@ class ExchangeListDataProvider: NSObject {
             table.endUpdates()
         }
     }
+    
+    var isRefreshing: Bool = false {
+        didSet {
+            guard let refresh = refreshControl else { return }
+            switch isRefreshing {
+            case true:
+                refresh.beginRefreshing()
+            case false:
+                refresh.endRefreshing()
+            }
+        }
+    }
+    
+    // MARK: Private Properties
 
     fileprivate weak var tableView: UITableView?
+    fileprivate var refreshControl: UIRefreshControl!
     fileprivate var models: [ExchangeTradeCellModel]?
 
     init(table: UITableView) {
@@ -62,6 +85,14 @@ class ExchangeListDataProvider: NSObject {
         table.register(loadingCell, forCellReuseIdentifier: LoadingTableViewCell.identifier)
         table.register(newOrderCell, forCellReuseIdentifier: NewOrderTableViewCell.identifier)
     }
+    
+    func setupPullToRefresh() {
+        guard refreshControl == nil else { return }
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl = control
+        tableView?.refreshControl = refreshControl
+    }
 
     func append(tradeModels: [ExchangeTradeCellModel]) {
         if var current = models {
@@ -71,6 +102,10 @@ class ExchangeListDataProvider: NSObject {
             models = tradeModels
         }
         tableView?.reloadData()
+    }
+    
+    @objc fileprivate func refresh() {
+        delegate?.refreshControlTriggered(self)
     }
 }
 

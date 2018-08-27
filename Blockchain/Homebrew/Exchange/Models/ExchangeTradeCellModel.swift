@@ -66,7 +66,7 @@ struct ExchangeTradeCellModel: Decodable {
     let identifier: String
     let status: TradeStatus
     let assetType: AssetType
-    let pair: PairType
+    let pair: TradingPair
     let transactionDate: Date
     let amountReceivedDisplayValue: String
     let amountDepositedDisplayValue: String
@@ -75,7 +75,7 @@ struct ExchangeTradeCellModel: Decodable {
         identifier = trade.orderID
         status = TradeStatus(shapeshift: trade.status)
         transactionDate = trade.date
-        if let pairType = PairType(stringValue: trade.pair) {
+        if let pairType = TradingPair(string: trade.pair) {
             pair = pairType
         } else {
             fatalError("Failed to map \(trade.pair)")
@@ -123,7 +123,7 @@ struct ExchangeTradeCellModel: Decodable {
         let statusValue = try values.decode(String.self, forKey: .status)
         status = TradeStatus(homebrew: statusValue)
         
-        if let pairType = PairType(stringValue: pairValue) {
+        if let pairType = TradingPair(string: pairValue) {
             pair = pairType
         } else {
             fatalError("Failed to map \(pairValue)")
