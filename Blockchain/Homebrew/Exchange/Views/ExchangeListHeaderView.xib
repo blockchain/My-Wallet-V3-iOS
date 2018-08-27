@@ -64,6 +64,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="rxY-p7-hFr"/>
             <connections>
+                <outlet property="background" destination="whc-gU-VwZ" id="Pr7-vW-hSf"/>
                 <outlet property="title" destination="bas-Df-f5D" id="gJi-SL-Wl4"/>
             </connections>
             <point key="canvasLocation" x="-31.5" y="-169.5"/>

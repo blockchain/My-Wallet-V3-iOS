@@ -67,8 +67,7 @@ struct ExchangeServices: ExchangeDependencies {
     func start() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                // TODO: Only for testing.
-                if !isHomebrewAvailable {
+                if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)
@@ -101,9 +100,7 @@ struct ExchangeServices: ExchangeDependencies {
         }
 
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        // TODO: Fix me.
-//        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Exchange.loading)
-
+        
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -117,7 +114,7 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            let listViewController = ExchangeListViewController.make(with: dependencies)
+            let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
             let navigationController = BCNavigationController(
                 rootViewController: listViewController,
                 title: LocalizationConstants.Exchange.navigationTitle

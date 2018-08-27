@@ -30,12 +30,14 @@ class ExchangeListViewController: UIViewController {
     fileprivate var dataProvider: ExchangeListDataProvider?
     fileprivate var presenter: ExchangeListPresenter!
     fileprivate var dependencies: ExchangeDependencies!
+    fileprivate var coordinator: ExchangeCoordinator!
     
     // MARK: Factory
     
-    class func make(with dependencies: ExchangeDependencies) -> ExchangeListViewController {
+    class func make(with dependencies: ExchangeDependencies, coordinator: ExchangeCoordinator) -> ExchangeListViewController {
         let controller = ExchangeListViewController.makeFromStoryboard()
         controller.dependencies = dependencies
+        controller.coordinator = coordinator
         return controller
     }
     

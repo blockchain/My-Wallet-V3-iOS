@@ -11,13 +11,13 @@ class ExchangeListHeaderView: UITableViewHeaderFooterView {
     fileprivate static let verticalPadding: CGFloat = 16.0
     
     @IBOutlet fileprivate var title: UILabel!
+    @IBOutlet fileprivate var background: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         title.text = LocalizationConstants.Exchange.orderHistory
-        backgroundView = UIView(frame: bounds)
-        backgroundView?.backgroundColor = .gray2
+        background.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.968627451, blue: 0.9764705882, alpha: 1)
     }
     
     static func height() -> CGFloat {
