@@ -15,9 +15,6 @@ private class CountriesMap {
     private var allCountries: Countries?
     private var backingMap = [String: Countries]()
 
-    init() {
-    }
-
     var searchText: String? {
         didSet {
             guard let countries = allCountries else {
