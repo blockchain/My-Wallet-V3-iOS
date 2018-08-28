@@ -70,6 +70,7 @@
     measuringLabel.font = agreementTappableLabel.font;
     measuringLabel.text = agreementTappableLabel.text;
 
+    // IOS-1107 - views produced here are offset in width somehow. See PartnerExchangeConfirmViewController.m for a correct implementation.
     UITapGestureRecognizer *tapGestureTermsOfService = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTermsOfService)];
     UIView *tappableViewTermsOfService = [self viewWithTapGesture:tapGestureTermsOfService onSubstring:termsOfService ofText:agreementTappableLabel.text inLabel:measuringLabel];
     [agreementTappableLabel addSubview:tappableViewTermsOfService];
