@@ -30,6 +30,10 @@ class ExchangeListViewController: UIViewController {
     fileprivate var dataProvider: ExchangeListDataProvider?
     fileprivate var presenter: ExchangeListPresenter!
     fileprivate var dependencies: ExchangeDependencies!
+    
+    // TODO: This may not be needed. This is anticipating
+    // that screen presentations/dismissals would be handled
+    // by the coordinator. 
     fileprivate var coordinator: ExchangeCoordinator!
     
     // MARK: Factory
