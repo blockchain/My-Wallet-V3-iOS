@@ -24,6 +24,7 @@ class KYCBaseViewController: UIViewController, KYCCoordinatorDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
