@@ -63,15 +63,36 @@ struct ExchangeTradeCellModel: Decodable {
         }
     }
 
+    let identifier: String
     let status: TradeStatus
     let assetType: AssetType
+    let pair: TradingPair
     let transactionDate: Date
-    let displayValue: String
+    let amountReceivedDisplayValue: String
+    let amountDepositedDisplayValue: String
 
     init(with trade: ExchangeTrade) {
+        identifier = trade.orderID
         status = TradeStatus(shapeshift: trade.status)
         transactionDate = trade.date
-        displayValue = trade.displayAmount() ?? ""
+        if let pairType = TradingPair(string: trade.pair) {
+            pair = pairType
+        } else {
+            fatalError("Failed to map \(trade.pair)")
+        }
+        
+        if let value = trade.inboundDisplayAmount() {
+            amountReceivedDisplayValue = value
+        } else {
+            fatalError("Failed to map \(trade.inboundDisplayAmount() ?? "")")
+        }
+        
+        if let value = trade.outboundDisplayAmount() {
+            amountDepositedDisplayValue = value
+        } else {
+            fatalError("Failed to map \(trade.outboundDisplayAmount() ?? "")")
+        }
+        
         if let asset = AssetType(stringValue: trade.withdrawalCurrency()) {
             assetType = asset
         } else {
@@ -82,19 +103,32 @@ struct ExchangeTradeCellModel: Decodable {
     // MARK: - Decodable
 
     enum CodingKeys: String, CodingKey {
+        case identifier = "id"
         case currency = "currency"
         case createdAt = "createdAt"
         case quantity = "quantity"
+        case depositQuantity = "depositQuantity"
+        case pair = "pair"
         case status = "state"
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         transactionDate = try values.decode(Date.self, forKey: .createdAt)
+        identifier = try values.decode(String.self, forKey: .identifier)
         let asset = try values.decode(String.self, forKey: .currency)
-        displayValue = try values.decode(String.self, forKey: .quantity)
+        let pairValue = try values.decode(String.self, forKey: .pair)
+        amountReceivedDisplayValue = try values.decode(String.self, forKey: .quantity)
+        amountDepositedDisplayValue = try values.decode(String.self, forKey: .depositQuantity)
         let statusValue = try values.decode(String.self, forKey: .status)
         status = TradeStatus(homebrew: statusValue)
+        
+        if let pairType = TradingPair(string: pairValue) {
+            pair = pairType
+        } else {
+            fatalError("Failed to map \(pairValue)")
+        }
+        
         if let asset = AssetType(stringValue: asset) {
             assetType = asset
         } else {
@@ -107,18 +141,20 @@ struct ExchangeTradeCellModel: Decodable {
 extension ExchangeTradeCellModel: Equatable {
     static func ==(lhs: ExchangeTradeCellModel, rhs: ExchangeTradeCellModel) -> Bool {
         return lhs.assetType == rhs.assetType &&
-        lhs.displayValue == rhs.displayValue &&
+        lhs.amountReceivedDisplayValue == rhs.amountReceivedDisplayValue &&
         lhs.status == rhs.status &&
-        lhs.transactionDate == rhs.transactionDate
+        lhs.transactionDate == rhs.transactionDate &&
+        lhs.pair == rhs.pair
     }
 }
 
 extension ExchangeTradeCellModel: Hashable {
     var hashValue: Int {
         return assetType.hashValue ^
-        displayValue.hashValue ^
+        amountReceivedDisplayValue.hashValue ^
         status.hashValue ^
-        transactionDate.hashValue
+        transactionDate.hashValue ^
+        pair.hashValue
     }
 }
 
@@ -164,8 +200,8 @@ extension ExchangeTradeCellModel.TradeStatus {
 }
 
 fileprivate extension ExchangeTrade {
-
-    fileprivate func displayAmount() -> String? {
+    
+    fileprivate func inboundDisplayAmount() -> String? {
         if BlockchainSettings.sharedAppInstance().symbolLocal {
             guard let currencySymbol = withdrawalCurrency() else { return nil }
             guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
@@ -185,8 +221,35 @@ fileprivate extension ExchangeTrade {
             }
         } else {
             guard let toAsset = pair.components(separatedBy: "_").last else { return nil }
-            return "\(NumberFormatter.localFormattedString(withdrawalAmount.stringValue)) \(toAsset))"
+            let formatted = toAsset.uppercased()
+            guard let amount = NumberFormatter.localFormattedString(withdrawalAmount.stringValue) else { return nil }
+            return amount + " " + formatted
         }
     }
-
+    
+    fileprivate func outboundDisplayAmount() -> String? {
+        if BlockchainSettings.sharedAppInstance().symbolLocal {
+            guard let currencySymbol = depositCurrency() else { return nil }
+            guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
+            switch assetType {
+            case .bitcoin:
+                let value = NumberFormatter.parseBtcValue(from: depositAmount.stringValue)
+                return NumberFormatter.formatMoney(value.magnitude)
+            case .ethereum:
+                guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
+                return NumberFormatter.formatEth(
+                    withLocalSymbol: depositAmount.stringValue,
+                    exchangeRate: exchangeRate
+                )
+            case .bitcoinCash:
+                let value = NumberFormatter.parseBtcValue(from: depositAmount.stringValue)
+                return NumberFormatter.formatBch(withSymbol: value.magnitude)
+            }
+        } else {
+            guard let fromAsset = pair.components(separatedBy: "_").first else { return nil }
+            let formatted = fromAsset.uppercased()
+            guard let amount = NumberFormatter.localFormattedString(depositAmount.stringValue) else { return nil }
+            return amount + " " + formatted
+        }
+    }
 }
