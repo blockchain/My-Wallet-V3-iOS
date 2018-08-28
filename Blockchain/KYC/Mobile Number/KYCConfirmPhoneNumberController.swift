@@ -54,6 +54,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
         validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
         labelPhoneNumber.text = phoneNumber
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
+        validationTextFieldConfirmationCode.becomeFocused()
     }
 
     override func viewDidAppear(_ animated: Bool) {
