@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class ExchangeRate;
-@interface ExchangeCreateViewController : UIViewController
+@interface PartnerExchangeCreateViewController : UIViewController
 - (void)didGetExchangeRate:(ExchangeRate *)result;
 - (void)didGetAvailableEthBalance:(NSDictionary *)result;
 - (void)didGetAvailableBtcBalance:(NSDictionary *)result;

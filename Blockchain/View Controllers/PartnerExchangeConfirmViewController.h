@@ -1,5 +1,5 @@
 //
-//  ExchangeConfirmViewController.h
+//  PartnerExchangeConfirmViewController.h
 //  Blockchain
 //
 //  Created by kevinwu on 10/31/17.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 @class ExchangeTrade;
-@interface ExchangeConfirmViewController : UIViewController
+@interface PartnerExchangeConfirmViewController : UIViewController
 - (id)initWithExchangeTrade:(ExchangeTrade *)trade;
 @end

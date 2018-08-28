@@ -76,7 +76,7 @@
 		3A019147212E178900AED2BF /* AssetConversionRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019141212E171500AED2BF /* AssetConversionRateView.swift */; };
 		3A019148212E179100AED2BF /* AssetConversionRateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A019142212E171500AED2BF /* AssetConversionRateView.xib */; };
 		3A019149212E179500AED2BF /* AssetConversionRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */; };
-		3A01914A212E17E500AED2BF /* HomebrewExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF98212B36F1003A8A08 /* HomebrewExchangeCreateViewController.swift */; };
+		3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */; };
 		3A01914B212E17EE00AED2BF /* ExchangeCreateInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF93212B36B2003A8A08 /* ExchangeCreateInterface.swift */; };
 		3A01914D212E17FE00AED2BF /* ExchangeCreateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF91212B36B1003A8A08 /* ExchangeCreateDelegate.swift */; };
 		3A01914E212E180500AED2BF /* FromToButtonDelegateIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF92212B36B2003A8A08 /* FromToButtonDelegateIntermediate.swift */; };
@@ -94,7 +94,7 @@
 		3A26AF95212B36B2003A8A08 /* ExchangeCreateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF91212B36B1003A8A08 /* ExchangeCreateDelegate.swift */; };
 		3A26AF96212B36B2003A8A08 /* FromToButtonDelegateIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF92212B36B2003A8A08 /* FromToButtonDelegateIntermediate.swift */; };
 		3A26AF97212B36B2003A8A08 /* ExchangeCreateInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF93212B36B2003A8A08 /* ExchangeCreateInterface.swift */; };
-		3A26AF99212B36F2003A8A08 /* HomebrewExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF98212B36F1003A8A08 /* HomebrewExchangeCreateViewController.swift */; };
+		3A26AF99212B36F2003A8A08 /* ExchangeCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */; };
 		3A26AF9B212B3743003A8A08 /* ExchangeCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */; };
 		3A26AF9F212B51C0003A8A08 /* HomebrewExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */; };
 		3A26AFA2212B58A8003A8A08 /* ExchangeListDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AFA1212B58A8003A8A08 /* ExchangeListDataProvider.swift */; };
@@ -701,7 +701,7 @@
 		C75684CA212F053200B5059C /* TradingPairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75684C9212F053200B5059C /* TradingPairTests.swift */; };
 		C75CBD041F1FB12F00CACE0D /* BCTotalAmountView.m in Sources */ = {isa = PBXBuildFile; fileRef = C75CBD031F1FB12F00CACE0D /* BCTotalAmountView.m */; };
 		C75EE7D8201BBA820067BA16 /* UITextView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = C75EE7D7201BBA820067BA16 /* UITextView+Animations.m */; };
-		C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C76135631F9E55DF0029E159 /* ExchangeCreateViewController.m */; };
+		C76135641F9E55DF0029E159 /* PartnerExchangeCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */; };
 		C7614399211A7FD70041411E /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7614398211A7FD70041411E /* SocketManager.swift */; };
 		C761439A211A7FD70041411E /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7614398211A7FD70041411E /* SocketManager.swift */; };
 		C76143A5211A80380041411E /* SocketMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76143A4211A80380041411E /* SocketMessage.swift */; };
@@ -743,7 +743,7 @@
 		C790E1211E5345160063D141 /* BCVerifyEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E1201E5345160063D141 /* BCVerifyEmailViewController.m */; };
 		C790E1241E5358540063D141 /* BCVerifyMobileNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E1231E5358540063D141 /* BCVerifyMobileNumberViewController.m */; };
 		C79261B51E8ADF0300C87CED /* BCCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C79261B41E8ADF0300C87CED /* BCCardView.m */; };
-		C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C793E1FB1F8E7921001F171C /* ExchangeOverviewViewController.m */; };
+		C793E1FC1F8E7921001F171C /* PartnerExchangeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */; };
 		C79672841FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m in Sources */ = {isa = PBXBuildFile; fileRef = C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */; };
 		C79B27B120A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
 		C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B27B020A6215B0061D0F2 /* WalletSendEtherDelegate.swift */; };
@@ -752,7 +752,7 @@
 		C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79EEFC11E898E380087DDCD /* WalletSetupViewController.m */; };
 		C7A0E90E1FA796EC004F4267 /* BCChartMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E90D1FA796EC004F4267 /* BCChartMarkerView.swift */; };
 		C7A0E9261FA89FE9004F4267 /* ExchangeModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E9251FA89FE9004F4267 /* ExchangeModalView.m */; };
-		C7A0E92E1FA8FFBF004F4267 /* ExchangeConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E92D1FA8FFBF004F4267 /* ExchangeConfirmViewController.m */; };
+		C7A0E92E1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */; };
 		C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */; };
 		C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */; };
 		C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */; };
@@ -1191,7 +1191,7 @@
 		3A26AF91212B36B1003A8A08 /* ExchangeCreateDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeCreateDelegate.swift; sourceTree = "<group>"; };
 		3A26AF92212B36B2003A8A08 /* FromToButtonDelegateIntermediate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FromToButtonDelegateIntermediate.swift; sourceTree = "<group>"; };
 		3A26AF93212B36B2003A8A08 /* ExchangeCreateInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeCreateInterface.swift; sourceTree = "<group>"; };
-		3A26AF98212B36F1003A8A08 /* HomebrewExchangeCreateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomebrewExchangeCreateViewController.swift; sourceTree = "<group>"; };
+		3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeCreateViewController.swift; sourceTree = "<group>"; };
 		3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeCreateView.swift; sourceTree = "<group>"; };
 		3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomebrewExchangeService.swift; sourceTree = "<group>"; };
 		3A26AFA1212B58A8003A8A08 /* ExchangeListDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListDataProvider.swift; sourceTree = "<group>"; };
@@ -3081,8 +3081,8 @@
 		C75F65022124CE1B00396B65 /* ExchangeTradeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTradeCoordinator.swift; sourceTree = "<group>"; };
 		C75F65042124D95600396B65 /* ExchangeTradeInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTradeInterface.swift; sourceTree = "<group>"; };
 		C75F65072124DDB900396B65 /* ExchangeTradeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTradeDelegate.swift; sourceTree = "<group>"; };
-		C76135621F9E55DF0029E159 /* ExchangeCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeCreateViewController.h; sourceTree = "<group>"; };
-		C76135631F9E55DF0029E159 /* ExchangeCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeCreateViewController.m; sourceTree = "<group>"; };
+		C76135621F9E55DF0029E159 /* PartnerExchangeCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartnerExchangeCreateViewController.h; sourceTree = "<group>"; };
+		C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartnerExchangeCreateViewController.m; sourceTree = "<group>"; };
 		C7614398211A7FD70041411E /* SocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
 		C76143A4211A80380041411E /* SocketMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketMessage.swift; sourceTree = "<group>"; };
 		C76143AA211A80D30041411E /* Codable+Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Coding.swift"; sourceTree = "<group>"; };
@@ -3136,8 +3136,8 @@
 		C790E1231E5358540063D141 /* BCVerifyMobileNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCVerifyMobileNumberViewController.m; sourceTree = "<group>"; };
 		C79261B31E8ADF0300C87CED /* BCCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCardView.h; sourceTree = "<group>"; };
 		C79261B41E8ADF0300C87CED /* BCCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCardView.m; sourceTree = "<group>"; };
-		C793E1FA1F8E7921001F171C /* ExchangeOverviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeOverviewViewController.h; sourceTree = "<group>"; };
-		C793E1FB1F8E7921001F171C /* ExchangeOverviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeOverviewViewController.m; sourceTree = "<group>"; };
+		C793E1FA1F8E7921001F171C /* PartnerExchangeListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartnerExchangeListViewController.h; sourceTree = "<group>"; };
+		C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartnerExchangeListViewController.m; sourceTree = "<group>"; };
 		C79672821FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+VerboseString.h"; sourceTree = "<group>"; };
 		C79672831FDEF4CC00F07C69 /* NSDateFormatter+VerboseString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+VerboseString.m"; sourceTree = "<group>"; };
 		C79A239720B3520D000D96B9 /* DestinationAddressSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DestinationAddressSource.h; sourceTree = "<group>"; };
@@ -3148,8 +3148,8 @@
 		C7A0E90D1FA796EC004F4267 /* BCChartMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCChartMarkerView.swift; sourceTree = "<group>"; };
 		C7A0E9241FA89FE9004F4267 /* ExchangeModalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeModalView.h; sourceTree = "<group>"; };
 		C7A0E9251FA89FE9004F4267 /* ExchangeModalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeModalView.m; sourceTree = "<group>"; };
-		C7A0E92C1FA8FFBF004F4267 /* ExchangeConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExchangeConfirmViewController.h; sourceTree = "<group>"; };
-		C7A0E92D1FA8FFBF004F4267 /* ExchangeConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExchangeConfirmViewController.m; sourceTree = "<group>"; };
+		C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartnerExchangeConfirmViewController.h; sourceTree = "<group>"; };
+		C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartnerExchangeConfirmViewController.m; sourceTree = "<group>"; };
 		C7A923EB1F8531FD003D9DAF /* GraphTimeFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphTimeFrame.h; sourceTree = "<group>"; };
 		C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphTimeFrame.m; sourceTree = "<group>"; };
 		C7A9E7A41FAB5FF600027F22 /* UILabel+CGRectForSubstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+CGRectForSubstring.h"; sourceTree = "<group>"; };
@@ -3340,7 +3340,7 @@
 		3A26AF7721277E6E003A8A08 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3A26AF98212B36F1003A8A08 /* HomebrewExchangeCreateViewController.swift */,
+				3A26AF98212B36F1003A8A08 /* ExchangeCreateViewController.swift */,
 				3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */,
 				3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */,
 			);
@@ -6017,12 +6017,12 @@
 				23F720F11C32DC0A00577738 /* DebugTableViewController.m */,
 				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
 				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
-				C7A0E92C1FA8FFBF004F4267 /* ExchangeConfirmViewController.h */,
-				C7A0E92D1FA8FFBF004F4267 /* ExchangeConfirmViewController.m */,
-				C76135621F9E55DF0029E159 /* ExchangeCreateViewController.h */,
-				C76135631F9E55DF0029E159 /* ExchangeCreateViewController.m */,
-				C793E1FA1F8E7921001F171C /* ExchangeOverviewViewController.h */,
-				C793E1FB1F8E7921001F171C /* ExchangeOverviewViewController.m */,
+				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
+				C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */,
+				C76135621F9E55DF0029E159 /* PartnerExchangeCreateViewController.h */,
+				C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */,
+				C793E1FA1F8E7921001F171C /* PartnerExchangeListViewController.h */,
+				C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */,
 				FCB33B701FC36EA200317E6B /* ExchangeProgressViewController.h */,
 				FCB33B711FC36EA200317E6B /* ExchangeProgressViewController.m */,
 				C7618B5F1F66C817003E7589 /* QRCodeScannerSendViewController.h */,
@@ -7357,7 +7357,7 @@
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
-				3A01914A212E17E500AED2BF /* HomebrewExchangeCreateViewController.swift in Sources */,
+				3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
@@ -7763,7 +7763,7 @@
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
 				AA126CDC212C94CB005886A3 /* KYCSessionTokenResponse.swift in Sources */,
 				511356BE209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
-				C76135641F9E55DF0029E159 /* ExchangeCreateViewController.m in Sources */,
+				C76135641F9E55DF0029E159 /* PartnerExchangeCreateViewController.m in Sources */,
 				606399E42110FC2D005B6DF5 /* SRProxyConnect.m in Sources */,
 				67EE1DCD19E3325900DBBFC9 /* ECSlidingSegue.m in Sources */,
 				AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */,
@@ -7799,7 +7799,7 @@
 				678CD7481A2777E600748AA5 /* BCCreateAccountView.m in Sources */,
 				23F8DE531DAEB11C001899AE /* BCNavigationController.m in Sources */,
 				AA477084211B73D1006356B1 /* BottomButtonContainerView.swift in Sources */,
-				C7A0E92E1FA8FFBF004F4267 /* ExchangeConfirmViewController.m in Sources */,
+				C7A0E92E1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m in Sources */,
 				C79261B51E8ADF0300C87CED /* BCCardView.m in Sources */,
 				ECD244F719A8B444004B1F40 /* UIImage+Utils.m in Sources */,
 				511356E3209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
@@ -7864,7 +7864,7 @@
 				AA126CE5212C99FF005886A3 /* KYCPageViewFactory.swift in Sources */,
 				C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
-				3A26AF99212B36F2003A8A08 /* HomebrewExchangeCreateViewController.swift in Sources */,
+				3A26AF99212B36F2003A8A08 /* ExchangeCreateViewController.swift in Sources */,
 				AA126DA5212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
 				84FC02FE19815F1B00B97D5B /* sha256.c in Sources */,
 				602B9CF72118E15300BD3D60 /* KYCVerifyIdentityController.swift in Sources */,
@@ -7894,7 +7894,7 @@
 				3A7F7EE3210F6C77001E20AF /* Visibility.swift in Sources */,
 				23444F931DCD21B700573C8C /* BTCBase58.m in Sources */,
 				606399DC2110FC2D005B6DF5 /* SRWebSocket.m in Sources */,
-				C793E1FC1F8E7921001F171C /* ExchangeOverviewViewController.m in Sources */,
+				C793E1FC1F8E7921001F171C /* PartnerExchangeListViewController.m in Sources */,
 				23FB5C161D9ABBB20008C6AB /* TransactionDetailValueCell.m in Sources */,
 				23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */,
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
