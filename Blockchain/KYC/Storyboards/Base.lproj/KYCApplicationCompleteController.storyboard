@@ -120,7 +120,6 @@ Your account is now in review!</string>
                                             <constraint firstAttribute="trailing" secondItem="Z2q-Ln-8Wl" secondAttribute="trailing" constant="24" id="hWd-qT-lN3"/>
                                             <constraint firstItem="Z2q-Ln-8Wl" firstAttribute="centerY" secondItem="nlb-i5-ZvY" secondAttribute="centerY" id="n6F-Pe-IlM"/>
                                         </constraints>
-                                        <viewLayoutGuide key="safeArea" id="rrc-9z-kP9"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MkZ-R3-OEu" userLabel="Home Address Added Item">
                                         <rect key="frame" x="0.0" y="112" width="375" height="56"/>
@@ -148,7 +147,6 @@ Your account is now in review!</string>
                                             <constraint firstItem="B4E-de-rse" firstAttribute="leading" secondItem="MkZ-R3-OEu" secondAttribute="leading" constant="24" id="rX9-93-Ffy"/>
                                             <constraint firstAttribute="trailing" secondItem="pfb-u3-qtd" secondAttribute="trailing" constant="24" id="wUY-aP-BMv"/>
                                         </constraints>
-                                        <viewLayoutGuide key="safeArea" id="2v5-8i-ocy"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lac-Yg-d13" userLabel="Device Verified Item">
                                         <rect key="frame" x="0.0" y="168" width="375" height="56"/>
@@ -176,7 +174,6 @@ Your account is now in review!</string>
                                             <constraint firstItem="ERB-lu-LbF" firstAttribute="leading" secondItem="lac-Yg-d13" secondAttribute="leading" constant="24" id="T3U-LI-kZv"/>
                                             <constraint firstAttribute="trailing" secondItem="XaQ-UI-CG3" secondAttribute="trailing" constant="24" id="v1H-jY-Xka"/>
                                         </constraints>
-                                        <viewLayoutGuide key="safeArea" id="TAr-a4-Jik"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F4r-w7-una" userLabel="ID Uploaded Item">
                                         <rect key="frame" x="0.0" y="224" width="375" height="56"/>
@@ -204,7 +201,6 @@ Your account is now in review!</string>
                                             <constraint firstAttribute="height" constant="56" id="MIu-CH-W2s"/>
                                             <constraint firstItem="l4h-0d-Y4w" firstAttribute="centerY" secondItem="F4r-w7-una" secondAttribute="centerY" id="Sk9-hl-sRo"/>
                                         </constraints>
-                                        <viewLayoutGuide key="safeArea" id="Icj-kY-SBc"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Th6-tZ-j5N" userLabel="Hello Blockchain Item">
                                         <rect key="frame" x="0.0" y="280" width="375" height="56"/>
@@ -232,7 +228,6 @@ Your account is now in review!</string>
                                             <constraint firstItem="iRq-np-1Cz" firstAttribute="centerY" secondItem="Th6-tZ-j5N" secondAttribute="centerY" id="jHb-uw-13a"/>
                                             <constraint firstAttribute="height" constant="56" id="pUt-ec-EtJ"/>
                                         </constraints>
-                                        <viewLayoutGuide key="safeArea" id="ftQ-fm-wL0"/>
                                     </view>
                                 </subviews>
                                 <constraints>
