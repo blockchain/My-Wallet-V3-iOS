@@ -90,8 +90,12 @@
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="JG9-Ux-Uyy">
                             <rect key="frame" x="0.0" y="207" width="343" height="61"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sr2-Ia-gcZ" userLabel="Empty">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sr2-Ia-gcZ" userLabel="Decimal">
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
+                                    <state key="normal" title="."/>
+                                    <connections>
+                                        <action selector="decimalButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="8Z4-ci-yM5"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kma-Kx-hJu">
                                     <rect key="frame" x="117" y="0.0" width="109" height="61"/>
