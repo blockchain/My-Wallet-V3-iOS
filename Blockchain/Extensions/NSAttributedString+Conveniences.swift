@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension NSMutableAttributedString {
+@objc public extension NSMutableAttributedString {
 
     /// Sets the foreground color of the substring `text` to the provided `color`
     /// if `text` is within this attributed string's range.

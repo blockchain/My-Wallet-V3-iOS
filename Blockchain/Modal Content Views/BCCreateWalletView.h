@@ -29,13 +29,11 @@
     IBOutlet UITextField *password2TextField;
     IBOutlet UILabel *passwordFeedbackLabel;
     IBOutlet UIProgressView *passwordStrengthMeter;
-    IBOutlet UILabel *termsOfServiceLabel;
-    IBOutlet UIButton *termsOfServiceButton;
+    IBOutlet UILabel *agreementLabel;
+    IBOutlet UILabel *agreementTappableLabel;
 }
 
 + (nonnull BCCreateWalletView *)instanceFromNib;
-
-- (IBAction)termsOfServiceClicked:(id)sender;
 
 - (void)createBlankWallet;
 - (void)showPassphraseTextField;
