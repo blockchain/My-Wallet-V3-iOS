@@ -49,6 +49,36 @@ extension SocketMessageCodable {
 
 // TODO: consider separate files when other socket types are added
 // TODO: add tests when parameters are figured out
+struct Auth: SocketMessageCodable {
+    typealias JSONType = Auth
+    
+    let channel, operation: String
+    let params: AuthParams
+
+    private enum CodingKeys: String, CodingKey {
+        case channel
+        case operation
+        case params
+    }
+}
+
+struct AuthParams: Codable {
+    let type, token: String
+}
+
+struct HeartBeat: SocketMessageCodable {
+    typealias JSONType = HeartBeat
+    
+    let sequenceNumber: Int
+    let channel, type: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case sequenceNumber
+        case channel
+        case type
+    }
+}
+
 struct Quote: SocketMessageCodable {
     typealias JSONType = Quote
 

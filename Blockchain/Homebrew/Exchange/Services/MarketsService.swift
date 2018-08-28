@@ -22,7 +22,9 @@ class MarketsService {
 
     var pair: TradingPair? {
         didSet {
-            fetchRates()
+            SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
+            SocketManager.shared.connect(socketType: .exchange)
+            authenticate()
         }
     }
 
@@ -45,6 +47,23 @@ class MarketsService {
             return restMessageSubject.filter({ _ -> Bool in
                 return false
             })
+        }
+    }
+
+    func authenticate() {
+        switch dataSource {
+        case .socket: do {
+            let params = AuthParams(type: "auth", token: "jwtToken")
+            let message = Auth(channel: "auth", operation: "subscribe", params: params)
+            do {
+                let encoded = try message.encodeToString(encoding: .utf8)
+                let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
+                SocketManager.shared.send(message: socketMessage)
+            } catch {
+                Logger.shared.error("Could not encode socket message")
+            }
+            }
+        case .rest: Logger.shared.debug("use REST endpoint")
         }
     }
 
