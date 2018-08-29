@@ -140,6 +140,8 @@
 		3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2291211E228C0091E706 /* KYCPageType.swift */; };
 		3A8B229D211E2A960091E706 /* KYCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229C211E2A960091E706 /* KYCUser.swift */; };
 		3A8B229F2122117A0091E706 /* KYCBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */; };
+		3A91F7962137067400CDC3FD /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7952137067400CDC3FD /* Order.swift */; };
+		3A91F7972137067400CDC3FD /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7952137067400CDC3FD /* Order.swift */; };
 		3A9B7F012135B68100754FD6 /* RatesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B7F002135B68100754FD6 /* RatesService.swift */; };
 		3A9B7F022135B68100754FD6 /* RatesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B7F002135B68100754FD6 /* RatesService.swift */; };
 		3A9B7F112135CF9800754FD6 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B7F102135CF9800754FD6 /* NetworkRequest.swift */; };
@@ -1264,6 +1266,7 @@
 		3A8B2291211E228C0091E706 /* KYCPageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageType.swift; sourceTree = "<group>"; };
 		3A8B229C211E2A960091E706 /* KYCUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCUser.swift; sourceTree = "<group>"; };
 		3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCBaseViewController.swift; sourceTree = "<group>"; };
+		3A91F7952137067400CDC3FD /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		3A9B7F002135B68100754FD6 /* RatesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatesService.swift; sourceTree = "<group>"; };
 		3A9B7F102135CF9800754FD6 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
@@ -3394,6 +3397,7 @@
 				3A1552D72135FFDB00683CEB /* Rates.swift */,
 				3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */,
 				3A1552EC2136EAF000683CEB /* TradeLimits.swift */,
+				3A91F7952137067400CDC3FD /* Order.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7476,6 +7480,7 @@
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
+				3A91F7972137067400CDC3FD /* Order.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* PinStoreResponse.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
 				3A1552E8213600B400683CEB /* TradingPairConfiguration.swift in Sources */,
@@ -7876,6 +7881,7 @@
 				C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */,
 				602B9CF32118E15300BD3D60 /* KYCInformationController.swift in Sources */,
 				AA63F87720A39DCF002B719B /* AppFeature.swift in Sources */,
+				3A91F7962137067400CDC3FD /* Order.swift in Sources */,
 				C7F041961E3BD4A6004E8B4A /* BuyBitcoinViewController.m in Sources */,
 				C7448A9C2034DDF80041947E /* AssetSelectorView.m in Sources */,
 				C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */,
