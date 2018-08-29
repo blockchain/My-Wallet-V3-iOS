@@ -138,17 +138,13 @@
 		3AB4D91421308640004F0160 /* ListPresentationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D91321308640004F0160 /* ListPresentationUpdate.swift */; };
 		3AB4D9172130893E004F0160 /* ExchangeListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D9162130893E004F0160 /* ExchangeListPresenter.swift */; };
 		3AB4D91821309BAD004F0160 /* ExchangeListContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */; };
-		3AB4D91921309BB2004F0160 /* ExchangeTradeCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */; };
 		3AB4D91A21309BC8004F0160 /* ExchangeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */; };
 		3AB4D91B21309BCC004F0160 /* ExchangeListDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AFA1212B58A8003A8A08 /* ExchangeListDataProvider.swift */; };
 		3AB4D91C21309BD4004F0160 /* ExchangeListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D9162130893E004F0160 /* ExchangeListPresenter.swift */; };
 		3AB4D91D21309BE7004F0160 /* ExchangeListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF5721273BC9003A8A08 /* ExchangeListViewCell.swift */; };
 		3AB4D91E21309BEE004F0160 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D908212F560F004F0160 /* LoadingTableViewCell.swift */; };
 		3AB4D92021309C25004F0160 /* ExchangeListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D90F212FA61E004F0160 /* ExchangeListInteractor.swift */; };
-		3AB4D92121309C2B004F0160 /* ExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AFA3212C9F88003A8A08 /* ExchangeService.swift */; };
-		3AB4D92221309C32004F0160 /* PartnerExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7C212B13FA003A8A08 /* PartnerExchangeService.swift */; };
 		3AB4D92321309C5B004F0160 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D9112130693F004F0160 /* Result.swift */; };
-		3AB4D92421309C70004F0160 /* PartnerExchangeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */; };
 		3AB4D92521309C76004F0160 /* HomebrewExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */; };
 		3AC4F97821234040003AA207 /* Storyboardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F97721234040003AA207 /* Storyboardable.swift */; };
 		3AC4F97921234930003AA207 /* Storyboardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F97721234040003AA207 /* Storyboardable.swift */; };
@@ -797,7 +793,6 @@
 		C7C0DC24212F6783000EFE71 /* ExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AFA3212C9F88003A8A08 /* ExchangeService.swift */; };
 		C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */; };
 		C7C0DC26212F67AD000EFE71 /* PartnerExchangeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */; };
-		C7C0DC27212F67B7000EFE71 /* HomebrewExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */; };
 		C7C0DC28212F67E1000EFE71 /* PartnerExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF7C212B13FA003A8A08 /* PartnerExchangeService.swift */; };
 		C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34B71F4DCB7E00032806 /* CardsViewController.m */; };
 		C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BA1F4DE14500032806 /* DashboardViewController.m */; };
@@ -7301,7 +7296,6 @@
 				51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */,
 				C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */,
 				AACE32012093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
-				3AB4D92221309C32004F0160 /* PartnerExchangeService.swift in Sources */,
 				3AFD18AD21221D40007145EA /* KYCBaseViewController.swift in Sources */,
 				AA63F87B20A3A198002B719B /* AppFeatureConfigurator.swift in Sources */,
 				AACE31DA2092A99B00B7B806 /* Application+Helpers.swift in Sources */,
@@ -7335,7 +7329,6 @@
 				51B7682221065D52003CCD46 /* Environment.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
-				C7C0DC27212F67B7000EFE71 /* HomebrewExchangeService.swift in Sources */,
 				C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */,
 				AAF2AEC4212379D800687E30 /* PersonalDetailsDelegate.swift in Sources */,
 				516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */,
@@ -7421,7 +7414,6 @@
 				AACE31CA2092A99B00B7B806 /* AssetAddress.swift in Sources */,
 				51135702209CEEB900056D65 /* PushNotificationAuthPayload.swift in Sources */,
 				C76143A6211A80380041411E /* SocketMessage.swift in Sources */,
-				3AB4D91921309BB2004F0160 /* ExchangeTradeCellModel.swift in Sources */,
 				AA63F87820A39DCF002B719B /* AppFeature.swift in Sources */,
 				C77217D020AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
 				AACE31C82092A99B00B7B806 /* ModalPresenter.swift in Sources */,
@@ -7466,7 +7458,6 @@
 				51FC1B112127473D007BEB18 /* UIView.swift in Sources */,
 				3AB4D91A21309BC8004F0160 /* ExchangeListViewController.swift in Sources */,
 				51C9EBB720DBE4A700AB521D /* UIView+SafeAreaFrame.swift in Sources */,
-				3AB4D92121309C2B004F0160 /* ExchangeService.swift in Sources */,
 				AA126D2B212D23FE005886A3 /* KYCUpdateMobileRequest.swift in Sources */,
 				AAE94F6A20C75C4E005A3595 /* MockPinView.swift in Sources */,
 				AAE94F6820C75B8D005A3595 /* PinPresenterTests.swift in Sources */,
@@ -7563,7 +7554,6 @@
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
-				3AB4D92421309C70004F0160 /* PartnerExchangeAPI.swift in Sources */,
 				C7E1A2902108FDFC0072DDA0 /* Colors.swift in Sources */,
 				602B9D0D2118E23800BD3D60 /* KYCOnboardingNavigationController.swift in Sources */,
 				3A53B950213466580020ECAD /* ExchangeListHeaderView.swift in Sources */,
