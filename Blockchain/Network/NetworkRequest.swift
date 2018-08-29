@@ -110,6 +110,28 @@ struct NetworkRequest {
         })
     }
     
+    static func POST<ResponseType: Decodable>(
+        url: URL,
+        body: Data?,
+        token: String?,
+        type: ResponseType.Type
+        ) -> Single<ResponseType> {
+        let request = self.init(endpoint: url, method: .post, body: body, authToken: token)
+        return Single.create(subscribe: { (observer) -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { (result, responseCode) in
+                switch result {
+                case .success(let value):
+                    observer(.success(value))
+                case .error(let error):
+                    if let value = error {
+                        observer(.error(value))
+                    }
+                }
+            })
+            return Disposables.create()
+        })
+    }
+    
     static func POST(url: URL, body: Data?) -> NetworkRequest {
         return self.init(endpoint: url, method: .post, body: body)
     }
