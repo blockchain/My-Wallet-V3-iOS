@@ -23,19 +23,18 @@
 #import "BCRecoveryView.h"
 #import "Wallet.h"
 
+// TICKET: IOS-1232 Refactor/Modernize BCCreateWalletView.
 @interface BCCreateWalletView : BCModalContentView <UITextFieldDelegate, WalletDelegate> {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextField *passwordTextField;
     IBOutlet UITextField *password2TextField;
     IBOutlet UILabel *passwordFeedbackLabel;
     IBOutlet UIProgressView *passwordStrengthMeter;
-    IBOutlet UILabel *termsOfServiceLabel;
-    IBOutlet UIButton *termsOfServiceButton;
+    IBOutlet UILabel *agreementTappablePlaceholderLabel;
+    IBOutlet UILabel *agreementLabel;
 }
 
 + (nonnull BCCreateWalletView *)instanceFromNib;
-
-- (IBAction)termsOfServiceClicked:(id)sender;
 
 - (void)createBlankWallet;
 - (void)showPassphraseTextField;
@@ -47,4 +46,5 @@
 @property(nonatomic) float passwordStrength;
 @property(nonatomic) BOOL isRecoveringWallet;
 @property(nonatomic) UIButton *createButton;
+@property(nonatomic) UILabel *agreementTappableLabel;
 @end

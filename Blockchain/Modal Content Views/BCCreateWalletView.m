@@ -30,29 +30,60 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
+
     UIButton *createButton = [UIButton buttonWithType:UIButtonTypeCustom];
     createButton.frame = CGRectMake(0, 0, self.window.frame.size.width, 46);
     createButton.backgroundColor = UIColor.brandSecondary;
     [createButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     createButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_LARGE];
     self.createButton = createButton;
-    
+
     emailTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     passwordTextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
     password2TextField.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
-    
+
     emailTextField.inputAccessoryView = createButton;
     passwordTextField.inputAccessoryView = createButton;
     password2TextField.inputAccessoryView = createButton;
     
     passwordTextField.textColor = [UIColor grayColor];
     password2TextField.textColor = [UIColor grayColor];
-    
+
     passwordFeedbackLabel.adjustsFontSizeToFitWidth = YES;
+
+    UIFont *agreementLabelFont = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
+    agreementLabel.font = agreementLabelFont;
     
-    termsOfServiceLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
-    termsOfServiceButton.titleLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
+    self.agreementTappableLabel = [[UILabel alloc] initWithFrame:CGRectMake(agreementTappablePlaceholderLabel.frame.origin.x, agreementTappablePlaceholderLabel.frame.origin.y, self.bounds.size.width, agreementTappablePlaceholderLabel.frame.size.height)];
+    self.agreementTappableLabel.userInteractionEnabled = YES;
+    [self addSubview:self.agreementTappableLabel];
+    
+    self.agreementTappableLabel.font = agreementLabelFont;
+
+    agreementLabel.text = [LocalizationConstantsObjcBridge createWalletLegalAgreementPrefix];
+
+    NSString *termsOfService = [LocalizationConstantsObjcBridge termsOfService];
+    NSString *privacyPolicy = [LocalizationConstantsObjcBridge privacyPolicy];
+    self.agreementTappableLabel.text = [NSString stringWithFormat:@"%@ & %@", termsOfService, privacyPolicy];
+
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.agreementTappableLabel.text attributes:@{NSFontAttributeName: agreementLabelFont, NSForegroundColorAttributeName: agreementLabel.textColor}];
+    [attributedText addForegroundColor:[UIColor brandSecondary] to:termsOfService];
+    [attributedText addForegroundColor:[UIColor brandSecondary] to:privacyPolicy];
+    self.agreementTappableLabel.attributedText = attributedText;
+
+    UILabel *measuringLabel = [[UILabel alloc] initWithFrame:self.agreementTappableLabel.bounds];
+    measuringLabel.font = self.agreementTappableLabel.font;
+    measuringLabel.text = self.agreementTappableLabel.text;
+
+    UITapGestureRecognizer *tapGestureTermsOfService = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTermsOfService)];
+    UIView *tappableViewTermsOfService = [self viewWithTapGesture:tapGestureTermsOfService onSubstring:termsOfService ofText:self.agreementTappableLabel.text inLabel:measuringLabel];
+    [tappableViewTermsOfService changeYPosition:tappableViewTermsOfService.frame.origin.y - 8];
+    [self.agreementTappableLabel addSubview:tappableViewTermsOfService];
+
+    UITapGestureRecognizer *tapGesturePrivacyPolicy = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPrivacyPolicy)];
+    UIView *tappableViewPrivacyPolicy = [self viewWithTapGesture:tapGesturePrivacyPolicy onSubstring:privacyPolicy ofText:self.agreementTappableLabel.text inLabel:measuringLabel];
+    [tappableViewPrivacyPolicy changeYPosition:tappableViewPrivacyPolicy.frame.origin.y - 8];
+    [self.agreementTappableLabel addSubview:tappableViewPrivacyPolicy];
 }
 
 - (void)createBlankWallet
@@ -178,12 +209,14 @@
     [WalletManager.sharedInstance.wallet performSelector:@selector(loadBlankWallet) withObject:nil afterDelay:DELAY_KEYBOARD_DISMISSAL];
 }
 
-- (IBAction)termsOfServiceClicked:(id)sender
+- (void)showTermsOfService
 {
-    BCWebViewController *webViewController = [[BCWebViewController alloc] initWithTitle:BC_STRING_TERMS_OF_SERVICE];
-    webViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [webViewController loadURL:[ConstantsObjcBridge termsOfServiceURLString]];
-    [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:webViewController animated:true completion:nil];
+    [self launchWebViewControllerWithTitle:[LocalizationConstantsObjcBridge termsOfService] URLString:[ConstantsObjcBridge termsOfServiceURLString]];
+}
+
+- (void)showPrivacyPolicy
+{
+    [self launchWebViewControllerWithTitle:[LocalizationConstantsObjcBridge privacyPolicy] URLString:[ConstantsObjcBridge privacyPolicyURLString]];
 }
 
 #pragma mark - Wallet Delegate method
@@ -290,6 +323,23 @@
 }
 
 #pragma mark - Helpers
+
+- (UIView *)viewWithTapGesture:(UITapGestureRecognizer *)tapGesture onSubstring:(NSString *)substring ofText:(NSString *)text inLabel:(UILabel *)label
+{
+    CGRect tappableArea = [label boundingRectForCharacterRange:[text rangeOfString:substring]];
+    UIView *tappableView = [[UIView alloc] initWithFrame:tappableArea];
+    tappableView.userInteractionEnabled = YES;
+    [tappableView addGestureRecognizer:tapGesture];
+    return tappableView;
+}
+
+- (void)launchWebViewControllerWithTitle:(NSString *)title URLString:(NSString *)urlString
+{
+    BCWebViewController *webViewController = [[BCWebViewController alloc] initWithTitle:title];
+    webViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [webViewController loadURL:urlString];
+    [UIApplication.sharedApplication.keyWindow.rootViewController.topMostViewController presentViewController:webViewController animated:true completion:nil];
+}
 
 - (void)didRecoverWallet
 {

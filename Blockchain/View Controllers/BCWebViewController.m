@@ -136,7 +136,8 @@ NSMutableArray *visitedPages;
 {
     // External sites open in the system browser
     NSString *hostname = [[request URL] host];
-    if ([hostname rangeOfString:[[BlockchainAPI sharedInstance] blockchainWallet]].location == NSNotFound) {
+    if ([hostname rangeOfString:[[BlockchainAPI sharedInstance] blockchainDotInfo]].location == NSNotFound &&
+        [hostname rangeOfString:[[BlockchainAPI sharedInstance] blockchainDotCom]].location == NSNotFound) {
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;
     }
