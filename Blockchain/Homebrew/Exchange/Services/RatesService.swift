@@ -15,8 +15,6 @@ class RatesService: RatesAPI {
         case generic
     }
     
-    fileprivate var task: URLSessionDataTask?
-    
     private let authentication: KYCAuthenticationService
     private var disposable: Disposable?
     
@@ -96,6 +94,4 @@ class RatesService: RatesAPI {
             )
         }
     }
-    
-    
 }

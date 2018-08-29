@@ -12,15 +12,18 @@ import RxSwift
 protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
     var rates: RatesAPI { get }
+    var tradeExecution: TradeExecutionAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
     let rates: RatesAPI
+    let tradeExecution: TradeExecutionAPI
     
     init() {
         rates = RatesService()
         service = ExchangeService()
+        tradeExecution = TradeExecutionService()
     }
 }
 

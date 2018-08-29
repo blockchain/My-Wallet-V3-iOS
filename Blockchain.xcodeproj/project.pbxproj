@@ -86,6 +86,12 @@
 		3A1552E52136000F00683CEB /* RatesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552E32136000F00683CEB /* RatesAPI.swift */; };
 		3A1552E7213600B400683CEB /* TradingPairConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */; };
 		3A1552E8213600B400683CEB /* TradingPairConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */; };
+		3A1552EA2136EA8D00683CEB /* TradeExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552E92136EA8D00683CEB /* TradeExecutionService.swift */; };
+		3A1552EB2136EA8D00683CEB /* TradeExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552E92136EA8D00683CEB /* TradeExecutionService.swift */; };
+		3A1552ED2136EAF000683CEB /* TradeLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552EC2136EAF000683CEB /* TradeLimits.swift */; };
+		3A1552EE2136EAF000683CEB /* TradeLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552EC2136EAF000683CEB /* TradeLimits.swift */; };
+		3A1552F02136FFE200683CEB /* TradeExecutionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552EF2136FFE200683CEB /* TradeExecutionAPI.swift */; };
+		3A1552F12136FFE200683CEB /* TradeExecutionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1552EF2136FFE200683CEB /* TradeExecutionAPI.swift */; };
 		3A258C0D210A486F00C023F5 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A258C0C210A486F00C023F5 /* ReusableView.swift */; };
 		3A258C0E210A486F00C023F5 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A258C0C210A486F00C023F5 /* ReusableView.swift */; };
 		3A26AF5321272019003A8A08 /* ExchangeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */; };
@@ -1217,6 +1223,9 @@
 		3A1552D72135FFDB00683CEB /* Rates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rates.swift; sourceTree = "<group>"; };
 		3A1552E32136000F00683CEB /* RatesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatesAPI.swift; sourceTree = "<group>"; };
 		3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPairConfiguration.swift; sourceTree = "<group>"; };
+		3A1552E92136EA8D00683CEB /* TradeExecutionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeExecutionService.swift; sourceTree = "<group>"; };
+		3A1552EC2136EAF000683CEB /* TradeLimits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeLimits.swift; sourceTree = "<group>"; };
+		3A1552EF2136FFE200683CEB /* TradeExecutionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeExecutionAPI.swift; sourceTree = "<group>"; };
 		3A258C0C210A486F00C023F5 /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		3A26AF5221272019003A8A08 /* ExchangeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListViewController.swift; sourceTree = "<group>"; };
 		3A26AF5421272026003A8A08 /* ExchangeListViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExchangeListViewController.storyboard; sourceTree = "<group>"; };
@@ -3384,6 +3393,7 @@
 				3A26AF7121274EF9003A8A08 /* ExchangeTradeCellModel.swift */,
 				3A1552D72135FFDB00683CEB /* Rates.swift */,
 				3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */,
+				3A1552EC2136EAF000683CEB /* TradeLimits.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3404,6 +3414,7 @@
 				3A26AF79212B0CCB003A8A08 /* PartnerExchangeAPI.swift */,
 				3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */,
 				3A1552E32136000F00683CEB /* RatesAPI.swift */,
+				3A1552EF2136FFE200683CEB /* TradeExecutionAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -3416,6 +3427,7 @@
 				3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */,
 				3A26AFA3212C9F88003A8A08 /* ExchangeService.swift */,
 				3A9B7F002135B68100754FD6 /* RatesService.swift */,
+				3A1552E92136EA8D00683CEB /* TradeExecutionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -7317,6 +7329,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A1552F12136FFE200683CEB /* TradeExecutionAPI.swift in Sources */,
 				3A019124212DF24700AED2BF /* ExchangeCreateView.swift in Sources */,
 				51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */,
 				C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */,
@@ -7456,6 +7469,7 @@
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
+				3A1552EB2136EA8D00683CEB /* TradeExecutionService.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
 				3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
@@ -7467,6 +7481,7 @@
 				3A1552E8213600B400683CEB /* TradingPairConfiguration.swift in Sources */,
 				3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				3AB4D91821309BAD004F0160 /* ExchangeListContracts.swift in Sources */,
+				3A1552EE2136EAF000683CEB /* TradeLimits.swift in Sources */,
 				51979169210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
 				C7C0DC10212F6597000EFE71 /* TradingPair.swift in Sources */,
 				AACE31E02092A99B00B7B806 /* NetworkManager.swift in Sources */,
@@ -7630,6 +7645,7 @@
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
 				AAE9113120A51C900093A431 /* ReminderType.swift in Sources */,
 				3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */,
+				3A1552EA2136EA8D00683CEB /* TradeExecutionService.swift in Sources */,
 				9F1831EB1516AE3500FB3D52 /* NSString+URLEncode.m in Sources */,
 				23BA22111D6B736900D0472B /* NSNumberFormatter+Currencies.m in Sources */,
 				23444F811DCD214800573C8C /* BTCBigNumber.m in Sources */,
@@ -8022,6 +8038,7 @@
 				C793E1FC1F8E7921001F171C /* PartnerExchangeListViewController.m in Sources */,
 				23FB5C161D9ABBB20008C6AB /* TransactionDetailValueCell.m in Sources */,
 				23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */,
+				3A1552ED2136EAF000683CEB /* TradeLimits.swift in Sources */,
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */,
 				606399E62110FC2D005B6DF5 /* SRRunLoopThread.m in Sources */,
@@ -8033,6 +8050,7 @@
 				3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */,
 				AA7133D921223AE000CB2AA9 /* Arrays.swift in Sources */,
 				AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
+				3A1552F02136FFE200683CEB /* TradeExecutionAPI.swift in Sources */,
 				AA126D9F212E189C005886A3 /* OnfidoUser.swift in Sources */,
 				AAA3333B2088115C0019AD55 /* Coordinator.swift in Sources */,
 				AACE31F12092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
