@@ -23,6 +23,7 @@
 #import "BCRecoveryView.h"
 #import "Wallet.h"
 
+// TICKET: IOS-1232 Refactor/Modernize BCCreateWalletView.
 @interface BCCreateWalletView : BCModalContentView <UITextFieldDelegate, WalletDelegate> {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextField *passwordTextField;
