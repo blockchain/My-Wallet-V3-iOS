@@ -6,12 +6,12 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+enum Side: String {
+    case buy = "BUY"
+    case sell = "SELL"
+}
+
 struct Order: Encodable {
-    
-    enum Side: String {
-        case buy = "BUY"
-        case sell = "SELL"
-    }
     
     let pair: TradingPair
     let side: Side
