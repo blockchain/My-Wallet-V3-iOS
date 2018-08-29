@@ -41,6 +41,10 @@ class ExchangeCreateViewController: UIViewController {
 }
 
 extension ExchangeCreateViewController: NumberKeypadViewDelegate {
+    func onDecimalButtonTapped() {
+
+    }
+
     func onNumberButtonTapped(value: String) {
 
     }
