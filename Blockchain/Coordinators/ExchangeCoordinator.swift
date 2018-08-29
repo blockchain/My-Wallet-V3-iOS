@@ -9,6 +9,18 @@
 import Foundation
 import RxSwift
 
+protocol ExchangeDependencies {
+    var service: ExchangeHistoryAPI { get }
+}
+
+struct ExchangeServices: ExchangeDependencies {
+    let service: ExchangeHistoryAPI
+    
+    init() {
+        service = ExchangeService()
+    }
+}
+
 @objc class ExchangeCoordinator: NSObject, Coordinator {
 
     private enum ExchangeType {
@@ -24,10 +36,19 @@ import RxSwift
     @objc class func sharedInstance() -> ExchangeCoordinator {
         return ExchangeCoordinator.shared
     }
+    
+    // MARK: Public Properties
+    
+    weak var exchangeOutput: ExchangeListOutput?
 
     private let walletManager: WalletManager
 
+    private let walletService: WalletService
+    private let dependencies: ExchangeDependencies = ExchangeServices()
+
     private var disposable: Disposable?
+    
+    private var exchangeListViewController: ExchangeListViewController?
 
     // MARK: - Navigation
     private var exchangeViewController: PartnerExchangeListViewController?
@@ -57,11 +78,11 @@ import RxSwift
 
     private func launchExchangeOrHomebrew() {
         if WalletManager.shared.wallet.hasEthAccount() {
-            let success = { (isHomebrewAvailable: Bool) in
+            let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
-                    self.showExchange(type: .homebrew)
+                    self?.showExchange(type: .homebrew)
                 } else {
-                    self.showExchange(type: .shapeshift)
+                    self?.showExchange(type: .shapeshift)
                 }
             }
             let error = { (error: Error) in
@@ -91,8 +112,7 @@ import RxSwift
         }
 
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.Exchange.loading)
-
+        
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -102,7 +122,16 @@ import RxSwift
     private func showExchange(type: ExchangeType) {
         switch type {
         case .homebrew:
-            Logger.shared.info("Not implemented yet")
+            guard let viewController = rootViewController else {
+                Logger.shared.error("View controller to present on is nil")
+                return
+            }
+            let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
+            let navigationController = BCNavigationController(
+                rootViewController: listViewController,
+                title: LocalizationConstants.Exchange.navigationTitle
+            )
+            viewController.present(navigationController, animated: true)
         default:
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
@@ -131,7 +160,6 @@ import RxSwift
     }
 
     // MARK: - Services
-    private let walletService: WalletService
     private let marketsService: MarketsService
     private let exchangeService: ExchangeService
 

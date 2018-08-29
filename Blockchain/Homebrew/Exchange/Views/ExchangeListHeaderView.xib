@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="N79-m8-30c" customClass="ExchangeListHeaderView" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="whc-gU-VwZ">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order History" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bas-Df-f5D">
+                    <rect key="frame" x="16" y="18" width="79" height="15"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ej6-V7-Fv3">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.87" green="0.87" blue="0.87" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="MjT-dT-p5X"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E8V-vp-6Z3">
+                    <rect key="frame" x="0.0" y="50" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.87" green="0.87" blue="0.87" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="GCG-Ck-2mx"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="ej6-V7-Fv3" firstAttribute="top" secondItem="rxY-p7-hFr" secondAttribute="top" id="3vi-rc-ecV"/>
+                <constraint firstAttribute="trailing" secondItem="E8V-vp-6Z3" secondAttribute="trailing" id="9cd-Ks-va3"/>
+                <constraint firstAttribute="trailing" secondItem="ej6-V7-Fv3" secondAttribute="trailing" id="GQY-H1-dKx"/>
+                <constraint firstItem="bas-Df-f5D" firstAttribute="leading" secondItem="rxY-p7-hFr" secondAttribute="leading" constant="16" id="I78-7d-ekk"/>
+                <constraint firstItem="bas-Df-f5D" firstAttribute="centerY" secondItem="rxY-p7-hFr" secondAttribute="centerY" id="K6W-lM-T2s"/>
+                <constraint firstItem="E8V-vp-6Z3" firstAttribute="bottom" secondItem="rxY-p7-hFr" secondAttribute="bottom" id="MfQ-be-1f7"/>
+                <constraint firstItem="whc-gU-VwZ" firstAttribute="leading" secondItem="rxY-p7-hFr" secondAttribute="leading" id="WgG-DX-ezk"/>
+                <constraint firstItem="whc-gU-VwZ" firstAttribute="top" secondItem="N79-m8-30c" secondAttribute="top" id="c2B-DD-djx"/>
+                <constraint firstItem="rxY-p7-hFr" firstAttribute="trailing" secondItem="whc-gU-VwZ" secondAttribute="trailing" id="cgq-Xz-I27"/>
+                <constraint firstItem="ej6-V7-Fv3" firstAttribute="leading" secondItem="N79-m8-30c" secondAttribute="leading" id="dyG-Tj-mp0"/>
+                <constraint firstAttribute="bottom" secondItem="whc-gU-VwZ" secondAttribute="bottom" id="gCS-dd-jzR"/>
+                <constraint firstItem="E8V-vp-6Z3" firstAttribute="leading" secondItem="N79-m8-30c" secondAttribute="leading" id="y26-fp-hpX"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="rxY-p7-hFr"/>
+            <connections>
+                <outlet property="background" destination="whc-gU-VwZ" id="Pr7-vW-hSf"/>
+                <outlet property="title" destination="bas-Df-f5D" id="gJi-SL-Wl4"/>
+            </connections>
+            <point key="canvasLocation" x="-31.5" y="-169.5"/>
+        </view>
+    </objects>
+</document>

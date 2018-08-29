@@ -20,6 +20,23 @@ struct TradingPair {
         internalFrom = from
         internalTo = to
     }
+    
+    init?(string: String) {
+        var components: [String] = []
+        for value in ["-", "_"] {
+            if string.contains(value) {
+                components = string.components(separatedBy: value)
+                break
+            }
+        }
+        
+        guard let from = components.first else { return nil }
+        guard let to = components.last else { return nil }
+        guard let toAsset = AssetType(stringValue: to) else { return nil }
+        guard let fromAsset = AssetType(stringValue: from) else { return nil }
+        
+        self.init(from: fromAsset, to: toAsset)
+    }
 
     var from: AssetType {
         get {
@@ -45,5 +62,19 @@ struct TradingPair {
             }
             internalTo = newValue
         }
+    }
+}
+
+extension TradingPair: Equatable {
+    static func ==(lhs: TradingPair, rhs: TradingPair) -> Bool {
+        return lhs.internalFrom == rhs.internalFrom &&
+            lhs.internalTo == rhs.internalTo
+    }
+}
+
+extension TradingPair: Hashable {
+    var hashValue: Int {
+        return internalTo.hashValue ^
+        internalFrom.hashValue
     }
 }
