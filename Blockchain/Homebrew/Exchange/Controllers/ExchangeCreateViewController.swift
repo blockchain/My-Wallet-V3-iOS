@@ -23,7 +23,7 @@ class ExchangeCreateViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction func fiatToggleTapped(_ sender: Any) {
-
+        delegate?.onFiatToggleTapped()
     }
 
     // MARK: Public Properties
@@ -32,70 +32,42 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: Private Properties
 
-    fileprivate var exchangeCreateView: ExchangeCreateView!
+    fileprivate var presenter: ExchangeCreatePresenter!
+    fileprivate var dependencies: ExchangeDependencies!
+
+    // MARK: Factory
+    
+    class func make(with dependencies: ExchangeDependencies) -> ExchangeCreateViewController {
+        let controller = ExchangeCreateViewController.makeFromStoryboard()
+        controller.dependencies = dependencies
+        return controller
+    }
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
-    }
-}
-
-extension ExchangeCreateViewController: NumberKeypadViewDelegate {
-    func onNumberButtonTapped(value: String) {
-
+        dependenciesSetup()
     }
 
-    func onBackspaceTapped() {
-
+    fileprivate func dependenciesSetup() {
+        let interactor = ExchangeCreateInteractor(dependencies: dependencies)
+        presenter = ExchangeCreatePresenter(interactor: interactor)
+        presenter.interface = self
+        interactor.output = presenter
+        delegate = presenter
     }
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-    func continueButtonEnabled(_ enabled: Bool) {
-        if enabled {
-            exchangeCreateView.enablePaymentButtons()
-        } else {
-            exchangeCreateView.disablePaymentButtons()
-        }
+    func expandRatesView() {
+        
     }
 
-    func exchangeRateUpdated(_ rate: String) {
+    func updateInputLabels(primary: String, secondary: String) {
 
     }
-}
 
-extension ExchangeCreateViewController: ExchangeCreateViewDelegate {
-    func assetToggleButtonTapped() {
-    }
+    func updateRates(first: String, second: String, third: String) {
 
-    func useMinButtonTapped() {
-    }
-
-    func useMaxButtonTapped() {
-    }
-
-    func continueButtonTapped() {
-        delegate?.onContinueButtonTapped()
-    }
-}
-
-extension ExchangeCreateViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        delegate?.onChangeAmountFieldText()
-        return true
-    }
-}
-
-extension ExchangeCreateViewController: AddressSelectionDelegate {
-    func getAssetType() -> LegacyAssetType {
-        return LegacyAssetType(rawValue: -1)!
-    }
-
-    func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
-        delegate?.onChangeFrom(assetType: AssetType.from(legacyAssetType: asset))
-    }
-
-    func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
-        delegate?.onChangeTo(assetType: AssetType.from(legacyAssetType: asset))
     }
 }

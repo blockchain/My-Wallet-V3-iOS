@@ -11,13 +11,19 @@ import RxSwift
 
 protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
+    var markets: ExchangeMarketsAPI { get }
+    var inputs: ExchangeInputsAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
-    
+    let markets: ExchangeMarketsAPI
+    let inputs: ExchangeInputsAPI
+
     init() {
         service = ExchangeService()
+        markets = MarketsService()
+        inputs = ExchangeInputs()
     }
 }
 
@@ -125,9 +131,7 @@ struct ExchangeServices: ExchangeDependencies {
     private func showCreateExchangetype(type: ExchangeType) {
         switch type {
         case .homebrew:
-            let exchangeCreateViewController = ExchangeCreateViewController()
-            exchangeCreateViewController.delegate = self
-            self.createInterface = exchangeCreateViewController
+            let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
             // present view controller
         default:
             // show shapeshift
@@ -138,9 +142,6 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Services
     private let marketsService: MarketsService
     private let exchangeService: ExchangeService
-
-    // MARK: - Interfaces
-    fileprivate weak var createInterface: ExchangeCreateInterface?
 
     // MARK: - Lifecycle
     private init(
@@ -174,32 +175,13 @@ struct ExchangeServices: ExchangeDependencies {
     }
 }
 
-// MARK: - Exchange Creation
-extension ExchangeCoordinator: ExchangeCreateDelegate {
-    func onChangeFrom(assetType: AssetType) {
-        marketsService.pair?.from = assetType
-    }
-
-    func onChangeTo(assetType: AssetType) {
-        marketsService.pair?.to = assetType
-    }
-
-    func onContinueButtonTapped() {
-
-    }
-
-    func onChangeAmountFieldText() {
-        marketsService.onChangeAmountFieldText()
-    }
-}
-
 extension ExchangeCoordinator {
     func subscribeToRates() {
-        disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
-            // WIP
-            self.createInterface?.exchangeRateUpdated("rate")
-        }, onError: { (error) in
-            Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
-        })
+//        disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
+//            // WIP
+//            self.createInterface?.exchangeRateUpdated("rate")
+//        }, onError: { (error) in
+//            Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
+//        })
     }
 }

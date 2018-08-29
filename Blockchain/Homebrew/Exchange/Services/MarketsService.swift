@@ -9,6 +9,9 @@
 import Foundation
 import RxSwift
 
+protocol ExchangeMarketsAPI {
+}
+
 class MarketsService {
     // Two ways of retrieving data.
     private enum DataSource {
@@ -70,4 +73,8 @@ extension MarketsService {
         //        case .rest: // send request, show spinner?
         //        }
     }
+}
+
+extension MarketsService: ExchangeMarketsAPI {
+    
 }
