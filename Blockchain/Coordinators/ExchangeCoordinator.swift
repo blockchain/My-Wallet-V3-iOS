@@ -55,6 +55,7 @@ struct ExchangeServices: ExchangeDependencies {
     private var exchangeListViewController: ExchangeListViewController?
 
     // MARK: - Navigation
+    private var navigationController: BCNavigationController?
     private var exchangeViewController: PartnerExchangeListViewController?
     private var rootViewController: UIViewController?
 
@@ -109,22 +110,22 @@ struct ExchangeServices: ExchangeDependencies {
                 return
             }
             let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
-            let navigationController = BCNavigationController(
+            navigationController = BCNavigationController(
                 rootViewController: listViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             )
-            viewController.present(navigationController, animated: true)
+            viewController.present(navigationController!, animated: true)
         default:
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
             exchangeViewController = PartnerExchangeListViewController()
-            let navigationController = BCNavigationController(
+            let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             )
-            viewController.present(navigationController, animated: true)
+            viewController.present(partnerNavigationController, animated: true)
         }
     }
 
@@ -132,11 +133,27 @@ struct ExchangeServices: ExchangeDependencies {
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
-            // present view controller
+            if navigationController == nil {
+                guard let viewController = rootViewController else {
+                    Logger.shared.error("View controller to present on is nil")
+                    return
+                }
+                navigationController = BCNavigationController(
+                    rootViewController: exchangeCreateViewController,
+                    title: LocalizationConstants.Exchange.navigationTitle
+                )
+                viewController.topMostViewController?.present(navigationController!, animated: true)
+            } else {
+                navigationController?.pushViewController(exchangeCreateViewController, animated: true)
+            }
         default:
             // show shapeshift
             Logger.shared.debug("Not yet implemented")
         }
+    }
+
+    func showCreateExchange() {
+        showCreateExchangetype(type: .homebrew)
     }
 
     // MARK: - Services

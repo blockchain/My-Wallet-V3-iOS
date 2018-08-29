@@ -15,10 +15,10 @@ import Foundation
     func onBackspaceTapped()
 }
 
-class NumberKeypadView: UIView {
-    @IBOutlet weak var delegate: NumberKeypadViewDelegate?
+@IBDesignable
+class NumberKeypadView: NibBasedView {
 
-    @IBOutlet var numberButtons: [UIButton]!
+    @IBOutlet weak var delegate: NumberKeypadViewDelegate?
 
     @IBAction func numberButtonTapped(_ sender: UIButton) {
         guard let titleLabel = sender.titleLabel, let value = titleLabel.text else { return }

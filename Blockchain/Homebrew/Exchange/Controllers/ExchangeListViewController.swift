@@ -87,7 +87,7 @@ extension ExchangeListViewController: ExchangeListInterface {
     }
     
     func showNewExchange(animated: Bool) {
-        // TODO
+        coordinator.showCreateExchange()
     }
 }
 
