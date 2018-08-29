@@ -53,31 +53,37 @@
 
     UIFont *agreementLabelFont = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_EXTRA_EXTRA_SMALL];
     agreementLabel.font = agreementLabelFont;
-    agreementTappableLabel.font = agreementLabelFont;
+    
+    self.agreementTappableLabel = [[UILabel alloc] initWithFrame:CGRectMake(agreementTappablePlaceholderLabel.frame.origin.x, agreementTappablePlaceholderLabel.frame.origin.y, self.bounds.size.width, agreementTappablePlaceholderLabel.frame.size.height)];
+    self.agreementTappableLabel.userInteractionEnabled = YES;
+    [self addSubview:self.agreementTappableLabel];
+    
+    self.agreementTappableLabel.font = agreementLabelFont;
 
     agreementLabel.text = [LocalizationConstantsObjcBridge createWalletLegalAgreementPrefix];
 
     NSString *termsOfService = [LocalizationConstantsObjcBridge termsOfService];
     NSString *privacyPolicy = [LocalizationConstantsObjcBridge privacyPolicy];
-    agreementTappableLabel.text = [NSString stringWithFormat:@"%@ & %@", termsOfService, privacyPolicy];
+    self.agreementTappableLabel.text = [NSString stringWithFormat:@"%@ & %@", termsOfService, privacyPolicy];
 
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:agreementTappableLabel.text attributes:@{NSFontAttributeName: agreementLabelFont, NSForegroundColorAttributeName: agreementLabel.textColor}];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.agreementTappableLabel.text attributes:@{NSFontAttributeName: agreementLabelFont, NSForegroundColorAttributeName: agreementLabel.textColor}];
     [attributedText addForegroundColor:[UIColor brandSecondary] to:termsOfService];
     [attributedText addForegroundColor:[UIColor brandSecondary] to:privacyPolicy];
-    agreementTappableLabel.attributedText = attributedText;
+    self.agreementTappableLabel.attributedText = attributedText;
 
-    UILabel *measuringLabel = [[UILabel alloc] initWithFrame:agreementTappableLabel.bounds];
-    measuringLabel.font = agreementTappableLabel.font;
-    measuringLabel.text = agreementTappableLabel.text;
+    UILabel *measuringLabel = [[UILabel alloc] initWithFrame:self.agreementTappableLabel.bounds];
+    measuringLabel.font = self.agreementTappableLabel.font;
+    measuringLabel.text = self.agreementTappableLabel.text;
 
-    // IOS-1107 - views produced here are offset in width somehow. See PartnerExchangeConfirmViewController.m for a correct implementation.
     UITapGestureRecognizer *tapGestureTermsOfService = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTermsOfService)];
-    UIView *tappableViewTermsOfService = [self viewWithTapGesture:tapGestureTermsOfService onSubstring:termsOfService ofText:agreementTappableLabel.text inLabel:measuringLabel];
-    [agreementTappableLabel addSubview:tappableViewTermsOfService];
+    UIView *tappableViewTermsOfService = [self viewWithTapGesture:tapGestureTermsOfService onSubstring:termsOfService ofText:self.agreementTappableLabel.text inLabel:measuringLabel];
+    [tappableViewTermsOfService changeYPosition:tappableViewTermsOfService.frame.origin.y - 8];
+    [self.agreementTappableLabel addSubview:tappableViewTermsOfService];
 
     UITapGestureRecognizer *tapGesturePrivacyPolicy = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPrivacyPolicy)];
-    UIView *tappableViewPrivacyPolicy = [self viewWithTapGesture:tapGesturePrivacyPolicy onSubstring:privacyPolicy ofText:agreementTappableLabel.text inLabel:measuringLabel];
-    [agreementTappableLabel addSubview:tappableViewPrivacyPolicy];
+    UIView *tappableViewPrivacyPolicy = [self viewWithTapGesture:tapGesturePrivacyPolicy onSubstring:privacyPolicy ofText:self.agreementTappableLabel.text inLabel:measuringLabel];
+    [tappableViewPrivacyPolicy changeYPosition:tappableViewPrivacyPolicy.frame.origin.y - 8];
+    [self.agreementTappableLabel addSubview:tappableViewPrivacyPolicy];
 }
 
 - (void)createBlankWallet

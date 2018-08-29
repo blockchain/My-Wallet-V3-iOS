@@ -165,7 +165,7 @@
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
                 </textField>
-                <label autoresizesSubviews="NO" opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" id="N1I-Aa-7Pp">
+                <label hidden="YES" autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" id="N1I-Aa-7Pp">
                     <rect key="frame" x="15" y="141" width="305" height="15"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <attributedString key="attributedText">
@@ -204,8 +204,8 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="agreementLabel" destination="Qvx-f4-C2O" id="DlP-Fx-sIk"/>
-                <outlet property="agreementTappableLabel" destination="N1I-Aa-7Pp" id="5jT-e5-oqG"/>
+                <outlet property="agreementLabel" destination="Qvx-f4-C2O" id="gsn-PO-Fbo"/>
+                <outlet property="agreementTappablePlaceholderLabel" destination="N1I-Aa-7Pp" id="l4x-nc-TC5"/>
                 <outlet property="emailTextField" destination="LsW-69-Qon" id="DDn-ad-Tlz"/>
                 <outlet property="password2TextField" destination="397" id="452"/>
                 <outlet property="passwordFeedbackLabel" destination="Mk4-63-3pL" id="Vra-AS-94J"/>

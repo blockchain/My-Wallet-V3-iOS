@@ -29,8 +29,8 @@
     IBOutlet UITextField *password2TextField;
     IBOutlet UILabel *passwordFeedbackLabel;
     IBOutlet UIProgressView *passwordStrengthMeter;
+    IBOutlet UILabel *agreementTappablePlaceholderLabel;
     IBOutlet UILabel *agreementLabel;
-    IBOutlet UILabel *agreementTappableLabel;
 }
 
 + (nonnull BCCreateWalletView *)instanceFromNib;
@@ -45,4 +45,5 @@
 @property(nonatomic) float passwordStrength;
 @property(nonatomic) BOOL isRecoveringWallet;
 @property(nonatomic) UIButton *createButton;
+@property(nonatomic) UILabel *agreementTappableLabel;
 @end
