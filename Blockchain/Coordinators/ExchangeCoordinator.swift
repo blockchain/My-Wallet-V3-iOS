@@ -70,9 +70,9 @@ struct ExchangeServices: ExchangeDependencies {
                 }
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
-                }, onError: { error in
-                    Logger.shared.error("Failed to get user: \(error.localizedDescription)")
-                    AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
+            }, onError: { error in
+                Logger.shared.error("Failed to get user: \(error.localizedDescription)")
+                AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
             })
     }
 
