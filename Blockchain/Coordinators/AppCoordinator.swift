@@ -27,7 +27,6 @@ import Foundation
     private(set) var window: UIWindow
 
     private let walletManager: WalletManager
-    private var kycCoordinator: KYCCoordinator?
 
     // MARK: - UIViewController Properties
 
@@ -223,6 +222,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleBuyBitcoin()
         case .exchange:
             handleExchange()
+        // TODO: remove item
         case .kyc:
             handleLaunchKYC()
         }
@@ -318,8 +318,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     }
     
     private func handleLaunchKYC() {
-        kycCoordinator = KYCCoordinator()
-        kycCoordinator?.start()
+        KYCCoordinator.shared.start()
     }
     
     private func handleExchange() {

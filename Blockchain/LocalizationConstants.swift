@@ -261,6 +261,7 @@ struct LocalizationConstants {
 
     struct Onboarding {
         static let createNewWallet = NSLocalizedString("Create New Wallet", comment: "")
+        static let termsOfServiceAndPrivacyPolicyNoticePrefix = NSLocalizedString("By creating a wallet you agree to Blockchain's", comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain's terms of service and privacy policy when they create a wallet")
         static let automaticPairing = NSLocalizedString("Automatic Pairing", comment: "")
         static let recoverFunds = NSLocalizedString("Recover Funds", comment: "")
         static let recoverFundsOnlyIfForgotCredentials = NSLocalizedString("You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", comment: "")
@@ -590,6 +591,18 @@ struct LocalizationConstants {
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
+    @objc class func createWalletLegalAgreementPrefix() -> String {
+        return LocalizationConstants.Onboarding.termsOfServiceAndPrivacyPolicyNoticePrefix
+    }
+
+    @objc class func termsOfService() -> String {
+        return LocalizationConstants.tos
+    }
+
+    @objc class func privacyPolicy() -> String {
+        return LocalizationConstants.privacyPolicy
+    }
+
     @objc class func continueString() -> String { return LocalizationConstants.continueString }
 
     @objc class func warning() -> String { return LocalizationConstants.Errors.warning }

@@ -249,8 +249,7 @@ typedef enum {
             break;
         }
         case RowKYC: {
-            KYCCoordinator *coordinator = [[KYCCoordinator alloc] init];
-            [coordinator startFrom:self];
+            [[KYCCoordinator sharedInstance] startFrom:self];
             break;
         }
         default:

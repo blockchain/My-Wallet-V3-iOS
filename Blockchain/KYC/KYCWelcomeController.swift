@@ -91,6 +91,8 @@ extension UITapGestureRecognizer {
     /// Checks if the tap occurred inside a specified range within a UILabel.
     /// See: https://stackoverflow.com/a/35789589
     ///
+    /// Warning: Does not work for labels with left-aligned text
+    ///
     /// - Parameters:
     ///   - label: the UILabel
     ///   - range: the NSRange
@@ -133,5 +135,4 @@ extension UITapGestureRecognizer {
 
         return NSLocationInRange(indexOfCharacter, range)
     }
-
 }

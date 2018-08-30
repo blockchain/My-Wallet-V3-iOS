@@ -97,7 +97,8 @@ NSString* loginWithJsonScript(NSString*, NSString*, NSString*, NSString*, BOOL);
 }
 
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
-    if ([challenge.protectionSpace.host hasSuffix:[[BlockchainAPI sharedInstance] blockchainWallet]]) {
+    if ([challenge.protectionSpace.host hasSuffix:[[BlockchainAPI sharedInstance] blockchainDotInfo]] ||
+        [challenge.protectionSpace.host hasSuffix:[[BlockchainAPI sharedInstance] blockchainDotCom]]) {
         [[CertificatePinner sharedInstance] didReceive:challenge completion:completionHandler];
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
