@@ -550,7 +550,7 @@ struct LocalizationConstants {
             comment: "Text displayed when KYC verification failed."
         )
         static let verificationFailedDescription = NSLocalizedString(
-            "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
+            "Unfortunately we had some trouble verifying your identity with the documents you’ve supplied and your account can’t be verified at this time.",
             comment: "Description for when KYC verification failed."
         )
         static let notifyMe = NSLocalizedString(
