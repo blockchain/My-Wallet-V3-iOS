@@ -489,7 +489,7 @@ struct LocalizationConstants {
             comment: "Text displayed when KYC verification is in progress."
         )
         static let verificationInProgressDescription = NSLocalizedString(
-            "Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange.",
+            "Your information is being reviewed. When all looks good, you’re clear to exchange. You should receive a notification within 5 minutes.",
             comment: "Description for when KYC verification is in progress."
         )
         static let accountApproved = NSLocalizedString(
