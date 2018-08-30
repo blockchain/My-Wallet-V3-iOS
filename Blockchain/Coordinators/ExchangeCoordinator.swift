@@ -58,7 +58,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     func start() {
         if let theUser = user, theUser.status == .approved {
-            launchExchangeOrHomebrew(); return
+            showAppropriateExchange(); return
         }
         disposable = BlockchainDataRepository.shared.kycUser
             .subscribeOn(MainScheduler.asyncInstance)
@@ -68,7 +68,7 @@ struct ExchangeServices: ExchangeDependencies {
                 guard self.user?.status == .approved else {
                     KYCCoordinator.shared.start(); return
                 }
-                self.launchExchangeOrHomebrew()
+                self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 }, onError: { error in
                     Logger.shared.error("Failed to get user: \(error.localizedDescription)")
@@ -76,7 +76,7 @@ struct ExchangeServices: ExchangeDependencies {
             })
     }
 
-    private func launchExchangeOrHomebrew() {
+    private func showAppropriateExchange() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
