@@ -118,7 +118,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="."/>
                                     <connections>
-                                        <action selector="decimalButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="8Z4-ci-yM5"/>
+                                        <action selector="decimalButtonTapped:" destination="-1" eventType="touchUpInside" id="eJG-1s-5Xl"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kma-Kx-hJu">
@@ -132,7 +132,7 @@
                                     <rect key="frame" x="234" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="&lt;x]"/>
                                     <connections>
-                                        <action selector="backspaceButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="ama-vk-TXp"/>
+                                        <action selector="backspaceButtonTapped:" destination="-1" eventType="touchUpInside" id="oi0-r2-q27"/>
                                     </connections>
                                 </button>
                             </subviews>

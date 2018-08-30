@@ -12,17 +12,18 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: - IBOutlets
 
+    @IBOutlet private var numberKeypadView: NumberKeypadView!
     // Label to be updated when amount is being typed in
-    @IBOutlet var primaryAmountLabel: UILabel!
+    @IBOutlet private var primaryAmountLabel: UILabel!
     // Amount being typed in converted to input crypto or input fiat
-    @IBOutlet var secondaryAmountLabel: UILabel!
-    @IBOutlet var useMinimumButton: UIButton!
-    @IBOutlet var useMaximumButton: UIButton!
-    @IBOutlet var exchangeRateButton: UIButton!
-    @IBOutlet var exchangeButton: UIButton!
+    @IBOutlet private var secondaryAmountLabel: UILabel!
+    @IBOutlet private var useMinimumButton: UIButton!
+    @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var exchangeRateButton: UIButton!
+    @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
 
-    @IBAction func fiatToggleTapped(_ sender: Any) {
+    @IBAction private func fiatToggleTapped(_ sender: Any) {
         delegate?.onFiatToggleTapped()
     }
 
@@ -51,6 +52,7 @@ class ExchangeCreateViewController: UIViewController {
 
     fileprivate func dependenciesSetup() {
         let interactor = ExchangeCreateInteractor(dependencies: dependencies)
+        numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
         presenter.interface = self
         interactor.output = presenter
@@ -58,13 +60,28 @@ class ExchangeCreateViewController: UIViewController {
     }
 }
 
-extension ExchangeCreateViewController: ExchangeCreateInterface {
-    func expandRatesView() {
-        
+extension ExchangeCreateViewController: NumberKeypadViewDelegate {
+    func onNumberButtonTapped(value: String) {
+        delegate?.onNumberButtonTapped(value: value)
     }
 
-    func updateInputLabels(primary: String, secondary: String) {
+    func onDecimalButtonTapped() {
+        delegate?.onDecimalButtonTapped()
+    }
 
+    func onBackspaceTapped() {
+        delegate?.onBackspaceTapped()
+    }
+}
+
+extension ExchangeCreateViewController: ExchangeCreateInterface {
+    func expandRatesView() {
+
+    }
+
+    func updateInputLabels(primary: String?, secondary: String?) {
+        primaryAmountLabel.text = primary
+        secondaryAmountLabel.text = secondary
     }
 
     func updateRates(first: String, second: String, third: String) {

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Delegate-->
+        <!--Exchange Create View Controller-->
         <scene sceneID="azD-85-pcI">
             <objects>
                 <viewController id="ZL9-nX-8IY" customClass="ExchangeCreateViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
@@ -24,9 +24,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="378" width="343" height="231"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <outlet property="delegate" destination="ZL9-nX-8IY" id="pb8-OK-o7P"/>
-                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBP-hF-UKz">
                                 <rect key="frame" x="16" y="340" width="343" height="30"/>
@@ -146,6 +143,7 @@
                     <connections>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
                         <outlet property="exchangeRateButton" destination="RBP-hF-UKz" id="U09-gZ-aBt"/>
+                        <outlet property="numberKeypadView" destination="dfm-a1-ad2" id="yN5-Le-zxp"/>
                         <outlet property="primaryAmountLabel" destination="cbA-yh-J0A" id="xGh-pL-sDT"/>
                         <outlet property="secondaryAmountLabel" destination="okC-2w-xB9" id="K2v-uv-GkY"/>
                         <outlet property="useMaximumButton" destination="kyX-88-NsD" id="1kX-WQ-I1q"/>

@@ -23,7 +23,7 @@ struct ExchangeServices: ExchangeDependencies {
     init() {
         service = ExchangeService()
         markets = MarketsService()
-        inputs = ExchangeInputs()
+        inputs = ExchangeInputsService()
     }
 }
 

@@ -19,7 +19,7 @@ protocol ExchangeInputsAPI: class {
     func toggleInput()
 }
 
-class ExchangeInputs: ExchangeInputsAPI {
+class ExchangeInputsService: ExchangeInputsAPI {
     var activeInput: NumberInputDelegate
     var lastOutput: String?
     var conversionRate: NSDecimalNumber?

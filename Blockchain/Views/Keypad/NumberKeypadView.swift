@@ -8,8 +8,7 @@
 
 import Foundation
 
-// @objc is required for NumberKeypadViewDelegate property to be an IBOutlet
-@objc protocol NumberKeypadViewDelegate: class {
+protocol NumberKeypadViewDelegate: class {
     func onNumberButtonTapped(value: String)
     func onDecimalButtonTapped()
     func onBackspaceTapped()
@@ -18,7 +17,7 @@ import Foundation
 @IBDesignable
 class NumberKeypadView: NibBasedView {
 
-    @IBOutlet weak var delegate: NumberKeypadViewDelegate?
+    weak var delegate: NumberKeypadViewDelegate?
 
     @IBAction func numberButtonTapped(_ sender: UIButton) {
         guard let titleLabel = sender.titleLabel, let value = titleLabel.text else { return }

@@ -19,15 +19,15 @@ class ExchangeCreatePresenter {
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onNumberButtonTapped(value: String) {
-        
+        interactor.onNumberButtonTapped(value: value)
     }
     
     func onDecimalButtonTapped() {
-        
+        interactor.onDecimalButtonTapped()
     }
 
     func onBackspaceTapped() {
-        
+        interactor.onBackspaceTapped()
     }
     
     func onContinueButtonTapped() {
@@ -41,7 +41,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func updatedInput(primary: String?, secondary: String?) {
-        
+         interface?.updateInputLabels(primary: primary, secondary: secondary)
     }
     
     func updatedRates(first: String, second: String, third: String) {

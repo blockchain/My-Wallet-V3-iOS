@@ -10,7 +10,7 @@ import Foundation
 
 protocol ExchangeCreateInterface: class {
     func expandRatesView()
-    func updateInputLabels(primary: String, secondary: String)
+    func updateInputLabels(primary: String?, secondary: String?)
     func updateRates(first: String, second: String, third: String)
 }
 
