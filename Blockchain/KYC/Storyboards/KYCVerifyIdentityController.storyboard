@@ -29,7 +29,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's Confirm It's You" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKX-KB-srT">
                                 <rect key="frame" x="16" y="30" width="343" height="22"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSW-uD-Za7">
@@ -37,7 +37,7 @@
                                 <string key="text">Grab your Passport, Driver’s License, Govt
 Issue ID or a Resident Permit Card.</string>
                                 <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="14"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IdentityVerification" translatesAutoresizingMaskIntoConstraints="NO" id="uin-Bk-g6x">
@@ -47,13 +47,10 @@ Issue ID or a Resident Permit Card.</string>
                                     <constraint firstAttribute="width" constant="280" id="miD-OS-faf"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYL-dK-Xos">
-                                <rect key="frame" x="16" y="328.33333333333331" width="343" height="51.333333333333314"/>
-                                <string key="text">Once we verify your identity, you are approved
-to Buy, Sell and Transfer cryptocurrenices
-on the Blockchain app!</string>
-                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="14"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once we verify your identity, you are approved to exchange cryptocurrencies on the Blockchain app!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYL-dK-Xos">
+                                <rect key="frame" x="24" y="328.33333333333331" width="327" height="29.333333333333314"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                                <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdd-nW-Qrc" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
@@ -76,12 +73,12 @@ on the Blockchain app!</string>
                             <constraint firstItem="xdd-nW-Qrc" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="56t-c7-pUw"/>
                             <constraint firstItem="uin-Bk-g6x" firstAttribute="top" secondItem="wSW-uD-Za7" secondAttribute="bottom" constant="48" id="AaY-7V-SCx"/>
                             <constraint firstItem="wSW-uD-Za7" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="G2Q-SU-oOt"/>
-                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="YYL-dK-Xos" secondAttribute="trailing" constant="16" id="JUN-MJ-uGY"/>
+                            <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="YYL-dK-Xos" secondAttribute="trailing" constant="24" id="JUN-MJ-uGY"/>
                             <constraint firstItem="wSW-uD-Za7" firstAttribute="top" secondItem="cKX-KB-srT" secondAttribute="bottom" constant="8" id="KdY-VC-lDj"/>
                             <constraint firstItem="cKX-KB-srT" firstAttribute="top" secondItem="Rfn-fs-48d" secondAttribute="top" constant="30" id="MA7-hp-82F"/>
                             <constraint firstItem="Rfn-fs-48d" firstAttribute="trailing" secondItem="xdd-nW-Qrc" secondAttribute="trailing" constant="16" id="R3P-Nx-o3o"/>
                             <constraint firstItem="YYL-dK-Xos" firstAttribute="top" secondItem="uin-Bk-g6x" secondAttribute="bottom" constant="36" id="Yrz-k3-9Mr"/>
-                            <constraint firstItem="YYL-dK-Xos" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="Ztg-TD-aCQ"/>
+                            <constraint firstItem="YYL-dK-Xos" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="24" id="Ztg-TD-aCQ"/>
                             <constraint firstItem="uin-Bk-g6x" firstAttribute="centerX" secondItem="Rfn-fs-48d" secondAttribute="centerX" id="hLV-lC-gKO"/>
                             <constraint firstItem="Rfn-fs-48d" firstAttribute="bottom" secondItem="xdd-nW-Qrc" secondAttribute="bottom" constant="16" id="hQ2-Bn-B5K"/>
                             <constraint firstItem="cKX-KB-srT" firstAttribute="leading" secondItem="Rfn-fs-48d" secondAttribute="leading" constant="16" id="kyB-V8-cMc"/>
