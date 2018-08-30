@@ -88,6 +88,7 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     func finish() {
+        // TODO: if applicable, persist state, do housekeeping, etc...
         navController.dismiss(animated: true)
     }
 
