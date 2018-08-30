@@ -40,6 +40,14 @@ final class KYCInformationController: KYCBaseViewController {
         return controller
     }
 
+    // MARK: - IBActions
+
+    @IBAction func dismiss(_ sender: Any) {
+        dismiss(animated: false, completion: {
+            self.coordinator.end()
+        })
+    }
+
     // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
