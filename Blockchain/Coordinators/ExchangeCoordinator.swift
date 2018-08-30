@@ -28,6 +28,8 @@ struct ExchangeServices: ExchangeDependencies {
         case shapeshift
     }
 
+    private(set) var user: KYCUser?
+
     static let shared = ExchangeCoordinator()
 
     // class function declared so that the ExchangeCoordinator singleton can be accessed from obj-C
@@ -52,7 +54,29 @@ struct ExchangeServices: ExchangeDependencies {
     private var exchangeViewController: PartnerExchangeListViewController?
     private var rootViewController: UIViewController?
 
+    // MARK: - Entry Point
+
     func start() {
+        if let theUser = user, theUser.status == .approved {
+            showAppropriateExchange(); return
+        }
+        disposable = BlockchainDataRepository.shared.kycUser
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [unowned self] in
+                self.user = $0
+                guard self.user?.status == .approved else {
+                    KYCCoordinator.shared.start(); return
+                }
+                self.showAppropriateExchange()
+                Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
+            }, onError: { error in
+                Logger.shared.error("Failed to get user: \(error.localizedDescription)")
+                AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
+            })
+    }
+
+    private func showAppropriateExchange() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {

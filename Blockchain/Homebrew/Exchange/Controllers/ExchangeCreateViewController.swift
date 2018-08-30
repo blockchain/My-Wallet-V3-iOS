@@ -10,6 +10,22 @@ import Foundation
 
 class ExchangeCreateViewController: UIViewController {
 
+    // MARK: - IBOutlets
+
+    // Label to be updated when amount is being typed in
+    @IBOutlet var primaryAmountLabel: UILabel!
+    // Amount being typed in converted to input crypto or input fiat
+    @IBOutlet var secondaryAmountLabel: UILabel!
+    @IBOutlet var useMinimumButton: UIButton!
+    @IBOutlet var useMaximumButton: UIButton!
+    @IBOutlet var exchangeRateButton: UIButton!
+    @IBOutlet var exchangeButton: UIButton!
+    // MARK: - IBActions
+
+    @IBAction func fiatToggleTapped(_ sender: Any) {
+
+    }
+
     // MARK: Public Properties
 
     weak var delegate: ExchangeCreateDelegate?
@@ -21,16 +37,20 @@ class ExchangeCreateViewController: UIViewController {
     // MARK: Lifecycle
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+    }
+}
 
-        exchangeCreateView = ExchangeCreateView(frame: view.bounds)
-        view.addSubview(exchangeCreateView)
+extension ExchangeCreateViewController: NumberKeypadViewDelegate {
+    func onDecimalButtonTapped() {
 
-        exchangeCreateView.setup(
-            withConversionView: true,
-            delegate: self,
-            navigationController: self.navigationController as! BCNavigationController
-        )
+    }
+
+    func onNumberButtonTapped(value: String) {
+
+    }
+
+    func onBackspaceTapped() {
+
     }
 }
 

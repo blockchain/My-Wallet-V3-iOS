@@ -39,19 +39,27 @@ protocol KYCCoordinatorDelegate: class {
 
     // MARK: - Public Properties
 
+    weak var delegate: KYCCoordinatorDelegate?
+
+    static let shared = KYCCoordinator()
+
+    @objc class func sharedInstance() -> KYCCoordinator {
+        return KYCCoordinator.shared
+    }
+
+    // MARK: - Private Properties
+
     private(set) var user: KYCUser?
 
     private(set) var country: KYCCountry?
-
-    weak var delegate: KYCCoordinatorDelegate?
-
-    // MARK: - Private Properties
 
     fileprivate var navController: KYCOnboardingNavigationController!
 
     private let pageFactory = KYCPageViewFactory()
 
     private var disposable: Disposable?
+
+    private override init() { /* Disallow initializing from outside objects */ }
 
     deinit {
         disposable?.dispose()

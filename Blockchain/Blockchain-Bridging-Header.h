@@ -57,3 +57,5 @@
 #import "ExchangeTrade.h"
 #import "NSDateFormatter+TimeAgoString.h"
 #import "UIView+ChangeFrameAttribute.h"
+
+#import "UILabel+CGRectForSubstring.h"

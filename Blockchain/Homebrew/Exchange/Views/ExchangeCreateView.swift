@@ -49,8 +49,6 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
     private var infoTextView: UITextView?
 
-    private var conversionRateView: AssetConversionRateView?
-
     private weak var delegate: ExchangeCreateViewDelegate?
 
     private var fromToButtonDelegateIntermediate: FromToButtonDelegateIntermediate?
@@ -60,7 +58,6 @@ To use it, create an instance using init(frame:), add it as a subview, and call 
 
 extension ExchangeCreateView {
     @objc func setup(
-        withConversionView: Bool,
         delegate: ExchangeCreateViewDelegate,
         navigationController: BCNavigationController
     ) {
@@ -73,12 +70,12 @@ extension ExchangeCreateView {
         )
 
         backgroundColor = UIColor.lightGray
-        setupSubviews(withConversionView: withConversionView)
+        setupSubviews()
     }
 }
 
 private extension ExchangeCreateView {
-    func setupSubviews(withConversionView: Bool) {
+    func setupSubviews() {
         setupFromToView()
 
         let amountView = UIView(frame: CGRect(
@@ -98,24 +95,9 @@ private extension ExchangeCreateView {
         setupBottomFields(amountView: amountView)
         setupFiatLabel(amountView: amountView)
         setupLineBelow(view: amountView)
-        if withConversionView {
-            setupConversionRateView(amountView: amountView)
-            let newReferenceView = UIView(frame: CGRect(
-                x: amountView.frame.origin.x,
-                y: amountView.frame.origin.y,
-                width: amountView.frame.size.width,
-                height: amountView.frame.size.height + conversionRateViewHeight)
-            )
-            setupLineBelow(view: newReferenceView)
-            setupMinAndMaxButtons(amountView: newReferenceView)
-            setupContinueButton()
-            setupErrorTextView(amountView: newReferenceView)
-            setupInfoTextViewBelow(view: errorTextView!)
-        } else {
-            setupMinAndMaxButtons(amountView: amountView)
-            setupContinueButton()
-            setupErrorTextView(amountView: amountView)
-        }
+        setupMinAndMaxButtons(amountView: amountView)
+        setupContinueButton()
+        setupErrorTextView(amountView: amountView)
     }
 
     var windowWidth: CGFloat { return frame.size.width }
@@ -251,20 +233,6 @@ private extension ExchangeCreateView {
     func setupLineBelow(view: UIView) {
         let lineAboveButtonsView = BCLine(yPosition: view.frame.origin.y + view.frame.size.height)
         addSubview(lineAboveButtonsView!)
-    }
-
-    var conversionRateViewHeight: CGFloat { return 70 }
-
-    func setupConversionRateView(amountView: UIView) {
-        let view = AssetConversionRateView.makeFromNib()
-        view.frame = CGRect(
-            x: 0,
-            y: amountView.frame.origin.y + amountView.frame.size.height + 0.5,
-            width: windowWidth,
-            height: conversionRateViewHeight
-        )
-        addSubview(view)
-        conversionRateView = view
     }
 
     var minMaxButtonHeight: CGFloat { return 50 }
@@ -569,11 +537,5 @@ extension ExchangeCreateView: AddressSelectionDelegate {
 
     func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
         delegate?.didSelect?(toAccount: account, assetType: asset)
-    }
-}
-
-extension ExchangeCreateView {
-    func updateConversionRateView(quote: Quote) {
-        conversionRateView?.updateViewModelWithQuote(quote: quote)
     }
 }

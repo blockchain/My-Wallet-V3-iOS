@@ -62,7 +62,7 @@
 
     self.fromToButtonDelegateIntermediate = [[FromToButtonDelegateIntermediate alloc] initWithWallet:WalletManager.sharedInstance.wallet navigationController:(BCNavigationController *)self.navigationController addressSelectionDelegate:self];
 
-    [self.exchangeView setupWithConversionView:NO delegate:self navigationController:(BCNavigationController *)self.navigationController];
+    [self.exchangeView setupWithDelegate:self navigationController:(BCNavigationController *)self.navigationController];
 
     self.btcAccount = [WalletManager.sharedInstance.wallet getDefaultAccountIndexForAssetType:LegacyAssetTypeBitcoin];
     

@@ -212,7 +212,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="AxH-7G-UPE"/>
                     </view>
-                    <navigationItem key="navigationItem" title="What's your address?" id="Nph-6g-WhM">
+                    <navigationItem key="navigationItem" title="Home Address" id="Nph-6g-WhM">
                         <barButtonItem key="backBarButtonItem" id="83G-T3-U7h"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
