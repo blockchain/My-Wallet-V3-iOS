@@ -117,20 +117,11 @@
                         <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
                         <outlet property="layoutConstraintBottomButton" destination="lHo-bY-QRU" id="amU-3n-8B8"/>
                         <outlet property="validationTextFieldConfirmationCode" destination="eU2-Mk-gi2" id="y9B-YN-lFc"/>
-                        <segue destination="Kem-jm-UpZ" kind="show" id="4J4-wa-RZJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6m-Ye-sCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="125.59999999999999" y="111.57635467980296"/>
-        </scene>
-        <!--KYCAddressController-->
-        <scene sceneID="Yd6-4J-UeZ">
-            <objects>
-                <viewControllerPlaceholder storyboardName="KYCAddressController" id="Kem-jm-UpZ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-zE-QFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="672" y="33"/>
         </scene>
     </scenes>
 </document>
