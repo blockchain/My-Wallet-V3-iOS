@@ -87,6 +87,10 @@ protocol KYCCoordinatorDelegate: class {
         navController = presentInNavigationController(welcomeViewController, in: viewController)
     }
 
+    func finish() {
+        navController.dismiss(animated: true)
+    }
+
     func handle(event: KYCEvent) {
         switch event {
         case .pageWillAppear(let type):

@@ -44,7 +44,7 @@ final class KYCInformationController: KYCBaseViewController {
 
     @IBAction func dismiss(_ sender: Any) {
         dismiss(animated: false, completion: {
-            self.coordinator.end()
+            self.coordinator.finish()
         })
     }
 
