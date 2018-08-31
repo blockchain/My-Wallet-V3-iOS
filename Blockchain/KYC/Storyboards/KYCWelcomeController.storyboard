@@ -108,7 +108,7 @@
                         <viewLayoutGuide key="safeArea" id="AzT-gm-yhf"/>
                     </view>
                     <navigationItem key="navigationItem" title="Exchange" id="PEt-7H-7Yn">
-                        <barButtonItem key="rightBarButtonItem" title="asdf" image="close" id="hvI-Vv-SE2">
+                        <barButtonItem key="rightBarButtonItem" image="close" id="hvI-Vv-SE2">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="onCloseTapped:" destination="jKB-tY-Hco" id="Rkh-bF-xde"/>
