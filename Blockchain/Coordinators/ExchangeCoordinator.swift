@@ -153,7 +153,7 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    private func showCreateExchangetype(type: ExchangeType) {
+    private func showCreateExchange(animated: Bool, type: ExchangeType) {
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
@@ -166,9 +166,9 @@ struct ExchangeServices: ExchangeDependencies {
                     rootViewController: exchangeCreateViewController,
                     title: LocalizationConstants.Exchange.navigationTitle
                 )
-                viewController.topMostViewController?.present(navigationController!, animated: true)
+                viewController.topMostViewController?.present(navigationController!, animated: animated)
             } else {
-                navigationController?.pushViewController(exchangeCreateViewController, animated: true)
+                navigationController?.pushViewController(exchangeCreateViewController, animated: animated)
             }
         default:
             // show shapeshift
@@ -176,8 +176,15 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    func showCreateExchange() {
-        showCreateExchangetype(type: .homebrew)
+    // MARK: - Event handling
+    enum ExchangeCoordinatorEvent {
+        case createHomebrewExchange(animated: Bool)
+    }
+
+    func handle(event: ExchangeCoordinatorEvent) {
+        switch event {
+        case .createHomebrewExchange(let animated): showCreateExchange(animated: animated, type: .homebrew)
+        }
     }
 
     // MARK: - Services
