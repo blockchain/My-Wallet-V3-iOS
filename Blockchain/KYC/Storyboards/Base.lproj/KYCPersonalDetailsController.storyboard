@@ -144,7 +144,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="A6g-7V-Tpb"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Personal Details" id="yfh-XJ-JUf">
+                    <navigationItem key="navigationItem" title="Profile" id="yfh-XJ-JUf">
                         <barButtonItem key="backBarButtonItem" id="KIB-TR-30p"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>

@@ -165,19 +165,20 @@
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wfI-8F-dfm">
+                <label hidden="YES" autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" id="N1I-Aa-7Pp">
                     <rect key="frame" x="15" y="141" width="305" height="15"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="11"/>
-                    <state key="normal" title="Blockchain Terms of Service">
-                        <color key="titleColor" red="0.094117647060000004" green="0.61176470589999998" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="termsOfServiceClicked:" destination="355" eventType="touchUpInside" id="cUG-Yk-K3K"/>
-                    </connections>
-                </button>
+                    <attributedString key="attributedText">
+                        <fragment content="Terms of Service &amp; Privacy Policy">
+                            <attributes>
+                                <color key="NSColor" red="0.63876992460000004" green="0.67347931859999999" blue="0.69598686700000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="11" name="GillSans"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By creating a new wallet you agree to the" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="6" id="Qvx-f4-C2O">
                     <rect key="frame" x="15" y="122" width="290" height="21"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -203,14 +204,14 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="agreementLabel" destination="Qvx-f4-C2O" id="gsn-PO-Fbo"/>
+                <outlet property="agreementTappablePlaceholderLabel" destination="N1I-Aa-7Pp" id="l4x-nc-TC5"/>
                 <outlet property="emailTextField" destination="LsW-69-Qon" id="DDn-ad-Tlz"/>
                 <outlet property="password2TextField" destination="397" id="452"/>
                 <outlet property="passwordFeedbackLabel" destination="Mk4-63-3pL" id="Vra-AS-94J"/>
                 <outlet property="passwordStrengthMeter" destination="acf-bJ-kgP" id="ytC-Jd-waT"/>
                 <outlet property="passwordTextField" destination="395" id="451"/>
                 <outlet property="recoveryPhraseView" destination="0Sz-Ta-Xdw" id="xpu-3L-4fd"/>
-                <outlet property="termsOfServiceButton" destination="wfI-8F-dfm" id="t25-7g-ono"/>
-                <outlet property="termsOfServiceLabel" destination="Qvx-f4-C2O" id="nGX-Sx-BCA"/>
             </connections>
             <point key="canvasLocation" x="133" y="-869"/>
         </view>
