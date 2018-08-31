@@ -122,6 +122,12 @@
 		3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2291211E228C0091E706 /* KYCPageType.swift */; };
 		3A8B229D211E2A960091E706 /* KYCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229C211E2A960091E706 /* KYCUser.swift */; };
 		3A8B229F2122117A0091E706 /* KYCBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */; };
+		3A91F7C1213845F700CDC3FD /* TradingPairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7C0213845F700CDC3FD /* TradingPairView.swift */; };
+		3A91F7C2213845F700CDC3FD /* TradingPairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7C0213845F700CDC3FD /* TradingPairView.swift */; };
+		3A91F7CD2138460900CDC3FD /* TradingPairView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A91F7CC2138460900CDC3FD /* TradingPairView.xib */; };
+		3A91F7CE2138460900CDC3FD /* TradingPairView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A91F7CC2138460900CDC3FD /* TradingPairView.xib */; };
+		3A91F7E121387A5300CDC3FD /* AnimatablePresentationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7E021387A5300CDC3FD /* AnimatablePresentationUpdate.swift */; };
+		3A91F7E221387A5300CDC3FD /* AnimatablePresentationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91F7E021387A5300CDC3FD /* AnimatablePresentationUpdate.swift */; };
 		3AB4D8EA212F1F62004F0160 /* NSDateFormatter+TimeAgoString.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */; };
 		3AB4D8EE212F2017004F0160 /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */; };
 		3AB4D902212F4A0E004F0160 /* ExchangeListContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */; };
@@ -150,6 +156,8 @@
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
 		3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7EE9F21125156006B924F /* ValidationTextField.xib */; };
 		3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EEA121126578006B924F /* NibBasedView.swift */; };
+		3AD8816B2138E57F0047B66E /* TransitionPresentationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD8816A2138E57F0047B66E /* TransitionPresentationUpdate.swift */; };
+		3AD8816C2138E57F0047B66E /* TransitionPresentationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD8816A2138E57F0047B66E /* TransitionPresentationUpdate.swift */; };
 		3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
 		3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
@@ -297,7 +305,6 @@
 		602B9CDB2118E15300BD3D60 /* KYCCountrySelectionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */; };
 		602B9CDC2118E15300BD3D60 /* KYCEnterPhoneNumberController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */; };
 		602B9CDD2118E15300BD3D60 /* KYCWelcomeController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */; };
-		602B9CDE2118E15300BD3D60 /* KYCAddressController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAF2118E15200BD3D60 /* KYCAddressController.storyboard */; };
 		602B9CE02118E15300BD3D60 /* KYCNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */; };
 		602B9CE12118E15300BD3D60 /* KYCEnterPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB32118E15200BD3D60 /* KYCEnterPhoneNumberController.swift */; };
 		602B9CE22118E15300BD3D60 /* KYCConfirmPhoneNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB42118E15200BD3D60 /* KYCConfirmPhoneNumberController.swift */; };
@@ -1234,6 +1241,9 @@
 		3A8B2291211E228C0091E706 /* KYCPageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageType.swift; sourceTree = "<group>"; };
 		3A8B229C211E2A960091E706 /* KYCUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCUser.swift; sourceTree = "<group>"; };
 		3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCBaseViewController.swift; sourceTree = "<group>"; };
+		3A91F7C0213845F700CDC3FD /* TradingPairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPairView.swift; sourceTree = "<group>"; };
+		3A91F7CC2138460900CDC3FD /* TradingPairView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TradingPairView.xib; sourceTree = "<group>"; };
+		3A91F7E021387A5300CDC3FD /* AnimatablePresentationUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatablePresentationUpdate.swift; sourceTree = "<group>"; };
 		3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
 		3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListContracts.swift; sourceTree = "<group>"; };
 		3AB4D908212F560F004F0160 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
@@ -1247,6 +1257,7 @@
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
 		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
 		3AD7EEA121126578006B924F /* NibBasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NibBasedView.swift; sourceTree = "<group>"; };
+		3AD8816A2138E57F0047B66E /* TransitionPresentationUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionPresentationUpdate.swift; sourceTree = "<group>"; };
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -1897,7 +1908,6 @@
 		602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCCountrySelectionController.storyboard; sourceTree = "<group>"; };
 		602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCEnterPhoneNumberController.storyboard; sourceTree = "<group>"; };
 		602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCWelcomeController.storyboard; sourceTree = "<group>"; };
-		602B9CAF2118E15200BD3D60 /* KYCAddressController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCAddressController.storyboard; sourceTree = "<group>"; };
 		602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCNetworkRequest.swift; sourceTree = "<group>"; };
 		602B9CB32118E15200BD3D60 /* KYCEnterPhoneNumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCEnterPhoneNumberController.swift; sourceTree = "<group>"; };
 		602B9CB42118E15200BD3D60 /* KYCConfirmPhoneNumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCConfirmPhoneNumberController.swift; sourceTree = "<group>"; };
@@ -3350,6 +3360,8 @@
 				3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */,
 				3A53B94E213466580020ECAD /* ExchangeListHeaderView.swift */,
 				3A53B95A213466670020ECAD /* ExchangeListHeaderView.xib */,
+				3A91F7C0213845F700CDC3FD /* TradingPairView.swift */,
+				3A91F7CC2138460900CDC3FD /* TradingPairView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3487,6 +3499,7 @@
 		3A7F7EC7210F6C20001E20AF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				3AD881692138E5640047B66E /* PresentationUpdate */,
 				3A7F7EE2210F6C77001E20AF /* Visibility.swift */,
 			);
 			path = ViewModels;
@@ -3546,6 +3559,16 @@
 				3AD7EE9F21125156006B924F /* ValidationTextField.xib */,
 			);
 			path = ValidationTextField;
+			sourceTree = "<group>";
+		};
+		3AD881692138E5640047B66E /* PresentationUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				3A91F7E021387A5300CDC3FD /* AnimatablePresentationUpdate.swift */,
+				3AB4D91321308640004F0160 /* ListPresentationUpdate.swift */,
+				3AD8816A2138E57F0047B66E /* TransitionPresentationUpdate.swift */,
+			);
+			path = PresentationUpdate;
 			sourceTree = "<group>";
 		};
 		3AE92BBF2110DAF1008D7BDC /* Keyboard */ = {
@@ -3827,7 +3850,6 @@
 		602B9CA72118E15200BD3D60 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				51E431EC2135D1B9004C2B0C /* KYCAddressController.storyboard */,
 				51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */,
 				602B9CAB2118E15200BD3D60 /* KYCConfirmPhoneNumberController.storyboard */,
 				602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */,
@@ -5921,7 +5943,6 @@
 				C774A1252102B87300DCCC17 /* ExchangeRate.swift */,
 				C78893E420A36572003C0A8F /* Trade.swift */,
 				3A7F7EC7210F6C20001E20AF /* ViewModels */,
-				3AB4D91321308640004F0160 /* ListPresentationUpdate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7019,6 +7040,7 @@
 				51979189210F68940096E50B /* countries.json in Resources */,
 				C78238BC2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */,
 				3A49B2C62130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */,
+				3A91F7CE2138460900CDC3FD /* TradingPairView.xib in Resources */,
 				3A53B95C213466670020ECAD /* ExchangeListHeaderView.xib in Resources */,
 				AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				51A862E7209268D300B338E0 /* sample-unused-address.json in Resources */,
@@ -7080,12 +7102,12 @@
 				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
-				51E431EA2135D1B9004C2B0C /* KYCAddressController.storyboard in Resources */,
 				515EFADD210282B4002350B6 /* AccountsAndAddresses.strings in Resources */,
 				ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */,
 				515EFAE0210282B4002350B6 /* SendCoins.strings in Resources */,
 				C9BE91811945D8F600FD516D /* PEKeyboard-1-edit.png in Resources */,
 				51383566210255E100767B2E /* Colors.xcassets in Resources */,
+				3A91F7CD2138460900CDC3FD /* TradingPairView.xib in Resources */,
 				602B9CD82118E15300BD3D60 /* KYCOnboardingNavigationController.storyboard in Resources */,
 				ECD244EF19A8AC45004B1F40 /* PEKeyboard-3.png in Resources */,
 				602B9CDC2118E15300BD3D60 /* KYCEnterPhoneNumberController.storyboard in Resources */,
@@ -7379,6 +7401,7 @@
 				3AB4D91C21309BD4004F0160 /* ExchangeListPresenter.swift in Sources */,
 				AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */,
 				3AC4F97B21234940003AA207 /* KYCPageType.swift in Sources */,
+				3AD8816C2138E57F0047B66E /* TransitionPresentationUpdate.swift in Sources */,
 				51A862DF20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift in Sources */,
 				602B9D1E2118E26C00BD3D60 /* KYCCountrySelectionController.swift in Sources */,
 				5113570B209CF6D700056D65 /* BackupVerifyViewController.swift in Sources */,
@@ -7433,6 +7456,7 @@
 				AA3CA9B32107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				AA126CD9212C94CB005886A3 /* KYCCreateUserResponse.swift in Sources */,
 				AADB027F20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */,
+				3A91F7C2213845F700CDC3FD /* TradingPairView.swift in Sources */,
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
@@ -7507,6 +7531,7 @@
 				C761439A211A7FD70041411E /* SocketManager.swift in Sources */,
 				602B9D0C2118E23400BD3D60 /* KYCCoordinator.swift in Sources */,
 				AA7133B8212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift in Sources */,
+				3A91F7E221387A5300CDC3FD /* AnimatablePresentationUpdate.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
 				C76143AC211A80D30041411E /* Codable+Coding.swift in Sources */,
 				AA748359211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift in Sources */,
@@ -7638,6 +7663,7 @@
 				C7E0FCCE211E12AE00B85D37 /* KYCAuthenticationService.swift in Sources */,
 				3A3D5D8B211B44BD00E6C241 /* ProgressableView.swift in Sources */,
 				C71859571F4B695700745A87 /* TabControllerManager.m in Sources */,
+				3AD8816B2138E57F0047B66E /* TransitionPresentationUpdate.swift in Sources */,
 				3A76F902211A3BA5002F7946 /* DateFormatter+Conveniences.swift in Sources */,
 				51135701209CEEB900056D65 /* PushNotificationAuthPayload.swift in Sources */,
 				602B9CE32118E15300BD3D60 /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
@@ -7833,6 +7859,7 @@
 				C7F041961E3BD4A6004E8B4A /* BuyBitcoinViewController.m in Sources */,
 				C7448A9C2034DDF80041947E /* AssetSelectorView.m in Sources */,
 				C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */,
+				3A91F7C1213845F700CDC3FD /* TradingPairView.swift in Sources */,
 				AA722C1420B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				C77C19B820C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				3A26AF97212B36B2003A8A08 /* ExchangeCreateInterface.swift in Sources */,
@@ -7976,6 +8003,7 @@
 				3A26AF5321272019003A8A08 /* ExchangeListViewController.swift in Sources */,
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				51A862DC20921EBD00B338E0 /* BitcoinCashAddress.swift in Sources */,
+				3A91F7E121387A5300CDC3FD /* AnimatablePresentationUpdate.swift in Sources */,
 				3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */,
 				AAC9FCEE20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AA24D4C720D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
