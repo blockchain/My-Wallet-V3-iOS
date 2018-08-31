@@ -159,6 +159,12 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
+    // TODO: use event handlers
+    func showPartnerExchange(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+        showExchange(type: .shapeshift)
+    }
+
     // MARK: - Services
     private let marketsService: MarketsService
     private let exchangeService: ExchangeService
