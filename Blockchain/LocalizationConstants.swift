@@ -477,7 +477,7 @@ struct LocalizationConstants {
 
     struct KYC {
         static let failedToConfirmNumber = NSLocalizedString(
-            "Failed to confirm number. Please try again.",
+            "The mobile number you have entered is already associated with an existing user.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."
         )
         static let termsOfServiceAndPrivacyPolicyNotice = NSLocalizedString(
