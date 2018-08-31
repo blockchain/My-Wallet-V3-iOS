@@ -39,7 +39,7 @@
                                         <rect key="frame" x="24" y="166" width="327" height="74.333333333333314"/>
                                         <attributedString key="attributedText">
                                             <fragment>
-                                                <string key="content">Introducing Blockchain’s new and improved crypto exchange function. To use this updated feature, please verify your identity.It only takes a couple of minutes. </string>
+                                                <string key="content">Introducing Blockchain’s new and improved crypto exchange function. To use this updated feature, please verify your identity. It only takes a couple of minutes. </string>
                                                 <attributes>
                                                     <color key="NSColor" red="0.32940999999999998" green="0.32940999999999998" blue="0.33724999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <font key="NSFont" size="14" name="Montserrat-Regular"/>
