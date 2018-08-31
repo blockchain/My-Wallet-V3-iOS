@@ -20,7 +20,6 @@ class TradingPairView: NibBasedView {
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
         case statusVisibility(Visibility)
-        case exchangeImage(UIImage)
         case backgroundColors(from: UIColor, to: UIColor)
         case swapTintColor(UIColor)
     }
@@ -119,8 +118,6 @@ class TradingPairView: NibBasedView {
             toButton.backgroundColor = toColor
             fromButton.backgroundColor = fromColor
             
-        case .exchangeImage(let image):
-            swapButton.setImage(image, for: .normal)
         case .swapTintColor(let color):
             swapButton.tintColor = color
         }
