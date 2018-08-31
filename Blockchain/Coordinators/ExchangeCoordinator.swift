@@ -225,11 +225,6 @@ struct ExchangeServices: ExchangeDependencies {
 
 extension ExchangeCoordinator {
     func subscribeToRates() {
-//        disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
-//            // WIP
-//            self.createInterface?.exchangeRateUpdated("rate")
-//        }, onError: { (error) in
-//            Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
-//        })
+
     }
 }
