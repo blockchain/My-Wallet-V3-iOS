@@ -52,8 +52,10 @@
 
 #import "FromToView.h"
 #import "ContinueButtonInputAccessoryView.h"
-#import "ExchangeOverviewViewController.h"
+#import "PartnerExchangeListViewController.h"
 
 #import "ExchangeTrade.h"
 #import "NSDateFormatter+TimeAgoString.h"
 #import "UIView+ChangeFrameAttribute.h"
+
+#import "UILabel+CGRectForSubstring.h"

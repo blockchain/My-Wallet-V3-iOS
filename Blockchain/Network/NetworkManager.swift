@@ -60,7 +60,58 @@ class NetworkManager: NSObject, URLSessionDelegate {
         persistServerSessionIDForNewUIWebViews()
     }
 
-    // MARK: - HTTP Requests
+    // MARK: - Rx
+
+    func request<ResponseType: Decodable>(
+        _ request: URLRequest,
+        responseType: ResponseType.Type
+    ) -> Single<ResponseType> {
+        return requestData(request).map { (response, result) in
+            guard (200...299).contains(response.statusCode) else {
+                throw NetworkError.badStatusCode
+            }
+            return try JSONDecoder().decode(responseType.self, from: result)
+        }
+    }
+
+    func requestData(_ request: URLRequest) -> Single<(HTTPURLResponse, Data)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
+            let dataRequest = SessionManager.default.request(request)
+            Logger.shared.debug("Sending \(request.httpMethod ?? "") to '\(request.url?.absoluteString ?? "")'")
+            observer(.success(dataRequest))
+            return Disposables.create()
+        }
+        return dataRequestSingle.flatMap { $0.responseData() }
+    }
+
+    /// Performs a network request and returns a Single emitting the HTTPURLResponse along with the
+    /// response decoded as a Data object.
+    ///
+    /// - Parameters:
+    ///   - url: the URL
+    ///   - method: the HTTP method
+    ///   - parameters: optional parameters for the request
+    ///   - headers: optional headers
+    /// - Returns: the Single
+    func requestData(
+        _ url: String,
+        method: HttpMethod,
+        parameters: URLParameters? = nil,
+        headers: [String: String]? = nil
+    ) -> Single<(HTTPURLResponse, Data)> {
+        let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
+            let request = SessionManager.default.request(
+                url,
+                method: method.toAlamofireHTTPMethod,
+                parameters: parameters,
+                encoding: URLEncoding.default,
+                headers: headers
+            )
+            observer(.success(request))
+            return Disposables.create()
+        }
+        return dataRequestSingle.flatMap { $0.responseData() }
+    }
 
     /// Performs a network request and returns an Observable emitting the HTTPURLResponse along with the
     /// decoded response data. The response data will be attempted to be decoded as a JSON, however if it
@@ -74,7 +125,8 @@ class NetworkManager: NSObject, URLSessionDelegate {
     func requestJsonOrString(
         _ url: String,
         method: HttpMethod,
-        parameters: URLParameters? = nil
+        parameters: URLParameters? = nil,
+        headers: [String: String]? = nil
     ) -> Single<(HTTPURLResponse, Any)> {
         let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
             let request = SessionManager.default.request(
@@ -82,7 +134,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
                 method: method.toAlamofireHTTPMethod,
                 parameters: parameters,
                 encoding: URLEncoding.default,
-                headers: nil
+                headers: headers
             )
             observer(.success(request))
             return Disposables.create()
@@ -91,7 +143,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
             return request.responseJSONSingle()
                 .catchError { _ -> Single<(HTTPURLResponse, Any)> in
                     return request.responseStringSingle()
-                }
+            }
         }
     }
 
@@ -105,7 +157,8 @@ class NetworkManager: NSObject, URLSessionDelegate {
         let host = challenge.protectionSpace.host
         Logger.shared.info("Received challenge from \(host)")
 
-        if BlockchainAPI.PartnerHosts.rawValues.contains(host) || host == "api.dev.blockchain.info" {
+        // TICKET: IOS-1194 - ⚠️ Do not ship `|| true`, this is for debugging purposes only.
+        if BlockchainAPI.PartnerHosts.rawValues.contains(host) || true {
             completionHandler(.performDefaultHandling, nil)
         } else {
             CertificatePinner.shared.didReceive(challenge, completion: completionHandler)
@@ -127,6 +180,23 @@ class NetworkManager: NSObject, URLSessionDelegate {
 }
 
 extension DataRequest {
+    func responseData() -> Single<(HTTPURLResponse, Data)> {
+        return Single.create { [unowned self] observer -> Disposable in
+            self.responseData { dataResponse in
+                if let error = dataResponse.result.error {
+                    observer(.error(error))
+                    return
+                }
+                guard let response = dataResponse.response, let result = dataResponse.result.value else {
+                    observer(.error(NetworkManager.unknownNetworkError))
+                    return
+                }
+                observer(.success((response, result)))
+            }
+            return Disposables.create()
+        }
+    }
+
     func responseJSONSingle() -> Single<(HTTPURLResponse, Any)> {
         return Single.create { [unowned self] observer -> Disposable in
             self.responseJSON { jsonResponse in

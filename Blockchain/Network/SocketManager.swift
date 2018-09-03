@@ -86,15 +86,12 @@ class SocketManager {
             return
         }
 
-        let onSuccess: (String) -> Void = { string in
+        do {
+            let string = try message.JSONMessage.encodeToString(encoding: .utf8)
             socket.write(string: string)
-        }
-
-        let onError: () -> Void = {
+        } catch {
             Logger.shared.error("Could send websocket message as string")
         }
-
-        message.JSONMessage.tryToEncode(encoding: .utf8, onSuccess: onSuccess, onError: onError)
     }
 
     private func errorNeedsSocketSetup(socketType: SocketType) -> String {

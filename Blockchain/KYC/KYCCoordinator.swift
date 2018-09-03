@@ -25,7 +25,7 @@ enum KYCEvent {
     /// Should the user go back in the KYC flow, we need to
     /// prepopulate the screens with the data they already entered.
     /// We may need another event type for this and hook into
-    /// `viewWillDisappear`. 
+    /// `viewWillDisappear`.
 }
 
 protocol KYCCoordinatorDelegate: class {
@@ -39,19 +39,27 @@ protocol KYCCoordinatorDelegate: class {
 
     // MARK: - Public Properties
 
+    weak var delegate: KYCCoordinatorDelegate?
+
+    static let shared = KYCCoordinator()
+
+    @objc class func sharedInstance() -> KYCCoordinator {
+        return KYCCoordinator.shared
+    }
+
+    // MARK: - Private Properties
+
     private(set) var user: KYCUser?
 
     private(set) var country: KYCCountry?
-
-    weak var delegate: KYCCoordinatorDelegate?
-
-    // MARK: - Private Properties
 
     fileprivate var navController: KYCOnboardingNavigationController!
 
     private let pageFactory = KYCPageViewFactory()
 
     private var disposable: Disposable?
+
+    private override init() { /* Disallow initializing from outside objects */ }
 
     deinit {
         disposable?.dispose()
@@ -87,6 +95,11 @@ protocol KYCCoordinatorDelegate: class {
         navController = presentInNavigationController(welcomeViewController, in: viewController)
     }
 
+    func finish() {
+        // TODO: if applicable, persist state, do housekeeping, etc...
+        navController.dismiss(animated: true)
+    }
+
     func handle(event: KYCEvent) {
         switch event {
         case .pageWillAppear(let type):
@@ -95,7 +108,7 @@ protocol KYCCoordinatorDelegate: class {
             handleFailurePage(for: error)
         case .nextPageFromPageType(let type, let payload):
             handlePayloadFromPageType(type, payload)
-            guard let nextPage = type.next else { return }
+            guard let nextPage = type.nextPage(for: self.user) else { return }
             let controller = pageFactory.createFrom(
                 pageType: nextPage,
                 in: self,
@@ -159,8 +172,8 @@ protocol KYCCoordinatorDelegate: class {
         case .welcome,
              .country,
              .confirmPhone,
-             .verifyIdentity,
-             .accountStatus:
+             .accountStatus,
+             .applicationComplete:
             break
         case .profile:
             guard let current = user else { return }
@@ -172,6 +185,9 @@ protocol KYCCoordinatorDelegate: class {
         case .enterPhone:
             guard let current = user else { return }
             delegate?.apply(model: .phone(current))
+        case .verifyIdentity:
+            guard let country = country else { return }
+            delegate?.apply(model: .verifyIdentity(country))
         }
     }
 

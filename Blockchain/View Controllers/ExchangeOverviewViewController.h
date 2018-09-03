@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ExchangeOverviewViewController : UIViewController
+@interface PartnerExchangeListViewController : UIViewController
 - (void)reloadSymbols;
 @end

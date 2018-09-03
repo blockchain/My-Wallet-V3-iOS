@@ -58,7 +58,7 @@
         self.decimalAmount = [NSDecimalNumber decimalNumberWithString:decimalString];
         WalletManager.sharedInstance.latestMultiAddressResponse.symbol_btc = currentSymbol;
         
-        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[BlockchainAPI sharedInstance] blockchainWallet]] uppercaseString];
+        self.detailButtonTitle = [[NSString stringWithFormat:@"%@ %@",BC_STRING_VIEW_ON_URL_ARGUMENT, [[BlockchainAPI sharedInstance] blockchainDotInfo]] uppercaseString];
         self.detailButtonLink = [[[BlockchainAPI sharedInstance] walletUrl] stringByAppendingFormat:@"/tx/%@", self.myHash];
     }
     return self;

@@ -131,7 +131,7 @@ extension AppSettingsController {
         if verified {
             self.createBadge(cell, color: .green)
             cell.detailTextLabel?.text = LocalizationConstants.verified
-            cell.detailTextLabel?.textColor = .green
+            cell.detailTextLabel?.textColor = .white
         } else {
             createBadge(cell, color: .unverified)
             cell.detailTextLabel?.text = LocalizationConstants.unverified

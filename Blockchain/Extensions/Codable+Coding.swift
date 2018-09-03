@@ -14,6 +14,30 @@ extension Encodable {
         return try encoder.encode(self)
     }
 
+    func encodeToString(encoding: String.Encoding) throws -> String {
+        let encodedData = try self.encode()
+        guard let string = String(data: encodedData, encoding: encoding) else {
+            throw EncodingError.invalidValue(
+                encodedData,
+                EncodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Could not create string with given encoding."
+                )
+            )
+        }
+        return string
+    }
+
+    func toDictionary() throws -> [String: Any] {
+        guard let data = try? self.encode(), let dictionary = try JSONSerialization.jsonObject(
+            with: data,
+            options: .allowFragments
+        ) as? [String: Any] else {
+            throw NSError(domain: "Encodable", code: 0, userInfo: nil)
+        }
+        return dictionary
+    }
+
     func tryToEncode(
         encoding: String.Encoding,
         onSuccess: (String) -> Void,

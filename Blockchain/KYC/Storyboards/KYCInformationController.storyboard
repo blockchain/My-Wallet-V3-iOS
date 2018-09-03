@@ -28,7 +28,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="okp-Sf-YF7">
-                                <rect key="frame" x="0.0" y="123" width="375" height="293"/>
+                                <rect key="frame" x="0.0" y="124.5" width="375" height="290"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1cf-8E-ugK">
                                         <rect key="frame" x="53.5" y="0.0" width="268" height="134"/>
@@ -84,7 +84,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfj-zv-olj">
-                                        <rect key="frame" x="16" y="234" width="343" height="59"/>
+                                        <rect key="frame" x="16" y="234" width="343" height="56"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -130,6 +130,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="Exchange" id="8I1-K6-NnG">
                         <barButtonItem key="backBarButtonItem" id="Vba-S8-Hwv"/>
+                        <barButtonItem key="rightBarButtonItem" image="close" id="wH2-u4-jo6">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="dismiss:" destination="uMm-1o-bGV" id="ivw-J1-IEw"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
@@ -147,5 +153,6 @@
     </scenes>
     <resources>
         <image name="AccountApproved" width="130" height="130"/>
+        <image name="close" width="18" height="18"/>
     </resources>
 </document>

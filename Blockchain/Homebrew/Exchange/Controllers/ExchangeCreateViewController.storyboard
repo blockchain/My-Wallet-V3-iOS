@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Delegate-->
+        <scene sceneID="azD-85-pcI">
+            <objects>
+                <viewController id="ZL9-nX-8IY" customClass="ExchangeCreateViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jre-mq-FDr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
+                                <rect key="frame" x="16" y="617" width="343" height="30"/>
+                                <state key="normal" title="Exchange something for something else"/>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="378" width="343" height="231"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ZL9-nX-8IY" id="pb8-OK-o7P"/>
+                                </connections>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBP-hF-UKz">
+                                <rect key="frame" x="16" y="340" width="343" height="30"/>
+                                <state key="normal" title="1 BTC = 22.19 ETH"/>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
+                                <rect key="frame" x="16" y="302" width="343" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
+                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
+                                        <state key="normal" title="0.05 BTC Min"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyX-88-NsD">
+                                        <rect key="frame" x="175.5" y="0.0" width="167.5" height="30"/>
+                                        <state key="normal" title="1.48 BTC Max"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UNX-CU-uNI">
+                                <rect key="frame" x="16" y="138" width="343" height="114"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf">
+                                        <rect key="frame" x="293" y="64" width="42" height="42"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="42" id="adV-rn-OQg"/>
+                                            <constraint firstAttribute="height" constant="42" id="reo-5s-btt"/>
+                                        </constraints>
+                                        <state key="normal" title="Fiat Toggle"/>
+                                        <connections>
+                                            <action selector="fiatToggleTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="8RY-92-F0K"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FgZ-oU-W6K">
+                                        <rect key="frame" x="111" y="29" width="120.5" height="56.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.01 BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
+                                                <rect key="frame" x="0.0" y="0.0" width="120.5" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
+                                                <rect key="frame" x="27.5" y="36" width="65.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="DPE-Uz-yYf" secondAttribute="trailing" constant="8" id="7CI-oE-xk2"/>
+                                    <constraint firstAttribute="bottom" secondItem="DPE-Uz-yYf" secondAttribute="bottom" constant="8" id="9Lz-pT-6hF"/>
+                                    <constraint firstItem="FgZ-oU-W6K" firstAttribute="centerY" secondItem="UNX-CU-uNI" secondAttribute="centerY" id="DB5-30-W72"/>
+                                    <constraint firstItem="FgZ-oU-W6K" firstAttribute="centerX" secondItem="UNX-CU-uNI" secondAttribute="centerX" id="IqU-5Z-E05"/>
+                                    <constraint firstItem="DPE-Uz-yYf" firstAttribute="top" secondItem="UNX-CU-uNI" secondAttribute="top" constant="64" id="bpv-Ef-Rup"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="POK-GE-gO7">
+                                <rect key="frame" x="16" y="92" width="343" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rcu-DM-4eH">
+                                        <rect key="frame" x="0.0" y="0.0" width="129.5" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="switch_currencies" translatesAutoresizingMaskIntoConstraints="NO" id="t8W-hq-ZjO">
+                                        <rect key="frame" x="129.5" y="0.0" width="84" height="30"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rEg-tW-g6Y">
+                                        <rect key="frame" x="213.5" y="0.0" width="129.5" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mih-H4-tuc">
+                                <rect key="frame" x="16" y="63.5" width="74.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwt-iu-BVZ">
+                                <rect key="frame" x="229.5" y="63.5" width="60" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DUe-4D-nhJ" secondAttribute="trailing" constant="16" id="5hU-Xa-xif"/>
+                            <constraint firstItem="DUe-4D-nhJ" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="6Rb-58-f8o"/>
+                            <constraint firstItem="UNX-CU-uNI" firstAttribute="top" secondItem="POK-GE-gO7" secondAttribute="bottom" constant="16" id="9E9-SV-0Ls"/>
+                            <constraint firstItem="RBP-hF-UKz" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="9Uk-BN-3HM"/>
+                            <constraint firstItem="rcu-DM-4eH" firstAttribute="top" secondItem="mih-H4-tuc" secondAttribute="bottom" constant="8" id="9Ux-su-GTO"/>
+                            <constraint firstItem="dfm-a1-ad2" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="AHN-eg-W66"/>
+                            <constraint firstItem="mih-H4-tuc" firstAttribute="leading" secondItem="rcu-DM-4eH" secondAttribute="leading" id="BMr-yz-otg"/>
+                            <constraint firstItem="5uc-t6-nYA" firstAttribute="top" secondItem="UNX-CU-uNI" secondAttribute="bottom" constant="50" id="CC9-qD-ogT"/>
+                            <constraint firstItem="DUe-4D-nhJ" firstAttribute="top" secondItem="dfm-a1-ad2" secondAttribute="bottom" constant="8" id="EPf-w5-lBJ"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
+                            <constraint firstItem="hwt-iu-BVZ" firstAttribute="leading" secondItem="rEg-tW-g6Y" secondAttribute="leading" id="IRN-cJ-TIc"/>
+                            <constraint firstItem="rEg-tW-g6Y" firstAttribute="top" secondItem="hwt-iu-BVZ" secondAttribute="bottom" constant="8" id="Nzc-i6-iDF"/>
+                            <constraint firstItem="UNX-CU-uNI" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Pkd-gf-mZN"/>
+                            <constraint firstItem="POK-GE-gO7" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Pzp-S8-YJl"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="RBP-hF-UKz" secondAttribute="trailing" constant="16" id="TTq-JC-OVd"/>
+                            <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="POK-GE-gO7" secondAttribute="trailing" constant="16" id="XbK-qG-lip"/>
+                            <constraint firstItem="dfm-a1-ad2" firstAttribute="top" secondItem="RBP-hF-UKz" secondAttribute="bottom" constant="8" id="hWm-4t-HII"/>
+                            <constraint firstItem="5uc-t6-nYA" firstAttribute="top" secondItem="jre-mq-FDr" secondAttribute="top" constant="302" id="jRq-hN-qS8"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="UNX-CU-uNI" secondAttribute="trailing" constant="16" id="lgz-nF-gUO"/>
+                            <constraint firstItem="RBP-hF-UKz" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="mS9-tQ-guh"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="dfm-a1-ad2" secondAttribute="trailing" constant="16" id="pXZ-qz-MkO"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="20" id="pni-o2-RxB"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="FIv-WY-bvA"/>
+                    </view>
+                    <connections>
+                        <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
+                        <outlet property="exchangeRateButton" destination="RBP-hF-UKz" id="U09-gZ-aBt"/>
+                        <outlet property="primaryAmountLabel" destination="cbA-yh-J0A" id="xGh-pL-sDT"/>
+                        <outlet property="secondaryAmountLabel" destination="okC-2w-xB9" id="K2v-uv-GkY"/>
+                        <outlet property="useMaximumButton" destination="kyX-88-NsD" id="1kX-WQ-I1q"/>
+                        <outlet property="useMinimumButton" destination="Gyg-rh-rE6" id="e6a-pn-89k"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J6x-Pe-arO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-74.400000000000006" y="16.641679160419791"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="switch_currencies" width="30" height="30"/>
+    </resources>
+</document>

@@ -8,13 +8,18 @@
 
 import Foundation
 
-protocol ExchangeListInterface: class {
-    func paginationActivityIndicatorVisibility(_ visibility: Visibility)
-    func activityIndicatorVisibility(_ visibility: Visibility)
-    func listVisibility(_ visibility: Visibility)
+protocol ExchangeListDelegate: class {
+    func onLoaded()
+    func onNextPageRequest(_ identifier: String)
+    func onNewOrderTapped()
+    func onPullToRefresh()
 }
 
 class ExchangeListViewController: UIViewController {
+    
+    // MARK: Public Properties
+    
+    weak var delegate: ExchangeListDelegate?
 
     // MARK: Private IBOutlets
 
@@ -23,20 +28,83 @@ class ExchangeListViewController: UIViewController {
     // MARK: Private Properties
 
     fileprivate var dataProvider: ExchangeListDataProvider?
+    fileprivate var presenter: ExchangeListPresenter!
+    fileprivate var dependencies: ExchangeDependencies!
+    
+    // TODO: This may not be needed. This is anticipating
+    // that screen presentations/dismissals would be handled
+    // by the coordinator. 
+    fileprivate var coordinator: ExchangeCoordinator!
+    
+    // MARK: Factory
+    
+    class func make(with dependencies: ExchangeDependencies, coordinator: ExchangeCoordinator) -> ExchangeListViewController {
+        let controller = ExchangeListViewController.makeFromStoryboard()
+        controller.dependencies = dependencies
+        controller.coordinator = coordinator
+        return controller
+    }
+    
+    // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         dataProvider = ExchangeListDataProvider(table: tableView)
+        dependenciesSetup()
+        delegate?.onLoaded()
         dataProvider?.delegate = self
+    }
+    
+    fileprivate func dependenciesSetup() {
+        let interactor = ExchangeListInteractor(dependencies: dependencies)
+        presenter = ExchangeListPresenter(interactor: interactor)
+        presenter.interface = self
+        interactor.output = presenter
+        delegate = presenter
+    }
+}
+
+extension ExchangeListViewController: ExchangeListInterface {
+    func paginationActivityIndicatorVisibility(_ visibility: Visibility) {
+        dataProvider?.isPaging = visibility == .visible
+    }
+    
+    func refreshControlVisibility(_ visibility: Visibility) {
+        dataProvider?.isRefreshing = visibility.isHidden == false
+    }
+    
+    func display(results: [ExchangeTradeCellModel]) {
+        dataProvider?.append(tradeModels: results)
+    }
+    
+    func append(results: [ExchangeTradeCellModel]) {
+        dataProvider?.append(tradeModels: results)
+    }
+    
+    func enablePullToRefresh() {
+        dataProvider?.setupPullToRefresh()
+    }
+    
+    func showNewExchange(animated: Bool) {
+        // TODO
     }
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
-    func newOrderTapped(_ dataProvider: ExchangeListDataProvider) {
-        // TODO
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel) {
+        // TODO: Show order detail screen for trade.
     }
-
-    func dataProvider(_ dataProvider: ExchangeListDataProvider, requestsNextPageBefore timestamp: Date) {
-        // TODO
+    
+    func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider) {
+        delegate?.onPullToRefresh()
+    }
+    
+    func newOrderTapped(_ dataProvider: ExchangeListDataProvider) {
+        delegate?.onNewOrderTapped()
+    }
+    
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, nextPageBefore identifier: String) {
+        delegate?.onNextPageRequest(identifier)
     }
 }

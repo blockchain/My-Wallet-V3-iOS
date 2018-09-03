@@ -48,7 +48,7 @@ struct LocalizationConstants {
     static let localCurrency = NSLocalizedString("Local Currency", comment: "")
     static let scanQRCode = NSLocalizedString("Scan QR Code", comment: "")
     static let dontShowAgain = NSLocalizedString(
-        "Don't show again",
+        "Don’t show again",
         comment: "Text displayed to the user when an action has the option to not be asked again."
     )
     static let myEtherWallet = NSLocalizedString(
@@ -72,7 +72,7 @@ struct LocalizationConstants {
         static let warning = NSLocalizedString("Warning", comment: "")
         static let checkConnection = NSLocalizedString("Please check your internet connection.", comment: "")
         static let timedOut = NSLocalizedString("Connection timed out. Please check your internet connection.", comment: "")
-        static let siteMaintenanceError = NSLocalizedString("Blockchain's servers are currently under maintenance. Please try again later", comment: "")
+        static let siteMaintenanceError = NSLocalizedString("Blockchain’s servers are currently under maintenance. Please try again later", comment: "")
         static let invalidServerResponse = NSLocalizedString("Invalid server response. Please try again later.", comment: "")
         static let invalidStatusCodeReturned = NSLocalizedString("Invalid Status Code Returned %@", comment: "")
         static let requestFailedCheckConnection = NSLocalizedString("Request failed. Please check your internet connection.", comment: "")
@@ -111,9 +111,9 @@ struct LocalizationConstants {
         static let hasVerified = NSLocalizedString("Your mobile number has been verified.", comment: "")
         static let invalidSharedKey = NSLocalizedString("Invalid Shared Key", comment: "")
         static let didCreateNewWalletTitle = NSLocalizedString("Your wallet was successfully created.", comment: "")
-        static let didCreateNewWalletMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
+        static let didCreateNewWalletMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It’s important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
         static let walletPairedSuccessfullyTitle = NSLocalizedString("Wallet Paired Successfully.", comment: "")
-        static let walletPairedSuccessfullyMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
+        static let walletPairedSuccessfullyMessage = NSLocalizedString("Before accessing your wallet, please choose a pin number to use to unlock your wallet. It’s important you remember this pin as it cannot be reset or changed without first unlocking the app.", comment: "")
         static let forgotPassword = NSLocalizedString("Forgot Password?", comment: "")
         static let passwordRequired = NSLocalizedString("Password Required", comment: "")
         static let downloadingWallet = NSLocalizedString("Downloading Wallet", comment: "")
@@ -177,7 +177,7 @@ struct LocalizationConstants {
         )
         static let validationCannotBeCompleted = NSLocalizedString(
             "PIN Validation cannot be completed. Please enter your wallet password manually.",
-            comment: "Error message displayed when the user's pin cannot be validated and instead they are prompted to enter their password."
+            comment: "Error message displayed when the user’s pin cannot be validated and instead they are prompted to enter their password."
         )
         static let incorrectUnknownError = NSLocalizedString(
             "PIN Code Incorrect. Unknown Error Message.",
@@ -189,7 +189,7 @@ struct LocalizationConstants {
         )
         static let decryptedPasswordLengthZero = NSLocalizedString(
             "Decrypted PIN Password length 0",
-            comment: "Error message displayed when the user's decrypted password length is 0."
+            comment: "Error message displayed when the user’s decrypted password length is 0."
         )
         static let validationError = NSLocalizedString(
             "PIN Validation Error",
@@ -261,6 +261,7 @@ struct LocalizationConstants {
 
     struct Onboarding {
         static let createNewWallet = NSLocalizedString("Create New Wallet", comment: "")
+        static let termsOfServiceAndPrivacyPolicyNoticePrefix = NSLocalizedString("By creating a wallet you agree to Blockchain’s", comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain’s terms of service and privacy policy when they create a wallet")
         static let automaticPairing = NSLocalizedString("Automatic Pairing", comment: "")
         static let recoverFunds = NSLocalizedString("Recover Funds", comment: "")
         static let recoverFundsOnlyIfForgotCredentials = NSLocalizedString("You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?", comment: "")
@@ -326,6 +327,11 @@ struct LocalizationConstants {
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
         
+        static let orderHistory = NSLocalizedString(
+            "Order History",
+            comment: "Header for the exchange list"
+        )
+        
         static let loading = NSLocalizedString(
             "Loading Exchange",
             comment: "Text presented when the wallet is loading the exchange"
@@ -351,7 +357,7 @@ struct LocalizationConstants {
 
     struct AddressAndKeyImport {
 
-        static let nonSpendable = NSLocalizedString("Non-Spendable", comment: "Text displayed to indicate that part of the funds in the user's wallet is not spendable.")
+        static let nonSpendable = NSLocalizedString("Non-Spendable", comment: "Text displayed to indicate that part of the funds in the user’s wallet is not spendable.")
 
         static let copyWalletId = NSLocalizedString("Copy Wallet ID", comment: "")
 
@@ -365,7 +371,7 @@ struct LocalizationConstants {
         static let importedPrivateKeyArgument = NSLocalizedString("Imported Private Key %@", comment: "")
         static let loadingImportKey = NSLocalizedString("Importing key", comment: "")
         static let loadingProcessingKey = NSLocalizedString("Processing key", comment: "")
-        static let importedKeyButForIncorrectAddress = NSLocalizedString("You've successfully imported a private key.", comment: "")
+        static let importedKeyButForIncorrectAddress = NSLocalizedString("You’ve successfully imported a private key.", comment: "")
         static let importedKeyDoesNotCorrespondToAddress = NSLocalizedString("NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.", comment: "")
         static let importedKeySuccess = NSLocalizedString("You can now spend from this address.", comment: "")
         static let incorrectPrivateKey = NSLocalizedString("Incorrect private key", comment: "Incorrect private key")
@@ -471,19 +477,19 @@ struct LocalizationConstants {
 
     struct KYC {
         static let failedToConfirmNumber = NSLocalizedString(
-            "Failed to confirm number. Please try again.",
+            "The mobile number you have entered is already associated with an existing user.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."
         )
         static let termsOfServiceAndPrivacyPolicyNotice = NSLocalizedString(
-            "By tapping on \"Apply Now\", you agree to Blockchain's %@ & %@",
-            comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain's terms of service and privacy policy when they start the KYC process."
+            "By hitting \"Begin Now\", you agree to Blockchain’s %@ & %@",
+            comment: "Text displayed to the user notifying them that they implicitly agree to Blockchain’s terms of service and privacy policy when they start the KYC process."
         )
         static let verificationInProgress = NSLocalizedString(
             "Verification in Progress",
             comment: "Text displayed when KYC verification is in progress."
         )
         static let verificationInProgressDescription = NSLocalizedString(
-            "Your information is being reviewed. When all looks good, you're clear to Buy, Sell and Transfer on the Exchange.",
+            "Your information is being reviewed. When all looks good, you’re clear to exchange. You should receive a notification within 5 minutes.",
             comment: "Description for when KYC verification is in progress."
         )
         static let accountApproved = NSLocalizedString(
@@ -544,7 +550,7 @@ struct LocalizationConstants {
             comment: "Text displayed when KYC verification failed."
         )
         static let verificationFailedDescription = NSLocalizedString(
-            "Unfortunately we had some trouble verifying your identity with the documents you've supplied.",
+            "Unfortunately we had some trouble verifying your identity with the documents you’ve supplied and your account can’t be verified at this time.",
             comment: "Description for when KYC verification failed."
         )
         static let notifyMe = NSLocalizedString(
@@ -568,7 +574,7 @@ struct LocalizationConstants {
             comment: "Title text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
         static let unsupportedCountryDescription = NSLocalizedString(
-            "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we'll let you know as soon as we launch in %@!",
+            "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
             comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
         static let backToDashboard = NSLocalizedString(
@@ -585,6 +591,18 @@ struct LocalizationConstants {
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
+    @objc class func createWalletLegalAgreementPrefix() -> String {
+        return LocalizationConstants.Onboarding.termsOfServiceAndPrivacyPolicyNoticePrefix
+    }
+
+    @objc class func termsOfService() -> String {
+        return LocalizationConstants.tos
+    }
+
+    @objc class func privacyPolicy() -> String {
+        return LocalizationConstants.privacyPolicy
+    }
+
     @objc class func continueString() -> String { return LocalizationConstants.continueString }
 
     @objc class func warning() -> String { return LocalizationConstants.Errors.warning }
