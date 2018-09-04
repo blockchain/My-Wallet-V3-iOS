@@ -34,6 +34,26 @@ class OnfidoService {
         }
     }
 
+    /// Submits the Onfido user to Blockchain to complete KYC processing.
+    /// This should be invoked upon successfully uploading the identity docs to Onfido.
+    ///
+    /// - Parameter user: the OnfidoUser
+    /// - Returns: a Completable
+    func submitVerification(_ user: OnfidoUser) -> Completable {
+        return authService.getKycSessionToken().flatMapCompletable { token in
+            let headers = [HttpHeaderField.authorization: token.token]
+            let payload = [
+                "applicantId": user.identifier,
+                HttpHeaderField.clientType: HttpHeaderValue.clientTypeApp
+            ]
+            return KYCNetworkRequest.request(
+                post: .submitVerification,
+                parameters: payload,
+                headers: headers
+            )
+        }
+    }
+
     // MARK: - Private
 
     private func getOnfidoCredentials() -> Single<OnfidoCredentials> {

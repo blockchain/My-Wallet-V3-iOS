@@ -209,6 +209,15 @@ final class KYCNetworkRequest {
                 guard let httpResponse = response as? HTTPURLResponse else {
                     taskFailure(HTTPRequestServerError.badResponse); return
                 }
+                guard let responseData = data else {
+                    taskFailure(HTTPRequestPayloadError.emptyData); return
+                }
+
+                // Debugging
+                if let responseString = String(data: responseData, encoding: .utf8) {
+                    Logger.shared.debug("Response received: \(responseString)")
+                }
+
                 guard (200...299).contains(httpResponse.statusCode) else {
                     taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
                 }
@@ -216,12 +225,6 @@ final class KYCNetworkRequest {
                     guard mimeType == HttpHeaderValue.json else {
                         taskFailure(HTTPRequestPayloadError.invalidMimeType(type: mimeType)); return
                     }
-                }
-                guard let responseData = data else {
-                    taskFailure(HTTPRequestPayloadError.emptyData); return
-                }
-                if let responseString = String(data: responseData, encoding: .utf8) {
-                    Logger.shared.debug("Response received: \(responseString)")
                 }
                 taskSuccess(responseData)
             }
