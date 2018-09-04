@@ -296,6 +296,7 @@
 		51FC1B0921270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
 		51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
 		51FC1B112127473D007BEB18 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D371210F692D000B8E95 /* UIView.swift */; };
+		51FE9128213867FD00F49B12 /* KYCAddressController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51FE911D213867FD00F49B12 /* KYCAddressController.storyboard */; };
 		600E18BB2118D46B003C1846 /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
 		601F5EEB211B32AA002697AB /* OnfidoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601F5EE0211B32AA002697AB /* OnfidoController.swift */; };
 		602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */; };
@@ -1900,6 +1901,7 @@
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
 		51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
+		51FE911E213867FD00F49B12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCAddressController.storyboard; sourceTree = "<group>"; };
 		601F5EE0211B32AA002697AB /* OnfidoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoController.swift; sourceTree = "<group>"; };
 		602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCInformationController.storyboard; sourceTree = "<group>"; };
 		602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingNavigationController.storyboard; sourceTree = "<group>"; };
@@ -3850,6 +3852,7 @@
 		602B9CA72118E15200BD3D60 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				51FE911D213867FD00F49B12 /* KYCAddressController.storyboard */,
 				51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */,
 				602B9CAB2118E15200BD3D60 /* KYCConfirmPhoneNumberController.storyboard */,
 				602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */,
@@ -7139,6 +7142,7 @@
 				AAD27A5320A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
 				C718595B1F4B85E800745A87 /* Transactions.xib in Resources */,
 				ECD244EB19A8AC45004B1F40 /* PEKeyboard-3-done.png in Resources */,
+				51FE9128213867FD00F49B12 /* KYCAddressController.storyboard in Resources */,
 				5138373B21025AD100767B2E /* alert-received.wav in Resources */,
 				ECD244F019A8AC45004B1F40 /* PEKeyboard-4-done.png in Resources */,
 				3A26AF5521272026003A8A08 /* ExchangeListViewController.storyboard in Resources */,
@@ -8915,6 +8919,14 @@
 			name = KYCPersonalDetailsController.storyboard;
 			sourceTree = "<group>";
 		};
+		51FE911D213867FD00F49B12 /* KYCAddressController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51FE911E213867FD00F49B12 /* Base */,
+			);
+			name = KYCAddressController.storyboard;
+			sourceTree = "<group>";
+		};
 		6045991F2118BDC000AE08C8 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -9081,7 +9093,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9195,7 +9207,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9309,7 +9321,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9423,7 +9435,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9870,7 +9882,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ6PH75U7K;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

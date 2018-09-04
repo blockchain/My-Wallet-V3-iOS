@@ -15,9 +15,6 @@ private class CountriesMap {
     private var allCountries: Countries?
     private var backingMap = [String: Countries]()
 
-    init() {
-    }
-
     var searchText: String? {
         didSet {
             guard let countries = allCountries else {
@@ -212,7 +209,7 @@ extension KYCCountrySelectionController: KYCCountrySelectionView {
     }
 
     func startPartnerExchangeFlow(country: KYCCountry) {
-        ExchangeCoordinator.shared.start(rootViewController: self)
+        ExchangeCoordinator.shared.showPartnerExchange(rootViewController: self)
     }
 
     func showExchangeNotAvailable(country: KYCCountry) {
