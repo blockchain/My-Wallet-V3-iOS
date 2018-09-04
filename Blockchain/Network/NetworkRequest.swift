@@ -114,9 +114,7 @@ struct NetworkRequest {
                 case .success(let value):
                     observer(.success(value))
                 case .error(let error):
-                    if let value = error {
-                        observer(.error(value))
-                    }
+                    observer(.error(error ?? NetworkError.generic))
                 }
             })
             return Disposables.create()
