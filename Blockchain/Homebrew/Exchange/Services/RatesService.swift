@@ -14,9 +14,21 @@ class RatesService: RatesAPI {
     private struct PathComponents {
         let components: [String]
         
-        static let standard = PathComponents(
+        static let rates = PathComponents(
             components: ["markets", "quotes", "pairs"]
         )
+        
+        static func withPair(_ pair: TradingPair) -> PathComponents {
+            let components = PathComponents(
+                components: [
+                    "markets",
+                    "quotes",
+                    pair.stringRepresentation,
+                    "config"
+                ]
+            )
+            return components
+        }
     }
     
     enum RatesAPIError: Error {
@@ -63,9 +75,11 @@ class RatesService: RatesAPI {
                 return .error(RatesAPIError.generic)
         }
         
+        let components = PathComponents.withPair(forPair)
+        
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: ["markets", "quotes", forPair.stringRepresentation, "config"],
+            pathComponents: components.components,
             queryParameters: nil) else {
                 return .error(RatesAPIError.generic)
         }
@@ -89,7 +103,7 @@ class RatesService: RatesAPI {
         
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: PathComponents.standard.components,
+            pathComponents: PathComponents.rates.components,
             queryParameters: nil) else {
                 return .error(RatesAPIError.generic)
         }
