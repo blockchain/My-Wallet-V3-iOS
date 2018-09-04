@@ -75,7 +75,7 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-    func expandRatesView() {
+    func ratesViewVisibility(_ visibility: Visibility) {
 
     }
 
