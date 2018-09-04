@@ -15,6 +15,18 @@ class TradeExecutionService: TradeExecutionAPI {
         case generic
     }
     
+    private struct PathComponents {
+        let components: [String]
+        
+        static let trades = PathComponents(
+            components: ["trades"]
+        )
+        
+        static let limits = PathComponents(
+            components: ["trades", "limits"]
+        )
+    }
+    
     private let authentication: KYCAuthenticationService
     private var disposable: Disposable?
     
@@ -60,7 +72,7 @@ class TradeExecutionService: TradeExecutionAPI {
         
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: ["trades"],
+            pathComponents: PathComponents.trades.components,
             queryParameters: nil) else {
                 return .error(TradeExecutionAPIError.generic)
         }
@@ -83,7 +95,7 @@ class TradeExecutionService: TradeExecutionAPI {
         
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: ["trades", "limits"],
+            pathComponents: PathComponents.limits.components,
             queryParameters: nil) else {
                 return .error(TradeExecutionAPIError.generic)
         }

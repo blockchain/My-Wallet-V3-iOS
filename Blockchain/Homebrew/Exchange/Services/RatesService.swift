@@ -11,6 +11,14 @@ import RxSwift
 
 class RatesService: RatesAPI {
     
+    private struct PathComponents {
+        let components: [String]
+        
+        static let standard = PathComponents(
+            components: ["markets", "quotes", "pairs"]
+        )
+    }
+    
     enum RatesAPIError: Error {
         case generic
     }
@@ -24,6 +32,7 @@ class RatesService: RatesAPI {
     
     deinit {
         disposable?.dispose()
+        disposable = nil
     }
     
     func getRates(withCompletion: @escaping ((Result<Rates>) -> Void)) {
@@ -80,7 +89,7 @@ class RatesService: RatesAPI {
         
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: ["markets", "quotes", "pairs"],
+            pathComponents: PathComponents.standard.components,
             queryParameters: nil) else {
                 return .error(RatesAPIError.generic)
         }
