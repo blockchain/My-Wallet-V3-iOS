@@ -59,6 +59,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>NSCameraUsageDescription</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Required for video capture</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Enabling Face ID allows you to securely access your wallet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
