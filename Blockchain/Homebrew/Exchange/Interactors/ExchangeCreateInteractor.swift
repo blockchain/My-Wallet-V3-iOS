@@ -20,20 +20,20 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
-    func toggleFiatInput() {
+    func displayInputTypeTapped() {
         inputs.toggleInput()
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
     
-    func ratesButtonTapped() {
+    func ratesViewTapped() {
         
     }
     
-    func useMinimumButtonTapped() {
+    func useMinimumAmount() {
         
     }
     
-    func useMaximumButtonTapped() {
+    func useMaximumAmount() {
         
     }
     
@@ -42,7 +42,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
     
-    func onKeypadButtonTapped(value: String) {
+    func onAddInputTapped(value: String) {
         inputs.add(character: value)
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }

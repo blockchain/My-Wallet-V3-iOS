@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NumberKeypadViewDelegate: class {
-    func onKeypadButtonTapped(value: String)
+    func onAddInputTapped(value: String)
     func onBackspaceTapped()
 }
 
@@ -20,7 +20,7 @@ class NumberKeypadView: NibBasedView {
 
     @IBAction func numberButtonTapped(_ sender: UIButton) {
         guard let titleLabel = sender.titleLabel, let value = titleLabel.text else { return }
-        delegate?.onKeypadButtonTapped(value: value)
+        delegate?.onAddInputTapped(value: value)
     }
 
     @IBAction func backspaceButtonTapped(_ sender: Any) {

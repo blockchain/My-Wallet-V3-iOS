@@ -14,11 +14,12 @@ protocol ExchangeCreateInterface: class {
     func updateRateLabels(first: String, second: String, third: String)
 }
 
+// Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
 protocol ExchangeCreateInput: NumberKeypadViewDelegate {
-    func toggleFiatInput()
-    func ratesButtonTapped()
-    func useMinimumButtonTapped()
-    func useMaximumButtonTapped()
+    func displayInputTypeTapped()
+    func ratesViewTapped()
+    func useMinimumAmount()
+    func useMaximumAmount()
 }
 
 protocol ExchangeCreateOutput: class {

@@ -61,8 +61,8 @@ class ExchangeCreateViewController: UIViewController {
 }
 
 extension ExchangeCreateViewController: NumberKeypadViewDelegate {
-    func onKeypadButtonTapped(value: String) {
-        delegate?.onKeypadButtonTapped(value: value)
+    func onAddInputTapped(value: String) {
+        delegate?.onAddInputTapped(value: value)
     }
 
     func onBackspaceTapped() {
