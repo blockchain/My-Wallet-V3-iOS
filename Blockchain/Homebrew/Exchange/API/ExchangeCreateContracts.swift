@@ -11,7 +11,7 @@ import Foundation
 protocol ExchangeCreateInterface: class {
     func expandRatesView()
     func updateInputLabels(primary: String?, secondary: String?)
-    func updateRates(first: String, second: String, third: String)
+    func updateRateLabels(first: String, second: String, third: String)
 }
 
 protocol ExchangeCreateInput: NumberKeypadViewDelegate {

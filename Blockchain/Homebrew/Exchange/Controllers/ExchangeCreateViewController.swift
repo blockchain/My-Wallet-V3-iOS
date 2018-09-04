@@ -84,7 +84,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         secondaryAmountLabel.text = secondary
     }
 
-    func updateRates(first: String, second: String, third: String) {
+    func updateRateLabels(first: String, second: String, third: String) {
 
     }
 }
