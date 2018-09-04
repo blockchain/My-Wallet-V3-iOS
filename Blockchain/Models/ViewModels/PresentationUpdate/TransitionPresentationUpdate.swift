@@ -33,11 +33,11 @@ enum TransitionParameter {
     case crossFade(duration: TimeInterval)
     case none
     
-    func perform(with: UIView, animations: @escaping () -> Void) {
+    func perform(with view: UIView, animations: @escaping () -> Void) {
         switch self {
         case .crossFade(duration: let duration):
             UIView.transition(
-                with: with,
+                with: view,
                 duration: duration,
                 options: [
                     .beginFromCurrentState,
