@@ -58,9 +58,10 @@ extension ExchangeService: ExchangeHistoryAPI {
                 if let err = error {
                     result = .error(err)
                 }
-                if let result = models {
-                    this.canPage = result.count == 50
-                    this.tradeModels.append(contentsOf: result)
+                if let output = models {
+                    this.canPage = output.count >= 50
+                    this.tradeModels.append(contentsOf: output)
+                    result = .success(output)
                 }
                 complete()
             })
@@ -99,7 +100,7 @@ extension ExchangeService: ExchangeHistoryAPI {
             guard let this = self else { return }
             this.homebrewAPI.nextPage(fromTimestamp: Date(), completion: { (models, error) in
                 if let result = models {
-                    this.canPage = result.count == 50
+                    this.canPage = result.count >= 50
                     this.tradeModels.append(contentsOf: result)
                 }
                 complete()
