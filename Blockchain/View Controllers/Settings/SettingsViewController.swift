@@ -57,8 +57,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     weak var delegate: (UIViewController & EmailDelegate)!
     weak var numberDelegate: (UIViewController & MobileNumberDelegate)!
     let walletManager: WalletManager
-//    var userIdentityStatus: KYCUser?
-//    var preparedIdentityStatus: Bool = false
     
     var disposable: Disposable?
     
@@ -79,7 +77,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         super.viewDidAppear(animated)
         tableView.reloadData()
         self.walletManager.accountInfoDelegate = self
-        // preparedIdentityStatus == false
     }
 
     convenience init(walletManager: WalletManager = WalletManager.shared) {
