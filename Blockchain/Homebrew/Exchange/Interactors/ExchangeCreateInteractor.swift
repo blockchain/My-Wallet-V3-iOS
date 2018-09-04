@@ -22,7 +22,7 @@ class ExchangeCreateInteractor {
 extension ExchangeCreateInteractor: ExchangeCreateInput {
     func toggleFiatInput() {
         inputs.toggleInput()
-        self.output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
     
     func ratesButtonTapped() {
@@ -39,16 +39,16 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     
     func onBackspaceTapped() {
         inputs.backspace()
-        self.output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
     
     func onNumberButtonTapped(value: String) {
         inputs.add(character: value)
-        self.output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
 
     func onDecimalButtonTapped() {
         inputs.addDecimal()
-        self.output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
 }
