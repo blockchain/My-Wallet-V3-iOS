@@ -158,6 +158,8 @@
 		3AB4D92021309C25004F0160 /* ExchangeListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D90F212FA61E004F0160 /* ExchangeListInteractor.swift */; };
 		3AB4D92321309C5B004F0160 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D9112130693F004F0160 /* Result.swift */; };
 		3AB4D92521309C76004F0160 /* HomebrewExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26AF9E212B51C0003A8A08 /* HomebrewExchangeService.swift */; };
+		3ABB80BB213F0CD300AD57BE /* Limit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB80BA213F0CD300AD57BE /* Limit.swift */; };
+		3ABB80BC213F0CD300AD57BE /* Limit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB80BA213F0CD300AD57BE /* Limit.swift */; };
 		3AC4F97821234040003AA207 /* Storyboardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F97721234040003AA207 /* Storyboardable.swift */; };
 		3AC4F97921234930003AA207 /* Storyboardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4F97721234040003AA207 /* Storyboardable.swift */; };
 		3AC4F97A2123493A003AA207 /* KYCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229C211E2A960091E706 /* KYCUser.swift */; };
@@ -1214,9 +1216,6 @@
 		3A01911A212DE57A00AED2BF /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		3A01911C212DEF8000AED2BF /* AsyncBlockOperaiton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperaiton.swift; sourceTree = "<group>"; };
 		3A019121212DF0EB00AED2BF /* AsyncBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperationTests.swift; sourceTree = "<group>"; };
-		3A019141212E171500AED2BF /* AssetConversionRateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetConversionRateView.swift; sourceTree = "<group>"; };
-		3A019142212E171500AED2BF /* AssetConversionRateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssetConversionRateView.xib; sourceTree = "<group>"; };
-		3A019143212E171600AED2BF /* AssetConversionRateViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetConversionRateViewModel.swift; sourceTree = "<group>"; };
 		3A1552D72135FFDB00683CEB /* Rates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rates.swift; sourceTree = "<group>"; };
 		3A1552E32136000F00683CEB /* RatesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatesAPI.swift; sourceTree = "<group>"; };
 		3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPairConfiguration.swift; sourceTree = "<group>"; };
@@ -1272,6 +1271,7 @@
 		3AB4D9112130693F004F0160 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		3AB4D91321308640004F0160 /* ListPresentationUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPresentationUpdate.swift; sourceTree = "<group>"; };
 		3AB4D9162130893E004F0160 /* ExchangeListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListPresenter.swift; sourceTree = "<group>"; };
+		3ABB80BA213F0CD300AD57BE /* Limit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Limit.swift; sourceTree = "<group>"; };
 		3AC4F97721234040003AA207 /* Storyboardable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboardable.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
@@ -3393,6 +3393,7 @@
 				3A1552E6213600B400683CEB /* TradingPairConfiguration.swift */,
 				3A1552EC2136EAF000683CEB /* TradeLimits.swift */,
 				3A91F7952137067400CDC3FD /* Order.swift */,
+				3ABB80BA213F0CD300AD57BE /* Limit.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7358,6 +7359,7 @@
 				AA63F85920A134DA002B719B /* BCTextField.swift in Sources */,
 				AACE31D42092A99B00B7B806 /* AppCoordinator.swift in Sources */,
 				AA3CA9B92107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */,
+				3ABB80BC213F0CD300AD57BE /* Limit.swift in Sources */,
 				3A1552D92135FFDB00683CEB /* Rates.swift in Sources */,
 				602B9D0E2118E23A00BD3D60 /* KYCVerifyIdentityController.swift in Sources */,
 				604598AE2118BAD000AE08C8 /* Settings+Table.swift in Sources */,
@@ -7541,7 +7543,6 @@
 				602B9D132118E24C00BD3D60 /* SearchControllerDelegate.swift in Sources */,
 				3AB4D92521309C76004F0160 /* HomebrewExchangeService.swift in Sources */,
 				3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */,
-				3A019149212E179500AED2BF /* AssetConversionRateViewModel.swift in Sources */,
 				3A9B7F022135B68100754FD6 /* RatesService.swift in Sources */,
 				C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
 				3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */,
@@ -8021,6 +8022,7 @@
 				232E17F91C29F0EF0044942E /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
 				23BD046A1D7761C000DB69E6 /* UITextView+AssertionFailureFix.m in Sources */,
 				23D423991D0878BE000054AA /* ModuleXMLHttpRequest.m in Sources */,
+				3ABB80BB213F0CD300AD57BE /* Limit.swift in Sources */,
 				C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */,
 				6055D372210F692D000B8E95 /* UIView.swift in Sources */,
 				3A26AF9B212B3743003A8A08 /* ExchangeCreateView.swift in Sources */,

@@ -53,9 +53,9 @@ class RatesService: RatesAPI {
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { (payload) in
                 withCompletion(.success(payload))
-        }, onError: { error in
-            withCompletion(.error(error))
-        })
+            }, onError: { error in
+                withCompletion(.error(error))
+            })
     }
     
     func getConfigurationForPair(_ tradingPair: TradingPair, withCompletion: @escaping ((Result<TradingPairConfiguration>) -> Void)) {

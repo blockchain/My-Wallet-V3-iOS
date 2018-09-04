@@ -8,7 +8,13 @@
 
 import RxSwift
 
+/// TICKET: IOS-1242 - Condense HttpHeaderField
+/// and HttpHeaderValue into enums and inject in a token
 struct NetworkRequest {
+    
+    enum NetworkError: Error {
+        case generic
+    }
     
     enum NetworkMethod: String {
         case get = "GET"
@@ -21,6 +27,11 @@ struct NetworkRequest {
     let endpoint: URL
     let token: String?
     let body: Data?
+    private let session: URLSession? = {
+        guard let session = NetworkManager.shared.session else { return nil }
+        return session
+    }()
+    private var task: URLSessionDataTask?
     
     init(endpoint: URL, method: NetworkMethod, body: Data?, authToken: String? = nil) {
         self.endpoint = endpoint
@@ -53,19 +64,19 @@ struct NetworkRequest {
         return request.copy() as? URLRequest
     }
     
-    fileprivate func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
+    fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
         var responseCode: Int = 0
         
         guard let urlRequest = URLRequest() else {
             withCompletion(.error(nil), responseCode)
             return
         }
-        guard let session = NetworkManager.shared.session else {
+        guard let session = session else {
             withCompletion(.error(nil), responseCode)
             return
         }
         
-        session.dataTask(with: urlRequest) { (payload, response, error) in
+        task = session.dataTask(with: urlRequest) { (payload, response, error) in
             
             if let httpResponse = response as? HTTPURLResponse {
                 responseCode = httpResponse.statusCode
@@ -85,7 +96,9 @@ struct NetworkRequest {
             if let error = error {
                 withCompletion(.error(error), responseCode)
             }
-        }.resume()
+        }
+        
+        task?.resume()
     }
     
     static func GET<ResponseType: Decodable>(
@@ -94,7 +107,7 @@ struct NetworkRequest {
         token: String?,
         type: ResponseType.Type
         ) -> Single<ResponseType> {
-        let request = self.init(endpoint: url, method: .get, body: body, authToken: token)
+        var request = self.init(endpoint: url, method: .get, body: body, authToken: token)
         return Single.create(subscribe: { (observer) -> Disposable in
             request.execute(expecting: ResponseType.self, withCompletion: { (result, responseCode) in
                 switch result {
@@ -116,16 +129,14 @@ struct NetworkRequest {
         token: String?,
         type: ResponseType.Type
         ) -> Single<ResponseType> {
-        let request = self.init(endpoint: url, method: .post, body: body, authToken: token)
+        var request = self.init(endpoint: url, method: .post, body: body, authToken: token)
         return Single.create(subscribe: { (observer) -> Disposable in
             request.execute(expecting: ResponseType.self, withCompletion: { (result, responseCode) in
                 switch result {
                 case .success(let value):
                     observer(.success(value))
                 case .error(let error):
-                    if let value = error {
-                        observer(.error(value))
-                    }
+                    observer(.error(error ?? NetworkError.generic))
                 }
             })
             return Disposables.create()

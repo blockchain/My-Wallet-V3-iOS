@@ -37,25 +37,6 @@ struct TradeLimits: Decodable {
         weekly = try values.decode(Limit.self, forKey: .weekly)
         annual = try values.decode(Limit.self, forKey: .annual)
     }
-    
-    struct Limit: Decodable {
-        let limit: Decimal
-        let available: Decimal
-        let used: Decimal
-        
-        enum CodingKeys: String, CodingKey {
-            case limit
-            case available
-            case used
-        }
-        
-        init(from decoder: Decoder) throws {
-            let values = try decoder.container(keyedBy: CodingKeys.self)
-            limit = try values.decode(String.self, forKey: .limit).toDecimal()
-            available = try values.decode(String.self, forKey: .available).toDecimal()
-            used = try values.decode(String.self, forKey: .used).toDecimal()
-        }
-    }
 }
 
 extension String {
