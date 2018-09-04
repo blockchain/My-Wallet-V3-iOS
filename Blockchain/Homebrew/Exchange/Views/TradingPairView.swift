@@ -7,8 +7,8 @@
 //
 
 protocol TradingPairViewDelegate: class {
-    func onFromButtonTapped(_ view: TradingPairView)
-    func onToButtonTapped(_ view: TradingPairView)
+    func onLeftButtonTapped(_ view: TradingPairView, title: String)
+    func onRightButtonTapped(_ view: TradingPairView, title: String)
     func onSwapButtonTapped(_ view: TradingPairView)
 }
 
@@ -19,25 +19,27 @@ class TradingPairView: NibBasedView {
     
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
-        case toStatusVisibility(Visibility)
-        case fromStatusVisibility(Visibility)
-        case backgroundColors(from: UIColor, to: UIColor)
+        case leftStatusVisibility(Visibility)
+        case rightStatusVisibility(Visibility)
+        case backgroundColors(left: UIColor, right: UIColor)
         case swapTintColor(UIColor)
     }
     
     enum ViewTransition: Transition {
         case swapImage(UIImage)
-        case images(from: UIImage?, to: UIImage?)
-        case titles(from: String, to: String)
+        case images(left: UIImage?, right: UIImage?)
+        case titles(left: String, right: String)
     }
     
     // MARK: IBOutlets
     
-    @IBOutlet fileprivate var fromButton: UIButton!
+    @IBOutlet fileprivate var leftButton: UIButton!
+    @IBOutlet fileprivate var rightButton: UIButton!
     @IBOutlet fileprivate var swapButton: UIButton!
-    @IBOutlet fileprivate var toButton: UIButton!
-    @IBOutlet fileprivate var toIconStatusImageView: UIImageView!
-    @IBOutlet fileprivate var fromIconStatusImageView: UIImageView!
+    @IBOutlet fileprivate var leftIconStatusImageView: UIImageView!
+    @IBOutlet fileprivate var rightIconStatusImageView: UIImageView!
+    @IBOutlet fileprivate var exchangeLabel: UILabel!
+    @IBOutlet fileprivate var receiveLabel: UILabel!
     
     // MARK: Public
     
@@ -48,18 +50,18 @@ class TradingPairView: NibBasedView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        fromButton.layer.cornerRadius = 4.0
-        toButton.layer.cornerRadius = 4.0
+        leftButton.layer.cornerRadius = 4.0
+        rightButton.layer.cornerRadius = 4.0
     }
     
     // MARK: Actions
     
-    @IBAction func fromButtonTapped(_ sender: UIButton) {
-        delegate?.onFromButtonTapped(self)
+    @IBAction func leftButtonTapped(_ sender: UIButton) {
+        delegate?.onLeftButtonTapped(self, title: sender.titleLabel?.text ?? "")
     }
     
-    @IBAction func toButtonTapped(_ sender: UIButton) {
-        delegate?.onToButtonTapped(self)
+    @IBAction func rightButtonTapped(_ sender: UIButton) {
+        delegate?.onRightButtonTapped(self, title: sender.titleLabel?.text ?? "")
     }
     
     @IBAction func swapButtonTapped(_ sender: UIButton) {
@@ -71,19 +73,19 @@ class TradingPairView: NibBasedView {
     func apply(pair: TradingPair, animation: AnimationParameter = .none, transition: TransitionParameter = .none) {
         let presentationUpdate = TradingPresentationUpdate(
             animations: [
-                .backgroundColors(from: pair.from.brandColor, to: pair.to.brandColor),
+                .backgroundColors(left: pair.from.brandColor, right: pair.to.brandColor),
                 .statusTintColor(.green),
                 .swapTintColor(.grayBlue),
-                .toStatusVisibility(.visible),
-                .fromStatusVisibility(.hidden)
+                .rightStatusVisibility(.visible),
+                .leftStatusVisibility(.hidden)
             ],
             animation: animation
         )
         
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [
-                .images(from: pair.from.brandImage, to: pair.to.brandImage),
-                .titles(from: pair.from.description, to: pair.to.description),
+                .images(left: pair.from.brandImage, right: pair.to.brandImage),
+                .titles(left: pair.from.description, right: pair.to.description),
                 .swapImage(#imageLiteral(resourceName: "Icon-Exchange").withRenderingMode(.alwaysTemplate))
             ],
             transition: transition
@@ -112,18 +114,18 @@ class TradingPairView: NibBasedView {
     fileprivate func handle(_ update: ViewUpdate) {
         switch update {
         case .statusTintColor(let color):
-            toIconStatusImageView.tintColor = color
-            fromIconStatusImageView.tintColor = color
+            rightIconStatusImageView.tintColor = color
+            leftIconStatusImageView.tintColor = color
             
-        case .toStatusVisibility(let visibility):
-            toIconStatusImageView.alpha = visibility.defaultAlpha
+        case .rightStatusVisibility(let visibility):
+            rightIconStatusImageView.alpha = visibility.defaultAlpha
             
-        case .fromStatusVisibility(let visibility):
-            fromIconStatusImageView.alpha = visibility.defaultAlpha
+        case .leftStatusVisibility(let visibility):
+            leftIconStatusImageView.alpha = visibility.defaultAlpha
             
-        case .backgroundColors(from: let fromColor, to: let toColor):
-            toButton.backgroundColor = toColor
-            fromButton.backgroundColor = fromColor
+        case .backgroundColors(left: let leftColor, right: let rightColor):
+            leftButton.backgroundColor = leftColor
+            rightButton.backgroundColor = rightColor
             
         case .swapTintColor(let color):
             swapButton.tintColor = color
@@ -135,13 +137,13 @@ class TradingPairView: NibBasedView {
         case .swapImage(let image):
             swapButton.setImage(image, for: .normal)
             
-        case .images(from: let fromImage, to: let toImage):
-            toButton.setImage(toImage, for: .normal)
-            fromButton.setImage(fromImage, for: .normal)
+        case .images(left: let leftImage, right: let rightImage):
+            rightButton.setImage(rightImage, for: .normal)
+            leftButton.setImage(leftImage, for: .normal)
             
-        case .titles(from: let fromTitle, to: let toTitle):
-            toButton.setTitle(toTitle, for: .normal)
-            fromButton.setTitle(fromTitle, for: .normal)
+        case .titles(left: let leftTitle, right: let rightTitle):
+            leftButton.setTitle(leftTitle, for: .normal)
+            rightButton.setTitle(rightTitle, for: .normal)
         }
     }
 }
