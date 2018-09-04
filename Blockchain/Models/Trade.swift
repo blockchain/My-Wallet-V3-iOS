@@ -17,14 +17,14 @@ struct Trade: Decodable {
     let updated: Date
     let pair: TradingPair
     let side: Side
-    let quantity: Double
+    let quantity: Decimal
     let currency: AssetType
     let refundAddress: String
-    let price: Double
+    let price: Decimal
     let depositAddress: String
-    let depositQuantity: Double
+    let depositQuantity: Decimal
     let withdrawalAddress: String
-    let withdrawalQuantity: Double
+    let withdrawalQuantity: Decimal
     let depositHash: String
     let withdrawalHash: String
 
@@ -92,13 +92,13 @@ struct Trade: Decodable {
             )
         }
         
-        quantity = try values.decode(String.self, forKey: .quantity).toDouble()
+        quantity = try values.decode(String.self, forKey: .quantity).toDecimal()
         refundAddress = try values.decode(String.self, forKey: .refundAddress)
-        price = try values.decode(String.self, forKey: .price).toDouble()
+        price = try values.decode(String.self, forKey: .price).toDecimal()
         depositAddress = try values.decode(String.self, forKey: .depositAddress)
-        depositQuantity = try values.decode(String.self, forKey: .depositQuantity).toDouble()
+        depositQuantity = try values.decode(String.self, forKey: .depositQuantity).toDecimal()
         withdrawalAddress = try values.decode(String.self, forKey: .withdrawlAddress)
-        withdrawalQuantity = try values.decode(String.self, forKey: .withdrawlQuantity).toDouble()
+        withdrawalQuantity = try values.decode(String.self, forKey: .withdrawlQuantity).toDecimal()
         depositHash = try values.decode(String.self, forKey: .depositTxHash)
         withdrawalHash = try values.decode(String.self, forKey: .withdrawalTxHash)
     }
