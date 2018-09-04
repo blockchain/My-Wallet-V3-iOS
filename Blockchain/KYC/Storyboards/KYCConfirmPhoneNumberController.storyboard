@@ -43,8 +43,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+1 (714) 333-4920" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDf-1e-GvH">
-                                <rect key="frame" x="16" y="40.666666666666657" width="99" height="15"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="12"/>
+                                <rect key="frame" x="16" y="40.666666666666657" width="98" height="15"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -117,20 +117,11 @@
                         <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
                         <outlet property="layoutConstraintBottomButton" destination="lHo-bY-QRU" id="amU-3n-8B8"/>
                         <outlet property="validationTextFieldConfirmationCode" destination="eU2-Mk-gi2" id="y9B-YN-lFc"/>
-                        <segue destination="Kem-jm-UpZ" kind="show" id="4J4-wa-RZJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6m-Ye-sCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="125.59999999999999" y="111.57635467980296"/>
-        </scene>
-        <!--KYCAddressController-->
-        <scene sceneID="Yd6-4J-UeZ">
-            <objects>
-                <viewControllerPlaceholder storyboardName="KYCAddressController" id="Kem-jm-UpZ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-zE-QFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="672" y="33"/>
         </scene>
     </scenes>
 </document>

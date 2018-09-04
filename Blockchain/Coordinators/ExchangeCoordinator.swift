@@ -178,12 +178,22 @@ struct ExchangeServices: ExchangeDependencies {
 
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
-        case createHomebrewExchange(animated: Bool)
+        case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
+        case createPartnerExchange(animated: Bool, viewController: UIViewController?)
     }
 
     func handle(event: ExchangeCoordinatorEvent) {
         switch event {
-        case .createHomebrewExchange(let animated): showCreateExchange(animated: animated, type: .homebrew)
+        case .createHomebrewExchange(let animated, let viewController):
+            if viewController != nil {
+                rootViewController = viewController
+            }
+            showCreateExchange(animated: animated, type: .homebrew)
+        case .createPartnerExchange(let animated, let viewController):
+            if viewController != nil {
+                rootViewController = viewController
+            }
+            showCreateExchange(animated: animated, type: .homebrew)
         }
     }
 

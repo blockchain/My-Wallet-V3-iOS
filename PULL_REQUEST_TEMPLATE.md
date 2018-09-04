@@ -10,9 +10,9 @@
 
 *Describe how a reviewer can verify your changes. This helps with those who are unfamiliar with the feature.*
 
-## Screenshot
+## Screenshot/Design assessment
 
-*If the change is UI related, paste a screenshot here.*
+*If the change is UI related, paste a screenshot here and include an assessment of design accuracy if applicable.*
 
 ## Merge Checklist
 

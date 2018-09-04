@@ -87,7 +87,7 @@ extension ExchangeListViewController: ExchangeListInterface {
     }
     
     func showNewExchange(animated: Bool) {
-        coordinator.handle(event: .createHomebrewExchange(animated: animated))
+        coordinator.handle(event: .createHomebrewExchange(animated: animated, viewController: nil))
     }
 }
 
