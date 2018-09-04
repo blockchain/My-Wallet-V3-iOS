@@ -23,8 +23,8 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
 
-    @IBAction private func fiatToggleTapped(_ sender: Any) {
-        delegate?.onFiatToggleTapped()
+    @IBAction private func displayInputTypeTapped(_ sender: Any) {
+        delegate?.onDisplayInputTypeTapped()
     }
 
     // MARK: Public Properties

@@ -9,6 +9,6 @@
 import Foundation
 
 protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
-    func onFiatToggleTapped()
+    func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
 }

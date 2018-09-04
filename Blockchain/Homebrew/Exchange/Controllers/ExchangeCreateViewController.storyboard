@@ -53,7 +53,7 @@
                                         </constraints>
                                         <state key="normal" title="Fiat Toggle"/>
                                         <connections>
-                                            <action selector="fiatToggleTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="8RY-92-F0K"/>
+                                            <action selector="displayInputTypeTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="f6g-9r-iu8"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FgZ-oU-W6K">

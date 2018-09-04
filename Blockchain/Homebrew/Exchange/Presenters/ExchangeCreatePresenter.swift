@@ -30,7 +30,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         
     }
 
-    func onFiatToggleTapped() {
+    func onDisplayInputTypeTapped() {
         interactor.displayInputTypeTapped()
     }
 }
