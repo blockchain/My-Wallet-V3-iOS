@@ -15,7 +15,6 @@ protocol ExchangeInputsAPI: class {
 
     func add(character: String)
     func backspace()
-    func addDecimal()
     func toggleInput()
 }
 
@@ -35,11 +34,6 @@ class ExchangeInputsService: ExchangeInputsAPI {
 
     func backspace() {
         activeInput.backspace()
-        updateOutput()
-    }
-
-    func addDecimal() {
-        activeInput.addDecimal()
         updateOutput()
     }
 

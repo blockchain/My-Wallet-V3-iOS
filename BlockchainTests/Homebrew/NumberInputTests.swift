@@ -46,7 +46,7 @@ class NumberInputTests: XCTestCase {
     func testAddingDecimals() {
         let model = NumberInputViewModel()
         (0..<5).forEach { _ in
-            model.addDecimal()
+            model.add(character: ".")
         }
         XCTAssert(model.input == "0.", "Only one decimal is allowed")
     }
@@ -54,7 +54,7 @@ class NumberInputTests: XCTestCase {
     func testAddingDecimalWithLeadingZero() {
         let model = NumberInputViewModel()
         model.add(character: "0")
-        model.addDecimal()
+        model.add(character: ".")
         model.add(character: "4")
         model.add(character: "0")
         model.add(character: "2")

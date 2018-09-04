@@ -11,7 +11,6 @@ import Foundation
 protocol NumberInputDelegate: class {
     var input: String { get }
     func add(character: String)
-    func addDecimal()
     func backspace()
 }
 
@@ -33,7 +32,7 @@ class NumberInputViewModel: NumberInputDelegate {
     }
 
     func add(character: String) {
-        guard numbers.contains(character) else {
+        guard numbers.contains(character) || character == decimalSeparator else {
             Logger.shared.error("Invalid character")
             return
         }
@@ -43,28 +42,25 @@ class NumberInputViewModel: NumberInputDelegate {
             return
         }
 
+        // Allow only one decimal separator
+        if character == decimalSeparator {
+            guard !input.contains(decimalSeparator) else {
+                Logger.shared.debug("Decimal already exists")
+                return
+            }
+            // If current input is zero, make it a leading zero and add decimal separator
+            guard input != zero else {
+                input = zero + decimalSeparator
+                return
+            }
+        }
+
         // If current input is zero, set to character
         guard input != zero else {
             input = character
             return
         }
         input += character
-    }
-
-    func addDecimal() {
-        // Allow only one decimal separator
-        guard !input.contains(decimalSeparator) else {
-            Logger.shared.debug("Decimal already exists")
-            return
-        }
-
-        // If current input is zero, make it a leading zero and add decimal separator
-        guard input != zero else {
-            input = zero + decimalSeparator
-            return
-        }
-
-        input += decimalSeparator
     }
 
     func backspace() {

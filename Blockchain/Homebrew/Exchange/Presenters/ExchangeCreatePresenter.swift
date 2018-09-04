@@ -18,12 +18,8 @@ class ExchangeCreatePresenter {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
-    func onNumberButtonTapped(value: String) {
-        interactor.onNumberButtonTapped(value: value)
-    }
-    
-    func onDecimalButtonTapped() {
-        interactor.onDecimalButtonTapped()
+    func onKeypadButtonTapped(value: String) {
+        interactor.onKeypadButtonTapped(value: value)
     }
 
     func onBackspaceTapped() {

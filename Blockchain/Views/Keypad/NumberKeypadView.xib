@@ -118,7 +118,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="."/>
                                     <connections>
-                                        <action selector="decimalButtonTapped:" destination="-1" eventType="touchUpInside" id="eJG-1s-5Xl"/>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="tvp-CN-MCk"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kma-Kx-hJu">

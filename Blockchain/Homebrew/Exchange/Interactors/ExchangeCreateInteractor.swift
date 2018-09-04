@@ -42,13 +42,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
     
-    func onNumberButtonTapped(value: String) {
+    func onKeypadButtonTapped(value: String) {
         inputs.add(character: value)
-        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
-    }
-
-    func onDecimalButtonTapped() {
-        inputs.addDecimal()
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
     }
 }
