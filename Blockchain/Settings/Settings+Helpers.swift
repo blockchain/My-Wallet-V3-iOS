@@ -148,8 +148,10 @@ extension AppSettingsController {
             case .expired, .failed, .none: cell.detailTextLabel?.backgroundColor = .unverified
             case .pending: cell.detailTextLabel?.backgroundColor = .pending
             }
+        } else if let theColor = color {
+            cell.detailTextLabel?.backgroundColor = theColor
         } else {
-            cell.detailTextLabel?.backgroundColor = color
+            cell.detailTextLabel?.backgroundColor = .unverified
         }
         cell.detailTextLabel?.textColor = .white
         cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)

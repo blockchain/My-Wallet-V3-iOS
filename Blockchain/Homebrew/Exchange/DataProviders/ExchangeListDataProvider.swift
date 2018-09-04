@@ -33,7 +33,7 @@ class ExchangeListDataProvider: NSObject {
             guard let current = models else { return }
             guard isPaging != oldValue else { return }
             table.beginUpdates()
-            let path = IndexPath(row: current.count, section: 0)
+            let path = IndexPath(row: current.count, section: 1)
             switch isPaging {
             case true:
                 table.insertRows(at: [path], with: .automatic)
@@ -147,7 +147,6 @@ extension ExchangeListDataProvider: UITableViewDataSource {
             return cell
             
         case 1:
-            guard items.count > indexPath.row else { return UITableViewCell() }
             
             if items.count > indexPath.row {
                 let model = items[indexPath.row]

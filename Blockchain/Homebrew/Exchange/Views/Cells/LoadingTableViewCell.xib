@@ -28,6 +28,9 @@
                     <constraint firstItem="zPF-lU-aKc" firstAttribute="centerX" secondItem="6MR-c0-5JX" secondAttribute="centerX" id="Fbu-8M-7Kj"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="activityIndicator" destination="zPF-lU-aKc" id="gjJ-wd-DTF"/>
+            </connections>
             <point key="canvasLocation" x="-97.5" y="10"/>
         </tableViewCell>
     </objects>

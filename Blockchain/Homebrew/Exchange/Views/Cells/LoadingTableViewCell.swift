@@ -8,6 +8,10 @@
 
 class LoadingTableViewCell: UITableViewCell {
     
+    // MARK: Private IBOutlets
+    
+    @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
+    
     // MARK: Static Properties
     
     fileprivate static let standardHeight: CGFloat = 75.0
@@ -16,5 +20,16 @@ class LoadingTableViewCell: UITableViewCell {
     
     static func height() -> CGFloat {
         return standardHeight
+    }
+    
+    // MARK: Lifecycle
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        /// This should never not be animating.
+        /// If there's ever a time when it shouldn't be
+        /// animating, it shouldn't be shown.
+        activityIndicator.startAnimating()
     }
 }

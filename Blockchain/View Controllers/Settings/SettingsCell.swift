@@ -86,21 +86,8 @@ import UIKit
         self.detailTextLabel?.frame.origin.y = ypos
         let detailWidth =  self.detailTextLabel?.frame.size.width
         let screenWidth = UIScreen.main.bounds.width
-
         self.detailTextLabel?.frame.origin.x = screenWidth - detailWidth! - 40
-
-        
         self.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
-
-        
-//        self.detailTextLabel?.layer.cornerRadius = 4
-//        self.detailTextLabel?.layer.masksToBounds = true
-//        self.detailTextLabel?.backgroundColor = .orange
-//        self.detailTextLabel?.textColor = .white
-//        sizeToFit()
-//        layoutIfNeeded()
-    
-        
     }
 }
 
