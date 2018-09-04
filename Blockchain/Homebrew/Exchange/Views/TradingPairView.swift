@@ -19,7 +19,8 @@ class TradingPairView: NibBasedView {
     
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
-        case statusVisibility(Visibility)
+        case toStatusVisibility(Visibility)
+        case fromStatusVisibility(Visibility)
         case backgroundColors(from: UIColor, to: UIColor)
         case swapTintColor(UIColor)
     }
@@ -35,7 +36,8 @@ class TradingPairView: NibBasedView {
     @IBOutlet fileprivate var fromButton: UIButton!
     @IBOutlet fileprivate var swapButton: UIButton!
     @IBOutlet fileprivate var toButton: UIButton!
-    @IBOutlet fileprivate var iconStatusImageView: UIImageView!
+    @IBOutlet fileprivate var toIconStatusImageView: UIImageView!
+    @IBOutlet fileprivate var fromIconStatusImageView: UIImageView!
     
     // MARK: Public
     
@@ -72,7 +74,8 @@ class TradingPairView: NibBasedView {
                 .backgroundColors(from: pair.from.brandColor, to: pair.to.brandColor),
                 .statusTintColor(.green),
                 .swapTintColor(.grayBlue),
-                .statusVisibility(.visible)
+                .toStatusVisibility(.visible),
+                .fromStatusVisibility(.hidden)
             ],
             animation: animation
         )
@@ -109,10 +112,14 @@ class TradingPairView: NibBasedView {
     fileprivate func handle(_ update: ViewUpdate) {
         switch update {
         case .statusTintColor(let color):
-            iconStatusImageView.tintColor = color
+            toIconStatusImageView.tintColor = color
+            fromIconStatusImageView.tintColor = color
             
-        case .statusVisibility(let visibility):
-            iconStatusImageView.alpha = visibility.defaultAlpha
+        case .toStatusVisibility(let visibility):
+            toIconStatusImageView.alpha = visibility.defaultAlpha
+            
+        case .fromStatusVisibility(let visibility):
+            fromIconStatusImageView.alpha = visibility.defaultAlpha
             
         case .backgroundColors(from: let fromColor, to: let toColor):
             toButton.backgroundColor = toColor
