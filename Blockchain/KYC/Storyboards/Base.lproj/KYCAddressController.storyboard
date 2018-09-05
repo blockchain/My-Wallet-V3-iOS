@@ -137,6 +137,24 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wad-m7-6Ym" userLabel="Country Text Field" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="264" width="288" height="56"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="Lab-xf-F25"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Country"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeholderFillColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="supportsAutoCorrect" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="optionalField" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="What is the address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVk-mv-RzC">
                                         <rect key="frame" x="16" y="0.0" width="288" height="15"/>
                                         <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
@@ -159,7 +177,9 @@
                                     <constraint firstItem="j8H-Lr-LlB" firstAttribute="width" secondItem="5mF-Bq-VW9" secondAttribute="width" id="9hf-ex-7fK"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="top" secondItem="HnA-P2-2Gj" secondAttribute="bottom" id="Db8-K7-5xO"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="leading" secondItem="j8H-Lr-LlB" secondAttribute="leading" id="Egi-9K-lbW"/>
+                                    <constraint firstItem="Wad-m7-6Ym" firstAttribute="leading" secondItem="HTQ-Da-JDA" secondAttribute="leading" constant="16" id="FgZ-94-Q7N"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="width" secondItem="HTQ-Da-JDA" secondAttribute="width" constant="-32" id="Jyz-vG-0JH"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wad-m7-6Ym" secondAttribute="trailing" constant="16" id="MuI-xj-vYt"/>
                                     <constraint firstItem="zsH-tV-aX0" firstAttribute="top" secondItem="TVk-mv-RzC" secondAttribute="bottom" constant="2" id="Pwb-jJ-RLZ"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="trailing" secondItem="j8H-Lr-LlB" secondAttribute="centerX" constant="-8" id="QLk-Yl-ULp"/>
                                     <constraint firstItem="MQL-tY-eAz" firstAttribute="top" secondItem="j8H-Lr-LlB" secondAttribute="bottom" id="aPV-xw-zye"/>
@@ -169,6 +189,7 @@
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="leading" secondItem="HnA-P2-2Gj" secondAttribute="leading" id="nT3-YY-MhI"/>
                                     <constraint firstItem="HnA-P2-2Gj" firstAttribute="top" secondItem="zsH-tV-aX0" secondAttribute="bottom" constant="8" id="nw1-NY-jhH"/>
                                     <constraint firstItem="zsH-tV-aX0" firstAttribute="trailing" secondItem="TVk-mv-RzC" secondAttribute="trailing" id="oBT-ma-W1E"/>
+                                    <constraint firstItem="Wad-m7-6Ym" firstAttribute="top" secondItem="LF7-ax-XE2" secondAttribute="bottom" id="oOL-uO-XQ8"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="height" secondItem="HnA-P2-2Gj" secondAttribute="height" id="qJ0-ut-CxM"/>
                                     <constraint firstAttribute="trailing" secondItem="HnA-P2-2Gj" secondAttribute="trailing" constant="16" id="ro4-4Z-JhY"/>
                                     <constraint firstItem="5mF-Bq-VW9" firstAttribute="width" secondItem="HnA-P2-2Gj" secondAttribute="width" id="sWF-2c-nZN"/>
@@ -229,6 +250,7 @@
                         <outlet property="addressTextField" destination="HnA-P2-2Gj" id="Gl8-tC-Ya0"/>
                         <outlet property="apartmentTextField" destination="5mF-Bq-VW9" id="P4y-WS-nbX"/>
                         <outlet property="cityTextField" destination="j8H-Lr-LlB" id="C3k-xF-5Hp"/>
+                        <outlet property="countryTextField" destination="Wad-m7-6Ym" id="r9K-V2-rp7"/>
                         <outlet property="layoutConstraintBottomButton" destination="mQa-gA-TTY" id="fO2-mo-UgL"/>
                         <outlet property="postalCodeTextField" destination="LF7-ax-XE2" id="1zJ-7Y-SwY"/>
                         <outlet property="primaryButtonContainer" destination="bhb-q7-xBR" id="0UF-pO-SuD"/>
