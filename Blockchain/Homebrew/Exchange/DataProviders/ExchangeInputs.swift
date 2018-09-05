@@ -11,7 +11,7 @@ import Foundation
 protocol ExchangeInputsAPI: class {
     var activeInput: NumberInputDelegate { get }
     var lastOutput: String? { get }
-    var conversionRate: NSDecimalNumber? { get set }
+    var conversionRate: Decimal? { get set }
 
     func add(character: String)
     func backspace()
@@ -21,7 +21,7 @@ protocol ExchangeInputsAPI: class {
 class ExchangeInputsService: ExchangeInputsAPI {
     var activeInput: NumberInputDelegate
     var lastOutput: String?
-    var conversionRate: NSDecimalNumber?
+    var conversionRate: Decimal?
 
     init() {
         self.activeInput = NumberInputViewModel(newInput: nil)
@@ -40,7 +40,7 @@ class ExchangeInputsService: ExchangeInputsAPI {
     func updateOutput() {
         guard let rate = conversionRate else { return }
         let active = NSDecimalNumber(string: activeInput.input)
-        let output = active.dividing(by: rate)
+        let output = active.dividing(by: NSDecimalNumber(decimal: rate))
         lastOutput = output.stringValue
     }
 
