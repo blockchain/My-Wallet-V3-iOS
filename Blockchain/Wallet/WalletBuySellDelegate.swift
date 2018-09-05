@@ -11,7 +11,7 @@ import Foundation
 /// Protocol definition for a delegate for buy/sell wallet callbacks
 protocol WalletBuySellDelegate: class {
     /// Method invoked when trade initiated from buy is completed
-    func didCompleteTrade(trade: Trade)
+    func didCompleteTrade(with hash: String, date: String)
 
     /// Method invoked when a user requests from inside the web view to see trade details
     func showCompletedTrade(tradeHash: String)

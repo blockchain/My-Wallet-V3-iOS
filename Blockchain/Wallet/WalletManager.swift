@@ -238,12 +238,10 @@ extension WalletManager: WalletDelegate {
     // MARK: - Buy/Sell
 
     func didCompleteTrade(_ tradeDict: [AnyHashable: Any]!) {
-        guard let trade = Trade(dict: tradeDict as! [String: String]) else {
-            Logger.shared.warning("Failed to create Trade object.")
-            return
-        }
+        guard let hash = tradeDict["txHash"] as? String else { return }
+        guard let date = tradeDict["createdAt"] as? String else { return }
         DispatchQueue.main.async { [unowned self] in
-            self.buySellDelegate?.didCompleteTrade(trade: trade)
+            self.buySellDelegate?.didCompleteTrade(with: hash, date: date)
         }
     }
 

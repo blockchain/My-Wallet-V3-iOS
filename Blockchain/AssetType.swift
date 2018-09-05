@@ -76,4 +76,26 @@ extension AssetType {
             return "ETH"
         }
     }
+    
+    var brandImage: UIImage {
+        switch self {
+        case .bitcoin:
+            return #imageLiteral(resourceName: "Icon-BTC")
+        case .bitcoinCash:
+            return #imageLiteral(resourceName: "Icon-BCH")
+        case .ethereum:
+            return #imageLiteral(resourceName: "Icon-ETH")
+        }
+    }
+    
+    var brandColor: UIColor {
+        switch self {
+        case .bitcoin:
+            return UIColor(red:1, green:0.61, blue:0.13, alpha:1)
+        case .ethereum:
+            return UIColor(red:0.28, green:0.23, blue:0.8, alpha:1)
+        case .bitcoinCash:
+            return UIColor(red:1, green:0.61, blue:0.13, alpha:1)
+        }
+    }
 }

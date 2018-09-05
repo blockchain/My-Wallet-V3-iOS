@@ -136,15 +136,13 @@ extension SettingsTableViewController {
     }
 
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        if preparedIdentityStatus { return }
-        self.createBadge(cell, color: .clear)
-        self.getUserVerificationStatus { status, success in
+        self.createBadge(cell)
+        self.getUserVerificationStatus { user, success in
             if success {
-                if let hasDetail = status?.status {
-                    let userModel = KYCInformationViewModel.create(for: hasDetail)
-                    self.createBadge(cell, status)
+                if let theUser = user {
+                    let userModel = KYCInformationViewModel.create(for: theUser.status)
+                    self.createBadge(cell, theUser)
                     cell.detailTextLabel?.text = userModel.badge
-                    self.preparedIdentityStatus = true
                 }
             } else {
                 self.createBadge(cell, color: .unverified)
@@ -187,7 +185,6 @@ extension SettingsTableViewController {
         case (sectionSecurity, pinBiometry): prepareRow(cell, .biometry)
         case (sectionSecurity, pinSwipeToReceive): prepareRow(cell, .swipeReceive)
         default: break
-
         }
     }
 
@@ -205,7 +202,7 @@ extension SettingsTableViewController {
         if indexPath.section == sectionProfile && indexPath.row == profileWalletIdentifier {
             return indexPath
         }
-        let hasLoadedAccountInfoDictionary: Bool = walletManager.wallet.hasLoadedAccountInfo ? true : false
+        let hasLoadedAccountInfoDictionary = walletManager.wallet.hasLoadedAccountInfo ? true : false
         if !hasLoadedAccountInfoDictionary || (UserDefaults.standard.object(forKey: "loadedSettings") as! Int != 0) == false {
             alertUserOfErrorLoadingSettings()
             return nil
@@ -219,7 +216,7 @@ extension SettingsTableViewController {
         switch indexPath.section {
         case sectionProfile:
             switch indexPath.row {
-            case identityVerification: KYCCoordinator.shared.start()
+            case identityVerification: KYCCoordinator.shared.start(from: self)
             case profileWalletIdentifier: walletIdentifierClicked()
             case profileEmail: emailClicked()
             case profileMobileNumber: mobileNumberClicked()

@@ -13,17 +13,23 @@ protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
     var markets: ExchangeMarketsAPI { get }
     var inputs: ExchangeInputsAPI { get }
+    var rates: RatesAPI { get }
+    var tradeExecution: TradeExecutionAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
     let markets: ExchangeMarketsAPI
     let inputs: ExchangeInputsAPI
-
+    let rates: RatesAPI
+    let tradeExecution: TradeExecutionAPI
+    
     init() {
+        rates = RatesService()
         service = ExchangeService()
         markets = MarketsService()
         inputs = ExchangeInputsService()
+        tradeExecution = TradeExecutionService()
     }
 }
 
