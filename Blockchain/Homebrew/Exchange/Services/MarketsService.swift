@@ -10,10 +10,25 @@ import Foundation
 import RxSwift
 
 protocol ExchangeMarketsAPI {
-    func update(newPair: TradingPair)
+    func authenticate(completion: @escaping (SocketMessage) -> Void)
+    var pair: TradingPair? { get set }
+    func fetchRates()
+    var rates: Observable<ExchangeRate> { get }
 }
 
-class MarketsService {
+class MarketsService: ExchangeMarketsAPI {
+    private let authentication: KYCAuthenticationService
+    private var disposable: Disposable?
+
+    init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
+        self.authentication = service
+    }
+
+    deinit {
+        disposable?.dispose()
+        disposable = nil
+    }
+
     // Two ways of retrieving data.
     private enum DataSource {
         case socket // Using websockets, which is the default dataSource
@@ -21,15 +36,12 @@ class MarketsService {
     }
     private var dataSource: DataSource = .socket
 
-    private var pair: TradingPair? {
+    var pair: TradingPair? {
         didSet {
-            SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
-            SocketManager.shared.connect(socketType: .exchange)
-            authenticate()
+            let quote = Quote(parameterOne: "param")
+            let message = SocketMessage(type: .exchange, JSONMessage: quote)
+            SocketManager.shared.send(message: message)
         }
-    }
-    func update(newPair: TradingPair) {
-        pair = newPair
     }
 
     private var socketMessageObservable: Observable<SocketMessage> {
@@ -54,19 +66,27 @@ class MarketsService {
         }
     }
 
-    func authenticate() {
+    func authenticate(completion: @escaping (SocketMessage) -> Void) {
         switch dataSource {
         case .socket: do {
-            let params = AuthParams(type: "auth", token: "jwtToken")
-            let message = Auth(channel: "auth", operation: "subscribe", params: params)
-            do {
-                let encoded = try message.encodeToString(encoding: .utf8)
-                let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
-                SocketManager.shared.send(message: socketMessage)
-            } catch {
-                Logger.shared.error("Could not encode socket message")
+            SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
+            disposable = authentication.getKycSessionToken().flatMap { [unowned self] token in
+                let params = AuthParams(type: "auth", token: token.token)
+                let message = Auth(channel: "auth", operation: "subscribe", params: params)
+                do {
+                    let encoded = try message.encodeToString(encoding: .utf8)
+                    let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
+                    SocketManager.shared.send(message: socketMessage)
+                } catch {
+                    Logger.shared.error("Could not encode socket message")
+                }
+                return self.socketMessageObservable.asSingle()
+            }.subscribe(onSuccess: { message in
+                completion(message)
+            }) { error in
+                Logger.shared.error("Could not authenticate")
             }
-            }
+        }
         case .rest: Logger.shared.debug("use REST endpoint")
         }
     }
@@ -86,18 +106,4 @@ class MarketsService {
         case .rest: Logger.shared.debug("use REST endpoint")
         }
     }
-}
-
-extension MarketsService {
-    func onChangeAmountFieldText() {
-        // TODO
-        //        switch dataSource {
-        //        case .socket: // calculate
-        //        case .rest: // send request, show spinner?
-        //        }
-    }
-}
-
-extension MarketsService: ExchangeMarketsAPI {
-    
 }

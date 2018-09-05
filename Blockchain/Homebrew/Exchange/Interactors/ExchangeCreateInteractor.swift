@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import RxSwift
 
 class ExchangeCreateInteractor {
     weak var output: ExchangeCreateOutput?
     fileprivate let inputs: ExchangeInputsAPI
-    fileprivate let markets: ExchangeMarketsAPI
+    fileprivate var markets: ExchangeMarketsAPI
 
     init(dependencies: ExchangeDependencies) {
         self.markets = dependencies.markets
@@ -20,8 +21,10 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
-    func setTradingPair(pair: TradingPair) {
-        markets.update(newPair: pair)
+    func authenticate() {
+        markets.authenticate(completion: { [unowned self] message in
+            self.markets.pair = TradingPair(from: .bitcoin, to: .ethereum)!
+        })
     }
 
     func displayInputTypeTapped() {
