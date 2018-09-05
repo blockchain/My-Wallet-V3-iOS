@@ -60,6 +60,38 @@ import RxSwift
         }
     }
 
+    /// Returns a signed retail token (a JWT token) from the wallet service. This token is typically
+    /// used as a mechanism to transfer info from the wallet to other services (e.g. Nabu). The
+    /// token expires in 1 minute.
+    ///
+    /// - Returns: a Single returning a SignedRetailTokenResponse
+    func getSignedRetailToken() -> Single<SignedRetailTokenResponse> {
+
+        // Construct URL
+        let appSettings = BlockchainSettings.App.shared
+
+        guard let walletGuid = appSettings.guid else {
+            return Single.error(KYCAuthenticationError.invalidGuid)
+        }
+        guard let sharedKey = appSettings.sharedKey else {
+            return Single.error(KYCAuthenticationError.invalidSharedKey)
+        }
+
+        let requestPayload = SignedRetailTokenRequest(
+            apiCode: BlockchainAPI.Parameters.apiCode,
+            sharedKey: sharedKey,
+            walletGuid: walletGuid
+        )
+        guard let baseUrl = URL(string: BlockchainAPI.shared.signedRetailTokenUrl),
+            let url = URL.endpoint(baseUrl, pathComponents: nil, queryParameters: requestPayload.toDictionary),
+            let urlRequest = try? URLRequest(url: url, method: .get) else {
+                return Single.error(KYCAuthenticationError.invalidUrl)
+        }
+
+        // Initiate request
+        return NetworkManager.shared.request(urlRequest, responseType: SignedRetailTokenResponse.self)
+    }
+
     /// Returns true if the provided country code is in the homebrew region
     ///
     /// - Parameter countryCode: the country code

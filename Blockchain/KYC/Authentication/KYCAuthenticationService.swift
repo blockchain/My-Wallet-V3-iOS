@@ -87,38 +87,11 @@ final class KYCAuthenticationService {
     /// Creates a KYC user ID and API token followed by updating the wallet metadata with
     /// the KYC user ID and API token.
     private func createAndSaveUserResponse() -> Single<KYCCreateUserResponse> {
-        return getSignedRetailToken().flatMap {
+        return WalletService.shared.getSignedRetailToken().flatMap {
             self.createKycUser(tokenResponse: $0)
         }.flatMap {
             self.saveToWalletMetadata(createUserResponse: $0)
         }
-    }
-
-    private func getSignedRetailToken() -> Single<SignedRetailTokenResponse> {
-
-        // Construct URL
-        let appSettings = BlockchainSettings.App.shared
-
-        guard let walletGuid = appSettings.guid else {
-            return Single.error(KYCAuthenticationError.invalidGuid)
-        }
-        guard let sharedKey = appSettings.sharedKey else {
-            return Single.error(KYCAuthenticationError.invalidSharedKey)
-        }
-
-        let requestPayload = SignedRetailTokenRequest(
-            apiCode: BlockchainAPI.Parameters.apiCode,
-            sharedKey: sharedKey,
-            walletGuid: walletGuid
-        )
-        guard let baseUrl = URL(string: BlockchainAPI.shared.signedRetailTokenUrl),
-            let url = URL.endpoint(baseUrl, pathComponents: nil, queryParameters: requestPayload.toDictionary),
-            let urlRequest = try? URLRequest(url: url, method: .get) else {
-                return Single.error(KYCAuthenticationError.invalidUrl)
-        }
-
-        // Initiate request
-        return NetworkManager.shared.request(urlRequest, responseType: SignedRetailTokenResponse.self)
     }
 
     private func createKycUser(tokenResponse: SignedRetailTokenResponse) -> Single<KYCCreateUserResponse> {
