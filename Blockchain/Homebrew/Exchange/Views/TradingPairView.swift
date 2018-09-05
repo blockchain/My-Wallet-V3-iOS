@@ -14,8 +14,15 @@ protocol TradingPairViewDelegate: class {
 
 class TradingPairView: NibBasedView {
     
+    static let standardHeight: CGFloat = 62.0
+    
     typealias TradingTransitionUpdate = TransitionPresentationUpdate<ViewTransition>
     typealias TradingPresentationUpdate = AnimatablePresentationUpdate<ViewUpdate>
+    
+    struct Model {
+        let transitionUpdate: TradingTransitionUpdate
+        let presentationUpdate: TradingPresentationUpdate
+    }
     
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
@@ -69,6 +76,11 @@ class TradingPairView: NibBasedView {
     }
     
     // MARK: Public
+    
+    func apply(model: Model) {
+        apply(presentationUpdate: model.presentationUpdate)
+        apply(transitionUpdate: model.transitionUpdate)
+    }
     
     func apply(pair: TradingPair, animation: AnimationParameter = .none, transition: TransitionParameter = .none) {
         let presentationUpdate = TradingPresentationUpdate(
@@ -146,4 +158,38 @@ class TradingPairView: NibBasedView {
             rightButton.setTitle(rightTitle, for: .normal)
         }
     }
+}
+
+extension TradingPairView {
+    
+    static func confirmationModel(for trade: Trade) -> Model {
+        
+        let fromAsset = trade.pair.from
+        let toAsset = trade.pair.to
+        
+        let transitionUpdate = TradingTransitionUpdate(
+            transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
+                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .titles(left: "123 BTC", right: "123 ETH")
+            ],
+            transition: .none
+        )
+        
+        let presentationUpdate = TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                .leftStatusVisibility(.hidden),
+                .rightStatusVisibility(.hidden),
+                .swapTintColor(.brandPrimary)
+            ],
+            animation: .none
+        )
+        
+        let model = Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        return model
+    }
+    
 }
