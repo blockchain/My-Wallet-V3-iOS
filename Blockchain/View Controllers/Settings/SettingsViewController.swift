@@ -12,8 +12,7 @@ import CoreFoundation
 import RxSwift
 
 @IBDesignable @objc class SettingsTableViewController: UITableViewController,
-AppSettingsController, UITextFieldDelegate, EmailDelegate,
-MobileNumberDelegate, WalletAccountInfoDelegate {
+AppSettingsController, UITextFieldDelegate, EmailDelegate, WalletAccountInfoDelegate {
     // Row References
     
     //Profile
@@ -46,7 +45,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
     var allCurrencySymbolsDictionary: [AnyHashable: Any] = [:]
     private var enteredEmailString = ""
     private var emailString = ""
-    private var enteredMobileNumberString = ""
     private var mobileNumberString = ""
     private var changeFeeTextField: UITextField?
     private var currentFeePerKb: Float = 0.0
@@ -92,64 +90,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
         alertUserToChangeTwoStepVerification()
     }
 
-    func isMobileVerified() -> Bool {
-        return walletManager.wallet.hasVerifiedMobileNumber()
-    }
-
-    func getMobileNumber() -> String? {
-        return walletManager.wallet.getSMSNumber()
-    }
-
-    func alertUserToVerifyMobileNumber() {
-        isVerifyingMobileNumber = true
-        let alertForVerifyingMobileNumber = UIAlertController(
-            title: LocalizationConstants.Authentication.enterVerification,
-            message: String(format: "Sent to %@", mobileNumberString),
-            preferredStyle: .alert)
-        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.Authentication.resendVerification,
-                                                              style: .default, handler: { _ in
-            self.changeMobileNumber(self.mobileNumberString)
-        }))
-        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { _ in
-            self.verifyMobileNumber(alertForVerifyingMobileNumber.textFields?.first?.text)
-        }))
-        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
-            // If the user cancels right after adding a legitimate number, update accountInfo
-            self.isEnablingTwoStepSMS = false
-            self.getAccountInfo()
-        }))
-        alertForVerifyingMobileNumber.addTextField(configurationHandler: { textField in
-            let secureTextField = textField as? BCSecureTextField
-            secureTextField?.autocapitalizationType = .none
-            secureTextField?.autocorrectionType = .no
-            secureTextField?.spellCheckingType = .no
-            secureTextField?.tag = 7
-            secureTextField?.delegate = self
-            secureTextField?.returnKeyType = .done
-            secureTextField?.placeholder = LocalizationConstants.enterCode
-        })
-        if alertTargetViewController != nil {
-            alertTargetViewController?.present(alertForVerifyingMobileNumber, animated: true)
-        } else {
-            navigationController?.present(alertForVerifyingMobileNumber, animated: true)
-        }
-    }
-    func showVerifyAlertIfNeeded() -> Bool {
-        let shouldShowVerifyAlert = isVerifyingMobileNumber
-        if shouldShowVerifyAlert {
-            alertUserToVerifyMobileNumber()
-            isVerifyingMobileNumber = false
-        }
-        return shouldShowVerifyAlert
-    }
-    func changeMobileNumber(_ newNumber: String?) {
-        enteredMobileNumberString = newNumber!
-        NotificationCenter.default.addObserver(self, selector: #selector(self.changeMobileNumberSuccess), name:
-            NSNotification.Name(rawValue: "ChangeMobileNumber"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.changeMobileNumberError), name:
-            NSNotification.Name(rawValue: "ChangeMobileNumberError"), object: nil)
-        walletManager.wallet.changeMobileNumber(newNumber)
-    }
     func mobileNumberClicked() {
         if walletManager.wallet.getTwoStepType() == AuthenticationTwoFactorType.sms.rawValue {
             let alertToDisableTwoFactorSMS = UIAlertController(title:
@@ -215,48 +155,6 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
             }
             return displayString
         }
-    }
-    // MARK: - Change Mobile Number
-    @objc func changeMobileNumberSuccess() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "ChangeMobileNumber"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "ChangeMobileNumberError"), object: nil)
-        mobileNumberString = enteredMobileNumberString
-        getAccountInfo()
-        alertUserToVerifyMobileNumber()
-    }
-    @objc func changeMobileNumberError() {
-        isEnablingTwoStepSMS = false
-        alertUserOfError("Invalid mobile number.")
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "ChangeMobileNumber"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "ChangeMobileNumberError"), object: nil)
-    }
-    func verifyMobileNumber(_ code: String?) {
-        walletManager.wallet.verifyMobileNumber(code)
-        addObserversForVerifyingMobileNumber()
-        // Mobile number error appears through sendEvent
-    }
-    func addObserversForVerifyingMobileNumber() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.verifyMobileNumberSuccess),
-                                               name: NSNotification.Name(rawValue: "VerifyMobileNumber"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.verifyMobileNumberError),
-                                               name: NSNotification.Name(rawValue: "VerifyMobileNumberError"), object: nil)
-    }
-    @objc func verifyMobileNumberSuccess() {
-        isVerifyingMobileNumber = false
-        removeObserversForVerifyingMobileNumber()
-        if isEnablingTwoStepSMS {
-            enableTwoStepForSMS()
-            return
-        }
-        alertUserOfSuccess(LocalizationConstants.Authentication.hasVerified)
-    }
-    @objc func verifyMobileNumberError() {
-        removeObserversForVerifyingMobileNumber()
-        isEnablingTwoStepSMS = false
-    }
-    func removeObserversForVerifyingMobileNumber() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "VerifyMobileNumber"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "VerifyMobileNumberError"), object: nil)
     }
     // MARK: - Web login
     func webLoginClicked() {
@@ -609,7 +507,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
                 if textField.tag == 7 {
                     weakSelf?.verifyMobileNumber(textField.text)
                 } else if textField.tag == 6 {
-                    weakSelf?.changeMobileNumber(textField.text)
+                    weakSelf?.verifyMobileNumberViewController(nil, changeMobileNumber: textField.text)
                 }
             }
             return true
@@ -618,7 +516,7 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
             if textField.tag == 7 {
                 weakSelf?.verifyMobileNumber(textField.text)
             } else if textField.tag == 6 {
-                weakSelf?.changeMobileNumber(textField.text)
+                weakSelf?.verifyMobileNumberViewController(nil, changeMobileNumber: textField.text)
             }
         }
         return true
@@ -761,5 +659,92 @@ MobileNumberDelegate, WalletAccountInfoDelegate {
                                                 object: nil)
         enteredEmailString = emailString!
         walletManager.wallet.changeEmail(emailString)
+    }
+}
+
+extension SettingsTableViewController: MobileNumberDelegate {
+
+    func verifyMobileNumberViewController(_ viewController: BCVerifyMobileNumberViewController?, changeMobileNumber numberString: String?) {
+        guard let number = numberString else { return }
+
+        walletManager.wallet.changeMobileNumber(number, success: { [weak self] in
+            viewController?.reload()
+            self?.mobileNumberString = number
+            self?.getAccountInfo()
+            self?.verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber: viewController)
+        }, error: { [weak self] in
+            viewController?.reload()
+            self?.isEnablingTwoStepSMS = false
+            self?.alertUserOfError("Invalid mobile number.")
+        })
+    }
+
+    func isMobileVerified() -> Bool {
+        return walletManager.wallet.hasVerifiedMobileNumber()
+    }
+
+    func getMobileNumber() -> String? {
+        return walletManager.wallet.getSMSNumber()
+    }
+
+    func verifyMobileNumberViewControllerShowVerifyAlertIfNeeded(_ viewController: BCVerifyMobileNumberViewController?) -> Bool {
+        let shouldShowVerifyAlert = isVerifyingMobileNumber
+        if shouldShowVerifyAlert {
+            verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber: viewController)
+            isVerifyingMobileNumber = false
+        }
+        return shouldShowVerifyAlert
+    }
+
+    func verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber viewController: BCVerifyMobileNumberViewController?) {
+        isVerifyingMobileNumber = true
+        let alertForVerifyingMobileNumber = UIAlertController(
+            title: LocalizationConstants.Authentication.enterVerification,
+            message: String(format: "Sent to %@", mobileNumberString),
+            preferredStyle: .alert)
+        alertForVerifyingMobileNumber.addAction(
+            UIAlertAction(title: LocalizationConstants.Authentication.resendVerification, style: .default, handler: { _ in
+                self.verifyMobileNumberViewController(viewController, changeMobileNumber: self.mobileNumberString)
+            })
+        )
+        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.verify, style: .default, handler: { _ in
+            self.verifyMobileNumber(alertForVerifyingMobileNumber.textFields?.first?.text, viewController: viewController)
+        }))
+        alertForVerifyingMobileNumber.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: { _ in
+            // If the user cancels right after adding a legitimate number, update accountInfo
+            self.isEnablingTwoStepSMS = false
+            self.getAccountInfo()
+        }))
+        alertForVerifyingMobileNumber.addTextField(configurationHandler: { textField in
+            let secureTextField = textField as? BCSecureTextField
+            secureTextField?.autocapitalizationType = .none
+            secureTextField?.autocorrectionType = .no
+            secureTextField?.spellCheckingType = .no
+            secureTextField?.tag = 7
+            secureTextField?.delegate = self
+            secureTextField?.returnKeyType = .done
+            secureTextField?.placeholder = LocalizationConstants.enterCode
+        })
+        if alertTargetViewController != nil {
+            alertTargetViewController?.present(alertForVerifyingMobileNumber, animated: true)
+        } else {
+            navigationController?.present(alertForVerifyingMobileNumber, animated: true)
+        }
+    }
+
+    private func verifyMobileNumber(_ code: String?, viewController: BCVerifyMobileNumberViewController? = nil) {
+        walletManager.wallet.verifyMobileNumber(code, success: { [weak self] in
+            viewController?.reload()
+            self?.isVerifyingMobileNumber = false
+            if let isEnablingTwoStepSMS = self?.isEnablingTwoStepSMS, isEnablingTwoStepSMS {
+                self?.enableTwoStepForSMS()
+                return
+            }
+            self?.alertUserOfSuccess(LocalizationConstants.Authentication.hasVerified)
+        }, error: { [weak self] in
+            viewController?.reload()
+            self?.isEnablingTwoStepSMS = false
+            self?.verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber: viewController)
+        })
     }
 }

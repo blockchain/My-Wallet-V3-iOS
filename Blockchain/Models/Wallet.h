@@ -356,8 +356,8 @@
 - (void)changeEmail:(NSString *)newEmail;
 - (void)resendVerificationEmail:(NSString *)email;
 - (void)getBtcExchangeRates;
-- (void)changeMobileNumber:(NSString *)newMobileNumber;
-- (void)verifyMobileNumber:(NSString *)code;
+- (void)changeMobileNumber:(NSString *)newMobileNumber success:(void (^ _Nonnull)(void))success error: (void (^ _Nonnull)(void))error;
+- (void)verifyMobileNumber:(NSString *)code success:(void (^ _Nonnull)(void))success error: (void (^ _Nonnull)(void))error;
 - (void)enableTwoStepVerificationForSMS;
 - (void)disableTwoStepVerification;
 - (void)changePassword:(NSString *)changedPassword;
