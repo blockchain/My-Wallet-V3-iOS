@@ -22,7 +22,7 @@ class ExchangeCreateInteractor {
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
     func authenticate() {
-        markets.authenticate(completion: { [unowned self] message in
+        markets.authenticate(completion: { [unowned self] in
             self.markets.pair = TradingPair(from: .bitcoin, to: .ethereum)!
         })
     }

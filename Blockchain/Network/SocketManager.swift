@@ -35,7 +35,7 @@ class SocketManager {
     // MARK: - Public methods
     func setupSocket(socketType: SocketType, url: URL) {
         switch socketType {
-        case .exchange: self.exchangeSocket = WebSocket(url: URL(string: "")!)
+        case .exchange: self.exchangeSocket = WebSocket(url: url)
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }

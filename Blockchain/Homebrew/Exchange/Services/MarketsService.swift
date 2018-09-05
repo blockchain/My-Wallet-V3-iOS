@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 protocol ExchangeMarketsAPI {
-    func authenticate(completion: @escaping (SocketMessage) -> Void)
+    func authenticate(completion: @escaping () -> Void)
     var pair: TradingPair? { get set }
     func fetchRates()
     var rates: Observable<ExchangeRate> { get }
@@ -18,15 +18,14 @@ protocol ExchangeMarketsAPI {
 
 class MarketsService: ExchangeMarketsAPI {
     private let authentication: KYCAuthenticationService
-    private var disposable: Disposable?
+    private var disposables: CompositeDisposable?
 
     init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
         self.authentication = service
     }
 
     deinit {
-        disposable?.dispose()
-        disposable = nil
+        disposables?.dispose()
     }
 
     // Two ways of retrieving data.
@@ -66,29 +65,48 @@ class MarketsService: ExchangeMarketsAPI {
         }
     }
 
-    func authenticate(completion: @escaping (SocketMessage) -> Void) {
+    func setupSocket() {
+        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
+    }
+
+    func authenticate(completion: @escaping () -> Void) {
         switch dataSource {
         case .socket: do {
-            SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
-            disposable = authentication.getKycSessionToken().flatMap { [unowned self] token in
-                let params = AuthParams(type: "auth", token: token.token)
-                let message = Auth(channel: "auth", operation: "subscribe", params: params)
-                do {
-                    let encoded = try message.encodeToString(encoding: .utf8)
-                    let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
-                    SocketManager.shared.send(message: socketMessage)
-                } catch {
-                    Logger.shared.error("Could not encode socket message")
-                }
-                return self.socketMessageObservable.asSingle()
-            }.subscribe(onSuccess: { message in
-                completion(message)
-            }) { error in
-                Logger.shared.error("Could not authenticate")
-            }
+            subscribeToHeartBeat(completion: completion)
+            authenticateSocket()
         }
         case .rest: Logger.shared.debug("use REST endpoint")
         }
+    }
+
+    private func subscribeToHeartBeat(completion: @escaping () -> Void) {
+        let heartBeatDisposable = socketMessageObservable
+            .filter { socketMessage in
+                // make sure it's a heartbeat
+                return true
+            }
+            .take(1)
+            .asSingle()
+            .subscribe(onSuccess: { _ in
+                completion()
+            })
+
+        _ = disposables?.insert(heartBeatDisposable)
+    }
+
+    private func authenticateSocket() {
+        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken().map { tokenResponse -> Auth in
+            let params = AuthParams(type: "auth", token: tokenResponse.token)
+            return Auth(channel: "auth", operation: "subscribe", params: params)
+            }.map { message in
+                return try message.encodeToString(encoding: .utf8)
+            }.map { encoded in
+                return SocketMessage(type: .exchange, JSONMessage: encoded)
+            }.map { socketMessage in
+                SocketManager.shared.send(message: socketMessage)
+            }.subscribe()
+
+        _ = disposables?.insert(authenticationDisposable)
     }
 
     func fetchRates() {
