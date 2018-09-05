@@ -70,6 +70,8 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Entry Point
 
     func start() {
+        self.showCreateExchange(animated: true, type: .homebrew)
+return
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }
@@ -163,7 +165,7 @@ struct ExchangeServices: ExchangeDependencies {
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
-            if navigationController == nil {
+            if 1 == 1 {
                 guard let viewController = rootViewController else {
                     Logger.shared.error("View controller to present on is nil")
                     return

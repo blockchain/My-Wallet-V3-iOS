@@ -48,6 +48,7 @@ class ExchangeCreateViewController: UIViewController {
 
     override func viewDidLoad() {
         dependenciesSetup()
+        delegate?.onLoaded()
     }
 
     fileprivate func dependenciesSetup() {

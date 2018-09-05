@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 
 protocol ExchangeMarketsAPI {
+    func update(newPair: TradingPair)
 }
 
 class MarketsService {
@@ -20,12 +21,15 @@ class MarketsService {
     }
     private var dataSource: DataSource = .socket
 
-    var pair: TradingPair? {
+    private var pair: TradingPair? {
         didSet {
             SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
             SocketManager.shared.connect(socketType: .exchange)
             authenticate()
         }
+    }
+    func update(newPair: TradingPair) {
+        pair = newPair
     }
 
     private var socketMessageObservable: Observable<SocketMessage> {

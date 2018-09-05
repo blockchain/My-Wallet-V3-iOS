@@ -57,7 +57,7 @@ class SideMenuPresenter {
                 self.setMenuItems(showExchange: isHomebrewSupported || isPartnerSupported)
             }, onError: { [unowned self] error in
                 Logger.shared.error("Failed to determine whether the country is supported by homebrew or by shapeshift.")
-                self.setMenuItems(showExchange: false)
+                self.setMenuItems(showExchange: true)
             })
     }
 

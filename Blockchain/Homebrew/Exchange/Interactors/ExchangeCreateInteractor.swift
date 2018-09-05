@@ -20,6 +20,10 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
+    func setTradingPair(pair: TradingPair) {
+        markets.update(newPair: pair)
+    }
+
     func displayInputTypeTapped() {
         inputs.toggleInput()
         output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)

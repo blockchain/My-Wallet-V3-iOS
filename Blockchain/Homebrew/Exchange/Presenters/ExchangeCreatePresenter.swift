@@ -18,6 +18,10 @@ class ExchangeCreatePresenter {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
+    func onLoaded() {
+        interactor.setTradingPair(pair: TradingPair(from: .bitcoin, to: .ethereum)!)
+    }
+
     func onAddInputTapped(value: String) {
         interactor.onAddInputTapped(value: value)
     }
