@@ -48,7 +48,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     func subscribeToConversions() {
         disposable = markets.conversions.subscribe(onNext: { [unowned self] conversion in
-            output?.
+            // do something with the converison
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
         })

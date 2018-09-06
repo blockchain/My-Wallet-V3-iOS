@@ -165,7 +165,7 @@ return
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
-            if 1 == 1 {
+            if navigationController == nil {
                 guard let viewController = rootViewController else {
                     Logger.shared.error("View controller to present on is nil")
                     return
