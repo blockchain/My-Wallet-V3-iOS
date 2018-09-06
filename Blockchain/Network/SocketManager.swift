@@ -35,7 +35,7 @@ class SocketManager {
     // MARK: - Public methods
     func setupSocket(socketType: SocketType, url: URL) {
         switch socketType {
-        case .exchange: self.exchangeSocket = WebSocket(url: url)
+        case .exchange: self.exchangeSocket = WebSocket(url: url); self.exchangeSocket?.advancedDelegate = self
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
@@ -59,7 +59,6 @@ class SocketManager {
                 Logger.shared.error(errorNeedsSocketSetup(socketType: socketType))
                 return
             }
-            socket.advancedDelegate = self
             socket.connect()
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
@@ -88,6 +87,7 @@ class SocketManager {
 
         do {
             let string = try message.JSONMessage.encodeToString(encoding: .utf8)
+            Logger.shared.debug("Writing to socket: \(string)")
             socket.write(string: string)
         } catch {
             Logger.shared.error("Could not send websocket message as string")

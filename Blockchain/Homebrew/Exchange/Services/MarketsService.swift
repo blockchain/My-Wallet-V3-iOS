@@ -38,7 +38,8 @@ class MarketsService: ExchangeMarketsAPI {
 
     var pair: TradingPair? {
         didSet {
-            let quote = Quote(parameterOne: "param")
+            let params = QuoteSubscribeParams(type: "pairs", pairs: [pair!.stringRepresentation])
+            let quote = Subscription(channel: "quotes", operation: "subscribe", params: params)
             let message = SocketMessage(type: .exchange, JSONMessage: quote)
             SocketManager.shared.send(message: message)
         }
@@ -87,8 +88,7 @@ class MarketsService: ExchangeMarketsAPI {
     private func subscribeToHeartBeat(completion: @escaping () -> Void) {
         let heartBeatDisposable = socketMessageObservable
             .filter { socketMessage in
-                // make sure it's a heartbeat
-                return true
+                return socketMessage.JSONMessage is HeartBeat
             }
             .take(1)
             .asSingle()
@@ -100,13 +100,11 @@ class MarketsService: ExchangeMarketsAPI {
     }
 
     private func authenticateSocket() {
-        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken().map { tokenResponse -> Auth in
-            let params = AuthParams(type: "auth", token: tokenResponse.token)
-            return Auth(channel: "auth", operation: "subscribe", params: params)
+        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken().map { tokenResponse -> Subscription<AuthSubscribeParams> in
+            let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
+            return Subscription(channel: "auth", operation: "subscribe", params: params)
             }.map { message in
-                return try message.encodeToString(encoding: .utf8)
-            }.map { encoded in
-                return SocketMessage(type: .exchange, JSONMessage: encoded)
+                return SocketMessage(type: .exchange, JSONMessage: message)
             }.map { socketMessage in
                 SocketManager.shared.send(message: socketMessage)
             }.subscribe()
