@@ -12,15 +12,22 @@ import RxSwift
 protocol ExchangeMarketsAPI {
     func setup()
     func authenticate(completion: @escaping () -> Void)
-    func fetchRates()
+    var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
     func updateConversion(model: MarketsModel)
-    var hasAuthenticated: Bool { get }
 }
 
-class MarketsService: ExchangeMarketsAPI {
-    private let authentication: KYCAuthenticationService
+class MarketsService {
     private var disposables: CompositeDisposable?
+
+    private var socketMessageObservable: Observable<SocketMessage> {
+        return SocketManager.shared.webSocketMessageObservable
+    }
+    private let restMessageSubject = PublishSubject<Conversion>()
+    private var dataSource: DataSource = .socket
+
+    private let authentication: KYCAuthenticationService
+    var hasAuthenticated: Bool = false
 
     init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
         self.authentication = service
@@ -29,50 +36,10 @@ class MarketsService: ExchangeMarketsAPI {
     deinit {
         disposables?.dispose()
     }
+}
 
-    // Two ways of retrieving data.
-    private enum DataSource {
-        case socket // Using websockets, which is the default dataSource
-        case rest // Using REST endpoints, which is the fallback dataSource
-    }
-    private var dataSource: DataSource = .socket
-
-    private var socketMessageObservable: Observable<SocketMessage> {
-        return SocketManager.shared.webSocketMessageObservable
-    }
-    private let restMessageSubject = PublishSubject<Conversion>()
-
-    var conversions: Observable<Conversion> {
-        switch dataSource {
-        case .socket:
-            return socketMessageObservable.filter {
-                $0.type == .exchange &&
-                $0.JSONMessage is Conversion
-            }.map { message in
-                return message.JSONMessage as! Conversion
-            }
-        case .rest:
-            return restMessageSubject.filter({ _ -> Bool in
-                return false
-            })
-        }
-    }
-    func updateConversion(model: MarketsModel) {
-        guard let pair = model.pair, let fiatCurrency = model.fiatCurrency else {
-            Logger.shared.error("Missing pair or fiat currency")
-            return
-        }
-        let params = ConversionSubscribeParams(
-            type: "pairs",
-            pair: pair.stringRepresentation,
-            fiatCurrency: fiatCurrency,
-            fix: model.fix,
-            volume: model.volume)
-        let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
-        let message = SocketMessage(type: .exchange, JSONMessage: quote)
-        SocketManager.shared.send(message: message)
-    }
-
+// MARK: - Setup
+extension MarketsService {
     func setup() {
         setupSocket()
     }
@@ -80,8 +47,20 @@ class MarketsService: ExchangeMarketsAPI {
     private func setupSocket() {
         SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
     }
+}
 
-    var hasAuthenticated: Bool = false
+// MARK: - Data sourcing
+private extension MarketsService {
+    // Two ways of retrieving data.
+    enum DataSource {
+        case socket // Using websockets, which is the default dataSource
+        case rest // Using REST endpoints, which is the fallback dataSource
+    }
+}
+
+// MARK: - Public API
+extension MarketsService: ExchangeMarketsAPI {
+    // MARK: - Authentication
     func authenticate(completion: @escaping () -> Void) {
         switch dataSource {
         case .socket: do {
@@ -92,7 +71,48 @@ class MarketsService: ExchangeMarketsAPI {
         }
     }
 
-    private func subscribeToHeartBeat(completion: @escaping () -> Void) {
+    // MARK: - Conversion
+    var conversions: Observable<Conversion> {
+        switch dataSource {
+        case .socket:
+            return socketMessageObservable.filter {
+                $0.type == .exchange &&
+                    $0.JSONMessage is Conversion
+                }.map { message in
+                    return message.JSONMessage as! Conversion
+            }
+        case .rest:
+            return restMessageSubject.filter({ _ -> Bool in
+                return false
+            })
+        }
+    }
+
+    func updateConversion(model: MarketsModel) {
+        guard let pair = model.pair, let fiatCurrency = model.fiatCurrency else {
+            Logger.shared.error("Missing pair or fiat currency")
+            return
+        }
+        switch dataSource {
+        case .socket:
+            let params = ConversionSubscribeParams(
+                type: "pairs",
+                pair: pair.stringRepresentation,
+                fiatCurrency: fiatCurrency,
+                fix: model.fix,
+                volume: model.volume)
+            let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
+            let message = SocketMessage(type: .exchange, JSONMessage: quote)
+            SocketManager.shared.send(message: message)
+        case .rest:
+            Logger.shared.debug("Not yet implemented")
+        }
+    }
+}
+
+// MARK: - Private API
+private extension MarketsService {
+    func subscribeToHeartBeat(completion: @escaping () -> Void) {
         let heartBeatDisposable = socketMessageObservable
             .filter { socketMessage in
                 return socketMessage.JSONMessage is HeartBeat
@@ -107,7 +127,7 @@ class MarketsService: ExchangeMarketsAPI {
         _ = disposables?.insert(heartBeatDisposable)
     }
 
-    private func authenticateSocket() {
+    func authenticateSocket() {
         let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken()
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
                 let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
@@ -119,21 +139,5 @@ class MarketsService: ExchangeMarketsAPI {
             }.subscribe()
 
         _ = disposables?.insert(authenticationDisposable)
-    }
-
-    func fetchRates() {
-        switch dataSource {
-        case .socket: do {
-            let message = Rate(parameterOne: "rate")
-            do {
-                let encoded = try message.encodeToString(encoding: .utf8)
-                let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)
-                SocketManager.shared.send(message: socketMessage)
-            } catch {
-                Logger.shared.error("Could not encode socket message")
-            }
-        }
-        case .rest: Logger.shared.debug("use REST endpoint")
-        }
     }
 }

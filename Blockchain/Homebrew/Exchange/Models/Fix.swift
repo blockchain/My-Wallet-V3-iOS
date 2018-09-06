@@ -8,6 +8,8 @@
 
 import Foundation
 
+// String that determines whether to read value as fiat or crypto
+// and whether the base or counter is designated
 enum Fix: String, Codable {
     case base
     case baseInFiat

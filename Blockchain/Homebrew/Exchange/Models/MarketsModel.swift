@@ -8,6 +8,7 @@
 
 import Foundation
 
+// State model for interacting with the MarketsService
 class MarketsModel {
     var pair: TradingPair?
     var fiatCurrency: String?
