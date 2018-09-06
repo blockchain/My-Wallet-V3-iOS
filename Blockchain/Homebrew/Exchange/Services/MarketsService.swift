@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 
 protocol ExchangeMarketsAPI {
+    func setup()
     func authenticate(completion: @escaping () -> Void)
     var pair: TradingPair? { get set }
     func fetchRates()
@@ -65,8 +66,12 @@ class MarketsService: ExchangeMarketsAPI {
         }
     }
 
-    func setupSocket() {
-        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.Nabu.quotes)!)
+    func setup() {
+        setupSocket()
+    }
+
+    private func setupSocket() {
+        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: "")!)
     }
 
     func authenticate(completion: @escaping () -> Void) {

@@ -21,7 +21,8 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
-    func authenticate() {
+    func load() {
+        markets.setup()
         markets.authenticate(completion: { [unowned self] in
             self.markets.pair = TradingPair(from: .bitcoin, to: .ethereum)!
         })
