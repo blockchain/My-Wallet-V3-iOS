@@ -134,8 +134,9 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
         switch type {
-        case "quote": Quote.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        case "conversion": Conversion.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
         case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        case "error": onError("Error returned")
         default: onError("Unsupported type")
         }
     }

@@ -52,7 +52,14 @@ class ExchangeCreateViewController: UIViewController {
     }
 
     fileprivate func dependenciesSetup() {
-        let interactor = ExchangeCreateInteractor(dependencies: dependencies)
+        let interactor = ExchangeCreateInteractor(
+            dependencies: dependencies,
+            model: MarketsModel(
+                pair: TradingPair(from: .ethereum,to: .bitcoinCash)!,
+                fiatCurrency: "USD",
+                fix: .base,
+                volume: 0
+        ))
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
         presenter.interface = self

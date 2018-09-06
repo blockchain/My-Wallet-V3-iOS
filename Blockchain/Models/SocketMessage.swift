@@ -69,9 +69,12 @@ struct AuthSubscribeParams: Codable {
     let type, token: String
 }
 
-struct QuoteSubscribeParams: Codable {
+struct ConversionSubscribeParams: Codable {
     let type: String
-    let pairs: [String]
+    let pair: String
+    let fiatCurrency: String
+    let fix: Fix
+    let volume: Double
 }
 
 // MARK: - Received Messages
@@ -88,35 +91,44 @@ struct HeartBeat: SocketMessageCodable {
     }
 }
 
-struct Quote: SocketMessageCodable {
-    typealias JSONType = Quote
+struct Conversion: SocketMessageCodable {
+    typealias JSONType = Conversion
 
     let sequenceNumber: Int
-    let pair: String
-    let quote: QuoteParams
-    let channel: String
-    let type: String
+    let channel, type, pair, fiatCurrency: String
+    let fix: Fix
+    let volume: Double
+    let currencyRatio: CurrencyRatio
 
-    private enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: CodingKey {
         case sequenceNumber
-        case pair
-        case quote
         case channel
         case type
+        case pair
+        case fiatCurrency
+        case fix
+        case volume
+        case currencyRatio
     }
 }
 
-struct QuoteParams: Codable {
-    let bestAsk: Double
-    let bestBid: Double
-    let askTiers: [Tier]
-    let bidTiers: [Tier]
-    let time: String
+struct CurrencyRatio: Codable {
+    let base: FiatCrypto
+    let counter: FiatCrypto
+    let baseToFiatRate: Double
+    let baseToCounterRate: Double
+    let counterToBaseRate: Double
+    let counterToFiatRate: Double
 }
 
-struct Tier: Codable {
-    let volume: Double
-    let price: Double
+struct FiatCrypto: Codable {
+    let fiat: SymbolValue
+    let crypto: SymbolValue
+}
+
+struct SymbolValue: Codable {
+    let symbol: String
+    let value: Double
 }
 
 struct Rate: SocketMessageCodable {

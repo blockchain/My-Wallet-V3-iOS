@@ -12,9 +12,10 @@ import RxSwift
 protocol ExchangeMarketsAPI {
     func setup()
     func authenticate(completion: @escaping () -> Void)
-    var pair: TradingPair? { get set }
     func fetchRates()
-    var rates: Observable<ExchangeRate> { get }
+    var conversions: Observable<Conversion> { get }
+    func updateConversion(model: MarketsModel)
+    var hasAuthenticated: Bool { get }
 }
 
 class MarketsService: ExchangeMarketsAPI {
@@ -36,35 +37,40 @@ class MarketsService: ExchangeMarketsAPI {
     }
     private var dataSource: DataSource = .socket
 
-    var pair: TradingPair? {
-        didSet {
-            let params = QuoteSubscribeParams(type: "pairs", pairs: [pair!.stringRepresentation])
-            let quote = Subscription(channel: "quotes", operation: "subscribe", params: params)
-            let message = SocketMessage(type: .exchange, JSONMessage: quote)
-            SocketManager.shared.send(message: message)
-        }
-    }
-
     private var socketMessageObservable: Observable<SocketMessage> {
         return SocketManager.shared.webSocketMessageObservable
     }
-    private let restMessageSubject = PublishSubject<ExchangeRate>()
+    private let restMessageSubject = PublishSubject<Conversion>()
 
-    var rates: Observable<ExchangeRate> {
+    var conversions: Observable<Conversion> {
         switch dataSource {
         case .socket:
             return socketMessageObservable.filter {
                 $0.type == .exchange &&
-                $0.JSONMessage is Quote
+                $0.JSONMessage is Conversion
             }.map { message in
-                // return message.JSONMessage as! Quote
-                return ExchangeRate(javaScriptValue: JSValue())!
+                return message.JSONMessage as! Conversion
             }
         case .rest:
             return restMessageSubject.filter({ _ -> Bool in
                 return false
             })
         }
+    }
+    func updateConversion(model: MarketsModel) {
+        guard let pair = model.pair, let fiatCurrency = model.fiatCurrency else {
+            Logger.shared.error("Missing pair or fiat currency")
+            return
+        }
+        let params = ConversionSubscribeParams(
+            type: "pairs",
+            pair: pair.stringRepresentation,
+            fiatCurrency: fiatCurrency,
+            fix: model.fix,
+            volume: model.volume)
+        let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
+        let message = SocketMessage(type: .exchange, JSONMessage: quote)
+        SocketManager.shared.send(message: message)
     }
 
     func setup() {
@@ -75,6 +81,7 @@ class MarketsService: ExchangeMarketsAPI {
         SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
     }
 
+    var hasAuthenticated: Bool = false
     func authenticate(completion: @escaping () -> Void) {
         switch dataSource {
         case .socket: do {
@@ -92,7 +99,8 @@ class MarketsService: ExchangeMarketsAPI {
             }
             .take(1)
             .asSingle()
-            .subscribe(onSuccess: { _ in
+            .subscribe(onSuccess: { [unowned self] _ in
+                self.hasAuthenticated = true
                 completion()
             })
 
@@ -100,9 +108,10 @@ class MarketsService: ExchangeMarketsAPI {
     }
 
     private func authenticateSocket() {
-        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken().map { tokenResponse -> Subscription<AuthSubscribeParams> in
-            let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
-            return Subscription(channel: "auth", operation: "subscribe", params: params)
+        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken()
+            .map { tokenResponse -> Subscription<AuthSubscribeParams> in
+                let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
+                return Subscription(channel: "auth", operation: "subscribe", params: params)
             }.map { message in
                 return SocketMessage(type: .exchange, JSONMessage: message)
             }.map { socketMessage in
