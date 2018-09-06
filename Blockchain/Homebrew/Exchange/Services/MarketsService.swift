@@ -115,7 +115,7 @@ class MarketsService: ExchangeMarketsAPI {
     func fetchRates() {
         switch dataSource {
         case .socket: do {
-            let message = Quote(parameterOne: "parameterOne")
+            let message = Rate(parameterOne: "rate")
             do {
                 let encoded = try message.encodeToString(encoding: .utf8)
                 let socketMessage = SocketMessage(type: .exchange, JSONMessage: encoded)

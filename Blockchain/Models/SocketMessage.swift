@@ -26,7 +26,7 @@ protocol SocketMessageCodable: Codable {
     static func tryToDecode(
         data: Data,
         onSuccess: (SocketMessage) -> Void,
-        onError: () -> Void
+        onError: (String) -> Void
     )
 }
 
@@ -34,7 +34,7 @@ extension SocketMessageCodable {
     static func tryToDecode(
         data: Data,
         onSuccess: (SocketMessage) -> Void,
-        onError: () -> Void
+        onError: (String) -> Void
     ) {
         do {
             let decoded = try JSONType.decode(data: data)
@@ -42,7 +42,7 @@ extension SocketMessageCodable {
             onSuccess(socketMessage)
             return
         } catch {
-            onError()
+            onError("Could not decode")
         }
     }
 }
@@ -91,11 +91,32 @@ struct HeartBeat: SocketMessageCodable {
 struct Quote: SocketMessageCodable {
     typealias JSONType = Quote
 
-    let parameterOne: String
+    let sequenceNumber: Int
+    let pair: String
+    let quote: QuoteParams
+    let channel: String
+    let type: String
 
     private enum CodingKeys: String, CodingKey {
-        case parameterOne
+        case sequenceNumber
+        case pair
+        case quote
+        case channel
+        case type
     }
+}
+
+struct QuoteParams: Codable {
+    let bestAsk: Double
+    let bestBid: Double
+    let askTiers: [Tier]
+    let bidTiers: [Tier]
+    let time: String
+}
+
+struct Tier: Codable {
+    let volume: Double
+    let price: Double
 }
 
 struct Rate: SocketMessageCodable {

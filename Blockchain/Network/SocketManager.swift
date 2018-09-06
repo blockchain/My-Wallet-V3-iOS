@@ -109,8 +109,8 @@ extension SocketManager: WebSocketAdvancedDelegate {
     }
 
     func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
-        let onError: () -> Void = {
-            Logger.shared.error("Could not form SocketMessage object from string")
+        let onError: (String) -> Void = { message in
+            Logger.shared.error("Could not form SocketMessage object from string: \(message)")
         }
 
         let onSuccess: (SocketMessage) -> Void = { socketMessage in
@@ -118,15 +118,26 @@ extension SocketManager: WebSocketAdvancedDelegate {
         }
 
         guard let data = text.data(using: .utf8) else {
-            onError()
+            onError("Couldn't form data from string")
             return
         }
 
-        HeartBeat.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        // TODO: figure out a way to minimize computation here, such as by decoding to JSON type first and inspecting a certain key-value pair
-//        Quote.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-//        Rate.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        // more structs of type SocketMessageCodable...
+        guard let json = try? JSONSerialization.jsonObject(with: data) as! [String: AnyObject] else {
+            onError("Couldn't create JSON object from data")
+            return
+        }
+
+        guard let type = json["type"] as? String else {
+            onError("Type is not a string value")
+            return
+        }
+
+        // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
+        switch type {
+        case "quote": Quote.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        default: onError("Unsupported type")
+        }
     }
 
     func websocketDidDisconnect(socket: WebSocket, error: Error?) {
