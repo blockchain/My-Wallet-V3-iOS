@@ -225,7 +225,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         // TODO: remove item
         case .kyc:
             // TODO: Do not merge into `dev`.
-            // Debugging only. 
+            // Debugging only.
             let controller = ExchangeDetailViewController.make(with: .locked(Trade.demo()))
             let navController = UINavigationController(rootViewController: controller)
             UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(

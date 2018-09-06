@@ -17,6 +17,7 @@ class PlainCell: ExchangeDetailCell {
     
     @IBOutlet fileprivate var subject: UILabel!
     @IBOutlet fileprivate var descriptionLabel: UILabel!
+    @IBOutlet fileprivate var statusImageView: UIImageView!
     
     // MARK: Overrides
     
@@ -28,8 +29,9 @@ class PlainCell: ExchangeDetailCell {
         descriptionLabel.text = payload.value
         subject.font = payload.bold ? PlainCell.mediumFont() : PlainCell.standardFont()
         descriptionLabel.font = payload.bold ? PlainCell.mediumFont() : PlainCell.standardFont()
-        
+        backgroundColor = payload.backgroundColor
         subject.textColor = payload.bold ? .darkGray : #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1)
+        statusImageView.alpha = payload.statusVisibility.defaultAlpha
     }
     
     override class func heightForProposedWidth(_ width: CGFloat, model: ExchangeCellModel) -> CGFloat {

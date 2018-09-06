@@ -167,6 +167,36 @@ class TradingPairView: NibBasedView {
 
 extension TradingPairView {
     
+    static func exchangeLockedModel(for trade: Trade) -> Model {
+        let fromAsset = trade.pair.from
+        let toAsset = trade.pair.to
+        
+        let transitionUpdate = TradingTransitionUpdate(
+            transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
+                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .titles(left: "123 BTC", right: "123 ETH")
+            ],
+            transition: .none
+        )
+        
+        let presentationUpdate = TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                .leftStatusVisibility(.hidden),
+                .rightStatusVisibility(.hidden),
+                .swapTintColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+                .titleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+            ],
+            animation: .none
+        )
+        
+        let model = Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        return model
+    }
+    
     static func confirmationModel(for trade: Trade) -> Model {
         
         let fromAsset = trade.pair.from

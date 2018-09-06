@@ -30,18 +30,27 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5.668586 ETH" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bHQ-2I-DWr">
-                        <rect key="frame" x="85" y="15" width="379" height="20"/>
+                        <rect key="frame" x="353.5" y="15" width="110.5" height="20"/>
                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-StatusDot" translatesAutoresizingMaskIntoConstraints="NO" id="S4B-a6-Y1K">
+                        <rect key="frame" x="341" y="21" width="8" height="8"/>
+                        <color key="tintColor" red="0.0" green="0.66000000000000003" blue="0.42999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="8" id="dcN-mT-Bx7"/>
+                            <constraint firstAttribute="height" constant="8" id="klQ-CH-0XY"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
             </view>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="bHQ-2I-DWr" firstAttribute="leading" secondItem="cwq-wf-eG2" secondAttribute="trailing" priority="750" constant="8" id="5uf-8g-4Ob"/>
+                <constraint firstItem="S4B-a6-Y1K" firstAttribute="centerY" secondItem="bHQ-2I-DWr" secondAttribute="centerY" id="1L7-Fb-DXr"/>
                 <constraint firstItem="cwq-wf-eG2" firstAttribute="leading" secondItem="An4-ti-8es" secondAttribute="leading" constant="16" id="BKG-ad-ALL"/>
                 <constraint firstAttribute="trailing" secondItem="bHQ-2I-DWr" secondAttribute="trailing" constant="16" id="UWl-4X-6bl"/>
+                <constraint firstItem="bHQ-2I-DWr" firstAttribute="leading" secondItem="S4B-a6-Y1K" secondAttribute="trailing" constant="4" id="ocM-MH-Vus"/>
                 <constraint firstItem="bHQ-2I-DWr" firstAttribute="centerY" secondItem="5LF-w3-Spa" secondAttribute="centerY" id="oiN-xt-TVB"/>
                 <constraint firstItem="cwq-wf-eG2" firstAttribute="centerY" secondItem="5LF-w3-Spa" secondAttribute="centerY" id="ooY-qZ-Y1v"/>
             </constraints>
@@ -49,9 +58,13 @@
             <size key="customSize" width="480" height="50"/>
             <connections>
                 <outlet property="descriptionLabel" destination="bHQ-2I-DWr" id="W8w-g1-IUY"/>
+                <outlet property="statusImageView" destination="S4B-a6-Y1K" id="pQv-LK-8pt"/>
                 <outlet property="subject" destination="cwq-wf-eG2" id="HYL-XR-ca3"/>
             </connections>
             <point key="canvasLocation" x="205" y="-120"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="Icon-StatusDot" width="8" height="8"/>
+    </resources>
 </document>

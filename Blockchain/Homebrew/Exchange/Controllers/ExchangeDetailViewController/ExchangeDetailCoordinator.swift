@@ -98,7 +98,7 @@ class ExchangeDetailCoordinator: NSObject {
                 interface?.navigationBarVisibility(.hidden)
                 
                 let pair = ExchangeCellModel.TradingPair(
-                    model: TradingPairView.confirmationModel(for: trade)
+                    model: TradingPairView.exchangeLockedModel(for: trade)
                 )
                 
                 let value = ExchangeCellModel.Plain(
@@ -128,7 +128,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let attributedText = NSAttributedString(
                     string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratMedium, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
+                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
                 

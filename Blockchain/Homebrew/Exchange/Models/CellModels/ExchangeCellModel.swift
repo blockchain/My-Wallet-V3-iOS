@@ -17,11 +17,15 @@ enum ExchangeCellModel {
     struct Plain {
         let description: String
         let value: String
+        let backgroundColor: UIColor
+        let statusVisibility: Visibility
         let bold: Bool
         
-        init(description: String, value: String, bold: Bool = false) {
+        init(description: String, value: String, backgroundColor: UIColor = .white, statusVisibility: Visibility = .hidden, bold: Bool = false) {
             self.description = description
             self.value = value
+            self.backgroundColor = backgroundColor
+            self.statusVisibility = statusVisibility
             self.bold = bold
         }
     }
