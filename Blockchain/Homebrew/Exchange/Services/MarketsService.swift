@@ -71,7 +71,7 @@ class MarketsService: ExchangeMarketsAPI {
     }
 
     private func setupSocket() {
-        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: "")!)
+        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
     }
 
     func authenticate(completion: @escaping () -> Void) {
