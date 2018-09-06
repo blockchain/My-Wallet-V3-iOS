@@ -11,7 +11,7 @@ import RxSwift
 enum KYCEvent {
 
     /// When a particular screen appears, we need to
-    /// look at the `KYCUser` object and determine if
+    /// look at the `NabuUser` object and determine if
     /// there is data there for pre-populate the screen with.
     case pageWillAppear(KYCPageType)
 
@@ -49,7 +49,7 @@ protocol KYCCoordinatorDelegate: class {
 
     // MARK: - Private Properties
 
-    private(set) var user: KYCUser?
+    private(set) var user: NabuUser?
 
     private(set) var country: KYCCountry?
 
@@ -78,7 +78,7 @@ protocol KYCCoordinatorDelegate: class {
 
     @objc func start(from viewController: UIViewController) {
         if user == nil {
-            disposable = BlockchainDataRepository.shared.kycUser
+            disposable = BlockchainDataRepository.shared.nabuUser
                 .subscribeOn(MainScheduler.asyncInstance)
                 .observeOn(MainScheduler.instance)
                 .subscribe(onSuccess: { [unowned self] in

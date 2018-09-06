@@ -35,10 +35,10 @@ class RatesService: RatesAPI {
         case generic
     }
     
-    private let authentication: KYCAuthenticationService
+    private let authentication: NabuAuthenticationService
     private var disposable: Disposable?
     
-    init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
         self.authentication = service
     }
     
@@ -84,7 +84,7 @@ class RatesService: RatesAPI {
                 return .error(RatesAPIError.generic)
         }
         
-        return authentication.getKycSessionToken().flatMap { token in
+        return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.GET(
                 url: endpoint,
                 body: nil,
@@ -108,7 +108,7 @@ class RatesService: RatesAPI {
                 return .error(RatesAPIError.generic)
         }
         
-        return authentication.getKycSessionToken().flatMap { token in
+        return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.GET(
                 url: endpoint,
                 body: nil,

@@ -65,7 +65,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
 
     fileprivate var locationCoordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
-    private var user: KYCUser?
+    private var user: NabuUser?
     private var country: KYCCountry?
 
     // MARK: KYCCoordinatorDelegate

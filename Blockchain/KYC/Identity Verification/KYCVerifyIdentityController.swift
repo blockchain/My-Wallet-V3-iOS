@@ -117,7 +117,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             return
         }
 
-        disposable = BlockchainDataRepository.shared.fetchKycUser().flatMap { [unowned self] user in
+        disposable = BlockchainDataRepository.shared.fetchNabuUser().flatMap { [unowned self] user in
             return self.onfidoService.createUserAndCredentials(user: user)
         }.subscribeOn(MainScheduler.asyncInstance).observeOn(MainScheduler.instance).subscribe(onSuccess: { (onfidoUser, token) in
             self.launchOnfidoController(documentType, onfidoUser, token)

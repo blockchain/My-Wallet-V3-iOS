@@ -13,7 +13,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     // MARK: Properties
 
-    private var user: KYCUser?
+    private var user: NabuUser?
 
     // MARK: BottomButtonContainerView
 

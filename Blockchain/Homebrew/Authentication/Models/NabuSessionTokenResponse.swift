@@ -1,5 +1,5 @@
 //
-//  KYCSessionTokenResponse.swift
+//  NabuSessionTokenResponse.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 8/15/18.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// Model encapsulating the network response from the `/auth` endpoint.
-struct KYCSessionTokenResponse: Decodable {
+struct NabuSessionTokenResponse: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case identifier = "id"

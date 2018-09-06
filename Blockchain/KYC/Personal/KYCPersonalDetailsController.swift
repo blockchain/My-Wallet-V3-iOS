@@ -43,7 +43,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     fileprivate var detailsCoordinator: PersonalDetailsCoordinator!
 
-    private var user: KYCUser?
+    private var user: NabuUser?
 
     // MARK: Overrides
 

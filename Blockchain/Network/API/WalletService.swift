@@ -71,10 +71,10 @@ import RxSwift
         let appSettings = BlockchainSettings.App.shared
 
         guard let walletGuid = appSettings.guid else {
-            return Single.error(KYCAuthenticationError.invalidGuid)
+            return Single.error(NabuAuthenticationError.invalidGuid)
         }
         guard let sharedKey = appSettings.sharedKey else {
-            return Single.error(KYCAuthenticationError.invalidSharedKey)
+            return Single.error(NabuAuthenticationError.invalidSharedKey)
         }
 
         let requestPayload = SignedRetailTokenRequest(
@@ -85,7 +85,7 @@ import RxSwift
         guard let baseUrl = URL(string: BlockchainAPI.shared.signedRetailTokenUrl),
             let url = URL.endpoint(baseUrl, pathComponents: nil, queryParameters: requestPayload.toDictionary),
             let urlRequest = try? URLRequest(url: url, method: .get) else {
-                return Single.error(KYCAuthenticationError.invalidUrl)
+                return Single.error(NabuAuthenticationError.invalidUrl)
         }
 
         // Initiate request

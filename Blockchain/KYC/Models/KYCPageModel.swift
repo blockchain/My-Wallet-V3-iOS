@@ -9,8 +9,8 @@
 import Foundation
 
 enum KYCPageModel {
-    case personalDetails(KYCUser)
-    case address(KYCUser, KYCCountry)
-    case phone(KYCUser)
+    case personalDetails(NabuUser)
+    case address(NabuUser, KYCCountry)
+    case phone(NabuUser)
     case verifyIdentity(KYCCountry)
 }

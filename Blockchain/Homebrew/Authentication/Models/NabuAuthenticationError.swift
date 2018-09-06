@@ -1,5 +1,5 @@
 //
-//  KYCAuthenticationError.swift
+//  NabuAuthenticationError.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 8/23/18.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// Enumerates errors that can occur during the KYC authentication flow
-enum KYCAuthenticationError: Error {
+/// Enumerates errors that can occur during the Nabu authentication flow
+enum NabuAuthenticationError: Error {
     case invalidUrl
 
     case invalidGuid

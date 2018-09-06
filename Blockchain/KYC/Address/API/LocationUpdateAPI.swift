@@ -30,7 +30,7 @@ class LocationUpdateService: NSObject, LocationUpdateAPI {
     }
 
     func updateAddress(address: UserAddress, with completion: @escaping LocationUpdateCompletion) {
-        disposable = KYCAuthenticationService.shared.getKycSessionToken().flatMapCompletable { token in
+        disposable = NabuAuthenticationService.shared.getSessionToken().flatMapCompletable { token in
             let headers = [HttpHeaderField.authorization: token.token]
             let payload = KYCUpdateAddressRequest(address: address)
             return KYCNetworkRequest.request(

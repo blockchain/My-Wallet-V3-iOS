@@ -12,12 +12,12 @@ import RxSwift
 class KYCVerifyPhoneNumberInteractor {
 
     private let phoneNumberKit = PhoneNumberKit()
-    private let authenticationService: KYCAuthenticationService
+    private let authenticationService: NabuAuthenticationService
     private let wallet: Wallet
     private let walletService: WalletService
 
     init(
-        authenticationService: KYCAuthenticationService = KYCAuthenticationService.shared,
+        authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared,
         wallet: Wallet = WalletManager.shared.wallet,
         walletService: WalletService = WalletService.shared
     ) {
@@ -61,11 +61,11 @@ class KYCVerifyPhoneNumberInteractor {
     }
 
     private func updateWalletInfo() -> Completable {
-        let sessionTokenSingle = authenticationService.getKycSessionToken()
+        let sessionTokenSingle = authenticationService.getSessionToken()
         let signedRetailToken = walletService.getSignedRetailToken()
         return Single.zip(sessionTokenSingle, signedRetailToken, resultSelector: {
             return ($0, $1)
-        }).flatMap { (sessionToken, signedRetailToken) -> Single<KYCUser> in
+        }).flatMap { (sessionToken, signedRetailToken) -> Single<NabuUser> in
 
             // Error checking
             guard signedRetailToken.success else {
@@ -83,7 +83,7 @@ class KYCVerifyPhoneNumberInteractor {
                 put: .updateWalletInformation,
                 parameters: payload,
                 headers: headers,
-                type: KYCUser.self
+                type: NabuUser.self
             )
         }.do(onSuccess: { user in
             Logger.shared.debug("""
