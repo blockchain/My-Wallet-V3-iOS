@@ -744,7 +744,11 @@ extension SettingsTableViewController: MobileNumberDelegate {
         }, error: { [weak self] in
             viewController?.reload()
             self?.isEnablingTwoStepSMS = false
-            self?.verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber: viewController)
+            if let settingsNavController = self?.navigationController as? SettingsNavigationController {
+                settingsNavController.onDismissViewController = {
+                    self?.verifyMobileNumberViewControllerAlertUser(toVerifyMobileNumber: viewController)
+                }
+            }
         })
     }
 }
