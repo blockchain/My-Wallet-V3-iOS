@@ -6,9 +6,9 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import UIKit
 import Onfido
 import RxSwift
+import UIKit
 
 /// Account verification screen in KYC flow
 final class KYCVerifyIdentityController: KYCBaseViewController {
@@ -102,7 +102,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             .withToken(providerCredentials.key)
             .withApplicantId(onfidoUser.identifier)
             .withDocumentStep(ofType: document, andCountryCode: country.code)
-            .withFaceStep(ofVariant: .photo) // specify the face capture variant here
+            .withFaceStep(ofVariant: .video)
             .build()
         return config
     }
@@ -125,6 +125,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             Logger.shared.error("Failed to get onfido user and credentials. Error: \(error.localizedDescription)")
         })
     }
+
     /// Begins identity verification and presents the view
     ///
     /// - Parameters:
@@ -150,6 +151,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             return
         }
         let onfidoController = OnfidoController(config: currentConfig)
+        onfidoController.user = user
         onfidoController.delegate = self
         onfidoController.modalPresentationStyle = .overCurrentContext
         self.present(onfidoController, animated: true)
@@ -177,6 +179,11 @@ extension KYCVerifyIdentityController: OnfidoControllerDelegate {
 
     func onOnfidoControllerSuccess(_ onfidoController: OnfidoController) {
         onfidoController.dismiss(animated: true)
-        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
+        _ = onfidoService.submitVerification(onfidoController.user)
+            .subscribe(onCompleted: { [unowned self] in
+                self.coordinator.handle(event: .nextPageFromPageType(self.pageType, nil))
+            }, onError: { error in
+                Logger.shared.error("Failed to submit verification \(error.localizedDescription)")
+            })
     }
 }
