@@ -6,7 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-class ExchangeDetailCell: UITableViewCell {
+class ExchangeDetailCell: UICollectionViewCell {
     
     func configure(with model: ExchangeCellModel) {
         assertionFailure("Should be implemented by subclasses")

@@ -24,10 +24,12 @@ class ExchangeDetailViewController: UIViewController {
     
     // MARK: Private IBOutlets
     
-    @IBOutlet fileprivate var tableView: UITableView!
+    @IBOutlet fileprivate var collectionView: UICollectionView!
+    @IBOutlet fileprivate var layout: UICollectionViewFlowLayout!
     
     // MARK: Private Properties
     
+    fileprivate let layoutAttributes: LayoutAttributes = .exchangeDetail
     fileprivate var model: PageModel!
     fileprivate var cellModels: [ExchangeCellModel]?
     fileprivate var reuseIdentifiers: Set<String> = []
@@ -38,77 +40,168 @@ class ExchangeDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         coordinator = ExchangeDetailCoordinator(delegate: self, interface: self)
-        coordinator.handle(event: .pageAppeared(model))
+        setupLayout()
+        coordinator.handle(event: .pageLoaded(model))
+    }
+    
+    fileprivate func setupLayout() {
+        guard let layout = layout else { return }
+        
+        layout.sectionInset = layoutAttributes.sectionInsets
+        layout.minimumLineSpacing = layoutAttributes.minimumLineSpacing
+        layout.minimumInteritemSpacing = layoutAttributes.minimumInterItemSpacing
     }
     
     fileprivate func registerCells() {
-        tableView.delegate = self
-        tableView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         cellModels?.forEach({ (cellModel) in
             let reuse = cellModel.reuseIdentifier
             if !reuseIdentifiers.contains(reuse) {
                 let nib = UINib.init(nibName: reuse, bundle: nil)
-                tableView.register(nib, forCellReuseIdentifier: reuse)
+                collectionView.register(nib, forCellWithReuseIdentifier: reuse)
                 reuseIdentifiers.insert(reuse)
             }
         })
     }
+    
+    fileprivate func registerSupplementaryViews() {
+        guard let page = model else { return }
+        switch page {
+        case .confirm:
+            break
+        case .locked:
+            let headerNib = UINib(nibName: ExchangeLockedHeaderView.identifier, bundle: nil)
+            collectionView.register(
+                headerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
+                withReuseIdentifier: ExchangeLockedHeaderView.identifier
+            )
+            
+            let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
+            collectionView.register(
+                footerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                withReuseIdentifier: ActionableFooterView.identifier
+            )
+            
+        case .overview:
+            break
+        }
+    }
 }
 
-extension ExchangeDetailViewController: UITableViewDataSource {
+extension ExchangeDetailViewController: UICollectionViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellModels?.count ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let items = cellModels else { return UITableViewCell() }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let items = cellModels else { return UICollectionViewCell() }
         let item = items[indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: item.reuseIdentifier, for: indexPath) as? ExchangeDetailCell else { return UITableViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.reuseIdentifier, for: indexPath) as? ExchangeDetailCell else { return UICollectionViewCell() }
         cell.configure(with: item)
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO (Nothing)
-    }
 }
 
-extension ExchangeDetailViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let items = cellModels else { return tableView.estimatedRowHeight }
-        guard items.count > indexPath.row else { return 0.0 }
-        let item = items[indexPath.row]
-        let cellType = item.cellType()
-        return cellType.heightForProposedWidth(
-            tableView.bounds.width,
-            model: item
-        )
+extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let models = cellModels else { return .zero }
+        let model = models[indexPath.row]
+        let width = collectionView.bounds.size.width - layoutAttributes.sectionInsets.left - layoutAttributes.sectionInsets.right
+        let height = model.heightForProposed(width: width)
+        return CGSize(width: width, height: height)
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let page = model else { return UICollectionReusableView() }
+        switch page {
+        case .confirm:
+            return UICollectionReusableView()
+        case .locked:
+            switch kind {
+            case UICollectionElementKindSectionHeader:
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionElementKindSectionHeader,
+                    withReuseIdentifier: ExchangeLockedHeaderView.identifier,
+                    for: indexPath
+                    ) as? ExchangeLockedHeaderView else { return UICollectionReusableView() }
+                header.closeTapped = { [weak self] in
+                    guard let this = self else { return }
+                    this.dismiss(animated: true, completion: nil)
+                }
+                
+                return header
+            case UICollectionElementKindSectionFooter:
+                guard let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionElementKindSectionFooter,
+                    withReuseIdentifier: ActionableFooterView.identifier,
+                    for: indexPath
+                    ) as? ActionableFooterView else { return UICollectionReusableView() }
+                footer.title = LocalizationConstants.Exchange.done
+                
+                return footer
+            default:
+                return UICollectionReusableView()
+            }
+        case .overview:
+            return UICollectionReusableView()
+        }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let page = model else { return .zero }
+        switch page {
+        case .confirm:
+            return .zero
+        case .locked:
+            return CGSize(
+                width: collectionView.bounds.width,
+                height: ExchangeLockedHeaderView.estimatedHeight()
+            )
+        case .overview:
+            return .zero
+        }
+    }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0.0
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard let page = model else { return .zero }
+        switch page {
+        case .confirm:
+            return .zero
+        case .locked:
+            return CGSize(
+                width: collectionView.bounds.width,
+                height: ActionableFooterView.height()
+            )
+        case .overview:
+            return .zero
+        }
     }
 }
 
 extension ExchangeDetailViewController: ExchangeDetailCoordinatorDelegate {
     func coordinator(_ detailCoordinator: ExchangeDetailCoordinator, updated models: [ExchangeCellModel]) {
+        cellModels = models
         registerCells()
-        tableView.reloadData()
+        registerSupplementaryViews()
+        collectionView.reloadData()
     }
 }
 
 extension ExchangeDetailViewController: ExchangeDetailInterface {
+    func navigationBarVisibility(_ visibility: Visibility) {
+        guard let navController = navigationController else { return }
+        navController.setNavigationBarHidden(visibility.isHidden, animated: false)
+    }
+    
     func updateBackgroundColor(_ color: UIColor) {
         view.backgroundColor = color
     }
@@ -118,6 +211,6 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
     }
     
     func updateTitle(_ value: String) {
-        title = value
+        navigationItem.title = value
     }
 }

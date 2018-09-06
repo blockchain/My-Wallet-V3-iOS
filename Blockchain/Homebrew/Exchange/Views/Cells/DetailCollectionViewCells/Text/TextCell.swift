@@ -28,7 +28,7 @@ class TextCell: ExchangeDetailCell {
         guard case let .text(payload) = model else { return 0.0 }
         
         let height = payload.attributedString.heightForWidth(width: width - horizontalPadding)
-        return height
+        return height + verticalPadding
     }
     
 }

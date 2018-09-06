@@ -50,4 +50,11 @@ extension ExchangeCellModel {
             return TradingPairCell.self
         }
     }
+    
+    func heightForProposed(width: CGFloat) -> CGFloat {
+        return cellType().heightForProposedWidth(
+            width,
+            model: self
+        )
+    }
 }

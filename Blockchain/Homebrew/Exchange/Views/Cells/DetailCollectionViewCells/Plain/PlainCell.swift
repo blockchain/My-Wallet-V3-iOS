@@ -1,5 +1,5 @@
 //
-//  PlainDetailTableViewCell.swift
+//  PlainCell.swift
 //  Blockchain
 //
 //  Created by Alex McGregor on 9/5/18.
@@ -11,7 +11,7 @@ class PlainCell: ExchangeDetailCell {
     // MARK: Private Static Properties
     
     static fileprivate let horizontalPadding: CGFloat = 32.0
-    static fileprivate let verticalPadding: CGFloat = 8.0
+    static fileprivate let verticalPadding: CGFloat = 32.0
     
     // MARK: Private IBOutlets
     

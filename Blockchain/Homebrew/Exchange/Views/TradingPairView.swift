@@ -26,6 +26,7 @@ class TradingPairView: NibBasedView {
     
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
+        case titleColor(UIColor)
         case leftStatusVisibility(Visibility)
         case rightStatusVisibility(Visibility)
         case backgroundColors(left: UIColor, right: UIColor)
@@ -125,6 +126,10 @@ class TradingPairView: NibBasedView {
     
     fileprivate func handle(_ update: ViewUpdate) {
         switch update {
+        case .titleColor(let color):
+            exchangeLabel.textColor = color
+            receiveLabel.textColor = color
+            
         case .statusTintColor(let color):
             rightIconStatusImageView.tintColor = color
             leftIconStatusImageView.tintColor = color
@@ -180,7 +185,8 @@ extension TradingPairView {
                 .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
                 .leftStatusVisibility(.hidden),
                 .rightStatusVisibility(.hidden),
-                .swapTintColor(.brandPrimary)
+                .swapTintColor(.brandPrimary),
+                .titleColor(.brandPrimary)
             ],
             animation: .none
         )

@@ -15,7 +15,7 @@ protocol ExchangeDetailCoordinatorDelegate: class {
 class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
-        case pageAppeared(ExchangeDetailViewController.PageModel)
+        case pageLoaded(ExchangeDetailViewController.PageModel)
     }
     
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
@@ -32,7 +32,7 @@ class ExchangeDetailCoordinator: NSObject {
     
     func handle(event: Event) {
         switch event {
-        case .pageAppeared(let model):
+        case .pageLoaded(let model):
             
             var cellModels: [ExchangeCellModel] = []
             
@@ -67,7 +67,15 @@ class ExchangeDetailCoordinator: NSObject {
                     value: "My Wallet"
                 )
                 
-                let attributedText = NSAttributedString(string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.")
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let attributedText = NSAttributedString(
+                    string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
+                    attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
+                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratMedium, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
+                                 NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                )
                 
                 let text = ExchangeCellModel.Text(
                     attributedString: attributedText
@@ -84,9 +92,61 @@ class ExchangeDetailCoordinator: NSObject {
                 )
                 
                 delegate?.coordinator(self, updated: cellModels)
-            case .locked:
-                // TODO
-                break
+            case .locked(let trade):
+                interface?.updateBackgroundColor(.brandPrimary)
+                interface?.updateTitle(LocalizationConstants.Exchange.exchangeLocked)
+                interface?.navigationBarVisibility(.hidden)
+                
+                let pair = ExchangeCellModel.TradingPair(
+                    model: TradingPairView.confirmationModel(for: trade)
+                )
+                
+                let value = ExchangeCellModel.Plain(
+                    description: "Value",
+                    value: "$1,624.50"
+                )
+                
+                let fees = ExchangeCellModel.Plain(
+                    description: "Fees",
+                    value: "0.000414 BTC"
+                )
+                
+                let receive = ExchangeCellModel.Plain(
+                    description: "Receive",
+                    value: "5.668586 ETH",
+                    bold: true
+                )
+                
+                let sendTo = ExchangeCellModel.Plain(
+                    description: "Send to",
+                    value: "My Wallet"
+                )
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let attributedText = NSAttributedString(
+                    string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
+                    attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratMedium, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
+                                 NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                )
+                
+                let text = ExchangeCellModel.Text(
+                    attributedString: attributedText
+                )
+                
+                cellModels.append(contentsOf: [
+                    .tradingPair(pair),
+                    .plain(value),
+                    .plain(fees),
+                    .plain(receive),
+                    .plain(sendTo),
+                    .text(text)
+                    ]
+                )
+                
+                delegate?.coordinator(self, updated: cellModels)
             case .overview:
                 // TODO
                 break
