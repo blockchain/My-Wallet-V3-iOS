@@ -49,29 +49,15 @@ class KYCVerifyPhoneNumberInteractor {
     /// then sent to Nabu.
     ///
     /// - Parameters:
-    ///   - number: the number to verify
     ///   - code: the code sent to the mobile number
     /// - Returns: a Completable which completes if the verification process succeeds
     ///            otherwise, it will emit an error.
-    func verify(number: String, code: String) -> Completable {
-        do {
-            // Sequence of operations when verifying the mobile number:
-            // 1. verify phone number on the user's wallet
-            // 2. obtain a JWT token from the user's wallet
-            // 3. send the JWT token to Nabu
-            let phoneNumber = try self.phoneNumberKit.parse(number)
-            let formattedPhoneNumber = self.phoneNumberKit.format(phoneNumber, toType: .e164)
-
-            Logger.shared.debug("Verifying number: '\(formattedPhoneNumber)' with code: '\(code)'")
-
-            return wallet.verifyMobileNumber(
-                code
-            ).andThen(
-                updateWalletInfo()
-            )
-        } catch {
-            return Completable.error(error)
-        }
+    func verifyNumber(with code: String) -> Completable {
+        return wallet.verifyMobileNumber(
+            code
+        ).andThen(
+            updateWalletInfo()
+        )
     }
 
     private func updateWalletInfo() -> Completable {

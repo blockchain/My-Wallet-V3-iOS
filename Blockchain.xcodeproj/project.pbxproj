@@ -511,6 +511,7 @@
 		AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
 		AA2F121E21405BE6006B1FC1 /* JSContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */; };
 		AA2F121F21405BE6006B1FC1 /* JSContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */; };
+		AA2F122C2140A92E006B1FC1 /* JSContext+HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F122A2140A92E006B1FC1 /* JSContext+HelpersTests.swift */; };
 		AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7B52098DA5200FE6268 /* AlertViewPresenter+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */; };
 		AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
@@ -2992,6 +2993,7 @@
 		AA2BA64320DC754600F01954 /* BitcoinAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAddressTests.swift; sourceTree = "<group>"; };
 		AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReceiveAddressView.swift; sourceTree = "<group>"; };
 		AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSContext+Helpers.swift"; sourceTree = "<group>"; };
+		AA2F122A2140A92E006B1FC1 /* JSContext+HelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSContext+HelpersTests.swift"; sourceTree = "<group>"; };
 		AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentity.storyboard; sourceTree = "<group>"; };
 		AA31A7B32098DA4800FE6268 /* AlertViewPresenter+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertViewPresenter+Wallet.swift"; sourceTree = "<group>"; };
 		AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuItem.swift; sourceTree = "<group>"; };
@@ -3805,8 +3807,6 @@
 		5194359F208E61F3001EF882 /* BlockchainTests */ = {
 			isa = PBXGroup;
 			children = (
-				3AB4D8EB212F1FEB004F0160 /* DateFormatterTests */,
-				3A019120212DF0C800AED2BF /* Operations */,
 				519435A2208E61F3001EF882 /* Info.plist */,
 				51C2ADD320BDD3EA00D66108 /* AddressValidatorTests.swift */,
 				519435A0208E61F3001EF882 /* BlockchainTests.swift */,
@@ -3814,12 +3814,15 @@
 				C74FEA2520979259007CAB5D /* JSContextWithDOMTests.swift */,
 				AA94966120CB611F00A9C2DD /* Addresses */,
 				AACE3206209782DD00B7B806 /* Authentication */,
+				3AB4D8EB212F1FEB004F0160 /* DateFormatterTests */,
 				51C9EBBF20DBE88000AB521D /* Extensions */,
 				C75684C6212F04F600B5059C /* Homebrew */,
+				AA2F12292140A915006B1FC1 /* Javascript */,
 				5159C3052109153600955BD6 /* KYC */,
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				511356DF209CA48F00056D65 /* Network */,
+				3A019120212DF0C800AED2BF /* Operations */,
 				AAE94F4C20C75B72005A3595 /* Pin */,
 				AA63F85220A12F4C002B719B /* URL */,
 			);
@@ -6279,6 +6282,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		AA2F12292140A915006B1FC1 /* Javascript */ = {
+			isa = PBXGroup;
+			children = (
+				AA2F122A2140A92E006B1FC1 /* JSContext+HelpersTests.swift */,
+			);
+			path = Javascript;
+			sourceTree = "<group>";
+		};
 		AA31A7B82098DFB900FE6268 /* Side Menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -7587,6 +7598,7 @@
 				60AAD2D5211B75D7001CFDB4 /* OnfidoController.swift in Sources */,
 				602B9D152118E25400BD3D60 /* LocationSuggestionCell.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
+				AA2F122C2140A92E006B1FC1 /* JSContext+HelpersTests.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
 				AA4770B8211BA984006356B1 /* KYCAccountStatus.swift in Sources */,
 				AADB01EA20C09FA7000FFFEC /* WalletService.swift in Sources */,

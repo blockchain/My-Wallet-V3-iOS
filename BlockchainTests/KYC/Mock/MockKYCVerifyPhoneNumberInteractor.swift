@@ -19,7 +19,7 @@ class MockKYCVerifyPhoneNumberInteractor: KYCVerifyPhoneNumberInteractor {
         }
     }
 
-    override func verify(number: String, code: String) -> Completable {
+    override func verifyNumber(with code: String) -> Completable {
         if shouldSucceed {
             return Completable.empty()
         } else {
