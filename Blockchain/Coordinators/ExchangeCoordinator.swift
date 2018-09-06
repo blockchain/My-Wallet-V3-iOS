@@ -27,7 +27,7 @@ struct ExchangeServices: ExchangeDependencies {
     init() {
         rates = RatesService()
         service = ExchangeService()
-        markets = MarketsService()
+        markets = MarketsService(authenticationService: NabuAuthenticationService())
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
     }
@@ -69,7 +69,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     // MARK: - Entry Point
 
-    func start() {
+    func start() {showAppropriateExchange(); return
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }
@@ -92,7 +92,7 @@ struct ExchangeServices: ExchangeDependencies {
     private func showAppropriateExchange() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if isHomebrewAvailable {
+                if !isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)
@@ -211,7 +211,7 @@ struct ExchangeServices: ExchangeDependencies {
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared,
-        marketsService: MarketsService = MarketsService(),
+        marketsService: MarketsService = MarketsService(authenticationService: NabuAuthenticationService()),
         exchangeService: ExchangeService = ExchangeService()
     ) {
         self.walletManager = walletManager
