@@ -224,16 +224,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleExchange()
         // TODO: remove item
         case .kyc:
-            // TODO: Do not merge into `dev`.
-            // Debugging only.
-            let overview = ExchangeDetailViewController.make(with: .overview(ExchangeTradeCellModel.sample()))
-            let confirm = ExchangeDetailViewController.make(with: .confirm(Trade.demo()))
-            let locked = ExchangeDetailViewController.make(with: .locked(Trade.demo()))
-            let navController = UINavigationController(rootViewController: overview)
-            UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
-                navController,
-                animated: true
-            )
+            handleLaunchKYC()
         }
     }
 
