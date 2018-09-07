@@ -16,7 +16,7 @@ protocol ExchangeCreateInterface: class {
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
 protocol ExchangeCreateInput: NumberKeypadViewDelegate {
-    func load()
+    func viewLoaded()
     func displayInputTypeTapped()
     func ratesViewTapped()
     func useMinimumAmount()

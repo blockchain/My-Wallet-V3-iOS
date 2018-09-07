@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
-    func onLoaded()
+    func onViewLoaded()
     func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
 }

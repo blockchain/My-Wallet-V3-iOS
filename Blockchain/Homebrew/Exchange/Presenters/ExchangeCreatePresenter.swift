@@ -18,8 +18,8 @@ class ExchangeCreatePresenter {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
-    func onLoaded() {
-        interactor.load()
+    func onViewLoaded() {
+        interactor.viewLoaded()
     }
 
     func onAddInputTapped(value: String) {

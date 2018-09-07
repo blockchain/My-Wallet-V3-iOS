@@ -36,7 +36,7 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
-    func load() {
+    func viewLoaded() {
         markets.setup()
 
         // Authenticate, then listen for conversions
