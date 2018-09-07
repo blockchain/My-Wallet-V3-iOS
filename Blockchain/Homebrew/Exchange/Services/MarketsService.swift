@@ -41,10 +41,6 @@ class MarketsService {
 // MARK: - Setup
 extension MarketsService {
     func setup() {
-        setupSocket()
-    }
-
-    private func setupSocket() {
         SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
     }
 }
