@@ -18,7 +18,7 @@ protocol ExchangeMarketsAPI {
 }
 
 class MarketsService {
-    private var disposables: CompositeDisposable?
+    private let disposables = CompositeDisposable()
 
     private var socketMessageObservable: Observable<SocketMessage> {
         return SocketManager.shared.webSocketMessageObservable
@@ -34,7 +34,7 @@ class MarketsService {
     }
 
     deinit {
-        disposables?.dispose()
+        disposables.dispose()
     }
 }
 
@@ -120,7 +120,7 @@ private extension MarketsService {
                 completion()
             })
 
-        _ = disposables?.insert(heartBeatDisposable)
+        _ = disposables.insert(heartBeatDisposable)
     }
 
     func authenticateSocket() {
@@ -134,6 +134,6 @@ private extension MarketsService {
                 SocketManager.shared.send(message: socketMessage)
             })
 
-        _ = disposables?.insert(authenticationDisposable)
+        _ = disposables.insert(authenticationDisposable)
     }
 }
