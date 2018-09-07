@@ -126,7 +126,11 @@ extension ExchangeDetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let items = cellModels else { return UICollectionViewCell() }
         let item = items[indexPath.row]
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.reuseIdentifier, for: indexPath) as? ExchangeDetailCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: item.reuseIdentifier,
+            for: indexPath) as? ExchangeDetailCell else {
+                return UICollectionViewCell()
+        }
         cell.configure(with: item)
         return cell
     }
@@ -141,7 +145,12 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind
+        kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
         case .confirm:
@@ -193,7 +202,11 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         guard let page = model else { return .zero }
         switch page {
         case .confirm:
@@ -213,7 +226,11 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForFooterInSection section: Int
+    ) -> CGSize {
         guard let page = model else { return .zero }
         switch page {
         case .confirm, .locked:

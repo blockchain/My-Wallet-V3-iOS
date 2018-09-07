@@ -29,7 +29,8 @@ class ExchangeDetailCoordinator: NSObject {
         self.interface = interface
         super.init()
     }
-    
+
+// swiftlint:disable function_body_length
     func handle(event: Event) {
         switch event {
         case .pageLoaded(let model):
@@ -75,10 +76,12 @@ class ExchangeDetailCoordinator: NSObject {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
+                let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
+                    ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
                     string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
-                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .regular),
+                                 NSAttributedStringKey.font: attributedTextFont,
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
                 
@@ -130,10 +133,12 @@ class ExchangeDetailCoordinator: NSObject {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
+                let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
+                    ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
                     string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .regular),
+                                 NSAttributedStringKey.font: attributedTextFont,
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
                 
@@ -212,3 +217,4 @@ class ExchangeDetailCoordinator: NSObject {
     
     
 }
+// swiftlint:enable function_body_length
