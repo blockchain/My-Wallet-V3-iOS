@@ -19,7 +19,13 @@ class ValidationDateField: ValidationTextField {
     }()
 
     var selectedDate: Date {
-        return pickerView.date
+        get {
+            return pickerView.date
+        }
+        set {
+            pickerView.date = newValue
+            datePickerUpdated(pickerView)
+        }
     }
 
     override func awakeFromNib() {

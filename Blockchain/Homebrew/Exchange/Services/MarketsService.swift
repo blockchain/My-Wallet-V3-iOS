@@ -32,10 +32,10 @@ class MarketsService {
     private let restMessageSubject = PublishSubject<Conversion>()
     private var dataSource: DataSource = .socket
 
-    private let authentication: KYCAuthenticationService
+    private let authentication: NabuAuthenticationService
     var hasAuthenticated: Bool = false
 
-    init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
         self.authentication = service
     }
 
@@ -127,7 +127,7 @@ private extension MarketsService {
     }
 
     func authenticateSocket() {
-        let authenticationDisposable = KYCAuthenticationService.shared.getKycSessionToken()
+        let authenticationDisposable = authentication.getSessionToken()
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
                 let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
                 return Subscription(channel: "auth", operation: "subscribe", params: params)
