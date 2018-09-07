@@ -34,6 +34,11 @@ class ExchangeDetailCoordinator: NSObject {
         switch event {
         case .pageLoaded(let model):
             
+            // TODO: These are placeholder `ViewModels`
+            // and are not to be shipped. That being said,
+            // they do demonstrate how to use `ExchangeCellModel`
+            // to display the correct cellTypes.
+            
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
@@ -73,7 +78,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let attributedText = NSAttributedString(
                     string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
-                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratMedium, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
+                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .regular),
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
                 
@@ -128,7 +133,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let attributedText = NSAttributedString(
                     string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .medium),
+                                 NSAttributedStringKey.font: UIFont(name: Constants.FontNames.montserratRegular, size: 16.0) ?? UIFont.systemFont(ofSize: 16.0, weight: .regular),
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
                 
@@ -147,9 +152,60 @@ class ExchangeDetailCoordinator: NSObject {
                 )
                 
                 delegate?.coordinator(self, updated: cellModels)
-            case .overview:
-                // TODO
-                break
+            case .overview(let trade):
+                interface?.updateBackgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+                interface?.updateTitle(LocalizationConstants.Exchange.orderID + " " + trade.identifier)
+                interface?.navigationBarVisibility(.visible)
+                
+                let status = ExchangeCellModel.Plain(
+                    description: "Status",
+                    value: "Complete",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
+                    statusVisibility: .visible
+                )
+                
+                let value = ExchangeCellModel.Plain(
+                    description: "Value",
+                    value: "$1,642.50",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                )
+                
+                let exchange = ExchangeCellModel.Plain(
+                    description: "Exchange",
+                    value: "$0.25 BTC",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                )
+                
+                let receive = ExchangeCellModel.Plain(
+                    description: "Receive",
+                    value: "5.668586",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
+                    bold: true
+                )
+                
+                let fees = ExchangeCellModel.Plain(
+                    description: "Fees",
+                    value: "0.000414 BTC",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                )
+                
+                let sendTo = ExchangeCellModel.Plain(
+                    description: "Send to",
+                    value: "My Wallet",
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                )
+                
+                cellModels.append(contentsOf: [
+                    .plain(status),
+                    .plain(value),
+                    .plain(exchange),
+                    .plain(receive),
+                    .plain(fees),
+                    .plain(sendTo)
+                    ]
+                )
+                
+                delegate?.coordinator(self, updated: cellModels)
             }
         }
     }

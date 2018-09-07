@@ -8,6 +8,9 @@
 
 import Foundation
 
+/// This `UIViewController` is used for the `Exchange Confirmation`,
+/// `Exchange Locked`, and `Trade Overview` screen. It contains
+/// a `UICollectionView`.
 class ExchangeDetailViewController: UIViewController {
     
     enum PageModel {
@@ -29,7 +32,7 @@ class ExchangeDetailViewController: UIViewController {
     
     // MARK: Private Properties
     
-    fileprivate let layoutAttributes: LayoutAttributes = .exchangeDetail
+    fileprivate var layoutAttributes: LayoutAttributes!
     fileprivate var model: PageModel!
     fileprivate var cellModels: [ExchangeCellModel]?
     fileprivate var reuseIdentifiers: Set<String> = []
@@ -45,6 +48,14 @@ class ExchangeDetailViewController: UIViewController {
     }
     
     fileprivate func setupLayout() {
+        guard let page = model else { return }
+        
+        switch page {
+        case .confirm, .locked:
+            layoutAttributes = .exchangeDetail
+        case .overview:
+            layoutAttributes = .exchangeOverview
+        }
         guard let layout = layout else { return }
         
         layout.sectionInset = layoutAttributes.sectionInsets
@@ -70,7 +81,12 @@ class ExchangeDetailViewController: UIViewController {
         guard let page = model else { return }
         switch page {
         case .confirm:
-            break
+            let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
+            collectionView.register(
+                footerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                withReuseIdentifier: ActionableFooterView.identifier
+            )
         case .locked:
             let headerNib = UINib(nibName: ExchangeLockedHeaderView.identifier, bundle: nil)
             collectionView.register(
@@ -87,7 +103,12 @@ class ExchangeDetailViewController: UIViewController {
             )
             
         case .overview:
-            break
+            let headerNib = UINib(nibName: ExchangeDetailHeaderView.identifier, bundle: nil)
+            collectionView.register(
+                headerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
+                withReuseIdentifier: ExchangeDetailHeaderView.identifier
+            )
         }
     }
 }
@@ -124,7 +145,17 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
         case .confirm:
-            return UICollectionReusableView()
+            guard kind == UICollectionElementKindSectionFooter else { return UICollectionReusableView() }
+            
+            guard let footer = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionElementKindSectionFooter,
+                withReuseIdentifier: ActionableFooterView.identifier,
+                for: indexPath
+                ) as? ActionableFooterView else { return UICollectionReusableView() }
+            footer.title = LocalizationConstants.Exchange.sendNow
+            
+            return footer
+            
         case .locked:
             switch kind {
             case UICollectionElementKindSectionHeader:
@@ -151,8 +182,14 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
             default:
                 return UICollectionReusableView()
             }
-        case .overview:
-            return UICollectionReusableView()
+        case .overview(let trade):
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionElementKindSectionHeader,
+                withReuseIdentifier: ExchangeDetailHeaderView.identifier,
+                for: indexPath
+                ) as? ExchangeDetailHeaderView else { return UICollectionReusableView() }
+            header.title = trade.amountReceivedDisplayValue
+            return header
         }
     }
     
@@ -166,17 +203,20 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 width: collectionView.bounds.width,
                 height: ExchangeLockedHeaderView.estimatedHeight()
             )
-        case .overview:
-            return .zero
+        case .overview(let trade):
+            let title = trade.amountReceivedDisplayValue
+            let height = ExchangeDetailHeaderView.height(for: title)
+            return CGSize(
+                width: collectionView.bounds.width,
+                height: height
+            )
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard let page = model else { return .zero }
         switch page {
-        case .confirm:
-            return .zero
-        case .locked:
+        case .confirm, .locked:
             return CGSize(
                 width: collectionView.bounds.width,
                 height: ActionableFooterView.height()
@@ -204,10 +244,6 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
     
     func updateBackgroundColor(_ color: UIColor) {
         view.backgroundColor = color
-    }
-    
-    func rightBarButtonVisibility(_ visibility: Visibility) {
-        // TODO
     }
     
     func updateTitle(_ value: String) {

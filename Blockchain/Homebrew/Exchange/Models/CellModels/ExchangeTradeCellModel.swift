@@ -9,6 +9,21 @@
 import Foundation
 
 struct ExchangeTradeCellModel: Decodable {
+    
+    /// TODO: This is only for sample data and for testing
+    /// the UI for specific screens in the Exchange Detail flow.
+    static func sample() -> ExchangeTradeCellModel {
+        let trade = ExchangeTrade()
+        trade.orderID = ""
+        trade.status = "PENDING_EXECUTION"
+        trade.pair = "BTC_ETH"
+        trade.date = Date()
+        trade.withdrawalAmount = 0.01
+        trade.depositAmount = 0.01
+        
+        let model = ExchangeTradeCellModel(with: trade)
+        return model
+    }
 
     enum TradeStatus {
         case noDeposits

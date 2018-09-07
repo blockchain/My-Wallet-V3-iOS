@@ -171,6 +171,10 @@ extension TradingPairView {
         let fromAsset = trade.pair.from
         let toAsset = trade.pair.to
         
+        // TODO: Some of the data below is placeholder data
+        // and will be adjusted once this is hooked up with a live
+        // API. In the mean time, this demonstrates how the Model
+        // is built and how it is to be used for the exchangeLocked screen
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
                           .images(left: fromAsset.brandImage, right: toAsset.brandImage),
@@ -202,6 +206,10 @@ extension TradingPairView {
         let fromAsset = trade.pair.from
         let toAsset = trade.pair.to
         
+        // TODO: Some of the data below is placeholder data
+        // and will be adjusted once this is hooked up with a live
+        // API. In the mean time, this demonstrates how the Model
+        // is built and how it is to be used for the confirmation screen
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
                           .images(left: fromAsset.brandImage, right: toAsset.brandImage),

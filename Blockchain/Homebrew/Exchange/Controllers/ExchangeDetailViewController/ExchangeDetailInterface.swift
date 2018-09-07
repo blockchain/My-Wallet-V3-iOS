@@ -9,6 +9,5 @@
 protocol ExchangeDetailInterface: class {
     func updateBackgroundColor(_ color: UIColor)
     func navigationBarVisibility(_ visibility: Visibility)
-    func rightBarButtonVisibility(_ visibility: Visibility)
     func updateTitle(_ value: String)
 }

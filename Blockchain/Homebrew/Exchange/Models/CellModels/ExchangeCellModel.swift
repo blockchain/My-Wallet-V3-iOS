@@ -1,13 +1,17 @@
 //
-//  PlainCellModel.swift
+//  ExchangeCellModel.swift
 //  Blockchain
 //
-//  Created by AlexM on 9/5/18.
+//  Created by Alex McGregor on 9/5/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
-
+/// This is all the ViewModels used in all the cells
+/// that are seen in the `ExchangeDetailViewController`
+/// The models are nested given that it's possible models
+/// similarly named could be used in other flows so, for the
+/// time being we want to keep this specific to the `Exchange Details`
+/// screen.
 enum ExchangeCellModel {
     
     case plain(Plain)
@@ -40,10 +44,14 @@ enum ExchangeCellModel {
 }
 
 extension ExchangeCellModel {
+    
     var reuseIdentifier: String {
         return cellType().identifier
     }
     
+    /// Each model maps to a specific Cell.Type.
+    /// All models should use an `ExchangeDetailCell`,
+    /// and there are three subclasses of said cell.
     func cellType() -> ExchangeDetailCell.Type {
         switch self {
         case .plain:

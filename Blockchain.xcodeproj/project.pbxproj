@@ -178,6 +178,10 @@
 		3AAEF9582141B04F005852D1 /* ActionableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEF9562141B04F005852D1 /* ActionableFooterView.swift */; };
 		3AAEF95A2141B05A005852D1 /* ActionableFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF9592141B05A005852D1 /* ActionableFooterView.xib */; };
 		3AAEF95B2141B05A005852D1 /* ActionableFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF9592141B05A005852D1 /* ActionableFooterView.xib */; };
+		3AAEF95D2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEF95C2141CEE9005852D1 /* ExchangeDetailHeaderView.swift */; };
+		3AAEF95E2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEF95C2141CEE9005852D1 /* ExchangeDetailHeaderView.swift */; };
+		3AAEF9602141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */; };
+		3AAEF9612141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */; };
 		3AB4D8EA212F1F62004F0160 /* NSDateFormatter+TimeAgoString.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */; };
 		3AB4D8EE212F2017004F0160 /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */; };
 		3AB4D902212F4A0E004F0160 /* ExchangeListContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */; };
@@ -1323,6 +1327,8 @@
 		3AAEF95221417563005852D1 /* ExchangeLockedHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExchangeLockedHeaderView.xib; sourceTree = "<group>"; };
 		3AAEF9562141B04F005852D1 /* ActionableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionableFooterView.swift; sourceTree = "<group>"; };
 		3AAEF9592141B05A005852D1 /* ActionableFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActionableFooterView.xib; sourceTree = "<group>"; };
+		3AAEF95C2141CEE9005852D1 /* ExchangeDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeDetailHeaderView.swift; sourceTree = "<group>"; };
+		3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExchangeDetailHeaderView.xib; sourceTree = "<group>"; };
 		3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
 		3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeListContracts.swift; sourceTree = "<group>"; };
 		3AB4D908212F560F004F0160 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
@@ -3529,6 +3535,8 @@
 				3A26D5022140293C00D79BDD /* SectionHeaders */,
 				3AAEF94C21417547005852D1 /* ExchangeLockedHeaderView.swift */,
 				3AAEF95221417563005852D1 /* ExchangeLockedHeaderView.xib */,
+				3AAEF95C2141CEE9005852D1 /* ExchangeDetailHeaderView.swift */,
+				3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -7228,6 +7236,7 @@
 				3A26D4FD2140227100D79BDD /* ExchangeDetailViewController.storyboard in Resources */,
 				C78238B02131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */,
 				3AAEF95421417563005852D1 /* ExchangeLockedHeaderView.xib in Resources */,
+				3AAEF9612141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */,
 				3AAEF95B2141B05A005852D1 /* ActionableFooterView.xib in Resources */,
 				3A26D52A214055FE00D79BDD /* TradingPairCell.xib in Resources */,
 				51979189210F68940096E50B /* countries.json in Resources */,
@@ -7296,6 +7305,7 @@
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
 				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
+				3AAEF9602141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
 				515EFADD210282B4002350B6 /* AccountsAndAddresses.strings in Resources */,
 				ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */,
@@ -7550,6 +7560,7 @@
 				AAA6648A21234250009C1C64 /* LocationUpdateAPI.swift in Sources */,
 				AAE94DCA20C25124005A3595 /* WalletServiceTests.swift in Sources */,
 				AA69118520D0967300DDB541 /* NetworkError.swift in Sources */,
+				3AAEF95E2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */,
 				51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				3A26D53521406C0200D79BDD /* ExchangeDetailCoordinator.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
@@ -8213,6 +8224,7 @@
 				51DC2F5C20B72F4900E03AF2 /* AddressValidator.swift in Sources */,
 				A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */,
 				9F4A5092152F585E00F9ED9D /* UIDevice+Hardware.m in Sources */,
+				3AAEF95D2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */,
 				6780DB921A40BDA70048EED2 /* AddressInOut.m in Sources */,
 				9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */,
 				C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
