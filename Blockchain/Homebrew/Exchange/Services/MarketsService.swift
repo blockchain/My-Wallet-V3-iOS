@@ -115,8 +115,9 @@ private extension MarketsService {
             }
             .take(1)
             .asSingle()
-            .subscribe(onSuccess: { [unowned self] _ in
-                self.hasAuthenticated = true
+            .subscribe(onSuccess: { [weak self] _ in
+                guard let this = self else { return }
+                this.hasAuthenticated = true
                 completion()
             })
 
