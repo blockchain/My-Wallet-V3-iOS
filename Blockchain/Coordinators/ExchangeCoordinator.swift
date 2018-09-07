@@ -11,18 +11,24 @@ import RxSwift
 
 protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
+    var markets: ExchangeMarketsAPI { get }
+    var inputs: ExchangeInputsAPI { get }
     var rates: RatesAPI { get }
     var tradeExecution: TradeExecutionAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
+    let markets: ExchangeMarketsAPI
+    let inputs: ExchangeInputsAPI
     let rates: RatesAPI
     let tradeExecution: TradeExecutionAPI
     
     init() {
         rates = RatesService()
         service = ExchangeService()
+        markets = MarketsService()
+        inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
     }
 }
@@ -57,6 +63,7 @@ struct ExchangeServices: ExchangeDependencies {
     private var exchangeListViewController: ExchangeListViewController?
 
     // MARK: - Navigation
+    private var navigationController: BCNavigationController?
     private var exchangeViewController: PartnerExchangeListViewController?
     private var rootViewController: UIViewController?
 
@@ -133,50 +140,72 @@ struct ExchangeServices: ExchangeDependencies {
                 return
             }
             let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
-            let navigationController = BCNavigationController(
+            navigationController = BCNavigationController(
                 rootViewController: listViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             )
-            viewController.present(navigationController, animated: true)
+            viewController.present(navigationController!, animated: true)
         default:
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
             exchangeViewController = PartnerExchangeListViewController()
-            let navigationController = BCNavigationController(
+            let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
             )
-            viewController.present(navigationController, animated: true)
+            viewController.present(partnerNavigationController, animated: true)
         }
     }
 
-    private func showCreateExchangetype(type: ExchangeType) {
+    private func showCreateExchange(animated: Bool, type: ExchangeType) {
         switch type {
         case .homebrew:
-            let exchangeCreateViewController = ExchangeCreateViewController()
-            exchangeCreateViewController.delegate = self
-            self.createInterface = exchangeCreateViewController
-            // present view controller
+            let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
+            if navigationController == nil {
+                guard let viewController = rootViewController else {
+                    Logger.shared.error("View controller to present on is nil")
+                    return
+                }
+                navigationController = BCNavigationController(
+                    rootViewController: exchangeCreateViewController,
+                    title: LocalizationConstants.Exchange.navigationTitle
+                )
+                viewController.topMostViewController?.present(navigationController!, animated: animated)
+            } else {
+                navigationController?.pushViewController(exchangeCreateViewController, animated: animated)
+            }
         default:
             // show shapeshift
             Logger.shared.debug("Not yet implemented")
         }
     }
 
-    // TODO: use event handlers
-    func showPartnerExchange(rootViewController: UIViewController) {
-        self.rootViewController = rootViewController
-        showExchange(type: .shapeshift)
+    // MARK: - Event handling
+    enum ExchangeCoordinatorEvent {
+        case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
+        case createPartnerExchange(animated: Bool, viewController: UIViewController?)
+    }
+
+    func handle(event: ExchangeCoordinatorEvent) {
+        switch event {
+        case .createHomebrewExchange(let animated, let viewController):
+            if viewController != nil {
+                rootViewController = viewController
+            }
+            showCreateExchange(animated: animated, type: .homebrew)
+        case .createPartnerExchange(let animated, let viewController):
+            if viewController != nil {
+                rootViewController = viewController
+            }
+            showCreateExchange(animated: animated, type: .homebrew)
+        }
     }
 
     // MARK: - Services
     private let marketsService: MarketsService
     private let exchangeService: ExchangeService
-
-    // MARK: - Interfaces
-    fileprivate weak var createInterface: ExchangeCreateInterface?
 
     // MARK: - Lifecycle
     private init(
@@ -210,32 +239,8 @@ struct ExchangeServices: ExchangeDependencies {
     }
 }
 
-// MARK: - Exchange Creation
-extension ExchangeCoordinator: ExchangeCreateDelegate {
-    func onChangeFrom(assetType: AssetType) {
-        marketsService.pair?.from = assetType
-    }
-
-    func onChangeTo(assetType: AssetType) {
-        marketsService.pair?.to = assetType
-    }
-
-    func onContinueButtonTapped() {
-
-    }
-
-    func onChangeAmountFieldText() {
-        marketsService.onChangeAmountFieldText()
-    }
-}
-
 extension ExchangeCoordinator {
     func subscribeToRates() {
-        disposable = self.marketsService.rates.subscribe(onNext: { [unowned self] rate in
-            // WIP
-            self.createInterface?.exchangeRateUpdated("rate")
-        }, onError: { (error) in
-            Logger.shared.debug("Could not get exchange rates: \(error.localizedDescription)")
-        })
+
     }
 }

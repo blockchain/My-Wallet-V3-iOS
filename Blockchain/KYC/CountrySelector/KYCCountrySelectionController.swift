@@ -209,7 +209,7 @@ extension KYCCountrySelectionController: KYCCountrySelectionView {
     }
 
     func startPartnerExchangeFlow(country: KYCCountry) {
-        ExchangeCoordinator.shared.showPartnerExchange(rootViewController: self)
+        ExchangeCoordinator.shared.handle(event: .createPartnerExchange(animated: true, viewController: self))
     }
 
     func showExchangeNotAvailable(country: KYCCountry) {
