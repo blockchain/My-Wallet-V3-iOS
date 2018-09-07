@@ -69,7 +69,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     // MARK: - Entry Point
 
-    func start() {showAppropriateExchange(); return
+    func start() {
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }
@@ -92,7 +92,7 @@ struct ExchangeServices: ExchangeDependencies {
     private func showAppropriateExchange() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if !isHomebrewAvailable {
+                if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)
