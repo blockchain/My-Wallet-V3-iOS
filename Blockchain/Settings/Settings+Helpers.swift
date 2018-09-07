@@ -139,7 +139,7 @@ extension AppSettingsController {
         }
     }
 
-    func createBadge(_ cell: UITableViewCell, color: UIColor? = nil, _ using: KYCUser? = nil) {
+    func createBadge(_ cell: UITableViewCell, color: UIColor? = nil, _ using: NabuUser? = nil) {
         cell.detailTextLabel?.layer.cornerRadius = 4
         cell.detailTextLabel?.layer.masksToBounds = true
         if let status = using?.status {

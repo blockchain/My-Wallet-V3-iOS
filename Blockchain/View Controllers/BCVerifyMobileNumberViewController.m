@@ -90,24 +90,15 @@
     
     SettingsNavigationController *navigationController = (SettingsNavigationController *)self.navigationController;
     navigationController.headerLabel.text = BC_STRING_SETTINGS_MOBILE_NUMBER;
-    
-    [self addObserversForVerifyingMobileNumber];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (![self.delegate showVerifyAlertIfNeeded]) {
+    if (![self.delegate verifyMobileNumberViewControllerShowVerifyAlertIfNeeded:self]) {
         [self.mobileNumberField becomeFirstResponder];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self removeObserversForVerifyingMobileNumber];
 }
 
 - (void)reload
@@ -146,68 +137,13 @@
 
 - (void)changeMobileNumber
 {
-    [self addObserversForChangingMobileNumber];
-    [self.delegate changeMobileNumber:self.mobileNumberField.text];
+    [self.delegate verifyMobileNumberViewController:self changeMobileNumber:self.mobileNumberField.text];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self updateButtonClicked];
     return YES;
-}
-
-#pragma mark - Observers
-
-- (void)addObserversForChangingMobileNumber
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeMobileNumberSuccess) name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_SUCCESS object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeMobileNumberError) name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_ERROR object:nil];
-}
-
-- (void)changeMobileNumberSuccess
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_SUCCESS object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_ERROR object:nil];
-    
-    [self reload];
-}
-
-- (void)changeMobileNumberError
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_SUCCESS object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_ERROR object:nil];
-    
-    [self reload];
-}
-
-- (void)addObserversForVerifyingMobileNumber
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifyMobileNumberSuccess) name:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_SUCCESS object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifyMobileNumberError) name:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_ERROR object:nil];
-}
-
-- (void)verifyMobileNumberSuccess
-{
-    [self reload];
-}
-
-- (void)verifyMobileNumberError
-{
-    SettingsNavigationController *navigationController = (SettingsNavigationController *)self.navigationController;
-    
-    navigationController.onDismissViewController = ^() {
-        if (self.view.window) {
-            [self.delegate alertUserToVerifyMobileNumber];
-        }
-    };
-    
-    [self reload];
-}
-
-- (void)removeObserversForVerifyingMobileNumber
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_SUCCESS object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_ERROR object:nil];
 }
 
 @end

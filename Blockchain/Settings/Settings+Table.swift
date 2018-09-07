@@ -124,8 +124,8 @@ extension SettingsTableViewController {
         cell.accessoryView = switchForEmailNotifications
     }
 
-    func getUserVerificationStatus(handler: @escaping (KYCUser?, Bool) -> Void) {
-        disposable = BlockchainDataRepository.shared.kycUser
+    func getUserVerificationStatus(handler: @escaping (NabuUser?, Bool) -> Void) {
+        disposable = BlockchainDataRepository.shared.nabuUser
             .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
             .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
             .subscribe(onSuccess: { user in

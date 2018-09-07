@@ -1,5 +1,5 @@
 //
-//  KYCAuthenticationService.swift
+//  NabuAuthenticationService.swift
 //  Blockchain
 //
 //  Created by kevinwu on 8/10/18.
@@ -9,12 +9,12 @@
 import RxCocoa
 import RxSwift
 
-/// Component in charge of authenticating the KYC user.
-final class KYCAuthenticationService {
+/// Component in charge of authenticating the Nabu user.
+final class NabuAuthenticationService {
 
-    static let shared = KYCAuthenticationService()
+    static let shared = NabuAuthenticationService()
 
-    private var cachedSessionToken = BehaviorRelay<KYCSessionTokenResponse?>(value: nil)
+    private var cachedSessionToken = BehaviorRelay<NabuSessionTokenResponse?>(value: nil)
     private let wallet: Wallet
 
     // MARK: - Initialization
@@ -25,7 +25,7 @@ final class KYCAuthenticationService {
 
     // MARK: - Public Methods
 
-    /// Returns a KYCSessionTokenResponse which is to be used for all KYC endpoints that
+    /// Returns a NabuSessionTokenResponse which is to be used for all KYC endpoints that
     /// require an authenticated KYC user. This function will handle creating a KYC user
     /// if needed, and it will also handle caching and refreshing the KYC session token
     /// as needed.
@@ -38,15 +38,15 @@ final class KYCAuthenticationService {
     ///   (3) the created Nabu user is then persisted in the wallet metadata
     ///
     /// - Returns: a Single returning the sesion token
-    func getKycSessionToken() -> Single<KYCSessionTokenResponse> {
-        return getOrCreateKYCUserResponse().flatMap {
-            self.getKycSessionTokenIfNeeded(from: $0)
+    func getSessionToken() -> Single<NabuSessionTokenResponse> {
+        return getOrCreateNabuUserResponse().flatMap {
+            self.getSessionTokenIfNeeded(from: $0)
         }
     }
 
     // MARK: - Private Methods
 
-    private func getKycSessionTokenIfNeeded(from userResponse: KYCCreateUserResponse) -> Single<KYCSessionTokenResponse> {
+    private func getSessionTokenIfNeeded(from userResponse: NabuCreateUserResponse) -> Single<NabuSessionTokenResponse> {
         // Use cached session token if not expired, otherwise, request a new one
         guard let sessionToken = cachedSessionToken.value,
             let expiresAt = sessionToken.expiresAt, Date() < expiresAt else {
@@ -62,7 +62,7 @@ final class KYCAuthenticationService {
                     post: .sessionToken(userId: userResponse.userId),
                     parameters: [:],
                     headers: headers,
-                    type: KYCSessionTokenResponse.self
+                    type: NabuSessionTokenResponse.self
                 ).do(onSuccess: { [unowned self] in
                     self.cachedSessionToken.accept($0)
                 })
@@ -70,70 +70,43 @@ final class KYCAuthenticationService {
         return Single.just(sessionToken)
     }
 
-    /// Retrieves the user's KYC user ID and API token from the wallet metadata if the KYC user ID
-    /// and api token had already been created. Otherwise, this method will create a new KYC user ID
+    /// Retrieves the user's Nabu user ID and API token from the wallet metadata if the Nabu user ID
+    /// and api token had already been created. Otherwise, this method will create a new Nabu user ID
     /// and api token from the wallet GUID + email pair followed by updating the wallet metadata
-    /// with the retrieved KYC user ID.
+    /// with the retrieved Nabu user ID.
     ///
-    /// - Returns: a Single returning the user's KYC api token
-    private func getOrCreateKYCUserResponse() -> Single<KYCCreateUserResponse> {
+    /// - Returns: a Single returning the user's Nabu api token
+    private func getOrCreateNabuUserResponse() -> Single<NabuCreateUserResponse> {
         guard let kycUserId = wallet.kycUserId(),
             let kycToken = wallet.kycLifetimeToken() else {
                 return createAndSaveUserResponse()
         }
-        return Single.just(KYCCreateUserResponse(userId: kycUserId, token: kycToken))
+        return Single.just(NabuCreateUserResponse(userId: kycUserId, token: kycToken))
     }
 
     /// Creates a KYC user ID and API token followed by updating the wallet metadata with
     /// the KYC user ID and API token.
-    private func createAndSaveUserResponse() -> Single<KYCCreateUserResponse> {
-        return getSignedRetailToken().flatMap {
-            self.createKycUser(tokenResponse: $0)
+    private func createAndSaveUserResponse() -> Single<NabuCreateUserResponse> {
+        return WalletService.shared.getSignedRetailToken().flatMap {
+            self.createNabuUser(tokenResponse: $0)
         }.flatMap {
             self.saveToWalletMetadata(createUserResponse: $0)
         }
     }
 
-    private func getSignedRetailToken() -> Single<SignedRetailTokenResponse> {
-
-        // Construct URL
-        let appSettings = BlockchainSettings.App.shared
-
-        guard let walletGuid = appSettings.guid else {
-            return Single.error(KYCAuthenticationError.invalidGuid)
-        }
-        guard let sharedKey = appSettings.sharedKey else {
-            return Single.error(KYCAuthenticationError.invalidSharedKey)
-        }
-
-        let requestPayload = SignedRetailTokenRequest(
-            apiCode: BlockchainAPI.Parameters.apiCode,
-            sharedKey: sharedKey,
-            walletGuid: walletGuid
-        )
-        guard let baseUrl = URL(string: BlockchainAPI.shared.signedRetailTokenUrl),
-            let url = URL.endpoint(baseUrl, pathComponents: nil, queryParameters: requestPayload.toDictionary),
-            let urlRequest = try? URLRequest(url: url, method: .get) else {
-                return Single.error(KYCAuthenticationError.invalidUrl)
-        }
-
-        // Initiate request
-        return NetworkManager.shared.request(urlRequest, responseType: SignedRetailTokenResponse.self)
-    }
-
-    private func createKycUser(tokenResponse: SignedRetailTokenResponse) -> Single<KYCCreateUserResponse> {
+    private func createNabuUser(tokenResponse: SignedRetailTokenResponse) -> Single<NabuCreateUserResponse> {
         guard let token = tokenResponse.token, tokenResponse.success else {
-            return Single.error(KYCAuthenticationError.invalidSignedRetailToken)
+            return Single.error(NabuAuthenticationError.invalidSignedRetailToken)
         }
         return KYCNetworkRequest.request(
             post: .createUser,
             parameters: ["jwt": token],
             headers: nil,
-            type: KYCCreateUserResponse.self
+            type: NabuCreateUserResponse.self
         )
     }
 
-    private func saveToWalletMetadata(createUserResponse: KYCCreateUserResponse) -> Single<KYCCreateUserResponse> {
+    private func saveToWalletMetadata(createUserResponse: NabuCreateUserResponse) -> Single<NabuCreateUserResponse> {
         return Single.create(subscribe: { [unowned self] observer -> Disposable in
             self.wallet.updateKYCUserCredentials(
                 withUserId: createUserResponse.userId,

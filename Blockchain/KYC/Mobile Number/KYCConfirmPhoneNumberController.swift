@@ -78,7 +78,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
             Logger.shared.warning("code is nil.")
             return
         }
-        presenter.verify(number: phoneNumber, code: code)
+        presenter.verifyNumber(with: code)
     }
 }
 

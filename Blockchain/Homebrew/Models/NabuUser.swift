@@ -1,5 +1,5 @@
 //
-//  KYCUser.swift
+//  NabuUser.swift
 //  Blockchain
 //
 //  Created by Alex McGregor on 8/10/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct KYCUser: Decodable {
+struct NabuUser: Decodable {
 
     enum UserState: String {
         case none = "NONE"

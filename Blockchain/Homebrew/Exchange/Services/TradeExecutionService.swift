@@ -27,10 +27,10 @@ class TradeExecutionService: TradeExecutionAPI {
         )
     }
     
-    private let authentication: KYCAuthenticationService
+    private let authentication: NabuAuthenticationService
     private var disposable: Disposable?
     
-    init(service: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
         self.authentication = service
     }
     
@@ -77,7 +77,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 return .error(TradeExecutionAPIError.generic)
         }
         
-        return authentication.getKycSessionToken().flatMap { token in
+        return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.POST(
                 url: endpoint,
                 body: try? JSONEncoder().encode(order),
@@ -100,7 +100,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 return .error(TradeExecutionAPIError.generic)
         }
         
-        return authentication.getKycSessionToken().flatMap { token in
+        return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.GET(
                 url: endpoint,
                 body: nil,

@@ -1,5 +1,5 @@
 //
-//  KYCCreateUserResponse.swift
+//  NabuCreateUserResponse.swift
 //  Blockchain
 //
 //  Created by Chris Arriola on 8/15/18.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// Model encapsulating the network response from the `/internal/auth` endpoint.
-struct KYCCreateUserResponse: Decodable {
+/// Model encapsulating the network response from the `/users` endpoint.
+struct NabuCreateUserResponse: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case userId

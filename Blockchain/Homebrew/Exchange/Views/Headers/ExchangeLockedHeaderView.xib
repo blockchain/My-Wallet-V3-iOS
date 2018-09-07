@@ -28,13 +28,13 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange Locked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-Yu-lLk">
-                    <rect key="frame" x="100" y="52" width="174" height="25"/>
+                    <rect key="frame" x="100.5" y="52" width="173.5" height="24.5"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order ID BC123-456-789" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjw-qN-uw6">
-                    <rect key="frame" x="92.5" y="85" width="189" height="20"/>
+                    <rect key="frame" x="92.5" y="84.5" width="189" height="20"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>

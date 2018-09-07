@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+
+@class BCVerifyMobileNumberViewController;
+
 @protocol MobileNumberDelegate
 - (BOOL)isMobileVerified;
 - (NSString *)getMobileNumber;
-- (void)changeMobileNumber:(NSString *)numberString;
-- (BOOL)showVerifyAlertIfNeeded;
-- (void)alertUserToVerifyMobileNumber;
+- (void)verifyMobileNumberViewController:(BCVerifyMobileNumberViewController * _Nullable)viewController changeMobileNumber:(NSString * _Nullable)numberString;
+- (BOOL)verifyMobileNumberViewControllerShowVerifyAlertIfNeeded:(BCVerifyMobileNumberViewController * _Nullable)viewController;
+- (void)verifyMobileNumberViewControllerAlertUserToVerifyMobileNumber:(BCVerifyMobileNumberViewController * _Nullable)viewController;
 @end
+
 @interface BCVerifyMobileNumberViewController : UIViewController
 @property (nonatomic) UIViewController<MobileNumberDelegate> *delegate;
 - (id)initWithMobileDelegate:(UIViewController<MobileNumberDelegate>*)delegate;
+- (void)reload;
 @end
-
