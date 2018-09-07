@@ -134,9 +134,9 @@ private extension MarketsService {
                 return Subscription(channel: "auth", operation: "subscribe", params: params)
             }.map { message in
                 return SocketMessage(type: .exchange, JSONMessage: message)
-            }.map { socketMessage in
+            }.subscribe(onSuccess: { socketMessage in
                 SocketManager.shared.send(message: socketMessage)
-            }.subscribe()
+            })
 
         _ = disposables?.insert(authenticationDisposable)
     }
