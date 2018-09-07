@@ -52,6 +52,7 @@ class ExchangeCreateViewController: UIViewController {
     }
 
     fileprivate func dependenciesSetup() {
+        // DEBUG - ideally add an .empty state for a blank/loading state for MarketsModel here.
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
