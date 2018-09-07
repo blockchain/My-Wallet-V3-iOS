@@ -182,6 +182,7 @@
 		3AAEF95E2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEF95C2141CEE9005852D1 /* ExchangeDetailHeaderView.swift */; };
 		3AAEF9602141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */; };
 		3AAEF9612141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AAEF95F2141CF2C005852D1 /* ExchangeDetailHeaderView.xib */; };
+		3AAEF96221421C6F005852D1 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4EAB95214080D700081531 /* TextCell.swift */; };
 		3AB4D8EA212F1F62004F0160 /* NSDateFormatter+TimeAgoString.m in Sources */ = {isa = PBXBuildFile; fileRef = C790E0F71E4E60AE0063D141 /* NSDateFormatter+TimeAgoString.m */; };
 		3AB4D8EE212F2017004F0160 /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D8EC212F2017004F0160 /* DateFormatterTests.swift */; };
 		3AB4D902212F4A0E004F0160 /* ExchangeListContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4D901212F4A0E004F0160 /* ExchangeListContracts.swift */; };
@@ -7628,6 +7629,7 @@
 				AACE31F22092B1F800B7B806 /* PasswordRequiredView.swift in Sources */,
 				AAC9FCEF20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AA63F84C20A12AE9002B719B /* URLs.swift in Sources */,
+				3AAEF96221421C6F005852D1 /* TextCell.swift in Sources */,
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
 				AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */,
