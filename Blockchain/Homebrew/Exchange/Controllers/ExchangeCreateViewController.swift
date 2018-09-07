@@ -56,6 +56,14 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
+
+        primaryAmountLabel.textColor = UIColor.brandPrimary
+        primaryDecimalLabel.textColor = UIColor.brandPrimary
+        secondaryAmountLabel.textColor = UIColor.brandPrimary
+
+        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic)
+        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
+        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
     }
 
     fileprivate func dependenciesSetup() {
