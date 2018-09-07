@@ -10,13 +10,13 @@ import Foundation
 
 // State model for interacting with the MarketsService
 class MarketsModel {
-    var pair: TradingPair?
-    var fiatCurrency: String?
+    var pair: TradingPair
+    var fiatCurrency: String
     var fix: Fix
     var volume: Double
 
     init(pair: TradingPair,
-         fiatCurrency: String?,
+         fiatCurrency: String,
          fix: Fix,
          volume: Double) {
         self.pair = pair

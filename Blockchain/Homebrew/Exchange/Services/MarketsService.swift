@@ -85,16 +85,12 @@ extension MarketsService: ExchangeMarketsAPI {
     }
 
     func updateConversion(model: MarketsModel) {
-        guard let pair = model.pair, let fiatCurrency = model.fiatCurrency else {
-            Logger.shared.error("Missing pair or fiat currency")
-            return
-        }
         switch dataSource {
         case .socket:
             let params = ConversionSubscribeParams(
                 type: "pairs",
-                pair: pair.stringRepresentation,
-                fiatCurrency: fiatCurrency,
+                pair: model.pair.stringRepresentation,
+                fiatCurrency: model.fiatCurrency,
                 fix: model.fix,
                 volume: model.volume)
             let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
