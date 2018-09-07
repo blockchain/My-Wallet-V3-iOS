@@ -17,6 +17,12 @@ protocol ExchangeMarketsAPI {
     func updateConversion(model: MarketsModel)
 }
 
+// MarketsService provides information about crypto/fiat trading data via observables.
+// Data can include volume, price, and conversion rates given a quantity, trading pair and
+// designated base or counter.
+// This class is intended to provide observables for both websockets and REST endpoints.
+// Ideally the caller should not care whether websockets or REST is used
+// The DataSource enum should default first to websockets, then to REST as fallback.
 class MarketsService {
     private let disposables = CompositeDisposable()
 
