@@ -9,10 +9,10 @@
 import Foundation
 
 struct KYCInformationViewModel {
-    let image: UIImage
-    let title: String
+    let image: UIImage?
+    let title: String?
     let subtitle: String?
-    let description: String
+    let description: String?
     let buttonTitle: String?
     var badge: String?
 }
@@ -45,7 +45,7 @@ extension KYCInformationViewModel {
                 buttonTitle: LocalizationConstants.KYC.getStarted,
                 badge: LocalizationConstants.KYC.accounVerifiedBadge
             )
-        case .expired, .failed, .none:
+        case .expired, .failed:
             return KYCInformationViewModel(
                 image: #imageLiteral(resourceName: "AccountFailed"),
                 title: LocalizationConstants.KYC.verificationFailed,
@@ -54,7 +54,7 @@ extension KYCInformationViewModel {
                 buttonTitle: nil,
                 badge: LocalizationConstants.KYC.verificationFailedBadge
             )
-        case.pending:
+        case .pending:
             return KYCInformationViewModel(
                 image: #imageLiteral(resourceName: "AccountInReview"),
                 title: LocalizationConstants.KYC.verificationInProgress,
@@ -62,6 +62,24 @@ extension KYCInformationViewModel {
                 description: LocalizationConstants.KYC.verificationInProgressDescription,
                 buttonTitle: LocalizationConstants.KYC.notifyMe,
                 badge: LocalizationConstants.KYC.accountUnderReviewBadge
+            )
+        case .underReview:
+            return KYCInformationViewModel(
+                image: #imageLiteral(resourceName: "AccountInReview"),
+                title: LocalizationConstants.KYC.verificationUnderReview,
+                subtitle: nil,
+                description: LocalizationConstants.KYC.verificationUnderReviewDescription,
+                buttonTitle: nil,
+                badge: LocalizationConstants.KYC.accountUnderReviewBadge
+            )
+        case .none:
+            return KYCInformationViewModel(
+                image: nil,
+                title: nil,
+                subtitle: nil,
+                description: nil,
+                buttonTitle: nil,
+                badge: LocalizationConstants.KYC.accountUnverifiedBadge
             )
         }
     }
@@ -86,6 +104,9 @@ extension KYCInformationViewConfig {
         case .pending:
             titleColor = UIColor.orange
             isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
+        case .underReview:
+            titleColor = .orange
+            isPrimaryButtonEnabled = false
         }
         return KYCInformationViewConfig(
             titleColor: titleColor,

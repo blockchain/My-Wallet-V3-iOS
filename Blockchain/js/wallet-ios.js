@@ -1463,6 +1463,7 @@ MyWalletPhone.changeMobileNumber = function(mobileNumber) {
 
     var error = function (e) {
         console.log('Error changing mobile number: ' + e);
+        objc_on_change_mobile_number_error();
     };
 
     BlockchainSettingsAPI.changeMobileNumber(mobileNumber, success, error);

@@ -12,18 +12,19 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: - IBOutlets
 
+    @IBOutlet private var numberKeypadView: NumberKeypadView!
     // Label to be updated when amount is being typed in
-    @IBOutlet var primaryAmountLabel: UILabel!
+    @IBOutlet private var primaryAmountLabel: UILabel!
     // Amount being typed in converted to input crypto or input fiat
-    @IBOutlet var secondaryAmountLabel: UILabel!
-    @IBOutlet var useMinimumButton: UIButton!
-    @IBOutlet var useMaximumButton: UIButton!
-    @IBOutlet var exchangeRateButton: UIButton!
-    @IBOutlet var exchangeButton: UIButton!
+    @IBOutlet private var secondaryAmountLabel: UILabel!
+    @IBOutlet private var useMinimumButton: UIButton!
+    @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var exchangeRateButton: UIButton!
+    @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
 
-    @IBAction func fiatToggleTapped(_ sender: Any) {
-
+    @IBAction private func displayInputTypeTapped(_ sender: Any) {
+        delegate?.onDisplayInputTypeTapped()
     }
 
     // MARK: Public Properties
@@ -32,74 +33,63 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: Private Properties
 
-    fileprivate var exchangeCreateView: ExchangeCreateView!
+    fileprivate var presenter: ExchangeCreatePresenter!
+    fileprivate var dependencies: ExchangeDependencies!
+
+    // MARK: Factory
+    
+    class func make(with dependencies: ExchangeDependencies) -> ExchangeCreateViewController {
+        let controller = ExchangeCreateViewController.makeFromStoryboard()
+        controller.dependencies = dependencies
+        return controller
+    }
 
     // MARK: Lifecycle
 
     override func viewDidLoad() {
+        dependenciesSetup()
+        delegate?.onViewLoaded()
+    }
+
+    fileprivate func dependenciesSetup() {
+        // DEBUG - ideally add an .empty state for a blank/loading state for MarketsModel here.
+        let interactor = ExchangeCreateInteractor(
+            dependencies: dependencies,
+            model: MarketsModel(
+                pair: TradingPair(from: .ethereum,to: .bitcoinCash)!,
+                fiatCurrency: "USD",
+                fix: .base,
+                volume: 0
+        ))
+        numberKeypadView.delegate = self
+        presenter = ExchangeCreatePresenter(interactor: interactor)
+        presenter.interface = self
+        interactor.output = presenter
+        delegate = presenter
     }
 }
 
 extension ExchangeCreateViewController: NumberKeypadViewDelegate {
-    func onDecimalButtonTapped() {
-
-    }
-
-    func onNumberButtonTapped(value: String) {
-
+    func onAddInputTapped(value: String) {
+        delegate?.onAddInputTapped(value: value)
     }
 
     func onBackspaceTapped() {
-
+        delegate?.onBackspaceTapped()
     }
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-    func continueButtonEnabled(_ enabled: Bool) {
-        if enabled {
-            exchangeCreateView.enablePaymentButtons()
-        } else {
-            exchangeCreateView.disablePaymentButtons()
-        }
-    }
-
-    func exchangeRateUpdated(_ rate: String) {
+    func ratesViewVisibility(_ visibility: Visibility) {
 
     }
-}
 
-extension ExchangeCreateViewController: ExchangeCreateViewDelegate {
-    func assetToggleButtonTapped() {
+    func updateInputLabels(primary: String?, secondary: String?) {
+        primaryAmountLabel.text = primary
+        secondaryAmountLabel.text = secondary
     }
 
-    func useMinButtonTapped() {
-    }
+    func updateRateLabels(first: String, second: String, third: String) {
 
-    func useMaxButtonTapped() {
-    }
-
-    func continueButtonTapped() {
-        delegate?.onContinueButtonTapped()
-    }
-}
-
-extension ExchangeCreateViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        delegate?.onChangeAmountFieldText()
-        return true
-    }
-}
-
-extension ExchangeCreateViewController: AddressSelectionDelegate {
-    func getAssetType() -> LegacyAssetType {
-        return LegacyAssetType(rawValue: -1)!
-    }
-
-    func didSelect(fromAccount account: Int32, assetType asset: LegacyAssetType) {
-        delegate?.onChangeFrom(assetType: AssetType.from(legacyAssetType: asset))
-    }
-
-    func didSelect(toAccount account: Int32, assetType asset: LegacyAssetType) {
-        delegate?.onChangeTo(assetType: AssetType.from(legacyAssetType: asset))
     }
 }

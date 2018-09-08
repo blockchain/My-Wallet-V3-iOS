@@ -59,6 +59,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>NSCameraUsageDescription</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Required for video capture</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Enabling Face ID allows you to securely access your wallet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -92,6 +94,8 @@
 	<string>$(WALLET_SERVER)</string>
 	<key>RETAIL_CORE_URL</key>
 	<string>$(RETAIL_CORE_URL)</string>
+	<key>RETAIL_CORE_SOCKET_URL</key>
+	<string>$(RETAIL_CORE_SOCKET_URL)</string>
 	<key>WEBSOCKET_SERVER</key>
 	<string>$(WEBSOCKET_SERVER)</string>
 	<key>WEBSOCKET_SERVER_BCH</key>

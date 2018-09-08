@@ -22,7 +22,7 @@ struct OnfidoCreateApplicantRequest: Codable {
 }
 
 extension OnfidoCreateApplicantRequest {
-    init?(kycUser: KYCUser) {
+    init?(kycUser: NabuUser) {
         guard let personalDetails = kycUser.personalDetails,
             let first = personalDetails.firstName,
             let last = personalDetails.lastName else {

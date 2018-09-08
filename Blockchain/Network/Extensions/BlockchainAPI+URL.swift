@@ -25,6 +25,11 @@ extension BlockchainAPI {
         return "https://\(host)"
     }
 
+    var retailCoreSocketUrl: String {
+        let host = Bundle.main.infoDictionary!["RETAIL_CORE_SOCKET_URL"] as! String
+        return "wss://\(host)"
+    }
+
     var walletOptionsUrl: String {
         return "\(walletUrl)/Resources/wallet-options.json"
     }

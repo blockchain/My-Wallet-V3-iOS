@@ -104,12 +104,13 @@ import RxSwift
 }
 
 extension BuySellCoordinator: WalletBuySellDelegate {
-    func didCompleteTrade(trade: Trade) {
+    
+    func didCompleteTrade(with hash: String, date: String) {
         let actions = [UIAlertAction(title: LocalizationConstants.okString, style: .cancel, handler: nil),
                        UIAlertAction(title: LocalizationConstants.BuySell.viewDetails, style: .default, handler: { _ in
-                        AppCoordinator.shared.tabControllerManager.showTransactionDetail(forHash: trade.hash)
+                        AppCoordinator.shared.tabControllerManager.showTransactionDetail(forHash: hash)
                        })]
-        AlertViewPresenter.shared.standardNotify(message: String(format: LocalizationConstants.BuySell.tradeCompletedDetailArg, trade.date),
+        AlertViewPresenter.shared.standardNotify(message: String(format: LocalizationConstants.BuySell.tradeCompletedDetailArg, date),
                                                  title: LocalizationConstants.BuySell.tradeCompleted,
                                                  actions: actions)
     }

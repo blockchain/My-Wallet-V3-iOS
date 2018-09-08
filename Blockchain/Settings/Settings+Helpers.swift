@@ -139,17 +139,19 @@ extension AppSettingsController {
         }
     }
 
-    func createBadge(_ cell: UITableViewCell, color: UIColor? = nil, _ using: KYCUser? = nil) {
+    func createBadge(_ cell: UITableViewCell, color: UIColor? = nil, _ using: NabuUser? = nil) {
         cell.detailTextLabel?.layer.cornerRadius = 4
         cell.detailTextLabel?.layer.masksToBounds = true
         if let status = using?.status {
             switch status {
             case .approved: cell.detailTextLabel?.backgroundColor = .verified
             case .expired, .failed, .none: cell.detailTextLabel?.backgroundColor = .unverified
-            case .pending: cell.detailTextLabel?.backgroundColor = .pending
+            case .pending, .underReview: cell.detailTextLabel?.backgroundColor = .pending
             }
+        } else if let theColor = color {
+            cell.detailTextLabel?.backgroundColor = theColor
         } else {
-            cell.detailTextLabel?.backgroundColor = color
+            cell.detailTextLabel?.backgroundColor = .unverified
         }
         cell.detailTextLabel?.textColor = .white
         cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)

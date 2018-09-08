@@ -9,9 +9,10 @@
 import Foundation
 
 enum KYCAccountStatus: String {
-    case none = "NONE"
-    case expired = "EXPIRED"
     case approved = "VERIFIED"
+    case expired = "EXPIRED"
     case failed = "REJECTED"
+    case none = "NONE"
     case pending = "PENDING"
+    case underReview = "UNDER_REVIEW"
 }

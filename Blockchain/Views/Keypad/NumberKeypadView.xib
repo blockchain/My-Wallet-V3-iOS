@@ -9,9 +9,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -25,16 +25,22 @@
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="1"/>
                                     <connections>
-                                        <action selector="numberButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="oO8-yb-HKn"/>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="xkC-zv-REz"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-De-n4k">
                                     <rect key="frame" x="117" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="2"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="M3w-Cc-KVn"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PkX-kC-KSG">
                                     <rect key="frame" x="234" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="3"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="zRI-6C-SH5"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>
@@ -49,14 +55,23 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ctr-Ct-wVn">
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="4"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Z24-09-4KO"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICd-bU-rTb">
                                     <rect key="frame" x="117" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="5"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="7ca-mZ-t5Y"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5mu-Rh-ATf">
                                     <rect key="frame" x="234" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="6"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="vD7-QF-lvB"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>
@@ -71,14 +86,23 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yuq-1L-HoU">
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="7"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Yia-Mz-aCo"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDk-qh-2Hi">
                                     <rect key="frame" x="117" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="8"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Idj-6v-RJp"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOX-WC-Mc9">
                                     <rect key="frame" x="234" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="9"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="lab-z7-Qni"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <constraints>
@@ -94,18 +118,21 @@
                                     <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="."/>
                                     <connections>
-                                        <action selector="decimalButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="8Z4-ci-yM5"/>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="tvp-CN-MCk"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kma-Kx-hJu">
                                     <rect key="frame" x="117" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="0"/>
+                                    <connections>
+                                        <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="2yB-KY-1gg"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sq4-OM-1dd" userLabel="Backspace">
                                     <rect key="frame" x="234" y="0.0" width="109" height="61"/>
                                     <state key="normal" title="&lt;x]"/>
                                     <connections>
-                                        <action selector="backspaceButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="ama-vk-TXp"/>
+                                        <action selector="backspaceButtonTapped:" destination="-1" eventType="touchUpInside" id="oi0-r2-q27"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -139,18 +166,6 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <connections>
-                <outletCollection property="numberButtons" destination="NCn-ay-Eff" collectionClass="NSMutableArray" id="zx7-FD-kvf"/>
-                <outletCollection property="numberButtons" destination="aYO-De-n4k" collectionClass="NSMutableArray" id="27I-3V-1K2"/>
-                <outletCollection property="numberButtons" destination="PkX-kC-KSG" collectionClass="NSMutableArray" id="uVi-Wi-68q"/>
-                <outletCollection property="numberButtons" destination="Ctr-Ct-wVn" collectionClass="NSMutableArray" id="esm-BS-7kw"/>
-                <outletCollection property="numberButtons" destination="ICd-bU-rTb" collectionClass="NSMutableArray" id="bUk-UK-wdv"/>
-                <outletCollection property="numberButtons" destination="5mu-Rh-ATf" collectionClass="NSMutableArray" id="DAt-ec-bnI"/>
-                <outletCollection property="numberButtons" destination="yuq-1L-HoU" collectionClass="NSMutableArray" id="kGe-cS-UJz"/>
-                <outletCollection property="numberButtons" destination="SDk-qh-2Hi" collectionClass="NSMutableArray" id="wIL-Sc-1eJ"/>
-                <outletCollection property="numberButtons" destination="vOX-WC-Mc9" collectionClass="NSMutableArray" id="Dfj-am-1II"/>
-                <outletCollection property="numberButtons" destination="kma-Kx-hJu" collectionClass="NSMutableArray" id="0GS-VN-4st"/>
-            </connections>
         </view>
     </objects>
 </document>

@@ -14,9 +14,9 @@ enum OnfidoError: Error {
 
 class OnfidoService {
 
-    private let authService: KYCAuthenticationService
+    private let authService: NabuAuthenticationService
 
-    init(authService: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(authService: NabuAuthenticationService = NabuAuthenticationService.shared) {
         self.authService = authService
     }
 
@@ -24,9 +24,9 @@ class OnfidoService {
 
     /// Creates an OnfidoUser and returns the credentials for the Onfido API.
     ///
-    /// - Parameter user: the KYCUser
+    /// - Parameter user: the NabuUser
     /// - Returns: a Single returning the OnfidoUser and the Onfido credentials
-    func createUserAndCredentials(user: KYCUser) -> Single<(OnfidoUser, OnfidoCredentials)> {
+    func createUserAndCredentials(user: NabuUser) -> Single<(OnfidoUser, OnfidoCredentials)> {
         return getOnfidoCredentials().flatMap { [unowned self] credentials in
             return self.createOnfidoUser(from: user, token: credentials).map {
                 return ($0, credentials)
@@ -34,10 +34,30 @@ class OnfidoService {
         }
     }
 
+    /// Submits the Onfido user to Blockchain to complete KYC processing.
+    /// This should be invoked upon successfully uploading the identity docs to Onfido.
+    ///
+    /// - Parameter user: the OnfidoUser
+    /// - Returns: a Completable
+    func submitVerification(_ user: OnfidoUser) -> Completable {
+        return authService.getSessionToken().flatMapCompletable { token in
+            let headers = [HttpHeaderField.authorization: token.token]
+            let payload = [
+                "applicantId": user.identifier,
+                HttpHeaderField.clientType: HttpHeaderValue.clientTypeApp
+            ]
+            return KYCNetworkRequest.request(
+                post: .submitVerification,
+                parameters: payload,
+                headers: headers
+            )
+        }
+    }
+
     // MARK: - Private
 
     private func getOnfidoCredentials() -> Single<OnfidoCredentials> {
-        return authService.getKycSessionToken().flatMap { token in
+        return authService.getSessionToken().flatMap { token in
             let headers = [HttpHeaderField.authorization: token.token]
             return KYCNetworkRequest.request(get: .credentialsForOnfido, headers: headers, type: OnfidoCredentials.self)
         }
@@ -46,10 +66,10 @@ class OnfidoService {
     /// Creates a new OnfidoUser from a KYCUser.
     ///
     /// - Parameters:
-    ///   - user: the KYCUser
+    ///   - user: the NabuUser
     ///   - token: the Onfido token
     /// - Returns: a Single returning the created OnfidoUser
-    private func createOnfidoUser(from user: KYCUser, token: OnfidoCredentials) -> Single<OnfidoUser> {
+    private func createOnfidoUser(from user: NabuUser, token: OnfidoCredentials) -> Single<OnfidoUser> {
         guard let request = OnfidoCreateApplicantRequest(kycUser: user) else {
             return Single.error(OnfidoError.invalidKycUser)
         }

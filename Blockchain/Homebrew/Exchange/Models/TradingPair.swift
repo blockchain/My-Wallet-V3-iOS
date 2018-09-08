@@ -63,6 +63,10 @@ struct TradingPair {
             internalTo = newValue
         }
     }
+    
+    var stringRepresentation: String {
+        return internalFrom.symbol + "-" + internalTo.symbol
+    }
 }
 
 extension TradingPair: Equatable {

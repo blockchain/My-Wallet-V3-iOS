@@ -51,6 +51,7 @@ class ExchangeListInteractor: ExchangeListInput {
     }
     
     func nextPageBefore(identifier: String) {
+        guard service.isExecuting() == false else { return }
         guard let model = service.tradeModels.filter({ $0.identifier == identifier }).first else { return }
         service.getHomebrewTrades(before: model.transactionDate) { [weak self] (result) in
             switch result {

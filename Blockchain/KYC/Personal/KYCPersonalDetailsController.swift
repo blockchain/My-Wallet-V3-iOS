@@ -43,7 +43,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     fileprivate var detailsCoordinator: PersonalDetailsCoordinator!
 
-    private var user: KYCUser?
+    private var user: NabuUser?
 
     // MARK: Overrides
 
@@ -57,7 +57,16 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     override func apply(model: KYCPageModel) {
         guard case let .personalDetails(user) = model else { return }
+
         self.user = user
+
+        guard let personalDetails = user.personalDetails else { return }
+
+        firstNameField.text = personalDetails.firstName
+        lastNameField.text = personalDetails.lastName
+        if let birthday = personalDetails.birthday {
+            birthdayField.selectedDate = birthday
+        }
     }
 
     // MARK: Lifecycle

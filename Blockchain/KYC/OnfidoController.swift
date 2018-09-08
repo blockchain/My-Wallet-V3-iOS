@@ -17,8 +17,8 @@ protocol OnfidoControllerDelegate: class {
 }
 
 class OnfidoController: UIViewController {
-    static let shared = OnfidoController()
     weak var delegate: OnfidoControllerDelegate?
+    var user: OnfidoUser!
     private var config: OnfidoConfig?
 
     convenience init() {

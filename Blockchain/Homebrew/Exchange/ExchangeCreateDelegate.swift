@@ -8,9 +8,8 @@
 
 import Foundation
 
-protocol ExchangeCreateDelegate: class {
+protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
+    func onViewLoaded()
+    func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
-    func onChangeAmountFieldText()
-    func onChangeFrom(assetType: AssetType)
-    func onChangeTo(assetType: AssetType)
 }

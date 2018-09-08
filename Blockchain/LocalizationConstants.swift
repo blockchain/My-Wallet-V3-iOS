@@ -61,6 +61,10 @@ struct LocalizationConstants {
     )
 
     struct Errors {
+        static let genericError = NSLocalizedString(
+            "An error occured. Please try again.",
+            comment: "Generic error message displayed when an error occurs."
+        )
         static let error = NSLocalizedString("Error", comment: "")
         static let loadingSettings = NSLocalizedString("loading Settings", comment: "")
         static let errorLoadingWallet = NSLocalizedString("Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.", comment: "")
