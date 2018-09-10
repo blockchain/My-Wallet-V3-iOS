@@ -25,17 +25,27 @@ class ExchangeConversionService: ExchangeConversionAPI {
         let fix = conversion.fix
         switch fix {
         case .base:
-            input = "\(currencyRatio.base.crypto.value)"
-            output = "\(currencyRatio.base.fiat.value)"
+            input = format(cryptoValue: currencyRatio.base.crypto.value)
+            output = format(fiatValue: currencyRatio.base.fiat.value)
         case .baseInFiat:
-            input = "\(currencyRatio.base.fiat.value)"
-            output = "\(currencyRatio.base.crypto.value)"
+            input = format(fiatValue: currencyRatio.base.fiat.value)
+            output = format(cryptoValue: currencyRatio.base.crypto.value)
         case .counter:
-            input = "\(currencyRatio.counter.crypto.value)"
-            output = "\(currencyRatio.counter.fiat.value)"
+            input = format(cryptoValue: currencyRatio.counter.crypto.value)
+            output = format(fiatValue: currencyRatio.counter.fiat.value)
         case .counterInFiat:
-            input = "\(currencyRatio.counter.fiat.value)"
-            output = "\(currencyRatio.counter.crypto.value)"
+            input = format(fiatValue: currencyRatio.counter.fiat.value)
+            output = format(cryptoValue: currencyRatio.counter.crypto.value)
         }
+    }
+}
+
+extension ExchangeConversionService {
+    func format(fiatValue: Decimal) -> String {
+        return NumberFormatter.localCurrencyFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: fiatValue))!
+    }
+
+    func format(cryptoValue: Decimal) -> String {
+        return NumberFormatter.assetFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: cryptoValue))!
     }
 }
