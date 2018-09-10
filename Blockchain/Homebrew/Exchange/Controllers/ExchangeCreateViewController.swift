@@ -59,10 +59,15 @@ class ExchangeCreateViewController: UIViewController {
         dependenciesSetup()
         delegate?.onViewLoaded()
         
+        
+        let demo = Trade.demo()
+        let model = TradingPairView.confirmationModel(for: demo)
+        tradingPairView.apply(model: model)
+        
 
-//        primaryAmountLabel.textColor = UIColor.brandPrimary
-//        primaryDecimalLabel.textColor = UIColor.brandPrimary
-//        secondaryAmountLabel.textColor = UIColor.brandPrimary
+        primaryAmountLabel.textColor = UIColor.brandPrimary
+        primaryDecimalLabel.textColor = UIColor.brandPrimary
+        secondaryAmountLabel.textColor = UIColor.brandPrimary
         
         useMaximumButton.layer.cornerRadius = 4.0
         useMaximumButton.layer.borderWidth = 1.0
@@ -77,9 +82,24 @@ class ExchangeCreateViewController: UIViewController {
         exchangeRateView.layer.borderWidth = 1.0
         exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
-//        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic)
-//        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
-//        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
+        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
+        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
+        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
+        
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyLightAppearance()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyDarkAppearance()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
     }
 
     fileprivate func dependenciesSetup() {
@@ -112,15 +132,20 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+    
+    func navigationBar(_ visibility: Visibility) {
+        navigationController?.setNavigationBarHidden(visibility.isHidden, animated: false)
+    }
+    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
-//        primaryAmountLabel.text = primary
-//        primaryDecimalLabel.text = primaryDecimal
-//        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
-//        secondaryAmountLabel.text = secondary
+        primaryAmountLabel.text = primary
+        primaryDecimalLabel.text = primaryDecimal
+        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
+        secondaryAmountLabel.text = secondary
     }
 
     func updateRateLabels(first: String, second: String, third: String) {
