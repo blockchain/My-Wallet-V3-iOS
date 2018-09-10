@@ -57,19 +57,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             this.conversions.update(with: conversion)
             let input = this.inputs.activeInput.input
 
-            // Remove trailing zeros - if the input values are equal, then avoid replacing
+            // Remove trailing zeros and decimal place - if the input values are equal, then avoid replacing
             // text, which would interrupt user entry
-            var inputTest = input.copy() as! String
-            while inputTest.hasSuffix("0") {
-                inputTest = String(inputTest.dropLast())
-            }
+            let inputTest = this.conversions.removeInsignificantCharacters(input: input)
+            let conversionInputTest = this.conversions.removeInsignificantCharacters(input: this.conversions.input)
 
-            // Remove trailing decimal place
-            if inputTest.hasSuffix(this.inputs.activeInput.decimalSeparator) {
-                inputTest = String(inputTest.dropLast())
-            }
-
-            if inputTest != this.conversions.input {
+            if inputTest != conversionInputTest {
                 this.inputs.activeInput.input = this.conversions.input
             }
 
@@ -122,7 +115,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             )
         }
 
-        // Update the amounts shown in the Trading Pair view
+        // TODO: update the amounts shown in the Trading Pair view
     }
 
     func displayInputTypeTapped() {
@@ -155,13 +148,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         if model.isUsingFiat == true {
             if let fractional = inputs.inputComponents.fractional,
-                fractional.count > NumberFormatter.localCurrencyFractionDigits {
+                fractional.count >= NumberFormatter.localCurrencyFractionDigits {
                 Logger.shared.warning("Cannot add more than two decimal values for fiat")
                 return
             }
         } else {
             if let fractional = inputs.inputComponents.fractional,
-                fractional.count > NumberFormatter.assetFractionDigits {
+                fractional.count >= NumberFormatter.assetFractionDigits {
                 Logger.shared.warning("Cannot add more than eight decimal values for crypto")
                 return
             }

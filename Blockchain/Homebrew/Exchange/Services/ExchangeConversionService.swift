@@ -14,6 +14,7 @@ protocol ExchangeConversionAPI {
     func update(with conversion: Conversion)
     var input: String { get }
     var output: String { get }
+    func removeInsignificantCharacters(input: String) -> String
 }
 
 class ExchangeConversionService: ExchangeConversionAPI {
@@ -40,12 +41,37 @@ class ExchangeConversionService: ExchangeConversionAPI {
     }
 }
 
-extension ExchangeConversionService {
+private extension ExchangeConversionService {
     func format(fiatValue: Decimal) -> String {
         return NumberFormatter.localCurrencyFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: fiatValue))!
     }
 
     func format(cryptoValue: Decimal) -> String {
         return NumberFormatter.assetFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: cryptoValue))!
+    }
+}
+
+extension ExchangeConversionService {
+    func removeInsignificantCharacters(input: String) -> String {
+        let decimalSeparator = NSLocale.current.decimalSeparator ?? "."
+
+        if !input.contains(decimalSeparator) {
+            // All characters are significant
+            return input
+        }
+
+        var inputCopy = input.copy() as! String
+
+        // Remove trailing zeros
+        while inputCopy.hasSuffix("0") {
+            inputCopy = String(inputCopy.dropLast())
+        }
+
+        // Remove trailing decimal place
+        if inputCopy.hasSuffix(decimalSeparator) {
+            inputCopy = String(inputCopy.dropLast())
+        }
+
+        return inputCopy
     }
 }

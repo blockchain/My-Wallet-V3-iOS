@@ -24,7 +24,7 @@ protocol ExchangeInputsAPI: class {
 class ExchangeInputsService: ExchangeInputsAPI {
     var activeInput: NumberInputDelegate
     var inputComponents: InputComponents {
-        let decimalSeparator = activeInput.decimalSeparator
+        let decimalSeparator = NSLocale.current.decimalSeparator ?? "."
         let components = activeInput.input.components(separatedBy: decimalSeparator)
         return (components.first ?? "0", decimalSeparator, components.count > 1 ? components.last : nil)
     }
