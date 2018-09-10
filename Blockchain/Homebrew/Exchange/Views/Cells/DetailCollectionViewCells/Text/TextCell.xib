@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="bXq-NT-Uv0" customClass="TextCell" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="435" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="435" height="50"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gqn-vO-j5a">
+                        <rect key="frame" x="16" y="8" width="403" height="34"/>
+                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="Gqn-vO-j5a" firstAttribute="leading" secondItem="bXq-NT-Uv0" secondAttribute="leading" constant="16" id="E9P-IE-eHC"/>
+                <constraint firstAttribute="trailing" secondItem="Gqn-vO-j5a" secondAttribute="trailing" constant="16" id="GPt-Im-JKj"/>
+                <constraint firstAttribute="bottom" secondItem="Gqn-vO-j5a" secondAttribute="bottom" constant="8" id="HLE-AX-1Ws"/>
+                <constraint firstItem="Gqn-vO-j5a" firstAttribute="top" secondItem="bXq-NT-Uv0" secondAttribute="top" constant="8" id="MdL-oG-88f"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="0Ny-dc-Y34"/>
+            <size key="customSize" width="435" height="50"/>
+            <connections>
+                <outlet property="descriptionLabel" destination="Gqn-vO-j5a" id="Vwu-Jd-Gi9"/>
+            </connections>
+            <point key="canvasLocation" x="-348" y="52"/>
+        </collectionViewCell>
+    </objects>
+</document>
