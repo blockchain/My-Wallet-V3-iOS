@@ -48,10 +48,19 @@ class ExchangeCreateViewController: UIViewController {
 
     override func viewDidLoad() {
         dependenciesSetup()
+        delegate?.onViewLoaded()
     }
 
     fileprivate func dependenciesSetup() {
-        let interactor = ExchangeCreateInteractor(dependencies: dependencies)
+        // DEBUG - ideally add an .empty state for a blank/loading state for MarketsModel here.
+        let interactor = ExchangeCreateInteractor(
+            dependencies: dependencies,
+            model: MarketsModel(
+                pair: TradingPair(from: .ethereum,to: .bitcoinCash)!,
+                fiatCurrency: "USD",
+                fix: .base,
+                volume: 0
+        ))
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
         presenter.interface = self

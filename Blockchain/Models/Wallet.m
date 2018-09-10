@@ -720,18 +720,6 @@
         [weakSelf on_change_password_error];
     };
 
-    self.context[@"objc_on_verify_mobile_number_success"] = ^() {
-        [weakSelf on_verify_mobile_number_success];
-    };
-
-    self.context[@"objc_on_verify_mobile_number_error"] = ^() {
-        [weakSelf on_verify_mobile_number_error];
-    };
-
-    self.context[@"objc_on_change_mobile_number_success"] = ^() {
-        [weakSelf on_change_mobile_number_success];
-    };
-
     self.context[@"objc_on_resend_verification_email_success"] = ^() {
         [weakSelf on_resend_verification_email_success];
     };
@@ -1477,21 +1465,31 @@
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.resendEmailConfirmation(\"%@\")", [email escapedForJS]]];
 }
 
-- (void)changeMobileNumber:(NSString *)newMobileNumber
+- (void)changeMobileNumber:(NSString *)newMobileNumber success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
 {
     if (![self isInitialized]) {
         return;
     }
 
+    // Set callbacks
+    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_change_mobile_number_success"];
+    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_change_mobile_number_error"];
+
+    // Invoke function in wallet
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.changeMobileNumber(\"%@\")", [newMobileNumber escapedForJS]]];
 }
 
-- (void)verifyMobileNumber:(NSString *)code
+- (void)verifyMobileNumber:(NSString *)code success:(void (^ _Nonnull)(void))success error: (void (^ _Nonnull)(void))error
 {
     if (![self isInitialized]) {
         return;
     }
 
+    // Set callbacks
+    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_verify_mobile_number_success"];
+    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_verify_mobile_number_error"];
+
+    // Invoke function in wallet
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.verifyMobile(\"%@\")", [code escapedForJS]]];
 }
 
@@ -3533,30 +3531,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_RESEND_VERIFICATION_EMAIL_SUCCESS object:nil];
 }
 
-- (void)on_change_mobile_number_success
-{
-    DLog(@"on_change_mobile_number_success");
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_SUCCESS object:nil];
-}
-
-- (void)on_change_mobile_number_error
-{
-    DLog(@"on_change_mobile_number_error");
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_CHANGE_MOBILE_NUMBER_ERROR object:nil];
-}
-
-- (void)on_verify_mobile_number_success
-{
-    DLog(@"on_verify_mobile_number_success");
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_SUCCESS object:nil];
-}
-
-- (void)on_verify_mobile_number_error
-{
-    DLog(@"on_verify_mobile_number_error");
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_KEY_VERIFY_MOBILE_NUMBER_ERROR object:nil];
-}
-
 - (void)on_change_two_step_success
 {
     DLog(@"on_change_two_step_success");
@@ -3584,8 +3558,6 @@
 - (void)on_get_history_success
 {
     DLog(@"on_get_history_success");
-
-//    [self getMessages];
 }
 
 - (void)did_get_fee:(NSNumber *)fee dust:(NSNumber *)dust txSize:(NSNumber *)txSize

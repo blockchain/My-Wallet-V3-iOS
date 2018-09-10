@@ -54,9 +54,9 @@ class KYCVerifyPhoneNumberPresenter {
             })
     }
 
-    func verify(number: String, code: String) {
+    func verifyNumber(with code: String) {
         view?.showLoadingView(with: LocalizationConstants.loading)
-        disposable = interactor.verify(number: number, code: code)
+        disposable = interactor.verifyNumber(with: code)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onCompleted: { [unowned self] in

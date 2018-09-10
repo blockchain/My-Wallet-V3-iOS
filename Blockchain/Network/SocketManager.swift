@@ -35,7 +35,7 @@ class SocketManager {
     // MARK: - Public methods
     func setupSocket(socketType: SocketType, url: URL) {
         switch socketType {
-        case .exchange: self.exchangeSocket = WebSocket(url: url)
+        case .exchange: self.exchangeSocket = WebSocket(url: url); self.exchangeSocket?.advancedDelegate = self
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
@@ -59,7 +59,6 @@ class SocketManager {
                 Logger.shared.error(errorNeedsSocketSetup(socketType: socketType))
                 return
             }
-            socket.advancedDelegate = self
             socket.connect()
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
@@ -88,9 +87,10 @@ class SocketManager {
 
         do {
             let string = try message.JSONMessage.encodeToString(encoding: .utf8)
+            Logger.shared.debug("Writing to socket: \(string)")
             socket.write(string: string)
         } catch {
-            Logger.shared.error("Could send websocket message as string")
+            Logger.shared.error("Could not send websocket message as string")
         }
     }
 
@@ -109,8 +109,8 @@ extension SocketManager: WebSocketAdvancedDelegate {
     }
 
     func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
-        let onError: () -> Void = {
-            Logger.shared.error("Could not form SocketMessage object from string")
+        let onError: (String) -> Void = { message in
+            Logger.shared.error("Could not form SocketMessage object from string: \(message)")
         }
 
         let onSuccess: (SocketMessage) -> Void = { socketMessage in
@@ -118,14 +118,27 @@ extension SocketManager: WebSocketAdvancedDelegate {
         }
 
         guard let data = text.data(using: .utf8) else {
-            onError()
+            onError("Couldn't form data from string")
             return
         }
 
-        // TODO: figure out a way to minimize computation here, such as by decoding to JSON type first and inspecting a certain key-value pair
-        Quote.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        Rate.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        // more structs of type SocketMessageCodable...
+        guard let json = try? JSONSerialization.jsonObject(with: data) as! [String: AnyObject] else {
+            onError("Couldn't create JSON object from data")
+            return
+        }
+
+        guard let type = json["type"] as? String else {
+            onError("Type is not a string value")
+            return
+        }
+
+        // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
+        switch type {
+        case "conversion": Conversion.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
+        case "error": onError("Error returned")
+        default: onError("Unsupported type")
+        }
     }
 
     func websocketDidDisconnect(socket: WebSocket, error: Error?) {

@@ -65,7 +65,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
 
     fileprivate var locationCoordinator: LocationSuggestionCoordinator!
     fileprivate var dataProvider: LocationDataProvider!
-    private var user: KYCUser?
+    private var user: NabuUser?
     private var country: KYCCountry?
 
     // MARK: KYCCoordinatorDelegate
@@ -74,6 +74,13 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
         guard case let .address(user, country) = model else { return }
         self.user = user
         self.country = country
+
+        guard let address = user.address else { return }
+        addressTextField.text = address.lineOne
+        apartmentTextField.text = address.lineTwo
+        postalCodeTextField.text = address.postalCode
+        cityTextField.text = address.city
+        stateTextField.text = address.state
     }
 
     // MARK: Lifecycle
@@ -163,10 +170,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
 
     fileprivate func primaryButtonTapped() {
         guard checkFieldsValidity() else { return }
-        guard let country = country else {
-            Logger.shared.debug("country is nil. Cannot proceed.")
-            return
-        }
+
         validationFields.forEach({$0.resignFocus()})
 
         let address = UserAddress(
@@ -175,7 +179,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
             postalCode: postalCodeTextField.text ?? "",
             city: cityTextField.text ?? "",
             state: stateTextField.text ?? "",
-            country: country.name
+            countryCode: country?.code ?? user?.address?.countryCode ?? ""
         )
         searchDelegate?.onSubmission(address, completion: { [weak self] in
             guard let this = self else { return }

@@ -61,6 +61,10 @@ struct LocalizationConstants {
     )
 
     struct Errors {
+        static let genericError = NSLocalizedString(
+            "An error occured. Please try again.",
+            comment: "Generic error message displayed when an error occurs."
+        )
         static let error = NSLocalizedString("Error", comment: "")
         static let loadingSettings = NSLocalizedString("loading Settings", comment: "")
         static let errorLoadingWallet = NSLocalizedString("Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.", comment: "")
@@ -353,6 +357,10 @@ struct LocalizationConstants {
             "All amounts are correct at this time but might change depending on the market price and transaction rates at the time your order is processed",
             comment: "Text displayed on exchange screen to inform user of changing market rates"
         )
+        static let orderID = NSLocalizedString("Order ID", comment: "Label in the exchange locked screen.")
+        static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
+        static let done = NSLocalizedString("Done", comment: "Footer button title")
+        static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
     }
 
     struct AddressAndKeyImport {

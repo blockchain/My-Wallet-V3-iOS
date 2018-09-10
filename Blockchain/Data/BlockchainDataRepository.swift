@@ -16,19 +16,19 @@ import RxSwift
 
     static let shared = BlockchainDataRepository()
 
-    private let authenticationService: KYCAuthenticationService
+    private let authenticationService: NabuAuthenticationService
 
-    init(authenticationService: KYCAuthenticationService = KYCAuthenticationService.shared) {
+    init(authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared) {
         self.authenticationService = authenticationService
     }
 
     // MARK: - Public Properties
 
-    /// The KYCUser. This will use a cached value if available
-    var kycUser: Single<KYCUser> {
+    /// The NabuUser. This will use a cached value if available
+    var nabuUser: Single<NabuUser> {
         return fetchData(
             cachedValue: cachedUser,
-            networkValue: fetchKycUser()
+            networkValue: fetchNabuUser()
         )
     }
 
@@ -43,23 +43,23 @@ import RxSwift
 
     private var cachedCountries = BehaviorRelay<Countries?>(value: nil)
 
-    private var cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+    private var cachedUser = BehaviorRelay<NabuUser?>(value: nil)
 
     // MARK: - Public Methods
 
     /// Clears cached data in this repository
     func clearCache() {
-        cachedUser = BehaviorRelay<KYCUser?>(value: nil)
+        cachedUser = BehaviorRelay<NabuUser?>(value: nil)
         cachedCountries = BehaviorRelay<Countries?>(value: nil)
     }
 
-    /// Fetches the KYCUser over the network
+    /// Fetches the NabuUser over the network
     ///
-    /// - Returns: the fetched KYCUser
-    func fetchKycUser() -> Single<KYCUser> {
-        return authenticationService.getKycSessionToken().flatMap { token in
+    /// - Returns: the fetched NabuUser
+    func fetchNabuUser() -> Single<NabuUser> {
+        return authenticationService.getSessionToken().flatMap { token in
             let headers = [HttpHeaderField.authorization: token.token]
-            return KYCNetworkRequest.request(get: .currentUser, headers: headers, type: KYCUser.self)
+            return KYCNetworkRequest.request(get: .currentUser, headers: headers, type: NabuUser.self)
         }
     }
 

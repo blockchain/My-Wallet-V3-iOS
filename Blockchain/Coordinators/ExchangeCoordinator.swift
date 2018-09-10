@@ -40,7 +40,7 @@ struct ExchangeServices: ExchangeDependencies {
         case shapeshift
     }
 
-    private(set) var user: KYCUser?
+    private(set) var user: NabuUser?
 
     static let shared = ExchangeCoordinator()
 
@@ -73,7 +73,7 @@ struct ExchangeServices: ExchangeDependencies {
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }
-        disposable = BlockchainDataRepository.shared.kycUser
+        disposable = BlockchainDataRepository.shared.nabuUser
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in

@@ -13,7 +13,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     // MARK: Properties
 
-    private var user: KYCUser?
+    private var user: NabuUser?
 
     // MARK: BottomButtonContainerView
 
@@ -48,6 +48,9 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
     override func apply(model: KYCPageModel) {
         guard case let .phone(user) = model else { return }
         self.user = user
+
+        guard let mobile = user.mobile else { return }
+        validationTextFieldMobileNumber.text = mobile.phone
     }
 
     // MARK: - UIViewController Lifecycle Methods
