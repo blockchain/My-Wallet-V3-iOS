@@ -10,9 +10,9 @@ import Foundation
 
 final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
-    // MARK: Private Properties
+    // MARK: Public Properties
 
-    private var phoneNumber: String = "" {
+    var phoneNumber: String = "" {
         didSet {
             guard isViewLoaded else { return }
             labelPhoneNumber.text = phoneNumber
@@ -51,6 +51,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     override func viewDidLoad() {
         super.viewDidLoad()
         validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
+        labelPhoneNumber.text = phoneNumber
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         validationTextFieldConfirmationCode.becomeFocused()
     }
@@ -66,7 +67,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     override func apply(model: KYCPageModel) {
         guard case let .phone(user) = model else { return }
 
-        guard let mobile = user.mobile else { return }
+        guard let mobile = user.mobile, phoneNumber.count == 0 else { return }
         phoneNumber = mobile.phone
     }
 
