@@ -12,24 +12,23 @@ import RxSwift
 class ExchangeCreateInteractor {
     var disposable: Disposable?
     weak var output: ExchangeCreateOutput?
-    fileprivate let inputs: ExchangeInputsAPI
+    fileprivate var inputs: ExchangeInputsAPI
     fileprivate var markets: ExchangeMarketsAPI
-    private let inputsState: InputsState
+    fileprivate var conversions: ExchangeConversionAPI
     private var model: MarketsModel? {
         didSet {
             if markets.hasAuthenticated {
-                updateConversion()
+                updateMarketsConversion()
             }
         }
     }
 
     init(dependencies: ExchangeDependencies,
-         model: MarketsModel,
-         inputsState: InputsState = InputsState()
+         model: MarketsModel
     ) {
-        self.inputsState = inputsState
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
+        self.conversions = dependencies.conversions
         self.model = model
     }
 
@@ -46,19 +45,23 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
             self.subscribeToConversions()
-            self.updateConversion()
+            self.updateMarketsConversion()
         })
     }
 
     func subscribeToConversions() {
-        disposable = markets.conversions.subscribe(onNext: { [unowned self] conversion in
-            // do something with the converison
+        disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
+            guard let this = self else { return }
+            this.conversions.update(with: conversion)
+            this.inputs.activeInput.input = this.conversions.input
+            this.inputs.lastOutput = this.conversions.output
+            this.updateOutput()
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
         })
     }
 
-    func updateConversion() {
+    func updateMarketsConversion() {
         guard let model = model else {
             Logger.shared.error("Updating conversion with no model")
             return
@@ -66,8 +69,23 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         markets.updateConversion(model: model)
     }
 
-    func updateInput() {
-        if inputsState.isUsingFiat {
+    func updatedInput() {
+        // Update model volume
+        guard let model = model else {
+            Logger.shared.error("Updating input with no model")
+            return
+        }
+        model.volume = Decimal(string: inputs.activeInput.input)!
+
+        updateOutput()
+
+        // Re-subscribe to socket with new volume value
+        updateMarketsConversion()
+    }
+
+    func updateOutput() {
+        // Update the inputs in crypto and fiat
+        if model?.isUsingFiat == true {
             let components = inputs.inputComponents
             output?.updatedInput(
                 primary: components.integer,
@@ -81,12 +99,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 secondary: inputs.lastOutput
             )
         }
+
+        // Update the amounts shown in the Trading Pair view
     }
 
     func displayInputTypeTapped() {
-        inputsState.isUsingFiat = !inputsState.isUsingFiat
+        model?.toggleFiatInput()
         inputs.toggleInput()
-        updateInput()
+        updatedInput()
     }
     
     func ratesViewTapped() {
@@ -103,11 +123,11 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     
     func onBackspaceTapped() {
         inputs.backspace()
-        updateInput()
+        updatedInput()
     }
     
     func onAddInputTapped(value: String) {
         inputs.add(character: value)
-        updateInput()
+        updatedInput()
     }
 }

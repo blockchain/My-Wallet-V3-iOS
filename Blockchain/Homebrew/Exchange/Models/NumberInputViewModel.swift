@@ -10,7 +10,7 @@ import Foundation
 
 protocol NumberInputDelegate: class {
     var decimalSeparator: String { get }
-    var input: String { get }
+    var input: String { get set }
     func add(character: String)
     func backspace()
 }
@@ -28,7 +28,7 @@ class NumberInputViewModel: NumberInputDelegate {
     }
     private let numbers: Set<String> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     private let zero = "0"
-    private(set) var input: String
+    var input: String
 
     init() {
         input = zero

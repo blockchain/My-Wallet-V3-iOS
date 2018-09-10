@@ -13,15 +13,34 @@ class MarketsModel {
     var pair: TradingPair
     var fiatCurrency: String
     var fix: Fix
-    var volume: Double
+    var volume: Decimal
 
     init(pair: TradingPair,
          fiatCurrency: String,
          fix: Fix,
-         volume: Double) {
+         volume: Decimal) {
         self.pair = pair
         self.fiatCurrency = fiatCurrency
         self.fix = fix
         self.volume = volume
+    }
+}
+
+extension MarketsModel {
+    var isUsingFiat: Bool {
+        return fix == .baseInFiat || fix == .counterInFiat
+    }
+
+    func toggleFiatInput() {
+        switch fix {
+        case .base:
+            fix = .baseInFiat
+        case .baseInFiat:
+            fix = .base
+        case .counter:
+            fix = .counterInFiat
+        case .counterInFiat:
+            fix = .counter
+        }
     }
 }

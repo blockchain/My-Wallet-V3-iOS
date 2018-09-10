@@ -12,6 +12,7 @@ import RxSwift
 protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
     var markets: ExchangeMarketsAPI { get }
+    var conversions: ExchangeConversionAPI { get }
     var inputs: ExchangeInputsAPI { get }
     var rates: RatesAPI { get }
     var tradeExecution: TradeExecutionAPI { get }
@@ -20,6 +21,7 @@ protocol ExchangeDependencies {
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
     let markets: ExchangeMarketsAPI
+    var conversions: ExchangeConversionAPI
     let inputs: ExchangeInputsAPI
     let rates: RatesAPI
     let tradeExecution: TradeExecutionAPI
@@ -28,6 +30,7 @@ struct ExchangeServices: ExchangeDependencies {
         rates = RatesService()
         service = ExchangeService()
         markets = MarketsService(authenticationService: NabuAuthenticationService())
+        conversions = ExchangeConversionService()
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
     }
@@ -69,7 +72,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     // MARK: - Entry Point
 
-    func start() {
+    func start() {self.showExchange(type: .homebrew); return
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }

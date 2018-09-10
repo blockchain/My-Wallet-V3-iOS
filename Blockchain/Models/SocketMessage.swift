@@ -24,6 +24,7 @@ struct SocketMessage {
 protocol SocketMessageCodable: Codable {
     associatedtype JSONType: Codable
     static func tryToDecode(
+        socketType: SocketType,
         data: Data,
         onSuccess: (SocketMessage) -> Void,
         onError: (String) -> Void
@@ -32,13 +33,15 @@ protocol SocketMessageCodable: Codable {
 
 extension SocketMessageCodable {
     static func tryToDecode(
+        socketType: SocketType,
         data: Data,
         onSuccess: (SocketMessage) -> Void,
         onError: (String) -> Void
     ) {
         do {
             let decoded = try JSONType.decode(data: data)
-            let socketMessage = SocketMessage(type: .unassigned, JSONMessage: decoded)
+            let socketMessage = SocketMessage(type: socketType, JSONMessage: decoded)
+            Logger.shared.debug("Decoded socket message of type \(JSONType.self)")
             onSuccess(socketMessage)
             return
         } catch {
@@ -74,7 +77,7 @@ struct ConversionSubscribeParams: Codable {
     let pair: String
     let fiatCurrency: String
     let fix: Fix
-    let volume: Double
+    let volume: Decimal
 }
 
 // MARK: - Received Messages
@@ -97,7 +100,7 @@ struct Conversion: SocketMessageCodable {
     let sequenceNumber: Int
     let channel, type, pair, fiatCurrency: String
     let fix: Fix
-    let volume: Double
+    let volume: Decimal
     let currencyRatio: CurrencyRatio
 
     private enum CodingKeys: CodingKey {
@@ -115,10 +118,10 @@ struct Conversion: SocketMessageCodable {
 struct CurrencyRatio: Codable {
     let base: FiatCrypto
     let counter: FiatCrypto
-    let baseToFiatRate: Double
-    let baseToCounterRate: Double
-    let counterToBaseRate: Double
-    let counterToFiatRate: Double
+    let baseToFiatRate: Decimal
+    let baseToCounterRate: Decimal
+    let counterToBaseRate: Decimal
+    let counterToFiatRate: Decimal
 }
 
 struct FiatCrypto: Codable {
@@ -128,7 +131,7 @@ struct FiatCrypto: Codable {
 
 struct SymbolValue: Codable {
     let symbol: String
-    let value: Double
+    let value: Decimal
 }
 
 struct Rate: SocketMessageCodable {
