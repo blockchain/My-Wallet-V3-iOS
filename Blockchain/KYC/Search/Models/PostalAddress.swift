@@ -24,7 +24,7 @@ struct UserAddress: Codable {
     let postalCode: String
     let city: String
     let state: String?
-    let country: String
+    let countryCode: String
 
     enum CodingKeys: String, CodingKey {
         case lineOne = "line1"
@@ -32,7 +32,7 @@ struct UserAddress: Codable {
         case postalCode = "postCode"
         case city = "city"
         case state = "state"
-        case country = "country"
+        case countryCode = "country"
     }
 }
 
@@ -42,7 +42,7 @@ extension UserAddress: Equatable {
             lhs.lineTwo == rhs.lineTwo &&
             lhs.postalCode == rhs.postalCode &&
             lhs.city == rhs.city &&
-            lhs.country == rhs.country &&
+            lhs.countryCode == rhs.countryCode &&
             lhs.state == rhs.state
     }
 }
@@ -53,6 +53,6 @@ extension UserAddress: Hashable {
             lineTwo.hashValue ^
             postalCode.hashValue ^
             city.hashValue ^
-            country.hashValue
+            countryCode.hashValue
     }
 }
