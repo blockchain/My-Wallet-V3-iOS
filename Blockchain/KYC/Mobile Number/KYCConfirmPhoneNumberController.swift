@@ -28,6 +28,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
     @IBOutlet private var labelPhoneNumber: UILabel!
     @IBOutlet private var validationTextFieldConfirmationCode: ValidationTextField!
+    @IBOutlet private var primaryButton: PrimaryButtonContainer!
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
@@ -54,6 +55,9 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
         labelPhoneNumber.text = phoneNumber
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         validationTextFieldConfirmationCode.becomeFocused()
+        primaryButton.actionBlock = { [unowned self] in
+            self.onNextTapped()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -71,12 +75,12 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
         phoneNumber = mobile.phone
     }
 
-    // MARK: IBActions
+    // MARK: Actions
     @IBAction func onResendCodeTapped(_ sender: Any) {
         presenter.startVerification(number: phoneNumber)
     }
 
-    @IBAction func onNextTapped(_ sender: Any) {
+    private func onNextTapped() {
         guard case .valid = validationTextFieldConfirmationCode.validate() else {
             validationTextFieldConfirmationCode.becomeFocused()
             Logger.shared.warning("text field is invalid.")
@@ -100,7 +104,7 @@ extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     }
 
     func hideLoadingView() {
-        LoadingViewPresenter.shared.hideBusyView()
+        primaryButton.isLoading = false
     }
 
     func showError(message: String) {
@@ -108,6 +112,6 @@ extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     }
 
     func showLoadingView(with text: String) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        primaryButton.isLoading = true
     }
 }

@@ -63,20 +63,18 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KX0-wF-bqu" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hUp-Xm-jWj" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.29803921568627451" green="0.6705882352941176" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="oqh-8S-n9c"/>
+                                    <constraint firstAttribute="height" constant="44" id="RgU-CF-HW6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="Next">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="primaryButtonTapped:" destination="7WR-uN-K1i" eventType="touchUpInside" id="mPE-5e-fgU"/>
-                                </connections>
-                            </button>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isLoading" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="Next"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -85,13 +83,13 @@
                             <constraint firstItem="PtR-Ju-hsT" firstAttribute="top" secondItem="iDg-3K-PTa" secondAttribute="bottom" constant="15" id="B6q-H9-Ov8"/>
                             <constraint firstItem="iDg-3K-PTa" firstAttribute="top" secondItem="icW-B4-iKS" secondAttribute="top" id="LTO-Db-Zfp"/>
                             <constraint firstItem="fxC-dO-8GT" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="MAY-oN-SGQ"/>
-                            <constraint firstItem="icW-B4-iKS" firstAttribute="bottom" secondItem="KX0-wF-bqu" secondAttribute="bottom" constant="16" id="SXE-nw-OlT"/>
+                            <constraint firstItem="icW-B4-iKS" firstAttribute="bottom" secondItem="hUp-Xm-jWj" secondAttribute="bottom" constant="16" id="MxB-xw-BrI"/>
+                            <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="hUp-Xm-jWj" secondAttribute="trailing" constant="16" id="R3r-wI-Aka"/>
                             <constraint firstItem="PtR-Ju-hsT" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="VO6-ZC-OAT"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="PtR-Ju-hsT" secondAttribute="trailing" constant="16" id="XuD-GS-eJm"/>
-                            <constraint firstItem="KX0-wF-bqu" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="clN-WD-rx6"/>
                             <constraint firstItem="iDg-3K-PTa" firstAttribute="leading" secondItem="m4i-aL-8OI" secondAttribute="leading" id="lyM-53-dJg"/>
+                            <constraint firstItem="hUp-Xm-jWj" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="phK-JZ-Cdm"/>
                             <constraint firstItem="VGy-nv-chh" firstAttribute="top" secondItem="fxC-dO-8GT" secondAttribute="bottom" constant="16" id="qsK-GB-jpe"/>
-                            <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="KX0-wF-bqu" secondAttribute="trailing" constant="16" id="tP6-WH-8XD"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="fxC-dO-8GT" secondAttribute="trailing" constant="16" id="typ-jK-hlr"/>
                             <constraint firstItem="VGy-nv-chh" firstAttribute="leading" secondItem="icW-B4-iKS" secondAttribute="leading" constant="16" id="ug0-ZA-LUy"/>
                             <constraint firstItem="fxC-dO-8GT" firstAttribute="top" secondItem="PtR-Ju-hsT" secondAttribute="bottom" constant="2" id="vMC-hS-pLe"/>
@@ -103,22 +101,14 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="layoutConstraintBottomButton" destination="SXE-nw-OlT" id="B4p-XA-yz6"/>
+                        <outlet property="layoutConstraintBottomButton" destination="MxB-xw-BrI" id="kD7-3b-emg"/>
+                        <outlet property="primaryButton" destination="hUp-Xm-jWj" id="YxT-E3-GWH"/>
                         <outlet property="validationTextFieldMobileNumber" destination="VGy-nv-chh" id="ary-Gi-hlU"/>
-                        <segue destination="xVk-FG-HTS" kind="show" identifier="verifyMobileNumber" id="Ppp-kU-LhA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSW-4d-mbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-73" y="218"/>
-        </scene>
-        <!--KYCConfirmPhoneNumberController-->
-        <scene sceneID="fw5-HU-1bR">
-            <objects>
-                <viewControllerPlaceholder storyboardName="KYCConfirmPhoneNumberController" id="xVk-FG-HTS" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dHo-TW-UGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="546" y="152"/>
         </scene>
     </scenes>
 </document>
