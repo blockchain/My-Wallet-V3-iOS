@@ -77,22 +77,21 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     @objc func start(from viewController: UIViewController) {
-        if user == nil {
-            disposable = BlockchainDataRepository.shared.nabuUser
-                .subscribeOn(MainScheduler.asyncInstance)
-                .observeOn(MainScheduler.instance)
-                .subscribe(onSuccess: { [unowned self] in
-                    self.user = $0
-                    Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
-                }, onError: { error in
-                    Logger.shared.error("Failed to get user: \(error.localizedDescription)")
-                })
-        }
-        guard let welcomeViewController = pageFactory.createFrom(
-            pageType: .welcome,
-            in: self
-        ) as? KYCWelcomeController else { return }
-        navController = presentInNavigationController(welcomeViewController, in: viewController)
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.loading)
+        disposable = BlockchainDataRepository.shared.fetchNabuUser()
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [unowned self] in
+                Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
+                LoadingViewPresenter.shared.hideBusyView()
+                self.user = $0
+                self.initializeNavigationStack(viewController)
+                self.restoreToMostRecentPageIfNeeded()
+            }, onError: { error in
+                Logger.shared.error("Failed to get user: \(error.localizedDescription)")
+                LoadingViewPresenter.shared.hideBusyView()
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
+            })
     }
 
     func finish() {
@@ -130,12 +129,41 @@ protocol KYCCoordinatorDelegate: class {
                 }
             case .pending:
                 PushNotificationManager.shared.requestAuthorization()
-            case .failed, .expired, .none:
+            case .failed, .expired:
                 // Confirm with design that this is how we should handle this
                 URL(string: Constants.Url.blockchainSupport)?.launch()
+            case .none, .underReview: return
             }
         }
         presentInNavigationController(accountStatusViewController, in: viewController)
+    }
+
+    // MARK: View Restoration
+
+    /// Restores the user to the most recent page if they dropped off mid-flow while KYC'ing
+    private func restoreToMostRecentPageIfNeeded() {
+        let startingPage = KYCPageType.welcome
+        let endPage = pageTypeForUser()
+        var currentPage = startingPage
+        while currentPage != endPage {
+            guard let nextPage = currentPage.nextPage(for: user) else { return }
+
+            currentPage = nextPage
+
+            let nextController = pageFactory.createFrom(
+                pageType: currentPage,
+                in: self
+            )
+            navController.pushViewController(nextController, animated: false)
+        }
+    }
+
+    private func initializeNavigationStack(_ viewController: UIViewController) {
+        guard let welcomeViewController = pageFactory.createFrom(
+            pageType: .welcome,
+            in: self
+        ) as? KYCWelcomeController else { return }
+        navController = presentInNavigationController(welcomeViewController, in: viewController)
     }
 
     // MARK: Private Methods
@@ -171,7 +199,6 @@ protocol KYCCoordinatorDelegate: class {
         switch type {
         case .welcome,
              .country,
-             .confirmPhone,
              .accountStatus,
              .applicationComplete:
             break
@@ -180,9 +207,8 @@ protocol KYCCoordinatorDelegate: class {
             delegate?.apply(model: .personalDetails(current))
         case .address:
             guard let current = user else { return }
-            guard let country = country else { return }
             delegate?.apply(model: .address(current, country))
-        case .enterPhone:
+        case .enterPhone, .confirmPhone:
             guard let current = user else { return }
             delegate?.apply(model: .phone(current))
         case .verifyIdentity:
@@ -204,20 +230,17 @@ protocol KYCCoordinatorDelegate: class {
 
     private func pageTypeForUser() -> KYCPageType {
         guard let currentUser = user else { return .welcome }
-        guard currentUser.personalDetails != nil else { return .welcome }
 
-        if currentUser.address != nil {
-            if let mobile = currentUser.mobile {
-                switch mobile.verified {
-                case true:
-                    return .verifyIdentity
-                case false:
-                    return .enterPhone
-                }
-            }
-            return .address
+        guard let personalDetails = currentUser.personalDetails, personalDetails.firstName != nil else {
+            return .welcome
         }
 
-        return .address
+        guard currentUser.address != nil else { return .country }
+
+        guard currentUser.mobile != nil else { return .enterPhone }
+
+        guard currentUser.status != .none else { return .verifyIdentity }
+
+        return .applicationComplete
     }
 }
