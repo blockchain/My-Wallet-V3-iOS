@@ -12,6 +12,7 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: - IBOutlets
 
+    @IBOutlet private var tradingPairView: TradingPairView!
     @IBOutlet private var numberKeypadView: NumberKeypadView!
 
     // Label to be updated when amount is being typed in
@@ -26,6 +27,7 @@ class ExchangeCreateViewController: UIViewController {
 
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var exchangeRateView: UIView!
     @IBOutlet private var exchangeRateButton: UIButton!
     @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
@@ -56,14 +58,28 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
+        
 
-        primaryAmountLabel.textColor = UIColor.brandPrimary
-        primaryDecimalLabel.textColor = UIColor.brandPrimary
-        secondaryAmountLabel.textColor = UIColor.brandPrimary
+//        primaryAmountLabel.textColor = UIColor.brandPrimary
+//        primaryDecimalLabel.textColor = UIColor.brandPrimary
+//        secondaryAmountLabel.textColor = UIColor.brandPrimary
+        
+        useMaximumButton.layer.cornerRadius = 4.0
+        useMaximumButton.layer.borderWidth = 1.0
+        useMaximumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        useMinimumButton.layer.cornerRadius = 4.0
+        useMinimumButton.layer.borderWidth = 1.0
+        useMinimumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        exchangeButton.layer.cornerRadius = 4.0
+        exchangeRateView.layer.cornerRadius = 4.0
+        exchangeRateView.layer.borderWidth = 1.0
+        exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
-        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic)
-        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
-        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
+//        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic)
+//        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
+//        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
     }
 
     fileprivate func dependenciesSetup() {
@@ -101,10 +117,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
-        primaryAmountLabel.text = primary
-        primaryDecimalLabel.text = primaryDecimal
-        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
-        secondaryAmountLabel.text = secondary
+//        primaryAmountLabel.text = primary
+//        primaryDecimalLabel.text = primaryDecimal
+//        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
+//        secondaryAmountLabel.text = secondary
     }
 
     func updateRateLabels(first: String, second: String, third: String) {

@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Exchange Create View Controller-->
         <scene sceneID="azD-85-pcI">
@@ -18,54 +23,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
-                                <rect key="frame" x="16" y="617" width="343" height="30"/>
-                                <state key="normal" title="Exchange something for something else"/>
-                            </button>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="378" width="343" height="231"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V30-pI-8jo" customClass="TradingPairView" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="44" width="343" height="70"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="eAr-RZ-O8R"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBP-hF-UKz">
-                                <rect key="frame" x="16" y="340" width="343" height="30"/>
-                                <state key="normal" title="1 BTC = 22.19 ETH"/>
-                            </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
-                                <rect key="frame" x="16" y="302" width="343" height="30"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
-                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
-                                        <state key="normal" title="0.05 BTC Min"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyX-88-NsD">
-                                        <rect key="frame" x="175.5" y="0.0" width="167.5" height="30"/>
-                                        <state key="normal" title="1.48 BTC Max"/>
-                                    </button>
-                                </subviews>
-                            </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UNX-CU-uNI">
-                                <rect key="frame" x="36" y="122" width="303" height="150"/>
+                                <rect key="frame" x="36" y="122" width="303" height="80"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3PK-fM-MXL" userLabel="Label Container">
-                                        <rect key="frame" x="0.0" y="35" width="303" height="80"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3PK-fM-MXL" userLabel="Label Container">
+                                        <rect key="frame" x="0.0" y="0.0" width="303" height="80"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
                                                 <rect key="frame" x="118" y="40" width="65.5" height="39"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2GY-32-aHY" userLabel="Primary Label Container">
-                                                <rect key="frame" x="70" y="0.0" width="162.5" height="41"/>
+                                                <rect key="frame" x="62.5" y="0.0" width="178.5" height="41"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.01 BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
-                                                        <rect key="frame" x="0.0" y="0.0" width="120.5" height="41"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="136.5" height="41"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDb-VO-eLj" userLabel="Primary Decimal Label">
-                                                        <rect key="frame" x="120.5" y="5.5" width="42" height="20.5"/>
+                                                        <rect key="frame" x="136.5" y="5.5" width="42" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -102,60 +89,115 @@
                                     <constraint firstItem="3PK-fM-MXL" firstAttribute="width" secondItem="UNX-CU-uNI" secondAttribute="width" id="llc-Aa-cFe"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf">
-                                <rect key="frame" x="342" y="230" width="28" height="42"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
+                                <rect key="frame" x="16" y="316" width="343" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
+                                        <rect key="frame" x="0.0" y="0.0" width="163.5" height="45"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                        <state key="normal" title="0.05 BTC Min">
+                                            <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyX-88-NsD">
+                                        <rect key="frame" x="179.5" y="0.0" width="163.5" height="45"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                        <state key="normal" title="1.48 BTC Max">
+                                            <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="28" id="adV-rn-OQg"/>
-                                    <constraint firstAttribute="height" constant="42" id="reo-5s-btt"/>
+                                    <constraint firstAttribute="height" constant="45" id="iIj-Hh-NEZ"/>
                                 </constraints>
-                                <state key="normal" title="Fiat Toggle"/>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf">
+                                <rect key="frame" x="342" y="177" width="28" height="25"/>
+                                <state key="normal" image="Icon-Switch"/>
                                 <connections>
                                     <action selector="displayInputTypeTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="f6g-9r-iu8"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V30-pI-8jo" customClass="TradingPairView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="44" width="343" height="70"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="16" y="417" width="343" height="162"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="eAr-RZ-O8R"/>
+                                    <constraint firstAttribute="height" constant="162" id="M4s-Fy-axT"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA3-pM-NKs">
+                                <rect key="frame" x="16" y="369" width="343" height="32"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.19 ETH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-S4-AAj">
+                                        <rect key="frame" x="122" y="8.5" width="99" height="15"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                                        <color key="textColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCs-Hh-I8i">
+                                        <rect key="frame" x="323" y="9" width="8" height="14"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="14" id="M20-tN-3VR"/>
+                                            <constraint firstAttribute="width" constant="8" id="wN4-Hn-SZR"/>
+                                        </constraints>
+                                        <state key="normal" image="TapArrows"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="C9l-S4-AAj" firstAttribute="centerX" secondItem="eA3-pM-NKs" secondAttribute="centerX" id="67L-xa-J0X"/>
+                                    <constraint firstAttribute="trailing" secondItem="wCs-Hh-I8i" secondAttribute="trailing" constant="12" id="HK0-EL-sDb"/>
+                                    <constraint firstItem="wCs-Hh-I8i" firstAttribute="centerY" secondItem="eA3-pM-NKs" secondAttribute="centerY" id="SVD-g1-0qs"/>
+                                    <constraint firstAttribute="height" constant="32" id="eYv-ah-jWx"/>
+                                    <constraint firstItem="C9l-S4-AAj" firstAttribute="centerY" secondItem="eA3-pM-NKs" secondAttribute="centerY" id="yxk-je-gdm"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
+                                <rect key="frame" x="16" y="595" width="343" height="56"/>
+                                <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="OUu-3B-15Y"/>
+                                </constraints>
+                                <state key="normal" title="Exchange BTC for ETH">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DUe-4D-nhJ" secondAttribute="trailing" constant="16" id="5hU-Xa-xif"/>
                             <constraint firstItem="DUe-4D-nhJ" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="6Rb-58-f8o"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DPE-Uz-yYf" secondAttribute="trailing" constant="5" id="6se-NL-E0N"/>
-                            <constraint firstItem="RBP-hF-UKz" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="9Uk-BN-3HM"/>
                             <constraint firstItem="dfm-a1-ad2" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="AHN-eg-W66"/>
-                            <constraint firstItem="5uc-t6-nYA" firstAttribute="top" secondItem="UNX-CU-uNI" secondAttribute="bottom" constant="30" id="CC9-qD-ogT"/>
-                            <constraint firstItem="DUe-4D-nhJ" firstAttribute="top" secondItem="dfm-a1-ad2" secondAttribute="bottom" constant="8" id="EPf-w5-lBJ"/>
+                            <constraint firstItem="DUe-4D-nhJ" firstAttribute="top" secondItem="dfm-a1-ad2" secondAttribute="bottom" constant="16" id="EPf-w5-lBJ"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" constant="16" id="GHI-5B-7xh"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="HgH-sR-rJB"/>
                             <constraint firstItem="UNX-CU-uNI" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="36" id="Pkd-gf-mZN"/>
                             <constraint firstItem="DPE-Uz-yYf" firstAttribute="leading" secondItem="UNX-CU-uNI" secondAttribute="trailing" constant="3" id="T7B-vE-k04"/>
-                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="RBP-hF-UKz" secondAttribute="trailing" constant="16" id="TTq-JC-OVd"/>
+                            <constraint firstItem="eA3-pM-NKs" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="TBU-fM-o9r"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="eA3-pM-NKs" secondAttribute="trailing" constant="16" id="bhv-Sp-60b"/>
+                            <constraint firstItem="eA3-pM-NKs" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="enm-Og-Fbn"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="top" secondItem="FIv-WY-bvA" secondAttribute="top" constant="24" id="fNG-KC-mpx"/>
                             <constraint firstItem="UNX-CU-uNI" firstAttribute="top" secondItem="V30-pI-8jo" secondAttribute="bottom" constant="8" id="gDy-SL-mtU"/>
-                            <constraint firstItem="dfm-a1-ad2" firstAttribute="top" secondItem="RBP-hF-UKz" secondAttribute="bottom" constant="8" id="hWm-4t-HII"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="UNX-CU-uNI" secondAttribute="trailing" constant="36" id="lgz-nF-gUO"/>
-                            <constraint firstItem="RBP-hF-UKz" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="mS9-tQ-guh"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="16" id="oTE-Cd-lXS"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="dfm-a1-ad2" secondAttribute="trailing" constant="16" id="pXZ-qz-MkO"/>
-                            <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="20" id="pni-o2-RxB"/>
                             <constraint firstItem="DPE-Uz-yYf" firstAttribute="bottom" secondItem="UNX-CU-uNI" secondAttribute="bottom" id="qd2-ac-G9J"/>
+                            <constraint firstItem="dfm-a1-ad2" firstAttribute="top" secondItem="eA3-pM-NKs" secondAttribute="bottom" constant="16" id="sAe-mI-cf2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FIv-WY-bvA"/>
                     </view>
                     <connections>
                         <outlet property="decimalLabelSpacingConstraint" destination="3K0-5H-idm" id="W0C-Yz-5aq"/>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
-                        <outlet property="exchangeRateButton" destination="RBP-hF-UKz" id="U09-gZ-aBt"/>
+                        <outlet property="exchangeRateView" destination="eA3-pM-NKs" id="XEu-xy-dQJ"/>
                         <outlet property="numberKeypadView" destination="dfm-a1-ad2" id="yN5-Le-zxp"/>
                         <outlet property="primaryAmountLabel" destination="cbA-yh-J0A" id="xGh-pL-sDT"/>
                         <outlet property="primaryDecimalLabel" destination="lDb-VO-eLj" id="T5h-at-TGm"/>
                         <outlet property="secondaryAmountLabel" destination="okC-2w-xB9" id="K2v-uv-GkY"/>
+                        <outlet property="tradingPairView" destination="V30-pI-8jo" id="DIp-jX-nte"/>
                         <outlet property="useMaximumButton" destination="kyX-88-NsD" id="1kX-WQ-I1q"/>
                         <outlet property="useMinimumButton" destination="Gyg-rh-rE6" id="e6a-pn-89k"/>
                     </connections>
@@ -165,4 +207,8 @@
             <point key="canvasLocation" x="-74.400000000000006" y="16.641679160419791"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Icon-Switch" width="22" height="25"/>
+        <image name="TapArrows" width="8" height="14"/>
+    </resources>
 </document>

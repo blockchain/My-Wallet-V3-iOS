@@ -78,7 +78,7 @@ struct ExchangeServices: ExchangeDependencies {
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in
                 self.user = $0
-                guard self.user?.status == .approved else {
+                guard self.user?.status != .approved else {
                     KYCCoordinator.shared.start(); return
                 }
                 self.showAppropriateExchange()
@@ -92,7 +92,7 @@ struct ExchangeServices: ExchangeDependencies {
     private func showAppropriateExchange() {
         if WalletManager.shared.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if isHomebrewAvailable {
+                if !isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
                 } else {
                     self?.showExchange(type: .shapeshift)
