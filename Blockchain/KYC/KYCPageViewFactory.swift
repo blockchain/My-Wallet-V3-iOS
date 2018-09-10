@@ -27,11 +27,7 @@ class KYCPageViewFactory {
         case .enterPhone:
             return KYCEnterPhoneNumberController.make(with: coordinator)
         case .confirmPhone:
-            let viewController = KYCConfirmPhoneNumberController.make(with: coordinator)
-            if let payload = payload, case let .phoneNumberUpdated(number) = payload {
-                viewController.phoneNumber = number
-            }
-            return viewController
+            return KYCConfirmPhoneNumberController.make(with: coordinator)
         case .verifyIdentity:
             return KYCVerifyIdentityController.make(with: coordinator)
         case .accountStatus:

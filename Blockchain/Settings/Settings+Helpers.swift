@@ -146,7 +146,7 @@ extension AppSettingsController {
             switch status {
             case .approved: cell.detailTextLabel?.backgroundColor = .verified
             case .expired, .failed, .none: cell.detailTextLabel?.backgroundColor = .unverified
-            case .pending: cell.detailTextLabel?.backgroundColor = .pending
+            case .pending, .underReview: cell.detailTextLabel?.backgroundColor = .pending
             }
         } else if let theColor = color {
             cell.detailTextLabel?.backgroundColor = theColor
