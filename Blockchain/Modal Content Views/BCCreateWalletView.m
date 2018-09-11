@@ -122,6 +122,7 @@
     
     [self clearSensitiveTextFields];
 
+    // TICKET: IOS-1281 avoid interacting directly with user defaults
 #ifdef DEBUG
     if ([[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]]) {
         emailTextField.text = @"test@doesnotexist.com";
