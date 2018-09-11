@@ -9,7 +9,6 @@
 import Foundation
 
 protocol ExchangeCreateInterface: class {
-    func navigationBar(_ visibility: Visibility)
     func ratesViewVisibility(_ visibility: Visibility)
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
     func updateRateLabels(first: String, second: String, third: String)

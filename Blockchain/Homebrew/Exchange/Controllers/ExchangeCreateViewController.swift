@@ -133,10 +133,6 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
     
-    func navigationBar(_ visibility: Visibility) {
-        navigationController?.setNavigationBarHidden(visibility.isHidden, animated: false)
-    }
-    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
