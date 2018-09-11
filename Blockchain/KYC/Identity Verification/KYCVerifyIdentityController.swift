@@ -171,10 +171,14 @@ extension KYCVerifyIdentityController: OnfidoControllerDelegate {
 
     func onOnfidoControllerSuccess(_ onfidoController: OnfidoController) {
         onfidoController.dismiss(animated: true)
+        LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.KYC.submittingInformation)
         _ = onfidoService.submitVerification(onfidoController.user)
             .subscribe(onCompleted: { [unowned self] in
+                LoadingViewPresenter.shared.hideBusyView()
                 self.coordinator.handle(event: .nextPageFromPageType(self.pageType, nil))
             }, onError: { error in
+                LoadingViewPresenter.shared.hideBusyView()
+                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
                 Logger.shared.error("Failed to submit verification \(error.localizedDescription)")
             })
     }

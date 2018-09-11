@@ -608,6 +608,10 @@ struct LocalizationConstants {
             "Driver's License",
             comment: "The title of the UIAlertAction for the driver's license option."
         )
+        static let submittingInformation = NSLocalizedString(
+            "Submitting information...",
+            comment: "Text prompt to the user when the client is submitting the identity documents to Blockchain's servers."
+        )
     }
 }
 
