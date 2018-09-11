@@ -86,7 +86,7 @@ protocol KYCCoordinatorDelegate: class {
                 LoadingViewPresenter.shared.hideBusyView()
                 self.user = $0
                 if self.pageTypeForUser() == .accountStatus {
-                    self.presentAccountStatusView(for: self.user!.status, in: viewController)
+                    self.presentAccountStatusView(for: $0.status, in: viewController)
                 } else {
                     self.initializeNavigationStack(viewController)
                     self.restoreToMostRecentPageIfNeeded()
