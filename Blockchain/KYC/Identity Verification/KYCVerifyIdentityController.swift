@@ -67,17 +67,9 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         let driversLicenseAction = UIAlertAction(title: "Driver's License", style: .default, handler: { _ in
             self.didSelect(.driversLicense)
         })
-        let identityCardAction = UIAlertAction(title: "Identity Card", style: .default, handler: { _ in
-            self.didSelect(.identityCard)
-        })
-        let residencePermitCardAction = UIAlertAction(title: "Residence Permit Card", style: .default, handler: { _ in
-            self.didSelect(.residencePermitCard)
-        })
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         documentDialog.addAction(passportAction)
         documentDialog.addAction(driversLicenseAction)
-        documentDialog.addAction(identityCardAction)
-        documentDialog.addAction(residencePermitCardAction)
         documentDialog.addAction(cancelAction)
         present(documentDialog, animated: true)
     }
