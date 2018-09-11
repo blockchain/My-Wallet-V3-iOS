@@ -47,27 +47,42 @@ final class NabuAuthenticationService {
     // MARK: - Private Methods
 
     private func getSessionTokenIfNeeded(from userResponse: NabuCreateUserResponse) -> Single<NabuSessionTokenResponse> {
-        // Use cached session token if not expired, otherwise, request a new one
-        guard let sessionToken = cachedSessionToken.value,
-            let expiresAt = sessionToken.expiresAt, Date() < expiresAt else {
-                let headers: [String: String] = [
-                    HttpHeaderField.authorization: userResponse.token,
-                    HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
-                    HttpHeaderField.clientType: HttpHeaderValue.clientTypeApp,
-                    HttpHeaderField.deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
-                    HttpHeaderField.walletGuid: self.wallet.guid,
-                    HttpHeaderField.walletEmail: self.wallet.getEmail()
-                ]
-                return KYCNetworkRequest.request(
-                    post: .sessionToken(userId: userResponse.userId),
-                    parameters: [:],
-                    headers: headers,
-                    type: NabuSessionTokenResponse.self
-                ).do(onSuccess: { [unowned self] in
-                    self.cachedSessionToken.accept($0)
-                })
+
+        guard let sessionToken = cachedSessionToken.value else {
+            return requestNewSessionToken(from: userResponse)
         }
+
+        // Make sure cached session token is for this user
+        guard userResponse.userId == sessionToken.userId else {
+            return requestNewSessionToken(from: userResponse)
+        }
+
+        // Make sure cached session token is not expired
+        guard let expiresAt = sessionToken.expiresAt, Date() < expiresAt else {
+            return requestNewSessionToken(from: userResponse)
+        }
+
         return Single.just(sessionToken)
+    }
+
+    /// Requests a new session token from Nabu followed by caching the response if successful
+    private func requestNewSessionToken(from userResponse: NabuCreateUserResponse) -> Single<NabuSessionTokenResponse> {
+        let headers: [String: String] = [
+            HttpHeaderField.authorization: userResponse.token,
+            HttpHeaderField.appVersion: Bundle.applicationVersion ?? "",
+            HttpHeaderField.clientType: HttpHeaderValue.clientTypeApp,
+            HttpHeaderField.deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
+            HttpHeaderField.walletGuid: self.wallet.guid,
+            HttpHeaderField.walletEmail: self.wallet.getEmail()
+        ]
+        return KYCNetworkRequest.request(
+            post: .sessionToken(userId: userResponse.userId),
+            parameters: [:],
+            headers: headers,
+            type: NabuSessionTokenResponse.self
+        ).do(onSuccess: { [unowned self] in
+            self.cachedSessionToken.accept($0)
+        })
     }
 
     /// Retrieves the user's Nabu user ID and API token from the wallet metadata if the Nabu user ID
