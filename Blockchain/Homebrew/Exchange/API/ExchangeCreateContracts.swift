@@ -10,6 +10,7 @@ import Foundation
 
 protocol ExchangeCreateInterface: class {
     func ratesViewVisibility(_ visibility: Visibility)
+    func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?)
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
     func updateRateLabels(first: String, second: String, third: String)
     func updateTradingPairViewValues(left: String, right: String)
@@ -26,6 +27,7 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
 }
 
 protocol ExchangeCreateOutput: class {
+    func updatedInput(primary: NSAttributedString?, secondary: String?)
     func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?)
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)

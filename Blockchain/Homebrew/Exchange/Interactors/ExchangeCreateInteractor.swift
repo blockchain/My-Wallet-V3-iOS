@@ -127,9 +127,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Update the inputs in crypto and fiat
         if model?.isUsingFiat == true {
             let components = inputs.inputComponents
+            
             output?.updatedInput(
-                primary: components.integer,
-                primaryDecimal: components.fractional,
+                primary: components.attributedFiat(),
                 secondary: inputs.lastOutput
             )
         } else {
@@ -173,14 +173,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating conversion with no model")
             return
         }
-        if model.isUsingFiat {
-            if let fractional = inputs.inputComponents.fractional,
+        if model.isUsingFiat == true {
+            if let fractional = inputs.inputComponents.factionalValue,
                 fractional.count >= NumberFormatter.localCurrencyFractionDigits {
                 Logger.shared.warning("Cannot add more than two decimal values for fiat")
                 return
             }
         } else {
-            if let fractional = inputs.inputComponents.fractional,
+            if let fractional = inputs.inputComponents.factionalValue,
                 fractional.count >= NumberFormatter.assetFractionDigits {
                 Logger.shared.warning("Cannot add more than eight decimal values for crypto")
                 return

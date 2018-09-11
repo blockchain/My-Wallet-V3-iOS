@@ -58,21 +58,28 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
-
-        [primaryAmountLabel, primaryDecimalLabel, secondaryAmountLabel].forEach {
-            $0?.textColor = UIColor.brandPrimary
-        }
-
-        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
-            addStyleToView($0)
-        }
-
+        
         exchangeButton.layer.cornerRadius = 4.0
+        
+        primaryAmountLabel.textColor = UIColor.brandPrimary
+        secondaryAmountLabel.textColor = UIColor.brandPrimary
+        
+        useMaximumButton.layer.cornerRadius = 4.0
+        useMaximumButton.layer.borderWidth = 1.0
+        useMaximumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        useMinimumButton.layer.cornerRadius = 4.0
+        useMinimumButton.layer.borderWidth = 1.0
+        useMinimumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        exchangeButton.layer.cornerRadius = 4.0
+        exchangeRateView.layer.cornerRadius = 4.0
+        exchangeRateView.layer.borderWidth = 1.0
+        exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
-        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
-        setAmountLabelFont(label: primaryDecimalLabel, size: Constants.FontSizes.Small)
-        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
-
+        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
+        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
+        
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
         }
@@ -131,15 +138,18 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-
+    
+    func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?) {
+        primaryAmountLabel.attributedText = primary
+        secondaryAmountLabel.text = secondary
+    }
+    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
         primaryAmountLabel.text = primary
-        primaryDecimalLabel.text = primaryDecimal
-        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
         secondaryAmountLabel.text = secondary
     }
 

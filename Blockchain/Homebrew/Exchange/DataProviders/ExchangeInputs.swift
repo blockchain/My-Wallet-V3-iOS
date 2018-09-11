@@ -11,8 +11,9 @@ import Foundation
 typealias InputComponents = (integer: String, decimalSeparator: String?, fractional: String?)
 
 protocol ExchangeInputsAPI: class {
+    
     var activeInput: NumberInputDelegate { get set }
-    var inputComponents: InputComponents { get }
+    var inputComponents: ExchangeInputComponent { get }
     var lastOutput: String? { get set }
 
     func add(character: String)
@@ -23,10 +24,15 @@ protocol ExchangeInputsAPI: class {
 // A class containing an active input that can switch values with an output using toggleInput()
 class ExchangeInputsService: ExchangeInputsAPI {
     var activeInput: NumberInputDelegate
-    var inputComponents: InputComponents {
-        let decimalSeparator = NSLocale.current.decimalSeparator ?? "."
-        let components = activeInput.input.components(separatedBy: decimalSeparator)
-        return (components.first ?? "0", decimalSeparator, components.count > 1 ? components.last : nil)
+    var inputComponents: ExchangeInputComponent {
+        let empty = ExchangeInputComponent.empty
+        let components = activeInput.input.components(separatedBy: empty.delimiter)
+        let value = ExchangeInputComponent(
+            wholeValue: components.first ?? empty.wholeValue,
+            delimiter: empty.delimiter,
+            factionalValue: components.last ?? empty.factionalValue
+        )
+        return value
     }
     var lastOutput: String?
 

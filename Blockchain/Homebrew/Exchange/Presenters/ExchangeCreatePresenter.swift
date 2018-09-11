@@ -44,6 +44,10 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.updateTradingPairView(pair: pair, fix: fix)
     }
 
+    func updatedInput(primary: NSAttributedString?, secondary: String?) {
+        interface?.updateAttributedPrimary(primary, secondary: secondary)
+    }
+    
     func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?) {
         interface?.updateInputLabels(primary: primary, primaryDecimal: primaryDecimal, secondary: secondary)
     }
