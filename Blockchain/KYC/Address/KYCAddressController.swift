@@ -28,6 +28,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
     @IBOutlet fileprivate var cityTextField: ValidationTextField!
     @IBOutlet fileprivate var stateTextField: ValidationTextField!
     @IBOutlet fileprivate var postalCodeTextField: ValidationTextField!
+    @IBOutlet fileprivate var countryTextField: ValidationTextField!
     @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
 
     // MARK: - Public IBOutlets
@@ -51,11 +52,13 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
     /// This is just for convenience purposes when iterating over the fields
     /// and checking validation etc.
     var validationFields: [ValidationTextField] {
-        return [addressTextField,
-                apartmentTextField,
-                cityTextField,
-                stateTextField,
-                postalCodeTextField
+        return [
+            addressTextField,
+            apartmentTextField,
+            cityTextField,
+            stateTextField,
+            postalCodeTextField,
+            countryTextField
         ]
     }
 
@@ -135,8 +138,11 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
         stateTextField.returnKeyType = .next
         stateTextField.contentType = .addressState
 
-        postalCodeTextField.returnKeyType = .done
+        postalCodeTextField.returnKeyType = .next
         postalCodeTextField.contentType = .postalCode
+
+        countryTextField.returnKeyType = .done
+        countryTextField.contentType = .countryName
 
         validationFields.enumerated().forEach { (index, field) in
             field.returnTappedBlock = { [weak self] in
@@ -218,6 +224,7 @@ extension KYCAddressController: LocationSuggestionInterface {
         cityTextField.text = address.city
         stateTextField.text = address.state
         postalCodeTextField.text = address.postalCode
+        countryTextField.text = address.country
     }
 
     func updateActivityIndicator(_ visibility: Visibility) {
