@@ -20,12 +20,11 @@ protocol ExchangeConversionAPI {
     // The conversion result amount from the input amount (what goes in the secondary or smaller, less prominent label)
     var output: String { get }
 
-    // The opposing fix is the 'counter' or 'opposite' to whatever is the input/output but with the same crypto/fiat
-    // format as the input.
-    // This will typically be displayed in the TradingPairView in the button above which the green dot is NOT visible.
-    // If the Fix is .base or .baseInFiat, the opposing fix is .counter or .counterInFiat.
-    // If the Fix is .counter or .counterInFiat, the opposing fix is .base or .baseInFiat.
-    var opposingFix: String { get }
+    // The base output is what should be displayed on the left hand side of the trading pair view.
+    var baseOutput: String { get }
+
+    // The counter fix output is what should be displayed on the right hand side of the trading pair view.
+    var counterOutput: String { get }
 
     // Method used to remove trailing zeros and decimals for true value comparison
     // Primariy used to allow the user to keep typing uninterrupted
@@ -35,7 +34,8 @@ protocol ExchangeConversionAPI {
 class ExchangeConversionService: ExchangeConversionAPI {
     var input: String = ""
     var output: String = ""
-    var opposingFix: String = ""
+    var baseOutput: String = ""
+    var counterOutput: String = ""
 
     func update(with conversion: Conversion) {
         let currencyRatio = conversion.currencyRatio
@@ -44,19 +44,23 @@ class ExchangeConversionService: ExchangeConversionAPI {
         case .base:
             input = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
             output = formatDecimalPlaces(fiatValue: currencyRatio.base.fiat.value)
-            opposingFix = formatDecimalPlaces(cryptoValue: currencyRatio.counter.crypto.value)
+            baseOutput = input
+            counterOutput = formatDecimalPlaces(cryptoValue: currencyRatio.counter.crypto.value)
         case .baseInFiat:
             input = formatDecimalPlaces(fiatValue: currencyRatio.base.fiat.value)
             output = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
-            opposingFix = formatDecimalPlaces(fiatValue: currencyRatio.counter.fiat.value)
+            baseOutput = output
+            counterOutput = formatDecimalPlaces(cryptoValue: currencyRatio.counter.crypto.value)
         case .counter:
             input = formatDecimalPlaces(cryptoValue: currencyRatio.counter.crypto.value)
             output = formatDecimalPlaces(fiatValue: currencyRatio.counter.fiat.value)
-            opposingFix = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
+            baseOutput = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
+            counterOutput = input
         case .counterInFiat:
             input = formatDecimalPlaces(fiatValue: currencyRatio.counter.fiat.value)
             output = formatDecimalPlaces(cryptoValue: currencyRatio.counter.crypto.value)
-            opposingFix = formatDecimalPlaces(fiatValue: currencyRatio.base.fiat.value)
+            baseOutput = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
+            counterOutput = output
         }
     }
 }

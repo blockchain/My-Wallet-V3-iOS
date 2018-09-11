@@ -72,7 +72,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             this.updateOutput()
 
             // Update trading pair view
-            this.updateTradingValues(left: this.inputs.activeInput.input, right: this.conversions.opposingFix)
+            this.updateTradingValues(left: this.conversions.baseOutput, right: this.conversions.counterOutput)
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
         })
