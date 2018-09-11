@@ -72,7 +72,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     // MARK: - Entry Point
 
-    func start() {self.showExchange(type: .homebrew); return
+    func start() {
         if let theUser = user, theUser.status == .approved {
             showAppropriateExchange(); return
         }
