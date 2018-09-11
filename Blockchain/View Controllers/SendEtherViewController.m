@@ -375,7 +375,7 @@
     }];
 }
 
-- (void)closeButtonClicked
+- (void)closeButtonTapped
 {
     [self.toField resignFirstResponder];
     [self.amountInputView.fiatField resignFirstResponder];
