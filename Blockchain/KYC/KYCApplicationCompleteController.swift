@@ -27,7 +27,6 @@ final class KYCApplicationCompleteController: KYCBaseViewController, Progressabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem()
         setupProgressView()
     }
 
