@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import PhoneNumberKit
 import RxSwift
 
 protocol KYCVerifyPhoneNumberView: class {
@@ -50,7 +51,7 @@ class KYCVerifyPhoneNumberPresenter {
             .subscribe(onCompleted: { [unowned self] in
                 self.handleStartVerificationCodeSuccess()
             }, onError: { [unowned self] error in
-                self.handleError(error)
+                self.handleStartVerificationError(error)
             })
     }
 
@@ -62,7 +63,7 @@ class KYCVerifyPhoneNumberPresenter {
             .subscribe(onCompleted: { [unowned self] in
                 self.handleVerifyCodeSuccess()
             }, onError: { [unowned self] error in
-                self.handleError(error)
+                self.handleVerifyNumberError(error)
             })
     }
 
@@ -80,7 +81,17 @@ class KYCVerifyPhoneNumberPresenter {
         view?.startVerificationSuccess()
     }
 
-    private func handleError(_ error: Error) {
+    private func handleStartVerificationError(_ error: Error) {
+        Logger.shared.error("Could not start mobile verification process. Error: \(error)")
+        view?.hideLoadingView()
+        if let phoneNumberError = error as? PhoneNumberError {
+            view?.showError(message: phoneNumberError.errorDescription ?? LocalizationConstants.KYC.invalidPhoneNumber)
+        } else {
+            view?.showError(message: LocalizationConstants.KYC.invalidPhoneNumber)
+        }
+    }
+
+    private func handleVerifyNumberError(_ error: Error) {
         Logger.shared.error("Could not complete mobile verification. Error: \(error)")
         view?.hideLoadingView()
         view?.showError(message: LocalizationConstants.KYC.failedToConfirmNumber)
