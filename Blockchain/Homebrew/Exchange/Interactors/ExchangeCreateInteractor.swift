@@ -125,17 +125,25 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     func updateOutput() {
         // Update the inputs in crypto and fiat
+        guard let output = output else { return }
         if model?.isUsingFiat == true {
             let components = inputs.inputComponents
             
-            output?.updatedInput(
-                primary: components.attributedFiat(),
+            output.updatedInput(
+                primary: components.attributedFiat(withFont: output.primaryFont()),
                 secondary: inputs.lastOutput
             )
         } else {
-            output?.updatedInput(
-                primary: inputs.activeInput.input,
-                primaryDecimal: nil,
+            guard let model = model else { return }
+            let symbol = model.pair.from.symbol
+            let value = inputs.activeInput.input + " " + symbol
+            let attributed = NSAttributedString(
+                string: value,
+                attributes: [.font: output.primaryFont()]
+            )
+            
+            output.updatedInput(
+                primary: attributed,
                 secondary: inputs.lastOutput
             )
         }

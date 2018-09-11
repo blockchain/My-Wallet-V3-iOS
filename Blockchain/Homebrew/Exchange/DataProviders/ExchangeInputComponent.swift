@@ -21,16 +21,15 @@ extension ExchangeInputComponent {
         factionalValue: nil
     )
     
-    func attributedFiat() -> NSAttributedString? {
+    func attributedFiat(withFont font: UIFont) -> NSAttributedString? {
         let attributed = NSAttributedString(string: wholeValue + delimiter + (factionalValue ?? ""))
-        guard let font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic) else { return nil }
-        let stylized = attributed.stylizedPrice(font, textColor: .white, includeCurrencySymbol: true)
+        let stylized = attributed.stylizedPrice(font, includeCurrencySymbol: true)
         return stylized
     }
 }
 
 private extension NSAttributedString {
-    func stylizedPrice(_ withFont: UIFont, textColor: UIColor, includeCurrencySymbol: Bool = true) -> NSAttributedString {
+    func stylizedPrice(_ withFont: UIFont, includeCurrencySymbol: Bool = true) -> NSAttributedString {
         let formatter = NumberFormatter.localCurrencyFormatter
         
         guard let currencySymbol = formatter.currencySymbol else {
