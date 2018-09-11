@@ -14,11 +14,19 @@ protocol TradingPairViewDelegate: class {
 
 class TradingPairView: NibBasedView {
     
+    static let standardHeight: CGFloat = 62.0
+    
     typealias TradingTransitionUpdate = TransitionPresentationUpdate<ViewTransition>
     typealias TradingPresentationUpdate = AnimatablePresentationUpdate<ViewUpdate>
     
+    struct Model {
+        let transitionUpdate: TradingTransitionUpdate
+        let presentationUpdate: TradingPresentationUpdate
+    }
+    
     enum ViewUpdate: Update {
         case statusTintColor(UIColor)
+        case titleColor(UIColor)
         case leftStatusVisibility(Visibility)
         case rightStatusVisibility(Visibility)
         case backgroundColors(left: UIColor, right: UIColor)
@@ -70,6 +78,11 @@ class TradingPairView: NibBasedView {
     
     // MARK: Public
     
+    func apply(model: Model) {
+        apply(presentationUpdate: model.presentationUpdate)
+        apply(transitionUpdate: model.transitionUpdate)
+    }
+    
     func apply(pair: TradingPair, animation: AnimationParameter = .none, transition: TransitionParameter = .none) {
         let presentationUpdate = TradingPresentationUpdate(
             animations: [
@@ -113,6 +126,10 @@ class TradingPairView: NibBasedView {
     
     fileprivate func handle(_ update: ViewUpdate) {
         switch update {
+        case .titleColor(let color):
+            exchangeLabel.textColor = color
+            receiveLabel.textColor = color
+            
         case .statusTintColor(let color):
             rightIconStatusImageView.tintColor = color
             leftIconStatusImageView.tintColor = color
@@ -146,4 +163,77 @@ class TradingPairView: NibBasedView {
             rightButton.setTitle(rightTitle, for: .normal)
         }
     }
+}
+
+extension TradingPairView {
+    
+    static func exchangeLockedModel(for trade: Trade) -> Model {
+        let fromAsset = trade.pair.from
+        let toAsset = trade.pair.to
+        
+        // TODO: Some of the data below is placeholder data
+        // and will be adjusted once this is hooked up with a live
+        // API. In the mean time, this demonstrates how the Model
+        // is built and how it is to be used for the exchangeLocked screen
+        let transitionUpdate = TradingTransitionUpdate(
+            transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
+                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .titles(left: "123 BTC", right: "123 ETH")
+            ],
+            transition: .none
+        )
+        
+        let presentationUpdate = TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                .leftStatusVisibility(.hidden),
+                .rightStatusVisibility(.hidden),
+                .swapTintColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+                .titleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+            ],
+            animation: .none
+        )
+        
+        let model = Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        return model
+    }
+    
+    static func confirmationModel(for trade: Trade) -> Model {
+        
+        let fromAsset = trade.pair.from
+        let toAsset = trade.pair.to
+        
+        // TODO: Some of the data below is placeholder data
+        // and will be adjusted once this is hooked up with a live
+        // API. In the mean time, this demonstrates how the Model
+        // is built and how it is to be used for the confirmation screen
+        let transitionUpdate = TradingTransitionUpdate(
+            transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
+                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .titles(left: "123 BTC", right: "123 ETH")
+            ],
+            transition: .none
+        )
+        
+        let presentationUpdate = TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                .leftStatusVisibility(.hidden),
+                .rightStatusVisibility(.hidden),
+                .swapTintColor(.brandPrimary),
+                .titleColor(.brandPrimary)
+            ],
+            animation: .none
+        )
+        
+        let model = Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        return model
+    }
+    
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="i7A-Ow-SjZ" customClass="ActionableFooterView" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ax5-i5-eWD">
+                    <rect key="frame" x="16" y="24" width="343" height="56"/>
+                    <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="56" id="gJR-Yb-5Ib"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                    <state key="normal" title="Done">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="actionTapped:" destination="i7A-Ow-SjZ" eventType="touchUpInside" id="Uex-ot-iqx"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="4xl-Eb-nqK" firstAttribute="trailing" secondItem="Ax5-i5-eWD" secondAttribute="trailing" constant="16" id="6yo-Q3-Vqq"/>
+                <constraint firstItem="Ax5-i5-eWD" firstAttribute="leading" secondItem="4xl-Eb-nqK" secondAttribute="leading" constant="16" id="HNN-X2-L3r"/>
+                <constraint firstItem="Ax5-i5-eWD" firstAttribute="top" secondItem="4xl-Eb-nqK" secondAttribute="top" constant="24" id="UIc-n0-ge7"/>
+                <constraint firstItem="Ax5-i5-eWD" firstAttribute="centerX" secondItem="4xl-Eb-nqK" secondAttribute="centerX" id="sN8-cI-g4y"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="4xl-Eb-nqK"/>
+            <connections>
+                <outlet property="action" destination="Ax5-i5-eWD" id="6yv-Py-OEo"/>
+            </connections>
+            <point key="canvasLocation" x="-155.5" y="59"/>
+        </collectionReusableView>
+    </objects>
+</document>

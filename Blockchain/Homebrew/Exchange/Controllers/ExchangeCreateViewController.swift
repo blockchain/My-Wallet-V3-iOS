@@ -12,6 +12,7 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: - IBOutlets
 
+    @IBOutlet private var tradingPairView: TradingPairView!
     @IBOutlet private var numberKeypadView: NumberKeypadView!
 
     // Label to be updated when amount is being typed in
@@ -26,6 +27,7 @@ class ExchangeCreateViewController: UIViewController {
 
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var exchangeRateView: UIView!
     @IBOutlet private var exchangeRateButton: UIButton!
     @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
@@ -56,14 +58,48 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
+        
+        
+        let demo = Trade.demo()
+        let model = TradingPairView.confirmationModel(for: demo)
+        tradingPairView.apply(model: model)
+        
 
         primaryAmountLabel.textColor = UIColor.brandPrimary
         primaryDecimalLabel.textColor = UIColor.brandPrimary
         secondaryAmountLabel.textColor = UIColor.brandPrimary
+        
+        useMaximumButton.layer.cornerRadius = 4.0
+        useMaximumButton.layer.borderWidth = 1.0
+        useMaximumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        useMinimumButton.layer.cornerRadius = 4.0
+        useMinimumButton.layer.borderWidth = 1.0
+        useMinimumButton.layer.borderColor = UIColor.brandPrimary.cgColor
+        
+        exchangeButton.layer.cornerRadius = 4.0
+        exchangeRateView.layer.cornerRadius = 4.0
+        exchangeRateView.layer.borderWidth = 1.0
+        exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
-        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Gigantic)
+        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
         primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
-        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
+        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
+        
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyLightAppearance()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyDarkAppearance()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
     }
 
     fileprivate func dependenciesSetup() {
@@ -95,6 +131,7 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }

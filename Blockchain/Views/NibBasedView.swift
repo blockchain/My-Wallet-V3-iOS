@@ -14,6 +14,11 @@ import UIKit
 class NibBasedView: UIView {
 
     @IBOutlet weak var view: UIView!
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        nibSetup()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
