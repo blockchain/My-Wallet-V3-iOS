@@ -484,8 +484,11 @@ struct LocalizationConstants {
     }
 
     struct KYC {
+        static let invalidPhoneNumber = NSLocalizedString(
+            "The mobile number you entered is invalid.",
+            comment: "Error message displayed to the user when the phone number they entered during KYC is invalid.")
         static let failedToConfirmNumber = NSLocalizedString(
-            "The mobile number you have entered is already associated with an existing user.",
+            "Failed to confirm mobile number. Please try again.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."
         )
         static let termsOfServiceAndPrivacyPolicyNotice = NSLocalizedString(
@@ -592,6 +595,18 @@ struct LocalizationConstants {
         static let yourHomeAddress = NSLocalizedString(
             "Your Home Address",
             comment: "Text displayed on the search bar when adding an address during KYC."
+        )
+        static let whichDocumentAreYouUsing = NSLocalizedString(
+            "Which document are you using?",
+            comment: ""
+        )
+        static let passport = NSLocalizedString(
+            "Passport",
+            comment: "The title of the UIAlertAction for the passport option."
+        )
+        static let driversLicense = NSLocalizedString(
+            "Driver's License",
+            comment: "The title of the UIAlertAction for the driver's license option."
         )
     }
 }

@@ -8,8 +8,11 @@
 
 import Foundation
 
+typealias InputComponents = (integer: String, decimalSeparator: String?, fractional: String?)
+
 protocol ExchangeInputsAPI: class {
     var activeInput: NumberInputDelegate { get }
+    var inputComponents: InputComponents { get }
     var lastOutput: String? { get }
     var conversionRate: Decimal? { get set }
 
@@ -20,6 +23,11 @@ protocol ExchangeInputsAPI: class {
 
 class ExchangeInputsService: ExchangeInputsAPI {
     var activeInput: NumberInputDelegate
+    var inputComponents: InputComponents {
+        let decimalSeparator = activeInput.decimalSeparator
+        let components = activeInput.input.components(separatedBy: decimalSeparator)
+        return (components.first ?? "0", decimalSeparator, components.count > 1 ? components.last : nil)
+    }
     var lastOutput: String?
     var conversionRate: Decimal?
 

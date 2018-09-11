@@ -35,8 +35,8 @@ class MarketsService {
     private let authentication: NabuAuthenticationService
     var hasAuthenticated: Bool = false
 
-    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
-        self.authentication = service
+    init(authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared) {
+        self.authentication = authenticationService
     }
 
     deinit {

@@ -27,7 +27,7 @@ struct ExchangeServices: ExchangeDependencies {
     init() {
         rates = RatesService()
         service = ExchangeService()
-        markets = MarketsService()
+        markets = MarketsService(authenticationService: NabuAuthenticationService())
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
     }
@@ -211,7 +211,7 @@ struct ExchangeServices: ExchangeDependencies {
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared,
-        marketsService: MarketsService = MarketsService(),
+        marketsService: MarketsService = MarketsService(authenticationService: NabuAuthenticationService()),
         exchangeService: ExchangeService = ExchangeService()
     ) {
         self.walletManager = walletManager

@@ -13,10 +13,17 @@ class ExchangeCreateViewController: UIViewController {
     // MARK: - IBOutlets
 
     @IBOutlet private var numberKeypadView: NumberKeypadView!
+
     // Label to be updated when amount is being typed in
     @IBOutlet private var primaryAmountLabel: UILabel!
+
+    // Amount being typed for fiat values to the right of the decimal separator
+    @IBOutlet var primaryDecimalLabel: UILabel!
+    @IBOutlet var decimalLabelSpacingConstraint: NSLayoutConstraint!
+
     // Amount being typed in converted to input crypto or input fiat
     @IBOutlet private var secondaryAmountLabel: UILabel!
+
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var exchangeRateButton: UIButton!
@@ -59,8 +66,9 @@ class ExchangeCreateViewController: UIViewController {
                 pair: TradingPair(from: .ethereum,to: .bitcoinCash)!,
                 fiatCurrency: "USD",
                 fix: .base,
-                volume: 0
-        ))
+                volume: 0),
+            inputsState: InputsState()
+        )
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
         presenter.interface = self
@@ -84,8 +92,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     }
 
-    func updateInputLabels(primary: String?, secondary: String?) {
+    func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
         primaryAmountLabel.text = primary
+        primaryDecimalLabel.text = primaryDecimal
+        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
         secondaryAmountLabel.text = secondary
     }
 

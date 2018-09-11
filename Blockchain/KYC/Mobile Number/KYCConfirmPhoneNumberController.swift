@@ -10,9 +10,9 @@ import Foundation
 
 final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 
-    // MARK: Private Properties
+    // MARK: Public Properties
 
-    private var phoneNumber: String = "" {
+    var phoneNumber: String = "" {
         didSet {
             guard isViewLoaded else { return }
             labelPhoneNumber.text = phoneNumber
@@ -28,6 +28,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
     @IBOutlet private var labelPhoneNumber: UILabel!
     @IBOutlet private var validationTextFieldConfirmationCode: ValidationTextField!
+    @IBOutlet private var primaryButton: PrimaryButtonContainer!
 
     private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
         return KYCVerifyPhoneNumberPresenter(view: self)
@@ -51,8 +52,12 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     override func viewDidLoad() {
         super.viewDidLoad()
         validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
+        labelPhoneNumber.text = phoneNumber
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         validationTextFieldConfirmationCode.becomeFocused()
+        primaryButton.actionBlock = { [unowned self] in
+            self.onNextTapped()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -66,16 +71,16 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     override func apply(model: KYCPageModel) {
         guard case let .phone(user) = model else { return }
 
-        guard let mobile = user.mobile else { return }
+        guard let mobile = user.mobile, phoneNumber.count == 0 else { return }
         phoneNumber = mobile.phone
     }
 
-    // MARK: IBActions
+    // MARK: Actions
     @IBAction func onResendCodeTapped(_ sender: Any) {
         presenter.startVerification(number: phoneNumber)
     }
 
-    @IBAction func onNextTapped(_ sender: Any) {
+    private func onNextTapped() {
         guard case .valid = validationTextFieldConfirmationCode.validate() else {
             validationTextFieldConfirmationCode.becomeFocused()
             Logger.shared.warning("text field is invalid.")
@@ -99,7 +104,7 @@ extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     }
 
     func hideLoadingView() {
-        LoadingViewPresenter.shared.hideBusyView()
+        primaryButton.isLoading = false
     }
 
     func showError(message: String) {
@@ -107,6 +112,6 @@ extension KYCConfirmPhoneNumberController: KYCConfirmPhoneNumberView {
     }
 
     func showLoadingView(with text: String) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        primaryButton.isLoading = true
     }
 }
