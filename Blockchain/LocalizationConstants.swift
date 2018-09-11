@@ -357,6 +357,10 @@ struct LocalizationConstants {
             "All amounts are correct at this time but might change depending on the market price and transaction rates at the time your order is processed",
             comment: "Text displayed on exchange screen to inform user of changing market rates"
         )
+        static let orderID = NSLocalizedString("Order ID", comment: "Label in the exchange locked screen.")
+        static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
+        static let done = NSLocalizedString("Done", comment: "Footer button title")
+        static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
     }
 
     struct AddressAndKeyImport {

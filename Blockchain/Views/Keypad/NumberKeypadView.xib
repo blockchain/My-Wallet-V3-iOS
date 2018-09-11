@@ -8,6 +8,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Medium.ttf">
+            <string>Montserrat-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
             <connections>
@@ -30,29 +35,38 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nKZ-n9-Lse">
-                    <rect key="frame" x="16" y="16" width="343" height="268"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="nKZ-n9-Lse">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qpy-Gp-51b">
-                            <rect key="frame" x="0.0" y="0.0" width="343" height="61"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NCn-ay-Eff">
-                                    <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="1"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="1">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="xkC-zv-REz"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-De-n4k">
-                                    <rect key="frame" x="117" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="2"/>
+                                    <rect key="frame" x="127.5" y="0.0" width="120" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="2">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="M3w-Cc-KVn"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PkX-kC-KSG">
-                                    <rect key="frame" x="234" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="3"/>
+                                    <rect key="frame" x="255.5" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="3">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="zRI-6C-SH5"/>
                                     </connections>
@@ -65,25 +79,34 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0mb-Ql-dnE">
-                            <rect key="frame" x="0.0" y="69" width="343" height="61"/>
+                            <rect key="frame" x="0.0" y="75" width="375" height="75"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ctr-Ct-wVn">
-                                    <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="4"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="4">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Z24-09-4KO"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICd-bU-rTb">
-                                    <rect key="frame" x="117" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="5"/>
+                                    <rect key="frame" x="127.5" y="0.0" width="120" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="5">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="7ca-mZ-t5Y"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5mu-Rh-ATf">
-                                    <rect key="frame" x="234" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="6"/>
+                                    <rect key="frame" x="255.5" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="6">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="vD7-QF-lvB"/>
                                     </connections>
@@ -96,25 +119,34 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5tD-GM-aT7">
-                            <rect key="frame" x="0.0" y="138" width="343" height="61"/>
+                            <rect key="frame" x="0.0" y="150" width="375" height="75"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yuq-1L-HoU">
-                                    <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="7"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="7">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Yia-Mz-aCo"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDk-qh-2Hi">
-                                    <rect key="frame" x="117" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="8"/>
+                                    <rect key="frame" x="127.5" y="0.0" width="120" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="8">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="Idj-6v-RJp"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOX-WC-Mc9">
-                                    <rect key="frame" x="234" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="9"/>
+                                    <rect key="frame" x="255.5" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="9">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="lab-z7-Qni"/>
                                     </connections>
@@ -127,25 +159,33 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="JG9-Ux-Uyy">
-                            <rect key="frame" x="0.0" y="207" width="343" height="61"/>
+                            <rect key="frame" x="0.0" y="225" width="375" height="75"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sr2-Ia-gcZ" userLabel="Decimal">
-                                    <rect key="frame" x="0.0" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="."/>
+                                    <rect key="frame" x="0.0" y="0.0" width="119.5" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title=".">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="tvp-CN-MCk"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kma-Kx-hJu">
-                                    <rect key="frame" x="117" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="0"/>
+                                    <rect key="frame" x="127.5" y="0.0" width="120" height="75"/>
+                                    <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="19"/>
+                                    <state key="normal" title="0">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="numberButtonTapped:" destination="-1" eventType="touchUpInside" id="2yB-KY-1gg"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sq4-OM-1dd" userLabel="Backspace">
-                                    <rect key="frame" x="234" y="0.0" width="109" height="61"/>
-                                    <state key="normal" title="&lt;x]"/>
+                                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sq4-OM-1dd" userLabel="Backspace">
+                                    <rect key="frame" x="255.5" y="0.0" width="119.5" height="75"/>
+                                    <state key="normal" image="Bolete">
+                                        <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <connections>
                                         <action selector="backspaceButtonTapped:" destination="-1" eventType="touchUpInside" id="oi0-r2-q27"/>
                                     </connections>
@@ -174,13 +214,17 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="nKZ-n9-Lse" secondAttribute="bottom" constant="16" id="Loz-QW-nug"/>
-                <constraint firstItem="nKZ-n9-Lse" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="TmL-MU-aqE"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="nKZ-n9-Lse" secondAttribute="trailing" constant="16" id="kEI-1f-kWF"/>
-                <constraint firstItem="nKZ-n9-Lse" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="r0O-UV-IAV"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="nKZ-n9-Lse" secondAttribute="bottom" id="Loz-QW-nug"/>
+                <constraint firstItem="nKZ-n9-Lse" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="TmL-MU-aqE"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="nKZ-n9-Lse" secondAttribute="trailing" id="kEI-1f-kWF"/>
+                <constraint firstItem="nKZ-n9-Lse" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="r0O-UV-IAV"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="25.5" y="52"/>
         </view>
     </objects>
+    <resources>
+        <image name="Bolete" width="25" height="20"/>
+    </resources>
 </document>

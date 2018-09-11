@@ -179,7 +179,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
             postalCode: postalCodeTextField.text ?? "",
             city: cityTextField.text ?? "",
             state: stateTextField.text ?? "",
-            country: country?.name ?? user?.address?.country ?? ""
+            countryCode: country?.code ?? user?.address?.countryCode ?? ""
         )
         searchDelegate?.onSubmission(address, completion: { [weak self] in
             guard let this = self else { return }

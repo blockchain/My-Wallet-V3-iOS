@@ -10,6 +10,14 @@ import Foundation
 
 /// Model for buy-sell trades.
 // TODO: integrate with Exchange trades.
+
+extension Trade {
+    static func demo() -> Trade {
+        let trade = Trade(pair: TradingPair(from: .bitcoin, to: .ethereum)!)
+        return trade
+    }
+}
+
 struct Trade: Decodable {
     
     let identifier: String
@@ -51,6 +59,24 @@ struct Trade: Decodable {
         case depositTxHash
         case withdrawalTxHash
         case state
+    }
+    
+    init(pair: TradingPair) {
+        self.identifier = ""
+        self.created = Date()
+        self.updated = Date()
+        self.side = .buy
+        self.quantity = 0.0012
+        self.currency = .bitcoin
+        self.refundAddress = "123"
+        self.price = 0.345
+        self.depositAddress = "321"
+        self.depositQuantity = 0.0012
+        self.withdrawalAddress = "123"
+        self.withdrawalQuantity = 0.0012
+        self.depositHash = "abcdefg"
+        self.withdrawalHash = "qrstuv"
+        self.pair = pair
     }
     
     init(from decoder: Decoder) throws {
