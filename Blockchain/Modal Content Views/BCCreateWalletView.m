@@ -112,7 +112,7 @@
     }
 }
 
-#pragma mark - BCModalContentView Lifecycle methods
+#pragma mark - BCModalContentView Lifecyle methods
 
 - (void)prepareForModalPresentation
 {
@@ -121,6 +121,15 @@
     password2TextField.delegate = self;
     
     [self clearSensitiveTextFields];
+
+#ifdef DEBUG
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]]) {
+        emailTextField.text = @"test@doesnotexist.com";
+        passwordTextField.text = @"testpassword!";
+        password2TextField.text = @"testpassword!";
+        [self checkPasswordStrength];
+    }
+#endif
     
     _recoveryPhraseView.recoveryPassphraseTextField.delegate = self;
     

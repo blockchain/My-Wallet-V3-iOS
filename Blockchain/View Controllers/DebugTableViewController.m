@@ -22,7 +22,8 @@ typedef NS_ENUM(NSInteger, DebugTableViewRow) {
     RowSecurityReminderTimer,
     RowZeroTickerValue,
     RowKYC,
-    RowTotalCount
+    RowTotalCount,
+    RowCreateWalletPrefill
 };
 
 typedef enum {
@@ -129,6 +130,12 @@ typedef enum {
     [[NSUserDefaults standardUserDefaults] setBool:!zeroTickerOn forKey:USER_DEFAULTS_KEY_DEBUG_SIMULATE_ZERO_TICKER];
 }
 
+- (void)toggleCreateWalletPrefill
+{
+    BOOL prefillOn = [[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
+    [[NSUserDefaults standardUserDefaults] setBool:!prefillOn forKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
+}
+
 - (void)showFilteredWalletJSON
 {
     UIViewController *viewController = [[UIViewController alloc] init];
@@ -198,6 +205,14 @@ typedef enum {
         }
         case RowKYC: {
             cell.textLabel.text = @"Launch KYC";
+        }
+        case RowCreateWalletPrefill: {
+            cell.textLabel.text = @"Create wallet prefill";
+            UISwitch *prefillToggle = [[UISwitch alloc] init];
+            BOOL prefillOn = [[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
+            prefillToggle.on = prefillOn;
+            [prefillToggle addTarget:self action:@selector(toggleCreateWalletPrefill) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = prefillToggle;
         }
         default:
             break;
