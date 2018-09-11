@@ -11,18 +11,18 @@ import Foundation
 struct ExchangeInputComponent {
     let wholeValue: String
     let delimiter: String
-    let factionalValue: String?
+    let fractionalValue: String?
 }
 
 extension ExchangeInputComponent {
     static let empty: ExchangeInputComponent = ExchangeInputComponent(
         wholeValue: "0",
         delimiter: Locale.current.decimalSeparator ?? ".",
-        factionalValue: nil
+        fractionalValue: nil
     )
     
     func attributedFiat(withFont font: UIFont) -> NSAttributedString? {
-        let attributed = NSAttributedString(string: wholeValue + delimiter + (factionalValue ?? ""))
+        let attributed = NSAttributedString(string: wholeValue + delimiter + (fractionalValue ?? ""))
         let stylized = attributed.stylizedPrice(font, includeCurrencySymbol: true)
         return stylized
     }
@@ -45,6 +45,10 @@ private extension NSAttributedString {
         if let components = copy.string.components(separatedBy: copy.string.delimiter).last {
             if components.count == 1 {
                 copy.append(NSAttributedString(string: "0"))
+            }
+            
+            if components.count == 0 {
+                copy.append(NSAttributedString(string: "00"))
             }
         }
         

@@ -182,13 +182,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             return
         }
         if model.isUsingFiat == true {
-            if let fractional = inputs.inputComponents.factionalValue,
+            if let fractional = inputs.inputComponents.fractionalValue,
                 fractional.count >= NumberFormatter.localCurrencyFractionDigits {
                 Logger.shared.warning("Cannot add more than two decimal values for fiat")
                 return
             }
         } else {
-            if let fractional = inputs.inputComponents.factionalValue,
+            if let fractional = inputs.inputComponents.fractionalValue,
                 fractional.count >= NumberFormatter.assetFractionDigits {
                 Logger.shared.warning("Cannot add more than eight decimal values for crypto")
                 return

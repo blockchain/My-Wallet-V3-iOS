@@ -27,10 +27,11 @@ class ExchangeInputsService: ExchangeInputsAPI {
     var inputComponents: ExchangeInputComponent {
         let empty = ExchangeInputComponent.empty
         let components = activeInput.input.components(separatedBy: empty.delimiter)
+        let fractional = components.count > 1 ? components.last : empty.fractionalValue
         let value = ExchangeInputComponent(
             wholeValue: components.first ?? empty.wholeValue,
             delimiter: empty.delimiter,
-            factionalValue: components.last ?? empty.factionalValue
+            fractionalValue: fractional
         )
         return value
     }
