@@ -22,8 +22,8 @@ typedef NS_ENUM(NSInteger, DebugTableViewRow) {
     RowSecurityReminderTimer,
     RowZeroTickerValue,
     RowKYC,
+    RowCreateWalletPrefill,
     RowTotalCount,
-    RowCreateWalletPrefill
 };
 
 typedef enum {
