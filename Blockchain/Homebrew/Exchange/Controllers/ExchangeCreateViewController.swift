@@ -144,7 +144,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
 
     func updateTradingPairViewValues(left: String, right: String) {
-
+        let transitionUpdate = TradingPairView.TradingTransitionUpdate(
+            transitions: [.titles(left: left, right: right)],
+            transition: .none
+        )
+        tradingPairView.apply(transitionUpdate: transitionUpdate)
     }
 
     func updateRateLabels(first: String, second: String, third: String) {
