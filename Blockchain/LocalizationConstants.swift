@@ -596,6 +596,18 @@ struct LocalizationConstants {
             "Your Home Address",
             comment: "Text displayed on the search bar when adding an address during KYC."
         )
+        static let whichDocumentAreYouUsing = NSLocalizedString(
+            "Which document are you using?",
+            comment: ""
+        )
+        static let passport = NSLocalizedString(
+            "Passport",
+            comment: "The title of the UIAlertAction for the passport option."
+        )
+        static let driversLicense = NSLocalizedString(
+            "Driver's License",
+            comment: "The title of the UIAlertAction for the driver's license option."
+        )
     }
 }
 

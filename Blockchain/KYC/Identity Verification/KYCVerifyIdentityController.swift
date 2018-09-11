@@ -60,14 +60,14 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     // MARK: - Private Methods
 
     private func setUpAndShowDocumentDialog() {
-        let documentDialog = UIAlertController(title: "Which document are you using?", message: nil, preferredStyle: .actionSheet)
-        let passportAction = UIAlertAction(title: "Passport", style: .default, handler: { _ in
+        let documentDialog = UIAlertController(title: LocalizationConstants.KYC.whichDocumentAreYouUsing, message: nil, preferredStyle: .actionSheet)
+        let passportAction = UIAlertAction(title: LocalizationConstants.KYC.passport, style: .default, handler: { _ in
             self.didSelect(.passport)
         })
-        let driversLicenseAction = UIAlertAction(title: "Driver's License", style: .default, handler: { _ in
+        let driversLicenseAction = UIAlertAction(title: LocalizationConstants.KYC.driversLicense, style: .default, handler: { _ in
             self.didSelect(.driversLicense)
         })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
         documentDialog.addAction(passportAction)
         documentDialog.addAction(driversLicenseAction)
         documentDialog.addAction(cancelAction)
