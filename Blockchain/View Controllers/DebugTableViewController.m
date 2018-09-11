@@ -205,6 +205,7 @@ typedef enum {
         }
         case RowKYC: {
             cell.textLabel.text = @"Launch KYC";
+            break;
         }
         case RowCreateWalletPrefill: {
             cell.textLabel.text = @"Create wallet prefill";
@@ -213,6 +214,7 @@ typedef enum {
             prefillToggle.on = prefillOn;
             [prefillToggle addTarget:self action:@selector(toggleCreateWalletPrefill) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = prefillToggle;
+            break;
         }
         default:
             break;
