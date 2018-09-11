@@ -118,6 +118,7 @@ protocol KYCCoordinatorDelegate: class {
                 in: self,
                 payload: payload
             )
+            controller.navigationItem.hidesBackButton = (nextPage == .applicationComplete)
             navController.pushViewController(controller, animated: true)
         }
     }
