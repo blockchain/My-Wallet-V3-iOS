@@ -47,4 +47,8 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func updatedRates(first: String, second: String, third: String) {
         
     }
+
+    func updateTradingPairValues(left: String, right: String) {
+        interface?.updateTradingPairViewValues(left: left, right: right)
+    }
 }

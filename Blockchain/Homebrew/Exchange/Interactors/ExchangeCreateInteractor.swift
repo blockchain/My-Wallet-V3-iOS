@@ -65,12 +65,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             if inputTest != conversionInputTest {
                 this.inputs.activeInput.input = this.conversions.input
             }
-
-            // Update output
             this.inputs.lastOutput = this.conversions.output
 
-            // Update interface
+            // Update interface to reflect the values returned from the conversion
+            // Update input labels
             this.updateOutput()
+
+            // Update trading pair view
+            this.updateTradingValues(left: this.inputs.activeInput.input, right: this.conversions.opposingFix)
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
         })
@@ -92,6 +94,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         model.volume = Decimal(string: inputs.activeInput.input)!
 
+        // Update interface to reflect what has been typed
         updateOutput()
 
         // Re-subscribe to socket with new volume value
@@ -114,8 +117,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 secondary: inputs.lastOutput
             )
         }
+    }
 
-        // TODO: update the amounts shown in the Trading Pair view
+    func updateTradingValues(left: String, right: String) {
+        output?.updateTradingPairValues(left: left, right: right)
     }
 
     func displayInputTypeTapped() {

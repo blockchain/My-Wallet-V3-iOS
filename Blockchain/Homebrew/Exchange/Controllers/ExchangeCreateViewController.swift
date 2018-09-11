@@ -106,6 +106,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         secondaryAmountLabel.text = secondary
     }
 
+    func updateTradingPairViewValues(left: String, right: String) {
+
+    }
+
     func updateRateLabels(first: String, second: String, third: String) {
 
     }
