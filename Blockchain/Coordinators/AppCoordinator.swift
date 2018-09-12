@@ -222,9 +222,6 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleBuyBitcoin()
         case .exchange:
             handleExchange()
-        // TODO: remove item
-        case .kyc:
-            handleLaunchKYC()
         }
     }
 
