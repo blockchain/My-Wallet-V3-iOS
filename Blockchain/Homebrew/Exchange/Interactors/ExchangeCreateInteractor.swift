@@ -11,15 +11,17 @@ import RxSwift
 
 class ExchangeCreateInteractor {
     var disposable: Disposable?
-    weak var output: ExchangeCreateOutput?
+    weak var output: ExchangeCreateOutput? {
+        didSet {
+            didSetModel()
+        }
+    }
     fileprivate var inputs: ExchangeInputsAPI
     fileprivate var markets: ExchangeMarketsAPI
     fileprivate var conversions: ExchangeConversionAPI
     private var model: MarketsModel? {
         didSet {
-            if markets.hasAuthenticated {
-                updateMarketsConversion()
-            }
+            didSetModel()
         }
     }
 
@@ -30,6 +32,15 @@ class ExchangeCreateInteractor {
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
         self.model = model
+    }
+
+    func didSetModel() {
+        if let model = model {
+            output?.updateTradingPair(pair: model.pair)
+        }
+        if markets.hasAuthenticated {
+            updateMarketsConversion()
+        }
     }
 
     deinit {

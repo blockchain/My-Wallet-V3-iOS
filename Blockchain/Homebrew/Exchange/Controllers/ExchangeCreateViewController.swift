@@ -58,12 +58,6 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
-        
-        
-        let demo = Trade.demo()
-        let model = TradingPairView.confirmationModel(for: demo)
-        tradingPairView.apply(model: model)
-        
 
         primaryAmountLabel.textColor = UIColor.brandPrimary
         primaryDecimalLabel.textColor = UIColor.brandPrimary
@@ -107,7 +101,7 @@ class ExchangeCreateViewController: UIViewController {
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: .bitcoin, to: .ethereum)!,
+                pair: TradingPair(from: .ethereum, to: .bitcoinCash)!,
                 fiatCurrency: "USD",
                 fix: .base,
                 volume: 0)
@@ -131,7 +125,7 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-    
+
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
@@ -141,6 +135,35 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         primaryDecimalLabel.text = primaryDecimal
         decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
         secondaryAmountLabel.text = secondary
+    }
+
+    func updateTradingPairView(pair: TradingPair) {
+        let fromAsset = pair.from
+        let toAsset = pair.to
+
+        let transitionUpdate = TradingPairView.TradingTransitionUpdate(
+            transitions: [
+                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .titles(left: "", right: "")
+            ],
+            transition: .none
+        )
+
+        let presentationUpdate = TradingPairView.TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                .leftStatusVisibility(.hidden),
+                .rightStatusVisibility(.hidden),
+                .swapTintColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+                .titleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+            ],
+            animation: .none
+        )
+        let model = TradingPairView.Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        tradingPairView.apply(model: model)
     }
 
     func updateTradingPairViewValues(left: String, right: String) {
