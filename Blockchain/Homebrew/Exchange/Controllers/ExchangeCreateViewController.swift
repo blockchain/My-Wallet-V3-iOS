@@ -101,7 +101,7 @@ class ExchangeCreateViewController: UIViewController {
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: .ethereum, to: .bitcoinCash)!,
+                pair: TradingPair(from: .bitcoin, to: .ethereum)!,
                 fiatCurrency: "USD",
                 fix: .base,
                 volume: 0)

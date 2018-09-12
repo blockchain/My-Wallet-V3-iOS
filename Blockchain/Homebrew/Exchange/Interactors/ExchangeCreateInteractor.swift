@@ -13,7 +13,9 @@ class ExchangeCreateInteractor {
     var disposable: Disposable?
     weak var output: ExchangeCreateOutput? {
         didSet {
-            didSetModel()
+            // output is not set during ExchangeCreateInteractor initialization,
+            // so the first update to the trading pair view is done here
+            didSetModel(oldModel: nil)
         }
     }
     fileprivate var inputs: ExchangeInputsAPI
@@ -21,7 +23,7 @@ class ExchangeCreateInteractor {
     fileprivate var conversions: ExchangeConversionAPI
     private var model: MarketsModel? {
         didSet {
-            didSetModel()
+            didSetModel(oldModel: oldValue)
         }
     }
 
@@ -34,9 +36,14 @@ class ExchangeCreateInteractor {
         self.model = model
     }
 
-    func didSetModel() {
+    func didSetModel(oldModel: MarketsModel?) {
+        // Only update TradingPair in Trading Pair View if it is different
+        // from the old TradingPair
         if let model = model {
-            output?.updateTradingPair(pair: model.pair)
+            if oldModel == nil ||
+               (oldModel != nil && oldModel!.pair != model.pair) {
+                output?.updateTradingPair(pair: model.pair)
+            }
         }
         if markets.hasAuthenticated {
             updateMarketsConversion()
@@ -63,6 +70,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func subscribeToConversions() {
         disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
             guard let this = self else { return }
+            guard let model = this.model, model.pair.stringRepresentation == conversion.pair else {
+                Logger.shared.error("Pair returned from conversion is different from model pair")
+                return
+            }
 
             // Use conversions service to determine new input/output
             this.conversions.update(with: conversion)
@@ -82,7 +93,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             // Update input labels
             this.updateOutput()
 
-            // Update trading pair view
+            // Update trading pair view values
             this.updateTradingValues(left: this.conversions.baseOutput, right: this.conversions.counterOutput)
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
