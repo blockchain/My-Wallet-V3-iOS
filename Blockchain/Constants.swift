@@ -17,6 +17,9 @@ struct Constants {
         static let duration = 0.2
         static let durationLong = 0.5
     }
+    struct DebugKeys {
+        static let createWalletPrefill = "createWalletPrefill"
+    }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
         // TODO: remove this once we use autolayout
@@ -124,6 +127,10 @@ struct Constants {
     @objc class func animationDuration() -> Double { return Constants.Animation.duration }
 
     @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }
+
+    @objc class func debugKeyCreateWalletPrefill() -> String {
+        return Constants.DebugKeys.createWalletPrefill
+    }
 
     @objc class func notificationKeyModalViewDismissed() -> String {
         return Constants.NotificationKeys.modalViewDismissed.rawValue

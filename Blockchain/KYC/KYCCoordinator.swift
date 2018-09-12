@@ -85,8 +85,12 @@ protocol KYCCoordinatorDelegate: class {
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
                 LoadingViewPresenter.shared.hideBusyView()
                 self.user = $0
-                self.initializeNavigationStack(viewController)
-                self.restoreToMostRecentPageIfNeeded()
+                if self.pageTypeForUser() == .accountStatus {
+                    self.presentAccountStatusView(for: $0.status, in: viewController)
+                } else {
+                    self.initializeNavigationStack(viewController)
+                    self.restoreToMostRecentPageIfNeeded()
+                }
             }, onError: { error in
                 Logger.shared.error("Failed to get user: \(error.localizedDescription)")
                 LoadingViewPresenter.shared.hideBusyView()
@@ -96,6 +100,7 @@ protocol KYCCoordinatorDelegate: class {
 
     func finish() {
         // TODO: if applicable, persist state, do housekeeping, etc...
+        if navController == nil { return }
         navController.dismiss(animated: true)
     }
 
@@ -113,6 +118,7 @@ protocol KYCCoordinatorDelegate: class {
                 in: self,
                 payload: payload
             )
+            controller.navigationItem.hidesBackButton = (nextPage == .applicationComplete)
             navController.pushViewController(controller, animated: true)
         }
     }
@@ -241,6 +247,6 @@ protocol KYCCoordinatorDelegate: class {
 
         guard currentUser.status != .none else { return .verifyIdentity }
 
-        return .applicationComplete
+        return .accountStatus
     }
 }

@@ -9,7 +9,16 @@
 import UIKit
 
 /// Personal details entry screen in KYC flow
-final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormView, ProgressableView {
+final class KYCPersonalDetailsController: KYCBaseViewController,
+    ValidationFormView,
+    ProgressableView,
+    BottomButtonContainerView {
+
+    // MARK: - BottomButtonContainerView
+
+    var originalBottomButtonConstraint: CGFloat!
+
+    @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 
     // MARK: - ProgressableView
 
@@ -32,8 +41,6 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
     var validationFields: [ValidationTextField] {
         return [firstNameField, lastNameField, birthdayField]
     }
-
-    var keyboard: KeyboardPayload?
 
     // MARK: Public Properties
 
@@ -71,6 +78,10 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     // MARK: Lifecycle
 
+    deinit {
+        cleanUp()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -97,6 +108,14 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
                 next.becomeFocused()
             }
         }
+
+        originalBottomButtonConstraint = layoutConstraintBottomButton.constant
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setUpBottomButtonContainerView()
+        firstNameField.becomeFocused()
     }
 
     // MARK: - Private Methods
@@ -121,12 +140,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController, ValidationFormV
 
     fileprivate func setupNotifications() {
         NotificationCenter.when(.UIKeyboardWillHide) { [weak self] _ in
-            self?.scrollView.contentInset = .zero
             self?.scrollView.setContentOffset(.zero, animated: true)
-        }
-        NotificationCenter.when(.UIKeyboardWillShow) { [weak self] notification in
-            let keyboard = KeyboardPayload(notification: notification)
-            self?.keyboard = keyboard
         }
     }
 

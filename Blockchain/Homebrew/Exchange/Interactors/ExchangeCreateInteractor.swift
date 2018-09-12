@@ -14,6 +14,7 @@ class ExchangeCreateInteractor {
     weak var output: ExchangeCreateOutput?
     fileprivate let inputs: ExchangeInputsAPI
     fileprivate var markets: ExchangeMarketsAPI
+    private let inputsState: InputsState
     private var model: MarketsModel? {
         didSet {
             if markets.hasAuthenticated {
@@ -23,7 +24,10 @@ class ExchangeCreateInteractor {
     }
 
     init(dependencies: ExchangeDependencies,
-         model: MarketsModel) {
+         model: MarketsModel,
+         inputsState: InputsState = InputsState()
+    ) {
+        self.inputsState = inputsState
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.model = model
@@ -62,9 +66,27 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         markets.updateConversion(model: model)
     }
 
+    func updateInput() {
+        if inputsState.isUsingFiat {
+            let components = inputs.inputComponents
+            output?.updatedInput(
+                primary: components.integer,
+                primaryDecimal: components.fractional,
+                secondary: inputs.lastOutput
+            )
+        } else {
+            output?.updatedInput(
+                primary: inputs.activeInput.input,
+                primaryDecimal: nil,
+                secondary: inputs.lastOutput
+            )
+        }
+    }
+
     func displayInputTypeTapped() {
+        inputsState.isUsingFiat = !inputsState.isUsingFiat
         inputs.toggleInput()
-        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        updateInput()
     }
     
     func ratesViewTapped() {
@@ -81,11 +103,11 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     
     func onBackspaceTapped() {
         inputs.backspace()
-        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        updateInput()
     }
     
     func onAddInputTapped(value: String) {
         inputs.add(character: value)
-        output?.updatedInput(primary: inputs.activeInput.input, secondary: inputs.lastOutput)
+        updateInput()
     }
 }

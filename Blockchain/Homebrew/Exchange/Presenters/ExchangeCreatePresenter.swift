@@ -40,8 +40,8 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
-    func updatedInput(primary: String?, secondary: String?) {
-         interface?.updateInputLabels(primary: primary, secondary: secondary)
+    func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?) {
+        interface?.updateInputLabels(primary: primary, primaryDecimal: primaryDecimal, secondary: secondary)
     }
     
     func updatedRates(first: String, second: String, third: String) {
