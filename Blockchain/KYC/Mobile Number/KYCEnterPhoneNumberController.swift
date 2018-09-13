@@ -23,6 +23,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
     // MARK: IBOutlets
 
     @IBOutlet private var validationTextFieldMobileNumber: ValidationTextField!
+    @IBOutlet private var primaryButton: PrimaryButtonContainer!
 
     // MARK: Private Properties
 
@@ -70,6 +71,9 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
         validationTextFieldMobileNumber.returnTappedBlock = { [unowned self] in
             self.validationTextFieldMobileNumber.resignFocus()
         }
+        primaryButton.actionBlock = { [unowned self] in
+            self.primaryButtonTapped()
+        }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
     }
 
@@ -81,7 +85,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     // MARK: - Actions
 
-    @IBAction func primaryButtonTapped(_ sender: Any) {
+    private func primaryButtonTapped() {
         guard case .valid = validationTextFieldMobileNumber.validate() else {
             validationTextFieldMobileNumber.becomeFocused()
             Logger.shared.warning("phone number field is invalid.")
@@ -101,7 +105,7 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     }
 
     func showLoadingView(with text: String) {
-        LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        primaryButton.isLoading = true
     }
 
     func startVerificationSuccess() {
@@ -115,6 +119,6 @@ extension KYCEnterPhoneNumberController: KYCVerifyPhoneNumberView {
     }
 
     func hideLoadingView() {
-        LoadingViewPresenter.shared.hideBusyView()
+        primaryButton.isLoading = false
     }
 }

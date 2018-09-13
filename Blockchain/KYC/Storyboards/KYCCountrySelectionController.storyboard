@@ -116,7 +116,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Z4F-OY-daj"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Select Your Country" id="lqm-oI-6In"/>
+                    <navigationItem key="navigationItem" title="Country of Residence" id="lqm-oI-6In">
+                        <barButtonItem key="backBarButtonItem" id="iN0-fe-UEY"/>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="progressView" destination="DD7-KN-SsY" id="48v-s6-3Ce"/>
