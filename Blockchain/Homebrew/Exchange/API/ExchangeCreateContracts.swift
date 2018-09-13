@@ -13,7 +13,7 @@ protocol ExchangeCreateInterface: class {
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
     func updateRateLabels(first: String, second: String, third: String)
     func updateTradingPairViewValues(left: String, right: String)
-    func updateTradingPairView(pair: TradingPair)
+    func updateTradingPairView(pair: TradingPair, fix: Fix)
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
@@ -29,5 +29,5 @@ protocol ExchangeCreateOutput: class {
     func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?)
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)
-    func updateTradingPair(pair: TradingPair)
+    func updateTradingPair(pair: TradingPair, fix: Fix)
 }

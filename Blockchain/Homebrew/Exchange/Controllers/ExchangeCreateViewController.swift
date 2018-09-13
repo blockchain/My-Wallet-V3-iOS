@@ -59,12 +59,6 @@ class ExchangeCreateViewController: UIViewController {
         dependenciesSetup()
         delegate?.onViewLoaded()
 
-        // Debug code - will be removed in later PR
-        let demo = Trade.demo()
-        let model = TradingPairView.confirmationModel(for: demo)
-        tradingPairView.apply(model: model)
-        // End debug code
-
         [primaryAmountLabel, primaryDecimalLabel, secondaryAmountLabel].forEach {
             $0?.textColor = UIColor.brandPrimary
         }
@@ -141,14 +135,18 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         secondaryAmountLabel.text = secondary
     }
 
-    func updateTradingPairView(pair: TradingPair) {
+    func updateTradingPairView(pair: TradingPair, fix: Fix) {
         let fromAsset = pair.from
         let toAsset = pair.to
 
+        let isUsingBase = fix == .base || fix == .baseInFiat
+        let leftVisibility: TradingPairView.ViewUpdate = .leftStatusVisibility(isUsingBase ? .visible : .hidden)
+        let rightVisibility: TradingPairView.ViewUpdate = .rightStatusVisibility(isUsingBase ? .hidden : .visible)
+
         let transitionUpdate = TradingPairView.TradingTransitionUpdate(
             transitions: [
-                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
-                          .titles(left: "", right: "")
+                .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                .titles(left: "", right: "")
             ],
             transition: .none
         )
@@ -156,10 +154,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         let presentationUpdate = TradingPairView.TradingPresentationUpdate(
             animations: [
                 .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
-                .leftStatusVisibility(.hidden),
-                .rightStatusVisibility(.hidden),
-                .swapTintColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
-                .titleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+                leftVisibility,
+                rightVisibility,
+                .statusTintColor(#colorLiteral(red: 0.01176470588, green: 0.662745098, blue: 0.4470588235, alpha: 1)),
+                .swapTintColor(#colorLiteral(red: 0, green: 0.2901960784, blue: 0.4862745098, alpha: 1)),
+                .titleColor(#colorLiteral(red: 0, green: 0.2901960784, blue: 0.4862745098, alpha: 1))
             ],
             animation: .none
         )
