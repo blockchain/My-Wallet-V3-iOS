@@ -82,7 +82,7 @@ class ExchangeInputsService: ExchangeInputsAPI {
     }
     
     func maxAssetFractional() -> Int {
-        return 2
+        return 8
     }
     
     func canBackspace() -> Bool {
