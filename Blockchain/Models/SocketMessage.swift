@@ -69,7 +69,8 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
 }
 
 struct AuthSubscribeParams: Codable {
-    let type, token: String
+    let type: String
+    let token: String
 }
 
 struct ConversionSubscribeParams: Codable {
@@ -85,7 +86,8 @@ struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
     
     let sequenceNumber: Int
-    let channel, type: String
+    let channel: String
+    let type: String
     
     private enum CodingKeys: String, CodingKey {
         case sequenceNumber
@@ -98,7 +100,8 @@ struct Conversion: SocketMessageCodable {
     typealias JSONType = Conversion
 
     let sequenceNumber: Int
-    let channel, type: String
+    let channel: String
+    let type: String
     let quote: Quote
 
     private enum CodingKeys: CodingKey {
@@ -110,7 +113,8 @@ struct Conversion: SocketMessageCodable {
 }
 
 struct Quote: Codable {
-    let pair, fiatCurrency: String
+    let pair: String
+    let fiatCurrency: String
     let fix: Fix
     let volume: String
     let currencyRatio: CurrencyRatio

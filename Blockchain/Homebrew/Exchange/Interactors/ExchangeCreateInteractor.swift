@@ -18,9 +18,9 @@ class ExchangeCreateInteractor {
             didSetModel(oldModel: nil)
         }
     }
-    fileprivate var inputs: ExchangeInputsAPI
-    fileprivate var markets: ExchangeMarketsAPI
-    fileprivate var conversions: ExchangeConversionAPI
+    fileprivate let inputs: ExchangeInputsAPI
+    fileprivate let markets: ExchangeMarketsAPI
+    fileprivate let conversions: ExchangeConversionAPI
     private var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
@@ -173,7 +173,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating conversion with no model")
             return
         }
-        if model.isUsingFiat == true {
+        if model.isUsingFiat {
             if let fractional = inputs.inputComponents.fractional,
                 fractional.count >= NumberFormatter.localCurrencyFractionDigits {
                 Logger.shared.warning("Cannot add more than two decimal values for fiat")
