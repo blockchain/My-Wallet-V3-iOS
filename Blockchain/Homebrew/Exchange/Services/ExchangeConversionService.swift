@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias ConversionResult = (input: String, output: String)
-
 protocol ExchangeConversionAPI {
     // Given a conversion, update the input, output, and opposing fix
     func update(with conversion: Conversion)
@@ -32,10 +30,10 @@ protocol ExchangeConversionAPI {
 }
 
 class ExchangeConversionService: ExchangeConversionAPI {
-    var input: String = ""
-    var output: String = ""
-    var baseOutput: String = ""
-    var counterOutput: String = ""
+    private(set) var input: String = ""
+    private(set) var output: String = ""
+    private(set) var baseOutput: String = ""
+    private(set) var counterOutput: String = ""
 
     func update(with conversion: Conversion) {
         let quote = conversion.quote
