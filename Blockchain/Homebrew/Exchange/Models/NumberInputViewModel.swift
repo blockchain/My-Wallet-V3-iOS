@@ -16,7 +16,7 @@ protocol NumberInputDelegate: class {
 
 // Class used to store the results of user input relayed by the NumberKeypadView.
 class NumberInputViewModel: NumberInputDelegate {
-
+    
     private let numbers: Set<String> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     private let zero = "0"
     var input: String

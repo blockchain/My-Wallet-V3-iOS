@@ -57,7 +57,14 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
+    
     func viewLoaded() {
+        guard let output = output else { return }
+        guard let model = model else { return }
+        inputs.setup(with: output.styleTemplate(), usingFiat: model.isUsingFiat)
+        inputs.toggleInput(usingFiat: model.isUsingFiat)
+        updatedInput()
+        
         markets.setup()
 
         // Authenticate, then listen for conversions
@@ -127,25 +134,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Update the inputs in crypto and fiat
         guard let output = output else { return }
         if model?.isUsingFiat == true {
-            let components = inputs.inputComponents
             
-            output.updatedInput(
-                primary: components.attributedFiat(withFont: output.primaryFont()),
-                secondary: inputs.lastOutput
-            )
+            let primary = inputs.primaryFiatAttributedString()
+            output.updatedInput(primary: primary, secondary: inputs.lastOutput)
         } else {
             guard let model = model else { return }
             let symbol = model.pair.from.symbol
-            let value = inputs.activeInput.input + " " + symbol
-            let attributed = NSAttributedString(
-                string: value,
-                attributes: [.font: output.primaryFont()]
-            )
-            
-            output.updatedInput(
-                primary: attributed,
-                secondary: inputs.lastOutput
-            )
+            let primary = inputs.primaryAssetAttributedString(symbol: symbol)
+            output.updatedInput(primary: primary, secondary: inputs.lastOutput)
         }
     }
 
@@ -154,8 +150,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func displayInputTypeTapped() {
-        model?.toggleFiatInput()
-        inputs.toggleInput()
+        guard let model = model else { return }
+        model.toggleFiatInput()
+        inputs.toggleInput(usingFiat: model.isUsingFiat)
         updatedInput()
     }
     
@@ -172,29 +169,56 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
     
     func onBackspaceTapped() {
+        guard inputs.canBackspace() else {
+            output?.entryRejected()
+            return
+        }
         inputs.backspace()
         updatedInput()
     }
     
     func onAddInputTapped(value: String) {
-        guard let model = model else {
+        guard let _ = model else {
             Logger.shared.error("Updating conversion with no model")
             return
         }
-        if model.isUsingFiat == true {
-            if let fractional = inputs.inputComponents.fractionalValue,
-                fractional.count >= NumberFormatter.localCurrencyFractionDigits {
-                Logger.shared.warning("Cannot add more than two decimal values for fiat")
-                return
-            }
-        } else {
-            if let fractional = inputs.inputComponents.fractionalValue,
-                fractional.count >= NumberFormatter.assetFractionDigits {
-                Logger.shared.warning("Cannot add more than eight decimal values for crypto")
-                return
-            }
+        
+        guard canAddAdditionalCharacter(value) == true else {
+            output?.entryRejected()
+            return
         }
-        inputs.add(character: value)
+        
+        inputs.add(
+            character: value
+        )
+        
         updatedInput()
+    }
+    
+    func onDelimiterTapped(value: String) {
+        guard inputs.canAddDelimiter() else {
+            output?.entryRejected()
+            return
+        }
+        
+        guard let model = model else { return }
+        
+        let text = model.isUsingFiat ? "00" : value
+        
+        inputs.add(
+            delimiter: text
+        )
+        
+        updatedInput()
+    }
+    
+    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
+        guard let model = model else { return false }
+        switch model.isUsingFiat {
+        case true:
+            return inputs.canAddFiatCharacter(value)
+        case false:
+            return inputs.canAddAssetCharacter(value)
+        }
     }
 }

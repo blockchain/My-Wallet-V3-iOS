@@ -8,94 +8,181 @@
 
 import Foundation
 
-struct ExchangeInputComponent {
-    let wholeValue: String
-    let delimiter: String
-    let fractionalValue: String?
-}
-
-extension ExchangeInputComponent {
-    static let empty: ExchangeInputComponent = ExchangeInputComponent(
-        wholeValue: "0",
-        delimiter: Locale.current.decimalSeparator ?? ".",
-        fractionalValue: nil
-    )
+struct ExchangeInputComponents {
+    var components: [InputComponent]
+    var isUsingFiat: Bool {
+        didSet {
+            styleTemplate.type = isUsingFiat ? .fiat : .nonfiat
+        }
+    }
+    private var styleTemplate: ExchangeStyleTemplate
     
-    func attributedFiat(withFont font: UIFont) -> NSAttributedString? {
-        let attributed = NSAttributedString(string: wholeValue + delimiter + (fractionalValue ?? ""))
-        let stylized = attributed.stylizedPrice(font, includeCurrencySymbol: true)
-        return stylized
+    init(template: ExchangeStyleTemplate) {
+        self.styleTemplate = template
+        self.components = [
+            InputComponent.start(
+                with: template.primaryFont,
+                textColor: template.textColor
+            )
+        ]
+        isUsingFiat = styleTemplate.type == .fiat
+    }
+    
+    mutating func append(_ component: InputComponent) {
+        if components.count == 1 {
+            if let first = components.first {
+                if first.type == .whole && first.value == "0" {
+                    components = [component]
+                    return
+                }
+            }
+        }
+        components.append(component)
+    }
+    
+    mutating func dropLast() {
+        components = components.drop()
+    }
+    
+    func primaryFiatAttributedString(_ symbolComponent: InputComponent) -> NSAttributedString {
+        guard symbolComponent.type == .symbol else { return NSAttributedString(string: "NaN")}
+        var reduced: [InputComponent] = components
+        if components.contains(where: { $0.type == .fractional }) {
+            reduced = components.filter({ $0.type != .pendingFractional })
+        }
+        let value = [symbolComponent] + reduced
+        return value.map({ return $0.attributedString(with: styleTemplate )}).join()
+    }
+    
+    func primaryAssetAttributedString(_ suffixComponent: InputComponent) -> NSAttributedString {
+        guard suffixComponent.type == .suffix else { return NSAttributedString(string: "NaN")}
+        let value = components + [suffixComponent]
+        return value.map({ return $0.attributedString(with: styleTemplate )}).join()
+    }
+    
+    var attributedString: NSAttributedString {
+        return components.map({ return $0.attributedString(with: styleTemplate) }).join()
     }
 }
 
-private extension NSAttributedString {
-    func stylizedPrice(_ withFont: UIFont, includeCurrencySymbol: Bool = true) -> NSAttributedString {
-        let formatter = NumberFormatter.localCurrencyFormatter
+class InputComponent {
+    let value: String
+    let type: InputComponentType
+    
+    init(value: String, type: InputComponentType) {
+        self.value = value
+        self.type = type
+    }
+}
+
+extension InputComponent {
+    static func start(with font: UIFont, textColor: UIColor) -> InputComponent {
+        let start = InputComponent(
+            value: "0",
+            type: .whole
+        )
+        return start
+    }
+}
+
+extension InputComponent {
+    
+    func attributedString(with style: ExchangeStyleTemplate) -> NSAttributedString {
+        let primaryFont = style.primaryFont
+        let secondaryFont = style.secondaryFont
         
-        guard let currencySymbol = formatter.currencySymbol else {
-            assertionFailure("Expected a currency symbol")
-            return self
-        }
+        let offset = primaryFont.capHeight - secondaryFont.capHeight
         
-        let copy = NSMutableAttributedString(attributedString: self)
-        if includeCurrencySymbol {
-            copy.insert(NSAttributedString(string: currencySymbol), at: 0)
-        }
-        
-        if let components = copy.string.components(separatedBy: copy.string.delimiter).last {
-            if components.count == 1 {
-                copy.append(NSAttributedString(string: "0"))
+        switch type {
+        case .whole:
+            return NSAttributedString(
+                string: value,
+                attributes: [.font: primaryFont]
+            )
+        case .fractional:
+            
+            let font = style.type == .fiat ? style.secondaryFont : style.primaryFont
+            
+            var attributes: [NSAttributedStringKey: Any] = [.font: font]
+            if style.type == .fiat {
+                attributes[.baselineOffset] = offset
             }
             
-            if components.count == 0 {
-                copy.append(NSAttributedString(string: "00"))
+            return NSAttributedString(
+                string: value,
+                attributes: attributes
+            )
+        case .pendingFractional:
+            
+            let font = style.type == .fiat ? style.secondaryFont : style.primaryFont
+            let color = style.type == .fiat ? style.pendingColor : style.textColor
+            
+            var attributes: [NSAttributedStringKey: Any] = [.font: font,
+                                                            .foregroundColor: color]
+            if style.type == .fiat {
+                attributes[.baselineOffset] = offset
+            }
+            
+            return NSAttributedString(
+                string: value,
+                attributes: attributes
+            )
+        case .suffix:
+            return NSAttributedString(
+                string: value,
+                attributes: [.font: primaryFont]
+            )
+        case .symbol:
+            return NSAttributedString(
+                string: value,
+                attributes: [.font: secondaryFont,
+                             .baselineOffset: offset]
+            )
+        case .space:
+            return NSAttributedString(
+                string: value,
+                attributes: [.font: primaryFont]
+            )
+        }
+    }
+}
+
+enum InputComponentType {
+    case whole
+    case fractional
+    case pendingFractional
+    case suffix
+    case symbol
+    case space
+}
+
+extension Array where Element == InputComponent {
+    
+    func canDrop() -> Bool {
+        if let model = first, count == 1 {
+            return model.value != "0"
+        }
+        if count > 1 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func drop() -> Array<Element> {
+        if count > 1 {
+            return Array(dropLast())
+        }
+        if count == 1 {
+            if let model = first, model.value == "0" {
+                return self
+            }
+            if let model = first, model.value != "0" {
+                let result = [InputComponent(value: "0", type: .whole)]
+                return result
             }
         }
-        
-        guard let decimalIndex = copy.string.currencyDelimiterRange?.lowerBound else {
-            assertionFailure("Expected a decimal point.")
-            return self
-        }
-        
-        var stylizedPrice: NSMutableAttributedString = NSMutableAttributedString(string: copy.string)
-        if copy.string.contains(".") {
-            stylizedPrice = NSMutableAttributedString(
-                string: copy.string.replacingOccurrences(of: ".", with: " "),
-                attributes: [.font: withFont]
-            )
-        }
-        
-        if copy.string.contains(",") {
-            stylizedPrice = NSMutableAttributedString(
-                string: copy.string.replacingOccurrences(of: ",", with: " "),
-                attributes: [.font: withFont]
-            )
-        }
-        
-        if copy.string.contains("١") {
-            stylizedPrice = NSMutableAttributedString(
-                string: copy.string.replacingOccurrences(of: "١", with: " "),
-                attributes: [.font: withFont]
-            )
-        }
-        
-        /// This takes into account the additional space
-        /// added if we opt to `includeCurrencySymbol`
-        let decimalRange = NSRange(
-            location: decimalIndex,
-            length: includeCurrencySymbol ? formatter.maximumFractionDigits + 1 : formatter.maximumFractionDigits
-        )
-        
-        guard let currencyRange = stylizedPrice.string.range(of: currencySymbol)?.asNSRange else { return stylizedPrice }
-        let reducedSize = ceil(withFont.pointSize / 2)
-        guard let reducedFont = UIFont(name: withFont.fontName, size: reducedSize) else { return stylizedPrice }
-        let offset = withFont.capHeight - reducedFont.capHeight
-        stylizedPrice.addAttribute(.font, value: reducedFont, range: decimalRange)
-        stylizedPrice.addAttribute(.baselineOffset, value: offset, range: decimalRange)
-        stylizedPrice.addAttribute(.font, value: reducedFont, range: currencyRange)
-        stylizedPrice.addAttribute(.baselineOffset, value: offset, range: currencyRange)
-        stylizedPrice.addAttribute(.kern, value: 1.5, range: currencyRange)
-        return stylizedPrice
+        return self
     }
 }
 
