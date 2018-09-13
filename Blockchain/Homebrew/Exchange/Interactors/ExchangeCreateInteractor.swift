@@ -70,7 +70,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func subscribeToConversions() {
         disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
             guard let this = self else { return }
-            guard let model = this.model, model.pair.stringRepresentation == conversion.pair else {
+            guard let model = this.model, model.pair.stringRepresentation == conversion.quote.pair else {
                 Logger.shared.error("Pair returned from conversion is different from model pair")
                 return
             }
