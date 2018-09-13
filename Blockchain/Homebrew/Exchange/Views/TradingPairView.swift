@@ -57,9 +57,7 @@ class TradingPairView: NibBasedView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        leftButton.layer.cornerRadius = 4.0
-        rightButton.layer.cornerRadius = 4.0
+        configureButtons()
     }
     
     // MARK: Actions
@@ -162,6 +160,19 @@ class TradingPairView: NibBasedView {
             leftButton.setTitle(leftTitle, for: .normal)
             rightButton.setTitle(rightTitle, for: .normal)
         }
+    }
+
+    func configureButtons() {
+        leftButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+        rightButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+
+        let numberOfLines = 1
+        leftButton.titleLabel?.numberOfLines = numberOfLines
+        rightButton.titleLabel?.numberOfLines = numberOfLines
+
+        let edgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        leftButton.titleEdgeInsets = edgeInsets
+        rightButton.titleEdgeInsets = edgeInsets
     }
 }
 
