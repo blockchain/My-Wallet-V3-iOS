@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Array where Element : Equatable {
+extension Array where Element: Equatable {
 
     /// Returns an array of unique values in the array
     var unique: [Element] {

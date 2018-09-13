@@ -183,7 +183,7 @@
                                 </button>
                                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sq4-OM-1dd" userLabel="Backspace">
                                     <rect key="frame" x="255.5" y="0.0" width="119.5" height="75"/>
-                                    <state key="normal" image="Bolete">
+                                    <state key="normal" image="backspace">
                                         <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
                                     <connections>
@@ -225,6 +225,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Bolete" width="25" height="20"/>
+        <image name="backspace" width="25" height="20"/>
     </resources>
 </document>

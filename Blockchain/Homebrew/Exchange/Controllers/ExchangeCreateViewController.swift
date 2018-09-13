@@ -58,34 +58,27 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
-        
-        
+
+        // Debug code - will be removed in later PR
         let demo = Trade.demo()
         let model = TradingPairView.confirmationModel(for: demo)
         tradingPairView.apply(model: model)
-        
+        // End debug code
 
-        primaryAmountLabel.textColor = UIColor.brandPrimary
-        primaryDecimalLabel.textColor = UIColor.brandPrimary
-        secondaryAmountLabel.textColor = UIColor.brandPrimary
-        
-        useMaximumButton.layer.cornerRadius = 4.0
-        useMaximumButton.layer.borderWidth = 1.0
-        useMaximumButton.layer.borderColor = UIColor.brandPrimary.cgColor
-        
-        useMinimumButton.layer.cornerRadius = 4.0
-        useMinimumButton.layer.borderWidth = 1.0
-        useMinimumButton.layer.borderColor = UIColor.brandPrimary.cgColor
-        
+        [primaryAmountLabel, primaryDecimalLabel, secondaryAmountLabel].forEach {
+            $0?.textColor = UIColor.brandPrimary
+        }
+
+        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
+            addStyleToView($0)
+        }
+
         exchangeButton.layer.cornerRadius = 4.0
-        exchangeRateView.layer.cornerRadius = 4.0
-        exchangeRateView.layer.borderWidth = 1.0
-        exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
-        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
-        primaryDecimalLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
-        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
-        
+        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
+        setAmountLabelFont(label: primaryDecimalLabel, size: Constants.FontSizes.Small)
+        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
+
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
         }
@@ -96,10 +89,6 @@ class ExchangeCreateViewController: UIViewController {
         if let navController = navigationController as? BCNavigationController {
             navController.applyDarkAppearance()
         }
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
     }
 
     fileprivate func dependenciesSetup() {
@@ -117,6 +106,23 @@ class ExchangeCreateViewController: UIViewController {
         presenter.interface = self
         interactor.output = presenter
         delegate = presenter
+    }
+}
+
+// MARK: - Styling
+extension ExchangeCreateViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+
+    private func addStyleToView(_ viewToEdit: UIView) {
+        viewToEdit.layer.cornerRadius = 4.0
+        viewToEdit.layer.borderWidth = 1.0
+        viewToEdit.layer.borderColor = UIColor.brandPrimary.cgColor
+    }
+
+    private func setAmountLabelFont(label: UILabel, size: CGFloat) {
+        label.font = UIFont(name: Constants.FontNames.montserratRegular, size: size)
     }
 }
 

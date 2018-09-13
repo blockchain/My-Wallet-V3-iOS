@@ -81,9 +81,6 @@ class SideMenuPresenter {
             .support,
             .logout
         ])
-        #if DEBUG
-        items.append(.kyc)
-        #endif
         view?.setMenu(items: items)
     }
 }

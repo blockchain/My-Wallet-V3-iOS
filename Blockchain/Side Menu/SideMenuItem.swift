@@ -14,7 +14,6 @@ enum SideMenuItem: String, RawValued {
     case backup = "backup"
     case buyBitcoin = "buy_bitcoin"
     case exchange = "exchange"
-    case kyc = "kyc"
     case logout = "logout"
     case settings = "settings"
     case support = "support"
@@ -29,7 +28,6 @@ extension SideMenuItem {
         case .backup: return LocalizationConstants.SideMenu.backupFunds
         case .buyBitcoin: return LocalizationConstants.SideMenu.buySellBitcoin
         case .exchange: return LocalizationConstants.SideMenu.exchange
-        case .kyc: return "Debug KYC"
         case .logout: return LocalizationConstants.SideMenu.logout
         case .settings: return LocalizationConstants.SideMenu.settings
         case .support: return LocalizationConstants.SideMenu.support
@@ -44,7 +42,6 @@ extension SideMenuItem {
         case .backup: return #imageLiteral(resourceName: "lock")
         case .buyBitcoin: return #imageLiteral(resourceName: "buy")
         case .exchange: return #imageLiteral(resourceName: "exchange_menu")
-        case .kyc: return #imageLiteral(resourceName: "web")
         case .logout: return #imageLiteral(resourceName: "logout")
         case .settings: return #imageLiteral(resourceName: "settings")
         case .support: return #imageLiteral(resourceName: "help")
