@@ -68,6 +68,14 @@ class ExchangeCreateViewController: UIViewController {
         }
 
         exchangeButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+
+        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
+        setAmountLabelFont(label: primaryDecimalLabel, size: Constants.FontSizes.Small)
+        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
+
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyLightAppearance()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
