@@ -66,6 +66,14 @@ class ExchangeCreateViewController: UIViewController {
         dependenciesSetup()
         delegate?.onViewLoaded()
         
+        [primaryAmountLabel, secondaryAmountLabel].forEach {
+            $0?.textColor = UIColor.brandPrimary
+        }
+
+        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
+            addStyleToView($0)
+        }
+        
         exchangeButton.layer.cornerRadius = 4.0
         
         primaryAmountLabel.textColor = UIColor.brandPrimary
