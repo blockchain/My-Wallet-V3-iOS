@@ -503,6 +503,8 @@
 		A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */; };
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
+		AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
+		AA0A412D214ADD5B00807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA126CD8212C94CB005886A3 /* NabuCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126CD5212C94CB005886A3 /* NabuCreateUserResponse.swift */; };
 		AA126CD9212C94CB005886A3 /* NabuCreateUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126CD5212C94CB005886A3 /* NabuCreateUserResponse.swift */; };
 		AA126CDC212C94CB005886A3 /* NabuSessionTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA126CD7212C94CB005886A3 /* NabuSessionTokenResponse.swift */; };
@@ -3037,6 +3039,7 @@
 		A2AADC041B0B98720085144B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Backup.strings; sourceTree = "<group>"; };
 		A2AADC071B0B999F0085144B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Backup.strings; sourceTree = "<group>"; };
 		A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0A412B214AD75300807163 /* DebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		AA126CD5212C94CB005886A3 /* NabuCreateUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NabuCreateUserResponse.swift; sourceTree = "<group>"; };
 		AA126CD7212C94CB005886A3 /* NabuSessionTokenResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NabuSessionTokenResponse.swift; sourceTree = "<group>"; };
 		AA126CDE212C9735005886A3 /* KYCPageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageError.swift; sourceTree = "<group>"; };
@@ -6241,10 +6244,11 @@
 				9F1831F315176F2200FB3D52 /* Categories */,
 				AAA33338208811460019AD55 /* Coordinators */,
 				AAF2AF0B2124946F00687E30 /* Data */,
+				AA0A4121214AD71100807163 /* Debug */,
 				510EA19620811FF100A63AB8 /* Extensions */,
 				AA63F87220A39D4E002B719B /* Feature Configuration */,
-				9F0CBAAB15135DF200CD945D /* JavaScript */,
 				C75F64F52124BB9000396B65 /* Homebrew */,
+				9F0CBAAB15135DF200CD945D /* JavaScript */,
 				602B9CA62118E15200BD3D60 /* KYC */,
 				515EF91A210282B4002350B6 /* Localization */,
 				AA3CA9932107F10000C2AD46 /* Logging */,
@@ -6252,8 +6256,8 @@
 				9F765F3A14BC7C3100048EFB /* Models */,
 				51A7348B20891EB3009727D5 /* Network */,
 				AABDED66208EB4EA002D8BAC /* Notifications */,
-				3A019119212DE54C00AED2BF /* Operations */,
 				AAA333402088450D0019AD55 /* Onboarding */,
+				3A019119212DE54C00AED2BF /* Operations */,
 				AACE317E2092793300B7B806 /* Pin */,
 				51042C8820B1FDA600B022DE /* PrivateKeyReader */,
 				AACE31FA2093F9F200B7B806 /* Reminder */,
@@ -6308,8 +6312,6 @@
 				C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */,
 				C7CE34B91F4DE14500032806 /* DashboardViewController.h */,
 				C7CE34BA1F4DE14500032806 /* DashboardViewController.m */,
-				23F720F01C32DC0A00577738 /* DebugTableViewController.h */,
-				23F720F11C32DC0A00577738 /* DebugTableViewController.m */,
 				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
 				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
 				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
@@ -6368,6 +6370,16 @@
 				3AC4F97721234040003AA207 /* Storyboardable.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		AA0A4121214AD71100807163 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				23F720F01C32DC0A00577738 /* DebugTableViewController.h */,
+				23F720F11C32DC0A00577738 /* DebugTableViewController.m */,
+				AA0A412B214AD75300807163 /* DebugSettings.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		AA126CD4212C94C1005886A3 /* Network */ = {
@@ -7669,6 +7681,7 @@
 				3AAEF96221421C6F005852D1 /* TextCell.swift in Sources */,
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
 				519435A1208E61F3001EF882 /* BlockchainTests.swift in Sources */,
+				AA0A412D214ADD5B00807163 /* DebugSettings.swift in Sources */,
 				AA6911A120D18B6E00DDB541 /* MockWalletService.swift in Sources */,
 				C7FF10FE2141C07A00CBA3CB /* Fix.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
@@ -7996,6 +8009,7 @@
 				C7CE25AA2135E3B500DCC43B /* ExchangeCreateContracts.swift in Sources */,
 				C7EEB8451EA95505002F28B9 /* UIView+ChangeFrameAttribute.m in Sources */,
 				C774A1262102B87300DCCC17 /* ExchangeRate.swift in Sources */,
+				AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */,
 				AACB48B821478472008FCCD0 /* Collection+Helpers.swift in Sources */,
 				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */,

@@ -127,8 +127,14 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
 
+        #if DEBUG
+        guard !DebugSettings.shared.useHomebrewForExchange else {
+            success(true)
+            return
+        }
+        #endif
+
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)

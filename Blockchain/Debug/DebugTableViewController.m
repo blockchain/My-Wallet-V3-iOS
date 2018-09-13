@@ -21,8 +21,8 @@ typedef NS_ENUM(NSInteger, DebugTableViewRow) {
     RowCertificatePinning,
     RowSecurityReminderTimer,
     RowZeroTickerValue,
-    RowKYC,
     RowCreateWalletPrefill,
+    RowUseHomebrewForExchange,
     RowTotalCount,
 };
 
@@ -132,8 +132,14 @@ typedef enum {
 
 - (void)toggleCreateWalletPrefill
 {
-    BOOL prefillOn = [[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
-    [[NSUserDefaults standardUserDefaults] setBool:!prefillOn forKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
+    DebugSettings *settings = DebugSettings.sharedInstance;
+    settings.createWalletPrefill = !settings.createWalletPrefill;
+}
+
+- (void)toggleUseHomebrewForExchange
+{
+    DebugSettings *settings = DebugSettings.sharedInstance;
+    settings.useHomebrewForExchange = !settings.useHomebrewForExchange;
 }
 
 - (void)showFilteredWalletJSON
@@ -203,16 +209,19 @@ typedef enum {
             cell.accessoryView = zeroTickerToggle;
             break;
         }
-        case RowKYC: {
-            cell.textLabel.text = @"Launch KYC";
-            break;
-        }
         case RowCreateWalletPrefill: {
             cell.textLabel.text = @"Create wallet prefill";
             UISwitch *prefillToggle = [[UISwitch alloc] init];
-            BOOL prefillOn = [[NSUserDefaults standardUserDefaults] boolForKey:[ConstantsObjcBridge debugKeyCreateWalletPrefill]];
-            prefillToggle.on = prefillOn;
+            prefillToggle.on = DebugSettings.sharedInstance.createWalletPrefill;
             [prefillToggle addTarget:self action:@selector(toggleCreateWalletPrefill) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = prefillToggle;
+            break;
+        }
+        case RowUseHomebrewForExchange: {
+            cell.textLabel.text = @"Use homebrew for exchange";
+            UISwitch *prefillToggle = [[UISwitch alloc] init];
+            prefillToggle.on = DebugSettings.sharedInstance.useHomebrewForExchange;
+            [prefillToggle addTarget:self action:@selector(toggleUseHomebrewForExchange) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = prefillToggle;
             break;
         }
@@ -263,10 +272,6 @@ typedef enum {
                 textField.text = [NSString stringWithFormat:@"%i", customTimeValue ? [customTimeValue intValue] : TIME_INTERVAL_SECURITY_REMINDER_PROMPT];
             }];
             [self presentViewController:alert animated:YES completion:nil];
-            break;
-        }
-        case RowKYC: {
-            [[KYCCoordinator sharedInstance] startFrom:self];
             break;
         }
         default:
