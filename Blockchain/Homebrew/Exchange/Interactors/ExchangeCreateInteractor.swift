@@ -101,6 +101,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func updateMarketsConversion() {
+        // TICKET: IOS-1287 - This should be called after user has stopped typing
         guard let model = model else {
             Logger.shared.error("Updating conversion with no model")
             return
