@@ -109,6 +109,8 @@ extension SocketManager: WebSocketAdvancedDelegate {
     }
 
     func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
+        let socketType: SocketType = socket == self.exchangeSocket ? .exchange : .unassigned
+
         let onError: (String) -> Void = { message in
             Logger.shared.error("Could not form SocketMessage object from string: \(message)")
         }
@@ -134,9 +136,10 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
         switch type {
-        case "conversion": Conversion.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(data: data, onSuccess: onSuccess, onError: onError)
-        case "error": onError("Error returned")
+        case "currencyRatio": Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "currencyRatioError": onError("Currency ratio error: \(json)")
+        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "error": onError("Error returned: \(json)")
         default: onError("Unsupported type")
         }
     }

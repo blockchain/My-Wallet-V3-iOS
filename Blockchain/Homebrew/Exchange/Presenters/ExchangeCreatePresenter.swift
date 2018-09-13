@@ -40,11 +40,19 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
+    func updateTradingPair(pair: TradingPair, fix: Fix) {
+        interface?.updateTradingPairView(pair: pair, fix: fix)
+    }
+
     func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?) {
         interface?.updateInputLabels(primary: primary, primaryDecimal: primaryDecimal, secondary: secondary)
     }
     
     func updatedRates(first: String, second: String, third: String) {
         
+    }
+
+    func updateTradingPairValues(left: String, right: String) {
+        interface?.updateTradingPairViewValues(left: left, right: right)
     }
 }

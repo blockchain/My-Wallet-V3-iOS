@@ -94,7 +94,7 @@ extension MarketsService: ExchangeMarketsAPI {
         switch dataSource {
         case .socket:
             let params = ConversionSubscribeParams(
-                type: "pairs",
+                type: "conversionSpecification",
                 pair: model.pair.stringRepresentation,
                 fiatCurrency: model.fiatCurrency,
                 fix: model.fix,
