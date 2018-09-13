@@ -138,7 +138,8 @@ extension SocketManager: WebSocketAdvancedDelegate {
         switch type {
         case "currencyRatio": Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "currencyRatioError": onError("Currency ratio error: \(json)")
-        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "heartbeat", "subscribed", "authenticated":
+            HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error": onError("Error returned: \(json)")
         default: onError("Unsupported type")
         }
