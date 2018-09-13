@@ -190,28 +190,6 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         )
     }
     
-    func primaryFont() -> UIFont {
-        guard let font = UIFont(
-            name: Constants.FontNames.montserratRegular,
-            size: Constants.FontSizes.Gigantic
-            ) else {
-            return UIFont.systemFont(ofSize: Constants.FontSizes.Gigantic)
-        }
-        
-        return font
-    }
-    
-    func secondaryFont() -> UIFont {
-        guard let font = UIFont(
-            name: Constants.FontNames.montserratRegular,
-            size: Constants.FontSizes.MediumLarge
-            ) else {
-                return UIFont.systemFont(ofSize: Constants.FontSizes.MediumLarge)
-        }
-        
-        return font
-    }
-    
     func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?) {
         primaryAmountLabel.attributedText = primary
         secondaryAmountLabel.text = secondary
