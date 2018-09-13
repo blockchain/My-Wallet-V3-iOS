@@ -45,6 +45,7 @@ class ExchangeCreateInteractor {
                 output?.updateTradingPair(pair: model.pair, fix: model.fix)
             }
         }
+        // TICKET: IOS-1287 - This should be called after user has stopped typing
         if markets.hasAuthenticated {
             updateMarketsConversion()
         }
@@ -101,7 +102,6 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func updateMarketsConversion() {
-        // TICKET: IOS-1287 - This should be called after user has stopped typing
         guard let model = model else {
             Logger.shared.error("Updating conversion with no model")
             return
