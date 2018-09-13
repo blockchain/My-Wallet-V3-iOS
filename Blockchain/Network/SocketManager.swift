@@ -137,14 +137,9 @@ extension SocketManager: WebSocketAdvancedDelegate {
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
         switch type {
         case "currencyRatio": Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-        case "currencyRatioError": onError("Currency ratio error: \(json["error"]!["description"]!!)")
-        case "heartbeat", "subscribed", "authenticated":
-            if 1 == 2 {
-                self.webSocketMessageSubject.onNext(mockConversionSocketMessage())
-            } else {
-                HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-            }
-        case "error": onError("Error returned")
+        case "currencyRatioError": onError("Currency ratio error: \(json)")
+        case "heartbeat", "subscribed", "authenticated": HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "error": onError("Error returned: \(json)")
         default: onError("Unsupported type")
         }
     }
@@ -163,30 +158,5 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
     func websocketHttpUpgrade(socket: WebSocket, response: String) {
         // Required by protocol
-    }
-}
-
-extension SocketManager {
-    func mockConversionSocketMessage() -> SocketMessage {
-        let mockBase = FiatCrypto(fiat: SymbolValue(symbol: "$", value: 6000), crypto: SymbolValue(symbol: "BTC", value: 6000))
-        let mockCounter = FiatCrypto(fiat: SymbolValue(symbol: "$", value: 5980), crypto: SymbolValue(symbol: "ETH", value: 30))
-        let mockCurrencyRatio = CurrencyRatio(
-            base: mockBase,
-            counter: mockCounter,
-            baseToFiatRate: 6000,
-            baseToCounterRate: 0.033,
-            counterToBaseRate: 20,
-            counterToFiatRate: 200
-        )
-        let mockConversion = Conversion(
-            sequenceNumber: 0,
-            channel: "conversion",
-            type: "currencyRatio",
-            pair: "BTC-ETH",
-            fiatCurrency: "USD",
-            fix: .base,
-            volume: 100,
-            currencyRatio: mockCurrencyRatio)
-        return SocketMessage(type: .exchange, JSONMessage: mockConversion)
     }
 }

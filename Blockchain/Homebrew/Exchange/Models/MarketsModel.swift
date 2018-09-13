@@ -13,12 +13,12 @@ class MarketsModel {
     var pair: TradingPair
     var fiatCurrency: String
     var fix: Fix
-    var volume: Decimal
+    var volume: String
 
     init(pair: TradingPair,
          fiatCurrency: String,
          fix: Fix,
-         volume: Decimal) {
+         volume: String) {
         self.pair = pair
         self.fiatCurrency = fiatCurrency
         self.fix = fix

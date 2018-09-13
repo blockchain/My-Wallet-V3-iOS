@@ -45,7 +45,7 @@ extension SocketMessageCodable {
             onSuccess(socketMessage)
             return
         } catch {
-            onError("Could not decode")
+            onError("Could not decode: \(error)")
         }
     }
 }
@@ -77,7 +77,7 @@ struct ConversionSubscribeParams: Codable {
     let pair: String
     let fiatCurrency: String
     let fix: Fix
-    let volume: Decimal
+    let volume: String
 }
 
 // MARK: - Received Messages
@@ -98,30 +98,31 @@ struct Conversion: SocketMessageCodable {
     typealias JSONType = Conversion
 
     let sequenceNumber: Int
-    let channel, type, pair, fiatCurrency: String
-    let fix: Fix
-    let volume: Decimal
-    let currencyRatio: CurrencyRatio
+    let channel, type: String
+    let quote: Quote
 
     private enum CodingKeys: CodingKey {
         case sequenceNumber
         case channel
         case type
-        case pair
-        case fiatCurrency
-        case fix
-        case volume
-        case currencyRatio
+        case quote
     }
+}
+
+struct Quote: Codable {
+    let pair, fiatCurrency: String
+    let fix: Fix
+    let volume: String
+    let currencyRatio: CurrencyRatio
 }
 
 struct CurrencyRatio: Codable {
     let base: FiatCrypto
     let counter: FiatCrypto
-    let baseToFiatRate: Decimal
-    let baseToCounterRate: Decimal
-    let counterToBaseRate: Decimal
-    let counterToFiatRate: Decimal
+    let baseToFiatRate: String
+    let baseToCounterRate: String
+    let counterToBaseRate: String
+    let counterToFiatRate: String
 }
 
 struct FiatCrypto: Codable {
@@ -131,7 +132,7 @@ struct FiatCrypto: Codable {
 
 struct SymbolValue: Codable {
     let symbol: String
-    let value: Decimal
+    let value: String
 }
 
 struct Rate: SocketMessageCodable {

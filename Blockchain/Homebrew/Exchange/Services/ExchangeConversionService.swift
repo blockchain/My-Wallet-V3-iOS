@@ -38,8 +38,9 @@ class ExchangeConversionService: ExchangeConversionAPI {
     var counterOutput: String = ""
 
     func update(with conversion: Conversion) {
-        let currencyRatio = conversion.currencyRatio
-        let fix = conversion.fix
+        let quote = conversion.quote
+        let currencyRatio = quote.currencyRatio
+        let fix = quote.fix
         switch fix {
         case .base:
             input = formatDecimalPlaces(cryptoValue: currencyRatio.base.crypto.value)
@@ -66,12 +67,12 @@ class ExchangeConversionService: ExchangeConversionAPI {
 }
 
 private extension ExchangeConversionService {
-    func formatDecimalPlaces(fiatValue: Decimal) -> String {
-        return NumberFormatter.localCurrencyFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: fiatValue))!
+    func formatDecimalPlaces(fiatValue: String) -> String {
+        return NumberFormatter.localCurrencyFormatterWithUSLocale.string(from: NSDecimalNumber(string: fiatValue))!
     }
 
-    func formatDecimalPlaces(cryptoValue: Decimal) -> String {
-        return NumberFormatter.assetFormatterWithUSLocale.string(from: NSDecimalNumber(decimal: cryptoValue))!
+    func formatDecimalPlaces(cryptoValue: String) -> String {
+        return NumberFormatter.assetFormatterWithUSLocale.string(from: NSDecimalNumber(string: cryptoValue))!
     }
 }
 
