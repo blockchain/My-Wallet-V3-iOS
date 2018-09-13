@@ -138,5 +138,6 @@ class ExchangeInputsService: ExchangeInputsAPI {
         activeInput = NumberInputViewModel(newInput: lastOutput)
         lastOutput = newOutput.input
         inputComponents.isUsingFiat = usingFiat
+        inputComponents.convertComponents(with: activeInput.input)
     }
 }

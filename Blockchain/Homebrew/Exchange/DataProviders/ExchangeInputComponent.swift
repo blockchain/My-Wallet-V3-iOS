@@ -28,6 +28,36 @@ struct ExchangeInputComponents {
         isUsingFiat = styleTemplate.type == .fiat
     }
     
+    mutating func convertComponents(with value: String) {
+        
+        let delimiter = NumberFormatter.localCurrencyFormatter.decimalSeparator ?? "."
+        /// This value is coming in as fiat
+        /// but needs to be broken down into `[InputComponent]`
+        let stringComponents = value.components(separatedBy: delimiter)
+        
+        if let first = stringComponents.first, stringComponents.count == 1 {
+            components = [InputComponent(value: first, type: .whole)]
+            return
+        }
+        
+        guard stringComponents.count == 2 else {
+            assertionFailure("You shouldn't have more than two strings here.")
+            return
+        }
+        
+        guard let first = stringComponents.first else { return }
+        guard let second = stringComponents.last else { return }
+        let whole = first.map({ return InputComponent(value: String($0), type: .whole) })
+        let pending = InputComponent(value: delimiter, type: .pendingFractional)
+        let fractional = second.map({ return InputComponent(value: String($0), type: .fractional) })
+        switch isUsingFiat {
+        case true:
+            components = whole + fractional
+        case false:
+            components = whole + [pending] + fractional
+        }
+    }
+    
     mutating func append(_ component: InputComponent) {
         if components.count == 1 {
             if let first = components.first {
