@@ -99,7 +99,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating input with no model")
             return
         }
-//        model.volume = Decimal(string: inputs.activeInput.input)!
+        model.volume = inputs.activeInput.input
 
         // Update interface to reflect what has been typed
         updateOutput()
