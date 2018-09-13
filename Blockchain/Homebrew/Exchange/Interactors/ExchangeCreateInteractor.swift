@@ -12,9 +12,9 @@ import RxSwift
 class ExchangeCreateInteractor {
     var disposable: Disposable?
     weak var output: ExchangeCreateOutput?
-    fileprivate var inputs: ExchangeInputsAPI
-    fileprivate var markets: ExchangeMarketsAPI
-    fileprivate var conversions: ExchangeConversionAPI
+    fileprivate let inputs: ExchangeInputsAPI
+    fileprivate let markets: ExchangeMarketsAPI
+    fileprivate let conversions: ExchangeConversionAPI
     private var model: MarketsModel? {
         didSet {
             if markets.hasAuthenticated {
@@ -151,7 +151,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating conversion with no model")
             return
         }
-        if model.isUsingFiat == true {
+        if model.isUsingFiat {
             if let fractional = inputs.inputComponents.fractional,
                 fractional.count >= NumberFormatter.localCurrencyFractionDigits {
                 Logger.shared.warning("Cannot add more than two decimal values for fiat")
