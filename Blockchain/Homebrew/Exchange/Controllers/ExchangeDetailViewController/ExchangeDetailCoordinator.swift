@@ -16,8 +16,9 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
+        case confirmExchange(Conversion, RatesAPI)
     }
-    
+
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
     
@@ -43,7 +44,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let conversion):
+            case .confirm(let conversion, let ratesAPI):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
@@ -212,6 +213,10 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
+        case .confirmExchange(let conversion, let ratesAPI):
+            ratesAPI.executeTrade(conversion: conversion, withCompletion: { result in
+
+            })
         }
     }
     

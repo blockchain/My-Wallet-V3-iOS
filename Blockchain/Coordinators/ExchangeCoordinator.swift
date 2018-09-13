@@ -190,7 +190,7 @@ struct ExchangeServices: ExchangeDependencies {
             Logger.shared.error("No navigation controller found")
             return
         }
-        let model = ExchangeDetailViewController.PageModel.confirm(conversion)
+        let model = ExchangeDetailViewController.PageModel.confirm(conversion, dependencies.rates)
         let confirmController = ExchangeDetailViewController.make(with: model)
         navigationController.pushViewController(confirmController, animated: true)
     }
