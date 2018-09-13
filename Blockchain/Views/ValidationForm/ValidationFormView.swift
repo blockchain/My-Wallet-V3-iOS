@@ -14,7 +14,6 @@ import Foundation
 protocol ValidationFormView {
     var validationFields: [ValidationTextField] { get }
     var scrollView: UIScrollView! { get }
-    var keyboard: KeyboardPayload? { get set }
 
     /// This should be called on `viewDidLoad`. It sets the
     /// `becomeFirstResponder` block and handles offseting
@@ -36,24 +35,13 @@ extension ValidationFormView where Self: UIViewController {
         validationFields.forEach { (field) in
             field.becomeFirstResponderBlock = { [weak self] (validationField) in
                 guard let this = self else { return }
-                var offsetHeight = this.keyboard?.endingFrame.height
-                if let field = validationField as? ValidationDateField {
-                    offsetHeight = field.pickerView.frame.height
-                }
-                guard let height = offsetHeight else { return }
-                let insets = UIEdgeInsets(
-                    top: 0.0,
-                    left: 0.0,
-                    bottom: height,
-                    right: 0.0
-                )
-                this.scrollView.contentInset = insets
 
-                let offset = CGPoint(
-                    x: 0.0,
-                    y: validationField.frame.minY
-                )
-                this.scrollView.setContentOffset(offset, animated: true)
+                // Scroll so that the next field is also visible
+                guard let currentIndex = this.validationFields.index(of: validationField) else { return }
+
+                guard let nextField = this.validationFields[safe: currentIndex + 1] else { return }
+
+                this.scrollView.scrollRectToVisible(nextField.frame, animated: true)
             }
         }
     }

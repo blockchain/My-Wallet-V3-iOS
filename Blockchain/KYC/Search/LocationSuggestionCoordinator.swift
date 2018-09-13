@@ -69,7 +69,7 @@ extension LocationSuggestionCoordinator: SearchControllerDelegate {
 
     func onSelection(_ selection: SearchSelection) {
         if let input = selection as? LocationSuggestion {
-            interface?.searchFieldText("\(input.title) \(input.subtitle)")
+            interface?.searchFieldText("")
             interface?.suggestionsList(.hidden)
             interface?.primaryButton(.visible)
             interface?.updateActivityIndicator(.visible)

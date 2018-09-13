@@ -16,7 +16,16 @@ protocol NumberKeypadViewDelegate: class {
 @IBDesignable
 class NumberKeypadView: NibBasedView {
 
+    @IBOutlet var keypadButtons: [UIButton]!
     weak var delegate: NumberKeypadViewDelegate?
+    
+    @IBInspectable var buttonTitleColor: UIColor = .brandPrimary {
+        didSet {
+            keypadButtons.forEach { button in
+                button.setTitleColor(buttonTitleColor, for: .normal)
+            }
+        }
+    }
 
     @IBAction func numberButtonTapped(_ sender: UIButton) {
         guard let titleLabel = sender.titleLabel, let value = titleLabel.text else { return }

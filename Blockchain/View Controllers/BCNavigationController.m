@@ -57,7 +57,9 @@
     self.closeButton.frame = CGRectMake(self.view.frame.size.width - 80, 15, 80, 51);
     self.closeButton.imageEdgeInsets = IMAGE_EDGE_INSETS_CLOSE_BUTTON_X;
     self.closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [self.closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+    
+    UIImage *closeImage = [[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.closeButton setImage:closeImage forState:UIControlStateNormal];
     self.closeButton.center = CGPointMake(self.closeButton.center.x, self.headerLabel.center.y);
     [self.closeButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [self.topBar addSubview:self.closeButton];
@@ -68,11 +70,28 @@
     self.backButton.center = CGPointMake(self.backButton.center.x, self.headerLabel.center.y);
     self.backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.backButton setTitle:@"" forState:UIControlStateNormal];
-    [self.backButton setImage:[UIImage imageNamed:@"back_chevron_icon"] forState:UIControlStateNormal];
+    UIImage *backImage = [[UIImage imageNamed:@"back_chevron_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.backButton setImage:backImage forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.topBar addSubview:self.backButton];
     
     [self setupBusyView];
+}
+
+- (void)applyLightAppearance
+{
+    [self.closeButton setTintColor:[UIColor brandPrimary]];
+    [self.headerLabel setTextColor:[UIColor brandPrimary]];
+    [self.backButton setTintColor:[UIColor brandPrimary]];
+    [self.topBar setBackgroundColor:[UIColor whiteColor]];
+}
+
+- (void)applyDarkAppearance
+{
+    [self.closeButton setTintColor:[UIColor whiteColor]];
+    [self.headerLabel setTextColor:[UIColor whiteColor]];
+    [self.backButton setTintColor:[UIColor whiteColor]];
+    [self.topBar setBackgroundColor:[UIColor brandPrimary]];
 }
 
 - (void)setupBusyView

@@ -357,6 +357,10 @@ struct LocalizationConstants {
             "All amounts are correct at this time but might change depending on the market price and transaction rates at the time your order is processed",
             comment: "Text displayed on exchange screen to inform user of changing market rates"
         )
+        static let orderID = NSLocalizedString("Order ID", comment: "Label in the exchange locked screen.")
+        static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
+        static let done = NSLocalizedString("Done", comment: "Footer button title")
+        static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
     }
 
     struct AddressAndKeyImport {
@@ -480,8 +484,11 @@ struct LocalizationConstants {
     }
 
     struct KYC {
+        static let invalidPhoneNumber = NSLocalizedString(
+            "The mobile number you entered is invalid.",
+            comment: "Error message displayed to the user when the phone number they entered during KYC is invalid.")
         static let failedToConfirmNumber = NSLocalizedString(
-            "The mobile number you have entered is already associated with an existing user.",
+            "Failed to confirm mobile number. Please try again.",
             comment: "Error message displayed to the user when the mobile confirmation steps fails."
         )
         static let termsOfServiceAndPrivacyPolicyNotice = NSLocalizedString(
@@ -588,6 +595,22 @@ struct LocalizationConstants {
         static let yourHomeAddress = NSLocalizedString(
             "Your Home Address",
             comment: "Text displayed on the search bar when adding an address during KYC."
+        )
+        static let whichDocumentAreYouUsing = NSLocalizedString(
+            "Which document are you using?",
+            comment: ""
+        )
+        static let passport = NSLocalizedString(
+            "Passport",
+            comment: "The title of the UIAlertAction for the passport option."
+        )
+        static let driversLicense = NSLocalizedString(
+            "Driver's License",
+            comment: "The title of the UIAlertAction for the driver's license option."
+        )
+        static let submittingInformation = NSLocalizedString(
+            "Submitting information...",
+            comment: "Text prompt to the user when the client is submitting the identity documents to Blockchain's servers."
         )
     }
 }

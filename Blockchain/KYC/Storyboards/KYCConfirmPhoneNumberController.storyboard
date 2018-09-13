@@ -77,36 +77,36 @@
                                     <action selector="onResendCodeTapped:" destination="gEL-b2-YEu" eventType="touchUpInside" id="YqU-Kz-5tB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="36T-B3-yyh" customClass="PrimaryButton" customModule="Blockchain" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K5Z-be-Yy8" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.89411764705882357" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="jDl-ln-Tjf"/>
+                                    <constraint firstAttribute="height" constant="44" id="JHK-dC-65Q"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="Next"/>
-                                <connections>
-                                    <action selector="onNextTapped:" destination="gEL-b2-YEu" eventType="touchUpInside" id="Bla-Qo-qkN"/>
-                                </connections>
-                            </button>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isLoading" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="Next"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="eU2-Mk-gi2" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="3ny-n6-04w"/>
-                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="36T-B3-yyh" secondAttribute="trailing" constant="16" id="6D8-hT-1ZS"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="wiv-Pe-rE0" secondAttribute="trailing" id="9eL-GR-wOY"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="eU2-Mk-gi2" secondAttribute="trailing" constant="16" id="9iF-tY-9wp"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="top" secondItem="IIQ-vZ-lk7" secondAttribute="top" id="BEn-HB-WCV"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="top" secondItem="IIQ-vZ-lk7" secondAttribute="top" id="CoK-xA-XIb"/>
                             <constraint firstItem="wiv-Pe-rE0" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" id="K9p-cd-ZWj"/>
+                            <constraint firstItem="K5Z-be-Yy8" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="Lx0-Rb-xaJ"/>
                             <constraint firstItem="eU2-Mk-gi2" firstAttribute="top" secondItem="cDf-1e-GvH" secondAttribute="bottom" constant="16" id="OLO-Gx-9ol"/>
                             <constraint firstItem="cDf-1e-GvH" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="RmE-gg-2ja"/>
+                            <constraint firstItem="K5Z-be-Yy8" firstAttribute="top" secondItem="KYo-qh-R2k" secondAttribute="bottom" constant="12" id="X04-og-pwJ"/>
                             <constraint firstItem="5ml-0c-co0" firstAttribute="top" secondItem="wiv-Pe-rE0" secondAttribute="bottom" constant="16" id="bCs-MV-efH"/>
-                            <constraint firstItem="36T-B3-yyh" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="cQs-wq-eL8"/>
+                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="bottom" secondItem="K5Z-be-Yy8" secondAttribute="bottom" constant="16" id="eSR-ls-WYF"/>
                             <constraint firstItem="KYo-qh-R2k" firstAttribute="centerX" secondItem="IIQ-vZ-lk7" secondAttribute="centerX" id="fsr-0d-Jfv"/>
                             <constraint firstItem="5ml-0c-co0" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="gbg-c0-ylX"/>
-                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="bottom" secondItem="36T-B3-yyh" secondAttribute="bottom" constant="16" id="lHo-bY-QRU"/>
-                            <constraint firstItem="36T-B3-yyh" firstAttribute="top" secondItem="KYo-qh-R2k" secondAttribute="bottom" constant="12" id="mHU-NG-Jq2"/>
+                            <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="K5Z-be-Yy8" secondAttribute="trailing" constant="16" id="oCj-JQ-zRo"/>
                             <constraint firstItem="cDf-1e-GvH" firstAttribute="top" secondItem="5ml-0c-co0" secondAttribute="bottom" constant="2" id="q6L-9H-yLO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IIQ-vZ-lk7"/>
@@ -115,7 +115,8 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="labelPhoneNumber" destination="cDf-1e-GvH" id="JN5-7b-SBR"/>
-                        <outlet property="layoutConstraintBottomButton" destination="lHo-bY-QRU" id="amU-3n-8B8"/>
+                        <outlet property="layoutConstraintBottomButton" destination="eSR-ls-WYF" id="gKN-La-Qp0"/>
+                        <outlet property="primaryButton" destination="K5Z-be-Yy8" id="YvY-z3-rhZ"/>
                         <outlet property="validationTextFieldConfirmationCode" destination="eU2-Mk-gi2" id="y9B-YN-lFc"/>
                     </connections>
                 </viewController>

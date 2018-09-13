@@ -9,6 +9,7 @@
 import Foundation
 
 protocol NumberInputDelegate: class {
+    var decimalSeparator: String { get }
     var input: String { get }
     func add(character: String)
     func backspace()
@@ -17,6 +18,14 @@ protocol NumberInputDelegate: class {
 // Class used to store the results of user input relayed by the NumberKeypadView.
 class NumberInputViewModel: NumberInputDelegate {
 
+    var decimalSeparator: String {
+        // Make sure a decimal separator exists
+        guard let decimalSeparator = Locale.current.decimalSeparator else {
+            Logger.shared.warning("No decimal separator available, using period")
+            return "."
+        }
+        return decimalSeparator
+    }
     private let numbers: Set<String> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     private let zero = "0"
     private(set) var input: String
@@ -69,17 +78,5 @@ class NumberInputViewModel: NumberInputDelegate {
             return
         }
         input = String(input.dropLast())
-    }
-}
-
-// MARK: Helpers
-extension NumberInputViewModel {
-    var decimalSeparator: String {
-        // Make sure a decimal separator exists
-        guard let decimalSeparator = Locale.current.decimalSeparator else {
-            Logger.shared.warning("No decimal separator available, using period")
-            return "."
-        }
-        return decimalSeparator
     }
 }

@@ -54,7 +54,7 @@ struct NabuUser: Decodable {
             first: firstName,
             last: lastName,
             email: email,
-            birthday: Date()
+            birthday: nil
         )
         
         if let number = phoneNumber {
