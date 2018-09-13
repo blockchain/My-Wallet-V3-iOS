@@ -14,6 +14,7 @@ class MarketsModel {
     var fiatCurrency: String
     var fix: Fix
     var volume: String
+    var lastConversion: Conversion?
 
     init(pair: TradingPair,
          fiatCurrency: String,
@@ -46,6 +47,7 @@ extension MarketsModel {
 }
 
 extension MarketsModel: Equatable {
+    // Do not compare lastConversion
     static func ==(lhs: MarketsModel, rhs: MarketsModel) -> Bool {
         return lhs.pair == rhs.pair &&
             lhs.fiatCurrency == rhs.fiatCurrency &&

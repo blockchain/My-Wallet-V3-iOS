@@ -37,6 +37,10 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onDisplayInputTypeTapped() {
         interactor.displayInputTypeTapped()
     }
+
+    func onExchangeButtonTapped() {
+        interactor.confirmConversion()
+    }
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
@@ -54,5 +58,9 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
 
     func updateTradingPairValues(left: String, right: String) {
         interface?.updateTradingPairViewValues(left: left, right: right)
+    }
+
+    func confirm(conversion: Conversion) {
+        interface?.showSummary(conversion: conversion)
     }
 }

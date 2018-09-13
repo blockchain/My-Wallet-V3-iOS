@@ -36,6 +36,9 @@ class ExchangeCreateViewController: UIViewController {
         delegate?.onDisplayInputTypeTapped()
     }
 
+    @IBAction private func exchangeButtonTapped(_ sender: Any) {
+        delegate?.onExchangeButtonTapped()
+    }
     // MARK: Public Properties
 
     weak var delegate: ExchangeCreateDelegate?
@@ -72,7 +75,10 @@ class ExchangeCreateViewController: UIViewController {
         setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
         setAmountLabelFont(label: primaryDecimalLabel, size: Constants.FontSizes.Small)
         setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
+    }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
         }
@@ -187,5 +193,9 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     func updateRateLabels(first: String, second: String, third: String) {
 
+    }
+
+    func showSummary(conversion: Conversion) {
+        ExchangeCoordinator.shared.handle(event: .confirmExchange(conversion: conversion))
     }
 }

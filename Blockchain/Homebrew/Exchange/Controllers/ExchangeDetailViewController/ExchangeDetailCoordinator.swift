@@ -43,13 +43,13 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let trade):
+            case .confirm(let conversion):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
                 
                 let pair = ExchangeCellModel.TradingPair(
-                    model: TradingPairView.confirmationModel(for: trade)
+                    model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
                 let value = ExchangeCellModel.Plain(

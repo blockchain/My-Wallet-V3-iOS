@@ -14,7 +14,7 @@ import Foundation
 class ExchangeDetailViewController: UIViewController {
     
     enum PageModel {
-        case confirm(Trade)
+        case confirm(Conversion)
         case locked(Trade)
         case overview(ExchangeTradeCellModel)
     }

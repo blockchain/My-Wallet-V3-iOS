@@ -75,6 +75,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 return
             }
 
+            // Store conversion
+            model.lastConversion = conversion
+
             // Use conversions service to determine new input/output
             this.conversions.update(with: conversion)
             let input = this.inputs.activeInput.input
@@ -188,5 +191,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         inputs.add(character: value)
         updatedInput()
+    }
+
+    func confirmConversion() {
+        guard let conversion = self.model?.lastConversion else {
+            Logger.shared.error("No conversion stored")
+            return
+        }
+        output?.confirm(conversion: conversion)
     }
 }

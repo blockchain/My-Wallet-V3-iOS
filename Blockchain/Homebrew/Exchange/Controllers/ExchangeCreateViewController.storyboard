@@ -168,6 +168,9 @@
                                 <state key="normal" title="Exchange BTC for ETH">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="exchangeButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="yeg-hs-kSJ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
