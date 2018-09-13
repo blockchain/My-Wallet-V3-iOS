@@ -361,6 +361,18 @@ struct LocalizationConstants {
         static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
         static let done = NSLocalizedString("Done", comment: "Footer button title")
         static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
+        static let exchangeXForY = NSLocalizedString(
+            "Exchange %@ for %@",
+            comment: "Text displayed on the primary action button for the exchange screen when exchanging between 2 assets."
+        )
+        static let whatDoYouWantToExchange = NSLocalizedString(
+            "What do you want to exchange?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
+        )
+        static let whatDoYouWantToReceive = NSLocalizedString(
+            "What do you want to receive?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
+        )
     }
 
     struct AddressAndKeyImport {

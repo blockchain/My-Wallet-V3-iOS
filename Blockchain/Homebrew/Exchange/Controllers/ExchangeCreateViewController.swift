@@ -51,6 +51,9 @@ class ExchangeCreateViewController: UIViewController {
 
     fileprivate var presenter: ExchangeCreatePresenter!
     fileprivate var dependencies: ExchangeDependencies!
+    fileprivate var assetAccountListPresenter: ExchangeAssetAccountListPresenter!
+    fileprivate var fromAccount: AssetAccount!
+    fileprivate var toAccount: AssetAccount!
 
     // MARK: Factory
     
@@ -63,19 +66,10 @@ class ExchangeCreateViewController: UIViewController {
     // MARK: Lifecycle
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         dependenciesSetup()
+        viewsSetup()
         delegate?.onViewLoaded()
-        
-        [primaryAmountLabel, secondaryAmountLabel].forEach {
-            $0?.textColor = UIColor.brandPrimary
-        }
-
-        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
-            addStyleToView($0)
-        }
-        
-        exchangeButton.layer.cornerRadius = 4.0
-        
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
         }
@@ -88,21 +82,62 @@ class ExchangeCreateViewController: UIViewController {
         }
     }
 
+    // MARK: Private
+
+    private func viewsSetup() {
+        [primaryAmountLabel, secondaryAmountLabel].forEach {
+            $0?.textColor = UIColor.brandPrimary
+        }
+
+        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
+            addStyleToView($0)
+        }
+
+        tradingPairView.delegate = self
+        exchangeButton.layer.cornerRadius = 4.0
+        
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyLightAppearance()
+        }
+    }
+
     fileprivate func dependenciesSetup() {
+        fromAccount = dependencies.assetAccountRepository.defaultAccount(for: .bitcoin)
+        toAccount = dependencies.assetAccountRepository.defaultAccount(for: .ethereum)
+
         // DEBUG - ideally add an .empty state for a blank/loading state for MarketsModel here.
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: .bitcoin, to: .ethereum)!,
+                pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
                 fiatCurrency: "USD",
                 fix: .base,
                 volume: "0")
         )
+        assetAccountListPresenter = ExchangeAssetAccountListPresenter(view: self)
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
         presenter.interface = self
         interactor.output = presenter
         delegate = presenter
+    }
+
+    private func onExchangeAccountChanged() {
+        guard let tradingPair = TradingPair(
+            from: fromAccount.address.assetType,
+            to: toAccount.address.assetType
+        ) else {
+            return
+        }
+        // TODO: where should the value of `fix` come from?
+        presenter.updateTradingPair(pair: tradingPair, fix: .base)
+
+        let exchangeButtonTitle = String(
+            format: LocalizationConstants.Exchange.exchangeXForY,
+            tradingPair.from.symbol,
+            tradingPair.to.symbol
+        )
+        exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
     }
 }
 
@@ -221,5 +256,53 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     func updateRateLabels(first: String, second: String, third: String) {
 
+    }
+}
+
+// MARK: - TradingPairViewDelegate
+
+extension ExchangeCreateViewController: TradingPairViewDelegate {
+    func onLeftButtonTapped(_ view: TradingPairView, title: String) {
+        assetAccountListPresenter.presentPicker(excludingAssetType: toAccount.address.assetType, for: .exchanging)
+    }
+
+    func onRightButtonTapped(_ view: TradingPairView, title: String) {
+        assetAccountListPresenter.presentPicker(excludingAssetType: fromAccount.address.assetType, for: .receiving)
+    }
+
+    func onSwapButtonTapped(_ view: TradingPairView) {
+        let swappedAccount = toAccount
+        toAccount = fromAccount
+        fromAccount = swappedAccount
+        onExchangeAccountChanged()
+    }
+}
+
+// MARK: - ExchangeAssetAccountListView
+
+extension ExchangeCreateViewController: ExchangeAssetAccountListView {
+    func showPicker(for assetAccounts: [AssetAccount], action: ExchangeAction) {
+        let actionSheetController = UIAlertController(title: action.title, message: nil, preferredStyle: .actionSheet)
+
+        // Insert actions
+        assetAccounts.forEach { account in
+            let alertAction = UIAlertAction(title: account.name, style: .default, handler: { [unowned self] _ in
+                Logger.shared.debug("Selected account titled: '\(account.name)' of type: '\(account.address.assetType.symbol)'")
+                switch action {
+                case .exchanging:
+                    self.fromAccount = account
+                case .receiving:
+                    self.toAccount = account
+                }
+                self.onExchangeAccountChanged()
+            })
+            actionSheetController.addAction(alertAction)
+        }
+        actionSheetController.addAction(
+            UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+        )
+
+        // Present picker
+        present(actionSheetController, animated: true)
     }
 }
