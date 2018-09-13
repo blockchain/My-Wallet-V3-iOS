@@ -84,7 +84,7 @@ extension ExchangeListViewController: ExchangeListInterface {
     }
     
     func display(results: [ExchangeTradeCellModel]) {
-        dataProvider?.append(tradeModels: results)
+        dataProvider?.set(tradeModels: results)
     }
     
     func append(results: [ExchangeTradeCellModel]) {
