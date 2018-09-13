@@ -32,6 +32,21 @@ class ExchangeCreateInteractor {
         self.model = model
     }
 
+    func didSetModel(oldModel: MarketsModel?) {
+        // Only update TradingPair in Trading Pair View if it is different
+        // from the old TradingPair
+        if let model = model {
+            if oldModel == nil ||
+               (oldModel != nil && oldModel!.pair != model.pair) {
+                output?.updateTradingPair(pair: model.pair, fix: model.fix)
+            }
+        }
+        // TICKET: IOS-1287 - This should be called after user has stopped typing
+        if markets.hasAuthenticated {
+            updateMarketsConversion()
+        }
+    }
+
     deinit {
         disposable?.dispose()
         disposable = nil
