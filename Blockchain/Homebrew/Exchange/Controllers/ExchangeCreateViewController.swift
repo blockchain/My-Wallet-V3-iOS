@@ -104,7 +104,7 @@ class ExchangeCreateViewController: UIViewController {
                 pair: TradingPair(from: .bitcoin, to: .ethereum)!,
                 fiatCurrency: "USD",
                 fix: .base,
-                volume: 0)
+                volume: "0")
         )
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
