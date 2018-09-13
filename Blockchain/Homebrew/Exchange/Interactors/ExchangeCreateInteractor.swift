@@ -42,7 +42,7 @@ class ExchangeCreateInteractor {
         if let model = model {
             if oldModel == nil ||
                (oldModel != nil && oldModel!.pair != model.pair) {
-                output?.updateTradingPair(pair: model.pair)
+                output?.updateTradingPair(pair: model.pair, fix: model.fix)
             }
         }
         if markets.hasAuthenticated {

@@ -44,3 +44,12 @@ extension MarketsModel {
         }
     }
 }
+
+extension MarketsModel: Equatable {
+    static func ==(lhs: MarketsModel, rhs: MarketsModel) -> Bool {
+        return lhs.pair == rhs.pair &&
+            lhs.fiatCurrency == rhs.fiatCurrency &&
+            lhs.fix == rhs.fix &&
+            lhs.volume == rhs.volume
+    }
+}
