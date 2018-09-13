@@ -11,6 +11,7 @@ import Foundation
 protocol ExchangeListDelegate: class {
     func onAppeared()
     func onNextPageRequest(_ identifier: String)
+    func onTradeCellTapped(_ trade: ExchangeTradeCellModel)
     func onNewOrderTapped()
     func onPullToRefresh()
 }
@@ -70,6 +71,10 @@ class ExchangeListViewController: UIViewController {
 }
 
 extension ExchangeListViewController: ExchangeListInterface {
+    func showTradeDetails(trade: ExchangeTradeCellModel) {
+        coordinator.handle(event: .showTradeDetails(trade: trade))
+    }
+
     func paginationActivityIndicatorVisibility(_ visibility: Visibility) {
         dataProvider?.isPaging = visibility == .visible
     }
@@ -97,7 +102,7 @@ extension ExchangeListViewController: ExchangeListInterface {
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
     func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel) {
-        // TODO: Show order detail screen for trade.
+        delegate?.onTradeCellTapped(trade)
     }
     
     func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider) {

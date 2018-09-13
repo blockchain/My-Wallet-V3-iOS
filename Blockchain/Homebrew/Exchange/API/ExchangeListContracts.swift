@@ -15,6 +15,7 @@ protocol ExchangeListInterface: class {
     func append(results: [ExchangeTradeCellModel])
     func enablePullToRefresh()
     func showNewExchange(animated: Bool)
+    func showTradeDetails(trade: ExchangeTradeCellModel)
 }
 
 protocol ExchangeListInput: class {
