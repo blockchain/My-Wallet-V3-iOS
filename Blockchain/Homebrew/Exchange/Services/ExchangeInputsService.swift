@@ -1,42 +1,12 @@
 //
-//  ExchangeInputs.swift
+//  ExchangeInputsService.swift
 //  Blockchain
 //
-//  Created by kevinwu on 8/27/18.
+//  Created by Alex McGregor on 9/13/18.
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
 import Foundation
-
-typealias InputComponents = (integer: String, decimalSeparator: String?, fractional: String?)
-
-protocol ExchangeInputsAPI: class {
-    
-    var activeInput: NumberInputDelegate { get set }
-    var inputComponents: ExchangeInputComponents { get set }
-    var lastOutput: String? { get set }
-    
-    func setup(with template: ExchangeStyleTemplate, usingFiat: Bool)
-    
-    func primaryFiatAttributedString() -> NSAttributedString
-    func primaryAssetAttributedString(symbol: String) -> NSAttributedString
-    
-    func maxFiatFractional() -> Int
-    func maxAssetFractional() -> Int
-    
-    func canBackspace() -> Bool
-    func canAddFiatCharacter(_ character: String) -> Bool
-    func canAddAssetCharacter(_ character: String) -> Bool
-    func canAddFractionalFiat() -> Bool
-    func canAddFractionalAsset() -> Bool
-    func canAddDelimiter() -> Bool
-    
-    func add(character: String)
-    func add(delimiter: String)
-    
-    func backspace()
-    func toggleInput(usingFiat: Bool)
-}
 
 // A class containing an active input that can switch values with an output using toggleInput()
 class ExchangeInputsService: ExchangeInputsAPI {
@@ -48,7 +18,7 @@ class ExchangeInputsService: ExchangeInputsAPI {
     private var components: [InputComponent] {
         return inputComponents.components
     }
-
+    
     init() {
         self.inputComponents = ExchangeInputComponents(template: .standard)
         self.activeInput = NumberInputViewModel(newInput: nil)
@@ -157,12 +127,12 @@ class ExchangeInputsService: ExchangeInputsAPI {
         )
         inputComponents.append(component)
     }
-
+    
     func backspace() {
         inputComponents.dropLast()
         activeInput.backspace()
     }
-
+    
     func toggleInput(usingFiat: Bool) {
         let newOutput = activeInput
         activeInput = NumberInputViewModel(newInput: lastOutput)
