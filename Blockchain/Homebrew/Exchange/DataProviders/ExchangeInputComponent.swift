@@ -30,10 +30,12 @@ struct ExchangeInputComponents {
     
     mutating func convertComponents(with value: String) {
         
-        let delimiter = NumberFormatter.localCurrencyFormatter.decimalSeparator ?? "."
+        let localizedDelimiter = NumberFormatter.localCurrencyFormatter.decimalSeparator ?? "."
+        let delimiter = styleTemplate.type == .fiat ? "00" : localizedDelimiter
+        
         /// This value is coming in as fiat
         /// but needs to be broken down into `[InputComponent]`
-        let stringComponents = value.components(separatedBy: delimiter)
+        let stringComponents = value.components(separatedBy: localizedDelimiter)
         
         if let first = stringComponents.first, stringComponents.count == 1 {
             components = [InputComponent(value: first, type: .whole)]
@@ -52,7 +54,7 @@ struct ExchangeInputComponents {
         let fractional = second.map({ return InputComponent(value: String($0), type: .fractional) })
         switch isUsingFiat {
         case true:
-            components = whole + fractional
+            components = whole + [pending] + fractional
         case false:
             components = whole + [pending] + fractional
         }
