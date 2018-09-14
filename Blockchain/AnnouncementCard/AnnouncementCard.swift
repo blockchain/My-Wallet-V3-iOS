@@ -10,41 +10,26 @@ import Foundation
 
 final class AnnouncementCard: NSObject {
 
-    // MARK: - Private Properties
+    typealias Action = () -> Void
 
-    private let title: String
-    private let message: String
-    private let image: UIImage
-    private let actionButtonTitle: String
-    @objc private let actionButtonPressed: () -> Void
-
-    // MARK: Public Properties
+    // MARK: Properties
 
     @objc var view: AnnouncementCardView?
 
     // MARK: - Initialization
 
-    @objc init(title: String, message: String, actionButtonTitle: String, image: UIImage, actionButtonPressed: @escaping () -> Void) {
-        self.title = title
-        self.message = message
-        self.image = image
-        self.actionButtonPressed = actionButtonPressed
-        self.actionButtonTitle = actionButtonTitle
+    @objc init(title: String, message: String, actionButtonTitle: String, image: UIImage, action: @escaping Action, onClose: @escaping Action) {
         super.init()
-        setupView()
-    }
-
-    private func setupView() {
         guard let nib = Bundle.main.loadNibNamed("AnnouncementCardView", owner: self, options: nil),
             let contentView = nib.first as? AnnouncementCardView else {
-            fatalError("🛑 Failed to load AnnouncementCard content view!")
+                fatalError("🛑 Failed to load AnnouncementCard content view!")
         }
         contentView.titleLabel.text = title
         contentView.bodyLabel.text = message
         contentView.imageView.image = image
         contentView.actionButton.setTitle(actionButtonTitle, for: .normal)
-        contentView.actionButton.addTarget(self, action: #selector(getter: AnnouncementCard.actionButtonPressed), for: .touchUpInside)
-        contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        contentView.actionButtonPressed = action
+        contentView.closeButtonPressed = onClose
         self.view = contentView
     }
 }

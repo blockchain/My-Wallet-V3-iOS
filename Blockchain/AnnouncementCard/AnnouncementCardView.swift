@@ -10,6 +10,10 @@ import UIKit
 
 class AnnouncementCardView: UIView {
 
+    // MARK: - Properties
+
+    var actionButtonPressed, closeButtonPressed: (() -> Void)?
+
     // MARK: - IBOutlets
 
     @IBOutlet var titleLabel: UILabel!
@@ -26,5 +30,22 @@ class AnnouncementCardView: UIView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    // MARK: - IBActions
+
+    @IBAction private func actionButtonPressed(_ sender: Any) {
+        guard let action = actionButtonPressed else {
+            Logger.shared.error("No action assigned to the action button!"); return
+        }
+        action()
+    }
+
+    @IBAction private func closeButtonPressed(_ sender: Any) {
+        guard let action = closeButtonPressed else {
+            Logger.shared.error("No action assigned to the close button!"); return
+        }
+        action()
     }
 }
