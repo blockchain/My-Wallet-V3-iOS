@@ -113,6 +113,7 @@ struct Conversion: SocketMessageCodable {
 }
 
 struct Quote: Codable {
+    let time: String?
     let pair: String
     let fiatCurrency: String
     let fix: Fix
@@ -139,12 +140,8 @@ struct SymbolValue: Codable {
     let value: String
 }
 
-struct Rate: SocketMessageCodable {
-    typealias JSONType = Rate
-
-    let parameterOne: String
-
-    private enum CodingKeys: String, CodingKey {
-        case parameterOne
-    }
+struct ExecutableTrade: Codable {
+    let destinationAddress: String
+    let refundAddress: String
+    let quote: Quote
 }

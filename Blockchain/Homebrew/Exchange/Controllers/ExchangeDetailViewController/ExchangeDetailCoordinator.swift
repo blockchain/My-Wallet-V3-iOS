@@ -214,7 +214,23 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             }
         case .confirmExchange(let conversion, let ratesAPI):
-            ratesAPI.executeTrade(conversion: conversion, withCompletion: { result in
+            let conversionQuote = conversion.quote
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            let time = dateFormatter.string(from: Date())
+            let tradeQuote = Quote(
+                time: time,
+                pair: conversionQuote.pair,
+                fiatCurrency: conversionQuote.fiatCurrency,
+                fix: conversionQuote.fix,
+                volume: conversionQuote.volume,
+                currencyRatio: conversionQuote.currencyRatio)
+            let executableTrade = ExecutableTrade(
+                destinationAddress: "",
+                refundAddress: "",
+                quote: conversion.quote
+            )
+            ratesAPI.execute(trade: executableTrade, withCompletion: { result in
 
             })
         }

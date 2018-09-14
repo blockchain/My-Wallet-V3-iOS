@@ -123,7 +123,6 @@ class RatesService: RatesAPI {
     }
 }
 
-
 // MARK: - Trade Execution
 struct TradeExecutionResult: Codable {
     let result: String
@@ -133,14 +132,14 @@ struct TradeExecutionResult: Codable {
 }
 
 extension RatesService {
-    func executeTrade(conversion: Conversion, withCompletion: @escaping ((Result<TradeExecutionResult>) -> Void)) {
+    func execute(trade: ExecutableTrade, withCompletion: @escaping ((Result<TradeExecutionResult>) -> Void)) {
         do {
-            let conversionString = try conversion.encodeToString(encoding: .utf8)
-            guard let data = conversionString.data(using: .utf8) else {
+            let tradeString = try trade.encodeToString(encoding: .utf8)
+            guard let data = tradeString.data(using: .utf8) else {
                 Logger.shared.error("Couldn't convert string to data")
                 return
             }
-            disposable = executeTrade(conversionData: data)
+            disposable = executeTrade(with: data)
                 .subscribeOn(MainScheduler.asyncInstance)
                 .observeOn(MainScheduler.instance)
                 .subscribe(onSuccess: { payload in
@@ -153,7 +152,7 @@ extension RatesService {
         }
     }
 
-    fileprivate func executeTrade(conversionData: Data) -> Single<TradeExecutionResult> {
+    fileprivate func executeTrade(with data: Data) -> Single<TradeExecutionResult> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
                 return .error(RatesAPIError.generic)
@@ -169,7 +168,7 @@ extension RatesService {
         return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.POST(
                 url: endpoint,
-                body: conversionData,
+                body: data,
                 token: token.token,
                 type: TradeExecutionResult.self
             )
