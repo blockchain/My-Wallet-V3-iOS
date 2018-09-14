@@ -28,10 +28,13 @@ class TradeExecutionService: TradeExecutionAPI {
     }
     
     private let authentication: NabuAuthenticationService
+    private let wallet: Wallet
     private var disposable: Disposable?
     
-    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
+    init(service: NabuAuthenticationService = NabuAuthenticationService.shared,
+         wallet: Wallet = WalletManager.shared.wallet) {
         self.authentication = service
+        self.wallet = wallet
     }
     
     deinit {
@@ -51,15 +54,17 @@ class TradeExecutionService: TradeExecutionAPI {
             })
     }
     
-    func submit(order: Order, withCompletion: @escaping ((Result<OrderResult>) -> Void)) {
+    func submit(order: Order, withCompletion: @escaping (() -> Void)) {
         disposable = process(order: order)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { (payload) in
-                withCompletion(.success(payload))
-            }, onError: { error in
-                withCompletion(.error(error))
-            })
+            .subscribe(onSuccess: { [weak self] payload in
+                guard let this = self else { return }
+                this.sendTransaction(result: payload, completion: withCompletion)
+        })
+//            }, onError: { error in
+//                withCompletion(.error(error))
+//            })
     }
     
     // MARK: Private
@@ -108,5 +113,22 @@ class TradeExecutionService: TradeExecutionAPI {
                 type: TradeLimits.self
             )
         }
+    }
+
+    private func sendTransaction(result: OrderResult, completion: @escaping (() -> Void)) {
+        let assetType = AssetType.bitcoin
+        let legacyAssetType = assetType.legacy
+        guard let to = result.depositAddress,
+            let amount = result.depositQuantity else {
+                Logger.shared.error("Missing to address or amount")
+                return
+        }
+        let orderTransaction = OrderTransaction(
+            legacyAssetType: legacyAssetType,
+            from: "from",
+            to: to,
+            amount: amount
+        )
+        wallet.send(orderTransaction, success: completion, error: {})
     }
 }

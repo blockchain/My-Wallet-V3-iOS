@@ -2634,6 +2634,14 @@
     return nil;
 }
 
+- (void)sendOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
+{
+    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
+    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
+
+    [self.context evaluateScript:[NSString stringWithFormat: "MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", \"%@\")", orderTransaction.from, orderTransaction.to, orderTransaction.amount];
+}
+
 # pragma mark - Ethereum
 
 - (void)createEthAccountForExchange:(NSString *)secondPassword

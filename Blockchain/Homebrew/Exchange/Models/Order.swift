@@ -17,7 +17,7 @@ struct Order: Encodable {
     let quote: Quote
 }
 
-// Backend is currently configured to send out two tpes of messages:
+// Backend is currently configured to return two types of responses:
 // a normal (success) response and an error response
 struct OrderResult: Codable {
     // Success

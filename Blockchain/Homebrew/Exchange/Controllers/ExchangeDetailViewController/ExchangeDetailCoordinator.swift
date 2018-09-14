@@ -237,7 +237,7 @@ class ExchangeDetailCoordinator: NSObject {
                 refundAddress: "",
                 quote: tradeQuote
             )
-            tradeExecutionAPI.submit(order: order, withCompletion: { [weak self] result in
+            tradeExecutionAPI.submit(order: order, withCompletion: { [weak self] in
                 guard let this = self else { return }
                 this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
             })

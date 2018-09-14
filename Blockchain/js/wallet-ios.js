@@ -3136,3 +3136,15 @@ MyWalletPhone.getHistoryForAllAssets = function() {
     var getBitcoinCashHistory = bch ? bch.getHistory() : {};
     return Promise.all([getBitcoinHistory, getEtherHistory, getBitcoinCashHistory]);
 }
+
+MyWalletPhone.tradeExecution = {
+    sendBitcoinTransaction : function(from, to, amount) {
+        currentPayment = MyWallet.wallet.createPayment()
+            .from(from)
+            .to(to)
+            .amount(amount)
+        currentPayment.build().then(function (x) {
+
+        }).catch(funcion(e){console.log('setupBitcoinTransaction: ' + e)})
+    }
+}
