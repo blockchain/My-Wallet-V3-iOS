@@ -62,8 +62,10 @@ struct ExchangeInputComponents {
         if components.count == 1 {
             if let first = components.first {
                 if first.type == .whole && first.value == "0" {
-                    components = [component]
-                    return
+                    if component.type != .pendingFractional {
+                        components = [component]
+                        return
+                    }
                 }
             }
         }
@@ -92,6 +94,18 @@ struct ExchangeInputComponents {
     
     var attributedString: NSAttributedString {
         return components.map({ return $0.attributedString(with: styleTemplate) }).join()
+    }
+    
+    var numericalString: String {
+        let whole = components.filter({ $0.type == .whole })
+        let wholeValue = whole.map({ return $0.attributedString(with: styleTemplate)}).join().string
+        let fractional = components.filter({ $0.type == .fractional })
+        let fractionalValue = fractional.map({ return $0.attributedString(with: styleTemplate )}).join().string
+        
+        if fractionalValue.count == 0 {
+            return wholeValue
+        }
+        return wholeValue + "." + fractionalValue
     }
 }
 

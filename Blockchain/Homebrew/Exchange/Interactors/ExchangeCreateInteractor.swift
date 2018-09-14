@@ -63,7 +63,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         guard let output = output else { return }
         guard let model = model else { return }
         inputs.setup(with: output.styleTemplate(), usingFiat: model.isUsingFiat)
-        inputs.toggleInput(usingFiat: model.isUsingFiat)
+        
         updatedInput()
         
         markets.setup()
@@ -85,17 +85,6 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
             // Use conversions service to determine new input/output
             this.conversions.update(with: conversion)
-            let input = this.inputs.activeInput.input
-
-            // Remove trailing zeros and decimal place - if the input values are equal, then avoid replacing
-            // text, which would interrupt user entry
-            let inputTest = this.conversions.removeInsignificantCharacters(input: input)
-            let conversionInputTest = this.conversions.removeInsignificantCharacters(input: this.conversions.input)
-
-            if inputTest != conversionInputTest {
-                this.inputs.activeInput.input = this.conversions.input
-            }
-            this.inputs.lastOutput = this.conversions.output
 
             // Update interface to reflect the values returned from the conversion
             // Update input labels
@@ -122,7 +111,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating input with no model")
             return
         }
-        model.volume = inputs.activeInput.input
+        model.volume = inputs.activeInput
 
         // Update interface to reflect what has been typed
         updateOutput()
@@ -134,15 +123,16 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func updateOutput() {
         // Update the inputs in crypto and fiat
         guard let output = output else { return }
+        let secondary = conversions.output.count == 0 ? "0": conversions.output
         if model?.isUsingFiat == true {
             
             let primary = inputs.primaryFiatAttributedString()
-            output.updatedInput(primary: primary, secondary: inputs.lastOutput)
+            output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
             guard let model = model else { return }
             let symbol = model.pair.from.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
-            output.updatedInput(primary: primary, secondary: inputs.lastOutput)
+            output.updatedInput(primary: primary, secondary: secondary)
         }
     }
 
@@ -153,7 +143,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func displayInputTypeTapped() {
         guard let model = model else { return }
         model.toggleFiatInput()
-        inputs.toggleInput(usingFiat: model.isUsingFiat)
+        inputs.isUsingFiat = model.isUsingFiat
+        inputs.toggleInput(withOutput: conversions.output)
         updatedInput()
     }
     

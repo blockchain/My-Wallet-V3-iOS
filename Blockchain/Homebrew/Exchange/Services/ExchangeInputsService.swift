@@ -11,21 +11,30 @@ import Foundation
 // A class containing an active input that can switch values with an output using toggleInput()
 class ExchangeInputsService: ExchangeInputsAPI {
     
-    var activeInput: NumberInputDelegate
+    var isUsingFiat: Bool = false {
+        didSet {
+            inputComponents.isUsingFiat = isUsingFiat
+        }
+    }
+    
+    var activeInput: String {
+        get {
+            return inputComponents.numericalString
+        }
+    }
     
     var inputComponents: ExchangeInputComponents
-    var lastOutput: String?
     private var components: [InputComponent] {
         return inputComponents.components
     }
     
     init() {
         self.inputComponents = ExchangeInputComponents(template: .standard)
-        self.activeInput = NumberInputViewModel(newInput: nil)
     }
     
     func setup(with template: ExchangeStyleTemplate, usingFiat: Bool) {
         inputComponents = ExchangeInputComponents(template: template)
+        isUsingFiat = usingFiat
     }
     
     func primaryFiatAttributedString() -> NSAttributedString {
@@ -105,7 +114,6 @@ class ExchangeInputsService: ExchangeInputsAPI {
             )
             
             inputComponents.append(component)
-            activeInput.add(character: character)
             return
         }
         
@@ -114,8 +122,6 @@ class ExchangeInputsService: ExchangeInputsAPI {
             type: .whole
         )
         inputComponents.append(component)
-        activeInput.add(character: character)
-        
     }
     
     func add(delimiter: String) {
@@ -125,19 +131,15 @@ class ExchangeInputsService: ExchangeInputsAPI {
             value: delimiter,
             type: .pendingFractional
         )
+        
         inputComponents.append(component)
     }
     
     func backspace() {
         inputComponents.dropLast()
-        activeInput.backspace()
     }
     
-    func toggleInput(usingFiat: Bool) {
-        let newOutput = activeInput
-        activeInput = NumberInputViewModel(newInput: lastOutput)
-        lastOutput = newOutput.input
-        inputComponents.isUsingFiat = usingFiat
-        inputComponents.convertComponents(with: activeInput.input)
+    func toggleInput(withOutput output: String) {
+        inputComponents.convertComponents(with: output)
     }
 }

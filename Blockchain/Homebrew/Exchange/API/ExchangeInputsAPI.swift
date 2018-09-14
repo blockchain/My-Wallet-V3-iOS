@@ -10,9 +10,9 @@ import Foundation
 
 protocol ExchangeInputsAPI: class {
     
-    var activeInput: NumberInputDelegate { get set }
+    var activeInput: String { get }
+    var isUsingFiat: Bool { get set }
     var inputComponents: ExchangeInputComponents { get set }
-    var lastOutput: String? { get set }
     
     func setup(with template: ExchangeStyleTemplate, usingFiat: Bool)
     
@@ -33,5 +33,5 @@ protocol ExchangeInputsAPI: class {
     func add(delimiter: String)
     
     func backspace()
-    func toggleInput(usingFiat: Bool)
+    func toggleInput(withOutput output: String)
 }
