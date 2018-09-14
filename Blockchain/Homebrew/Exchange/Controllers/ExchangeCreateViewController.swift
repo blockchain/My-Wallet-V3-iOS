@@ -75,22 +75,6 @@ class ExchangeCreateViewController: UIViewController {
         }
         
         exchangeButton.layer.cornerRadius = 4.0
-        
-        primaryAmountLabel.textColor = UIColor.brandPrimary
-        secondaryAmountLabel.textColor = UIColor.brandPrimary
-        
-        useMaximumButton.layer.cornerRadius = 4.0
-        useMaximumButton.layer.borderWidth = 1.0
-        useMaximumButton.layer.borderColor = UIColor.brandPrimary.cgColor
-        
-        useMinimumButton.layer.cornerRadius = 4.0
-        useMinimumButton.layer.borderWidth = 1.0
-        useMinimumButton.layer.borderColor = UIColor.brandPrimary.cgColor
-        
-        exchangeButton.layer.cornerRadius = 4.0
-        exchangeRateView.layer.cornerRadius = 4.0
-        exchangeRateView.layer.borderWidth = 1.0
-        exchangeRateView.layer.borderColor = UIColor.brandPrimary.cgColor
 
         primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
         secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
