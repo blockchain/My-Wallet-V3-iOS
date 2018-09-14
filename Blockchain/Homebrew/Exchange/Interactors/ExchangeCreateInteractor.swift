@@ -45,6 +45,8 @@ class ExchangeCreateInteractor {
                 output?.updateTradingPair(pair: model.pair, fix: model.fix)
             }
         }
+
+        // TICKET: IOS-1287 - This should be called after user has stopped typing
         if markets.hasAuthenticated {
             updateMarketsConversion()
         }
@@ -57,7 +59,14 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
+    
     func viewLoaded() {
+        guard let output = output else { return }
+        guard let model = model else { return }
+        inputs.setup(with: output.styleTemplate(), usingFiat: model.isUsingFiat)
+        
+        updatedInput()
+        
         markets.setup()
 
         // Authenticate, then listen for conversions
@@ -80,17 +89,6 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
             // Use conversions service to determine new input/output
             this.conversions.update(with: conversion)
-            let input = this.inputs.activeInput.input
-
-            // Remove trailing zeros and decimal place - if the input values are equal, then avoid replacing
-            // text, which would interrupt user entry
-            let inputTest = this.conversions.removeInsignificantCharacters(input: input)
-            let conversionInputTest = this.conversions.removeInsignificantCharacters(input: this.conversions.input)
-
-            if inputTest != conversionInputTest {
-                this.inputs.activeInput.input = this.conversions.input
-            }
-            this.inputs.lastOutput = this.conversions.output
 
             // Update interface to reflect the values returned from the conversion
             // Update input labels
@@ -117,7 +115,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("Updating input with no model")
             return
         }
-        model.volume = inputs.activeInput.input
+        model.volume = inputs.activeInput
 
         // Update interface to reflect what has been typed
         updateOutput()
@@ -128,19 +126,21 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     func updateOutput() {
         // Update the inputs in crypto and fiat
-        if model?.isUsingFiat == true {
-            let components = inputs.inputComponents
-            output?.updatedInput(
-                primary: components.integer,
-                primaryDecimal: components.fractional,
-                secondary: inputs.lastOutput
-            )
+        guard let output = output else { return }
+        guard let model = model else { return }
+        let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? "$"
+        let suffix = model.pair.from.symbol
+        
+        let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
+        let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
+        
+        if model.isUsingFiat == true {
+            let primary = inputs.primaryFiatAttributedString()
+            output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
-            output?.updatedInput(
-                primary: inputs.activeInput.input,
-                primaryDecimal: nil,
-                secondary: inputs.lastOutput
-            )
+            let symbol = model.pair.from.symbol
+            let primary = inputs.primaryAssetAttributedString(symbol: symbol)
+            output.updatedInput(primary: primary, secondary: secondaryResult)
         }
     }
 
@@ -149,8 +149,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func displayInputTypeTapped() {
-        model?.toggleFiatInput()
-        inputs.toggleInput()
+        guard let model = model else { return }
+        model.toggleFiatInput()
+        inputs.isUsingFiat = model.isUsingFiat
+        inputs.toggleInput(withOutput: conversions.output)
         updatedInput()
     }
     
@@ -167,29 +169,46 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
     
     func onBackspaceTapped() {
+        guard inputs.canBackspace() else {
+            output?.entryRejected()
+            return
+        }
         inputs.backspace()
         updatedInput()
     }
     
     func onAddInputTapped(value: String) {
-        guard let model = model else {
+        guard let _ = model else {
             Logger.shared.error("Updating conversion with no model")
             return
         }
-        if model.isUsingFiat {
-            if let fractional = inputs.inputComponents.fractional,
-                fractional.count >= NumberFormatter.localCurrencyFractionDigits {
-                Logger.shared.warning("Cannot add more than two decimal values for fiat")
-                return
-            }
-        } else {
-            if let fractional = inputs.inputComponents.fractional,
-                fractional.count >= NumberFormatter.assetFractionDigits {
-                Logger.shared.warning("Cannot add more than eight decimal values for crypto")
-                return
-            }
+        
+        guard canAddAdditionalCharacter(value) == true else {
+            output?.entryRejected()
+            return
         }
-        inputs.add(character: value)
+        
+        inputs.add(
+            character: value
+        )
+        
+        updatedInput()
+    }
+    
+    func onDelimiterTapped(value: String) {
+        guard inputs.canAddDelimiter() else {
+            output?.entryRejected()
+            return
+        }
+        
+        guard let model = model else { return }
+        
+        let text = model.isUsingFiat ? "00" : value
+        
+        inputs.add(
+            delimiter: text
+        )
+        
         updatedInput()
     }
 
@@ -199,5 +218,15 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             return
         }
         output?.confirm(conversion: conversion)
+    }
+    
+    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
+        guard let model = model else { return false }
+        switch model.isUsingFiat {
+        case true:
+            return inputs.canAddFiatCharacter(value)
+        case false:
+            return inputs.canAddAssetCharacter(value)
+        }
     }
 }

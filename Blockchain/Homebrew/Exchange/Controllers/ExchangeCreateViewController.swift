@@ -9,6 +9,13 @@
 import Foundation
 
 class ExchangeCreateViewController: UIViewController {
+    
+    // MARK: Private Static Properties
+    
+    static let primaryFontName: String = Constants.FontNames.montserratRegular
+    static let primaryFontSize: CGFloat = Constants.FontSizes.Huge
+    static let secondaryFontName: String = Constants.FontNames.montserratRegular
+    static let secondaryFontSize: CGFloat = Constants.FontSizes.SmallMedium
 
     // MARK: - IBOutlets
 
@@ -61,15 +68,15 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
-
-        [primaryAmountLabel, primaryDecimalLabel, secondaryAmountLabel].forEach {
+        
+        [primaryAmountLabel, secondaryAmountLabel].forEach {
             $0?.textColor = UIColor.brandPrimary
         }
 
         [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
             addStyleToView($0)
         }
-
+        
         exchangeButton.layer.cornerRadius = 4.0
 
         setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
@@ -127,6 +134,10 @@ extension ExchangeCreateViewController {
 }
 
 extension ExchangeCreateViewController: NumberKeypadViewDelegate {
+    func onDelimiterTapped(value: String) {
+        delegate?.onDelimiterTapped(value: value)
+    }
+    
     func onAddInputTapped(value: String) {
         delegate?.onAddInputTapped(value: value)
     }
@@ -137,15 +148,42 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
-
+    
+    func wigglePrimaryLabel() {
+        primaryAmountLabel.wiggle()
+    }
+    
+    func styleTemplate() -> ExchangeStyleTemplate {
+        
+        let primary = UIFont(
+            name: ExchangeCreateViewController.primaryFontName,
+            size: ExchangeCreateViewController.primaryFontSize
+        ) ?? UIFont.systemFont(ofSize: 17.0)
+        
+        let secondary = UIFont(
+            name: ExchangeCreateViewController.secondaryFontName,
+            size: ExchangeCreateViewController.secondaryFontSize
+            ) ?? UIFont.systemFont(ofSize: 17.0)
+        
+        return ExchangeStyleTemplate(
+            primaryFont: primary,
+            secondaryFont: secondary,
+            textColor: .brandPrimary,
+            pendingColor: UIColor.brandPrimary.withAlphaComponent(0.5)
+        )
+    }
+    
+    func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?) {
+        primaryAmountLabel.attributedText = primary
+        secondaryAmountLabel.text = secondary
+    }
+    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
         primaryAmountLabel.text = primary
-        primaryDecimalLabel.text = primaryDecimal
-        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
         secondaryAmountLabel.text = secondary
     }
 

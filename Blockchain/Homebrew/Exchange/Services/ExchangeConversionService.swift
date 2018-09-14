@@ -30,8 +30,8 @@ protocol ExchangeConversionAPI {
 }
 
 class ExchangeConversionService: ExchangeConversionAPI {
-    private(set) var input: String = ""
-    private(set) var output: String = ""
+    private(set) var input: String = "0"
+    private(set) var output: String = "0"
     private(set) var baseOutput: String = ""
     private(set) var counterOutput: String = ""
 
