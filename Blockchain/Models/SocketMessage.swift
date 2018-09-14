@@ -139,9 +139,3 @@ struct SymbolValue: Codable {
     let symbol: String
     let value: String
 }
-
-struct ExecutableTrade: Codable {
-    let destinationAddress: String
-    let refundAddress: String
-    let quote: Quote
-}

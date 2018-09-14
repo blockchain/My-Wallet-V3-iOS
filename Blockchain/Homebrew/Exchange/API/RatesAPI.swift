@@ -11,5 +11,4 @@ import Foundation
 protocol RatesAPI {
     func getRates(withCompletion: @escaping ((Result<Rates>) -> Void))
     func getConfigurationForPair(_ tradingPair: TradingPair, withCompletion: @escaping ((Result<TradingPairConfiguration>) -> Void))
-    func execute(trade: ExecutableTrade, withCompletion: @escaping ((Result<TradeExecutionResult>) -> Void))
 }

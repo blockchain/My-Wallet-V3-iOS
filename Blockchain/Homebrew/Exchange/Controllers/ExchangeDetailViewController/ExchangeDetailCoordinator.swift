@@ -16,7 +16,7 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
-        case confirmExchange(Conversion, RatesAPI)
+        case confirmExchange(Conversion, TradeExecutionAPI)
     }
 
     enum Action {
@@ -217,7 +217,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let conversion, let ratesAPI):
+        case .confirmExchange(let conversion, let tradeExecutionAPI):
             interface?.loadingVisibility(.visible, action: .confirmExchange)
 
             let conversionQuote = conversion.quote
@@ -230,13 +230,14 @@ class ExchangeDetailCoordinator: NSObject {
                 fiatCurrency: conversionQuote.fiatCurrency,
                 fix: conversionQuote.fix,
                 volume: conversionQuote.volume,
-                currencyRatio: conversionQuote.currencyRatio)
-            let executableTrade = ExecutableTrade(
+                currencyRatio: conversionQuote.currencyRatio
+            )
+            let order = Order(
                 destinationAddress: "",
                 refundAddress: "",
                 quote: tradeQuote
             )
-            ratesAPI.execute(trade: executableTrade, withCompletion: { [weak self] result in
+            tradeExecutionAPI.submit(order: order, withCompletion: { [weak self] result in
                 guard let this = self else { return }
                 this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
             })

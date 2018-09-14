@@ -12,30 +12,18 @@ enum Side: String {
 }
 
 struct Order: Encodable {
-    
-    let pair: TradingPair
-    let side: Side
-    let quantity: Double
     let destinationAddress: String
     let refundAddress: String
-    
-    enum CodingKeys: String, CodingKey {
-        case side
-        case pair
-        case quantity
-        case destinationAddress
-        case refundAddress
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        let pairValue = pair.stringRepresentation
-        
-        try container.encode(side.rawValue, forKey: .side)
-        try container.encode(pairValue, forKey: .pair)
-        try container.encodeIfPresent(String(quantity), forKey: .quantity)
-        try container.encode(destinationAddress, forKey: .destinationAddress)
-        try container.encode(refundAddress, forKey: .refundAddress)
+    let quote: Quote
+}
+
+struct TradeExecutionResult: Codable {
+    // Error
+    let type: String?
+    let description: String?
+    private enum CodingKeys: CodingKey {
+        // Error
+        case type
+        case description
     }
 }
