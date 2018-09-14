@@ -235,7 +235,5 @@ class ExchangeDetailCoordinator: NSObject {
             })
         }
     }
-    
-    
 }
 // swiftlint:enable function_body_length

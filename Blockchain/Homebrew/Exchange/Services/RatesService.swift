@@ -125,9 +125,13 @@ class RatesService: RatesAPI {
 
 // MARK: - Trade Execution
 struct TradeExecutionResult: Codable {
-    let result: String
+    // Error
+    let type: String?
+    let description: String?
     private enum CodingKeys: CodingKey {
-        case result
+        // Error
+        case type
+        case description
     }
 }
 
