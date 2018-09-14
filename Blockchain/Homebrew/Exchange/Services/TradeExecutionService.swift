@@ -51,7 +51,7 @@ class TradeExecutionService: TradeExecutionAPI {
             })
     }
     
-    func submit(order: Order, withCompletion: @escaping ((Result<Trade>) -> Void)) {
+    func submit(order: Order, withCompletion: @escaping ((Result<OrderResult>) -> Void)) {
         disposable = process(order: order)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -64,7 +64,7 @@ class TradeExecutionService: TradeExecutionAPI {
     
     // MARK: Private
     
-    fileprivate func process(order: Order) -> Single<Trade> {
+    fileprivate func process(order: Order) -> Single<OrderResult> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
                 return .error(TradeExecutionAPIError.generic)
@@ -82,7 +82,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 url: endpoint,
                 body: try? JSONEncoder().encode(order),
                 token: token.token,
-                type: Trade.self
+                type: OrderResult.self
             )
         }
     }

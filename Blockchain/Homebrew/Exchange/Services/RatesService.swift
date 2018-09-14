@@ -29,10 +29,6 @@ class RatesService: RatesAPI {
             )
             return components
         }
-
-        static let trades = PathComponents(
-            components: ["trades"]
-        )
     }
     
     enum RatesAPIError: Error {
