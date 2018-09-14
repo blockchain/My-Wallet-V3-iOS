@@ -3138,13 +3138,13 @@ MyWalletPhone.getHistoryForAllAssets = function() {
 }
 
 MyWalletPhone.tradeExecution = {
-    sendBitcoinTransaction : function(from, to, amount) {
+    sendBitcoinTransaction : function(id, from, to, amount) {
         currentPayment = MyWallet.wallet.createPayment()
             .from(from)
             .to(to)
             .amount(amount)
         currentPayment.build().then(function (x) {
-
+            MyWalletPhone.quickSendBtc(id, false)
         }).catch(funcion(e){console.log('setupBitcoinTransaction: ' + e)})
     }
 }

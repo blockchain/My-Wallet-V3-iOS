@@ -2639,7 +2639,10 @@
     [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
     [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
-    [self.context evaluateScript:[NSString stringWithFormat: "MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", \"%@\")", orderTransaction.from, orderTransaction.to, orderTransaction.amount];
+    // May not be used, can remove later if confirmed safe
+    NSString * txProgressID = [[self.context evaluateScript:@"MyWalletPhone.createTxProgressId()"] toString];
+
+    [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", \"%@\", \"%@\")", txProgressID, orderTransaction.from, orderTransaction.to, orderTransaction.amount]];
 }
 
 # pragma mark - Ethereum

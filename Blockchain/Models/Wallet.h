@@ -41,7 +41,7 @@
 @property(nonatomic, assign) int tag;
 @end
 
-@class Wallet, Transaction, JSValue, JSContext, ExchangeRate;
+@class Wallet, Transaction, JSValue, JSContext, ExchangeRate, OrderTransaction;
 
 @protocol WalletSuccessCallback;
 

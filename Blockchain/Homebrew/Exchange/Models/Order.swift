@@ -60,3 +60,22 @@ struct OrderResult: Codable {
         case description
     }
 }
+
+@objc class OrderTransaction: NSObject {
+    init(
+        legacyAssetType: LegacyAssetType,
+        from: String,
+        to: String,
+        amount: String
+        ) {
+        self.legacyAssetType = legacyAssetType
+        self.from = from
+        self.to = to
+        self.amount = amount
+        super.init()
+    }
+    @objc let legacyAssetType: LegacyAssetType
+    @objc let from: String
+    @objc let to: String
+    @objc let amount: String
+}

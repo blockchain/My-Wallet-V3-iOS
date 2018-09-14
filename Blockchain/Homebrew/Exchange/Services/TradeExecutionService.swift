@@ -115,6 +115,18 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
 
+    func sendTx() {
+        let assetType = AssetType.bitcoin
+        let legacyAssetType = assetType.legacy
+        let orderTransaction = OrderTransaction(
+            legacyAssetType: legacyAssetType,
+            from: "from",
+            to: "to",
+            amount: "amount"
+        )
+        wallet.send(orderTransaction, success: {}, error: {})
+    }
+
     private func sendTransaction(result: OrderResult, completion: @escaping (() -> Void)) {
         let assetType = AssetType.bitcoin
         let legacyAssetType = assetType.legacy
