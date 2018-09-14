@@ -19,6 +19,10 @@ class ExchangeDetailCoordinator: NSObject {
         case confirmExchange(Conversion, RatesAPI)
     }
 
+    enum Action {
+        case confirmExchange
+    }
+
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
     
@@ -44,7 +48,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let conversion, let ratesAPI):
+            case .confirm(let conversion, _):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
@@ -214,6 +218,8 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             }
         case .confirmExchange(let conversion, let ratesAPI):
+            interface?.loadingVisibility(.visible, action: .confirmExchange)
+
             let conversionQuote = conversion.quote
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -230,8 +236,9 @@ class ExchangeDetailCoordinator: NSObject {
                 refundAddress: "",
                 quote: tradeQuote
             )
-            ratesAPI.execute(trade: executableTrade, withCompletion: { result in
-
+            ratesAPI.execute(trade: executableTrade, withCompletion: { [weak self] result in
+                guard let this = self else { return }
+                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
             })
         }
     }

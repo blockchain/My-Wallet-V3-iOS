@@ -269,4 +269,16 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
     func updateTitle(_ value: String) {
         navigationItem.title = value
     }
+
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeDetailCoordinator.Action) {
+        if visibility == .hidden {
+            LoadingViewPresenter.shared.hideBusyView()
+        } else {
+            var text = LocalizationConstants.loading
+            switch action {
+            case .confirmExchange: text = LocalizationConstants.Exchange.sendingOrder
+            }
+            LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        }
+    }
 }
