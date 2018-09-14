@@ -35,12 +35,12 @@ struct ExchangeStyleTemplate {
     private static let primary = UIFont(
         name: ExchangeCreateViewController.primaryFontName,
         size: ExchangeCreateViewController.primaryFontSize
-        ) ?? UIFont.systemFont(ofSize: 17.0)
+    ) ?? UIFont.systemFont(ofSize: 17.0)
     
     private static let secondary = UIFont(
         name: ExchangeCreateViewController.secondaryFontName,
         size: ExchangeCreateViewController.secondaryFontSize
-        ) ?? UIFont.systemFont(ofSize: 17.0)
+    ) ?? UIFont.systemFont(ofSize: 17.0)
     
     static let standard: ExchangeStyleTemplate = ExchangeStyleTemplate(
         primaryFont: primary,
