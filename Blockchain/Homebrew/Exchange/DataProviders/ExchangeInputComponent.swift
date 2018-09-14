@@ -52,12 +52,7 @@ struct ExchangeInputComponents {
         let whole = first.map({ return InputComponent(value: String($0), type: .whole) })
         let pending = InputComponent(value: delimiter, type: .pendingFractional)
         let fractional = second.map({ return InputComponent(value: String($0), type: .fractional) })
-        switch isUsingFiat {
-        case true:
-            components = whole + [pending] + fractional
-        case false:
-            components = whole + [pending] + fractional
-        }
+        components = whole + [pending] + fractional
     }
     
     mutating func append(_ component: InputComponent) {
