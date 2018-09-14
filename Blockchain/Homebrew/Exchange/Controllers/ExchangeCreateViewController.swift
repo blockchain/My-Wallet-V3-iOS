@@ -158,7 +158,7 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
     
-    func wigglePrimaryPrimaryLabel() {
+    func wigglePrimaryLabel() {
         guard primaryAmountLabel.layer.animationKeys() == nil else { return }
         let wiggle = CABasicAnimation(keyPath: "position")
         wiggle.duration = 0.05

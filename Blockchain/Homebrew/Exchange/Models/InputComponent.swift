@@ -105,11 +105,7 @@ extension Array where Element == InputComponent {
         if let model = first, count == 1 {
             return model.value != "0"
         }
-        if count > 1 {
-            return true
-        } else {
-            return false
-        }
+        return count > 1
     }
     
     func drop() -> Array<Element> {

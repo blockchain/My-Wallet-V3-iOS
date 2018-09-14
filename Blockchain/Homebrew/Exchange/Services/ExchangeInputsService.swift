@@ -57,11 +57,11 @@ class ExchangeInputsService: ExchangeInputsAPI {
     }
     
     func maxFiatFractional() -> Int {
-        return 2
+        return NumberFormatter.localCurrencyFractionDigits
     }
     
     func maxAssetFractional() -> Int {
-        return 8
+        return NumberFormatter.assetFractionDigits
     }
     
     func canBackspace() -> Bool {

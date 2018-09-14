@@ -49,7 +49,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     }
     
     func entryRejected() {
-        interface?.wigglePrimaryPrimaryLabel()
+        interface?.wigglePrimaryLabel()
     }
     
     func styleTemplate() -> ExchangeStyleTemplate {

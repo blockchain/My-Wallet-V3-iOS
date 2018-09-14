@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ExchangeCreateInterface: class {
-    func wigglePrimaryPrimaryLabel()
+    func wigglePrimaryLabel()
     func styleTemplate() -> ExchangeStyleTemplate
     func ratesViewVisibility(_ visibility: Visibility)
     func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?)
