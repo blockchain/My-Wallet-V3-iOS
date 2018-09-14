@@ -228,7 +228,7 @@ class ExchangeDetailCoordinator: NSObject {
             let executableTrade = ExecutableTrade(
                 destinationAddress: "",
                 refundAddress: "",
-                quote: conversion.quote
+                quote: tradeQuote
             )
             ratesAPI.execute(trade: executableTrade, withCompletion: { result in
 
