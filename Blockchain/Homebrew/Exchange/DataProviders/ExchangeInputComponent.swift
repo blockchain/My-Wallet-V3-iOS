@@ -85,7 +85,8 @@ struct ExchangeInputComponents {
     
     func primaryAssetAttributedString(_ suffixComponent: InputComponent) -> NSAttributedString {
         guard suffixComponent.type == .suffix else { return NSAttributedString(string: "NaN")}
-        let value = components + [suffixComponent]
+        let space = InputComponent(value: " ", type: .space)
+        let value = components + [space, suffixComponent]
         return value.map({ return $0.attributedString(with: styleTemplate )}).join()
     }
     

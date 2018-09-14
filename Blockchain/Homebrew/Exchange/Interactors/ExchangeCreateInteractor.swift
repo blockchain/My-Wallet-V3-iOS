@@ -123,16 +123,20 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func updateOutput() {
         // Update the inputs in crypto and fiat
         guard let output = output else { return }
-        let secondary = conversions.output.count == 0 ? "0": conversions.output
-        if model?.isUsingFiat == true {
-            
+        guard let model = model else { return }
+        let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? "$"
+        let suffix = model.pair.from.symbol
+        
+        let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
+        let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
+        
+        if model.isUsingFiat == true {
             let primary = inputs.primaryFiatAttributedString()
             output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
-            guard let model = model else { return }
             let symbol = model.pair.from.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
-            output.updatedInput(primary: primary, secondary: secondary)
+            output.updatedInput(primary: primary, secondary: secondaryResult)
         }
     }
 

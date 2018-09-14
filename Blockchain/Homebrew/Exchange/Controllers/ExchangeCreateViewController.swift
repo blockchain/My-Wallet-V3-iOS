@@ -75,9 +75,6 @@ class ExchangeCreateViewController: UIViewController {
         }
         
         exchangeButton.layer.cornerRadius = 4.0
-
-        primaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Huge)
-        secondaryAmountLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.MediumLarge)
         
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
