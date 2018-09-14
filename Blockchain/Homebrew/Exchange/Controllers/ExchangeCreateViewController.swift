@@ -159,23 +159,7 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 extension ExchangeCreateViewController: ExchangeCreateInterface {
     
     func wigglePrimaryLabel() {
-        guard primaryAmountLabel.layer.animationKeys() == nil else { return }
-        let wiggle = CABasicAnimation(keyPath: "position")
-        wiggle.duration = 0.05
-        wiggle.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-        wiggle.repeatCount = 1
-        wiggle.autoreverses = true
-        wiggle.fromValue = CGPoint(
-            x: primaryAmountLabel.center.x - 2.0,
-            y: primaryAmountLabel.center.y
-        )
-        wiggle.toValue = CGPoint(
-            x: primaryAmountLabel.center.x + 2.0,
-            y: primaryAmountLabel.center.y
-        )
-        primaryAmountLabel.layer.add(wiggle, forKey: wiggle.keyPath)
-        let feedback = UINotificationFeedbackGenerator()
-        feedback.notificationOccurred(.error)
+        primaryAmountLabel.wiggle()
     }
     
     func styleTemplate() -> ExchangeStyleTemplate {
