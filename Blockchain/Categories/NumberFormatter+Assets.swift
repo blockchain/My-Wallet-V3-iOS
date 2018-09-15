@@ -24,7 +24,7 @@ extension NumberFormatter {
     }
 
     // MARK: Local Currency
-    private static let localCurrencyFractionDigits: Int = 2
+    static let localCurrencyFractionDigits: Int = 2
 
     // Example: 1234.12
     static let localCurrencyFormatter: NumberFormatter = {
@@ -50,7 +50,7 @@ extension NumberFormatter {
     }()
 
     // MARK: Digital Assets
-    private static let assetFractionDigits: Int = 8
+    static let assetFractionDigits: Int = 8
 
     // Example: 1234.12345678
     static let assetFormatter: NumberFormatter = {

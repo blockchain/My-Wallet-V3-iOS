@@ -12,6 +12,7 @@ import RxSwift
 protocol ExchangeDependencies {
     var service: ExchangeHistoryAPI { get }
     var markets: ExchangeMarketsAPI { get }
+    var conversions: ExchangeConversionAPI { get }
     var inputs: ExchangeInputsAPI { get }
     var rates: RatesAPI { get }
     var tradeExecution: TradeExecutionAPI { get }
@@ -20,6 +21,7 @@ protocol ExchangeDependencies {
 struct ExchangeServices: ExchangeDependencies {
     let service: ExchangeHistoryAPI
     let markets: ExchangeMarketsAPI
+    var conversions: ExchangeConversionAPI
     let inputs: ExchangeInputsAPI
     let rates: RatesAPI
     let tradeExecution: TradeExecutionAPI
@@ -27,7 +29,8 @@ struct ExchangeServices: ExchangeDependencies {
     init() {
         rates = RatesService()
         service = ExchangeService()
-        markets = MarketsService(authenticationService: NabuAuthenticationService())
+        markets = MarketsService()
+        conversions = ExchangeConversionService()
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
     }
@@ -124,8 +127,14 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
 
+        #if DEBUG
+        guard !DebugSettings.shared.useHomebrewForExchange else {
+            success(true)
+            return
+        }
+        #endif
+
         // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        
         disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -211,12 +220,12 @@ struct ExchangeServices: ExchangeDependencies {
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared,
-        marketsService: MarketsService = MarketsService(authenticationService: NabuAuthenticationService()),
+        marketsService: MarketsService = MarketsService(),
         exchangeService: ExchangeService = ExchangeService()
     ) {
         self.walletManager = walletManager
         self.walletService = walletService
-        self.marketsService = marketsService
+        self.marketsService = marketsService 
         self.exchangeService = exchangeService
         super.init()
     }

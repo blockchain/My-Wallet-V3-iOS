@@ -15,11 +15,13 @@ extension UserDefaults {
     // Refactor enableCertificatePinning, simulateZeroTicker, shouldHideBuySellCard,
     // swipeToReceiveEnabled such that key = value
     enum DebugKeys: String {
-        case appReviewPromptCount
-        case enableCertificatePinning = "certificatePinning"
-        case securityReminderTimer
-        case simulateSurge
-        case simulateZeroTicker = "zeroTicker"
+        case appReviewPromptCount = "debug_appReviewPromptCount"
+        case enableCertificatePinning = "debug_certificatePinning"
+        case securityReminderTimer = "debug_securiterReminderTimer"
+        case simulateSurge = "debug_simulateSurge"
+        case simulateZeroTicker = "debug_zeroTicker"
+        case createWalletPrefill = "debug_createWalletPrefill"
+        case useHomebrewForExchange = "debug_useHomebrewForExchange"
     }
 
     enum Keys: String {

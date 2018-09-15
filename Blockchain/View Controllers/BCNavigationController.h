@@ -24,6 +24,9 @@
 @property(nonatomic, copy) void (^onPopViewController)(void);
 @property(nonatomic, copy) void (^onViewWillDisappear)(void);
 
+- (void)applyLightAppearance;
+- (void)applyDarkAppearance;
+
 - (_Nonnull id)initWithRootViewController:(UIViewController *)rootViewController title:(NSString *)title;
 - (void)showBusyViewWithLoadingText:(NSString *)text;
 - (void)hideBusyView;

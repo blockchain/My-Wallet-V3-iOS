@@ -67,3 +67,19 @@ public extension NSAttributedString {
         return copy() as! NSAttributedString
     }
 }
+
+extension Sequence where Element: NSAttributedString {
+    
+    func join(withSeparator separator: NSAttributedString? = nil) -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        for (index, string) in enumerated() {
+            if index > 0 {
+                if let separator = separator {
+                    result.append(separator)
+                }
+            }
+            result.append(string)
+        }
+        return result
+    }
+}

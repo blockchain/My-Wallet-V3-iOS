@@ -13,15 +13,43 @@ class MarketsModel {
     var pair: TradingPair
     var fiatCurrency: String
     var fix: Fix
-    var volume: Double
+    var volume: String
 
     init(pair: TradingPair,
          fiatCurrency: String,
          fix: Fix,
-         volume: Double) {
+         volume: String) {
         self.pair = pair
         self.fiatCurrency = fiatCurrency
         self.fix = fix
         self.volume = volume
+    }
+}
+
+extension MarketsModel {
+    var isUsingFiat: Bool {
+        return fix == .baseInFiat || fix == .counterInFiat
+    }
+
+    func toggleFiatInput() {
+        switch fix {
+        case .base:
+            fix = .baseInFiat
+        case .baseInFiat:
+            fix = .base
+        case .counter:
+            fix = .counterInFiat
+        case .counterInFiat:
+            fix = .counter
+        }
+    }
+}
+
+extension MarketsModel: Equatable {
+    static func == (lhs: MarketsModel, rhs: MarketsModel) -> Bool {
+        return lhs.pair == rhs.pair &&
+        lhs.fiatCurrency == rhs.fiatCurrency &&
+        lhs.fix == rhs.fix &&
+        lhs.volume == rhs.volume
     }
 }

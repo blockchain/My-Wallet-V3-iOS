@@ -125,7 +125,7 @@ extension SettingsTableViewController {
     }
 
     func getUserVerificationStatus(handler: @escaping (NabuUser?, Bool) -> Void) {
-        disposable = BlockchainDataRepository.shared.nabuUser
+        disposable = BlockchainDataRepository.shared.fetchNabuUser()
             .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
             .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
             .subscribe(onSuccess: { user in

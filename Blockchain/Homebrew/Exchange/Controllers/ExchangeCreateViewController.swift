@@ -9,9 +9,17 @@
 import Foundation
 
 class ExchangeCreateViewController: UIViewController {
+    
+    // MARK: Private Static Properties
+    
+    static let primaryFontName: String = Constants.FontNames.montserratRegular
+    static let primaryFontSize: CGFloat = Constants.FontSizes.Huge
+    static let secondaryFontName: String = Constants.FontNames.montserratRegular
+    static let secondaryFontSize: CGFloat = Constants.FontSizes.SmallMedium
 
     // MARK: - IBOutlets
 
+    @IBOutlet private var tradingPairView: TradingPairView!
     @IBOutlet private var numberKeypadView: NumberKeypadView!
 
     // Label to be updated when amount is being typed in
@@ -26,6 +34,7 @@ class ExchangeCreateViewController: UIViewController {
 
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var exchangeRateView: UIView!
     @IBOutlet private var exchangeRateButton: UIButton!
     @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
@@ -56,6 +65,27 @@ class ExchangeCreateViewController: UIViewController {
     override func viewDidLoad() {
         dependenciesSetup()
         delegate?.onViewLoaded()
+        
+        [primaryAmountLabel, secondaryAmountLabel].forEach {
+            $0?.textColor = UIColor.brandPrimary
+        }
+
+        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
+            addStyleToView($0)
+        }
+        
+        exchangeButton.layer.cornerRadius = 4.0
+        
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyLightAppearance()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let navController = navigationController as? BCNavigationController {
+            navController.applyDarkAppearance()
+        }
     }
 
     fileprivate func dependenciesSetup() {
@@ -63,11 +93,10 @@ class ExchangeCreateViewController: UIViewController {
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: .ethereum,to: .bitcoinCash)!,
+                pair: TradingPair(from: .bitcoin, to: .ethereum)!,
                 fiatCurrency: "USD",
                 fix: .base,
-                volume: 0),
-            inputsState: InputsState()
+                volume: "0")
         )
         numberKeypadView.delegate = self
         presenter = ExchangeCreatePresenter(interactor: interactor)
@@ -77,7 +106,28 @@ class ExchangeCreateViewController: UIViewController {
     }
 }
 
+// MARK: - Styling
+extension ExchangeCreateViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+
+    private func addStyleToView(_ viewToEdit: UIView) {
+        viewToEdit.layer.cornerRadius = 4.0
+        viewToEdit.layer.borderWidth = 1.0
+        viewToEdit.layer.borderColor = UIColor.brandPrimary.cgColor
+    }
+
+    private func setAmountLabelFont(label: UILabel, size: CGFloat) {
+        label.font = UIFont(name: Constants.FontNames.montserratRegular, size: size)
+    }
+}
+
 extension ExchangeCreateViewController: NumberKeypadViewDelegate {
+    func onDelimiterTapped(value: String) {
+        delegate?.onDelimiterTapped(value: value)
+    }
+    
     func onAddInputTapped(value: String) {
         delegate?.onAddInputTapped(value: value)
     }
@@ -88,15 +138,85 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+    
+    func wigglePrimaryLabel() {
+        primaryAmountLabel.wiggle()
+    }
+    
+    func styleTemplate() -> ExchangeStyleTemplate {
+        
+        let primary = UIFont(
+            name: ExchangeCreateViewController.primaryFontName,
+            size: ExchangeCreateViewController.primaryFontSize
+        ) ?? UIFont.systemFont(ofSize: 17.0)
+        
+        let secondary = UIFont(
+            name: ExchangeCreateViewController.secondaryFontName,
+            size: ExchangeCreateViewController.secondaryFontSize
+            ) ?? UIFont.systemFont(ofSize: 17.0)
+        
+        return ExchangeStyleTemplate(
+            primaryFont: primary,
+            secondaryFont: secondary,
+            textColor: .brandPrimary,
+            pendingColor: UIColor.brandPrimary.withAlphaComponent(0.5)
+        )
+    }
+    
+    func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?) {
+        primaryAmountLabel.attributedText = primary
+        secondaryAmountLabel.text = secondary
+    }
+    
     func ratesViewVisibility(_ visibility: Visibility) {
 
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {
         primaryAmountLabel.text = primary
-        primaryDecimalLabel.text = primaryDecimal
-        decimalLabelSpacingConstraint.constant = primaryDecimal == nil ? 0 : 2
         secondaryAmountLabel.text = secondary
+    }
+
+    func updateTradingPairView(pair: TradingPair, fix: Fix) {
+        let fromAsset = pair.from
+        let toAsset = pair.to
+
+        let isUsingBase = fix == .base || fix == .baseInFiat
+        let leftVisibility: TradingPairView.ViewUpdate = .leftStatusVisibility(isUsingBase ? .visible : .hidden)
+        let rightVisibility: TradingPairView.ViewUpdate = .rightStatusVisibility(isUsingBase ? .hidden : .visible)
+
+        let transitionUpdate = TradingPairView.TradingTransitionUpdate(
+            transitions: [
+                .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                .titles(left: "", right: "")
+            ],
+            transition: .none
+        )
+
+        let presentationUpdate = TradingPairView.TradingPresentationUpdate(
+            animations: [
+                .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
+                leftVisibility,
+                rightVisibility,
+                .statusTintColor(#colorLiteral(red: 0.01176470588, green: 0.662745098, blue: 0.4470588235, alpha: 1)),
+                .swapTintColor(#colorLiteral(red: 0, green: 0.2901960784, blue: 0.4862745098, alpha: 1)),
+                .titleColor(#colorLiteral(red: 0, green: 0.2901960784, blue: 0.4862745098, alpha: 1))
+            ],
+            animation: .none
+        )
+        let model = TradingPairView.Model(
+            transitionUpdate: transitionUpdate,
+            presentationUpdate: presentationUpdate
+        )
+        tradingPairView.apply(model: model)
+    }
+
+    func updateTradingPairViewValues(left: String, right: String) {
+        let transitionUpdate = TradingPairView.TradingTransitionUpdate(
+            transitions: [.titles(left: left, right: right)],
+            transition: .none
+        )
+        tradingPairView.apply(transitionUpdate: transitionUpdate)
     }
 
     func updateRateLabels(first: String, second: String, third: String) {

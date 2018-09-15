@@ -21,6 +21,10 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onViewLoaded() {
         interactor.viewLoaded()
     }
+    
+    func onDelimiterTapped(value: String) {
+        interactor.onDelimiterTapped(value: value)
+    }
 
     func onAddInputTapped(value: String) {
         interactor.onAddInputTapped(value: value)
@@ -40,11 +44,31 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
+    func updateTradingPair(pair: TradingPair, fix: Fix) {
+        interface?.updateTradingPairView(pair: pair, fix: fix)
+    }
+    
+    func entryRejected() {
+        interface?.wigglePrimaryLabel()
+    }
+    
+    func styleTemplate() -> ExchangeStyleTemplate {
+        return interface?.styleTemplate() ?? .standard
+    }
+    
+    func updatedInput(primary: NSAttributedString?, secondary: String?) {
+        interface?.updateAttributedPrimary(primary, secondary: secondary)
+    }
+    
     func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?) {
         interface?.updateInputLabels(primary: primary, primaryDecimal: primaryDecimal, secondary: secondary)
     }
     
     func updatedRates(first: String, second: String, third: String) {
         
+    }
+    
+    func updateTradingPairValues(left: String, right: String) {
+        interface?.updateTradingPairViewValues(left: left, right: right)
     }
 }

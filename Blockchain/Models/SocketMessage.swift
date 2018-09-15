@@ -24,6 +24,7 @@ struct SocketMessage {
 protocol SocketMessageCodable: Codable {
     associatedtype JSONType: Codable
     static func tryToDecode(
+        socketType: SocketType,
         data: Data,
         onSuccess: (SocketMessage) -> Void,
         onError: (String) -> Void
@@ -32,17 +33,19 @@ protocol SocketMessageCodable: Codable {
 
 extension SocketMessageCodable {
     static func tryToDecode(
+        socketType: SocketType,
         data: Data,
         onSuccess: (SocketMessage) -> Void,
         onError: (String) -> Void
     ) {
         do {
             let decoded = try JSONType.decode(data: data)
-            let socketMessage = SocketMessage(type: .unassigned, JSONMessage: decoded)
+            let socketMessage = SocketMessage(type: socketType, JSONMessage: decoded)
+            Logger.shared.debug("Decoded socket message of type \(JSONType.self)")
             onSuccess(socketMessage)
             return
         } catch {
-            onError("Could not decode")
+            onError("Could not decode: \(error)")
         }
     }
 }
@@ -66,7 +69,8 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
 }
 
 struct AuthSubscribeParams: Codable {
-    let type, token: String
+    let type: String
+    let token: String
 }
 
 struct ConversionSubscribeParams: Codable {
@@ -74,7 +78,7 @@ struct ConversionSubscribeParams: Codable {
     let pair: String
     let fiatCurrency: String
     let fix: Fix
-    let volume: Double
+    let volume: String
 }
 
 // MARK: - Received Messages
@@ -82,7 +86,8 @@ struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
     
     let sequenceNumber: Int
-    let channel, type: String
+    let channel: String
+    let type: String
     
     private enum CodingKeys: String, CodingKey {
         case sequenceNumber
@@ -95,30 +100,33 @@ struct Conversion: SocketMessageCodable {
     typealias JSONType = Conversion
 
     let sequenceNumber: Int
-    let channel, type, pair, fiatCurrency: String
-    let fix: Fix
-    let volume: Double
-    let currencyRatio: CurrencyRatio
+    let channel: String
+    let type: String
+    let quote: Quote
 
     private enum CodingKeys: CodingKey {
         case sequenceNumber
         case channel
         case type
-        case pair
-        case fiatCurrency
-        case fix
-        case volume
-        case currencyRatio
+        case quote
     }
+}
+
+struct Quote: Codable {
+    let pair: String
+    let fiatCurrency: String
+    let fix: Fix
+    let volume: String
+    let currencyRatio: CurrencyRatio
 }
 
 struct CurrencyRatio: Codable {
     let base: FiatCrypto
     let counter: FiatCrypto
-    let baseToFiatRate: Double
-    let baseToCounterRate: Double
-    let counterToBaseRate: Double
-    let counterToFiatRate: Double
+    let baseToFiatRate: String
+    let baseToCounterRate: String
+    let counterToBaseRate: String
+    let counterToFiatRate: String
 }
 
 struct FiatCrypto: Codable {
@@ -128,7 +136,7 @@ struct FiatCrypto: Codable {
 
 struct SymbolValue: Codable {
     let symbol: String
-    let value: Double
+    let value: String
 }
 
 struct Rate: SocketMessageCodable {

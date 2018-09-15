@@ -17,9 +17,6 @@ struct Constants {
         static let duration = 0.2
         static let durationLong = 0.5
     }
-    struct DebugKeys {
-        static let createWalletPrefill = "createWalletPrefill"
-    }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
         // TODO: remove this once we use autolayout
@@ -54,6 +51,8 @@ struct Constants {
         static let Large: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 20.0 : 17.0
         static let ExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 21.0 : 18.0
         static let ExtraExtraLarge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 23.0 : 20.0
+        static let Huge: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 25.0 : 22.0
+        static let Gigantic: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 48.0 : 45.0
     }
     struct FontNames {
         static let montserratRegular = "Montserrat-Regular"
@@ -127,10 +126,6 @@ struct Constants {
     @objc class func animationDuration() -> Double { return Constants.Animation.duration }
 
     @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }
-
-    @objc class func debugKeyCreateWalletPrefill() -> String {
-        return Constants.DebugKeys.createWalletPrefill
-    }
 
     @objc class func notificationKeyModalViewDismissed() -> String {
         return Constants.NotificationKeys.modalViewDismissed.rawValue
