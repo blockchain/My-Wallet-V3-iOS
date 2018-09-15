@@ -462,6 +462,7 @@
 - (void)updateKYCUserCredentialsWithUserId:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^ _Nonnull)(NSString *_Nonnull))success error: (void (^ _Nonnull)(NSString *_Nullable))error;
 - (NSString *_Nullable)KYCUserId;
 - (NSString *_Nullable)KYCLifetimeToken;
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error;
 - (void)sendOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error;
 
 // Top Bar Display

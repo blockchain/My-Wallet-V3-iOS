@@ -46,6 +46,12 @@ class ExchangeCreateViewController: UIViewController {
     @IBAction private func exchangeButtonTapped(_ sender: Any) {
         delegate?.onExchangeButtonTapped()
     }
+
+    // MARK: Action enum
+    enum Action {
+        case createPayment
+    }
+
     // MARK: Public Properties
 
     weak var delegate: ExchangeCreateDelegate?
@@ -231,6 +237,23 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     func updateRateLabels(first: String, second: String, third: String) {
 
+    }
+
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action) {
+        if visibility == .visible {
+            var loadingText: String?
+            switch action {
+            case .createPayment: loadingText = LocalizationConstants.Exchange.confirming
+            }
+
+            guard let text = loadingText else {
+                Logger.shared.error("unknown ExchangeCreateViewController action")
+                return
+            }
+            LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        } else {
+            LoadingViewPresenter.shared.hideBusyView()
+        }
     }
 
     func showSummary(conversion: Conversion) {

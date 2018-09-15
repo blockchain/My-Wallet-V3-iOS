@@ -37,7 +37,7 @@ struct OrderResult: Codable {
 
     // Error
     let type: String?
-    let description: String??
+    let description: String?
 
     private enum CodingKeys: CodingKey {
         // Success

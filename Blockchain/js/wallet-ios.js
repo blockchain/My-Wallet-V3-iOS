@@ -3148,37 +3148,66 @@ MyWalletPhone.getHistoryForAllAssets = function() {
 }
 
 MyWalletPhone.tradeExecution = {
-    sendBitcoinTransaction: function(from, to, amount) {
-        if (!Helpers.isBitcoinAddress(from)) {
-            from = parseInt(from)
+    bitcoin: {
+        payment: null,
+        createPayment: function(from, to, amount) {
+            if (!Helpers.isBitcoinAddress(from)) {
+                from = parseInt(from)
+            }
+            this.payment = MyWallet.wallet.createPayment();
+            this.payment
+            .from(from)
+            .to(to)
+            .amount(amount)
+            .build()
+            .then(function (paymentPromise) {
+                objc_on_create_order_payment_success(paymentPromise.finalFee);
+                return paymentPromise
+            }).catch(objc_on_create_order_payment_error);
+        },
+        send: function() {
+            MyWalletPhone.sendBitcoinPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
         }
-        currentPayment = MyWallet.wallet.createPayment();
-        currentPayment
-        .from(from)
-        .to(to)
-        .amount(amount)
-        .build()
-        .then(function (payment) {
-            MyWalletPhone.sendBitcoinPayment(currentPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
-            return payment
-        }).catch(function(e){console.log('trade execution error: ' + e)});
     },
-    sendBitcoinCashTransaction: function(from, to, amount) {
-        // Currently cannot send from BCH addresses
-        from = parseInt(from)
-        let bchAccount = MyWallet.wallet.bch.accounts[from];
-        currentBitcoinCashPayment = bchAccount.createPayment();
-        MyWalletPhone.bch.buildPayment(to, amount);
-        MyWalletPhone.sendBitcoinPayment(currentBitcoinCashPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+
+    bitcoinCash: {
+        payment: null,
+        createPayment: function(from, to, amount) {
+            // Currently cannot send from BCH addresses
+            from = parseInt(from)
+            let bchAccount = MyWallet.wallet.bch.accounts[from];
+            this.payment = bchAccount.createPayment();
+            this.payment.to(to);
+            this.payment.amount(amount);
+
+            var options = walletOptions.getValue()
+            bchAccount.getAvailableBalance(options.bcash.feePerByte).then(function(balance) {
+                var fee = balance.sweepFee;
+                var maxAvailable = balance.amount;
+                this.payment.feePerByte(options.bcash.feePerByte);
+                this.payment.build();
+                objc_on_create_order_payment_success(maxAvailable, fee);
+            }).catch(objc_on_create_order_payment_error);
+        },
+        send: function() {
+            MyWalletPhone.sendBitcoinPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+        },
     },
-    sendEtherTransaction: function(from, to, amount) {
-        let eth = MyWallet.wallet.eth;
-        eth.fetchFees().then(function(fees) {
-            let etherPayment = eth.defaultAccount.createPayment();
-            etherPayment.setGasPrice(fees.regular);
-            etherPayment.setGasLimit(fees.gasLimit);
-            etherPayment.setTo(to);
-            MyWalletPhone.sendEtherPayment(etherPayment, objc_on_send_order_transaction_success, function(e){console.log(JSON.stringify(e))});
-        })
+
+    ether: {
+        payment: null,
+        createPayment: function(from, to, amount) {
+            eth.fetchFees().then(function(fees) {
+                this.payment = eth.defaultAccount.createPayment();
+                this.payment.setGasPrice(fees.regular);
+                this.payment.setGasLimit(fees.gasLimit);
+                this.payment.setTo(to);
+                this.payment.setValue(amount);
+                objc_on_create_order_payment_success(this.payment.fee);
+            }).catch(objc_on_create_order_payment_error);
+        },
+        send: function() {
+            MyWalletPhone.sendEtherPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+        }
     }
 }

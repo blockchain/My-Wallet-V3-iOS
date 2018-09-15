@@ -21,6 +21,7 @@ class ExchangeCreateInteractor {
     fileprivate let inputs: ExchangeInputsAPI
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
+    fileprivate let tradeExecution: TradeExecutionAPI
     private var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
@@ -33,6 +34,7 @@ class ExchangeCreateInteractor {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
+        self.tradeExecution = dependencies.tradeExecution
         self.model = model
     }
 
@@ -217,7 +219,32 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             Logger.shared.error("No conversion stored")
             return
         }
-        output?.confirm(conversion: conversion)
+
+        output?.loadingVisibility(.visible, action: ExchangeCreateViewController.Action.createPayment)
+
+        // Submit order to get payment information
+        let conversionQuote = conversion.quote
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        let time = dateFormatter.string(from: Date())
+        let tradeQuote = Quote(
+            time: time,
+            pair: conversionQuote.pair,
+            fiatCurrency: conversionQuote.fiatCurrency,
+            fix: conversionQuote.fix,
+            volume: conversionQuote.volume,
+            currencyRatio: conversionQuote.currencyRatio
+        )
+        let order = Order(
+            destinationAddress: "",
+            refundAddress: "",
+            quote: tradeQuote
+        )
+        tradeExecution.submit(order: order, withCompletion: { [weak self] in
+            guard let this = self else { return }
+            // order result + payment information
+            // show confirm trade screen
+        })
     }
     
     fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {

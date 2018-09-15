@@ -60,13 +60,16 @@ class TradeExecutionService: TradeExecutionAPI {
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] payload in
                 guard let this = self else { return }
-                this.sendTransaction(result: payload, completion: withCompletion)
+                // Here we should have an OrderResult object, with a deposit address.
+                // Fees must be fetched from wallet payment APIs.
+                this.createOrder(from: payload, completion: withCompletion)
         })
-//            }, onError: { error in
-//                withCompletion(.error(error))
-//            })
+        // Can't figure out error: Extra argument 'onError' in call
+//        , onError: { error in
+//            withCompletion(.error(error))
+//        })
     }
-    
+
     // MARK: Private
     
     fileprivate func process(order: Order) -> Single<OrderResult> {
@@ -92,6 +95,18 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
     
+    fileprivate func createOrder(from orderResult: OrderResult, completion: @escaping (() -> Void)) {
+        let assetType = AssetType.ethereum
+        let legacyAssetType = assetType.legacy
+        let orderTransaction = OrderTransaction(
+            legacyAssetType: legacyAssetType,
+            from: "0",
+            to: "0xC29814F5197d6A492d91879F31568e6eBAE31184",
+            amount: "0.00222171"
+        )
+        wallet.createOrderPayment(with: orderTransaction, success: completion, error: {})
+    }
+
     fileprivate func limits() -> Single<TradeLimits> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
@@ -115,16 +130,21 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
 
+    // DEBUG ONLY
     func sendTx() {
-        let assetType = AssetType.bitcoin
+        let assetType = AssetType.ethereum
         let legacyAssetType = assetType.legacy
         let orderTransaction = OrderTransaction(
             legacyAssetType: legacyAssetType,
-            from: "from",
-            to: "to",
-            amount: "amount"
+            from: "0",
+            to: "0xC29814F5197d6A492d91879F31568e6eBAE31184",
+            amount: "0.00222171"
         )
-        wallet.send(orderTransaction, success: {}, error: {})
+        wallet.send(orderTransaction, success: {
+            Logger.shared.debug("send order transaction success")
+        }, error: {
+            Logger.shared.debug("send order transaction error")
+        })
     }
 
     private func sendTransaction(result: OrderResult, completion: @escaping (() -> Void)) {

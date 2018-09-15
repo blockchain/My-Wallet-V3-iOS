@@ -76,6 +76,10 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.updateTradingPairViewValues(left: left, right: right)
     }
 
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action) {
+        interface?.loadingVisibility(visibility, action: action)
+    }
+
     func confirm(conversion: Conversion) {
         interface?.showSummary(conversion: conversion)
     }

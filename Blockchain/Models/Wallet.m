@@ -2634,27 +2634,48 @@
     return nil;
 }
 
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
+{
+    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
+    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
+
+    NSString *tradeExecutionType;
+    NSString *formattedAmount;
+    if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
+        tradeExecutionType = @"bitcoin";
+        formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
+        tradeExecutionType = @"bitcoinCash";
+        formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
+        tradeExecutionType = @"ether";
+        formattedAmount = orderTransaction.amount;
+    } else {
+        DLog(@"Unsupported legacy asset type");
+        return;
+    }
+
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.createPayment(\"%@\", \"%@\", %@)", [tradeExecutionType escapedForJS], [orderTransaction.from escapedForJS], [orderTransaction.to escapedForJS], [formattedAmount escapedForJS]]];
+}
+
 - (void)sendOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
 {
     [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
     [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
-    if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin ||
-        orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
-        NSString *executionFunction;
-        if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
-            executionFunction = @"sendBitcoinTransaction";
-        } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
-            executionFunction = @"sendBitcoinCashTransaction";
-        } else {
-            DLog(@"Unsupported bitcoin derivative");
-        }
-        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.%@(\"%@\", \"%@\", %lld)", executionFunction, orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
+    NSString *tradeExecutionType;
+    if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
+        tradeExecutionType = @"bitcoin";
+    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
+        tradeExecutionType = @"bitcoinCash";
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
-        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendEtherTransaction(\"%@\", \"%@\", %lld)", orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
+        tradeExecutionType = @"ether";
     } else {
         DLog(@"Unsupported legacy asset type");
+        return;
     }
+
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
 }
 
 # pragma mark - Ethereum

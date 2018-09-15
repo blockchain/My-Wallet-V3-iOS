@@ -11,5 +11,7 @@ import Foundation
 protocol TradeExecutionAPI {
     func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void))
     func submit(order: Order, withCompletion: @escaping (() -> Void))
+    
+    // DEBUG ONLY
     func sendTx()
 }
