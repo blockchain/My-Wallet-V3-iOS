@@ -21,10 +21,10 @@ class AssetAccountRepository {
 
     // MARK: Public Methods
 
-    func accounts(for type: AssetType) -> [AssetAccount] {
+    func accounts(for assetType: AssetType) -> [AssetAccount] {
 
         // Handle ethereum
-        if type == .ethereum {
+        if assetType == .ethereum {
             if let ethereumAccount = defaultEthereumAccount() {
                 return [ethereumAccount]
             }
@@ -34,9 +34,9 @@ class AssetAccountRepository {
         // Handle BTC and BCH
         // TODO pull in legacy addresses
         var accounts: [AssetAccount] = []
-        for index in 0...wallet.getActiveAccountsCount(type.legacy)-1 {
-            let index = wallet.getIndexOfActiveAccount(index, assetType: type.legacy)
-            if let assetAccount = AssetAccount.create(type: type, index: index, wallet: wallet) {
+        for index in 0...wallet.getActiveAccountsCount(assetType.legacy)-1 {
+            let index = wallet.getIndexOfActiveAccount(index, assetType: assetType.legacy)
+            if let assetAccount = AssetAccount.create(assetType: assetType, index: index, wallet: wallet) {
                 accounts.append(assetAccount)
             }
         }
@@ -57,7 +57,7 @@ class AssetAccountRepository {
             return defaultEthereumAccount()
         }
         let index = wallet.getDefaultAccountIndex(for: assetType.legacy)
-        return AssetAccount.create(type: assetType, index: index, wallet: wallet)
+        return AssetAccount.create(assetType: assetType, index: index, wallet: wallet)
     }
 
     // MARK: Private Methods
@@ -83,7 +83,7 @@ class AssetAccountRepository {
 
 extension AssetAccount {
 
-    static func create(type: AssetType, index: Int32, wallet: Wallet) -> AssetAccount? {
+    static func create(assetType: AssetType, index: Int32, wallet: Wallet) -> AssetAccount? {
         guard let address = wallet.getReceiveAddress(forAccount: index, assetType: type.legacy) else {
             return nil
         }
