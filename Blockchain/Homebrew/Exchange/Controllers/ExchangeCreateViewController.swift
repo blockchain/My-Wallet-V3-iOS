@@ -25,10 +25,6 @@ class ExchangeCreateViewController: UIViewController {
     // Label to be updated when amount is being typed in
     @IBOutlet private var primaryAmountLabel: UILabel!
 
-    // Amount being typed for fiat values to the right of the decimal separator
-    @IBOutlet var primaryDecimalLabel: UILabel!
-    @IBOutlet var decimalLabelSpacingConstraint: NSLayoutConstraint!
-
     // Amount being typed in converted to input crypto or input fiat
     @IBOutlet private var secondaryAmountLabel: UILabel!
 
@@ -110,7 +106,6 @@ class ExchangeCreateViewController: UIViewController {
         exchangeButton.layer.cornerRadius = 4.0
 
         setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
-        setAmountLabelFont(label: primaryDecimalLabel, size: Constants.FontSizes.Small)
         setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
     }
 
