@@ -181,7 +181,7 @@ extension TradingPairView {
     static func exchangeLockedModel(for trade: Trade) -> Model {
         let fromAsset = trade.pair.from
         let toAsset = trade.pair.to
-        
+
         // TODO: Some of the data below is placeholder data
         // and will be adjusted once this is hooked up with a live
         // API. In the mean time, this demonstrates how the Model
