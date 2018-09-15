@@ -3197,6 +3197,7 @@ MyWalletPhone.tradeExecution = {
     ether: {
         payment: null,
         createPayment: function(from, to, amount) {
+            let eth = MyWallet.wallet.eth;
             eth.fetchFees().then(function(fees) {
                 this.payment = eth.defaultAccount.createPayment();
                 this.payment.setGasPrice(fees.regular);
