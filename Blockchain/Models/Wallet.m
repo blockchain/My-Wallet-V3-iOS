@@ -2641,7 +2641,16 @@
 
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin ||
         orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
-        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", %lld)", orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
+        NSString *executionFunction;
+        if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
+            executionFunction = @"sendBitcoinTransaction";
+        } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
+            executionFunction = @"sendBitcoinCashTransaction";
+        } else {
+            @throw [NSException exceptionWithName:@"SendOrderTransaction Exception"
+                                           reason:@"Unsupported Bitcoin derivative" userInfo:nil];
+        }
+        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.%@(\"%@\", \"%@\", %lld)", executionFunction, orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
     } else {
         // send ether
     }

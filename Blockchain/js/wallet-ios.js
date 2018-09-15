@@ -3144,13 +3144,21 @@ MyWalletPhone.tradeExecution = {
         }
         currentPayment = MyWallet.wallet.createPayment();
         currentPayment
-            .from(from)
-            .to(to)
-            .amount(amount)
-            .build()
-            .then(function (payment) {
-                MyWalletPhone.quickSendBtc(null, true)
-                return payment
-            }).catch(function(e){console.log('trade execution error: ' + e)})
+        .from(from)
+        .to(to)
+        .amount(amount)
+        .build()
+        .then(function (payment) {
+            MyWalletPhone.quickSendBtc(null, true)
+            return payment
+        }).catch(function(e){console.log('trade execution error: ' + e)})
+    },
+    sendBitcoinCashTransaction : function(from, to, amount) {
+        // Currently cannot send from BCH addresses
+        from = parseInt(from)
+        let bchAccount = MyWallet.wallet.bch.accounts[from];
+        currentBitcoinCashPayment = bchAccount.createPayment();
+        MyWalletPhone.bch.buildPayment(to, amount);
+        MyWalletPhone.bch.quickSend(null, true)
     }
 }
