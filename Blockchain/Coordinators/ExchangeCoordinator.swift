@@ -208,7 +208,7 @@ struct ExchangeServices: ExchangeDependencies {
             if viewController != nil {
                 rootViewController = viewController
             }
-            showCreateExchange(animated: animated, type: .homebrew)
+            showCreateExchange(animated: animated, type: .shapeshift)
         }
     }
 

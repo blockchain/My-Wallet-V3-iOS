@@ -588,9 +588,9 @@ struct LocalizationConstants {
             "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
             comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
-        static let backToDashboard = NSLocalizedString(
-            "Back to Dashboard",
-            comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
+        static let messageMeWhenAvailable = NSLocalizedString(
+            "Message Me When Available",
+            comment: "Text displayed on a button when the user wishes to be notified when crypto-to-crypto exchange is available in their country."
         )
         static let yourHomeAddress = NSLocalizedString(
             "Your Home Address",
