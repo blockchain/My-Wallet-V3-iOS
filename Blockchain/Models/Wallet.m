@@ -2636,12 +2636,8 @@
 
 - (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
 {
-    self.context[@"objc_on_create_order_payment_success"] = ^(NSString *fees) {
-        success(fees);
-    };
-    self.context[@"objc_on_create_order_payment_error"] = ^(NSString *errorMessage) {
-        error(errorMessage);
-    };
+    [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
+    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
 
     NSString *tradeExecutionType;
     NSString *formattedAmount;
@@ -2665,9 +2661,7 @@
 - (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
     [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    self.context[@"objc_on_send_order_transaction_error"] = ^(NSString *errorMessage) {
-        error(errorMessage);
-    };
+    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
