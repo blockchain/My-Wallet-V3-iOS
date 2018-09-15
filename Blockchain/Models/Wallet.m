@@ -2634,10 +2634,14 @@
     return nil;
 }
 
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
 {
-    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
-    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
+    self.context[@"objc_on_create_order_payment_success"] = ^(NSString *fees) {
+        success(fees);
+    };
+    self.context[@"objc_on_create_order_payment_error"] = ^(NSString *errorMessage) {
+        error(errorMessage);
+    };
 
     NSString *tradeExecutionType;
     NSString *formattedAmount;
@@ -2658,17 +2662,19 @@
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.createPayment(\"%@\", \"%@\", %@)", [tradeExecutionType escapedForJS], [orderTransaction.from escapedForJS], [orderTransaction.to escapedForJS], [formattedAmount escapedForJS]]];
 }
 
-- (void)sendOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
     [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
+    self.context[@"objc_on_send_order_transaction_error"] = ^(NSString *errorMessage) {
+        error(errorMessage);
+    };
 
     NSString *tradeExecutionType;
-    if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
+    if (legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
-    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
+    } else if (legacyAssetType == LegacyAssetTypeBitcoinCash) {
         tradeExecutionType = @"bitcoinCash";
-    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
+    } else if (legacyAssetType == LegacyAssetTypeEther) {
         tradeExecutionType = @"ether";
     } else {
         DLog(@"Unsupported legacy asset type");

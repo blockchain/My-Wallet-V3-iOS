@@ -41,7 +41,7 @@
 @property(nonatomic, assign) int tag;
 @end
 
-@class Wallet, Transaction, JSValue, JSContext, ExchangeRate, OrderTransaction;
+@class Wallet, Transaction, JSValue, JSContext, ExchangeRate, OrderTransactionLegacy;
 
 @protocol WalletSuccessCallback;
 
@@ -462,9 +462,8 @@
 - (void)updateKYCUserCredentialsWithUserId:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^ _Nonnull)(NSString *_Nonnull))success error: (void (^ _Nonnull)(NSString *_Nullable))error;
 - (NSString *_Nullable)KYCUserId;
 - (NSString *_Nullable)KYCLifetimeToken;
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error;
-- (void)sendOrderTransaction:(OrderTransaction *_Nonnull)orderTransaction success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(void))error;
-
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error;
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error;
 // Top Bar Display
 - (NSDecimalNumber *)btcDecimalBalance;
 - (NSDecimalNumber *)ethDecimalBalance;

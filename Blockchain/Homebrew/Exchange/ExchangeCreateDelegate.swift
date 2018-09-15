@@ -13,4 +13,5 @@ protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
     func onExchangeButtonTapped()
+    func onTradingPairChanged(tradingPair: TradingPair)
 }

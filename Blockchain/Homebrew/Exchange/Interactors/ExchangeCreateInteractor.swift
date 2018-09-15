@@ -214,6 +214,20 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
     }
 
+    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
+        guard let model = model else { return false }
+        switch model.isUsingFiat {
+        case true:
+            return inputs.canAddFiatCharacter(value)
+        case false:
+            return inputs.canAddAssetCharacter(value)
+        }
+    }
+
+    func changeTradingPair(tradingPair: TradingPair) {
+        model?.pair = tradingPair
+    }
+
     func confirmConversion() {
         guard let conversion = self.model?.lastConversion else {
             Logger.shared.error("No conversion stored")
@@ -223,37 +237,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         output?.loadingVisibility(.visible, action: ExchangeCreateViewController.Action.createPayment)
 
         // Submit order to get payment information
-        let conversionQuote = conversion.quote
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        let time = dateFormatter.string(from: Date())
-        let tradeQuote = Quote(
-            time: time,
-            pair: conversionQuote.pair,
-            fiatCurrency: conversionQuote.fiatCurrency,
-            fix: conversionQuote.fix,
-            volume: conversionQuote.volume,
-            currencyRatio: conversionQuote.currencyRatio
-        )
-        let order = Order(
-            destinationAddress: "",
-            refundAddress: "",
-            quote: tradeQuote
-        )
-        tradeExecution.submit(order: order, withCompletion: { [weak self] in
+        tradeExecution.submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
             guard let this = self else { return }
             // order result + payment information
             // show confirm trade screen
+            this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
+        }, error: { errorMessage in
+            AlertViewPresenter.shared.standardError(message: errorMessage)
         })
-    }
-    
-    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
-        guard let model = model else { return false }
-        switch model.isUsingFiat {
-        case true:
-            return inputs.canAddFiatCharacter(value)
-        case false:
-            return inputs.canAddAssetCharacter(value)
-        }
     }
 }

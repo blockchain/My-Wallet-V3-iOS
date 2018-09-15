@@ -14,7 +14,7 @@ import Foundation
 class ExchangeDetailViewController: UIViewController {
     
     enum PageModel {
-        case confirm(Conversion, TradeExecutionAPI)
+        case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
         case locked(Trade)
         case overview(ExchangeTradeCellModel)
     }
@@ -153,7 +153,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
     ) -> UICollectionReusableView {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
-        case .confirm(let conversion, let tradeExecutionAPI):
+        case .confirm(let orderTransaction, let conversion, let tradeExecutionAPI):
             guard kind == UICollectionElementKindSectionFooter else { return UICollectionReusableView() }
             
             guard let footer = collectionView.dequeueReusableSupplementaryView(
@@ -163,7 +163,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
             footer.title = LocalizationConstants.Exchange.sendNow
             footer.actionBlock = {
-                self.coordinator.handle(event: .confirmExchange(conversion, tradeExecutionAPI))
+                self.coordinator.handle(event: .confirmExchange(orderTransaction, conversion, tradeExecutionAPI))
             }
 
             return footer
@@ -276,7 +276,7 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
         } else {
             var text = LocalizationConstants.loading
             switch action {
-            case .confirmExchange: text = LocalizationConstants.Exchange.sendingOrder
+            case .confirmExchange, .sentTransaction: text = LocalizationConstants.Exchange.sendingOrder
             }
             LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
         }

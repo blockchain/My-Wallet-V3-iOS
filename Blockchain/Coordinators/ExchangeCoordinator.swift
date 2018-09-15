@@ -194,12 +194,12 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    private func showConfirmExchange(conversion: Conversion) {
+    private func showConfirmExchange(orderTransaction: OrderTransaction, conversion: Conversion) {
         guard let navigationController = navigationController else {
             Logger.shared.error("No navigation controller found")
             return
         }
-        let model = ExchangeDetailViewController.PageModel.confirm(conversion, dependencies.tradeExecution)
+        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
         let confirmController = ExchangeDetailViewController.make(with: model)
         navigationController.pushViewController(confirmController, animated: true)
     }
@@ -208,7 +208,8 @@ struct ExchangeServices: ExchangeDependencies {
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
-        case confirmExchange(conversion: Conversion)
+        case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
+        case sentTransaction
     }
 
     func handle(event: ExchangeCoordinatorEvent) {
@@ -223,8 +224,10 @@ struct ExchangeServices: ExchangeDependencies {
                 rootViewController = viewController
             }
             showCreateExchange(animated: animated, type: .shapeshift)
-        case .confirmExchange(let conversion):
-            showConfirmExchange(conversion: conversion)
+        case .confirmExchange(let orderTransaction, let conversion):
+            showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
+        case .sentTransaction:
+            navigationController?.popToRootViewController(animated: true)
         }
     }
 

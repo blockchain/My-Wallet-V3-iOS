@@ -45,6 +45,14 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onExchangeButtonTapped() {
         interactor.confirmConversion()
     }
+
+    func onTradingPairChanged(tradingPair: TradingPair) {
+        interactor.changeTradingPair(tradingPair: tradingPair)
+    }
+
+    func confirmConversion() {
+        interactor.confirmConversion()
+    }
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
@@ -80,7 +88,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.loadingVisibility(visibility, action: action)
     }
 
-    func confirm(conversion: Conversion) {
-        interface?.showSummary(conversion: conversion)
+    func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
+        interface?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
     }
 }

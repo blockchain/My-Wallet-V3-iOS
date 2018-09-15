@@ -53,21 +53,70 @@ class TradeExecutionService: TradeExecutionAPI {
                 withCompletion(.error(error))
             })
     }
-    
-    func submit(order: Order, withCompletion: @escaping (() -> Void)) {
+
+    // TICKET: IOS-1291 Refactor this
+    func submitOrder(
+        with conversion: Conversion,
+        success: @escaping ((OrderTransaction, Conversion) -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        let conversionQuote = conversion.quote
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        let time = dateFormatter.string(from: Date())
+        let quote = Quote(
+            time: time,
+            pair: conversionQuote.pair,
+            fiatCurrency: conversionQuote.fiatCurrency,
+            fix: conversionQuote.fix,
+            volume: conversionQuote.volume,
+            currencyRatio: conversionQuote.currencyRatio
+        )
+        let pair = TradingPair(string: quote.pair)!
+        let refundAddress = wallet.getReceiveAddress(ofDefaultAccount: pair.from.legacy)
+        let destinationAddress = wallet.getReceiveAddress(ofDefaultAccount: pair.to.legacy)
+        let order = Order(
+            destinationAddress: destinationAddress!,
+            refundAddress: refundAddress!,
+            quote: quote
+        )
         disposable = process(order: order)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] payload in
                 guard let this = self else { return }
                 // Here we should have an OrderResult object, with a deposit address.
-                // Fees must be fetched from wallet payment APIs.
-                this.createOrder(from: payload, completion: withCompletion)
+                // Fees must be fetched from wallet payment APIs
+                let createOrderCompletion: ((OrderTransactionLegacy) -> Void) = { [weak self] orderTransactionLegacy in
+                    guard let this = self else { return }
+                    let addressString = this.wallet.getReceiveAddress(forAccount: 0, assetType: orderTransactionLegacy.legacyAssetType)
+                    let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
+                    let fromAddress = AssetAddressFactory.create(fromAddressString: addressString!, assetType: assetType)
+                    let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
+                    let orderTransaction = OrderTransaction(
+                        from: AssetAccount(
+                            index: 0,
+                            address: fromAddress,
+                            balance: NSDecimalNumber(string: orderTransactionLegacy.amount).decimalValue,
+                            name: "assetAccount"
+                        ),
+                        to: to,
+                        amountToSend: orderTransactionLegacy.amount,
+                        amountToReceive: payload.withdrawalQuantity!,
+                        fees: orderTransactionLegacy.fees!
+                    )
+                    success(orderTransaction, conversion)
+                }
+                this.createOrder(from: payload, success: createOrderCompletion, error: error)
         })
         // Can't figure out error: Extra argument 'onError' in call
 //        , onError: { error in
 //            withCompletion(.error(error))
 //        })
+    }
+
+    func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
+        wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
     }
 
     // MARK: Private
@@ -95,16 +144,25 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
     
-    fileprivate func createOrder(from orderResult: OrderResult, completion: @escaping (() -> Void)) {
+    fileprivate func createOrder(
+        from orderResult: OrderResult,
+        success: @escaping ((OrderTransactionLegacy) -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
         let assetType = AssetType.ethereum
         let legacyAssetType = assetType.legacy
-        let orderTransaction = OrderTransaction(
+        let orderTransactionLegacy = OrderTransactionLegacy(
             legacyAssetType: legacyAssetType,
-            from: "0",
-            to: "0xC29814F5197d6A492d91879F31568e6eBAE31184",
-            amount: "0.00222171"
+            from: "",
+            to: orderResult.depositAddress!,
+            amount: orderResult.depositQuantity!,
+            fees: nil
         )
-        wallet.createOrderPayment(with: orderTransaction, success: completion, error: {})
+        let createOrderPaymentSuccess: ((String) -> Void) = { fees in
+            orderTransactionLegacy.fees = fees
+            success(orderTransactionLegacy)
+        }
+        wallet.createOrderPayment(withOrderTransaction: orderTransactionLegacy, success: createOrderPaymentSuccess, error: error)
     }
 
     fileprivate func limits() -> Single<TradeLimits> {
@@ -128,39 +186,5 @@ class TradeExecutionService: TradeExecutionAPI {
                 type: TradeLimits.self
             )
         }
-    }
-
-    // DEBUG ONLY
-    func sendTx() {
-        let assetType = AssetType.ethereum
-        let legacyAssetType = assetType.legacy
-        let orderTransaction = OrderTransaction(
-            legacyAssetType: legacyAssetType,
-            from: "0",
-            to: "0xC29814F5197d6A492d91879F31568e6eBAE31184",
-            amount: "0.00222171"
-        )
-        wallet.send(orderTransaction, success: {
-            Logger.shared.debug("send order transaction success")
-        }, error: {
-            Logger.shared.debug("send order transaction error")
-        })
-    }
-
-    private func sendTransaction(result: OrderResult, completion: @escaping (() -> Void)) {
-        let assetType = AssetType.bitcoin
-        let legacyAssetType = assetType.legacy
-        guard let to = result.depositAddress,
-            let amount = result.depositQuantity else {
-                Logger.shared.error("Missing to address or amount")
-                return
-        }
-        let orderTransaction = OrderTransaction(
-            legacyAssetType: legacyAssetType,
-            from: "from",
-            to: to,
-            amount: amount
-        )
-        wallet.send(orderTransaction, success: completion, error: {})
     }
 }

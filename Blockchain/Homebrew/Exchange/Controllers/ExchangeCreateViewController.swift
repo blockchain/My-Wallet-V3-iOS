@@ -114,13 +114,6 @@ class ExchangeCreateViewController: UIViewController {
         setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let navController = navigationController as? BCNavigationController {
-            navController.applyLightAppearance()
-        }
-    }
-
     fileprivate func dependenciesSetup() {
         fromAccount = dependencies.assetAccountRepository.defaultAccount(for: .bitcoin)
         toAccount = dependencies.assetAccountRepository.defaultAccount(for: .ethereum)
@@ -158,6 +151,8 @@ class ExchangeCreateViewController: UIViewController {
             tradingPair.to.symbol
         )
         exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
+
+        delegate?.onTradingPairChanged(tradingPair: tradingPair)
     }
 }
 
@@ -295,8 +290,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         }
     }
 
-    func showSummary(conversion: Conversion) {
-        ExchangeCoordinator.shared.handle(event: .confirmExchange(conversion: conversion))
+    func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
+        ExchangeCoordinator.shared.handle(event: .confirmExchange(orderTransaction: orderTransaction, conversion: conversion))
     }
 }
 

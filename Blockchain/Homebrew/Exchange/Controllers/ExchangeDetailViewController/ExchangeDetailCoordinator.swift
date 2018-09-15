@@ -16,11 +16,12 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
-        case confirmExchange(Conversion, TradeExecutionAPI)
+        case confirmExchange(OrderTransaction, Conversion, TradeExecutionAPI)
     }
 
     enum Action {
         case confirmExchange
+        case sentTransaction
     }
 
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
@@ -48,7 +49,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let conversion, _):
+            case .confirm(let orderTransaction, let conversion, _):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
@@ -217,30 +218,13 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let conversion, let tradeExecutionAPI):
+        case .confirmExchange(let orderTransaction, _, let tradeExecutionAPI):
             interface?.loadingVisibility(.visible, action: .confirmExchange)
-
-            let conversionQuote = conversion.quote
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            let time = dateFormatter.string(from: Date())
-            let tradeQuote = Quote(
-                time: time,
-                pair: conversionQuote.pair,
-                fiatCurrency: conversionQuote.fiatCurrency,
-                fix: conversionQuote.fix,
-                volume: conversionQuote.volume,
-                currencyRatio: conversionQuote.currencyRatio
-            )
-            let order = Order(
-                destinationAddress: "",
-                refundAddress: "",
-                quote: tradeQuote
-            )
-            tradeExecutionAPI.submit(order: order, withCompletion: { [weak self] in
-                guard let this = self else { return }
-                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
-            })
+            tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
+                ExchangeCoordinator.shared.handle(event: .sentTransaction)
+            }) { error in
+                AlertViewPresenter.shared.standardError(message: error)
+            }
         }
     }
 }
