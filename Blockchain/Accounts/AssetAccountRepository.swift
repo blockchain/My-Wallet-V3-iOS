@@ -32,7 +32,8 @@ class AssetAccountRepository {
         }
 
         // Handle BTC and BCH
-        // TODO pull in legacy addresses
+        // TODO pull in legacy addresses.
+        // TICKET: IOS-1290
         var accounts: [AssetAccount] = []
         for index in 0...wallet.getActiveAccountsCount(assetType.legacy)-1 {
             let index = wallet.getIndexOfActiveAccount(index, assetType: assetType.legacy)
