@@ -19,6 +19,9 @@ extension UserDefaults {
         case simulateZeroTicker = "debug_zeroTicker"
         case createWalletPrefill = "debug_createWalletPrefill"
         case useHomebrewForExchange = "debug_useHomebrewForExchange"
+        case mockExchangeOrderDepositAddress = "debug_mockExchangeOrderDepositAddress"
+        case mockExchangeDepositQuantity = "debug_mockExchangeDepositQuantity"
+        case mockExchangeDepositQuantityString = "debug_mockExchangeDepositQuantityString"
     }
 
     enum Keys: String {

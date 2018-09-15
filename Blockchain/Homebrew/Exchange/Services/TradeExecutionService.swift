@@ -61,6 +61,12 @@ class TradeExecutionService: TradeExecutionAPI {
         error: @escaping ((String) -> Void)
     ) {
         let conversionQuote = conversion.quote
+        #if DEBUG
+        let settings = DebugSettings.shared
+        if settings.mockExchangeDepositQuantity {
+            settings.mockExchangeDepositQuantityString = conversionQuote.volume
+        }
+        #endif
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         let time = dateFormatter.string(from: Date())
@@ -149,13 +155,21 @@ class TradeExecutionService: TradeExecutionAPI {
         success: @escaping ((OrderTransactionLegacy) -> Void),
         error: @escaping ((String) -> Void)
     ) {
+        #if DEBUG
+        let settings = DebugSettings.shared
+        let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress!
+        let depositQuantity = settings.mockExchangeDepositQuantity ? settings.mockExchangeDepositQuantityString! : orderResult.depositQuantity!
+        #else
+        let depositAddress = orderResult.depositAddress!
+        let depositQuantity = orderResult.depositQuantity!
+        #endif
         let assetType = AssetType.ethereum
         let legacyAssetType = assetType.legacy
         let orderTransactionLegacy = OrderTransactionLegacy(
             legacyAssetType: legacyAssetType,
             from: "",
-            to: orderResult.depositAddress!,
-            amount: orderResult.depositQuantity!,
+            to: depositAddress,
+            amount: depositQuantity,
             fees: nil
         )
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
