@@ -1002,6 +1002,12 @@ MyWalletPhone.quickSend = function(id, onSendScreen, secondPassword, assetType) 
         return;
     }
 
+    MyWalletPhone.sendBitcoinPayment(payment, success, error);
+
+    return id;
+};
+
+MyWalletPhone.sendBitcoinPayment = function(payment, success, error) {
     if (MyWallet.wallet.isDoubleEncrypted) {
         if (secondPassword) {
             payment
@@ -1010,11 +1016,11 @@ MyWalletPhone.quickSend = function(id, onSendScreen, secondPassword, assetType) 
             .then(success).catch(error);
         } else {
             MyWalletPhone.getSecondPassword(function (pw) {
-              secondPassword = pw;
-              payment
-              .sign(pw)
-              .publish()
-              .then(success).catch(error);
+                secondPassword = pw;
+                payment
+                .sign(pw)
+                .publish()
+                .then(success).catch(error);
             });
         }
     } else {
@@ -1023,9 +1029,7 @@ MyWalletPhone.quickSend = function(id, onSendScreen, secondPassword, assetType) 
         .publish()
         .then(success).catch(error);
     }
-
-    return id;
-};
+}
 
 MyWalletPhone.newAccount = function(password, email, firstAccountName) {
     var success = function(guid, sharedKey, password) {
@@ -2358,11 +2362,11 @@ MyWalletPhone.createNewEtherPayment = function() {
     currentEtherPayment = eth.defaultAccount.createPayment();
 
     eth.fetchFees().then(function(fees) {
-         currentEtherPayment.setGasPrice(fees.regular);
-         currentEtherPayment.setGasLimit(fees.gasLimit);
+        currentEtherPayment.setGasPrice(fees.regular);
+        currentEtherPayment.setGasLimit(fees.gasLimit);
 
-         MyWalletPhone.updateEtherPayment();
-     });
+        MyWalletPhone.updateEtherPayment();
+    });
 }
 
 MyWalletPhone.hasEthAccount = function() {
@@ -2452,20 +2456,26 @@ MyWalletPhone.sendEtherPaymentWithNote = function(note) {
         objc_on_send_ether_payment_error(e);
     }
 
+    MyWalletPhone.sendEtherPayment(currentEtherPayment, success, error);
+}
+
+MyWalletPhone.sendEtherPayment = function(payment, success, error) {
+    var eth = MyWallet.wallet.eth;
+
     if (MyWallet.wallet.isDoubleEncrypted) {
-      MyWalletPhone.getSecondPassword(function (pw) {
-        var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
-        currentEtherPayment.sign(privateKey);
-        currentEtherPayment
+        MyWalletPhone.getSecondPassword(function (pw) {
+            var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
+            payment.sign(privateKey);
+            payment
+            .publish()
+            .then(success).catch(error);
+        });
+    } else {
+        var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount);
+        payment.sign(privateKey);
+        payment
         .publish()
         .then(success).catch(error);
-      });
-    } else {
-      var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount);
-      currentEtherPayment.sign(privateKey);
-      currentEtherPayment
-      .publish()
-      .then(success).catch(error);
     }
 }
 
@@ -3138,7 +3148,7 @@ MyWalletPhone.getHistoryForAllAssets = function() {
 }
 
 MyWalletPhone.tradeExecution = {
-    sendBitcoinTransaction : function(from, to, amount) {
+    sendBitcoinTransaction: function(from, to, amount) {
         if (!Helpers.isBitcoinAddress(from)) {
             from = parseInt(from)
         }
@@ -3149,16 +3159,26 @@ MyWalletPhone.tradeExecution = {
         .amount(amount)
         .build()
         .then(function (payment) {
-            MyWalletPhone.quickSendBtc(null, true)
+            MyWalletPhone.sendBitcoinPayment(currentPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
             return payment
-        }).catch(function(e){console.log('trade execution error: ' + e)})
+        }).catch(function(e){console.log('trade execution error: ' + e)});
     },
-    sendBitcoinCashTransaction : function(from, to, amount) {
+    sendBitcoinCashTransaction: function(from, to, amount) {
         // Currently cannot send from BCH addresses
         from = parseInt(from)
         let bchAccount = MyWallet.wallet.bch.accounts[from];
         currentBitcoinCashPayment = bchAccount.createPayment();
         MyWalletPhone.bch.buildPayment(to, amount);
-        MyWalletPhone.bch.quickSend(null, true)
+        MyWalletPhone.sendBitcoinPayment(currentBitcoinCashPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+    },
+    sendEtherTransaction: function(from, to, amount) {
+        let eth = MyWallet.wallet.eth;
+        eth.fetchFees().then(function(fees) {
+            let etherPayment = eth.defaultAccount.createPayment();
+            etherPayment.setGasPrice(fees.regular);
+            etherPayment.setGasLimit(fees.gasLimit);
+            etherPayment.setTo(to);
+            MyWalletPhone.sendEtherPayment(etherPayment, objc_on_send_order_transaction_success, function(e){console.log(JSON.stringify(e))});
+        })
     }
 }

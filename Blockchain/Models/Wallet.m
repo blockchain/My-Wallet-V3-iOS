@@ -2647,12 +2647,13 @@
         } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
             executionFunction = @"sendBitcoinCashTransaction";
         } else {
-            @throw [NSException exceptionWithName:@"SendOrderTransaction Exception"
-                                           reason:@"Unsupported Bitcoin derivative" userInfo:nil];
+            DLog(@"Unsupported bitcoin derivative");
         }
         [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.%@(\"%@\", \"%@\", %lld)", executionFunction, orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
+    } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
+        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendEtherTransaction(\"%@\", \"%@\", %lld)", orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
     } else {
-        // send ether
+        DLog(@"Unsupported legacy asset type");
     }
 }
 
