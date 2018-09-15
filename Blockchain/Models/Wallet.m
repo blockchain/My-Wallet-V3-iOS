@@ -4472,6 +4472,8 @@
         return [[self.context evaluateScript:@"MyWalletPhone.getReceiveAddressOfDefaultAccount()"] toString];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
         return [[self.context evaluateScript:@"MyWalletPhone.bch.getReceiveAddressOfDefaultAccount()"] toString];
+    } else if (assetType == LegacyAssetTypeEther) {
+        return [self getEtherAddress];
     }
     DLog(@"Warning: unknown asset type!");
     return nil;
