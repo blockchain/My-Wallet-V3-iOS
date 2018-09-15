@@ -3138,13 +3138,19 @@ MyWalletPhone.getHistoryForAllAssets = function() {
 }
 
 MyWalletPhone.tradeExecution = {
-    sendBitcoinTransaction : function(id, from, to, amount) {
-        currentPayment = MyWallet.wallet.createPayment()
+    sendBitcoinTransaction : function(from, to, amount) {
+        if (!Helpers.isBitcoinAddress(from)) {
+            from = parseInt(from)
+        }
+        currentPayment = MyWallet.wallet.createPayment();
+        currentPayment
             .from(from)
             .to(to)
             .amount(amount)
-        currentPayment.build().then(function (x) {
-            MyWalletPhone.quickSendBtc(id, false)
-        }).catch(funcion(e){console.log('setupBitcoinTransaction: ' + e)})
+            .build()
+            .then(function (payment) {
+                MyWalletPhone.quickSendBtc(null, true)
+                return payment
+            }).catch(function(e){console.log('trade execution error: ' + e)})
     }
 }

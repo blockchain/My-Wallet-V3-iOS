@@ -2639,10 +2639,12 @@
     [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
     [self.context invokeOnceWithFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
-    // May not be used, can remove later if confirmed safe
-    NSString * txProgressID = [[self.context evaluateScript:@"MyWalletPhone.createTxProgressId()"] toString];
-
-    [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", \"%@\", \"%@\")", txProgressID, orderTransaction.from, orderTransaction.to, orderTransaction.amount]];
+    if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin ||
+        orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
+        [self.context evaluateScript:[NSString stringWithFormat: @"MyWalletPhone.tradeExecution.sendBitcoinTransaction(\"%@\", \"%@\", %lld)", orderTransaction.from, orderTransaction.to, [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]]];
+    } else {
+        // send ether
+    }
 }
 
 # pragma mark - Ethereum
