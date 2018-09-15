@@ -70,16 +70,20 @@ class ExchangeCreateViewController: UIViewController {
         dependenciesSetup()
         viewsSetup()
         delegate?.onViewLoaded()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let navController = navigationController as? BCNavigationController {
             navController.applyLightAppearance()
         }
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+
+    override func viewWillDisappear(_ animated: Bool) {
         if let navController = navigationController as? BCNavigationController {
             navController.applyDarkAppearance()
         }
+        super.viewWillDisappear(animated)
     }
 
     // MARK: Private
