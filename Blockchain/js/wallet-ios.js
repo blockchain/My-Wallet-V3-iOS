@@ -1016,11 +1016,11 @@ MyWalletPhone.sendBitcoinPayment = function(payment, success, error) {
             .then(success).catch(error);
         } else {
             MyWalletPhone.getSecondPassword(function (pw) {
-                secondPassword = pw;
-                payment
-                .sign(pw)
-                .publish()
-                .then(success).catch(error);
+              secondPassword = pw;
+              payment
+              .sign(pw)
+              .publish()
+              .then(success).catch(error);
             });
         }
     } else {
