@@ -43,21 +43,30 @@ class DebugSettings: NSObject {
         }
     }
 
-    @objc var mockExchangeDepositQuantity: Bool {
+    @objc var mockExchangeDeposit: Bool {
         get {
-            return defaults.bool(forKey: UserDefaults.DebugKeys.mockExchangeDepositQuantity.rawValue)
+            return defaults.bool(forKey: UserDefaults.DebugKeys.mockExchangeDeposit.rawValue)
+        }
+        set {
+            defaults.set(newValue, forKey: UserDefaults.DebugKeys.mockExchangeDeposit.rawValue)
+        }
+    }
+
+    @objc var mockExchangeDepositQuantity: String? {
+        get {
+            return defaults.object(forKey: UserDefaults.DebugKeys.mockExchangeDepositQuantity.rawValue) as? String
         }
         set {
             defaults.set(newValue, forKey: UserDefaults.DebugKeys.mockExchangeDepositQuantity.rawValue)
         }
     }
 
-    @objc var mockExchangeDepositQuantityString: String? {
+    var mockExchangeDepositAssetTypeString: String? {
         get {
-            return defaults.object(forKey: UserDefaults.DebugKeys.mockExchangeDepositQuantityString.rawValue) as? String
+            return defaults.object(forKey: UserDefaults.DebugKeys.mockExchangeDepositAssetTypeString.rawValue) as? String
         }
         set {
-            defaults.set(newValue, forKey: UserDefaults.DebugKeys.mockExchangeDepositQuantityString.rawValue)
+            defaults.set(newValue, forKey: UserDefaults.DebugKeys.mockExchangeDepositAssetTypeString.rawValue)
         }
     }
 

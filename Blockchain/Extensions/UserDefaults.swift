@@ -20,8 +20,9 @@ extension UserDefaults {
         case createWalletPrefill = "debug_createWalletPrefill"
         case useHomebrewForExchange = "debug_useHomebrewForExchange"
         case mockExchangeOrderDepositAddress = "debug_mockExchangeOrderDepositAddress"
+        case mockExchangeDeposit = "debug_mockExchangeDeposit"
         case mockExchangeDepositQuantity = "debug_mockExchangeDepositQuantity"
-        case mockExchangeDepositQuantityString = "debug_mockExchangeDepositQuantityString"
+        case mockExchangeDepositAssetTypeString = "debug_mockExchangeDepositAssetTypeString"
     }
 
     enum Keys: String {

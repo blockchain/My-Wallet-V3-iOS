@@ -63,8 +63,9 @@ class TradeExecutionService: TradeExecutionAPI {
         let conversionQuote = conversion.quote
         #if DEBUG
         let settings = DebugSettings.shared
-        if settings.mockExchangeDepositQuantity {
-            settings.mockExchangeDepositQuantityString = conversionQuote.volume
+        if settings.mockExchangeDeposit {
+            settings.mockExchangeDepositQuantity = conversionQuote.volume
+            settings.mockExchangeDepositAssetTypeString = TradingPair(string: conversionQuote.pair)!.from.symbol
         }
         #endif
         let dateFormatter = DateFormatter()
@@ -108,7 +109,7 @@ class TradeExecutionService: TradeExecutionAPI {
                         ),
                         to: to,
                         amountToSend: orderTransactionLegacy.amount,
-                        amountToReceive: payload.withdrawalQuantity!,
+                        amountToReceive: payload.withdrawalQuantity ?? "Unavailable",
                         fees: orderTransactionLegacy.fees!
                     )
                     success(orderTransaction, conversion)
@@ -158,16 +159,20 @@ class TradeExecutionService: TradeExecutionAPI {
         #if DEBUG
         let settings = DebugSettings.shared
         let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress!
-        let depositQuantity = settings.mockExchangeDepositQuantity ? settings.mockExchangeDepositQuantityString! : orderResult.depositQuantity!
+        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.depositQuantity!
+        let assetType = settings.mockExchangeDeposit ?
+            AssetType(stringValue: settings.mockExchangeDepositAssetTypeString!)!
+            : TradingPair(string: orderResult.pair!)!.from
         #else
         let depositAddress = orderResult.depositAddress!
         let depositQuantity = orderResult.depositQuantity!
+        let pair = TradingPair(string: orderResult.pair!)
+        let assetType = pair!.from
         #endif
-        let assetType = AssetType.ethereum
         let legacyAssetType = assetType.legacy
         let orderTransactionLegacy = OrderTransactionLegacy(
             legacyAssetType: legacyAssetType,
-            from: "",
+            from: wallet.getDefaultAccountIndex(for: legacyAssetType),
             to: depositAddress,
             amount: depositQuantity,
             fees: nil

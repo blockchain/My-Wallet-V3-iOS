@@ -239,11 +239,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Submit order to get payment information
         tradeExecution.submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
             guard let this = self else { return }
-            // order result + payment information
-            // show confirm trade screen
+            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
             this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
-        }, error: { errorMessage in
+        }, error: { [weak self] errorMessage in
+            guard let this = self else { return }
             AlertViewPresenter.shared.standardError(message: errorMessage)
+            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
         })
     }
 }

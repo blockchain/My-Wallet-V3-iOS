@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, DebugTableViewRow) {
     RowCreateWalletPrefill,
     RowUseHomebrewForExchange,
     RowMockExchangeOrderDepositAddress,
-    RowMockExchangeDepositQuantity,
+    RowMockExchangeDeposit,
     RowTotalCount,
 };
 
@@ -164,10 +164,10 @@ typedef enum {
     [self presentViewController:depositAddressAlert animated:YES completion:nil];
 }
 
-- (void)toggleMockExchangeDepositQuantity
+- (void)toggleMockExchangeDeposit
 {
     DebugSettings *settings = DebugSettings.sharedInstance;
-    settings.mockExchangeDepositQuantity = !settings.mockExchangeDepositQuantity;
+    settings.mockExchangeDeposit = !settings.mockExchangeDeposit;
 }
 
 - (void)showFilteredWalletJSON
@@ -257,11 +257,11 @@ typedef enum {
             cell.textLabel.text = @"Mock Homebrew Exchange deposit address";
             break;
         }
-        case RowMockExchangeDepositQuantity: {
-            cell.textLabel.text = @"Mock exchange deposit quantity";
+        case RowMockExchangeDeposit: {
+            cell.textLabel.text = @"Mock exchange deposit";
             UISwitch *mockToggle = [[UISwitch alloc] init];
-            mockToggle.on = DebugSettings.sharedInstance.mockExchangeDepositQuantity;
-            [mockToggle addTarget:self action:@selector(toggleMockExchangeDepositQuantity) forControlEvents:UIControlEventTouchUpInside];
+            mockToggle.on = DebugSettings.sharedInstance.mockExchangeDeposit;
+            [mockToggle addTarget:self action:@selector(toggleMockExchangeDeposit) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = mockToggle;
             break;
         }

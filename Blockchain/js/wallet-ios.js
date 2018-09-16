@@ -3151,9 +3151,6 @@ MyWalletPhone.tradeExecution = {
     bitcoin: {
         payment: null,
         createPayment: function(from, to, amount) {
-            if (!Helpers.isBitcoinAddress(from)) {
-                from = parseInt(from)
-            }
             this.payment = MyWallet.wallet.createPayment();
             this.payment
             .from(from)
@@ -3174,7 +3171,6 @@ MyWalletPhone.tradeExecution = {
         payment: null,
         createPayment: function(from, to, amount) {
             // Currently cannot send from BCH addresses
-            from = parseInt(from)
             let bchAccount = MyWallet.wallet.bch.accounts[from];
             this.payment = bchAccount.createPayment();
             this.payment.to(to);
@@ -3184,8 +3180,8 @@ MyWalletPhone.tradeExecution = {
             bchAccount.getAvailableBalance(options.bcash.feePerByte).then(function(balance) {
                 var fee = balance.sweepFee;
                 var maxAvailable = balance.amount;
-                this.payment.feePerByte(options.bcash.feePerByte);
-                this.payment.build();
+                MyWalletPhone.tradeExecution.bitcoinCash.payment.feePerByte(options.bcash.feePerByte);
+                MyWalletPhone.tradeExecution.bitcoinCash.payment.build();
                 objc_on_create_order_payment_success(maxAvailable, fee);
             }).catch(objc_on_create_order_payment_error);
         },

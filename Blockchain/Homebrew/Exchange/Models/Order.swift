@@ -64,7 +64,7 @@ struct OrderResult: Codable {
 @objc class OrderTransactionLegacy: NSObject {
     init(
         legacyAssetType: LegacyAssetType,
-        from: String,
+        from: Int32,
         to: String,
         amount: String,
         fees: String?
@@ -77,7 +77,7 @@ struct OrderResult: Codable {
         super.init()
     }
     @objc let legacyAssetType: LegacyAssetType
-    @objc let from: String
+    @objc let from: Int32
     @objc let to: String
     @objc let amount: String
     @objc var fees: String?
