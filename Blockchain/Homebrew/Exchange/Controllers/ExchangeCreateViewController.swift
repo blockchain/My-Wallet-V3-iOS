@@ -104,6 +104,9 @@ class ExchangeCreateViewController: UIViewController {
 
         tradingPairView.delegate = self
         exchangeButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+
+        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
+        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
     }
 
     fileprivate func dependenciesSetup() {
