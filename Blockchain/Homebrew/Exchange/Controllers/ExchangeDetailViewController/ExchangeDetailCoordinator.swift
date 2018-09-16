@@ -219,13 +219,10 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             }
         case .confirmExchange(let orderTransaction, _, let tradeExecutionAPI):
-            interface?.loadingVisibility(.visible, action: .confirmExchange)
             tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
                 ExchangeCoordinator.shared.handle(event: .sentTransaction)
-            }) { [weak self] error in
-                guard let this = self else { return }
+            }) { error in
                 AlertViewPresenter.shared.standardError(message: error)
-                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
             }
         }
     }
