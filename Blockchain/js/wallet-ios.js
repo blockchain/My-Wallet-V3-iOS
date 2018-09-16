@@ -3149,10 +3149,9 @@ MyWalletPhone.getHistoryForAllAssets = function() {
 
 MyWalletPhone.tradeExecution = {
     bitcoin: {
-        payment: null,
         createPayment: function(from, to, amount) {
-            this.payment = MyWallet.wallet.createPayment();
-            this.payment
+            currentPayment = MyWallet.wallet.createPayment();
+            currentPayment
             .from(from)
             .to(to)
             .amount(amount)
@@ -3163,48 +3162,46 @@ MyWalletPhone.tradeExecution = {
             }).catch(objc_on_create_order_payment_error);
         },
         send: function() {
-            MyWalletPhone.sendBitcoinPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+            MyWalletPhone.sendBitcoinPayment(currentPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
         }
     },
 
     bitcoinCash: {
-        payment: null,
         createPayment: function(from, to, amount) {
             // Currently cannot send from BCH addresses
             let bchAccount = MyWallet.wallet.bch.accounts[from];
-            this.payment = bchAccount.createPayment();
-            this.payment.to(to);
-            this.payment.amount(amount);
+            currentBitcoinCashPayment = bchAccount.createPayment();
+            currentBitcoinCashPayment.to(to);
+            currentBitcoinCashPayment.amount(amount);
 
-            var options = walletOptions.getValue()
+            let options = walletOptions.getValue()
             bchAccount.getAvailableBalance(options.bcash.feePerByte).then(function(balance) {
                 var fee = balance.sweepFee;
                 var maxAvailable = balance.amount;
-                MyWalletPhone.tradeExecution.bitcoinCash.payment.feePerByte(options.bcash.feePerByte);
-                MyWalletPhone.tradeExecution.bitcoinCash.payment.build();
+                currentBitcoinCashPayment.feePerByte(options.bcash.feePerByte);
+                currentBitcoinCashPayment.build();
                 objc_on_create_order_payment_success(maxAvailable, fee);
             }).catch(objc_on_create_order_payment_error);
         },
         send: function() {
-            MyWalletPhone.sendBitcoinPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+            MyWalletPhone.sendBitcoinPayment(currentBitcoinCashPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
         },
     },
 
     ether: {
-        payment: null,
         createPayment: function(from, to, amount) {
             let eth = MyWallet.wallet.eth;
             eth.fetchFees().then(function(fees) {
-                this.payment = eth.defaultAccount.createPayment();
-                this.payment.setGasPrice(fees.regular);
-                this.payment.setGasLimit(fees.gasLimit);
-                this.payment.setTo(to);
-                this.payment.setValue(amount);
-                objc_on_create_order_payment_success(this.payment.fee);
+                currentEtherPayment = eth.defaultAccount.createPayment();
+                currentEtherPayment.setGasPrice(fees.regular);
+                currentEtherPayment.setGasLimit(fees.gasLimit);
+                currentEtherPayment.setTo(to);
+                currentEtherPayment.setValue(amount);
+                objc_on_create_order_payment_success(currentEtherPayment.fee);
             }).catch(objc_on_create_order_payment_error);
         },
         send: function() {
-            MyWalletPhone.sendEtherPayment(this.payment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
+            MyWalletPhone.sendEtherPayment(currentEtherPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);
         }
     }
 }

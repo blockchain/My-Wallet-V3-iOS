@@ -4489,6 +4489,8 @@
         return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.getReceivingAddressForAccount(%d)", account]] toString];
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
         return [[self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.bch.getReceivingAddressForAccount(%d)", account]] toString];
+    } else if (assetType == LegacyAssetTypeEther) {
+        return [self getEtherAddress];
     }
     DLog(@"Warning: unknown asset type!");
     return nil;

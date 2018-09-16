@@ -222,8 +222,10 @@ class ExchangeDetailCoordinator: NSObject {
             interface?.loadingVisibility(.visible, action: .confirmExchange)
             tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
                 ExchangeCoordinator.shared.handle(event: .sentTransaction)
-            }) { error in
+            }) { [weak self] error in
+                guard let this = self else { return }
                 AlertViewPresenter.shared.standardError(message: error)
+                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
             }
         }
     }
