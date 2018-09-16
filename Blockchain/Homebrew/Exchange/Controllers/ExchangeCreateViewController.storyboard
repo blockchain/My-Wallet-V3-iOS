@@ -92,6 +92,9 @@
                                 <state key="normal" title="Exchange BTC for ETH">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="exchangeButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="yeg-hs-kSJ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf">
                                 <rect key="frame" x="344" y="142" width="15" height="19"/>

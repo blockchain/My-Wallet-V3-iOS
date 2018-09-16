@@ -361,6 +361,20 @@ struct LocalizationConstants {
         static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
         static let done = NSLocalizedString("Done", comment: "Footer button title")
         static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
+        static let creatingOrder = NSLocalizedString("Creating order", comment: "Loading text shown when a final exchange order is being created")
+        static let sendingOrder = NSLocalizedString("Sending order", comment: "Loading text shown when a final exchange order is being sent")
+        static let exchangeXForY = NSLocalizedString(
+            "Exchange %@ for %@",
+            comment: "Text displayed on the primary action button for the exchange screen when exchanging between 2 assets."
+        )
+        static let whatDoYouWantToExchange = NSLocalizedString(
+            "What do you want to exchange?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
+        )
+        static let whatDoYouWantToReceive = NSLocalizedString(
+            "What do you want to receive?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
+        )
     }
 
     struct AddressAndKeyImport {
@@ -588,9 +602,9 @@ struct LocalizationConstants {
             "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
             comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
-        static let backToDashboard = NSLocalizedString(
-            "Back to Dashboard",
-            comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
+        static let messageMeWhenAvailable = NSLocalizedString(
+            "Message Me When Available",
+            comment: "Text displayed on a button when the user wishes to be notified when crypto-to-crypto exchange is available in their country."
         )
         static let yourHomeAddress = NSLocalizedString(
             "Your Home Address",

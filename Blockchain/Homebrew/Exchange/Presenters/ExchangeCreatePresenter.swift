@@ -41,13 +41,25 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onDisplayInputTypeTapped() {
         interactor.displayInputTypeTapped()
     }
+
+    func onExchangeButtonTapped() {
+        interactor.confirmConversion()
+    }
+
+    func onTradingPairChanged(tradingPair: TradingPair) {
+        interactor.changeTradingPair(tradingPair: tradingPair)
+    }
+
+    func confirmConversion() {
+        interactor.confirmConversion()
+    }
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func updateTradingPair(pair: TradingPair, fix: Fix) {
         interface?.updateTradingPairView(pair: pair, fix: fix)
     }
-    
+
     func entryRejected() {
         interface?.wigglePrimaryLabel()
     }
@@ -70,5 +82,13 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     
     func updateTradingPairValues(left: String, right: String) {
         interface?.updateTradingPairViewValues(left: left, right: right)
+    }
+
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action) {
+        interface?.loadingVisibility(visibility, action: action)
+    }
+
+    func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
+        interface?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
     }
 }

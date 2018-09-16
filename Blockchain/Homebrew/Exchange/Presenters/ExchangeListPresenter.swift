@@ -18,7 +18,7 @@ class ExchangeListPresenter {
 }
 
 extension ExchangeListPresenter: ExchangeListDelegate {
-    func onLoaded() {
+    func onAppeared() {
         interface?.refreshControlVisibility(.visible)
         interactor.fetchAllTrades()
     }

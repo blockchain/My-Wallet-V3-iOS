@@ -29,7 +29,7 @@ extension KYCInformationViewModel {
             title: String(format: LocalizationConstants.KYC.unsupportedCountryTitle, country.name),
             subtitle: nil,
             description: String(format: LocalizationConstants.KYC.unsupportedCountryDescription, country.name),
-            buttonTitle: LocalizationConstants.KYC.backToDashboard,
+            buttonTitle: LocalizationConstants.KYC.messageMeWhenAvailable,
             badge: nil
         )
     }

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ExchangeListDelegate: class {
-    func onLoaded()
+    func onAppeared()
     func onNextPageRequest(_ identifier: String)
     func onNewOrderTapped()
     func onPullToRefresh()
@@ -52,8 +52,12 @@ class ExchangeListViewController: UIViewController {
         
         dataProvider = ExchangeListDataProvider(table: tableView)
         dependenciesSetup()
-        delegate?.onLoaded()
         dataProvider?.delegate = self
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        delegate?.onAppeared()
     }
     
     fileprivate func dependenciesSetup() {

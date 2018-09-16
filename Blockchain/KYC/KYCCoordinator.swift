@@ -57,13 +57,12 @@ protocol KYCCoordinatorDelegate: class {
 
     private let pageFactory = KYCPageViewFactory()
 
-    private var disposable: Disposable?
+    private let disposables = CompositeDisposable()
 
     private override init() { /* Disallow initializing from outside objects */ }
 
     deinit {
-        disposable?.dispose()
-        disposable = nil
+        disposables.dispose()
     }
 
     // MARK: Public
@@ -78,7 +77,7 @@ protocol KYCCoordinatorDelegate: class {
 
     @objc func start(from viewController: UIViewController) {
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.loading)
-        disposable = BlockchainDataRepository.shared.fetchNabuUser()
+        let disposable = BlockchainDataRepository.shared.fetchNabuUser()
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in
@@ -96,6 +95,7 @@ protocol KYCCoordinatorDelegate: class {
                 LoadingViewPresenter.shared.hideBusyView()
                 AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
             })
+         _ = disposables.insert(disposable)
     }
 
     func finish() {
@@ -194,8 +194,14 @@ protocol KYCCoordinatorDelegate: class {
                 titleColor: UIColor.gray5,
                 isPrimaryButtonEnabled: true
             )
-            informationViewController.primaryButtonAction = { viewController in
+            informationViewController.primaryButtonAction = { [unowned self] viewController in
                 viewController.presentingViewController?.presentingViewController?.dismiss(animated: true)
+                let interactor = KYCCountrySelectionInteractor()
+                let disposables = interactor.selected(
+                    country: country,
+                    shouldBeNotifiedWhenAvailable: true
+                )
+                _ = self.disposables.insert(disposables)
             }
             presentInNavigationController(informationViewController, in: navController)
         }

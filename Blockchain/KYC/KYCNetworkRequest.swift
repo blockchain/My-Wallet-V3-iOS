@@ -60,6 +60,7 @@ final class KYCNetworkRequest {
 
         enum POST {
             case createUser
+            case country
             case sessionToken(userId: String)
             case verifications
             case submitVerification
@@ -67,6 +68,7 @@ final class KYCNetworkRequest {
             var path: String {
                 switch self {
                 case .createUser: return "/users"
+                case .country: return "/users/current/country"
                 case .sessionToken: return "/auth"
                 case .verifications: return "/verifications"
                 case .submitVerification: return "/kyc/verifications"
@@ -78,6 +80,7 @@ final class KYCNetworkRequest {
                 case .sessionToken(let userId):
                     return ["userId": userId]
                 case .createUser,
+                     .country,
                      .verifications,
                      .submitVerification:
                         return nil

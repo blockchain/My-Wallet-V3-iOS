@@ -21,6 +21,7 @@ class ExchangeCreateInteractor {
     fileprivate let inputs: ExchangeInputsAPI
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
+    fileprivate let tradeExecution: TradeExecutionAPI
     private var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
@@ -33,6 +34,7 @@ class ExchangeCreateInteractor {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
+        self.tradeExecution = dependencies.tradeExecution
         self.model = model
     }
 
@@ -45,6 +47,7 @@ class ExchangeCreateInteractor {
                 output?.updateTradingPair(pair: model.pair, fix: model.fix)
             }
         }
+
         // TICKET: IOS-1287 - This should be called after user has stopped typing
         if markets.hasAuthenticated {
             updateMarketsConversion()
@@ -82,6 +85,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 Logger.shared.error("Pair returned from conversion is different from model pair")
                 return
             }
+
+            // Store conversion
+            model.lastConversion = conversion
 
             // Use conversions service to determine new input/output
             this.conversions.update(with: conversion)
@@ -207,7 +213,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         updatedInput()
     }
-    
+
     fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
         guard let model = model else { return false }
         switch model.isUsingFiat {
@@ -216,5 +222,29 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         case false:
             return inputs.canAddAssetCharacter(value)
         }
+    }
+
+    func changeTradingPair(tradingPair: TradingPair) {
+        model?.pair = tradingPair
+    }
+
+    func confirmConversion() {
+        guard let conversion = self.model?.lastConversion else {
+            Logger.shared.error("No conversion stored")
+            return
+        }
+
+        output?.loadingVisibility(.visible, action: ExchangeCreateViewController.Action.createPayment)
+
+        // Submit order to get payment information
+        tradeExecution.submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
+            guard let this = self else { return }
+            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
+            this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
+        }, error: { [weak self] errorMessage in
+            guard let this = self else { return }
+            AlertViewPresenter.shared.standardError(message: errorMessage)
+            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
+        })
     }
 }

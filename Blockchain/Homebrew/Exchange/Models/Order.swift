@@ -12,30 +12,81 @@ enum Side: String {
 }
 
 struct Order: Encodable {
-    
-    let pair: TradingPair
-    let side: Side
-    let quantity: Double
     let destinationAddress: String
     let refundAddress: String
-    
-    enum CodingKeys: String, CodingKey {
-        case side
+    let quote: Quote
+}
+
+// Backend is currently configured to return two types of responses:
+// a normal (success) response and an error response
+struct OrderResult: Codable {
+    // Success
+    let id: String?
+    let createdAt: String?
+    let updatedAt: String?
+    let pair: String?
+    let quantity: String?
+    let currency: String?
+    let refundAddress: String?
+    let price: String?
+    let depositAddress: String?
+    let depositQuantity: String?
+    let withdrawalAddress: String?
+    let withdrawalQuantity: String?
+    let state: String?
+
+    // Error
+    let type: String?
+    let description: String?
+
+    private enum CodingKeys: CodingKey {
+        // Success
+        case id
+        case createdAt
+        case updatedAt
         case pair
         case quantity
-        case destinationAddress
+        case currency
         case refundAddress
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        case price
+        case depositAddress
+        case depositQuantity
+        case withdrawalAddress
+        case withdrawalQuantity
+        case state
         
-        let pairValue = pair.stringRepresentation
-        
-        try container.encode(side.rawValue, forKey: .side)
-        try container.encode(pairValue, forKey: .pair)
-        try container.encodeIfPresent(String(quantity), forKey: .quantity)
-        try container.encode(destinationAddress, forKey: .destinationAddress)
-        try container.encode(refundAddress, forKey: .refundAddress)
+        // Error
+        case type
+        case description
     }
+}
+
+@objc class OrderTransactionLegacy: NSObject {
+    init(
+        legacyAssetType: LegacyAssetType,
+        from: Int32,
+        to: String,
+        amount: String,
+        fees: String?
+    ) {
+        self.legacyAssetType = legacyAssetType
+        self.from = from
+        self.to = to
+        self.amount = amount
+        self.fees = fees
+        super.init()
+    }
+    @objc let legacyAssetType: LegacyAssetType
+    @objc let from: Int32
+    @objc let to: String
+    @objc let amount: String
+    @objc var fees: String?
+}
+
+struct OrderTransaction {
+    let from: AssetAccount
+    let to: AssetAddress
+    let amountToSend: String
+    let amountToReceive: String
+    let fees: String
 }

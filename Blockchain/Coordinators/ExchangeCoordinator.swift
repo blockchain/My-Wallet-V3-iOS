@@ -16,6 +16,7 @@ protocol ExchangeDependencies {
     var inputs: ExchangeInputsAPI { get }
     var rates: RatesAPI { get }
     var tradeExecution: TradeExecutionAPI { get }
+    var assetAccountRepository: AssetAccountRepository { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
@@ -25,6 +26,7 @@ struct ExchangeServices: ExchangeDependencies {
     let inputs: ExchangeInputsAPI
     let rates: RatesAPI
     let tradeExecution: TradeExecutionAPI
+    let assetAccountRepository: AssetAccountRepository
     
     init() {
         rates = RatesService()
@@ -33,6 +35,7 @@ struct ExchangeServices: ExchangeDependencies {
         conversions = ExchangeConversionService()
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
+        assetAccountRepository = AssetAccountRepository.shared
     }
 }
 
@@ -191,10 +194,22 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
+    private func showConfirmExchange(orderTransaction: OrderTransaction, conversion: Conversion) {
+        guard let navigationController = navigationController else {
+            Logger.shared.error("No navigation controller found")
+            return
+        }
+        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
+        let confirmController = ExchangeDetailViewController.make(with: model)
+        navigationController.pushViewController(confirmController, animated: true)
+    }
+
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
+        case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
+        case sentTransaction
     }
 
     func handle(event: ExchangeCoordinatorEvent) {
@@ -208,7 +223,11 @@ struct ExchangeServices: ExchangeDependencies {
             if viewController != nil {
                 rootViewController = viewController
             }
-            showCreateExchange(animated: animated, type: .homebrew)
+            showCreateExchange(animated: animated, type: .shapeshift)
+        case .confirmExchange(let orderTransaction, let conversion):
+            showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
+        case .sentTransaction:
+            navigationController?.popToRootViewController(animated: true)
         }
     }
 

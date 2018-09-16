@@ -17,6 +17,8 @@ protocol ExchangeCreateInterface: class {
     func updateRateLabels(first: String, second: String, third: String)
     func updateTradingPairViewValues(left: String, right: String)
     func updateTradingPairView(pair: TradingPair, fix: Fix)
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
+    func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
@@ -26,6 +28,8 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
     func ratesViewTapped()
     func useMinimumAmount()
     func useMaximumAmount()
+    func confirmConversion()
+    func changeTradingPair(tradingPair: TradingPair)
 }
 
 protocol ExchangeCreateOutput: class {
@@ -36,4 +40,6 @@ protocol ExchangeCreateOutput: class {
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
+    func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
 }

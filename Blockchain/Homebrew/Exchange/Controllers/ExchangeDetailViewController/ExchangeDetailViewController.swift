@@ -14,7 +14,7 @@ import Foundation
 class ExchangeDetailViewController: UIViewController {
     
     enum PageModel {
-        case confirm(Trade)
+        case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
         case locked(Trade)
         case overview(ExchangeTradeCellModel)
     }
@@ -153,7 +153,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
     ) -> UICollectionReusableView {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
-        case .confirm:
+        case .confirm(let orderTransaction, let conversion, let tradeExecutionAPI):
             guard kind == UICollectionElementKindSectionFooter else { return UICollectionReusableView() }
             
             guard let footer = collectionView.dequeueReusableSupplementaryView(
@@ -162,7 +162,10 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 for: indexPath
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
             footer.title = LocalizationConstants.Exchange.sendNow
-            
+            footer.actionBlock = {
+                self.coordinator.handle(event: .confirmExchange(orderTransaction, conversion, tradeExecutionAPI))
+            }
+
             return footer
             
         case .locked:
@@ -265,5 +268,17 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
     
     func updateTitle(_ value: String) {
         navigationItem.title = value
+    }
+
+    func loadingVisibility(_ visibility: Visibility, action: ExchangeDetailCoordinator.Action) {
+        if visibility == .hidden {
+            LoadingViewPresenter.shared.hideBusyView()
+        } else {
+            var text = LocalizationConstants.loading
+            switch action {
+            case .confirmExchange, .sentTransaction: text = LocalizationConstants.Exchange.sendingOrder
+            }
+            LoadingViewPresenter.shared.showBusyView(withLoadingText: text)
+        }
     }
 }

@@ -16,8 +16,14 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
+        case confirmExchange(OrderTransaction, Conversion, TradeExecutionAPI)
     }
-    
+
+    enum Action {
+        case confirmExchange
+        case sentTransaction
+    }
+
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
     
@@ -43,28 +49,30 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let trade):
+            case .confirm(let orderTransaction, let conversion, _):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
                 
                 let pair = ExchangeCellModel.TradingPair(
-                    model: TradingPairView.confirmationModel(for: trade)
+                    model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
                 let value = ExchangeCellModel.Plain(
                     description: "Value",
-                    value: "$1,624.50"
+                    value: "$" + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
+                        conversion.quote.currencyRatio.base.fiat.value :
+                        conversion.quote.currencyRatio.counter.fiat.value)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
                     description: "Fees",
-                    value: "0.000414 BTC"
+                    value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
                 let receive = ExchangeCellModel.Plain(
                     description: "Receive",
-                    value: "5.668586 ETH",
+                    value: orderTransaction.amountToReceive + " " + TradingPair(string: conversion.quote.pair)!.to.symbol,
                     bold: true
                 )
                 
@@ -212,9 +220,13 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
+        case .confirmExchange(let orderTransaction, _, let tradeExecutionAPI):
+            tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
+                ExchangeCoordinator.shared.handle(event: .sentTransaction)
+            }) { error in
+                AlertViewPresenter.shared.standardError(message: error)
+            }
         }
     }
-    
-    
 }
 // swiftlint:enable function_body_length

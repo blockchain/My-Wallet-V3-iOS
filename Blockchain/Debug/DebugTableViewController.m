@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, DebugTableViewRow) {
     RowZeroTickerValue,
     RowCreateWalletPrefill,
     RowUseHomebrewForExchange,
+    RowMockExchangeOrderDepositAddress,
+    RowMockExchangeDeposit,
     RowTotalCount,
 };
 
@@ -142,6 +144,32 @@ typedef enum {
     settings.useHomebrewForExchange = !settings.useHomebrewForExchange;
 }
 
+- (void)mockExchangeOrderDepositAddress
+{
+    DebugSettings *settings = DebugSettings.sharedInstance;
+
+    UIAlertController *depositAddressAlert = [UIAlertController alertControllerWithTitle:@"Mock deposit address" message:@"Type in the desired address to send exchange orders to." preferredStyle:UIAlertControllerStyleAlert];
+    [depositAddressAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        BCSecureTextField *secureTextField = (BCSecureTextField *)textField;
+        secureTextField.text = settings.mockExchangeOrderDepositAddress;
+        secureTextField.returnKeyType = UIReturnKeyDone;
+    }];
+    [depositAddressAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        settings.mockExchangeOrderDepositAddress = [[depositAddressAlert textFields] firstObject].text;
+    }]];
+    [depositAddressAlert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:nil]];
+    [depositAddressAlert addAction:[UIAlertAction actionWithTitle:DEBUG_STRING_RESET style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        settings.mockExchangeOrderDepositAddress = nil;
+    }]];
+    [self presentViewController:depositAddressAlert animated:YES completion:nil];
+}
+
+- (void)toggleMockExchangeDeposit
+{
+    DebugSettings *settings = DebugSettings.sharedInstance;
+    settings.mockExchangeDeposit = !settings.mockExchangeDeposit;
+}
+
 - (void)showFilteredWalletJSON
 {
     UIViewController *viewController = [[UIViewController alloc] init];
@@ -225,6 +253,18 @@ typedef enum {
             cell.accessoryView = prefillToggle;
             break;
         }
+        case RowMockExchangeOrderDepositAddress: {
+            cell.textLabel.text = @"Mock Homebrew Exchange deposit address";
+            break;
+        }
+        case RowMockExchangeDeposit: {
+            cell.textLabel.text = @"Mock exchange deposit";
+            UISwitch *mockToggle = [[UISwitch alloc] init];
+            mockToggle.on = DebugSettings.sharedInstance.mockExchangeDeposit;
+            [mockToggle addTarget:self action:@selector(toggleMockExchangeDeposit) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = mockToggle;
+            break;
+        }
         default:
             break;
     }
@@ -272,6 +312,10 @@ typedef enum {
                 textField.text = [NSString stringWithFormat:@"%i", customTimeValue ? [customTimeValue intValue] : TIME_INTERVAL_SECURITY_REMINDER_PROMPT];
             }];
             [self presentViewController:alert animated:YES completion:nil];
+            break;
+        }
+        case RowMockExchangeOrderDepositAddress: {
+            [self mockExchangeOrderDepositAddress];
             break;
         }
         default:
