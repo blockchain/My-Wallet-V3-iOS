@@ -64,7 +64,10 @@ class TradeExecutionService: TradeExecutionAPI {
         #if DEBUG
         let settings = DebugSettings.shared
         if settings.mockExchangeDeposit {
-            settings.mockExchangeDepositQuantity = conversionQuote.volume
+            settings.mockExchangeDepositQuantity = conversionQuote.fix == .base ||
+                conversionQuote.fix == .baseInFiat ?
+                conversionQuote.currencyRatio.base.crypto.value :
+                conversionQuote.currencyRatio.counter.crypto.value
             settings.mockExchangeDepositAssetTypeString = TradingPair(string: conversionQuote.pair)!.from.symbol
         }
         #endif

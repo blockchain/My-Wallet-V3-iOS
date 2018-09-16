@@ -2654,8 +2654,8 @@
         DLog(@"Unsupported legacy asset type");
         return;
     }
-
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.createPayment(%d, \"%@\", %@)", [tradeExecutionType escapedForJS], orderTransaction.from, [orderTransaction.to escapedForJS], [formattedAmount escapedForJS]]];
+    NSString *script = [NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.createPayment(%d, \"%@\", %@)", [tradeExecutionType escapedForJS], orderTransaction.from, [orderTransaction.to escapedForJS], [formattedAmount escapedForJS]];
+    [self.context evaluateScript:script];
 }
 
 - (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
