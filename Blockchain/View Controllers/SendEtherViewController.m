@@ -335,7 +335,7 @@
 
 #pragma mark - Continue Button Accessory View Delegate
 
-- (void)continueButtonClicked
+- (void)continueButtonTapped
 {
     self.toAddress = self.toField.text;
     
