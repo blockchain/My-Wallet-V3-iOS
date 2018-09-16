@@ -60,17 +60,19 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: "Value",
-                    value: "$1,624.50"
+                    value: "$" + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
+                        conversion.quote.currencyRatio.base.fiat.value :
+                        conversion.quote.currencyRatio.counter.fiat.value)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
                     description: "Fees",
-                    value: "0.000414 BTC"
+                    value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
                 let receive = ExchangeCellModel.Plain(
                     description: "Receive",
-                    value: "5.668586 ETH",
+                    value: orderTransaction.amountToReceive + " " + TradingPair(string: conversion.quote.pair)!.to.symbol,
                     bold: true
                 )
                 

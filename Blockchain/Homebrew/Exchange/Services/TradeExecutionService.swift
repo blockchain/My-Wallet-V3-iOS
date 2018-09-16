@@ -181,7 +181,12 @@ class TradeExecutionService: TradeExecutionAPI {
             fees: nil
         )
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
-            orderTransactionLegacy.fees = fees
+            if assetType == .bitcoin || assetType == .bitcoinCash {
+                let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
+                orderTransactionLegacy.fees = NumberFormatter.satoshi(toBTC: feeInSatoshi)
+            } else {
+                orderTransactionLegacy.fees = fees
+            }
             success(orderTransactionLegacy)
         }
         wallet.createOrderPayment(withOrderTransaction: orderTransactionLegacy, success: createOrderPaymentSuccess, error: error)
