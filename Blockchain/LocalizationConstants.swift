@@ -775,4 +775,6 @@ struct LocalizationConstants {
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }
+
+    @objc class func dashboardPriceCharts() -> String { return LocalizationConstants.Dashboard.priceCharts }
 }
