@@ -1,2220 +1,1788 @@
-/* No comment provided by engineer. */
-" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = " כל אחד עם גישה הביטוי השחזור שלך יש גישה ביטקוין שלך כדי להיות בטוח כדי לשמור אותו באופן לא מקוון במקום מאוד בטוחה ומאובטחת.";
-
-/* (No Commment) */
-" We recommend the fee below for the transaction at this time." = " אנו ממליצים על דמי מתחת עבור התנועה בשלב זה.";
-
-/* (No Commment) */
-"%@ BTC" = "%@ BTC";
-
-/* (No Commment) */
-"%@ Confirmations" = "%@ אישורי";
-
-/* (No Commment) */
-"%@ copied to clipboard" = "%@ יועתק אל הלוח";
-
-/* (No Commment) */
-"%d Confirmations" = "%d אישורי";
-
-/* (No Commment) */
-"%d Transactions" = "%d תנועות";
-
-/* (No Commment) */
-"%d address" = "כתובת %d";
-
-/* (No Commment) */
-"%d addresses" = "כתובות %d";
-
-/* No comment provided by engineer. */
-"%lld hours ago" = "%lld. לפני כמה שעות";
-
-/* No comment provided by engineer. */
-"%lld minutes ago" = "%lld. לפני כמה דקות";
-
-/* No comment provided by engineer. */
-"%lld seconds ago" = "לפני %lld שניות";
-
-/* (No Commment) */
-"%lu Recipients" = "%lu נמענים";
-
-/* No comment provided by engineer. */
-"1 hour ago" = "לפני 1 שעה";
-
-/* No comment provided by engineer. */
-"1 minute ago" = "לפני 1 דקה";
-
-/* (No Commment) */
-"2-Step Enabled" = "2-שלב זמינה";
-
-/* (No Commment) */
-"2-Step has been disabled." = "2-שלב בוטלה.";
-
-/* (No Commment) */
-"2-Step has been enabled for SMS." = "2-שלב הוגדר כזמין עבור SMS.";
-
-/* (No Commment) */
-"2-step Verification" = "אימות דו-שלבי";
-
-/* (No Commment) */
-"2-step Verification is currently disabled." = "אימות דו-שלבי אינה זמינה כעת.";
-
-/* (No Commment) */
-"2-step Verification is currently enabled for %@." = "אימות דו-שלבי זמין כעת עבור %@.";
-
-/* (No Commment) */
-"2-step Verification is currently enabled." = "אימות דו-שלבי זמין כעת.";
-
-/* (No Commment) */
-"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "לא ניתן ליצור חיבור כי אין אפשרות לאמת את האישור של שרת. אנא בדוק את הגדרות הרשת שלך, ודא כי אתה משתמש בחיבור מאובטח.";
-
-/* (No Commment) */
-"API URL" = "API של כתובת URL";
-
-/* (No Commment) */
-"About" = "אודות";
-
-/* (No Commment) */
-"Account Details" = "פרטי חשבון";
-
-/* (No Commment) */
-"Accounts" = "חשבונות";
-
-/* (No Commment) */
-"Add Email" = "הוסף דוא";
-
-/* (No Commment) */
-"Add to Address book?" = "הוסף את פנקס הכתובות?";
-
-/* (No Commment) */
-"Address" = "כתובת";
-
-/* (No Commment) */
-"Address book" = "פנקס הכתובות";
-
-/* (No Commment) */
-"Address is not valid" = "כתובת אינה חוקית";
-
-/* (No Commment) */
-"Addresses" = "כתובות";
-
-/* (No Commment) */
-"Adjust Fee" = "להתאים את דמי";
-
-/* (No Commment) */
-"Allow" = "לאפשר";
-
-/* (No Commment) */
-"Allowed" = "מותר";
-
-/* (No Commment) */
-"Amount" = "כמות";
-
-/* (No Commment) */
-"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "סכום חייב להיות גדול או שווה להסף אבק (%lld סטושי)";
-
-/* (No Commment) */
-"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "שגיאה אירעה עקב הפרעות במהלך אימות PIN. נא לסגור את היישום ונסה שוב.";
-
-/* (No Commment) */
-"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "אירעה שגיאה בעת אימות הקוד האישי שלך עם השרת המרוחק. אתה יכול להיות מנותק או Blockchain עשויים לחוות קשיים. האם ברצונך לנסות שוב אימות או במקום להזין את הסיסמה שלך באופן ידני?";
-
-/* (No Commment) */
-"An error occurred while changing 2-Step verification." = "אירעה שגיאה בזמן שינוי אימות דו-שלבי.";
-
-/* (No Commment) */
-"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "אירעה שגיאה במהלך העתקת כתובת שלך ללוח. נא בחר שוב את כתובת היעד או הפעל מחדש את היישום ונסה שוב.";
-
-/* (No Commment) */
-"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "אירעה שגיאה בעת שמירת השינויים. נא ודא כי אתה לא נכנסת לתוך הארנק שלך בהתקן אחר.";
-
-/* (No Commment) */
-"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "אירעה שגיאה בעת עדכון יתרת מתכלה למכשיר שלך. נא בדוק את חיבור האינטרנט שלך ונסה שוב.";
-
-/* (No Commment) */
-"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "אירעה שגיאה בעת טעינת הארנק שלך. אתה יכול להיות מנותק או Blockchain הוא נתקל בקשיים. נא לסגור את היישום, נסה שוב מאוחר יותר או לשייך מחדש את המכשיר.";
-
-/* (No Commment) */
-"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "אירעה שגיאה בעת אחזור המזהה את הארנק שלך מחזיק מפתחות. נא לסגור את היישום ונסה שוב.";
-
-/* (No Commment) */
-"Any address" = "כל כתובת";
-
-/* (No Commment) */
-"App Store review prompt timer (seconds)" = "App Store סקירה בקש טיימר (שניות)";
-
-/* (No Commment) */
-"Archive" = "ארכיון";
-
-/* (No Commment) */
-"Archive Address" = "ארכיון כתובת";
-
-/* (No Commment) */
-"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "ארכיון זה אם אתה לא רוצה להמשיך להשתמש בו. קרנות שלך יישאר בטוח, אתה יכול unarchive אותו בכל עת.";
-
-/* (No Commment) */
-"Archived" = "בארכיון";
-
-/* (No Commment) */
-"Archiving addresses" = "בארכיון כתובות";
-
-/* (No Commment) */
-"Ask Me Later" = ". תשאל אותי מאוחר יותר";
-
-/* (No Commment) */
-"Authenticate with Touch ID" = "אימות עם מזהה מגע";
-
-/* (No Commment) */
-"Authorization Required" = "אישור נדרש";
-
-/* (No Commment) */
-"Automatic Pairing" = "זיווג אוטומטי";
-
-/* (No Commment) */
-"Automatically" = "באופן אוטומטי";
-
-/* No comment provided by engineer. */
-"BACKUP FUNDS" = "קרנות גיבוי";
-
-/* (No Commment) */
-"Backup" = "גיבוי";
-
-/* No comment provided by engineer. */
-"Backup Funds" = "קרנות גיבוי";
-
-/* (No Commment) */
-"Backup Phrase" = "הביטוי גיבוי";
-
-/* (No Commment) */
-"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "בטרם ייגש הארנק שלך, אנא בחר מספר pin כדי להשתמש כדי לפתוח את הארנק שלך. חשוב שתזכור את הסיכה הזאת כמו זה ניתן לאפס או לשנות ללא הראשון פותח את היישום.";
-
-/* (No Commment) */
-"Bitcoin Unit" = "יחידת ביטקוין";
-
-/* (No Commment) */
-"Bitcoin payment request" = "בקשתכם לתשלום ביטקוין";
-
-/* (No Commment) */
-"Block" = "בלוק";
-
-/* (No Commment) */
-"Block Tor" = "לחסום את תור";
-
-/* (No Commment) */
-"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain אין גישה למצלמה. כדי לאפשר גישה, עבור ההתקן שלך, הגדרות.";
-
-/* (No Commment) */
-"Blockchain is currently down for maintenance. Please try again later." = "Blockchain מושבת כעת לצורך תחזוקה. נא נסה שוב מאוחר יותר.";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location." = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך.";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך. באפשרותך לאפשר גישה בהגדרות -> פרטיות -> שירותי איכון";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך. באפשרותך לאפשר גישה בהגדרות -> פרטיות -> מיקום -> שירותי איכון";
-
-/* (No Commment) */
-"Blocked" = "חסם";
-
-/* (No Commment) */
-"Calculating: Address %@ of %@" = "חישוב: %1$@ כתובת של %2$@";
-
-/* (No Commment) */
-"Camera Access Denied" = "המצלמה הגישה נדחתה";
-
-/* (No Commment) */
-"Cancel" = "ביטול";
-
-/* (No Commment) */
-"Cancelling" = "ביטול";
-
-/* (No Commment) */
-"Cannot save PIN Code while wallet is not initialized or password is null" = "אין אפשרות לשמור קוד PIN בזמן הארנק לא אותחל או סיסמה הוא null";
-
-/* (No Commment) */
-"Change Email" = "שינוי דוא";
-
-/* (No Commment) */
-"Change Mobile Number" = "שינוי מספר טלפון נייד";
-
-/* (No Commment) */
-"Change PIN" = "שינוי PIN";
-
-/* (No Commment) */
-"Change Password" = "שינוי סיסמה";
-
-/* (No Commment) */
-"Change Password Hint" = "שינוי לסיסמה";
-
-/* (No Commment) */
-"Change fee per kilobyte" = "שינוי דמי לכל קילו בייט";
-
-/* (No Commment) */
-"Checking for Wallet updates" = "הארנק עדכונים";
-
-/* (No Commment) */
-"Checking for more: Step %d of %d" = "בדיקת יותר: שלב %1$d של %2$d";
-
-/* No comment provided by engineer. */
-"Close" = "סגור";
-
-/* (No Commment) */
-"Close App" = "סגור את יישום";
-
-/* (No Commment) */
-"Complete the steps below for ultimate security" = "השלם את השלבים להלן עבור אבטחה האולטימטיבי";
-
-/* (No Commment) */
-"Confirm Payment" = "לאשר תשלום";
-
-/* (No Commment) */
-"Confirm your PIN" = "לאשר את מספר הזיהוי האישי";
-
-/* (No Commment) */
-"Confirmed" = "אישר";
-
-/* (No Commment) */
-"Connection timed out. Please check your internet connection." = "תם הזמן שהוקצב לחיבור. נא בדוק את החיבור שלך לאינטרנט.";
-
-/* (No Commment) */
-"Continue" = "המשך";
-
-/* (No Commment) */
-"Copied to clipboard" = "יועתק אל הלוח";
-
-/* (No Commment) */
-"Copy Address" = "העתק כתובת";
-
-/* (No Commment) */
-"Copy Wallet ID" = "מזהה את הארנק עותק";
-
-/* (No Commment) */
-"Copy to clipboard" = "העתק ללוח";
-
-/* (No Commment) */
-"Copy xPub" = "העתק xPub";
-
-/* (No Commment) */
-"Could not find transaction with hash %@ when reloading data" = "לא היתה אפשרות למצוא תנועת עם hash %@ בעת טעינה מחדש של נתונים";
-
-/* (No Commment) */
-"Could not get value when sent - please check your internet connection and try again." = "יכול לא לקבל ערך כאשר שלח - אנא בדוק את חיבור האינטרנט שלך ונסה שוב.";
-
-/* (No Commment) */
-"Create" = "צור";
-
-/* (No Commment) */
-"Create New Wallet" = "ליצור את הארנק החדש";
-
-/* (No Commment) */
-"Create Wallet" = "ליצור את הארנק";
-
-/* (No Commment) */
-"Create new address" = "ליצור כתובת חדשה";
-
-/* (No Commment) */
-"Creating" = "יצירת";
-
-/* (No Commment) */
-"Creating V3 Wallet" = "יצירת הארנק V3";
-
-/* (No Commment) */
-"Creating Wallet" = "יצירת הארנק";
-
-/* (No Commment) */
-"Creating new Wallet" = "יצירת הארנק החדש";
-
-/* (No Commment) */
-"Creating new address" = "יצירת כתובת חדשה";
-
-/* (No Commment) */
-"Current rate: %@ BTC" = "שיעור נוכחי: %@ BTC";
-
-/* (No Commment) */
-"Customize the way you organize your bitcoin in your Blockchain Wallet" = "התאמה אישית של הדרך בה תארגן ביטקוין שלך בארנק שלך Blockchain";
-
-/* (No Commment) */
-"Date" = "תאריך";
-
-/* (No Commment) */
-"Debug" = "איתור באגים";
-
-/* (No Commment) */
-"Decrypted PIN Password length 0" = "אורך PIN סיסמה מפוענחים 0";
-
-/* (No Commment) */
-"Decrypting Private Key" = "פענוח מפתח פרטי";
-
-/* (No Commment) */
-"Decrypting Wallet" = "פענוח הארנק";
-
-/* (No Commment) */
-"Default" = "ברירת מחדל";
-
-/* (No Commment) */
-"Description" = "תיאור";
-
-/* (No Commment) */
-"Details" = "פרטים";
-
-/* (No Commment) */
-"Disable" = "בטל";
-
-/* (No Commment) */
-"Disabled" = "בעלי מוגבלויות";
-
-/* (No Commment) */
-"Display" = "התצוגה";
-
-/* (No Commment) */
-"Do you really want to log out?" = "אתה רוצה לצאת?";
-
-/* (No Commment) */
-"Don't show again" = "אל תציג שוב";
-
-/* No comment provided by engineer. */
-"Done" = "עשיתי";
-
-/* (No Commment) */
-"Downloading Wallet" = "הורדת את הארנק";
-
-/* (No Commment) */
-"Easy one time wallet backup keeps you in control of your funds" = "פעם אחת קלה הארנק גיבוי משאיר אותך בשליטה של קרנות שלך";
-
-/* (No Commment) */
-"Edit" = "עריכה";
-
-/* (No Commment) */
-"Email" = "דוא";
-
-/* (No Commment) */
-"Email Notifications" = "הודעות דוא";
-
-/* (No Commment) */
-"Email Verified" = "אימות דוא";
-
-/* (No Commment) */
-"Empty response from server." = "תגובה ריקה מהשרת.";
-
-/* (No Commment) */
-"Enable" = "לאפשר";
-
-/* (No Commment) */
-"Enable 2-Step" = "לאפשר דו-שלבי";
-
-/* (No Commment) */
-"Enable 2-Step for SMS" = "אפשר 2-צעד עבור SMS";
-
-/* (No Commment) */
-"Enable Location Services" = "הפעלת שירותי איכון";
-
-/* (No Commment) */
-"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "לאפשר הודעות כדי לקבל דואר אלקטרוני או הודעת SMS בכל פעם שאתה מקבל ביטקוין. רק עם תוויות כתובות ולא לייבא כתובות זכאים הודעות על ההדק.";
-
-/* (No Commment) */
-"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "לאפשר אפשרות זו כדי למנוע כתובות IP ידועים להיות חלק של רשת ה-Tor anonymizing מלגשת אל הארנק שלך. רשת ה-Tor משמש לעתים קרובות על ידי האקרים המנסה לגשת ארנקים Blockchain הגולשים.";
-
-/* (No Commment) */
-"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "הפעלת אפשרות זו לחשוף כתובת קבלה בעת לסחוב שמאלה במסך ה-PIN, ביצוע מהיר אפילו המקבל ביטקוין. חמש כתובות ייטענו ברציפות, לאחר מכן כניסה נדרש להציג כתובות חדש.";
-
-/* (No Commment) */
-"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "הפעלת אפשרות זו לחשוף כתובת קבלה בעת לסחוב שמאלה במסך ה-PIN, ביצוע מהיר אפילו המקבל ביטקוין. אחת הכתובות ייטענו, כניסה נדרש להציג כתובת חדשה.";
-
-/* (No Commment) */
-"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "הפעלת תכונה זו תאפשר לכל המשתמשים בעלי טביעת אצבע המגע מזהה רשומה על התקן זה כדי לגשת את הארנק שלך.";
-
-/* (No Commment) */
-"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "נהנה את הארנק Blockchain? נא לקחת רגע כדי לעזוב סקירה ב- App Store. ולתת לאחרים לדעת על זה.";
-
-/* (No Commment) */
-"Enter %@ amount" = "הזן כמות %@";
-
-/* (No Commment) */
-"Enter Bitcoin address or select" = "הזן כתובת ביטקוין או בחר";
-
-/* (No Commment) */
-"Enter PIN" = "הזן את מספר הזיהוי האישי שלך";
-
-/* (No Commment) */
-"Enter Password" = "הזן את הסיסמה";
-
-/* (No Commment) */
-"Enter Verification Code" = "הזן את קוד האימות";
-
-/* (No Commment) */
-"Enter your verification code" = "הזן את קוד האימות";
-
-/* No comment provided by engineer. */
-"Error" = "שגיאה";
-
-/* (No Commment) */
-"Error loading settings" = "שגיאה בטעינת הגדרות";
-
-/* (No Commment) */
-"Error updating settings" = "שגיאה בעת עדכון הגדרות";
-
-/* (No Commment) */
-"Everything you need to store, spend and receive your bitcoin" = "כל מה שאתה צריך כדי לאחסן, לבלות ולקבל שלך ביטקוין";
-
-/* (No Commment) */
-"Extended Public Key" = "מורחב מפתח ציבורי";
-
-/* (No Commment) */
-"Failed To Load Wallet" = "לא הצליח לטעון את הארנק";
-
-/* (No Commment) */
-"Failed to validate server certificate" = "נכשל באימות אישור שרת";
-
-/* (No Commment) */
-"Fee is too high (0.01 BTC limit)" = "התשלום הוא גבוה מדי (0.01 BTC מוגבל)";
-
-/* (No Commment) */
-"Fee per KB" = "תשלום לכל KB";
-
-/* (No Commment) */
-"Fees" = "דמי";
-
-/* (No Commment) */
-"Finished Signing Inputs" = "סיים חתימת כניסות";
-
-/* (No Commment) */
-"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "פרטיות מוגברת, נוכל ליצור כתובת ייחודית עבור כל תשלום. כל כתובות שנוצרו בארנק שלך יכולים עדיין לקבל כספים, אפילו אם הם כבר לא מופיעים תחת קבלה.";
-
-/* (No Commment) */
-"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "למען הבטיחות שלך, אנו ממליצים לך להעביר כל היתרות שלך כתובות מיובאות לתוך הארנק שלך Blockchain.";
-
-/* (No Commment) */
-"Forget Wallet" = ". שכח את הארנק";
-
-/* (No Commment) */
-"Found %d, with %@" = "נמצאו %1$d, עם %2$@";
-
-/* (No Commment) */
-"From" = "מ";
-
-/* (No Commment) */
-"From and destination address have to be different" = "מ כתובת היעד חייב להיות שונה";
-
-/* (No Commment) */
-"From and destination have to be different" = "מן היעד חייב להיות שונה";
-
-/* (No Commment) */
-"Go to Settings" = "עבור אל הגדרות";
-
-/* (No Commment) */
-"Google Authenticator" = "Google Authenticator";
-
-/* (No Commment) */
-"Hint Stored" = "רמז מאוחסנים";
-
-/* (No Commment) */
-"How would you like to pair?" = "? מה דעתך על זוג";
-
-/* (No Commment) */
-"Identifier" = "המזהה";
-
-/* (No Commment) */
-"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "אם אתה סוחר, הצג את המפתח הציבורי המורחבת שלך (xPub), להשתמש app Blockchain הסוחר לקבל כספים.";
-
-/* (No Commment) */
-"Import Private Key" = "מפתח פרטי ייבוא";
-
-/* (No Commment) */
-"Import address" = "ייבוא כתובת";
-
-/* (No Commment) */
-"Imported Addresses" = "כתובות מיובאות";
-
-/* (No Commment) */
-"Imported Addresses (Archived)" = "כתובות מיובאות (בארכיון)";
-
-/* (No Commment) */
-"Imported Private Key %@" = "מפתח פרטי מיובאת %@";
-
-/* (No Commment) */
-"Imported watch-only address %@" = "כתובת השעון בלבד המיובאים %@";
-
-/* (No Commment) */
-"Importing key" = "ייבוא מפתח";
-
-/* (No Commment) */
-"Incorrect PIN. Please retry." = "PIN שגוי. נא נסה שנית.";
-
-/* (No Commment) */
-"Incorrect password" = "סיסמה שגויה";
-
-/* (No Commment) */
-"Incorrect private key" = "המפתח הפרטי שגוי";
-
-/* (No Commment) */
-"Increase fee" = "להגדיל את דמי";
-
-/* (No Commment) */
-"Information" = "מידע";
-
-/* (No Commment) */
-"Initializing Wallet" = "מאתחל את הארנק";
-
-/* (No Commment) */
-"Insufficient Funds" = "אין לי כסף";
-
-/* (No Commment) */
-"Invalid Identifier" = "מזהה לא חוקי";
-
-/* (No Commment) */
-"Invalid Pairing Code" = "קוד לא תקף זיווג";
-
-/* (No Commment) */
-"Invalid Send Value" = "ערך לא חוקי שלח";
-
-/* (No Commment) */
-"Invalid Shared Key" = "חוקי משותפים מפתח";
-
-/* (No Commment) */
-"Invalid Status Code Returned %@" = "קוד מצב לא חוקי חזר %@";
-
-/* (No Commment) */
-"Invalid Wallet ID" = "מזהה את הארנק לא חוקי";
-
-/* (No Commment) */
-"Invalid address: %@" = "כתובת לא חוקית: %@";
-
-/* (No Commment) */
-"Invalid email address." = "דוא ל לא תקין";
-
-/* (No Commment) */
-"Invalid mobile number." = "מספר טלפון נייד לא חוקי.";
-
-/* (No Commment) */
-"Invalid recovery phrase. Please try again" = "הביטוי שחזור לא חוקי. אנא נסה שנית";
-
-/* (No Commment) */
-"Invalid server response. Please check your internet connection." = "תגובת השרת לא חוקי. נא בדוק את החיבור שלך לאינטרנט.";
-
-/* (No Commment) */
-"Invalid to bitcoin address" = "חוקי לכתובת ביטקוין";
-
-/* (No Commment) */
-"Invalid two-factor authentication type" = "סוג לא חוקי אימות שני הגורמים";
-
-/* (No Commment) */
-"Invalid verification code. Please try again." = "קוד אימות לא חוקי. נא נסה שוב.";
-
-/* No comment provided by engineer. */
-"It is important to make sure you write down your words exactly as they appear here and " = "חשוב לוודא לרשום את המילים שלך בדיוק כפי שהם מופיעים כאן, ";
-
-/* No comment provided by engineer. */
-"Just now" = "רק עכשיו";
-
-/* (No Commment) */
-"Keep higher fee" = "לשמור על תשלום גבוה יותר";
-
-/* (No Commment) */
-"Keep lower fee" = "לשמור על שכר נמוך";
-
-/* (No Commment) */
-"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "שמור את xPub הפרטי. מישהו עם גישה xPub שלך תהיה אפשרות לראות את כל הכספים, תנועות.";
-
-/* (No Commment) */
-"Key already imported" = "מפתח כבר מיובא";
-
-/* (No Commment) */
-"Label" = "תווית";
-
-/* (No Commment) */
-"Label Address" = "תוויות כתובת";
-
-/* (No Commment) */
-"Label must contain letters and numbers only" = "התווית חייב להכיל אותיות ומספרים בלבד";
-
-/* (No Commment) */
-"Label must have less than 18 characters" = "התווית חייב להיות פחות מ- 18 תווים";
-
-/* (No Commment) */
-"Large Transaction" = "העברות גדולות";
-
-/* (No Commment) */
-"Learn More" = "למד עוד";
-
-/* (No Commment) */
-"Link Mobile" = "קישור סלולרי";
-
-/* (No Commment) */
-"Load More Transactions" = "לטעון עוד עסקאות";
-
-/* (No Commment) */
-"Loading External Page" = "טעינת דף חיצוני";
-
-/* (No Commment) */
-"Loading transactions" = "טעינת עסקאות";
-
-/* (No Commment) */
-"Local Currency" = "מטבע מקומי";
-
-/* (No Commment) */
-"Log in to my Wallet" = "התחבר עם הארנק שלי";
-
-/* (No Commment) */
-"Login existing Wallet" = "הארנק קיימת כניסה";
-
-/* (No Commment) */
-"Logout" = "יציאה מהמערכת";
-
-/* (No Commment) */
-"Logout and forget wallet" = "יציאה ולשכוח את הארנק";
-
-/* (No Commment) */
-"Lower fee" = "עלות נמוכה יותר";
-
-/* (No Commment) */
-"Make Default" = "להפוך את ברירת המחדל";
-
-/* (No Commment) */
-"Manual Pairing" = "זיווג ידני";
-
-/* (No Commment) */
-"Manually" = "באופן ידני";
-
-/* (No Commment) */
-"Merchant" = "סוחר";
-
-/* (No Commment) */
-"Merchant Directory is currently unavailable. Please try again later." = "מדריך סוחר אינו זמין כעת. נא נסה שוב מאוחר יותר.";
-
-/* (No Commment) */
-"Merchant Map" = "סוחר מפה";
-
-/* (No Commment) */
-"Merchant URL" = "כתובת url של סוחר";
-
-/* (No Commment) */
-"Mobile Linked" = "ניידים מקושרים";
-
-/* (No Commment) */
-"Mobile Number" = "מספר טלפון נייד";
-
-/* No comment provided by engineer. */
-"My Bitcoin Wallet" = "הארנק שלי ביטקוין";
-
-/* (No Commment) */
-"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "הערה: המפתח הפרטי שנסרקו אינו תואם לכתובת זו השעון בלבד. אם אתה רוצה לבלות מכתובת זו, ודא סריקה של המפתח הפרטי המתאים.";
-
-/* (No Commment) */
-"Name" = "שם";
-
-/* (No Commment) */
-"Needs BIP38 Password" = "צריך סיסמה BIP38";
-
-/* (No Commment) */
-"New Address" = "כתובת חדשה";
-
-/* (No Commment) */
-"New Email Address" = "כתובת הדוא ל החדשה";
-
-/* (No Commment) */
-"New Mobile Number" = "מספר נייד חדש";
-
-/* (No Commment) */
-"New PIN must be different" = "ה-PIN החדש חייב להיות שונה";
-
-/* (No Commment) */
-"New password must be different" = "הסיסמה החדשה להיות שונה";
-
-/* (No Commment) */
-"New password must be different from your password hint" = "הסיסמה החדשה להיות שונה לסיסמה";
-
-/* No comment provided by engineer. */
-"Next word" = "המילה הבאה";
-
-/* (No Commment) */
-"No" = "לא";
-
-/* (No Commment) */
-"No Label" = "ללא תווית";
-
-/* No comment provided by engineer. */
-"No Password Entered" = "ללא הסיסמה שהוזנו";
-
-/* (No Commment) */
-"No internet connection available. Please check your network settings." = "חיבור לאינטרנט זמין. נא בדוק את הגדרות הרשת שלך.";
-
-/* (No Commment) */
-"No internet connection." = "חיבור לאינטרנט.";
-
-/* (No Commment) */
-"Normal" = "רגיל";
-
-/* (No Commment) */
-"Not Stored" = "אינם מאוחסנים";
-
-/* (No Commment) */
-"Not now" = "לא עכשיו";
-
-/* (No Commment) */
-"Notifications" = "הודעות";
-
-/* No comment provided by engineer. */
-"OK" = "אוקיי";
-
-/* (No Commment) */
-"Open %@?" = "%@ פתוח?";
-
-/* (No Commment) */
-"Open Mail App" = "App דואר פתוח";
-
-/* (No Commment) */
-"PIN" = "סיכה";
-
-/* (No Commment) */
-"PIN Encrypted String is nil" = "מחרוזת מוצפנת PIN היא אפסית";
-
-/* (No Commment) */
-"PIN Response Object key or value length 0" = "סיכת עצם התגובה מפתח או ערך אורך 0";
-
-/* (No Commment) */
-"PIN Response Object success length 0" = "עצם התגובה, סיכת הצלחה אורך 0";
-
-/* (No Commment) */
-"PIN Saved Successfully" = "סיכה, שנשמרו בהצלחה";
-
-/* (No Commment) */
-"PIN Validation Error" = "שגיאת אימות PIN";
-
-/* (No Commment) */
-"PIN Validation cannot be completed. Please enter your wallet password manually." = "אין אפשרות להשלים את האימות PIN. הזינו בבקשה את הסיסמה הארנק שלך באופן ידני.";
-
-/* (No Commment) */
-"PINs do not match" = "הפינים אינם תואמים";
-
-/* (No Commment) */
-"Parsing Pairing Code" = "ניתוח קוד התאמה";
-
-/* (No Commment) */
-"Password Hint" = "לסיסמה";
-
-/* (No Commment) */
-"Password Required" = "דרושה סיסמה";
-
-/* (No Commment) */
-"Password changed. Please login to continue." = "סיסמה לשינוי. אנא התחבר כדי להמשיך.";
-
-/* (No Commment) */
-"Password must be different from your email" = "הסיסמה חייבת להיות שונה הדוא ל שלך";
-
-/* (No Commment) */
-"Password must be less than or equal to 255 characters" = "הסיסמה חייבת להיות קטן או שווה ל- 255 תווים";
-
-/* (No Commment) */
-"Passwords do not match" = "הסיסמאות לא תואמות";
-
-/* (No Commment) */
-"Payment Received" = "התשלום התקבל";
-
-/* (No Commment) */
-"Payment Sent!" = "התשלום נשלח!";
-
-/* (No Commment) */
-"Payments Sent" = "תשלומים שנשלחו";
-
-/* (No Commment) */
-"Pending" = "ממתינה";
-
-/* (No Commment) */
-"Pending (%@ Confirmations)" = "ממתינים (אישורי%@)";
-
-/* (No Commment) */
-"Phrase Backed" = "הביטוי מגובה";
-
-/* (No Commment) */
-"Please Login" = "אנא התחבר";
-
-/* (No Commment) */
-"Please add an email address" = "נא להוסיף כתובת דואר אלקטרוני";
-
-/* (No Commment) */
-"Please check your email and click on the verification link." = "נא בדוק את הדוא ל שלך ולחץ על הקישור אימות.";
-
-/* (No Commment) */
-"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "נא בדוק את הדוא ל שלך. אם וידאת כבר ניסיון כניסה, עליך להיכנס באמצעות הארנק האינטרנט שלנו, זוג בטלפון שלך על-ידי סריקת הקוד QR תחת הגדרות-> הארנק מידע.";
-
-/* (No Commment) */
-"Please check your internet connection." = "נא בדוק את החיבור שלך לאינטרנט.";
-
-/* (No Commment) */
-"Please choose another PIN" = "נא לבחור סיכה אחרת";
-
-/* (No Commment) */
-"Please choose from the options below." = "נא לבחור מתוך האפשרויות הבאות.";
-
-/* (No Commment) */
-"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "הזינו בבקשה את תשלום גדול מ- 0 BTC, לכל היותר 0.01 BTC";
-
-/* (No Commment) */
-"Please enter a new PIN" = "נא להזין מספר זיהוי אישי חדש";
-
-/* (No Commment) */
-"Please enter your %@ 2FA code" = "אנא הקלידו את הקוד 2FA %@";
-
-/* (No Commment) */
-"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "נא הזן המזהה את הארנק שלך תו 36 כראוי. ניתן למצוא בדוא ל ברוכים הבאים בעת ההפעלה.";
-
-/* (No Commment) */
-"Please enter your PIN" = "אנא הזן את מספר הזיהוי האישי";
-
-/* (No Commment) */
-"Please enter your recovery phrase with words separated by spaces" = "הזינו בבקשה את הביטוי השחזור שלך עם מילים המופרדות באמצעות רווחים";
-
-/* (No Commment) */
-"Please login to load more addresses." = "אנא התחבר כדי לטעון כתובות נוספות.";
-
-/* (No Commment) */
-"Please lower the fee to an amount that is less than your balance" = "בבקשה תנמיך את תשלום סכום שהוא פחות האיזון שלך";
-
-/* (No Commment) */
-"Please provide an email address." = "נא לספק כתובת דואר אלקטרוני.";
-
-/* (No Commment) */
-"Please refresh the pairing code and try again." = "נא לרענן את קוד ההתאמה ונסה שוב.";
-
-/* (No Commment) */
-"Please select a different address to send from." = "בחר כתובת שונה לשלוח מ.";
-
-/* (No Commment) */
-"Please send %@ to bitcoin address.
-%@" = "נא לשלוח %1$@ לכתובת ביטקוין.
-%2$@";
-
-/* (No Commment) */
-"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "נא לשלוח את התשלום לכתובת ביטקוין (< href = \"https://blockchain.info/wallet/bitcoin-faq\" > לעזור? < /a >): %@";
-
-/* No comment provided by engineer. */
-"Please try again" = "אנא נסה שנית";
-
-/* (No Commment) */
-"Please verify your email address first." = "נא ודא כי כתובת הדוא ל שלך קודם.";
-
-/* (No Commment) */
-"Please verify your mobile number first." = "נא ודא את מספר הנייד שלך קודם.";
-
-/* (No Commment) */
-"Preferences" = "העדפות";
-
-/* (No Commment) */
-"Preparing transfer" = "הכנת העברה";
-
-/* (No Commment) */
-"Privacy Policy" = "מדיניות פרטיות";
-
-/* (No Commment) */
-"Private Key Needed" = "מפתח פרטי הדרושים";
-
-/* (No Commment) */
-"Processing key" = "עיבוד מפתח";
-
-/* (No Commment) */
-"Rate Blockchain Wallet" = "קצב Blockchain הארנק";
-
-/* (No Commment) */
-"Receive" = "לקבל";
-
-/* (No Commment) */
-"Receive to..." = "לקבל את...";
-
-/* (No Commment) */
-"Received" = "התקבל";
-
-/* (No Commment) */
-"Recipients" = "נמענים";
-
-/* (No Commment) */
-"Recover Funds" = "לשחזר קרנות";
-
-/* (No Commment) */
-"Recovering Funds" = "קרנות בגמילה";
-
-/* (No Commment) */
-"Regular" = "רגיל";
-
-/* (No Commment) */
-"Request" = "בקשה";
-
-/* (No Commment) */
-"Request Amount" = "לבקש סכום";
-
-/* (No Commment) */
-"Request failed. Please check your internet connection." = "הבקשה נכשלה. נא בדוק את החיבור שלך לאינטרנט.";
-
-/* (No Commment) */
-"Resend verification SMS" = "שלח מחדש אימות ב- SMS";
-
-/* (No Commment) */
-"Resend verification email" = "שלח מחדש דואר אלקטרוני לאימות";
-
-/* (No Commment) */
-"Reset" = "איפוס";
-
-/* (No Commment) */
-"Retrieving recommended fee" = "מאחזר מומלץ דמי";
-
-/* (No Commment) */
-"Retry Validation" = "נסה שנית אימות";
-
-/* (No Commment) */
-"SMS" = "SMS";
-
-/* (No Commment) */
-"SMS Notifications" = "הודעות SMS";
-
-/* (No Commment) */
-"Save" = "שמור";
-
-/* (No Commment) */
-"Scan Pairing Code" = "לסרוק קוד התאמה";
-
-/* (No Commment) */
-"Scan Private Key" = "סרוק מפתח פרטי";
-
-/* (No Commment) */
-"Scan QR Code" = "לסרוק קוד QR";
-
-/* (No Commment) */
-"Scan QR code" = "לסרוק קוד QR";
-
-/* (No Commment) */
-"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "סרוק או העתק את הקוד לתוך האפליקציה Blockchain הסוחר שלך בצורה מאובטחת לקבל ביטקוין.";
-
-/* No comment provided by engineer. */
-"Second Password Incorrect" = "סיסמה שנייה שגוי";
-
-/* No comment provided by engineer. */
-"Second Password Required" = "דרושה סיסמה שנייה";
-
-/* (No Commment) */
-"Security" = "אבטחה";
-
-/* (No Commment) */
-"Security Center" = "מרכז האבטחה";
-
-/* (No Commment) */
-"Security Center completed - your wallet is safe and secure" = "מרכז האבטחה הושלמה - הארנק שלך הוא בטוח ומאובטח";
-
-/* (No Commment) */
-"Send" = "שלח";
-
-/* (No Commment) */
-"Send from..." = "לשלוח...";
-
-/* (No Commment) */
-"Send to..." = ". לשלוח...";
-
-/* (No Commment) */
-"Send verification SMS" = "שלח אימות ב- SMS";
-
-/* (No Commment) */
-"Sending Transaction" = "שליחת עסקת";
-
-/* (No Commment) */
-"Sent" = "שלח";
-
-/* (No Commment) */
-"Sent to %@" = "נשלח ע י %@";
-
-/* (No Commment) */
-"Server URL" = "כתובת url של השרת";
-
-/* (No Commment) */
-"Set as Default?" = "קבע ברירת מחדל?";
-
-/* (No Commment) */
-"Settings" = "הגדרות";
-
-/* (No Commment) */
-"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "שיתוף xPub שלך מסמיך אחרים כדי לעקוב אחר ההיסטוריה התנועה שלך. כפי ה\"גורמים עשוי להיות מסוגל לשבש את מלגשת אל הארנק שלך, לשתף רק xPub שלך עם אנשים שאתה בוטח.";
-
-/* (No Commment) */
-"Show all 'Dont Show Again' alerts" = "הצג את כל ההתראות \"אל תציג שנית\"";
-
-/* No comment provided by engineer. */
-"Signal %d was raised." = "אות %d גדל.";
-
-/* (No Commment) */
-"Signing Input %d" = "חתימת %d קלט";
-
-/* (No Commment) */
-"Signing Inputs" = "חתימת כניסות";
-
-/* (No Commment) */
-"Simulate surge" = "לדמות גל";
-
-/* (No Commment) */
-"Some funds cannot be transferred automatically." = "אין אפשרות להעביר כספים באופן אוטומטי.";
-
-/* (No Commment) */
-"Status" = "מצב";
-
-/* (No Commment) */
-"Store Hint" = "חנות רמז";
-
-/* (No Commment) */
-"Stored" = "מאוחסן";
-
-/* (No Commment) */
-"Strong" = "סטרונג";
-
-/* (No Commment) */
-"Success" = "הצלחה";
-
-/* (No Commment) */
-"Success!" = "הצלחה!";
-
-/* (No Commment) */
-"Support" = "תמיכה";
-
-/* (No Commment) */
-"Surge Occurring" = "עליית מתח המתרחשים";
-
-/* (No Commment) */
-"Swipe to Receive" = "נשמטים לקבל";
-
-/* No comment provided by engineer. */
-"Syncing Wallet" = "מסנכרן את הארנק";
-
-/* (No Commment) */
-"Tap to copy this address. Share it with the sender via email or text." = "הקש כדי להעתיק את הכתובת הזו. לשתף אותו עם השולח באמצעות דואר אלקטרוני או טקסט.";
-
-/* (No Commment) */
-"Terms of Service" = "תנאי השירות";
-
-/* (No Commment) */
-"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "הרשת הכרייה ביטקוין כיום נתקלת נפח גבוה של פעילות, וכתוצאה מכך מומלץ תשלומים גבוהים מהרגיל.";
-
-/* (No Commment) */
-"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "ה-PIN שבחרת נפוץ מאוד, אולי יהיה לנחש בקלות על ידי מישהו עם גישה לטלפון שלך בתוך 3 מנסה. האם ברצונך להשתמש הסיכה הזו בכל מקרה?";
-
-/* (No Commment) */
-"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "הסכום שברצונך לשלוח (%1$@) גדול יותר מהסכום המרבי שתוכלו לבלות פחות דמי (%2$@ - %3$@). האם ברצונך לשלוח %4$@?";
-
-/* (No Commment) */
-"The fee you have specified is too low." = "דמי שציינת הוא נמוך מדי.";
-
-/* (No Commment) */
-"The private key you are attempting to import is encrypted. Please enter the password below." = "המפתח הפרטי שאתה מנסה לייבא מוצפן. נא הזן את הסיסמה שלהלן.";
-
-/* (No Commment) */
-"There was a problem verifying your identity." = "אירעה בעיה מאמת את זהותך.";
-
-/* (No Commment) */
-"There was an error importing this private key" = "אירעה שגיאה בעת ייבוא זה המפתח הפרטי";
-
-/* (No Commment) */
-"These options are recommended for advanced users only. Continue?" = "אפשרויות אלה מומלץ עבור משתמשים מתקדמים בלבד. האם להמשיך?";
-
-/* (No Commment) */
-"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "פעולה זו דורשת את המפתח הפרטי עבור %@ כתובת ביטקוין. בבקשה לסרוק קוד QR.";
-
-/* (No Commment) */
-"This action requires the second password for your wallet. Please enter it below and press continue." = "פעולה זו דורשת הסיסמה השנייה לארנק ביטקוין. אנא הכניסו אותה בהמשך והמשך העיתונות.";
-
-/* (No Commment) */
-"This address has already been used. Please login." = "כתובת זו כבר היה בשימוש. אנא התחבר.";
-
-/* (No Commment) */
-"This address is not watch-only." = "כתובת זו אינה השעון בלבד.";
-
-/* (No Commment) */
-"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "זה כתובת השעון בלבד. כדי להעביר את הכספים שלך מהארנק הזה, בבקשה לסרוק את המפתח הפרטי שלך.";
-
-/* (No Commment) */
-"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "זוהי טרנזקציה ביטקוין מנופחים. הארנק שלך צריך לאחד תשלומים קטנים רבים שהתקבלו בעבר. פעולה זו דורשת תשלום גבוה יחסית על מנת להיות מאושרות במהירות. אם זה בסדר עבור התנועה לוקח קצת יותר זמן כדי לאשר, באפשרותך להפחית את דמי באופן ידני על-ידי הקשה \"התאמה אישית של תשלום חודשי.";
-
-/* (No Commment) */
-"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "זה נמצא בארכיון. אבל אתה לא יכול לשלוח כספים מכאן, כל קרנות יישאר בטוח. Unarchive פשוט כדי להתחיל להשתמש בו שוב.";
-
-/* (No Commment) */
-"This name is already in use. Please choose a different name." = "שם זה כבר נמצא בשימוש. נא לבחור שם אחר.";
-
-/* (No Commment) */
-"This private key belongs to another address that is not watch only" = "המפתח הפרטי הזה שייך לכתובת אחרת, שאינה רק את השעון";
-
-/* (No Commment) */
-"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "תנועה זו דורשת תשלום גבוה יותר לצריכה אבק בגלל כמות קטנה של שינוי יוחזר.";
-
-/* (No Commment) */
-"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "זה יאפשר את ההתראות הבאות: לקבל בקשה סקירה השעון בלבד, App Store, להעביר את כספי.";
-
-/* (No Commment) */
-"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "זה יביא למחיקת כל הנתונים הארנק בהתקן זה. אנא אשרו שאת הארנק מידע שנמסר הציל במקום אחר אחרת כל ביטקוין בצוואה את הארנק הזה אינו נגיש!!";
-
-/* (No Commment) */
-"To" = "כדי";
-
-/* (No Commment) */
-"Tor Requests" = "תור בקשות";
-
-/* (No Commment) */
-"Tor blocked" = "טור חסום";
-
-/* (No Commment) */
-"Tor requests allowed" = "בקשות תור מותר";
-
-/* (No Commment) */
-"Tor requests are currently allowed." = "תור בקשות כיום מותר.";
-
-/* (No Commment) */
-"Tor requests are currently blocked." = "תור בקשות כיום חסומים.";
-
-/* (No Commment) */
-"Total Balance" = "המאזן";
-
-/* (No Commment) */
-"Touch ID has been locked due to too many failed attempts." = "מזהה מגע ננעל עקב ניסיונות כושלים רבים מדי.";
-
-/* (No Commment) */
-"Touch ID is not available on this device." = "מזהה מגע אינה זמינה במכשיר זה.";
-
-/* (No Commment) */
-"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "מזהה מגע אינו זמין בהתקן זה. כדי לאפשר זיהוי מגע, ללכת & מזהה הגדרות->Touch קוד ולהוסיף על טביעת אצבע.";
-
-/* (No Commment) */
-"Transaction" = "עסקת";
-
-/* (No Commment) */
-"Transaction Fees" = "עלויות עסקה";
-
-/* (No Commment) */
-"Transaction fee: %@" = "דמי העסקה: %@";
-
-/* (No Commment) */
-"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "עלויות עסקה להשפיע כמה מהר הרשת הכרייה ביטקוין לאשר את העסקאות שלך, ותלויות התנאים הרשת הנוכחית.";
-
-/* (No Commment) */
-"Transactions" = "תנועות";
-
-/* (No Commment) */
-"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "תנועות ללא עלויות עשויה להימשך זמן רב כדי לאשר או עשוי לא להיות מאושרות בכלל. האם ברצונך להמשיך?";
-
-/* (No Commment) */
-"Transfer Funds" = "העברת כספים";
-
-/* (No Commment) */
-"Transferred" = "הועבר";
-
-/* (No Commment) */
-"Transferred funds from %d %@" = "כספים שהועברו %1$d %2$@";
-
-/* (No Commment) */
-"Transferred funds from %d %@. Outputs for %d %@ were too small." = "כספים שהועברו %1$d %2$@. יציאות עבור %3$d %4$@ היו קטנות מדי.";
-
-/* (No Commment) */
-"Transferring all funds: Address %i of %i" = "העברת כספים כל: כתובת %1$i של %2$i";
-
-/* (No Commment) */
-"Try again" = "נסה שוב";
-
-/* (No Commment) */
-"UPGRADE YOUR WALLET" = "לשדרג את הארנק שלך";
-
-/* (No Commment) */
-"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "אין אפשרות לטעון את הארנק בגלל שאין תגובה מהשרת. אתה יכול להיות מנותק או Blockchain הוא נתקל בקשיים. נא נסה שוב מאוחר יותר.";
-
-/* (No Commment) */
-"Unarchive" = "Unarchive";
-
-/* (No Commment) */
-"Unarchive Address" = "Unarchive כתובת";
-
-/* (No Commment) */
-"Unconfirmed" = "לא מאושר";
-
-/* No comment provided by engineer. */
-"Unhandled exception" = "חריג שאינו מטופל";
-
-/* (No Commment) */
-"Unknown" = "ידוע";
-
-/* (No Commment) */
-"Unknown Touch ID error. Code: %ld" = "שגיאה לא ידועה מזהה מגע. קוד: %ld";
-
-/* (No Commment) */
-"Unknown key format" = "תבנית המפתח לא ידוע";
-
-/* (No Commment) */
-"Unsupported Private Key Format" = "בתבנית שאינה נתמכת של מפתח פרטי";
-
-/* (No Commment) */
-"Unverified" = "לא מאומתים";
-
-/* (No Commment) */
-"Update" = "עדכון";
-
 /* (No Commment) */
 "Upgrade" = "שדרוג";
-
 /* (No Commment) */
-"Upgrade Wallet" = "לשדרג את הארנק";
-
+"Settings" = "הגדרות";
 /* (No Commment) */
-"Upgrade to V3" = "שדרג ל- V3";
-
+"Send" = "שלח";
 /* (No Commment) */
-"Use Touch ID as PIN" = "השתמש במזהה מגע כמו סיכה";
-
-/* (No Commment) */
-"Use all funds" = "להשתמש בכספי";
-
-/* (No Commment) */
-"Use recommended values" = "השתמש בערכים מומלצים";
-
-/* (No Commment) */
-"Use total available minus fee: %@" = "שימוש שהסכום הזמין מינוס דמי: %@";
-
-/* (No Commment) */
-"User Declined" = "המשתמש סירב";
-
-/* No comment provided by engineer. */
-"VERIFY BACKUP" = "ודא גיבוי";
-
-/* (No Commment) */
-"Value when sent: %@" = "ערך כאשר נשלח: %@";
-
-/* (No Commment) */
-"Verification email has been sent to %@." = "דואר אלקטרוני לאימות נשלחה %@.";
-
-/* (No Commment) */
-"Verified" = "אומת";
-
-/* (No Commment) */
-"Verify" = "ודא";
-
-/* (No Commment) */
-"Verify Email" = "אימות דוא";
-
-/* (No Commment) */
-"Verifying" = "אימות";
-
-/* (No Commment) */
-"Wallet ID" = "מזהה את הארנק";
-
-/* (No Commment) */
-"Wallet Information" = "הארנק מידע";
-
-/* (No Commment) */
-"Wallet JSON" = "הארנק JSON";
-
-/* (No Commment) */
-"Wallet Paired Successfully." = "הארנק לזווג בהצלחה.";
-
-/* (No Commment) */
-"Recovery Phrase" = "הביטוי שחזור";
-
-/* (No Commment) */
-"Warning" = "אזהרה";
-
-/* (No Commment) */
-"Warning!!!" = "אזהרה!!!";
-
-/* (No Commment) */
-"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "אזהרה: המזהה את הארנק שלך אינו מידע רגיש. העתקתו עלול לפגוע בבטחון את הארנק שלך.";
-
-/* (No Commment) */
-"Watch Only" = "Watch בלבד";
-
-/* (No Commment) */
-"We'll send the hint to your confirmed email address in case you request it." = "אנו נשלח את הרמז לכתובת הדואר האלקטרוני שסיפקת מאושרות למקרה לפי בקשה.";
-
-/* (No Commment) */
-"Weak" = "חלש";
-
-/* (No Commment) */
-"WebSocket URL" = "כתובת URL WebSocket";
-
-/* (No Commment) */
-"Welcome" = "ברוך הבא";
-
-/* No comment provided by engineer. */
-"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "עבודה טובה! צריך איבדת את הסיסמה שלך, באפשרותך לשחזר קרנות בארנק הזה אפילו אם התקבל בעתיד (למעט כתובות מיובאות) באמצעות שחזור של 12 המילים. זכור לשמור את הביטוי השחזור שלך במצב לא מקוון במקום מאוד בטוחה ומאובטחת. כל אחד עם גישה הביטוי השחזור שלך יש גישה שלך ביטקוין.";
-
-/* (No Commment) */
-"We’ve detected a previous installation of Blockchain Wallet on your phone." = "שגילינו התקנה קודמת של Blockchain הארנק בטלפון שלך.";
-
-/* (No Commment) */
-"What's this for?" = "בשביל מה זה?";
-
-/* (No Commment) */
-"Where" = "איפה";
-
-/* (No Commment) */
-"Would you like to add the bitcoin address %@ to your address book?" = "האם ברצונך להוסיף את %@ כתובת ביטקוין לפנקס הכתובות שלך?";
-
-/* (No Commment) */
-"Would you like to archive the addresses used?" = "האם ברצונך לאחסן בארכיון את הכתובות שישמשו?";
-
-/* No comment provided by engineer. */
-"Write the following 12 words onto a " = "לכתוב את המילים הבאות 12 על גבי ";
-
-/* (No Commment) */
-"Wrong BIP38 Password" = "הסיסמה BIP38 הלא נכון";
-
+"Ebu-XV-0mt.normalTitle" = "ביטול";
 /* (No Commment) */
 "Yes" = "כן";
-
 /* (No Commment) */
-"Yes, rate Blockchain Wallet" = ". כן, קצב Blockchain הארנק";
-
-/* No comment provided by engineer. */
+"No" = "לא";
+"Done" = "עשיתי";
 "Yesterday" = "אתמול";
-
 /* (No Commment) */
-"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "אתה עומד ייבוא כתובת השעון בלבד, כתובת (או script המפתח הציבור) מאוחסן בארנק ללא הפרטי המתאים מפתח. משמעות הדבר היא כי ניתן לבלות את הכספים רק אם יש לך המפתח הפרטי מאוחסנים במקום אחר. אם אין לך את המפתח הפרטי המאוחסן, אינם מורים שמישהו ישלח לך ביטקוין לכתובת השעון בלבד.";
-
+"Transferred" = "הועבר";
 /* (No Commment) */
-"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "אתה עומד לקבל ביטקוין לכתובת השעון בלבד. אתה יכול רק להשקיע כספים אלה אם יש לך גישה למפתח הפרטי. האם להמשיך?";
-
+"Copied to clipboard" = "יועתק אל הלוח";
 /* (No Commment) */
-"You are now running our most secure Bitcoin wallet" = "עכשיו אתה מפעיל את הארנק ביטקוין המאובטחת ביותר שלנו";
-
-/* No comment provided by engineer. */
-"You backed up your funds successfully." = "לך לגבות כספים שלך בהצלחה.";
-
+"Local Currency" = "מטבע מקומי";
 /* (No Commment) */
-"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "ניתן לאפשר אימות דו-שלבי באמצעות SMS בטלפון הנייד שלך. על מנת להשתמש משיטות אימות אחרות במקום זאת, אנא התחבר כדי הארנק האינטרנט שלנו.";
-
+"Bitcoin Unit" = "יחידת ביטקוין";
 /* (No Commment) */
-"You can now spend from this address." = "אתה יכול להשקיע עכשיו מהכתובת הזו.";
-
+"Terms of Service" = "תנאי השירות";
 /* (No Commment) */
-"You do not have an account set up for Mail. Please contact %@" = "אין לך חשבון להגדיר עבור דואר. אנא צרו קשר %@";
-
+"Privacy Policy" = "מדיניות פרטיות";
 /* (No Commment) */
-"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = ". לך אין כתובות עם מאזן מתכלה למכשיר גדול או שווה להסף הנדרשים אבק...";
-
+"Invalid Wallet ID" = "מזהה את הארנק לא חוקי";
 /* (No Commment) */
-"You have no available funds to send from this address" = "יש לך אין מימון לשלוח מהכתובת הזאת";
-
+"Passwords do not match" = "הסיסמאות לא תואמות";
 /* (No Commment) */
-"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "עליך לנטרל אימות דו-שלבי SMS לפני שינוי מספר הטלפון הנייד שלך (%@).";
-
+"Enter PIN" = "הזן את מספר הזיהוי האישי שלך";
 /* (No Commment) */
-"You must enter a destination address" = "עליך להזין כתובת יעד";
-
+"Automatic Pairing" = "זיווג אוטומטי";
 /* (No Commment) */
-"You must enter a label" = "עליך להזין תווית";
-
+"Manual Pairing" = "זיווג ידני";
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "ללכת להגדרות / כללי.";
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "לחץ על הצג קוד השיוך לחשוף קוד QR, ברקוד & מרובע שחור לבן. לסרוק את הקוד עם המצלמה שלך.";
 /* (No Commment) */
-"You must have at least one active address" = "דרושה לך לפחות פעיל כתובת אחת";
-
+"Wallet ID" = "מזהה את הארנק";
+/* First account name: */
+"My Bitcoin Wallet" = "הארנק שלי ביטקוין";
 /* (No Commment) */
-"You must have two-factor authentication disabled to pair manually." = "יש אימות דו-גורמי זמין על זוג באופן ידני.";
-
-/* (No Commment) */
-"You must leave at least one active address" = "עליך להשאיר כתובת פעיל אחד לפחות";
-
+"Recover Funds" = "לשחזר קרנות";
 /* (No Commment) */
 "You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "עליך תמיד זוג או להיכנס למערכת, אם יש לך גישה אל הארנק המזהה והסיסמה שלך. שחזור כספים שלך יהיה ליצור מזהה את הארנק החדש האם ברצונך להמשיך?";
-
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "zd5-DZ-hsS"; */
+"zd5-DZ-hsS.placeholder" = "סיסמה";
 /* (No Commment) */
-"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "שציינת תשלום תנועה קטן במיוחד של %1$@. העסקה שלך אולי תקוע, ואולי אף פעם לא להיות מאושרות. כדי להגדיל את הסבירות עבור העסקה שלך לאשר בתוך שעה בקירוב (שישה גושי בניינים), אנו ממליצים תשלום של לא פחות מאשר %2$@.";
-
+"Email" = "דוא";
 /* (No Commment) */
-"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "שציינת תשלום תנועה קטן במיוחד של %1$@. העסקה שלך עשוי להיות תקוע, ואולי אף פעם לא לאשר. כדי להגדיל את הסבירות עבור העסקה שלך לאשר בתוך שעה בקירוב (שישה גושי בניינים), אנו ממליצים תשלום של לא פחות מאשר %2$@. מכיוון שאין לך מספיק כסף, כלומר שהסכום שלח גם צריך להיות מופחת. כדי %3$@.";
-
+"Create Wallet" = "ליצור את הארנק";
 /* (No Commment) */
-"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "שציינת דמי העסקה גבוה באופן חריג של %1$@. גם אם תנמיך את דמי %2$@, אתה יכול לצפות את התנועה כדי לאשר בתוך 10 הדקות (רחוב אחד).";
-
+"Weak" = "חלש";
 /* (No Commment) */
-"You will be leaving the app." = ". תעזוב את האפליקציה.";
-
+"Strong" = "סטרונג";
 /* (No Commment) */
-"You've successfully imported a private key." = "בהצלחה ייבאת מפתח פרטי.";
-
+"Normal" = "רגיל";
 /* (No Commment) */
-"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "בהצלחה ייבאת את המפתח הפרטי עבור %@ הכתובת, עכשיו תוכלו לבלות ממנו. אם אתה רוצה לבלות מכתובת זו, ודא שאתה סורק את המפתח הפרטי המתאים.";
-
+"Gk5-cB-fZg.normalTitle" = "[%key:dialog_continue%]";
 /* (No Commment) */
-"Your device appears to be jailbroken. The security of your wallet may be compromised." = "המכשיר נראה jailbroken. . בסכנה את האבטחה של הארנק שלך";
-
-/* (No Commment) */
-"Your email has been verified." = "הדוא ל שלך אומת.";
-
-/* (No Commment) */
-"Your identity does not match our records." = "הזהות שלך אינו תואם את הרשומות שלנו.";
-
-/* (No Commment) */
-"Your mobile number has been verified." = "מספר הטלפון הנייד שלך אומת.";
-
-/* (No Commment) */
-"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "הטלפון הנייד יכול לשמש כדי לאפשר אימות שני הגורמים, עוזר כדי לאבטח את הארנק שלך מפני גישה לא מורשית.";
-
-/* (No Commment) */
-"Your new password hint contains invalid characters. Please try again." = "לסיסמה חדשה מכיל תווים לא חוקיים. נא נסה שוב.";
-
-/* (No Commment) */
-"Your new password hint contains no text. Your password hint will be cleared." = "לסיסמה חדשה מכיל טקסט. הרמז לסיסמה שלך ינוקה.";
-
-/* (No Commment) */
-"Your new password hint must be different from your password. Please try again." = "רמז הסיסמה החדשה להיות שונה מסיסמת שלך. נא נסה שוב.";
-
-/* (No Commment) */
-"Your new password hint must be different from your second password. Please try again." = "לסיסמה החדשה להיות שונה מסיסמת השני שלך. נא נסה שוב.";
-
-/* (No Commment) */
-"Your password hint has been updated." = "הרמז לסיסמה שלך עודכנה.";
-
-/* (No Commment) */
-"Your password is not strong enough. Please choose a different password." = "הסיסמה אינה חזקה מספיק. נא לבחור בסיסמה שונה.";
-
-/* (No Commment) */
-"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "את הכספים שהועברו שלך יהיה בטוח ומאובטח, תוכל ליהנות תכונות גיבוי ושחזור נוחות ופרטיות מוגברת.";
-
-/* (No Commment) */
-"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "את כתובת הדוא ל מאומת משמש כדי לשלוח קודי כניסה פעילות חשודה או יוצא דופן מזוהה, כדי להזכיר לך את מזהה הכניסה שלך את הארנק, וכדי לשלוח התראות התשלום ביטקוין בעת קבלת כספים. לא נשתמש כתובת הדוא ל שלך למטרות שיווק.";
-
-/* (No Commment) */
-"Your wallet does not contain this address." = "הארנק שלך אינו מכיל את הכתובת הזו.";
-
-/* (No Commment) */
-"Your wallet was successfully created." = "הארנק שלך נוצר בהצלחה.";
-
-/* (No Commment) */
-"Yubi Key" = "Yubi מפתח";
-
-/* No comment provided by engineer. */
-"eighth word" = "המילה השמיני";
-
-/* No comment provided by engineer. */
-"eleventh word" = "המילה האחת עשרה";
-
-/* No comment provided by engineer. */
-"fifth word" = "מילה חמישית";
-
-/* No comment provided by engineer. */
-"first word" = "המילה הראשונה";
-
-/* No comment provided by engineer. */
-"fourth word" = ". מילה רביעית";
-
+"Support" = "תמיכה";
 /* (No Commment) */
 "from" = "מ";
-
-/* No comment provided by engineer. */
-"in this order." = "בצו זה.";
-
-/* No comment provided by engineer. */
-"ninth word" = "המילה התשיעית";
-
 /* (No Commment) */
-"or Continue" = "או המשך";
-
-/* No comment provided by engineer. */
-"piece of paper." = "פיסת נייר.";
-
-/* No comment provided by engineer. */
+"13.text" = "כדי";
+/* (No Commment) */
+"Confirm Payment" = "לאשר תשלום";
+/* (No Commment) */
+"Imported Addresses" = "כתובות מיובאות";
+"OK" = "אוקיי";
+/* (No Commment) */
+"Change PIN" = "שינוי PIN";
+/* (No Commment) */
+"Name" = "שם";
+/* Class = "UIButton"; normalTitle = "Save"; ObjectID = "63"; */
+"63.normalTitle" = "שמור";
+"first word" = "המילה הראשונה";
 "second word" = "המילה השנייה";
-
-/* No comment provided by engineer. */
-"seventh word" = "המילה השביעי";
-
-/* No comment provided by engineer. */
-"sixth word" = "המילה השישית";
-
-/* No comment provided by engineer. */
-"tenth word" = "המילה העשירי";
-
-/* No comment provided by engineer. */
 "third word" = "המילה השלישית";
-
-/* No comment provided by engineer. */
+"fourth word" = ". מילה רביעית";
+"fifth word" = "מילה חמישית";
+"sixth word" = "המילה השישית";
+"seventh word" = "המילה השביעי";
+"eighth word" = "המילה השמיני";
+"ninth word" = "המילה התשיעית";
+"tenth word" = "המילה העשירי";
+"eleventh word" = "המילה האחת עשרה";
 "twelfth word" = "המילה השתים עשרה";
-
-/* No comment provided by engineer. */
-" We recommend the fee shown for the transaction at this time." = " אנו ממליצים על דמי המוצג עבור התנועה בשלב זה.";
-
-/* No comment provided by engineer. */
-"Fee" = "דמי";
-
-/* No comment provided by engineer. */
-"Please contact support:\n%@" = "נא ליצור קשר עם התמיכה: \n%@";
-
-/* No comment provided by engineer. */
-"Transfer Amount" = "סכום ההעברה";
-
-/* No comment provided by engineer. */
-"Value when received: %@" = "ערך כאשר התקבל: %@";
-
 /* (No Commment) */
-"Transfer All Funds" = "להעביר את כספי";
-
+"Archived" = "בארכיון";
 /* (No Commment) */
-"Transfer all" = "העברת כל";
-
+"Create new address" = "ליצור כתובת חדשה";
 /* (No Commment) */
-"Transfer imported addresses?" = "להעביר כתובות מיובאות?";
-
+"Label" = "תווית";
 /* (No Commment) */
-"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "כתובות מיובאות הם אינם מגובים על ידי הביטוי ההתאוששות שלך. כדי לאבטח קרנות אלה, אנו ממליצים על העברת יתרות אלה לכלול בגיבוי.";
-
+"Edit" = "עריכה";
 /* (No Commment) */
-"About Us" = "עלינו";
-
+"Warning" = "אזהרה";
 /* (No Commment) */
-"You currently have email notifications enabled. Changing your email will disable email notifications." = "כעת יש לך הודעות דוא ל מופעלת. שינוי הדוא ל שלך תהפוך הודעות דוא.";
-
+"Extended Public Key" = "מורחב מפתח ציבורי";
+/* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
+"64.text" = "כתובת";
 /* (No Commment) */
-"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "כעת יש לך הודעות SMS מופעלת. שינוי הדוא ל שלך תהפוך הודעות SMS.";
-
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "שיתוף xPub שלך מסמיך אחרים כדי לעקוב אחר ההיסטוריה התנועה שלך. כפי ה\"גורמים עשוי להיות מסוגל לשבש את מלגשת אל הארנק שלך, לשתף רק xPub שלך עם אנשים שאתה בוטח.";
 /* (No Commment) */
-"All rights reserved." = "כל הזכויות שמורות.";
-
+"Archive" = "ארכיון";
 /* (No Commment) */
-"Rate us" = "לדרג אותנו";
-
+"Unarchive" = "Unarchive";
 /* (No Commment) */
-"Free Merchant app" = "App סוחר חינם";
-
+"Private Key Needed" = "מפתח פרטי הדרושים";
 /* (No Commment) */
-"Cannot open Mail App" = "אין אפשרות לפתוח דואר App";
-
+"Watch Only" = "Watch בלבד";
 /* (No Commment) */
-"Cannot open URL %@" = "לא ניתן לפתוח כתובת URL %@";
-
+"Success" = "הצלחה";
 /* (No Commment) */
-"Would you like to tell us about your experience with Blockchain?" = "רוצה לספר לנו על החוויה שלך עם Blockchain?";
-
+"Default" = "ברירת מחדל";
+/* (No Commment) */
+"Not now" = "לא עכשיו";
+/* (No Commment) */
+"Logout" = "יציאה מהמערכת";
+/* (No Commment) */
+"Update" = "עדכון";
+/* (No Commment) */
+"Verify" = "ודא";
+/* (No Commment) */
+"Allow" = "לאפשר";
+/* (No Commment) */
+"Block" = "בלוק";
+/* (No Commment) */
+"Security" = "אבטחה";
+/* (No Commment) */
+"Enable" = "לאפשר";
+/* (No Commment) */
+"Disable" = "בטל";
+/* (No Commment) */
+"SMS" = "SMS";
+/* (No Commment) */
+"Google Authenticator" = "Google Authenticator";
+/* (No Commment) */
+"2-step Verification" = "אימות דו-שלבי";
+/* (No Commment) */
+"Change Password" = "שינוי סיסמה";
+/* (No Commment) */
+"Email Notifications" = "הודעות דוא";
+/* Class = "UITextField"; placeholder = "New Password"; ObjectID = "VKs-B5-luJ"; */
+"VKs-B5-luJ.placeholder" = "סיסמה חדשה";
+/* (No Commment) */
+"Preferences" = "העדפות";
+/* (No Commment) */
+"Information" = "מידע";
+/* (No Commment) */
+"Bitcoin payment request" = "בקשתכם לתשלום ביטקוין";
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "ה-PIN שבחרת נפוץ מאוד, אולי יהיה לנחש בקלות על ידי מישהו עם גישה לטלפון שלך בתוך 3 מנסה. האם ברצונך להשתמש הסיכה הזו בכל מקרה?";
+/* (No Commment) */
+"Try again" = "נסה שוב";
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "אם תרצה לשכוח את הארנק הזה ולהתחיל מחדש, הקש \"שכח את הארנק\".";
+/* (No Commment) */
+"Transaction" = "עסקת";
+/* (No Commment) */
+"Backup Phrase" = "הביטוי גיבוי";
+/* (No Commment) */
+"Copy Address" = "העתק כתובת";
+/* (No Commment) */
+"2je-u4-PB2.text" = "[%key:overview%]";
+/* (No Commment) */
+"Regular" = "רגיל";
+/* Class = "UIButton"; normalTitle = "Backup funds again"; ObjectID = "1Hq-6D-ut1"; */
+"1Hq-6D-ut1.normalTitle" = "גיבוי קרנות שוב";
+/* (No Commment) */
+"1Hq-6D-ut1.text" = "גיבוי קרנות שוב";
+/* (No Commment) */
+"3kJ-3U-lFe.text" = "אנא נסה שנית";
+/* Class = "UILabel"; text = "Enter the following words from your Recovery Phrase to complete the backup process."; ObjectID = "4Nq-ue-tXr"; */
+"4Nq-ue-tXr.text" = "הזן את המילים הבאות שלך הביטוי השחזור כדי להשלים את תהליך הגיבוי.";
+/* (No Commment) */
+"6zt-Xf-txg.text" = "לחץ והחזק כדי לחשוף את המילה";
+/* (No Commment) */
+"07q-RX-CeI.text" = "אנא נסה שנית";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "9A7-TT-PzN"; */
+"9A7-TT-PzN.title" = "קרנות גיבוי";
+/* Class = "UILabel"; text = "Oh no! You haven't backed up your funds yet."; ObjectID = "9Hu-uO-gJl"; */
+"9Hu-uO-gJl.text" = "הו לא! לא זכרת לגבות כספים שלך עדיין.";
+/* Class = "UILabel"; text = "This action requires the second password for your bitcoin wallet. Please enter it below and press continue."; ObjectID = "9WK-My-5CL"; */
+"9WK-My-5CL.text" = "פעולה זו דורשת הסיסמה השנייה לארנק ביטקוין. אנא הכניסו אותה בהמשך והמשך העיתונות.";
+/* (No Commment) */
+"9hR-tm-aq5.placeholder" = "המילה הראשונה";
+/* Class = "UINavigationItem"; title = "Second Password Required"; ObjectID = "74J-f3-Lhq"; */
+"74J-f3-Lhq.title" = "דרושה סיסמה שנייה";
+/* Class = "UIButton"; normalTitle = "Previous word"; ObjectID = "AFH-AI-Rgk"; */
+"AFH-AI-Rgk.normalTitle" = "המילה הקודמת";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "CBl-1W-VP8"; */
+"CBl-1W-VP8.placeholder" = "סיסמה";
+/* (No Commment) */
+"EQM-OM-jK8.normalTitle" = "עשיתי";
+/* Class = "UILabel"; text = "It is important to make sure you write down your words exactly as they appear here and in this order."; ObjectID = "FDO-ui-cGo"; */
+"FDO-ui-cGo.text" = "אל תיקח צילום מסך!\
+אתה עלול לסכן את האבטחה של הארנק שלך";
+/* (No Commment) */
+"Fda-Z4-3e7.placeholder" = "המילה השישית";
+/* (No Commment) */
+"NaV-Bk-o1b.text" = "כיצד לשחזר את הארנק שלך";
+/* Class = "UILabel"; text = "unicorn"; ObjectID = "Okr-VE-yvm"; */
+"Okr-VE-yvm.text" = "חד-קרן";
+/* Class = "UILabel"; text = "Please try again"; ObjectID = "T3S-Dk-HAh"; */
+"T3S-Dk-HAh.text" = "אנא נסה שנית";
+/* (No Commment) */
+"T4p-mz-siC.normalTitle" = "ודא גיבוי";
+/* Class = "UILabel"; text = "Write down your Recovery Phrase and keep it somewhere very safe and secure. Anyone who knows your Recovery Phrase has access to your bitcoins, so don’t share this with anyone you don’t trust."; ObjectID = "UCL-i9-UDp"; */
+"UCL-i9-UDp.text" = "תכתבי את המילים לפי הסדר המדויק הם מופיעים על גיליון נייר, ואחסן אותו במקום בטוח\
+";
+/* Class = "UILabel"; text = "Lost your 12 word recovery phrase?"; ObjectID = "Yh8-Gm-6op"; */
+"Yh8-Gm-6op.text" = "איבדת את 12 מילים שחזור?";
+/* Class = "UIButton"; normalTitle = "NEXT WORD"; ObjectID = "dkQ-nj-Pkf"; */
+"dkQ-nj-Pkf.normalTitle" = "המילה הבאה";
+/* Class = "UIButton"; normalTitle = "Next word"; ObjectID = "eaO-py-9rY"; */
+"eaO-py-9rY.normalTitle" = "המילה הבאה";
+/* Class = "UILabel"; text = "Please take a few minutes to ensure you can access your Bitcoin (except in imported addresses), even if you forget your password or if our service becomes unavailable. We promise doing so is quick, painless, and worth it."; ObjectID = "eyR-AW-SMc"; */
+"eyR-AW-SMc.text" = ". קח כמה דקות כדי להבטיח שתוכל לגשת ביטקוין שלך (למעט כתובות מיובאות), גם אם תשכח את הסיסמה שלך או אם השירות שלנו הופך ללא זמין. אנו מבטיחים פעולה זו מהירה, ללא כאב, שווה את זה.";
+/* (No Commment) */
+"kcC-2S-PfL.placeholder" = "המילה השלישית";
+/* Class = "UILabel"; text = "Word 5 of 12"; ObjectID = "mUc-u7-Zcj"; */
+"mUc-u7-Zcj.text" = "המילה 5 12";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "mYR-MQ-mS2"; */
+"mYR-MQ-mS2.title" = "הארנק גיבוי";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "nuD-nb-tAt"; */
+"nuD-nb-tAt.normalTitle" = "המשך";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "xmf-pK-R3X"; */
+"xmf-pK-R3X.title" = "הארנק גיבוי";
+/* (No Commment) */
+"4cR-kX-YUY.text" = "לאשר את השדרוג";
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "D5e-zI-7dK"; */
+"D5e-zI-7dK.text" = "Lorem ipsum dolor לשבת er עילית lamet, consectetaur cillium adipisicing pecu, sed לעשות eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut למשל המודעה במיני veniam, quis nostrud exercitation ullamco laboris ut על תנאי aliquip ex ea commodo consequat. כשנעצר dolor irure aute ב reprehenderit ב voluptate velit esse cillum dolore האיחוד האירופי fugiat והנה pariatur. Excepteur sint occaecat cupidatat ללא proident, הנסיך של העולם ב לכמה qui officia deserunt mollit ענים מזהה laborum est. נאם conscient טה ליבר כדי גורם טאם poen legum odioque civiuda.";
+/* Class = "UIButton"; normalTitle = "Ask Me Later"; ObjectID = "HuT-V7-syg"; */
+"HuT-V7-syg.normalTitle" = ". תשאל אותי מאוחר יותר";
+/* Class = "UIButton"; normalTitle = "Upgrade"; ObjectID = "cZ9-x2-KGM"; */
+"cZ9-x2-KGM.normalTitle" = "שדרוג";
+/* Class = "UILabel"; text = "Store Hint"; ObjectID = "0zs-bt-hEl"; */
+"0zs-bt-hEl.text" = "חנות רמז";
+/* Class = "UILabel"; text = "Verify Email"; ObjectID = "8Ha-3e-Nqx"; */
+"8Ha-3e-Nqx.text" = "אימות דוא";
+/* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
+"8Zy-R2-HoW.text" = "אימות דו-שלבי";
+/* Class = "UITextField"; placeholder = "Confirm New Password"; ObjectID = "Ii6-KE-x0B"; */
+"Ii6-KE-x0B.placeholder" = "אשר סיסמה חדשה";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Kmb-pO-dHq"; */
+"Kmb-pO-dHq.text" = "חלש";
+/* Class = "UILabel"; text = "Backup Phrase"; ObjectID = "WVd-f2-ZLG"; */
+"WVd-f2-ZLG.text" = "הביטוי גיבוי";
+/* Class = "UILabel"; text = "Block TORs"; ObjectID = "Wor-ZR-sPS"; */
+"Wor-ZR-sPS.text" = "TORs בלוק";
+/* Class = "UILabel"; text = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet."; ObjectID = "bFL-5O-fcl"; */
+"bFL-5O-fcl.text" = "להגן על הארנק שלך מפני גישה לא מורשית על-ידי הפעלת אימות דו-שלבי. באפשרותך לבחור להשתמש האפליקציה בחינם או מספר הטלפון הנייד שלך כדי לאבטח את הארנק שלך. קוד זה יתבקשו בעת ניסיון לגשת את הארנק שלך.";
+/* Class = "UILabel"; text = "Link Mobile"; ObjectID = "f52-8F-scW"; */
+"f52-8F-scW.text" = "קישור סלולרי";
+/* Class = "UIButton"; normalTitle = "Use your mobile phone number"; ObjectID = "g8G-4j-qpJ"; */
+"g8G-4j-qpJ.normalTitle" = "שימוש במספר הטלפון הנייד שלך";
+/* Class = "UILabel"; text = "Enable 2-Step"; ObjectID = "gIP-mj-Hh2"; */
+"gIP-mj-Hh2.text" = "לאפשר דו-שלבי";
+/* Class = "UILabel"; text = "Complete the steps below for ultimate security"; ObjectID = "u5x-QP-acV"; */
+"u5x-QP-acV.text" = "השלם את השלבים להלן עבור אבטחה האולטימטיבי";
+/* Class = "UIViewController"; title = "Security Center"; ObjectID = "wnC-Xd-1Er"; */
+"wnC-Xd-1Er.title" = "מרכז האבטחה";
+/* (No Commment) */
+"NSCameraUsageDescription" = "פעולה זו נדרשת עבור app לסרוק קוד QR.";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "2Ig-LA-4kK"; */
+"2Ig-LA-4kK.text" = "CurrAmt";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
+"4.normalTitle" = "[%key:CONTINUE%]";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "6ll-Xx-4fm"; */
+"6ll-Xx-4fm.text" = "BtcAmt";
+/* (No Commment) */
+"6zi-8R-Tmt.normalTitle" = "BTC";
+/* Class = "UILabel"; text = "From"; ObjectID = "7"; */
+"7.text" = "מ";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "7ho-GV-ikp"; */
+"7ho-GV-ikp.text" = "BTC";
+/* (No Commment) */
+"8LN-Tc-WVh.normalTitle" = "עשיתי";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "9B2-23-8j5"; */
+"9B2-23-8j5.text" = "CurrAmt";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "52"; */
+"52.placeholder" = "0.000";
+/* (No Commment) */
+"52.text" = "0.00";
+/* (No Commment) */
+"57.text" = "כתובת";
+/* (No Commment) */
+"61.text" = "תווית:";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "62"; */
+"62.placeholder" = "תווית";
+/* (No Commment) */
+"65.text" = "כתובת:";
+/* (No Commment) */
+"67.text" = "תוויות כתובת";
+/* Class = "UIButton"; normalTitle = "Customize Fee"; ObjectID = "Cbp-Qe-FKP"; */
+"Cbp-Qe-FKP.normalTitle" = "התאמה אישית של דמי";
+/* Class = "UILabel"; text = "Fee: "; ObjectID = "FB0-NP-5do"; */
+"FB0-NP-5do.text" = "תשלום: ";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "IUn-6N-qeo"; */
+"IUn-6N-qeo.text" = "BtcAmt";
+/* Class = "UIButton"; normalTitle = "Cancel next"; ObjectID = "Pgx-k8-cTb"; */
+"Pgx-k8-cTb.normalTitle" = "ביטול הבא";
+/* Class = "UILabel"; text = "Total:"; ObjectID = "Ubr-KG-egH"; */
+"Ubr-KG-egH.text" = "סה:";
+/* Class = "UILabel"; text = "From:"; ObjectID = "ZcA-OM-4nq"; */
+"ZcA-OM-4nq.text" = "מ:";
+/* Class = "UILabel"; text = "Please Wait"; ObjectID = "Zgn-Wx-Uwx"; */
+"Zgn-Wx-Uwx.text" = "חכה בבקשה";
+/* Class = "UILabel"; text = "Fee"; ObjectID = "Zhm-Jw-P4C"; */
+"Zhm-Jw-P4C.text" = "דמי";
+/* (No Commment) */
+"aKC-Q2-phD.text" = "שליחת תשלום";
+/* Class = "UILabel"; text = "Amount: "; ObjectID = "aeG-gf-oXV"; */
+"aeG-gf-oXV.text" = "סכום: ";
+/* Class = "UIButton"; normalTitle = "Funds available"; ObjectID = "d7n-Ue-QXL"; */
+"d7n-Ue-QXL.normalTitle" = "קרנות";
+/* Class = "UILabel"; text = "To"; ObjectID = "fpY-AA-We5"; */
+"fpY-AA-We5.text" = "כדי";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "p7q-Ud-nYh"; */
+"p7q-Ud-nYh.placeholder" = "0.000";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "pPu-bJ-k6p"; */
+"pPu-bJ-k6p.normalTitle" = "המשך";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "qx4-XV-uhn"; */
+"qx4-XV-uhn.placeholder" = "0.00";
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "sXf-3w-qdy"; */
+"sXf-3w-qdy.normalTitle" = "שלח";
+/* Class = "UILabel"; text = "CurrTotal"; ObjectID = "t8M-NC-003"; */
+"t8M-NC-003.text" = "CurrTotal";
+/* Class = "UILabel"; text = "USD"; ObjectID = "vGH-md-Ck3"; */
+"vGH-md-Ck3.text" = "USD";
+/* Class = "UILabel"; text = "BtcTotal"; ObjectID = "vzP-xG-GPO"; */
+"vzP-xG-GPO.text" = "BtcTotal";
+/* Class = "UILabel"; text = "To:"; ObjectID = "yGR-Eh-YG1"; */
+"yGR-Eh-YG1.text" = "על:";
+/* Class = "UITextField"; text = "Any Address"; ObjectID = "zyc-E3-FOM"; */
+"zyc-E3-FOM.text" = "כל כתובת";
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = ". שכח את הארנק";
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 BTC";
+/* (No Commment) */
+"257.text" = "0 BTC";
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "טעינה";
+/* (No Commment) */
+"353.text" = "זיווג אוטומטי";
+/* (No Commment) */
+"358.text" = "ליצור ארנק חדש";
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "התחבר עם הארנק שלך Blockchain דרך PC או Mac שלך ב- https://login.blockchain.com";
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "לסרוק קוד התאמה";
+/* (No Commment) */
+"376.normalTitle" = "לחצן 2";
+/* (No Commment) */
+"377.normalTitle" = "לחצן 1";
+/* (No Commment) */
+"378.text" = "אם כבר יש לך ארנק Blockchain, בחר התקן זוג; אחרת, בחר ליצור את הארנק.    זה בחינם! אין דוא ל חובה.";
+/* (No Commment) */
+"380.text" = "ברוכים הבאים Blockchain את הארנק";
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "אין עסקאות אחרונות";
+/* (No Commment) */
+"394.text" = "סיסמה:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "סיסמה";
+/* (No Commment) */
+"396.text" = "אשר:";
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "אשר את הסיסמה";
+/* (No Commment) */
+"398.normalTitle" = "ליצור את הארנק";
+/* (No Commment) */
+"465.text" = "דרושה סיסמה";
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "תיאור הבקשה סיסמה";
+/* (No Commment) */
+"468.text" = "סיסמה:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "סיסמה";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"586.text" = "מזהה את הארנק:";
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "המזהה את הארנק";
+/* (No Commment) */
+"588.text" = "בחרת זוג ידנית (או שיוך אוטומטי אינו נתמך עם המכשיר). הזינו את פרטי ההתחברות שלך למטה.";
+/* (No Commment) */
+"591.text" = "סיסמה:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "סיסמה";
+/* (No Commment) */
+"602.text" = "יש אימות דו-גורמי זמין על זוג באופן ידני.";
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "התחברת או אירעה שגיאה בעת פענוח קובץ הארנק שלך. הזן את הסיסמה שלך מתחת כניסה.";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "[%key:CONTINUE%]";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "סיסמה";
+/* (No Commment) */
+"627.text" = "סיסמה:";
+/* (No Commment) */
+"630.text" = "כניסה";
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "כותרת";
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "שחזור סיסמה";
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "הדוא ל שלך";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "חלש";
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "לחצן 3";
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "על-ידי יצירת ארנק חדש אתה מסכים";
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"VcH-wh-BEs.text" = "דוא:";
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 USD";
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "אני לא יכול לגשת את המצלמה שלי";
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* חובה";
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "תנועות 0";
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "הזן את המילים שחזור 12 שלך עם רווחים כדי לשחזר את קרנות & תנועות";
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "זיווג ידני";
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Blockchain תנאי השירות";
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* מינימום 10 תווים";
+" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = " כל אחד עם גישה הביטוי השחזור שלך יש גישה ביטקוין שלך כדי להיות בטוח כדי לשמור אותו באופן לא מקוון במקום מאוד בטוחה ומאובטחת.";
+/* (No Commment) */
+" We recommend the fee below for the transaction at this time." = " אנו ממליצים על דמי מתחת עבור התנועה בשלב זה.";
+/* (No Commment) */
+"%@ BTC" = "%@ BTC";
+/* (No Commment) */
+"%@ Confirmations" = "%@ אישורי";
+/* (No Commment) */
+"%@ copied to clipboard" = "%@ יועתק אל הלוח";
+/* (No Commment) */
+"%d Confirmations" = "%d אישורי";
+/* (No Commment) */
+"%d Transactions" = "%d תנועות";
+/* (No Commment) */
+"%d address" = "כתובת %d";
+/* (No Commment) */
+"%d addresses" = "כתובות %d";
+"%lld hours ago" = "%lld. לפני כמה שעות";
+"%lld minutes ago" = "%lld. לפני כמה דקות";
+"%lld seconds ago" = "לפני %lld שניות";
+/* (No Commment) */
+"%lu Recipients" = "%lu נמענים";
+"1 hour ago" = "לפני 1 שעה";
+"1 minute ago" = "לפני 1 דקה";
+/* (No Commment) */
+"2-Step Enabled" = "2-שלב זמינה";
+/* (No Commment) */
+"2-Step has been disabled." = "2-שלב בוטלה.";
+/* (No Commment) */
+"2-Step has been enabled for SMS." = "2-שלב הוגדר כזמין עבור SMS.";
+/* (No Commment) */
+"2-step Verification is currently disabled." = "אימות דו-שלבי אינה זמינה כעת.";
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "אימות דו-שלבי זמין כעת עבור %@.";
+/* (No Commment) */
+"2-step Verification is currently enabled." = "אימות דו-שלבי זמין כעת.";
+/* (No Commment) */
+"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "לא ניתן ליצור חיבור כי אין אפשרות לאמת את האישור של שרת. אנא בדוק את הגדרות הרשת שלך, ודא כי אתה משתמש בחיבור מאובטח.";
+/* (No Commment) */
+"API URL" = "API של כתובת URL";
+/* (No Commment) */
+"About" = "אודות";
+/* (No Commment) */
+"Account Details" = "פרטי חשבון";
+/* (No Commment) */
+"Accounts" = "חשבונות";
+/* (No Commment) */
+"Add Email" = "הוסף דוא";
+/* (No Commment) */
+"Add to Address book?" = "הוסף את פנקס הכתובות?";
+/* (No Commment) */
+"Address" = "כתובת";
+/* (No Commment) */
+"Address book" = "פנקס הכתובות";
+/* (No Commment) */
+"Address is not valid" = "כתובת אינה חוקית";
+/* (No Commment) */
+"Addresses" = "כתובות";
+/* (No Commment) */
+"Adjust Fee" = "להתאים את דמי";
+/* (No Commment) */
+"Allowed" = "מותר";
+/* (No Commment) */
+"Amount" = "כמות";
+/* (No Commment) */
+"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "סכום חייב להיות גדול או שווה להסף אבק (%lld סטושי)";
+/* (No Commment) */
+"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "שגיאה אירעה עקב הפרעות במהלך אימות PIN. נא לסגור את היישום ונסה שוב.";
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "אירעה שגיאה בעת אימות הקוד האישי שלך עם השרת המרוחק. אתה יכול להיות מנותק או Blockchain עשויים לחוות קשיים. האם ברצונך לנסות שוב אימות או במקום להזין את הסיסמה שלך באופן ידני?";
+/* (No Commment) */
+"An error occurred while changing 2-Step verification." = "אירעה שגיאה בזמן שינוי אימות דו-שלבי.";
+/* (No Commment) */
+"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "אירעה שגיאה במהלך העתקת כתובת שלך ללוח. נא בחר שוב את כתובת היעד או הפעל מחדש את היישום ונסה שוב.";
+/* (No Commment) */
+"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "אירעה שגיאה בעת שמירת השינויים. נא ודא כי אתה לא נכנסת לתוך הארנק שלך בהתקן אחר.";
+/* (No Commment) */
+"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "אירעה שגיאה בעת עדכון יתרת מתכלה למכשיר שלך. נא בדוק את חיבור האינטרנט שלך ונסה שוב.";
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "אירעה שגיאה בעת טעינת הארנק שלך. אתה יכול להיות מנותק או Blockchain הוא נתקל בקשיים. נא לסגור את היישום, נסה שוב מאוחר יותר או לשייך מחדש את המכשיר.";
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "אירעה שגיאה בעת אחזור המזהה את הארנק שלך מחזיק מפתחות. נא לסגור את היישום ונסה שוב.";
+/* (No Commment) */
+"Any address" = "כל כתובת";
+/* (No Commment) */
+"App Store review prompt timer (seconds)" = "App Store סקירה בקש טיימר (שניות)";
+/* (No Commment) */
+"Archive Address" = "ארכיון כתובת";
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "ארכיון זה אם אתה לא רוצה להמשיך להשתמש בו. קרנות שלך יישאר בטוח, אתה יכול unarchive אותו בכל עת.";
+/* (No Commment) */
+"Archiving addresses" = "בארכיון כתובות";
+/* (No Commment) */
+"Ask Me Later" = ". תשאל אותי מאוחר יותר";
+/* (No Commment) */
+"Authenticate with Touch ID" = "אימות עם מזהה מגע";
+/* (No Commment) */
+"Authorization Required" = "אישור נדרש";
+/* (No Commment) */
+"Automatically" = "באופן אוטומטי";
+"BACKUP FUNDS" = "קרנות גיבוי";
+/* (No Commment) */
+"Backup" = "גיבוי";
+"Backup Funds" = "קרנות גיבוי";
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "בטרם ייגש הארנק שלך, אנא בחר מספר pin כדי להשתמש כדי לפתוח את הארנק שלך. חשוב שתזכור את הסיכה הזאת כמו זה ניתן לאפס או לשנות ללא הראשון פותח את היישום.";
+/* (No Commment) */
+"Block Tor" = "לחסום את תור";
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain אין גישה למצלמה. כדי לאפשר גישה, עבור ההתקן שלך, הגדרות.";
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain מושבת כעת לצורך תחזוקה. נא נסה שוב מאוחר יותר.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך. באפשרותך לאפשר גישה בהגדרות -> פרטיות -> שירותי איכון";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain צריך שירותי איכון זמינה כדי לגשת למיקום שלך. באפשרותך לאפשר גישה בהגדרות -> פרטיות -> מיקום -> שירותי איכון";
+/* (No Commment) */
+"Blocked" = "חסם";
+/* (No Commment) */
+"Calculating: Address %@ of %@" = "חישוב: %1$@ כתובת של %2$@";
+/* (No Commment) */
+"Camera Access Denied" = "המצלמה הגישה נדחתה";
+/* (No Commment) */
+"Cancel" = "ביטול";
+/* (No Commment) */
+"Cancelling" = "ביטול";
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "אין אפשרות לשמור קוד PIN בזמן הארנק לא אותחל או סיסמה הוא null";
+/* (No Commment) */
+"Change Email" = "שינוי דוא";
+/* (No Commment) */
+"Change Mobile Number" = "שינוי מספר טלפון נייד";
+/* (No Commment) */
+"Change Password Hint" = "שינוי לסיסמה";
+/* (No Commment) */
+"Change fee per kilobyte" = "שינוי דמי לכל קילו בייט";
+/* (No Commment) */
+"Checking for Wallet updates" = "הארנק עדכונים";
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "בדיקת יותר: שלב %1$d של %2$d";
+"Close" = "סגור";
+/* (No Commment) */
+"Close App" = "סגור את יישום";
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "השלם את השלבים להלן עבור אבטחה האולטימטיבי";
+/* (No Commment) */
+"Confirm your PIN" = "לאשר את מספר הזיהוי האישי";
+/* (No Commment) */
+"Confirmed" = "אישר";
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "תם הזמן שהוקצב לחיבור. נא בדוק את החיבור שלך לאינטרנט.";
+/* (No Commment) */
+"Continue" = "המשך";
+/* (No Commment) */
+"Copy Wallet ID" = "מזהה את הארנק עותק";
+/* (No Commment) */
+"Copy to clipboard" = "העתק ללוח";
+/* (No Commment) */
+"Copy xPub" = "העתק xPub";
+/* (No Commment) */
+"Could not find transaction with hash %@ when reloading data" = "לא היתה אפשרות למצוא תנועת עם hash %@ בעת טעינה מחדש של נתונים";
+/* (No Commment) */
+"Could not get value when sent - please check your internet connection and try again." = "יכול לא לקבל ערך כאשר שלח - אנא בדוק את חיבור האינטרנט שלך ונסה שוב.";
+/* (No Commment) */
+"Create" = "צור";
+/* (No Commment) */
+"Create New Wallet" = "ליצור את הארנק החדש";
+/* (No Commment) */
+"Creating" = "יצירת";
+/* (No Commment) */
+"Creating V3 Wallet" = "יצירת הארנק V3";
+/* (No Commment) */
+"Creating Wallet" = "יצירת הארנק";
+/* (No Commment) */
+"Creating new Wallet" = "יצירת הארנק החדש";
+/* (No Commment) */
+"Creating new address" = "יצירת כתובת חדשה";
+/* (No Commment) */
+"Current rate: %@ BTC" = "שיעור נוכחי: %@ BTC";
+/* (No Commment) */
+"Customize the way you organize your bitcoin in your Blockchain Wallet" = "התאמה אישית של הדרך בה תארגן ביטקוין שלך בארנק שלך Blockchain";
+/* (No Commment) */
+"Date" = "תאריך";
+/* (No Commment) */
+"Debug" = "איתור באגים";
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "אורך PIN סיסמה מפוענחים 0";
+/* (No Commment) */
+"Decrypting Private Key" = "פענוח מפתח פרטי";
+/* (No Commment) */
+"Decrypting Wallet" = "פענוח הארנק";
+/* (No Commment) */
+"Description" = "תיאור";
+/* (No Commment) */
+"Details" = "פרטים";
+/* (No Commment) */
+"Disabled" = "בעלי מוגבלויות";
+/* (No Commment) */
+"Display" = "התצוגה";
+/* (No Commment) */
+"Do you really want to log out?" = "אתה רוצה לצאת?";
+/* (No Commment) */
+"Don't show again" = "אל תציג שוב";
+/* (No Commment) */
+"Downloading Wallet" = "הורדת את הארנק";
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "פעם אחת קלה הארנק גיבוי משאיר אותך בשליטה של קרנות שלך";
+/* (No Commment) */
+"Email Verified" = "אימות דוא";
+/* (No Commment) */
+"Empty response from server." = "תגובה ריקה מהשרת.";
+/* (No Commment) */
+"Enable 2-Step" = "לאפשר דו-שלבי";
+/* (No Commment) */
+"Enable 2-Step for SMS" = "אפשר 2-צעד עבור SMS";
+/* (No Commment) */
+"Enable Location Services" = "הפעלת שירותי איכון";
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "לאפשר הודעות כדי לקבל דואר אלקטרוני או הודעת SMS בכל פעם שאתה מקבל ביטקוין. רק עם תוויות כתובות ולא לייבא כתובות זכאים הודעות על ההדק.";
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "לאפשר אפשרות זו כדי למנוע כתובות IP ידועים להיות חלק של רשת ה-Tor anonymizing מלגשת אל הארנק שלך. רשת ה-Tor משמש לעתים קרובות על ידי האקרים המנסה לגשת ארנקים Blockchain הגולשים.";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "הפעלת אפשרות זו לחשוף כתובת קבלה בעת לסחוב שמאלה במסך ה-PIN, ביצוע מהיר אפילו המקבל ביטקוין. חמש כתובות ייטענו ברציפות, לאחר מכן כניסה נדרש להציג כתובות חדש.";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "הפעלת אפשרות זו לחשוף כתובת קבלה בעת לסחוב שמאלה במסך ה-PIN, ביצוע מהיר אפילו המקבל ביטקוין. אחת הכתובות ייטענו, כניסה נדרש להציג כתובת חדשה.";
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "הפעלת תכונה זו תאפשר לכל המשתמשים בעלי טביעת אצבע המגע מזהה רשומה על התקן זה כדי לגשת את הארנק שלך.";
+/* (No Commment) */
+"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "נהנה את הארנק Blockchain? נא לקחת רגע כדי לעזוב סקירה ב- App Store. ולתת לאחרים לדעת על זה.";
+/* (No Commment) */
+"Enter %@ amount" = "הזן כמות %@";
+/* (No Commment) */
+"Enter Bitcoin address or select" = "הזן כתובת ביטקוין או בחר";
+/* (No Commment) */
+"Enter Password" = "הזן את הסיסמה";
+/* (No Commment) */
+"Enter Verification Code" = "הזן את קוד האימות";
+/* (No Commment) */
+"Enter your verification code" = "הזן את קוד האימות";
+"Error" = "שגיאה";
+/* (No Commment) */
+"Error loading settings" = "שגיאה בטעינת הגדרות";
+/* (No Commment) */
+"Error updating settings" = "שגיאה בעת עדכון הגדרות";
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "כל מה שאתה צריך כדי לאחסן, לבלות ולקבל שלך ביטקוין";
+/* (No Commment) */
+"Failed To Load Wallet" = "לא הצליח לטעון את הארנק";
+/* (No Commment) */
+"Failed to validate server certificate" = "נכשל באימות אישור שרת";
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "התשלום הוא גבוה מדי (0.01 BTC מוגבל)";
+/* (No Commment) */
+"Fee per KB" = "תשלום לכל KB";
+/* (No Commment) */
+"Fees" = "דמי";
+/* (No Commment) */
+"Finished Signing Inputs" = "סיים חתימת כניסות";
+/* (No Commment) */
+"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "פרטיות מוגברת, נוכל ליצור כתובת ייחודית עבור כל תשלום. כל כתובות שנוצרו בארנק שלך יכולים עדיין לקבל כספים, אפילו אם הם כבר לא מופיעים תחת קבלה.";
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "למען הבטיחות שלך, אנו ממליצים לך להעביר כל היתרות שלך כתובות מיובאות לתוך הארנק שלך Blockchain.";
+/* (No Commment) */
+"Forget Wallet" = ". שכח את הארנק";
+/* (No Commment) */
+"Found %d, with %@" = "נמצאו %1$d, עם %2$@";
+/* (No Commment) */
+"From" = "מ";
+/* (No Commment) */
+"From and destination address have to be different" = "מ כתובת היעד חייב להיות שונה";
+/* (No Commment) */
+"From and destination have to be different" = "מן היעד חייב להיות שונה";
+/* (No Commment) */
+"Go to Settings" = "עבור אל הגדרות";
+/* (No Commment) */
+"Hint Stored" = "רמז מאוחסנים";
+/* (No Commment) */
+"How would you like to pair?" = "? מה דעתך על זוג";
+/* (No Commment) */
+"Identifier" = "המזהה";
+/* (No Commment) */
+"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "אם אתה סוחר, הצג את המפתח הציבורי המורחבת שלך (xPub), להשתמש app Blockchain הסוחר לקבל כספים.";
+/* (No Commment) */
+"Import Private Key" = "מפתח פרטי ייבוא";
+/* (No Commment) */
+"Import address" = "ייבוא כתובת";
+/* (No Commment) */
+"Imported Addresses (Archived)" = "כתובות מיובאות (בארכיון)";
+/* (No Commment) */
+"Imported Private Key %@" = "מפתח פרטי מיובאת %@";
+/* (No Commment) */
+"Imported watch-only address %@" = "כתובת השעון בלבד המיובאים %@";
+/* (No Commment) */
+"Importing key" = "ייבוא מפתח";
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "PIN שגוי. נא נסה שנית.";
+/* (No Commment) */
+"Incorrect password" = "סיסמה שגויה";
+/* (No Commment) */
+"Incorrect private key" = "המפתח הפרטי שגוי";
+/* (No Commment) */
+"Increase fee" = "להגדיל את דמי";
+/* (No Commment) */
+"Initializing Wallet" = "מאתחל את הארנק";
+/* (No Commment) */
+"Insufficient Funds" = "אין לי כסף";
+/* (No Commment) */
+"Invalid Identifier" = "מזהה לא חוקי";
+/* (No Commment) */
+"Invalid Pairing Code" = "קוד לא תקף זיווג";
+/* (No Commment) */
+"Invalid Send Value" = "ערך לא חוקי שלח";
+/* (No Commment) */
+"Invalid Shared Key" = "חוקי משותפים מפתח";
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "קוד מצב לא חוקי חזר %@";
+/* (No Commment) */
+"Invalid address: %@" = "כתובת לא חוקית: %@";
+/* (No Commment) */
+"Invalid email address." = "דוא ל לא תקין";
+/* (No Commment) */
+"Invalid mobile number." = "מספר טלפון נייד לא חוקי.";
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "הביטוי שחזור לא חוקי. אנא נסה שנית";
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "תגובת השרת לא חוקי. נא בדוק את החיבור שלך לאינטרנט.";
+/* (No Commment) */
+"Invalid to bitcoin address" = "חוקי לכתובת ביטקוין";
+/* (No Commment) */
+"Invalid two-factor authentication type" = "סוג לא חוקי אימות שני הגורמים";
+/* (No Commment) */
+"Invalid verification code. Please try again." = "קוד אימות לא חוקי. נא נסה שוב.";
+"It is important to make sure you write down your words exactly as they appear here and " = "חשוב לוודא לרשום את המילים שלך בדיוק כפי שהם מופיעים כאן, ";
+"Just now" = "רק עכשיו";
+/* (No Commment) */
+"Keep higher fee" = "לשמור על תשלום גבוה יותר";
+/* (No Commment) */
+"Keep lower fee" = "לשמור על שכר נמוך";
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "שמור את xPub הפרטי. מישהו עם גישה xPub שלך תהיה אפשרות לראות את כל הכספים, תנועות.";
+/* (No Commment) */
+"Key already imported" = "מפתח כבר מיובא";
+/* (No Commment) */
+"Label Address" = "תוויות כתובת";
+/* (No Commment) */
+"Label must contain letters and numbers only" = "התווית חייב להכיל אותיות ומספרים בלבד";
+/* (No Commment) */
+"Label must have less than 18 characters" = "התווית חייב להיות פחות מ- 18 תווים";
+/* (No Commment) */
+"Large Transaction" = "העברות גדולות";
+/* (No Commment) */
+"Learn More" = "למד עוד";
+/* (No Commment) */
+"Link Mobile" = "קישור סלולרי";
+/* (No Commment) */
+"Load More Transactions" = "לטעון עוד עסקאות";
+/* (No Commment) */
+"Loading External Page" = "טעינת דף חיצוני";
+/* (No Commment) */
+"Loading transactions" = "טעינת עסקאות";
+/* (No Commment) */
+"Log in to my Wallet" = "התחבר עם הארנק שלי";
+/* (No Commment) */
+"Login existing Wallet" = "הארנק קיימת כניסה";
+/* (No Commment) */
+"Logout and forget wallet" = "יציאה ולשכוח את הארנק";
+/* (No Commment) */
+"Lower fee" = "עלות נמוכה יותר";
+/* (No Commment) */
+"Make Default" = "להפוך את ברירת המחדל";
+/* (No Commment) */
+"Manually" = "באופן ידני";
+/* (No Commment) */
+"Merchant" = "סוחר";
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "מדריך סוחר אינו זמין כעת. נא נסה שוב מאוחר יותר.";
+/* (No Commment) */
+"Merchant Map" = "סוחר מפה";
+/* (No Commment) */
+"Merchant URL" = "כתובת url של סוחר";
+/* (No Commment) */
+"Mobile Linked" = "ניידים מקושרים";
+/* (No Commment) */
+"Mobile Number" = "מספר טלפון נייד";
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "הערה: המפתח הפרטי שנסרקו אינו תואם לכתובת זו השעון בלבד. אם אתה רוצה לבלות מכתובת זו, ודא סריקה של המפתח הפרטי המתאים.";
+/* (No Commment) */
+"Needs BIP38 Password" = "צריך סיסמה BIP38";
+/* (No Commment) */
+"New Address" = "כתובת חדשה";
+/* (No Commment) */
+"New Email Address" = "כתובת הדוא ל החדשה";
+/* (No Commment) */
+"New Mobile Number" = "מספר נייד חדש";
+/* (No Commment) */
+"New PIN must be different" = "ה-PIN החדש חייב להיות שונה";
+/* (No Commment) */
+"New password must be different" = "הסיסמה החדשה להיות שונה";
+/* (No Commment) */
+"New password must be different from your password hint" = "הסיסמה החדשה להיות שונה לסיסמה";
+"Next word" = "המילה הבאה";
+/* (No Commment) */
+"No Label" = "ללא תווית";
+"No Password Entered" = "ללא הסיסמה שהוזנו";
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "חיבור לאינטרנט זמין. נא בדוק את הגדרות הרשת שלך.";
+/* (No Commment) */
+"No internet connection." = "חיבור לאינטרנט.";
+/* (No Commment) */
+"Not Stored" = "אינם מאוחסנים";
+/* (No Commment) */
+"Notifications" = "הודעות";
+/* (No Commment) */
+"Open %@?" = "%@ פתוח?";
+/* (No Commment) */
+"Open Mail App" = "App דואר פתוח";
+/* (No Commment) */
+"PIN" = "סיכה";
+/* (No Commment) */
+"PIN Encrypted String is nil" = "מחרוזת מוצפנת PIN היא אפסית";
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "סיכת עצם התגובה מפתח או ערך אורך 0";
+/* (No Commment) */
+"PIN Response Object success length 0" = "עצם התגובה, סיכת הצלחה אורך 0";
+/* (No Commment) */
+"PIN Saved Successfully" = "סיכה, שנשמרו בהצלחה";
+/* (No Commment) */
+"PIN Validation Error" = "שגיאת אימות PIN";
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "אין אפשרות להשלים את האימות PIN. הזינו בבקשה את הסיסמה הארנק שלך באופן ידני.";
+/* (No Commment) */
+"PINs do not match" = "הפינים אינם תואמים";
+/* (No Commment) */
+"Parsing Pairing Code" = "ניתוח קוד התאמה";
+/* (No Commment) */
+"Password Hint" = "לסיסמה";
+/* (No Commment) */
+"Password Required" = "דרושה סיסמה";
+/* (No Commment) */
+"Password changed. Please login to continue." = "סיסמה לשינוי. אנא התחבר כדי להמשיך.";
+/* (No Commment) */
+"Password must be different from your email" = "הסיסמה חייבת להיות שונה הדוא ל שלך";
+/* (No Commment) */
+"Password must be less than or equal to 255 characters" = "הסיסמה חייבת להיות קטן או שווה ל- 255 תווים";
+/* (No Commment) */
+"Payment Received" = "התשלום התקבל";
+/* (No Commment) */
+"Payment Sent!" = "התשלום נשלח!";
+/* (No Commment) */
+"Payments Sent" = "תשלומים שנשלחו";
+/* (No Commment) */
+"Pending" = "ממתינה";
+/* (No Commment) */
+"Pending (%@ Confirmations)" = "ממתינים (אישורי%@)";
+/* (No Commment) */
+"Phrase Backed" = "הביטוי מגובה";
+/* (No Commment) */
+"Please Login" = "אנא התחבר";
+/* (No Commment) */
+"Please add an email address" = "נא להוסיף כתובת דואר אלקטרוני";
+/* (No Commment) */
+"Please check your email and click on the verification link." = "נא בדוק את הדוא ל שלך ולחץ על הקישור אימות.";
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "נא בדוק את הדוא ל שלך. אם וידאת כבר ניסיון כניסה, עליך להיכנס באמצעות הארנק האינטרנט שלנו, זוג בטלפון שלך על-ידי סריקת הקוד QR תחת הגדרות-> הארנק מידע.";
+/* (No Commment) */
+"Please check your internet connection." = "נא בדוק את החיבור שלך לאינטרנט.";
+/* (No Commment) */
+"Please choose another PIN" = "נא לבחור סיכה אחרת";
+/* (No Commment) */
+"Please choose from the options below." = "נא לבחור מתוך האפשרויות הבאות.";
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "הזינו בבקשה את תשלום גדול מ- 0 BTC, לכל היותר 0.01 BTC";
+/* (No Commment) */
+"Please enter a new PIN" = "נא להזין מספר זיהוי אישי חדש";
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "אנא הקלידו את הקוד 2FA %@";
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "נא הזן המזהה את הארנק שלך תו 36 כראוי. ניתן למצוא בדוא ל ברוכים הבאים בעת ההפעלה.";
+/* (No Commment) */
+"Please enter your PIN" = "אנא הזן את מספר הזיהוי האישי";
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "הזינו בבקשה את הביטוי השחזור שלך עם מילים המופרדות באמצעות רווחים";
+/* (No Commment) */
+"Please login to load more addresses." = "אנא התחבר כדי לטעון כתובות נוספות.";
+/* (No Commment) */
+"Please lower the fee to an amount that is less than your balance" = "בבקשה תנמיך את תשלום סכום שהוא פחות האיזון שלך";
+/* (No Commment) */
+"Please provide an email address." = "נא לספק כתובת דואר אלקטרוני.";
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "נא לרענן את קוד ההתאמה ונסה שוב.";
+/* (No Commment) */
+"Please select a different address to send from." = "בחר כתובת שונה לשלוח מ.";
+/* (No Commment) */
+"Please send %@ to bitcoin address.\
+%@" = "נא לשלוח %1$@ לכתובת ביטקוין.\
+%2$@";
+/* (No Commment) */
+"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "נא לשלוח את התשלום לכתובת ביטקוין (< href = \"https://blockchain.info/wallet/bitcoin-faq\" > לעזור? < /a >): %@";
+"Please try again" = "אנא נסה שנית";
+/* (No Commment) */
+"Please verify your email address first." = "נא ודא כי כתובת הדוא ל שלך קודם.";
+/* (No Commment) */
+"Please verify your mobile number first." = "נא ודא את מספר הנייד שלך קודם.";
+/* (No Commment) */
+"Preparing transfer" = "הכנת העברה";
+/* (No Commment) */
+"Processing key" = "עיבוד מפתח";
+/* (No Commment) */
+"Rate Blockchain Wallet" = "קצב Blockchain הארנק";
+/* (No Commment) */
+"Receive" = "לקבל";
+/* (No Commment) */
+"Receive to..." = "לקבל את...";
+/* (No Commment) */
+"Received" = "התקבל";
+/* (No Commment) */
+"Recipients" = "נמענים";
+/* (No Commment) */
+"Recovering Funds" = "קרנות בגמילה";
+/* (No Commment) */
+"Request" = "בקשה";
+/* (No Commment) */
+"Request Amount" = "לבקש סכום";
+/* (No Commment) */
+"Request failed. Please check your internet connection." = "הבקשה נכשלה. נא בדוק את החיבור שלך לאינטרנט.";
+/* (No Commment) */
+"Resend verification SMS" = "שלח מחדש אימות ב- SMS";
+/* (No Commment) */
+"Resend verification email" = "שלח מחדש דואר אלקטרוני לאימות";
+/* (No Commment) */
+"Reset" = "איפוס";
+/* (No Commment) */
+"Retrieving recommended fee" = "מאחזר מומלץ דמי";
+/* (No Commment) */
+"Retry Validation" = "נסה שנית אימות";
+/* (No Commment) */
+"SMS Notifications" = "הודעות SMS";
+/* (No Commment) */
+"Save" = "שמור";
+/* (No Commment) */
+"Scan Pairing Code" = "לסרוק קוד התאמה";
+/* (No Commment) */
+"Scan Private Key" = "סרוק מפתח פרטי";
+/* (No Commment) */
+"Scan QR Code" = "לסרוק קוד QR";
+/* (No Commment) */
+"Scan QR code" = "לסרוק קוד QR";
+/* (No Commment) */
+"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "סרוק או העתק את הקוד לתוך האפליקציה Blockchain הסוחר שלך בצורה מאובטחת לקבל ביטקוין.";
+"Second Password Incorrect" = "סיסמה שנייה שגוי";
+"Second Password Required" = "דרושה סיסמה שנייה";
+/* (No Commment) */
+"Security Center" = "מרכז האבטחה";
+/* (No Commment) */
+"Security Center completed - your wallet is safe and secure" = "מרכז האבטחה הושלמה - הארנק שלך הוא בטוח ומאובטח";
+/* (No Commment) */
+"Send from..." = "לשלוח...";
+/* (No Commment) */
+"Send to..." = ". לשלוח...";
+/* (No Commment) */
+"Send verification SMS" = "שלח אימות ב- SMS";
+/* (No Commment) */
+"Sending Transaction" = "שליחת עסקת";
+/* (No Commment) */
+"Sent" = "שלח";
+/* (No Commment) */
+"Sent to %@" = "נשלח ע י %@";
+/* (No Commment) */
+"Server URL" = "כתובת url של השרת";
+/* (No Commment) */
+"Set as Default?" = "קבע ברירת מחדל?";
+/* (No Commment) */
+"Show all 'Dont Show Again' alerts" = "הצג את כל ההתראות \"אל תציג שנית\"";
+"Signal %d was raised." = "אות %d גדל.";
+/* (No Commment) */
+"Signing Input %d" = "חתימת %d קלט";
+/* (No Commment) */
+"Signing Inputs" = "חתימת כניסות";
+/* (No Commment) */
+"Simulate surge" = "לדמות גל";
+/* (No Commment) */
+"Some funds cannot be transferred automatically." = "אין אפשרות להעביר כספים באופן אוטומטי.";
+/* (No Commment) */
+"Status" = "מצב";
+/* (No Commment) */
+"Store Hint" = "חנות רמז";
+/* (No Commment) */
+"Stored" = "מאוחסן";
+/* (No Commment) */
+"Success!" = "הצלחה!";
+/* (No Commment) */
+"Surge Occurring" = "עליית מתח המתרחשים";
+/* (No Commment) */
+"Swipe to Receive" = "נשמטים לקבל";
+"Syncing Wallet" = "מסנכרן את הארנק";
+/* (No Commment) */
+"Tap to copy this address. Share it with the sender via email or text." = "הקש כדי להעתיק את הכתובת הזו. לשתף אותו עם השולח באמצעות דואר אלקטרוני או טקסט.";
+/* (No Commment) */
+"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "הרשת הכרייה ביטקוין כיום נתקלת נפח גבוה של פעילות, וכתוצאה מכך מומלץ תשלומים גבוהים מהרגיל.";
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "הסכום שברצונך לשלוח (%1$@) גדול יותר מהסכום המרבי שתוכלו לבלות פחות דמי (%2$@ - %3$@). האם ברצונך לשלוח %4$@?";
+/* (No Commment) */
+"The fee you have specified is too low." = "דמי שציינת הוא נמוך מדי.";
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "המפתח הפרטי שאתה מנסה לייבא מוצפן. נא הזן את הסיסמה שלהלן.";
+/* (No Commment) */
+"There was a problem verifying your identity." = "אירעה בעיה מאמת את זהותך.";
+/* (No Commment) */
+"There was an error importing this private key" = "אירעה שגיאה בעת ייבוא זה המפתח הפרטי";
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "אפשרויות אלה מומלץ עבור משתמשים מתקדמים בלבד. האם להמשיך?";
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "פעולה זו דורשת את המפתח הפרטי עבור %@ כתובת ביטקוין. בבקשה לסרוק קוד QR.";
+/* (No Commment) */
+"This action requires the second password for your wallet. Please enter it below and press continue." = "פעולה זו דורשת הסיסמה השנייה לארנק ביטקוין. אנא הכניסו אותה בהמשך והמשך העיתונות.";
+/* (No Commment) */
+"This address has already been used. Please login." = "כתובת זו כבר היה בשימוש. אנא התחבר.";
+/* (No Commment) */
+"This address is not watch-only." = "כתובת זו אינה השעון בלבד.";
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "זה כתובת השעון בלבד. כדי להעביר את הכספים שלך מהארנק הזה, בבקשה לסרוק את המפתח הפרטי שלך.";
+/* (No Commment) */
+"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "זוהי טרנזקציה ביטקוין מנופחים. הארנק שלך צריך לאחד תשלומים קטנים רבים שהתקבלו בעבר. פעולה זו דורשת תשלום גבוה יחסית על מנת להיות מאושרות במהירות. אם זה בסדר עבור התנועה לוקח קצת יותר זמן כדי לאשר, באפשרותך להפחית את דמי באופן ידני על-ידי הקשה \"התאמה אישית של תשלום חודשי.";
+/* (No Commment) */
+"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "זה נמצא בארכיון. אבל אתה לא יכול לשלוח כספים מכאן, כל קרנות יישאר בטוח. Unarchive פשוט כדי להתחיל להשתמש בו שוב.";
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "שם זה כבר נמצא בשימוש. נא לבחור שם אחר.";
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "המפתח הפרטי הזה שייך לכתובת אחרת, שאינה רק את השעון";
+/* (No Commment) */
+"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "תנועה זו דורשת תשלום גבוה יותר לצריכה אבק בגלל כמות קטנה של שינוי יוחזר.";
+/* (No Commment) */
+"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "זה יאפשר את ההתראות הבאות: לקבל בקשה סקירה השעון בלבד, App Store, להעביר את כספי.";
+/* (No Commment) */
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "זה יביא למחיקת כל הנתונים הארנק בהתקן זה. אנא אשרו שאת הארנק מידע שנמסר הציל במקום אחר אחרת כל ביטקוין בצוואה את הארנק הזה אינו נגיש!!";
+/* (No Commment) */
+"To" = "כדי";
+/* (No Commment) */
+"Tor Requests" = "תור בקשות";
+/* (No Commment) */
+"Tor blocked" = "טור חסום";
+/* (No Commment) */
+"Tor requests allowed" = "בקשות תור מותר";
+/* (No Commment) */
+"Tor requests are currently allowed." = "תור בקשות כיום מותר.";
+/* (No Commment) */
+"Tor requests are currently blocked." = "תור בקשות כיום חסומים.";
+/* (No Commment) */
+"Total Balance" = "המאזן";
+/* (No Commment) */
+"Touch ID has been locked due to too many failed attempts." = "מזהה מגע ננעל עקב ניסיונות כושלים רבים מדי.";
+/* (No Commment) */
+"Touch ID is not available on this device." = "מזהה מגע אינה זמינה במכשיר זה.";
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "מזהה מגע אינו זמין בהתקן זה. כדי לאפשר זיהוי מגע, ללכת & מזהה הגדרות->Touch קוד ולהוסיף על טביעת אצבע.";
+/* (No Commment) */
+"Transaction Fees" = "עלויות עסקה";
+/* (No Commment) */
+"Transaction fee: %@" = "דמי העסקה: %@";
+/* (No Commment) */
+"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "עלויות עסקה להשפיע כמה מהר הרשת הכרייה ביטקוין לאשר את העסקאות שלך, ותלויות התנאים הרשת הנוכחית.";
+/* (No Commment) */
+"Transactions" = "תנועות";
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "תנועות ללא עלויות עשויה להימשך זמן רב כדי לאשר או עשוי לא להיות מאושרות בכלל. האם ברצונך להמשיך?";
+/* (No Commment) */
+"Transfer Funds" = "העברת כספים";
+/* (No Commment) */
+"Transferred funds from %d %@" = "כספים שהועברו %1$d %2$@";
+/* (No Commment) */
+"Transferred funds from %d %@. Outputs for %d %@ were too small." = "כספים שהועברו %1$d %2$@. יציאות עבור %3$d %4$@ היו קטנות מדי.";
+/* (No Commment) */
+"Transferring all funds: Address %i of %i" = "העברת כספים כל: כתובת %1$i של %2$i";
+/* (No Commment) */
+"UPGRADE YOUR WALLET" = "לשדרג את הארנק שלך";
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "אין אפשרות לטעון את הארנק בגלל שאין תגובה מהשרת. אתה יכול להיות מנותק או Blockchain הוא נתקל בקשיים. נא נסה שוב מאוחר יותר.";
+/* (No Commment) */
+"Unarchive Address" = "Unarchive כתובת";
+/* (No Commment) */
+"Unconfirmed" = "לא מאושר";
+"Unhandled exception" = "חריג שאינו מטופל";
+/* (No Commment) */
+"Unknown" = "ידוע";
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "שגיאה לא ידועה מזהה מגע. קוד: %ld";
+/* (No Commment) */
+"Unknown key format" = "תבנית המפתח לא ידוע";
+/* (No Commment) */
+"Unsupported Private Key Format" = "בתבנית שאינה נתמכת של מפתח פרטי";
+/* (No Commment) */
+"Unverified" = "לא מאומתים";
+/* (No Commment) */
+"Upgrade Wallet" = "לשדרג את הארנק";
+/* (No Commment) */
+"Upgrade to V3" = "שדרג ל- V3";
+/* (No Commment) */
+"Use Touch ID as PIN" = "השתמש במזהה מגע כמו סיכה";
+/* (No Commment) */
+"Use all funds" = "להשתמש בכספי";
+/* (No Commment) */
+"Use recommended values" = "השתמש בערכים מומלצים";
+/* (No Commment) */
+"Use total available minus fee: %@" = "שימוש שהסכום הזמין מינוס דמי: %@";
+/* (No Commment) */
+"User Declined" = "המשתמש סירב";
+"VERIFY BACKUP" = "ודא גיבוי";
+/* (No Commment) */
+"Value when sent: %@" = "ערך כאשר נשלח: %@";
+/* (No Commment) */
+"Verification email has been sent to %@." = "דואר אלקטרוני לאימות נשלחה %@.";
+/* (No Commment) */
+"Verified" = "אומת";
+/* (No Commment) */
+"Verify Email" = "אימות דוא";
+/* (No Commment) */
+"Verifying" = "אימות";
+/* (No Commment) */
+"Wallet Information" = "הארנק מידע";
+/* (No Commment) */
+"Wallet JSON" = "הארנק JSON";
+/* (No Commment) */
+"Wallet Paired Successfully." = "הארנק לזווג בהצלחה.";
+/* (No Commment) */
+"Recovery Phrase" = "הביטוי שחזור";
+/* (No Commment) */
+"Warning!!!" = "אזהרה!!!";
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "אזהרה: המזהה את הארנק שלך אינו מידע רגיש. העתקתו עלול לפגוע בבטחון את הארנק שלך.";
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "אנו נשלח את הרמז לכתובת הדואר האלקטרוני שסיפקת מאושרות למקרה לפי בקשה.";
+/* (No Commment) */
+"WebSocket URL" = "כתובת URL WebSocket";
+/* (No Commment) */
+"Welcome" = "ברוך הבא";
+"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "עבודה טובה! צריך איבדת את הסיסמה שלך, באפשרותך לשחזר קרנות בארנק הזה אפילו אם התקבל בעתיד (למעט כתובות מיובאות) באמצעות שחזור של 12 המילים. זכור לשמור את הביטוי השחזור שלך במצב לא מקוון במקום מאוד בטוחה ומאובטחת. כל אחד עם גישה הביטוי השחזור שלך יש גישה שלך ביטקוין.";
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "שגילינו התקנה קודמת של Blockchain הארנק בטלפון שלך.";
+/* (No Commment) */
+"What's this for?" = "בשביל מה זה?";
+/* (No Commment) */
+"Where" = "איפה";
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "האם ברצונך להוסיף את %@ כתובת ביטקוין לפנקס הכתובות שלך?";
+/* (No Commment) */
+"Would you like to archive the addresses used?" = "האם ברצונך לאחסן בארכיון את הכתובות שישמשו?";
+"Write the following 12 words onto a " = "לכתוב את המילים הבאות 12 על גבי ";
+/* (No Commment) */
+"Wrong BIP38 Password" = "הסיסמה BIP38 הלא נכון";
+/* (No Commment) */
+"Yes, rate Blockchain Wallet" = ". כן, קצב Blockchain הארנק";
+/* (No Commment) */
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "אתה עומד ייבוא כתובת השעון בלבד, כתובת (או script המפתח הציבור) מאוחסן בארנק ללא הפרטי המתאים מפתח. משמעות הדבר היא כי ניתן לבלות את הכספים רק אם יש לך המפתח הפרטי מאוחסנים במקום אחר. אם אין לך את המפתח הפרטי המאוחסן, אינם מורים שמישהו ישלח לך ביטקוין לכתובת השעון בלבד.";
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "אתה עומד לקבל ביטקוין לכתובת השעון בלבד. אתה יכול רק להשקיע כספים אלה אם יש לך גישה למפתח הפרטי. האם להמשיך?";
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "עכשיו אתה מפעיל את הארנק ביטקוין המאובטחת ביותר שלנו";
+"You backed up your funds successfully." = "לך לגבות כספים שלך בהצלחה.";
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "ניתן לאפשר אימות דו-שלבי באמצעות SMS בטלפון הנייד שלך. על מנת להשתמש משיטות אימות אחרות במקום זאת, אנא התחבר כדי הארנק האינטרנט שלנו.";
+/* (No Commment) */
+"You can now spend from this address." = "אתה יכול להשקיע עכשיו מהכתובת הזו.";
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "אין לך חשבון להגדיר עבור דואר. אנא צרו קשר %@";
+/* (No Commment) */
+"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = ". לך אין כתובות עם מאזן מתכלה למכשיר גדול או שווה להסף הנדרשים אבק...";
+/* (No Commment) */
+"You have no available funds to send from this address" = "יש לך אין מימון לשלוח מהכתובת הזאת";
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "עליך לנטרל אימות דו-שלבי SMS לפני שינוי מספר הטלפון הנייד שלך (%@).";
+/* (No Commment) */
+"You must enter a destination address" = "עליך להזין כתובת יעד";
+/* (No Commment) */
+"You must enter a label" = "עליך להזין תווית";
+/* (No Commment) */
+"You must have at least one active address" = "דרושה לך לפחות פעיל כתובת אחת";
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "יש אימות דו-גורמי זמין על זוג באופן ידני.";
+/* (No Commment) */
+"You must leave at least one active address" = "עליך להשאיר כתובת פעיל אחד לפחות";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "שציינת תשלום תנועה קטן במיוחד של %1$@. העסקה שלך אולי תקוע, ואולי אף פעם לא להיות מאושרות. כדי להגדיל את הסבירות עבור העסקה שלך לאשר בתוך שעה בקירוב (שישה גושי בניינים), אנו ממליצים תשלום של לא פחות מאשר %2$@.";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "שציינת תשלום תנועה קטן במיוחד של %1$@. העסקה שלך עשוי להיות תקוע, ואולי אף פעם לא לאשר. כדי להגדיל את הסבירות עבור העסקה שלך לאשר בתוך שעה בקירוב (שישה גושי בניינים), אנו ממליצים תשלום של לא פחות מאשר %2$@. מכיוון שאין לך מספיק כסף, כלומר שהסכום שלח גם צריך להיות מופחת. כדי %3$@.";
+/* (No Commment) */
+"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "שציינת דמי העסקה גבוה באופן חריג של %1$@. גם אם תנמיך את דמי %2$@, אתה יכול לצפות את התנועה כדי לאשר בתוך 10 הדקות (רחוב אחד).";
 /* (No Commment) */
 "You will be leaving the app." = ". תעזוב את האפליקציה.";
-
+/* (No Commment) */
+"You've successfully imported a private key." = "בהצלחה ייבאת מפתח פרטי.";
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "בהצלחה ייבאת את המפתח הפרטי עבור %@ הכתובת, עכשיו תוכלו לבלות ממנו. אם אתה רוצה לבלות מכתובת זו, ודא שאתה סורק את המפתח הפרטי המתאים.";
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "המכשיר נראה jailbroken. . בסכנה את האבטחה של הארנק שלך";
+/* (No Commment) */
+"Your email has been verified." = "הדוא ל שלך אומת.";
+/* (No Commment) */
+"Your identity does not match our records." = "הזהות שלך אינו תואם את הרשומות שלנו.";
+/* (No Commment) */
+"Your mobile number has been verified." = "מספר הטלפון הנייד שלך אומת.";
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "הטלפון הנייד יכול לשמש כדי לאפשר אימות שני הגורמים, עוזר כדי לאבטח את הארנק שלך מפני גישה לא מורשית.";
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "לסיסמה חדשה מכיל תווים לא חוקיים. נא נסה שוב.";
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "לסיסמה חדשה מכיל טקסט. הרמז לסיסמה שלך ינוקה.";
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "רמז הסיסמה החדשה להיות שונה מסיסמת שלך. נא נסה שוב.";
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "לסיסמה החדשה להיות שונה מסיסמת השני שלך. נא נסה שוב.";
+/* (No Commment) */
+"Your password hint has been updated." = "הרמז לסיסמה שלך עודכנה.";
+/* (No Commment) */
+"Your password is not strong enough. Please choose a different password." = "הסיסמה אינה חזקה מספיק. נא לבחור בסיסמה שונה.";
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "את הכספים שהועברו שלך יהיה בטוח ומאובטח, תוכל ליהנות תכונות גיבוי ושחזור נוחות ופרטיות מוגברת.";
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "את כתובת הדוא ל מאומת משמש כדי לשלוח קודי כניסה פעילות חשודה או יוצא דופן מזוהה, כדי להזכיר לך את מזהה הכניסה שלך את הארנק, וכדי לשלוח התראות התשלום ביטקוין בעת קבלת כספים. לא נשתמש כתובת הדוא ל שלך למטרות שיווק.";
+/* (No Commment) */
+"Your wallet does not contain this address." = "הארנק שלך אינו מכיל את הכתובת הזו.";
+/* (No Commment) */
+"Your wallet was successfully created." = "הארנק שלך נוצר בהצלחה.";
+/* (No Commment) */
+"Yubi Key" = "Yubi מפתח";
+"in this order." = "בצו זה.";
+/* (No Commment) */
+"or Continue" = "או המשך";
+"piece of paper." = "פיסת נייר.";
+/* (No Commment) */
+" We recommend the fee shown for the transaction at this time." = " אנו ממליצים על דמי המוצג עבור התנועה בשלב זה.";
+"Fee" = "דמי";
+"Please contact support:\n%@" = "נא ליצור קשר עם התמיכה: \
+%@";
+"Transfer Amount" = "סכום ההעברה";
+"Value when received: %@" = "ערך כאשר התקבל: %@";
+/* (No Commment) */
+"Transfer All Funds" = "להעביר את כספי";
+/* (No Commment) */
+"Transfer all" = "העברת כל";
+/* (No Commment) */
+"Transfer imported addresses?" = "להעביר כתובות מיובאות?";
+/* (No Commment) */
+"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "כתובות מיובאות הם אינם מגובים על ידי הביטוי ההתאוששות שלך. כדי לאבטח קרנות אלה, אנו ממליצים על העברת יתרות אלה לכלול בגיבוי.";
+/* (No Commment) */
+"About Us" = "עלינו";
+/* (No Commment) */
+"You currently have email notifications enabled. Changing your email will disable email notifications." = "כעת יש לך הודעות דוא ל מופעלת. שינוי הדוא ל שלך תהפוך הודעות דוא.";
+/* (No Commment) */
+"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "כעת יש לך הודעות SMS מופעלת. שינוי הדוא ל שלך תהפוך הודעות SMS.";
+/* (No Commment) */
+"All rights reserved." = "כל הזכויות שמורות.";
+/* (No Commment) */
+"Rate us" = "לדרג אותנו";
+/* (No Commment) */
+"Free Merchant app" = "App סוחר חינם";
+/* (No Commment) */
+"Cannot open Mail App" = "אין אפשרות לפתוח דואר App";
+/* (No Commment) */
+"Cannot open URL %@" = "לא ניתן לפתוח כתובת URL %@";
+/* (No Commment) */
+"Would you like to tell us about your experience with Blockchain?" = "רוצה לספר לנו על החוויה שלך עם Blockchain?";
 /* (No Commment) */
 "Check Your Inbox" = "בדוק בתיבת הדואר הנכנס שלך";
-
 /* (No Commment) */
 "Continue To Mail" = "המשך ל- Mail";
-
 /* (No Commment) */
 "Look for an email from Blockchain and click the verification link to complete your wallet setup." = "לחפש הודעת דוא ל מ- Blockchain ולחץ על הקישור אימות כדי להשלים את ההתקנה את הארנק שלך.";
-
 /* (No Commment) */
 "Backup Your Funds" = "לגבות את הכספים שלך";
-
 /* (No Commment) */
 "Backup Now" = "גיבוי עכשיו";
-
 /* (No Commment) */
 "Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "מזל טוב, יש לך ביטקוין! עכשיו בואו לגבות את הארנק שלך כדי להבטיח שתוכל לגשת bitcoins שלך במקרה שתשכח את הסיסמה שלך.";
-
 /* (No Commment) */
 "2-Step Verification" = "אימות דו-שלבי";
-
 /* (No Commment) */
 "Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "למנוע גישה לא מורשית הארנק שלך. לאפשר אימות דו-שלבי לשפר את האבטחה הארנק.";
-
 /* (No Commment) */
 "Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "לאפשר הודעות כדי לקבל דואר אלקטרוני או הודעת SMS בכל פעם שאתה מקבל ביטקוין.";
-
 /* (No Commment) */
 "Not Now" = "לא עכשיו";
-
 /* (No Commment) */
 "I'll do this later" = "אני אעשה את זה מאוחר יותר";
-
 /* (No Commment) */
 "May be at risk for a double spend." = "עשויים להיות בסיכון לבלות כפול.";
-
 /* (No Commment) */
 "For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "למען ביטחונכם, אנחנו לא שומרים כל הסיסמאות על קובץ. גיבוי את הארנק שלך כדי להבטיח קרנות שלך בטוחים, אם איבדת את סיסמתך.";
-
 /* (No Commment) */
 "Wallets" = "ארנקים";
-
+/* (No Commment) */
 "START BACKUP" = "התחל גיבוי";
-
+/* (No Commment) */
 "Backup Needed" = "הגיבוי הדרוש";
-
+/* (No Commment) */
 "Create a Wallet" = "ליצור ארנק";
-
+/* (No Commment) */
 "Log In" = "כנס";
-
+/* (No Commment) */
 "Please enter your password to log into your Blockchain wallet." = "צריך להזין סיסמה כדי להיכנס לתוך הארנק שלך Blockchain.";
-
+/* (No Commment) */
 "Forgot Password?" = "שכחת סיסמה?";
-
+/* (No Commment) */
 "Or start over and " = "או להתחיל מחדש, ";
-
+/* (No Commment) */
 "Update Email" = "עדכון דוא";
-
+/* (No Commment) */
 "Enter Email Address" = "הזן את כתובת הדוא";
-
+/* (No Commment) */
 "Update Mobile" = "עדכון נייד";
-
+/* (No Commment) */
 "Enter Mobile Number" = "הזן מספר טלפון נייד";
-
+/* (No Commment) */
 "Balances" = "יתרות";
-
+/* (No Commment) */
 "Transactions occur when you send and receive bitcoin." = "תנועות להתרחש בעת שליחה וקבלה של ביטקוין.";
-
+/* (No Commment) */
 "Your Transactions" = "העסקאות שלך";
-
+/* (No Commment) */
 "Backup Complete" = "גיבוי מלא";
-
-"Backup Needed" = "הגיבוי הדרוש";
-
+/* (No Commment) */
 "Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "להשתמש את הביטוי השחזור כדי לשחזר את הכספים שלך במקרה של סיסמה אבודה.  כל אחד עם גישה הביטוי השחזור שלך יכולים לגשת קרנות, חבל במצב לא מקוון במקום בטוח ומאובטח.";
-
+/* (No Commment) */
 "The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "המילה 12 הבאים הביטוי שחזור ייתן לך גישה לקרנות שלך במקרה אתה מאבד את הסיסמה שלך.";
-
+/* (No Commment) */
 "Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "הקפד לכתוב את הביטוי שלך על פיסת נייר ולשמור אותו במקום בטוח ומאובטח.";
-
+/* (No Commment) */
 "Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "תרשום את הבאים 12 שחזור ביטוי בדיוק כפי שהם מופיעים ובסדר זה:";
-
+/* (No Commment) */
 "PREVIOUS" = "הקודם";
-
+/* (No Commment) */
 "NEXT" = "הבא";
-
+/* (No Commment) */
 "BACKUP AGAIN" = "גיבוי שוב";
-
+/* (No Commment) */
 "Your verified email address is used to send payment alerts, ID reminders, and login codes." = "את כתובת הדוא ל מאומת משמש לשליחת התראות תשלום מזהה תזכורות, קודי כניסה.";
-
+/* (No Commment) */
 "Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "הטלפון הנייד יכול לשמש כדי לאפשר אימות דו-גורמי או לקבל התראות.";
-
 /* (No Commment) */
 "Trade Completed" = "סחר הושלמה";
-
 /* (No Commment) */
 "The trade you created on %@ has been completed!" = "הסחר שיצרת ב- %@ הושלמה!";
-
 /* (No Commment) */
 "View details" = "הצגת פרטים";
-
 /* (No Commment) */
 "Buy Bitcoin" = "לקנות ביטקוין";
-
-/* (No Commment) */
-"Your Transactions" = "העסקאות שלך";
-
-/* (No Commment) */
-"Transactions occur when you send and receive bitcoin." = "תנועות להתרחש בעת שליחה וקבלה של ביטקוין.";
-
 /* (No Commment) */
 "Something went wrong, please try reopening Buy Bitcoin again." = "משהו השתבש, אנא נסה לפתוח מחדש ביטקוין לקנות שוב.";
-
 /* (No Commment) */
 "Custom" = "מותאם אישית";
-
 /* (No Commment) */
 "Advanced users only" = "למשתמשים מתקדמים בלבד";
-
 /* (No Commment) */
 "1+ hour" = "1+ שעה";
-
 /* (No Commment) */
 "Priority" = "עדיפות";
-
 /* (No Commment) */
 "~0-60 min" = "~0-60 min";
-
 /* (No Commment) */
 "Satoshi per byte" = "סטושי לכל בייט";
-
 /* (No Commment) */
 "High fee not necessary" = "תשלום הגבוה לא הכרחי";
-
 /* (No Commment) */
 "Low fee not recommended" = "נמוך דמי לא מומלץ";
-
 /* (No Commment) */
 "This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck." = "תכונה זו מומלצת למשתמשים מתקדמים בלבד. על ידי בחירה אישית של דמי, את הסיכון משלם יותר מדי או העסקה שלך עלולה להיתקע.";
-
 /* (No Commment) */
 "Available now" = "זמין עכשיו";
-
 /* (No Commment) */
 "Buy bitcoin directly from your mobile wallet. It's simple, seamless, and secure." = "לקנות ביטקוין ישירות מהטלפון הנייד שלך הארנק. זה פשוט, חלקה ומאובטחת.";
-
 /* (No Commment) */
 "Log in to Web Wallet" = "היכנס לאתר האינטרנט הארנק";
-
 /* (No Commment) */
 "Go to login.blockchain.com on your computer." = "ללכת login.blockchain.com במחשב שלך.";
-
 /* (No Commment) */
 "Select Log in via mobile." = "בחר באפשרות התחבר באמצעות הנייד.";
-
 /* (No Commment) */
 "Using your computer's camera, scan the QR code below." = "באמצעות המחשב של המצלמה, לסרוק את קוד QR שלהלן.";
-
 /* (No Commment) */
 "Keep this QR code hidden until you're ready." = "לשמור את זה QR קוד מוסתר עד שאתה מוכן.";
-
 /* (No Commment) */
 "Keep this QR code safe!" = "לשמור על קוד QR זה בטוח!";
-
 /* (No Commment) */
 "Do not share it with others." = "לא לחלוק את זה עם אחרים.";
-
 /* (No Commment) */
 "Show QR Code" = "הצג קוד QR";
-
 /* (No Commment) */
 "Hide QR Code" = "להסתיר את קוד QR";
-
 /* (No Commment) */
 "U.S. Dollar" = "ארה \" ב דולר";
-
 /* (No Commment) */
 "Euro" = "יורו";
-
 /* (No Commment) */
 "lcelandic Króna" = "איסלנדית, Króna";
-
 /* (No Commment) */
 "Hong Kong Dollar" = "דולר הונג קונג";
-
 /* (No Commment) */
 "New Taiwan Dollar" = "דולר טאיוואני חדש";
-
 /* (No Commment) */
 "Swiss Franc" = "פרנק שוויצרי";
-
 /* (No Commment) */
 "Danish Krone" = "קרונה דנית";
-
 /* (No Commment) */
 "Chilean Peso" = "פזו צ ' יליאני";
-
 /* (No Commment) */
 "Canadian Dollar" = "דולר קנדי";
-
 /* (No Commment) */
 "Indian Rupee" = "רופיה הודית";
-
 /* (No Commment) */
 "Chinese Yuan" = "יואן סיני";
-
 /* (No Commment) */
 "Thai Baht" = "באט תאילנדי";
-
 /* (No Commment) */
 "Australian Dollar" = "דולר אוסטרלי";
-
 /* (No Commment) */
 "Singapore Dollar" = "דולר סינגפורי";
-
 /* (No Commment) */
 "South Korean Won" = "דרום קוריאה זכתה";
-
 /* (No Commment) */
 "Japanese Yen" = "ין יפני";
-
 /* (No Commment) */
 "Polish Zloty" = "זלוטי פולני";
-
 /* (No Commment) */
 "Great British Pound" = "לירה שטרלינג";
-
 /* (No Commment) */
 "Swedish Krona" = "קרונה שבדית";
-
 /* (No Commment) */
 "New Zealand Dollar" = "דולר ניו זילנד";
-
 /* (No Commment) */
 "Brazil Real" = "ברזיל האמיתית";
-
 /* (No Commment) */
 "Russian Ruble" = "הרובל הרוסי";
-
 /* (No Commment) */
 "Bitcoin Balances" = "Bitcoin יתרות";
-
 /* (No Commment) */
 "Enter Ether address or select" = "הזן את כתובת אתר או בחר";
-
 /* (No Commment) */
 "Payment Sent! Your balance and transactions will update soon." = "התשלום נשלח! שיווי המשקל שלך ואת עסקאות נעדכן בקרוב.";
-
 /* (No Commment) */
 "Waiting for payment" = "מחכה תשלום";
-
 /* (No Commment) */
 "Please wait until your last ether transaction confirms." = "חכה בבקשה, עד האחרון שלך אתר מאשרת את העסקה.";
-
 /* (No Commment) */
 "Bitcoin Addresses" = "כתובות ביטקוין";
-
 /* (No Commment) */
 "Bitcoin Merchant Map" = "Bitcoin סוחר מפה";
-
 /* (No Commment) */
 "Invalid Ether address: %@" = "חוקי האתר כתובת: %@";
-
 /* (No Commment) */
 "An error occurred while retrieving the latest chart data. Please try again later." = "אירעה שגיאה בעת איחזור האחרון נתוני הטבלה. אנא נסה שוב מאוחר יותר.";
-
 /* (No Commment) */
 "Transactions occur when you send and request ether." = "עסקאות להתרחש בעת שליחת הבקשה אתר.";
-
 /* (No Commment) */
 "Request Ether" = "בקשה אתר";
-
 /* (No Commment) */
 "Dashboard" = "לוח המחוונים.";
-
 /* (No Commment) */
 "Week" = "שבוע";
-
 /* (No Commment) */
 "Month" = "בחודש";
-
 /* (No Commment) */
 "Year" = "שנה";
-
 /* (No Commment) */
 "Bitcoin Price" = "Bitcoin מחיר";
-
 /* (No Commment) */
 "Ether Price" = "אתר מחיר";
-
 /* (No Commment) */
 "Contract addresses are not supported." = "חוזה כתובות אינן נתמכות.";
-
 /* (No Commment) */
 "At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "כרגע אנחנו רק תומכים ETH. לא ניתן לקבל מוניטין, ICN, GNT, הגמד, DGD, BCP.";
-
 /* (No Commment) */
 "Now supporting Ether" = "עכשיו תומך אתר";
-
 /* (No Commment) */
 "You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "אתה שאלת, הקשבנו. אנו שמחים להודיע שלך Blockchain הארנק עכשיו מאפשרים לך בקלות לשלוח ולקבל אתר!";
-
 /* (No Commment) */
 "Get Started with Ether" = "נתחיל עם אתר";
-
 /* (No Commment) */
 "To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "כדי להשתמש בשירות זה, אנו דורשים ממך להזין את סיסמא שנייה. אתה צריך רק צריך להזין את זה פעם אחת כדי להגדיר את אתר הארנק.";
-
 /* (No Commment) */
 "Enter Ether address" = "הזן כתובת אתר";
-
 /* (No Commment) */
 "Day" = "יום";
-
 /* (No Commment) */
 "All" = "כל";
-
 /* (No Commment) */
 "Please send ether to %@." = "נא לשלוח אתר כדי %@.";
-
-/* (No Commment) */
-"Bitcoin payment request" = "Bitcoin תשלום הבקשה.";
-
 /* (No Commment) */
 "Ether payment request" = "אתר התשלומים בקשה";
-
 /* (No Commment) */
 "My Ether Wallet" = "שלי אתר הארנק";
-
 /* (No Commment) */
 "Miners receive this fee to process this transaction." = "הכורים מקבלים תשלום זה תהליך העסקה.";
-
 /* (No Commment) */
 "Get Ether" = "קבל אתר";
-
 /* (No Commment) */
 "at" = "ב";
-
 /* (No Commment) */
 "Exchange" = "Exchange";
-
 /* (No Commment) */
 "New Exchange" = "שערי חליפין חדשים";
-
 /* (No Commment) */
 "Use minimum" = "שימוש מינימלי";
-
 /* (No Commment) */
 "Use maximum" = "שימוש מקסימלית";
-
 /* (No Commment) */
 "Sending Funds" = "שולח כספים";
-
 /* (No Commment) */
 "Thanks for placing your trade!  Exchange trades can take up to two hours, and you can keep track of your trade’s progress in the Order History section." = "תודה על הצבת המסחר שלך! Exchange עסקאות יכול לקחת עד שעתיים, אתה יכול לשמור על מעקב אחר של מסחר התקדמות לפי סדר היסטוריה'.";
-
 /* (No Commment) */
 "In Progress" = "בתהליך";
-
 /* (No Commment) */
 "Exchanges can take up to two hours, you can keep track of your exchange progress in the Order History. Once the trade is complete, your ether will arrive in your wallet." = "חילופי יכול לקחת עד שעתיים, אתה יכול לשמור על מעקב אחר של exchange התקדמות לפי סדר ההיסטוריה. לאחר החילוף המלא, את אתר יגיעו בארנק שלך.";
-
 /* (No Commment) */
 "Your trade has been canceled. Please return to the exchange tab to start your trade again." = "המסחר שלך בוטל. נא להחזיר את ההחלפה tab כדי להתחיל את המסחר שלך שוב.";
-
 /* (No Commment) */
 "Failed" = "נכשל";
-
 /* (No Commment) */
 "Exchange Failed" = "Exchange נכשל";
-
 /* (No Commment) */
 "This trade has failed. Any funds sent from your wallet will be returned minus the transaction fee. Please return to the exchange tab to start a new trade." = "יש סחר זה נכשל. כל הכספים שנשלחו מהארנק שלך תוחזר בניכוי את דמי העסקה. נא להחזיר את ההחלפה tab כדי להתחיל עסקה חדשה.";
-
 /* (No Commment) */
 "Your trade has expired. Please return to the exchange tab to start a new trade." = "המסחר שלך פג. נא להחזיר את ההחלפה tab כדי להתחיל עסקה חדשה.";
-
 /* (No Commment) */
 "You can now exchange your bitcoin for ether and vice versa directly from your Blockchain wallet!" = "עכשיו אתה יכול להחליף את ביטקוין עבור אתר ולהיפך ישירות מה-Blockchain הארנק!";
-
 /* (No Commment) */
 "%@ to Deposit" = "%@ להפקיד";
-
 /* (No Commment) */
 "%@ to be Received" = "%@ להתקבל.";
-
 /* (No Commment) */
 "Exchange Rate" = "שער החליפין";
-
 /* (No Commment) */
 "Transaction Fee" = "עמלת";
-
 /* (No Commment) */
 "Network Transaction Fee" = "רשת עמלת";
-
 /* (No Commment) */
 "ShapeShift Withdrawal Fee" = "לשנות צורה דמי משיכה";
-
 /* (No Commment) */
 "Agree to ShapeShift" = "מסכים כדי לשנות צורה";
-
 /* (No Commment) */
 "terms and conditions" = "תנאי שימוש";
-
 /* (No Commment) */
 "Exchange In Progress" = "Exchange בתהליך";
-
 /* (No Commment) */
 "Exchange Completed" = "Exchange הושלמה";
-
 /* (No Commment) */
 "Get started" = "נתחיל";
-
 /* (No Commment) */
 "Below minimum limit" = "להלן מגבלת המינימום";
-
 /* (No Commment) */
 "Above maximum limit" = "מעל המרבית המותרת";
-
 /* (No Commment) */
 "Not enough to exchange" = "לא מספיק להחליף";
-
 /* (No Commment) */
 "Order ID" = "מזהה ההזמנה";
-
 /* (No Commment) */
 "Total %@ spent" = "סה \" כ %@ בילה";
-
 /* (No Commment) */
 "Getting quote" = "מקבל ציטוט";
-
 /* (No Commment) */
 "Confirming" = "המאשר";
-
-/* (No Commment) */
-"Exchange In Progress" = "Exchange בתהליך";
-
 /* (No Commment) */
 "Complete" = "להשלים";
-
-/* (No Commment) */
-"Exchange Completed" = "Exchange הושלמה";
-
 /* (No Commment) */
 "Quote expires in %@" = "ציטוט תקפה %@";
-
 /* (No Commment) */
 "Step %d of %d" = "שלב %d של %d";
-
 /* (No Commment) */
 "Select your State:" = "בחר את המדינה שלך:";
-
 /* (No Commment) */
 "Select State" = "בחר מדינה";
-
 /* (No Commment) */
 "Not Available" = "לא זמין";
-
 /* (No Commment) */
 "Exchanging coins is not yet available in your state. We’ll be rolling out more states soon." = "החלפת מטבעות הוא עדיין לא זמין במדינה שלך. אנחנו יהיו מתגלגלים החוצה עוד מדינות בקרוב.";
-
 /* (No Commment) */
 "An error occurred when getting your %@ balance. Please try again later. Details: %@" = "אירעה שגיאה בעת מקבל את %@ איזון. אנא נסה שוב מאוחר יותר. פרטים: %@";
-
 /* (No Commment) */
 "An error occurred when getting an approximate quote. Please try again later. Details: %@" = "אירעה שגיאה בעת הגעה משוער ציטוט. אנא נסה שוב מאוחר יותר. פרטים: %@";
-
 /* (No Commment) */
 "Deposited to ShapeShift" = "שהופקדו כדי לשנות צורה";
-
 /* (No Commment) */
 "Received from ShapeShift" = "שהתקבלו לשנות צורה";
-
 /* (No Commment) */
 "Order History" = "סדר היסטוריה";
-
 /* (No Commment) */
 "Incoming" = "נכנסות";
-
 /* (No Commment) */
 "Trade Expired" = "סחר פג";
-
 /* (No Commment) */
 "Your trade has expired. Please return to the Exchange page to start your trade again." = "המסחר שלך פג. נא להחזיר את ההחלפה בדף כדי להתחיל את המסחר שלך שוב.";
-
 /* (No Commment) */
 "No Funds to Exchange" = "אין כספים כדי להחליף";
-
 /* (No Commment) */
 "You have no funds to exchange. Why not get started by receiving some funds?" = "אין לך כספים exchange. למה לא להתחיל על ידי קבלת כספים?";
-
 /* (No Commment) */
 "Loading Exchange" = "טעינת Exchange";
-
 /* (No Commment) */
 "Select other %@ Wallet" = "בחר אחרות %@ הארנק";
-
 /* (No Commment) */
 "%@ needed to exchange" = "%@ צריך להחליף";
-
 /* (No Commment) */
 "Start trading" = "להתחיל לסחור";
-
 /* (No Commment) */
 "Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "מסחר ביטקוין ישירות מה-Blockchain הארנק. התחל על ידי יצירת חשבון לקנות & למכור כרטיסייה.";
-
 /* (No Commment) */
 "The wait is over" = "ההמתנה הסתיימה";
-
 /* (No Commment) */
 "Something went wrong, please try reopening Buy & Sell Bitcoin again." = "משהו השתבש, אנא נסה המחודשת לקנות & למכור ביטקוין שוב.";
-
 /* (No Commment) */
 "Buy & Sell Bitcoin" = "לקנות & למכור ביטקוין";
-
 /* (No Commment) */
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "אנחנו עובדים עם exchange שותפים בכל רחבי העולם, אז אתה יכול לקנות ולמכור ביטקוין ישירות לארנק שלך.";
-
 /* (No Commment) */
 "Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "נייד לקנות & למכור נתמך עבור iOS 9 ומעלה. בבקשה להריץ עדכון תוכנה או התחברות ב login.blockchain.com במחשב שלך.";
-
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "לקנות ולמכור ביטקוין ישירות מה-Blockchain הארנק. התחל על ידי יצירת חשבון לקנות & למכור כרטיסייה.";
-
 /* (No Commment) */
 "All Wallets" = "כל הארנקים.";
-
-/* (No Commment) */
-"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "שמור את xPub פרטי. מישהו עם גישה xPub יהיה מסוגל לראות את כל הכספים שלך ועסקאות.";
-
 /* (No Commment) */
 "Your xPub is an advanced feature that contains all of your public addresses." = "את xPub הוא תכונה מתקדמת אשר מכילה את כל כתובות ציבוריות.";
-
 /* (No Commment) */
 "Transactions occur when you send and request bitcoin cash." = "עסקאות להתרחש בעת שליחת הבקשה ביטקוין במזומן.";
-
 /* (No Commment) */
 "Get Bitcoin Cash" = "לקבל ביטקוין במזומן";
-
 /* (No Commment) */
 "Request Bitcoin Cash" = "בקשה ביטקוין במזומן";
-
 /* (No Commment) */
 "Price" = "מחיר";
-
 /* (No Commment) */
 "See charts" = "לראות את הרישומים.";
-
 /* (No Commment) */
 "Price charts" = "מחיר תרשימים";
-
 /* (No Commment) */
 "Bitcoin Cash" = "ביטקוין במזומן";
-
 /* (No Commment) */
 "Bitcoin Cash Price" = "ביטקוין במזומן מחיר";
-
 /* (No Commment) */
 "Enter Bitcoin Cash address or select" = "הזן ביטקוין במזומן הכתובת, או בחר";
-
 /* (No Commment) */
 "Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "להעתיק זה לקבל כתובת ללוח? אם כך, שימו לב כי יישומים אחרים עשויים להיות מסוגלים להסתכל על זה מידע.";
-
 /* (No Commment) */
-"Please send BCH to the Bitcoin Cash address\n%@" = "בבקשה תשלח מסלקת הנייר על ביטקוין במזומן כתובת\n%@";
-
+"Please send BCH to the Bitcoin Cash address\n%@" = "בבקשה תשלח מסלקת הנייר על ביטקוין במזומן כתובת\
+%@";
 /* (No Commment) */
 "Transaction fees impact how quickly the mining network will confirm your transactions, and depend on the current network conditions." = "עלויות עסקה השפעה כמה מהר הכרייה ברשת יהיה לאשר את העסקות שלך, תלויים על הרשת הנוכחית התנאים.";
-
 /* (No Commment) */
 "Trade Refunded" = "סחר יוחזר";
-
 /* (No Commment) */
 "We are excited to announce that your Blockchain wallet will allow you to seamlessly send, receive, and exchange Bitcoin Cash!" = "אנחנו שמחים להודיע כי את Blockchain הארנק יאפשר לך בצורה חלקה לשלוח, לקבל, להחליף ביטקוין במזומן!";
-
 /* (No Commment) */
 "Are you sure this is a bitcoin cash address?" = "אתה בטוח זה ביטקוין במזומן כתובת?";
-
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "שולח כספים כתובת bitcoin בטעות לגרום לאובדן כספים.";
-
 /* (No Commment) */
 "Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "הפנים ID אינה מופעלת בהתקן זה. כדי לאפשר זיהוי הפנים, ללכת להגדרות -> הפנים ID & סיסמה להוסיף טביעת אצבע.";
-
 /* (No Commment) */
 "Face ID is not available on this device." = "הפנים מזהה אינו זמין במכשיר זה.";
-
 /* (No Commment) */
 "Unknown Face ID error. Code: %ld" = "לא ידוע הפנים מזהה שגיאה. קוד: %ld";
-
 /* (No Commment) */
 "Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain שרתי כיום תחת תחזוקה. אנא נסה שוב מאוחר יותר";
-
 /* (No Commment) */
 "Unable to authenticate due to failing authentication too many times." = "אין אפשרות לאמת בשל אימות נכשל יותר מדי פעמים.";
-
 /* (No Commment) */
 "Unable to authenticate because the device does not support biometric authentication." = "לא ניתן לאמת כי המכשיר אינו תומך אימות ביומטרי.";
-
 /* (No Commment) */
 "Unable to use biometrics." = "אין אפשרות להשתמש ביומטריה.";
-
 /* (No Commment) */
 "Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "לא ניתן לאמת כי היו שם יותר מדי נכשל Touch ID ניסיונות. הסיסמה הנדרשת כדי לפתוח את Touch ID";
-
 /* (No Commment) */
 "Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "הפעלת תכונה זו תאפשר לכל המשתמשים עם רשום %@ טביעת אצבע במכשיר זה כדי לגשת לארנק שלך.";
-
 /* (No Commment) */
 "Enable %@" = "לאפשר %@";
-
 /* (No Commment) */
 "Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "השתמש %@ במקום PIN כדי לאמת Blockchain וגישה הארנק שלך.";
-
 /* (No Commment) */
 "Use %@ as PIN" = "השתמש %@ כמו מסמר";
-
 /* (No Commment) */
 "Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "מזל טוב, יש לך bitcoin! עכשיו בואו גיבוי הארנק שלך כדי לוודא שאתה יכול לגשת הכספים שלך אם אתה שוכח את הסיסמה שלך.";
-
 /* (No Commment) */
 "Invalid %@ address: %@" = "חוקי %@ כתובת: %@";
-
 /* (No Commment) */
 "%@ payment request" = "%@ תשלום הבקשה.";
-
 /* (No Commment) */
 "Cookie Policy" = "מדיניות ה-Cookie";
-
 /* (No Commment) */
 "Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "אנא בדוק את הדוא ל שלך, לאשר את זה התחבר-ניסיון. לאחר ביצוע פעולה זו, אנא שובו לכאן ואז לנסות ולהיכנס שוב";
-
 /* (No Commment) */
 "Non-Spendable" = "שאינו מתכלה למכשיר";
+/* (No Commment) */
+"Confirm Upgrade" = "לאשר את השדרוג";
+/* (No Commment) */
+"48.normalTitle" = "שמור";
+/* (No Commment) */
+"56.text" = "תוויות כתובת";
+/* (No Commment) */
+"58.text" = "תווית";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "59"; */
+"59.placeholder" = "תווית";
+/* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
+"60.text" = "כתובת";
+/* (No Commment) */
+"68.text" = "אין כתובות";
+/* (No Commment) */
+"69.text" = "החשבון שלך כנראה לא מזווג כראוי. לחץ הכפתור העליון השמאלי של המסך, בצע את ההוראות שעל המסך.";
+/* (No Commment) */
+"80.normalTitle" = "ארכיון כתובת";
+/* (No Commment) */
+"81.normalTitle" = "תוויות כתובת";
+/* (No Commment) */
+"88.normalTitle" = "בקש תשלום";
+/* (No Commment) */
+"90.text" = "כתובת ביטקוין ";
+/* (No Commment) */
+"91.text" = "1PqtuSjPKDGqst5yadi3rF2XCxFsVDn5UH";
+/* (No Commment) */
+"92.normalTitle" = "העתק כתובת";
+/* (No Commment) */
+"100.text" = "סכום:";
+/* (No Commment) */
+"120.text" = "5 BTC = 10 דולר";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "E60-hZ-tDl"; */
+"E60-hZ-tDl.placeholder" = "0.000";
+/* (No Commment) */
+"GwZ-6f-89z.normalTitle" = "BTC";
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "ZHr-29-NdG"; */
+"ZHr-29-NdG.normalTitle" = "עשיתי";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "a9y-3I-Drw"; */
+"a9y-3I-Drw.placeholder" = "0.00";
+/* (No Commment) */
+"i1j-pG-caF.normalTitle" = "סרוק מפתח פרטי";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "jRM-0A-Zuo"; */
+"jRM-0A-Zuo.text" = "BTC";
+/* Class = "UILabel"; text = "USD"; ObjectID = "wDT-32-lDe"; */
+"wDT-32-lDe.text" = "USD";
+"* Minimum 10 characters" = "* מינימום 10 תווים";
+/* (No Commment) */
+"8.text" = "פנקס הכתובות";
+/* (No Commment) */
+"from" = "מ";

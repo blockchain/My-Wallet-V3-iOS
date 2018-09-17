@@ -1,2274 +1,1805 @@
-/* No comment provided by engineer. */
-" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = "Bất cứ ai truy cập vào Nhóm từ khôi phục sẽ có thể truy cập vào bitcoin của bạn, hãy lưu trữ ở một nơi an toàn và đảm bảo.";
-
-/* (No Commment) */
-" We recommend the fee below for the transaction at this time." = "Chúng tôi khuyến nghị sử dụng các phí bên dưới cho các giao dịch vào thời điểm này.";
-
-/* (No Commment) */
-"%@ BTC" = "%@ BTC";
-
-/* (No Commment) */
-"%@ Confirmations" = "%@ xác nhận";
-
-/* (No Commment) */
-"%@ copied to clipboard" = "%@ được sao chép vào bộ nhớ tạm";
-
-/* (No Commment) */
-"%d Confirmations" = "%d xác nhận";
-
-/* (No Commment) */
-"%d Transactions" = "%d giao dịch";
-
-/* (No Commment) */
-"%d address" = "%d địa chỉ";
-
-/* (No Commment) */
-"%d addresses" = "%d địa chỉ";
-
-/* No comment provided by engineer. */
-"%lld hours ago" = "%lld giờ trước";
-
-/* No comment provided by engineer. */
-"%lld minutes ago" = "%lld phút trước";
-
-/* No comment provided by engineer. */
-"%lld seconds ago" = "%lld giây trước";
-
-/* (No Commment) */
-"%lu Recipients" = "%lu người nhận";
-
-/* No comment provided by engineer. */
-"1 hour ago" = "1 giờ trước";
-
-/* No comment provided by engineer. */
-"1 minute ago" = "1 phút trước";
-
-/* (No Commment) */
-"2-Step Enabled" = "Đã kích hoạt Xác minh 2 bước";
-
-/* (No Commment) */
-"2-Step has been disabled." = "Đã tắt Xác minh 2 bước.";
-
-/* (No Commment) */
-"2-Step has been enabled for SMS." = "Đã kích hoạt Xác minh 2 bước cho tin nhắn SMS.";
-
-/* (No Commment) */
-"2-step Verification" = "Xác minh 2 bước";
-
-/* (No Commment) */
-"2-step Verification is currently disabled." = "Đã tắt Xác minh 2 bước.";
-
-/* (No Commment) */
-"2-step Verification is currently enabled for %@." = "Đã kích hoạt Xác minh 2 bước cho %@.";
-
-/* (No Commment) */
-"2-step Verification is currently enabled." = "Đã mở Xác minh 2 bước.";
-
-/* (No Commment) */
-"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "Kết nối không được thiết lập do không thể xác minh chứng chỉ máy chủ Vui lòng kiểm tra thiết lập mạng và đảm bảo bạn sử dụng kết nối an toàn.";
-
-/* (No Commment) */
-"API URL" = "URL API";
-
-/* (No Commment) */
-"About" = "Về";
-
-/* (No Commment) */
-"Account Details" = "Thông tin tài khoản";
-
-/* (No Commment) */
-"Accounts" = "Tài khoản";
-
-/* (No Commment) */
-"Add Email" = "Thêm email";
-
-/* (No Commment) */
-"Add to Address book?" = "Thêm vào sổ địa chỉ?";
-
-/* (No Commment) */
-"Address" = "Địa chỉ";
-
-/* (No Commment) */
-"Address book" = "Sổ địa chỉ";
-
-/* (No Commment) */
-"Address is not valid" = "Địa chỉ không hợp lệ";
-
-/* (No Commment) */
-"Addresses" = "Địa chỉ";
-
-/* (No Commment) */
-"Adjust Fee" = "Điều chỉnh phí";
-
-/* (No Commment) */
-"Allow" = "Cho phép";
-
-/* (No Commment) */
-"Allowed" = "Đã cho phép";
-
-/* (No Commment) */
-"Amount" = "Số tiền";
-
-/* (No Commment) */
-"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "Số tiền phải lớn hơn hoặc bằng ngưỡng thấp nhất (%lld Satoshi)";
-
-/* (No Commment) */
-"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "Xuất hiện lỗi do gián đoạn trong quá trình xác minh mã PIN. Vui lòng đóng ứng dụng và thử lại.";
-
-/* (No Commment) */
-"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "Lỗi khi xác minh mã PIN với máy chủ điều khiển từ xa. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Bạn có muốn thử xác minh lại thay vì nhập mật khẩu thủ công?";
-
-/* (No Commment) */
-"An error occurred while changing 2-Step verification." = "Lỗi khi thay đổi Xác minh 2 bước.";
-
-/* (No Commment) */
-"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "Lỗi khi sao chép địa chỉ của bạn vào clipboard. Vui lòng chọn địa chỉ gửi hoặc khởi động lại ứng dụng và thử lại.";
-
-/* (No Commment) */
-"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "Lỗi khi lưu các thay đổi của bạn. Vui lòng đảm bảo không đăng nhập ví trên một thiết bị khác.";
-
-/* (No Commment) */
-"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "Lỗi khi cập nhật số dư khả dụng của bạn. Vui lòng kiểm tra kết nối internet và thử lại.";
-
-/* (No Commment) */
-"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "Lỗi khi tải ví của bạn. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Vui lòng đóng ứng dụng và thử lại hoặc kết nối lại với thiết bị của bạn.";
-
-/* (No Commment) */
-"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "Lỗi khi lấy lại ID ví của bạn từ Keychain. Vui lòng đóng ứng dụng và thử lại";
-
-/* (No Commment) */
-"Any address" = "Bất kỳ địa chỉ nào";
-
-/* (No Commment) */
-"App Store review prompt timer (seconds)" = "Đánh giá theo thời gian (giây) trên App Store";
-
-/* (No Commment) */
-"Archive" = "Lưu trữ";
-
-/* (No Commment) */
-"Archive Address" = "Lưu trữ địa chỉ";
-
-/* (No Commment) */
-"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "Lưu trữ nếu bạn KHÔNG muốn dùng nữa. Các khoản tiền sẽ được an toàn, và bạn có thể bỏ lưu trữ bất kỳ lúc nào.";
-
-/* (No Commment) */
-"Archived" = "Đã lưu trữ";
-
-/* (No Commment) */
-"Archiving addresses" = "Đang lưu trữ địa chỉ";
-
-/* (No Commment) */
-"Ask Me Later" = "Hỏi lại sau";
-
-/* (No Commment) */
-"Authenticate with Touch ID" = "Xác nhận bằng cảm biến vân tay";
-
-/* (No Commment) */
-"Authorization Required" = "Yêu cầu quyền truy cập";
-
-/* (No Commment) */
-"Automatic Pairing" = "Tự động kết nối";
-
-/* (No Commment) */
-"Automatically" = "Tự động";
-
-/* No comment provided by engineer. */
-"BACKUP FUNDS" = "SAO LƯU CÁC KHOẢN TIỀN";
-
-/* (No Commment) */
-"Backup" = "Sao lưu";
-
-/* No comment provided by engineer. */
-"Backup Funds" = "Sao lưu các khoản tiền";
-
-/* (No Commment) */
-"Backup Phrase" = "Sao lưu nhóm từ";
-
-/* (No Commment) */
-"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "Trước khi truy cập ví, vui lòng chọn mã số pin dùng để mở khóa ví. Lưu ý mã pin không thể thiết lập lại hay thay đổi nếu không mở khóa ứng dụng trước tiên.";
-
-/* (No Commment) */
-"Bitcoin Unit" = "Đơn vị Bitcoin";
-
-/* (No Commment) */
-"Bitcoin payment request" = "Yêu cầu thanh toán Bitcoin";
-
-/* (No Commment) */
-"Block" = "Chặn";
-
-/* (No Commment) */
-"Block Tor" = "Chặn Tor";
-
-/* (No Commment) */
-"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain không có quyền truy cập camera. Để mở quyền truy cập, đến mục Cài đặt trên thiết bị.";
-
-/* (No Commment) */
-"Blockchain is currently down for maintenance. Please try again later." = "Blockchain hiện đang bảo trì. Vui lòng thử lại sau.";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location." = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn.";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn. Mở quyền truy cập trong Cài đặt->Bảo mật->Dịch vụ định vị";
-
-/* (No Commment) */
-"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn. Mở quyền truy cập trong Cài đặt->Bảo mật->Định vị->Dịch vụ định vị";
-
-/* (No Commment) */
-"Blocked" = "Đã chặn";
-
-/* (No Commment) */
-"Calculating: Address %@ of %@" = "Đang tính toán: Địa chỉ %1$@ của %2$@";
-
-/* (No Commment) */
-"Camera Access Denied" = "Truy cập camera bị từ chối";
-
-/* (No Commment) */
-"Cancel" = "Hủy bỏ";
-
-/* (No Commment) */
-"Cancelling" = "Đang hủy";
-
-/* (No Commment) */
-"Cannot save PIN Code while wallet is not initialized or password is null" = "Không thể lưu mã PIN khi ví không được tạo hoặc mật khẩu không có giá trị";
-
-/* (No Commment) */
-"Change Email" = "Thay đổi Email";
-
-/* (No Commment) */
-"Change Mobile Number" = "Thay đổi số điện thoại";
-
-/* (No Commment) */
-"Change PIN" = "Thay đổi mã PIN";
-
-/* (No Commment) */
-"Change Password" = "Thay đổi mật khẩu";
-
-/* (No Commment) */
-"Change Password Hint" = "Thay đổi cụm từ gợi ý mật khẩu";
-
-/* (No Commment) */
-"Change fee per kilobyte" = "Thay đổi phí cho mỗi kilobyte";
-
-/* (No Commment) */
-"Checking for Wallet updates" = "Kiểm tra cập nhật Ví";
-
-/* (No Commment) */
-"Checking for more: Step %d of %d" = "Kiểm tra thêm: Bước %1$d của %2$d";
-
-/* No comment provided by engineer. */
-"Close" = "Đóng";
-
-/* (No Commment) */
-"Close App" = "Đóng ứng dụng";
-
-/* (No Commment) */
-"Complete the steps below for ultimate security" = "Hoàn thành các bước bên dưới để bảo vệ tối đa";
-
-/* (No Commment) */
-"Confirm Payment" = "Xác nhận thanh toán";
-
-/* (No Commment) */
-"Confirm your PIN" = "Xác nhận mã PIN";
-
-/* (No Commment) */
-"Confirmed" = "Đã xác nhận";
-
-/* (No Commment) */
-"Connection timed out. Please check your internet connection." = "Kết nối quá hạn. Vui lòng kiểm tra kết nối internet.";
-
-/* (No Commment) */
-"Continue" = "Tiếp tục";
-
-/* (No Commment) */
-"Copied to clipboard" = "Đã sao chép vào bộ nhớ tạm";
-
-/* (No Commment) */
-"Copy Address" = "Sao chép địa chỉ";
-
-/* (No Commment) */
-"Copy Wallet ID" = "Sao chép ID ví";
-
-/* (No Commment) */
-"Copy to clipboard" = "Sao chép vào bộ nhớ tạm";
-
-/* (No Commment) */
-"Copy xPub" = "Sao chép xPub";
-
-/* (No Commment) */
-"Could not find transaction with hash %@ when reloading data" = "Không thể tìm thấy giao dịch với mã băm %@ khi tải lại dữ liệu";
-
-/* (No Commment) */
-"Could not get value when sent - please check your internet connection and try again." = "Không thể nhận được giá trị khi gửi - vui lòng kiểm tra kết nối mạng và thử lại.";
-
-/* (No Commment) */
-"Create" = "Tạo";
-
-/* (No Commment) */
-"Create New Wallet" = "Tạo Ví mới";
-
-/* (No Commment) */
-"Create Wallet" = "Tạo Ví";
-
-/* (No Commment) */
-"Create new address" = "Tạo địa chỉ mới";
-
-/* (No Commment) */
-"Creating" = "Đang tạo";
-
-/* (No Commment) */
-"Creating V3 Wallet" = "Đang tạo Ví V3";
-
-/* (No Commment) */
-"Creating Wallet" = "Đang tạo ví";
-
-/* (No Commment) */
-"Creating new Wallet" = "Đang tạo Ví mới";
-
-/* (No Commment) */
-"Creating new address" = "Đang tạo địa chỉ mới";
-
-/* (No Commment) */
-"Current rate: %@ BTC" = "Tỉ lệ hiện tại: %@ BTC";
-
-/* (No Commment) */
-"Customize the way you organize your bitcoin in your Blockchain Wallet" = "Tùy chỉnh cách bạn tổ chức Bitcoin trong Ví Blockchain";
-
-/* (No Commment) */
-"Date" = "Ngày";
-
-/* (No Commment) */
-"Debug" = "Gỡ lỗi";
-
-/* (No Commment) */
-"Decrypted PIN Password length 0" = "Mật khẩu PIN được giải mã dài 0";
-
-/* (No Commment) */
-"Decrypting Private Key" = "Đang giải mã Khóa riêng";
-
-/* (No Commment) */
-"Decrypting Wallet" = "Đang giải mã Ví";
-
-/* (No Commment) */
-"Default" = "Mặc định";
-
-/* (No Commment) */
-"Description" = "Mô tả";
-
-/* (No Commment) */
-"Details" = "Chi tiết";
-
-/* (No Commment) */
-"Disable" = "Tắt";
-
-/* (No Commment) */
-"Disabled" = "Đã tắt";
-
-/* (No Commment) */
-"Display" = "Hiển thị";
-
-/* (No Commment) */
-"Do you really want to log out?" = "Bạn có muốn đăng xuất?";
-
-/* (No Commment) */
-"Don't show again" = "Không hiện lại";
-
-/* No comment provided by engineer. */
-"Done" = "Hoàn tất";
-
-/* (No Commment) */
-"Downloading Wallet" = "Đang tải Ví";
-
-/* (No Commment) */
-"Easy one time wallet backup keeps you in control of your funds" = "Sao lưu ví dễ dàng trong 1 lần giúp bạn kiểm soát các khoản tiền";
-
-/* (No Commment) */
-"Edit" = "Chỉnh sửa";
-
-/* (No Commment) */
-"Email" = "Email";
-
-/* (No Commment) */
-"Email Notifications" = "Thông báo Email";
-
-/* (No Commment) */
-"Email Verified" = "Email đã xác minh";
-
-/* (No Commment) */
-"Empty response from server." = "Không có phản hồi từ máy chủ.";
-
-/* (No Commment) */
-"Enable" = "Bật";
-
-/* (No Commment) */
-"Enable 2-Step" = "Kích hoạt Xác minh 2 bước";
-
-/* (No Commment) */
-"Enable 2-Step for SMS" = "Kích hoạt Xác minh 2 bước cho tin nhắn SMS";
-
-/* (No Commment) */
-"Enable Location Services" = "Bật định vị";
-
-/* (No Commment) */
-"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "Bật thông báo để nhận email hoặc tin nhắn SMS khi bạn nhận được bitcoin. Chỉ những địa chỉ được dán nhãn và được nhập mới đủ điều kiện nhận thông báo.";
-
-/* (No Commment) */
-"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "Bật tùy chọn này để chặn các địa chỉ IP, được biết đến là một phần của mạng ẩn danh Tor, khỏi việc truy cập vào ví của bạn. Mạng Tor được sử dụng thường xuyên bởi các hacker, những kẻ luôn cố gắng truy cập vào ví người dùng Blockchain.";
-
-/* (No Commment) */
-"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "Bật tùy chọn này để hiện địa chỉ nhận khi bạn trượt qua trái trên màn hình mã PIN, giúp việc nhận bitcoin thậm chí còn nhanh hơn. Năm địa chỉ này sẽ được tải liên tục, sau đó cần đăng nhập để hiện các địa chỉ mới.";
-
-/* (No Commment) */
-"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "Bật tùy chọn này để hiện địa chỉ nhận khi bạn trượt qua trái trên màn hình mã PIN, giúp việc nhận bitcoin thậm chí còn nhanh hơn. Chỉ một địa chỉ được tải, cần đăng nhập để hiện địa chỉ mới.";
-
-/* (No Commment) */
-"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "Bật tính năng này sẽ cho phép tất cả người dùng đã đăng ký cảm biến vân tay trên thiết bị này có thể truy cập ví của bạn.";
-
-/* (No Commment) */
-"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "Bạn có thích Ví Blockchain? Hãy để lại nhận xét trên App Store.";
-
-/* (No Commment) */
-"Enter %@ amount" = "Nhập lượng %@";
-
-/* (No Commment) */
-"Enter Bitcoin address or select" = "Nhập hoặc chọn địa chỉ Bitcoin";
-
-/* (No Commment) */
-"Enter PIN" = "Nhập mã PIN";
-
-/* (No Commment) */
-"Enter Password" = "Nhập mật khẩu";
-
-/* (No Commment) */
-"Enter Verification Code" = "Nhập mã xác minh";
-
-/* (No Commment) */
-"Enter your verification code" = "Nhập mã xác minh của bạn";
-
-/* No comment provided by engineer. */
-"Error" = "Lỗi";
-
-/* (No Commment) */
-"Error loading settings" = "Lỗi thiết lập tải";
-
-/* (No Commment) */
-"Error updating settings" = "Lỗi thiết lập cập nhật";
-
-/* (No Commment) */
-"Everything you need to store, spend and receive your bitcoin" = "Mọi thứ bạn cần để lưu trữ, tiêu dùng và nhận bitcoin";
-
-/* (No Commment) */
-"Extended Public Key" = "Khóa chung mở rộng (xPub)";
-
-/* (No Commment) */
-"Failed To Load Wallet" = "Tải ví thất bại";
-
-/* (No Commment) */
-"Failed to validate server certificate" = "Xác nhận chứng chỉ máy chủ thất bại";
-
-/* (No Commment) */
-"Fee is too high (0.01 BTC limit)" = "Phí quá cao (giới hạn 0,01 BTC)";
-
-/* (No Commment) */
-"Fee per KB" = "Phí mỗi KB";
-
-/* (No Commment) */
-"Fees" = "Phí";
-
-/* (No Commment) */
-"Finished Signing Inputs" = "Hoàn tất nhập chữ ký";
-
-/* (No Commment) */
-"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "Để tăng cường bảo mật, chúng tôi tạo một địa chỉ độc nhất cho mỗi thanh toán. Tất cả các địa chỉ được tạo trong ví đều có thể nhận tiền, thậm chí khi không còn xuất hiện trong mục Nhận.";
-
-/* (No Commment) */
-"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "Vì lý do an toàn, chúng tôi khuyên bạn nên chuyển khoản bất kỳ số dư nào trong các địa chỉ đã nhập vào ví Blockchain.";
-
-/* (No Commment) */
-"Forget Wallet" = "Quên ví";
-
-/* (No Commment) */
-"Found %d, with %@" = "Tìm thấy %1$d, với %2$@";
-
-/* (No Commment) */
-"From" = "Từ";
-
-/* (No Commment) */
-"From and destination address have to be different" = "Địa chỉ đi và đến phải khác nhau";
-
-/* (No Commment) */
-"From and destination have to be different" = "Đi và đến phải khác nhau";
-
-/* (No Commment) */
-"Go to Settings" = "Đến Cài đặt";
-
-/* (No Commment) */
-"Google Authenticator" = "Google Authenticator";
-
-/* (No Commment) */
-"Hint Stored" = "Cụm Từ Gợi Ý đã được lưu trữ";
-
-/* (No Commment) */
-"How would you like to pair?" = "Bạn có muốn kết nối không?";
-
-/* (No Commment) */
-"Identifier" = "ID";
-
-/* (No Commment) */
-"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "Nếu bạn là một cổng thanh toán, sử dụng xPub và ứng dụng Cổng thanh toán của Blockchain để nhận các khoản tiền.";
-
-/* (No Commment) */
-"Import Private Key" = "Nhập khóa riêng";
-
-/* (No Commment) */
-"Import address" = "Nhập địa chỉ";
-
-/* (No Commment) */
-"Imported Addresses" = "Các địa chỉ đã nhập";
-
-/* (No Commment) */
-"Imported Addresses (Archived)" = "Các địa chỉ đã nhập (Đã lưu trữ)";
-
-/* (No Commment) */
-"Imported Private Key %@" = "Đã nhập khóa riêng %@";
-
-/* (No Commment) */
-"Imported watch-only address %@" = "Đã nhập địa chỉ chỉ-xem %@";
-
-/* (No Commment) */
-"Importing key" = "Đang nhập khóa";
-
-/* (No Commment) */
-"Incorrect PIN. Please retry." = "Mã PIN không đúng. Vui lòng thử lại.";
-
-/* (No Commment) */
-"Incorrect password" = "Mật khẩu không đúng";
-
-/* (No Commment) */
-"Incorrect private key" = "Khóa riêng không đúng";
-
-/* (No Commment) */
-"Increase fee" = "Tăng phí";
-
-/* (No Commment) */
-"Information" = "Thông tin";
-
-/* (No Commment) */
-"Initializing Wallet" = "Đang tạo ví";
-
-/* (No Commment) */
-"Insufficient Funds" = "Không đủ tiền";
-
-/* (No Commment) */
-"Invalid Identifier" = "ID không hợp lệ";
-
-/* (No Commment) */
-"Invalid Pairing Code" = "Mã kết nối không hợp lệ";
-
-/* (No Commment) */
-"Invalid Send Value" = "Giá trị gửi không hợp lệ";
-
-/* (No Commment) */
-"Invalid Shared Key" = "Khóa được chia sẻ không hợp lệ";
-
-/* (No Commment) */
-"Invalid Status Code Returned %@" = "Tình trạng mã được trả lại không hợp lệ %@";
-
-/* (No Commment) */
-"Invalid Wallet ID" = "ID Ví không hợp lệ";
-
-/* (No Commment) */
-"Invalid address: %@" = "Địa chỉ không hợp lệ: %@";
-
-/* (No Commment) */
-"Invalid email address." = "Địa chỉ email không hợp lệ.";
-
-/* (No Commment) */
-"Invalid mobile number." = "Số điện thoại không hợp lệ.";
-
-/* (No Commment) */
-"Invalid recovery phrase. Please try again" = "Nhóm từ khôi phục không hợp lệ. Vui lòng thử lại";
-
-/* (No Commment) */
-"Invalid server response. Please check your internet connection." = "Phản hồi máy chủ không hợp lệ. Vui lòng kiểm tra kết nối internet.";
-
-/* (No Commment) */
-"Invalid to bitcoin address" = "Địa chỉ bitcoin không hợp lệ";
-
-/* (No Commment) */
-"Invalid two-factor authentication type" = "Nhập bảo mật 2 lớp không hợp lệ";
-
-/* (No Commment) */
-"Invalid verification code. Please try again." = "Mã xác minh không hợp lệ. Vui lòng thử lại.";
-
-/* No comment provided by engineer. */
-"It is important to make sure you write down your words exactly as they appear here and " = "Bạn phải viết các từ chính xác theo đúng thứ tự";
-
-/* No comment provided by engineer. */
-"Just now" = "Mới đây";
-
-/* (No Commment) */
-"Keep higher fee" = "Giữ phí cao hơn";
-
-/* (No Commment) */
-"Keep lower fee" = "Giữ phí thấp hơn";
-
-/* (No Commment) */
-"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Bảo mật xPub của bạn. Ai đó truy cập vào xPub sẽ có thể xem toàn bộ các khoản tiền và giao dịch của bạn.";
-
-/* (No Commment) */
-"Key already imported" = "Khóa đã được nhập";
-
-/* (No Commment) */
-"Label" = "Nhãn";
-
-/* (No Commment) */
-"Label Address" = "Dán nhãn địa chỉ";
-
-/* (No Commment) */
-"Label must contain letters and numbers only" = "Nhãn chỉ chứa chữ và số";
-
-/* (No Commment) */
-"Label must have less than 18 characters" = "Nhãn có ít hơn 18 ký tự";
-
-/* (No Commment) */
-"Large Transaction" = "Giao dịch lớn";
-
-/* (No Commment) */
-"Learn More" = "Tìm hiểu thêm";
-
-/* (No Commment) */
-"Link Mobile" = "Liên kết điện thoại";
-
-/* (No Commment) */
-"Load More Transactions" = "Tải thêm giao dịch";
-
-/* (No Commment) */
-"Loading External Page" = "Đang tải trang mở rộng";
-
-/* (No Commment) */
-"Loading transactions" = "Đang tải giao dịch";
-
-/* (No Commment) */
-"Local Currency" = "Nội tệ";
-
-/* (No Commment) */
-"Log in to my Wallet" = "Đăng nhập Ví của tôi";
-
-/* (No Commment) */
-"Login existing Wallet" = "Đăng nhập Ví hiện tại";
-
-/* (No Commment) */
-"Logout" = "Đăng xuất";
-
-/* (No Commment) */
-"Logout and forget wallet" = "Đăng xuất và quên ví";
-
-/* (No Commment) */
-"Lower fee" = "Giảm phí";
-
-/* (No Commment) */
-"Make Default" = "Làm mặc định";
-
-/* (No Commment) */
-"Manual Pairing" = "Kết nối thủ công";
-
-/* (No Commment) */
-"Manually" = "Thủ công";
-
-/* (No Commment) */
-"Merchant" = "Cổng thanh toán";
-
-/* (No Commment) */
-"Merchant Directory is currently unavailable. Please try again later." = "Danh mục Cổng thanh toán hiện không có. Vui lòng thử lại sau.";
-
-/* (No Commment) */
-"Merchant Map" = "Sơ đồ cổng thanh toán";
-
-/* (No Commment) */
-"Merchant URL" = "URL Cổng thanh toán";
-
-/* (No Commment) */
-"Mobile Linked" = "Điện thoại đã liên kết";
-
-/* (No Commment) */
-"Mobile Number" = "Số điện thoại";
-
-/* No comment provided by engineer. */
-"My Bitcoin Wallet" = "Ví Bitcoin của tôi";
-
-/* (No Commment) */
-"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "CHÚ Ý: Khóa riêng được quét không tương ứng với địa chỉ chỉ-xem. Để sử dụng các khoản tiền của bạn từ địa chỉ này, vui lòng quét khóa riêng đúng.";
-
-/* (No Commment) */
-"Name" = "Tên";
-
-/* (No Commment) */
-"Needs BIP38 Password" = "Cần mật khẩu BIP38";
-
-/* (No Commment) */
-"New Address" = "Địa chỉ mới";
-
-/* (No Commment) */
-"New Email Address" = "Địa chỉ email mới";
-
-/* (No Commment) */
-"New Mobile Number" = "Số điện thoại mới";
-
-/* (No Commment) */
-"New PIN must be different" = "Mã PIN mới phải khác";
-
-/* (No Commment) */
-"New password must be different" = "Mật khẩu mới phải khác";
-
-/* (No Commment) */
-"New password must be different from your password hint" = "Mật khẩu mới phải khác Cụm từ gợi ý mật khẩu";
-
-/* No comment provided by engineer. */
-"Next word" = "Từ tiếp theo";
-
-/* (No Commment) */
-"No" = "Không";
-
-/* (No Commment) */
-"No Label" = "Không có nhãn";
-
-/* No comment provided by engineer. */
-"No Password Entered" = "Không có mật khẩu";
-
-/* (No Commment) */
-"No internet connection available. Please check your network settings." = "Không có kết nối internet. Vui lòng kiểm tra kết nối mạng.";
-
-/* (No Commment) */
-"No internet connection." = "Không có kết nối internet.";
-
-/* (No Commment) */
-"Normal" = "Tốt";
-
-/* (No Commment) */
-"Not Stored" = "Chưa được lưu trữ";
-
-/* (No Commment) */
-"Not now" = "Không phải bây giờ";
-
-/* (No Commment) */
-"Notifications" = "Thông báo";
-
-/* No comment provided by engineer. */
-"OK" = "OK";
-
-/* (No Commment) */
-"Open %@?" = "Mở %@?";
-
-/* (No Commment) */
-"Open Mail App" = "Mở ứng dụng Email";
-
-/* (No Commment) */
-"PIN" = "Mã PIN";
-
-/* (No Commment) */
-"PIN Encrypted String is nil" = "Chuỗi PIN được mã hóa là số không";
-
-/* (No Commment) */
-"PIN Response Object key or value length 0" = "Khóa và giá trị phản hồi mã PIN dài 0";
-
-/* (No Commment) */
-"PIN Response Object success length 0" = "Kết quả phản hồi mã PIN dài 0";
-
-/* (No Commment) */
-"PIN Saved Successfully" = "Lưu mã PIN thành công";
-
-/* (No Commment) */
-"PIN Validation Error" = "Lỗi xác thực mã PIN";
-
-/* (No Commment) */
-"PIN Validation cannot be completed. Please enter your wallet password manually." = "Không thể hoàn thành xác thực mã PIN. Vui lòng nhập thủ công mật khẩu ví.";
-
-/* (No Commment) */
-"PINs do not match" = "Mã PIN không khớp";
-
-/* (No Commment) */
-"Parsing Pairing Code" = "Phân tích cú pháp mã kết nối";
-
-/* (No Commment) */
-"Password Hint" = "Cụm từ gợi ý mật khẩu";
-
-/* (No Commment) */
-"Password Required" = "Yêu cầu mật khẩu";
-
-/* (No Commment) */
-"Password changed. Please login to continue." = "Mật khẩu đã thay đổi. Vui lòng đăng nhập để tiếp tục.";
-
-/* (No Commment) */
-"Password must be different from your email" = "Mật khẩu phải khác email";
-
-/* (No Commment) */
-"Password must be less than or equal to 255 characters" = "Mật khẩu phải ít hơn hoặc đúng 255 ký tự";
-
-/* (No Commment) */
-"Passwords do not match" = "Mật khẩu không khớp";
-
-/* (No Commment) */
-"Payment Received" = "Thanh toán đã nhận";
-
-/* (No Commment) */
-"Payment Sent!" = "Thanh toán đã gửi!";
-
-/* (No Commment) */
-"Payments Sent" = "Thanh toán đã gửi!";
-
-/* (No Commment) */
-"Pending" = "Chưa giải quyết";
-
-/* (No Commment) */
-"Pending (%@ Confirmations)" = "Chưa giải quyết (%@ xác nhận)";
-
-/* (No Commment) */
-"Phrase Backed" = "Nhóm Từ Khôi Phục đã được sao lưu";
-
-/* (No Commment) */
-"Please Login" = "Vui lòng đăng nhập";
-
-/* (No Commment) */
-"Please add an email address" = "Vui lòng thêm địa chỉ email";
-
-/* (No Commment) */
-"Please check your email and click on the verification link." = "Vui lòng kiểm tra email và nhấn vào liên kết xác minh.";
-
-/* (No Commment) */
-"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "Vui lòng kiểm tra email của bạn. Nếu bạn đã xác minh đăng nhập, bạn cần đăng nhập ví trên web và kết nối với điện thoại bằng cách quét mã QR tại Cài đặt -> Thông tin Ví.";
-
-/* (No Commment) */
-"Please check your internet connection." = "Vui lòng kiểm tra kết nối internet.";
-
-/* (No Commment) */
-"Please choose another PIN" = "Vui lòng chọn mã PIN khác";
-
-/* (No Commment) */
-"Please choose from the options below." = "Vui lòng chọn các tùy chọn bên dưới.";
-
-/* (No Commment) */
-"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "Vui lòng nhập phí cao hơn 0 BTC và cao nhất là 0,01 BTC";
-
-/* (No Commment) */
-"Please enter a new PIN" = "Vui lòng nhập mã PIN mới";
-
-/* (No Commment) */
-"Please enter your %@ 2FA code" = "Vui lòng nhập mã Bảo mật 2 lớp %@ của bạn";
-
-/* (No Commment) */
-"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "Vui lòng nhập chính xác ID ví gồm 36 ký tự. Có thể tìm thấy tại email chào mừng lúc mới bắt đầu.";
-
-/* (No Commment) */
-"Please enter your PIN" = "Vui lòng nhập mã PIN";
-
-/* (No Commment) */
-"Please enter your recovery phrase with words separated by spaces" = "Vui lòng nhập nhóm từ khôi phục với các từ cách nhau bằng dấu cách";
-
-/* (No Commment) */
-"Please login to load more addresses." = "Vui lòng đăng nhập để tải thêm địa chỉ.";
-
-/* (No Commment) */
-"Please lower the fee to an amount that is less than your balance" = "Vui lòng giảm phí xuống thấp hơn số dư của bạn";
-
-/* (No Commment) */
-"Please provide an email address." = "Vui lòng cung cấp địa chỉ email.";
-
-/* (No Commment) */
-"Please refresh the pairing code and try again." = "Vui lòng làm mới mã kết nối và thử lại.";
-
-/* (No Commment) */
-"Please select a different address to send from." = "Vui lòng chọn địa chỉ khác để gửi.";
-
-/* (No Commment) */
-"Please send %@ to bitcoin address.
-%@" = "Vui lòng gửi %1$@ đến địa chỉ bitcoin.
-%2$@";
-
-/* (No Commment) */
-"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "Vui lòng gửi thanh toán đến địa chỉ bitcoin (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">giúp đỡ?</a>): %@";
-
-/* No comment provided by engineer. */
-"Please try again" = "Vui lòng thử lại";
-
-/* (No Commment) */
-"Please verify your email address first." = "Vui lòng xác minh địa chỉ email của bạn trước.";
-
-/* (No Commment) */
-"Please verify your mobile number first." = "Vui lòng xác minh số điện thoại của bạn trước.";
-
-/* (No Commment) */
-"Preferences" = "Ưu tiên";
-
-/* (No Commment) */
-"Preparing transfer" = "Chuẩn bị chuyển khoản";
-
-/* (No Commment) */
-"Privacy Policy" = "Chính sách Bảo mật";
-
-/* (No Commment) */
-"Private Key Needed" = "Yêu cầu Khóa riêng";
-
-/* (No Commment) */
-"Processing key" = "Đang xử lý khóa";
-
-/* (No Commment) */
-"Rate Blockchain Wallet" = "Đánh giá Ví Blockchain";
-
-/* (No Commment) */
-"Receive" = "Nhận";
-
-/* (No Commment) */
-"Receive to..." = "Nhận tại...";
-
-/* (No Commment) */
-"Received" = "Đã nhận";
-
-/* (No Commment) */
-"Recipients" = "Người nhận";
-
-/* (No Commment) */
-"Recover Funds" = "Khôi phục các khoản tiền";
-
-/* (No Commment) */
-"Recovering Funds" = "Đang khôi phục các khoản tiền";
-
-/* (No Commment) */
-"Regular" = "Tương đối";
-
-/* (No Commment) */
-"Request" = "Yêu cầu";
-
-/* (No Commment) */
-"Request Amount" = "Số tiền yêu cầu";
-
-/* (No Commment) */
-"Request failed. Please check your internet connection." = "Yêu cầu thất bại. Vui lòng kiểm tra kết nối internet.";
-
-/* (No Commment) */
-"Resend verification SMS" = "Gửi lại tin nhắn xác minh";
-
-/* (No Commment) */
-"Resend verification email" = "Gửi lại email xác minh";
-
-/* (No Commment) */
-"Reset" = "Thiết lập lại";
-
-/* (No Commment) */
-"Retrieving recommended fee" = "Lấy lại phí được đề nghị";
-
-/* (No Commment) */
-"Retry Validation" = "Xác thực lại";
-
-/* (No Commment) */
-"SMS" = "Tin nhắn SMS";
-
-/* (No Commment) */
-"SMS Notifications" = "Thông báo tin nhắn SMS";
-
-/* (No Commment) */
-"Save" = "Lưu";
-
-/* (No Commment) */
-"Scan Pairing Code" = "Quét mã kết nối";
-
-/* (No Commment) */
-"Scan Private Key" = "Quét khóa riêng";
-
-/* (No Commment) */
-"Scan QR Code" = "Quét mã QR";
-
-/* (No Commment) */
-"Scan QR code" = "Quét mã QR";
-
-/* (No Commment) */
-"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "Quét và sao chép mã này vào ứng dụng Cổng thanh toán của Blockchain để nhận Bitcoin an toàn.";
-
-/* No comment provided by engineer. */
-"Second Password Incorrect" = "Mật khẩu cấp 2 không đúng";
-
-/* No comment provided by engineer. */
-"Second Password Required" = "Yêu cầu Mật khẩu cấp 2";
-
-/* (No Commment) */
-"Security" = "Bảo mật";
-
-/* (No Commment) */
-"Security Center" = "Trung tâm Bảo mật";
-
-/* (No Commment) */
-"Security Center completed - your wallet is safe and secure" = "Trung tâm Bảo mật đã hoàn tất - ví của bạn được an toàn và đảm bảo";
-
-/* (No Commment) */
-"Send" = "Gửi";
-
-/* (No Commment) */
-"Send from..." = "Gửi từ...";
-
-/* (No Commment) */
-"Send to..." = "Gửi đến...";
-
-/* (No Commment) */
-"Send verification SMS" = "Gửi tin nhắn xác minh";
-
-/* (No Commment) */
-"Sending Transaction" = "Đang gửi giao dịch";
-
-/* (No Commment) */
-"Sent" = "Đã gửi";
-
-/* (No Commment) */
-"Sent to %@" = "Đã gửi đến %@";
-
-/* (No Commment) */
-"Server URL" = "URL máy chủ";
-
-/* (No Commment) */
-"Set as Default?" = "Đặt làm mặc định?";
-
-/* (No Commment) */
-"Settings" = "Cài đặt";
-
-/* (No Commment) */
-"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "Ủy quyền xPub cho những người khác để theo dõi lịch sử giao dịch của bạn. Những người được ủy quyền có thể ngăn bạn truy cập vào ví của mình, chỉ chia sẻ xPub với những người bạn tin tưởng.";
-
-/* (No Commment) */
-"Show all 'Dont Show Again' alerts" = "Hiện tất cả thông báo 'Không hiện lại'";
-
-/* No comment provided by engineer. */
-"Signal %d was raised." = "Tín hiệu %d được tăng.";
-
-/* (No Commment) */
-"Signing Input %d" = "Nhập chữ ký %d";
-
-/* (No Commment) */
-"Signing Inputs" = "Nhập chữ ký";
-
-/* (No Commment) */
-"Simulate surge" = "Mô phỏng biến động";
-
-/* (No Commment) */
-"Some funds cannot be transferred automatically." = "Một số khoản tiền không thể chuyển tự động.";
-
-/* (No Commment) */
-"Status" = "Trạng thái";
-
-/* (No Commment) */
-"Store Hint" = "Gợi ý lưu trữ";
-
-/* (No Commment) */
-"Stored" = "Đã lưu trữ";
-
-/* (No Commment) */
-"Strong" = "Mạnh";
-
-/* (No Commment) */
-"Success" = "Thành công";
-
-/* (No Commment) */
-"Success!" = "Thành công!";
-
-/* (No Commment) */
-"Support" = "Hỗ trợ";
-
-/* (No Commment) */
-"Surge Occurring" = "Xuất hiện biến động";
-
-/* (No Commment) */
-"Swipe to Receive" = "Vuốt để Nhận";
-
-/* No comment provided by engineer. */
-"Syncing Wallet" = "Đồng bộ Ví";
-
-/* (No Commment) */
-"Tap to copy this address. Share it with the sender via email or text." = "Nhấn để sao chép địa chỉ này. Chia sẻ với người gửi qua email hoặc tin nhắn.";
-
-/* (No Commment) */
-"Terms of Service" = "Điều khoản Dịch vụ";
-
-/* (No Commment) */
-"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "Mạng lưới dò tìm Bitcoin hiện đang rất đông, dẫn đến các phí được yêu cầu cao hơn thông thường.";
-
-/* (No Commment) */
-"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "Mã PIN bạn đã chọn rất thông dụng và có thể đoán được dễ dàng với 3 lần thử trên điện thoại. Bạn có muốn vẫn sử dụng mã PIN này?";
-
-/* (No Commment) */
-"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "Số tiền bạn muốn gửi (%1$@) lớn hơn số tiền tối đa mà bạn có thể dùng trừ đi phí (%2$@ - %3$@). Bạn có muốn gửi %4$@?";
-
-/* (No Commment) */
-"The fee you have specified is too low." = "Bạn xác định phí quá thấp.";
-
-/* (No Commment) */
-"The private key you are attempting to import is encrypted. Please enter the password below." = "Khóa riêng bạn đang dùng để nhập đã bị mã hóa. Vui lòng nhập mật khẩu vào bên dưới.";
-
-/* (No Commment) */
-"There was a problem verifying your identity." = "Có lỗi khi xác minh danh tính của bạn.";
-
-/* (No Commment) */
-"There was an error importing this private key" = "Có lỗi khi nhập khóa riêng này";
-
-/* (No Commment) */
-"These options are recommended for advanced users only. Continue?" = "Các tùy chọn này chỉ khuyến nghị cho người dùng cao cấp. Tiếp tục?";
-
-/* (No Commment) */
-"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "Hành động này yêu cầu khóa riêng cho địa chỉ Bitcoin %@. Vui lòng quét mã QR.";
-
-/* (No Commment) */
-"This action requires the second password for your wallet. Please enter it below and press continue." = "Hành động này yêu cầu mật khẩu cấp 2 cho ví. Vui lòng nhập vào bên dưới và nhấn tiếp tục.";
-
-/* (No Commment) */
-"This address has already been used. Please login." = "Địa chỉ này đã được sử dụng. Vui lòng đăng nhập.";
-
-/* (No Commment) */
-"This address is not watch-only." = "Đây không phải là địa chỉ chỉ-xem.";
-
-/* (No Commment) */
-"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "Đây là địa chỉ chỉ-xem. Để sử dụng các khoản tiền từ ví này, vui lòng quét khóa riêng.";
-
-/* (No Commment) */
-"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "Đây là một giao dịch bitcoin vượt kích cỡ. Ví của bạn cần tổng hợp nhiều khoản thanh toán nhỏ hơn những khoản bạn đã nhận trong quá khứ. Điều này cần một khoản phí tương đối cao để được xác nhận nhanh chóng. Nếu bạn cảm thấy ổn khi giao dịch mất nhiều thời gian hơn để xác nhận, bạn có thể giảm phí thủ công bằng cách nhấn vào \"Tùy chỉnh phí.\"";
-
-/* (No Commment) */
-"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "Đã được lưu trữ. Mặc dù bạn không thể gửi tiền từ đây, nhưng tất cả các khoản tiền sẽ được an toàn. Đơn giản chỉ cần bỏ lưu trữ và bắt đầu sử dụng lại.";
-
-/* (No Commment) */
-"This name is already in use. Please choose a different name." = "Tên này đã được sử dụng. Vui lòng chọn tên khác.";
-
-/* (No Commment) */
-"This private key belongs to another address that is not watch only" = "Khóa riêng này thuộc về một địa chỉ khác không phải địa chỉ chỉ-xem";
-
-/* (No Commment) */
-"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "Giao dịch này yêu cầu phí cao hơn vì thực hiện giao dịch với số tiền quá nhỏ.";
-
-/* (No Commment) */
-"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "Điều này sẽ cho phép các thông báo sau: nhận tại địa chỉ chỉ-xem, đánh giá nhanh trên App Store, và chuyển khoản toàn bộ tiền.";
-
-/* (No Commment) */
-"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "Điều này sẽ xóa toàn bộ dữ liệu ví trên thiết bị. Vui lòng xác nhận thông tin của bạn được lưu trữ an toàn, nếu không bitcoin trong ví sẽ không thể truy cập!!";
-
-/* (No Commment) */
-"To" = "Đến";
-
-/* (No Commment) */
-"Tor Requests" = "Yêu cầu từ Tor";
-
-/* (No Commment) */
-"Tor blocked" = "Chặn Tor";
-
-/* (No Commment) */
-"Tor requests allowed" = "Yêu cầu từ Tor được cho phép";
-
-/* (No Commment) */
-"Tor requests are currently allowed." = "Yêu cầu từ Tor hiện được cho phép.";
-
-/* (No Commment) */
-"Tor requests are currently blocked." = "Yêu cầu từ Tor hiện bị chặn.";
-
-/* (No Commment) */
-"Total Balance" = "Tổng số dư";
-
-/* (No Commment) */
-"Touch ID has been locked due to too many failed attempts." = "Cảm biến vân tay đã bị khóa do đăng nhập thất bại quá nhiều.";
-
-/* (No Commment) */
-"Touch ID is not available on this device." = "Cảm biến vân tay không có trên thiết bị này.";
-
-/* (No Commment) */
-"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "Cảm biến vân tay không được kích hoạt trên thiết bị này. Để kích hoạt Cảm biến vân tay, đến Cài đặt->Mật khẩu và thêm dấu vân tay.";
-
-/* (No Commment) */
-"Transaction" = "Giao dịch";
-
-/* (No Commment) */
-"Transaction Fees" = "Phí giao dịch";
-
-/* (No Commment) */
-"Transaction fee: %@" = "Phí giao dịch: %@";
-
-/* (No Commment) */
-"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "Phí giao dịch tác động đến tốc độ mạng lưới dò Bitcoin xác nhận giao dịch của bạn, và phụ thuộc vào các điều kiện mạng hiện tại.";
-
-/* (No Commment) */
-"Transactions" = "Giao dịch";
-
-/* (No Commment) */
-"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "Giao dịch không có phí sẽ tốn nhiều thời gian để xác nhận hoặc không được xác nhận. Bạn có muốn tiếp tục?";
-
-/* (No Commment) */
-"Transfer Funds" = "Chuyển khoản tiền";
-
-/* (No Commment) */
-"Transferred" = "Đã chuyển";
-
-/* (No Commment) */
-"Transferred funds from %d %@" = "Chuyển khoản tiền từ %1$d %2$@";
-
-/* (No Commment) */
-"Transferred funds from %d %@. Outputs for %d %@ were too small." = "Chuyển khoản tiền từ %1$d %2$@. Đầu ra cho %3$d %4$@ quá nhỏ.";
-
-/* (No Commment) */
-"Transferring all funds: Address %i of %i" = "Đang chuyển toàn bộ tiền: địa chỉ %1$i của %2$i";
-
-/* (No Commment) */
-"Try again" = "Thử lại";
-
-/* (No Commment) */
-"UPGRADE YOUR WALLET" = "NÂNG CẤP VÍ";
-
-/* (No Commment) */
-"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "Không thể tải ví do không có phản hồi từ máy chủ. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Vui lòng thử lại sau.";
-
-/* (No Commment) */
-"Unarchive" = "Bỏ lưu trữ";
-
-/* (No Commment) */
-"Unarchive Address" = "Bỏ lưu trữ địa chỉ";
-
-/* (No Commment) */
-"Unconfirmed" = "Không được xác nhận";
-
-/* No comment provided by engineer. */
-"Unhandled exception" = "Tình huống ngoại lệ không thể xử lí được";
-
-/* (No Commment) */
-"Unknown" = "Không xác định";
-
-/* (No Commment) */
-"Unknown Touch ID error. Code: %ld" = "Lỗi Cảm biến vân tay không xác định. Mã: %ld";
-
-/* (No Commment) */
-"Unknown key format" = "Định dạng khóa không xác định";
-
-/* (No Commment) */
-"Unsupported Private Key Format" = "Định dạng khóa riêng không được hỗ trợ";
-
-/* (No Commment) */
-"Unverified" = "Chưa được xác minh";
-
-/* (No Commment) */
-"Update" = "Cập nhật";
-
 /* (No Commment) */
 "Upgrade" = "Nâng cấp";
-
 /* (No Commment) */
-"Upgrade Wallet" = "Nâng cấp ví";
-
+"Settings" = "Cài đặt";
 /* (No Commment) */
-"Upgrade to V3" = "Nâng cấp lên V3";
-
+"Send" = "Gửi";
 /* (No Commment) */
-"Use Touch ID as PIN" = "Sử dụng Cảm biến vân tay như mã PIN";
-
-/* (No Commment) */
-"Use all funds" = "Sử dụng tất cả các khoản tiền";
-
-/* (No Commment) */
-"Use recommended values" = "Sử dụng các giá trị được đề xuất";
-
-/* (No Commment) */
-"Use total available minus fee: %@" = "Sử dụng tổng hiện có trừ phí: %@";
-
-/* (No Commment) */
-"User Declined" = "Người dùng bị từ chối";
-
-/* No comment provided by engineer. */
-"VERIFY BACKUP" = "XÁC MINH SAO LƯU";
-
-/* (No Commment) */
-"Value when sent: %@" = "Giá trị khi gửi: %@";
-
-/* (No Commment) */
-"Verification email has been sent to %@." = "Email xác minh đã được gửi đến %@.";
-
-/* (No Commment) */
-"Verified" = "Đã xác minh";
-
-/* (No Commment) */
-"Verify" = "Xác minh";
-
-/* (No Commment) */
-"Verify Email" = "Xác minh Email";
-
-/* (No Commment) */
-"Verifying" = "Đang xác minh";
-
-/* (No Commment) */
-"Wallet ID" = "ID Ví";
-
-/* (No Commment) */
-"Wallet Information" = "Thông tin Ví";
-
-/* (No Commment) */
-"Wallet JSON" = "Ví JSON";
-
-/* (No Commment) */
-"Wallet Paired Successfully." = "Ví được kết nối thành công.";
-
-/* (No Commment) */
-"Recovery Phrase" = "Nhóm từ khôi phục";
-
-/* (No Commment) */
-"Warning" = "Cảnh báo";
-
-/* (No Commment) */
-"Warning!!!" = "Cảnh báo!!!";
-
-/* (No Commment) */
-"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "Cảnh báo: ID ví của bạn chứa thông tin nhạy cảm. Sao chép có thể gây hại đến sự an toàn của ví.";
-
-/* (No Commment) */
-"Watch Only" = "Chỉ xem";
-
-/* (No Commment) */
-"We'll send the hint to your confirmed email address in case you request it." = "Chúng tôi sẽ gửi cụm từ gợi ý đến địa chỉ email được xác nhận nếu bạn yêu cầu.";
-
-/* (No Commment) */
-"Weak" = "Yếu";
-
-/* (No Commment) */
-"WebSocket URL" = "URL WebSocket";
-
-/* (No Commment) */
-"Welcome" = "Chào mừng";
-
-/* No comment provided by engineer. */
-"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "Tốt lắm! Có phải bạn bị mất mật khẩu, bạn có thể khôi phục các khoản tiền trong ví hay thậm chí nhận tiền trong tương lai (ngoại trừ các địa chỉ đã nhập) bằng cách sử dụng nhóm 12 từ khôi phục. Hãy nhớ lưu trữ Nhóm từ khôi phục của bạn ở một nơi thật an toàn và đảm bảo. Bất kỳ ai truy cập được vào Nhóm từ khôi phục của bạn, đều có thể truy cập bitcoin của bạn.";
-
-/* (No Commment) */
-"We’ve detected a previous installation of Blockchain Wallet on your phone." = "Chúng tôi phát hiện Ví Blockchain đã được cài đặt trước đây trên điện thoại của bạn.";
-
-/* (No Commment) */
-"What's this for?" = "Cái này đề làm gì?";
-
-/* (No Commment) */
-"Where" = "Ở đâu";
-
-/* (No Commment) */
-"Would you like to add the bitcoin address %@ to your address book?" = "Bạn có muốn thêm địa chỉ bitcoin %@ vào sổ địa chỉ?";
-
-/* (No Commment) */
-"Would you like to archive the addresses used?" = "Bạn có muốn lưu trữ các địa chỉ đã sử dụng?";
-
-/* No comment provided by engineer. */
-"Write the following 12 words onto a " = "Viết 12 từ tiếp theo vào";
-
-/* (No Commment) */
-"Wrong BIP38 Password" = "Sai mật khẩu BIP38";
-
+"Ebu-XV-0mt.normalTitle" = "Hủy bỏ";
 /* (No Commment) */
 "Yes" = "Có";
-
 /* (No Commment) */
-"Yes, rate Blockchain Wallet" = "Có, đánh giá Ví Blockchain";
-
-/* No comment provided by engineer. */
+"No" = "Không";
+"Done" = "Hoàn tất";
 "Yesterday" = "Hôm qua";
-
+"SENT" = "Đã gửi";
+/* Transaction cell: */
+"RECEIVED" = "Đã nhận";
 /* (No Commment) */
-"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Bạn sắp nhập một địa chỉ chỉ-xem, địa chỉ (hay đoạn mã xPub) được lưu trữ trong ví mà không có khóa riêng tương ứng. Điều này có nghĩa các khoản tiền CHỈ CÓ THỂ sử dụng nếu bạn có khóa riêng được lưu trữ. Nếu bạn không có khóa riêng được lưu trữ, KHÔNG hướng dẫn bất kỳ ai gửi bitcoin cho bạn đến địa chỉ chỉ-xem.";
-
+"Transferred" = "Đã chuyển";
 /* (No Commment) */
-"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "Bạn sắp nhận bitcoin tại một địa chỉ chỉ-xem. Bạn chỉ có thể sử dụng các khoản tiền này nếu bạn có quyền truy cập khóa riêng. Tiếp tục?";
-
+"Copied to clipboard" = "Đã sao chép vào bộ nhớ tạm";
 /* (No Commment) */
-"You are now running our most secure Bitcoin wallet" = "Bạn đang sử dụng ví Bitcoin có độ an toàn cao nhất";
-
-/* No comment provided by engineer. */
-"You backed up your funds successfully." = "Sao lưu các khoản tiền thành công.";
-
+"Local Currency" = "Nội tệ";
 /* (No Commment) */
-"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "Bạn có thể kích hoạt Xác minh 2 bước bằng tin nhắn trên điện thoại. Để sử dụng các phương pháp xác thực thay thế khác, vui lòng đăng nhập ví trên web.";
-
+"Bitcoin Unit" = "Đơn vị Bitcoin";
 /* (No Commment) */
-"You can now spend from this address." = "Bạn có thể tiêu dùng từ địa chỉ này.";
-
+"Terms of Service" = "Điều khoản Dịch vụ";
 /* (No Commment) */
-"You do not have an account set up for Mail. Please contact %@" = "Bạn không có tài khoản để thiết lập email. Vui lòng liên hệ %@";
-
+"Privacy Policy" = "Chính sách Bảo mật";
 /* (No Commment) */
-"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = "Bạn không có địa chỉ với số dư khả dụng lớn hơn hoặc bằng ngưỡng thấp nhất được yêu cầu.";
-
+"Invalid Wallet ID" = "ID Ví không hợp lệ";
 /* (No Commment) */
-"You have no available funds to send from this address" = "Bạn không có tiền để gửi từ địa chỉ này";
-
+"Passwords do not match" = "Mật khẩu không khớp";
 /* (No Commment) */
-"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "Bạn phải tắt Xác minh 2 bước trước khi thay đổi số điện thoại (%@).";
-
+"Enter PIN" = "Nhập mã PIN";
 /* (No Commment) */
-"You must enter a destination address" = "Bạn phải nhập địa chỉ đến";
-
+"Automatic Pairing" = "Tự động kết nối";
 /* (No Commment) */
-"You must enter a label" = "Bạn phải nhập nhãn";
-
+"Manual Pairing" = "Kết nối thủ công";
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Nếu bạn đang sử dụng ví cũ, nhấn vào Cài đặt Tài khoản và chọn thẻ Thiết bị. Nếu bạn đang sử dụng ví phiên bản thử nghiệm mới, đến Cài đặt / Thông tin Ví.";
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Nhấn hiển thị mã kết nối để hiện mã QR, mã vạch gồm các hình vuông đen & trắng. Quét mã bằng camera.";
 /* (No Commment) */
-"You must have at least one active address" = "Bạn phải có ít nhất 1 địa chỉ hoạt động";
-
+"Wallet ID" = "ID Ví";
+/* First account name: */
+"My Bitcoin Wallet" = "Ví Bitcoin của tôi";
 /* (No Commment) */
-"You must have two-factor authentication disabled to pair manually." = "Bạn phải tắt Bảo mật 2 lớp để kết nối thủ công.";
-
-/* (No Commment) */
-"You must leave at least one active address" = "Bạn phải có ít nhất 1 địa chỉ hoạt động";
-
+"Recover Funds" = "Khôi phục các khoản tiền";
 /* (No Commment) */
 "You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "Bạn nên thường xuyên kết nối hoặc đăng nhập nếu bạn có quyền truy cập ví của mình. Khôi phục các khoản tiền sẽ tạo một ID ví mới. Bạn có muốn tiếp tục?";
-
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "zd5-DZ-hsS"; */
+"zd5-DZ-hsS.placeholder" = "Mật khẩu";
 /* (No Commment) */
-"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "Bạn đã xác định rõ khoản phí giao dịch nhỏ đặc biệt của %1$@. Giao dịch của bạn có thể bị kẹt và không bao giờ được xác nhận. Để gia tăng khả năng giao dịch được xác nhận trong vòng một giờ (6 khối), chúng tôi khuyên bạn không sử dụng phí thấp hơn %2$@.";
-
+"Email" = "Email";
 /* (No Commment) */
-"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "Bạn đã xác định rõ khoản phí giao dịch nhỏ đặc biệt của %1$@. Giao dịch của bạn có thể bị kẹt và không bao giờ được xác nhận. Để gia tăng khả năng giao dịch được xác nhận trong vòng một giờ (6 khối), chúng tôi khuyên bạn không sử dụng phí thấp hơn %2$@. Vì bạn không có đủ tiền, vậy nên tiền Gửi cũng sẽ phải hạ xuống %3$@.";
-
+"Create Wallet" = "Tạo Ví";
 /* (No Commment) */
-"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "Bạn đã xác định rõ khoản phí giao dịch cao đặc biệt của %1$@. Thậm chí nếu bạn hạ thấp phí đến %2$@, bạn có thể kỳ vọng giao dịch được xác nhận trong khoảng 10 phút (1 khối) tiếp theo.";
-
+"Weak" = "Yếu";
 /* (No Commment) */
-"You will be leaving the app." = "Bạn sẽ rời khỏi ứng dụng.";
-
+"Strong" = "Mạnh";
 /* (No Commment) */
-"You've successfully imported a private key." = "Bạn đã nhập thành công khóa riêng.";
-
+"Normal" = "Tốt";
 /* (No Commment) */
-"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "Bạn đã nhập thành công khóa riêng cho ​địa chỉ %@, bây giờ bạn có thể sử dụng. Nếu bạn muốn tiêu dùng từ địa chỉ này, đảm bảo bạn quét đúng khóa riêng.";
-
+"Gk5-cB-fZg.normalTitle" = "Tiếp tục";
 /* (No Commment) */
-"Your device appears to be jailbroken. The security of your wallet may be compromised." = "Thiết bị của bạn đã được jailbreak. Có thể gây hại cho sự an toàn của ví.";
-
+"Support" = "Hỗ trợ";
 /* (No Commment) */
-"Your email has been verified." = "Email của bạn đã được xác minh.";
-
+"from" = "Từ";
 /* (No Commment) */
-"Your identity does not match our records." = "Danh tính của bạn không khớp với hồ sơ của chúng tôi.";
-
+"13.text" = "Đến";
 /* (No Commment) */
-"Your mobile number has been verified." = "Số điện thoại của bạn đã được xác minh.";
-
+"Confirm Payment" = "Xác nhận thanh toán";
 /* (No Commment) */
-"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "Điện thoại của bạn có thể được sử dụng để kích hoạt bảo mật 2 lớp, giúp bảo vệ ví của bạn khỏi các truy cập trái phép.";
-
+"Imported Addresses" = "Các địa chỉ đã nhập";
+"OK" = "OK";
 /* (No Commment) */
-"Your new password hint contains invalid characters. Please try again." = "Cụm từ gợi ý mật khẩu mới chứa các ký tự không phù hợp. Vui lòng thử lại.";
-
+"Change PIN" = "Thay đổi mã PIN";
+"Import Address" = "Nhập địa chỉ";
 /* (No Commment) */
-"Your new password hint contains no text. Your password hint will be cleared." = "Cụm từ gợi ý mật khẩu không chứa văn bản. Cụm từ gợi ý mật khẩu sẽ được xóa.";
-
-/* (No Commment) */
-"Your new password hint must be different from your password. Please try again." = "Cụm từ gợi ý mật khẩu phải khác mật khẩu. Vui lòng thử lại.";
-
-/* (No Commment) */
-"Your new password hint must be different from your second password. Please try again." = "Cụm từ gợi ý mật khẩu phải khác Mật khẩu cấp 2. Vui lòng thử lại.";
-
-/* (No Commment) */
-"Your password hint has been updated." = "Cụm từ gợi ý mật khẩu đã được cập nhật.";
-
-/* (No Commment) */
-"Your password is not strong enough. Please choose a different password." = "Mật khẩu của bạn không đủ mạnh. Vui lòng chọn mật khẩu khác.";
-
-/* (No Commment) */
-"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "Các khoản đã chuyển của bạn sẽ được an toàn và đảm bảo, và bạn sẽ hưởng lợi từ việc tăng cường bảo mật cùng các tính năng sao lưu và khôi phục thuận tiện.";
-
-/* (No Commment) */
-"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "Địa chỉ email đã xác minh của bạn được sử dụng để gửi các mã đăng nhập khi phát hiện có hành vi đáng ngờ hoặc bất thường, nhắc nhở bạn về ID đăng nhập ví của mình, và để gửi thông báo thanh toán bitcoin khi bạn nhận được tiền. Chúng tôi sẽ không sử dụng địa chỉ email của bạn cho các mục đích tiếp thị.";
-
-/* (No Commment) */
-"Your wallet does not contain this address." = "Ví của bạn không chứa địa chỉ này.";
-
-/* (No Commment) */
-"Your wallet was successfully created." = "Ví của bạn được tạo thành công.";
-
-/* (No Commment) */
-"Yubi Key" = "Khóa Yubi";
-
-/* No comment provided by engineer. */
-"eighth word" = "từ số 8";
-
-/* No comment provided by engineer. */
-"eleventh word" = "từ số 11";
-
-/* No comment provided by engineer. */
-"fifth word" = "từ số 5";
-
-/* No comment provided by engineer. */
+"Name" = "Tên";
+/* Class = "UIButton"; normalTitle = "Save"; ObjectID = "63"; */
+"63.normalTitle" = "Lưu";
 "first word" = "từ số 1";
-
-/* No comment provided by engineer. */
-"fourth word" = "từ số 4";
-
-/* (No Commment) */
-"from" = "từ";
-
-/* No comment provided by engineer. */
-"in this order." = "theo thứ tự này.";
-
-/* No comment provided by engineer. */
-"ninth word" = "từ số 9";
-
-/* (No Commment) */
-"or Continue" = "hoặc tiếp tục";
-
-/* No comment provided by engineer. */
-"piece of paper." = "mảnh giấy.";
-
-/* No comment provided by engineer. */
 "second word" = "từ số 2";
-
-/* No comment provided by engineer. */
-"seventh word" = "từ số 7";
-
-/* No comment provided by engineer. */
-"sixth word" = "từ số 6";
-
-/* No comment provided by engineer. */
-"tenth word" = "từ số 10";
-
-/* No comment provided by engineer. */
 "third word" = "từ số 3";
-
-/* No comment provided by engineer. */
+"fourth word" = "từ số 4";
+"fifth word" = "từ số 5";
+"sixth word" = "từ số 6";
+"seventh word" = "từ số 7";
+"eighth word" = "từ số 8";
+"ninth word" = "từ số 9";
+"tenth word" = "từ số 10";
+"eleventh word" = "từ số 11";
 "twelfth word" = "từ số 12";
-
-/* No comment provided by engineer. */
-" We recommend the fee shown for the transaction at this time." = " Chúng tôi khuyến nghị các chi phí được hiển thị cho những giao dịch vào thời điểm này.";
-
-/* No comment provided by engineer. */
-"Fee" = "Chi phí";
-
-/* No comment provided by engineer. */
-"Please contact support:\n%@" = "Vui lòng liên hệ hỗ trợ:\n%@";
-
-/* No comment provided by engineer. */
-"Transfer Amount" = "Số tiền Chuyển khoản";
-
-/* No comment provided by engineer. */
-"Value when received: %@" = "Giá trị khi nhận được: %@";
-
-/* (No Commment) */
-"Transfer All Funds" = "Chuyển Toàn bộ Các khoản tiền";
-
-/* (No Commment) */
-"Transfer all" = "Chuyển Toàn bộ";
-
-/* (No Commment) */
-"Transfer imported addresses?" = "Chuyển các địa chỉ đã nhập?";
-
-/* (No Commment) */
-"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "Các địa chỉ đã nhập không được sao lưu bằng Nhóm từ Khôi phục của bạn. Nhằm đảm bảo an toàn cho các khoản tiền này, chúng tôi khuyến nghị bạn chuyển những số dư này vào bản sao lưu của mình.";
-
-/* (No Commment) */
-"About Us" = "Giới thiệu";
-
-/* (No Commment) */
-"You currently have email notifications enabled. Changing your email will disable email notifications." = "Hiện bạn đã bật thông báo email. Thay đổi email của bạn sẽ tắt thông báo email.";
-
-/* (No Commment) */
-"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "Hiện bạn đã bật thông báo tin nhắn. Thay đổi email của bạn sẽ tắt thông báo tin nhắn.";
-
-/* (No Commment) */
-"All rights reserved." = "Bảo lưu mọi quyền.";
-
-/* (No Commment) */
-"Rate us" = "Đánh giá chúng tôi";
-
-/* (No Commment) */
-"Free Merchant app" = "Ứng dụng Cổng thanh toán Miễn phí";
-
-/* (No Commment) */
-"Cannot open Mail App" = "Không thể mở Ứng dụng Mail";
-
-/* (No Commment) */
-"Cannot open URL %@" = "Không thể mở URL %@";
-
-/* (No Commment) */
-"Would you like to tell us about your experience with Blockchain?" = "Bạn có muốn cho chúng tôi biết trải nghiệm của mình với Blockchain?";
-
-/* (No Commment) */
-"You will be leaving the app." = "Bạn sẽ rời khỏi ứng dụng.";
-
-/* (No Commment) */
-"Check Your Inbox" = "Kiểm tra Hộp thư của Bạn";
-
-/* (No Commment) */
-"Continue To Mail" = "Tiếp tục đến Mail";
-
-/* (No Commment) */
-"Look for an email from Blockchain and click the verification link to complete your wallet setup." = "Tìm một email từ Blockchain và nhấn vào liên kết xác minh để hoàn tất quá trình thiết lập ví của bạn.";
-
-/* (No Commment) */
-"Backup Your Funds" = "Sao lưu các Khoản tiền của Bạn";
-
-/* (No Commment) */
-"Backup Now" = "Sao lưu Ngay";
-
-/* (No Commment) */
-"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "Chúc mừng, bạn có bitcoin! Bây giờ hãy sao lưu ví của bạn để đảm bảo bạn vẫn có thể truy cập bitcoin của mình nếu quên mật khẩu.";
-
-/* (No Commment) */
-"2-Step Verification" = "Xác minh 2 bước";
-
-/* (No Commment) */
-"Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "Ngăn chặn truy cập trái phép đến ví của bạn. Kích hoạt xác minh 2 bước để tăng cường bảo mật cho ví.";
-
-/* (No Commment) */
-"Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "Kích hoạt thông báo để nhận email hoặc tin nhắn SMS mỗi khi bạn nhận được bitcoin.";
-
-/* (No Commment) */
-"Not Now" = "Không phải Bây giờ";
-
-/* (No Commment) */
-"I'll do this later" = "Để sau";
-
-/* (No Commment) */
-"May be at risk for a double spend." = "Chi tiêu gấp đôi có thể gặp nguy hiểm.";
-
-/* (No Commment) */
-"For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "Để bảo mật cho bạn, chúng tôi không lưu trữ bất kỳ mật khẩu nào. Sao lưu ví của bạn để đảm bảo tiền được an toàn trong trường hợp bạn quên mật khẩu.";
-
-/* (No Commment) */
-"Wallets" = "Ví";
-
-"START BACKUP" = "BẮT ĐẦU SAO LƯU";
-
-"Backup Needed" = "Cần thiết Sao lưu";
-
-"Create a Wallet" = "Tạo Ví";
-
-"Log In" = "Đăng nhập";
-
-"Please enter your password to log into your Blockchain wallet." = "Vui lòng nhập mật khẩu để đăng nhập ví Blockchain của bạn.";
-
-"Forgot Password?" = "Quên Mật khẩu?";
-
-"Or start over and " = "Hoặc bắt đầu lại và ";
-
-"Update Email" = "Cập nhật Email";
-
-"Enter Email Address" = "Nhập Địa chỉ Email";
-
-"Update Mobile" = "Cập nhật Số Điện thoại";
-
-"Enter Mobile Number" = "Nhập Số Điện thoại";
-
-"Balances" = "Số dư";
-
-"Transactions occur when you send and receive bitcoin." = "Giao dịch xuất hiện khi bạn gửi hoặc nhận bitcoin.";
-
-"Your Transactions" = "Giao dịch của bạn";
-
-"Backup Complete" = "Sao lưu Hoàn tất";
-
-"Backup Needed" = "Cần thiết Sao lưu";
-
-"Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "Sử dụng Nhóm từ Khôi phục để khôi phục các khoản tiền của bạn trong trường hợp quên mật khẩu.  Bất kỳ ai truy cập vào Nhóm từ Khôi phục của bạn đều có thể truy cập khoản tiền của bạn, vì vậy hãy lưu trữ nó tại một nơi an toàn và đảm bảo.";
-
-"The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "Nhóm từ Khôi phục gồm 12 từ sau đây sẽ cho phép bạn truy cập vào các khoản tiền của mình trong trường hợp quên mật khẩu.";
-
-"Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "Hãy viết nhóm từ của bạn vào một tờ giấy và lưu trữ tại một nơi an toàn và đảm bảo.";
-
-"Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "Hãy viết Nhóm từ Khôi phục gồm 12 từ sau đây chính xác theo thứ tự:";
-
-"PREVIOUS" = "TRƯỚC";
-
-"NEXT" = "SAU";
-
-"BACKUP AGAIN" = "SAO LƯU LẠI";
-
-"Your verified email address is used to send payment alerts, ID reminders, and login codes." = "Địa chỉ email đã xác nhận của bạn được sử dụng để gửi thông báo thanh toán, nhắc nhở ID và mã đăng nhập.";
-
-"Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "Số điện thoại của bạn có thể được dùng để kích hoạt bảo mật 2 lớp để nhận thông báo.";
-
-/* (No Commment) */
-"Trade Completed" = "Giao dịch Hoàn tất";
-
-/* (No Commment) */
-"The trade you created on %@ has been completed!" = "Giao dịch bạn tạo trên %@ đã hoàn tất!";
-
-/* (No Commment) */
-"View details" = "Xem chi tiết";
-
-/* (No Commment) */
-"Buy Bitcoin" = "Mua Bitcoin";
-
-/* (No Commment) */
-"Your Transactions" = "Giao dịch của bạn";
-
-/* (No Commment) */
-"Transactions occur when you send and receive bitcoin." = "Giao dịch xuất hiện khi bạn gửi hoặc nhận bitcoin.";
-
-/* (No Commment) */
-"Custom" = "Tùy chỉnh";
-
-/* (No Commment) */
-"Advanced users only" = "Chỉ dành cho người dùng nâng cao";
-
-/* (No Commment) */
-"1+ hour" = "Hơn 1 giờ";
-
-/* (No Commment) */
-"Priority" = "Ưu tiên";
-
-/* (No Commment) */
-"~0-60 min" = "Khoảng 0-60 phút";
-
-/* (No Commment) */
-"Satoshi per byte" = "Satoshi mỗi byte";
-
-/* (No Commment) */
-"sat/b" = "sat/b";
-
-/* (No Commment) */
-"High fee not necessary" = "Phí cao không cần thiết";
-
 /* (No Commment) */
-"Low fee not recommended" = "Không đề xuất phí thấp";
-
+"Archived" = "Đã lưu trữ";
 /* (No Commment) */
-"This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck." = "Tính năng này chỉ được đề xuất dành cho người dùng nâng cao. Nếu chọn phí tùy chỉnh, bạn có nguy cơ thanh toán quá mức hoặc giao dịch của bạn có thể bị kẹt.";
-
+"Create new address" = "Tạo địa chỉ mới";
 /* (No Commment) */
-"Available now" = "Hiện đang khả dụng";
-
+"Label" = "Nhãn";
 /* (No Commment) */
-"Buy bitcoin directly from your mobile wallet. It's simple, seamless, and secure." = "Mua bitcoin trực tiếp từ ví trên điện thoại di động của bạn. Đơn giản, liền mạch và an toàn.";
-
+"Edit" = "Chỉnh sửa";
 /* (No Commment) */
-"Log in to Web Wallet" = "Đăng nhập Ví trên Web";
-
+"Warning" = "Cảnh báo";
 /* (No Commment) */
-"Go to login.blockchain.com on your computer." = "Truy cập login.blockchain.com trên máy tính của bạn.";
-
+"Extended Public Key" = "Khóa chung mở rộng (xPub)";
+/* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
+"64.text" = "Địa chỉ";
 /* (No Commment) */
-"Select Log in via mobile." = "Chọn Đăng nhập bằng di động.";
-
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "Ủy quyền xPub cho những người khác để theo dõi lịch sử giao dịch của bạn. Những người được ủy quyền có thể ngăn bạn truy cập vào ví của mình, chỉ chia sẻ xPub với những người bạn tin tưởng.";
 /* (No Commment) */
-"Using your computer's camera, scan the QR code below." = "Sử dụng camera trên máy tính, quét mã QR dưới đây.";
-
+"Archive" = "Lưu trữ";
 /* (No Commment) */
-"Keep this QR code hidden until you're ready." = "Ẩn mã QR này cho đến khi bạn sẵn sàng.";
-
+"Unarchive" = "Bỏ lưu trữ";
 /* (No Commment) */
-"Keep this QR code safe!" = "Giữ mã QR này được an toàn!";
-
+"Private Key Needed" = "Yêu cầu Khóa riêng";
 /* (No Commment) */
-"Do not share it with others." = "Không chia sẻ với người khác.";
-
+"Watch Only" = "Chỉ xem";
 /* (No Commment) */
-"Show QR Code" = "Hiện Mã QR";
-
+"Success" = "Thành công";
 /* (No Commment) */
-"Hide QR Code" = "Ẩn Mã QR";
-
+"Default" = "Mặc định";
 /* (No Commment) */
-"U.S. Dollar" = "Đô-la Mỹ";
-
+"Not now" = "Không phải bây giờ";
 /* (No Commment) */
-"Euro" = "Euro";
-
+"Logout" = "Đăng xuất";
 /* (No Commment) */
-"lcelandic Króna" = "Krona Iceland";
-
+"Update" = "Cập nhật";
 /* (No Commment) */
-"Hong Kong Dollar" = "Đô-la Hồng Kông";
-
+"Verify" = "Xác minh";
 /* (No Commment) */
-"New Taiwan Dollar" = "Tân Đài Tệ";
-
+"Allow" = "Cho phép";
 /* (No Commment) */
-"Swiss Franc" = "Franc Thụy Sĩ";
-
+"Block" = "Chặn";
 /* (No Commment) */
-"Danish Krone" = "Krone Đan Mạch";
-
+"Security" = "Bảo mật";
 /* (No Commment) */
-"Chilean Peso" = "Peso Chi Lê";
-
+"Enable" = "Bật";
 /* (No Commment) */
-"Canadian Dollar" = "Đô-la Canada";
-
+"Disable" = "Tắt";
 /* (No Commment) */
-"Indian Rupee" = "Rupee Ấn Độ";
-
+"SMS" = "Tin nhắn SMS";
 /* (No Commment) */
-"Chinese Yuan" = "Nhân dân tệ Trung Quốc";
-
+"Google Authenticator" = "Google Authenticator";
 /* (No Commment) */
-"Thai Baht" = "Bạt Thái Lan";
-
+"2-step Verification" = "Xác minh 2 bước";
 /* (No Commment) */
-"Australian Dollar" = "Đô-la Úc";
-
+"Change Password" = "Thay đổi mật khẩu";
 /* (No Commment) */
-"Singapore Dollar" = "Đô-la Singapore";
-
+"Email Notifications" = "Thông báo Email";
+/* Class = "UITextField"; placeholder = "New Password"; ObjectID = "VKs-B5-luJ"; */
+"VKs-B5-luJ.placeholder" = "Mật khẩu mới";
 /* (No Commment) */
-"South Korean Won" = "Won Hàn Quốc";
-
+"Preferences" = "Ưu tiên";
 /* (No Commment) */
-"Japanese Yen" = "Yên Nhật";
-
-/* (No Commment) */
-"Polish Zloty" = "Zloty Ba Lan";
-
-/* (No Commment) */
-"Great British Pound" = "Bảng Anh";
-
-/* (No Commment) */
-"Swedish Krona" = "Krona Thụy Điển";
-
-/* (No Commment) */
-"New Zealand Dollar" = "Đô-la New Zealand";
-
-/* (No Commment) */
-"Brazil Real" = "Real Brazil";
-
-/* (No Commment) */
-"Russian Ruble" = "Rúp Nga";
-
-/* (No Commment) */
-"Bitcoin Balances" = "Số dư Bitcoin";
-
-/* (No Commment) */
-"Enter Ether address or select" = "Nhập địa chỉ Ether hoặc chọn";
-
-/* (No Commment) */
-"Payment Sent! Your balance and transactions will update soon." = "Đã gửi Thanh toán! Số dư và giao dịch của bạn sẽ sớm được cập nhật.";
-
-/* (No Commment) */
-"Waiting for payment" = "Đang chờ thanh toán";
-
-/* (No Commment) */
-"Please wait until your last ether transaction confirms." = "Vui lòng chờ cho đến khi xác nhận giao dịch ether vừa rồi của bạn.";
-
-/* (No Commment) */
-"Bitcoin Addresses" = "Địa chỉ Bitcoin";
-
-/* (No Commment) */
-"Bitcoin Merchant Map" = "Bản đồ Cổng thanh toán Bitcoin";
-
-/* (No Commment) */
-"Invalid Ether address: %@" = "Địa chỉ Ether không hợp lệ: %@";
-
-/* (No Commment) */
-"An error occurred while retrieving the latest chart data. Please try again later." = "Đã xảy ra lỗi khi truy xuất dữ liệu biểu đồ mới nhất. Vui lòng thử lại sau.";
-
-/* (No Commment) */
-"Transactions occur when you send and request ether." = "Các giao dịch xảy ra khi bạn gửi và yêu cầu ether.";
-
-/* (No Commment) */
-"Request Ether" = "Yêu cầu Ether";
-
-/* (No Commment) */
-"Dashboard" = "Bảng điều khiển";
-
-/* (No Commment) */
-"Week" = "Tuần";
-
-/* (No Commment) */
-"Month" = "Tháng";
-
-/* (No Commment) */
-"Year" = "Năm";
-
-/* (No Commment) */
-"Bitcoin Price" = "Giá Bitcoin";
-
-/* (No Commment) */
-"Ether Price" = "Giá Ether";
-
-/* (No Commment) */
-"Contract addresses are not supported." = "Địa chỉ hợp đồng không được hỗ trợ.";
-
-/* (No Commment) */
-"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "Hiện tại chúng tôi chỉ hỗ trợ ETH. Bạn không thể nhận REP, ICN, GNT, GNO, DGD, BCP.";
-
-/* (No Commment) */
-"Now supporting Ether" = "Hiện nay chúng tôi đang hỗ trợ Ether";
-
-/* (No Commment) */
-"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "Chúng tôi lắng nghe yêu cầu của bạn. Chúng tôi rất vui mừng thông báo ví Blockchain giờ đây đã cho phép bạn tự do gửi và nhận ether!";
-
-/* (No Commment) */
-"Get Started with Ether" = "Bắt Đầu Với Ether";
-
-/* (No Commment) */
-"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "Để sử dụng dịch vụ này, chúng tôi yêu cầu bạn nhập mật khẩu cấp hai của mình. Bạn chỉ cần nhập mật khẩu cấp hai một lần để thiết lập ví Ether của mình.";
-
-/* (No Commment) */
-"Enter Ether address" = "Nhập Địa chỉ Ether";
-
-/* (No Commment) */
-"Day" = "Ngày";
-
-/* (No Commment) */
-"All" = "Tất cả";
-
-/* (No Commment) */
-"Please send ether to %@." = "Vui lòng gửi ether đến %@.";
-
+"Information" = "Thông tin";
 /* (No Commment) */
 "Bitcoin payment request" = "Yêu cầu thanh toán Bitcoin";
-
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "Mã PIN bạn đã chọn rất thông dụng và có thể đoán được dễ dàng với 3 lần thử trên điện thoại. Bạn có muốn vẫn sử dụng mã PIN này?";
+/* (No Commment) */
+"Try again" = "Thử lại";
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "Nếu bạn muốn quên ví này và bắt đầu lại, nhấn 'Quên ví'.";
+/* (No Commment) */
+"Transaction" = "Giao dịch";
+/* (No Commment) */
+"Backup Phrase" = "Sao lưu nhóm từ";
+/* (No Commment) */
+"Copy Address" = "Sao chép địa chỉ";
+/* (No Commment) */
+"2je-u4-PB2.text" = "Giao dịch";
+/* (No Commment) */
+"Regular" = "Tương đối";
+/* Class = "UIButton"; normalTitle = "Backup funds again"; ObjectID = "1Hq-6D-ut1"; */
+"1Hq-6D-ut1.normalTitle" = "Sao lưu lại các khoản tiền";
+/* (No Commment) */
+"1Hq-6D-ut1.text" = "Sao lưu lại các khoản tiền";
+/* (No Commment) */
+"3kJ-3U-lFe.text" = "Vui lòng thử lại";
+/* Class = "UILabel"; text = "Enter the following words from your Recovery Phrase to complete the backup process."; ObjectID = "4Nq-ue-tXr"; */
+"4Nq-ue-tXr.text" = "Nhập các từ tiếp theo trong Nhóm từ khôi phục để hoàn thành quá trình sao lưu.";
+/* (No Commment) */
+"6zt-Xf-txg.text" = "Nhấn và giữ để hiện từ";
+/* (No Commment) */
+"07q-RX-CeI.text" = "Vui lòng thử lại";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "9A7-TT-PzN"; */
+"9A7-TT-PzN.title" = "Sao lưu các khoản tiền";
+/* Class = "UILabel"; text = "Oh no! You haven't backed up your funds yet."; ObjectID = "9Hu-uO-gJl"; */
+"9Hu-uO-gJl.text" = "Ồ không! Bạn chưa sao lưu các khoản tiền của mình.";
+/* Class = "UILabel"; text = "This action requires the second password for your bitcoin wallet. Please enter it below and press continue."; ObjectID = "9WK-My-5CL"; */
+"9WK-My-5CL.text" = "Hành động này yêu cầu mật khẩu cấp 2 cho ví bitcoin. Vui lòng nhập vào bên dưới và nhấn tiếp tục.";
+/* (No Commment) */
+"9hR-tm-aq5.placeholder" = "từ số 1";
+/* Class = "UINavigationItem"; title = "Second Password Required"; ObjectID = "74J-f3-Lhq"; */
+"74J-f3-Lhq.title" = "Yêu cầu Mật khẩu cấp 2";
+/* Class = "UIButton"; normalTitle = "Previous word"; ObjectID = "AFH-AI-Rgk"; */
+"AFH-AI-Rgk.normalTitle" = "Từ trước";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "CBl-1W-VP8"; */
+"CBl-1W-VP8.placeholder" = "Mật khẩu";
+/* (No Commment) */
+"EQM-OM-jK8.normalTitle" = "Hoàn tất";
+/* Class = "UILabel"; text = "It is important to make sure you write down your words exactly as they appear here and in this order."; ObjectID = "FDO-ui-cGo"; */
+"FDO-ui-cGo.text" = "Không chụp ảnh màn hình!\
+Bạn có thể gây nguy hiểm cho sự an toàn của ví";
+/* (No Commment) */
+"Fda-Z4-3e7.placeholder" = "từ số 6";
+/* (No Commment) */
+"NaV-Bk-o1b.text" = "Làm thế nào để khôi phục lại ví";
+/* Class = "UILabel"; text = "unicorn"; ObjectID = "Okr-VE-yvm"; */
+"Okr-VE-yvm.text" = "công ty khởi nghiệp";
+/* Class = "UILabel"; text = "Please try again"; ObjectID = "T3S-Dk-HAh"; */
+"T3S-Dk-HAh.text" = "Vui lòng thử lại";
+/* (No Commment) */
+"T4p-mz-siC.normalTitle" = "XÁC MINH SAO LƯU";
+/* Class = "UILabel"; text = "Write down your Recovery Phrase and keep it somewhere very safe and secure. Anyone who knows your Recovery Phrase has access to your bitcoins, so don’t share this with anyone you don’t trust."; ObjectID = "UCL-i9-UDp"; */
+"UCL-i9-UDp.text" = "Viết chính xác các từ theo thứ tự, và lưu trữ ở một nơi an toàn\
+";
+/* Class = "UILabel"; text = "Lost your 12 word recovery phrase?"; ObjectID = "Yh8-Gm-6op"; */
+"Yh8-Gm-6op.text" = "Mất nhóm 12 từ khôi phục?";
+/* Class = "UIButton"; normalTitle = "NEXT WORD"; ObjectID = "dkQ-nj-Pkf"; */
+"dkQ-nj-Pkf.normalTitle" = "TỪ TIẾP THEO";
+/* Class = "UIButton"; normalTitle = "Next word"; ObjectID = "eaO-py-9rY"; */
+"eaO-py-9rY.normalTitle" = "Từ tiếp theo";
+/* Class = "UILabel"; text = "Please take a few minutes to ensure you can access your Bitcoin (except in imported addresses), even if you forget your password or if our service becomes unavailable. We promise doing so is quick, painless, and worth it."; ObjectID = "eyR-AW-SMc"; */
+"eyR-AW-SMc.text" = "Vui lòng dành ra một vài phút để đảm bảo bạn có thể truy cập bitcoin của mình (ngoài trừ các địa chỉ đã nhập), kể cả khi bạn đã quên mật khẩu hay dịch vụ của chúng tôi không hiển thị. Chúng tôi hứa sẽ thực hiện nhanh chóng.";
+/* (No Commment) */
+"kcC-2S-PfL.placeholder" = "từ số 3";
+/* Class = "UILabel"; text = "Word 5 of 12"; ObjectID = "mUc-u7-Zcj"; */
+"mUc-u7-Zcj.text" = "Từ số 5 trên 12";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "mYR-MQ-mS2"; */
+"mYR-MQ-mS2.title" = "Sao lưu ví";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "nuD-nb-tAt"; */
+"nuD-nb-tAt.normalTitle" = "Tiếp tục";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "xmf-pK-R3X"; */
+"xmf-pK-R3X.title" = "Sao lưu ví";
+/* (No Commment) */
+"4cR-kX-YUY.text" = "Xác nhận nâng cấp";
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "D5e-zI-7dK"; */
+"D5e-zI-7dK.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+/* Class = "UIButton"; normalTitle = "Ask Me Later"; ObjectID = "HuT-V7-syg"; */
+"HuT-V7-syg.normalTitle" = "Hỏi lại sau";
+/* Class = "UIButton"; normalTitle = "Upgrade"; ObjectID = "cZ9-x2-KGM"; */
+"cZ9-x2-KGM.normalTitle" = "Nâng cấp";
+/* Class = "UILabel"; text = "Store Hint"; ObjectID = "0zs-bt-hEl"; */
+"0zs-bt-hEl.text" = "Gợi ý lưu trữ";
+/* Class = "UILabel"; text = "Verify Email"; ObjectID = "8Ha-3e-Nqx"; */
+"8Ha-3e-Nqx.text" = "Xác minh Email";
+/* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
+"8Zy-R2-HoW.text" = "Xác minh 2 bước";
+/* Class = "UITextField"; placeholder = "Confirm New Password"; ObjectID = "Ii6-KE-x0B"; */
+"Ii6-KE-x0B.placeholder" = "Xác nhận mật khẩu mới";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Kmb-pO-dHq"; */
+"Kmb-pO-dHq.text" = "Yếu";
+/* Class = "UILabel"; text = "Backup Phrase"; ObjectID = "WVd-f2-ZLG"; */
+"WVd-f2-ZLG.text" = "Sao lưu nhóm từ";
+/* Class = "UILabel"; text = "Block TORs"; ObjectID = "Wor-ZR-sPS"; */
+"Wor-ZR-sPS.text" = "Chặn TOR";
+/* Class = "UILabel"; text = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet."; ObjectID = "bFL-5O-fcl"; */
+"bFL-5O-fcl.text" = "Bảo vệ ví khỏi các truy cập trái phép bằng Xác minh 2 bước. Bạn có thể chọn sử dụng miễn phí ứng dụng hoặc số điện thoại của mình để đảm bảo an toàn cho ví. Mã này sẽ được yêu cầu khi bạn truy cập ví của mình.";
+/* Class = "UILabel"; text = "Link Mobile"; ObjectID = "f52-8F-scW"; */
+"f52-8F-scW.text" = "Liên kết điện thoại";
+/* Class = "UIButton"; normalTitle = "Use your mobile phone number"; ObjectID = "g8G-4j-qpJ"; */
+"g8G-4j-qpJ.normalTitle" = "Sử dụng số điện thoại của bạn";
+/* Class = "UILabel"; text = "Enable 2-Step"; ObjectID = "gIP-mj-Hh2"; */
+"gIP-mj-Hh2.text" = "Kích hoạt Xác minh 2 bước";
+/* Class = "UILabel"; text = "Complete the steps below for ultimate security"; ObjectID = "u5x-QP-acV"; */
+"u5x-QP-acV.text" = "Hoàn thành các bước bên dưới để bảo vệ tối đa";
+/* Class = "UIViewController"; title = "Security Center"; ObjectID = "wnC-Xd-1Er"; */
+"wnC-Xd-1Er.title" = "Trung tâm Bảo mật";
+/* (No Commment) */
+"NSCameraUsageDescription" = "Ứng dụng cần được quét mã QR.";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "2Ig-LA-4kK"; */
+"2Ig-LA-4kK.text" = "Tiền hiện tại";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
+"4.normalTitle" = "Tiếp tục";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "6ll-Xx-4fm"; */
+"6ll-Xx-4fm.text" = "Lượng BTC";
+/* (No Commment) */
+"6zi-8R-Tmt.normalTitle" = "BTC";
+/* Class = "UILabel"; text = "From"; ObjectID = "7"; */
+"7.text" = "Từ";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "7ho-GV-ikp"; */
+"7ho-GV-ikp.text" = "BTC";
+/* (No Commment) */
+"8LN-Tc-WVh.normalTitle" = "Hoàn tất";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "9B2-23-8j5"; */
+"9B2-23-8j5.text" = "Tiền hiện tại";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "52"; */
+"52.placeholder" = "0,000";
+/* (No Commment) */
+"52.text" = "0,00";
+/* (No Commment) */
+"57.text" = "Địa chỉ";
+/* (No Commment) */
+"61.text" = "Nhãn:";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "62"; */
+"62.placeholder" = "Nhãn";
+/* (No Commment) */
+"65.text" = "Địa chỉ:";
+/* (No Commment) */
+"67.text" = "Dán nhãn địa chỉ";
+/* Class = "UIButton"; normalTitle = "Customize Fee"; ObjectID = "Cbp-Qe-FKP"; */
+"Cbp-Qe-FKP.normalTitle" = "Tùy chỉnh phí";
+/* Class = "UILabel"; text = "Fee: "; ObjectID = "FB0-NP-5do"; */
+"FB0-NP-5do.text" = "Phí:";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "IUn-6N-qeo"; */
+"IUn-6N-qeo.text" = "Lượng BTC";
+/* Class = "UIButton"; normalTitle = "Cancel next"; ObjectID = "Pgx-k8-cTb"; */
+"Pgx-k8-cTb.normalTitle" = "Hủy kế tiếp";
+/* Class = "UILabel"; text = "Total:"; ObjectID = "Ubr-KG-egH"; */
+"Ubr-KG-egH.text" = "Tổng:";
+/* Class = "UILabel"; text = "From:"; ObjectID = "ZcA-OM-4nq"; */
+"ZcA-OM-4nq.text" = "Từ:";
+/* Class = "UILabel"; text = "Please Wait"; ObjectID = "Zgn-Wx-Uwx"; */
+"Zgn-Wx-Uwx.text" = "Vui lòng chờ";
+/* Class = "UILabel"; text = "Fee"; ObjectID = "Zhm-Jw-P4C"; */
+"Zhm-Jw-P4C.text" = "Phí";
+/* (No Commment) */
+"aKC-Q2-phD.text" = "Đang gửi thanh toán";
+/* Class = "UILabel"; text = "Amount: "; ObjectID = "aeG-gf-oXV"; */
+"aeG-gf-oXV.text" = "Số tiền:";
+/* Class = "UIButton"; normalTitle = "Funds available"; ObjectID = "d7n-Ue-QXL"; */
+"d7n-Ue-QXL.normalTitle" = "Các khoản tiền hiện có";
+/* Class = "UILabel"; text = "To"; ObjectID = "fpY-AA-We5"; */
+"fpY-AA-We5.text" = "Đến";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "p7q-Ud-nYh"; */
+"p7q-Ud-nYh.placeholder" = "0,000";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "pPu-bJ-k6p"; */
+"pPu-bJ-k6p.normalTitle" = "Tiếp tục";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "qx4-XV-uhn"; */
+"qx4-XV-uhn.placeholder" = "0,00";
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "sXf-3w-qdy"; */
+"sXf-3w-qdy.normalTitle" = "Gửi";
+/* Class = "UILabel"; text = "CurrTotal"; ObjectID = "t8M-NC-003"; */
+"t8M-NC-003.text" = "Tổng hiện tại";
+/* Class = "UILabel"; text = "USD"; ObjectID = "vGH-md-Ck3"; */
+"vGH-md-Ck3.text" = "USD";
+/* Class = "UILabel"; text = "BtcTotal"; ObjectID = "vzP-xG-GPO"; */
+"vzP-xG-GPO.text" = "Tổng BTC";
+/* Class = "UILabel"; text = "To:"; ObjectID = "yGR-Eh-YG1"; */
+"yGR-Eh-YG1.text" = "Đến:";
+/* Class = "UITextField"; text = "Any Address"; ObjectID = "zyc-E3-FOM"; */
+"zyc-E3-FOM.text" = "Bất kỳ địa chỉ nào";
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Quên ví";
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1,12345 BTC";
+/* (No Commment) */
+"257.text" = "0 BTC";
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "đang tải";
+/* (No Commment) */
+"353.text" = "Tự động kết nối";
+/* (No Commment) */
+"358.text" = "Tạo một ví mới";
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "Đăng nhập ví Blockchain của bạn bằng PC hoặc Mac tại\
+https://login.blockchain.com";
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Quét mã kết nối";
+/* (No Commment) */
+"376.normalTitle" = "Nút 2";
+/* (No Commment) */
+"377.normalTitle" = "Nút 1";
+/* (No Commment) */
+"378.text" = "Nếu bạn đã có Ví Blockchain, chọn Kết nối thiết bị; nếu không, chọn Tạo ví    Miễn phí! Không yêu cầu email.";
+/* (No Commment) */
+"380.text" = "Chào mừng bạn đến với Ví Blockchain";
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "Không có giao dịch gần đây";
+/* (No Commment) */
+"394.text" = "Mật khẩu:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "Mật khẩu";
+/* (No Commment) */
+"396.text" = "Xác nhận:";
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "Xác nhận mật khẩu";
+/* (No Commment) */
+"398.normalTitle" = "Tạo Ví";
+/* (No Commment) */
+"465.text" = "Yêu cầu mật khẩu";
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Mô tả yêu cầu mật khẩu";
+/* (No Commment) */
+"468.text" = "Mật khẩu:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "Mật khẩu";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Tiếp tục";
+/* (No Commment) */
+"586.text" = "ID Ví:";
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "ID Ví";
+/* (No Commment) */
+"588.text" = "Bạn đã chọn kết nối thủ công (hoặc tự động, kết nối không hỗ trợ thiết bị của bạn). Vui lòng nhập thông tin đăng nhập của bạn bên dưới.";
+/* (No Commment) */
+"591.text" = "Mật khẩu:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "Mật khẩu";
+/* (No Commment) */
+"602.text" = "Bạn phải tắt bảo mật 2 lớp để kết nối thủ công.";
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "Bạn đã đăng xuất hoặc có lỗi khi mã hóa ví của bạn. Nhập mật khẩu vào bên dưới để đăng nhập.";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Tiếp tục";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "Mật khẩu";
+/* (No Commment) */
+"627.text" = "Mật khẩu:";
+/* (No Commment) */
+"630.text" = "Đăng nhập";
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "Tiêu đề";
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "Nhóm từ khôi phục";
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "Email của bạn";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "Yếu";
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "Nút 3";
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "Việc tạo một ví mới, bạn đồng ý với";
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "Tiếp tục";
+/* (No Commment) */
+"VcH-wh-BEs.text" = "Email:";
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345,68 USD";
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "Bạn không thể truy cập camera";
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* Được yêu cầu";
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 giao dịch";
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Nhập nhóm 12 từ khôi phục với các khoảng trống để khôi phục những khoản tiền & giao dịch của bạn";
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "Kết nối thủ công";
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Điều khoản Dịch vụ của Blockchain";
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* Tối thiểu 10 ký tự";
+" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = "Bất cứ ai truy cập vào Nhóm từ khôi phục sẽ có thể truy cập vào bitcoin của bạn, hãy lưu trữ ở một nơi an toàn và đảm bảo.";
+/* (No Commment) */
+" We recommend the fee below for the transaction at this time." = "Chúng tôi khuyến nghị sử dụng các phí bên dưới cho các giao dịch vào thời điểm này.";
+/* (No Commment) */
+"%@ BTC" = "%@ BTC";
+/* (No Commment) */
+"%@ Confirmations" = "%@ xác nhận";
+/* (No Commment) */
+"%@ copied to clipboard" = "%@ được sao chép vào bộ nhớ tạm";
+/* (No Commment) */
+"%d Confirmations" = "%d xác nhận";
+/* (No Commment) */
+"%d Transactions" = "%d giao dịch";
+/* (No Commment) */
+"%d address" = "%d địa chỉ";
+/* (No Commment) */
+"%d addresses" = "%d địa chỉ";
+"%lld hours ago" = "%lld giờ trước";
+"%lld minutes ago" = "%lld phút trước";
+"%lld seconds ago" = "%lld giây trước";
+/* (No Commment) */
+"%lu Recipients" = "%lu người nhận";
+"1 hour ago" = "1 giờ trước";
+"1 minute ago" = "1 phút trước";
+/* (No Commment) */
+"2-Step Enabled" = "Đã kích hoạt Xác minh 2 bước";
+/* (No Commment) */
+"2-Step has been disabled." = "Đã tắt Xác minh 2 bước.";
+/* (No Commment) */
+"2-Step has been enabled for SMS." = "Đã kích hoạt Xác minh 2 bước cho tin nhắn SMS.";
+/* (No Commment) */
+"2-step Verification is currently disabled." = "Đã tắt Xác minh 2 bước.";
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "Đã kích hoạt Xác minh 2 bước cho %@.";
+/* (No Commment) */
+"2-step Verification is currently enabled." = "Đã mở Xác minh 2 bước.";
+/* (No Commment) */
+"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "Kết nối không được thiết lập do không thể xác minh chứng chỉ máy chủ Vui lòng kiểm tra thiết lập mạng và đảm bảo bạn sử dụng kết nối an toàn.";
+/* (No Commment) */
+"API URL" = "URL API";
+/* (No Commment) */
+"About" = "Về";
+/* (No Commment) */
+"Account Details" = "Thông tin tài khoản";
+/* (No Commment) */
+"Accounts" = "Tài khoản";
+/* (No Commment) */
+"Add Email" = "Thêm email";
+/* (No Commment) */
+"Add to Address book?" = "Thêm vào sổ địa chỉ?";
+/* (No Commment) */
+"Address" = "Địa chỉ";
+/* (No Commment) */
+"Address book" = "Sổ địa chỉ";
+/* (No Commment) */
+"Address is not valid" = "Địa chỉ không hợp lệ";
+/* (No Commment) */
+"Addresses" = "Địa chỉ";
+/* (No Commment) */
+"Adjust Fee" = "Điều chỉnh phí";
+/* (No Commment) */
+"Allowed" = "Đã cho phép";
+/* (No Commment) */
+"Amount" = "Số tiền";
+/* (No Commment) */
+"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "Số tiền phải lớn hơn hoặc bằng ngưỡng thấp nhất (%lld Satoshi)";
+/* (No Commment) */
+"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "Xuất hiện lỗi do gián đoạn trong quá trình xác minh mã PIN. Vui lòng đóng ứng dụng và thử lại.";
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "Lỗi khi xác minh mã PIN với máy chủ điều khiển từ xa. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Bạn có muốn thử xác minh lại thay vì nhập mật khẩu thủ công?";
+/* (No Commment) */
+"An error occurred while changing 2-Step verification." = "Lỗi khi thay đổi Xác minh 2 bước.";
+/* (No Commment) */
+"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "Lỗi khi sao chép địa chỉ của bạn vào clipboard. Vui lòng chọn địa chỉ gửi hoặc khởi động lại ứng dụng và thử lại.";
+/* (No Commment) */
+"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "Lỗi khi lưu các thay đổi của bạn. Vui lòng đảm bảo không đăng nhập ví trên một thiết bị khác.";
+/* (No Commment) */
+"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "Lỗi khi cập nhật số dư khả dụng của bạn. Vui lòng kiểm tra kết nối internet và thử lại.";
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "Lỗi khi tải ví của bạn. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Vui lòng đóng ứng dụng và thử lại hoặc kết nối lại với thiết bị của bạn.";
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "Lỗi khi lấy lại ID ví của bạn từ Keychain. Vui lòng đóng ứng dụng và thử lại";
+/* (No Commment) */
+"Any address" = "Bất kỳ địa chỉ nào";
+/* (No Commment) */
+"App Store review prompt timer (seconds)" = "Đánh giá theo thời gian (giây) trên App Store";
+/* (No Commment) */
+"Archive Address" = "Lưu trữ địa chỉ";
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "Lưu trữ nếu bạn KHÔNG muốn dùng nữa. Các khoản tiền sẽ được an toàn, và bạn có thể bỏ lưu trữ bất kỳ lúc nào.";
+/* (No Commment) */
+"Archiving addresses" = "Đang lưu trữ địa chỉ";
+/* (No Commment) */
+"Ask Me Later" = "Hỏi lại sau";
+/* (No Commment) */
+"Authenticate with Touch ID" = "Xác nhận bằng cảm biến vân tay";
+/* (No Commment) */
+"Authorization Required" = "Yêu cầu quyền truy cập";
+/* (No Commment) */
+"Automatically" = "Tự động";
+"BACKUP FUNDS" = "SAO LƯU CÁC KHOẢN TIỀN";
+/* (No Commment) */
+"Backup" = "Sao lưu";
+"Backup Funds" = "Sao lưu các khoản tiền";
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "Trước khi truy cập ví, vui lòng chọn mã số pin dùng để mở khóa ví. Lưu ý mã pin không thể thiết lập lại hay thay đổi nếu không mở khóa ứng dụng trước tiên.";
+/* (No Commment) */
+"Block Tor" = "Chặn Tor";
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain không có quyền truy cập camera. Để mở quyền truy cập, đến mục Cài đặt trên thiết bị.";
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain hiện đang bảo trì. Vui lòng thử lại sau.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn. Mở quyền truy cập trong Cài đặt->Bảo mật->Dịch vụ định vị";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain cần kích hoạt Định vị để truy cập vị trí của bạn. Mở quyền truy cập trong Cài đặt->Bảo mật->Định vị->Dịch vụ định vị";
+/* (No Commment) */
+"Blocked" = "Đã chặn";
+/* (No Commment) */
+"Calculating: Address %@ of %@" = "Đang tính toán: Địa chỉ %1$@ của %2$@";
+/* (No Commment) */
+"Camera Access Denied" = "Truy cập camera bị từ chối";
+/* (No Commment) */
+"Cancel" = "Hủy bỏ";
+/* (No Commment) */
+"Cancelling" = "Đang hủy";
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "Không thể lưu mã PIN khi ví không được tạo hoặc mật khẩu không có giá trị";
+/* (No Commment) */
+"Change Email" = "Thay đổi Email";
+/* (No Commment) */
+"Change Mobile Number" = "Thay đổi số điện thoại";
+/* (No Commment) */
+"Change Password Hint" = "Thay đổi cụm từ gợi ý mật khẩu";
+/* (No Commment) */
+"Change fee per kilobyte" = "Thay đổi phí cho mỗi kilobyte";
+/* (No Commment) */
+"Checking for Wallet updates" = "Kiểm tra cập nhật Ví";
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "Kiểm tra thêm: Bước %1$d của %2$d";
+"Close" = "Đóng";
+/* (No Commment) */
+"Close App" = "Đóng ứng dụng";
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "Hoàn thành các bước bên dưới để bảo vệ tối đa";
+/* (No Commment) */
+"Confirm your PIN" = "Xác nhận mã PIN";
+/* (No Commment) */
+"Confirmed" = "Đã xác nhận";
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "Kết nối quá hạn. Vui lòng kiểm tra kết nối internet.";
+/* (No Commment) */
+"Continue" = "Tiếp tục";
+/* (No Commment) */
+"Copy Wallet ID" = "Sao chép ID ví";
+/* (No Commment) */
+"Copy to clipboard" = "Sao chép vào bộ nhớ tạm";
+/* (No Commment) */
+"Copy xPub" = "Sao chép xPub";
+/* (No Commment) */
+"Could not find transaction with hash %@ when reloading data" = "Không thể tìm thấy giao dịch với mã băm %@ khi tải lại dữ liệu";
+/* (No Commment) */
+"Could not get value when sent - please check your internet connection and try again." = "Không thể nhận được giá trị khi gửi - vui lòng kiểm tra kết nối mạng và thử lại.";
+/* (No Commment) */
+"Create" = "Tạo";
+/* (No Commment) */
+"Create New Wallet" = "Tạo Ví mới";
+/* (No Commment) */
+"Creating" = "Đang tạo";
+/* (No Commment) */
+"Creating V3 Wallet" = "Đang tạo Ví V3";
+/* (No Commment) */
+"Creating Wallet" = "Đang tạo ví";
+/* (No Commment) */
+"Creating new Wallet" = "Đang tạo Ví mới";
+/* (No Commment) */
+"Creating new address" = "Đang tạo địa chỉ mới";
+/* (No Commment) */
+"Current rate: %@ BTC" = "Tỉ lệ hiện tại: %@ BTC";
+/* (No Commment) */
+"Customize the way you organize your bitcoin in your Blockchain Wallet" = "Tùy chỉnh cách bạn tổ chức Bitcoin trong Ví Blockchain";
+/* (No Commment) */
+"Date" = "Ngày";
+/* (No Commment) */
+"Debug" = "Gỡ lỗi";
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "Mật khẩu PIN được giải mã dài 0";
+/* (No Commment) */
+"Decrypting Private Key" = "Đang giải mã Khóa riêng";
+/* (No Commment) */
+"Decrypting Wallet" = "Đang giải mã Ví";
+/* (No Commment) */
+"Description" = "Mô tả";
+/* (No Commment) */
+"Details" = "Chi tiết";
+/* (No Commment) */
+"Disabled" = "Đã tắt";
+/* (No Commment) */
+"Display" = "Hiển thị";
+/* (No Commment) */
+"Do you really want to log out?" = "Bạn có muốn đăng xuất?";
+/* (No Commment) */
+"Don't show again" = "Không hiện lại";
+/* (No Commment) */
+"Downloading Wallet" = "Đang tải Ví";
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "Sao lưu ví dễ dàng trong 1 lần giúp bạn kiểm soát các khoản tiền";
+/* (No Commment) */
+"Email Verified" = "Email đã xác minh";
+/* (No Commment) */
+"Empty response from server." = "Không có phản hồi từ máy chủ.";
+/* (No Commment) */
+"Enable 2-Step" = "Kích hoạt Xác minh 2 bước";
+/* (No Commment) */
+"Enable 2-Step for SMS" = "Kích hoạt Xác minh 2 bước cho tin nhắn SMS";
+/* (No Commment) */
+"Enable Location Services" = "Bật định vị";
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "Bật thông báo để nhận email hoặc tin nhắn SMS khi bạn nhận được bitcoin. Chỉ những địa chỉ được dán nhãn và được nhập mới đủ điều kiện nhận thông báo.";
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "Bật tùy chọn này để chặn các địa chỉ IP, được biết đến là một phần của mạng ẩn danh Tor, khỏi việc truy cập vào ví của bạn. Mạng Tor được sử dụng thường xuyên bởi các hacker, những kẻ luôn cố gắng truy cập vào ví người dùng Blockchain.";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "Bật tùy chọn này để hiện địa chỉ nhận khi bạn trượt qua trái trên màn hình mã PIN, giúp việc nhận bitcoin thậm chí còn nhanh hơn. Năm địa chỉ này sẽ được tải liên tục, sau đó cần đăng nhập để hiện các địa chỉ mới.";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "Bật tùy chọn này để hiện địa chỉ nhận khi bạn trượt qua trái trên màn hình mã PIN, giúp việc nhận bitcoin thậm chí còn nhanh hơn. Chỉ một địa chỉ được tải, cần đăng nhập để hiện địa chỉ mới.";
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "Bật tính năng này sẽ cho phép tất cả người dùng đã đăng ký cảm biến vân tay trên thiết bị này có thể truy cập ví của bạn.";
+/* (No Commment) */
+"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "Bạn có thích Ví Blockchain? Hãy để lại nhận xét trên App Store.";
+/* (No Commment) */
+"Enter %@ amount" = "Nhập lượng %@";
+/* (No Commment) */
+"Enter Bitcoin address or select" = "Nhập hoặc chọn địa chỉ Bitcoin";
+/* (No Commment) */
+"Enter Password" = "Nhập mật khẩu";
+/* (No Commment) */
+"Enter Verification Code" = "Nhập mã xác minh";
+/* (No Commment) */
+"Enter your verification code" = "Nhập mã xác minh của bạn";
+"Error" = "Lỗi";
+/* (No Commment) */
+"Error loading settings" = "Lỗi thiết lập tải";
+/* (No Commment) */
+"Error updating settings" = "Lỗi thiết lập cập nhật";
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "Mọi thứ bạn cần để lưu trữ, tiêu dùng và nhận bitcoin";
+/* (No Commment) */
+"Failed To Load Wallet" = "Tải ví thất bại";
+/* (No Commment) */
+"Failed to validate server certificate" = "Xác nhận chứng chỉ máy chủ thất bại";
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "Phí quá cao (giới hạn 0,01 BTC)";
+/* (No Commment) */
+"Fee per KB" = "Phí mỗi KB";
+/* (No Commment) */
+"Fees" = "Phí";
+/* (No Commment) */
+"Finished Signing Inputs" = "Hoàn tất nhập chữ ký";
+/* (No Commment) */
+"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "Để tăng cường bảo mật, chúng tôi tạo một địa chỉ độc nhất cho mỗi thanh toán. Tất cả các địa chỉ được tạo trong ví đều có thể nhận tiền, thậm chí khi không còn xuất hiện trong mục Nhận.";
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "Vì lý do an toàn, chúng tôi khuyên bạn nên chuyển khoản bất kỳ số dư nào trong các địa chỉ đã nhập vào ví Blockchain.";
+/* (No Commment) */
+"Forget Wallet" = "Quên ví";
+/* (No Commment) */
+"Found %d, with %@" = "Tìm thấy %1$d, với %2$@";
+/* (No Commment) */
+"From" = "Từ";
+/* (No Commment) */
+"From and destination address have to be different" = "Địa chỉ đi và đến phải khác nhau";
+/* (No Commment) */
+"From and destination have to be different" = "Đi và đến phải khác nhau";
+/* (No Commment) */
+"Go to Settings" = "Đến Cài đặt";
+/* (No Commment) */
+"Hint Stored" = "Cụm Từ Gợi Ý đã được lưu trữ";
+/* (No Commment) */
+"How would you like to pair?" = "Bạn có muốn kết nối không?";
+/* (No Commment) */
+"Identifier" = "ID";
+/* (No Commment) */
+"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "Nếu bạn là một cổng thanh toán, sử dụng xPub và ứng dụng Cổng thanh toán của Blockchain để nhận các khoản tiền.";
+/* (No Commment) */
+"Import Private Key" = "Nhập khóa riêng";
+/* (No Commment) */
+"Import address" = "Nhập địa chỉ";
+/* (No Commment) */
+"Imported Addresses (Archived)" = "Các địa chỉ đã nhập (Đã lưu trữ)";
+/* (No Commment) */
+"Imported Private Key %@" = "Đã nhập khóa riêng %@";
+/* (No Commment) */
+"Imported watch-only address %@" = "Đã nhập địa chỉ chỉ-xem %@";
+/* (No Commment) */
+"Importing key" = "Đang nhập khóa";
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "Mã PIN không đúng. Vui lòng thử lại.";
+/* (No Commment) */
+"Incorrect password" = "Mật khẩu không đúng";
+/* (No Commment) */
+"Incorrect private key" = "Khóa riêng không đúng";
+/* (No Commment) */
+"Increase fee" = "Tăng phí";
+/* (No Commment) */
+"Initializing Wallet" = "Đang tạo ví";
+/* (No Commment) */
+"Insufficient Funds" = "Không đủ tiền";
+/* (No Commment) */
+"Invalid Identifier" = "ID không hợp lệ";
+/* (No Commment) */
+"Invalid Pairing Code" = "Mã kết nối không hợp lệ";
+/* (No Commment) */
+"Invalid Send Value" = "Giá trị gửi không hợp lệ";
+/* (No Commment) */
+"Invalid Shared Key" = "Khóa được chia sẻ không hợp lệ";
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "Tình trạng mã được trả lại không hợp lệ %@";
+/* (No Commment) */
+"Invalid address: %@" = "Địa chỉ không hợp lệ: %@";
+/* (No Commment) */
+"Invalid email address." = "Địa chỉ email không hợp lệ.";
+/* (No Commment) */
+"Invalid mobile number." = "Số điện thoại không hợp lệ.";
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "Nhóm từ khôi phục không hợp lệ. Vui lòng thử lại";
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "Phản hồi máy chủ không hợp lệ. Vui lòng kiểm tra kết nối internet.";
+/* (No Commment) */
+"Invalid to bitcoin address" = "Địa chỉ bitcoin không hợp lệ";
+/* (No Commment) */
+"Invalid two-factor authentication type" = "Nhập bảo mật 2 lớp không hợp lệ";
+/* (No Commment) */
+"Invalid verification code. Please try again." = "Mã xác minh không hợp lệ. Vui lòng thử lại.";
+"It is important to make sure you write down your words exactly as they appear here and " = "Bạn phải viết các từ chính xác theo đúng thứ tự";
+"Just now" = "Mới đây";
+/* (No Commment) */
+"Keep higher fee" = "Giữ phí cao hơn";
+/* (No Commment) */
+"Keep lower fee" = "Giữ phí thấp hơn";
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Bảo mật xPub của bạn. Ai đó truy cập vào xPub sẽ có thể xem toàn bộ các khoản tiền và giao dịch của bạn.";
+/* (No Commment) */
+"Key already imported" = "Khóa đã được nhập";
+/* (No Commment) */
+"Label Address" = "Dán nhãn địa chỉ";
+/* (No Commment) */
+"Label must contain letters and numbers only" = "Nhãn chỉ chứa chữ và số";
+/* (No Commment) */
+"Label must have less than 18 characters" = "Nhãn có ít hơn 18 ký tự";
+/* (No Commment) */
+"Large Transaction" = "Giao dịch lớn";
+/* (No Commment) */
+"Learn More" = "Tìm hiểu thêm";
+/* (No Commment) */
+"Link Mobile" = "Liên kết điện thoại";
+/* (No Commment) */
+"Load More Transactions" = "Tải thêm giao dịch";
+/* (No Commment) */
+"Loading External Page" = "Đang tải trang mở rộng";
+/* (No Commment) */
+"Loading transactions" = "Đang tải giao dịch";
+/* (No Commment) */
+"Log in to my Wallet" = "Đăng nhập Ví của tôi";
+/* (No Commment) */
+"Login existing Wallet" = "Đăng nhập Ví hiện tại";
+/* (No Commment) */
+"Logout and forget wallet" = "Đăng xuất và quên ví";
+/* (No Commment) */
+"Lower fee" = "Giảm phí";
+/* (No Commment) */
+"Make Default" = "Làm mặc định";
+/* (No Commment) */
+"Manually" = "Thủ công";
+/* (No Commment) */
+"Merchant" = "Cổng thanh toán";
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "Danh mục Cổng thanh toán hiện không có. Vui lòng thử lại sau.";
+/* (No Commment) */
+"Merchant Map" = "Sơ đồ cổng thanh toán";
+/* (No Commment) */
+"Merchant URL" = "URL Cổng thanh toán";
+/* (No Commment) */
+"Mobile Linked" = "Điện thoại đã liên kết";
+/* (No Commment) */
+"Mobile Number" = "Số điện thoại";
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "CHÚ Ý: Khóa riêng được quét không tương ứng với địa chỉ chỉ-xem. Để sử dụng các khoản tiền của bạn từ địa chỉ này, vui lòng quét khóa riêng đúng.";
+/* (No Commment) */
+"Needs BIP38 Password" = "Cần mật khẩu BIP38";
+/* (No Commment) */
+"New Address" = "Địa chỉ mới";
+/* (No Commment) */
+"New Email Address" = "Địa chỉ email mới";
+/* (No Commment) */
+"New Mobile Number" = "Số điện thoại mới";
+/* (No Commment) */
+"New PIN must be different" = "Mã PIN mới phải khác";
+/* (No Commment) */
+"New password must be different" = "Mật khẩu mới phải khác";
+/* (No Commment) */
+"New password must be different from your password hint" = "Mật khẩu mới phải khác Cụm từ gợi ý mật khẩu";
+"Next word" = "Từ tiếp theo";
+/* (No Commment) */
+"No Label" = "Không có nhãn";
+"No Password Entered" = "Không có mật khẩu";
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "Không có kết nối internet. Vui lòng kiểm tra kết nối mạng.";
+/* (No Commment) */
+"No internet connection." = "Không có kết nối internet.";
+/* (No Commment) */
+"Not Stored" = "Chưa được lưu trữ";
+/* (No Commment) */
+"Notifications" = "Thông báo";
+/* (No Commment) */
+"Open %@?" = "Mở %@?";
+/* (No Commment) */
+"Open Mail App" = "Mở ứng dụng Email";
+/* (No Commment) */
+"PIN" = "Mã PIN";
+/* (No Commment) */
+"PIN Encrypted String is nil" = "Chuỗi PIN được mã hóa là số không";
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "Khóa và giá trị phản hồi mã PIN dài 0";
+/* (No Commment) */
+"PIN Response Object success length 0" = "Kết quả phản hồi mã PIN dài 0";
+/* (No Commment) */
+"PIN Saved Successfully" = "Lưu mã PIN thành công";
+/* (No Commment) */
+"PIN Validation Error" = "Lỗi xác thực mã PIN";
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "Không thể hoàn thành xác thực mã PIN. Vui lòng nhập thủ công mật khẩu ví.";
+/* (No Commment) */
+"PINs do not match" = "Mã PIN không khớp";
+/* (No Commment) */
+"Parsing Pairing Code" = "Phân tích cú pháp mã kết nối";
+/* (No Commment) */
+"Password Hint" = "Cụm từ gợi ý mật khẩu";
+/* (No Commment) */
+"Password Required" = "Yêu cầu mật khẩu";
+/* (No Commment) */
+"Password changed. Please login to continue." = "Mật khẩu đã thay đổi. Vui lòng đăng nhập để tiếp tục.";
+/* (No Commment) */
+"Password must be different from your email" = "Mật khẩu phải khác email";
+/* (No Commment) */
+"Password must be less than or equal to 255 characters" = "Mật khẩu phải ít hơn hoặc đúng 255 ký tự";
+/* (No Commment) */
+"Payment Received" = "Thanh toán đã nhận";
+/* (No Commment) */
+"Payment Sent!" = "Thanh toán đã gửi!";
+/* (No Commment) */
+"Payments Sent" = "Thanh toán đã gửi!";
+/* (No Commment) */
+"Pending" = "Chưa giải quyết";
+/* (No Commment) */
+"Pending (%@ Confirmations)" = "Chưa giải quyết (%@ xác nhận)";
+/* (No Commment) */
+"Phrase Backed" = "Nhóm Từ Khôi Phục đã được sao lưu";
+/* (No Commment) */
+"Please Login" = "Vui lòng đăng nhập";
+/* (No Commment) */
+"Please add an email address" = "Vui lòng thêm địa chỉ email";
+/* (No Commment) */
+"Please check your email and click on the verification link." = "Vui lòng kiểm tra email và nhấn vào liên kết xác minh.";
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "Vui lòng kiểm tra email của bạn. Nếu bạn đã xác minh đăng nhập, bạn cần đăng nhập ví trên web và kết nối với điện thoại bằng cách quét mã QR tại Cài đặt -> Thông tin Ví.";
+/* (No Commment) */
+"Please check your internet connection." = "Vui lòng kiểm tra kết nối internet.";
+/* (No Commment) */
+"Please choose another PIN" = "Vui lòng chọn mã PIN khác";
+/* (No Commment) */
+"Please choose from the options below." = "Vui lòng chọn các tùy chọn bên dưới.";
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "Vui lòng nhập phí cao hơn 0 BTC và cao nhất là 0,01 BTC";
+/* (No Commment) */
+"Please enter a new PIN" = "Vui lòng nhập mã PIN mới";
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "Vui lòng nhập mã Bảo mật 2 lớp %@ của bạn";
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "Vui lòng nhập chính xác ID ví gồm 36 ký tự. Có thể tìm thấy tại email chào mừng lúc mới bắt đầu.";
+/* (No Commment) */
+"Please enter your PIN" = "Vui lòng nhập mã PIN";
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "Vui lòng nhập nhóm từ khôi phục với các từ cách nhau bằng dấu cách";
+/* (No Commment) */
+"Please login to load more addresses." = "Vui lòng đăng nhập để tải thêm địa chỉ.";
+/* (No Commment) */
+"Please lower the fee to an amount that is less than your balance" = "Vui lòng giảm phí xuống thấp hơn số dư của bạn";
+/* (No Commment) */
+"Please provide an email address." = "Vui lòng cung cấp địa chỉ email.";
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "Vui lòng làm mới mã kết nối và thử lại.";
+/* (No Commment) */
+"Please select a different address to send from." = "Vui lòng chọn địa chỉ khác để gửi.";
+/* (No Commment) */
+"Please send %@ to bitcoin address.\
+%@" = "Vui lòng gửi %1$@ đến địa chỉ bitcoin.\
+%2$@";
+/* (No Commment) */
+"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "Vui lòng gửi thanh toán đến địa chỉ bitcoin (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">giúp đỡ?</a>): %@";
+"Please try again" = "Vui lòng thử lại";
+/* (No Commment) */
+"Please verify your email address first." = "Vui lòng xác minh địa chỉ email của bạn trước.";
+/* (No Commment) */
+"Please verify your mobile number first." = "Vui lòng xác minh số điện thoại của bạn trước.";
+/* (No Commment) */
+"Preparing transfer" = "Chuẩn bị chuyển khoản";
+/* (No Commment) */
+"Processing key" = "Đang xử lý khóa";
+/* (No Commment) */
+"Rate Blockchain Wallet" = "Đánh giá Ví Blockchain";
+/* (No Commment) */
+"Receive" = "Nhận";
+/* (No Commment) */
+"Receive to..." = "Nhận tại...";
+/* (No Commment) */
+"Received" = "Đã nhận";
+/* (No Commment) */
+"Recipients" = "Người nhận";
+/* (No Commment) */
+"Recovering Funds" = "Đang khôi phục các khoản tiền";
+/* (No Commment) */
+"Request" = "Yêu cầu";
+/* (No Commment) */
+"Request Amount" = "Số tiền yêu cầu";
+/* (No Commment) */
+"Request failed. Please check your internet connection." = "Yêu cầu thất bại. Vui lòng kiểm tra kết nối internet.";
+/* (No Commment) */
+"Resend verification SMS" = "Gửi lại tin nhắn xác minh";
+/* (No Commment) */
+"Resend verification email" = "Gửi lại email xác minh";
+/* (No Commment) */
+"Reset" = "Thiết lập lại";
+/* (No Commment) */
+"Retrieving recommended fee" = "Lấy lại phí được đề nghị";
+/* (No Commment) */
+"Retry Validation" = "Xác thực lại";
+/* (No Commment) */
+"SMS Notifications" = "Thông báo tin nhắn SMS";
+/* (No Commment) */
+"Save" = "Lưu";
+/* (No Commment) */
+"Scan Pairing Code" = "Quét mã kết nối";
+/* (No Commment) */
+"Scan Private Key" = "Quét khóa riêng";
+/* (No Commment) */
+"Scan QR Code" = "Quét mã QR";
+/* (No Commment) */
+"Scan QR code" = "Quét mã QR";
+/* (No Commment) */
+"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "Quét và sao chép mã này vào ứng dụng Cổng thanh toán của Blockchain để nhận Bitcoin an toàn.";
+"Second Password Incorrect" = "Mật khẩu cấp 2 không đúng";
+"Second Password Required" = "Yêu cầu Mật khẩu cấp 2";
+/* (No Commment) */
+"Security Center" = "Trung tâm Bảo mật";
+/* (No Commment) */
+"Security Center completed - your wallet is safe and secure" = "Trung tâm Bảo mật đã hoàn tất - ví của bạn được an toàn và đảm bảo";
+/* (No Commment) */
+"Send from..." = "Gửi từ...";
+/* (No Commment) */
+"Send to..." = "Gửi đến...";
+/* (No Commment) */
+"Send verification SMS" = "Gửi tin nhắn xác minh";
+/* (No Commment) */
+"Sending Transaction" = "Đang gửi giao dịch";
+/* (No Commment) */
+"Sent" = "Đã gửi";
+/* (No Commment) */
+"Sent to %@" = "Đã gửi đến %@";
+/* (No Commment) */
+"Server URL" = "URL máy chủ";
+/* (No Commment) */
+"Set as Default?" = "Đặt làm mặc định?";
+/* (No Commment) */
+"Show all 'Dont Show Again' alerts" = "Hiện tất cả thông báo 'Không hiện lại'";
+"Signal %d was raised." = "Tín hiệu %d được tăng.";
+/* (No Commment) */
+"Signing Input %d" = "Nhập chữ ký %d";
+/* (No Commment) */
+"Signing Inputs" = "Nhập chữ ký";
+/* (No Commment) */
+"Simulate surge" = "Mô phỏng biến động";
+/* (No Commment) */
+"Some funds cannot be transferred automatically." = "Một số khoản tiền không thể chuyển tự động.";
+/* (No Commment) */
+"Status" = "Trạng thái";
+/* (No Commment) */
+"Store Hint" = "Gợi ý lưu trữ";
+/* (No Commment) */
+"Stored" = "Đã lưu trữ";
+/* (No Commment) */
+"Success!" = "Thành công!";
+/* (No Commment) */
+"Surge Occurring" = "Xuất hiện biến động";
+/* (No Commment) */
+"Swipe to Receive" = "Vuốt để Nhận";
+"Syncing Wallet" = "Đồng bộ Ví";
+/* (No Commment) */
+"Tap to copy this address. Share it with the sender via email or text." = "Nhấn để sao chép địa chỉ này. Chia sẻ với người gửi qua email hoặc tin nhắn.";
+/* (No Commment) */
+"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "Mạng lưới dò tìm Bitcoin hiện đang rất đông, dẫn đến các phí được yêu cầu cao hơn thông thường.";
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "Số tiền bạn muốn gửi (%1$@) lớn hơn số tiền tối đa mà bạn có thể dùng trừ đi phí (%2$@ - %3$@). Bạn có muốn gửi %4$@?";
+/* (No Commment) */
+"The fee you have specified is too low." = "Bạn xác định phí quá thấp.";
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "Khóa riêng bạn đang dùng để nhập đã bị mã hóa. Vui lòng nhập mật khẩu vào bên dưới.";
+/* (No Commment) */
+"There was a problem verifying your identity." = "Có lỗi khi xác minh danh tính của bạn.";
+/* (No Commment) */
+"There was an error importing this private key" = "Có lỗi khi nhập khóa riêng này";
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "Các tùy chọn này chỉ khuyến nghị cho người dùng cao cấp. Tiếp tục?";
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "Hành động này yêu cầu khóa riêng cho địa chỉ Bitcoin %@. Vui lòng quét mã QR.";
+/* (No Commment) */
+"This action requires the second password for your wallet. Please enter it below and press continue." = "Hành động này yêu cầu mật khẩu cấp 2 cho ví. Vui lòng nhập vào bên dưới và nhấn tiếp tục.";
+/* (No Commment) */
+"This address has already been used. Please login." = "Địa chỉ này đã được sử dụng. Vui lòng đăng nhập.";
+/* (No Commment) */
+"This address is not watch-only." = "Đây không phải là địa chỉ chỉ-xem.";
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "Đây là địa chỉ chỉ-xem. Để sử dụng các khoản tiền từ ví này, vui lòng quét khóa riêng.";
+/* (No Commment) */
+"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "Đây là một giao dịch bitcoin vượt kích cỡ. Ví của bạn cần tổng hợp nhiều khoản thanh toán nhỏ hơn những khoản bạn đã nhận trong quá khứ. Điều này cần một khoản phí tương đối cao để được xác nhận nhanh chóng. Nếu bạn cảm thấy ổn khi giao dịch mất nhiều thời gian hơn để xác nhận, bạn có thể giảm phí thủ công bằng cách nhấn vào \"Tùy chỉnh phí.\"";
+/* (No Commment) */
+"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "Đã được lưu trữ. Mặc dù bạn không thể gửi tiền từ đây, nhưng tất cả các khoản tiền sẽ được an toàn. Đơn giản chỉ cần bỏ lưu trữ và bắt đầu sử dụng lại.";
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "Tên này đã được sử dụng. Vui lòng chọn tên khác.";
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "Khóa riêng này thuộc về một địa chỉ khác không phải địa chỉ chỉ-xem";
+/* (No Commment) */
+"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "Giao dịch này yêu cầu phí cao hơn vì thực hiện giao dịch với số tiền quá nhỏ.";
+/* (No Commment) */
+"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "Điều này sẽ cho phép các thông báo sau: nhận tại địa chỉ chỉ-xem, đánh giá nhanh trên App Store, và chuyển khoản toàn bộ tiền.";
+/* (No Commment) */
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "Điều này sẽ xóa toàn bộ dữ liệu ví trên thiết bị. Vui lòng xác nhận thông tin của bạn được lưu trữ an toàn, nếu không bitcoin trong ví sẽ không thể truy cập!!";
+/* (No Commment) */
+"To" = "Đến";
+/* (No Commment) */
+"Tor Requests" = "Yêu cầu từ Tor";
+/* (No Commment) */
+"Tor blocked" = "Chặn Tor";
+/* (No Commment) */
+"Tor requests allowed" = "Yêu cầu từ Tor được cho phép";
+/* (No Commment) */
+"Tor requests are currently allowed." = "Yêu cầu từ Tor hiện được cho phép.";
+/* (No Commment) */
+"Tor requests are currently blocked." = "Yêu cầu từ Tor hiện bị chặn.";
+/* (No Commment) */
+"Total Balance" = "Tổng số dư";
+/* (No Commment) */
+"Touch ID has been locked due to too many failed attempts." = "Cảm biến vân tay đã bị khóa do đăng nhập thất bại quá nhiều.";
+/* (No Commment) */
+"Touch ID is not available on this device." = "Cảm biến vân tay không có trên thiết bị này.";
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "Cảm biến vân tay không được kích hoạt trên thiết bị này. Để kích hoạt Cảm biến vân tay, đến Cài đặt->Mật khẩu và thêm dấu vân tay.";
+/* (No Commment) */
+"Transaction Fees" = "Phí giao dịch";
+/* (No Commment) */
+"Transaction fee: %@" = "Phí giao dịch: %@";
+/* (No Commment) */
+"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "Phí giao dịch tác động đến tốc độ mạng lưới dò Bitcoin xác nhận giao dịch của bạn, và phụ thuộc vào các điều kiện mạng hiện tại.";
+/* (No Commment) */
+"Transactions" = "Giao dịch";
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "Giao dịch không có phí sẽ tốn nhiều thời gian để xác nhận hoặc không được xác nhận. Bạn có muốn tiếp tục?";
+/* (No Commment) */
+"Transfer Funds" = "Chuyển khoản tiền";
+/* (No Commment) */
+"Transferred funds from %d %@" = "Chuyển khoản tiền từ %1$d %2$@";
+/* (No Commment) */
+"Transferred funds from %d %@. Outputs for %d %@ were too small." = "Chuyển khoản tiền từ %1$d %2$@. Đầu ra cho %3$d %4$@ quá nhỏ.";
+/* (No Commment) */
+"Transferring all funds: Address %i of %i" = "Đang chuyển toàn bộ tiền: địa chỉ %1$i của %2$i";
+/* (No Commment) */
+"UPGRADE YOUR WALLET" = "NÂNG CẤP VÍ";
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "Không thể tải ví do không có phản hồi từ máy chủ. Bạn có thể ẩn, nếu không trải nghiệm Blockchain sẽ gặp khó khăn. Vui lòng thử lại sau.";
+/* (No Commment) */
+"Unarchive Address" = "Bỏ lưu trữ địa chỉ";
+/* (No Commment) */
+"Unconfirmed" = "Không được xác nhận";
+"Unhandled exception" = "Tình huống ngoại lệ không thể xử lí được";
+/* (No Commment) */
+"Unknown" = "Không xác định";
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "Lỗi Cảm biến vân tay không xác định. Mã: %ld";
+/* (No Commment) */
+"Unknown key format" = "Định dạng khóa không xác định";
+/* (No Commment) */
+"Unsupported Private Key Format" = "Định dạng khóa riêng không được hỗ trợ";
+/* (No Commment) */
+"Unverified" = "Chưa được xác minh";
+/* (No Commment) */
+"Upgrade Wallet" = "Nâng cấp ví";
+/* (No Commment) */
+"Upgrade to V3" = "Nâng cấp lên V3";
+/* (No Commment) */
+"Use Touch ID as PIN" = "Sử dụng Cảm biến vân tay như mã PIN";
+/* (No Commment) */
+"Use all funds" = "Sử dụng tất cả các khoản tiền";
+/* (No Commment) */
+"Use recommended values" = "Sử dụng các giá trị được đề xuất";
+/* (No Commment) */
+"Use total available minus fee: %@" = "Sử dụng tổng hiện có trừ phí: %@";
+/* (No Commment) */
+"User Declined" = "Người dùng bị từ chối";
+"VERIFY BACKUP" = "XÁC MINH SAO LƯU";
+/* (No Commment) */
+"Value when sent: %@" = "Giá trị khi gửi: %@";
+/* (No Commment) */
+"Verification email has been sent to %@." = "Email xác minh đã được gửi đến %@.";
+/* (No Commment) */
+"Verified" = "Đã xác minh";
+/* (No Commment) */
+"Verify Email" = "Xác minh Email";
+/* (No Commment) */
+"Verifying" = "Đang xác minh";
+/* (No Commment) */
+"Wallet Information" = "Thông tin Ví";
+/* (No Commment) */
+"Wallet JSON" = "Ví JSON";
+/* (No Commment) */
+"Wallet Paired Successfully." = "Ví được kết nối thành công.";
+/* (No Commment) */
+"Recovery Phrase" = "Nhóm từ khôi phục";
+/* (No Commment) */
+"Warning!!!" = "Cảnh báo!!!";
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "Cảnh báo: ID ví của bạn chứa thông tin nhạy cảm. Sao chép có thể gây hại đến sự an toàn của ví.";
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "Chúng tôi sẽ gửi cụm từ gợi ý đến địa chỉ email được xác nhận nếu bạn yêu cầu.";
+/* (No Commment) */
+"WebSocket URL" = "URL WebSocket";
+/* (No Commment) */
+"Welcome" = "Chào mừng";
+"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "Tốt lắm! Có phải bạn bị mất mật khẩu, bạn có thể khôi phục các khoản tiền trong ví hay thậm chí nhận tiền trong tương lai (ngoại trừ các địa chỉ đã nhập) bằng cách sử dụng nhóm 12 từ khôi phục. Hãy nhớ lưu trữ Nhóm từ khôi phục của bạn ở một nơi thật an toàn và đảm bảo. Bất kỳ ai truy cập được vào Nhóm từ khôi phục của bạn, đều có thể truy cập bitcoin của bạn.";
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "Chúng tôi phát hiện Ví Blockchain đã được cài đặt trước đây trên điện thoại của bạn.";
+/* (No Commment) */
+"What's this for?" = "Cái này đề làm gì?";
+/* (No Commment) */
+"Where" = "Ở đâu";
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "Bạn có muốn thêm địa chỉ bitcoin %@ vào sổ địa chỉ?";
+/* (No Commment) */
+"Would you like to archive the addresses used?" = "Bạn có muốn lưu trữ các địa chỉ đã sử dụng?";
+"Write the following 12 words onto a " = "Viết 12 từ tiếp theo vào";
+/* (No Commment) */
+"Wrong BIP38 Password" = "Sai mật khẩu BIP38";
+/* (No Commment) */
+"Yes, rate Blockchain Wallet" = "Có, đánh giá Ví Blockchain";
+/* (No Commment) */
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Bạn sắp nhập một địa chỉ chỉ-xem, địa chỉ (hay đoạn mã xPub) được lưu trữ trong ví mà không có khóa riêng tương ứng. Điều này có nghĩa các khoản tiền CHỈ CÓ THỂ sử dụng nếu bạn có khóa riêng được lưu trữ. Nếu bạn không có khóa riêng được lưu trữ, KHÔNG hướng dẫn bất kỳ ai gửi bitcoin cho bạn đến địa chỉ chỉ-xem.";
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "Bạn sắp nhận bitcoin tại một địa chỉ chỉ-xem. Bạn chỉ có thể sử dụng các khoản tiền này nếu bạn có quyền truy cập khóa riêng. Tiếp tục?";
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "Bạn đang sử dụng ví Bitcoin có độ an toàn cao nhất";
+"You backed up your funds successfully." = "Sao lưu các khoản tiền thành công.";
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "Bạn có thể kích hoạt Xác minh 2 bước bằng tin nhắn trên điện thoại. Để sử dụng các phương pháp xác thực thay thế khác, vui lòng đăng nhập ví trên web.";
+/* (No Commment) */
+"You can now spend from this address." = "Bạn có thể tiêu dùng từ địa chỉ này.";
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "Bạn không có tài khoản để thiết lập email. Vui lòng liên hệ %@";
+/* (No Commment) */
+"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = "Bạn không có địa chỉ với số dư khả dụng lớn hơn hoặc bằng ngưỡng thấp nhất được yêu cầu.";
+/* (No Commment) */
+"You have no available funds to send from this address" = "Bạn không có tiền để gửi từ địa chỉ này";
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "Bạn phải tắt Xác minh 2 bước trước khi thay đổi số điện thoại (%@).";
+/* (No Commment) */
+"You must enter a destination address" = "Bạn phải nhập địa chỉ đến";
+/* (No Commment) */
+"You must enter a label" = "Bạn phải nhập nhãn";
+/* (No Commment) */
+"You must have at least one active address" = "Bạn phải có ít nhất 1 địa chỉ hoạt động";
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "Bạn phải tắt Bảo mật 2 lớp để kết nối thủ công.";
+/* (No Commment) */
+"You must leave at least one active address" = "Bạn phải có ít nhất 1 địa chỉ hoạt động";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "Bạn đã xác định rõ khoản phí giao dịch nhỏ đặc biệt của %1$@. Giao dịch của bạn có thể bị kẹt và không bao giờ được xác nhận. Để gia tăng khả năng giao dịch được xác nhận trong vòng một giờ (6 khối), chúng tôi khuyên bạn không sử dụng phí thấp hơn %2$@.";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "Bạn đã xác định rõ khoản phí giao dịch nhỏ đặc biệt của %1$@. Giao dịch của bạn có thể bị kẹt và không bao giờ được xác nhận. Để gia tăng khả năng giao dịch được xác nhận trong vòng một giờ (6 khối), chúng tôi khuyên bạn không sử dụng phí thấp hơn %2$@. Vì bạn không có đủ tiền, vậy nên tiền Gửi cũng sẽ phải hạ xuống %3$@.";
+/* (No Commment) */
+"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "Bạn đã xác định rõ khoản phí giao dịch cao đặc biệt của %1$@. Thậm chí nếu bạn hạ thấp phí đến %2$@, bạn có thể kỳ vọng giao dịch được xác nhận trong khoảng 10 phút (1 khối) tiếp theo.";
+/* (No Commment) */
+"You will be leaving the app." = "Bạn sẽ rời khỏi ứng dụng.";
+/* (No Commment) */
+"You've successfully imported a private key." = "Bạn đã nhập thành công khóa riêng.";
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "Bạn đã nhập thành công khóa riêng cho ​địa chỉ %@, bây giờ bạn có thể sử dụng. Nếu bạn muốn tiêu dùng từ địa chỉ này, đảm bảo bạn quét đúng khóa riêng.";
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "Thiết bị của bạn đã được jailbreak. Có thể gây hại cho sự an toàn của ví.";
+/* (No Commment) */
+"Your email has been verified." = "Email của bạn đã được xác minh.";
+/* (No Commment) */
+"Your identity does not match our records." = "Danh tính của bạn không khớp với hồ sơ của chúng tôi.";
+/* (No Commment) */
+"Your mobile number has been verified." = "Số điện thoại của bạn đã được xác minh.";
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "Điện thoại của bạn có thể được sử dụng để kích hoạt bảo mật 2 lớp, giúp bảo vệ ví của bạn khỏi các truy cập trái phép.";
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "Cụm từ gợi ý mật khẩu mới chứa các ký tự không phù hợp. Vui lòng thử lại.";
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "Cụm từ gợi ý mật khẩu không chứa văn bản. Cụm từ gợi ý mật khẩu sẽ được xóa.";
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "Cụm từ gợi ý mật khẩu phải khác mật khẩu. Vui lòng thử lại.";
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "Cụm từ gợi ý mật khẩu phải khác Mật khẩu cấp 2. Vui lòng thử lại.";
+/* (No Commment) */
+"Your password hint has been updated." = "Cụm từ gợi ý mật khẩu đã được cập nhật.";
+/* (No Commment) */
+"Your password is not strong enough. Please choose a different password." = "Mật khẩu của bạn không đủ mạnh. Vui lòng chọn mật khẩu khác.";
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "Các khoản đã chuyển của bạn sẽ được an toàn và đảm bảo, và bạn sẽ hưởng lợi từ việc tăng cường bảo mật cùng các tính năng sao lưu và khôi phục thuận tiện.";
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "Địa chỉ email đã xác minh của bạn được sử dụng để gửi các mã đăng nhập khi phát hiện có hành vi đáng ngờ hoặc bất thường, nhắc nhở bạn về ID đăng nhập ví của mình, và để gửi thông báo thanh toán bitcoin khi bạn nhận được tiền. Chúng tôi sẽ không sử dụng địa chỉ email của bạn cho các mục đích tiếp thị.";
+/* (No Commment) */
+"Your wallet does not contain this address." = "Ví của bạn không chứa địa chỉ này.";
+/* (No Commment) */
+"Your wallet was successfully created." = "Ví của bạn được tạo thành công.";
+/* (No Commment) */
+"Yubi Key" = "Khóa Yubi";
+"in this order." = "theo thứ tự này.";
+/* (No Commment) */
+"or Continue" = "hoặc tiếp tục";
+"piece of paper." = "mảnh giấy.";
+/* (No Commment) */
+" We recommend the fee shown for the transaction at this time." = " Chúng tôi khuyến nghị các chi phí được hiển thị cho những giao dịch vào thời điểm này.";
+"Fee" = "Chi phí";
+"Please contact support:\n%@" = "Vui lòng liên hệ hỗ trợ:\
+%@";
+"Transfer Amount" = "Số tiền Chuyển khoản";
+"Value when received: %@" = "Giá trị khi nhận được: %@";
+/* (No Commment) */
+"Transfer All Funds" = "Chuyển Toàn bộ Các khoản tiền";
+/* (No Commment) */
+"Transfer all" = "Chuyển Toàn bộ";
+/* (No Commment) */
+"Transfer imported addresses?" = "Chuyển các địa chỉ đã nhập?";
+/* (No Commment) */
+"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "Các địa chỉ đã nhập không được sao lưu bằng Nhóm từ Khôi phục của bạn. Nhằm đảm bảo an toàn cho các khoản tiền này, chúng tôi khuyến nghị bạn chuyển những số dư này vào bản sao lưu của mình.";
+/* (No Commment) */
+"About Us" = "Giới thiệu";
+/* (No Commment) */
+"You currently have email notifications enabled. Changing your email will disable email notifications." = "Hiện bạn đã bật thông báo email. Thay đổi email của bạn sẽ tắt thông báo email.";
+/* (No Commment) */
+"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "Hiện bạn đã bật thông báo tin nhắn. Thay đổi email của bạn sẽ tắt thông báo tin nhắn.";
+/* (No Commment) */
+"All rights reserved." = "Bảo lưu mọi quyền.";
+/* (No Commment) */
+"Rate us" = "Đánh giá chúng tôi";
+/* (No Commment) */
+"Free Merchant app" = "Ứng dụng Cổng thanh toán Miễn phí";
+/* (No Commment) */
+"Cannot open Mail App" = "Không thể mở Ứng dụng Mail";
+/* (No Commment) */
+"Cannot open URL %@" = "Không thể mở URL %@";
+/* (No Commment) */
+"Would you like to tell us about your experience with Blockchain?" = "Bạn có muốn cho chúng tôi biết trải nghiệm của mình với Blockchain?";
+/* (No Commment) */
+"Check Your Inbox" = "Kiểm tra Hộp thư của Bạn";
+/* (No Commment) */
+"Continue To Mail" = "Tiếp tục đến Mail";
+/* (No Commment) */
+"Look for an email from Blockchain and click the verification link to complete your wallet setup." = "Tìm một email từ Blockchain và nhấn vào liên kết xác minh để hoàn tất quá trình thiết lập ví của bạn.";
+/* (No Commment) */
+"Backup Your Funds" = "Sao lưu các Khoản tiền của Bạn";
+/* (No Commment) */
+"Backup Now" = "Sao lưu Ngay";
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "Chúc mừng, bạn có bitcoin! Bây giờ hãy sao lưu ví của bạn để đảm bảo bạn vẫn có thể truy cập bitcoin của mình nếu quên mật khẩu.";
+/* (No Commment) */
+"2-Step Verification" = "Xác minh 2 bước";
+/* (No Commment) */
+"Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "Ngăn chặn truy cập trái phép đến ví của bạn. Kích hoạt xác minh 2 bước để tăng cường bảo mật cho ví.";
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "Kích hoạt thông báo để nhận email hoặc tin nhắn SMS mỗi khi bạn nhận được bitcoin.";
+/* (No Commment) */
+"Not Now" = "Không phải Bây giờ";
+/* (No Commment) */
+"I'll do this later" = "Để sau";
+/* (No Commment) */
+"May be at risk for a double spend." = "Chi tiêu gấp đôi có thể gặp nguy hiểm.";
+/* (No Commment) */
+"For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "Để bảo mật cho bạn, chúng tôi không lưu trữ bất kỳ mật khẩu nào. Sao lưu ví của bạn để đảm bảo tiền được an toàn trong trường hợp bạn quên mật khẩu.";
+/* (No Commment) */
+"Wallets" = "Ví";
+/* (No Commment) */
+"START BACKUP" = "BẮT ĐẦU SAO LƯU";
+/* (No Commment) */
+"Backup Needed" = "Cần thiết Sao lưu";
+/* (No Commment) */
+"Create a Wallet" = "Tạo Ví";
+/* (No Commment) */
+"Log In" = "Đăng nhập";
+/* (No Commment) */
+"Please enter your password to log into your Blockchain wallet." = "Vui lòng nhập mật khẩu để đăng nhập ví Blockchain của bạn.";
+/* (No Commment) */
+"Forgot Password?" = "Quên Mật khẩu?";
+/* (No Commment) */
+"Or start over and " = "Hoặc bắt đầu lại và ";
+/* (No Commment) */
+"Update Email" = "Cập nhật Email";
+/* (No Commment) */
+"Enter Email Address" = "Nhập Địa chỉ Email";
+/* (No Commment) */
+"Update Mobile" = "Cập nhật Số Điện thoại";
+/* (No Commment) */
+"Enter Mobile Number" = "Nhập Số Điện thoại";
+/* (No Commment) */
+"Balances" = "Số dư";
+/* (No Commment) */
+"Transactions occur when you send and receive bitcoin." = "Giao dịch xuất hiện khi bạn gửi hoặc nhận bitcoin.";
+/* (No Commment) */
+"Your Transactions" = "Giao dịch của bạn";
+/* (No Commment) */
+"Backup Complete" = "Sao lưu Hoàn tất";
+/* (No Commment) */
+"Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "Sử dụng Nhóm từ Khôi phục để khôi phục các khoản tiền của bạn trong trường hợp quên mật khẩu.  Bất kỳ ai truy cập vào Nhóm từ Khôi phục của bạn đều có thể truy cập khoản tiền của bạn, vì vậy hãy lưu trữ nó tại một nơi an toàn và đảm bảo.";
+/* (No Commment) */
+"The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "Nhóm từ Khôi phục gồm 12 từ sau đây sẽ cho phép bạn truy cập vào các khoản tiền của mình trong trường hợp quên mật khẩu.";
+/* (No Commment) */
+"Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "Hãy viết nhóm từ của bạn vào một tờ giấy và lưu trữ tại một nơi an toàn và đảm bảo.";
+/* (No Commment) */
+"Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "Hãy viết Nhóm từ Khôi phục gồm 12 từ sau đây chính xác theo thứ tự:";
+/* (No Commment) */
+"PREVIOUS" = "TRƯỚC";
+/* (No Commment) */
+"NEXT" = "SAU";
+/* (No Commment) */
+"BACKUP AGAIN" = "SAO LƯU LẠI";
+/* (No Commment) */
+"Your verified email address is used to send payment alerts, ID reminders, and login codes." = "Địa chỉ email đã xác nhận của bạn được sử dụng để gửi thông báo thanh toán, nhắc nhở ID và mã đăng nhập.";
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "Số điện thoại của bạn có thể được dùng để kích hoạt bảo mật 2 lớp để nhận thông báo.";
+/* (No Commment) */
+"Trade Completed" = "Giao dịch Hoàn tất";
+/* (No Commment) */
+"The trade you created on %@ has been completed!" = "Giao dịch bạn tạo trên %@ đã hoàn tất!";
+/* (No Commment) */
+"View details" = "Xem chi tiết";
+/* (No Commment) */
+"Buy Bitcoin" = "Mua Bitcoin";
+/* (No Commment) */
+"Custom" = "Tùy chỉnh";
+/* (No Commment) */
+"Advanced users only" = "Chỉ dành cho người dùng nâng cao";
+/* (No Commment) */
+"1+ hour" = "Hơn 1 giờ";
+/* (No Commment) */
+"Priority" = "Ưu tiên";
+/* (No Commment) */
+"~0-60 min" = "Khoảng 0-60 phút";
+/* (No Commment) */
+"Satoshi per byte" = "Satoshi mỗi byte";
+/* (No Commment) */
+"High fee not necessary" = "Phí cao không cần thiết";
+/* (No Commment) */
+"Low fee not recommended" = "Không đề xuất phí thấp";
+/* (No Commment) */
+"This feature is recommended for advanced users only. By choosing a custom fee, you risk overpaying or your transaction may get stuck." = "Tính năng này chỉ được đề xuất dành cho người dùng nâng cao. Nếu chọn phí tùy chỉnh, bạn có nguy cơ thanh toán quá mức hoặc giao dịch của bạn có thể bị kẹt.";
+/* (No Commment) */
+"Available now" = "Hiện đang khả dụng";
+/* (No Commment) */
+"Buy bitcoin directly from your mobile wallet. It's simple, seamless, and secure." = "Mua bitcoin trực tiếp từ ví trên điện thoại di động của bạn. Đơn giản, liền mạch và an toàn.";
+/* (No Commment) */
+"Log in to Web Wallet" = "Đăng nhập Ví trên Web";
+/* (No Commment) */
+"Go to login.blockchain.com on your computer." = "Truy cập login.blockchain.com trên máy tính của bạn.";
+/* (No Commment) */
+"Select Log in via mobile." = "Chọn Đăng nhập bằng di động.";
+/* (No Commment) */
+"Using your computer's camera, scan the QR code below." = "Sử dụng camera trên máy tính, quét mã QR dưới đây.";
+/* (No Commment) */
+"Keep this QR code hidden until you're ready." = "Ẩn mã QR này cho đến khi bạn sẵn sàng.";
+/* (No Commment) */
+"Keep this QR code safe!" = "Giữ mã QR này được an toàn!";
+/* (No Commment) */
+"Do not share it with others." = "Không chia sẻ với người khác.";
+/* (No Commment) */
+"Show QR Code" = "Hiện Mã QR";
+/* (No Commment) */
+"Hide QR Code" = "Ẩn Mã QR";
+/* (No Commment) */
+"U.S. Dollar" = "Đô-la Mỹ";
+/* (No Commment) */
+"Euro" = "Euro";
+/* (No Commment) */
+"lcelandic Króna" = "Krona Iceland";
+/* (No Commment) */
+"Hong Kong Dollar" = "Đô-la Hồng Kông";
+/* (No Commment) */
+"New Taiwan Dollar" = "Tân Đài Tệ";
+/* (No Commment) */
+"Swiss Franc" = "Franc Thụy Sĩ";
+/* (No Commment) */
+"Danish Krone" = "Krone Đan Mạch";
+/* (No Commment) */
+"Chilean Peso" = "Peso Chi Lê";
+/* (No Commment) */
+"Canadian Dollar" = "Đô-la Canada";
+/* (No Commment) */
+"Indian Rupee" = "Rupee Ấn Độ";
+/* (No Commment) */
+"Chinese Yuan" = "Nhân dân tệ Trung Quốc";
+/* (No Commment) */
+"Thai Baht" = "Bạt Thái Lan";
+/* (No Commment) */
+"Australian Dollar" = "Đô-la Úc";
+/* (No Commment) */
+"Singapore Dollar" = "Đô-la Singapore";
+/* (No Commment) */
+"South Korean Won" = "Won Hàn Quốc";
+/* (No Commment) */
+"Japanese Yen" = "Yên Nhật";
+/* (No Commment) */
+"Polish Zloty" = "Zloty Ba Lan";
+/* (No Commment) */
+"Great British Pound" = "Bảng Anh";
+/* (No Commment) */
+"Swedish Krona" = "Krona Thụy Điển";
+/* (No Commment) */
+"New Zealand Dollar" = "Đô-la New Zealand";
+/* (No Commment) */
+"Brazil Real" = "Real Brazil";
+/* (No Commment) */
+"Russian Ruble" = "Rúp Nga";
+/* (No Commment) */
+"Bitcoin Balances" = "Số dư Bitcoin";
+/* (No Commment) */
+"Enter Ether address or select" = "Nhập địa chỉ Ether hoặc chọn";
+/* (No Commment) */
+"Payment Sent! Your balance and transactions will update soon." = "Đã gửi Thanh toán! Số dư và giao dịch của bạn sẽ sớm được cập nhật.";
+/* (No Commment) */
+"Waiting for payment" = "Đang chờ thanh toán";
+/* (No Commment) */
+"Please wait until your last ether transaction confirms." = "Vui lòng chờ cho đến khi xác nhận giao dịch ether vừa rồi của bạn.";
+/* (No Commment) */
+"Bitcoin Addresses" = "Địa chỉ Bitcoin";
+/* (No Commment) */
+"Bitcoin Merchant Map" = "Bản đồ Cổng thanh toán Bitcoin";
+/* (No Commment) */
+"Invalid Ether address: %@" = "Địa chỉ Ether không hợp lệ: %@";
+/* (No Commment) */
+"An error occurred while retrieving the latest chart data. Please try again later." = "Đã xảy ra lỗi khi truy xuất dữ liệu biểu đồ mới nhất. Vui lòng thử lại sau.";
+/* (No Commment) */
+"Transactions occur when you send and request ether." = "Các giao dịch xảy ra khi bạn gửi và yêu cầu ether.";
+/* (No Commment) */
+"Request Ether" = "Yêu cầu Ether";
+/* (No Commment) */
+"Dashboard" = "Bảng điều khiển";
+/* (No Commment) */
+"Week" = "Tuần";
+/* (No Commment) */
+"Month" = "Tháng";
+/* (No Commment) */
+"Year" = "Năm";
+/* (No Commment) */
+"Bitcoin Price" = "Giá Bitcoin";
+/* (No Commment) */
+"Ether Price" = "Giá Ether";
+/* (No Commment) */
+"Contract addresses are not supported." = "Địa chỉ hợp đồng không được hỗ trợ.";
+/* (No Commment) */
+"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "Hiện tại chúng tôi chỉ hỗ trợ ETH. Bạn không thể nhận REP, ICN, GNT, GNO, DGD, BCP.";
+/* (No Commment) */
+"Now supporting Ether" = "Hiện nay chúng tôi đang hỗ trợ Ether";
+/* (No Commment) */
+"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "Chúng tôi lắng nghe yêu cầu của bạn. Chúng tôi rất vui mừng thông báo ví Blockchain giờ đây đã cho phép bạn tự do gửi và nhận ether!";
+/* (No Commment) */
+"Get Started with Ether" = "Bắt Đầu Với Ether";
+/* (No Commment) */
+"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "Để sử dụng dịch vụ này, chúng tôi yêu cầu bạn nhập mật khẩu cấp hai của mình. Bạn chỉ cần nhập mật khẩu cấp hai một lần để thiết lập ví Ether của mình.";
+/* (No Commment) */
+"Enter Ether address" = "Nhập Địa chỉ Ether";
+/* (No Commment) */
+"Day" = "Ngày";
+/* (No Commment) */
+"All" = "Tất cả";
+/* (No Commment) */
+"Please send ether to %@." = "Vui lòng gửi ether đến %@.";
 /* (No Commment) */
 "Ether payment request" = "Yêu cầu thanh toán Ether";
-
 /* (No Commment) */
 "My Ether Wallet" = "Ví Ether của tôi";
-
 /* (No Commment) */
 "Miners receive this fee to process this transaction." = "Các thợ đào nhận được khoản phí này để thực hiện giao dịch này.";
-
 /* (No Commment) */
 "Get Ether" = "Nhận Ether";
-
 /* (No Commment) */
 "at" = "tại";
-
 /* (No Commment) */
 "Exchange" = "Chuyển đổi";
-
 /* (No Commment) */
 "New Exchange" = "Chuyển đổi Mới";
-
 /* (No Commment) */
 "Use minimum" = "Sử dụng tối thiểu";
-
 /* (No Commment) */
 "Use maximum" = "Sử dụng tối đa";
-
 /* (No Commment) */
 "Sending Funds" = "Gửi Khoản Tiền";
-
 /* (No Commment) */
 "Thanks for placing your trade!  Exchange trades can take up to two hours, and you can keep track of your trade’s progress in the Order History section." = "Cảm ơn bạn đã đầu tư giao dịch! Các giao dịch chuyển đổi có thể mất đến hai giờ, bạn có thể theo dõi tiến trình giao dịch của mình tại mục Lịch sử Đặt lệnh.";
-
 /* (No Commment) */
 "In Progress" = "Đang tiến hành";
-
 /* (No Commment) */
 "Exchanges can take up to two hours, you can keep track of your exchange progress in the Order History. Once the trade is complete, your ether will arrive in your wallet." = "Các chuyển đổi có thể mất đến hai giờ, bạn có thể theo dõi tiến trình chuyển đổi của mình tại Lịch sử Đặt lệnh. Khi hoạt động giao dịch hoàn tất, ether sẽ được chuyển đến ví của bạn.";
-
 /* (No Commment) */
 "Your trade has been canceled. Please return to the exchange tab to start your trade again." = "Giao dịch của bạn đã bị hủy. Vui lòng quay lại thẻ chuyển đổi để bắt đầu giao dịch lại.";
-
 /* (No Commment) */
 "Failed" = "Thất bại";
-
 /* (No Commment) */
 "Exchange Failed" = "Chuyển đổi thất bại";
-
 /* (No Commment) */
 "This trade has failed. Any funds sent from your wallet will be returned minus the transaction fee. Please return to the exchange tab to start a new trade." = "Giao dịch này đã thất bại. Bất cứ khoản tiền nào được gửi từ ví của bạn sẽ được hoàn trả sau khi trừ phí giao dịch. Vui lòng quay lại thẻ chuyển đổi để bắt đầu một giao dịch mới.";
-
 /* (No Commment) */
 "Your trade has expired. Please return to the exchange tab to start a new trade." = "Giao dịch của bạn đã hết hạn. Vui lòng quay lại thẻ chuyển đổi để bắt đầu một giao dịch mới.";
-
 /* (No Commment) */
 "You can now exchange your bitcoin for ether and vice versa directly from your Blockchain wallet!" = "Giờ đây bạn có thể chuyển đổi bitcoin của mình sang ether và ngược lại, trực tiếp từ ví Blockchain!";
-
 /* (No Commment) */
 "%@ to Deposit" = "%@ để Gửi tiền";
-
 /* (No Commment) */
 "%@ to be Received" = "%@ để Được nhận";
-
 /* (No Commment) */
 "Exchange Rate" = "Tỷ Giá";
-
 /* (No Commment) */
 "Transaction Fee" = "Phí Giao dịch";
-
 /* (No Commment) */
 "Network Transaction Fee" = "Phí Giao dịch Mạng lưới";
-
 /* (No Commment) */
 "ShapeShift Withdrawal Fee" = "Phí Rút tiền ShapeShift";
-
 /* (No Commment) */
 "Agree to ShapeShift" = "Đồng ý với ShapeShift";
-
 /* (No Commment) */
 "terms and conditions" = "các điều khoản và điều kiện";
-
 /* (No Commment) */
 "Exchange In Progress" = "Đang Tiến hành Chuyển đổi";
-
 /* (No Commment) */
 "Exchange Completed" = "Chuyển đổi Hoàn tất";
-
 /* (No Commment) */
 "Get started" = "Bắt đầu";
-
 /* (No Commment) */
 "Below minimum limit" = "Dưới mức giới hạn tối thiểu";
-
 /* (No Commment) */
 "Above maximum limit" = "Trên mức giới hạn tối đa";
-
 /* (No Commment) */
 "Not enough to exchange" = "Không đủ để chuyển đổi";
-
 /* (No Commment) */
 "Order ID" = "ID Đặt lệnh";
-
 /* (No Commment) */
 "Total %@ spent" = "Tổng sử dụng %@";
-
 /* (No Commment) */
 "Getting quote" = "Nhận báo giá";
-
 /* (No Commment) */
 "Confirming" = "Xác nhận";
-
-/* (No Commment) */
-"Exchange In Progress" = "Đang Tiến hành Chuyển đổi";
-
 /* (No Commment) */
 "Complete" = "Hoàn tất";
-
-/* (No Commment) */
-"Exchange Completed" = "Chuyển đổi Hoàn tất";
-
 /* (No Commment) */
 "Quote expires in %@" = "Báo giá hết hạn trong %@";
-
 /* (No Commment) */
 "Step %d of %d" = "Bước %d trên %d";
-
 /* (No Commment) */
 "Select your State:" = "Lựa chọn Bang:";
-
 /* (No Commment) */
 "Select State" = "Lựa chọn Bang";
-
 /* (No Commment) */
 "Not Available" = "Không Có";
-
 /* (No Commment) */
 "Exchanging coins is not yet available in your state. We’ll be rolling out more states soon." = "Chuyển đổi xu hiện chưa có tại bang của bạn. Chúng tôi sẽ sớm phát hành thêm các bang khác.";
-
 /* (No Commment) */
 "An error occurred when getting your %@ balance. Please try again later. Details: %@" = "Xuất hiện lỗi khi tải số dư %@ của bạn. Vui lòng thử lại sau. Chi tiết: %@";
-
 /* (No Commment) */
 "An error occurred when getting an approximate quote. Please try again later. Details: %@" = "Xuất hiện lỗi khi tải báo giá ước tính. Vui lòng thử lại sau. Chi tiết: %@";
-
 /* (No Commment) */
 "Deposited to ShapeShift" = "Đã gửi tiền vào ShapeShift";
-
 /* (No Commment) */
 "Received from ShapeShift" = "Đã nhận từ ShapeShift";
-
 /* (No Commment) */
 "Order History" = "Lịch sử Đặt lệnh";
-
 /* (No Commment) */
 "Incoming" = "Doanh thu";
-
 /* (No Commment) */
 "Trade Expired" = "Giao dịch Hết hạn";
-
 /* (No Commment) */
 "Your trade has expired. Please return to the Exchange page to start your trade again." = "Giao dịch của bạn đã hết hạn. Vui lòng quay lại trang Chuyển đổi để bắt đầu lại giao dịch của bạn.";
-
 /* (No Commment) */
 "No Funds to Exchange" = "Không có Tiền để Chuyển đổi";
-
 /* (No Commment) */
 "You have no funds to exchange. Why not get started by receiving some funds?" = "Bạn không có tiền để chuyển đổi. Tại sao không bắt đầu bằng cách nhận một vài khoản tiền?";
-
 /* (No Commment) */
 "Loading Exchange" = "Đang tải Chuyển đổi";
-
 /* (No Commment) */
 "Select other %@ Wallet" = "Chọn Ví %@ khác";
-
 /* (No Commment) */
 "%@ needed to exchange" = "Cần %@ để chuyển đổi";
-
 /* (No Commment) */
 "Start trading" = "Bắt đầu kinh doanh";
-
 /* (No Commment) */
 "Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Thương mại bitcoin trực tiếp từ Tiểu ví. Bắt đầu bằng cách tạo ra một tài khoản ở đảo Mua Và Bán tab.";
-
 /* (No Commment) */
 "The wait is over" = "Chờ đợi là hơn";
-
 /* (No Commment) */
 "Something went wrong, please try reopening Buy & Sell Bitcoin again." = "Có gì đó không đúng, vui lòng thử mở lại Và Mua cho tiền một lần nữa.";
-
 /* (No Commment) */
 "Buy & Sell Bitcoin" = "Mua Cho Tiền";
-
 /* (No Commment) */
 "We work with exchange partners all over the world, so you can buy and sell bitcoin directly from your wallet." = "Chúng tôi làm việc trao đổi với các đối tác, tất cả các nơi trên thế giới, do đó bạn có thể mua cho tiền trực tiếp từ ví của bạn.";
-
 /* (No Commment) */
 "Mobile Buy & Sell is supported for iOS 9 and up. Please run a software update or login at login.blockchain.com on your computer." = "Điện thoại di động Mua Và Bán được hỗ trợ cho trên windows 9 và lên. Xin vui lòng chạy một phần hoặc nhập vào login.blockchain.com trên máy tính.";
-
 /* (No Commment) */
 "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Mua cho tiền trực tiếp từ Tiểu ví. Bắt đầu bằng cách tạo ra một tài khoản ở đảo Mua Và Bán tab.";
-
 /* (No Commment) */
 "All Wallets" = "Tất Cả Ví";
-
-/* (No Commment) */
-"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Giữ xPub riêng tư. Ai đó có quyền vào xPub sẽ có thể nhìn thấy tất cả số tiền và giao dịch.";
-
 /* (No Commment) */
 "Your xPub is an advanced feature that contains all of your public addresses." = "Bạn xPub là một máy bay mà có tất cả của bạn địa chỉ công cộng.";
-
 /* (No Commment) */
 "Transactions occur when you send and request bitcoin cash." = "Giao dịch xảy ra khi bạn gửi và yêu cầu bitcoin tiền mặt.";
-
 /* (No Commment) */
 "Get Bitcoin Cash" = "Được Bitcoin Tiền Mặt";
-
 /* (No Commment) */
 "Request Bitcoin Cash" = "Yêu Cầu Bitcoin Tiền Mặt";
-
 /* (No Commment) */
 "Price" = "Giá";
-
 /* (No Commment) */
 "See charts" = "Xem biểu đồ";
-
 /* (No Commment) */
 "Price charts" = "Biểu đồ giá";
-
 /* (No Commment) */
 "Bitcoin Cash" = "Bitcoin Tiền Mặt";
-
 /* (No Commment) */
 "Bitcoin Cash Price" = "Bitcoin Tiền Mặt, Giá";
-
 /* (No Commment) */
 "Enter Bitcoin Cash address or select" = "Nhập Bitcoin Tiền mặt hoặc chọn địa chỉ";
-
 /* (No Commment) */
 "Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "Sao chép này nhận được địa chỉ để các bạn? Nếu như vậy, được thông báo rằng các ứng dụng khác có thể nhìn vào những thông tin này.";
-
 /* (No Commment) */
-"Please send BCH to the Bitcoin Cash address\n%@" = "Xin vui lòng gửi từ internet explorer để thế giới Tiền mặt địa chỉ\n%@";
-
+"Please send BCH to the Bitcoin Cash address\n%@" = "Xin vui lòng gửi từ internet explorer để thế giới Tiền mặt địa chỉ\
+%@";
 /* (No Commment) */
 "Transaction fees impact how quickly the mining network will confirm your transactions, and depend on the current network conditions." = "Phí giao dịch tác động như thế nào một cách nhanh chóng các mỏ mạng sẽ xác nhận các giao dịch của bạn, và phụ thuộc vào điều kiện mạng hiện tại.";
-
 /* (No Commment) */
 "Trade Refunded" = "Thương Mại Hoàn Lại";
-
 /* (No Commment) */
 "We are excited to announce that your Blockchain wallet will allow you to seamlessly send, receive, and exchange Bitcoin Cash!" = "Chúng tôi rất vui mừng được thông báo rằng bạn Tìm ví sẽ cho phép anh để liên tục gửi nhận được, và trao đổi Bitcoin Tiền mặt!";
-
 /* (No Commment) */
 "Are you sure this is a bitcoin cash address?" = "Anh có chắc đây là một dịch vụ tiền mặt địa chỉ?";
-
 /* (No Commment) */
 "Sending funds to a bitcoin address by accident will result in loss of funds." = "Gửi tiền để trên địa chỉ bởi tai nạn sẽ dẫn đến sự mất mát của quỹ.";
-
-/* (No Commment) */
-"All Wallets" = "Tất cả Ví";
-
-/* (No Commment) */
-"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Đảm bảo sự bảo mật cho xPub của bạn. Khi có ai đó truy cập vào xPub của bạn, họ sẽ có thể xem toàn bộ các khoản tiền và giao dịch của bạn.";
-
-/* (No Commment) */
-"Your xPub is an advanced feature that contains all of your public addresses." = "xPub là một tính năng nâng cao chứa tất cả địa chỉ công khai của bạn.";
-
-/* (No Commment) */
-"Transactions occur when you send and request bitcoin cash." = "Giao dịch xảy ra khi bạn gửi và yêu cầu bitcoin cash.";
-
-/* (No Commment) */
-"Get Bitcoin Cash" = "Nhận Bitcoin Cash";
-
-/* (No Commment) */
-"Request Bitcoin Cash" = "Yêu cầu Bitcoin Cash";
-
-/* (No Commment) */
-"Price" = "Giá";
-
-/* (No Commment) */
-"See charts" = "Xem bảng";
-
-/* (No Commment) */
-"Price charts" = "Bảng giá";
-
-/* (No Commment) */
-"Bitcoin Cash" = "Bitcoin Cash";
-
-/* (No Commment) */
-"Bitcoin Cash Price" = "Giá Bitcoin Cash";
-
-/* (No Commment) */
-"Enter Bitcoin Cash address or select" = "Nhập địa chỉ Bitcoin Cash hoặc chọn";
-
-/* (No Commment) */
-"Copy this receive address to the clipboard? If so, be advised that other applications may be able to look at this information." = "Sao chép địa chỉ nhận này vào bộ nhớ đệm? Nếu thực hiện điều này, xin lưu ý tất cả các ứng dụng khác sẽ có thể xem thông tin này.";
-
-/* (No Commment) */
-"Start trading" = "Bắt đầu giao dịch";
-
-/* (No Commment) */
-"Trade bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab." = "Giao dịch bitcoin trực tiếp từ ví Blockchain của bạn. Hãy bắt đầu bằng cách tạo một tài khoản trong tab Mua & Bán.";
-
-/* (No Commment) */
-"The wait is over" = "Thời gian chờ đã hết";
-
-/* (No Commment) */
-"Face ID has been locked due to too many failed attempts." = "Face ID đã bị khóa do quá nhiều lần thử không thành công.";
-
 /* (No Commment) */
 "Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "Face ID không được kích hoạt trên thiết bị này. Để kích hoạt Face ID, đến Cài đặt -> Face ID & Mã khóa và thêm dấu vân tay.";
-
 /* (No Commment) */
 "Face ID is not available on this device." = "Face ID không khả dụng trên thiết bị này.";
-
 /* (No Commment) */
 "Unknown Face ID error. Code: %ld" = "Lỗi Face ID không xác định. Mã: %ld";
-
-/* (No Commment) */
-"Unknown Touch ID error. Code: %ld" = "Lỗi Touch ID không xác định. Mã: %ld";
-
 /* (No Commment) */
 "Blockchain's servers are currently under maintenance. Please try again later" = "Các máy chủ của Blockchain hiện đang được bảo trì. Vui lòng thử lại sau";
-
 /* (No Commment) */
 "Unable to authenticate due to failing authentication too many times." = "Không thể xác thực do xác thực không thành công quá nhiều lần.";
-
 /* (No Commment) */
 "Unable to authenticate because the device does not support biometric authentication." = "Không thể xác thực vì thiết bị không hỗ trợ xác thực sinh trắc học.";
-
 /* (No Commment) */
 "Unable to use biometrics." = "Không thể sử dụng sinh trắc học.";
-
 /* (No Commment) */
 "Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "Không thể xác thực do đăng nhập bằng Touch ID không thành công quá nhiều lần. Yêu cầu mã số để mở khóa Touch ID";
-
 /* (No Commment) */
 "Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "Kích hoạt tính năng này sẽ cho phép tất cả người dùng có dấu vân tay %@ đã đăng ký trên thiết bị này có thể truy cập vào ví của bạn.";
-
 /* (No Commment) */
 "Enable %@" = "Kích hoạt %@";
-
 /* (No Commment) */
 "Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "Sử dụng %@ thay cho mã PIN để xác thực Blockchain và truy cập ví của bạn.";
-
 /* (No Commment) */
 "Use %@ as PIN" = "Sử dụng %@ làm mã PIN";
-
 /* (No Commment) */
 "Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "Chúc mừng, bạn có bitcoin! Bây giờ hãy sao lưu ví của bạn để đảm bảo bạn có thể truy cập vào các khoản tiền của mình nếu bạn quên mật khẩu.";
-
 /* (No Commment) */
 "Invalid %@ address: %@" = "Địa chỉ %@ không hợp lệ: %@";
-
 /* (No Commment) */
 "%@ payment request" = "Yêu cầu thanh toán %@";
-
 /* (No Commment) */
 "Cookie Policy" = "Chính sách Cookie";
-
 /* (No Commment) */
 "Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "Vui lòng kiểm tra email của bạn và cấp quyền cho lần đăng nhập này. Sau khi thực hiện, vui lòng quay lại đây và thử đăng nhập lại";
-
 /* (No Commment) */
 "Non-Spendable" = "Không thể Tiêu dùng";
+/* (No Commment) */
+"Confirm Upgrade" = "Xác nhận nâng cấp";
+/* (No Commment) */
+"sat/b" = "sat/b";
+/* (No Commment) */
+"Face ID has been locked due to too many failed attempts." = "Face ID đã bị khóa do quá nhiều lần thử không thành công.";
+/* (No Commment) */
+"1sL-eb-Qgc.normalTitle" = "ĐÓNG";
+/* (No Commment) */
+"48.normalTitle" = "Lưu";
+/* (No Commment) */
+"56.text" = "Dán nhãn địa chỉ";
+/* (No Commment) */
+"58.text" = "Nhãn";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "59"; */
+"59.placeholder" = "Nhãn";
+/* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
+"60.text" = "Địa chỉ";
+/* (No Commment) */
+"68.text" = "Không có địa chỉ";
+/* (No Commment) */
+"69.text" = "Tài khoản của bạn không được kết nối đúng cách. Nhấn nút ở trên bên trái màn hình và làm theo hướng dẫn.";
+/* (No Commment) */
+"80.normalTitle" = "SAO LƯU ĐỊA CHỈ";
+/* (No Commment) */
+"81.normalTitle" = "DÁN NHÃN ĐỊA CHỈ";
+/* (No Commment) */
+"88.normalTitle" = "YÊU CẦU THANH TOÁN";
+/* (No Commment) */
+"90.text" = "Địa chỉ Bitcoin";
+/* (No Commment) */
+"91.text" = "1PqtuSjPKDGqst5yadi3rF2XCxFsVDn5UH";
+/* (No Commment) */
+"92.normalTitle" = "SAO CHÉP ĐỊA CHỈ";
+/* (No Commment) */
+"100.text" = "Số tiền:";
+/* (No Commment) */
+"120.text" = "5 BTC = $10";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "E60-hZ-tDl"; */
+"E60-hZ-tDl.placeholder" = "0,000";
+/* (No Commment) */
+"GwZ-6f-89z.normalTitle" = "BTC";
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "ZHr-29-NdG"; */
+"ZHr-29-NdG.normalTitle" = "Hoàn tất";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "a9y-3I-Drw"; */
+"a9y-3I-Drw.placeholder" = "0,00";
+/* (No Commment) */
+"i1j-pG-caF.normalTitle" = "Quét khóa riêng";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "jRM-0A-Zuo"; */
+"jRM-0A-Zuo.text" = "BTC";
+/* Class = "UILabel"; text = "USD"; ObjectID = "wDT-32-lDe"; */
+"wDT-32-lDe.text" = "USD";
+"* Minimum 10 characters" = "* Tối thiểu 10 ký tự";
+"Wallet Identifier" = "ID Ví";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "Khóa riêng đã được quét không tương ứng với địa chỉ chỉ xem của bạn. Để sử dụng các khoản tiền của bạn từ địa chỉ này, vui lòng quét khóa riêng đúng.";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "Bạn sắp nhập một địa chỉ chỉ-xem, địa chỉ (hay đoạn mã xPub) được lưu trữ trong ví mà không có khóa riêng tương ứng. Điều này có nghĩa các khoản tiền CHỈ CÓ THỂ sử dụng nếu bạn có khóa riêng được lưu trữ. Nếu bạn không có khóa riêng được lưu trữ, KHÔNG hướng dẫn bất kỳ ai gửi bitcoin cho bạn đến địa chỉ chỉ-xem.\
+\
+Các tùy chọn này chỉ được khuyến nghị cho người dùng cao cấp. Tiếp tục?";
+/* (No Commment) */
+"8.text" = "Sổ địa chỉ";
+"SENT" = "Đã gửi";
+/* Transaction cell: */
+"RECEIVED" = "Đã nhận";
+/* (No Commment) */
+"from" = "từ";

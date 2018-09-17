@@ -7,7 +7,7 @@
 /* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
 "64.text" = "[%key:identityverification.address.address%]";
 /* (No Commment) */
-"Verify" = "Verifiser";
+"Verify" = "Потвърди";
 /* (No Commment) */
 "2je-u4-PB2.text" = "[%key:overview%]";
 /* (No Commment) */
@@ -15,13 +15,13 @@
 /* (No Commment) */
 "4cR-kX-YUY.text" = "[%key:Confirm Upgrade%]";
 /* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
-"8Zy-R2-HoW.text" = "To-trinns verifisering";
+"8Zy-R2-HoW.text" = "Двустъпково удостоверяване";
 /* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
 "4.normalTitle" = "[%key:CONTINUE%]";
 /* (No Commment) */
 "57.text" = "[%key:identityverification.address.address%]";
 /* (No Commment) */
-"65.text" = "Adresse:";
+"65.text" = "Адрес:";
 /* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
 "5gL-FG-Zcc.normalTitle" = "[%key:Forget Wallet%]";
 /* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
@@ -35,55 +35,55 @@
 /* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
 "625.normalTitle" = "[%key:CONTINUE%]";
 /* (No Commment) */
-"630.text" = "Logg inn";
+"630.text" = "Вход";
 /* (No Commment) */
 "TzC-Tw-04r.normalTitle" = "[%key:CONTINUE%]";
 /* (No Commment) */
-"About" = "Om";
+"About" = "За нас";
 /* (No Commment) */
 "Address" = "[%key:identityverification.address.address%]";
 /* (No Commment) */
-"Allowed" = "Tillatt";
+"Allowed" = "Позволено";
 /* (No Commment) */
-"Backup" = "Sikkerhetskopier midler";
+"Backup" = "Направи копие за средствата";
 /* (No Commment) */
-"Blocked" = "Blokkert";
+"Blocked" = "Блокирано";
 /* (No Commment) */
 "Cancel" = "[%key:buysell.sfoxcheckout.orderreview.cancel%]";
 /* (No Commment) */
-"Change Email" = "Endre e-post";
+"Change Email" = "Промени имейла";
 /* (No Commment) */
-"Change Mobile Number" = "Bytt mobilnummer";
-"Close" = "Lukk";
+"Change Mobile Number" = "Променете мобилния номер";
+"Close" = "Затвори";
 /* (No Commment) */
 "Continue" = "[%key:CONTINUE%]";
 /* (No Commment) */
-"Disabled" = "Deaktivert";
-"Error" = "Feil";
+"Disabled" = "Деактивирано";
+"Error" = "Грешка";
 /* (No Commment) */
 "Forget Wallet" = "[%key:5gL-FG-Zcc.normalTitle%]";
 /* (No Commment) */
-"Incorrect password" = "Feil passord";
+"Incorrect password" = "Неправилна парола";
 /* (No Commment) */
-"Make Default" = "Sett som standard";
+"Make Default" = "Направи по подразбиране";
 /* (No Commment) */
-"Mobile Number" = "Mobilnummer";
+"Mobile Number" = "Мобилен номер";
 /* (No Commment) */
-"Notifications" = "Varsler";
+"Notifications" = "Известия";
 /* (No Commment) */
 "Password Required" = "[%key:465.text%]";
 /* (No Commment) */
-"Reset" = "Tilbakestilling";
+"Reset" = "Нулиране";
 /* (No Commment) */
 "Scan Pairing Code" = "[%key:370.normalTitle%]";
 /* (No Commment) */
-"Security Center" = "Sikkerhetssenter";
+"Security Center" = "Център за сигурност";
 /* (No Commment) */
-"Total Balance" = "Total Saldo";
+"Total Balance" = "Обща наличност";
 /* (No Commment) */
-"Unverified" = "Uverifisert";
+"Unverified" = "Непотвърден";
 /* (No Commment) */
-"Verified" = "Verifisert";
+"Verified" = "Потвърден";
 /* (No Commment) */
 "You must have two-factor authentication disabled to pair manually." = "[%key:602.text%]";
 /* (No Commment) */
@@ -91,9 +91,9 @@
 /* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
 "60.text" = "[%key:identityverification.address.address%]";
 /* (No Commment) */
-"90.text" = "Bitcoin-adresse";
+"90.text" = "Bitcoin адрес";
 /* (No Commment) */
-"100.text" = "Beløp:";
+"100.text" = "Количество:";
 /* (No Commment) */
 "120.text" = "[%key:identityverification.address.address%]";
-"Wallet Identifier" = "Lommebokidentifikator";
+"Wallet Identifier" = "Идентификатор на портфейла";
