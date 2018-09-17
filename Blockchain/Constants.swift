@@ -10,6 +10,9 @@ import UIKit
 
 struct Constants {
 
+    // SATOSHI = 1e8 (100,000,000)
+    static let satoshi = UInt64(1e8)
+
     struct AppStore {
         static let AppID = "id493253309"
     }
