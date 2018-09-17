@@ -15,6 +15,8 @@ class ExchangeDetailInteractor {
     fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
 
+    weak var output: ExchangeDetailOutput?
+
     init(dependencies: ExchangeDependencies) {
         self.markets = dependencies.markets
         self.conversions = dependencies.conversions
@@ -29,7 +31,10 @@ class ExchangeDetailInteractor {
 
 extension ExchangeDetailInteractor: ExchangeDetailInput {
     func viewLoaded() {
-
+        disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
+            guard let this = self else { return }
+            this.output?.received(conversion: conversion)
+        })
     }
 
     func sendOrderTapped() {

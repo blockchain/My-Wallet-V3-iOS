@@ -778,6 +778,7 @@
 		C7343BC4214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BC3214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift */; };
 		C7343BCF214FF93A001B1EC9 /* ExchangeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BCE214FF93A001B1EC9 /* ExchangeDetailInteractor.swift */; };
 		C7343BD1214FF9D0001B1EC9 /* ExchangeDetailContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BD0214FF9D0001B1EC9 /* ExchangeDetailContracts.swift */; };
+		C7343BD8215003E6001B1EC9 /* ExchangeDetailContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BD0214FF9D0001B1EC9 /* ExchangeDetailContracts.swift */; };
 		C740FA89210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
 		C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
 		C7414E451FD7131C001A89FA /* ConfirmStateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */; };
@@ -7850,6 +7851,7 @@
 				602B9D0C2118E23400BD3D60 /* KYCCoordinator.swift in Sources */,
 				AA7133B8212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift in Sources */,
 				3A91F7E221387A5300CDC3FD /* AnimatablePresentationUpdate.swift in Sources */,
+				C7343BD8215003E6001B1EC9 /* ExchangeDetailContracts.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
 				C76143AC211A80D30041411E /* Codable+Coding.swift in Sources */,
 				AA748359211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift in Sources */,

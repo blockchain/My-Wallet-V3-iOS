@@ -13,6 +13,8 @@ protocol ExchangeDetailInterface: class {
     func navigationBarVisibility(_ visibility: Visibility)
     func updateTitle(_ value: String)
     func loadingVisibility(_ visibility: Visibility, action: ExchangeDetailCoordinator.Action)
+    func updateConfirmDetails(conversion: Conversion)
+    var mostRecentOrderTransaction: OrderTransaction? { set get }
 }
 
 protocol ExchangeDetailInput: class {
@@ -21,6 +23,6 @@ protocol ExchangeDetailInput: class {
 }
 
 protocol ExchangeDetailOutput: class {
-    func conversionReceived()
+    func received(conversion: Conversion)
     func orderSent()
 }

@@ -16,7 +16,8 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
-        case confirmExchange(OrderTransaction, Conversion, TradeExecutionAPI)
+        case confirmExchange(OrderTransaction, Conversion)
+        case updateConfirmDetails(OrderTransaction, Conversion)
     }
 
     enum Action {
@@ -26,19 +27,24 @@ class ExchangeDetailCoordinator: NSObject {
 
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
+    let tradeExecution: TradeExecutionAPI
     
     init(
         delegate: ExchangeDetailCoordinatorDelegate,
-        interface: ExchangeDetailInterface
-        ) {
+        interface: ExchangeDetailInterface,
+        dependencies: ExchangeDependencies
+    ) {
         self.delegate = delegate
         self.interface = interface
+        self.tradeExecution = dependencies.tradeExecution
         super.init()
     }
 
 // swiftlint:disable function_body_length
     func handle(event: Event) {
         switch event {
+        case .updateConfirmDetails(let orderTransaction, let conversion):
+            handle(event: .pageLoaded(.confirm(orderTransaction, conversion)))
         case .pageLoaded(let model):
             
             // TODO: These are placeholder `ViewModels`
@@ -49,7 +55,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let orderTransaction, let conversion, _):
+            case .confirm(let orderTransaction, let conversion):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
@@ -106,7 +112,9 @@ class ExchangeDetailCoordinator: NSObject {
                     .text(text)
                     ]
                 )
-                
+
+                interface?.mostRecentOrderTransaction = orderTransaction
+
                 delegate?.coordinator(self, updated: cellModels)
             case .locked(let trade):
                 interface?.updateBackgroundColor(.brandPrimary)
@@ -220,8 +228,8 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let orderTransaction, _, let tradeExecutionAPI):
-            tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
+        case .confirmExchange(let orderTransaction, _):
+            tradeExecution.sendTransaction(assetType: orderTransaction.to.assetType, success: {
                 ExchangeCoordinator.shared.handle(event: .sentTransaction)
             }) { error in
                 AlertViewPresenter.shared.standardError(message: error)
