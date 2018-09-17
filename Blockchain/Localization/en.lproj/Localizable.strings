@@ -1,0 +1,1001 @@
+/* (No Commment) */
+"Upgrade" = "Upgrade";
+/* (No Commment) */
+"Settings" = "Settings";
+/* (No Commment) */
+"Send" = "Send";
+/* (No Commment) */
+"Ebu-XV-0mt.normalTitle" = "Cancel";
+/* (No Commment) */
+"Yes" = "Yes";
+/* (No Commment) */
+"No" = "No";
+"Done" = "Done";
+"Yesterday" = "Yesterday";
+"SENT" = "Sent";
+/* Transaction cell: */
+"RECEIVED" = "Received";
+/* (No Commment) */
+"Transferred" = "Transferred";
+/* (No Commment) */
+"Copied to clipboard" = "Copied to clipboard";
+/* (No Commment) */
+"Local Currency" = "Local Currency";
+/* (No Commment) */
+"Bitcoin Unit" = "Bitcoin Unit";
+/* (No Commment) */
+"Terms of Service" = "Terms of Service";
+/* (No Commment) */
+"Privacy Policy" = "Privacy Policy";
+/* (No Commment) */
+"Invalid Wallet ID" = "Invalid Wallet ID";
+/* (No Commment) */
+"Passwords do not match" = "Passwords do not match";
+/* (No Commment) */
+"Enter PIN" = "Enter PIN";
+/* (No Commment) */
+"Automatic Pairing" = "Pair Your Wallet";
+/* (No Commment) */
+"Manual Pairing" = "Manual Pairing";
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "Go to Settings / General.";
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "Click Show Pairing Code to reveal a QR Code, a square black & white barcode. Scan the code with your camera.";
+/* (No Commment) */
+"Wallet ID" = "Wallet ID";
+/* First account name: */
+"My Bitcoin Wallet" = "My Bitcoin Wallet";
+/* (No Commment) */
+"Recover Funds" = "Recover Funds";
+/* (No Commment) */
+"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "zd5-DZ-hsS"; */
+"zd5-DZ-hsS.placeholder" = "Password";
+/* (No Commment) */
+"Email" = "Email";
+/* (No Commment) */
+"Create Wallet" = "Create Wallet";
+/* (No Commment) */
+"Weak" = "Weak";
+/* (No Commment) */
+"Strong" = "Strong";
+/* (No Commment) */
+"Normal" = "Normal";
+/* (No Commment) */
+"Gk5-cB-fZg.normalTitle" = "Continue";
+/* (No Commment) */
+"Support" = "Support";
+/* (No Commment) */
+"from" = "From";
+/* (No Commment) */
+"13.text" = "To";
+/* (No Commment) */
+"Confirm Payment" = "Confirm Payment";
+/* (No Commment) */
+"Imported Addresses" = "Imported Addresses";
+"OK" = "OK";
+/* (No Commment) */
+"Change PIN" = "Change PIN";
+"Import Address" = "Import Address";
+/* (No Commment) */
+"Name" = "Name";
+/* Class = "UIButton"; normalTitle = "Save"; ObjectID = "63"; */
+"63.normalTitle" = "Save";
+"first word" = "first word";
+"second word" = "second word";
+"third word" = "third word";
+"fourth word" = "fourth word";
+"fifth word" = "fifth word";
+"sixth word" = "sixth word";
+"seventh word" = "seventh word";
+"eighth word" = "eighth word";
+"ninth word" = "ninth word";
+"tenth word" = "tenth word";
+"eleventh word" = "eleventh word";
+"twelfth word" = "twelfth word";
+/* (No Commment) */
+"Archived" = "Archived";
+/* (No Commment) */
+"Create new address" = "Create new address";
+/* (No Commment) */
+"Label" = "Label";
+/* (No Commment) */
+"Edit" = "Edit";
+/* (No Commment) */
+"Warning" = "Warning";
+/* (No Commment) */
+"Extended Public Key" = "Extended Public Key";
+/* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
+"64.text" = "Address";
+/* (No Commment) */
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust.";
+/* (No Commment) */
+"Archive" = "Archive";
+/* (No Commment) */
+"Unarchive" = "Unarchive";
+/* (No Commment) */
+"Private Key Needed" = "Private Key Needed";
+/* (No Commment) */
+"Watch Only" = "Watch Only";
+/* (No Commment) */
+"Success" = "Success";
+/* (No Commment) */
+"Default" = "Default";
+/* (No Commment) */
+"Not now" = "Not now";
+/* (No Commment) */
+"Logout" = "Logout";
+/* (No Commment) */
+"Update" = "Update";
+/* (No Commment) */
+"Verify" = "Verify";
+/* (No Commment) */
+"Allow" = "Allow";
+/* (No Commment) */
+"Block" = "Block";
+/* (No Commment) */
+"Security" = "Security";
+/* (No Commment) */
+"Enable" = "Enable";
+/* (No Commment) */
+"Disable" = "Disable";
+/* (No Commment) */
+"SMS" = "SMS";
+/* (No Commment) */
+"Google Authenticator" = "Google Authenticator";
+/* (No Commment) */
+"2-step Verification" = "2-step Verification";
+/* (No Commment) */
+"Change Password" = "Change Password";
+/* (No Commment) */
+"Email Notifications" = "Email Notifications";
+/* Class = "UITextField"; placeholder = "New Password"; ObjectID = "VKs-B5-luJ"; */
+"VKs-B5-luJ.placeholder" = "New Password";
+/* (No Commment) */
+"Preferences" = "Preferences";
+/* (No Commment) */
+"Information" = "Information";
+/* (No Commment) */
+"Bitcoin payment request" = "Bitcoin payment request";
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?";
+/* (No Commment) */
+"Try again" = "Try again";
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "If you would like to forget this wallet and start over, press 'Forget Wallet'.";
+/* (No Commment) */
+"Transaction" = "Transaction";
+/* (No Commment) */
+"Backup Phrase" = "Backup Phrase";
+/* (No Commment) */
+"Copy Address" = "Copy Address";
+/* (No Commment) */
+"2je-u4-PB2.text" = "Transactions";
+/* (No Commment) */
+"Regular" = "Regular";
+"Create Account" = "Create Account";
+/* (No Commment) */
+"4cR-kX-YUY.text" = "Confirm Upgrade";
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "D5e-zI-7dK"; */
+"D5e-zI-7dK.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+/* Class = "UIButton"; normalTitle = "Ask Me Later"; ObjectID = "HuT-V7-syg"; */
+"HuT-V7-syg.normalTitle" = "Ask Me Later";
+/* Class = "UIButton"; normalTitle = "Upgrade"; ObjectID = "cZ9-x2-KGM"; */
+"cZ9-x2-KGM.normalTitle" = "Upgrade";
+/* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
+"8Zy-R2-HoW.text" = "Two-Step Verification";
+/* Class = "UITextField"; placeholder = "Confirm New Password"; ObjectID = "Ii6-KE-x0B"; */
+"Ii6-KE-x0B.placeholder" = "Confirm New Password";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Kmb-pO-dHq"; */
+"Kmb-pO-dHq.text" = "Weak";
+/* Class = "UILabel"; text = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet."; ObjectID = "bFL-5O-fcl"; */
+"bFL-5O-fcl.text" = "Protect your wallet from unauthorized access by enabling two-factor authentication using your mobile number. When you try to access your wallet, an SMS code will be requested to approve the login.";
+/* (No Commment) */
+"NSCameraUsageDescription" = "This is required for the app to scan QR codes.";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
+"4.normalTitle" = "Continue";
+/* (No Commment) */
+"6zi-8R-Tmt.normalTitle" = "BTC";
+/* Class = "UILabel"; text = "From"; ObjectID = "7"; */
+"7.text" = "From";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "7ho-GV-ikp"; */
+"7ho-GV-ikp.text" = "BTC";
+/* (No Commment) */
+"8LN-Tc-WVh.normalTitle" = "Done";
+/* (No Commment) */
+"52.text" = "0.00";
+/* (No Commment) */
+"57.text" = "Address";
+/* (No Commment) */
+"61.text" = "Label:";
+/* (No Commment) */
+"65.text" = "Address:";
+/* (No Commment) */
+"67.text" = "Label Address";
+/* Class = "UIButton"; normalTitle = "Cancel next"; ObjectID = "Pgx-k8-cTb"; */
+"Pgx-k8-cTb.normalTitle" = "Cancel next";
+/* Class = "UILabel"; text = "Please Wait"; ObjectID = "Zgn-Wx-Uwx"; */
+"Zgn-Wx-Uwx.text" = "Please Wait";
+/* (No Commment) */
+"aKC-Q2-phD.text" = "Sending Payment";
+/* Class = "UITextField"; text = "Any Address"; ObjectID = "zyc-E3-FOM"; */
+"zyc-E3-FOM.text" = "Any Address";
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "Forget Wallet";
+/* (No Commment) */
+"257.text" = "0 BTC";
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "loading";
+/* (No Commment) */
+"353.text" = "Automatic Pairing";
+/* (No Commment) */
+"358.text" = "Create a New Wallet";
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "Log in to your Blockchain Wallet via your PC or Mac at\
+login.blockchain.com";
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "Scan Pairing Code";
+/* (No Commment) */
+"376.normalTitle" = "Button 2";
+/* (No Commment) */
+"377.normalTitle" = "Button 1";
+/* (No Commment) */
+"378.text" = "If you already have a Blockchain Wallet, choose Pair Device; otherwise, choose Create Wallet.    It's Free! No email required.";
+/* (No Commment) */
+"380.text" = "Welcome to Blockchain Wallet";
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "No recent transactions";
+/* (No Commment) */
+"394.text" = "Password:";
+/* (No Commment) */
+"396.text" = "Confirm:";
+/* (No Commment) */
+"398.normalTitle" = "Create Wallet";
+/* (No Commment) */
+"465.text" = "Password Required";
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "Password Request Description";
+/* (No Commment) */
+"468.text" = "Password:";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "Continue";
+/* (No Commment) */
+"586.text" = "Wallet Identifier:";
+/* (No Commment) */
+"588.text" = "You have chosen to pair manually (or automatic pairing is not supported with your device). Please enter your login details below.";
+/* (No Commment) */
+"591.text" = "Password:";
+/* (No Commment) */
+"602.text" = "You must have two-factor authentication disabled to pair manually.";
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login.";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "Continue";
+/* (No Commment) */
+"627.text" = "Password:";
+/* (No Commment) */
+"630.text" = "Login";
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "Button 3";
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "Continue";
+/* (No Commment) */
+"VcH-wh-BEs.text" = "Email:";
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* Required";
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 Transactions";
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "Enter your 12 recovery words with spaces to recover your funds & transactions";
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "Manual Pairing";
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* Minimum 10 characters";
+/* (No Commment) */
+"%@ BTC" = "%@ BTC";
+/* (No Commment) */
+"%@ copied to clipboard" = "%@ copied to clipboard";
+/* (No Commment) */
+"%d Confirmations" = "%d Confirmations";
+/* (No Commment) */
+"%d Transactions" = "%d Transactions";
+"%lld hours ago" = "%lld hours ago";
+"%lld minutes ago" = "%lld minutes ago";
+"%lld seconds ago" = "%lld seconds ago";
+"1 hour ago" = "1 hour ago";
+"1 minute ago" = "1 minute ago";
+/* (No Commment) */
+"2-Step Enabled" = "2-Step Enabled";
+/* (No Commment) */
+"2-step Verification is currently disabled." = "2-step Verification is currently disabled.";
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "2-step Verification is currently enabled for %@.";
+/* (No Commment) */
+"2-step Verification is currently enabled." = "2-step Verification is currently enabled.";
+/* (No Commment) */
+"API URL" = "API URL";
+/* (No Commment) */
+"About" = "About";
+/* (No Commment) */
+"Account Details" = "Account Details";
+/* (No Commment) */
+"Accounts" = "Accounts";
+/* (No Commment) */
+"Add Email" = "Add Email";
+/* (No Commment) */
+"Add to Address book?" = "Add to Address book?";
+/* (No Commment) */
+"Address" = "Address";
+/* (No Commment) */
+"Address book" = "Address book";
+/* (No Commment) */
+"Address is not valid" = "Address is not valid";
+/* (No Commment) */
+"Adjust Fee" = "Adjust Fee";
+/* (No Commment) */
+"Allowed" = "Allowed";
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?";
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "You may be offline or Blockchain might be experiencing difficulties. Please close the application and try again later or re-pair your device.";
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again.";
+/* (No Commment) */
+"Any address" = "Any address";
+/* (No Commment) */
+"Archive Address" = "Archive Address";
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time.";
+/* (No Commment) */
+"Authenticate with Touch ID" = "Authenticate with Touch ID";
+/* (No Commment) */
+"Authorization Required" = "Authorization Required";
+/* (No Commment) */
+"Automatically" = "Automatically";
+"BACKUP FUNDS" = "BACKUP FUNDS";
+/* (No Commment) */
+"Backup" = "Backup Funds";
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app.";
+/* (No Commment) */
+"Block Tor" = "Block Tor";
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain does not have access to the camera. To enable access, go to your device Settings.";
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain is currently down for maintenance. Please try again later.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain needs Location Services enabled in order to access your location.";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services";
+/* (No Commment) */
+"Blocked" = "Blocked";
+/* (No Commment) */
+"Camera Access Denied" = "Camera Access Denied";
+/* (No Commment) */
+"Cancel" = "Cancel";
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "Cannot save PIN Code while wallet is not initialized or password is null";
+/* (No Commment) */
+"Change Email" = "Change Email";
+/* (No Commment) */
+"Change Mobile Number" = "Change Mobile Number";
+/* (No Commment) */
+"Change Password Hint" = "Change Password Hint";
+/* (No Commment) */
+"Change fee per kilobyte" = "Change fee per kilobyte";
+/* (No Commment) */
+"Checking for Wallet updates" = "Checking for Wallet updates";
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "Checking for more: Step %d of %d";
+"Close" = "Close";
+/* (No Commment) */
+"Close App" = "Close App";
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "Complete the steps below for ultimate security";
+/* (No Commment) */
+"Confirm your PIN" = "Confirm your PIN";
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "Connection timed out. Please check your internet connection.";
+/* (No Commment) */
+"Continue" = "Continue";
+/* (No Commment) */
+"Copy Wallet ID" = "Copy Wallet ID";
+/* (No Commment) */
+"Copy to clipboard" = "Copy to clipboard";
+/* (No Commment) */
+"Copy xPub" = "Copy xPub";
+/* (No Commment) */
+"Create" = "Create";
+/* (No Commment) */
+"Create New Wallet" = "Create New Wallet";
+/* (No Commment) */
+"Creating" = "Creating";
+/* (No Commment) */
+"Creating V3 Wallet" = "Creating V3 Wallet";
+/* (No Commment) */
+"Creating Wallet" = "Creating Wallet";
+/* (No Commment) */
+"Creating new Wallet" = "Creating new Wallet";
+/* (No Commment) */
+"Creating new address" = "Creating new address";
+/* (No Commment) */
+"Current rate: %@ BTC" = "Current rate: %@ BTC";
+/* (No Commment) */
+"Debug" = "Debug";
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "Decrypted PIN Password length 0";
+/* (No Commment) */
+"Decrypting Private Key" = "Decrypting Private Key";
+/* (No Commment) */
+"Decrypting Wallet" = "Decrypting Wallet";
+/* (No Commment) */
+"Disabled" = "Disabled";
+/* (No Commment) */
+"Display" = "Display";
+/* (No Commment) */
+"Do you really want to log out?" = "Do you really want to log out?";
+/* (No Commment) */
+"Don't show again" = "Don't show again";
+/* (No Commment) */
+"Downloading Wallet" = "Downloading Wallet";
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "Easy one time wallet\
+backup keeps you in control\
+of your funds";
+/* (No Commment) */
+"Email Verified" = "Email Verified";
+/* (No Commment) */
+"Empty response from server." = "Empty response from server.";
+/* (No Commment) */
+"Enable 2-Step" = "Enable 2-Step";
+/* (No Commment) */
+"Enable 2-Step for SMS" = "Enable 2-Step for SMS";
+/* (No Commment) */
+"Enable Location Services" = "Enable Location Services";
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets.";
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet.";
+/* (No Commment) */
+"Enter Password" = "Enter Password";
+/* (No Commment) */
+"Enter Verification Code" = "Enter Verification Code";
+/* (No Commment) */
+"Enter your verification code" = "Enter your verification code";
+"Error" = "Error";
+/* (No Commment) */
+"Error loading settings" = "Error loading settings";
+/* (No Commment) */
+"Error updating settings" = "Error updating settings";
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "Everything you need to\
+store, spend and receive\
+your bitcoin";
+/* (No Commment) */
+"Failed To Load Wallet" = "Failed To Load Wallet";
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "Fee is too high (0.01 BTC limit)";
+/* (No Commment) */
+"Fee per KB" = "Fee per KB";
+/* (No Commment) */
+"Fees" = "Fees";
+/* (No Commment) */
+"Finished Signing Inputs" = "Finished Signing Inputs";
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet.";
+/* (No Commment) */
+"Forget Wallet" = "Forget Wallet";
+/* (No Commment) */
+"Found %d, with %@" = "Found %d, with %@";
+/* (No Commment) */
+"From and destination address have to be different" = "From and destination address have to be different";
+/* (No Commment) */
+"From and destination have to be different" = "From and destination have to be different";
+/* (No Commment) */
+"Go to Settings" = "Go to Settings";
+/* (No Commment) */
+"Hint Stored" = "Hint Stored";
+/* (No Commment) */
+"How would you like to pair?" = "How would you like to pair?";
+/* (No Commment) */
+"Identifier" = "Identifier";
+/* (No Commment) */
+"Import Private Key" = "Import Private Key";
+/* (No Commment) */
+"Import address" = "Import address";
+/* (No Commment) */
+"Imported Addresses (Archived)" = "Imported Addresses (Archived)";
+/* (No Commment) */
+"Imported Private Key %@" = "Imported Private Key %@";
+/* (No Commment) */
+"Imported watch-only address %@" = "Imported watch-only address %@";
+/* (No Commment) */
+"Importing key" = "Importing key";
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "Incorrect PIN. Please retry.";
+/* (No Commment) */
+"Incorrect password" = "Incorrect password";
+/* (No Commment) */
+"Incorrect private key" = "Incorrect private key";
+/* (No Commment) */
+"Initializing Wallet" = "Initializing Wallet";
+/* (No Commment) */
+"Insufficient Funds" = "Insufficient Funds";
+/* (No Commment) */
+"Invalid Identifier" = "Invalid Identifier";
+/* (No Commment) */
+"Invalid Pairing Code" = "Invalid Pairing Code";
+/* (No Commment) */
+"Invalid Send Value" = "Please enter an amount";
+/* (No Commment) */
+"Invalid Shared Key" = "Invalid Shared Key";
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "Invalid Status Code Returned %@";
+/* (No Commment) */
+"Invalid address: %@" = "Invalid address: %@";
+/* (No Commment) */
+"Invalid email address." = "Invalid email address.";
+/* (No Commment) */
+"Invalid mobile number." = "Invalid mobile number.";
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "Invalid recovery phrase. Please try again";
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "Invalid server response. Please check your internet connection.";
+/* (No Commment) */
+"Invalid to bitcoin address" = "Invalid bitcoin address";
+/* (No Commment) */
+"Invalid two-factor authentication type" = "Invalid two-factor authentication type";
+/* (No Commment) */
+"Invalid verification code. Please try again." = "Invalid verification code. Please try again.";
+"Just now" = "Just now";
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions.";
+/* (No Commment) */
+"Label Address" = "Label Address";
+/* (No Commment) */
+"Label must contain letters and numbers only" = "Label must contain letters and numbers only";
+/* (No Commment) */
+"Label must have less than 18 characters" = "Label must have less than 18 characters";
+/* (No Commment) */
+"Link Mobile" = "Link Mobile";
+/* (No Commment) */
+"Loading External Page" = "Loading External Page";
+/* (No Commment) */
+"Loading transactions" = "Loading transactions";
+/* (No Commment) */
+"Log in to my Wallet" = "Log in to my Wallet";
+/* (No Commment) */
+"Login existing Wallet" = "Login existing Wallet";
+/* (No Commment) */
+"Make Default" = "Make Default";
+/* (No Commment) */
+"Manually" = "Manually";
+/* (No Commment) */
+"Merchant" = "Merchant";
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "Merchant Directory is currently unavailable. Please try again later.";
+/* (No Commment) */
+"Merchant Map" = "Merchant Map";
+/* (No Commment) */
+"Merchant URL" = "Merchant URL";
+/* (No Commment) */
+"Mobile Linked" = "Mobile Linked";
+/* (No Commment) */
+"Mobile Number" = "Mobile Number";
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.";
+/* (No Commment) */
+"New Address" = "New Address";
+/* (No Commment) */
+"New Email Address" = "New Email Address";
+/* (No Commment) */
+"New Mobile Number" = "New Mobile Number";
+/* (No Commment) */
+"New password must be different" = "New password must be different";
+/* (No Commment) */
+"New password must be different from your password hint" = "New password must be different from your password hint";
+"Next word" = "Next word";
+/* (No Commment) */
+"No Label" = "No Label";
+"No Password Entered" = "No Password Entered";
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "No internet connection available. Please check your network settings.";
+/* (No Commment) */
+"No internet connection." = "No internet connection.";
+/* (No Commment) */
+"Not Stored" = "Not Stored";
+/* (No Commment) */
+"Notifications" = "Notifications";
+/* (No Commment) */
+"PIN" = "PIN";
+/* (No Commment) */
+"PIN Encrypted String is nil" = "PIN Encrypted String is nil";
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "PIN Response Object key or value length 0";
+/* (No Commment) */
+"PIN Response Object success length 0" = "PIN Response Object success length 0";
+/* (No Commment) */
+"PIN Saved Successfully" = "PIN Saved Successfully";
+/* (No Commment) */
+"PIN Validation Error" = "PIN Validation Error";
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "PIN Validation cannot be completed. Please enter your wallet password manually.";
+/* (No Commment) */
+"Parsing Pairing Code" = "Parsing Pairing Code";
+/* (No Commment) */
+"Password Hint" = "Password Hint";
+/* (No Commment) */
+"Password Required" = "Password Required";
+/* (No Commment) */
+"Password changed. Please login to continue." = "Password changed. Please login to continue.";
+/* (No Commment) */
+"Payment Received" = "Payment Received";
+/* (No Commment) */
+"Payment Sent!" = "Payment Sent";
+/* (No Commment) */
+"Phrase Backed" = "Phrase Backed";
+/* (No Commment) */
+"Please Login" = "Please Login";
+/* (No Commment) */
+"Please add an email address" = "Please add an email address";
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information.";
+/* (No Commment) */
+"Please check your internet connection." = "Please check your internet connection.";
+/* (No Commment) */
+"Please choose another PIN" = "Please choose another PIN";
+/* (No Commment) */
+"Please choose from the options below." = "Please choose from the options below.";
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "Please enter a fee greater than 0 BTC and at most 0.01 BTC";
+/* (No Commment) */
+"Please enter a new PIN" = "Please enter a new PIN";
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "Please enter your %@ 2FA code";
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup.";
+/* (No Commment) */
+"Please enter your PIN" = "Enter PIN";
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "Please enter your recovery phrase with words separated by spaces";
+/* (No Commment) */
+"Please provide an email address." = "Please provide an email address.";
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "Please refresh the pairing code and try again.";
+"Please try again" = "Please try again";
+/* (No Commment) */
+"Please verify your email address first." = "Please verify your email address first.";
+/* (No Commment) */
+"Processing key" = "Processing key";
+/* (No Commment) */
+"Receive" = "Receive";
+/* (No Commment) */
+"Received" = "Received";
+/* (No Commment) */
+"Recovering Funds" = "Recovering Funds";
+/* (No Commment) */
+"Request Amount" = "Request Amount";
+/* (No Commment) */
+"Resend verification SMS" = "Resend verification SMS";
+/* (No Commment) */
+"Resend verification email" = "Resend verification email";
+/* (No Commment) */
+"Reset" = "Reset";
+/* (No Commment) */
+"Retry Validation" = "Retry Validation";
+/* (No Commment) */
+"Save" = "Save";
+/* (No Commment) */
+"Scan Pairing Code" = "Scan Pairing Code";
+/* (No Commment) */
+"Scan Private Key" = "Scan Private Key";
+/* (No Commment) */
+"Scan QR code" = "Scan QR code";
+"Second Password Incorrect" = "Second Password Incorrect";
+"Second Password Required" = "Second Password Required";
+/* (No Commment) */
+"Security Center" = "Security Center";
+/* (No Commment) */
+"Send from..." = "Send from...";
+/* (No Commment) */
+"Send to..." = "Send to...";
+/* (No Commment) */
+"Send verification SMS" = "Send verification SMS";
+/* (No Commment) */
+"Sending Transaction" = "Sending Transaction";
+/* (No Commment) */
+"Sent" = "Sent";
+/* (No Commment) */
+"Sent to %@" = "Sent to %@";
+/* (No Commment) */
+"Server URL" = "Server URL";
+/* (No Commment) */
+"Set as Default?" = "Set as Default?";
+/* (No Commment) */
+"Signing Input %d" = "Signing Input %d";
+/* (No Commment) */
+"Signing Inputs" = "Signing Inputs";
+/* (No Commment) */
+"Store Hint" = "Store Hint";
+/* (No Commment) */
+"Stored" = "Stored";
+/* (No Commment) */
+"Success!" = "Success!";
+"Syncing Wallet" = "Syncing Wallet";
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?";
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "The private key you are attempting to import is encrypted. Please enter the password below.";
+/* (No Commment) */
+"There was a problem verifying your identity." = "There was a problem verifying your identity.";
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "These options are recommended for advanced users only. Continue?";
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "This action requires the private key for the Bitcoin address %@. Please scan the QR code.";
+/* (No Commment) */
+"This address is not watch-only." = "This address is not watch-only.";
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "This is a watch-only address. To spend your funds from this wallet, please scan your private key.";
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "This name is already in use. Please choose a different name.";
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "This private key belongs to another address that is not watch only";
+/* (No Commment) */
+"Tor Requests" = "Tor Requests";
+/* (No Commment) */
+"Tor blocked" = "Tor blocked";
+/* (No Commment) */
+"Tor requests allowed" = "Tor requests allowed";
+/* (No Commment) */
+"Tor requests are currently allowed." = "Tor requests are currently allowed.";
+/* (No Commment) */
+"Tor requests are currently blocked." = "Tor requests are currently blocked.";
+/* (No Commment) */
+"Total Balance" = "Total Balance";
+/* (No Commment) */
+"Touch ID is not available on this device." = "Touch ID is not available on this device.";
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint.";
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?";
+/* (No Commment) */
+"Transfer Funds" = "Transfer Funds";
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later.";
+/* (No Commment) */
+"Unarchive Address" = "Unarchive Address";
+/* (No Commment) */
+"Unconfirmed" = "Unconfirmed";
+/* (No Commment) */
+"Unknown key format" = "Unknown key format";
+/* (No Commment) */
+"Unsupported Private Key Format" = "Unsupported Private Key Format";
+/* (No Commment) */
+"Unverified" = "Unverified";
+/* (No Commment) */
+"Upgrade Wallet" = "Upgrade Wallet";
+/* (No Commment) */
+"Upgrade to V3" = "Upgrade to V3";
+/* (No Commment) */
+"Use Touch ID as PIN" = "Use Touch ID as PIN";
+/* (No Commment) */
+"Use all funds" = "Use all funds";
+/* (No Commment) */
+"User Declined" = "User Declined";
+"VERIFY BACKUP" = "VERIFY BACKUP";
+/* (No Commment) */
+"Verification email has been sent to %@." = "Verification email has been sent to %@.";
+/* (No Commment) */
+"Verified" = "Verified";
+/* (No Commment) */
+"Verify Email" = "Verify Email";
+/* (No Commment) */
+"Verifying" = "Verifying";
+/* (No Commment) */
+"Wallet Information" = "Wallet Information";
+/* (No Commment) */
+"Wallet JSON" = "Wallet JSON";
+/* (No Commment) */
+"Wallet Paired Successfully." = "Wallet Paired Successfully.";
+/* (No Commment) */
+"Warning!!!" = "Warning";
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet.";
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "We'll send the hint to your confirmed email address in case you request it.";
+/* (No Commment) */
+"WebSocket URL" = "WebSocket URL";
+/* (No Commment) */
+"Welcome" = "Welcome";
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "We’ve detected a previous installation of Blockchain Wallet on your phone.";
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "Would you like to add the bitcoin address %@ to your address book?";
+/* (No Commment) */
+"Wrong BIP38 Password" = "Wrong BIP38 Password";
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?";
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "You are now running our most secure Bitcoin wallet";
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet.";
+/* (No Commment) */
+"You can now spend from this address." = "You can now spend from this address.";
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "You do not have an account set up for Mail. Please contact %@";
+/* (No Commment) */
+"You have no available funds to send from this address" = "You have no available funds to send from this address";
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "You must disable SMS 2-Step Verification before changing your mobile number (%@).";
+/* (No Commment) */
+"You must enter a destination address" = "You must enter a destination address";
+/* (No Commment) */
+"You must enter a label" = "You must enter a label";
+/* (No Commment) */
+"You must have at least one active address" = "You must have at least one active address";
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "You must have two-factor authentication disabled to pair manually.";
+/* (No Commment) */
+"You must leave at least one active address" = "You must leave at least one active address";
+/* (No Commment) */
+"You've successfully imported a private key." = "You've successfully imported a private key.";
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key.";
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "Your device appears to be jailbroken. The security of your wallet may be compromised.";
+/* (No Commment) */
+"Your email has been verified." = "Your email has been verified.";
+/* (No Commment) */
+"Your identity does not match our records." = "Your identity does not match our records.";
+/* (No Commment) */
+"Your mobile number has been verified." = "Your mobile number has been verified.";
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "Your new password hint contains invalid characters. Please try again.";
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "Your new password hint contains no text. Your password hint will be cleared.";
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "Your new password hint must be different from your password. Please try again.";
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "Your new password hint must be different from your second password. Please try again.";
+/* (No Commment) */
+"Your password hint has been updated." = "Your password hint has been updated.";
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features.";
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes.";
+/* (No Commment) */
+"Your wallet does not contain this address." = "Your wallet does not contain this address.";
+/* (No Commment) */
+"Your wallet was successfully created." = "Your wallet was successfully created.";
+/* (No Commment) */
+"or Continue" = "or Continue";
+/* (No Commment) */
+"Amount must be above dust threshold (%lld Satoshi)" = "Amount must be above dust threshold (%lld Satoshi)";
+/* (No Commment) */
+"Confirm Upgrade" = "Confirm Upgrade";
+/* (No Commment) */
+"If you are a merchant, show your xPub and use the Blockchain Merchant app to receive funds safely and privately." = "If you are a merchant, show your xPub and use the Blockchain Merchant app to receive funds safely and privately.";
+/* (No Commment) */
+"Scan this code or copy it into your Blockchain Merchant app to securely receive Bitcoin." = "Scan this code or copy it into your Blockchain Merchant app to securely receive Bitcoin.";
+/* (No Commment) */
+"This action requires the second password for your bitcoin wallet. Please enter it below and press continue." = "This action requires the second password for your bitcoin wallet. Please enter it below and press continue.";
+/* (No Commment) */
+"Upgrade Now" = "Upgrade Now";
+/* (No Commment) */
+"Wallet Recovery Phrase" = "Wallet Recovery Phrase";
+/* (No Commment) */
+"Wallet version %lld not supported" = "Wallet version %lld not supported";
+/* (No Commment) */
+"1sL-eb-Qgc.normalTitle" = "CLOSE";
+/* (No Commment) */
+"48.normalTitle" = "Save";
+/* (No Commment) */
+"56.text" = "Label Address";
+/* (No Commment) */
+"58.text" = "Label";
+/* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
+"60.text" = "Address";
+/* (No Commment) */
+"68.text" = "No Addresses";
+/* (No Commment) */
+"69.text" = "Your account is probably not paired correctly. Click the button in the top left of the screen and follow the instructions on screen.";
+/* (No Commment) */
+"80.normalTitle" = "ARCHIVE ADDRESS";
+/* (No Commment) */
+"81.normalTitle" = "LABEL ADDRESS";
+/* (No Commment) */
+"88.normalTitle" = "REQUEST PAYMENT";
+/* (No Commment) */
+"90.text" = "Bitcoin Address ";
+/* (No Commment) */
+"91.text" = "1PqtuSjPKDGqst5yadi3rF2XCxFsVDn5UH";
+/* (No Commment) */
+"92.normalTitle" = "COPY ADDRESS";
+/* (No Commment) */
+"100.text" = "Amount:";
+/* (No Commment) */
+"120.text" = "5 BTC = $10";
+/* (No Commment) */
+"GwZ-6f-89z.normalTitle" = "BTC";
+/* (No Commment) */
+"i1j-pG-caF.normalTitle" = "Scan Private Key";
+"Invalid GUID" = "Invalid GUID";
+"From and destination account have to be different" = "From and destination account have to be different";
+"News, Price & Charts" = "News, Price & Charts";
+"%@ available" = "%@ available";
+"Password must 10 characters or longer" = "Password must be 10 characters or longer";
+"Scan Watch Only Address?" = "Scan Watch Only Address?";
+"Server Returned Null Status Code" = "Server Returned Null Status Code";
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoins in this wallet will be inaccessible!!" = "This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoins in this wallet will be inaccessible.";
+"Wallet address %@ has funds available to spend. However the private key needs to be scanned from a paper wallet or QR Code. Would you like to scan the private key now?" = "Wallet address %@ has funds available to spend. However the private key needs to be scanned from a paper wallet or QR Code. Would you like to scan the private key now?";
+"* Minimum 10 characters" = "* Minimum 10 characters";
+"Name your account" = "Name your account";
+"Edit Account" = "Edit Account";
+"My Accounts" = "My Accounts";
+"Creating Account" = "Creating Account";
+"Log in to my wallet" = "Log in to my wallet";
+"Share on Twitter" = "Share on Twitter";
+"Share on Facebook" = "Share on Facebook";
+"Share via E-mail" = "Share via E-mail";
+"Share via SMS" = "Share via SMS";
+"Anything you need to store, spend and receive your bitcoin" = "Anything you need to\
+store, spend and receive\
+your bitcoin";
+"TRANSFERRED" = "TRANSFERRED";
+"1 second ago" = "1 second ago";
+"Word %@ of %@" = "Word %@ of %@";
+"You backed your wallet up %@ days ago" = "You backed your wallet up %@ days ago";
+"You only need to backup your wallet once, but it is a good idea to occasionally verify that your backup is valid." = "You only need to backup your wallet once, but it is a good idea to occasionally verify that your backup is valid.";
+"You backed up your funds successfully" = "You backed up your funds successfully";
+"Write the words down on a sheet of paper in the exact order they appear on a sheet of paper, and store it somewhere safe\n" = "Write the words down on a sheet of paper in the exact order they appear on a sheet of paper, and store it somewhere safe\
+";
+"(e.g, with your passport)" = "(e.g., with your passport)";
+"Backing up your funds is easy and ensures you will not lose access to your bitcoins, even if our service becomes unavailable." = "Backing up your funds is easy and ensures you will not lose access to your bitcoins, even if our service becomes unavailable.";
+"You have not backed up your funds yet" = "You have not backed up your funds yet";
+"Now you can restore your funds using the 12 word recovery phrase in case you lose your wallet's password" = "Now you can restore your funds using the 12 word recovery phrase in case you lose your wallet's password";
+"Please verify your email" = "Please verify your email";
+"Bitcoin Units" = "Bitcoin Units";
+"Enable notifications to receive an email whenever you receive bitcoins. Only labeled addresses in your accounts and imported addresses are eligible to trigger notifications." = "Enable notifications to receive an email whenever you receive bitcoins. Only labeled addresses in your accounts and imported addresses are eligible to trigger notifications.";
+"Wallet Identifier" = "Wallet Identifier";
+"Would you like to keep the wallet you last used?" = "Would you like to keep the wallet you last used?";
+"Fee per kilobyte" = "Fee per kilobyte";
+"Updating settings" = "Updating settings";
+"Please check your email." = "Please check your email.";
+"Use all %@" = "Use all %@";
+"Please select a different address to send from or lower the fee in Settings." = "Please select a different address to send from or lower the fee in Settings.";
+"Updating label" = "Updating label";
+"Syncing wallet" = "Syncing wallet";
+"Copy GUID" = "Copy GUID";
+"Recover Wallet" = "Recover Wallet";
+"Recovering wallet" = "Recovering wallet";
+"Checking for more accounts: Step %d of %d" = "Checking for more accounts: Step %d of %d";
+"Found account %d, with %@" = "Found account %d, with %@";
+"You should always pair or login if you have access to your GUID and password. Recovering your funds will create a new GUID. Would you like to continue?" = "You should always pair or login if you have access to your GUID and password. Recovering your funds will create a new GUID. Would you like to continue?";
+"An error occurred while updating your password hint." = "An error occurred while updating your password hint.";
+"Write the words down in the exact order they appear on a sheet of paper, and store it somewhere safe\n" = "Write the words down in the exact order they appear on a sheet of paper, and store it somewhere safe\
+";
+"Enable notifications to receive an email whenever you receive bitcoins. Only labeled addresses and imported addresses are eligible to trigger notifications." = "Enable notifications to receive an email whenever you receive bitcoins. Only labeled addresses and imported addresses are eligible to trigger notifications.";
+"Customize the way you organize your bitcoins in your Blockchain Wallet" = "Customize the way you organize your bitcoins in your Blockchain Wallet";
+"Write down your Recovery Phrase and keep it somewhere very safe and secure. Remember that anyone who knows your Recovery Phrase has access to your bitcoins." = "Write down your Recovery Phrase and keep it somewhere very safe and secure. Remember that anyone who knows your Recovery Phrase has access to your bitcoins.";
+"This thing is archived. That means it cannot be accessed in the app, and you cannot send funds from it.\n\nIf there are any funds, they will be safe. In order to start using this thing again, unarchive it." = "This thing is archived. That means it cannot be accessed in the app, and you cannot send funds from it.\
+\
+If there are any funds, they will be safe. In order to start using this thing again, unarchive it.";
+"Show your xPub if you are a merchant and use the Blockchain Merchant app to receive funds safely and privately.\n\nKeep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "Show your xPub if you are a merchant and use the Blockchain Merchant app to receive funds safely and privately.\
+\
+Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions.";
+"You've successfully imported a private key. Note that it does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "You've successfully imported a private key. Note that it does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key.";
+"This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key." = "This private key does not correspond to this watch-only address. If you want to spend from this address, make sure you scan the correct private key.";
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. You cannot spend bitcoin from a watch-only address directly, but you can get the balance, or export a transaction to be signed externally. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address.";
+"SENT" = "SENT";
+/* Transaction cell: */
+"RECEIVED" = "RECEIVED";
+/* (No Commment) */
+"from" = "from";
