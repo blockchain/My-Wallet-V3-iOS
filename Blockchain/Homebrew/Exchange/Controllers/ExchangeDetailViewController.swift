@@ -8,6 +8,11 @@
 
 import Foundation
 
+protocol ExchangeDetailDelegate: class {
+    func onViewLoaded()
+    func onSendOrderTapped()
+}
+
 /// This `UIViewController` is used for the `Exchange Confirmation`,
 /// `Exchange Locked`, and `Trade Overview` screen. It contains
 /// a `UICollectionView`.
