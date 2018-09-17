@@ -267,6 +267,11 @@
 		513C828620EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
 		513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
+		5152AC2E2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
+		5152AC2F2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
+		5152AC312142E4BE00E769CE /* AnnouncementCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */; };
+		5152AC352143107E00E769CE /* AnnouncementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC342143107E00E769CE /* AnnouncementCard.swift */; };
+		5152AC362143107E00E769CE /* AnnouncementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC342143107E00E769CE /* AnnouncementCard.swift */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
 		51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
@@ -295,6 +300,8 @@
 		516546F6208FCF710019EE63 /* NetworkManager+UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F4208FCF710019EE63 /* NetworkManager+UserAgent.swift */; };
 		516546F8208FCF800019EE63 /* Enum+Enumeratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516546F7208FCF800019EE63 /* Enum+Enumeratable.swift */; };
 		5171E39020F4F98000E8913E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171E38F20F4F98000E8913E /* Colors.swift */; };
+		5176A45C2147F6600006769F /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A45B2147F6600006769F /* CardsView.swift */; };
+		5176A45D2147F6600006769F /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A45B2147F6600006769F /* CardsView.swift */; };
 		5177E7E2212B07A9008E13AB /* Pods-Blockchain.debug staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5177E7D8212B07A9008E13AB /* Pods-Blockchain.debug staging.xcconfig */; };
 		5177E832212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5177E828212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig */; };
 		5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
@@ -1415,6 +1422,9 @@
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Biometrics.swift"; sourceTree = "<group>"; };
+		5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnouncementCardView.swift; sourceTree = "<group>"; };
+		5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnnouncementCardView.xib; sourceTree = "<group>"; };
+		5152AC342143107E00E769CE /* AnnouncementCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementCard.swift; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyImportDelegate.swift; sourceTree = "<group>"; };
 		51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyImportCoordinator.swift; sourceTree = "<group>"; };
@@ -1891,6 +1901,7 @@
 		516594A7204F1DE600C50E78 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
 		5171E38F20F4F98000E8913E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		5176A45B2147F6600006769F /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		5177E7D8212B07A9008E13AB /* Pods-Blockchain.debug staging.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig"; sourceTree = "<group>"; };
 		5177E828212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig"; sourceTree = "<group>"; };
 		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enum+RawValued.swift"; sourceTree = "<group>"; };
@@ -3918,6 +3929,17 @@
 				5138373921025AD100767B2E /* alert-received.wav */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		5152AC242142DD1100E769CE /* AnnouncementCard */ = {
+			isa = PBXGroup;
+			children = (
+				5152AC342143107E00E769CE /* AnnouncementCard.swift */,
+				5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */,
+				5176A45B2147F6600006769F /* CardsView.swift */,
+				5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */,
+			);
+			path = AnnouncementCard;
 			sourceTree = "<group>";
 		};
 		5159C3052109153600955BD6 /* KYC */ = {
@@ -6263,6 +6285,7 @@
 				AA0A4149214B142200807163 /* Accounts */,
 				AA722C1720B4BB8F00262A5F /* Addresses */,
 				AAA33169208964FC00BBD292 /* Alerts */,
+				5152AC242142DD1100E769CE /* AnnouncementCard */,
 				511BF4F020E6828900A14072 /* AppReviewPrompt */,
 				510EA1732080F58700A63AB8 /* Authentication */,
 				AAD279DE209A99CA00C0EAFC /* AV */,
@@ -7372,6 +7395,7 @@
 				ECD244F219A8AC45004B1F40 /* PEKeyboard-4-edit.png in Resources */,
 				3A49B2C52130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */,
 				C9BE91861945D8F600FD516D /* PEKeyboard-2-edit.png in Resources */,
+				5152AC312142E4BE00E769CE /* AnnouncementCardView.xib in Resources */,
 				ECD244F119A8AC45004B1F40 /* PEKeyboard-4-dot.png in Resources */,
 				C9BE917E1945D8F600FD516D /* PEViewController.xib in Resources */,
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
@@ -7679,6 +7703,7 @@
 				AA126CFE212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AAF2AF072123952500687E30 /* KYCInformationViewModel.swift in Sources */,
+				5152AC2F2142E4B700E769CE /* AnnouncementCardView.swift in Sources */,
 				C72AC7032134A90B001DA48B /* ExchangeInputsAPI.swift in Sources */,
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
@@ -7773,6 +7798,7 @@
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				3A1552EB2136EA8D00683CEB /* TradeExecutionService.swift in Sources */,
+				5152AC362143107E00E769CE /* AnnouncementCard.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
 				3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
@@ -7885,6 +7911,7 @@
 				AAFE9E762100D169002E4E1E /* PinStoreKeyPair.swift in Sources */,
 				602B9D1B2118E26300BD3D60 /* LocationSuggestionPageModel.swift in Sources */,
 				AA74835B21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift in Sources */,
+				5176A45D2147F6600006769F /* CardsView.swift in Sources */,
 				602B9D1A2118E26300BD3D60 /* LocationSuggestion.swift in Sources */,
 				3A01911F212DF0B700AED2BF /* AsyncOperation.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
@@ -7961,6 +7988,7 @@
 				C7FF110F2141E24000CBA3CB /* InputsState.swift in Sources */,
 				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
+				5152AC352143107E00E769CE /* AnnouncementCard.swift in Sources */,
 				60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */,
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
 				AAE9113120A51C900093A431 /* ReminderType.swift in Sources */,
@@ -8209,6 +8237,7 @@
 				5185E12A208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
 				23444F7E1DCD213D00573C8C /* BTCKey.m in Sources */,
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
+				5152AC2E2142E4B700E769CE /* AnnouncementCardView.swift in Sources */,
 				C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
 				C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
@@ -8237,6 +8266,7 @@
 				60B10D442118EC85003F945F /* CountryDataProvider.swift in Sources */,
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
 				C7442E341FBA1E7800695E4C /* ExchangeTableViewCell.m in Sources */,
+				5176A45C2147F6600006769F /* CardsView.swift in Sources */,
 				3A26AF7D212B13FA003A8A08 /* PartnerExchangeService.swift in Sources */,
 				C7559CBA1F573763005B2375 /* EtherTransaction.m in Sources */,
 				AA126CDC212C94CB005886A3 /* NabuSessionTokenResponse.swift in Sources */,
