@@ -28,6 +28,10 @@ struct LocalizationConstants {
     static let addEmail = NSLocalizedString ("Add Email", comment: "")
     static let newEmail = NSLocalizedString ("New Email Address", comment: "")
     static let settings = NSLocalizedString ("Settings", comment: "")
+    static let balances = NSLocalizedString(
+        "Balances",
+        comment: "Generic translation, may be used in multiple places."
+    )
 
     static let more = NSLocalizedString("More", comment: "")
     static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "")
@@ -142,7 +146,6 @@ struct LocalizationConstants {
     }
 
     struct Pin {
-
         static let revealAddress = NSLocalizedString(
         """
         Enable this option to reveal a receive address when you swipe left on the PIN screen, making
@@ -273,6 +276,30 @@ struct LocalizationConstants {
         static let askToUserOldWalletMessage = NSLocalizedString("Please choose from the options below.", comment: "")
         static let loginExistingWallet = NSLocalizedString("Login existing Wallet", comment: "")
         static let biometricInstructions = NSLocalizedString("Use %@ instead of PIN to authenticate Blockchain and access your wallet.", comment: "")
+    }
+
+    struct Dashboard {
+        static let priceCharts = NSLocalizedString(
+            "Price charts",
+            comment: "The title of the balances label in the price chart view."
+        )
+    }
+
+    struct AnnouncementCards {
+        static let buySellCardTitle = NSLocalizedString("The wait is over", comment: "The title of the card.")
+        static let continueKYCCardTitle = NSLocalizedString("Verify Your Identity", comment: "The title of the card.")
+        static let buySellCardDescription = NSLocalizedString(
+            "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.",
+            comment: "The description displayed on the card."
+        )
+        static let continueKYCCardDescription = NSLocalizedString(
+            "Looks like you’ve started verifying your identity but didn’t finish. Pick up where you left off?",
+            comment: "The description displayed on the card."
+        )
+        static let continueKYCActionButtonTitle = NSLocalizedString(
+            "Continue verification",
+            comment: "The title of the action on the announcement card."
+        )
     }
 
     struct SideMenu {
@@ -525,22 +552,18 @@ struct LocalizationConstants {
             "Congratulations! We successfully verified your identity. You can now Exchange cryptocurrencies at Blockchain.",
             comment: "Description for when KYC verification is approved."
         )
-        
         static let accountApprovedBadge = NSLocalizedString(
             "Approved",
             comment: "KYC verification is approved."
         )
-        
         static let accountPendingBadge = NSLocalizedString(
             "Pending",
             comment: "KYC verification is Pending."
         )
-        
         static let accountUnderReviewBadge = NSLocalizedString(
             "Under Review",
             comment: "KYC verification is Under Review."
         )
-        
         static let verificationUnderReview = NSLocalizedString(
             "Verification Under Review",
             comment: "Text displayed when KYC verification is under review."
@@ -549,27 +572,22 @@ struct LocalizationConstants {
             "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
             comment: "Description for when KYC verification is under review."
         )
-        
         static let accountUnconfirmedBadge = NSLocalizedString(
             "Unconfirmed",
             comment: "KYC verification is unconfirmed."
         )
-        
         static let accountUnverifiedBadge = NSLocalizedString(
             "Unverified",
             comment: "KYC verification is unverified."
         )
-        
         static let accounVerifiedBadge = NSLocalizedString(
             "Verified",
             comment: "KYC verification is complete."
         )
-        
         static let verificationFailed = NSLocalizedString(
             "Verification Failed",
             comment: "Text displayed when KYC verification failed."
         )
-        
         static let verificationFailedBadge = NSLocalizedString(
             "Failed",
             comment: "Text displayed when KYC verification failed."
@@ -745,4 +763,16 @@ struct LocalizationConstants {
     @objc class func etherSecondPasswordPrompt() -> String { return LocalizationConstants.Authentication.etherSecondPasswordPrompt }
 
     @objc class func myEtherWallet() -> String { return LocalizationConstants.myEtherWallet }
+
+    @objc class func buySellCardTitle() -> String { return LocalizationConstants.AnnouncementCards.buySellCardTitle }
+
+    @objc class func continueKYCCardTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardTitle }
+
+    @objc class func buySellCardDescription() -> String { return LocalizationConstants.AnnouncementCards.buySellCardDescription }
+
+    @objc class func continueKYCCardDescription() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardDescription }
+
+    @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
+
+    @objc class func balances() -> String { return LocalizationConstants.balances }
 }
