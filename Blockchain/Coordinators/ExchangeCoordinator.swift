@@ -191,7 +191,7 @@ struct ExchangeServices: ExchangeDependencies {
         case .shapeshift:
             showExchange(type: .shapeshift)
         default:
-            Logger.shared.debug("Not yet implemented")
+            Logger.shared.warning("showCreateExchange not implemented for ExchangeType")
         }
     }
 
