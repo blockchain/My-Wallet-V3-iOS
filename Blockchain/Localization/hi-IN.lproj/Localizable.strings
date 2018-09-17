@@ -1,0 +1,1542 @@
+/* (No Commment) */
+"Upgrade" = "नवीनीकरण";
+/* (No Commment) */
+"Settings" = "सेटिंग्स";
+/* (No Commment) */
+"Send" = "भेजें";
+/* (No Commment) */
+"Ebu-XV-0mt.normalTitle" = "रद्द करें";
+/* (No Commment) */
+"Yes" = "हाँ";
+/* (No Commment) */
+"No" = "नहीं";
+"Done" = "किया";
+"Yesterday" = "कल";
+/* (No Commment) */
+"Transferred" = "तबादला";
+/* (No Commment) */
+"Copied to clipboard" = "क्लिपबोर्ड पर प्रतिलिपि बनाई गई";
+/* (No Commment) */
+"Local Currency" = "स्थानीय मुद्रा";
+/* (No Commment) */
+"Bitcoin Unit" = "Bitcoin इकाई";
+/* (No Commment) */
+"Terms of Service" = "सेवा की शर्तें";
+/* (No Commment) */
+"Privacy Policy" = "गोपनीयता नीति";
+/* (No Commment) */
+"Invalid Wallet ID" = "अमान्य बटुआ ID";
+/* (No Commment) */
+"Passwords do not match" = "पासवर्ड मेल नहीं खाते हैं";
+/* (No Commment) */
+"Enter PIN" = "PIN दर्ज करें";
+/* (No Commment) */
+"Automatic Pairing" = "स्वत: बाँधना";
+/* (No Commment) */
+"Manual Pairing" = "मैनुअल बाँधना";
+/* Class = "UITextView"; text = "Go to s"; ObjectID = "1RS-t6-JqX"; */
+"1RS-t6-JqX.text" = "करने के लिए जाओ सेटिंग्स / सामान्य है ।";
+/* Class = "UILabel"; text = "Click 'Show Pairing Code' to reveal a QR Code (a square black & white barcode). Scan the code with your camera."; ObjectID = "369"; */
+"369.text" = "दिखाएँ बाँधना एक QR कोड, एक वर्ग काले & सफेद बारकोड प्रकट करने के लिए कोड क्लिक करें। अपने कैमरे के साथ कोड स्कैन करें।";
+/* (No Commment) */
+"Wallet ID" = "बटुआ ID";
+/* First account name: */
+"My Bitcoin Wallet" = "मेरी Bitcoin बटुआ";
+/* (No Commment) */
+"Recover Funds" = "धन की वसूली";
+/* (No Commment) */
+"You should always pair or login if you have access to your Wallet ID and password. Recovering your funds will create a new Wallet ID. Would you like to continue?" = "तुम हमेशा जोड़ी होना चाहिए या यदि आपके पास पहुँच आपके बटुए ID और पासवर्ड के लिए लॉगिन। आपका धन पुनर्प्राप्त करना एक नया id के बटुए बनाएगा आप जारी रखना चाहेंगे?";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "zd5-DZ-hsS"; */
+"zd5-DZ-hsS.placeholder" = "पासवर्ड";
+/* (No Commment) */
+"Email" = "ईमेल";
+/* (No Commment) */
+"Create Wallet" = "बटुआ बनाएँ";
+/* (No Commment) */
+"Weak" = "कमजोर";
+/* (No Commment) */
+"Strong" = "सशक्त";
+/* (No Commment) */
+"Normal" = "सामान्य";
+/* (No Commment) */
+"Gk5-cB-fZg.normalTitle" = "[%key:dialog_continue%]";
+/* (No Commment) */
+"Support" = "समर्थन";
+/* (No Commment) */
+"from" = "से";
+/* (No Commment) */
+"13.text" = "करने के लिए";
+/* (No Commment) */
+"Confirm Payment" = "भुगतान की पुष्टि करें";
+/* (No Commment) */
+"Imported Addresses" = "आयातित पतों";
+"OK" = "ठीक है";
+/* (No Commment) */
+"Change PIN" = "PIN परिवर्तित करे";
+/* (No Commment) */
+"Name" = "नाम";
+/* Class = "UIButton"; normalTitle = "Save"; ObjectID = "63"; */
+"63.normalTitle" = "सहेजें";
+"first word" = "प्रथम शब्द";
+"second word" = "दूसरा शब्द";
+"third word" = "तीसरा शब्द";
+"fourth word" = "चौथा शब्द";
+"fifth word" = "पांचवें शब्द";
+"sixth word" = "छठे शब्द";
+"seventh word" = "सातवें शब्द";
+"eighth word" = "आठवें शब्द";
+"ninth word" = "नौवें शब्द";
+"tenth word" = "दसवें शब्द";
+"eleventh word" = "ग्यारहवें शब्द";
+"twelfth word" = "बारहवें शब्द";
+/* (No Commment) */
+"Archived" = "आर्काइव्ड";
+/* (No Commment) */
+"Create new address" = "नया पता बनाएँ";
+/* (No Commment) */
+"Label" = "लेबल";
+/* (No Commment) */
+"Edit" = "संपादित करें";
+/* (No Commment) */
+"Warning" = "चेतावनी";
+/* (No Commment) */
+"Extended Public Key" = "सार्वजनिक कुंजी विस्तारित";
+/* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
+"64.text" = "पते";
+/* (No Commment) */
+"Sharing your xPub authorizes others to track your transaction history. As authorized persons may be able to disrupt you from accessing your wallet, only share your xPub with people you trust." = "अपने xPub साझा दूसरों अपने ट्रांजे़क्शन इतिहास ट्रैक करने के लिए अधिकृत। अधिकृत व्यक्तियों आप अपने बटुए तक पहुंचने से बाधित करने में सक्षम हो सकता है के रूप में, केवल अपने xPub पर भरोसा है आप लोगों के साथ साझा।";
+/* (No Commment) */
+"Archive" = "पुरालेख";
+/* (No Commment) */
+"Unarchive" = "Unarchive";
+/* (No Commment) */
+"Private Key Needed" = "निजी कुंजी आवश्यक";
+/* (No Commment) */
+"Watch Only" = "केवल घड़ी";
+/* (No Commment) */
+"Success" = "सफलता";
+/* (No Commment) */
+"Default" = "डिफ़ॉल्ट";
+/* (No Commment) */
+"Not now" = "अभी नहीं";
+/* (No Commment) */
+"Logout" = "लॉग आउट";
+/* (No Commment) */
+"Update" = "अद्यतन";
+/* (No Commment) */
+"Verify" = "सत्यापित करें";
+/* (No Commment) */
+"Allow" = "अनुमति दें";
+/* (No Commment) */
+"Block" = "ब्लॉक";
+/* (No Commment) */
+"Security" = "सुरक्षा";
+/* (No Commment) */
+"Enable" = "सक्षम करें";
+/* (No Commment) */
+"Disable" = "अक्षम करें";
+/* (No Commment) */
+"SMS" = "एसएमएस";
+/* (No Commment) */
+"Google Authenticator" = "Google प्रमाणक";
+/* (No Commment) */
+"2-step Verification" = "2-चरणीय सत् यापन";
+/* (No Commment) */
+"Change Password" = "पासवर्ड परिवर्तित करें";
+/* (No Commment) */
+"Email Notifications" = "ईमेल सूचनाएँ";
+/* Class = "UITextField"; placeholder = "New Password"; ObjectID = "VKs-B5-luJ"; */
+"VKs-B5-luJ.placeholder" = "नया पासवर्ड";
+/* (No Commment) */
+"Preferences" = "वरीयताएँ";
+/* (No Commment) */
+"Information" = "जानकारी";
+/* (No Commment) */
+"Bitcoin payment request" = "Bitcoin भुगतान अनुरोध";
+/* (No Commment) */
+"The PIN you have selected is extremely common and may be easily guessed by someone with access to your phone within 3 tries. Would you like to use this PIN anyway?" = "आपके द्वारा चयनित पिन बेहद आम है और आसानी से 3 की कोशिश के भीतर अपने फ़ोन करने के लिए उपयोग के साथ किसी के द्वारा अनुमान लगाया जा सकता। तुम वैसे भी इस पिन का उपयोग करना चाहते हैं?";
+/* (No Commment) */
+"Try again" = "फिर कोशिश करो";
+/* Class = "UILabel"; text = "If you would like to forget this wallet and start over, press 'Forget Wallet'."; ObjectID = "C0R-wB-wF1"; */
+"C0R-wB-wF1.text" = "यदि आप इस बटुआ भूल जाओ और अधिक शुरू करने के लिए चाहते हैं, 'बटुआ भूल' दबाएँ।";
+/* (No Commment) */
+"Transaction" = "लेन-देन";
+/* (No Commment) */
+"Backup Phrase" = "बैकअप वाक्यांश";
+/* (No Commment) */
+"Copy Address" = "पते की प्रतिलिपि बनाएँ";
+/* (No Commment) */
+"2je-u4-PB2.text" = "[%key:overview%]";
+/* (No Commment) */
+"Regular" = "नियमित रूप से";
+/* Class = "UIButton"; normalTitle = "Backup funds again"; ObjectID = "1Hq-6D-ut1"; */
+"1Hq-6D-ut1.normalTitle" = "बैकअप फिर से धन";
+/* (No Commment) */
+"1Hq-6D-ut1.text" = "बैकअप फिर से धन";
+/* (No Commment) */
+"3kJ-3U-lFe.text" = "कृपया पुन: प्रयास करें";
+/* Class = "UILabel"; text = "Enter the following words from your Recovery Phrase to complete the backup process."; ObjectID = "4Nq-ue-tXr"; */
+"4Nq-ue-tXr.text" = "अपने पुनर्प्राप्ति बैकअप प्रक्रिया पूर्ण करने के लिए वाक्यांश से निम्नलिखित शब्द दर्ज करें।";
+/* (No Commment) */
+"6zt-Xf-txg.text" = "शब्द प्रकट करने के लिए दबाकर रखें";
+/* (No Commment) */
+"07q-RX-CeI.text" = "कृपया पुन: प्रयास करें";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "9A7-TT-PzN"; */
+"9A7-TT-PzN.title" = "बैकअप फंड";
+/* Class = "UILabel"; text = "Oh no! You haven't backed up your funds yet."; ObjectID = "9Hu-uO-gJl"; */
+"9Hu-uO-gJl.text" = "ओह नहीं! आप अपने धन को अभी तक समर्थित नहीं।";
+/* Class = "UILabel"; text = "This action requires the second password for your bitcoin wallet. Please enter it below and press continue."; ObjectID = "9WK-My-5CL"; */
+"9WK-My-5CL.text" = "इस कार्रवाई के लिए अपना bitcoin बटुआ दूसरा पासवर्ड की आवश्यकता है। कृपया उसे नीचे दर्ज करें और प्रेस जारी रखें।";
+/* (No Commment) */
+"9hR-tm-aq5.placeholder" = "प्रथम शब्द";
+/* Class = "UINavigationItem"; title = "Second Password Required"; ObjectID = "74J-f3-Lhq"; */
+"74J-f3-Lhq.title" = "दूसरा पासवर्ड की आवश्यकता";
+/* Class = "UIButton"; normalTitle = "Previous word"; ObjectID = "AFH-AI-Rgk"; */
+"AFH-AI-Rgk.normalTitle" = "पिछला शब्द";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "CBl-1W-VP8"; */
+"CBl-1W-VP8.placeholder" = "पासवर्ड";
+/* (No Commment) */
+"EQM-OM-jK8.normalTitle" = "किया";
+/* Class = "UILabel"; text = "It is important to make sure you write down your words exactly as they appear here and in this order."; ObjectID = "FDO-ui-cGo"; */
+"FDO-ui-cGo.text" = "एक स्क्रीनशॉट ले लो न!\
+आप अपने बटुए की सुरक्षा ख़तरे में डालना कर सकते हैं";
+/* (No Commment) */
+"Fda-Z4-3e7.placeholder" = "छठे शब्द";
+/* (No Commment) */
+"NaV-Bk-o1b.text" = "अपने बटुए को पुनर्स्थापित कैसे करें";
+/* Class = "UILabel"; text = "unicorn"; ObjectID = "Okr-VE-yvm"; */
+"Okr-VE-yvm.text" = "एक तंगावाला";
+/* Class = "UILabel"; text = "Please try again"; ObjectID = "T3S-Dk-HAh"; */
+"T3S-Dk-HAh.text" = "कृपया पुन: प्रयास करें";
+/* (No Commment) */
+"T4p-mz-siC.normalTitle" = "बैकअप सत्यापित करें";
+/* Class = "UILabel"; text = "Write down your Recovery Phrase and keep it somewhere very safe and secure. Anyone who knows your Recovery Phrase has access to your bitcoins, so don’t share this with anyone you don’t trust."; ObjectID = "UCL-i9-UDp"; */
+"UCL-i9-UDp.text" = "शब्दों के सही क्रम में वे कागज के एक पत्रक पर दिखाई देते हैं, और कहीं न कहीं सुरक्षित संग्रह नीचे लिखें\
+";
+/* Class = "UILabel"; text = "Lost your 12 word recovery phrase?"; ObjectID = "Yh8-Gm-6op"; */
+"Yh8-Gm-6op.text" = "अपने 12 वर्ड वसूली मुहावरा खो दिया?";
+/* Class = "UIButton"; normalTitle = "NEXT WORD"; ObjectID = "dkQ-nj-Pkf"; */
+"dkQ-nj-Pkf.normalTitle" = "अगला शब्द";
+/* Class = "UIButton"; normalTitle = "Next word"; ObjectID = "eaO-py-9rY"; */
+"eaO-py-9rY.normalTitle" = "अगला शब्द";
+/* Class = "UILabel"; text = "Please take a few minutes to ensure you can access your Bitcoin (except in imported addresses), even if you forget your password or if our service becomes unavailable. We promise doing so is quick, painless, and worth it."; ObjectID = "eyR-AW-SMc"; */
+"eyR-AW-SMc.text" = "कृपया आप अपने bitcoin का उपयोग कर सकते हैं यह सुनिश्चित करने के लिए कुछ मिनट लग (छोड़कर आयातित पतों में), यहां तक कि अगर आप अपना पासवर्ड भूल गए हैं या यदि हमारी सेवा अनुपलब्ध हो जाता है। हम वादा करता हूँ ऐसा त्वरित, पीड़ारहित, और इसके लायक है।";
+/* (No Commment) */
+"kcC-2S-PfL.placeholder" = "तीसरा शब्द";
+/* Class = "UILabel"; text = "Word 5 of 12"; ObjectID = "mUc-u7-Zcj"; */
+"mUc-u7-Zcj.text" = "12 में से 5 शब्द";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "mYR-MQ-mS2"; */
+"mYR-MQ-mS2.title" = "बैकअप बटुआ";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "nuD-nb-tAt"; */
+"nuD-nb-tAt.normalTitle" = "जारी रखें";
+/* Class = "UINavigationItem"; title = "Backup Wallet"; ObjectID = "xmf-pK-R3X"; */
+"xmf-pK-R3X.title" = "बैकअप बटुआ";
+/* (No Commment) */
+"4cR-kX-YUY.text" = "नवीनीकरण की पुष्टि करें";
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "D5e-zI-7dK"; */
+"D5e-zI-7dK.text" = "Lorem ipsum dolor बैठ एर elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt यूटी labore एट dolore magna aliqua. यूटी enim विज्ञापन अत्यल्प आकार का प्राणी veniam, quis nostrud exercitation ullamco laboris nisi यूटी ea commodo consequat पूर्व aliquip. Duis aute irure dolor voluptate velit esse cillum dolore यूरोपीय संघ fugiat सोता pariatur में reprehenderit में। Excepteur sint occaecat cupidatat गैर proident, culpa qui officia deserunt mollit anim आईडी स्था laborum में sunt। गुटनिरपेक्ष आंदोलन हम ते conscient तुम poen legum odioque civiuda कारक करने के लिए।";
+/* Class = "UIButton"; normalTitle = "Ask Me Later"; ObjectID = "HuT-V7-syg"; */
+"HuT-V7-syg.normalTitle" = "मुझे बाद में पूछें";
+/* Class = "UIButton"; normalTitle = "Upgrade"; ObjectID = "cZ9-x2-KGM"; */
+"cZ9-x2-KGM.normalTitle" = "नवीनीकरण";
+/* Class = "UILabel"; text = "Store Hint"; ObjectID = "0zs-bt-hEl"; */
+"0zs-bt-hEl.text" = "दुकान संकेत";
+/* Class = "UILabel"; text = "Verify Email"; ObjectID = "8Ha-3e-Nqx"; */
+"8Ha-3e-Nqx.text" = "ईमेल सत्यापित करें";
+/* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
+"8Zy-R2-HoW.text" = "2-चरणीय सत्यापन";
+/* Class = "UITextField"; placeholder = "Confirm New Password"; ObjectID = "Ii6-KE-x0B"; */
+"Ii6-KE-x0B.placeholder" = "नए पासवर्ड की पुष्टि करें";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Kmb-pO-dHq"; */
+"Kmb-pO-dHq.text" = "कमजोर";
+/* Class = "UILabel"; text = "Backup Phrase"; ObjectID = "WVd-f2-ZLG"; */
+"WVd-f2-ZLG.text" = "बैकअप वाक्यांश";
+/* Class = "UILabel"; text = "Block TORs"; ObjectID = "Wor-ZR-sPS"; */
+"Wor-ZR-sPS.text" = "ब्लॉक TORs";
+/* Class = "UILabel"; text = "Protect your wallet from unauthorized access by enabling 2-Step Verification. You can choose to use a free app or your mobile phone number to secure your wallet. This code will be requested when you try to access your wallet."; ObjectID = "bFL-5O-fcl"; */
+"bFL-5O-fcl.text" = "2-चरणीय सत् यापन सक्षम करके अपना बटुआ अनधिकृत पहुँच से बचाने। आप अपने बटुए को सुरक्षित करने के लिए एक नि: शुल्क app या अपने मोबाइल फ़ोन नंबर का उपयोग करने के लिए चुन सकते हैं। आप अपने बटुए का उपयोग करने का प्रयास करते समय इस कोड का अनुरोध किया जाएगा।";
+/* Class = "UILabel"; text = "Link Mobile"; ObjectID = "f52-8F-scW"; */
+"f52-8F-scW.text" = "लिंक मोबाइल";
+/* Class = "UIButton"; normalTitle = "Use your mobile phone number"; ObjectID = "g8G-4j-qpJ"; */
+"g8G-4j-qpJ.normalTitle" = "आपका मोबाइल फ़ोन नंबर का उपयोग करें";
+/* Class = "UILabel"; text = "Enable 2-Step"; ObjectID = "gIP-mj-Hh2"; */
+"gIP-mj-Hh2.text" = "2-चरणीय सक्षम करें";
+/* Class = "UILabel"; text = "Complete the steps below for ultimate security"; ObjectID = "u5x-QP-acV"; */
+"u5x-QP-acV.text" = "परम सुरक्षा के लिए नीचे चरणों को पूरा";
+/* Class = "UIViewController"; title = "Security Center"; ObjectID = "wnC-Xd-1Er"; */
+"wnC-Xd-1Er.title" = "सुरक्षा केंद्र";
+/* (No Commment) */
+"NSCameraUsageDescription" = "यह एप्लिकेशन QR कोड स्कैन करने के लिए के लिए आवश्यक है।";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "2Ig-LA-4kK"; */
+"2Ig-LA-4kK.text" = "CurrAmt";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
+"4.normalTitle" = "[%key:CONTINUE%]";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "6ll-Xx-4fm"; */
+"6ll-Xx-4fm.text" = "BtcAmt";
+/* (No Commment) */
+"6zi-8R-Tmt.normalTitle" = "बीटीसी";
+/* Class = "UILabel"; text = "From"; ObjectID = "7"; */
+"7.text" = "से";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "7ho-GV-ikp"; */
+"7ho-GV-ikp.text" = "बीटीसी";
+/* (No Commment) */
+"8LN-Tc-WVh.normalTitle" = "किया";
+/* Class = "UILabel"; text = "CurrAmt"; ObjectID = "9B2-23-8j5"; */
+"9B2-23-8j5.text" = "CurrAmt";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "52"; */
+"52.placeholder" = "0.000";
+/* (No Commment) */
+"52.text" = "0.00";
+/* (No Commment) */
+"57.text" = "पते";
+/* (No Commment) */
+"61.text" = "लेबल:";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "62"; */
+"62.placeholder" = "लेबल";
+/* (No Commment) */
+"65.text" = "पता:";
+/* (No Commment) */
+"67.text" = "लेबल पता";
+/* Class = "UIButton"; normalTitle = "Customize Fee"; ObjectID = "Cbp-Qe-FKP"; */
+"Cbp-Qe-FKP.normalTitle" = "शुल्क को अनुकूलित करें";
+/* Class = "UILabel"; text = "Fee: "; ObjectID = "FB0-NP-5do"; */
+"FB0-NP-5do.text" = "शुल्क: ";
+/* Class = "UILabel"; text = "BtcAmt"; ObjectID = "IUn-6N-qeo"; */
+"IUn-6N-qeo.text" = "BtcAmt";
+/* Class = "UIButton"; normalTitle = "Cancel next"; ObjectID = "Pgx-k8-cTb"; */
+"Pgx-k8-cTb.normalTitle" = "अगले रद्द";
+/* Class = "UILabel"; text = "Total:"; ObjectID = "Ubr-KG-egH"; */
+"Ubr-KG-egH.text" = "कुल:";
+/* Class = "UILabel"; text = "From:"; ObjectID = "ZcA-OM-4nq"; */
+"ZcA-OM-4nq.text" = "से:";
+/* Class = "UILabel"; text = "Please Wait"; ObjectID = "Zgn-Wx-Uwx"; */
+"Zgn-Wx-Uwx.text" = "कृपया प्रतीक्षा करो";
+/* Class = "UILabel"; text = "Fee"; ObjectID = "Zhm-Jw-P4C"; */
+"Zhm-Jw-P4C.text" = "शुल्क";
+/* (No Commment) */
+"aKC-Q2-phD.text" = "भुगतान भेजने";
+/* Class = "UILabel"; text = "Amount: "; ObjectID = "aeG-gf-oXV"; */
+"aeG-gf-oXV.text" = "राशि: ";
+/* Class = "UIButton"; normalTitle = "Funds available"; ObjectID = "d7n-Ue-QXL"; */
+"d7n-Ue-QXL.normalTitle" = "उपलब्ध धन";
+/* Class = "UILabel"; text = "To"; ObjectID = "fpY-AA-We5"; */
+"fpY-AA-We5.text" = "करने के लिए";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "p7q-Ud-nYh"; */
+"p7q-Ud-nYh.placeholder" = "0.000";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "pPu-bJ-k6p"; */
+"pPu-bJ-k6p.normalTitle" = "जारी रखें";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "qx4-XV-uhn"; */
+"qx4-XV-uhn.placeholder" = "0.00";
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "sXf-3w-qdy"; */
+"sXf-3w-qdy.normalTitle" = "भेजें";
+/* Class = "UILabel"; text = "CurrTotal"; ObjectID = "t8M-NC-003"; */
+"t8M-NC-003.text" = "CurrTotal";
+/* Class = "UILabel"; text = "USD"; ObjectID = "vGH-md-Ck3"; */
+"vGH-md-Ck3.text" = "अमरीकी डालर";
+/* Class = "UILabel"; text = "BtcTotal"; ObjectID = "vzP-xG-GPO"; */
+"vzP-xG-GPO.text" = "BtcTotal";
+/* Class = "UILabel"; text = "To:"; ObjectID = "yGR-Eh-YG1"; */
+"yGR-Eh-YG1.text" = "करने के लिए:";
+/* Class = "UITextField"; text = "Any Address"; ObjectID = "zyc-E3-FOM"; */
+"zyc-E3-FOM.text" = "किसी भी पते";
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "बटुआ भूल जाते हैं";
+/* Class = "UIButton"; normalTitle = "1.12345 BTC"; ObjectID = "6sh-r5-yAx"; */
+"6sh-r5-yAx.normalTitle" = "1.12345 बीटीसी";
+/* (No Commment) */
+"257.text" = "0 बीटीसी";
+/* Class = "UILabel"; text = "loading"; ObjectID = "263"; */
+"263.text" = "लोड हो रहा है";
+/* (No Commment) */
+"353.text" = "स्वत: बाँधना";
+/* (No Commment) */
+"358.text" = "बनाएँ एक नई बटुआ";
+/* Class = "UILabel"; text = "1"; ObjectID = "360"; */
+"360.text" = "1";
+/* Class = "UILabel"; text = "Login to your Blockchain Wallet via your PC or Mac at\nhttp://blockchain.info/wallet"; ObjectID = "361"; */
+"361.text" = "अपने पीसी या मैक के जरिए अपने Blockchain बटुए में, https://login.blockchain.com में प्रवेश करें";
+/* Class = "UILabel"; text = "2"; ObjectID = "363"; */
+"363.text" = "2";
+/* Class = "UILabel"; text = "3"; ObjectID = "368"; */
+"368.text" = "3";
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "स्कैन कोड बाँधना";
+/* (No Commment) */
+"376.normalTitle" = "बटन 2";
+/* (No Commment) */
+"377.normalTitle" = "बटन 1";
+/* (No Commment) */
+"378.text" = "यदि आप पहले से ही एक Blockchain बटुआ, जोड़ी डिवाइस चुनें; अन्यथा, बटुआ बनाएँ चुनें।    यह मुफ़्त है! कोई ईमेल आवश्यक।";
+/* (No Commment) */
+"380.text" = "Blockchain बटुए में आपका स्वागत है";
+/* Class = "UILabel"; text = "Welcome to Blockchain Wallet. This screen shows your transactions. If you have already made transactions with this wallet, there may have been an error contacting our server. Please make sure your account is correctly setup and you have an active internet connection."; ObjectID = "387"; */
+"387.text" = "कोई हाल ही में लेन-देन";
+/* (No Commment) */
+"394.text" = "पासवर्ड:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "395"; */
+"395.placeholder" = "पासवर्ड";
+/* (No Commment) */
+"396.text" = "की पुष्टि करें:";
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "397"; */
+"397.placeholder" = "पासवर्ड की पुष्टि करें";
+/* (No Commment) */
+"398.normalTitle" = "बटुआ बनाएँ";
+/* (No Commment) */
+"465.text" = "पासवर्ड की आवश्यकता";
+/* Class = "UILabel"; text = "Password Request Description"; ObjectID = "467"; */
+"467.text" = "पासवर्ड अनुरोध विवरण";
+/* (No Commment) */
+"468.text" = "पासवर्ड:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "469"; */
+"469.placeholder" = "पासवर्ड";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"586.text" = "बटुआ पहचानकर्ता:";
+/* Class = "UITextField"; placeholder = "Wallet identifier"; ObjectID = "587"; */
+"587.placeholder" = "बटुआ पहचानकर्ता";
+/* (No Commment) */
+"588.text" = "आप मैन्युअल रूप से जोड़ी चुना है (या स्वचालित बाँधना आपकी डिवाइस के साथ समर्थित नहीं है)। कृपया नीचे अपना लॉगिन विवरण दर्ज करें।";
+/* (No Commment) */
+"591.text" = "पासवर्ड:";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "592"; */
+"592.placeholder" = "पासवर्ड";
+/* (No Commment) */
+"602.text" = "आप दो फैक्टर प्रमाणीकरण करने के लिए जोड़ी को मैन्युअल रूप से अक्षम होना आवश्यक है।";
+/* Class = "UILabel"; text = "You have logged out or there was an error decrypting your wallet file. Enter your password below to login."; ObjectID = "624"; */
+"624.text" = "तुम लॉग इन है या अपने बटुए फ़ाइल डीक्रिप्ट करने में कोई त्रुटि थी। लॉगिन करने के लिए नीचे अपना पासवर्ड दर्ज करें।";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "[%key:CONTINUE%]";
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "626"; */
+"626.placeholder" = "पासवर्ड";
+/* (No Commment) */
+"627.text" = "पासवर्ड:";
+/* (No Commment) */
+"630.text" = "लॉगिन";
+/* Class = "UILabel"; text = "Title"; ObjectID = "DIx-fJ-eKX"; */
+"DIx-fJ-eKX.text" = "शीर्षक";
+/* Class = "UITextField"; placeholder = "Recovery passphrase"; ObjectID = "L1x-Mw-4H5"; */
+"L1x-Mw-4H5.placeholder" = "वसूली पदबंध";
+/* Class = "UITextField"; placeholder = "Your email"; ObjectID = "LsW-69-Qon"; */
+"LsW-69-Qon.placeholder" = "आपका ईमेल";
+/* Class = "UILabel"; text = "Weak"; ObjectID = "Mk4-63-3pL"; */
+"Mk4-63-3pL.text" = "कमजोर";
+/* (No Commment) */
+"OKS-md-gDQ.normalTitle" = "बटन 3";
+/* Class = "UILabel"; text = "By creating a new wallet you agree to the"; ObjectID = "Qvx-f4-C2O"; */
+"Qvx-f4-C2O.text" = "एक नया बटुआ बनाने के द्वारा आप करने के लिए सहमत";
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"VcH-wh-BEs.text" = "ईमेल:";
+/* Class = "UIButton"; normalTitle = "345.68 USD"; ObjectID = "bzM-Ub-MUU"; */
+"bzM-Ub-MUU.normalTitle" = "345.68 अमरीकी डालर";
+/* Class = "UIButton"; normalTitle = "I can't access my camera"; ObjectID = "fI2-PD-Xwa"; */
+"fI2-PD-Xwa.normalTitle" = "मैं मेरा कैमरा तक नहीं पहुँच सकता";
+/* (No Commment) */
+"jUZ-5W-4qw.text" = "* की आवश्यकता";
+/* (No Commment) */
+"kK3-Xs-d3Q.text" = "0 लेनदेन";
+/* Class = "UILabel"; text = "Enter your 12 recovery words with spaces to recover your funds & transactions"; ObjectID = "pEh-08-oZW"; */
+"pEh-08-oZW.text" = "आपका धन एवं लेन-देन को पुनर्प्राप्त करने के लिए रिक्त स्थान के साथ अपने 12 वसूली शब्द दर्ज करें";
+/* (No Commment) */
+"qIf-DM-Gtq.text" = "मैनुअल बाँधना";
+/* Class = "UIButton"; normalTitle = "Blockchain Terms of Service"; ObjectID = "wfI-8F-dfm"; */
+"wfI-8F-dfm.normalTitle" = "Blockchain सेवा की शर्तें";
+/* (No Commment) */
+"wvh-x7-hB8.text" = "* न्यूनतम 10 अक्षर";
+/* (No Commment) */
+"364.text" = "सेटिंग्स पर जाएँ / बटुआ Informationweifwohefwoihfwef.";
+" Anyone with access to your Recovery Phrase has access to your bitcoin so be sure to keep it offline somewhere very safe and secure." = " अपने पुनर्प्राप्ति वाक्यांश करने के लिए पहुँच के साथ किसी को आपके bitcoin का उपयोग तो यह ऑफ़लाइन कहीं बहुत सुरक्षित और सुरक्षित रखने के लिए सुनिश्चित हो है।";
+/* (No Commment) */
+" We recommend the fee below for the transaction at this time." = " हम नीचे शुल्क इस समय हस्तांतरण के लिए अनुशंसा करते हैं।";
+/* (No Commment) */
+"%@ BTC" = "%@ बीटीसी";
+/* (No Commment) */
+"%@ Confirmations" = "%@ Confirmations";
+/* (No Commment) */
+"%@ copied to clipboard" = "क्लिपबोर्ड पर प्रतिलिपि बनाई %@";
+/* (No Commment) */
+"%d Confirmations" = "%d Confirmations";
+/* (No Commment) */
+"%d Transactions" = "%d लेनदेन";
+/* (No Commment) */
+"%d address" = "%d पता";
+/* (No Commment) */
+"%d addresses" = "%d पते";
+"%lld hours ago" = "%lld घंटे पहले";
+"%lld minutes ago" = "%lld मिनट पहले";
+"%lld seconds ago" = "%lld सेकंड पहले";
+/* (No Commment) */
+"%lu Recipients" = "%lu प्राप्तकर्ता";
+"1 hour ago" = "1 घंटे पहले";
+"1 minute ago" = "1 मिनट पहले";
+/* (No Commment) */
+"2-Step Enabled" = "2-चरणीय सक्षम किया गया";
+/* (No Commment) */
+"2-Step has been disabled." = "2-चरण अक्षम किया गया है।";
+/* (No Commment) */
+"2-Step has been enabled for SMS." = "2-चरण SMS के लिए सक्षम किया गया है।";
+/* (No Commment) */
+"2-step Verification is currently disabled." = "2-चरणीय सत् यापन वर्तमान में अक्षम किया गया है।";
+/* (No Commment) */
+"2-step Verification is currently enabled for %@." = "2-चरणीय सत् यापन वर्तमान में %@ के लिए सक्षम किया गया है।";
+/* (No Commment) */
+"2-step Verification is currently enabled." = "2-चरणीय सत् यापन वर्तमान में सक्षम है।";
+/* (No Commment) */
+"A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection." = "सर्वर प्रमाणपत्र मान्य नहीं किया जा सका, क्योंकि एक कनेक्शन स्थापित किया जा सकता। कृपया अपनी नेटवर्क सेटिंग्स जाँचें और सुनिश्चित करें कि आप एक सुरक्षित कनेक्शन का उपयोग कर रहे हैं।";
+/* (No Commment) */
+"API URL" = "API यूआरएल";
+/* (No Commment) */
+"About" = "के बारे में";
+/* (No Commment) */
+"Account Details" = "खाता विवरण";
+/* (No Commment) */
+"Accounts" = "गूगल खात";
+/* (No Commment) */
+"Add Email" = "ईमेल जोड़ने";
+/* (No Commment) */
+"Add to Address book?" = "पता पुस्तिका में जोड़ें?";
+/* (No Commment) */
+"Address" = "पता";
+/* (No Commment) */
+"Address book" = "पता पुस्तिका";
+/* (No Commment) */
+"Address is not valid" = "पता मान्य नहीं है";
+/* (No Commment) */
+"Addresses" = "पते";
+/* (No Commment) */
+"Adjust Fee" = "शुल्क समायोजित करें";
+/* (No Commment) */
+"Allowed" = "अनुमति दी गई";
+/* (No Commment) */
+"Amount" = "राशि";
+/* (No Commment) */
+"Amount must be greater than or equal to the dust threshold (%lld Satoshi)" = "मात्रा से अधिक या बराबर करने के लिए धूल थ्रेशोल्ड (%lld Satoshi) होना चाहिए";
+/* (No Commment) */
+"An error occurred due to interruptions during PIN verification. Please close the app and try again." = "पिन सत्यापन के दौरान व्यवधान के कारण कोई त्रुटि उत्पन्न हुई। कृपया अनुप्रयोग बंद करें और पुन: प्रयास करें।";
+/* (No Commment) */
+"An error occurred validating your PIN code with the remote server. You may be offline or Blockchain may be experiencing difficulties. Would you like retry validation or instead enter your password manually?" = "दूरस्थ सर्वर के साथ अपने पिन कोड मान्य कर रहा है कोई त्रुटि उत्पन्न हुई। आप ऑफ़लाइन किया जा सकता या Blockchain कठिनाइयों का अनुभव किया जा सकता है। आप सत्यापन पुन: प्रयास करें या इसके बजाय अपने पासवर्ड मैन्युअली दर्ज करना चाहेंगे?";
+/* (No Commment) */
+"An error occurred while changing 2-Step verification." = "2-चरणीय सत् यापन बदलते समय एक त्रुटि उत्पन्न हुई।";
+/* (No Commment) */
+"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again." = "क्लिपबोर्ड करने के लिए आपके पते की प्रतिलिपि बनाते समय कोई त्रुटि उत्पन्न हुई। कृपया पुन: गंतव्य पते का चयन करें या अनुप्रयोग को पुनरारंभ करें और पुन: प्रयास करें।";
+/* (No Commment) */
+"An error occurred while saving your changes. Please make sure you are not logged into your wallet on another device." = "अपने परिवर्तन सहेजने के दौरान कोई त्रुटि उत्पन्न हुई। कृपया सुनिश्चित करें कि आप किसी अन्य डिवाइस पर अपने बटुए में लॉग नहीं हैं।";
+/* (No Commment) */
+"An error occurred while updating your spendable balance. Please check your internet connection and try again." = "अपने spendable संतुलन को अद्यतन करते समय कोई त्रुटि उत्पन्न हुई। कृपया अपना इंटरनेट कनेक्शन जाँचें और पुनः प्रयास करें।";
+/* (No Commment) */
+"An error was encountered loading your wallet. You may be offline or Blockchain is experiencing difficulties. Please close the application and try again later or re-pair your device." = "त्रुटि लोड हो रहा है अपने बटुए का सामना करना पड़ा था। आप ऑफ़लाइन किया जा सकता या Blockchain कठिनाइयों का सामना कर रहा है। कृपया अनुप्रयोग बंद करें और बाद में पुन: प्रयास करें या अपने डिवाइस पुन: जोड़ी।";
+/* (No Commment) */
+"An error was encountered retrieving your wallet identifier from the keychain. Please close the application and try again." = "एक त्रुटि अपने बटुए पहचानकर्ता चाबी का गुच्छा से पुन: प्राप्त करने का सामना करना पड़ा था। कृपया अनुप्रयोग बंद करें और पुन: प्रयास करें।";
+/* (No Commment) */
+"Any address" = "किसी भी पते";
+/* (No Commment) */
+"App Store review prompt timer (seconds)" = "App स्टोर की समीक्षा शीघ्र टाइमर (सेकंड)";
+/* (No Commment) */
+"Archive Address" = "पुरालेख के पते";
+/* (No Commment) */
+"Archive this if you do NOT want to use it anymore. Your funds will remain safe, and you can unarchive it at any time." = "यदि आप इसे अब और का उपयोग करने के लिए नहीं चाहते हैं, तो यह संग्रह। आपका धन सुरक्षित रहेगा, और आप इसे किसी भी समय unarchive कर सकते हैं।";
+/* (No Commment) */
+"Archiving addresses" = "पते संग्रह करना";
+/* (No Commment) */
+"Ask Me Later" = "मुझे बाद में पूछें";
+/* (No Commment) */
+"Authenticate with Touch ID" = "स्पर्श ID के साथ प्रमाणित करें";
+/* (No Commment) */
+"Authorization Required" = "प्राधिकरण की आवश्यकता";
+/* (No Commment) */
+"Automatically" = "स्वचालित रूप से";
+"BACKUP FUNDS" = "बैकअप फंड";
+/* (No Commment) */
+"Backup" = "बैकअप";
+"Backup Funds" = "बैकअप फंड";
+/* (No Commment) */
+"Before accessing your wallet, please choose a pin number to use to unlock your wallet. It's important you remember this pin as it cannot be reset or changed without first unlocking the app." = "अपना बटुआ तक पहुँचने से पहले, कृपया अपना बटुआ अनलॉक करने के लिए उपयोग करने के लिए कोई पिन संख्या चुनें। यह महत्वपूर्ण आप इस पिन याद के रूप में इसे रीसेट नहीं कर सकते या app पहले ताला खोलने के बिना बदल गया है।";
+/* (No Commment) */
+"Block Tor" = "ब्लॉक टो";
+/* (No Commment) */
+"Blockchain does not have access to the camera. To enable access, go to your device Settings." = "Blockchain कैमरा करने के लिए पहुँच नहीं है। पहुँच को सक्षम करने के लिए, आपकी डिवाइस सेटिंग्स करने के लिए जाओ।";
+/* (No Commment) */
+"Blockchain is currently down for maintenance. Please try again later." = "Blockchain वर्तमान में नीचे रखरखाव के लिए है। कृपया बाद में पुन: प्रयास करें।";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location." = "Blockchain स्थान सेवाएँ आपके स्थान तक पहुंचने के लिए सक्षम की जरूरत है।";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location Services" = "Blockchain स्थान सेवाएँ आपके स्थान तक पहुंचने के लिए सक्षम की जरूरत है। आप तक पहुँच को सक्षम कर सकते हैं गोपनीयता में सेटिंग्स -> -> स्थान सेवाएँ";
+/* (No Commment) */
+"Blockchain needs Location Services enabled in order to access your location. You can enable access in Settings->Privacy->Location->Location Services" = "Blockchain स्थान सेवाएँ आपके स्थान तक पहुंचने के लिए सक्षम की जरूरत है। आप तक पहुँच को सक्षम कर सकते हैं गोपनीयता में सेटिंग्स -> -> स्थान स्थान सेवाएँ ->";
+/* (No Commment) */
+"Blocked" = "ब्लॉक की गई";
+/* (No Commment) */
+"Calculating: Address %@ of %@" = "की गणना: %2$@ का पता %1$@";
+/* (No Commment) */
+"Camera Access Denied" = "कैमरे में प्रवेश निषेध है";
+/* (No Commment) */
+"Cancel" = "रद्द करें";
+/* (No Commment) */
+"Cancelling" = "रद्द कर रहा है";
+/* (No Commment) */
+"Cannot save PIN Code while wallet is not initialized or password is null" = "पिन कोड बटुआ प्रारंभ नहीं की गई है या पासवर्ड रिक्त है, जबकि सहेज नहीं सकते";
+/* (No Commment) */
+"Change Email" = "ईमेल बदलें";
+/* (No Commment) */
+"Change Mobile Number" = "मोबाइल नंबर परिवर्तित करें";
+/* (No Commment) */
+"Change Password Hint" = "बदलें पासवर्ड संकेत";
+/* (No Commment) */
+"Change fee per kilobyte" = "किलोबाइट प्रति परिवर्तन शुल्क";
+/* (No Commment) */
+"Checking for Wallet updates" = "बटुआ अद्यतनों के लिए जाँच";
+/* (No Commment) */
+"Checking for more: Step %d of %d" = "अधिक जानकारी के लिए जाँच: %2$d के चरण %1$d";
+"Close" = "बंद करें";
+/* (No Commment) */
+"Close App" = "अनुप्रयोग बंद करें";
+/* (No Commment) */
+"Complete the steps below for ultimate security" = "परम सुरक्षा के लिए नीचे चरणों को पूरा";
+/* (No Commment) */
+"Confirm your PIN" = "अपने पिन की पुष्टि करें";
+/* (No Commment) */
+"Confirmed" = "की पुष्टि की";
+/* (No Commment) */
+"Connection timed out. Please check your internet connection." = "कनेक्शन समयबाह्य हो गई। कृपया अपना इंटरनेट कनेक्शन जाँचें।";
+/* (No Commment) */
+"Continue" = "जारी रखें";
+/* (No Commment) */
+"Copy Wallet ID" = "बटुआ ID की प्रतिलिपि बनाएँ";
+/* (No Commment) */
+"Copy to clipboard" = "क्लिपबोर्ड पर प्रतिलिपि बनाएँ";
+/* (No Commment) */
+"Copy xPub" = "XPub की प्रतिलिपि बनाएँ";
+/* (No Commment) */
+"Could not find transaction with hash %@ when reloading data" = "हैश %@ साथ लेन-देन डेटा reloading जब नहीं ढूँढ सका";
+/* (No Commment) */
+"Could not get value when sent - please check your internet connection and try again." = "सकता है भेजा, जब मान नहीं मिलता - कृपया अपने इंटरनेट कनेक्शन की जाँच करें और पुन: प्रयास करें।";
+/* (No Commment) */
+"Create" = "बनाएँ";
+/* (No Commment) */
+"Create New Wallet" = "नई बटुआ बनाएँ";
+/* (No Commment) */
+"Creating" = "बनाना";
+/* (No Commment) */
+"Creating V3 Wallet" = "V3 बटुआ बनाना";
+/* (No Commment) */
+"Creating Wallet" = "बटुआ बनाना";
+/* (No Commment) */
+"Creating new Wallet" = "नई बटुआ बनाना";
+/* (No Commment) */
+"Creating new address" = "नया पता बनाना";
+/* (No Commment) */
+"Current rate: %@ BTC" = "वर्तमान दर: %@ बीटीसी";
+/* (No Commment) */
+"Customize the way you organize your bitcoin in your Blockchain Wallet" = "आप अपने लॉकचेन बटुए में आपके bitcoin व्यवस्थित तरीके को अनुकूलित";
+/* (No Commment) */
+"Date" = "दिनांक";
+/* (No Commment) */
+"Debug" = "डीबग करें";
+/* (No Commment) */
+"Decrypted PIN Password length 0" = "Decrypted पिन पासवर्ड लंबाई 0";
+/* (No Commment) */
+"Decrypting Private Key" = "निजी कुंजी डीक्रिप्ट करने";
+/* (No Commment) */
+"Decrypting Wallet" = "बटुआ डीक्रिप्ट करने";
+/* (No Commment) */
+"Description" = "विवरण";
+/* (No Commment) */
+"Details" = "विवरण";
+/* (No Commment) */
+"Disabled" = "विकलांग";
+/* (No Commment) */
+"Display" = "प्रदर्शन";
+/* (No Commment) */
+"Do you really want to log out?" = "तुम सच में लॉग इन करने के लिए चाहते हैं?";
+/* (No Commment) */
+"Don't show again" = "फिर से न दिखाएँ";
+/* (No Commment) */
+"Downloading Wallet" = "बटुआ डाउनलोड करना";
+/* (No Commment) */
+"Easy one time wallet backup keeps you in control of your funds" = "आसान एक बार बटुए बैकअप आप आपके धन के नियंत्रण में रहता है";
+/* (No Commment) */
+"Email Verified" = "ईमेल सत्यापित";
+/* (No Commment) */
+"Empty response from server." = "सर्वर से खाली प्रतिसाद।";
+/* (No Commment) */
+"Enable 2-Step" = "2-चरणीय सक्षम करें";
+/* (No Commment) */
+"Enable 2-Step for SMS" = "2-चरण SMS के लिए सक्षम करें";
+/* (No Commment) */
+"Enable Location Services" = "स्थान सेवाओं को सक्षम करें";
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin. Only labeled addresses and imported addresses are eligible to trigger notifications." = "जब भी आप bitcoin प्राप्त एक ईमेल या एसएमएस संदेश प्राप्त करने के लिए सूचनाएँ सक्षम करें। केवल पते लेबल और आयातित पतों सूचना ट्रिगर करने के लिए पात्र हैं।";
+/* (No Commment) */
+"Enable this option to prevent IP addresses that are known to be part of the Tor anonymizing network from accessing your wallet. The Tor network is frequently used by hackers attempting to access Blockchain users' wallets." = "कि अपना बटुआ तक पहुँचने से टॉर कि नेटवर्क का हिस्सा होने के लिए जाना जाता IP पते को रोकने के लिए इस विकल्प को सक्षम करें। टो नेटवर्क अक्सर हैकर्स द्वारा Blockchain उपयोगकर्ता जेब तक पहुँचने का प्रयास किया जाता है।";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Five addresses will be loaded consecutively, after which logging in is required to show new addresses." = "एक प्राप्त पता पता चलता है जब आप पिन स्क्रीन पर, बाईं ओर स्वाइप प्राप्त bitcoin भी तेजी से बनाने के लिए इस विकल्प को सक्षम करें। पांच पते क्रमानुसार, जिसके बाद लॉग इन नए पते को दिखाने के लिए की आवश्यकता है लोड किया जाएगा।";
+/* (No Commment) */
+"Enable this option to reveal a receive address when you swipe left on the PIN screen, making receiving bitcoin even faster. Only one address will be loaded, logging in is required to show a new address." = "एक प्राप्त पता पता चलता है जब आप पिन स्क्रीन पर, बाईं ओर स्वाइप प्राप्त bitcoin भी तेजी से बनाने के लिए इस विकल्प को सक्षम करें। केवल एक पता लोड हो जाएगा, लॉग इन करने की आवश्यकता है एक नया पता दिखा।";
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered Touch ID fingerprint on this device to access to your wallet." = "इस सुविधा को सक्षम करने के एक पंजीकृत स्पर्श ID फिंगरप्रिंट के साथ सभी उपयोगकर्ताओं के लिए अपने बटुए का उपयोग करने के लिए इस डिवाइस पर की अनुमति होगी।";
+/* (No Commment) */
+"Enjoying the Blockchain Wallet? Please take a moment to leave a review in the App Store and let others know about it." = "लॉकचेन बटुआ मजा आ रहा है? App की दुकान में एक समीक्षा छोड़ दो और दूसरों के बारे में पता करने के लिए एक क्षण ले कृपया।";
+/* (No Commment) */
+"Enter %@ amount" = "%@ राशि दर्ज करें";
+/* (No Commment) */
+"Enter Bitcoin address or select" = "Bitcoin पता दर्ज करें या का चयन करें";
+/* (No Commment) */
+"Enter Password" = "पासवर्ड दर्ज करें";
+/* (No Commment) */
+"Enter Verification Code" = "सत्यापन कोड दर्ज करें";
+/* (No Commment) */
+"Enter your verification code" = "अपना सत्यापन कोड दर्ज करें";
+"Error" = "त्रुटि";
+/* (No Commment) */
+"Error loading settings" = "त्रुटि लोडिंग सेटिंग्स";
+/* (No Commment) */
+"Error updating settings" = "सेटिंग्स अद्यतन करने में त्रुटि";
+/* (No Commment) */
+"Everything you need to store, spend and receive your bitcoin" = "सब कुछ आप की जरूरत है को संग्रहीत करने के लिए, खर्च और अपना bitcoin प्राप्त";
+/* (No Commment) */
+"Failed To Load Wallet" = "बटुआ लोड करने में विफल रहा";
+/* (No Commment) */
+"Failed to validate server certificate" = "सर्वर प्रमाण पत्र को मान्य करने में विफल रहा";
+/* (No Commment) */
+"Fee is too high (0.01 BTC limit)" = "शुल्क बहुत अधिक है (0.01 बीटीसी सीमा)";
+/* (No Commment) */
+"Fee per KB" = "KB प्रति शुल्क";
+/* (No Commment) */
+"Fees" = "फीस";
+/* (No Commment) */
+"Finished Signing Inputs" = "आदानों पर हस्ताक्षर करने समाप्त हो गया";
+/* (No Commment) */
+"For increased privacy, we generate a unique address for every payment. All addresses generated in your wallet can still receive funds, even if they no longer appear under Receive." = "बढ़ी हुई गोपनीयता के लिए, हम एक अद्वितीय पते हर भुगतान के लिए उत्पन्न करते हैं। सभी अपने बटुए में उत्पन्न किए गए पते अभी भी धन, प्राप्त कर सकते हैं, भले ही वे अब प्राप्त करें के अंतर्गत दिखाई देते हैं।";
+/* (No Commment) */
+"For your safety, we recommend you to transfer any balances in your imported addresses into your Blockchain wallet." = "अपनी सुरक्षा के लिए, हम अनुशंसा करते हैं आप अपने आयातित पतों में किसी भी शेष अपने लॉकचेन बटुए में स्थानांतरित करने के लिए।";
+/* (No Commment) */
+"Forget Wallet" = "बटुआ भूल जाते हैं";
+/* (No Commment) */
+"Found %d, with %@" = "%1$d, %2$@ के साथ पाया";
+/* (No Commment) */
+"From" = "से";
+/* (No Commment) */
+"From and destination address have to be different" = "से और गंतव्य पता है अलग होना करने के लिए";
+/* (No Commment) */
+"From and destination have to be different" = "से और गंतव्य अलग होना है";
+/* (No Commment) */
+"Go to Settings" = "सेटिंग्स पर जाएँ";
+/* (No Commment) */
+"Hint Stored" = "संग्रहीत संकेत";
+/* (No Commment) */
+"How would you like to pair?" = "आप जोड़ी करने के लिए कैसे करना चाहेंगे?";
+/* (No Commment) */
+"Identifier" = "पहचानकर्ता";
+/* (No Commment) */
+"If you are a merchant, view your extended public key (xPub) and use the Blockchain Merchant app to receive funds." = "यदि आप एक व्यापारी हैं, अपने विस्तारित सार्वजनिक कुंजी (xPub) देखने और धन प्राप्त करने के लिए लॉकचेन मर्चेंट ऐप का उपयोग करें।";
+/* (No Commment) */
+"Import Private Key" = "आयात निजी कुंजी";
+/* (No Commment) */
+"Import address" = "पते आयात करें";
+/* (No Commment) */
+"Imported Addresses (Archived)" = "आयातित पतों (संग्रहीत)";
+/* (No Commment) */
+"Imported Private Key %@" = "आयातित निजी कुंजी %@";
+/* (No Commment) */
+"Imported watch-only address %@" = "आयातित केवल देखो पता %@";
+/* (No Commment) */
+"Importing key" = "कुंजी आयात कर रहा है";
+/* (No Commment) */
+"Incorrect PIN. Please retry." = "ग़लत PIN. कृपया पुन: प्रयास करें।";
+/* (No Commment) */
+"Incorrect password" = "गलत पासवर्ड";
+/* (No Commment) */
+"Incorrect private key" = "गलत निजी कुंजी";
+/* (No Commment) */
+"Increase fee" = "शुल्क में वृद्धि";
+/* (No Commment) */
+"Initializing Wallet" = "बटुआ इनिशियलाइज़ कर रहा";
+/* (No Commment) */
+"Insufficient Funds" = "अपर्याप्त धनराशि";
+/* (No Commment) */
+"Invalid Identifier" = "अमान्य पहचानकर्ता";
+/* (No Commment) */
+"Invalid Pairing Code" = "अमान्य कोड बाँधना";
+/* (No Commment) */
+"Invalid Send Value" = "अमान्य भेजें मान";
+/* (No Commment) */
+"Invalid Shared Key" = "अमान्य साझा कुंजी";
+/* (No Commment) */
+"Invalid Status Code Returned %@" = "अमान्य स्थिति कोड %@ में लौटे";
+/* (No Commment) */
+"Invalid address: %@" = "अमान्य पता: %@";
+/* (No Commment) */
+"Invalid email address." = "अमान्य ईमेल पते।";
+/* (No Commment) */
+"Invalid mobile number." = "अमान्य मोबाइल नंबर।";
+/* (No Commment) */
+"Invalid recovery phrase. Please try again" = "अवैध वसूली वाक्यांश। कृपया पुन: प्रयास करें";
+/* (No Commment) */
+"Invalid server response. Please check your internet connection." = "अमान्य सर्वर प्रतिसाद। कृपया अपना इंटरनेट कनेक्शन जाँचें।";
+/* (No Commment) */
+"Invalid to bitcoin address" = "Bitcoin पता करने के लिए अमान्य";
+/* (No Commment) */
+"Invalid two-factor authentication type" = "अमान्य दो फैक्टर प्रमाणीकरण प्रकार";
+/* (No Commment) */
+"Invalid verification code. Please try again." = "अमान्य सत्यापन कोड। कृपया पुन: प्रयास करें।";
+"It is important to make sure you write down your words exactly as they appear here and " = "यह सुनिश्चित करें कि आप अपने शब्दों के नीचे लिखने के रूप में वे यहाँ बिल्कुल दिखाई देते हैं करने के लिए महत्वपूर्ण है और ";
+"Just now" = "बस अब";
+/* (No Commment) */
+"Keep higher fee" = "उच्च शुल्क रखने";
+/* (No Commment) */
+"Keep lower fee" = "कम शुल्क रखने";
+/* (No Commment) */
+"Keep your xPub private. Someone with access to your xPub will be able to see all of your funds and transactions." = "अपने xPub को निजी रखना। अपने xPub के लिए पहुँच के साथ कोई अपने धन और लेन-देन के सभी को देखने में सक्षम हो जाएगा।";
+/* (No Commment) */
+"Key already imported" = "पहले से ही आयातित कुंजी";
+/* (No Commment) */
+"Label Address" = "लेबल पता";
+/* (No Commment) */
+"Label must contain letters and numbers only" = "अक्षरों और संख्याओं केवल लेबल शामिल होना चाहिए";
+/* (No Commment) */
+"Label must have less than 18 characters" = "लेबल कम से कम 18 वर्ण होना आवश्यक";
+/* (No Commment) */
+"Large Transaction" = "बड़े लेन-देन";
+/* (No Commment) */
+"Learn More" = "और जानो";
+/* (No Commment) */
+"Link Mobile" = "लिंक मोबाइल";
+/* (No Commment) */
+"Load More Transactions" = "अधिक लेन-देन लोड";
+/* (No Commment) */
+"Loading External Page" = "बाह्य पृष्ठ लोड हो रहा है";
+/* (No Commment) */
+"Loading transactions" = "लेनदेन के लोड हो रहा है";
+/* (No Commment) */
+"Log in to my Wallet" = "मेरा बटुआ के लिए लॉग इन करें";
+/* (No Commment) */
+"Login existing Wallet" = "लॉगिन मौजूदा बटुआ";
+/* (No Commment) */
+"Logout and forget wallet" = "लॉग आउट और बटुआ भूल जाते हैं";
+/* (No Commment) */
+"Lower fee" = "कम शुल्क";
+/* (No Commment) */
+"Make Default" = "कर डिफ़ॉल्ट";
+/* (No Commment) */
+"Manually" = "मैन्युअल रूप से";
+/* (No Commment) */
+"Merchant" = "व्यापारी";
+/* (No Commment) */
+"Merchant Directory is currently unavailable. Please try again later." = "व्यापारी निर्देशिका वर्तमान में अनुपलब्ध है। कृपया बाद में पुन: प्रयास करें।";
+/* (No Commment) */
+"Merchant Map" = "व्यापारी मानचित्र";
+/* (No Commment) */
+"Merchant URL" = "व्यापारी यूआरएल";
+/* (No Commment) */
+"Mobile Linked" = "मोबाइल से जुड़ा हुआ";
+/* (No Commment) */
+"Mobile Number" = "मोबाइल नंबर";
+/* (No Commment) */
+"NOTE: The scanned private key does not correspond to this watch-only address. If you want to spend from this address, make sure that you scan the correct private key." = "नोट:: यह केवल देखो पता करने के लिए स्कैन की गई निजी कुंजी संगत नहीं है। आप इस पते से खर्च करने के लिए चाहते हैं, तो सुनिश्चित करें कि आप सही निजी कुंजी स्कैन।";
+/* (No Commment) */
+"Needs BIP38 Password" = "BIP38 पासवर्ड की जरूरत";
+/* (No Commment) */
+"New Address" = "नया पता";
+/* (No Commment) */
+"New Email Address" = "नए ईमेल पते";
+/* (No Commment) */
+"New Mobile Number" = "नया मोबाइल नंबर";
+/* (No Commment) */
+"New PIN must be different" = "नया पिन अलग होना चाहिए";
+/* (No Commment) */
+"New password must be different" = "नया पासवर्ड अलग होना चाहिए.";
+/* (No Commment) */
+"New password must be different from your password hint" = "नया पासवर्ड आपके पासवर्ड संकेत से अलग होना चाहिए";
+"Next word" = "अगला शब्द";
+/* (No Commment) */
+"No Label" = "कोई लेबल";
+"No Password Entered" = "कोई पासवर्ड दर्ज किया";
+/* (No Commment) */
+"No internet connection available. Please check your network settings." = "कोई इंटरनेट कनेक्शन उपलब्ध नहीं। कृपया अपनी नेटवर्क सेटिंग्स की जाँच करें।";
+/* (No Commment) */
+"No internet connection." = "कोई इंटरनेट कनेक्शन।";
+/* (No Commment) */
+"Not Stored" = "संग्रहीत नहीं";
+/* (No Commment) */
+"Notifications" = "सूचनाएँ";
+/* (No Commment) */
+"Open %@?" = "खुला %@?";
+/* (No Commment) */
+"Open Mail App" = "खुला मेल अनुप्रयोग";
+/* (No Commment) */
+"PIN" = "पिन";
+/* (No Commment) */
+"PIN Encrypted String is nil" = "पिन एन्क्रिप्टेड स्ट्रिंग नहीं के बराबर है";
+/* (No Commment) */
+"PIN Response Object key or value length 0" = "पिन प्रतिसाद ऑब्जेक्ट कुंजी या मान की लंबाई 0";
+/* (No Commment) */
+"PIN Response Object success length 0" = "पिन प्रतिसाद ऑब्जेक्ट सफलता लंबाई 0";
+/* (No Commment) */
+"PIN Saved Successfully" = "PIN सफलतापूर्वक सहेजा गया";
+/* (No Commment) */
+"PIN Validation Error" = "पिन सत्यापन त्रुटि";
+/* (No Commment) */
+"PIN Validation cannot be completed. Please enter your wallet password manually." = "पिन सत्यापन पूर्ण नहीं हो सकती। कृपया अपना बटुआ पासवर्ड मैन्युअली दर्ज करें।";
+/* (No Commment) */
+"PINs do not match" = "पिन से मेल नहीं खाते";
+/* (No Commment) */
+"Parsing Pairing Code" = "पार्सिंग कोड बाँधना";
+/* (No Commment) */
+"Password Hint" = "पासवर्ड संकेत";
+/* (No Commment) */
+"Password Required" = "पासवर्ड की आवश्यकता";
+/* (No Commment) */
+"Password changed. Please login to continue." = "पासवर्ड परिवर्तित कर दिया। कृपया जारी रखने के लिए लॉगिन।";
+/* (No Commment) */
+"Password must be different from your email" = "पासवर्ड आपके ई-मेल से अलग होना चाहिए.";
+/* (No Commment) */
+"Password must be less than or equal to 255 characters" = "पासवर्ड से कम या बराबर करने के लिए 255 वर्ण होना चाहिए.";
+/* (No Commment) */
+"Payment Received" = "प्राप्त भुगतान";
+/* (No Commment) */
+"Payment Sent!" = "भुगतान भेजा!";
+/* (No Commment) */
+"Payments Sent" = "भुगतान भेजा";
+/* (No Commment) */
+"Pending" = "लंबित";
+/* (No Commment) */
+"Pending (%@ Confirmations)" = "(%@ Confirmations) लंबित";
+/* (No Commment) */
+"Phrase Backed" = "समर्थित वाक्यांश";
+/* (No Commment) */
+"Please Login" = "कृपया लॉगिन";
+/* (No Commment) */
+"Please add an email address" = "कृपया एक ईमेल पते जोड़ें";
+/* (No Commment) */
+"Please check your email and click on the verification link." = "कृपया अपने ईमेल की जाँच और सत्यापन लिंक पर क्लिक करें।";
+/* (No Commment) */
+"Please check your email. If you have already verified a login attempt, you should log in via our web wallet and pair your phone by scanning the QR code under Settings -> Wallet Information." = "कृपया अपने ईमेल की जाँच करें। यदि आप पहले से ही एक लॉगिन का प्रयास सत्यापित कर लिया है, आप के माध्यम से हमारी वेब बटुए में लॉग इन करें और अपने फोन सेटिंग्स के अंतर्गत QR कोड स्कैन कर रहा है द्वारा जोड़ी चाहिए-> बटुए जानकारी।";
+/* (No Commment) */
+"Please check your internet connection." = "कृपया अपना इंटरनेट कनेक्शन जाँचें।";
+/* (No Commment) */
+"Please choose another PIN" = "कृपया चुनें किसी अन्य पिन";
+/* (No Commment) */
+"Please choose from the options below." = "कृपया नीचे दिए गए विकल्पों में से चुनें।";
+/* (No Commment) */
+"Please enter a fee greater than 0 BTC and at most 0.01 BTC" = "कृपया 0 बीटीसी और सबसे कम 0.01 बीटीसी से भी अधिक से अधिक एक शुल्क दर्ज करें";
+/* (No Commment) */
+"Please enter a new PIN" = "कृपया एक नया पिन दर्ज करें";
+/* (No Commment) */
+"Please enter your %@ 2FA code" = "कृपया अपने %@ 2FA कोड दर्ज करें";
+/* (No Commment) */
+"Please enter your 36 character wallet identifier correctly. It can be found in the welcome email on startup." = "कृपया अपने 36 चरित्र बटुआ पहचानकर्ता सही ढंग से दर्ज करें। यह स्टार्टअप पर आपका स्वागत है ईमेल में पाया जा सकता है।";
+/* (No Commment) */
+"Please enter your PIN" = "कृपया अपना पिन दर्ज करें";
+/* (No Commment) */
+"Please enter your recovery phrase with words separated by spaces" = "शब्दों के रिक्त स्थान से अलग के साथ अपने वसूली वाक्यांश दर्ज करें";
+/* (No Commment) */
+"Please lower the fee to an amount that is less than your balance" = "कृपया एक राशि है कि आपकी शेष राशि से कम है के लिए शुल्क कम";
+/* (No Commment) */
+"Please provide an email address." = "कृपया एक ईमेल पता प्रदान करते हैं।";
+/* (No Commment) */
+"Please refresh the pairing code and try again." = "कृपया पेयरिंग कोड को ताज़ा करें और पुन: प्रयास करें।";
+/* (No Commment) */
+"Please select a different address to send from." = "कृपया किसी भिन्न पते से भेजने के लिए का चयन करें।";
+/* (No Commment) */
+"Please send %@ to bitcoin address.\
+%@" = "कृपया %1$@ bitcoin पता करने के लिए भेजें।\
+%2$@";
+/* (No Commment) */
+"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@" = "कृपया भुगतान bitcoin पते पर भेजें (< a href = \"https://blockchain.info/wallet/bitcoin-faq\" = > मदद? < /a >): %@";
+"Please try again" = "कृपया पुन: प्रयास करें";
+/* (No Commment) */
+"Please verify your email address first." = "कृपया अपना ईमेल पता पहले सत्यापित करें।";
+/* (No Commment) */
+"Please verify your mobile number first." = "कृपया अपना मोबाइल नंबर पहले सत्यापित करें।";
+/* (No Commment) */
+"Preparing transfer" = "स्थानांतरण की तैयारी";
+/* (No Commment) */
+"Processing key" = "कुंजी संसाधन";
+/* (No Commment) */
+"Rate Blockchain Wallet" = "दर लॉकचेन बटुआ";
+/* (No Commment) */
+"Receive" = "प्राप्त";
+/* (No Commment) */
+"Receive to..." = "प्राप्त करने के लिए...";
+/* (No Commment) */
+"Received" = "प्राप्त हुआ";
+/* (No Commment) */
+"Recipients" = "प्राप्तकर्ताओं";
+/* (No Commment) */
+"Recovering Funds" = "धन पुनर्प्राप्त करना";
+/* (No Commment) */
+"Request" = "अनुरोध";
+/* (No Commment) */
+"Request Amount" = "राशि का अनुरोध";
+/* (No Commment) */
+"Request failed. Please check your internet connection." = "अनुरोध विफल हुआ। कृपया अपना इंटरनेट कनेक्शन जाँचें।";
+/* (No Commment) */
+"Resend verification SMS" = "SMS सत्यापन पुन: भेजें";
+/* (No Commment) */
+"Resend verification email" = "सत्यापन ईमेल पुनः भेजें";
+/* (No Commment) */
+"Reset" = "रीसेट करें";
+/* (No Commment) */
+"Retrieving recommended fee" = "शुल्क पुन: प्राप्त करने की सिफारिश की";
+/* (No Commment) */
+"Retry Validation" = "सत्यापन पुन: प्रयास करें";
+/* (No Commment) */
+"SMS Notifications" = "एसएमएस सूचनाएं";
+/* (No Commment) */
+"Save" = "सहेजें";
+/* (No Commment) */
+"Scan Pairing Code" = "स्कैन कोड बाँधना";
+/* (No Commment) */
+"Scan Private Key" = "निजी कुंजी को स्कैन";
+/* (No Commment) */
+"Scan QR Code" = "QR कोड स्कैन करें";
+/* (No Commment) */
+"Scan QR code" = "QR कोड स्कैन करें";
+/* (No Commment) */
+"Scan or copy this code into your Blockchain Merchant app to securely receive Bitcoin." = "स्कैन या Bitcoin सुरक्षित रूप से प्राप्त करने के लिए अपने लॉकचेन व्यापारी app में इस कोड की प्रतिलिपि बनाएँ।";
+"Second Password Incorrect" = "दूसरा पासवर्ड ग़लत";
+"Second Password Required" = "दूसरा पासवर्ड की आवश्यकता";
+/* (No Commment) */
+"Security Center" = "सुरक्षा केंद्र";
+/* (No Commment) */
+"Security Center completed - your wallet is safe and secure" = "सुरक्षा केंद्र पूर्ण - सुरक्षित और सुरक्षित अपने बटुआ है";
+/* (No Commment) */
+"Send from..." = "से भेजें...";
+/* (No Commment) */
+"Send to..." = "करने के लिए भेज...";
+/* (No Commment) */
+"Send verification SMS" = "सत्यापन एसएमएस भेजें";
+/* (No Commment) */
+"Sending Transaction" = "भेजने के लेन-देन";
+/* (No Commment) */
+"Sent" = "भेजे गए";
+/* (No Commment) */
+"Sent to %@" = "%@ करने के लिए भेजा";
+/* (No Commment) */
+"Server URL" = "सर्वर URL";
+/* (No Commment) */
+"Set as Default?" = "डिफ़ॉल्ट के रूप में सेट करें?";
+/* (No Commment) */
+"Show all 'Dont Show Again' alerts" = "सभी 'मत दिखाओ फिर से' अलर्ट दिखाएँ";
+"Signal %d was raised." = "सिग्नल %d उठाया था।";
+/* (No Commment) */
+"Signing Input %d" = "इनपुट %d हस्ताक्षर करने";
+/* (No Commment) */
+"Signing Inputs" = "आदानों पर हस्ताक्षर";
+/* (No Commment) */
+"Simulate surge" = "वृद्धि अनुकरण";
+/* (No Commment) */
+"Some funds cannot be transferred automatically." = "कुछ धन स्वचालित रूप से स्थानांतरित नहीं किया जा सकता।";
+/* (No Commment) */
+"Status" = "स्थिति";
+/* (No Commment) */
+"Store Hint" = "दुकान संकेत";
+/* (No Commment) */
+"Stored" = "संग्रहित";
+/* (No Commment) */
+"Success!" = "सफलता!";
+/* (No Commment) */
+"Surge Occurring" = "उत्पन्न हो रही वृद्धि";
+/* (No Commment) */
+"Swipe to Receive" = "प्राप्त करने के लिए ज़ोर से मारना";
+"Syncing Wallet" = "बटुआ सिंक्रनाइज़ किए जा रहे";
+/* (No Commment) */
+"Tap to copy this address. Share it with the sender via email or text." = "इस पते की प्रतिलिपि बनाएँ करने के लिए टैप करें। यह ईमेल या पाठ के माध्यम से प्रेषक के साथ साझा करें।";
+/* (No Commment) */
+"The Bitcoin mining network is currently experiencing a high volume of activity, resulting in recommended fees that are higher than usual." = "Bitcoin खनन नेटवर्क वर्तमान में सामान्य से अधिक कर रहे हैं की सिफारिश की फीस में जिसके परिणामस्वरूप गतिविधि, की एक उच्च वॉल्यूम का अनुभव है।";
+/* (No Commment) */
+"The amount you want to send (%@) is greater than the maximum amount you can spend minus the fee (%@ - %@). Would you like to send %@?" = "(%1$@) भेजने के लिए इच्छित राशि आप शुल्क (%2$@ - %3$@) शून्य से खर्च कर सकते हैं अधिकतम राशि से अधिक है। आप %4$@ भेजना चाहेंगे?";
+/* (No Commment) */
+"The fee you have specified is too low." = "आपने निर्दिष्ट किया है शुल्क बहुत कम है।";
+/* (No Commment) */
+"The private key you are attempting to import is encrypted. Please enter the password below." = "आप आयात करने का प्रयास कर रहे हैं निजी कुंजी एन्क्रिप्टेड है। कृपया नीचे दिए गए पासवर्ड दर्ज करें।";
+/* (No Commment) */
+"There was a problem verifying your identity." = "आपकी पहचान की पुष्टि करने में कोई समस्या थी।";
+/* (No Commment) */
+"There was an error importing this private key" = "इस निजी कुंजी आयात करने में कोई त्रुटि थी";
+/* (No Commment) */
+"These options are recommended for advanced users only. Continue?" = "ये विकल्प केवल उन्नत उपयोगकर्ताओं के लिए सिफारिश कर रहे हैं। जारी रखें?";
+/* (No Commment) */
+"This action requires the private key for the Bitcoin address %@. Please scan the QR code." = "इस क्रिया के लिए Bitcoin पता %@ निजी कुंजी की आवश्यकता है। कृपया QR कोड स्कैन करें।";
+/* (No Commment) */
+"This action requires the second password for your wallet. Please enter it below and press continue." = "इस कार्रवाई के लिए अपना बटुआ दूसरा पासवर्ड की आवश्यकता है। कृपया उसे नीचे दर्ज करें और प्रेस जारी रखें।";
+/* (No Commment) */
+"This address has already been used. Please login." = "इस पता पहले से ही इस्तेमाल किया गया है। कृपया लॉगिन करें।";
+/* (No Commment) */
+"This address is not watch-only." = "यह पता केवल देखो नहीं है।";
+/* (No Commment) */
+"This is a watch-only address. To spend your funds from this wallet, please scan your private key." = "यह एक केवल-देखो पता है। इस वॉलेट से आपकी धनराशि खर्च करने के लिए, कृपया अपने निजी कुंजी स्कैन करें।";
+/* (No Commment) */
+"This is an oversized bitcoin transaction. Your wallet needs to consolidate many smaller payments you've received in the past. This requires a relatively high fee in order to be confirmed quickly. If it’s fine for the transaction to take longer to confirm, you can reduce the fee manually by tapping \"Customize Fee.\"" = "यह एक oversized bitcoin लेनदेन है। अपने बटुए आपको मिला है, अतीत में कई छोटे भुगतान को मजबूत करने की जरूरत है। यह जल्दी से पुष्टि की जानी करने के लिए एक अपेक्षाकृत उच्च शुल्क की आवश्यकता है। यह पुष्टि करने के लिए लंबे समय तक लेने के लिए इस सौदे के लिए ठीक है, तो आप शुल्क मैन्युअल रूप से \"अनुकूलित करें शुल्क.\" दोहन द्वारा कम कर सकते हैं";
+/* (No Commment) */
+"This is archived. Though you cannot send funds from here, any and all funds will remain safe. Simply unarchive to start using it again." = "यह संग्रहीत है। भले ही आप यहाँ से धन भेजा नहीं कर सकता, किसी भी और सभी धन सुरक्षित रहेगा। बस इसे फिर से का उपयोग कर प्रारंभ करने के लिए unarchive.";
+/* (No Commment) */
+"This name is already in use. Please choose a different name." = "यह नाम पहले से उपयोग में है। कृपया कोई भिन्न नाम चुनें।";
+/* (No Commment) */
+"This private key belongs to another address that is not watch only" = "देखो केवल नहीं है किसी अन्य पता करने के लिए इस निजी कुंजी संबंध रखता है";
+/* (No Commment) */
+"This transaction requires a higher fee for dust consumption due to the small amount of change to be returned." = "इस हस्तांतरण वापस करने के लिए परिवर्तन की छोटी राशि के कारण धूल की खपत के लिए एक उच्च शुल्क की आवश्यकता है।";
+/* (No Commment) */
+"This will allow the following alerts: Receive to watch-only, App Store review prompt, and Transfer All Funds." = "यह निम्न सूचनाएँ देगा: देखो केवल, App स्टोर की समीक्षा करने के लिए प्रॉम्प्ट प्राप्त होता है, और सभी धन अंतरण।";
+/* (No Commment) */
+"This will erase all wallet data on this device. Please confirm you have your wallet information saved elsewhere otherwise any bitcoin in this wallet will be inaccessible!!" = "यह इस डिवाइस पर सभी वॉलेट डेटा मिटा देगा। कृपया पुष्टि करें कि आपके पास अपने वॉलेट जानकारी कहीं और अन्यथा किसी भी bitcoin बटुआ जाएगा में सहेजा दुर्गम हो!!";
+/* (No Commment) */
+"To" = "करने के लिए";
+/* (No Commment) */
+"Tor Requests" = "टो अनुरोधों";
+/* (No Commment) */
+"Tor blocked" = "टो ब्लॉक किया गया";
+/* (No Commment) */
+"Tor requests allowed" = "टो अनुरोधों की अनुमति दी";
+/* (No Commment) */
+"Tor requests are currently allowed." = "वर्तमान में टो अनुरोधों की अनुमति है।";
+/* (No Commment) */
+"Tor requests are currently blocked." = "टो अनुरोधों वर्तमान में अवरुद्ध कर रहे हैं।";
+/* (No Commment) */
+"Total Balance" = "कुल शेष राशि";
+/* (No Commment) */
+"Touch ID has been locked due to too many failed attempts." = "स्पर्श ID भी कई असफल प्रयासों के कारण बंद कर दिया गया है।";
+/* (No Commment) */
+"Touch ID is not available on this device." = "स्पर्श ID इस डिवाइस पर उपलब्ध नहीं है।";
+/* (No Commment) */
+"Touch ID is not enabled on this device. To enable Touch ID, go to Settings->Touch ID & Passcode and add a fingerprint." = "स्पर्श ID इस डिवाइस पर सक्षम नहीं है। स्पर्श ID को सक्षम करने के लिए, सेटिंग्स->Touch ID & पासकोड को जाना और एक फिंगरप्रिंट जोड़ें।";
+/* (No Commment) */
+"Transaction Fees" = "लेन-देन की फीस";
+/* (No Commment) */
+"Transaction fee: %@" = "लेनदेन शुल्क: %@";
+/* (No Commment) */
+"Transaction fees impact how quickly the Bitcoin mining network will confirm your transactions, and depend on the current network conditions." = "लेनदेन की फीस प्रभाव कितनी जल्दी Bitcoin खनन नेटवर्क आपके लेन-देन की पुष्टि करें, और वर्तमान नेटवर्क की स्थितियों पर निर्भर करते हैं।";
+/* (No Commment) */
+"Transactions" = "लेन-देन";
+/* (No Commment) */
+"Transactions with no fees may take a long time to confirm or may not be confirmed at all. Would you like to continue?" = "कोई फीस के साथ लेन-देन की पुष्टि करने के लिए एक लंबा समय लग सकते हैं या सब पर हो सकता की पुष्टि नहीं की। आप जारी रखना चाहेंगे?";
+/* (No Commment) */
+"Transfer Funds" = "निधि अंतरण";
+/* (No Commment) */
+"Transferred funds from %d %@" = "%1$d %2$@ से हस्तांतरित धन";
+/* (No Commment) */
+"Transferred funds from %d %@. Outputs for %d %@ were too small." = "%1$d %2$@ से धनराशि। Outputs %3$d %4$@ लिए बहुत छोटे थे।";
+/* (No Commment) */
+"Transferring all funds: Address %i of %i" = "सभी निधि स्थानांतरित: %2$i का पता %1$i";
+/* (No Commment) */
+"UPGRADE YOUR WALLET" = "अपने बटुए का उन्नयन";
+/* (No Commment) */
+"Unable to load wallet due to no server response. You may be offline or Blockchain is experiencing difficulties. Please try again later." = "कोई सर्वर प्रतिक्रिया के कारण बटुआ लोड करने में असमर्थ। आप ऑफ़लाइन किया जा सकता या Blockchain कठिनाइयों का सामना कर रहा है। कृपया बाद में पुन: प्रयास करें।";
+/* (No Commment) */
+"Unarchive Address" = "पता unarchive";
+/* (No Commment) */
+"Unconfirmed" = "अपुष्ट";
+"Unhandled exception" = "मैनेज्ड अपवाद";
+/* (No Commment) */
+"Unknown" = "अज्ञात";
+/* (No Commment) */
+"Unknown Touch ID error. Code: %ld" = "अज्ञात स्पर्श ID त्रुटि। कोड: %ld";
+/* (No Commment) */
+"Unknown key format" = "अज्ञात कुंजी स्वरूप";
+/* (No Commment) */
+"Unsupported Private Key Format" = "असमर्थित निजी कुंजी स्वरूप";
+/* (No Commment) */
+"Unverified" = "असत्यापित";
+/* (No Commment) */
+"Upgrade Wallet" = "बटुए का उन्नयन";
+/* (No Commment) */
+"Upgrade to V3" = "V3 के लिए अपग्रेड करें";
+/* (No Commment) */
+"Use Touch ID as PIN" = "पिन के रूप में स्पर्श ID का उपयोग करें";
+/* (No Commment) */
+"Use all funds" = "सभी निधियों का उपयोग करें";
+/* (No Commment) */
+"Use recommended values" = "अनुशंसित मान का उपयोग करें";
+/* (No Commment) */
+"Use total available minus fee: %@" = "उपयोग शुल्क शून्य से उपलब्ध कुल: %@";
+/* (No Commment) */
+"User Declined" = "उपयोगकर्ता मना कर दिया";
+"VERIFY BACKUP" = "बैकअप सत्यापित करें";
+/* (No Commment) */
+"Value when sent: %@" = "मान जब भेजे: %@";
+/* (No Commment) */
+"Verification email has been sent to %@." = "सत्यापन ईमेल करने के लिए %@ भेजा गया है।";
+/* (No Commment) */
+"Verified" = "सत्यापित किया";
+/* (No Commment) */
+"Verify Email" = "ईमेल सत्यापित करें";
+/* (No Commment) */
+"Verifying" = "का सत्यापन";
+/* (No Commment) */
+"Wallet Information" = "बटुआ जानकारी";
+/* (No Commment) */
+"Wallet JSON" = "बटुआ JSON";
+/* (No Commment) */
+"Wallet Paired Successfully." = "बटुआ सफलतापूर्वक बनती।";
+/* (No Commment) */
+"Recovery Phrase" = "वसूली वाक्यांश";
+/* (No Commment) */
+"Warning!!!" = "चेतावनी!!!";
+/* (No Commment) */
+"Warning: Your wallet identifier is sensitive information. Copying it may compromise the security of your wallet." = "चेतावनी: आपका बटुआ पहचानकर्ता संवेदनशील जानकारी है। यह नकल अपने बटुए की सुरक्षा से समझौता कर सकते हैं।";
+/* (No Commment) */
+"We'll send the hint to your confirmed email address in case you request it." = "मामले में आप यह अनुरोध हम आपकी पुष्टि किया गया ईमेल पता करने के लिए संकेत भेज देंगे।";
+/* (No Commment) */
+"WebSocket URL" = "WebSocket यूआरएल";
+/* (No Commment) */
+"Welcome" = "स्वागत है";
+"Well done! Should you lose your password, you can restore funds in this wallet even if received in the future (except imported addresses) using the 12 word recovery phrase. Remember to keep your Recovery Phrase offline somewhere very safe and secure. Anyone with access to your Recovery Phrase has access to your bitcoin." = "बहुत ख़ूब! आप अपना पासवर्ड खो जाना चाहिए, आप पुनर्स्थापित कर सकते हैं इस बटुए में धन भले ही 12 शब्द वसूली वाक्यांश का प्रयोग भविष्य में (सिवाय आयात किए गए पते) प्राप्त किया। अपने पुनर्प्राप्ति वाक्यांश ऑफ़लाइन कहीं बहुत सुरक्षित और सुरक्षित रखने के लिए याद रखें। अपने पुनर्प्राप्ति वाक्यांश करने के लिए पहुँच के साथ किसी को भी अपने bitcoin के लिए पहुँच है।";
+/* (No Commment) */
+"We’ve detected a previous installation of Blockchain Wallet on your phone." = "हम अपने फोन पर Blockchain बटुए के एक पूर्व स्थापना पाई है।";
+/* (No Commment) */
+"What's this for?" = "इस के लिए क्या है?";
+/* (No Commment) */
+"Where" = "जहाँ";
+/* (No Commment) */
+"Would you like to add the bitcoin address %@ to your address book?" = "आप bitcoin पते %@ आपकी पता पुस्तिका में जोड़ने के लिए चाहते हैं?";
+/* (No Commment) */
+"Would you like to archive the addresses used?" = "आप पते उपयोग किया संग्रह करना चाहेंगे?";
+"Write the following 12 words onto a " = "लिखने के निम्नलिखित 12 शब्दों पर एक ";
+/* (No Commment) */
+"Wrong BIP38 Password" = "गलत BIP38 पासवर्ड";
+/* (No Commment) */
+"Yes, rate Blockchain Wallet" = "हाँ, लॉकचेन बटुआ दर";
+/* (No Commment) */
+"You are about to import a watch-only address, an address (or public key script) stored in the wallet without the corresponding private key. This means that the funds can be spent ONLY if you have the private key stored elsewhere. If you do not have the private key stored, do NOT instruct anyone to send you bitcoin to the watch-only address." = "लगभग एक ही देखो पता आयात करने के लिए कर रहे हैं, कोई पता (या सार्वजनिक कुंजी स्क्रिप्ट) इसी निजी बिना बटुआ कुंजी में संग्रहीत। इसका मतलब यह है कि केवल यदि आप कहीं और निजी कुंजी संग्रहीत धन खर्च किया जा कर सकते हैं। यदि आपके पास निजी कुंजी संग्रहीत नहीं है, आप केवल देखो पता करने के लिए bitcoin भेजने के लिए किसी को भी हिदायत नहीं।";
+/* (No Commment) */
+"You are about to receive bitcoin to a watch-only address. You can only spend these funds if you have access to the private key. Continue?" = "आप के बारे में bitcoin एक केवल-देखो पता करने के लिए प्राप्त करने के लिए कर रहे हैं। आप निजी कुंजी के लिए पहुँच है, तो आप केवल इन धन खर्च कर सकते हैं। जारी रखें?";
+/* (No Commment) */
+"You are now running our most secure Bitcoin wallet" = "आप हमारे सबसे सुरक्षित Bitcoin बटुआ अब चल रहे हैं";
+"You backed up your funds successfully." = "आप अपने धन को सफलतापूर्वक बैकअप।";
+/* (No Commment) */
+"You can enable 2-step Verification via SMS on your mobile phone. In order to use other authentication methods instead, please login to our web wallet." = "आप अपने मोबाइल फोन पर एसएमएस के जरिए 2-चरणीय सत् यापन सक्षम कर सकते हैं। बजाय अन्य प्रमाणीकरण पद्धतियों का उपयोग करने के लिए, कृपया हमारी वेब वॉलेट करने के लिए लॉगिन।";
+/* (No Commment) */
+"You can now spend from this address." = "आप अब इस पते से खर्च कर सकते हैं।";
+/* (No Commment) */
+"You do not have an account set up for Mail. Please contact %@" = "आप किसी खाते के लिए मेल सेट अप नहीं है। कृपया %@ से संपर्क करें";
+/* (No Commment) */
+"You have no addresses with a spendable balance greater than or equal to the required dust threshold." = "आपके पास एक से अधिक या बराबर करने के लिए आवश्यक धूल थ्रेशोल्ड spendable संतुलन के साथ कोई पते।";
+/* (No Commment) */
+"You have no available funds to send from this address" = "आप इस पते से भेजने के लिए कोई धनराशि उपलब्ध है";
+/* (No Commment) */
+"You must disable SMS 2-Step Verification before changing your mobile number (%@)." = "आप अपने मोबाइल नंबर (%@) को बदलने से पहले एसएमएस 2-चरणीय सत्यापन अक्षम करना चाहिए।";
+/* (No Commment) */
+"You must enter a destination address" = "आप एक गंतव्य पता दर्ज करना होगा";
+/* (No Commment) */
+"You must enter a label" = "आप कोई लेबल दर्ज करना होगा";
+/* (No Commment) */
+"You must have at least one active address" = "आप कम से कम एक सक्रिय पता होना चाहिए";
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "आप दो फैक्टर प्रमाणीकरण करने के लिए जोड़ी को मैन्युअल रूप से अक्षम होना आवश्यक है।";
+/* (No Commment) */
+"You must leave at least one active address" = "आपको कम से कम एक सक्रिय पता छोड़ देना चाहिए";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may be stuck and possibly never be confirmed. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@." = "आपके द्वारा निर्दिष्ट %1$@ की एक असाधारण छोटे लेनदेन शुल्क। आपके लेन-देन में फंस सकता है और संभवतः कभी नहीं होने की पुष्टि की। लगभग एक घंटे के भीतर (छह ब्लॉक) की पुष्टि करने के लिए अपने लेनदेन के लिए की संभावना में वृद्धि करने के लिए, हम एक शुल्क कम %2$@ नहीं की अनुशंसा करते हैं।";
+/* (No Commment) */
+"You specified an exceptionally small transaction fee of %@. Your transaction may become stuck and possibly never confirm. To increase the likelihood for your transaction to confirm within approximately one hour (six blocks), we strongly recommend a fee of no less than %@. Since you don’t have sufficient funds, that means the Send amount will also have to be lowered to %@." = "आपके द्वारा निर्दिष्ट %1$@ की एक असाधारण छोटे लेनदेन शुल्क। आपके लेन-देन अटका हो सकता है और संभवतः कभी नहीं की पुष्टि करें। लगभग एक घंटे के भीतर (छह ब्लॉक) की पुष्टि करने के लिए अपने लेनदेन के लिए की संभावना में वृद्धि करने के लिए, हम एक शुल्क कम %2$@ नहीं की अनुशंसा करते हैं। चूंकि आपके पास पर्याप्त धन नहीं है, इसका मतलब है कि भेजें राशि भी %3$@ को कम किया जा करना होगा।";
+/* (No Commment) */
+"You specified an unusually high transaction fee of %@. Even if you lower the fee to %@, you can expect the transaction to confirm within the next 10 minutes (one block)." = "आपके द्वारा निर्दिष्ट %1$@ की एक असामान्य रूप से उच्च लेनदेन शुल्क। यहां तक कि अगर आप %2$@ के लिए शुल्क कम, आप हस्तांतरण अगले 10 मिनट के भीतर (एक ब्लॉक) की पुष्टि करने के लिए उम्मीद कर सकते हैं।";
+/* (No Commment) */
+"You will be leaving the app." = "आप app जा रही हो जाएगा।";
+/* (No Commment) */
+"You've successfully imported a private key." = "आप सफलतापूर्वक एक निजी कुंजी आयात किए गए।";
+/* (No Commment) */
+"You've successfully imported the private key for ​the address %@, and you can now spend from it. If you want to spend from this address, make sure you scan the correct private key." = "आप सफलतापूर्वक पता %@ के लिए निजी कुंजी आयात किया है, और आप इसे से अब खर्च कर सकते हैं। आप इस पते से खर्च करने के लिए चाहते हैं, तो सुनिश्चित करें कि आप सही निजी कुंजी स्कैन।";
+/* (No Commment) */
+"Your device appears to be jailbroken. The security of your wallet may be compromised." = "Jailbroken किया जा करने के लिए अपने डिवाइस प्रकट होता है। अपने बटुए की सुरक्षा समझौता हो सकता है।";
+/* (No Commment) */
+"Your email has been verified." = "आपका ईमेल सत्यापित किया गया है।";
+/* (No Commment) */
+"Your identity does not match our records." = "आपकी पहचान हमारे रिकॉर्ड से मेल नहीं खाता।";
+/* (No Commment) */
+"Your mobile number has been verified." = "अपना मोबाइल नंबर सत्यापित किया गया है।";
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication, helping to secure your wallet from unauthorized access." = "अपने मोबाइल फोन अपने बटुए अनधिकृत पहुँच से सुरक्षित करने में मदद, दो कारक प्रमाणीकरण सक्षम करने के लिए इस्तेमाल किया जा सकता।";
+/* (No Commment) */
+"Your new password hint contains invalid characters. Please try again." = "आपका नया पासवर्ड संकेत में अमान्य वर्ण हैं। कृपया पुन: प्रयास करें।";
+/* (No Commment) */
+"Your new password hint contains no text. Your password hint will be cleared." = "आपका नया पासवर्ड संकेत कोई पाठ होता है। अपने पासवर्ड संकेत को मंजूरी दे दी हो जाएगा।";
+/* (No Commment) */
+"Your new password hint must be different from your password. Please try again." = "आपका नया पासवर्ड संकेत अपना पासवर्ड से अलग होना चाहिए। कृपया पुन: प्रयास करें।";
+/* (No Commment) */
+"Your new password hint must be different from your second password. Please try again." = "आपका नया पासवर्ड संकेत से अपना दूसरा पासवर्ड अलग होना चाहिए। कृपया पुन: प्रयास करें।";
+/* (No Commment) */
+"Your password hint has been updated." = "अपने पासवर्ड संकेत अद्यतन किया गया है।";
+/* (No Commment) */
+"Your password is not strong enough. Please choose a different password." = "अपना पासवर्ड पर्याप्त रूप से मज़बूत नहीं है। कृपया किसी भिन्न पासवर्ड का चयन करें।";
+/* (No Commment) */
+"Your transferred funds will be safe and secure, and you'll benefit from increased privacy and convenient backup and recovery features." = "आपकी धनराशि सुरक्षित और सुरक्षित हो जाएगा, और आप बढ़ी हुई गोपनीयता और सुविधाजनक बैकअप और पुनर्प्राप्ति सुविधाओं से लाभ होगा।";
+/* (No Commment) */
+"Your verified email address is used to send login codes when suspicious or unusual activity is detected, to remind you of your wallet login ID, and to send bitcoin payment alerts when you receive funds. We will not use your email address for marketing purposes." = "अपना सत् यापित ईमेल पते जब संदेहास्पद या असामान्य गतिविधि पता है, आप अपने बटुए लॉगिन ID की याद दिलाने के लिए, और bitcoin भुगतान चेतावनियाँ भेज जब आप धन प्राप्त करने के लिए लॉगिन कोड भेजने के लिए उपयोग किया जाता है। हम विपणन उद्देश्यों के लिए अपने ईमेल पते का उपयोग नहीं करेगा।";
+/* (No Commment) */
+"Your wallet does not contain this address." = "अपने बटुए यह पता नहीं है।";
+/* (No Commment) */
+"Your wallet was successfully created." = "अपने बटुए को सफलतापूर्वक बनाया गया था।";
+/* (No Commment) */
+"Yubi Key" = "Yubi कुंजी";
+"in this order." = "इस क्रम में।";
+/* (No Commment) */
+"or Continue" = "या जारी रखें";
+"piece of paper." = "कागज का टुकड़ा।";
+/* (No Commment) */
+" We recommend the fee shown for the transaction at this time." = " हम इस समय पर लेन-देन के लिए दिखाए गए शुल्क की सलाह देते हैं।";
+"Fee" = "शुल्क";
+"Please contact support:\n%@" = "कृपया से संपर्क करें समर्थन: \
+%@";
+"Transfer Amount" = "राशि हस्तांतरण";
+"Value when received: %@" = "जब प्राप्त मान: %@";
+/* (No Commment) */
+"Transfer All Funds" = "सभी निधि अंतरण";
+/* (No Commment) */
+"Transfer all" = "सभी स्थानांतरित";
+/* (No Commment) */
+"Transfer imported addresses?" = "आयातित पतों हस्तांतरण?";
+/* (No Commment) */
+"Imported addresses are not backed up by your Recovery Phrase. To secure these funds, we recommend transferring these balances to include in your backup." = "आयातित पतों अपने वसूली वाक्यांश द्वारा समर्थित नहीं हैं। इन निधियों को सुरक्षित करने के लिए, हम अनुशंसा करते हैं आपके बैकअप में शामिल करने के लिए इन शेष स्थानांतरित कर रहा है।";
+/* (No Commment) */
+"About Us" = "हमारे बारे में";
+/* (No Commment) */
+"You currently have email notifications enabled. Changing your email will disable email notifications." = "आप वर्तमान में ई-मेल सूचना सक्षम किया गया है। अपने ईमेल परिवर्तित ई-मेल सूचनाएँ अक्षम कर देगा।";
+/* (No Commment) */
+"You currently have SMS notifications enabled. Changing your email will disable SMS notifications." = "आप वर्तमान में एसएमएस सूचनाएँ सक्षम किया गया है। अपना ईमेल बदलने के एसएमएस सूचनाएँ अक्षम कर देगा।";
+/* (No Commment) */
+"All rights reserved." = "सभी अधिकार सुरक्षित।";
+/* (No Commment) */
+"Rate us" = "हमें दर";
+/* (No Commment) */
+"Free Merchant app" = "नि: शुल्क व्यापारी app";
+/* (No Commment) */
+"Cannot open Mail App" = "मेल अनुप्रयोग खोलें नहीं कर सकता";
+/* (No Commment) */
+"Cannot open URL %@" = "URL %@ को नहीं खोल सकता";
+/* (No Commment) */
+"Would you like to tell us about your experience with Blockchain?" = "आप हमें ब् लॉकचेन के साथ अपने अनुभव के बारे में बताने के लिए चाहते हैं?";
+/* (No Commment) */
+"Check Your Inbox" = "अपने इनबॉक्स की जाँच करें";
+/* (No Commment) */
+"Continue To Mail" = "मेल करने के लिए जारी रखें";
+/* (No Commment) */
+"Look for an email from Blockchain and click the verification link to complete your wallet setup." = "ब् लॉकचेन से एक ईमेल के लिए देखो और अपने बटुए का सेटअप पूरा करने के लिए सत्यापन लिंक पर क्लिक करें।";
+/* (No Commment) */
+"Backup Your Funds" = "बैकअप आपके धन";
+/* (No Commment) */
+"Backup Now" = "अब बैकअप लें";
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your bitcoins if you forget your password." = "बधाई हो, आप bitcoin है! अब चलो तुम अपने bitcoins उपयोग कर सकते हैं यदि आप अपना पासवर्ड भूल गए हैं यह सुनिश्चित करने के लिए अपने बटुए का बैकअप।";
+/* (No Commment) */
+"2-Step Verification" = "2-चरणीय सत्यापन";
+/* (No Commment) */
+"Prevent unauthorized access to your wallet. Enable 2-step verification to increase wallet security." = "अपने बटुए को अनधिकृत पहुँच को रोकने। बटुआ सुरक्षा बढ़ाने के लिए 2-चरणीय सत् यापन सक्षम करें।";
+/* (No Commment) */
+"Enable notifications to receive an email or SMS message whenever you receive bitcoin." = "जब भी आप bitcoin प्राप्त एक ईमेल या एसएमएस संदेश प्राप्त करने के लिए सूचनाएँ सक्षम करें।";
+/* (No Commment) */
+"Not Now" = "अभी नहीं";
+/* (No Commment) */
+"I'll do this later" = "मैं यह बाद में कर लेंगे";
+/* (No Commment) */
+"May be at risk for a double spend." = "एक डबल खर्च के लिए जोखिम में हो सकता है।";
+/* (No Commment) */
+"For your security, we do not keep any passwords on file. Backup your wallet to ensure your funds are safe in case you lose your password." = "आपकी सुरक्षा के लिए, हम किसी भी पासवर्ड फ़ाइल पर न रखें। बैकअप आपके फंड सुनिश्चित करने के लिए अपने बटुए सुरक्षित हैं मामले में आप अपना पासवर्ड खो।";
+/* (No Commment) */
+"Wallets" = "जेब";
+/* (No Commment) */
+"START BACKUP" = "बैकअप प्रारंभ करें";
+/* (No Commment) */
+"Backup Needed" = "बैकअप की जरूरत";
+/* (No Commment) */
+"Create a Wallet" = "बनाएँ एक बटुआ";
+/* (No Commment) */
+"Log In" = "लॉग इन करो";
+/* (No Commment) */
+"Please enter your password to log into your Blockchain wallet." = "कृपया अपने ब् लॉकचेन बटुए में प्रवेश करने के लिए अपना पासवर्ड दर्ज करें।";
+/* (No Commment) */
+"Forgot Password?" = "पासवर्ड भूल गए?";
+/* (No Commment) */
+"Or start over and " = "या अधिक शुरू और ";
+/* (No Commment) */
+"Update Email" = "ईमेल अपडेट";
+/* (No Commment) */
+"Enter Email Address" = "ई-मेल पता दर्ज करें";
+/* (No Commment) */
+"Update Mobile" = "अद्यतन मोबाइल";
+/* (No Commment) */
+"Enter Mobile Number" = "मोबाइल नंबर दर्ज करें";
+/* (No Commment) */
+"Balances" = "शेष राशि";
+/* (No Commment) */
+"Transactions occur when you send and receive bitcoin." = "जब आप भेजें और प्राप्त bitcoin लेनदेन हो।";
+/* (No Commment) */
+"Your Transactions" = "आपके लेन-देन";
+/* (No Commment) */
+"Backup Complete" = "पूर्ण बैकअप";
+/* (No Commment) */
+"Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure." = "अपने धन खो पासवर्ड मामले में पुनर्स्थापित करने के लिए आपके पुनर्प्राप्ति वाक्यांश का प्रयोग करें।  अपने पुनर्प्राप्ति वाक्यांश करने के लिए पहुँच के साथ किसी को भी अपने फंड का उपयोग कर सकते हैं, तो यह ऑफ़लाइन कहीं सुरक्षित रखने।";
+/* (No Commment) */
+"The following 12 word Recovery Phrase will give you access to your funds in case you lose your password." = "मामले में आप अपना पासवर्ड खो निम्न 12 शब्द वसूली वाक्यांश आपके धन करने के लिए आपको पहुँच प्रदान करेगा।";
+/* (No Commment) */
+"Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure." = "नीचे अपने वाक्यांश कागज के एक टुकड़े पर लिखने और यह कहीं सुरक्षित और सुरक्षित रखने के लिए सुनिश्चित हो।";
+/* (No Commment) */
+"Write down the following 12 word Recovery Phrase exactly as they appear and in this order:" = "निम्न 12 शब्द वसूली वाक्यांश नीचे बिल्कुल के रूप में वे दिखाई देते हैं और इस क्रम में लिखें:";
+/* (No Commment) */
+"PREVIOUS" = "पिछले";
+/* (No Commment) */
+"NEXT" = "अगले";
+/* (No Commment) */
+"BACKUP AGAIN" = "बैकअप पुन:";
+/* (No Commment) */
+"Your verified email address is used to send payment alerts, ID reminders, and login codes." = "अपने सत् यापित ईमेल पते भुगतान अलर्ट, ID अनुस्मारक और लॉगिन कोड भेजने के लिए उपयोग किया जाता है।";
+/* (No Commment) */
+"Your mobile phone can be used to enable two-factor authentication or to receive alerts." = "अपने मोबाइल फोन दो कारक प्रमाणीकरण सक्षम करने के लिए या चेतावनियाँ प्राप्त करने के लिए इस्तेमाल किया जा सकता।";
+/* (No Commment) */
+"Trade Completed" = "पूरा व्यापार";
+/* (No Commment) */
+"The trade you created on %@ has been completed!" = "आप %@ पर बनाई गई व्यापार पूरा हो चुका है!";
+/* (No Commment) */
+"View details" = "विवरण देखें";
+/* (No Commment) */
+"Buy Bitcoin" = "Bitcoin खरीदें";
+/* (No Commment) */
+"Bitcoin Balances" = "Bitcoin Balances";
+/* (No Commment) */
+"Enter Ether address or select" = "Enter Ether address or select";
+/* (No Commment) */
+"Payment Sent! Your balance and transactions will update soon." = "Payment Sent! Your balance and transactions will update soon.";
+/* (No Commment) */
+"Waiting for payment" = "Waiting for payment";
+/* (No Commment) */
+"Please wait until your last ether transaction confirms." = "Please wait until your last ether transaction confirms.";
+/* (No Commment) */
+"Bitcoin Addresses" = "Bitcoin Addresses";
+/* (No Commment) */
+"Bitcoin Merchant Map" = "Bitcoin Merchant Map";
+/* (No Commment) */
+"Invalid Ether address: %@" = "Invalid Ether address: %@";
+/* (No Commment) */
+"An error occurred while retrieving the latest chart data. Please try again later." = "An error occurred while retrieving the latest chart data. Please try again later.";
+/* (No Commment) */
+"Transactions occur when you send and request ether." = "Transactions occur when you send and request ether.";
+/* (No Commment) */
+"Request Ether" = "Request Ether";
+/* (No Commment) */
+"Dashboard" = "Dashboard";
+/* (No Commment) */
+"Week" = "Week";
+/* (No Commment) */
+"Month" = "Month";
+/* (No Commment) */
+"Year" = "Year";
+/* (No Commment) */
+"Bitcoin Price" = "Bitcoin Price";
+/* (No Commment) */
+"Ether Price" = "Ether Price";
+/* (No Commment) */
+"Contract addresses are not supported." = "Contract addresses are not supported.";
+/* (No Commment) */
+"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP." = "At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP.";
+/* (No Commment) */
+"Now supporting Ether" = "Now supporting Ether";
+/* (No Commment) */
+"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!" = "You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!";
+/* (No Commment) */
+"Get Started with Ether" = "Get Started with Ether";
+/* (No Commment) */
+"To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet." = "To use this service, we require you to enter your second password. You should only need to enter this once to set up your Ether wallet.";
+/* (No Commment) */
+"Enter Ether address" = "Enter Ether address";
+/* (No Commment) */
+"Day" = "Day";
+/* (No Commment) */
+"All" = "All";
+/* (No Commment) */
+"Please send ether to %@." = "Please send ether to %@.";
+/* (No Commment) */
+"Ether payment request" = "Ether payment request";
+/* (No Commment) */
+"My Ether Wallet" = "My Ether Wallet";
+/* (No Commment) */
+"Miners receive this fee to process this transaction." = "Miners receive this fee to process this transaction.";
+/* (No Commment) */
+"Face ID is not enabled on this device. To enable Face ID, go to Settings -> Face ID & Passcode and add a fingerprint." = "चेहरा आईडी पर सक्षम नहीं है, इस डिवाइस है । सक्षम करने के लिए चेहरे#, सेटिंग्स में जाओ -> चेहरा आईडी और पासकोड जोड़ने और एक अंगुली की छाप है ।";
+/* (No Commment) */
+"Face ID is not available on this device." = "चेहरा आईडी उपलब्ध नहीं है पर इस डिवाइस है ।";
+/* (No Commment) */
+"Unknown Face ID error. Code: %ld" = "अज्ञात का सामना आईडी त्रुटि । कोड: %ld";
+/* (No Commment) */
+"Blockchain's servers are currently under maintenance. Please try again later" = "Blockchain के सर्वर रखरखाव के अंतर्गत वर्तमान में है । कृपया बाद में फिर से कोशिश";
+/* (No Commment) */
+"Unable to authenticate due to failing authentication too many times." = "में असमर्थ प्रमाणित करने के लिए कारण करने के लिए असफल प्रमाणीकरण भी कई बार.";
+/* (No Commment) */
+"Unable to authenticate because the device does not support biometric authentication." = "में असमर्थ प्रमाणित करने के लिए कारण का समर्थन नहीं करता डिवाइस बॉयोमीट्रिक प्रमाणीकरण.";
+/* (No Commment) */
+"Unable to use biometrics." = "का उपयोग करने में असमर्थ बॉयोमीट्रिक्स.";
+/* (No Commment) */
+"Unable to Authenticate because there were too many failed Touch ID attempts. Passcode is required to unlock Touch ID" = "में असमर्थ प्रमाणित करने के लिए, क्योंकि वहाँ थे भी कई विफल टच आईडी का प्रयास करता है । पासकोड की आवश्यकता है अनलॉक करने के लिए टच आईडी";
+/* (No Commment) */
+"Enabling this feature will allow all users with a registered %@ fingerprint on this device to access to your wallet." = "इस सुविधा को सक्षम करने की अनुमति देगा सभी उपयोगकर्ताओं के साथ एक पंजीकृत %@ फिंगरप्रिंट पर इस उपकरण का उपयोग करने के लिए अपने बटुए के लिए.";
+/* (No Commment) */
+"Enable %@" = "सक्षम %@";
+/* (No Commment) */
+"Use %@ instead of PIN to authenticate Blockchain and access your wallet." = "उपयोग %@ के बजाय पिन प्रमाणित करने के लिए Blockchain और उपयोग अपने बटुए.";
+/* (No Commment) */
+"Use %@ as PIN" = "उपयोग %@ के रूप में पिन";
+/* (No Commment) */
+"Congrats, you have bitcoin! Now let’s backup your wallet to ensure you can access your funds if you forget your password." = "बधाई हो, आप bitcoin! अब चलो अपने बटुए का बैकअप करें यह सुनिश्चित करने के लिए आप कर सकते हैं अपने धन का उपयोग अगर आप अपना पासवर्ड भूल जाते हैं.";
+/* (No Commment) */
+"Invalid %@ address: %@" = "अमान्य %@ पता: %@";
+/* (No Commment) */
+"%@ payment request" = "%@ भुगतान अनुरोध";
+/* (No Commment) */
+"Cookie Policy" = "कुकी नीति";
+/* (No Commment) */
+"Please check your email and authorize this log-in attempt. After doing so, please return here and try logging in again" = "कृपया अपने ईमेल की जाँच करें और को अधिकृत यह लॉग-इन करने का प्रयास । ऐसा करने के बाद, वापस कृपया यहाँ और में प्रवेश करने का प्रयास फिर से";
+/* (No Commment) */
+"Non-Spendable" = "गैर-Spendable";
+/* (No Commment) */
+"Confirm Upgrade" = "नवीनीकरण की पुष्टि करें";
+/* (No Commment) */
+"48.normalTitle" = "सहेजें";
+/* (No Commment) */
+"56.text" = "लेबल पता";
+/* (No Commment) */
+"58.text" = "लेबल";
+/* Class = "UITextField"; placeholder = "Label"; ObjectID = "59"; */
+"59.placeholder" = "लेबल";
+/* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
+"60.text" = "पते";
+/* (No Commment) */
+"68.text" = "कोई पते";
+/* (No Commment) */
+"69.text" = "आपका खाता ठीक से बनती शायद नहीं है। में शीर्ष बटन छोड़ दिया है की स्क्रीन और स्क्रीन पर दिए गए निर्देशों का पालन करें पर क्लिक करें।";
+/* (No Commment) */
+"80.normalTitle" = "पुरालेख के पते";
+/* (No Commment) */
+"81.normalTitle" = "लेबल पता";
+/* (No Commment) */
+"88.normalTitle" = "भुगतान का अनुरोध";
+/* (No Commment) */
+"90.text" = "Bitcoin पते ";
+/* (No Commment) */
+"91.text" = "1PqtuSjPKDGqst5yadi3rF2XCxFsVDn5UH";
+/* (No Commment) */
+"92.normalTitle" = "पते की प्रतिलिपि बनाएँ";
+/* (No Commment) */
+"100.text" = "राशि:";
+/* (No Commment) */
+"120.text" = "5 बीटीसी = $10";
+/* Class = "UITextField"; placeholder = "0.000"; ObjectID = "E60-hZ-tDl"; */
+"E60-hZ-tDl.placeholder" = "0.000";
+/* (No Commment) */
+"GwZ-6f-89z.normalTitle" = "बीटीसी";
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "ZHr-29-NdG"; */
+"ZHr-29-NdG.normalTitle" = "किया";
+/* Class = "UITextField"; placeholder = "0.00"; ObjectID = "a9y-3I-Drw"; */
+"a9y-3I-Drw.placeholder" = "0.00";
+/* (No Commment) */
+"i1j-pG-caF.normalTitle" = "निजी कुंजी को स्कैन";
+/* Class = "UILabel"; text = "BTC"; ObjectID = "jRM-0A-Zuo"; */
+"jRM-0A-Zuo.text" = "बीटीसी";
+/* Class = "UILabel"; text = "USD"; ObjectID = "wDT-32-lDe"; */
+"wDT-32-lDe.text" = "अमरीकी डालर";
+"* Minimum 10 characters" = "* न्यूनतम 10 अक्षर";
+"Wallet Identifier" = "वॉलेट पहचानकर्ता";
+/* (No Commment) */
+"8.text" = "पता पुस्तिका";
+/* (No Commment) */
+"from" = "से";
