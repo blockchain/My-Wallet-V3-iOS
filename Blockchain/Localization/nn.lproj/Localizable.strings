@@ -1,0 +1,99 @@
+/* (No Commment) */
+"Ebu-XV-0mt.normalTitle" = "[%key:buysell.sfoxcheckout.orderreview.cancel%]";
+/* (No Commment) */
+"Wallet ID" = "[%key:options_id%]";
+/* (No Commment) */
+"Gk5-cB-fZg.normalTitle" = "[%key:dialog_continue%]";
+/* Class = "UILabel"; text = "Address"; ObjectID = "64"; */
+"64.text" = "[%key:identityverification.address.address%]";
+/* (No Commment) */
+"Verify" = "Verifiser";
+/* (No Commment) */
+"2je-u4-PB2.text" = "[%key:overview%]";
+/* (No Commment) */
+"Regular" = "[%key:strength_medium%]";
+/* (No Commment) */
+"4cR-kX-YUY.text" = "[%key:Confirm Upgrade%]";
+/* Class = "UILabel"; text = "Two-Step Verification"; ObjectID = "8Zy-R2-HoW"; */
+"8Zy-R2-HoW.text" = "To-trinns verifisering";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "4"; */
+"4.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"57.text" = "[%key:identityverification.address.address%]";
+/* (No Commment) */
+"65.text" = "Adresse:";
+/* Class = "UIButton"; normalTitle = "Forget Wallet"; ObjectID = "5gL-FG-Zcc"; */
+"5gL-FG-Zcc.normalTitle" = "[%key:Forget Wallet%]";
+/* Class = "UIButton"; normalTitle = "Scan Pairing Code"; ObjectID = "370"; */
+"370.normalTitle" = "[%key:Scan Pairing Code%]";
+/* (No Commment) */
+"465.text" = "[%key:Password Required%]";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "471"; */
+"471.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"602.text" = "[%key:You must have two-factor authentication disabled to pair manually.%]";
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "625"; */
+"625.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"630.text" = "Logg inn";
+/* (No Commment) */
+"TzC-Tw-04r.normalTitle" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"About" = "Om";
+/* (No Commment) */
+"Address" = "[%key:identityverification.address.address%]";
+/* (No Commment) */
+"Allowed" = "Tillatt";
+/* (No Commment) */
+"Backup" = "Sikkerhetskopier midler";
+/* (No Commment) */
+"Blocked" = "Blokkert";
+/* (No Commment) */
+"Cancel" = "[%key:buysell.sfoxcheckout.orderreview.cancel%]";
+/* (No Commment) */
+"Change Email" = "Endre e-post";
+/* (No Commment) */
+"Change Mobile Number" = "Bytt mobilnummer";
+"Close" = "Lukk";
+/* (No Commment) */
+"Continue" = "[%key:CONTINUE%]";
+/* (No Commment) */
+"Disabled" = "Deaktivert";
+"Error" = "Feil";
+/* (No Commment) */
+"Forget Wallet" = "[%key:5gL-FG-Zcc.normalTitle%]";
+/* (No Commment) */
+"Incorrect password" = "Feil passord";
+/* (No Commment) */
+"Make Default" = "Sett som standard";
+/* (No Commment) */
+"Mobile Number" = "Mobilnummer";
+/* (No Commment) */
+"Notifications" = "Varsler";
+/* (No Commment) */
+"Password Required" = "[%key:465.text%]";
+/* (No Commment) */
+"Reset" = "Tilbakestilling";
+/* (No Commment) */
+"Scan Pairing Code" = "[%key:370.normalTitle%]";
+/* (No Commment) */
+"Security Center" = "Sikkerhetssenter";
+/* (No Commment) */
+"Total Balance" = "Total Saldo";
+/* (No Commment) */
+"Unverified" = "Uverifisert";
+/* (No Commment) */
+"Verified" = "Verifisert";
+/* (No Commment) */
+"You must have two-factor authentication disabled to pair manually." = "[%key:602.text%]";
+/* (No Commment) */
+"Confirm Upgrade" = "[%key:4cR-kX-YUY.text%]";
+/* Class = "UILabel"; text = "Address"; ObjectID = "60"; */
+"60.text" = "[%key:identityverification.address.address%]";
+/* (No Commment) */
+"90.text" = "Bitcoin-adresse";
+/* (No Commment) */
+"100.text" = "Beløp:";
+/* (No Commment) */
+"120.text" = "[%key:identityverification.address.address%]";
+"Wallet Identifier" = "Lommebokidentifikator";
