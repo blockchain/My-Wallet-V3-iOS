@@ -35,6 +35,7 @@ class ExchangeDetailViewController: UIViewController {
 
     weak var delegate: ExchangeDetailDelegate?
     var mostRecentOrderTransaction: OrderTransaction?
+    var mostRecentConversion: Conversion?
 
     // MARK: Private IBOutlets
 
@@ -190,7 +191,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
             footer.title = LocalizationConstants.Exchange.sendNow
             footer.actionBlock = {
-                self.coordinator.handle(event: .confirmExchange(orderTransaction, conversion))
+                self.coordinator.handle(event: .confirmExchange)
             }
 
             return footer

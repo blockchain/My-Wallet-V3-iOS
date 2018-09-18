@@ -16,7 +16,7 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
-        case confirmExchange(OrderTransaction, Conversion)
+        case confirmExchange
         case updateConfirmDetails(OrderTransaction, Conversion)
     }
 
@@ -44,6 +44,7 @@ class ExchangeDetailCoordinator: NSObject {
     func handle(event: Event) {
         switch event {
         case .updateConfirmDetails(let orderTransaction, let conversion):
+            interface?.mostRecentConversion = conversion
             handle(event: .pageLoaded(.confirm(orderTransaction, conversion)))
         case .pageLoaded(let model):
             
@@ -56,7 +57,6 @@ class ExchangeDetailCoordinator: NSObject {
             
             switch model {
             case .confirm(let orderTransaction, let conversion):
-                
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle("Confirm Exchange")
                 
@@ -114,6 +114,7 @@ class ExchangeDetailCoordinator: NSObject {
                 )
 
                 interface?.mostRecentOrderTransaction = orderTransaction
+                interface?.mostRecentConversion = conversion
 
                 delegate?.coordinator(self, updated: cellModels)
             case .locked(let trade):
@@ -228,12 +229,14 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let orderTransaction, _):
-            tradeExecution.sendTransaction(assetType: orderTransaction.to.assetType, success: {
-                ExchangeCoordinator.shared.handle(event: .sentTransaction)
-            }) { error in
-                AlertViewPresenter.shared.standardError(message: error)
+        case .confirmExchange:
+            guard let lastConversion = interface?.mostRecentConversion else {
+                Logger.shared.error("No conversion to use")
+                return
             }
+            tradeExecution.submitAndSend(with: lastConversion, success: {
+                ExchangeCoordinator.shared.handle(event: .sentTransaction)
+            }) { AlertViewPresenter.shared.standardError(message: $0) }
         }
     }
 }
