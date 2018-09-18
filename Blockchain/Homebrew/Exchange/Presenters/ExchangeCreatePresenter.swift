@@ -9,10 +9,10 @@
 import Foundation
 
 class ExchangeCreatePresenter {
-    fileprivate let interactor: ExchangeCreateInput
+    fileprivate let interactor: ExchangeCreateInteractor
     weak var interface: ExchangeCreateInterface?
 
-    init(interactor: ExchangeCreateInput) {
+    init(interactor: ExchangeCreateInteractor) {
         self.interactor = interactor
     }
 }
@@ -33,9 +33,13 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onBackspaceTapped() {
         interactor.onBackspaceTapped()
     }
-    
-    func onContinueButtonTapped() {
-        
+
+    func changeTradingPair(tradingPair: TradingPair) {
+        interactor.changeTradingPair(tradingPair: tradingPair)
+    }
+
+    func onToggleFixTapped() {
+        interactor.toggleFix()
     }
 
     func onDisplayInputTypeTapped() {
@@ -44,10 +48,6 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 
     func onExchangeButtonTapped() {
         interactor.confirmConversion()
-    }
-
-    func onTradingPairChanged(tradingPair: TradingPair) {
-        interactor.changeTradingPair(tradingPair: tradingPair)
     }
 
     func confirmConversion() {

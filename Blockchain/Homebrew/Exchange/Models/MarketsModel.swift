@@ -44,6 +44,10 @@ extension MarketsModel {
             fix = .counter
         }
     }
+
+    func toggleFix() {
+        fix = fix.toggledFix()
+    }
 }
 
 extension MarketsModel: Equatable {

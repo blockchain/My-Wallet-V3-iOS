@@ -11,9 +11,7 @@ import Foundation
 protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onViewLoaded()
     func onDisplayInputTypeTapped()
-    func onContinueButtonTapped()
     func onExchangeButtonTapped()
-    func onTradingPairChanged(tradingPair: TradingPair)
 }
 
 class ExchangeCreateViewController: UIViewController {
@@ -39,7 +37,6 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var exchangeRateView: UIView!
-    @IBOutlet private var exchangeRateButton: UIButton!
     @IBOutlet private var exchangeButton: UIButton!
     // MARK: - IBActions
 
@@ -128,7 +125,8 @@ class ExchangeCreateViewController: UIViewController {
                 pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
                 fiatCurrency: "USD",
                 fix: .base,
-                volume: "0")
+                volume: "0"
+            )
         )
         assetAccountListPresenter = ExchangeAssetAccountListPresenter(view: self)
         numberKeypadView.delegate = self
@@ -136,26 +134,6 @@ class ExchangeCreateViewController: UIViewController {
         presenter.interface = self
         interactor.output = presenter
         delegate = presenter
-    }
-
-    private func onExchangeAccountChanged() {
-        guard let tradingPair = TradingPair(
-            from: fromAccount.address.assetType,
-            to: toAccount.address.assetType
-        ) else {
-            return
-        }
-        // TODO: where should the value of `fix` come from?
-        presenter.updateTradingPair(pair: tradingPair, fix: .base)
-
-        let exchangeButtonTitle = String(
-            format: LocalizationConstants.Exchange.exchangeXForY,
-            tradingPair.from.symbol,
-            tradingPair.to.symbol
-        )
-        exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
-
-        delegate?.onTradingPairChanged(tradingPair: tradingPair)
     }
 }
 
@@ -206,7 +184,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         let secondary = UIFont(
             name: ExchangeCreateViewController.secondaryFontName,
             size: ExchangeCreateViewController.secondaryFontSize
-            ) ?? UIFont.systemFont(ofSize: 17.0)
+        ) ?? UIFont.systemFont(ofSize: 17.0)
         
         return ExchangeStyleTemplate(
             primaryFont: primary,
@@ -262,6 +240,13 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             presentationUpdate: presentationUpdate
         )
         tradingPairView.apply(model: model)
+
+        let exchangeButtonTitle = String(
+            format: LocalizationConstants.Exchange.exchangeXForY,
+            pair.from.symbol,
+            pair.to.symbol
+        )
+        exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
     }
 
     func updateTradingPairViewValues(left: String, right: String) {
@@ -310,10 +295,7 @@ extension ExchangeCreateViewController: TradingPairViewDelegate {
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
-        let swappedAccount = toAccount
-        toAccount = fromAccount
-        fromAccount = swappedAccount
-        onExchangeAccountChanged()
+        presenter.onToggleFixTapped()
     }
 }
 
@@ -333,7 +315,7 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
                 case .receiving:
                     self.toAccount = account
                 }
-                self.onExchangeAccountChanged()
+                self.onTradingPairChanged()
             })
             actionSheetController.addAction(alertAction)
         }
@@ -343,5 +325,15 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
 
         // Present picker
         present(actionSheetController, animated: true)
+    }
+
+    private func onTradingPairChanged() {
+        guard let tradingPair = TradingPair(
+            from: fromAccount.address.assetType,
+            to: toAccount.address.assetType
+        ) else {
+            return
+        }
+        presenter.changeTradingPair(tradingPair: tradingPair)
     }
 }
