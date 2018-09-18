@@ -31,6 +31,7 @@ class AnnouncementCardView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false
+        closeButton.tintColor = .gray4
     }
 
     override func layoutSubviews() {
