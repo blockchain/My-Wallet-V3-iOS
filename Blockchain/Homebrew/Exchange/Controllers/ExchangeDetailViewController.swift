@@ -20,7 +20,7 @@ class ExchangeDetailViewController: UIViewController {
     
     enum PageModel {
         case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
-        case locked(Trade)
+        case locked(OrderTransaction, Conversion)
         case overview(ExchangeTradeCellModel)
     }
     

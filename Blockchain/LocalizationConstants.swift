@@ -375,6 +375,23 @@ struct LocalizationConstants {
             "What do you want to receive?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
         )
+        
+        static let value = NSLocalizedString("Value", comment: "Value")
+        static let fees = NSLocalizedString("Fees", comment: "Fees")
+        static let confirmExchange = NSLocalizedString(
+            "Confirm Exchange",
+            comment: "Confirm Exchange"
+        )
+        static let receive = NSLocalizedString("Receive", comment: "Receive")
+        static let sendTo = NSLocalizedString("Send to", comment: "Send to")
+        static let amountVariation = NSLocalizedString(
+            "The amounts you send and receive may change slightly due to market activity.",
+            comment: "Disclaimer in exchange locked screen"
+        )
+        static let orderStartDisclaimer = NSLocalizedString(
+            "Once an order starts, we are unable to stop it.",
+            comment: "Second disclaimer in exchange locked screen"
+        )
     }
 
     struct AddressAndKeyImport {

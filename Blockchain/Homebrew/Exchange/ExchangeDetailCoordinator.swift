@@ -26,6 +26,11 @@ class ExchangeDetailCoordinator: NSObject {
 
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
+    fileprivate var accountRepository: AssetAccountRepository {
+        get {
+            return AssetAccountRepository.shared
+        }
+    }
     
     init(
         delegate: ExchangeDetailCoordinatorDelegate,
@@ -52,33 +57,39 @@ class ExchangeDetailCoordinator: NSObject {
             case .confirm(let orderTransaction, let conversion, _):
                 
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
-                interface?.updateTitle("Confirm Exchange")
+                interface?.updateTitle(LocalizationConstants.Exchange.confirmExchange)
                 
                 let pair = ExchangeCellModel.TradingPair(
                     model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
+                let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+                
                 let value = ExchangeCellModel.Plain(
-                    description: "Value",
-                    value: "$" + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
+                    description: LocalizationConstants.Exchange.value,
+                    value: symbol + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
                         conversion.quote.currencyRatio.base.fiat.value :
                         conversion.quote.currencyRatio.counter.fiat.value)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: "Fees",
+                    description: LocalizationConstants.Exchange.fees,
                     value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
                 let receive = ExchangeCellModel.Plain(
-                    description: "Receive",
+                    description: LocalizationConstants.Exchange.receive,
                     value: orderTransaction.amountToReceive + " " + TradingPair(string: conversion.quote.pair)!.to.symbol,
                     bold: true
                 )
                 
+                let accounts = accountRepository.allAccounts()
+                
+                guard let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first else { return }
+                
                 let sendTo = ExchangeCellModel.Plain(
-                    description: "Send to",
-                    value: "My Wallet"
+                    description: LocalizationConstants.Exchange.sendTo,
+                    value: destination.name
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -87,7 +98,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
                     ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
-                    string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
+                    string: LocalizationConstants.Exchange.amountVariation +  " \n\n " + LocalizationConstants.Exchange.orderStartDisclaimer,
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
                                  NSAttributedStringKey.font: attributedTextFont,
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
@@ -108,34 +119,42 @@ class ExchangeDetailCoordinator: NSObject {
                 )
                 
                 delegate?.coordinator(self, updated: cellModels)
-            case .locked(let trade):
+            case .locked(let orderTransaction, let conversion):
                 interface?.updateBackgroundColor(.brandPrimary)
                 interface?.updateTitle(LocalizationConstants.Exchange.exchangeLocked)
                 interface?.navigationBarVisibility(.hidden)
                 
                 let pair = ExchangeCellModel.TradingPair(
-                    model: TradingPairView.exchangeLockedModel(for: trade)
+                    model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
+                let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+                
                 let value = ExchangeCellModel.Plain(
-                    description: "Value",
-                    value: "$1,624.50"
+                    description: LocalizationConstants.Exchange.value,
+                    value: symbol + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
+                        conversion.quote.currencyRatio.base.fiat.value :
+                        conversion.quote.currencyRatio.counter.fiat.value)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: "Fees",
-                    value: "0.000414 BTC"
+                    description: LocalizationConstants.Exchange.fees,
+                    value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
                 let receive = ExchangeCellModel.Plain(
-                    description: "Receive",
-                    value: "5.668586 ETH",
+                    description: LocalizationConstants.Exchange.receive,
+                    value: orderTransaction.amountToReceive + " " + TradingPair(string: conversion.quote.pair)!.to.symbol,
                     bold: true
                 )
                 
+                let accounts = accountRepository.allAccounts()
+                
+                guard let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first else { return }
+                
                 let sendTo = ExchangeCellModel.Plain(
-                    description: "Send to",
-                    value: "My Wallet"
+                    description: LocalizationConstants.Exchange.sendTo,
+                    value: destination.name
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -144,7 +163,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
                     ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
-                    string: "The amounts you send and receive may change slightly due to market activity.\n\n Once an order starts, we are unable to stop it.",
+                    string: LocalizationConstants.Exchange.amountVariation +  " \n\n " + LocalizationConstants.Exchange.orderStartDisclaimer,
                     attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
                                  NSAttributedStringKey.font: attributedTextFont,
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
@@ -220,9 +239,14 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let orderTransaction, _, let tradeExecutionAPI):
+        case .confirmExchange(let orderTransaction, let conversion, let tradeExecutionAPI):
             tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
-                ExchangeCoordinator.shared.handle(event: .sentTransaction)
+                ExchangeCoordinator.shared.handle(
+                    event: .sentTransaction(
+                        transaction: orderTransaction,
+                        conversion: conversion
+                    )
+                )
             }) { error in
                 AlertViewPresenter.shared.standardError(message: error)
             }
