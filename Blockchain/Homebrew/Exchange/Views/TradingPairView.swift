@@ -173,6 +173,9 @@ class TradingPairView: NibBasedView {
         let edgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         leftButton.titleEdgeInsets = edgeInsets
         rightButton.titleEdgeInsets = edgeInsets
+
+        let swapImage = UIImage(named: "Icon-Exchange")?.withRenderingMode(.alwaysTemplate)
+        swapButton.setImage(swapImage, for: .normal)
     }
 }
 

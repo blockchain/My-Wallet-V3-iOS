@@ -157,7 +157,7 @@ struct ExchangeServices: ExchangeDependencies {
                 title: LocalizationConstants.Exchange.navigationTitle
             )
             viewController.present(navigationController!, animated: true)
-        default:
+        case .shapeshift:
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
                 return
@@ -188,9 +188,10 @@ struct ExchangeServices: ExchangeDependencies {
             } else {
                 navigationController?.pushViewController(exchangeCreateViewController, animated: animated)
             }
+        case .shapeshift:
+            showExchange(type: .shapeshift)
         default:
-            // show shapeshift
-            Logger.shared.debug("Not yet implemented")
+            Logger.shared.warning("showCreateExchange not implemented for ExchangeType")
         }
     }
 
