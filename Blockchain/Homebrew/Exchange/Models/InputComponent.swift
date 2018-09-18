@@ -108,7 +108,7 @@ extension Array where Element == InputComponent {
         return count > 1
     }
     
-    func drop() -> Array<Element> {
+    func drop() -> [Element] {
         if count > 1 {
             return Array(dropLast())
         }

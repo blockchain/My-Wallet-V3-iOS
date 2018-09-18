@@ -32,6 +32,10 @@ extension MarketsModel {
         return fix == .baseInFiat || fix == .counterInFiat
     }
 
+    var isUsingBase: Bool {
+        return fix == .base || fix == .baseInFiat
+    }
+
     func toggleFiatInput() {
         switch fix {
         case .base:

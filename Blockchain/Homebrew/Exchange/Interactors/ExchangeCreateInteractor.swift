@@ -139,11 +139,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
 
-        if model.isUsingFiat == true {
+        if model.isUsingFiat {
             let primary = inputs.primaryFiatAttributedString()
             output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
-            let symbol = model.pair.from.symbol
+            let assetType = model.isUsingBase ? model.pair.from : model.pair.to
+            let symbol = assetType.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
             output.updatedInput(primary: primary, secondary: secondaryResult)
         }
@@ -176,6 +177,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func toggleFix() {
         guard let model = model else { return }
         model.toggleFix()
+        inputs.clear()
+        updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
     
@@ -189,7 +192,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
     
     func onAddInputTapped(value: String) {
-        guard let _ = model else {
+        guard model != nil else {
             Logger.shared.error("Updating conversion with no model")
             return
         }
