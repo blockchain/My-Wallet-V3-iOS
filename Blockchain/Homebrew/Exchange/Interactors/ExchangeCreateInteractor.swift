@@ -177,7 +177,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func toggleFix() {
         guard let model = model else { return }
         model.toggleFix()
+        model.lastConversion = nil
         inputs.clear()
+        conversions.clear()
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
