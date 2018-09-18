@@ -104,14 +104,12 @@
             }
         }
 
-        if (self.announcementCards.count > 0) {
+        if (!self.showWelcomeCards && self.announcementCards.count == 0) {
+            self.cardsViewHeight = 0;
+        } else if (self.announcementCards.count > 0) {
             self.cardsViewHeight = ANNOUNCEMENT_CARD_HEIGHT * self.announcementCards.count;
         } else {
             self.cardsViewHeight = 240;
-        }
-
-        if (!self.showWelcomeCards && self.announcementCards.count == 0) {
-            self.cardsViewHeight = 0;
         }
 
         if (self.showWelcomeCards && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
