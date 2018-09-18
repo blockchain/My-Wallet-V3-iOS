@@ -60,9 +60,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: "$" + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
-                        conversion.quote.currencyRatio.base.fiat.value :
-                        conversion.quote.currencyRatio.counter.fiat.value)
+                    value: "$" + conversion.quote.currencyRatio.counter.fiat.value
                 )
                 
                 let fees = ExchangeCellModel.Plain(
