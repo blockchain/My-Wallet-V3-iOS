@@ -43,16 +43,6 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var conversionView: UIView!
     @IBOutlet private var exchangeButton: UIButton!
-    
-    // MARK: - IBActions
-
-    @IBAction private func displayInputTypeTapped(_ sender: Any) {
-        delegate?.onDisplayInputTypeTapped()
-    }
-
-    @IBAction private func exchangeButtonTapped(_ sender: Any) {
-        delegate?.onExchangeButtonTapped()
-    }
 
     // MARK: Action enum
     enum Action {
@@ -140,17 +130,27 @@ class ExchangeCreateViewController: UIViewController {
         interactor.output = presenter
         delegate = presenter
     }
+    
+    // MARK: - IBActions
 
-    @IBAction func ratesViewTapped(_ sender: UITapGestureRecognizer) {
+    @IBAction private func ratesViewTapped(_ sender: UITapGestureRecognizer) {
         delegate?.onDisplayRatesTapped()
     }
     
-    @IBAction func rateButtonTapped(_ sender: UIButton) {
+    @IBAction private func rateButtonTapped(_ sender: UIButton) {
         delegate?.onDisplayRatesTapped()
     }
     
-    @IBAction func hideRatesButtonTapped(_ sender: UIButton) {
+    @IBAction private func hideRatesButtonTapped(_ sender: UIButton) {
         delegate?.onHideRatesTapped()
+    }
+    
+    @IBAction private func displayInputTypeTapped(_ sender: Any) {
+        delegate?.onDisplayInputTypeTapped()
+    }
+    
+    @IBAction private func exchangeButtonTapped(_ sender: Any) {
+        delegate?.onExchangeButtonTapped()
     }
     
     private func onExchangeAccountChanged() {
