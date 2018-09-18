@@ -179,7 +179,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         model.toggleFix()
         model.lastConversion = nil
         inputs.clear()
-        conversions.clear()
+        clearConversions()
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
@@ -189,10 +189,22 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             output?.entryRejected()
             return
         }
+
         inputs.backspace()
+
+        // Clear conversions if the user backspaced all the way to 0
+        if !inputs.canBackspace() {
+            clearConversions()
+        }
+
         updatedInput()
     }
-    
+
+    private func clearConversions() {
+        conversions.clear()
+        output?.updateTradingPairValues(left: "", right: "")
+    }
+
     func onAddInputTapped(value: String) {
         guard model != nil else {
             Logger.shared.error("Updating conversion with no model")
