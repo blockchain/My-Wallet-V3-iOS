@@ -207,12 +207,18 @@ struct ExchangeServices: ExchangeDependencies {
         navigationController.pushViewController(confirmController, animated: true)
     }
 
+    private func showTradeDetails(trade: ExchangeTradeCellModel) {
+        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade))
+        navigationController?.pushViewController(detailViewController, animated: true)
+    }
+
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
         case sentTransaction
+        case showTradeDetails(trade: ExchangeTradeCellModel)
     }
 
     func handle(event: ExchangeCoordinatorEvent) {
@@ -231,6 +237,8 @@ struct ExchangeServices: ExchangeDependencies {
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
         case .sentTransaction:
             navigationController?.popToRootViewController(animated: true)
+        case .showTradeDetails(let trade):
+            showTradeDetails(trade: trade)
         }
     }
 

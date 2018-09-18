@@ -37,6 +37,10 @@ extension ExchangeListPresenter: ExchangeListDelegate {
         interface?.refreshControlVisibility(.visible)
         interactor.refresh()
     }
+
+    func onTradeCellTapped(_ trade: ExchangeTradeCellModel) {
+        interface?.showTradeDetails(trade: trade)
+    }
 }
 
 extension ExchangeListPresenter: ExchangeListOutput {

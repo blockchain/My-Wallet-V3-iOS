@@ -16,3 +16,18 @@ enum Fix: String, Codable {
     case counter
     case counterInFiat
 }
+
+extension Fix {
+    func toggledFix() -> Fix {
+        switch self {
+        case .base:
+            return .counter
+        case .baseInFiat:
+            return .counterInFiat
+        case .counter:
+            return .base
+        case .counterInFiat:
+            return .baseInFiat
+        }
+    }
+}

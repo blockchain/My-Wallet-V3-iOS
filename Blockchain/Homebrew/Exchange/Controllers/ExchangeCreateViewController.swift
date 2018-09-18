@@ -14,19 +14,17 @@ protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onHideRatesTapped()
     func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool)
     func onDisplayInputTypeTapped()
-    func onContinueButtonTapped()
     func onExchangeButtonTapped()
-    func onTradingPairChanged(tradingPair: TradingPair)
 }
 
 class ExchangeCreateViewController: UIViewController {
     
     // MARK: Private Static Properties
     
-    static let primaryFontName: String = Constants.FontNames.montserratRegular
+    static let primaryFontName: String = Constants.FontNames.montserratMedium
     static let primaryFontSize: CGFloat = Constants.FontSizes.Huge
-    static let secondaryFontName: String = Constants.FontNames.montserratRegular
-    static let secondaryFontSize: CGFloat = Constants.FontSizes.SmallMedium
+    static let secondaryFontName: String = Constants.FontNames.montserratMedium
+    static let secondaryFontSize: CGFloat = Constants.FontSizes.MediumLarge
 
     // MARK: - IBOutlets
 
@@ -107,9 +105,6 @@ class ExchangeCreateViewController: UIViewController {
 
         tradingPairView.delegate = self
         exchangeButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
-
-        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
-        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
     }
 
     fileprivate func dependenciesSetup() {
@@ -123,7 +118,8 @@ class ExchangeCreateViewController: UIViewController {
                 pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
                 fiatCurrency: "USD",
                 fix: .base,
-                volume: "0")
+                volume: "0"
+            )
         )
         assetAccountListPresenter = ExchangeAssetAccountListPresenter(view: self)
         numberKeypadView.delegate = self
@@ -171,8 +167,6 @@ class ExchangeCreateViewController: UIViewController {
             tradingPair.to.symbol
         )
         exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
-
-        delegate?.onTradingPairChanged(tradingPair: tradingPair)
     }
 }
 
@@ -186,10 +180,6 @@ extension ExchangeCreateViewController {
         viewToEdit.layer.cornerRadius = 4.0
         viewToEdit.layer.borderWidth = 1.0
         viewToEdit.layer.borderColor = UIColor.brandPrimary.cgColor
-    }
-
-    private func setAmountLabelFont(label: UILabel, size: CGFloat) {
-        label.font = UIFont(name: Constants.FontNames.montserratRegular, size: size)
     }
 }
 
@@ -223,7 +213,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         let secondary = UIFont(
             name: ExchangeCreateViewController.secondaryFontName,
             size: ExchangeCreateViewController.secondaryFontSize
-            ) ?? UIFont.systemFont(ofSize: 17.0)
+        ) ?? UIFont.systemFont(ofSize: 17.0)
         
         return ExchangeStyleTemplate(
             primaryFont: primary,
@@ -331,6 +321,13 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             presentationUpdate: presentationUpdate
         )
         tradingPairView.apply(model: model)
+
+        let exchangeButtonTitle = String(
+            format: LocalizationConstants.Exchange.exchangeXForY,
+            pair.from.symbol,
+            pair.to.symbol
+        )
+        exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
     }
 
     func updateTradingPairViewValues(left: String, right: String) {
@@ -383,10 +380,7 @@ extension ExchangeCreateViewController: TradingPairViewDelegate {
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
-        let swappedAccount = toAccount
-        toAccount = fromAccount
-        fromAccount = swappedAccount
-        onExchangeAccountChanged()
+        presenter.onToggleFixTapped()
     }
 }
 
@@ -406,7 +400,7 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
                 case .receiving:
                     self.toAccount = account
                 }
-                self.onExchangeAccountChanged()
+                self.onTradingPairChanged()
             })
             actionSheetController.addAction(alertAction)
         }
@@ -416,5 +410,15 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
 
         // Present picker
         present(actionSheetController, animated: true)
+    }
+
+    private func onTradingPairChanged() {
+        guard let tradingPair = TradingPair(
+            from: fromAccount.address.assetType,
+            to: toAccount.address.assetType
+        ) else {
+            return
+        }
+        presenter.changeTradingPair(tradingPair: tradingPair)
     }
 }

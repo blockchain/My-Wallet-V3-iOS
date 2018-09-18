@@ -18,9 +18,7 @@ class ExchangeInputsService: ExchangeInputsAPI {
     }
     
     var activeInput: String {
-        get {
-            return inputComponents.numericalString
-        }
+        return inputComponents.numericalString
     }
     
     var inputComponents: ExchangeInputComponents
@@ -141,5 +139,11 @@ class ExchangeInputsService: ExchangeInputsAPI {
     
     func toggleInput(withOutput output: String) {
         inputComponents.convertComponents(with: output)
+    }
+
+    func clear() {
+        while canBackspace() {
+            backspace()
+        }
     }
 }
