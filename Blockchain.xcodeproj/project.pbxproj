@@ -262,6 +262,8 @@
 		51392046205C60520025EE33 /* Cert in Resources */ = {isa = PBXBuildFile; fileRef = 51392045205C60520025EE33 /* Cert */; };
 		513C828620EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
 		513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */; };
+		5146E29D21518826009B62D7 /* AnnouncementCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5146E29C21518826009B62D7 /* AnnouncementCardViewModel.swift */; };
+		5146E29E21518826009B62D7 /* AnnouncementCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5146E29C21518826009B62D7 /* AnnouncementCardViewModel.swift */; };
 		5149BD03205718ED00DC88A0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FF2056BC6700DE6A1E /* Crashlytics.framework */; };
 		5152AC2E2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
 		5152AC2F2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
@@ -1417,6 +1419,7 @@
 		513913EF2081206C002578FD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		51392045205C60520025EE33 /* Cert */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cert; sourceTree = "<group>"; };
 		513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Biometrics.swift"; sourceTree = "<group>"; };
+		5146E29C21518826009B62D7 /* AnnouncementCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementCardViewModel.swift; sourceTree = "<group>"; };
 		5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnouncementCardView.swift; sourceTree = "<group>"; };
 		5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnnouncementCardView.xib; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
@@ -3927,6 +3930,7 @@
 				5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */,
 				5176A45B2147F6600006769F /* CardsView.swift */,
 				5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */,
+				5146E29C21518826009B62D7 /* AnnouncementCardViewModel.swift */,
 			);
 			path = AnnouncementCard;
 			sourceTree = "<group>";
@@ -7840,6 +7844,7 @@
 				602B9D0A2118E22B00BD3D60 /* KYCNetworkRequest.swift in Sources */,
 				60AAD2D5211B75D7001CFDB4 /* OnfidoController.swift in Sources */,
 				602B9D152118E25400BD3D60 /* LocationSuggestionCell.swift in Sources */,
+				5146E29E21518826009B62D7 /* AnnouncementCardViewModel.swift in Sources */,
 				C74FEA2620979259007CAB5D /* JSContextWithDOMTests.swift in Sources */,
 				AA2F122C2140A92E006B1FC1 /* JSContext+HelpersTests.swift in Sources */,
 				AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */,
@@ -8146,6 +8151,7 @@
 				606399F02110FC2D005B6DF5 /* SRURLUtilities.m in Sources */,
 				23DF4EFC1DBA586C0059CF92 /* KeychainItemWrapper+SwipeAddresses.m in Sources */,
 				C780A44C20235E9500E49274 /* BCBalancesChartView.m in Sources */,
+				5146E29D21518826009B62D7 /* AnnouncementCardViewModel.swift in Sources */,
 				3A26D4F02140224A00D79BDD /* ExchangeDetailViewController.swift in Sources */,
 				C71859541F4B647100745A87 /* SendEtherViewController.m in Sources */,
 				AA126D91212E17A3005886A3 /* OnfidoService.swift in Sources */,

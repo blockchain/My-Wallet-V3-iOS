@@ -71,23 +71,25 @@
 
     if (shouldShowKYCAnnouncementCard) {
         TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-        AnnouncementCardView *card = [AnnouncementCardView createWithTitle:[[LocalizationConstantsObjcBridge continueKYCCardTitle] uppercaseString]
-                                                                   message:[LocalizationConstantsObjcBridge continueKYCCardDescription]
-                                                                     image:[UIImage imageNamed:@"identity_verification_card"]
-                                                         actionButtonTitle:[LocalizationConstantsObjcBridge continueKYCActionButtonTitle]
-                                                                    action:^{
-                                                                        [[KYCCoordinator sharedInstance] startFrom:tabControllerManager];
-                                                                    }
-                                                                   onClose:^{
-                                                                       BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard = NO;
-                                                                       [UIView animateWithDuration:.4f animations:^{
-                                                                           [self.cardsView changeYPosition:-self.cardsView.frame.size.height];
-                                                                           self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView.frame.size.height);
-                                                                           [self.contentView changeYPosition:0];
-                                                                       } completion:^(BOOL finished) {
-                                                                           [self removeCardsView];
-                                                                       }];
-                                                                   }];
+        AnnouncementCardViewModel *model = [[AnnouncementCardViewModel alloc]
+                                            initWithTitle:[[LocalizationConstantsObjcBridge continueKYCCardTitle] uppercaseString]
+                                            message:[LocalizationConstantsObjcBridge continueKYCCardDescription]
+                                            actionButtonTitle:[LocalizationConstantsObjcBridge continueKYCActionButtonTitle]
+                                            image:[UIImage imageNamed:@"identity_verification_card"]
+                                            action:^{
+                                                [[KYCCoordinator sharedInstance] startFrom:tabControllerManager];
+                                            }
+                                            onClose:^{
+                                                BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard = NO;
+                                                [UIView animateWithDuration:.4f animations:^{
+                                                    [self.cardsView changeYPosition:-self.cardsView.frame.size.height];
+                                                    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView.frame.size.height);
+                                                    [self.contentView changeYPosition:0];
+                                                } completion:^(BOOL finished) {
+                                                    [self removeCardsView];
+                                                }];
+                                            }];
+        AnnouncementCardView *card = [AnnouncementCardView createWithModel:model];
         self.cardsViewHeight = card.frame.size.height;
         self.cardsView = [self prepareCardsView];
         [self.cardsView addSubview:card];
