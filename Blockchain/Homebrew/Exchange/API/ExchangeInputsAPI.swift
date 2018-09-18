@@ -31,7 +31,8 @@ protocol ExchangeInputsAPI: class {
     
     func add(character: String)
     func add(delimiter: String)
-    
+
+    func clear()
     func backspace()
     func toggleInput(withOutput output: String)
 }

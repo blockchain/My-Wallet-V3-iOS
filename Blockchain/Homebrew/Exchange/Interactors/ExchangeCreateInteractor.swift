@@ -22,7 +22,7 @@ class ExchangeCreateInteractor {
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
-    private var model: MarketsModel? {
+    private(set) var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
         }
@@ -39,18 +39,21 @@ class ExchangeCreateInteractor {
     }
 
     func didSetModel(oldModel: MarketsModel?) {
-        // Only update TradingPair in Trading Pair View if it is different
-        // from the old TradingPair
-        if let model = model {
-            if oldModel == nil ||
-               (oldModel != nil && oldModel!.pair != model.pair) {
-                output?.updateTradingPair(pair: model.pair, fix: model.fix)
-            }
-        }
-
         // TICKET: IOS-1287 - This should be called after user has stopped typing
         if markets.hasAuthenticated {
             updateMarketsConversion()
+        }
+
+        // Only update TradingPair in Trading Pair View if it is different
+        // from the old TradingPair
+        guard let model = model else { return }
+
+        if let oldModel = oldModel {
+            if oldModel.pair != model.pair || oldModel.fix != model.fix {
+                output?.updateTradingPair(pair: model.pair, fix: model.fix)
+            }
+        } else {
+            output?.updateTradingPair(pair: model.pair, fix: model.fix)
         }
     }
 
@@ -135,12 +138,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
-        
-        if model.isUsingFiat == true {
+
+        if model.isUsingFiat {
             let primary = inputs.primaryFiatAttributedString()
             output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
-            let symbol = model.pair.from.symbol
+            let assetType = model.isUsingBase ? model.pair.from : model.pair.to
+            let symbol = assetType.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
             output.updatedInput(primary: primary, secondary: secondaryResult)
         }
@@ -169,18 +173,40 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func useMaximumAmount() {
         
     }
+
+    func toggleFix() {
+        guard let model = model else { return }
+        model.toggleFix()
+        model.lastConversion = nil
+        inputs.clear()
+        clearConversions()
+        updatedInput()
+        output?.updateTradingPair(pair: model.pair, fix: model.fix)
+    }
     
     func onBackspaceTapped() {
         guard inputs.canBackspace() else {
             output?.entryRejected()
             return
         }
+
         inputs.backspace()
+
+        // Clear conversions if the user backspaced all the way to 0
+        if !inputs.canBackspace() {
+            clearConversions()
+        }
+
         updatedInput()
     }
-    
+
+    private func clearConversions() {
+        conversions.clear()
+        output?.updateTradingPairValues(left: "", right: "")
+    }
+
     func onAddInputTapped(value: String) {
-        guard let _ = model else {
+        guard model != nil else {
             Logger.shared.error("Updating conversion with no model")
             return
         }
@@ -225,7 +251,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func changeTradingPair(tradingPair: TradingPair) {
-        model?.pair = tradingPair
+        guard let model = model else { return }
+        model.pair = tradingPair
+        updatedInput()
+        output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
 
     func confirmConversion() {

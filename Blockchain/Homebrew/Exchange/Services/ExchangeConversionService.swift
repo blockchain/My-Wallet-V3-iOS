@@ -27,6 +27,9 @@ protocol ExchangeConversionAPI {
     // Method used to remove trailing zeros and decimals for true value comparison
     // Primariy used to allow the user to keep typing uninterrupted
     func removeInsignificantCharacters(input: String) -> String
+
+    /// Clears the conversion values
+    func clear()
 }
 
 class ExchangeConversionService: ExchangeConversionAPI {
@@ -34,6 +37,13 @@ class ExchangeConversionService: ExchangeConversionAPI {
     private(set) var output: String = "0"
     private(set) var baseOutput: String = ""
     private(set) var counterOutput: String = ""
+
+    func clear() {
+        input = "0"
+        output = "0"
+        baseOutput = ""
+        counterOutput = ""
+    }
 
     func update(with conversion: Conversion) {
         let quote = conversion.quote
