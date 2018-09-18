@@ -33,6 +33,15 @@ class AnnouncementCardView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.masksToBounds = false
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 2
+        layer.shadowOpacity = 0.15
+        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+    }
+
     // MARK: - IBActions
 
     @IBAction private func actionButtonPressed(_ sender: Any) {
