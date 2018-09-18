@@ -10,6 +10,8 @@ import UIKit
 
 class AnnouncementCardView: UIView {
 
+    typealias Action = () -> Void
+
     // MARK: - Properties
 
     var actionButtonPressed, closeButtonPressed: (() -> Void)?
@@ -24,8 +26,22 @@ class AnnouncementCardView: UIView {
 
     // MARK: - Initialization
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    // swiftlint:disable:next function_parameter_count
+    @objc class func create(
+        withTitle title: String,
+        message: String,
+        image: UIImage,
+        actionButtonTitle: String,
+        action: @escaping Action,
+        onClose: @escaping Action) -> AnnouncementCardView {
+            let cardView = AnnouncementCardView.makeFromNib()
+            cardView.titleLabel.text = title
+            cardView.bodyLabel.text = message
+            cardView.imageView.image = image
+            cardView.actionButton.setTitle(actionButtonTitle, for: .normal)
+            cardView.actionButtonPressed = action
+            cardView.closeButtonPressed = onClose
+            return cardView
     }
 
     override func awakeFromNib() {

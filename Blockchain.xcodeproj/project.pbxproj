@@ -266,8 +266,6 @@
 		5152AC2E2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
 		5152AC2F2142E4B700E769CE /* AnnouncementCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */; };
 		5152AC312142E4BE00E769CE /* AnnouncementCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */; };
-		5152AC352143107E00E769CE /* AnnouncementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC342143107E00E769CE /* AnnouncementCard.swift */; };
-		5152AC362143107E00E769CE /* AnnouncementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5152AC342143107E00E769CE /* AnnouncementCard.swift */; };
 		515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C543A21D0F4197007A5F58 /* libicucore.tbd */; };
 		515315F32056C1A0000161DF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 515315F22056C1A0000161DF /* libcrypto.a */; };
 		51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */; };
@@ -1421,7 +1419,6 @@
 		513C826B20EBF30C00ECDE52 /* UIDevice+Biometrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Biometrics.swift"; sourceTree = "<group>"; };
 		5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnouncementCardView.swift; sourceTree = "<group>"; };
 		5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnnouncementCardView.xib; sourceTree = "<group>"; };
-		5152AC342143107E00E769CE /* AnnouncementCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementCard.swift; sourceTree = "<group>"; };
 		515315F22056C1A0000161DF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Submodules/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		51578AE920B448BF00B0080A /* WalletKeyImportDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyImportDelegate.swift; sourceTree = "<group>"; };
 		51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyImportCoordinator.swift; sourceTree = "<group>"; };
@@ -3927,7 +3924,6 @@
 		5152AC242142DD1100E769CE /* AnnouncementCard */ = {
 			isa = PBXGroup;
 			children = (
-				5152AC342143107E00E769CE /* AnnouncementCard.swift */,
 				5152AC2D2142E4B700E769CE /* AnnouncementCardView.swift */,
 				5176A45B2147F6600006769F /* CardsView.swift */,
 				5152AC302142E4BE00E769CE /* AnnouncementCardView.xib */,
@@ -7790,7 +7786,6 @@
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				3A1552EB2136EA8D00683CEB /* TradeExecutionService.swift in Sources */,
-				5152AC362143107E00E769CE /* AnnouncementCard.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
 				3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
@@ -7979,7 +7974,6 @@
 				C7FF110F2141E24000CBA3CB /* InputsState.swift in Sources */,
 				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
-				5152AC352143107E00E769CE /* AnnouncementCard.swift in Sources */,
 				60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */,
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
 				AAE9113120A51C900093A431 /* ReminderType.swift in Sources */,
