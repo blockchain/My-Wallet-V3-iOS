@@ -206,7 +206,7 @@ struct ExchangeServices: ExchangeDependencies {
     }
 
     private func showTradeDetails(trade: ExchangeTradeCellModel) {
-        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade))
+        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: dependencies)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
