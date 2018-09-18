@@ -18,10 +18,10 @@ class ExchangeCreateViewController: UIViewController {
     
     // MARK: Private Static Properties
     
-    static let primaryFontName: String = Constants.FontNames.montserratRegular
+    static let primaryFontName: String = Constants.FontNames.montserratMedium
     static let primaryFontSize: CGFloat = Constants.FontSizes.Huge
-    static let secondaryFontName: String = Constants.FontNames.montserratRegular
-    static let secondaryFontSize: CGFloat = Constants.FontSizes.SmallMedium
+    static let secondaryFontName: String = Constants.FontNames.montserratMedium
+    static let secondaryFontSize: CGFloat = Constants.FontSizes.MediumLarge
 
     // MARK: - IBOutlets
 
@@ -109,9 +109,6 @@ class ExchangeCreateViewController: UIViewController {
 
         tradingPairView.delegate = self
         exchangeButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
-
-        setAmountLabelFont(label: primaryAmountLabel, size: Constants.FontSizes.Huge)
-        setAmountLabelFont(label: secondaryAmountLabel, size: Constants.FontSizes.MediumLarge)
     }
 
     fileprivate func dependenciesSetup() {
@@ -147,10 +144,6 @@ extension ExchangeCreateViewController {
         viewToEdit.layer.cornerRadius = 4.0
         viewToEdit.layer.borderWidth = 1.0
         viewToEdit.layer.borderColor = UIColor.brandPrimary.cgColor
-    }
-
-    private func setAmountLabelFont(label: UILabel, size: CGFloat) {
-        label.font = UIFont(name: Constants.FontNames.montserratRegular, size: size)
     }
 }
 

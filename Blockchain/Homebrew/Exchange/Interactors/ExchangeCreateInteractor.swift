@@ -138,7 +138,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
-        
+
         if model.isUsingFiat == true {
             let primary = inputs.primaryFiatAttributedString()
             output.updatedInput(primary: primary, secondary: conversions.output)
