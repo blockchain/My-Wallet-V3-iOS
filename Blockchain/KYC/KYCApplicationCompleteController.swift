@@ -30,10 +30,14 @@ final class KYCApplicationCompleteController: KYCBaseViewController, Progressabl
         setupProgressView()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        BlockchainSettings.App.shared.shouldShowKYCAnnouncementCard = false
+    }
+
     // MARK: - IBActions
 
     @IBAction private func primaryButtonTapped(_ sender: Any) {
-        BlockchainSettings.App.shared.shouldShowKYCAnnouncementCard = false
         coordinator.presentAccountStatusView(for: .pending, in: self)
     }
 }
