@@ -12,6 +12,7 @@ protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onViewLoaded()
     func onDisplayRatesTapped()
     func onHideRatesTapped()
+    func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool)
     func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
     func onExchangeButtonTapped()
@@ -39,6 +40,7 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var secondaryAmountLabel: UILabel!
 
     @IBOutlet private var hideRatesButton: UIButton!
+    @IBOutlet private var conversionRatesView: ConversionRatesView!
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var conversionView: UIView!
@@ -99,7 +101,7 @@ class ExchangeCreateViewController: UIViewController {
             $0?.textColor = UIColor.brandPrimary
         }
 
-        [useMaximumButton, useMinimumButton, conversionView].forEach {
+        [useMaximumButton, useMinimumButton, conversionView, hideRatesButton].forEach {
             addStyleToView($0)
         }
 
@@ -237,11 +239,14 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
     
     func ratesViewVisibility(_ visibility: Visibility, animated: Bool) {
-        // TODO
+        conversionRatesView.updateVisibility(visibility, animated: animated)
     }
     
     func keypadViewVisibility(_ visibility: Visibility, animated: Bool) {
-        numberKeypadView.updateKeypadVisibility(visibility, animated: animated)
+        numberKeypadView.updateKeypadVisibility(visibility, animated: animated) { [weak self] in
+            guard let this = self else { return }
+            this.delegate?.onKeypadVisibilityUpdated(visibility, animated: animated)
+        }
     }
     
     func exchangeButtonVisibility(_ visibility: Visibility, animated: Bool) {
@@ -337,7 +342,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
 
     func updateRateLabels(first: String, second: String, third: String) {
-
+        conversionRatesView.apply(
+            baseToCounter: first,
+            baseToFiat: second,
+            counterToFiat: third
+        )
     }
 
     func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action) {

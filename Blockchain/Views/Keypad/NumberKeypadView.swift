@@ -29,12 +29,14 @@ class NumberKeypadView: NibBasedView {
         }
     }
     
-    func updateKeypadVisibility(_ visibility: Visibility, animated: Bool = true) {
+    func updateKeypadVisibility(_ visibility: Visibility, animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let keypadButtons = keypadButtons else { return }
         guard keypadButtons.count > 0 else { return }
         
         if animated == false {
             keypadButtons.forEach({ $0.alpha = visibility.defaultAlpha })
+            alpha = visibility.defaultAlpha
+            completion?()
             return
         }
         
@@ -46,8 +48,12 @@ class NumberKeypadView: NibBasedView {
             UIView.animate(withDuration: 0.2, delay: 0.05, options: .curveEaseIn, animations: {
                 animatedButton.alpha = visibility.defaultAlpha
                 animatedButton.transform = transform
-            }, completion: nil)
+            }, completion: { _ in
+                completion?()
+            })
         }
+        
+        alpha = visibility.defaultAlpha
     }
 
     @IBAction func delimiterButtonTapped(_ sender: UIButton) {

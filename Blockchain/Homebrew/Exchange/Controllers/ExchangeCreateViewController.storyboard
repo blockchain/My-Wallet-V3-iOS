@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -51,6 +52,10 @@
                                     <constraint firstAttribute="height" constant="44" id="iIj-Hh-NEZ"/>
                                 </constraints>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcw-SG-3XL" customClass="ConversionRatesView" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="15.5" y="293.5" width="343" height="273.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
                                 <rect key="frame" x="16" y="269" width="343" height="322"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -140,6 +145,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="5uc-t6-nYA" firstAttribute="trailing" secondItem="dfm-a1-ad2" secondAttribute="trailing" id="2zo-r7-EeJ"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DUe-4D-nhJ" secondAttribute="trailing" constant="16" id="5hU-Xa-xif"/>
                             <constraint firstItem="DUe-4D-nhJ" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="6Rb-58-f8o"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="top" secondItem="V30-pI-8jo" secondAttribute="bottom" constant="8" id="7kf-Ns-aJR"/>
@@ -148,13 +154,17 @@
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" constant="16" id="GHI-5B-7xh"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="HgH-sR-rJB"/>
+                            <constraint firstItem="Hcw-SG-3XL" firstAttribute="width" secondItem="dfm-a1-ad2" secondAttribute="width" id="NgP-UU-rcW"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="top" secondItem="DPE-Uz-yYf" secondAttribute="bottom" constant="8" id="Oin-bF-NGa"/>
+                            <constraint firstItem="Hcw-SG-3XL" firstAttribute="height" secondItem="dfm-a1-ad2" secondAttribute="height" multiplier="0.85" id="PLc-ir-uPC"/>
                             <constraint firstItem="coY-Dg-Mc5" firstAttribute="centerY" secondItem="DUe-4D-nhJ" secondAttribute="centerY" id="Pxh-nT-mtp"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="centerX" secondItem="V30-pI-8jo" secondAttribute="centerX" id="Qr8-L9-lCF"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="TBU-fM-o9r"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
                             <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" id="XKu-Vm-Ove"/>
+                            <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerX" secondItem="dfm-a1-ad2" secondAttribute="centerX" id="bJ3-Vq-GwG"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="eA3-pM-NKs" secondAttribute="trailing" constant="16" id="bhv-Sp-60b"/>
+                            <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerY" secondItem="dfm-a1-ad2" secondAttribute="centerY" id="dnB-8I-crf"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="enm-Og-Fbn"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" id="fCT-6x-0Y5"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="top" secondItem="FIv-WY-bvA" secondAttribute="top" constant="8" id="fNG-KC-mpx"/>
@@ -170,6 +180,7 @@
                         <viewLayoutGuide key="safeArea" id="FIv-WY-bvA"/>
                     </view>
                     <connections>
+                        <outlet property="conversionRatesView" destination="Hcw-SG-3XL" id="2o2-Fx-Jb5"/>
                         <outlet property="conversionView" destination="eA3-pM-NKs" id="veU-HE-Ibp"/>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
                         <outlet property="hideRatesButton" destination="coY-Dg-Mc5" id="bEB-4e-zyz"/>

@@ -124,6 +124,10 @@
 		3A3D5DCD211C9C6500E6C241 /* PersonalDetailsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */; };
 		3A3D5DD0211CA2CD00E6C241 /* PersonalDetailsInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */; };
 		3A3D5DD2211CA4A700E6C241 /* PersonalDetailsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D5DD1211CA4A700E6C241 /* PersonalDetailsCoordinator.swift */; };
+		3A49A8E32151801300760B8C /* ConversionRatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A49A8E22151801300760B8C /* ConversionRatesView.swift */; };
+		3A49A8E42151801300760B8C /* ConversionRatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A49A8E22151801300760B8C /* ConversionRatesView.swift */; };
+		3A49A8EF2151802000760B8C /* ConversionRatesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A49A8EE2151802000760B8C /* ConversionRatesView.xib */; };
+		3A49A8F02151802000760B8C /* ConversionRatesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A49A8EE2151802000760B8C /* ConversionRatesView.xib */; };
 		3A49B2B92130B5610068F443 /* NewOrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A49B2B82130B5610068F443 /* NewOrderTableViewCell.swift */; };
 		3A49B2BA2130B5610068F443 /* NewOrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A49B2B82130B5610068F443 /* NewOrderTableViewCell.swift */; };
 		3A49B2C52130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A49B2C42130B56C0068F443 /* NewOrderTableViewCell.xib */; };
@@ -1332,6 +1336,8 @@
 		3A3D5DCC211C9C6500E6C241 /* PersonalDetailsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsService.swift; sourceTree = "<group>"; };
 		3A3D5DCF211CA2CD00E6C241 /* PersonalDetailsInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsInterface.swift; sourceTree = "<group>"; };
 		3A3D5DD1211CA4A700E6C241 /* PersonalDetailsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsCoordinator.swift; sourceTree = "<group>"; };
+		3A49A8E22151801300760B8C /* ConversionRatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionRatesView.swift; sourceTree = "<group>"; };
+		3A49A8EE2151802000760B8C /* ConversionRatesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversionRatesView.xib; sourceTree = "<group>"; };
 		3A49B2B82130B5610068F443 /* NewOrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOrderTableViewCell.swift; sourceTree = "<group>"; };
 		3A49B2C42130B56C0068F443 /* NewOrderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewOrderTableViewCell.xib; sourceTree = "<group>"; };
 		3A4EAB95214080D700081531 /* TextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
@@ -3497,6 +3503,8 @@
 				3A26AF9A212B3742003A8A08 /* ExchangeCreateView.swift */,
 				3A91F7C0213845F700CDC3FD /* TradingPairView.swift */,
 				3A91F7CC2138460900CDC3FD /* TradingPairView.xib */,
+				3A49A8E22151801300760B8C /* ConversionRatesView.swift */,
+				3A49A8EE2151802000760B8C /* ConversionRatesView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -7315,6 +7323,7 @@
 				3A26D52A214055FE00D79BDD /* TradingPairCell.xib in Resources */,
 				51979189210F68940096E50B /* countries.json in Resources */,
 				C78238BC2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */,
+				3A49A8F02151802000760B8C /* ConversionRatesView.xib in Resources */,
 				3A49B2C62130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */,
 				3A91F7CE2138460900CDC3FD /* TradingPairView.xib in Resources */,
 				3A53B95C213466670020ECAD /* ExchangeListHeaderView.xib in Resources */,
@@ -7376,6 +7385,7 @@
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
 				60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */,
+				3A49A8EF2151802000760B8C /* ConversionRatesView.xib in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
 				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
@@ -7736,6 +7746,7 @@
 				51135703209CF5D000056D65 /* AuthenticationTwoFactorType.swift in Sources */,
 				51DC2F5D20B72F4900E03AF2 /* AddressValidator.swift in Sources */,
 				AA56423B20DDBDBB0092A022 /* String+EscapeJSTests.swift in Sources */,
+				3A49A8E42151801300760B8C /* ConversionRatesView.swift in Sources */,
 				AAFA97B12115110000D19ED3 /* SettingsViewController.swift in Sources */,
 				602B9D162118E25A00BD3D60 /* LocationSuggestionService.swift in Sources */,
 				3A1552E52136000F00683CEB /* RatesAPI.swift in Sources */,
@@ -8401,6 +8412,7 @@
 				AADB027E20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */,
 				2390C10B1D87376E00342C38 /* TransactionRecipientsViewController.m in Sources */,
 				C7618B611F66C817003E7589 /* QRCodeScannerSendViewController.m in Sources */,
+				3A49A8E32151801300760B8C /* ConversionRatesView.swift in Sources */,
 				AA63F87420A39D8D002B719B /* AppFeatureConfiguration.swift in Sources */,
 				51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */,
 				AAE9113520A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,

@@ -144,6 +144,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
             output.updatedInput(primary: primary, secondary: secondaryResult)
         }
+        
+        guard let conversion = model.lastConversion else { return }
+        
+        output.updatedRates(
+            first: conversion.baseToCounterDescription,
+            second: conversion.baseToFiatDescription,
+            third: conversion.counterToFiatDescription
+        )
     }
 
     func updateTradingValues(left: String, right: String) {

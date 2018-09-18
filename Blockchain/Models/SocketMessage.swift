@@ -112,6 +112,30 @@ struct Conversion: SocketMessageCodable {
     }
 }
 
+extension Conversion {
+    var baseToFiatDescription: String {
+        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
+        return base + " = " + fiat
+    }
+    
+    var baseToCounterDescription: String {
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
+        return base + " = " + counter
+    }
+    
+    var counterToFiatDescription: String {
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let counter = "1" + " " + counterSymbol
+        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
+        return counter + " = " + fiat
+    }
+}
+
 struct Quote: Codable {
     let time: String?
     let pair: String

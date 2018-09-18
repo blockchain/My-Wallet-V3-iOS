@@ -28,16 +28,12 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         
         interface?.ratesViewVisibility(.hidden, animated: false)
         interface?.ratesChevronButtonVisibility(.hidden, animated: false)
-        
     }
     
     func onDisplayRatesTapped() {
         interface?.conversionViewVisibility(.hidden, animated: true)
         interface?.keypadViewVisibility(.hidden, animated: true)
         interface?.exchangeButtonVisibility(.hidden, animated: true)
-        
-        interface?.ratesViewVisibility(.visible, animated: true)
-        interface?.ratesChevronButtonVisibility(.visible, animated: true)
     }
     
     func onHideRatesTapped() {
@@ -59,6 +55,12 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 
     func onBackspaceTapped() {
         interactor.onBackspaceTapped()
+    }
+    
+    func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool) {
+        let ratesViewVisibility: Visibility = visibility == .hidden ? .visible : .hidden
+        interface?.ratesViewVisibility(ratesViewVisibility, animated: animated)
+        interface?.ratesChevronButtonVisibility(ratesViewVisibility, animated: animated)
     }
     
     func onContinueButtonTapped() {
@@ -104,7 +106,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     }
     
     func updatedRates(first: String, second: String, third: String) {
-        
+        interface?.updateRateLabels(first: first, second: second, third: third)
     }
     
     func updateTradingPairValues(left: String, right: String) {
