@@ -33,6 +33,7 @@ final class KYCApplicationCompleteController: KYCBaseViewController, Progressabl
     // MARK: - IBActions
 
     @IBAction private func primaryButtonTapped(_ sender: Any) {
+        BlockchainSettings.App.shared.shouldShowKYCAnnouncementCard = false
         coordinator.presentAccountStatusView(for: .pending, in: self)
     }
 }
