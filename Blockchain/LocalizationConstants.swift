@@ -367,6 +367,18 @@ struct LocalizationConstants {
             "Exchange %@ for %@",
             comment: "Text displayed on the primary action button for the exchange screen when exchanging between 2 assets."
         )
+        static let receive = NSLocalizedString(
+            "Receive",
+            comment: "Text displayed when reviewing the amount to be received for an exchange order")
+        static let estimatedFees = NSLocalizedString(
+            "Estimated fees",
+            comment: "Text displayed when reviewing the estimated amount of fees to pay for an exchange order")
+        static let value = NSLocalizedString(
+            "Value",
+            comment: "Text displayed when reviewing the fiat value of an exchange order")
+        static let sendTo = NSLocalizedString(
+            "Send to",
+            comment: "Text displayed when reviewing where the result of an exchange order will be sent to")
         static let whatDoYouWantToExchange = NSLocalizedString(
             "What do you want to exchange?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
