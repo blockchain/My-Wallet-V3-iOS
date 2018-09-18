@@ -28,6 +28,27 @@ class NumberKeypadView: NibBasedView {
             }
         }
     }
+    
+    func updateKeypadVisibility(_ visibility: Visibility, animated: Bool = true) {
+        guard let keypadButtons = keypadButtons else { return }
+        guard keypadButtons.count > 0 else { return }
+        
+        if animated == false {
+            keypadButtons.forEach({ $0.alpha = visibility.defaultAlpha })
+            return
+        }
+        
+        var buttons = keypadButtons
+        let transform: CGAffineTransform = visibility == .hidden ? CGAffineTransform(scaleX: 0.01, y: 0.01) : .identity
+        while buttons.count > 0 {
+            guard let animatedButton = buttons.randomItem() else { return }
+            buttons = buttons.filter({ $0.currentTitle != animatedButton.currentTitle })
+            UIView.animate(withDuration: 0.2, delay: 0.05, options: .curveEaseIn, animations: {
+                animatedButton.alpha = visibility.defaultAlpha
+                animatedButton.transform = transform
+            }, completion: nil)
+        }
+    }
 
     @IBAction func delimiterButtonTapped(_ sender: UIButton) {
         guard let titleLabel = sender.titleLabel, let value = titleLabel.text else { return }

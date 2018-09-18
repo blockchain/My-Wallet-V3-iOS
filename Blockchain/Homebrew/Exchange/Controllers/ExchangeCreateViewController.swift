@@ -10,6 +10,8 @@ import Foundation
 
 protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onViewLoaded()
+    func onDisplayRatesTapped()
+    func onHideRatesTapped()
     func onDisplayInputTypeTapped()
     func onContinueButtonTapped()
     func onExchangeButtonTapped()
@@ -36,11 +38,12 @@ class ExchangeCreateViewController: UIViewController {
     // Amount being typed in converted to input crypto or input fiat
     @IBOutlet private var secondaryAmountLabel: UILabel!
 
+    @IBOutlet private var hideRatesButton: UIButton!
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
-    @IBOutlet private var exchangeRateView: UIView!
-    @IBOutlet private var exchangeRateButton: UIButton!
+    @IBOutlet private var conversionView: UIView!
     @IBOutlet private var exchangeButton: UIButton!
+    
     // MARK: - IBActions
 
     @IBAction private func displayInputTypeTapped(_ sender: Any) {
@@ -106,7 +109,7 @@ class ExchangeCreateViewController: UIViewController {
             $0?.textColor = UIColor.brandPrimary
         }
 
-        [useMaximumButton, useMinimumButton, exchangeRateView].forEach {
+        [useMaximumButton, useMinimumButton, conversionView].forEach {
             addStyleToView($0)
         }
 
@@ -138,6 +141,18 @@ class ExchangeCreateViewController: UIViewController {
         delegate = presenter
     }
 
+    @IBAction func ratesViewTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.onDisplayRatesTapped()
+    }
+    
+    @IBAction func rateButtonTapped(_ sender: UIButton) {
+        delegate?.onDisplayRatesTapped()
+    }
+    
+    @IBAction func hideRatesButtonTapped(_ sender: UIButton) {
+        delegate?.onHideRatesTapped()
+    }
+    
     private func onExchangeAccountChanged() {
         guard let tradingPair = TradingPair(
             from: fromAccount.address.assetType,
@@ -221,8 +236,57 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         secondaryAmountLabel.text = secondary
     }
     
-    func ratesViewVisibility(_ visibility: Visibility) {
-
+    func ratesViewVisibility(_ visibility: Visibility, animated: Bool) {
+        // TODO
+    }
+    
+    func keypadViewVisibility(_ visibility: Visibility, animated: Bool) {
+        numberKeypadView.updateKeypadVisibility(visibility, animated: animated)
+    }
+    
+    func exchangeButtonVisibility(_ visibility: Visibility, animated: Bool) {
+        if animated == false {
+            exchangeButton.alpha = visibility.defaultAlpha
+            return
+        }
+        
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: .curveEaseIn,
+            animations: {
+                self.exchangeButton.alpha = visibility.defaultAlpha
+        }, completion: nil)
+    }
+    
+    func ratesChevronButtonVisibility(_ visibility: Visibility, animated: Bool) {
+        if animated == false {
+            hideRatesButton.alpha = visibility.defaultAlpha
+            return
+        }
+        
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: .curveEaseIn,
+            animations: {
+                self.hideRatesButton.alpha = visibility.defaultAlpha
+        }, completion: nil)
+    }
+    
+    func conversionViewVisibility(_ visibility: Visibility, animated: Bool) {
+        if animated == false {
+            conversionView.alpha = visibility.defaultAlpha
+            return
+        }
+        
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.0,
+            options: .curveEaseIn,
+            animations: {
+                self.conversionView.alpha = visibility.defaultAlpha
+        }, completion: nil)
     }
 
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?) {

@@ -18,8 +18,35 @@ class ExchangeCreatePresenter {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
+    
     func onViewLoaded() {
         interactor.viewLoaded()
+        
+        interface?.conversionViewVisibility(.visible, animated: false)
+        interface?.keypadViewVisibility(.visible, animated: false)
+        interface?.exchangeButtonVisibility(.visible, animated: false)
+        
+        interface?.ratesViewVisibility(.hidden, animated: false)
+        interface?.ratesChevronButtonVisibility(.hidden, animated: false)
+        
+    }
+    
+    func onDisplayRatesTapped() {
+        interface?.conversionViewVisibility(.hidden, animated: true)
+        interface?.keypadViewVisibility(.hidden, animated: true)
+        interface?.exchangeButtonVisibility(.hidden, animated: true)
+        
+        interface?.ratesViewVisibility(.visible, animated: true)
+        interface?.ratesChevronButtonVisibility(.visible, animated: true)
+    }
+    
+    func onHideRatesTapped() {
+        interface?.conversionViewVisibility(.visible, animated: true)
+        interface?.ratesViewVisibility(.hidden, animated: true)
+        interface?.ratesChevronButtonVisibility(.hidden, animated: true)
+        
+        interface?.keypadViewVisibility(.visible, animated: true)
+        interface?.exchangeButtonVisibility(.visible, animated: true)
     }
     
     func onDelimiterTapped(value: String) {
