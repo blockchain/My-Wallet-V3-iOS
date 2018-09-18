@@ -106,4 +106,3 @@ struct ExchangeInputComponents {
         return wholeValue + "." + fractionalValue
     }
 }
-

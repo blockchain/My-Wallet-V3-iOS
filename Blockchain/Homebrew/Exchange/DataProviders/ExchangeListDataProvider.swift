@@ -92,6 +92,11 @@ class ExchangeListDataProvider: NSObject {
         tableView?.refreshControl = refreshControl
     }
 
+    func set(tradeModels: [ExchangeTradeCellModel]) {
+        models = tradeModels
+        tableView?.reloadData()
+    }
+
     func append(tradeModels: [ExchangeTradeCellModel]) {
         if var current = models {
             current.append(contentsOf: tradeModels)
