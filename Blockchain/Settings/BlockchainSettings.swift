@@ -243,6 +243,15 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        @objc var shouldShowKYCAnnouncementCard: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.shouldShowKYCAnnouncementCard.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowKYCAnnouncementCard.rawValue)
+            }
+        }
+
         private override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.

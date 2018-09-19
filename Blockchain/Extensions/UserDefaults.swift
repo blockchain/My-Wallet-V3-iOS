@@ -9,8 +9,11 @@
 
 import Foundation
 
-@objc
 extension UserDefaults {
+
+    // TICKET: IOS-1289 - Refactor key-value mapping such that key = value
+    // Refactor enableCertificatePinning, simulateZeroTicker, shouldHideBuySellCard,
+    // swipeToReceiveEnabled such that key = value
     enum DebugKeys: String {
         case appReviewPromptCount = "debug_appReviewPromptCount"
         case enableCertificatePinning = "debug_certificatePinning"
@@ -26,29 +29,31 @@ extension UserDefaults {
     }
 
     enum Keys: String {
-        case appBecameActiveCount = "appBecameActiveCount"
-        case assetType = "assetType"
-        case didFailBiometrySetup = "didFailBiometrySetup"
-        case encryptedPinPassword = "encryptedPINPassword"
-        case environment = "environment"
-        case firstRun = "firstRun"
-        case hasEndedFirstSession = "hasEndedFirstSession"
-        case hasSeenAllCards = "hasSeenAllCards"
-        case hasSeenEmailReminder = "hasSeenEmailReminder"
-        case hasSeenUpgradeToHdScreen = "hasSeenUpgradeToHdScreen"
-        case password = "password"
-        case passwordPartHash = "passwordPartHash"
-        case pin = "pin"
-        case pinKey = "pinKey"
-        case reminderModalDate = "reminderModalDate"
+        case appBecameActiveCount
+        case assetType
+        case biometryEnabled
+        case defaultAccountLabelledAddressesCount
+        case didFailBiometrySetup
+        case dontAskUserToShowAppReviewPrompt
+        case encryptedPinPassword
+        case environment
+        case firstRun
+        case graphTimeFrameKey = "timeFrame"
+        case hasEndedFirstSession
+        case hasSeenAllCards
+        case hasSeenEmailReminder
+        case hasSeenUpgradeToHdScreen
+        case hideTransferAllFundsAlert
+        case password
+        case passwordPartHash
+        case pin
+        case pinKey
+        case reminderModalDate
         case shouldHideBuySellCard = "shouldHideBuySellNotificationCard"
-        case shouldShowBiometrySetup = "shouldShowBiometrySetup"
+        case shouldShowBiometrySetup
+        case shouldShowKYCAnnouncementCard
         case swipeToReceiveEnabled = "swipeToReceive"
-        case symbolLocal = "symbolLocal"
-        case biometryEnabled = "biometryEnabled"
-        case hideTransferAllFundsAlert = "hideTransferAllFundsAlert"
-        case defaultAccountLabelledAddressesCount = "defaultAccountLabelledAddressesCount"
-        case dontAskUserToShowAppReviewPrompt = "dontAskUserToShowAppReviewPrompt"
+        case symbolLocal
     }
 
     func migrateLegacyKeysIfNeeded() {

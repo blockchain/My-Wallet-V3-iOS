@@ -14,17 +14,19 @@
 
 #define ANNOUNCEMENT_CARD_HEIGHT 208
 
+// TICKET: IOS-1249 - Refactor CardsViewController
+
 @interface CardsViewController () <CardViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) UIView *contentView;
 
 // Onboarding cards
-@property (nonatomic) BOOL showCards;
+@property (nonatomic) BOOL showWelcomeCards;
 @property (nonatomic) NSMutableArray *announcementCards;
 @property (nonatomic) CGFloat cardsViewHeight;
 @property (nonatomic) UIScrollView *cardsScrollView;
-@property (nonatomic) UIView *cardsView;
+@property (nonatomic) CardsView *cardsView;
 @property (nonatomic) BOOL isUsingPageControl;
 @property (nonatomic) UIPageControl *pageControl;
 @property (nonatomic) UIButton *startOverButton;
@@ -59,46 +61,82 @@
 
 - (void)reloadCards
 {
-    self.showCards = !BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards;
-    
-    self.announcementCards = [NSMutableArray new];
-    if (!self.showCards) {
-        if (!BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
-            [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
+    /**
+      Temporary code to show KYC announcement card
+      - SeeAlso: IOS-1249 - Refactor CardsViewController
+     */
+
+    BOOL shouldShowKYCAnnouncementCard = BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard;
+    self.cardsViewHeight = 0;
+
+    if (shouldShowKYCAnnouncementCard) {
+        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
+        AnnouncementCardViewModel *model = [[AnnouncementCardViewModel alloc]
+                                            initWithTitle:[[LocalizationConstantsObjcBridge continueKYCCardTitle] uppercaseString]
+                                            message:[LocalizationConstantsObjcBridge continueKYCCardDescription]
+                                            actionButtonTitle:[LocalizationConstantsObjcBridge continueKYCActionButtonTitle]
+                                            image:[UIImage imageNamed:@"identity_verification_card"]
+                                            action:^{
+                                                [[KYCCoordinator sharedInstance] startFrom:tabControllerManager];
+                                            }
+                                            onClose:^{
+                                                BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard = NO;
+                                                [UIView animateWithDuration:.4f animations:^{
+                                                    [self.cardsView changeYPosition:-self.cardsView.frame.size.height];
+                                                    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView.frame.size.height);
+                                                    [self.contentView changeYPosition:0];
+                                                } completion:^(BOOL finished) {
+                                                    [self removeCardsView];
+                                                }];
+                                            }];
+        AnnouncementCardView *card = [AnnouncementCardView createWithModel:model];
+        self.cardsViewHeight = card.frame.size.height;
+        self.cardsView = [self prepareCardsView];
+        [self.cardsView addSubview:card];
+        [self.scrollView addSubview:self.cardsView];
+        [self.contentView changeYPosition:self.cardsViewHeight];
+    } else {
+        self.announcementCards = [NSMutableArray new];
+        self.showWelcomeCards = !BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards;
+
+        if (!self.showWelcomeCards) {
+            if (!BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
+                [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
+            }
+        }
+
+        if (!self.showWelcomeCards && self.announcementCards.count == 0) {
+            self.cardsViewHeight = 0;
+        } else if (self.announcementCards.count > 0) {
+            self.cardsViewHeight = ANNOUNCEMENT_CARD_HEIGHT * self.announcementCards.count;
+        } else {
+            self.cardsViewHeight = 240;
+        }
+
+        if (self.showWelcomeCards && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
+            [self setupWelcomeCardsView];
+        } else if (self.announcementCards.count > 0) {
+            [self setupCardsViewWithConfigurations:self.announcementCards];
+        } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
+            [self removeCardsView];
         }
     }
-    
-    if (self.announcementCards.count > 0) {
-        self.cardsViewHeight = ANNOUNCEMENT_CARD_HEIGHT * self.announcementCards.count;
-    } else {
-        self.cardsViewHeight = IS_USING_SCREEN_SIZE_4S ? 208 : 240;
-    }
-    
-    if (self.showCards && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
-        [self setupWelcomeCardsView];
-    } else if (self.announcementCards.count > 0) {
-        [self setupCardsViewWithConfigurations:self.announcementCards];
-    } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
-        [self removeCardsView];
-    }
-    
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView.frame.size.height + (self.announcementCards.count > 0 || self.showCards ? self.cardsViewHeight : 0));
+
+    CGFloat width = self.view.frame.size.width;
+    CGFloat height = self.contentView.frame.size.height + self.cardsViewHeight;
+    self.scrollView.contentSize = CGSizeMake(width, height);
 }
 
-- (UIView *)prepareCardsView
+- (CardsView *)prepareCardsView
 {
     [self.cardsView removeFromSuperview];
-    
-    UIView *cardsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.cardsViewHeight)];
-    cardsView.clipsToBounds = YES;
-    cardsView.backgroundColor = UIColor.lightGray;
-    
-    return cardsView;
+    CardsView *view = [[CardsView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.cardsViewHeight)];
+    return view;
 }
 
 - (void)setupWelcomeCardsView
 {
-    UIView *cardsView = [self prepareCardsView];
+    CardsView *cardsView = [self prepareCardsView];
     
     self.cardsView = [self configureCardsViewWelcome:cardsView];
     
@@ -109,20 +147,37 @@
 
 - (void)setupCardsViewWithConfigurations:(NSArray *)configurations
 {
-    UIView *cardsView = [self prepareCardsView];
-    CGRect cardFrame = CGRectMake(0, 0, self.scrollView.frame.size.width, ANNOUNCEMENT_CARD_HEIGHT);
-    
-    CGFloat verticalPadding = 8;
-    
+    CardsView *cardsView = [self prepareCardsView];
+
     for (int index = 0; index < configurations.count; index++) {
-        NSNumber *configuration = configurations[index];
-        if ([configuration integerValue] == CardConfigurationBuySell) {
-            BCCardView *buySellCard = [[BCCardView alloc] initWithContainerFrame:cardFrame title:[BC_STRING_BUY_SELL_CARD_TITLE uppercaseString] description:BC_STRING_BUY_SELL_CARD_DESCRIPTION actionType:ActionTypeBuySell imageName:@"buy_sell_partial" reducedHeightForPageIndicator:NO delegate:self];
-            [buySellCard setupCloseButton];
-            [buySellCard.closeButton addTarget:self action:@selector(closeBuySellCard) forControlEvents:UIControlEventTouchUpInside];
-            [buySellCard changeYPosition:ANNOUNCEMENT_CARD_HEIGHT * index + verticalPadding];
-            [cardsView addSubview:buySellCard];
+        CGRect cardFrame = CGRectMake(0, 0, self.scrollView.frame.size.width, ANNOUNCEMENT_CARD_HEIGHT);
+        NSInteger configuration = [configurations[index] integerValue];
+        NSString *title, *description, *imageName;
+        ActionType actionType;
+        Boolean reducedHeight = false;
+        CGFloat verticalPadding = 8;
+
+        switch (configuration) {
+            case CardConfigurationBuySell:
+                title = [[LocalizationConstantsObjcBridge buySellCardTitle] uppercaseString];
+                description = [LocalizationConstantsObjcBridge buySellCardDescription];
+                actionType = ActionTypeBuySell;
+                imageName = @"buy_sell_partial";
+                break;
+            default: return;
         }
+
+        BCCardView *card = [[BCCardView alloc]
+                            initWithContainerFrame:cardFrame
+                            title:title
+                            description:description
+                            actionType:actionType
+                            imageName:imageName
+                            reducedHeightForPageIndicator:reducedHeight delegate:self];
+        [card setupCloseButton];
+        [card.closeButton addTarget:self action:@selector(closeBuySellCard) forControlEvents:UIControlEventTouchUpInside];
+        [card changeYPosition:ANNOUNCEMENT_CARD_HEIGHT * index + verticalPadding];
+        [cardsView addSubview:card];
     }
     
     self.cardsView = cardsView;
@@ -134,7 +189,7 @@
 
 #pragma mark - New Wallet Cards
 
-- (UIView *)configureCardsViewWelcome:(UIView *)cardsView
+- (CardsView *)configureCardsViewWelcome:(CardsView *)cardsView
 {
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:cardsView.bounds];
     scrollView.delegate = self;
@@ -254,7 +309,7 @@
         self.closeCardsViewButton.hidden = NO;
         self.pageControl.hidden = YES;
         self.skipAllButton.hidden = YES;
-    };
+    }
     self.cardsScrollView.contentOffset = CGPointMake(oldContentOffsetX > self.cardsScrollView.contentSize.width ? self.cardsScrollView.contentSize.width - self.cardsScrollView.frame.size.width : oldContentOffsetX, self.cardsScrollView.contentOffset.y);
     
     return cardsView;
@@ -282,35 +337,40 @@
 - (void)closeAnnouncementCard:(CardConfiguration)cardConfiguration
 {
     if (self.announcementCards.count == 1) {
-        [self closeCardsView];
-    } else {
-        [UIView animateWithDuration:ANIMATION_DURATION_LONG animations:^{
-            CGFloat newY = ANNOUNCEMENT_CARD_HEIGHT * (self.announcementCards.count - 1);
-            if ([self.announcementCards.firstObject integerValue] == cardConfiguration) {
-                for (UIView *cardView in self.cardsView.subviews) {
-                    cardView.frame = CGRectOffset(cardView.frame, 0, -ANNOUNCEMENT_CARD_HEIGHT);
-                }
-            }
-            [self.cardsView changeHeight:newY];
-            self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView ? self.contentView.frame.size.height : 0);
-            [self.contentView changeYPosition:newY];
-        } completion:^(BOOL finished) {
-            [self reloadCards];
-        }];
+        [self closeCardsView]; return;
     }
+    [UIView animateWithDuration:ANIMATION_DURATION_LONG animations:^{
+        CGFloat newY = ANNOUNCEMENT_CARD_HEIGHT * (self.announcementCards.count - 1);
+        if ([self.announcementCards.firstObject integerValue] == cardConfiguration) {
+            for (UIView *cardView in self.cardsView.subviews) {
+                cardView.frame = CGRectOffset(cardView.frame, 0, -ANNOUNCEMENT_CARD_HEIGHT);
+            }
+        }
+        [self.cardsView changeHeight:newY];
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView ? self.contentView.frame.size.height : 0);
+        [self.contentView changeYPosition:newY];
+    } completion:^(BOOL finished) {
+        [self reloadCards];
+    }];
 }
 
 - (void)cardActionClicked:(ActionType)actionType
 {
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-    if (actionType == ActionTypeBuyBitcoin) {
-        [BuySellCoordinator.sharedInstance showBuyBitcoinView];
-    } else if (actionType == ActionTypeShowReceive) {
-        [tabControllerManager receiveCoinClicked:nil];
-    } else if (actionType == ActionTypeScanQR) {
-        [tabControllerManager qrCodeButtonClicked];
-    } else if (actionType == ActionTypeBuySell) {
-        [BuySellCoordinator.sharedInstance showBuyBitcoinView];
+
+    switch (actionType) {
+        case ActionTypeBuyBitcoin:
+            [BuySellCoordinator.sharedInstance showBuyBitcoinView];
+            break;
+        case ActionTypeShowReceive:
+            [tabControllerManager receiveCoinClicked:nil];
+            break;
+        case ActionTypeScanQR:
+            [tabControllerManager qrCodeButtonClicked];
+            break;
+        case ActionTypeBuySell:
+            [BuySellCoordinator.sharedInstance showBuyBitcoinView];
+            break;
     }
 }
 
@@ -393,7 +453,7 @@
 }
 
 - (void)closeCardsView
-{    
+{
     [UIView animateWithDuration:ANIMATION_DURATION_LONG animations:^{
         [self.cardsView changeHeight:0];
         self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.contentView ? self.contentView.frame.size.height : 0);
