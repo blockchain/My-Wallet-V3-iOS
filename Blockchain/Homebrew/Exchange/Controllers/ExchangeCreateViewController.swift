@@ -150,24 +150,6 @@ class ExchangeCreateViewController: UIViewController {
     @IBAction private func exchangeButtonTapped(_ sender: Any) {
         delegate?.onExchangeButtonTapped()
     }
-    
-    private func onExchangeAccountChanged() {
-        guard let tradingPair = TradingPair(
-            from: fromAccount.address.assetType,
-            to: toAccount.address.assetType
-        ) else {
-            return
-        }
-        // TODO: where should the value of `fix` come from?
-        presenter.updateTradingPair(pair: tradingPair, fix: .base)
-
-        let exchangeButtonTitle = String(
-            format: LocalizationConstants.Exchange.exchangeXForY,
-            tradingPair.from.symbol,
-            tradingPair.to.symbol
-        )
-        exchangeButton.setTitle(exchangeButtonTitle, for: .normal)
-    }
 }
 
 // MARK: - Styling
