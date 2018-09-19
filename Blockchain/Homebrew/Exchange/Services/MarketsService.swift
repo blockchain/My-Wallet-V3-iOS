@@ -99,7 +99,7 @@ extension MarketsService: ExchangeMarketsAPI {
                 fiatCurrency: model.fiatCurrency,
                 fix: model.fix,
                 volume: model.volume)
-            let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
+            let quote = Subscription(channel: "conversion", params: params)
             let message = SocketMessage(type: .exchange, JSONMessage: quote)
             SocketManager.shared.send(message: message)
         case .rest:
@@ -130,7 +130,7 @@ private extension MarketsService {
         let authenticationDisposable = authentication.getSessionToken()
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
                 let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
-                return Subscription(channel: "auth", operation: "subscribe", params: params)
+                return Subscription(channel: "auth", params: params)
             }.map { message in
                 return SocketMessage(type: .exchange, JSONMessage: message)
             }.subscribe(onSuccess: { socketMessage in

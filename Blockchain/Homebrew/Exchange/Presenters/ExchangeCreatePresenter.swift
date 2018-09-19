@@ -72,11 +72,11 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     }
 
     func onUseMinimumTapped() {
-        // TODO
+        interactor.useMinimumAmount()
     }
 
     func onUseMaximumTapped() {
-        // TODO
+        interactor.useMaximumAmount()
     }
 
     func onDisplayInputTypeTapped() {

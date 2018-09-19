@@ -175,11 +175,17 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
     
     func useMinimumAmount() {
-        
+        guard let model = model else { return }
+
+        inputs.clear()
+        clearConversions()
+        updatedInput()
+
+        // TODO
     }
     
     func useMaximumAmount() {
-        
+        // TODO
     }
 
     func toggleFix() {

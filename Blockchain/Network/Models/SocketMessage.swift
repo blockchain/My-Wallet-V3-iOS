@@ -8,6 +8,9 @@
 
 import Foundation
 
+// TICKET: IOS-1318
+// Move structs into separate files
+
 enum SocketType: String {
     case unassigned
     case exchange
@@ -58,7 +61,7 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
     typealias JSONType = Subscription
     
     let channel: String
-    let operation: String
+    let operation = "subscribe"
     let params: SubscribeParams
 
     private enum CodingKeys: CodingKey {
@@ -79,6 +82,10 @@ struct ConversionSubscribeParams: Codable {
     let fiatCurrency: String
     let fix: Fix
     let volume: String
+}
+
+struct AllCurrencyPairsSubscribeParams: Codable {
+    let type = "allCurrencyPairs"
 }
 
 // MARK: - Received Messages
@@ -135,6 +142,8 @@ extension Conversion {
         return counter + " = " + fiat
     }
 }
+
+// MARK - Associated Models
 
 struct Quote: Codable {
     let time: String?
