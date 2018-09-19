@@ -17,6 +17,7 @@ protocol ExchangeDependencies {
     var rates: RatesAPI { get }
     var tradeExecution: TradeExecutionAPI { get }
     var assetAccountRepository: AssetAccountRepository { get }
+    var tradeLimits: TradeLimitsAPI { get }
 }
 
 struct ExchangeServices: ExchangeDependencies {
@@ -27,6 +28,7 @@ struct ExchangeServices: ExchangeDependencies {
     let rates: RatesAPI
     let tradeExecution: TradeExecutionAPI
     let assetAccountRepository: AssetAccountRepository
+    let tradeLimits: TradeLimitsAPI
     
     init() {
         rates = RatesService()
@@ -36,6 +38,7 @@ struct ExchangeServices: ExchangeDependencies {
         inputs = ExchangeInputsService()
         tradeExecution = TradeExecutionService()
         assetAccountRepository = AssetAccountRepository.shared
+        tradeLimits = TradeLimitsService()
     }
 }
 

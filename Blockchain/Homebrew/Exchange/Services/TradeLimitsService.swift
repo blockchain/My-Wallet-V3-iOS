@@ -6,14 +6,16 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 
 class TradeLimitsService: TradeLimitsAPI {
 
-    private var disposable: Disposable?
+    private let disposables = CompositeDisposable()
 
     private let authenticationService: NabuAuthenticationService
     private let socketManager: SocketManager
+    private var cachedLimits = BehaviorRelay<TradeLimits?>(value: nil)
 
     init(
         authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared,
@@ -28,12 +30,25 @@ class TradeLimitsService: TradeLimitsAPI {
     }
 
     deinit {
-        disposable?.dispose()
-        disposable = nil
+        disposables.dispose()
     }
 
-    func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void)) {
-        disposable = getTradeLimits()
+    /// Initializes this TradeLimitsService so that the trade limits for the current
+    /// user is pre-fetched and cached
+    func initialize(withFiatCurrency currency: String) {
+        let disposable = getTradeLimits(withFiatCurrency: currency)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { _ in
+                Logger.shared.debug("Successfully initialized TradeLimitsService.")
+            }, onError: { error in
+                Logger.shared.error("Failed to initialize TradeLimitsService: \(error)")
+            })
+        _ = disposables.insert(disposable)
+    }
+
+    func getTradeLimits(withFiatCurrency currency: String, withCompletion: @escaping ((Result<TradeLimits>) -> Void)) {
+        let disposable = getTradeLimits(withFiatCurrency: currency)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { (payload) in
@@ -41,19 +56,23 @@ class TradeLimitsService: TradeLimitsAPI {
             }, onError: { error in
                 withCompletion(.error(error))
             })
+        _ = disposables.insert(disposable)
     }
 
-    func subscribeToAllExchangeRates() {
+    // MARK: - Private
 
-        // Send subscribe message
-        let params = AllCurrencyPairsSubscribeParams()
-        let subscriptionMessage = Subscription(channel: "exchange_rate", params: params)
-        let socketMessage = SocketMessage(type: .exchange, JSONMessage: subscriptionMessage)
-        socketManager.send(message: socketMessage)
+    private func getTradeLimits(withFiatCurrency currency: String) -> Single<TradeLimits> {
+        return Single.deferred { [unowned self] in
+            guard let cachedLimits = self.cachedLimits.value else {
+                return self.getTradeLimitsNetwork(withFiatCurrency: currency)
+            }
+            return Single.just(cachedLimits)
+        }.do(onSuccess: { [weak self] response in
+            self?.cachedLimits.accept(response)
+        })
     }
 
-    func getTradeLimits() -> Single<TradeLimits> {
-        // TODO: can be cached
+    private func getTradeLimitsNetwork(withFiatCurrency currency: String) -> Single<TradeLimits> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl
         ) else {
@@ -63,7 +82,7 @@ class TradeLimitsService: TradeLimitsAPI {
         guard let endpoint = URL.endpoint(
             baseURL,
             pathComponents: ["trades", "limits"],
-            queryParameters: nil
+            queryParameters: ["currency": currency]
         ) else {
             return .error(TradeLimitsAPIError.generic)
         }

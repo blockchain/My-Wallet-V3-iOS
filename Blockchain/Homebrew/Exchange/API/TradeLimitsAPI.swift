@@ -9,5 +9,6 @@
 import Foundation
 
 protocol TradeLimitsAPI {
-    func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void))
+    func initialize(withFiatCurrency currency: String)
+    func getTradeLimits(withFiatCurrency currency: String, withCompletion: @escaping ((Result<TradeLimits>) -> Void))
 }

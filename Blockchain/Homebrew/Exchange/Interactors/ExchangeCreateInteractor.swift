@@ -22,19 +22,19 @@ class ExchangeCreateInteractor {
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
+    fileprivate let tradeLimitService: TradeLimitsAPI
     private(set) var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
         }
     }
 
-    init(dependencies: ExchangeDependencies,
-         model: MarketsModel
-    ) {
+    init(dependencies: ExchangeDependencies, model: MarketsModel) {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
         self.tradeExecution = dependencies.tradeExecution
+        self.tradeLimitService = dependencies.tradeLimits
         self.model = model
     }
 
@@ -73,6 +73,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         
         markets.setup()
+        tradeLimitService.initialize(withFiatCurrency: model.fiatCurrency)
 
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
