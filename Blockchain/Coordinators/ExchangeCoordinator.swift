@@ -205,7 +205,7 @@ struct ExchangeServices: ExchangeDependencies {
         navigationController.pushViewController(confirmController, animated: true)
     }
 
-    private func showTradeDetails(trade: ExchangeTradeCellModel) {
+    private func showTradeDetails(trade: ExchangeTradeModel) {
         let detailViewController = ExchangeDetailViewController.make(with: .overview(trade))
         navigationController?.pushViewController(detailViewController, animated: true)
     }
@@ -216,7 +216,7 @@ struct ExchangeServices: ExchangeDependencies {
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
         case sentTransaction
-        case showTradeDetails(trade: ExchangeTradeCellModel)
+        case showTradeDetails(trade: ExchangeTradeModel)
     }
 
     func handle(event: ExchangeCoordinatorEvent) {

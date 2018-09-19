@@ -11,7 +11,7 @@ import Foundation
 protocol ExchangeListDelegate: class {
     func onAppeared()
     func onNextPageRequest(_ identifier: String)
-    func onTradeCellTapped(_ trade: ExchangeTradeCellModel)
+    func onTradeCellTapped(_ trade: ExchangeTradeModel)
     func onNewOrderTapped()
     func onPullToRefresh()
 }
@@ -71,7 +71,7 @@ class ExchangeListViewController: UIViewController {
 }
 
 extension ExchangeListViewController: ExchangeListInterface {
-    func showTradeDetails(trade: ExchangeTradeCellModel) {
+    func showTradeDetails(trade: ExchangeTradeModel) {
         coordinator.handle(event: .showTradeDetails(trade: trade))
     }
 
@@ -83,11 +83,11 @@ extension ExchangeListViewController: ExchangeListInterface {
         dataProvider?.isRefreshing = visibility.isHidden == false
     }
     
-    func display(results: [ExchangeTradeCellModel]) {
+    func display(results: [ExchangeTradeModel]) {
         dataProvider?.set(tradeModels: results)
     }
     
-    func append(results: [ExchangeTradeCellModel]) {
+    func append(results: [ExchangeTradeModel]) {
         dataProvider?.append(tradeModels: results)
     }
     
@@ -101,7 +101,7 @@ extension ExchangeListViewController: ExchangeListInterface {
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
-    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel) {
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeModel) {
         delegate?.onTradeCellTapped(trade)
     }
     

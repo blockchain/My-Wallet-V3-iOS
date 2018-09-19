@@ -16,6 +16,10 @@ protocol PartnerExchangeServiceDelegate {
     func partnerExchange(_ service: PartnerExchangeService, didBuild tradeInfo: NSDictionary)
 }
 
+enum PartnerExchangeServiceError: Error {
+    case generic
+}
+
 class PartnerExchangeService: PartnerExchangeAPI {
 
     // MARK: Lazy Properties
@@ -52,13 +56,17 @@ extension PartnerExchangeService: WalletExchangeDelegate {
     
     func didGetExchangeTrades(trades: NSArray) {
         if let block = completionBlock, trades.count == 0 {
-            block(nil, nil)
+            block(.error(nil))
             return
         }
         guard let input = trades as? [ExchangeTrade] else { return }
-        let models: [ExchangeTradeCellModel] = input.map({ return ExchangeTradeCellModel(with: $0) })
+        let models: [ExchangeTradeModel] = input.map({
+            let partnerTrade = PartnerTrade(with: $0)
+            let value: ExchangeTradeModel = .partner(partnerTrade)
+            return value
+        })
         if let block = completionBlock {
-            block(models, nil)
+            block(.success(models))
         }
     }
 

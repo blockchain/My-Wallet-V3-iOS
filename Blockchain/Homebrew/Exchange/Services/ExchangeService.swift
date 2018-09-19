@@ -8,10 +8,10 @@
 
 import Foundation
 
-typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
+typealias CompletionHandler = ((Result<[ExchangeTradeModel]>) -> Void)
 
 protocol ExchangeHistoryAPI {
-    var tradeModels: [ExchangeTradeCellModel] { get set }
+    var tradeModels: [ExchangeTradeModel] { get set }
     var canPage: Bool { get set }
     
     func getHomebrewTrades(before date: Date, completion: @escaping CompletionHandler)
@@ -21,9 +21,9 @@ protocol ExchangeHistoryAPI {
 
 class ExchangeService: NSObject {
     
-    typealias CompletionHandler = ((Result<[ExchangeTradeCellModel]>) -> Void)
+    typealias CompletionHandler = ((Result<[ExchangeTradeModel]>) -> Void)
 
-    var tradeModels: [ExchangeTradeCellModel] = []
+    var tradeModels: [ExchangeTradeModel] = []
     var canPage: Bool = false
     
     fileprivate let partnerAPI: PartnerExchangeAPI = PartnerExchangeService()
@@ -37,7 +37,7 @@ class ExchangeService: NSObject {
         return queue
     }()
     
-    fileprivate func sort(models: [ExchangeTradeCellModel]) -> [ExchangeTradeCellModel] {
+    fileprivate func sort(models: [ExchangeTradeModel]) -> [ExchangeTradeModel] {
         let sorted = models.sorted(by: { $0.transactionDate.compare($1.transactionDate) == .orderedDescending })
         return sorted
     }
@@ -51,17 +51,17 @@ extension ExchangeService: ExchangeHistoryAPI {
             guard op.isExecuting == false else { return }
         }
         
-        var result: Result<[ExchangeTradeCellModel]> = .error(nil)
+        var result: Result<[ExchangeTradeModel]> = .error(nil)
         homebrewOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
-            this.homebrewAPI.nextPage(fromTimestamp: date, completion: { (models, error) in
-                if let err = error {
-                    result = .error(err)
-                }
-                if let output = models {
-                    this.canPage = output.count >= 50
-                    this.tradeModels.append(contentsOf: output)
-                    result = .success(output)
+            this.homebrewAPI.nextPage(fromTimestamp: date, completion: { payload in
+                result = payload
+                switch result {
+                case .success(let value):
+                    this.canPage = value.count >= 50
+                    this.tradeModels.append(contentsOf: value)
+                case .error(let error):
+                    this.canPage = false
                 }
                 complete()
             })
@@ -88,9 +88,10 @@ extension ExchangeService: ExchangeHistoryAPI {
         
         partnerOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
-            this.partnerAPI.fetchTransactions(with: { (models, error) in
-                if let result = models {
-                    this.tradeModels.append(contentsOf: result)
+            this.partnerAPI.fetchTransactions(with: { result in
+                
+                if case let .success(payload) = result {
+                    this.tradeModels.append(contentsOf: payload)
                 }
                 complete()
             })
@@ -98,10 +99,13 @@ extension ExchangeService: ExchangeHistoryAPI {
         
         homebrewOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
-            this.homebrewAPI.nextPage(fromTimestamp: Date(), completion: { (models, error) in
-                if let result = models {
-                    this.canPage = result.count >= 50
-                    this.tradeModels.append(contentsOf: result)
+            this.homebrewAPI.nextPage(fromTimestamp: Date(), completion: { result in
+                switch result {
+                case .success(let value):
+                    this.canPage = value.count >= 50
+                    this.tradeModels.append(contentsOf: value)
+                case .error(let error):
+                    this.canPage = false
                 }
                 complete()
             })
