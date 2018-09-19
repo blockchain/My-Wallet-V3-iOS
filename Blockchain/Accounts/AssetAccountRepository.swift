@@ -46,8 +46,7 @@ class AssetAccountRepository {
 
     func allAccounts() -> [AssetAccount] {
         var allAccounts: [AssetAccount] = []
-        let allTypes: [AssetType] = [.bitcoin, .ethereum, .bitcoinCash]
-        allTypes.forEach {
+        AssetType.all.forEach {
             allAccounts.append(contentsOf: accounts(for: $0))
         }
         return allAccounts
@@ -93,7 +92,12 @@ extension AssetAccount {
         }
         let name = wallet.getLabelForAccount(index, assetType: assetType.legacy)
         let balanceLong = wallet.getBalanceForAccount(index, assetType: assetType.legacy) as? CUnsignedLongLong ?? 0
-        let balance = Decimal(balanceLong)
+        let balance: Decimal
+        if assetType == .bitcoin || assetType == .bitcoinCash {
+            balance = Decimal(balanceLong) / Decimal(Constants.Conversions.satoshi)
+        } else {
+            balance = Decimal(balanceLong)
+        }
         return AssetAccount(
             index: index,
             address: AssetAddressFactory.create(fromAddressString: address, assetType: assetType),

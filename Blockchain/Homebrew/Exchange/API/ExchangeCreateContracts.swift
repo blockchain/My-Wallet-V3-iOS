@@ -30,8 +30,8 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
     func viewLoaded()
     func displayInputTypeTapped()
     func ratesViewTapped()
-    func useMinimumAmount()
-    func useMaximumAmount()
+    func useMinimumAmount(assetAccount: AssetAccount)
+    func useMaximumAmount(assetAccount: AssetAccount)
     func confirmConversion()
     func changeTradingPair(tradingPair: TradingPair)
 }

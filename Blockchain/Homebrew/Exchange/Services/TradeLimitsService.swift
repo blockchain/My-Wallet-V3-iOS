@@ -15,7 +15,7 @@ class TradeLimitsService: TradeLimitsAPI {
 
     private let authenticationService: NabuAuthenticationService
     private let socketManager: SocketManager
-    private var cachedLimits = BehaviorRelay<TradeLimits?>(value: nil)
+    private let cachedLimits = BehaviorRelay<TradeLimits?>(value: nil)
 
     init(
         authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared,
@@ -59,11 +59,9 @@ class TradeLimitsService: TradeLimitsAPI {
         _ = disposables.insert(disposable)
     }
 
-    // MARK: - Private
-
-    private func getTradeLimits(withFiatCurrency currency: String) -> Single<TradeLimits> {
+    func getTradeLimits(withFiatCurrency currency: String) -> Single<TradeLimits> {
         return Single.deferred { [unowned self] in
-            guard let cachedLimits = self.cachedLimits.value else {
+            guard let cachedLimits = self.cachedLimits.value, cachedLimits.currency == currency else {
                 return self.getTradeLimitsNetwork(withFiatCurrency: currency)
             }
             return Single.just(cachedLimits)
@@ -71,6 +69,8 @@ class TradeLimitsService: TradeLimitsAPI {
             self?.cachedLimits.accept(response)
         })
     }
+
+    // MARK: - Private
 
     private func getTradeLimitsNetwork(withFiatCurrency currency: String) -> Single<TradeLimits> {
         guard let baseURL = URL(

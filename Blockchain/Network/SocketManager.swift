@@ -142,6 +142,9 @@ extension SocketManager: WebSocketAdvancedDelegate {
         switch type {
         case "unsubscribed":
             onAcknowledge("Successfully unsubscribed. Payload: \(text)")
+        case "exchangeRate":
+            Logger.shared.debug("Attempting to decode: \(text)")
+            ExchangeRates.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "currencyRatio":
             Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "currencyRatioError":
