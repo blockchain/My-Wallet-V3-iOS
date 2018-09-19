@@ -284,7 +284,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         model.lastConversion = nil
         inputs.isUsingFiat = true
         clearInputs()
-        updatedInput()
+        output?.updateTradingPair(pair: model.pair, fix: model.fix)
 
         tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrency) { [weak self] limitsResult in
             guard let strongSelf = self else { return }
