@@ -16,10 +16,6 @@ protocol PartnerExchangeServiceDelegate {
     func partnerExchange(_ service: PartnerExchangeService, didBuild tradeInfo: NSDictionary)
 }
 
-enum PartnerExchangeServiceError: Error {
-    case generic
-}
-
 class PartnerExchangeService: PartnerExchangeAPI {
 
     // MARK: Lazy Properties
