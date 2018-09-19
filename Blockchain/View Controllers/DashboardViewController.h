@@ -10,6 +10,7 @@
 #import "CardsViewController.h"
 #import "Assets.h"
 
+// TICKET: IOS-1297 - Complete Dashboard Swift Refactor
 @interface DashboardViewController : CardsViewController
 @property (nonatomic) LegacyAssetType assetType;
 - (void)reload;

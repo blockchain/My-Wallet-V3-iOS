@@ -86,7 +86,7 @@
     UILabel *balancesLabel = [[UILabel alloc] initWithFrame:CGRectMake(horizontalPadding, 16, self.view.frame.size.width/2, 40)];
     balancesLabel.textColor = UIColor.brandPrimary;
     balancesLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_LARGE];
-    balancesLabel.text = [BC_STRING_BALANCES uppercaseString];
+    balancesLabel.text = [[LocalizationConstantsObjcBridge balances] uppercaseString];
     [self.contentView addSubview:balancesLabel];
     
     self.balancesChartView = [[BCBalancesChartView alloc] initWithFrame:CGRectMake(horizontalPadding, balancesLabel.frame.origin.y + balancesLabel.frame.size.height, self.view.frame.size.width - horizontalPadding*2, 320)];
@@ -112,7 +112,7 @@
     UILabel *balancesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/2, labelHeight)];
     balancesLabel.textColor = UIColor.brandPrimary;
     balancesLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_LARGE];
-    balancesLabel.text = [BC_STRING_PRICE_CHARTS uppercaseString];
+    balancesLabel.text = [[LocalizationConstantsObjcBridge dashboardPriceCharts] uppercaseString];
     [priceChartContainerView addSubview:balancesLabel];
     
     BCPricePreviewView *bitcoinPreviewView = [[BCPricePreviewView alloc] initWithFrame:CGRectMake(0, balancesLabel.frame.origin.y + balancesLabel.frame.size.height, self.view.frame.size.width - horizontalPadding*2, previewViewHeight) assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin] price:[NSNumberFormatter formatMoney:SATOSHI localCurrency:YES] assetImage:@"bitcoin_white"];

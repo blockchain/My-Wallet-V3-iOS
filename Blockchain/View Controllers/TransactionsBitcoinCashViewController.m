@@ -223,7 +223,7 @@
 - (void)showFilterMenu
 {
     BCAddressSelectionView *filterView = [[BCAddressSelectionView alloc] initWithWallet:WalletManager.sharedInstance.wallet selectMode:SelectModeFilter delegate:self];
-    [[ModalPresenter sharedInstance] showModalWithContent:filterView closeType:ModalCloseTypeBack showHeader:YES headerText:BC_STRING_BALANCES onDismiss:nil onResume:nil];
+    [[ModalPresenter sharedInstance] showModalWithContent:filterView closeType:ModalCloseTypeBack showHeader:YES headerText:[LocalizationConstantsObjcBridge balances] onDismiss:nil onResume:nil];
 }
 
 #pragma mark - Address Selection Delegate
