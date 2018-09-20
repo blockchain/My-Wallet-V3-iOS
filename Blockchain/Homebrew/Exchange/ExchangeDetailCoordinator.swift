@@ -65,25 +65,23 @@ class ExchangeDetailCoordinator: NSObject {
                 )
                 
                 let value = ExchangeCellModel.Plain(
-                    description: "Value",
-                    value: "$" + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
-                        conversion.quote.currencyRatio.base.fiat.value :
-                        conversion.quote.currencyRatio.counter.fiat.value)
+                    description: LocalizationConstants.Exchange.value,
+                    value: "$" + conversion.quote.currencyRatio.counter.fiat.value
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: "Fees",
+                    description: LocalizationConstants.Exchange.estimatedFees,
                     value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
                 let receive = ExchangeCellModel.Plain(
-                    description: "Receive",
+                    description: LocalizationConstants.Exchange.receive,
                     value: orderTransaction.amountToReceive + " " + TradingPair(string: conversion.quote.pair)!.to.symbol,
                     bold: true
                 )
                 
                 let sendTo = ExchangeCellModel.Plain(
-                    description: "Send to",
+                    description: LocalizationConstants.Exchange.sendTo,
                     value: "My Wallet"
                 )
                 
