@@ -162,6 +162,20 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+    func clearInputLabelAnimations() {
+        primaryAmountLabel.layer.removeAllAnimations()
+        secondaryAmountLabel.layer.removeAllAnimations()
+    }
+
+    func showTemporaryInputLabelsColor(color: UIColor) {
+        primaryAmountLabel.showTemporaryTextColor(color: color, originalColor: UIColor.brandPrimary)
+        secondaryAmountLabel.showTemporaryTextColor(color: color, originalColor: UIColor.brandPrimary)
+    }
+
+    func wiggleInputLabels() {
+        primaryAmountLabel.wiggle()
+        secondaryAmountLabel.wiggle()
+    }
     
     func wigglePrimaryLabel() {
         primaryAmountLabel.wiggle()

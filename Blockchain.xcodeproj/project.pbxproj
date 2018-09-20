@@ -874,6 +874,8 @@
 		C7A0E92E1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */; };
 		C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */; };
 		C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */; };
+		C7AA4C4A2152DE46009A1F2C /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AA4C492152DE46009A1F2C /* UILabel.swift */; };
+		C7AA4C4B2152DE46009A1F2C /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AA4C492152DE46009A1F2C /* UILabel.swift */; };
 		C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */; };
 		C7BD107B209A01690062269E /* NumberFormatter+Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */; };
 		C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */; };
@@ -3337,6 +3339,7 @@
 		C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphTimeFrame.m; sourceTree = "<group>"; };
 		C7A9E7A41FAB5FF600027F22 /* UILabel+CGRectForSubstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+CGRectForSubstring.h"; sourceTree = "<group>"; };
 		C7A9E7A51FAB5FF600027F22 /* UILabel+CGRectForSubstring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+CGRectForSubstring.m"; sourceTree = "<group>"; };
+		C7AA4C492152DE46009A1F2C /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		C7B685591F17AE2A00A18A5C /* BCEmptyPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCEmptyPageView.h; sourceTree = "<group>"; };
 		C7B6855A1F17AE2A00A18A5C /* BCEmptyPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCEmptyPageView.m; sourceTree = "<group>"; };
 		C7BD107A209A01690062269E /* NumberFormatter+Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Assets.swift"; sourceTree = "<group>"; };
@@ -3861,6 +3864,7 @@
 				AACE31212091004A00B7B806 /* UIApplication+Suspend.m */,
 				AACE314B209152D800B7B806 /* Application+Helpers.swift */,
 				511646DE20851BC600C43522 /* Bundle.swift */,
+				C7AA4C492152DE46009A1F2C /* UILabel.swift */,
 				C76143AA211A80D30041411E /* Codable+Coding.swift */,
 				AACB48B721478472008FCCD0 /* Collection+Helpers.swift */,
 				3A76F901211A3BA5002F7946 /* DateFormatter+Conveniences.swift */,
@@ -7754,6 +7758,7 @@
 				AA126DBD212F4DA5005886A3 /* SignedRetailTokenResponse.swift in Sources */,
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				AA126DA6212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
+				C7AA4C4B2152DE46009A1F2C /* UILabel.swift in Sources */,
 				AA7133B621220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
 				AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */,
 				3A4EABA52140826800081531 /* PlainCell.swift in Sources */,
@@ -8038,6 +8043,7 @@
 				C9BE917D1945D8F600FD516D /* PEViewController.m in Sources */,
 				674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */,
 				67D95A281B3DDC900012EBB1 /* Constants.swift in Sources */,
+				C7AA4C4A2152DE46009A1F2C /* UILabel.swift in Sources */,
 				60AEA56821125AB20053A753 /* SettingsTwoStepVC.swift in Sources */,
 				AA3CA9B82107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */,
 				9F765F3214BC622E00048EFB /* TransactionsBitcoinViewController.m in Sources */,
