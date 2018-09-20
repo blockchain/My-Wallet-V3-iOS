@@ -363,6 +363,7 @@
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
 		51F5D04321542B96003D6237 /* KYCConfirmPhoneNumberController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F5D04521542B96003D6237 /* KYCConfirmPhoneNumberController.storyboard */; };
+		51F5D09821542CEF003D6237 /* KYCCountrySelectionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F5D09A21542CEF003D6237 /* KYCCountrySelectionController.storyboard */; };
 		51FC1AFE21270D0D007BEB18 /* SettingsTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */; };
 		51FC1B0921270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
 		51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */; };
@@ -373,7 +374,6 @@
 		602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */; };
 		602B9CD82118E15300BD3D60 /* KYCOnboardingNavigationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */; };
 		602B9CD92118E15300BD3D60 /* KYCVerifyIdentityController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAA2118E15200BD3D60 /* KYCVerifyIdentityController.storyboard */; };
-		602B9CDB2118E15300BD3D60 /* KYCCountrySelectionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */; };
 		602B9CDC2118E15300BD3D60 /* KYCEnterPhoneNumberController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */; };
 		602B9CDD2118E15300BD3D60 /* KYCWelcomeController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */; };
 		602B9CE02118E15300BD3D60 /* KYCNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */; };
@@ -2170,6 +2170,48 @@
 		51F5D09321542C06003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCConfirmPhoneNumberController.strings; sourceTree = "<group>"; };
 		51F5D09521542C2A003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCConfirmPhoneNumberController.strings; sourceTree = "<group>"; };
 		51F5D09721542C2B003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCConfirmPhoneNumberController.strings; sourceTree = "<group>"; };
+		51F5D09921542CEF003D6237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCCountrySelectionController.storyboard; sourceTree = "<group>"; };
+		51F5D09C21542CF3003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D09E21542CF4003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0A021542CF5003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0A221542CF7003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0A421542CF8003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0A621542CF9003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0A821542CFA003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0AA21542CFC003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0AC21542CFD003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0AE21542CFE003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0B021542D00003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0B221542D01003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0B421542D06003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0B621542D08003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0B821542D09003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0BA21542D0A003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0BC21542D0B003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0BE21542D0D003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0C021542D0E003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0C221542D0F003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0C421542D11003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0C621542D12003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0C821542D13003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0CA21542D15003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0CC21542D16003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0CE21542D18003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0D021542D19003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0D221542D1A003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0D421542D1C003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0D621542D22003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCCountrySelectionController.strings"; sourceTree = "<group>"; };
+		51F5D0D821542D24003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0DA21542D25003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0DC21542D26003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0DE21542D27003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0E021542D29003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0E221542D2A003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0E421542D2B003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0E621542D2D003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0E821542D2E003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0EA21542D30003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
+		51F5D0EC21542D31003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
 		51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
@@ -2178,7 +2220,6 @@
 		602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCInformationController.storyboard; sourceTree = "<group>"; };
 		602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCOnboardingNavigationController.storyboard; sourceTree = "<group>"; };
 		602B9CAA2118E15200BD3D60 /* KYCVerifyIdentityController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentityController.storyboard; sourceTree = "<group>"; };
-		602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCCountrySelectionController.storyboard; sourceTree = "<group>"; };
 		602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCEnterPhoneNumberController.storyboard; sourceTree = "<group>"; };
 		602B9CAE2118E15200BD3D60 /* KYCWelcomeController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCWelcomeController.storyboard; sourceTree = "<group>"; };
 		602B9CB12118E15200BD3D60 /* KYCNetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCNetworkRequest.swift; sourceTree = "<group>"; };
@@ -4252,7 +4293,7 @@
 				51FE911D213867FD00F49B12 /* KYCAddressController.storyboard */,
 				51058F0D212F50C400AD8719 /* KYCApplicationCompleteController.storyboard */,
 				51F5D04521542B96003D6237 /* KYCConfirmPhoneNumberController.storyboard */,
-				602B9CAC2118E15200BD3D60 /* KYCCountrySelectionController.storyboard */,
+				51F5D09A21542CEF003D6237 /* KYCCountrySelectionController.storyboard */,
 				602B9CAD2118E15200BD3D60 /* KYCEnterPhoneNumberController.storyboard */,
 				602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */,
 				602B9CA92118E15200BD3D60 /* KYCOnboardingNavigationController.storyboard */,
@@ -7537,7 +7578,7 @@
 				515EFAE8210282B4002350B6 /* ReceiveCoins.xib in Resources */,
 				602B9CD72118E15300BD3D60 /* KYCInformationController.storyboard in Resources */,
 				602B9CF12118E15300BD3D60 /* LocationSuggestionCell.xib in Resources */,
-				602B9CDB2118E15300BD3D60 /* KYCCountrySelectionController.storyboard in Resources */,
+				51F5D09821542CEF003D6237 /* KYCCountrySelectionController.storyboard in Resources */,
 				515EFADE210282B4002350B6 /* BCAddressSelectionView.strings in Resources */,
 				3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
@@ -9552,6 +9593,55 @@
 				51F5D09721542C2B003D6237 /* ar */,
 			);
 			name = KYCConfirmPhoneNumberController.storyboard;
+			sourceTree = "<group>";
+		};
+		51F5D09A21542CEF003D6237 /* KYCCountrySelectionController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51F5D09921542CEF003D6237 /* Base */,
+				51F5D09C21542CF3003D6237 /* fr */,
+				51F5D09E21542CF4003D6237 /* es */,
+				51F5D0A021542CF5003D6237 /* de */,
+				51F5D0A221542CF7003D6237 /* zh-Hans */,
+				51F5D0A421542CF8003D6237 /* ja */,
+				51F5D0A621542CF9003D6237 /* it */,
+				51F5D0A821542CFA003D6237 /* nl */,
+				51F5D0AA21542CFC003D6237 /* ko */,
+				51F5D0AC21542CFD003D6237 /* zh-Hant */,
+				51F5D0AE21542CFE003D6237 /* pt */,
+				51F5D0B021542D00003D6237 /* pt-PT */,
+				51F5D0B221542D01003D6237 /* da */,
+				51F5D0B421542D06003D6237 /* fi */,
+				51F5D0B621542D08003D6237 /* nb */,
+				51F5D0B821542D09003D6237 /* sv */,
+				51F5D0BA21542D0A003D6237 /* ru */,
+				51F5D0BC21542D0B003D6237 /* pl */,
+				51F5D0BE21542D0D003D6237 /* tr */,
+				51F5D0C021542D0E003D6237 /* ar */,
+				51F5D0C221542D0F003D6237 /* th */,
+				51F5D0C421542D11003D6237 /* zh */,
+				51F5D0C621542D12003D6237 /* ca */,
+				51F5D0C821542D13003D6237 /* pt-BR */,
+				51F5D0CA21542D15003D6237 /* es-MX */,
+				51F5D0CC21542D16003D6237 /* zh-TW */,
+				51F5D0CE21542D18003D6237 /* zh-CN */,
+				51F5D0D021542D19003D6237 /* sv-SE */,
+				51F5D0D221542D1A003D6237 /* sl */,
+				51F5D0D421542D1C003D6237 /* hi */,
+				51F5D0D621542D22003D6237 /* es-ES */,
+				51F5D0D821542D24003D6237 /* vi */,
+				51F5D0DA21542D25003D6237 /* ms */,
+				51F5D0DC21542D26003D6237 /* id */,
+				51F5D0DE21542D27003D6237 /* uk */,
+				51F5D0E021542D29003D6237 /* sk */,
+				51F5D0E221542D2A003D6237 /* ro */,
+				51F5D0E421542D2B003D6237 /* he */,
+				51F5D0E621542D2D003D6237 /* el */,
+				51F5D0E821542D2E003D6237 /* hr */,
+				51F5D0EA21542D30003D6237 /* hu */,
+				51F5D0EC21542D31003D6237 /* cs */,
+			);
+			name = KYCCountrySelectionController.storyboard;
 			sourceTree = "<group>";
 		};
 		51FE911D213867FD00F49B12 /* KYCAddressController.storyboard */ = {
