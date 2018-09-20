@@ -77,9 +77,20 @@ struct NetworkRequest {
         }
         
         task = session.dataTask(with: urlRequest) { (payload, response, error) in
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                responseCode = httpResponse.statusCode
+
+            if let error = error {
+                withCompletion(.error(HTTPRequestClientError.failedRequest(description: error.localizedDescription)), responseCode)
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                withCompletion(.error(HTTPRequestServerError.badResponse), responseCode)
+                return
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                withCompletion(.error(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)), responseCode)
+                return
             }
             
             if let payload = payload, error == nil {
