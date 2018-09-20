@@ -177,9 +177,9 @@ class TradeExecutionService: TradeExecutionAPI {
             AssetType(stringValue: settings.mockExchangeDepositAssetTypeString!)!
             : TradingPair(string: orderResult.pair)!.from
         #else
-        let depositAddress = orderResult.depositAddress!
-        let depositQuantity = orderResult.depositQuantity!
-        let pair = TradingPair(string: orderResult.pair!)
+        let depositAddress = orderResult.depositAddress
+        let depositQuantity = orderResult.depositQuantity
+        let pair = TradingPair(string: orderResult.pair)
         let assetType = pair!.from
         #endif
         let legacyAssetType = assetType.legacy
