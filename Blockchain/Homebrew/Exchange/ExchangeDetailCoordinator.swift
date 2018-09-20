@@ -90,11 +90,13 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let accounts = accountRepository.allAccounts()
                 
-                guard let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first else { return }
+                // TICKET: IOS-1326 - Destination Name on Exchange Locked Screen Should Match Withdrawal Address
+                let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first
+                let destinationName = destination?.name ?? ""
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: destination.name
+                    value: destinationName
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
