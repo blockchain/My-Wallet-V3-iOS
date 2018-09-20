@@ -64,7 +64,7 @@ struct NetworkRequest {
         return request.copy() as? URLRequest
     }
     
-    fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
+    fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((HTTPRequestResult<T>, _ responseCode: Int) -> Void)) {
         var responseCode: Int = 0
         
         guard let urlRequest = URLRequest() else {
@@ -99,13 +99,10 @@ struct NetworkRequest {
                     decoder.dateDecodingStrategy = .secondsSince1970
                     let final = try decoder.decode(T.self, from: payload)
                     withCompletion(.success(final), responseCode)
-                } catch let err {
-                    withCompletion(.error(err), responseCode)
+                } catch let decodingError {
+                    Logger.shared.debug("Payload decoding error: \(decodingError)")
+                    withCompletion(.error(HTTPRequestPayloadError.badData), responseCode)
                 }
-            }
-            
-            if let error = error {
-                withCompletion(.error(error), responseCode)
             }
         }
         

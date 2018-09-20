@@ -16,3 +16,8 @@ enum Result<A> {
     case success(A)
     case error(Error?)
 }
+
+enum HTTPRequestResult<A> {
+    case success(A)
+    case error(HTTPRequestError?)
+}

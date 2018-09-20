@@ -55,6 +55,7 @@ class TradeExecutionService: TradeExecutionAPI {
     }
 
     // TICKET: IOS-1291 Refactor this
+    // swiftlint:disable function_body_length
     func submitOrder(
         with conversion: Conversion,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
@@ -118,12 +119,15 @@ class TradeExecutionService: TradeExecutionAPI {
                     success(orderTransaction, conversion)
                 }
                 this.createOrder(from: payload, success: createOrderCompletion, error: error)
+        }, onError: { requestError in
+            guard let httpRequestError = requestError as? HTTPRequestError else {
+                error(requestError.localizedDescription)
+                return
+            }
+            error(httpRequestError.debugDescription)
         })
-        // Can't figure out error: Extra argument 'onError' in call
-//        , onError: { error in
-//            withCompletion(.error(error))
-//        })
     }
+    // swiftlint:enable function_body_length
 
     func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
         wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
@@ -140,7 +144,7 @@ class TradeExecutionService: TradeExecutionAPI {
         }, error: error)
     }
     // MARK: Private
-    
+
     fileprivate func process(order: Order) -> Single<OrderResult> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
