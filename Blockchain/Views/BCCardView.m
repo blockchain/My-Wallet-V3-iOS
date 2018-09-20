@@ -19,49 +19,59 @@
 - (id)initWithContainerFrame:(CGRect)frame title:(NSString *)title description:(NSString *)description actionType:(ActionType)actionType imageName:(NSString *)imageName reducedHeightForPageIndicator:(BOOL)reducedHeightForPageIndicator delegate:(id<CardViewDelegate>)delegate
 {
     if (self == [super init]) {
-        
         self.delegate = delegate;
         self.actionType = actionType;
         self.reducedHeightForPageIndicator = reducedHeightForPageIndicator;
-        
         self.frame = [self frameFromContainer:frame];
-        
         self.layer.masksToBounds = NO;
         self.layer.shadowOffset = CGSizeMake(0, 2);
         self.layer.shadowRadius = 2;
         self.layer.shadowOpacity = 0.15;
         self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
-        
         self.backgroundColor = [UIColor whiteColor];
         
-        CGFloat imageViewHeight = actionType == ActionTypeBuySell ? self.frame.size.height - 32 : 100;
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 16, 100, imageViewHeight)];
+        CGRect imageViewFrame;
+        switch (actionType) {
+            case ActionTypeBuySell:
+                imageViewFrame = CGRectMake(0, 16, 100, self.frame.size.height - 32);
+                break;
+            default:
+                imageViewFrame = CGRectMake(0, 16, 100, 100);
+                break;
+        }
+
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageViewFrame];
         imageView.image = [UIImage imageNamed:imageName];
         [self addSubview:imageView];
         
         CGFloat textWidth = self.frame.size.width - imageView.frame.size.width - 16;
         
         NSString *actionName;
-        UIColor *actionColor;
-        UIColor *titleColor;
+        UIColor *actionColor, *titleColor;
 
-        if (actionType == ActionTypeScanQR) {
-            actionName = BC_STRING_SCAN_ADDRESS;
-            actionColor = UIColor.brandPrimary;
-            titleColor = actionColor;
-        } else if (actionType == ActionTypeShowReceive) {
-            actionName = BC_STRING_REQUEST;
-            actionColor = UIColor.aqua;
-            titleColor = actionColor;
-        } else if (actionType == ActionTypeBuyBitcoin) {
-            actionName = BC_STRING_BUY_AND_SELL_BITCOIN;
-            actionColor = UIColor.brandSecondary;
-            titleColor = actionColor;
-        } else if (actionType == ActionTypeBuySell) {
-            actionName = BC_STRING_GET_STARTED;
-            actionColor = UIColor.brandPrimary;
-            titleColor = UIColor.brandPrimary;
+        switch (actionType) {
+            case ActionTypeScanQR:
+                actionName = BC_STRING_SCAN_ADDRESS;
+                actionColor = UIColor.brandPrimary;
+                titleColor = actionColor;
+                break;
+            case ActionTypeShowReceive:
+                actionName = BC_STRING_REQUEST;
+                actionColor = UIColor.aqua;
+                titleColor = actionColor;
+                break;
+            case ActionTypeBuyBitcoin:
+                actionName = BC_STRING_BUY_AND_SELL_BITCOIN;
+                actionColor = UIColor.brandSecondary;
+                titleColor = actionColor;
+                break;
+            case ActionTypeBuySell:
+                actionName = BC_STRING_GET_STARTED;
+                actionColor = UIColor.brandPrimary;
+                titleColor = UIColor.brandPrimary;
+                break;
+            default:
+                break;
         }
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.size.width + 8, imageView.frame.origin.y, textWidth, 54)];

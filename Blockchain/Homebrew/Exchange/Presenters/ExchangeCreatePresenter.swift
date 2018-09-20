@@ -18,8 +18,31 @@ class ExchangeCreatePresenter {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateDelegate {
+    
     func onViewLoaded() {
         interactor.viewLoaded()
+        
+        interface?.conversionViewVisibility(.visible, animated: false)
+        interface?.keypadViewVisibility(.visible, animated: false)
+        interface?.exchangeButtonVisibility(.visible, animated: false)
+        
+        interface?.ratesViewVisibility(.hidden, animated: false)
+        interface?.ratesChevronButtonVisibility(.hidden, animated: false)
+    }
+    
+    func onDisplayRatesTapped() {
+        interface?.conversionViewVisibility(.hidden, animated: true)
+        interface?.keypadViewVisibility(.hidden, animated: true)
+        interface?.exchangeButtonVisibility(.hidden, animated: true)
+    }
+    
+    func onHideRatesTapped() {
+        interface?.conversionViewVisibility(.visible, animated: true)
+        interface?.ratesViewVisibility(.hidden, animated: true)
+        interface?.ratesChevronButtonVisibility(.hidden, animated: true)
+        
+        interface?.keypadViewVisibility(.visible, animated: true)
+        interface?.exchangeButtonVisibility(.visible, animated: true)
     }
     
     func onDelimiterTapped(value: String) {
@@ -32,6 +55,12 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 
     func onBackspaceTapped() {
         interactor.onBackspaceTapped()
+    }
+    
+    func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool) {
+        let ratesViewVisibility: Visibility = visibility == .hidden ? .visible : .hidden
+        interface?.ratesViewVisibility(ratesViewVisibility, animated: animated)
+        interface?.ratesChevronButtonVisibility(ratesViewVisibility, animated: animated)
     }
 
     func changeTradingPair(tradingPair: TradingPair) {
@@ -77,7 +106,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     }
     
     func updatedRates(first: String, second: String, third: String) {
-        
+        interface?.updateRateLabels(first: first, second: second, third: third)
     }
     
     func updateTradingPairValues(left: String, right: String) {

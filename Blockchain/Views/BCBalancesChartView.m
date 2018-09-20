@@ -252,7 +252,7 @@
 
     if (hasZeroBalances) {
         ChartDataEntry *emptyValue = [[PieChartDataEntry alloc] initWithValue:1];
-        dataSet = [[PieChartDataSet alloc] initWithValues:@[emptyValue] label:BC_STRING_BALANCES];
+        dataSet = [[PieChartDataSet alloc] initWithValues:@[emptyValue] label:[LocalizationConstantsObjcBridge balances]];
         dataSet.colors = @[UIColor.emptyChart];
         dataSet.selectionShift = 5;
         self.chartView.highlightPerTapEnabled = NO;
@@ -264,7 +264,7 @@
         ChartDataEntry *bitcoinValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoin.fiatBalance data:btcChartEntryData];
         ChartDataEntry *etherValue = [[PieChartDataEntry alloc] initWithValue:self.ether.fiatBalance data:ethChartEntryData];
         ChartDataEntry *bitcoinCashValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinCash.fiatBalance data:bchChartEntryData];
-        dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue] label:BC_STRING_BALANCES];
+        dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue] label:[LocalizationConstantsObjcBridge balances]];
         dataSet.colors = @[UIColor.brandPrimary, UIColor.brandSecondary, UIColor.brandTertiary];
         dataSet.selectionShift = 5;
         self.chartView.highlightPerTapEnabled = YES;

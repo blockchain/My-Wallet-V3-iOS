@@ -129,6 +129,16 @@ class TradeExecutionService: TradeExecutionAPI {
         wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
     }
 
+    func submitAndSend(
+        with conversion: Conversion,
+        success: @escaping (() -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
+            guard let this = self else { return }
+            this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+        }, error: error)
+    }
     // MARK: Private
     
     fileprivate func process(order: Order) -> Single<OrderResult> {

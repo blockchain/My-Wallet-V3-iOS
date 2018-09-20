@@ -11,7 +11,11 @@ import Foundation
 protocol ExchangeCreateInterface: class {
     func wigglePrimaryLabel()
     func styleTemplate() -> ExchangeStyleTemplate
-    func ratesViewVisibility(_ visibility: Visibility)
+    func conversionViewVisibility(_ visibility: Visibility, animated: Bool)
+    func ratesViewVisibility(_ visibility: Visibility, animated: Bool)
+    func keypadViewVisibility(_ visibility: Visibility, animated: Bool)
+    func exchangeButtonVisibility(_ visibility: Visibility, animated: Bool)
+    func ratesChevronButtonVisibility(_ visibility: Visibility, animated: Bool)
     func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?)
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
     func updateRateLabels(first: String, second: String, third: String)

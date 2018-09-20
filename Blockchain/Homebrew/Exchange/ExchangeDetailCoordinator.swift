@@ -16,7 +16,8 @@ class ExchangeDetailCoordinator: NSObject {
     
     enum Event {
         case pageLoaded(ExchangeDetailViewController.PageModel)
-        case confirmExchange(OrderTransaction, Conversion, TradeExecutionAPI)
+        case confirmExchange(OrderTransaction)
+        case updateConfirmDetails(OrderTransaction, Conversion)
     }
 
     enum Action {
@@ -26,6 +27,7 @@ class ExchangeDetailCoordinator: NSObject {
 
     fileprivate weak var delegate: ExchangeDetailCoordinatorDelegate?
     fileprivate weak var interface: ExchangeDetailInterface?
+    let tradeExecution: TradeExecutionAPI
     fileprivate var accountRepository: AssetAccountRepository {
         get {
             return AssetAccountRepository.shared
@@ -34,16 +36,21 @@ class ExchangeDetailCoordinator: NSObject {
     
     init(
         delegate: ExchangeDetailCoordinatorDelegate,
-        interface: ExchangeDetailInterface
-        ) {
+        interface: ExchangeDetailInterface,
+        dependencies: ExchangeDependencies
+    ) {
         self.delegate = delegate
         self.interface = interface
+        self.tradeExecution = dependencies.tradeExecution
         super.init()
     }
 
 // swiftlint:disable function_body_length
     func handle(event: Event) {
         switch event {
+        case .updateConfirmDetails(let orderTransaction, let conversion):
+            interface?.mostRecentConversion = conversion
+            handle(event: .pageLoaded(.confirm(orderTransaction, conversion, tradeExecution)))
         case .pageLoaded(let model):
             
             // TODO: These are placeholder `ViewModels`
@@ -55,7 +62,6 @@ class ExchangeDetailCoordinator: NSObject {
             
             switch model {
             case .confirm(let orderTransaction, let conversion, _):
-                
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle(LocalizationConstants.Exchange.confirmExchange)
                 
@@ -67,13 +73,11 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: symbol + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
-                        conversion.quote.currencyRatio.base.fiat.value :
-                        conversion.quote.currencyRatio.counter.fiat.value)
+                    value: symbol + conversion.quote.currencyRatio.counter.fiat.value
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: LocalizationConstants.Exchange.fees,
+                    description: LocalizationConstants.Exchange.estimatedFees,
                     value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
@@ -117,7 +121,10 @@ class ExchangeDetailCoordinator: NSObject {
                     .text(text)
                     ]
                 )
-                
+
+                interface?.mostRecentOrderTransaction = orderTransaction
+                interface?.mostRecentConversion = conversion
+
                 delegate?.coordinator(self, updated: cellModels)
             case .locked(let orderTransaction, let conversion):
                 interface?.updateBackgroundColor(.brandPrimary)
@@ -239,17 +246,14 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let orderTransaction, let conversion, let tradeExecutionAPI):
-            tradeExecutionAPI.sendTransaction(assetType: orderTransaction.to.assetType, success: {
-                ExchangeCoordinator.shared.handle(
-                    event: .sentTransaction(
-                        transaction: orderTransaction,
-                        conversion: conversion
-                    )
-                )
-            }) { error in
-                AlertViewPresenter.shared.standardError(message: error)
+        case .confirmExchange(let transaction):
+            guard let lastConversion = interface?.mostRecentConversion else {
+                Logger.shared.error("No conversion to use")
+                return
             }
+            tradeExecution.submitAndSend(with: lastConversion, success: {
+                ExchangeCoordinator.shared.handle(event: .sentTransaction(orderTransaction: transaction, conversion: lastConversion))
+            }) { AlertViewPresenter.shared.standardError(message: $0) }
         }
     }
 }

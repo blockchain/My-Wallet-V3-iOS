@@ -199,7 +199,7 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
         let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
-        let confirmController = ExchangeDetailViewController.make(with: model)
+        let confirmController = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
         navigationController.pushViewController(confirmController, animated: true)
     }
     
@@ -209,12 +209,12 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
         let model = ExchangeDetailViewController.PageModel.locked(orderTransaction, conversion)
-        let controller = ExchangeDetailViewController.make(with: model)
+        let controller = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
         navigationController.present(controller, animated: true, completion: nil)
     }
 
     private func showTradeDetails(trade: ExchangeTradeCellModel) {
-        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade))
+        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: dependencies)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
@@ -223,7 +223,7 @@ struct ExchangeServices: ExchangeDependencies {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
-        case sentTransaction(transaction: OrderTransaction, conversion: Conversion)
+        case sentTransaction(orderTransaction: OrderTransaction, conversion: Conversion)
         case showTradeDetails(trade: ExchangeTradeCellModel)
     }
 
@@ -241,7 +241,7 @@ struct ExchangeServices: ExchangeDependencies {
             showCreateExchange(animated: animated, type: .shapeshift)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
-        case .sentTransaction(transaction: let transaction, conversion: let conversion):
+        case .sentTransaction(orderTransaction: let transaction, conversion: let conversion):
             showLockedExchange(orderTransaction: transaction, conversion: conversion)
         case .showTradeDetails(let trade):
             showTradeDetails(trade: trade)

@@ -17,39 +17,62 @@ protocol ExchangeDetailDelegate: class {
 /// `Exchange Locked`, and `Trade Overview` screen. It contains
 /// a `UICollectionView`.
 class ExchangeDetailViewController: UIViewController {
-    
+
     enum PageModel {
         case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
         case locked(OrderTransaction, Conversion)
         case overview(ExchangeTradeCellModel)
     }
-    
-    static func make(with model: PageModel) -> ExchangeDetailViewController {
+
+    static func make(with model: PageModel, dependencies: ExchangeDependencies) -> ExchangeDetailViewController {
         let controller = ExchangeDetailViewController.makeFromStoryboard()
         controller.model = model
+        controller.dependencies = dependencies
         return controller
     }
-    
+
+    // MARK: Public Properties
+
+    weak var delegate: ExchangeDetailDelegate?
+    var mostRecentOrderTransaction: OrderTransaction?
+    var mostRecentConversion: Conversion?
+
     // MARK: Private IBOutlets
-    
+
     @IBOutlet fileprivate var collectionView: UICollectionView!
     @IBOutlet fileprivate var layout: UICollectionViewFlowLayout!
-    
+
     // MARK: Private Properties
-    
+
     fileprivate var layoutAttributes: LayoutAttributes!
     fileprivate var model: PageModel!
     fileprivate var cellModels: [ExchangeCellModel]?
     fileprivate var reuseIdentifiers: Set<String> = []
     fileprivate var coordinator: ExchangeDetailCoordinator!
-    
+    fileprivate var presenter: ExchangeDetailPresenter!
+    fileprivate var dependencies: ExchangeDependencies!
+
     // MARK: Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        coordinator = ExchangeDetailCoordinator(delegate: self, interface: self)
+        coordinator = ExchangeDetailCoordinator(
+            delegate: self,
+            interface: self,
+            dependencies: dependencies
+        )
+        dependenciesSetup()
         setupLayout()
         coordinator.handle(event: .pageLoaded(model))
+        delegate?.onViewLoaded()
+    }
+
+    fileprivate func dependenciesSetup() {
+        let interactor = ExchangeDetailInteractor(dependencies: dependencies)
+        presenter = ExchangeDetailPresenter(interactor: interactor)
+        presenter.interface = self
+        interactor.output = presenter
+        delegate = presenter
     }
     
     fileprivate func setupLayout() {
@@ -149,7 +172,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         let height = model.heightForProposed(width: width)
         return CGSize(width: width, height: height)
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind
@@ -158,7 +181,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
     ) -> UICollectionReusableView {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
-        case .confirm(let orderTransaction, let conversion, let tradeExecutionAPI):
+        case .confirm:
             guard kind == UICollectionElementKindSectionFooter else { return UICollectionReusableView() }
             
             guard let footer = collectionView.dequeueReusableSupplementaryView(
@@ -167,8 +190,9 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 for: indexPath
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
             footer.title = LocalizationConstants.Exchange.sendNow
+            guard let order = mostRecentOrderTransaction else { return UICollectionReusableView() }
             footer.actionBlock = {
-                self.coordinator.handle(event: .confirmExchange(orderTransaction, conversion, tradeExecutionAPI))
+                self.coordinator.handle(event: .confirmExchange(order))
             }
 
             return footer
@@ -262,6 +286,14 @@ extension ExchangeDetailViewController: ExchangeDetailCoordinatorDelegate {
 }
 
 extension ExchangeDetailViewController: ExchangeDetailInterface {
+    func updateConfirmDetails(conversion: Conversion) {
+        guard let orderTransaction = self.mostRecentOrderTransaction else {
+            Logger.shared.error("Missing order transaction - should have been stored after onLoaded ExchangeDetailCoordinator event")
+            return
+        }
+        coordinator.handle(event: .updateConfirmDetails(orderTransaction, conversion))
+    }
+
     func navigationBarVisibility(_ visibility: Visibility) {
         guard let navController = navigationController else { return }
         navController.setNavigationBarHidden(visibility.isHidden, animated: false)
