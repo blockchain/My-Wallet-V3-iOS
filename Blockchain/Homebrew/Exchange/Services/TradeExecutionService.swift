@@ -21,10 +21,6 @@ class TradeExecutionService: TradeExecutionAPI {
         static let trades = PathComponents(
             components: ["trades"]
         )
-        
-        static let limits = PathComponents(
-            components: ["trades", "limits"]
-        )
     }
     
     private let authentication: NabuAuthenticationService
@@ -42,17 +38,6 @@ class TradeExecutionService: TradeExecutionAPI {
     }
     
     // MARK: TradeExecutionAPI
-    
-    func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void)) {
-        disposable = limits()
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { (payload) in
-                withCompletion(.success(payload))
-            }, onError: { error in
-                withCompletion(.error(error))
-            })
-    }
 
     // TICKET: IOS-1291 Refactor this
     func submitOrder(
@@ -129,6 +114,16 @@ class TradeExecutionService: TradeExecutionAPI {
         wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
     }
 
+    func submitAndSend(
+        with conversion: Conversion,
+        success: @escaping (() -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
+            guard let this = self else { return }
+            this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+        }, error: error)
+    }
     // MARK: Private
     
     fileprivate func process(order: Order) -> Single<OrderResult> {
@@ -190,28 +185,5 @@ class TradeExecutionService: TradeExecutionAPI {
             success(orderTransactionLegacy)
         }
         wallet.createOrderPayment(withOrderTransaction: orderTransactionLegacy, success: createOrderPaymentSuccess, error: error)
-    }
-
-    fileprivate func limits() -> Single<TradeLimits> {
-        guard let baseURL = URL(
-            string: BlockchainAPI.shared.retailCoreUrl) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        guard let endpoint = URL.endpoint(
-            baseURL,
-            pathComponents: PathComponents.limits.components,
-            queryParameters: nil) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        return authentication.getSessionToken().flatMap { token in
-            return NetworkRequest.GET(
-                url: endpoint,
-                body: nil,
-                token: token.token,
-                type: TradeLimits.self
-            )
-        }
     }
 }

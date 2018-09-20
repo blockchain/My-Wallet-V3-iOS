@@ -22,19 +22,19 @@ class ExchangeCreateInteractor {
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
+    fileprivate let tradeLimitService: TradeLimitsAPI
     private(set) var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
         }
     }
 
-    init(dependencies: ExchangeDependencies,
-         model: MarketsModel
-    ) {
+    init(dependencies: ExchangeDependencies, model: MarketsModel) {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
         self.tradeExecution = dependencies.tradeExecution
+        self.tradeLimitService = dependencies.tradeLimits
         self.model = model
     }
 
@@ -64,6 +64,11 @@ class ExchangeCreateInteractor {
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
+
+    fileprivate enum TradingLimit {
+        case min
+        case max
+    }
     
     func viewLoaded() {
         guard let output = output else { return }
@@ -73,6 +78,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         
         markets.setup()
+        tradeLimitService.initialize(withFiatCurrency: model.fiatCurrency)
 
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
@@ -148,6 +154,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
             output.updatedInput(primary: primary, secondary: secondaryResult)
         }
+        
+        guard let conversion = model.lastConversion else { return }
+        
+        output.updatedRates(
+            first: conversion.baseToCounterDescription,
+            second: conversion.baseToFiatDescription,
+            third: conversion.counterToFiatDescription
+        )
     }
 
     func updateTradingValues(left: String, right: String) {
@@ -167,19 +181,18 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
     
     func useMinimumAmount() {
-        
+        applyTradingLimit(limit: .min)
     }
     
     func useMaximumAmount() {
-        
+        applyTradingLimit(limit: .max)
     }
 
     func toggleFix() {
         guard let model = model else { return }
         model.toggleFix()
         model.lastConversion = nil
-        inputs.clear()
-        clearConversions()
+        clearInputs()
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
@@ -194,15 +207,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         // Clear conversions if the user backspaced all the way to 0
         if !inputs.canBackspace() {
-            clearConversions()
+            clearInputs()
         }
 
         updatedInput()
-    }
-
-    private func clearConversions() {
-        conversions.clear()
-        output?.updateTradingPairValues(left: "", right: "")
     }
 
     func onAddInputTapped(value: String) {
@@ -240,16 +248,6 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
     }
 
-    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
-        guard let model = model else { return false }
-        switch model.isUsingFiat {
-        case true:
-            return inputs.canAddFiatCharacter(value)
-        case false:
-            return inputs.canAddAssetCharacter(value)
-        }
-    }
-
     func changeTradingPair(tradingPair: TradingPair) {
         guard let model = model else { return }
         model.pair = tradingPair
@@ -275,5 +273,49 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             AlertViewPresenter.shared.standardError(message: errorMessage)
             this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
         })
+    }
+
+    // MARK: - Private
+
+    private func applyTradingLimit(limit: TradingLimit) {
+        guard let model = model else { return }
+
+        model.fix = .baseInFiat
+        model.lastConversion = nil
+        inputs.isUsingFiat = true
+        clearInputs()
+        output?.updateTradingPair(pair: model.pair, fix: model.fix)
+
+        tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrency) { [weak self] limitsResult in
+            guard let strongSelf = self else { return }
+
+            guard case let .success(limits) = limitsResult else { return }
+
+            let limitString = (limit == .min) ? limits.minOrder.description : limits.maxPossibleOrder.description
+            limitString.unicodeScalars.forEach { char in
+                let charStringValue = String(char)
+                if CharacterSet.decimalDigits.contains(char) {
+                    strongSelf.onAddInputTapped(value: charStringValue)
+                } else if "." == charStringValue {
+                    strongSelf.onDelimiterTapped(value: charStringValue)
+                }
+            }
+        }
+    }
+
+    private func clearInputs() {
+        inputs.clear()
+        conversions.clear()
+        output?.updateTradingPairValues(left: "", right: "")
+    }
+
+    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
+        guard let model = model else { return false }
+        switch model.isUsingFiat {
+        case true:
+            return inputs.canAddFiatCharacter(value)
+        case false:
+            return inputs.canAddAssetCharacter(value)
+        }
     }
 }

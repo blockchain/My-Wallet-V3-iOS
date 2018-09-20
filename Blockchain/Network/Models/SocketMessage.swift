@@ -8,6 +8,9 @@
 
 import Foundation
 
+// TICKET: IOS-1318
+// Move structs into separate files
+
 enum SocketType: String {
     case unassigned
     case exchange
@@ -58,7 +61,7 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
     typealias JSONType = Subscription
     
     let channel: String
-    let operation: String
+    let operation = "subscribe"
     let params: SubscribeParams
 
     private enum CodingKeys: CodingKey {
@@ -79,6 +82,10 @@ struct ConversionSubscribeParams: Codable {
     let fiatCurrency: String
     let fix: Fix
     let volume: String
+}
+
+struct AllCurrencyPairsSubscribeParams: Codable {
+    let type = "allCurrencyPairs"
 }
 
 // MARK: - Received Messages
@@ -111,6 +118,32 @@ struct Conversion: SocketMessageCodable {
         case quote
     }
 }
+
+extension Conversion {
+    var baseToFiatDescription: String {
+        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
+        return base + " = " + fiat
+    }
+    
+    var baseToCounterDescription: String {
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
+        return base + " = " + counter
+    }
+    
+    var counterToFiatDescription: String {
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let counter = "1" + " " + counterSymbol
+        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
+        return counter + " = " + fiat
+    }
+}
+
+// MARK - Associated Models
 
 struct Quote: Codable {
     let time: String?

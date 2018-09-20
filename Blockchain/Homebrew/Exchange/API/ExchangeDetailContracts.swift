@@ -13,6 +13,17 @@ protocol ExchangeDetailInterface: class {
     func navigationBarVisibility(_ visibility: Visibility)
     func updateTitle(_ value: String)
     func loadingVisibility(_ visibility: Visibility, action: ExchangeDetailCoordinator.Action)
+    func updateConfirmDetails(conversion: Conversion)
+
+    // When live updates are being received, the ExchangeDetailCoordinator
+    // fully reloads each collection view with new cells and doesn't have
+    // a reference to the existing ones, so the most recent order
+    // transaction must be saved to repopulate the fee field.
+    var mostRecentOrderTransaction: OrderTransaction? { get set }
+
+    // Live updates are still being received from the conversion socket,
+    // so the last conversion should be used to create the transaction
+    var mostRecentConversion: Conversion? { get set }
 }
 
 protocol ExchangeDetailInput: class {
@@ -21,6 +32,6 @@ protocol ExchangeDetailInput: class {
 }
 
 protocol ExchangeDetailOutput: class {
-    func conversionReceived()
+    func received(conversion: Conversion)
     func orderSent()
 }

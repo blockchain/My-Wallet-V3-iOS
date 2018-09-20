@@ -514,6 +514,7 @@
 #define FILTER_INDEX_IMPORTED_ADDRESSES -2
 
 // TabViewController
+// TICKET: IOS-1297 - Complete Dashboard Swift Refactor
 #define TAB_SEND 0
 #define TAB_DASHBOARD 1
 #define TAB_TRANSACTIONS 2
