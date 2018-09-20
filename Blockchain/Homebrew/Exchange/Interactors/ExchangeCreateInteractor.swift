@@ -95,12 +95,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
             guard model.pair.stringRepresentation == conversion.quote.pair else {
                 Logger.shared.warning(
-                    """
-                    Pair '\(conversion.quote.pair)' is different from model pair '\(model.pair.stringRepresentation)'.
-                    Unsubscribing from pair '\(conversion.quote.pair)'
-                    """
+                    "Pair '\(conversion.quote.pair)' is different from model pair '\(model.pair.stringRepresentation)'."
                 )
-                this.markets.unsubscribeToCurrencyPair(pair: conversion.quote.pair)
                 return
             }
 
@@ -259,6 +255,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     func changeTradingPair(tradingPair: TradingPair) {
         guard let model = model else { return }
+
+        // Unsubscribe from old pair conversions
+        Logger.shared.debug("Unsubscribing from old currency pair '\(model.pair.stringRepresentation)'")
+        markets.unsubscribeToCurrencyPair(pair: model.pair.stringRepresentation)
+
+        // Update to new pair
         model.pair = tradingPair
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
