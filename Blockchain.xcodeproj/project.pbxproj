@@ -4058,10 +4058,11 @@
 		515EF90221027E13002350B6 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
-				C9B32CF9194F3F5800BDF3A0 /* Cells */,
-				515EF9F5210282B4002350B6 /* SendCoins.xib */,
 				C71859581F4B791600745A87 /* TabController.xib */,
 				C718595A1F4B85E800745A87 /* Transactions.xib */,
+				C9B32CF9194F3F5800BDF3A0 /* Cells */,
+				515EF9FB210282B4002350B6 /* ReceiveCoins.xib */,
+				515EF9F5210282B4002350B6 /* SendCoins.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -4074,7 +4075,6 @@
 				515EF925210282B4002350B6 /* MainWindow.strings */,
 				515EF9ED210282B4002350B6 /* MainWindow.xib */,
 				515EF91D210282B4002350B6 /* ReceiveCoins.strings */,
-				515EF9FB210282B4002350B6 /* ReceiveCoins.xib */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
