@@ -12,6 +12,7 @@ import RxSwift
 protocol ExchangeMarketsAPI {
     func setup()
     func authenticate(completion: @escaping () -> Void)
+    func unsubscribeToCurrencyPair(pair: String)
     var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
     func updateConversion(model: MarketsModel)
@@ -80,8 +81,8 @@ extension MarketsService: ExchangeMarketsAPI {
             return socketMessageObservable.filter {
                 $0.type == .exchange &&
                     $0.JSONMessage is Conversion
-                }.map { message in
-                    return message.JSONMessage as! Conversion
+            }.map { message in
+                return message.JSONMessage as! Conversion
             }
         case .rest:
             return restMessageSubject.filter({ _ -> Bool in
@@ -105,6 +106,17 @@ extension MarketsService: ExchangeMarketsAPI {
         case .rest:
             Logger.shared.debug("Not yet implemented")
         }
+    }
+
+    func unsubscribeToCurrencyPair(pair: String) {
+        guard dataSource == .socket else {
+            Logger.shared.info("Unsubscribing to a currency pair is only necessary if the data source is WS.")
+            return
+        }
+        let params = ConversionPairUnsubscribeParams(pair: pair)
+        let unsubscribeMessage = Unsubscription(channel: "conversion", params: params)
+        let socketMessage = SocketMessage(type: .exchange, JSONMessage: unsubscribeMessage)
+        SocketManager.shared.send(message: socketMessage)
     }
 }
 

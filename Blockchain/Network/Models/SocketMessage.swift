@@ -88,6 +88,21 @@ struct AllCurrencyPairsSubscribeParams: Codable {
     let type = "allCurrencyPairs"
 }
 
+// MARK: - Unsubscribing
+
+struct Unsubscription<UnsubscribeParams: Codable>: SocketMessageCodable {
+    typealias JSONType = Unsubscription
+
+    let channel: String
+    let operation = "unsubscribe"
+    let params: UnsubscribeParams
+}
+
+struct ConversionPairUnsubscribeParams: Codable {
+    let type = "conversionPair"
+    let pair: String
+}
+
 // MARK: - Received Messages
 struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
@@ -143,7 +158,7 @@ extension Conversion {
     }
 }
 
-// MARK - Associated Models
+// MARK: - Associated Models
 
 struct Quote: Codable {
     let time: String?
