@@ -9,7 +9,8 @@
 import Foundation
 
 protocol ExchangeListDelegate: class {
-    func onAppeared()
+    func onLoaded()
+    func onDisappear()
     func onNextPageRequest(_ identifier: String)
     func onTradeCellTapped(_ trade: ExchangeTradeModel)
     func onNewOrderTapped()
@@ -31,10 +32,6 @@ class ExchangeListViewController: UIViewController {
     fileprivate var dataProvider: ExchangeListDataProvider?
     fileprivate var presenter: ExchangeListPresenter!
     fileprivate var dependencies: ExchangeDependencies!
-    
-    // TODO: This may not be needed. This is anticipating
-    // that screen presentations/dismissals would be handled
-    // by the coordinator. 
     fileprivate var coordinator: ExchangeCoordinator!
     
     // MARK: Factory
@@ -50,15 +47,10 @@ class ExchangeListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         dataProvider = ExchangeListDataProvider(table: tableView)
         dependenciesSetup()
         dataProvider?.delegate = self
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        delegate?.onAppeared()
+        delegate?.onLoaded()
     }
     
     fileprivate func dependenciesSetup() {
@@ -67,6 +59,11 @@ class ExchangeListViewController: UIViewController {
         presenter.interface = self
         interactor.output = presenter
         delegate = presenter
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.onDisappear()
     }
 }
 

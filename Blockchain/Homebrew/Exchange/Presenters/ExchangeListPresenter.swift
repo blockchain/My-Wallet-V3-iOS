@@ -18,9 +18,14 @@ class ExchangeListPresenter {
 }
 
 extension ExchangeListPresenter: ExchangeListDelegate {
-    func onAppeared() {
+    func onLoaded() {
+        interface?.enablePullToRefresh()
         interface?.refreshControlVisibility(.visible)
         interactor.fetchAllTrades()
+    }
+    
+    func onDisappear() {
+        interactor.cancel()
     }
     
     func onNextPageRequest(_ identifier: String) {

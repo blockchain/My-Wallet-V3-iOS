@@ -10,6 +10,7 @@ import Foundation
 
 protocol ExchangeDetailCoordinatorDelegate: class {
     func coordinator(_ detailCoordinator: ExchangeDetailCoordinator, updated models: [ExchangeCellModel])
+    func coordinator(_ detailCoordinator: ExchangeDetailCoordinator, completedTransaction: OrderTransaction)
 }
 
 class ExchangeDetailCoordinator: NSObject {
@@ -251,8 +252,10 @@ class ExchangeDetailCoordinator: NSObject {
                 Logger.shared.error("No conversion to use")
                 return
             }
-            tradeExecution.submitAndSend(with: lastConversion, success: {
+            tradeExecution.submitAndSend(with: lastConversion, success: { [weak self] in
+                guard let this = self else { return }
                 ExchangeCoordinator.shared.handle(event: .sentTransaction(orderTransaction: transaction, conversion: lastConversion))
+                this.delegate?.coordinator(this, completedTransaction: transaction)
             }) { AlertViewPresenter.shared.standardError(message: $0) }
         }
     }

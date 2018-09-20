@@ -218,6 +218,10 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                     for: indexPath
                     ) as? ActionableFooterView else { return UICollectionReusableView() }
                 footer.title = LocalizationConstants.Exchange.done
+                footer.actionBlock = { [weak self] in
+                    guard let this = self else { return }
+                    this.dismiss(animated: true, completion: nil)
+                }
                 
                 return footer
             default:
@@ -282,6 +286,10 @@ extension ExchangeDetailViewController: ExchangeDetailCoordinatorDelegate {
         registerCells()
         registerSupplementaryViews()
         collectionView.reloadData()
+    }
+    func coordinator(_ detailCoordinator: ExchangeDetailCoordinator, completedTransaction: OrderTransaction) {
+        guard let navController = navigationController else { return }
+        navController.popToRootViewController(animated: false)
     }
 }
 

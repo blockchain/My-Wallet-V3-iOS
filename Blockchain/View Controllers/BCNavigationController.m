@@ -62,6 +62,7 @@
     [self.closeButton setImage:closeImage forState:UIControlStateNormal];
     self.closeButton.center = CGPointMake(self.closeButton.center.x, self.headerLabel.center.y);
     [self.closeButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+    [self.closeButton setTintColor:[UIColor whiteColor]];
     [self.topBar addSubview:self.closeButton];
     
     self.backButton = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -80,6 +81,7 @@
 
 - (void)applyLightAppearance
 {
+    [self.backButton setTintColor:[UIColor brandPrimary]];
     [self.closeButton setTintColor:[UIColor brandPrimary]];
     [self.headerLabel setTextColor:[UIColor brandPrimary]];
     [self.backButton setTintColor:[UIColor brandPrimary]];
@@ -88,6 +90,7 @@
 
 - (void)applyDarkAppearance
 {
+    [self.backButton setTintColor:[UIColor whiteColor]];
     [self.closeButton setTintColor:[UIColor whiteColor]];
     [self.headerLabel setTextColor:[UIColor whiteColor]];
     [self.backButton setTintColor:[UIColor whiteColor]];
