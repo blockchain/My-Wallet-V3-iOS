@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Once we verify your identity, you are approved to exchange cryptocurrencies on the Blockchain app!"; ObjectID = "YYL-dK-Xos"; */
+"YYL-dK-Xos.text" = "Once we verify your identity, you are approved to exchange cryptocurrencies on the Blockchain app!";
+
+/* Class = "UILabel"; text = "Let's Confirm It's You"; ObjectID = "cKX-KB-srT"; */
+"cKX-KB-srT.text" = "Let's Confirm It's You";
+
+/* Class = "UINavigationItem"; title = "Verify Your Identity"; ObjectID = "fI3-4B-lT9"; */
+"fI3-4B-lT9.title" = "Verify Your Identity";
+
+/* Class = "UILabel"; text = "Grab your Passport or Driver's License."; ObjectID = "wSW-uD-Za7"; */
+"wSW-uD-Za7.text" = "Grab your Passport or Driver's License.";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "xdd-nW-Qrc"; */
+"xdd-nW-Qrc.normalTitle" = "Next";
