@@ -71,6 +71,14 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interactor.toggleFix()
     }
 
+    func onUseMinimumTapped() {
+        interactor.useMinimumAmount()
+    }
+
+    func onUseMaximumTapped() {
+        interactor.useMaximumAmount()
+    }
+
     func onDisplayInputTypeTapped() {
         interactor.displayInputTypeTapped()
     }

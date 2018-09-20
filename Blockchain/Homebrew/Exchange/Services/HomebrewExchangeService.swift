@@ -7,58 +7,54 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol HomebrewExchangeAPI {
     func nextPage(fromTimestamp: Date, completion: @escaping ExchangeCompletion)
-    func cancel()
-    func isExecuting() -> Bool
+}
+
+enum HomebrewExchangeServiceError: Error {
+    case generic
 }
 
 class HomebrewExchangeService: HomebrewExchangeAPI {
-
-    fileprivate var task: URLSessionDataTask?
+    
+    fileprivate let authentication: NabuAuthenticationService
+    fileprivate var disposable: Disposable?
+    
+    init(service: NabuAuthenticationService = NabuAuthenticationService.shared) {
+        self.authentication = service
+    }
+    
+    deinit {
+        disposable?.dispose()
+    }
 
     func nextPage(fromTimestamp: Date, completion: @escaping ExchangeCompletion) {
-        guard let baseURL = URL(string: BlockchainAPI.shared.retailCoreUrl) else { return }
-        let timestamp = DateFormatter.sessionDateFormat.string(from: fromTimestamp)
-        guard let endpoint = URL.endpoint(baseURL, pathComponents: ["trades"], queryParameters: ["before": timestamp]) else { return }
-        guard let session = NetworkManager.shared.session else { return }
-
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = [
-            HttpHeaderField.contentType: HttpHeaderValue.json,
-            HttpHeaderField.accept: HttpHeaderValue.json
-        ]
-        if let currentTask = task {
-            guard currentTask.currentRequest != request else { return }
+        
+        disposable = trades(before: fromTimestamp)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { (payload) in
+                let result: [ExchangeTradeModel] = payload.map({ return .homebrew($0) })
+                completion(.success(result))
+            }, onError: { error in
+                completion(.error(error))
+            })
+    }
+    
+    fileprivate func trades(before timestamp: Date) -> Single<[ExchangeTradeCellModel]> {
+        guard let baseURL = URL(string: BlockchainAPI.shared.retailCoreUrl) else {
+            return .error(HomebrewExchangeServiceError.generic)
         }
-
-        task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-            if let result = data {
-                do {
-                    let decoder = JSONDecoder()
-                    let final = try decoder.decode([ExchangeTradeCellModel].self, from: result)
-                    completion(final, error)
-                } catch let err {
-                    completion(nil, err)
-                }
-            }
-
-            if let err = error {
-                completion(nil, err)
-            }
-        })
-
-        task?.resume()
-    }
-
-    func cancel() {
-        guard let current = task else { return }
-        current.cancel()
-    }
-
-    func isExecuting() -> Bool {
-        return task?.state == .running
+        
+        let timestamp = DateFormatter.sessionDateFormat.string(from: timestamp)
+        guard let endpoint = URL.endpoint(baseURL, pathComponents: ["trades"], queryParameters: ["before": timestamp]) else {
+            return .error(HomebrewExchangeServiceError.generic)
+        }
+        
+        return authentication.getSessionToken().flatMap { token in
+            return NetworkRequest.GET(url: endpoint, body: nil, token: token.token, type: [ExchangeTradeCellModel].self)
+        }
     }
 }

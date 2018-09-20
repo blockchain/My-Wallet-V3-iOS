@@ -9,7 +9,6 @@
 import Foundation
 
 protocol TradeExecutionAPI {
-    func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void))
 
     // Build a transaction
     func submitOrder(with conversion: Conversion, success: @escaping ((OrderTransaction, Conversion) -> Void), error: @escaping ((String) -> Void))

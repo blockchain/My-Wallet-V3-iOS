@@ -81,9 +81,10 @@ struct NetworkRequest {
             if let httpResponse = response as? HTTPURLResponse {
                 responseCode = httpResponse.statusCode
             }
-            
+
             if let payload = payload, error == nil {
                 do {
+                    Logger.shared.debug("Received payload: \(String(data: payload, encoding: .utf8) ?? "")")
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .secondsSince1970
                     let final = try decoder.decode(T.self, from: payload)
@@ -101,46 +102,6 @@ struct NetworkRequest {
         task?.resume()
     }
     
-    static func GET<ResponseType: Decodable>(
-        url: URL,
-        body: Data?,
-        token: String?,
-        type: ResponseType.Type
-        ) -> Single<ResponseType> {
-        var request = self.init(endpoint: url, method: .get, body: body, authToken: token)
-        return Single.create(subscribe: { (observer) -> Disposable in
-            request.execute(expecting: ResponseType.self, withCompletion: { (result, responseCode) in
-                switch result {
-                case .success(let value):
-                    observer(.success(value))
-                case .error(let error):
-                    observer(.error(error ?? NetworkError.generic))
-                }
-            })
-            return Disposables.create()
-        })
-    }
-    
-    static func POST<ResponseType: Decodable>(
-        url: URL,
-        body: Data?,
-        token: String?,
-        type: ResponseType.Type
-        ) -> Single<ResponseType> {
-        var request = self.init(endpoint: url, method: .post, body: body, authToken: token)
-        return Single.create(subscribe: { (observer) -> Disposable in
-            request.execute(expecting: ResponseType.self, withCompletion: { (result, responseCode) in
-                switch result {
-                case .success(let value):
-                    observer(.success(value))
-                case .error(let error):
-                    observer(.error(error ?? NetworkError.generic))
-                }
-            })
-            return Disposables.create()
-        })
-    }
-    
     static func POST(url: URL, body: Data?) -> NetworkRequest {
         return self.init(endpoint: url, method: .post, body: body)
     }
@@ -151,5 +112,50 @@ struct NetworkRequest {
     
     static func DELETE(url: URL) -> NetworkRequest {
         return self.init(endpoint: url, method: .delete, body: nil)
+    }
+}
+
+// MARK: - Rx
+
+extension NetworkRequest {
+
+    static func GET<ResponseType: Decodable>(
+        url: URL,
+        body: Data?,
+        token: String?,
+        type: ResponseType.Type
+    ) -> Single<ResponseType> {
+        var request = self.init(endpoint: url, method: .get, body: body, authToken: token)
+        return Single.create(subscribe: { (observer) -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { (result, _) in
+                switch result {
+                case .success(let value):
+                    observer(.success(value))
+                case .error(let error):
+                    observer(.error(error ?? NetworkError.generic))
+                }
+            })
+            return Disposables.create()
+        })
+    }
+
+    static func POST<ResponseType: Decodable>(
+        url: URL,
+        body: Data?,
+        token: String?,
+        type: ResponseType.Type
+    ) -> Single<ResponseType> {
+        var request = self.init(endpoint: url, method: .post, body: body, authToken: token)
+        return Single.create(subscribe: { (observer) -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { (result, _) in
+                switch result {
+                case .success(let value):
+                    observer(.success(value))
+                case .error(let error):
+                    observer(.error(error ?? NetworkError.generic))
+                }
+            })
+            return Disposables.create()
+        })
     }
 }

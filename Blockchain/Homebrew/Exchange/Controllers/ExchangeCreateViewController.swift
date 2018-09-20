@@ -13,6 +13,8 @@ protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onDisplayRatesTapped()
     func onHideRatesTapped()
     func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool)
+    func onUseMinimumTapped()
+    func onUseMaximumTapped()
     func onDisplayInputTypeTapped()
     func onExchangeButtonTapped()
 }
@@ -43,6 +45,14 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var conversionView: UIView!
     @IBOutlet private var exchangeButton: UIButton!
+
+    @IBAction func useMinimumButtonTapped(_ sender: Any) {
+        delegate?.onUseMinimumTapped()
+    }
+
+    @IBAction func useMaximumButtonTapped(_ sender: Any) {
+        delegate?.onUseMaximumTapped()
+    }
 
     // MARK: Action enum
     enum Action {
@@ -99,6 +109,8 @@ class ExchangeCreateViewController: UIViewController {
             $0?.textColor = UIColor.brandPrimary
         }
 
+        useMinimumButton.setTitle(LocalizationConstants.Exchange.useMin, for: .normal)
+        useMaximumButton.setTitle(LocalizationConstants.Exchange.useMax, for: .normal)
         [useMaximumButton, useMinimumButton, conversionView, hideRatesButton].forEach {
             addStyleToView($0)
         }

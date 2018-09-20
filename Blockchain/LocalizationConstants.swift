@@ -349,12 +349,24 @@ struct LocalizationConstants {
             "Complete",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
+        static let expired = NSLocalizedString(
+            "Expired",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let failed = NSLocalizedString(
+            "Failed",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
         static let inProgress = NSLocalizedString(
             "In Progress",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
-        static let tradeRefunded = NSLocalizedString(
-            "Trade Refunded",
+        static let refundInProgress = NSLocalizedString(
+            "Refund in Progress",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let refunded = NSLocalizedString(
+            "Refunded",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
         
@@ -370,12 +382,12 @@ struct LocalizationConstants {
         static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
         static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
         static let confirming = NSLocalizedString("Confirming", comment: "")
-        static let useMinimum = NSLocalizedString(
-            "Use minimum",
+        static let useMin = NSLocalizedString(
+            "Use min",
             comment: "Text displayed on button for user to tap to create a trade with the minimum amount of crypto allowed"
         )
-        static let useMaximum = NSLocalizedString(
-            "Use maximum",
+        static let useMax = NSLocalizedString(
+            "Use max",
             comment: "Text displayed on button for user to tap to create a trade with the maximum amount of crypto allowed"
         )
         static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")

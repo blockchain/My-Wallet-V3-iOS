@@ -21,7 +21,7 @@ class ExchangeDetailViewController: UIViewController {
     enum PageModel {
         case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
         case locked(OrderTransaction, Conversion)
-        case overview(ExchangeTradeCellModel)
+        case overview(ExchangeTradeModel)
     }
 
     static func make(with model: PageModel, dependencies: ExchangeDependencies) -> ExchangeDetailViewController {
