@@ -60,9 +60,7 @@ class AssetAccountRepository {
         return AssetAccount.create(assetType: assetType, index: index, wallet: wallet)
     }
 
-    // MARK: Private Methods
-
-    private func defaultEthereumAccount() -> AssetAccount? {
+    func defaultEthereumAccount() -> AssetAccount? {
         guard let ethereumAddress = wallet.getEtherAddress(), wallet.hasEthAccount() else {
             Logger.shared.debug("This wallet has no ethereum address.")
             return nil
@@ -86,6 +84,8 @@ class AssetAccountRepository {
 
 extension AssetAccount {
 
+    /// Creates a new AssetAccount. This method only supports creating an AssetAccount for
+    /// BTC or BCH. For ETH, use `defaultEthereumAccount`.
     static func create(assetType: AssetType, index: Int32, wallet: Wallet) -> AssetAccount? {
         guard let address = wallet.getReceiveAddress(forAccount: index, assetType: assetType.legacy) else {
             return nil
