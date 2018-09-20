@@ -2254,6 +2254,47 @@
 		51F5D13D21542DB8003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
 		51F5D13F21542DB9003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
 		51F5D14121542DBA003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		51F5D14321542E3F003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D14521542E41003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D14721542E42003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D14921542E43003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D14B21542E44003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D14D21542E45003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D14F21542E47003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15121542E48003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15321542E4A003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15521542E4B003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15721542E4C003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D15921542E4E003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15B21542E4F003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15D21542E51003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D15F21542E52003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16121542E53003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16321542E57003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16521542E58003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16721542E59003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16921542E5A003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16B21542E5C003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16D21542E5D003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D16F21542E5E003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17121542E60003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17321542E61003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17521542E62003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17721542E64003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17921542E65003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17B21542E66003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17D21542E68003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D17F21542E6A003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D18121542E6B003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18321542E6D003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D18521542E6E003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18721542E72003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18921542E73003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18B21542E74003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18D21542E75003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		51F5D18F21542E77003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D19121542E78003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		51F5D19321542E79003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
 		51F6A9BB206964D6002968EC /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
 		51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
@@ -9583,6 +9624,47 @@
 			isa = PBXVariantGroup;
 			children = (
 				51E431FA2135D39B004C2B0C /* Base */,
+				51F5D14321542E3F003D6237 /* fr */,
+				51F5D14521542E41003D6237 /* es */,
+				51F5D14721542E42003D6237 /* de */,
+				51F5D14921542E43003D6237 /* zh-Hans */,
+				51F5D14B21542E44003D6237 /* ja */,
+				51F5D14D21542E45003D6237 /* it */,
+				51F5D14F21542E47003D6237 /* nl */,
+				51F5D15121542E48003D6237 /* ko */,
+				51F5D15321542E4A003D6237 /* sl */,
+				51F5D15521542E4B003D6237 /* hi */,
+				51F5D15721542E4C003D6237 /* es-ES */,
+				51F5D15921542E4E003D6237 /* vi */,
+				51F5D15B21542E4F003D6237 /* ms */,
+				51F5D15D21542E51003D6237 /* id */,
+				51F5D15F21542E52003D6237 /* uk */,
+				51F5D16121542E53003D6237 /* sk */,
+				51F5D16321542E57003D6237 /* ro */,
+				51F5D16521542E58003D6237 /* he */,
+				51F5D16721542E59003D6237 /* el */,
+				51F5D16921542E5A003D6237 /* hr */,
+				51F5D16B21542E5C003D6237 /* hu */,
+				51F5D16D21542E5D003D6237 /* cs */,
+				51F5D16F21542E5E003D6237 /* th */,
+				51F5D17121542E60003D6237 /* ar */,
+				51F5D17321542E61003D6237 /* tr */,
+				51F5D17521542E62003D6237 /* pl */,
+				51F5D17721542E64003D6237 /* ru */,
+				51F5D17921542E65003D6237 /* sv */,
+				51F5D17B21542E66003D6237 /* nb */,
+				51F5D17D21542E68003D6237 /* fi */,
+				51F5D17F21542E6A003D6237 /* da */,
+				51F5D18121542E6B003D6237 /* pt-PT */,
+				51F5D18321542E6D003D6237 /* pt */,
+				51F5D18521542E6E003D6237 /* zh-Hant */,
+				51F5D18721542E72003D6237 /* sv-SE */,
+				51F5D18921542E73003D6237 /* zh-CN */,
+				51F5D18B21542E74003D6237 /* zh-TW */,
+				51F5D18D21542E75003D6237 /* es-MX */,
+				51F5D18F21542E77003D6237 /* zh */,
+				51F5D19121542E78003D6237 /* ca */,
+				51F5D19321542E79003D6237 /* pt-BR */,
 			);
 			name = KYCPersonalDetailsController.storyboard;
 			sourceTree = "<group>";
