@@ -140,9 +140,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: symbol + ((conversion.quote.fix == .base || conversion.quote.fix == .baseInFiat) ?
-                        conversion.quote.currencyRatio.base.fiat.value :
-                        conversion.quote.currencyRatio.counter.fiat.value)
+                    value: symbol + conversion.quote.currencyRatio.counter.fiat.value
                 )
                 
                 let fees = ExchangeCellModel.Plain(
@@ -198,39 +196,39 @@ class ExchangeDetailCoordinator: NSObject {
                 interface?.navigationBarVisibility(.visible)
                 
                 let status = ExchangeCellModel.Plain(
-                    description: "Status",
-                    value: "Complete",
+                    description: LocalizationConstants.Exchange.status,
+                    value: trade.status.displayValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
                     statusVisibility: .visible
                 )
                 
                 let value = ExchangeCellModel.Plain(
-                    description: "Value",
+                    description: LocalizationConstants.Exchange.value,
                     value: "$1,642.50",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let exchange = ExchangeCellModel.Plain(
-                    description: "Exchange",
+                    description: LocalizationConstants.Exchange.exchange,
                     value: "$0.25 BTC",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let receive = ExchangeCellModel.Plain(
-                    description: "Receive",
+                    description: LocalizationConstants.Exchange.receive,
                     value: "5.668586",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
                     bold: true
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: "Fees",
+                    description: LocalizationConstants.Exchange.fees,
                     value: "0.000414 BTC",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let sendTo = ExchangeCellModel.Plain(
-                    description: "Send to",
+                    description: LocalizationConstants.Exchange.sendTo,
                     value: "My Wallet",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )

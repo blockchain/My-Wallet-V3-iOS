@@ -440,6 +440,14 @@ struct LocalizationConstants {
             "Once an order starts, we are unable to stop it.",
             comment: "Second disclaimer in exchange locked screen"
         )
+        static let status = NSLocalizedString(
+            "Status",
+            comment: "Status of a trade in the exchange overview screen"
+        )
+        static let exchange = NSLocalizedString(
+            "Exchange",
+            comment: "Exchange"
+        )
     }
 
     struct AddressAndKeyImport {
