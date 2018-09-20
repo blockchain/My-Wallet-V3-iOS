@@ -312,7 +312,7 @@ extension ExchangeTradeModel.TradeStatus {
             return LocalizationConstants.Exchange.refundInProgress
         case .refunded,
              .cancelled:
-            return LocalizationConstants.Exchange.tradeRefunded
+            return LocalizationConstants.Exchange.refunded
         case .failed:
             return LocalizationConstants.Exchange.failed
         case .expired:

@@ -365,7 +365,7 @@ struct LocalizationConstants {
             "Refund in Progress",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
-        static let tradeRefunded = NSLocalizedString(
+        static let refunded = NSLocalizedString(
             "Refunded",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )

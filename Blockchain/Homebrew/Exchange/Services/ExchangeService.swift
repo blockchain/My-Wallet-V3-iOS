@@ -17,6 +17,7 @@ protocol ExchangeHistoryAPI {
     func getHomebrewTrades(before date: Date, completion: @escaping CompletionHandler)
     func getAllTrades(with completion: @escaping CompletionHandler)
     func isExecuting() -> Bool
+    func cancel()
 }
 
 class ExchangeService: NSObject {
@@ -60,7 +61,7 @@ extension ExchangeService: ExchangeHistoryAPI {
                 case .success(let value):
                     this.canPage = value.count >= 50
                     this.tradeModels.append(contentsOf: value)
-                case .error(let error):
+                case .error:
                     this.canPage = false
                 }
                 complete()
@@ -80,9 +81,6 @@ extension ExchangeService: ExchangeHistoryAPI {
     
     func getAllTrades(with completion: @escaping CompletionHandler) {
         /// Trades are being fetched, bail early.
-        if let op = homebrewOperation {
-            op.cancel()
-        }
         guard tradeQueue.operations.count == 0 else { return }
         tradeModels = []
         
@@ -104,7 +102,7 @@ extension ExchangeService: ExchangeHistoryAPI {
                 case .success(let value):
                     this.canPage = value.count >= 50
                     this.tradeModels.append(contentsOf: value)
-                case .error(let error):
+                case .error:
                     this.canPage = false
                 }
                 complete()
@@ -123,5 +121,9 @@ extension ExchangeService: ExchangeHistoryAPI {
     
     func isExecuting() -> Bool {
         return tradeQueue.operations.count > 0 || homebrewOperation.isExecuting
+    }
+    
+    func cancel() {
+        tradeQueue.operations.forEach({$0.cancel()})
     }
 }
