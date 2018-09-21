@@ -128,7 +128,8 @@ class ExchangeCreateViewController: UIViewController {
             dependencies: dependencies,
             model: MarketsModel(
                 pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
-                fiatCurrency: BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? "USD",
+                fiatCurrencyCode: BlockchainSettings.sharedAppInstance().fiatCurrencyCode ?? "USD",
+                fiatCurrencySymbol: BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? "$",
                 fix: .base,
                 volume: "0"
             )

@@ -161,7 +161,7 @@ extension MarketsService: ExchangeMarketsAPI {
             let params = ConversionSubscribeParams(
                 type: "conversionSpecification",
                 pair: model.pair.stringRepresentation,
-                fiatCurrency: model.fiatCurrency,
+                fiatCurrency: model.fiatCurrencyCode,
                 fix: model.fix,
                 volume: model.volume)
             let quote = Subscription(channel: "conversion", params: params)

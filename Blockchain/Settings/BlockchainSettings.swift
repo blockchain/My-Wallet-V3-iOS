@@ -137,6 +137,10 @@ final class BlockchainSettings: NSObject {
             return WalletManager.shared.latestMultiAddressResponse?.symbol_local.symbol
         }
 
+        @objc var fiatCurrencyCode: String? {
+            return WalletManager.shared.latestMultiAddressResponse?.symbol_local.code
+        }
+
         /// The first 5 characters of SHA256 hash of the user's password
         @objc var passwordPartHash: String? {
             get {
