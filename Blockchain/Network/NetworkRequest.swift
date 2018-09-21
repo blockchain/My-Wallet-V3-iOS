@@ -64,7 +64,7 @@ struct NetworkRequest {
         return request.copy() as? URLRequest
     }
     
-    fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((HTTPRequestResult<T>, _ responseCode: Int) -> Void)) {
+    fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
         var responseCode: Int = 0
         
         guard let urlRequest = URLRequest() else {
@@ -89,7 +89,7 @@ struct NetworkRequest {
             }
 
             guard (200...299).contains(httpResponse.statusCode) else {
-                withCompletion(.error(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)), responseCode)
+                withCompletion(.error(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)), httpResponse.statusCode)
                 return
             }
             
@@ -98,10 +98,10 @@ struct NetworkRequest {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .secondsSince1970
                     let final = try decoder.decode(T.self, from: payload)
-                    withCompletion(.success(final), responseCode)
+                    withCompletion(.success(final), httpResponse.statusCode)
                 } catch let decodingError {
                     Logger.shared.debug("Payload decoding error: \(decodingError)")
-                    withCompletion(.error(HTTPRequestPayloadError.badData), responseCode)
+                    withCompletion(.error(HTTPRequestPayloadError.badData), httpResponse.statusCode)
                 }
             }
         }

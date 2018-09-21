@@ -113,7 +113,7 @@ class TradeExecutionService: TradeExecutionAPI {
                         ),
                         to: to,
                         amountToSend: orderTransactionLegacy.amount,
-                        amountToReceive: payload.withdrawalQuantity,
+                        amountToReceive: payload.withdrawal.value,
                         fees: orderTransactionLegacy.fees!
                     )
                     success(orderTransaction, conversion)
@@ -176,7 +176,7 @@ class TradeExecutionService: TradeExecutionAPI {
         #if DEBUG
         let settings = DebugSettings.shared
         let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress
-        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.depositQuantity
+        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.deposit.value
         let assetType = settings.mockExchangeDeposit ?
             AssetType(stringValue: settings.mockExchangeDepositAssetTypeString!)!
             : TradingPair(string: orderResult.pair)!.from
