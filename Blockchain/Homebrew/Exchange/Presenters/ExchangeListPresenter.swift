@@ -59,12 +59,7 @@ extension ExchangeListPresenter: ExchangeListOutput {
     
     func loadedTrades(_ trades: [ExchangeTradeModel]) {
         interface?.refreshControlVisibility(.hidden)
-        if trades.count == 0 {
-            interface?.showNewExchange(animated: false)
-        } else {
-            interface?.enablePullToRefresh()
-            interface?.display(results: trades)
-        }
+        interface?.display(results: trades)
     }
     
     func appendTrades(_ trades: [ExchangeTradeModel]) {
