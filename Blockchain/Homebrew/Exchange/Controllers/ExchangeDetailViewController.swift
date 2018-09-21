@@ -19,8 +19,8 @@ protocol ExchangeDetailDelegate: class {
 class ExchangeDetailViewController: UIViewController {
 
     enum PageModel {
-        case confirm(OrderTransaction, Conversion)
-        case locked(Trade)
+        case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
+        case locked(OrderTransaction, Conversion)
         case overview(ExchangeTradeModel)
     }
 
@@ -181,7 +181,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
     ) -> UICollectionReusableView {
         guard let page = model else { return UICollectionReusableView() }
         switch page {
-        case .confirm(let orderTransaction, let conversion):
+        case .confirm:
             guard kind == UICollectionElementKindSectionFooter else { return UICollectionReusableView() }
             
             guard let footer = collectionView.dequeueReusableSupplementaryView(
@@ -190,8 +190,9 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 for: indexPath
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
             footer.title = LocalizationConstants.Exchange.sendNow
+            guard let order = mostRecentOrderTransaction else { return UICollectionReusableView() }
             footer.actionBlock = {
-                self.coordinator.handle(event: .confirmExchange)
+                self.coordinator.handle(event: .confirmExchange(order))
             }
 
             return footer
@@ -217,6 +218,10 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                     for: indexPath
                     ) as? ActionableFooterView else { return UICollectionReusableView() }
                 footer.title = LocalizationConstants.Exchange.done
+                footer.actionBlock = { [weak self] in
+                    guard let this = self else { return }
+                    this.dismiss(animated: true, completion: nil)
+                }
                 
                 return footer
             default:
@@ -281,6 +286,10 @@ extension ExchangeDetailViewController: ExchangeDetailCoordinatorDelegate {
         registerCells()
         registerSupplementaryViews()
         collectionView.reloadData()
+    }
+    func coordinator(_ detailCoordinator: ExchangeDetailCoordinator, completedTransaction: OrderTransaction) {
+        guard let navController = navigationController else { return }
+        navController.popToRootViewController(animated: false)
     }
 }
 

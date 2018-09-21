@@ -115,15 +115,16 @@ class ExchangeListDataProvider: NSObject {
 extension ExchangeListDataProvider: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        guard let items = models else { return 1 }
+        return items.count > 0 ? 2 : 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let current = models else { return 0 }
         switch section {
         case 0:
             return 1
         case 1:
+            guard let current = models else { return 0 }
             return isPaging ? current.count + 1 : current.count
         default:
             return 0
@@ -131,7 +132,6 @@ extension ExchangeListDataProvider: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let items = models else { return UITableViewCell() }
         
         let newOrderIdentifier = NewOrderTableViewCell.identifier
         let listIdentifier = ExchangeListViewCell.identifier
@@ -144,6 +144,15 @@ extension ExchangeListDataProvider: UITableViewDataSource {
                 for: indexPath
                 ) as? NewOrderTableViewCell else { return UITableViewCell() }
             
+            /// This particular cell shouldn't have a separator.
+            /// This is how we hide it.
+            cell.separatorInset = UIEdgeInsets(
+                top: 0.0,
+                left: 0.0,
+                bottom: 0.0,
+                right: .greatestFiniteMagnitude
+            )
+            
             cell.actionHandler = { [weak self] in
                 guard let this = self else { return }
                 this.delegate?.newOrderTapped(this)
@@ -152,6 +161,7 @@ extension ExchangeListDataProvider: UITableViewDataSource {
             return cell
             
         case 1:
+            guard let items = models else { return UITableViewCell() }
             
             if items.count > indexPath.row {
                 let model = items[indexPath.row]
@@ -189,11 +199,12 @@ extension ExchangeListDataProvider: UITableViewDataSource {
 
 extension ExchangeListDataProvider: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let items = models else { return tableView.estimatedRowHeight }
         
         if indexPath.section == 0 {
             return NewOrderTableViewCell.height()
         }
+        
+        guard let items = models else { return tableView.estimatedRowHeight }
         
         if items.count > indexPath.row {
             let item = items[indexPath.row]

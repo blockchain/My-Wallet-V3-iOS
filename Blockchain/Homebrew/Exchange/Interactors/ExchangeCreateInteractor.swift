@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 class ExchangeCreateInteractor {
-    var disposable: Disposable?
+
     weak var output: ExchangeCreateOutput? {
         didSet {
             // output is not set during ExchangeCreateInteractor initialization,
@@ -18,6 +18,10 @@ class ExchangeCreateInteractor {
             didSetModel(oldModel: nil)
         }
     }
+
+    private var disposable: Disposable?
+    private var tradingLimitDisposable: Disposable?
+
     fileprivate let inputs: ExchangeInputsAPI
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
@@ -60,6 +64,9 @@ class ExchangeCreateInteractor {
     deinit {
         disposable?.dispose()
         disposable = nil
+
+        tradingLimitDisposable?.dispose()
+        tradingLimitDisposable = nil
     }
 }
 
@@ -90,8 +97,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func subscribeToConversions() {
         disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
             guard let this = self else { return }
-            guard let model = this.model, model.pair.stringRepresentation == conversion.quote.pair else {
-                Logger.shared.error("Pair returned from conversion is different from model pair")
+
+            guard let model = this.model else { return }
+
+            guard model.pair.stringRepresentation == conversion.quote.pair else {
+                Logger.shared.warning(
+                    "Pair '\(conversion.quote.pair)' is different from model pair '\(model.pair.stringRepresentation)'."
+                )
                 return
             }
 
@@ -180,12 +192,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
     }
     
-    func useMinimumAmount() {
-        applyTradingLimit(limit: .min)
+    func useMinimumAmount(assetAccount: AssetAccount) {
+        applyTradingLimit(limit: .min, assetAccount: assetAccount)
     }
     
-    func useMaximumAmount() {
-        applyTradingLimit(limit: .max)
+    func useMaximumAmount(assetAccount: AssetAccount) {
+        applyTradingLimit(limit: .max, assetAccount: assetAccount)
     }
 
     func toggleFix() {
@@ -250,6 +262,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     func changeTradingPair(tradingPair: TradingPair) {
         guard let model = model else { return }
+
+        // Unsubscribe from old pair conversions
+        Logger.shared.debug("Unsubscribing from old currency pair '\(model.pair.stringRepresentation)'")
+        markets.unsubscribeToCurrencyPair(pair: model.pair.stringRepresentation)
+
+        // Update to new pair
         model.pair = tradingPair
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
@@ -277,22 +295,43 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
     // MARK: - Private
 
-    private func applyTradingLimit(limit: TradingLimit) {
+    private func applyTradingLimit(limit: TradingLimit, assetAccount: AssetAccount) {
         guard let model = model else { return }
 
+        // Dispose previous subscription
+        tradingLimitDisposable?.dispose()
+
+        // Update MarketsModel to baseInFiat and update view
         model.fix = .baseInFiat
         model.lastConversion = nil
         inputs.isUsingFiat = true
         clearInputs()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
 
-        tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrency) { [weak self] limitsResult in
+        // Compute trading limit and take into account user's balance
+        let tradingLimitsSingle = tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrency)
+        let balanceFiatValue = markets.fiatBalance(
+            forAssetAccount: assetAccount,
+            fiatCurrencySymbol: model.fiatCurrency
+        )
+
+        tradingLimitDisposable = Single.zip(tradingLimitsSingle, balanceFiatValue.take(1).asSingle()) {
+            return ($0, $1)
+        }.subscribeOn(MainScheduler.asyncInstance)
+        .observeOn(MainScheduler.instance)
+        .subscribe(onSuccess: { [weak self] (limits, accountFiatValue) in
             guard let strongSelf = self else { return }
 
-            guard case let .success(limits) = limitsResult else { return }
+            let limitInDecimal: Decimal
+            switch limit {
+            case .min:
+                limitInDecimal = (accountFiatValue < limits.minOrder) ? accountFiatValue : limits.minOrder
+            case .max:
+                limitInDecimal = (accountFiatValue < limits.maxPossibleOrder) ? accountFiatValue : limits.maxPossibleOrder
+            }
 
-            let limitString = (limit == .min) ? limits.minOrder.description : limits.maxPossibleOrder.description
-            limitString.unicodeScalars.forEach { char in
+            let limitString = NumberFormatter.localCurrencyFormatter.string(for: limitInDecimal)
+            limitString?.unicodeScalars.forEach { char in
                 let charStringValue = String(char)
                 if CharacterSet.decimalDigits.contains(char) {
                     strongSelf.onAddInputTapped(value: charStringValue)
@@ -300,7 +339,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     strongSelf.onDelimiterTapped(value: charStringValue)
                 }
             }
-        }
+        }, onError: { error in
+            Logger.shared.error("Failed to compute trading limits: \(error)")
+        })
     }
 
     private func clearInputs() {

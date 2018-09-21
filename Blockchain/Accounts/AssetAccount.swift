@@ -18,8 +18,6 @@ struct AssetAccount {
     let address: AssetAddress
 
     /// The balance in this account
-    /// For BTC and BCH, this value is in satoshis
-    /// For Eth, this value is in ether
     let balance: Decimal
 
     /// The name of this account

@@ -71,12 +71,12 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interactor.toggleFix()
     }
 
-    func onUseMinimumTapped() {
-        interactor.useMinimumAmount()
+    func onUseMinimumTapped(assetAccount: AssetAccount) {
+        interactor.useMinimumAmount(assetAccount: assetAccount)
     }
 
-    func onUseMaximumTapped() {
-        interactor.useMaximumAmount()
+    func onUseMaximumTapped(assetAccount: AssetAccount) {
+        interactor.useMaximumAmount(assetAccount: assetAccount)
     }
 
     func onDisplayInputTypeTapped() {

@@ -84,11 +84,50 @@ struct ConversionSubscribeParams: Codable {
     let volume: String
 }
 
-struct AllCurrencyPairsSubscribeParams: Codable {
+struct AllCurrencyPairsUnsubscribeParams: Codable {
     let type = "allCurrencyPairs"
 }
 
+struct CurrencyPairsSubscribeParams: Codable {
+    let type = "exchangeRates"
+    let pairs: [String]
+}
+
+// MARK: - Unsubscribing
+
+struct Unsubscription<UnsubscribeParams: Codable>: SocketMessageCodable {
+    typealias JSONType = Unsubscription
+
+    let channel: String
+    let operation = "unsubscribe"
+    let params: UnsubscribeParams
+}
+
+struct ConversionPairUnsubscribeParams: Codable {
+    let type = "conversionPair"
+    let pair: String
+}
+
 // MARK: - Received Messages
+
+struct ExchangeRates: SocketMessageCodable {
+    typealias JSONType = ExchangeRates
+
+    let sequenceNumber: Int
+    let channel: String
+    let type: String
+    let rates: [CurrencyPairRate]
+}
+
+extension ExchangeRates {
+    func convert(balance: Decimal, fromCurrency: String, toCurrency: String) -> Decimal {
+        if let matchingPair = rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" }) {
+            return matchingPair.price * balance
+        }
+        return balance
+    }
+}
+
 struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
     
@@ -143,7 +182,12 @@ extension Conversion {
     }
 }
 
-// MARK - Associated Models
+// MARK: - Associated Models
+
+struct CurrencyPairRate: Codable {
+    let pair: String
+    let price: Decimal
+}
 
 struct Quote: Codable {
     let time: String?

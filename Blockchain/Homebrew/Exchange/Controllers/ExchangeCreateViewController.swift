@@ -13,8 +13,8 @@ protocol ExchangeCreateDelegate: NumberKeypadViewDelegate {
     func onDisplayRatesTapped()
     func onHideRatesTapped()
     func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool)
-    func onUseMinimumTapped()
-    func onUseMaximumTapped()
+    func onUseMinimumTapped(assetAccount: AssetAccount)
+    func onUseMaximumTapped(assetAccount: AssetAccount)
     func onDisplayInputTypeTapped()
     func onExchangeButtonTapped()
 }
@@ -47,11 +47,11 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var exchangeButton: UIButton!
 
     @IBAction func useMinimumButtonTapped(_ sender: Any) {
-        delegate?.onUseMinimumTapped()
+        delegate?.onUseMinimumTapped(assetAccount: fromAccount)
     }
 
     @IBAction func useMaximumButtonTapped(_ sender: Any) {
-        delegate?.onUseMaximumTapped()
+        delegate?.onUseMaximumTapped(assetAccount: fromAccount)
     }
 
     // MARK: Action enum

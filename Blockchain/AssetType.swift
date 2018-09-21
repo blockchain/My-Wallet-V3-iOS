@@ -20,6 +20,8 @@ extension AssetType {
         "eth": .ethereum,
         "bch": .bitcoinCash
     ]
+
+    static let all: [AssetType] = [.bitcoin, .ethereum, .bitcoinCash]
     
     static func from(legacyAssetType: LegacyAssetType) -> AssetType {
         switch legacyAssetType {

@@ -193,8 +193,6 @@ struct ExchangeServices: ExchangeDependencies {
             }
         case .shapeshift:
             showExchange(type: .shapeshift)
-        default:
-            Logger.shared.warning("showCreateExchange not implemented for ExchangeType")
         }
     }
 
@@ -203,9 +201,19 @@ struct ExchangeServices: ExchangeDependencies {
             Logger.shared.error("No navigation controller found")
             return
         }
-        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion)
+        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
         let confirmController = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
         navigationController.pushViewController(confirmController, animated: true)
+    }
+    
+    private func showLockedExchange(orderTransaction: OrderTransaction, conversion: Conversion) {
+        guard let navigationController = navigationController else {
+            Logger.shared.error("No navigation controller found")
+            return
+        }
+        let model = ExchangeDetailViewController.PageModel.locked(orderTransaction, conversion)
+        let controller = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
+        navigationController.present(controller, animated: true, completion: nil)
     }
 
     private func showTradeDetails(trade: ExchangeTradeModel) {
@@ -218,7 +226,7 @@ struct ExchangeServices: ExchangeDependencies {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
         case createPartnerExchange(animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
-        case sentTransaction
+        case sentTransaction(orderTransaction: OrderTransaction, conversion: Conversion)
         case showTradeDetails(trade: ExchangeTradeModel)
     }
 
@@ -236,8 +244,8 @@ struct ExchangeServices: ExchangeDependencies {
             showCreateExchange(animated: animated, type: .shapeshift)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
-        case .sentTransaction:
-            navigationController?.popToRootViewController(animated: true)
+        case .sentTransaction(orderTransaction: let transaction, conversion: let conversion):
+            showLockedExchange(orderTransaction: transaction, conversion: conversion)
         case .showTradeDetails(let trade):
             showTradeDetails(trade: trade)
         }

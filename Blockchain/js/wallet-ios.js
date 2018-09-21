@@ -3171,7 +3171,7 @@ MyWalletPhone.tradeExecution = {
             // Currently cannot send from BCH addresses
             let bchAccount = MyWallet.wallet.bch.accounts[from];
             currentBitcoinCashPayment = bchAccount.createPayment();
-            currentBitcoinCashPayment.to(to);
+            MyWalletPhone.bch.changePaymentToAddress(to);
             currentBitcoinCashPayment.amount(amount);
 
             let options = walletOptions.getValue()

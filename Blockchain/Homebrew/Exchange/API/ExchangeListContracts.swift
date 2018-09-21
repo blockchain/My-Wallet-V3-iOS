@@ -22,6 +22,7 @@ protocol ExchangeListInput: class {
     func canPage() -> Bool
     func fetchAllTrades()
     func refresh()
+    func cancel()
     func tradeSelectedWith(identifier: String) -> ExchangeTradeModel?
     func nextPageBefore(identifier: String)
 }

@@ -63,4 +63,9 @@ class ExchangeListInteractor: ExchangeListInput {
         }
     }
     
+    func cancel() {
+        guard service.isExecuting() else { return }
+        service.cancel()
+    }
+    
 }
