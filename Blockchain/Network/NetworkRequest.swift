@@ -65,7 +65,7 @@ struct NetworkRequest {
     }
     
     fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
-        var responseCode: Int = 0
+        let responseCode: Int = 0
         
         guard let urlRequest = URLRequest() else {
             withCompletion(.error(nil), responseCode)
