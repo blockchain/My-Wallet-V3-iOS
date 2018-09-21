@@ -160,7 +160,7 @@ struct Conversion: SocketMessageCodable {
 
 extension Conversion {
     var baseToFiatDescription: String {
-        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let fiatSymbol = quote.currencyRatio.base.fiat.symbol
         let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
         let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
         return base + " = " + fiat
@@ -175,7 +175,7 @@ extension Conversion {
     
     var counterToFiatDescription: String {
         let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let fiatSymbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+        let fiatSymbol = quote.currencyRatio.counter.fiat.symbol
         let counter = "1" + " " + counterSymbol
         let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
         return counter + " = " + fiat

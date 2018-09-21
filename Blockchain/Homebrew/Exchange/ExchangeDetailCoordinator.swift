@@ -70,7 +70,7 @@ class ExchangeDetailCoordinator: NSObject {
                     model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
-                let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+                let symbol = conversion.quote.currencyRatio.counter.fiat.symbol
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
@@ -138,7 +138,7 @@ class ExchangeDetailCoordinator: NSObject {
                     model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
-                let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? ""
+                let symbol = conversion.quote.currencyRatio.counter.fiat.symbol
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,

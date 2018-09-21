@@ -151,14 +151,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Update the inputs in crypto and fiat
         guard let output = output else { return }
         guard let model = model else { return }
-        let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? "$"
+        let symbol = model.fiatCurrency
         let suffix = model.pair.from.symbol
         
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
 
         if model.isUsingFiat {
-            let primary = inputs.primaryFiatAttributedString()
+            let primary = inputs.primaryFiatAttributedString(currencySymbol: symbol)
             output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
             let assetType = model.isUsingBase ? model.pair.from : model.pair.to
