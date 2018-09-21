@@ -196,7 +196,7 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             case .overview(let trade):
                 interface?.updateBackgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-                interface?.updateTitle(LocalizationConstants.Exchange.orderID + " " + trade.identifier)
+                interface?.updateTitle(trade.amountReceivedCryptoValue + LocalizationConstants.Exchange.orderID + " " + trade.identifier)
                 interface?.navigationBarVisibility(.visible)
                 
                 let status = ExchangeCellModel.Plain(
@@ -208,19 +208,19 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: "$1,642.50",
+                    value: trade.amountFiatSymbol + trade.amountFiatValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let exchange = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.exchange,
-                    value: "$0.25 BTC",
+                    value: trade.amountDepositedCryptoValue + " " + trade.amountDepositedCryptoSymbol,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let receive = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.receive,
-                    value: "5.668586",
+                    value: trade.amountReceivedCryptoValue + " " + trade.amountReceivedCryptoSymbol,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
                     bold: true
                 )
@@ -236,6 +236,12 @@ class ExchangeDetailCoordinator: NSObject {
                     value: "My Wallet",
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
+
+                let orderId = ExchangeCellModel.Plain(
+                    description: LocalizationConstants.Exchange.orderID,
+                    value: trade.identifier,
+                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                )
                 
                 cellModels.append(contentsOf: [
                     .plain(status),
@@ -243,7 +249,8 @@ class ExchangeDetailCoordinator: NSObject {
                     .plain(exchange),
                     .plain(receive),
                     .plain(fees),
-                    .plain(sendTo)
+                    .plain(sendTo),
+                    .plain(orderId)
                     ]
                 )
                 

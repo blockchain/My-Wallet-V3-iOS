@@ -73,20 +73,57 @@ enum ExchangeTradeModel {
 }
 
 extension ExchangeTradeModel {
+    var amountFiatValue: String {
+        switch self {
+        case .partner(_):
+            // Currently calculated in ExchangeTableViewCell based on latest rates
+            return ""
+        case .homebrew(let model):
+            return model.fiatValue.value
+        }
+    }
     
-    var amountDepositedDisplayValue: String {
+    var amountFiatSymbol: String {
+        switch self {
+        case .partner(_):
+            // Currently calculated in ExchangeTableViewCell cell based on latest rates
+            return ""
+        case .homebrew(let model):
+            return model.fiatValue.symbol
+        }
+    }
+
+    var amountDepositedCryptoValue: String {
         switch self {
         case .partner(let model):
-            return model.amountDepositedDisplayValue
+            return model.amountDepositedCryptoValue
         case .homebrew(let model):
             return model.deposit.value
         }
     }
     
-    var amountReceivedDisplayValue: String {
+    var amountDepositedCryptoSymbol: String {
         switch self {
         case .partner(let model):
-            return model.amountReceivedDisplayValue
+            return model.pair.from.symbol
+        case .homebrew(let model):
+            return model.deposit.symbol
+        }
+    }
+
+    var amountReceivedCryptoSymbol: String {
+        switch self {
+        case .partner(let model):
+            return model.pair.to.symbol
+        case .homebrew(let model):
+            return model.withdrawal.symbol
+        }
+    }
+
+    var amountReceivedCryptoValue: String {
+        switch self {
+        case .partner(let model):
+            return model.amountReceivedCryptoValue
         case .homebrew(let model):
             return model.withdrawal.value
         }
@@ -138,8 +175,8 @@ struct PartnerTrade {
     let assetType: AssetType
     let pair: TradingPair
     let transactionDate: Date
-    let amountReceivedDisplayValue: String
-    let amountDepositedDisplayValue: String
+    let amountReceivedCryptoValue: String
+    let amountDepositedCryptoValue: String
     
     init(with trade: ExchangeTrade) {
         identifier = trade.orderID
@@ -152,13 +189,13 @@ struct PartnerTrade {
         }
         
         if let value = trade.inboundDisplayAmount() {
-            amountReceivedDisplayValue = value
+            amountReceivedCryptoValue = value
         } else {
             fatalError("Failed to map \(trade.inboundDisplayAmount() ?? "")")
         }
         
         if let value = trade.outboundDisplayAmount() {
-            amountDepositedDisplayValue = value
+            amountDepositedCryptoValue = value
         } else {
             fatalError("Failed to map \(trade.outboundDisplayAmount() ?? "")")
         }

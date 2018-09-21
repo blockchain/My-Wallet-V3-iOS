@@ -233,7 +233,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 withReuseIdentifier: ExchangeDetailHeaderView.identifier,
                 for: indexPath
                 ) as? ExchangeDetailHeaderView else { return UICollectionReusableView() }
-            header.title = trade.amountReceivedDisplayValue
+            header.title = trade.amountReceivedCryptoValue + " " + trade.amountReceivedCryptoSymbol
             return header
         }
     }
@@ -253,7 +253,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 height: ExchangeLockedHeaderView.estimatedHeight()
             )
         case .overview(let trade):
-            let title = trade.amountReceivedDisplayValue
+            let title = trade.amountReceivedCryptoValue
             let height = ExchangeDetailHeaderView.height(for: title)
             return CGSize(
                 width: collectionView.bounds.width,
