@@ -102,7 +102,5 @@
 	<string>$(WEBSOCKET_SERVER_BCH)</string>
 	<key>WEBSOCKET_SERVER_ETH</key>
 	<string>$(WEBSOCKET_SERVER_ETH)</string>
-	<key>CFBundleAllowMixedLocalizations</key>
-	<true/>
 </dict>
 </plist>
