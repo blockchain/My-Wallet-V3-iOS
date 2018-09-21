@@ -366,11 +366,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
 extension ExchangeCreateViewController: TradingPairViewDelegate {
     func onLeftButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: toAccount.address.assetType, for: .exchanging)
+        assetAccountListPresenter.presentPicker(excludingAssetType: nil, for: .exchanging)
     }
 
     func onRightButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: fromAccount.address.assetType, for: .receiving)
+        assetAccountListPresenter.presentPicker(excludingAssetType: nil, for: .receiving)
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
@@ -390,8 +390,10 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
                 Logger.shared.debug("Selected account titled: '\(account.name)' of type: '\(account.address.assetType.symbol)'")
                 switch action {
                 case .exchanging:
+                    self.toAccount = account == self.toAccount ? self.fromAccount : self.toAccount
                     self.fromAccount = account
                 case .receiving:
+                    self.fromAccount = account == self.fromAccount ? self.toAccount : self.fromAccount
                     self.toAccount = account
                 }
                 self.onTradingPairChanged()

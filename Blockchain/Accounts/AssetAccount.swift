@@ -23,3 +23,12 @@ struct AssetAccount {
     /// The name of this account
     let name: String
 }
+
+extension AssetAccount: Equatable {
+    static func == (lhs: AssetAccount, rhs: AssetAccount) -> Bool {
+        return lhs.index == rhs.index &&
+        lhs.address.address == rhs.address.address &&
+        lhs.balance == rhs.balance &&
+        lhs.name == rhs.name
+    }
+}
