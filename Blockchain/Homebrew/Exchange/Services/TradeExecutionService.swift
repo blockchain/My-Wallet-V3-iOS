@@ -182,7 +182,7 @@ class TradeExecutionService: TradeExecutionAPI {
             : TradingPair(string: orderResult.pair)!.from
         #else
         let depositAddress = orderResult.depositAddress
-        let depositQuantity = orderResult.depositQuantity
+        let depositQuantity = orderResult.deposit.value
         let pair = TradingPair(string: orderResult.pair)
         let assetType = pair!.from
         #endif
