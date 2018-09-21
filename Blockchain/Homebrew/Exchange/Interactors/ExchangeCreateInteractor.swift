@@ -312,7 +312,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let tradingLimitsSingle = tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrencyCode)
         let balanceFiatValue = markets.fiatBalance(
             forAssetAccount: assetAccount,
-            fiatCurrencySymbol: model.fiatCurrencySymbol
+            fiatCurrencyCode: model.fiatCurrencyCode
         )
 
         tradingLimitDisposable = Single.zip(tradingLimitsSingle, balanceFiatValue.take(1).asSingle()) {

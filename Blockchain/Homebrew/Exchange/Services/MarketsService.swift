@@ -24,9 +24,9 @@ protocol ExchangeMarketsAPI {
     ///
     /// - Parameters:
     ///   - assetAccount: the AssetAccount
-    ///   - fiatCurrencySymbol: the currency symbol to compute the balance in (e.g. "USD")
+    ///   - fiatCurrencyCode: the currency code to compute the balance in (e.g. "USD")
     /// - Returns: an Observable returning the fiat balance
-    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencySymbol: String) -> Observable<Decimal>
+    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal>
 
     var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
@@ -123,7 +123,7 @@ extension MarketsService: ExchangeMarketsAPI {
         })
     }
 
-    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencySymbol: String) -> Observable<Decimal> {
+    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal> {
 
         // Don't need to get exchange rates if the account balance is 0
         guard assetAccount.balance != 0 else {
@@ -132,7 +132,7 @@ extension MarketsService: ExchangeMarketsAPI {
 
         // Send exchange_rates socket message - get exchange rates for all possible pairs
         let allPairs = AssetType.all.map {
-            return "\($0.symbol)-\(fiatCurrencySymbol)"
+            return "\($0.symbol)-\(fiatCurrencyCode)"
         }
         let params = CurrencyPairsSubscribeParams(pairs: allPairs)
         let subscribe = Subscription(channel: "exchange_rate", params: params)
@@ -150,7 +150,7 @@ extension MarketsService: ExchangeMarketsAPI {
             return rates.convert(
                 balance: assetAccount.balance,
                 fromCurrency: assetAccount.address.assetType.symbol,
-                toCurrency: fiatCurrencySymbol
+                toCurrency: fiatCurrencyCode
             )
         }
     }
