@@ -253,6 +253,9 @@
 		511646C5208124E200C43522 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646C4208124E200C43522 /* AssetType.swift */; };
 		511646DF20851BC600C43522 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646DE20851BC600C43522 /* Bundle.swift */; };
 		511646E2208523E300C43522 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
+		511713AE215545D7000C3AD1 /* Blockchain-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 511713AD215545D7000C3AD1 /* Blockchain-Info.plist */; };
+		511713AF21554880000C3AD1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF923210282B4002350B6 /* InfoPlist.strings */; };
+		511713B02155489D000C3AD1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF921210282B4002350B6 /* Localizable.strings */; };
 		511BF4ED20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
 		511BF4EE20E67B3B00A14072 /* AppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */; };
 		513468002056BC6700DE6A1E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513467FE2056BC6600DE6A1E /* Fabric.framework */; };
@@ -280,8 +283,6 @@
 		51578AEF20B44AD400B0080A /* KeyImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51578AED20B44AD400B0080A /* KeyImportCoordinator.swift */; };
 		5159C3212109156400955BD6 /* KYCCountrySelectionControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5159C3202109156400955BD6 /* KYCCountrySelectionControllerTests.swift */; };
 		515EFAD8210282B4002350B6 /* ReceiveCoins.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF91D210282B4002350B6 /* ReceiveCoins.strings */; };
-		515EFADA210282B4002350B6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF921210282B4002350B6 /* Localizable.strings */; };
-		515EFADB210282B4002350B6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 515EF923210282B4002350B6 /* InfoPlist.strings */; };
 		515EFAE2210282B4002350B6 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 515EF9ED210282B4002350B6 /* MainWindow.xib */; };
 		515EFAE3210282B4002350B6 /* Upgrade.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515EF9EF210282B4002350B6 /* Upgrade.storyboard */; };
 		515EFAE4210282B4002350B6 /* BCAddressSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 515EF9F2210282B4002350B6 /* BCAddressSelectionView.xib */; };
@@ -1376,6 +1377,7 @@
 		5117139C215537BC000C3AD1 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5117139D215537BD000C3AD1 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5117139E215537BE000C3AD1 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		511713AD215545D7000C3AD1 /* Blockchain-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Blockchain-Info.plist"; sourceTree = "<group>"; };
 		511BF4EC20E67B3B00A14072 /* AppReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewPrompt.swift; sourceTree = "<group>"; };
 		513467FE2056BC6600DE6A1E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Frameworks/Fabric.framework; sourceTree = "<group>"; };
 		513467FF2056BC6700DE6A1E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
@@ -3091,7 +3093,6 @@
 		9F91B605151666EB00ACB32D /* BCCreateWalletView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCreateWalletView.h; sourceTree = "<group>"; };
 		9F91B606151666EB00ACB32D /* BCCreateWalletView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCreateWalletView.m; sourceTree = "<group>"; };
 		9FB3637114B60128004BEA02 /* Blockchain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blockchain.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FB3637D14B60128004BEA02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FB3638314B60128004BEA02 /* Blockchain-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockchain-Prefix.pch"; sourceTree = "<group>"; };
 		9FCA4D141514949500ECDFBE /* ReceiveBitcoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiveBitcoinViewController.h; sourceTree = "<group>"; };
 		9FCA4D151514949500ECDFBE /* ReceiveBitcoinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceiveBitcoinViewController.m; sourceTree = "<group>"; };
@@ -6269,9 +6270,9 @@
 				5194359F208E61F3001EF882 /* BlockchainTests */,
 				516594A4204F1A3B00C50E78 /* Config */,
 				9FB3637414B60128004BEA02 /* Frameworks */,
+				FA02948BFA299F1E3FB4F9BB /* Pods */,
 				9FB3637214B60128004BEA02 /* Products */,
 				C9D4B2AE193E020D00EDA9EA /* Third Party */,
-				FA02948BFA299F1E3FB4F9BB /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6320,6 +6321,7 @@
 				C73CFBE81EA16B4A00C115F0 /* PrivateHeaders.h */,
 				84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */,
 				9FB3638314B60128004BEA02 /* Blockchain-Prefix.pch */,
+				511713AD215545D7000C3AD1 /* Blockchain-Info.plist */,
 				AAA3333220880A2B0019AD55 /* AppDelegate.swift */,
 				AA7133D821223AE000CB2AA9 /* Arrays.swift */,
 				511646C4208124E200C43522 /* AssetType.swift */,
@@ -7039,7 +7041,6 @@
 		C9D4B2AF193E023C00EDA9EA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9FB3637D14B60128004BEA02 /* Info.plist */,
 				51383565210255E100767B2E /* Colors.xcassets */,
 				C9BE918B1945F5FC00FD516D /* Images.xcassets */,
 				513835632102558100767B2E /* KYCImages.xcassets */,
@@ -7414,6 +7415,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				511713B02155489D000C3AD1 /* Localizable.strings in Resources */,
+				511713AF21554880000C3AD1 /* InfoPlist.strings in Resources */,
 				51B767A92106369A003CCD46 /* Montserrat-Black.ttf in Resources */,
 				51B767AA2106369A003CCD46 /* Montserrat-BlackItalic.ttf in Resources */,
 				3A8B227C211DFE110091E706 /* PrimaryButtonContainer.xib in Resources */,
@@ -7468,6 +7471,7 @@
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
 				3AAEF9602141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
+				511713AE215545D7000C3AD1 /* Blockchain-Info.plist in Resources */,
 				ECD244EC19A8AC45004B1F40 /* PEKeyboard-3-dot.png in Resources */,
 				3A4EAB98214080D700081531 /* TextCell.xib in Resources */,
 				C9BE91811945D8F600FD516D /* PEKeyboard-1-edit.png in Resources */,
@@ -7511,7 +7515,6 @@
 				C9BE91841945D8F600FD516D /* PEKeyboard-2-done.png in Resources */,
 				5138373A21025AD100767B2E /* beep.wav in Resources */,
 				AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */,
-				515EFADB210282B4002350B6 /* InfoPlist.strings in Resources */,
 				9F1831F0151744FC00FB3D52 /* ReceiveCell.xib in Resources */,
 				C78238AF2131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */,
 				ECD244EE19A8AC45004B1F40 /* PEKeyboard-3-next.png in Resources */,
@@ -7521,7 +7524,6 @@
 				67EEE76E1A8E547200288753 /* PEPin-off@2x.png in Resources */,
 				AABB74C620D44AE300C0F7C5 /* AboutUsView.storyboard in Resources */,
 				C9BE91891945D8F600FD516D /* PEPin-off.png in Resources */,
-				515EFADA210282B4002350B6 /* Localizable.strings in Resources */,
 				67EEE7721A8E547900288753 /* PEPin-on@2x.png in Resources */,
 				5177E832212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig in Resources */,
 				513835642102558100767B2E /* KYCImages.xcassets in Resources */,
@@ -9610,7 +9612,7 @@
 					"$(SRCROOT)/Submodules/SocketRocket",
 					"$(SRCROOT)/Submodules/Charts",
 				);
-				INFOPLIST_FILE = Blockchain/Resources/Info.plist;
+				INFOPLIST_FILE = "Blockchain/Blockchain-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -9724,7 +9726,7 @@
 					"$(SRCROOT)/Submodules/SocketRocket",
 					"$(SRCROOT)/Submodules/Charts",
 				);
-				INFOPLIST_FILE = Blockchain/Resources/Info.plist;
+				INFOPLIST_FILE = "Blockchain/Blockchain-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -9838,7 +9840,7 @@
 					"$(SRCROOT)/Submodules/SocketRocket",
 					"$(SRCROOT)/Submodules/Charts",
 				);
-				INFOPLIST_FILE = Blockchain/Resources/Info.plist;
+				INFOPLIST_FILE = "Blockchain/Blockchain-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -9952,7 +9954,7 @@
 					"$(SRCROOT)/Submodules/SocketRocket",
 					"$(SRCROOT)/Submodules/Charts",
 				);
-				INFOPLIST_FILE = Blockchain/Resources/Info.plist;
+				INFOPLIST_FILE = "Blockchain/Blockchain-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -10399,7 +10401,7 @@
 					"$(SRCROOT)/Submodules/SocketRocket",
 					"$(SRCROOT)/Submodules/Charts",
 				);
-				INFOPLIST_FILE = Blockchain/Resources/Info.plist;
+				INFOPLIST_FILE = "Blockchain/Blockchain-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
