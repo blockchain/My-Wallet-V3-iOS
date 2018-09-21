@@ -23,6 +23,12 @@ class AssetAccountRepository {
 
     func accounts(for assetType: AssetType) -> [AssetAccount] {
 
+        // A crash occurs in the for loop if wallet.getActiveAccountsCount returns 0
+        // "Fatal error: Can't form Range with upperBound < lowerBound"
+        if !wallet.isInitialized() {
+            return []
+        }
+
         // Handle ethereum
         if assetType == .ethereum {
             if let ethereumAccount = defaultEthereumAccount() {
@@ -91,12 +97,14 @@ extension AssetAccount {
             return nil
         }
         let name = wallet.getLabelForAccount(index, assetType: assetType.legacy)
-        let balanceLong = wallet.getBalanceForAccount(index, assetType: assetType.legacy) as? CUnsignedLongLong ?? 0
+        let balanceFromWalletObject = wallet.getBalanceForAccount(index, assetType: assetType.legacy)
         let balance: Decimal
         if assetType == .bitcoin || assetType == .bitcoinCash {
+            let balanceLong = balanceFromWalletObject as? CUnsignedLongLong ?? 0
             balance = Decimal(balanceLong) / Decimal(Constants.Conversions.satoshi)
         } else {
-            balance = Decimal(balanceLong)
+            let balanceString = balanceFromWalletObject as? String ?? "0"
+            balance = NSDecimalNumber(string: balanceString).decimalValue
         }
         return AssetAccount(
             index: index,
