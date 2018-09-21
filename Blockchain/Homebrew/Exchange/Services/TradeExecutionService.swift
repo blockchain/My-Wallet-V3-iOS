@@ -40,6 +40,7 @@ class TradeExecutionService: TradeExecutionAPI {
     // MARK: TradeExecutionAPI
 
     // TICKET: IOS-1291 Refactor this
+    // swiftlint:disable function_body_length
     func submitOrder(
         with conversion: Conversion,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
@@ -97,18 +98,21 @@ class TradeExecutionService: TradeExecutionAPI {
                         ),
                         to: to,
                         amountToSend: orderTransactionLegacy.amount,
-                        amountToReceive: payload.withdrawalQuantity ?? "Unavailable",
+                        amountToReceive: payload.withdrawal.value,
                         fees: orderTransactionLegacy.fees!
                     )
                     success(orderTransaction, conversion)
                 }
                 this.createOrder(from: payload, success: createOrderCompletion, error: error)
+        }, onError: { requestError in
+            guard let httpRequestError = requestError as? HTTPRequestError else {
+                error(requestError.localizedDescription)
+                return
+            }
+            error(httpRequestError.debugDescription)
         })
-        // Can't figure out error: Extra argument 'onError' in call
-//        , onError: { error in
-//            withCompletion(.error(error))
-//        })
     }
+    // swiftlint:enable function_body_length
 
     func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
         wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
@@ -125,7 +129,7 @@ class TradeExecutionService: TradeExecutionAPI {
         }, error: error)
     }
     // MARK: Private
-    
+
     fileprivate func process(order: Order) -> Single<OrderResult> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
@@ -156,15 +160,15 @@ class TradeExecutionService: TradeExecutionAPI {
     ) {
         #if DEBUG
         let settings = DebugSettings.shared
-        let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress!
-        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.depositQuantity!
+        let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress
+        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.deposit.value
         let assetType = settings.mockExchangeDeposit ?
             AssetType(stringValue: settings.mockExchangeDepositAssetTypeString!)!
-            : TradingPair(string: orderResult.pair!)!.from
+            : TradingPair(string: orderResult.pair)!.from
         #else
-        let depositAddress = orderResult.depositAddress!
-        let depositQuantity = orderResult.depositQuantity!
-        let pair = TradingPair(string: orderResult.pair!)
+        let depositAddress = orderResult.depositAddress
+        let depositQuantity = orderResult.deposit.value
+        let pair = TradingPair(string: orderResult.pair)
         let assetType = pair!.from
         #endif
         let legacyAssetType = assetType.legacy
