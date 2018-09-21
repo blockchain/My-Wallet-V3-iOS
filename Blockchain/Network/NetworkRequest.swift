@@ -65,7 +65,7 @@ struct NetworkRequest {
     }
     
     fileprivate mutating func execute<T: Decodable>(expecting: T.Type, withCompletion: @escaping ((Result<T>, _ responseCode: Int) -> Void)) {
-        var responseCode: Int = 0
+        let responseCode: Int = 0
         
         guard let urlRequest = URLRequest() else {
             withCompletion(.error(nil), responseCode)
@@ -77,9 +77,20 @@ struct NetworkRequest {
         }
         
         task = session.dataTask(with: urlRequest) { (payload, response, error) in
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                responseCode = httpResponse.statusCode
+
+            if let error = error {
+                withCompletion(.error(HTTPRequestClientError.failedRequest(description: error.localizedDescription)), responseCode)
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                withCompletion(.error(HTTPRequestServerError.badResponse), responseCode)
+                return
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                withCompletion(.error(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)), httpResponse.statusCode)
+                return
             }
 
             if let payload = payload, error == nil {
@@ -88,14 +99,11 @@ struct NetworkRequest {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .secondsSince1970
                     let final = try decoder.decode(T.self, from: payload)
-                    withCompletion(.success(final), responseCode)
-                } catch let err {
-                    withCompletion(.error(err), responseCode)
+                    withCompletion(.success(final), httpResponse.statusCode)
+                } catch let decodingError {
+                    Logger.shared.debug("Payload decoding error: \(decodingError)")
+                    withCompletion(.error(HTTPRequestPayloadError.badData), httpResponse.statusCode)
                 }
-            }
-            
-            if let error = error {
-                withCompletion(.error(error), responseCode)
             }
         }
         

@@ -17,47 +17,35 @@ struct Order: Encodable {
     let quote: Quote
 }
 
-// Backend is currently configured to return two types of responses:
-// a normal (success) response and an error response
 struct OrderResult: Codable {
-    // Success
-    let id: String?
-    let createdAt: String?
-    let updatedAt: String?
-    let pair: String?
-    let quantity: String?
-    let currency: String?
-    let refundAddress: String?
-    let price: String?
-    let depositAddress: String?
-    let depositQuantity: String?
-    let withdrawalAddress: String?
-    let withdrawalQuantity: String?
-    let state: String?
-
-    // Error
-    let type: String?
-    let description: String?
+    let id: String
+    let state: String
+    let createdAt: String
+    let updatedAt: String
+    let pair: String
+    let refundAddress: String
+    let rate: String
+    let depositAddress: String
+    let deposit: SymbolValue
+    let withdrawalAddress: String
+    let withdrawal: SymbolValue
+    let withdrawalFee: SymbolValue
+    let fiatValue: SymbolValue
 
     private enum CodingKeys: CodingKey {
-        // Success
         case id
+        case state
         case createdAt
         case updatedAt
         case pair
-        case quantity
-        case currency
         case refundAddress
-        case price
+        case rate
         case depositAddress
-        case depositQuantity
+        case deposit
         case withdrawalAddress
-        case withdrawalQuantity
-        case state
-        
-        // Error
-        case type
-        case description
+        case withdrawal
+        case withdrawalFee
+        case fiatValue
     }
 }
 
