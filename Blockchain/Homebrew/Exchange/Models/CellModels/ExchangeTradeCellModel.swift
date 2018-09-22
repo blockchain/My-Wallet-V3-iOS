@@ -263,9 +263,9 @@ struct ExchangeTradeCellModel: Decodable {
     enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case status = "state"
-        case createdAt = "createdAt"
-        case updatedAt = "insertedAt"
-        case pair = "pair"
+        case createdAt
+        case updatedAt
+        case pair
         case refundAddress
         case rate
         case depositAddress
