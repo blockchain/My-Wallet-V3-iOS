@@ -211,7 +211,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let fees = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.fees,
-                    value: trade.amountFeeSymbol + " " + trade.amountFeeValue,
+                    value: trade.amountFeeValue + " " + trade.amountFeeSymbol,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
