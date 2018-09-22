@@ -73,13 +73,13 @@ enum ExchangeTradeModel {
 }
 
 extension ExchangeTradeModel {
-    var depositAddress: String {
+    var withdrawalAddress: String {
         switch self {
         case .partner:
             // Not in ExchangeTableViewCell
             return ""
         case .homebrew(let model):
-            return model.depositAddress
+            return model.withdrawalAddress
         }
     }
 
