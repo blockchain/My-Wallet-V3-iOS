@@ -234,7 +234,7 @@ class ExchangeDetailCoordinator: NSObject {
                     guard let text = $0.text else { return }
                     UIPasteboard.general.string = text
                     $0.animate(
-                        fromText: LocalizationConstants.Exchange.orderID,
+                        fromText: trade.identifier,
                         toIntermediateText: LocalizationConstants.copiedToClipboard,
                         speed: 1,
                         gestureReceiver: $0
