@@ -69,12 +69,10 @@ class ExchangeDetailCoordinator: NSObject {
                 let pair = ExchangeCellModel.TradingPair(
                     model: TradingPairView.confirmationModel(for: conversion)
                 )
-                
-                let symbol = conversion.quote.currencyRatio.counter.fiat.symbol
-                
+
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: symbol + conversion.quote.currencyRatio.counter.fiat.value
+                    value: valueString(for: conversion.quote.currencyRatio.counter.fiat.value, currencyCode: conversion.quote.currencyRatio.counter.fiat.symbol)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
@@ -132,11 +130,9 @@ class ExchangeDetailCoordinator: NSObject {
                     model: TradingPairView.confirmationModel(for: conversion)
                 )
                 
-                let symbol = conversion.quote.currencyRatio.counter.fiat.symbol
-                
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: symbol + conversion.quote.currencyRatio.counter.fiat.value
+                    value: valueString(for: conversion.quote.currencyRatio.counter.fiat.value, currencyCode: conversion.quote.currencyRatio.counter.fiat.symbol)
                 )
                 
                 let fees = ExchangeCellModel.Plain(
@@ -196,7 +192,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let value = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.value,
-                    value: trade.amountFiatSymbol + trade.amountFiatValue,
+                    value: valueString(for: trade.amountFiatValue, currencyCode: trade.amountFiatSymbol),
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
@@ -268,3 +264,16 @@ class ExchangeDetailCoordinator: NSObject {
     }
 }
 // swiftlint:enable function_body_length
+
+extension ExchangeDetailCoordinator {
+    // TICKET: IOS-1328 Find a better place for this
+    func valueString(for amount: String, currencyCode: String) -> String {
+        if let currencySymbol =  BlockchainSettings.sharedAppInstance().fiatSymbolFromCode(currencyCode: currencyCode) {
+            // $2.34
+            return currencySymbol + amount
+        } else {
+            // 2.34 USD
+            return amount + " " + currencyCode
+        }
+    }
+}
