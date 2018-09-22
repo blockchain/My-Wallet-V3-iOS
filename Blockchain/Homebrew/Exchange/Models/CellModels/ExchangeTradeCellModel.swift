@@ -73,9 +73,39 @@ enum ExchangeTradeModel {
 }
 
 extension ExchangeTradeModel {
+    var depositAddress: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.depositAddress
+        }
+    }
+
+    var amountFeeSymbol: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.withdrawalFee.symbol
+        }
+    }
+
+    var amountFeeValue: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.withdrawalFee.value
+        }
+    }
+
     var amountFiatValue: String {
         switch self {
-        case .partner(_):
+        case .partner:
             // Currently calculated in ExchangeTableViewCell based on latest rates
             return ""
         case .homebrew(let model):
@@ -85,7 +115,7 @@ extension ExchangeTradeModel {
     
     var amountFiatSymbol: String {
         switch self {
-        case .partner(_):
+        case .partner:
             // Currently calculated in ExchangeTableViewCell cell based on latest rates
             return ""
         case .homebrew(let model):

@@ -88,15 +88,9 @@ class ExchangeDetailCoordinator: NSObject {
                     bold: true
                 )
                 
-                let accounts = accountRepository.allAccounts()
-                
-                // TICKET: IOS-1326 - Destination Name on Exchange Locked Screen Should Match Withdrawal Address
-                let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first
-                let destinationName = destination?.name ?? ""
-                
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: destinationName
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.to.address)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -156,15 +150,9 @@ class ExchangeDetailCoordinator: NSObject {
                     bold: true
                 )
                 
-                let accounts = accountRepository.allAccounts()
-                
-                // TICKET: IOS-1326 - Destination Name on Exchange Locked Screen Should Match Withdrawal Address
-                let destination = accounts.filter({ return $0.address.address == orderTransaction.to.address }).first
-                let destinationName = destination?.name ?? ""
-                
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: destinationName
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.to.address)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -227,13 +215,13 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let fees = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.fees,
-                    value: "0.000414 BTC",
+                    value: trade.amountFeeSymbol + " " + trade.amountFeeValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: "My Wallet",
+                    value: accountRepository.nameOfAccountContaining(address: trade.depositAddress),
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
 
