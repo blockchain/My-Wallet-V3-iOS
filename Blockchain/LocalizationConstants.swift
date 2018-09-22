@@ -63,6 +63,10 @@ struct LocalizationConstants {
         "Loading",
         comment: "Text displayed when there is an asynchronous action that needs to complete before the user can take further action."
     )
+    static let copiedToClipboard = NSLocalizedString(
+        "Copied to clipboard",
+        comment: "Text displayed when a user has tapped on an item to copy its text."
+    )
 
     struct Errors {
         static let genericError = NSLocalizedString(

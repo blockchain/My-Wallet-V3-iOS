@@ -18,13 +18,17 @@ enum ExchangeCellModel {
     case text(Text)
     case tradingPair(TradingPair)
     
+    typealias LabelAction = ((UILabel) -> Void)
+
     struct Plain {
         let description: String
         let value: String
         let backgroundColor: UIColor
         let statusVisibility: Visibility
         let bold: Bool
-        
+
+        var descriptionActionBlock: LabelAction?
+
         init(description: String, value: String, backgroundColor: UIColor = .white, statusVisibility: Visibility = .hidden, bold: Bool = false) {
             self.description = description
             self.value = value

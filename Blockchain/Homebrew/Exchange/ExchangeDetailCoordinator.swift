@@ -237,11 +237,21 @@ class ExchangeDetailCoordinator: NSObject {
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
 
-                let orderId = ExchangeCellModel.Plain(
+                var orderId = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.orderID,
                     value: trade.identifier,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
+                orderId.descriptionActionBlock = {
+                    guard let text = $0.text else { return }
+                    UIPasteboard.general.string = text
+                    $0.animate(
+                        fromText: LocalizationConstants.Exchange.orderID,
+                        toIntermediateText: LocalizationConstants.copiedToClipboard,
+                        speed: 1,
+                        gestureReceiver: $0
+                    )
+                }
                 
                 cellModels.append(contentsOf: [
                     .plain(status),
