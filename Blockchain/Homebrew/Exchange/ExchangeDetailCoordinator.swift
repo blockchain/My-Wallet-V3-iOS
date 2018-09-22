@@ -88,7 +88,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.to.address)
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -148,7 +148,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.to.address)
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()

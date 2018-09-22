@@ -90,6 +90,7 @@ class TradeExecutionService: TradeExecutionAPI {
                     let fromAddress = AssetAddressFactory.create(fromAddressString: addressString!, assetType: assetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
+                        destination: payload.withdrawalAddress,
                         from: AssetAccount(
                             index: 0,
                             address: fromAddress,

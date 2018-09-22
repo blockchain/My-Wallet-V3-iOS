@@ -72,6 +72,11 @@ struct OrderResult: Codable {
 }
 
 struct OrderTransaction {
+    // The destination is where the user will ultimately receive
+    // funds from the exchange.
+    let destination: String
+
+    // Details of payment constructed in Wallet JS
     let from: AssetAccount
     let to: AssetAddress
     let amountToSend: String
