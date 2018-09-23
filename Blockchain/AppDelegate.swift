@@ -251,7 +251,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        // TICKET: IOS-1329 - Push Notifications | Implement didFailToRegisterForRemoteNotificationsWithError
+        // TICKET: IOS-1329 - Implement didFailToRegisterForRemoteNotificationsWithError
     }
 
     // MARK: - State Checks
