@@ -245,6 +245,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
     }
 
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        NetworkManager.registerDeviceForPushNotifications(withDeviceToken: token)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // TICKET: IOS-1329 - Push Notifications | Implement didFailToRegisterForRemoteNotificationsWithError
+    }
+
     // MARK: - State Checks
 
     func checkForNewInstall() {
