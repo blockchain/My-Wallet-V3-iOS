@@ -314,10 +314,6 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         BuySellCoordinator.shared.showBuyBitcoinView()
     }
     
-    private func handleLaunchKYC() {
-        KYCCoordinator.shared.start()
-    }
-    
     private func handleExchange() {
         ExchangeCoordinator.shared.start(rootViewController: self.tabControllerManager)
     }

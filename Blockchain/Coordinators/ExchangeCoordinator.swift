@@ -49,8 +49,6 @@ struct ExchangeServices: ExchangeDependencies {
         case shapeshift
     }
 
-    private(set) var user: NabuUser?
-
     static let shared = ExchangeCoordinator()
 
     // class function declared so that the ExchangeCoordinator singleton can be accessed from obj-C
@@ -79,15 +77,11 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Entry Point
 
     func start() {
-        if let theUser = user, theUser.status == .approved {
-            showAppropriateExchange(); return
-        }
         disposable = BlockchainDataRepository.shared.nabuUser
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in
-                self.user = $0
-                guard self.user?.status == .approved else {
+                guard $0.status == .approved else {
                     KYCCoordinator.shared.start(); return
                 }
                 self.showAppropriateExchange()
