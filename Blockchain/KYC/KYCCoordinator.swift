@@ -53,7 +53,7 @@ protocol KYCCoordinatorDelegate: class {
 
     private(set) var country: KYCCountry?
 
-    private var rootViewController: UIViewController?
+    private weak var rootViewController: UIViewController?
 
     fileprivate var navController: KYCOnboardingNavigationController!
 
