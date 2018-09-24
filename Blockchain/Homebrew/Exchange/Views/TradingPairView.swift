@@ -57,9 +57,7 @@ class TradingPairView: NibBasedView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        leftButton.layer.cornerRadius = 4.0
-        rightButton.layer.cornerRadius = 4.0
+        configureButtons()
     }
     
     // MARK: Actions
@@ -163,6 +161,22 @@ class TradingPairView: NibBasedView {
             rightButton.setTitle(rightTitle, for: .normal)
         }
     }
+
+    func configureButtons() {
+        leftButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+        rightButton.layer.cornerRadius = Constants.Measurements.buttonCornerRadius
+
+        let numberOfLines = 1
+        leftButton.titleLabel?.numberOfLines = numberOfLines
+        rightButton.titleLabel?.numberOfLines = numberOfLines
+
+        let edgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        leftButton.titleEdgeInsets = edgeInsets
+        rightButton.titleEdgeInsets = edgeInsets
+
+        let swapImage = UIImage(named: "Icon-Exchange")?.withRenderingMode(.alwaysTemplate)
+        swapButton.setImage(swapImage, for: .normal)
+    }
 }
 
 extension TradingPairView {
@@ -170,7 +184,7 @@ extension TradingPairView {
     static func exchangeLockedModel(for trade: Trade) -> Model {
         let fromAsset = trade.pair.from
         let toAsset = trade.pair.to
-        
+
         // TODO: Some of the data below is placeholder data
         // and will be adjusted once this is hooked up with a live
         // API. In the mean time, this demonstrates how the Model
@@ -201,19 +215,40 @@ extension TradingPairView {
         return model
     }
     
-    static func confirmationModel(for trade: Trade) -> Model {
-        
-        let fromAsset = trade.pair.from
-        let toAsset = trade.pair.to
-        
-        // TODO: Some of the data below is placeholder data
-        // and will be adjusted once this is hooked up with a live
-        // API. In the mean time, this demonstrates how the Model
-        // is built and how it is to be used for the confirmation screen
+    static func confirmationModel(for conversion: Conversion) -> Model {
+        guard let pair = TradingPair(string: conversion.quote.pair) else {
+            Logger.shared.error("Couldn't create trading pair from conversion")
+            let transitionUpdate = TradingTransitionUpdate(
+                transitions: [],
+                transition: .none
+            )
+            let presentationUpdate = TradingPresentationUpdate(
+                animations: [],
+                animation: .none
+            )
+            return Model(
+                transitionUpdate: transitionUpdate,
+                presentationUpdate: presentationUpdate
+            )
+        }
+
+        let fromAsset = pair.from
+        let toAsset = pair.to
+
+        let currencyRatio = conversion.quote.currencyRatio
+
+        let fromAmount = currencyRatio.base.crypto.value
+        let fromSymbol = currencyRatio.base.crypto.symbol
+        let fromAmountAndSymbol = fromAmount + " " + fromSymbol
+
+        let toAmount = currencyRatio.counter.crypto.value
+        let toSymbol = currencyRatio.counter.crypto.symbol
+        let toAmountAndSymbol = toAmount + " " + toSymbol
+
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [.swapImage(#imageLiteral(resourceName: "Icon-SingleArrow")),
-                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
-                          .titles(left: "123 BTC", right: "123 ETH")
+                          .images(left: nil, right: nil),
+                          .titles(left: fromAmountAndSymbol, right: toAmountAndSymbol)
             ],
             transition: .none
         )

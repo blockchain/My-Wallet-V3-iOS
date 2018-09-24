@@ -28,31 +28,38 @@ class KYCCountrySelectionPresenter {
 
     // MARK: - Private Properties
 
+    private let interactor: KYCCountrySelectionInteractor
     private let wallet: Wallet
     private let walletService: WalletService
     private weak var view: KYCCountrySelectionView?
-    private var disposable: Disposable?
+    private let disposables = CompositeDisposable()
 
     // MARK: - Initializer
 
     init(
         view: KYCCountrySelectionView,
+        interactor: KYCCountrySelectionInteractor = KYCCountrySelectionInteractor(),
         wallet: Wallet = WalletManager.shared.wallet,
         walletService: WalletService = WalletService.shared
     ) {
         self.view = view
+        self.interactor = interactor
         self.wallet = wallet
         self.walletService = walletService
     }
 
     deinit {
-        disposable?.dispose()
-        disposable = nil
+        disposables.dispose()
     }
 
     // MARK: - Public Methods
 
     func selected(country: KYCCountry) {
+
+        // Notify server of user's selection
+        let interactorDisposable = interactor.selected(country: country)
+        _ = disposables.insert(interactorDisposable)
+
         // There are 3 scenarios once a user picks a country:
 
         // 1. if the country is supported by our native KYC, proceed
@@ -63,7 +70,7 @@ class KYCCountrySelectionPresenter {
         }
 
         let stateCodeGuess = wallet.stateCodeGuess()
-        disposable = walletService.isInPartnerRegionForExchange(countryCode: country.code, state: stateCodeGuess)
+        let disposable = walletService.isInPartnerRegionForExchange(countryCode: country.code, state: stateCodeGuess)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] in
@@ -77,5 +84,6 @@ class KYCCountrySelectionPresenter {
                     self?.view?.showExchangeNotAvailable(country: country)
                 }
             })
+        _ = disposables.insert(disposable)
     }
 }

@@ -28,6 +28,10 @@ struct LocalizationConstants {
     static let addEmail = NSLocalizedString ("Add Email", comment: "")
     static let newEmail = NSLocalizedString ("New Email Address", comment: "")
     static let settings = NSLocalizedString ("Settings", comment: "")
+    static let balances = NSLocalizedString(
+        "Balances",
+        comment: "Generic translation, may be used in multiple places."
+    )
 
     static let more = NSLocalizedString("More", comment: "")
     static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "")
@@ -58,6 +62,10 @@ struct LocalizationConstants {
     static let loading = NSLocalizedString(
         "Loading",
         comment: "Text displayed when there is an asynchronous action that needs to complete before the user can take further action."
+    )
+    static let copiedToClipboard = NSLocalizedString(
+        "Copied to clipboard",
+        comment: "Text displayed when a user has tapped on an item to copy its text."
     )
 
     struct Errors {
@@ -142,7 +150,6 @@ struct LocalizationConstants {
     }
 
     struct Pin {
-
         static let revealAddress = NSLocalizedString(
         """
         Enable this option to reveal a receive address when you swipe left on the PIN screen, making
@@ -275,6 +282,30 @@ struct LocalizationConstants {
         static let biometricInstructions = NSLocalizedString("Use %@ instead of PIN to authenticate Blockchain and access your wallet.", comment: "")
     }
 
+    struct Dashboard {
+        static let priceCharts = NSLocalizedString(
+            "Price charts",
+            comment: "The title of the balances label in the price chart view."
+        )
+    }
+
+    struct AnnouncementCards {
+        static let buySellCardTitle = NSLocalizedString("The wait is over", comment: "The title of the card.")
+        static let continueKYCCardTitle = NSLocalizedString("Verify Your Identity", comment: "The title of the card.")
+        static let buySellCardDescription = NSLocalizedString(
+            "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.",
+            comment: "The description displayed on the card."
+        )
+        static let continueKYCCardDescription = NSLocalizedString(
+            "Looks like you’ve started verifying your identity but didn’t finish. Pick up where you left off?",
+            comment: "The description displayed on the card."
+        )
+        static let continueKYCActionButtonTitle = NSLocalizedString(
+            "Continue verification",
+            comment: "The title of the action on the announcement card."
+        )
+    }
+
     struct SideMenu {
         static let loginToWebWallet = NSLocalizedString("Log in to Web Wallet", comment: "")
         static let logout = NSLocalizedString("Logout", comment: "")
@@ -322,12 +353,24 @@ struct LocalizationConstants {
             "Complete",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
+        static let expired = NSLocalizedString(
+            "Expired",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let failed = NSLocalizedString(
+            "Failed",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
         static let inProgress = NSLocalizedString(
             "In Progress",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
-        static let tradeRefunded = NSLocalizedString(
-            "Trade Refunded",
+        static let refundInProgress = NSLocalizedString(
+            "Refund in Progress",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let refunded = NSLocalizedString(
+            "Refunded",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
         
@@ -343,12 +386,12 @@ struct LocalizationConstants {
         static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
         static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
         static let confirming = NSLocalizedString("Confirming", comment: "")
-        static let useMinimum = NSLocalizedString(
-            "Use minimum",
+        static let useMin = NSLocalizedString(
+            "Use min",
             comment: "Text displayed on button for user to tap to create a trade with the minimum amount of crypto allowed"
         )
-        static let useMaximum = NSLocalizedString(
-            "Use maximum",
+        static let useMax = NSLocalizedString(
+            "Use max",
             comment: "Text displayed on button for user to tap to create a trade with the maximum amount of crypto allowed"
         )
         static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
@@ -361,6 +404,54 @@ struct LocalizationConstants {
         static let exchangeLocked = NSLocalizedString("Exchange Locked", comment: "Header title for the Exchange Locked screen.")
         static let done = NSLocalizedString("Done", comment: "Footer button title")
         static let sendNow = NSLocalizedString("Send Now", comment: "Footer button title for Exchange Confirmation screen")
+        static let creatingOrder = NSLocalizedString("Creating order", comment: "Loading text shown when a final exchange order is being created")
+        static let sendingOrder = NSLocalizedString("Sending order", comment: "Loading text shown when a final exchange order is being sent")
+        static let exchangeXForY = NSLocalizedString(
+            "Exchange %@ for %@",
+            comment: "Text displayed on the primary action button for the exchange screen when exchanging between 2 assets."
+        )
+        static let receive = NSLocalizedString(
+            "Receive",
+            comment: "Text displayed when reviewing the amount to be received for an exchange order")
+        static let estimatedFees = NSLocalizedString(
+            "Estimated fees",
+            comment: "Text displayed when reviewing the estimated amount of fees to pay for an exchange order")
+        static let value = NSLocalizedString(
+            "Value",
+            comment: "Text displayed when reviewing the fiat value of an exchange order")
+        static let sendTo = NSLocalizedString(
+            "Send to",
+            comment: "Text displayed when reviewing where the result of an exchange order will be sent to")
+        static let whatDoYouWantToExchange = NSLocalizedString(
+            "What do you want to exchange?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
+        )
+        static let whatDoYouWantToReceive = NSLocalizedString(
+            "What do you want to receive?",
+            comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
+        )
+        
+        static let fees = NSLocalizedString("Fees", comment: "Fees")
+        static let confirmExchange = NSLocalizedString(
+            "Confirm Exchange",
+            comment: "Confirm Exchange"
+        )
+        static let amountVariation = NSLocalizedString(
+            "The amounts you send and receive may change slightly due to market activity.",
+            comment: "Disclaimer in exchange locked screen"
+        )
+        static let orderStartDisclaimer = NSLocalizedString(
+            "Once an order starts, we are unable to stop it.",
+            comment: "Second disclaimer in exchange locked screen"
+        )
+        static let status = NSLocalizedString(
+            "Status",
+            comment: "Status of a trade in the exchange overview screen"
+        )
+        static let exchange = NSLocalizedString(
+            "Exchange",
+            comment: "Exchange"
+        )
     }
 
     struct AddressAndKeyImport {
@@ -511,22 +602,18 @@ struct LocalizationConstants {
             "Congratulations! We successfully verified your identity. You can now Exchange cryptocurrencies at Blockchain.",
             comment: "Description for when KYC verification is approved."
         )
-        
         static let accountApprovedBadge = NSLocalizedString(
             "Approved",
             comment: "KYC verification is approved."
         )
-        
         static let accountPendingBadge = NSLocalizedString(
             "Pending",
             comment: "KYC verification is Pending."
         )
-        
         static let accountUnderReviewBadge = NSLocalizedString(
             "Under Review",
             comment: "KYC verification is Under Review."
         )
-        
         static let verificationUnderReview = NSLocalizedString(
             "Verification Under Review",
             comment: "Text displayed when KYC verification is under review."
@@ -535,27 +622,22 @@ struct LocalizationConstants {
             "We had some trouble verifying your account with the documents provided. Our support team will contact you shortly to resolve this.",
             comment: "Description for when KYC verification is under review."
         )
-        
         static let accountUnconfirmedBadge = NSLocalizedString(
             "Unconfirmed",
             comment: "KYC verification is unconfirmed."
         )
-        
         static let accountUnverifiedBadge = NSLocalizedString(
             "Unverified",
             comment: "KYC verification is unverified."
         )
-        
         static let accounVerifiedBadge = NSLocalizedString(
             "Verified",
             comment: "KYC verification is complete."
         )
-        
         static let verificationFailed = NSLocalizedString(
             "Verification Failed",
             comment: "Text displayed when KYC verification failed."
         )
-        
         static let verificationFailedBadge = NSLocalizedString(
             "Failed",
             comment: "Text displayed when KYC verification failed."
@@ -588,9 +670,9 @@ struct LocalizationConstants {
             "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
             comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
-        static let backToDashboard = NSLocalizedString(
-            "Back to Dashboard",
-            comment: "Text displayed on a button when the user wishes to navigate back to the dashboard view."
+        static let messageMeWhenAvailable = NSLocalizedString(
+            "Message Me When Available",
+            comment: "Text displayed on a button when the user wishes to be notified when crypto-to-crypto exchange is available in their country."
         )
         static let yourHomeAddress = NSLocalizedString(
             "Your Home Address",
@@ -731,4 +813,18 @@ struct LocalizationConstants {
     @objc class func etherSecondPasswordPrompt() -> String { return LocalizationConstants.Authentication.etherSecondPasswordPrompt }
 
     @objc class func myEtherWallet() -> String { return LocalizationConstants.myEtherWallet }
+
+    @objc class func buySellCardTitle() -> String { return LocalizationConstants.AnnouncementCards.buySellCardTitle }
+
+    @objc class func continueKYCCardTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardTitle }
+
+    @objc class func buySellCardDescription() -> String { return LocalizationConstants.AnnouncementCards.buySellCardDescription }
+
+    @objc class func continueKYCCardDescription() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardDescription }
+
+    @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
+
+    @objc class func balances() -> String { return LocalizationConstants.balances }
+
+    @objc class func dashboardPriceCharts() -> String { return LocalizationConstants.Dashboard.priceCharts }
 }

@@ -10,15 +10,17 @@ import UIKit
 
 struct Constants {
 
+    struct Conversions {
+        // SATOSHI = 1e8 (100,000,000)
+        static let satoshi = UInt64(1e8)
+    }
+
     struct AppStore {
         static let AppID = "id493253309"
     }
     struct Animation {
         static let duration = 0.2
         static let durationLong = 0.5
-    }
-    struct DebugKeys {
-        static let createWalletPrefill = "createWalletPrefill"
     }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
@@ -129,10 +131,6 @@ struct Constants {
     @objc class func animationDuration() -> Double { return Constants.Animation.duration }
 
     @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }
-
-    @objc class func debugKeyCreateWalletPrefill() -> String {
-        return Constants.DebugKeys.createWalletPrefill
-    }
 
     @objc class func notificationKeyModalViewDismissed() -> String {
         return Constants.NotificationKeys.modalViewDismissed.rawValue

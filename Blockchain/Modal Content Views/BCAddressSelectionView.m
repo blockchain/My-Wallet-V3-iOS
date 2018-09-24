@@ -610,7 +610,7 @@ typedef enum {
     NSMutableArray *accountLabels = [NSMutableArray new];
     // First show the HD accounts with positive balance
     for (int i = 0; i < [WalletManager.sharedInstance.wallet getActiveAccountsCount:assetType]; i++) {
-        
+
         BOOL balanceGreaterThanZero = [[WalletManager.sharedInstance.wallet getBalanceForAccount:[WalletManager.sharedInstance.wallet getIndexOfActiveAccount:i assetType:assetType] assetType:assetType] longLongValue] > 0;
         
         BOOL shouldAddAccount;

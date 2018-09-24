@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ConversionRatesView" customModule="Blockchain" customModuleProvider="target">
+            <connections>
+                <outlet property="baseToCounterLabel" destination="c79-iI-rsd" id="dKv-QV-F3i"/>
+                <outlet property="baseToFiatLabel" destination="kLY-uP-be5" id="UTV-yl-hre"/>
+                <outlet property="counterToFiatLabel" destination="dxJ-35-Wx8" id="2ly-rn-Qbw"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="i6j-jW-r2U">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="486"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.19 ETH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c79-iI-rsd">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="24.5"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                    <color key="textColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = $6,443.53" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kLY-uP-be5">
+                    <rect key="frame" x="0.0" y="241" width="375" height="24.5"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                    <color key="textColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 ETH = $274.49" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxJ-35-Wx8">
+                    <rect key="frame" x="0.0" y="461.5" width="375" height="24.5"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                    <color key="textColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="c79-iI-rsd" firstAttribute="top" secondItem="i6j-jW-r2U" secondAttribute="top" id="Ize-yf-T7K"/>
+                <constraint firstItem="dxJ-35-Wx8" firstAttribute="leading" secondItem="JHK-Ew-y9h" secondAttribute="leading" id="JxX-Fn-FDx"/>
+                <constraint firstItem="JHK-Ew-y9h" firstAttribute="bottom" secondItem="dxJ-35-Wx8" secondAttribute="bottom" id="RJE-ff-hfY"/>
+                <constraint firstItem="kLY-uP-be5" firstAttribute="leading" secondItem="JHK-Ew-y9h" secondAttribute="leading" id="Rf9-Fo-mmV"/>
+                <constraint firstItem="kLY-uP-be5" firstAttribute="centerY" secondItem="JHK-Ew-y9h" secondAttribute="centerY" id="cjg-bv-d1v"/>
+                <constraint firstItem="JHK-Ew-y9h" firstAttribute="trailing" secondItem="dxJ-35-Wx8" secondAttribute="trailing" id="eVp-VL-jy8"/>
+                <constraint firstItem="JHK-Ew-y9h" firstAttribute="trailing" secondItem="kLY-uP-be5" secondAttribute="trailing" id="hRo-Jc-gpn"/>
+                <constraint firstItem="c79-iI-rsd" firstAttribute="leading" secondItem="JHK-Ew-y9h" secondAttribute="leading" id="kjo-Yb-XhW"/>
+                <constraint firstItem="kLY-uP-be5" firstAttribute="centerX" secondItem="JHK-Ew-y9h" secondAttribute="centerX" id="svl-Pt-O72"/>
+                <constraint firstItem="JHK-Ew-y9h" firstAttribute="trailing" secondItem="c79-iI-rsd" secondAttribute="trailing" id="vLa-en-ciG"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="JHK-Ew-y9h"/>
+            <point key="canvasLocation" x="209" y="-101"/>
+        </view>
+    </objects>
+</document>

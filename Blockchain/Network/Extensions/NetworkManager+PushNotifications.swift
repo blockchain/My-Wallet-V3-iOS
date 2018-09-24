@@ -29,13 +29,11 @@ extension NetworkManager {
                 Logger.shared.error("Error registering device with backend: \(error!.localizedDescription)")
                 return
             }
-            guard
-                let httpResponse = response as? HTTPURLResponse,
+            guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
                     return
             }
-            guard
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
+            guard let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: AnyObject],
                 let success = json!["success"] as? Bool, success == true else {
                     return
             }

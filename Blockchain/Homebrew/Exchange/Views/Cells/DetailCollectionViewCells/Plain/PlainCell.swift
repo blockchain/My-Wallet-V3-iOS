@@ -18,7 +18,11 @@ class PlainCell: ExchangeDetailCell {
     @IBOutlet fileprivate var subject: UILabel!
     @IBOutlet fileprivate var descriptionLabel: UILabel!
     @IBOutlet fileprivate var statusImageView: UIImageView!
-    
+
+    // MARK: Private Properties
+
+    fileprivate var tapActionBlock: ExchangeCellModel.LabelAction?
+
     // MARK: Overrides
     
     override func configure(with model: ExchangeCellModel) {
@@ -33,6 +37,13 @@ class PlainCell: ExchangeDetailCell {
         subject.textColor = payload.bold ? .darkGray : #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1)
         statusImageView.alpha = payload.statusVisibility.defaultAlpha
         statusImageView.tintColor = .green
+
+        if let action = payload.descriptionActionBlock {
+            tapActionBlock = action
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(descriptionLabelTapped(sender:)))
+            descriptionLabel.isUserInteractionEnabled = true
+            descriptionLabel.addGestureRecognizer(tapGesture)
+        }
     }
     
     override class func heightForProposedWidth(_ width: CGFloat, model: ExchangeCellModel) -> CGFloat {
@@ -71,5 +82,11 @@ class PlainCell: ExchangeDetailCell {
                 ofSize: 16,
                 weight: .regular
         )
+    }
+
+    @objc private func descriptionLabelTapped(sender: UITapGestureRecognizer) {
+        if let action = tapActionBlock, let label = sender.view as? UILabel {
+            action(label)
+        }
     }
 }

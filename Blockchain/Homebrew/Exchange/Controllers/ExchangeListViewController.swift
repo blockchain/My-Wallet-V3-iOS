@@ -10,7 +10,9 @@ import Foundation
 
 protocol ExchangeListDelegate: class {
     func onLoaded()
+    func onDisappear()
     func onNextPageRequest(_ identifier: String)
+    func onTradeCellTapped(_ trade: ExchangeTradeModel)
     func onNewOrderTapped()
     func onPullToRefresh()
 }
@@ -30,10 +32,6 @@ class ExchangeListViewController: UIViewController {
     fileprivate var dataProvider: ExchangeListDataProvider?
     fileprivate var presenter: ExchangeListPresenter!
     fileprivate var dependencies: ExchangeDependencies!
-    
-    // TODO: This may not be needed. This is anticipating
-    // that screen presentations/dismissals would be handled
-    // by the coordinator. 
     fileprivate var coordinator: ExchangeCoordinator!
     
     // MARK: Factory
@@ -49,11 +47,10 @@ class ExchangeListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         dataProvider = ExchangeListDataProvider(table: tableView)
         dependenciesSetup()
-        delegate?.onLoaded()
         dataProvider?.delegate = self
+        delegate?.onLoaded()
     }
     
     fileprivate func dependenciesSetup() {
@@ -63,9 +60,18 @@ class ExchangeListViewController: UIViewController {
         interactor.output = presenter
         delegate = presenter
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.onDisappear()
+    }
 }
 
 extension ExchangeListViewController: ExchangeListInterface {
+    func showTradeDetails(trade: ExchangeTradeModel) {
+        coordinator.handle(event: .showTradeDetails(trade: trade))
+    }
+
     func paginationActivityIndicatorVisibility(_ visibility: Visibility) {
         dataProvider?.isPaging = visibility == .visible
     }
@@ -74,11 +80,11 @@ extension ExchangeListViewController: ExchangeListInterface {
         dataProvider?.isRefreshing = visibility.isHidden == false
     }
     
-    func display(results: [ExchangeTradeCellModel]) {
-        dataProvider?.append(tradeModels: results)
+    func display(results: [ExchangeTradeModel]) {
+        dataProvider?.set(tradeModels: results)
     }
     
-    func append(results: [ExchangeTradeCellModel]) {
+    func append(results: [ExchangeTradeModel]) {
         dataProvider?.append(tradeModels: results)
     }
     
@@ -92,8 +98,8 @@ extension ExchangeListViewController: ExchangeListInterface {
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {
-    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeCellModel) {
-        // TODO: Show order detail screen for trade.
+    func dataProvider(_ dataProvider: ExchangeListDataProvider, didSelect trade: ExchangeTradeModel) {
+        delegate?.onTradeCellTapped(trade)
     }
     
     func refreshControlTriggered(_ dataProvider: ExchangeListDataProvider) {

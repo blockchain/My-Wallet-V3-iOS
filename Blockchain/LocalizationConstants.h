@@ -479,7 +479,6 @@
 #define BC_STRING_BRAZIL_REAL NSLocalizedString(@"Brazil Real", @"")
 #define BC_STRING_RUSSIAN_RUBLE NSLocalizedString(@"Russian Ruble", @"")
 
-#define BC_STRING_BALANCES NSLocalizedString(@"Balances", nil)
 #define BC_STRING_NO_TRANSACTIONS_TITLE NSLocalizedString(@"No Transactions", nil)
 #define BC_STRING_NO_TRANSACTIONS_TEXT_BITCOIN NSLocalizedString(@"Transactions occur when you send and request bitcoin.", nil)
 #define BC_STRING_NO_TRANSACTIONS_TEXT_ETHER NSLocalizedString(@"Transactions occur when you send and request ether.", nil)
@@ -629,15 +628,11 @@
 #define BC_STRING_ARGUMENT_NEEDED_TO_EXCHANGE NSLocalizedString(@"%@ needed to exchange", nil)
 #define BC_STRING_FAILED_TO_LOAD_EXCHANGE_DATA NSLocalizedString(@"Failed to load exchange data", nil)
 
-#define BC_STRING_BUY_SELL_CARD_TITLE NSLocalizedString(@"The wait is over", nil)
-
 #define BC_STRING_PRICE NSLocalizedString(@"Price", nil)
 #define BC_STRING_SEE_CHARTS NSLocalizedString(@"See charts", nil)
-#define BC_STRING_PRICE_CHARTS NSLocalizedString(@"Price charts", nil)
 
 #define BC_STRING_BITCOIN_CASH_PRICE NSLocalizedString(@"Bitcoin Cash Price", nil)
 #define BC_STRING_ENTER_BITCOIN_CASH_ADDRESS_OR_SELECT NSLocalizedString(@"Enter Bitcoin Cash address or select", nil)
-#define BC_STRING_BUY_SELL_CARD_DESCRIPTION NSLocalizedString(@"Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.", nil)
 #define BC_STRING_BUY_SELL_CARD_ACTION_TITLE BC_STRING_GET_STARTED
 
 #define BC_STRING_BITCOIN_CASH_WARNING_CONFIRM_VALID_ADDRESS_ONE NSLocalizedString(@"Are you sure this is a bitcoin cash address?", nil)

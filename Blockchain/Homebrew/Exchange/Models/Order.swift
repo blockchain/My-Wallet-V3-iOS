@@ -12,30 +12,74 @@ enum Side: String {
 }
 
 struct Order: Encodable {
-    
-    let pair: TradingPair
-    let side: Side
-    let quantity: Double
     let destinationAddress: String
     let refundAddress: String
-    
-    enum CodingKeys: String, CodingKey {
-        case side
+    let quote: Quote
+}
+
+struct OrderResult: Codable {
+    let id: String
+    let state: String
+    let createdAt: String
+    let updatedAt: String
+    let pair: String
+    let refundAddress: String
+    let rate: String
+    let depositAddress: String
+    let deposit: SymbolValue
+    let withdrawalAddress: String
+    let withdrawal: SymbolValue
+    let withdrawalFee: SymbolValue
+    let fiatValue: SymbolValue
+
+    private enum CodingKeys: CodingKey {
+        case id
+        case state
+        case createdAt
+        case updatedAt
         case pair
-        case quantity
-        case destinationAddress
         case refundAddress
+        case rate
+        case depositAddress
+        case deposit
+        case withdrawalAddress
+        case withdrawal
+        case withdrawalFee
+        case fiatValue
     }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        let pairValue = pair.stringRepresentation
-        
-        try container.encode(side.rawValue, forKey: .side)
-        try container.encode(pairValue, forKey: .pair)
-        try container.encodeIfPresent(String(quantity), forKey: .quantity)
-        try container.encode(destinationAddress, forKey: .destinationAddress)
-        try container.encode(refundAddress, forKey: .refundAddress)
+}
+
+@objc class OrderTransactionLegacy: NSObject {
+    init(
+        legacyAssetType: LegacyAssetType,
+        from: Int32,
+        to: String,
+        amount: String,
+        fees: String?
+    ) {
+        self.legacyAssetType = legacyAssetType
+        self.from = from
+        self.to = to
+        self.amount = amount
+        self.fees = fees
+        super.init()
     }
+    @objc let legacyAssetType: LegacyAssetType
+    @objc let from: Int32
+    @objc let to: String
+    @objc let amount: String
+    @objc var fees: String?
+}
+
+struct OrderTransaction {
+    // The destination is where the user will ultimately receive
+    // funds from the exchange.
+    let destination: String
+
+    // Details of payment constructed in Wallet JS
+    let from: AssetAccount
+    let to: AssetAddress
+    let amountToSend: String
+    let amountToReceive: String
+    let fees: String
 }

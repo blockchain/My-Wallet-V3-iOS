@@ -45,7 +45,7 @@ class ExchangeListInteractor: ExchangeListInput {
         return service.canPage
     }
     
-    func tradeSelectedWith(identifier: String) -> ExchangeTradeCellModel? {
+    func tradeSelectedWith(identifier: String) -> ExchangeTradeModel? {
         let model = service.tradeModels.filter({ $0.identifier == identifier }).first
         return model
     }
@@ -61,6 +61,11 @@ class ExchangeListInteractor: ExchangeListInput {
                 self?.output?.tradeFetchFailed(error: error)
             }
         }
+    }
+    
+    func cancel() {
+        guard service.isExecuting() else { return }
+        service.cancel()
     }
     
 }
