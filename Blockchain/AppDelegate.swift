@@ -246,10 +246,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        if !application.isRegisteredForRemoteNotifications {
-            let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-            NetworkManager.registerDeviceForPushNotifications(withDeviceToken: token)
-        }
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        NetworkManager.registerDeviceForPushNotifications(withDeviceToken: token)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
