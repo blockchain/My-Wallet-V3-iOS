@@ -53,6 +53,8 @@ protocol KYCCoordinatorDelegate: class {
 
     private(set) var country: KYCCountry?
 
+    private var rootViewController: UIViewController?
+
     fileprivate var navController: KYCOnboardingNavigationController!
 
     private let pageFactory = KYCPageViewFactory()
@@ -76,6 +78,7 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     @objc func start(from viewController: UIViewController) {
+        rootViewController = viewController
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.loading)
         let disposable = BlockchainDataRepository.shared.fetchNabuUser()
             .subscribeOn(MainScheduler.asyncInstance)
@@ -131,7 +134,11 @@ protocol KYCCoordinatorDelegate: class {
             switch status {
             case .approved:
                 viewController.dismiss(animated: true) {
-                    ExchangeCoordinator.shared.start()
+                    guard let viewController = self.rootViewController else {
+                        Logger.shared.error("View controller to present on is nil.")
+                        return
+                    }
+                    ExchangeCoordinator.shared.start(rootViewController: viewController)
                 }
             case .pending:
                 PushNotificationManager.shared.requestAuthorization()
