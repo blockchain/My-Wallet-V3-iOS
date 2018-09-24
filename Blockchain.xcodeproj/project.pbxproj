@@ -225,6 +225,8 @@
 		3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AEF9E8B21091B71006B1CF9 /* MapKit.framework */; };
+		3AFB65EE215585DF00EBFF30 /* BounceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB65ED215585DF00EBFF30 /* BounceButton.swift */; };
+		3AFB65EF215585DF00EBFF30 /* BounceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB65ED215585DF00EBFF30 /* BounceButton.swift */; };
 		3AFD18AD21221D40007145EA /* KYCBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B229E2122117A0091E706 /* KYCBaseViewController.swift */; };
 		3AFD18AF21221D95007145EA /* KYCPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFD18AE21221D95007145EA /* KYCPageModel.swift */; };
 		51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */; };
@@ -1406,6 +1408,7 @@
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		3AFB65ED215585DF00EBFF30 /* BounceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BounceButton.swift; sourceTree = "<group>"; };
 		3AFD18AE21221D95007145EA /* KYCPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCPageModel.swift; sourceTree = "<group>"; };
 		404A01EFD6ABF02E4F6F337A /* Pods-Blockchain.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"; sourceTree = "<group>"; };
 		51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCApplicationCompleteController.swift; sourceTree = "<group>"; };
@@ -3838,6 +3841,14 @@
 				3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */,
 			);
 			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		3AFB65E3215585B500EBFF30 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				3AFB65ED215585DF00EBFF30 /* BounceButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		51042C8820B1FDA600B022DE /* PrivateKeyReader */ = {
@@ -7017,6 +7028,7 @@
 		C9D4B2B2193E032200EDA9EA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3AFB65E3215585B500EBFF30 /* Buttons */,
 				C70576B1212CFFFC0027C6AA /* Nibable.swift */,
 				C78238CF2131FA34008FCCAD /* Keypad */,
 				3A76F8FC211A0665002F7946 /* ValidationForm */,
@@ -7970,6 +7982,7 @@
 				C7343C1821516A64001B1EC9 /* ExchangeDetailPresenter.swift in Sources */,
 				5114EA2420CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				AA3CA9B02107F18D00C2AD46 /* Logger.swift in Sources */,
+				3AFB65EF215585DF00EBFF30 /* BounceButton.swift in Sources */,
 				3A9B7F122135CF9800754FD6 /* NetworkRequest.swift in Sources */,
 				AA126CE6212C99FF005886A3 /* KYCPageViewFactory.swift in Sources */,
 				3AB4D91B21309BCC004F0160 /* ExchangeListDataProvider.swift in Sources */,
@@ -8105,6 +8118,7 @@
 				84FC02FD19815F1B00B97D5B /* crypto_scrypt-nosse.c in Sources */,
 				602B9CE82118E15300BD3D60 /* LocationSuggestion.swift in Sources */,
 				AA447BC82127679A00EC0FA0 /* SideMenuViewController.swift in Sources */,
+				3AFB65EE215585DF00EBFF30 /* BounceButton.swift in Sources */,
 				C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */,
 				51A7349320891EB3009727D5 /* NetworkManager.swift in Sources */,
 				606399EA2110FC2D005B6DF5 /* SRDelegateController.m in Sources */,
