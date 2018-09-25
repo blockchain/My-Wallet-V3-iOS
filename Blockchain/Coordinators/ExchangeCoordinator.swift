@@ -141,7 +141,7 @@ struct ExchangeServices: ExchangeDependencies {
             .subscribe(onSuccess: success, onError: error)
     }
 
-    private func showExchange(type: ExchangeType) {
+    private func showExchange(type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
             guard let viewController = rootViewController else {
@@ -159,7 +159,11 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            exchangeViewController = PartnerExchangeListViewController()
+            guard let country = country else {
+                Logger.shared.warning("Country is nil. Cannot present partner exchange.")
+                return
+            }
+            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country.code)
             let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -168,7 +172,7 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    private func showCreateExchange(animated: Bool, type: ExchangeType) {
+    private func showCreateExchange(animated: Bool, type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
@@ -186,7 +190,7 @@ struct ExchangeServices: ExchangeDependencies {
                 navigationController?.pushViewController(exchangeCreateViewController, animated: animated)
             }
         case .shapeshift:
-            showExchange(type: .shapeshift)
+            showExchange(type: .shapeshift, country: country)
         }
     }
 
@@ -218,7 +222,7 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
-        case createPartnerExchange(animated: Bool, viewController: UIViewController?)
+        case createPartnerExchange(country: KYCCountry, animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
         case sentTransaction(orderTransaction: OrderTransaction, conversion: Conversion)
         case showTradeDetails(trade: ExchangeTradeModel)
@@ -231,11 +235,11 @@ struct ExchangeServices: ExchangeDependencies {
                 rootViewController = viewController
             }
             showCreateExchange(animated: animated, type: .homebrew)
-        case .createPartnerExchange(let animated, let viewController):
+        case .createPartnerExchange(let country, let animated, let viewController):
             if viewController != nil {
                 rootViewController = viewController
             }
-            showCreateExchange(animated: animated, type: .shapeshift)
+            showCreateExchange(animated: animated, type: .shapeshift, country: country)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
         case .sentTransaction(orderTransaction: let transaction, conversion: let conversion):

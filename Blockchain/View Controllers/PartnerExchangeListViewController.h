@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PartnerExchangeListViewController : UIViewController
++ (PartnerExchangeListViewController * _Nonnull)createWithCountryCode:(NSString *_Nonnull)countryCode;
 - (void)reloadSymbols;
 @end

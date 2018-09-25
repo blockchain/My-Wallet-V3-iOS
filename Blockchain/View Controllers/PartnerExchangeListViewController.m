@@ -29,9 +29,17 @@
 @property (nonatomic) PartnerExchangeCreateViewController *createViewController;
 @property (nonatomic) BOOL didFinishShift;
 @property (nonatomic) UIRefreshControl *refreshControl;
+@property (nonatomic) NSString *countryCode;
 @end
 
 @implementation PartnerExchangeListViewController
+
++ (PartnerExchangeListViewController * _Nonnull)createWithCountryCode:(NSString *_Nonnull)countryCode
+{
+    PartnerExchangeListViewController *controller = [[PartnerExchangeListViewController alloc] init];
+    controller.countryCode = countryCode;
+    return controller;
+}
 
 - (void)viewDidLoad
 {
@@ -40,11 +48,10 @@
     [WalletManager sharedInstance].exchangeDelegate = self;
     
     self.view.backgroundColor = UIColor.lightGray;
-    
-    NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
-    
-    if (availableStates.count > 0) {
+
+    if ([self.countryCode  isEqual: @"US"]) {
         [[LoadingViewPresenter sharedInstance] hideBusyView];
+        NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
         [self showStates:availableStates];
     } else {
         [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingExchange]];
@@ -274,25 +281,25 @@
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 45)];
     view.backgroundColor = UIColor.lightGray;
-    
+
     UILabel *leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 12, tableView.frame.size.width/2, 30)];
     leftLabel.textColor = UIColor.gray5;
     leftLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_SMALL];
-    
+
     [view addSubview:leftLabel];
-    
+
     leftLabel.text = [BC_STRING_ORDER_HISTORY uppercaseString];
-    
+
     CGFloat rightLabelOriginX = leftLabel.frame.origin.x + leftLabel.frame.size.width + 8;
     UILabel *rightLabel = [[UILabel alloc] initWithFrame:CGRectMake(rightLabelOriginX, 12, self.view.frame.size.width - rightLabelOriginX - 15, 30)];
     rightLabel.textColor = UIColor.gray5;
     rightLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:FONT_SIZE_EXTRA_EXTRA_SMALL];
     rightLabel.textAlignment = NSTextAlignmentRight;
-    
+
     [view addSubview:rightLabel];
-    
+
     rightLabel.text = [BC_STRING_INCOMING uppercaseString];
-    
+
     return view;
 }
 
@@ -309,20 +316,20 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ExchangeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_EXCHANGE_CELL];
-    
+
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ExchangeTableViewCell" owner:nil options:nil] objectAtIndex:0];
         ExchangeTrade *trade = [self.trades objectAtIndex:indexPath.row];
         [cell configureWithTrade:trade];
     }
-    
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     ExchangeProgressViewController *exchangeProgressVC = [[ExchangeProgressViewController alloc] init];
     exchangeProgressVC.trade = [self.trades objectAtIndex:indexPath.row];
     BCNavigationController *navigationController = [[BCNavigationController alloc] initWithRootViewController:exchangeProgressVC title:BC_STRING_EXCHANGE];
