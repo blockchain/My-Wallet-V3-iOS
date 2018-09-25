@@ -391,10 +391,15 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
                 Logger.shared.debug("Selected account titled: '\(account.name)' of type: '\(account.address.assetType.symbol)'")
                 switch action {
                 case .exchanging:
-                    self.toAccount = account == self.toAccount ? self.fromAccount : self.toAccount
+                    if account.address.assetType == self.toAccount.address.assetType {
+                        self.toAccount = self.fromAccount
+                    }
+                    
                     self.fromAccount = account
                 case .receiving:
-                    self.fromAccount = account == self.fromAccount ? self.toAccount : self.fromAccount
+                    if account.address.assetType == self.fromAccount.address.assetType {
+                        self.fromAccount = self.toAccount
+                    }
                     self.toAccount = account
                 }
                 self.onTradingPairChanged()
