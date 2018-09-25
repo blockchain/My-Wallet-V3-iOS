@@ -193,6 +193,10 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+
+    // This method needs to be called before calling showTemporaryInputLabelsColor(color:)
+    // and wiggleInputLabels() for consistent animations (e.g., when a user is triggering
+    // an error repeatedly/rapidly via tap gesture)
     func clearInputLabelAnimations() {
         primaryAmountLabel.layer.removeAllAnimations()
         secondaryAmountLabel.layer.removeAllAnimations()
