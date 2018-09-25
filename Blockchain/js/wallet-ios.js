@@ -3159,7 +3159,7 @@ MyWalletPhone.tradeExecution = {
             .then(function (paymentPromise) {
                 objc_on_create_order_payment_success(paymentPromise.finalFee);
                 return paymentPromise
-            }).catch(function(e) {objc_on_create_order_payment_error(JSON.stringify(e))});
+            }).catch(objc_on_create_order_payment_error);
         },
         send: function() {
             MyWalletPhone.sendBitcoinPayment(currentPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error);

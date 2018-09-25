@@ -2637,19 +2637,24 @@
 - (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
 {
     [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
 
     NSString *tradeExecutionType;
     NSString *formattedAmount;
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+        [self.context invokeOnceWithValueFunctionBlock:^(JSValue *_Nonnull value) {
+            [self showBTCPaymentError:[value toDictionary][DICTIONARY_KEY_ERROR]];
+            // error(@"Could not build payment");
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
         tradeExecutionType = @"bitcoinCash";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+        [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
         tradeExecutionType = @"ether";
         formattedAmount = orderTransaction.amount;
+        [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else {
         DLog(@"Unsupported legacy asset type");
         return;
@@ -3659,26 +3664,9 @@
 - (void)on_error_update_fee:(NSDictionary *)error updateType:(FeeUpdateType)updateType
 {
     DLog(@"on_error_update_fee");
-    NSString *message;
-    if ([error[DICTIONARY_KEY_MESSAGE] isKindOfClass:[NSString class]]) {
-        message = error[DICTIONARY_KEY_MESSAGE];
-    } else {
-        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
-        message = [errorObject isKindOfClass:[NSString class]] ? errorObject : errorObject[DICTIONARY_KEY_ERROR];
-    }
 
     if (updateType == FeeUpdateTypeConfirm) {
-        if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR in:nil handler:nil];
-        } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
-            id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
-            uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR in:nil handler:nil];
-        } else if ([message isEqualToString:ERROR_FETCH_UNSPENT]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR in:nil handler:nil];
-        } else {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
-        }
+        [self showBTCPaymentError:error];
 
         if ([self.delegate respondsToSelector:@selector(enableSendPaymentButtons)]) {
             [self.delegate enableSendPaymentButtons];
@@ -4649,6 +4637,31 @@
 #endif
 
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:decription title:BC_STRING_ERROR in:nil handler:nil];
+}
+
+#pragma mark - Helper methods
+
+- (void)showBTCPaymentError:(NSDictionary *)error
+{
+    NSString *message;
+    if ([error[DICTIONARY_KEY_MESSAGE] isKindOfClass:[NSString class]]) {
+        message = error[DICTIONARY_KEY_MESSAGE];
+    } else {
+        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
+        message = [errorObject isKindOfClass:[NSString class]] ? errorObject : errorObject[DICTIONARY_KEY_ERROR];
+    }
+
+    if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR in:nil handler:nil];
+    } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
+        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
+        uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR in:nil handler:nil];
+    } else if ([message isEqualToString:ERROR_FETCH_UNSPENT]) {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR in:nil handler:nil];
+    } else {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
+    }
 }
 
 #pragma mark - Settings Helpers
