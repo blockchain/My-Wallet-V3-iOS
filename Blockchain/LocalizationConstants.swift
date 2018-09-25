@@ -452,6 +452,18 @@ struct LocalizationConstants {
             "Exchange",
             comment: "Exchange"
         )
+        static let aboveTradingLimit = NSLocalizedString(
+            "Above trading limit",
+            comment: "Error message shown when a user is attempting to exchange an amount above their designated limit"
+        )
+        static let belowTradingLimit = NSLocalizedString(
+            "Below trading limit",
+            comment: "Error message shown when a user is attempting to exchange an amount below their designated limit"
+        )
+        static let insufficientFunds = NSLocalizedString(
+            "Insufficient funds",
+            comment: "Error message shown when a user is attempting to exchange an amount greater than their balance"
+        )
     }
 
     struct AddressAndKeyImport {
