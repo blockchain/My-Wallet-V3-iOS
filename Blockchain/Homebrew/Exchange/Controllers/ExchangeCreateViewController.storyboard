@@ -31,7 +31,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf" userLabel="Fiat Button">
-                                <rect key="frame" x="311.5" y="100" width="70" height="70"/>
+                                <rect key="frame" x="311.5" y="105.5" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="4dm-4V-5VL"/>
                                     <constraint firstAttribute="height" constant="70" id="fWa-MZ-Ert"/>
@@ -42,7 +42,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
-                                <rect key="frame" x="16" y="224" width="343" height="44"/>
+                                <rect key="frame" x="16" y="241" width="343" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
                                         <rect key="frame" x="0.0" y="0.0" width="163.5" height="44"/>
@@ -70,15 +70,15 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcw-SG-3XL" customClass="ConversionRatesView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="15.5" y="344" width="343" height="227"/>
+                                <rect key="frame" x="15.5" y="359.5" width="343" height="213"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="324" width="343" height="267"/>
+                                <rect key="frame" x="16" y="341" width="343" height="250"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA3-pM-NKs">
-                                <rect key="frame" x="16" y="276" width="343" height="32"/>
+                                <rect key="frame" x="16" y="293" width="343" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.19 ETH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-S4-AAj">
                                         <rect key="frame" x="122" y="8.5" width="99" height="15"/>
@@ -137,13 +137,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
-                                <rect key="frame" x="154.5" y="177.5" width="65.5" height="38.5"/>
+                                <rect key="frame" x="154.5" y="189" width="65.5" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="0.01 BTC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
-                                <rect key="frame" x="16" y="96" width="342.5" height="77.5"/>
+                                <rect key="frame" x="16" y="96" width="342.5" height="89"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -174,7 +174,7 @@
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="enm-Og-Fbn"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" id="fCT-6x-0Y5"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="top" secondItem="FIv-WY-bvA" secondAttribute="top" constant="8" id="fNG-KC-mpx"/>
-                            <constraint firstItem="dfm-a1-ad2" firstAttribute="height" relation="lessThanOrEqual" secondItem="jre-mq-FDr" secondAttribute="height" multiplier="0.4" id="jtO-7D-eg1"/>
+                            <constraint firstItem="dfm-a1-ad2" firstAttribute="height" secondItem="jre-mq-FDr" secondAttribute="height" multiplier="0.375" id="jtO-7D-eg1"/>
                             <constraint firstItem="okC-2w-xB9" firstAttribute="centerX" secondItem="cbA-yh-J0A" secondAttribute="centerX" id="kRJ-eC-1n8"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="16" id="oTE-Cd-lXS"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="leading" secondItem="V30-pI-8jo" secondAttribute="leading" id="p9e-tX-pLR"/>
