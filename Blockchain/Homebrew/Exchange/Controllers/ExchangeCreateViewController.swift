@@ -389,6 +389,9 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
         assetAccounts.forEach { account in
             let alertAction = UIAlertAction(title: account.name, style: .default, handler: { [unowned self] _ in
                 Logger.shared.debug("Selected account titled: '\(account.name)' of type: '\(account.address.assetType.symbol)'")
+                
+                /// Note: Users should not be able to exchange between
+                /// accounts with the same assetType.
                 switch action {
                 case .exchanging:
                     if account.address.assetType == self.toAccount.address.assetType {
