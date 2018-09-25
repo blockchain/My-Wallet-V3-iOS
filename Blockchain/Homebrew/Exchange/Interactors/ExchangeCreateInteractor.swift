@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 class ExchangeCreateInteractor {
-    var disposable: Disposable?
+
     weak var output: ExchangeCreateOutput? {
         didSet {
             // output is not set during ExchangeCreateInteractor initialization,
@@ -18,23 +18,27 @@ class ExchangeCreateInteractor {
             didSetModel(oldModel: nil)
         }
     }
+
+    private var disposable: Disposable?
+    private var tradingLimitDisposable: Disposable?
+
     fileprivate let inputs: ExchangeInputsAPI
     fileprivate let markets: ExchangeMarketsAPI
     fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
+    fileprivate let tradeLimitService: TradeLimitsAPI
     private(set) var model: MarketsModel? {
         didSet {
             didSetModel(oldModel: oldValue)
         }
     }
 
-    init(dependencies: ExchangeDependencies,
-         model: MarketsModel
-    ) {
+    init(dependencies: ExchangeDependencies, model: MarketsModel) {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
         self.conversions = dependencies.conversions
         self.tradeExecution = dependencies.tradeExecution
+        self.tradeLimitService = dependencies.tradeLimits
         self.model = model
     }
 
@@ -60,10 +64,18 @@ class ExchangeCreateInteractor {
     deinit {
         disposable?.dispose()
         disposable = nil
+
+        tradingLimitDisposable?.dispose()
+        tradingLimitDisposable = nil
     }
 }
 
 extension ExchangeCreateInteractor: ExchangeCreateInput {
+
+    fileprivate enum TradingLimit {
+        case min
+        case max
+    }
     
     func viewLoaded() {
         guard let output = output else { return }
@@ -73,6 +85,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         
         markets.setup()
+        tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
 
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
@@ -84,8 +97,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func subscribeToConversions() {
         disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
             guard let this = self else { return }
-            guard let model = this.model, model.pair.stringRepresentation == conversion.quote.pair else {
-                Logger.shared.error("Pair returned from conversion is different from model pair")
+
+            guard let model = this.model else { return }
+
+            guard model.pair.stringRepresentation == conversion.quote.pair else {
+                Logger.shared.warning(
+                    "Pair '\(conversion.quote.pair)' is different from model pair '\(model.pair.stringRepresentation)'."
+                )
                 return
             }
 
@@ -133,14 +151,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         // Update the inputs in crypto and fiat
         guard let output = output else { return }
         guard let model = model else { return }
-        let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol ?? "$"
+        let symbol = model.fiatCurrencySymbol
         let suffix = model.pair.from.symbol
         
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
 
         if model.isUsingFiat {
-            let primary = inputs.primaryFiatAttributedString()
+            let primary = inputs.primaryFiatAttributedString(currencySymbol: symbol)
             output.updatedInput(primary: primary, secondary: conversions.output)
         } else {
             let assetType = model.isUsingBase ? model.pair.from : model.pair.to
@@ -148,6 +166,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
             output.updatedInput(primary: primary, secondary: secondaryResult)
         }
+        
+        guard let conversion = model.lastConversion else { return }
+        
+        output.updatedRates(
+            first: conversion.baseToCounterDescription,
+            second: conversion.baseToFiatDescription,
+            third: conversion.counterToFiatDescription
+        )
     }
 
     func updateTradingValues(left: String, right: String) {
@@ -166,20 +192,19 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
     }
     
-    func useMinimumAmount() {
-        
+    func useMinimumAmount(assetAccount: AssetAccount) {
+        applyTradingLimit(limit: .min, assetAccount: assetAccount)
     }
     
-    func useMaximumAmount() {
-        
+    func useMaximumAmount(assetAccount: AssetAccount) {
+        applyTradingLimit(limit: .max, assetAccount: assetAccount)
     }
 
     func toggleFix() {
         guard let model = model else { return }
         model.toggleFix()
         model.lastConversion = nil
-        inputs.clear()
-        clearConversions()
+        clearInputs()
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
@@ -194,15 +219,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         // Clear conversions if the user backspaced all the way to 0
         if !inputs.canBackspace() {
-            clearConversions()
+            clearInputs()
         }
 
         updatedInput()
-    }
-
-    private func clearConversions() {
-        conversions.clear()
-        output?.updateTradingPairValues(left: "", right: "")
     }
 
     func onAddInputTapped(value: String) {
@@ -240,18 +260,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
     }
 
-    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
-        guard let model = model else { return false }
-        switch model.isUsingFiat {
-        case true:
-            return inputs.canAddFiatCharacter(value)
-        case false:
-            return inputs.canAddAssetCharacter(value)
-        }
-    }
-
     func changeTradingPair(tradingPair: TradingPair) {
         guard let model = model else { return }
+
+        // Unsubscribe from old pair conversions
+        Logger.shared.debug("Unsubscribing from old currency pair '\(model.pair.stringRepresentation)'")
+        markets.unsubscribeToCurrencyPair(pair: model.pair.stringRepresentation)
+
+        // Update to new pair
         model.pair = tradingPair
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
@@ -275,5 +291,72 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             AlertViewPresenter.shared.standardError(message: errorMessage)
             this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
         })
+    }
+
+    // MARK: - Private
+
+    private func applyTradingLimit(limit: TradingLimit, assetAccount: AssetAccount) {
+        guard let model = model else { return }
+
+        // Dispose previous subscription
+        tradingLimitDisposable?.dispose()
+
+        // Update MarketsModel to baseInFiat and update view
+        model.fix = .baseInFiat
+        model.lastConversion = nil
+        inputs.isUsingFiat = true
+        clearInputs()
+        output?.updateTradingPair(pair: model.pair, fix: model.fix)
+
+        // Compute trading limit and take into account user's balance
+        let tradingLimitsSingle = tradeLimitService.getTradeLimits(withFiatCurrency: model.fiatCurrencyCode)
+        let balanceFiatValue = markets.fiatBalance(
+            forAssetAccount: assetAccount,
+            fiatCurrencyCode: model.fiatCurrencyCode
+        )
+
+        tradingLimitDisposable = Single.zip(tradingLimitsSingle, balanceFiatValue.take(1).asSingle()) {
+            return ($0, $1)
+        }.subscribeOn(MainScheduler.asyncInstance)
+        .observeOn(MainScheduler.instance)
+        .subscribe(onSuccess: { [weak self] (limits, accountFiatValue) in
+            guard let strongSelf = self else { return }
+
+            let limitInDecimal: Decimal
+            switch limit {
+            case .min:
+                limitInDecimal = (accountFiatValue < limits.minOrder) ? accountFiatValue : limits.minOrder
+            case .max:
+                limitInDecimal = (accountFiatValue < limits.maxPossibleOrder) ? accountFiatValue : limits.maxPossibleOrder
+            }
+
+            let limitString = NumberFormatter.localCurrencyFormatter.string(for: limitInDecimal)
+            limitString?.unicodeScalars.forEach { char in
+                let charStringValue = String(char)
+                if CharacterSet.decimalDigits.contains(char) {
+                    strongSelf.onAddInputTapped(value: charStringValue)
+                } else if "." == charStringValue {
+                    strongSelf.onDelimiterTapped(value: charStringValue)
+                }
+            }
+        }, onError: { error in
+            Logger.shared.error("Failed to compute trading limits: \(error)")
+        })
+    }
+
+    private func clearInputs() {
+        inputs.clear()
+        conversions.clear()
+        output?.updateTradingPairValues(left: "", right: "")
+    }
+
+    fileprivate func canAddAdditionalCharacter(_ value: String) -> Bool {
+        guard let model = model else { return false }
+        switch model.isUsingFiat {
+        case true:
+            return inputs.canAddFiatCharacter(value)
+        case false:
+            return inputs.canAddAssetCharacter(value)
+        }
     }
 }

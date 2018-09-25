@@ -22,18 +22,18 @@ class ExchangeListViewCell: UITableViewCell {
     
     // MARK: Public
 
-    func configure(with cellModel: ExchangeTradeCellModel) {
+    func configure(with cellModel: ExchangeTradeModel) {
         timestamp.text = cellModel.formattedDate
-        depositAmount.text = "-" + cellModel.amountDepositedDisplayValue
-        receivedAmount.text = cellModel.amountReceivedDisplayValue
+        depositAmount.text = "-" + cellModel.amountDepositedCryptoValue
+        receivedAmount.text = cellModel.amountReceivedCryptoValue
         
         status.text = cellModel.status.displayValue
 
         statusImageView.tintColor = cellModel.status.tintColor
     }
 
-    class func estimatedHeight(for model: ExchangeTradeCellModel) -> CGFloat {
-        let received = model.amountReceivedDisplayValue
+    class func estimatedHeight(for model: ExchangeTradeModel) -> CGFloat {
+        let received = model.amountReceivedCryptoValue
         let status = model.status.displayValue
         
         guard let receivedFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16) else { return 0.0 }

@@ -133,6 +133,21 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        @objc var fiatCurrencySymbol: String? {
+            return WalletManager.shared.latestMultiAddressResponse?.symbol_local.symbol
+        }
+
+        @objc var fiatCurrencyCode: String? {
+            return WalletManager.shared.latestMultiAddressResponse?.symbol_local.code
+        }
+
+        @objc func fiatSymbolFromCode(currencyCode: String) -> String?  {
+            guard let currencyCodeDict = WalletManager.shared.wallet.btcRates[currencyCode] as? [String: Any] else {
+                return nil
+            }
+            return currencyCodeDict["symbol"] as? String
+        }
+
         /// The first 5 characters of SHA256 hash of the user's password
         @objc var passwordPartHash: String? {
             get {

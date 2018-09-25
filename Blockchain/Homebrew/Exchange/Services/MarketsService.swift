@@ -6,12 +6,28 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import RxCocoa
 import RxSwift
 
 protocol ExchangeMarketsAPI {
     func setup()
     func authenticate(completion: @escaping () -> Void)
+
+    /// Unsubscribes from receiving conversion updates for the currency pair `pair`
+    ///
+    /// - Parameter pair: the currency pair (e.g. "BTC-ETH")
+    func unsubscribeToCurrencyPair(pair: String)
+
+    /// Computes the fiat balance in `fiatCurrency` for the provided `assetAccount` balance.
+    /// This method will return an Observable which reports different fiat balances as
+    /// the exchange rate changes.
+    ///
+    /// - Parameters:
+    ///   - assetAccount: the AssetAccount
+    ///   - fiatCurrencyCode: the currency code to compute the balance in (e.g. "USD")
+    /// - Returns: an Observable returning the fiat balance
+    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal>
+
     var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
     func updateConversion(model: MarketsModel)
@@ -24,15 +40,18 @@ protocol ExchangeMarketsAPI {
 // Ideally the caller should not care whether websockets or REST is used
 // The DataSource enum should default first to websockets, then to REST as fallback.
 class MarketsService {
+
+    private let restMessageSubject = PublishSubject<Conversion>()
+    private let authentication: NabuAuthenticationService
+    private let cachedExchangeRates = BehaviorRelay<ExchangeRates?>(value: nil)
     private let disposables = CompositeDisposable()
 
     private var socketMessageObservable: Observable<SocketMessage> {
         return SocketManager.shared.webSocketMessageObservable
     }
-    private let restMessageSubject = PublishSubject<Conversion>()
+
     private var dataSource: DataSource = .socket
 
-    private let authentication: NabuAuthenticationService
     var hasAuthenticated: Bool = false
 
     init(authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared) {
@@ -80,13 +99,59 @@ extension MarketsService: ExchangeMarketsAPI {
             return socketMessageObservable.filter {
                 $0.type == .exchange &&
                     $0.JSONMessage is Conversion
-                }.map { message in
-                    return message.JSONMessage as! Conversion
+            }.map { message in
+                return message.JSONMessage as! Conversion
             }
         case .rest:
             return restMessageSubject.filter({ _ -> Bool in
                 return false
             })
+        }
+    }
+
+    private var exchangeRatesObservable: Observable<ExchangeRates> {
+        // TODO: handle REST
+        // TICKET: IOS-1320
+        return socketMessageObservable.filter {
+            $0.type == .exchange
+        }.filter {
+            $0.JSONMessage is ExchangeRates
+        }.map {
+            $0.JSONMessage as! ExchangeRates
+        }.do(onNext: { [weak self] exchangeRates in
+            self?.cachedExchangeRates.accept(exchangeRates)
+        })
+    }
+
+    func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal> {
+
+        // Don't need to get exchange rates if the account balance is 0
+        guard assetAccount.balance != 0 else {
+            return Observable.just(0)
+        }
+
+        // Send exchange_rates socket message - get exchange rates for all possible pairs
+        let allPairs = AssetType.all.map {
+            return "\($0.symbol)-\(fiatCurrencyCode)"
+        }
+        let params = CurrencyPairsSubscribeParams(pairs: allPairs)
+        let subscribe = Subscription(channel: "exchange_rate", params: params)
+        let message = SocketMessage(type: .exchange, JSONMessage: subscribe)
+        SocketManager.shared.send(message: message)
+
+        // Fetch exchange rate, or use cached rate if available, followed by computing the
+        // fiat value of `assetAccount`
+        var exchangeRates = exchangeRatesObservable
+        if let cachedExchangeRates = cachedExchangeRates.value {
+            exchangeRates = exchangeRates.startWith(cachedExchangeRates)
+        }
+
+        return exchangeRates.map { rates in
+            return rates.convert(
+                balance: assetAccount.balance,
+                fromCurrency: assetAccount.address.assetType.symbol,
+                toCurrency: fiatCurrencyCode
+            )
         }
     }
 
@@ -96,15 +161,26 @@ extension MarketsService: ExchangeMarketsAPI {
             let params = ConversionSubscribeParams(
                 type: "conversionSpecification",
                 pair: model.pair.stringRepresentation,
-                fiatCurrency: model.fiatCurrency,
+                fiatCurrency: model.fiatCurrencyCode,
                 fix: model.fix,
                 volume: model.volume)
-            let quote = Subscription(channel: "conversion", operation: "subscribe", params: params)
+            let quote = Subscription(channel: "conversion", params: params)
             let message = SocketMessage(type: .exchange, JSONMessage: quote)
             SocketManager.shared.send(message: message)
         case .rest:
             Logger.shared.debug("Not yet implemented")
         }
+    }
+
+    func unsubscribeToCurrencyPair(pair: String) {
+        guard dataSource == .socket else {
+            Logger.shared.info("Unsubscribing to a currency pair is only necessary if the data source is WS.")
+            return
+        }
+        let params = ConversionPairUnsubscribeParams(pair: pair)
+        let unsubscribeMessage = Unsubscription(channel: "conversion", params: params)
+        let socketMessage = SocketMessage(type: .exchange, JSONMessage: unsubscribeMessage)
+        SocketManager.shared.send(message: socketMessage)
     }
 }
 
@@ -130,7 +206,7 @@ private extension MarketsService {
         let authenticationDisposable = authentication.getSessionToken()
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
                 let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
-                return Subscription(channel: "auth", operation: "subscribe", params: params)
+                return Subscription(channel: "auth", params: params)
             }.map { message in
                 return SocketMessage(type: .exchange, JSONMessage: message)
             }.subscribe(onSuccess: { socketMessage in

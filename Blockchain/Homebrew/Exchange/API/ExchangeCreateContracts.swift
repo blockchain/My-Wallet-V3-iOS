@@ -12,7 +12,11 @@ protocol ExchangeCreateInterface: class {
     func wigglePrimaryLabel()
     func wiggleInputLabels()
     func styleTemplate() -> ExchangeStyleTemplate
-    func ratesViewVisibility(_ visibility: Visibility)
+    func conversionViewVisibility(_ visibility: Visibility, animated: Bool)
+    func ratesViewVisibility(_ visibility: Visibility, animated: Bool)
+    func keypadViewVisibility(_ visibility: Visibility, animated: Bool)
+    func exchangeButtonVisibility(_ visibility: Visibility, animated: Bool)
+    func ratesChevronButtonVisibility(_ visibility: Visibility, animated: Bool)
     func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?)
     func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
     func updateRateLabels(first: String, second: String, third: String)
@@ -29,8 +33,8 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
     func viewLoaded()
     func displayInputTypeTapped()
     func ratesViewTapped()
-    func useMinimumAmount()
-    func useMaximumAmount()
+    func useMinimumAmount(assetAccount: AssetAccount)
+    func useMaximumAmount(assetAccount: AssetAccount)
     func confirmConversion()
     func changeTradingPair(tradingPair: TradingPair)
 }

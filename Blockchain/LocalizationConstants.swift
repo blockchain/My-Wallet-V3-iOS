@@ -63,6 +63,10 @@ struct LocalizationConstants {
         "Loading",
         comment: "Text displayed when there is an asynchronous action that needs to complete before the user can take further action."
     )
+    static let copiedToClipboard = NSLocalizedString(
+        "Copied to clipboard",
+        comment: "Text displayed when a user has tapped on an item to copy its text."
+    )
 
     struct Errors {
         static let genericError = NSLocalizedString(
@@ -349,12 +353,24 @@ struct LocalizationConstants {
             "Complete",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
+        static let expired = NSLocalizedString(
+            "Expired",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let failed = NSLocalizedString(
+            "Failed",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
         static let inProgress = NSLocalizedString(
             "In Progress",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
-        static let tradeRefunded = NSLocalizedString(
-            "Trade Refunded",
+        static let refundInProgress = NSLocalizedString(
+            "Refund in Progress",
+            comment: "Text shown on the exchange list cell indicating the trade status"
+        )
+        static let refunded = NSLocalizedString(
+            "Refunded",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
         
@@ -370,12 +386,12 @@ struct LocalizationConstants {
         static let loadingTransactions = NSLocalizedString("Loading transactions", comment: "")
         static let gettingQuote = NSLocalizedString("Getting quote", comment: "")
         static let confirming = NSLocalizedString("Confirming", comment: "")
-        static let useMinimum = NSLocalizedString(
-            "Use minimum",
+        static let useMin = NSLocalizedString(
+            "Use min",
             comment: "Text displayed on button for user to tap to create a trade with the minimum amount of crypto allowed"
         )
-        static let useMaximum = NSLocalizedString(
-            "Use maximum",
+        static let useMax = NSLocalizedString(
+            "Use max",
             comment: "Text displayed on button for user to tap to create a trade with the maximum amount of crypto allowed"
         )
         static let to = NSLocalizedString("To", comment: "Label for exchanging to a specific type of crypto")
@@ -394,6 +410,18 @@ struct LocalizationConstants {
             "Exchange %@ for %@",
             comment: "Text displayed on the primary action button for the exchange screen when exchanging between 2 assets."
         )
+        static let receive = NSLocalizedString(
+            "Receive",
+            comment: "Text displayed when reviewing the amount to be received for an exchange order")
+        static let estimatedFees = NSLocalizedString(
+            "Estimated fees",
+            comment: "Text displayed when reviewing the estimated amount of fees to pay for an exchange order")
+        static let value = NSLocalizedString(
+            "Value",
+            comment: "Text displayed when reviewing the fiat value of an exchange order")
+        static let sendTo = NSLocalizedString(
+            "Send to",
+            comment: "Text displayed when reviewing where the result of an exchange order will be sent to")
         static let whatDoYouWantToExchange = NSLocalizedString(
             "What do you want to exchange?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
@@ -401,6 +429,28 @@ struct LocalizationConstants {
         static let whatDoYouWantToReceive = NSLocalizedString(
             "What do you want to receive?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
+        )
+        
+        static let fees = NSLocalizedString("Fees", comment: "Fees")
+        static let confirmExchange = NSLocalizedString(
+            "Confirm Exchange",
+            comment: "Confirm Exchange"
+        )
+        static let amountVariation = NSLocalizedString(
+            "The amounts you send and receive may change slightly due to market activity.",
+            comment: "Disclaimer in exchange locked screen"
+        )
+        static let orderStartDisclaimer = NSLocalizedString(
+            "Once an order starts, we are unable to stop it.",
+            comment: "Second disclaimer in exchange locked screen"
+        )
+        static let status = NSLocalizedString(
+            "Status",
+            comment: "Status of a trade in the exchange overview screen"
+        )
+        static let exchange = NSLocalizedString(
+            "Exchange",
+            comment: "Exchange"
         )
     }
 

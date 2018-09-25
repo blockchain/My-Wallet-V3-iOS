@@ -8,6 +8,9 @@
 
 import Foundation
 
+// TICKET: IOS-1318
+// Move structs into separate files
+
 enum SocketType: String {
     case unassigned
     case exchange
@@ -58,7 +61,7 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
     typealias JSONType = Subscription
     
     let channel: String
-    let operation: String
+    let operation = "subscribe"
     let params: SubscribeParams
 
     private enum CodingKeys: CodingKey {
@@ -81,7 +84,50 @@ struct ConversionSubscribeParams: Codable {
     let volume: String
 }
 
+struct AllCurrencyPairsUnsubscribeParams: Codable {
+    let type = "allCurrencyPairs"
+}
+
+struct CurrencyPairsSubscribeParams: Codable {
+    let type = "exchangeRates"
+    let pairs: [String]
+}
+
+// MARK: - Unsubscribing
+
+struct Unsubscription<UnsubscribeParams: Codable>: SocketMessageCodable {
+    typealias JSONType = Unsubscription
+
+    let channel: String
+    let operation = "unsubscribe"
+    let params: UnsubscribeParams
+}
+
+struct ConversionPairUnsubscribeParams: Codable {
+    let type = "conversionPair"
+    let pair: String
+}
+
 // MARK: - Received Messages
+
+struct ExchangeRates: SocketMessageCodable {
+    typealias JSONType = ExchangeRates
+
+    let sequenceNumber: Int
+    let channel: String
+    let type: String
+    let rates: [CurrencyPairRate]
+}
+
+extension ExchangeRates {
+    func convert(balance: Decimal, fromCurrency: String, toCurrency: String) -> Decimal {
+        if let matchingPair = rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" }) {
+            return matchingPair.price * balance
+        }
+        return balance
+    }
+}
+
 struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
     
@@ -110,6 +156,37 @@ struct Conversion: SocketMessageCodable {
         case type
         case quote
     }
+}
+
+extension Conversion {
+    var baseToFiatDescription: String {
+        let fiatSymbol = quote.currencyRatio.base.fiat.symbol
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
+        return base + " = " + fiat
+    }
+    
+    var baseToCounterDescription: String {
+        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
+        return base + " = " + counter
+    }
+    
+    var counterToFiatDescription: String {
+        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
+        let fiatSymbol = quote.currencyRatio.counter.fiat.symbol
+        let counter = "1" + " " + counterSymbol
+        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
+        return counter + " = " + fiat
+    }
+}
+
+// MARK: - Associated Models
+
+struct CurrencyPairRate: Codable {
+    let pair: String
+    let price: Decimal
 }
 
 struct Quote: Codable {

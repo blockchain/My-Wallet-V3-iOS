@@ -64,3 +64,4 @@
 #import "UIView+ChangeFrameAttribute.h"
 
 #import "UILabel+CGRectForSubstring.h"
+#import "UILabel+Animations.h"

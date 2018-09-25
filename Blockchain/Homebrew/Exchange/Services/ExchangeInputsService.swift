@@ -35,11 +35,10 @@ class ExchangeInputsService: ExchangeInputsAPI {
         isUsingFiat = usingFiat
     }
     
-    func primaryFiatAttributedString() -> NSAttributedString {
+    func primaryFiatAttributedString(currencySymbol: String) -> NSAttributedString {
         guard components.count > 0 else { return NSAttributedString(string: "NaN")}
-        guard let symbol = NumberFormatter.localCurrencyFormatter.currencySymbol else { return NSAttributedString(string: "NaN") }
         let symbolComponent = InputComponent(
-            value: symbol,
+            value: currencySymbol,
             type: .symbol
         )
         return inputComponents.primaryFiatAttributedString(symbolComponent)

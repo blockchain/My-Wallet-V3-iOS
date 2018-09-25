@@ -19,10 +19,21 @@ class ExchangeDetailPresenter {
 
 extension ExchangeDetailPresenter: ExchangeDetailDelegate {
     func onViewLoaded() {
-
+        interactor.viewLoaded()
     }
     
     func onSendOrderTapped() {
+        interactor.sendOrderTapped()
+    }
+}
+
+extension ExchangeDetailPresenter: ExchangeDetailOutput {
+    func received(conversion: Conversion) {
+        let model = TradingPairView.confirmationModel(for: conversion)
+        interface?.updateConfirmDetails(conversion: conversion)
+    }
+
+    func orderSent() {
 
     }
 }

@@ -258,7 +258,7 @@ private extension ExchangeCreateView {
         useMinButton.titleLabel?.font = buttonFont
         useMinButton.backgroundColor = UIColor.white
         useMinButton.setTitleColor(UIColor.brandSecondary, for: .normal)
-        useMinButton.setTitle(LocalizationConstants.Exchange.useMinimum, for: .normal)
+        useMinButton.setTitle(LocalizationConstants.Exchange.useMin, for: .normal)
         useMinButton.addTarget(self, action: #selector(self.useMinButtonTapped), for: .touchUpInside)
         buttonsView.addSubview(useMinButton)
 
@@ -272,7 +272,7 @@ private extension ExchangeCreateView {
         useMaxButton.titleLabel?.font = buttonFont
         useMaxButton.backgroundColor = UIColor.white
         useMaxButton.setTitleColor(UIColor.brandSecondary, for: .normal)
-        useMaxButton.setTitle(LocalizationConstants.Exchange.useMaximum, for: .normal)
+        useMaxButton.setTitle(LocalizationConstants.Exchange.useMax, for: .normal)
         useMaxButton.addTarget(self, action: #selector(self.useMaxButtonTapped), for: .touchUpInside)
         buttonsView.addSubview(useMaxButton)
     }

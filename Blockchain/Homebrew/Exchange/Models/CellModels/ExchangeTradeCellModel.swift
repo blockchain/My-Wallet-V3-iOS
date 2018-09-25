@@ -8,33 +8,22 @@
 
 import Foundation
 
-struct ExchangeTradeCellModel: Decodable {
+enum ExchangeTradeModel {
+    case partner(PartnerTrade)
+    case homebrew(ExchangeTradeCellModel)
     
-    /// TODO: This is only for sample data and for testing
-    /// the UI for specific screens in the Exchange Detail flow.
-    static func sample() -> ExchangeTradeCellModel {
-        let trade = ExchangeTrade()
-        trade.orderID = ""
-        trade.status = "PENDING_EXECUTION"
-        trade.pair = "BTC_ETH"
-        trade.date = Date()
-        trade.withdrawalAmount = 0.01
-        trade.depositAmount = 0.01
-        
-        let model = ExchangeTradeCellModel(with: trade)
-        return model
-    }
-
     enum TradeStatus {
         case noDeposits
         case complete
         case resolved
         case inProgress
+        case pendingRefund
+        case refunded
         case cancelled
         case failed
         case expired
         case none
-
+        
         /// This isn't ideal but `Homebrew` and `Shapeshift` map their
         /// trade status values differently.
         init(homebrew: String) {
@@ -43,20 +32,24 @@ struct ExchangeTradeCellModel: Decodable {
                 self = .none
             case "PENDING_EXECUTION",
                  "PENDING_DEPOSIT",
-                 "PENDING_REFUND",
+                 "FINISHED_DEPOSIT",
                  "PENDING_WITHDRAWAL":
                 self = .inProgress
+            case "PENDING_REFUND":
+                self = .pendingRefund
+            case "REFUNDED":
+                self = .refunded
             case "FINISHED":
                 self = .complete
             case "FAILED":
                 self = .failed
-            case "REFUNDED":
-                self = .cancelled
+            case "EXPIRED":
+                self = .expired
             default:
                 self = .none
             }
         }
-
+        
         init(shapeshift: String) {
             switch shapeshift {
             case "no_deposits",
@@ -77,15 +70,144 @@ struct ExchangeTradeCellModel: Decodable {
             }
         }
     }
+}
 
+extension ExchangeTradeModel {
+    var withdrawalAddress: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.withdrawalAddress
+        }
+    }
+
+    var amountFeeSymbol: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.withdrawalFee.symbol
+        }
+    }
+
+    var amountFeeValue: String {
+        switch self {
+        case .partner:
+            // Not in ExchangeTableViewCell
+            return ""
+        case .homebrew(let model):
+            return model.withdrawalFee.value
+        }
+    }
+
+    var amountFiatValue: String {
+        switch self {
+        case .partner:
+            // Currently calculated in ExchangeTableViewCell based on latest rates
+            return ""
+        case .homebrew(let model):
+            return model.fiatValue.value
+        }
+    }
+    
+    var amountFiatSymbol: String {
+        switch self {
+        case .partner:
+            // Currently calculated in ExchangeTableViewCell cell based on latest rates
+            return ""
+        case .homebrew(let model):
+            return model.fiatValue.symbol
+        }
+    }
+
+    var amountDepositedCryptoValue: String {
+        switch self {
+        case .partner(let model):
+            return model.amountDepositedCryptoValue
+        case .homebrew(let model):
+            return model.deposit.value
+        }
+    }
+    
+    var amountDepositedCryptoSymbol: String {
+        switch self {
+        case .partner(let model):
+            return model.pair.from.symbol
+        case .homebrew(let model):
+            return model.deposit.symbol
+        }
+    }
+
+    var amountReceivedCryptoSymbol: String {
+        switch self {
+        case .partner(let model):
+            return model.pair.to.symbol
+        case .homebrew(let model):
+            return model.withdrawal.symbol
+        }
+    }
+
+    var amountReceivedCryptoValue: String {
+        switch self {
+        case .partner(let model):
+            return model.amountReceivedCryptoValue
+        case .homebrew(let model):
+            return model.withdrawal.value
+        }
+    }
+    
+    var transactionDate: Date {
+        switch self {
+        case .partner(let model):
+            return model.transactionDate
+        case .homebrew(let model):
+            return model.createdAt
+        }
+    }
+    
+    var formattedDate: String {
+        switch self {
+        case .partner(let model):
+            return DateFormatter.timeAgoString(from: model.transactionDate)
+        case .homebrew(let model):
+            return DateFormatter.timeAgoString(from: model.createdAt)
+        }
+    }
+    
+    var status: ExchangeTradeModel.TradeStatus {
+        switch self {
+        case .partner(let model):
+            return model.status
+        case .homebrew(let model):
+            return model.status
+        }
+    }
+    
+    var identifier: String {
+        switch self {
+        case .partner(let model):
+            return model.identifier
+        case .homebrew(let model):
+            return model.identifier
+        }
+    }
+}
+
+struct PartnerTrade {
+    
+    typealias TradeStatus = ExchangeTradeModel.TradeStatus
+    
     let identifier: String
     let status: TradeStatus
     let assetType: AssetType
     let pair: TradingPair
     let transactionDate: Date
-    let amountReceivedDisplayValue: String
-    let amountDepositedDisplayValue: String
-
+    let amountReceivedCryptoValue: String
+    let amountDepositedCryptoValue: String
+    
     init(with trade: ExchangeTrade) {
         identifier = trade.orderID
         status = TradeStatus(shapeshift: trade.status)
@@ -97,13 +219,13 @@ struct ExchangeTradeCellModel: Decodable {
         }
         
         if let value = trade.inboundDisplayAmount() {
-            amountReceivedDisplayValue = value
+            amountReceivedCryptoValue = value
         } else {
             fatalError("Failed to map \(trade.inboundDisplayAmount() ?? "")")
         }
         
         if let value = trade.outboundDisplayAmount() {
-            amountDepositedDisplayValue = value
+            amountDepositedCryptoValue = value
         } else {
             fatalError("Failed to map \(trade.outboundDisplayAmount() ?? "")")
         }
@@ -114,27 +236,74 @@ struct ExchangeTradeCellModel: Decodable {
             fatalError("Failed to map \(trade.withdrawalCurrency())")
         }
     }
+}
+
+struct ExchangeTradeCellModel: Decodable {
+    
+    typealias TradeStatus = ExchangeTradeModel.TradeStatus
+
+    let identifier: String
+    let status: TradeStatus
+    let createdAt: Date
+    let updatedAt: Date
+    let pair: TradingPair
+    let refundAddress: String
+    let rate: String
+    let depositAddress: String
+    let deposit: SymbolValue
+    let withdrawalAddress: String
+    let withdrawal: SymbolValue
+    let withdrawalFee: SymbolValue
+    let fiatValue: SymbolValue
+    let depositTxHash: String
+    let withdrawalTxHash: String
 
     // MARK: - Decodable
 
     enum CodingKeys: String, CodingKey {
         case identifier = "id"
-        case currency = "currency"
-        case createdAt = "createdAt"
-        case quantity = "quantity"
-        case depositQuantity = "depositQuantity"
-        case pair = "pair"
         case status = "state"
+        case createdAt
+        case updatedAt
+        case pair
+        case refundAddress
+        case rate
+        case depositAddress
+        case deposit
+        case withdrawalAddress
+        case withdrawal
+        case withdrawalFee
+        case fiatValue
+        case depositTxHash
+        case withdrawalTxHash
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        transactionDate = try values.decode(Date.self, forKey: .createdAt)
+        let updated = try values.decode(String.self, forKey: .updatedAt)
+        let inserted = try values.decode(String.self, forKey: .createdAt)
+        let formatter = DateFormatter.sessionDateFormat
+        
+        guard let transactionResult = formatter.date(from: inserted) else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .createdAt,
+                in: values,
+                debugDescription: "Date string does not match format expected by formatter."
+            )
+        }
+        guard let updatedResult = formatter.date(from: updated) else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .updatedAt,
+                in: values,
+                debugDescription: "Date string does not match format expected by formatter."
+            )
+        }
+        
+        createdAt = transactionResult
+        updatedAt = updatedResult
+        
         identifier = try values.decode(String.self, forKey: .identifier)
-        let asset = try values.decode(String.self, forKey: .currency)
         let pairValue = try values.decode(String.self, forKey: .pair)
-        amountReceivedDisplayValue = try values.decode(String.self, forKey: .quantity)
-        amountDepositedDisplayValue = try values.decode(String.self, forKey: .depositQuantity)
         let statusValue = try values.decode(String.self, forKey: .status)
         status = TradeStatus(homebrew: statusValue)
         
@@ -144,72 +313,81 @@ struct ExchangeTradeCellModel: Decodable {
             fatalError("Failed to map \(pairValue)")
         }
         
-        if let asset = AssetType(stringValue: asset) {
-            assetType = asset
-        } else {
-            // TODO: Show error alert
-            fatalError("Failed to map \(asset)")
-        }
+        refundAddress = try values.decode(String.self, forKey: .refundAddress)
+        rate = try values.decode(String.self, forKey: .rate)
+        depositAddress = try values.decode(String.self, forKey: .depositAddress)
+        deposit = try values.decode(SymbolValue.self, forKey: .deposit)
+        withdrawalAddress = try values.decode(String.self, forKey: .withdrawalAddress)
+        withdrawal = try values.decode(SymbolValue.self, forKey: .withdrawal)
+        withdrawalFee = try values.decode(SymbolValue.self, forKey: .withdrawalFee)
+        fiatValue = try values.decode(SymbolValue.self, forKey: .fiatValue)
+        depositTxHash = try values.decode(String.self, forKey: .depositTxHash)
+        withdrawalTxHash = try values.decode(String.self, forKey: .withdrawalTxHash)
     }
 }
 
 extension ExchangeTradeCellModel: Equatable {
     static func ==(lhs: ExchangeTradeCellModel, rhs: ExchangeTradeCellModel) -> Bool {
-        return lhs.assetType == rhs.assetType &&
-        lhs.amountReceivedDisplayValue == rhs.amountReceivedDisplayValue &&
-        lhs.status == rhs.status &&
-        lhs.transactionDate == rhs.transactionDate &&
+        return lhs.status == rhs.status &&
+        lhs.createdAt == rhs.createdAt &&
         lhs.pair == rhs.pair
     }
 }
 
 extension ExchangeTradeCellModel: Hashable {
     var hashValue: Int {
-        return assetType.hashValue ^
-        amountReceivedDisplayValue.hashValue ^
-        status.hashValue ^
-        transactionDate.hashValue ^
+        return status.hashValue ^
+        createdAt.hashValue ^
         pair.hashValue
     }
 }
 
 extension ExchangeTradeCellModel {
     var formattedDate: String {
-        return DateFormatter.timeAgoString(from: transactionDate)
+        return DateFormatter.timeAgoString(from: createdAt)
     }
 }
 
-extension ExchangeTradeCellModel.TradeStatus {
+extension ExchangeTradeModel.TradeStatus {
     
     var tintColor: UIColor {
         switch self {
-        case .complete:
+        case .complete,
+             .refunded,
+             .resolved,
+             .cancelled:
             return .green
-        case .noDeposits,
-             .inProgress,
+        case .inProgress,
+             .noDeposits:
+           return #colorLiteral(red: 0.96, green: 0.65, blue: 0.14, alpha: 1)
+        case .pendingRefund:
+            return #colorLiteral(red: 0.96, green: 0.65, blue: 0.14, alpha: 1)
+        case .failed:
+           return #colorLiteral(red: 0.95, green: 0.42, blue: 0.44, alpha: 1)
+        case .expired,
              .none:
-            return .grayBlue
-        case .cancelled,
-             .failed,
-             .expired,
-             .resolved:
-            return .red
+            return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         }
     }
 
     var displayValue: String {
         switch self {
-        case .complete:
+        case .complete,
+             .resolved:
             return LocalizationConstants.Exchange.complete
-        case .noDeposits,
-             .inProgress,
+        case .pendingRefund:
+            return LocalizationConstants.Exchange.refundInProgress
+        case .refunded,
+             .cancelled:
+            return LocalizationConstants.Exchange.refunded
+        case .failed:
+            return LocalizationConstants.Exchange.failed
+        case .expired:
+            return LocalizationConstants.Exchange.expired
+        case .inProgress,
+             .noDeposits,
              .none:
             return LocalizationConstants.Exchange.inProgress
-        case .cancelled,
-             .failed,
-             .expired,
-             .resolved:
-            return LocalizationConstants.Exchange.tradeRefunded
         }
     }
 }

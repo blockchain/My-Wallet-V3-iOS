@@ -21,10 +21,6 @@ class TradeExecutionService: TradeExecutionAPI {
         static let trades = PathComponents(
             components: ["trades"]
         )
-        
-        static let limits = PathComponents(
-            components: ["trades", "limits"]
-        )
     }
     
     private let authentication: NabuAuthenticationService
@@ -42,19 +38,9 @@ class TradeExecutionService: TradeExecutionAPI {
     }
     
     // MARK: TradeExecutionAPI
-    
-    func getTradeLimits(withCompletion: @escaping ((Result<TradeLimits>) -> Void)) {
-        disposable = limits()
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { (payload) in
-                withCompletion(.success(payload))
-            }, onError: { error in
-                withCompletion(.error(error))
-            })
-    }
 
     // TICKET: IOS-1291 Refactor this
+    // swiftlint:disable function_body_length
     func submitOrder(
         with conversion: Conversion,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
@@ -104,6 +90,7 @@ class TradeExecutionService: TradeExecutionAPI {
                     let fromAddress = AssetAddressFactory.create(fromAddressString: addressString!, assetType: assetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
+                        destination: payload.withdrawalAddress,
                         from: AssetAccount(
                             index: 0,
                             address: fromAddress,
@@ -112,25 +99,38 @@ class TradeExecutionService: TradeExecutionAPI {
                         ),
                         to: to,
                         amountToSend: orderTransactionLegacy.amount,
-                        amountToReceive: payload.withdrawalQuantity ?? "Unavailable",
+                        amountToReceive: payload.withdrawal.value,
                         fees: orderTransactionLegacy.fees!
                     )
                     success(orderTransaction, conversion)
                 }
                 this.createOrder(from: payload, success: createOrderCompletion, error: error)
+        }, onError: { requestError in
+            guard let httpRequestError = requestError as? HTTPRequestError else {
+                error(requestError.localizedDescription)
+                return
+            }
+            error(httpRequestError.debugDescription)
         })
-        // Can't figure out error: Extra argument 'onError' in call
-//        , onError: { error in
-//            withCompletion(.error(error))
-//        })
     }
+    // swiftlint:enable function_body_length
 
     func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
         wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
     }
 
+    func submitAndSend(
+        with conversion: Conversion,
+        success: @escaping (() -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
+            guard let this = self else { return }
+            this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+        }, error: error)
+    }
     // MARK: Private
-    
+
     fileprivate func process(order: Order) -> Single<OrderResult> {
         guard let baseURL = URL(
             string: BlockchainAPI.shared.retailCoreUrl) else {
@@ -161,15 +161,15 @@ class TradeExecutionService: TradeExecutionAPI {
     ) {
         #if DEBUG
         let settings = DebugSettings.shared
-        let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress!
-        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.depositQuantity!
+        let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress
+        let depositQuantity = settings.mockExchangeDeposit ? settings.mockExchangeDepositQuantity! : orderResult.deposit.value
         let assetType = settings.mockExchangeDeposit ?
             AssetType(stringValue: settings.mockExchangeDepositAssetTypeString!)!
-            : TradingPair(string: orderResult.pair!)!.from
+            : TradingPair(string: orderResult.pair)!.from
         #else
-        let depositAddress = orderResult.depositAddress!
-        let depositQuantity = orderResult.depositQuantity!
-        let pair = TradingPair(string: orderResult.pair!)
+        let depositAddress = orderResult.depositAddress
+        let depositQuantity = orderResult.deposit.value
+        let pair = TradingPair(string: orderResult.pair)
         let assetType = pair!.from
         #endif
         let legacyAssetType = assetType.legacy
@@ -190,28 +190,5 @@ class TradeExecutionService: TradeExecutionAPI {
             success(orderTransactionLegacy)
         }
         wallet.createOrderPayment(withOrderTransaction: orderTransactionLegacy, success: createOrderPaymentSuccess, error: error)
-    }
-
-    fileprivate func limits() -> Single<TradeLimits> {
-        guard let baseURL = URL(
-            string: BlockchainAPI.shared.retailCoreUrl) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        guard let endpoint = URL.endpoint(
-            baseURL,
-            pathComponents: PathComponents.limits.components,
-            queryParameters: nil) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        return authentication.getSessionToken().flatMap { token in
-            return NetworkRequest.GET(
-                url: endpoint,
-                body: nil,
-                token: token.token,
-                type: TradeLimits.self
-            )
-        }
     }
 }
