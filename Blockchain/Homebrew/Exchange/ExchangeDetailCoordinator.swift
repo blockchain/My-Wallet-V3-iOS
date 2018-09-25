@@ -257,6 +257,9 @@ class ExchangeDetailCoordinator: NSObject {
             }
             tradeExecution.submitAndSend(with: lastConversion, success: { [weak self] in
                 guard let this = self else { return }
+                NotificationCenter.default.post(
+                    Notification(name: Constants.NotificationKeys.exchangeSubmitted)
+                )
                 ExchangeCoordinator.shared.handle(event: .sentTransaction(orderTransaction: transaction, conversion: lastConversion))
                 this.delegate?.coordinator(this, completedTransaction: transaction)
             }) { AlertViewPresenter.shared.standardError(message: $0) }
