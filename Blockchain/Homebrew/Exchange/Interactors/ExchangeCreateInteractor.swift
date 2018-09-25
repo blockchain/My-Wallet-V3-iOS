@@ -81,7 +81,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         guard let output = output else { return }
         guard let model = model else { return }
         inputs.setup(with: output.styleTemplate(), usingFiat: model.isUsingFiat)
-        
+        conversions.clear()
         updatedInput()
         
         markets.setup()
