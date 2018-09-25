@@ -127,7 +127,7 @@ class ExchangeCreateViewController: UIViewController {
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
+                marketPair: MarketPair(fromAccount: fromAccount, toAccount: toAccount),
                 fiatCurrencyCode: BlockchainSettings.sharedAppInstance().fiatCurrencyCode ?? "USD",
                 fiatCurrencySymbol: BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? "$",
                 fix: .base,
@@ -367,11 +367,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
 extension ExchangeCreateViewController: TradingPairViewDelegate {
     func onLeftButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: fromAccount.address.assetType, for: .exchanging)
+        assetAccountListPresenter.presentPicker(excludingAccount: fromAccount, for: .exchanging)
     }
 
     func onRightButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: toAccount.address.assetType, for: .receiving)
+        assetAccountListPresenter.presentPicker(excludingAccount: toAccount, for: .receiving)
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
@@ -404,18 +404,16 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
         actionSheetController.addAction(
             UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
         )
-
-        // Present picker
+        
         present(actionSheetController, animated: true)
     }
 
     private func onTradingPairChanged() {
-        guard let tradingPair = TradingPair(
-            from: fromAccount.address.assetType,
-            to: toAccount.address.assetType
-        ) else {
-            return
-        }
-        presenter.changeTradingPair(tradingPair: tradingPair)
+        presenter.changeMarketPair(
+            marketPair: MarketPair(
+                fromAccount: fromAccount,
+                toAccount: toAccount
+            )
+        )
     }
 }

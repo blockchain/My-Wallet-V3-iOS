@@ -260,7 +260,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
     }
 
-    func changeTradingPair(tradingPair: TradingPair) {
+    func changeMarketPair(marketPair: MarketPair) {
         guard let model = model else { return }
 
         // Unsubscribe from old pair conversions
@@ -268,7 +268,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         markets.unsubscribeToCurrencyPair(pair: model.pair.stringRepresentation)
 
         // Update to new pair
-        model.pair = tradingPair
+        model.marketPair = marketPair
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }

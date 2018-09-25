@@ -63,8 +63,8 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.ratesChevronButtonVisibility(ratesViewVisibility, animated: animated)
     }
 
-    func changeTradingPair(tradingPair: TradingPair) {
-        interactor.changeTradingPair(tradingPair: tradingPair)
+    func changeMarketPair(marketPair: MarketPair) {
+        interactor.changeMarketPair(marketPair: marketPair)
     }
 
     func onToggleFixTapped() {

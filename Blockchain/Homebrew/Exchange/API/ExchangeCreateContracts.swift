@@ -33,7 +33,7 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
     func useMinimumAmount(assetAccount: AssetAccount)
     func useMaximumAmount(assetAccount: AssetAccount)
     func confirmConversion()
-    func changeTradingPair(tradingPair: TradingPair)
+    func changeMarketPair(marketPair: MarketPair)
 }
 
 protocol ExchangeCreateOutput: class {
