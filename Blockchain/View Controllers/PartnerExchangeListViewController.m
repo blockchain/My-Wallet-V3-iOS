@@ -34,7 +34,7 @@
 
 @implementation PartnerExchangeListViewController
 
-+ (PartnerExchangeListViewController * _Nonnull)createWithCountryCode:(NSString *_Nonnull)countryCode
++ (PartnerExchangeListViewController * _Nonnull)createWithCountryCode:(NSString *_Nullable)countryCode
 {
     PartnerExchangeListViewController *controller = [[PartnerExchangeListViewController alloc] init];
     controller.countryCode = countryCode;
@@ -49,13 +49,15 @@
     
     self.view.backgroundColor = UIColor.lightGray;
 
-    if ([self.countryCode  isEqual: @"US"]) {
+    Wallet *wallet = WalletManager.sharedInstance.wallet;
+    NSString *countryCode = (self.countryCode != nil) ? self.countryCode : wallet.countryCodeGuess;
+    NSArray *availableStates = wallet.availableUSStates;
+    if ([countryCode  isEqual: @"US"] && availableStates.count > 0) {
         [[LoadingViewPresenter sharedInstance] hideBusyView];
-        NSArray *availableStates = [WalletManager.sharedInstance.wallet availableUSStates];
         [self showStates:availableStates];
     } else {
         [[LoadingViewPresenter sharedInstance] showBusyViewWithLoadingText:[LocalizationConstantsObjcBridge loadingExchange]];
-        [WalletManager.sharedInstance.wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
+        [wallet performSelector:@selector(getExchangeTrades) withObject:nil afterDelay:ANIMATION_DURATION];
     }
 }
 
