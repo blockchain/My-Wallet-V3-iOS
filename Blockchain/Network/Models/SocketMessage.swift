@@ -44,6 +44,9 @@ extension SocketMessageCodable {
         do {
             let decoded = try JSONType.decode(data: data)
             let socketMessage = SocketMessage(type: socketType, JSONMessage: decoded)
+            if JSONType.self != HeartBeat.self {
+                Logger.shared.debug("Decoded socket message of type \(JSONType.self)")
+            }
             onSuccess(socketMessage)
             return
         } catch {
