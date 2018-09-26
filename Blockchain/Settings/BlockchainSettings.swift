@@ -334,6 +334,25 @@ final class BlockchainSettings: NSObject {
 
         // MARK: - Public
 
+        /**
+         Resets app-specific settings back to their initial value.
+         - Note:
+           This function will not reset any settings which are derived from wallet options.
+        */
+        func reset() {
+            // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
+            // TODO: - reset all appropriate settings upon logging out
+            App.shared.appBecameActiveCount = 0
+            App.shared.shouldShowKYCAnnouncementCard = false
+            Logger.shared.info("Application settings have been reset.")
+        }
+
+        /// - Warning: Calling This function will remove **ALL** settings in the application.
+        func clear() {
+            UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+            Logger.shared.info("Application settings have been cleared.")
+        }
+
         func clearPin() {
             pin = nil
             encryptedPinPassword = nil
