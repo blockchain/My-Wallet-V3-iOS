@@ -23,16 +23,6 @@ class SocketManager {
     init() {
         self.webSocketMessageSubject = PublishSubject<SocketMessage>()
     }
-    
-    /// Data providers should subscribe to this for error handling.
-    /// The reason we use this and not `webSocketMessageObservable` is
-    /// because since it's technically not an `Error` but rather a `SocketMessage`
-    /// the `onError` closure in the `webSocketMessageObservable` won't be called.
-    /// For simplicity sake, you'll want to observe both `webSocketMessageObservable`
-    /// and `webSocketErrorObservable`.
-    var webSocketErrorObservable: Observable<SocketMessage> {
-        return webSocketMessageSubject.asObservable()
-    }
 
     /// Data providers should suscribe to this and filter (e.g., { $0 is ExchangeSocketMessage })
     var webSocketMessageObservable: Observable<SocketMessage> {
