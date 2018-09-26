@@ -30,7 +30,14 @@ enum ExchangeCellModel {
 
         var descriptionActionBlock: LabelAction?
 
-        init(description: String, value: String, backgroundColor: UIColor = .white, statusVisibility: Visibility = .hidden, bold: Bool = false, statusTintColor: UIColor = .green) {
+        init(
+            description: String,
+            value: String,
+            backgroundColor: UIColor = .white,
+            statusVisibility: Visibility = .hidden,
+            bold: Bool = false,
+            statusTintColor: UIColor = .green
+            ) {
             self.description = description
             self.value = value
             self.backgroundColor = backgroundColor
