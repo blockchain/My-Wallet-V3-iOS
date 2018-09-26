@@ -253,6 +253,8 @@ import RxSwift
                 ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
                 self.walletManager.forgetWallet()
                 OnboardingCoordinator.shared.start()
+                // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
+                // BlockchainSettings.App.shared.clear()
             }
         )
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
