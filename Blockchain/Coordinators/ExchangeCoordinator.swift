@@ -159,11 +159,7 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            guard let country = country else {
-                Logger.shared.warning("Country is nil. Cannot present partner exchange.")
-                return
-            }
-            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country.code)
+            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country?.code)
             let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
