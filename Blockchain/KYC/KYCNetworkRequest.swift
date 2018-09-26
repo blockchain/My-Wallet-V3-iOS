@@ -222,7 +222,8 @@ final class KYCNetworkRequest {
                 }
 
                 guard (200...299).contains(httpResponse.statusCode) else {
-                    taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)); return
+                    let errorPayload = try? JSONDecoder().decode(NabuNetworkError.self, from: responseData)
+                    taskFailure(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode, error: errorPayload)); return
                 }
                 if let mimeType = httpResponse.mimeType {
                     guard mimeType == HttpHeaderValue.json else {

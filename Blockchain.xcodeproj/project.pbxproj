@@ -514,6 +514,8 @@
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
 		AA08439A215C0E210007BFD1 /* SocketMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084399215C0E210007BFD1 /* SocketMessageTests.swift */; };
+		AA08439F215C47290007BFD1 /* NabuNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08439E215C47290007BFD1 /* NabuNetworkError.swift */; };
+		AA0843A0215C47290007BFD1 /* NabuNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08439E215C47290007BFD1 /* NabuNetworkError.swift */; };
 		AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A412D214ADD5B00807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A4147214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */; };
@@ -3007,6 +3009,7 @@
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA084399215C0E210007BFD1 /* SocketMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketMessageTests.swift; sourceTree = "<group>"; };
+		AA08439E215C47290007BFD1 /* NabuNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NabuNetworkError.swift; sourceTree = "<group>"; };
 		AA0A412B214AD75300807163 /* DebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeAssetAccountListPresenter.swift; sourceTree = "<group>"; };
 		AA0A414A214B152100807163 /* AssetAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAccount.swift; sourceTree = "<group>"; };
@@ -6457,6 +6460,7 @@
 			isa = PBXGroup;
 			children = (
 				3A8B229C211E2A960091E706 /* NabuUser.swift */,
+				AA08439E215C47290007BFD1 /* NabuNetworkError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7586,6 +7590,7 @@
 				AACE31DA2092A99B00B7B806 /* Application+Helpers.swift in Sources */,
 				602B9D252118E27100BD3D60 /* KYCVerifyPhoneNumberPresenter.swift in Sources */,
 				3A3D5D8E211B454000E6C241 /* ValidationDateField.swift in Sources */,
+				AA0843A0215C47290007BFD1 /* NabuNetworkError.swift in Sources */,
 				AA447BCB21276DA900EC0FA0 /* SideMenuPresenter.swift in Sources */,
 				C7C0DC24212F6783000EFE71 /* ExchangeService.swift in Sources */,
 				C787180220A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
@@ -8133,6 +8138,7 @@
 				AA0A4147214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */,
 				C75EE7D8201BBA820067BA16 /* UITextView+Animations.m in Sources */,
 				23C95EA61C0779C600E4692A /* SettingsChangePasswordViewController.m in Sources */,
+				AA08439F215C47290007BFD1 /* NabuNetworkError.swift in Sources */,
 				51578AEA20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
 				23FDEFA91D6E43DE00FC80D6 /* TransactionDetailTableCell.m in Sources */,
 				3AC4F97821234040003AA207 /* Storyboardable.swift in Sources */,
