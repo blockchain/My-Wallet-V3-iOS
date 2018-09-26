@@ -187,6 +187,18 @@ extension Conversion {
 struct CurrencyPairRate: Codable {
     let pair: String
     let price: Decimal
+
+    enum CodingKeys: String, CodingKey {
+        case pair
+        case price
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        pair = try container.decode(String.self, forKey: .pair)
+        let priceString = try container.decode(String.self, forKey: .price)
+        price = Decimal(string: priceString)!
+    }
 }
 
 struct Quote: Codable {
