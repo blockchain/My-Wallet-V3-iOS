@@ -13,14 +13,9 @@ struct TradingPair {
     private var internalTo: AssetType
 
     init?(from: AssetType, to: AssetType) {
-        // TODO: This used to return early with `nil`.
-        // Some have already executed trades though when
-        // there was a server side bug that allowed for the
-        // two asset types to be the same. So, when those of
-        // us who have that in our trade history GET trades
-        // we hit an assertion error. 
-        if from == to {
+        guard from != to else {
             Logger.shared.error("From and to must be different")
+            return nil
         }
         internalFrom = from
         internalTo = to
