@@ -42,6 +42,15 @@ final class BlockchainSettings: NSObject {
 
         // MARK: - Properties
 
+        /**
+         Determines if the application should *ask the system* to show the app review prompt.
+
+         - Note:
+         This value increments whenever the application is launched or enters the foreground.
+
+         - Important:
+         This setting **should** be set reset upon logging the user out of the application.
+         */
         @objc var appBecameActiveCount: Int {
             get {
                 return defaults.integer(forKey: UserDefaults.Keys.appBecameActiveCount.rawValue)
@@ -158,6 +167,16 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /**
+         Keeps track if the user has elected to use biometric authentication in the application.
+
+         - Note:
+         This setting should be **deprecated** in the future, as we should always assume a user
+         wants to use this feature if it is enabled system-wide.
+
+         - SeeAlso:
+         [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios/user-interaction/authentication)
+         */
         @objc var biometryEnabled: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.biometryEnabled.rawValue)
@@ -207,6 +226,14 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /**
+         Determines if the application should allow access to swipe-to-receive on the pin screen.
+
+         - Note:
+         The value of this setting is controlled by a switch on the settings screen.
+
+         The default of this setting is `true`.
+         */
         @objc var swipeToReceiveEnabled: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.swipeToReceiveEnabled.rawValue)
@@ -239,7 +266,14 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        /// Number of labelled addresses for default account
+        /**
+         Determines the number of labeled addresses for the default account.
+
+         - Note:
+         This value is set when the wallet has gotten its latest multi-address response.
+
+         This setting is currently only used in the `didGet(_ response: MultiAddressResponse)` function of the wallet manager.
+        */
         @objc var defaultAccountLabelledAddressesCount: Int {
             get {
                 return defaults.integer(forKey: UserDefaults.Keys.defaultAccountLabelledAddressesCount.rawValue)
@@ -249,7 +283,13 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var dontAskUserToShowAppReviewPrompt: Bool {
+        /**
+         Determines if the application should never prompt the user to write an app review.
+
+         - Note:
+         This value is set to `true` if the user has chosen to write an app review or not to be asked again.
+        */
+        var dontAskUserToShowAppReviewPrompt: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.dontAskUserToShowAppReviewPrompt.rawValue)
             }
@@ -258,6 +298,17 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /**
+         Determines if the application should show the *Continue verification* announcement card on the dashboard.
+
+         - Note:
+         This value is set to `true` whenever the user taps on the primary button on the KYC welcome screen.
+
+         This value is set to `false` whenever the *Application complete* screen in the KYC flow will disappear.
+
+         - Important:
+         This setting **MUST** be set to `false` upon logging the user out of the application.
+         */
         @objc var shouldShowKYCAnnouncementCard: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.shouldShowKYCAnnouncementCard.rawValue)
@@ -343,7 +394,16 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        /// Property indicating if the biometric authentication set-up should be shown to the user
+        /**
+         Determines if the biometric authentication setup should be shown to the user.
+
+         - Note:
+         This value is set to `true` if the value of `didFailBiometrySetup` is `true` and the value of `biometryEnabled` is false.
+
+         This value is set to `false` whenever the user is reminded to very their email.
+
+         The default value of this setting is `false`.
+        */
         var shouldShowBiometrySetup: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.shouldShowBiometrySetup.rawValue)
@@ -353,7 +413,14 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        /// Property indicating if this is the first time the user is running the application
+        /**
+         Determines if this is the first time the user is running the application.
+
+         - Note:
+         This value is set to `true` if the application is running for the first time.
+
+         This setting is currently not used for anything else.
+        */
         var firstRun: Bool {
             get {
                 return defaults.bool(forKey: UserDefaults.Keys.firstRun.rawValue)
