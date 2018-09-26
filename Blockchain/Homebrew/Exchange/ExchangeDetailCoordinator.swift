@@ -255,11 +255,25 @@ class ExchangeDetailCoordinator: NSObject {
                 Logger.shared.error("No conversion to use")
                 return
             }
-            tradeExecution.submitAndSend(with: lastConversion, success: { [weak self] in
+            guard tradeExecution.isExecuting == false else { return }
+            interface?.loadingVisibility(.visible, action: .confirmExchange)
+            
+            tradeExecution.submitAndSend(
+                with: lastConversion,
+                success: { [weak self] in
+                    guard let this = self else { return }
+                    this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
+                    ExchangeCoordinator.shared.handle(
+                        event: .sentTransaction(
+                            orderTransaction: transaction,
+                            conversion: lastConversion
+                        )
+                    )
+            }) { [weak self] errorDescription in
                 guard let this = self else { return }
-                ExchangeCoordinator.shared.handle(event: .sentTransaction(orderTransaction: transaction, conversion: lastConversion))
-                this.delegate?.coordinator(this, completedTransaction: transaction)
-            }) { AlertViewPresenter.shared.standardError(message: $0) }
+                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
+                AlertViewPresenter.shared.standardError(message: errorDescription)
+            }
         }
     }
 }

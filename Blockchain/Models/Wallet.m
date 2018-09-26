@@ -2634,11 +2634,18 @@
     return nil;
 }
 
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction completion:(void (^ _Nonnull)(void))completion success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
-
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull response) {
+        completion();
+        success(response);
+    } forJsFunctionName:@"objc_on_create_order_payment_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_create_order_payment_error"];
+    
     NSString *tradeExecutionType;
     NSString *formattedAmount;
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
@@ -2658,11 +2665,18 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
-
+    [self.context invokeOnceWithFunctionBlock:^{
+        completion();
+        success();
+    } forJsFunctionName:@"objc_on_send_order_transaction_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_send_order_transaction_error"];
+    
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
@@ -2674,7 +2688,7 @@
         DLog(@"Unsupported legacy asset type");
         return;
     }
-
+    
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
 }
 

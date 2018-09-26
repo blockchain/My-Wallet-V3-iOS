@@ -272,6 +272,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
+    
+    func confirmationIsExecuting() -> Bool {
+        return tradeExecution.isExecuting
+    }
 
     func confirmConversion() {
         guard let conversion = self.model?.lastConversion else {

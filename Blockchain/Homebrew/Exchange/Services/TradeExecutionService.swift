@@ -27,6 +27,10 @@ class TradeExecutionService: TradeExecutionAPI {
     private let wallet: Wallet
     private var disposable: Disposable?
     
+    // MARK: TradeExecutionAPI
+    
+    var isExecuting: Bool = false
+    
     init(service: NabuAuthenticationService = NabuAuthenticationService.shared,
          wallet: Wallet = WalletManager.shared.wallet) {
         self.authentication = service
@@ -37,7 +41,7 @@ class TradeExecutionService: TradeExecutionAPI {
         disposable?.dispose()
     }
     
-    // MARK: TradeExecutionAPI
+    // MARK: TradeExecutionAPI Functions
 
     // TICKET: IOS-1291 Refactor this
     // swiftlint:disable function_body_length
@@ -46,6 +50,7 @@ class TradeExecutionService: TradeExecutionAPI {
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
     ) {
+        isExecuting = true
         let conversionQuote = conversion.quote
         #if DEBUG
         let settings = DebugSettings.shared
@@ -105,7 +110,9 @@ class TradeExecutionService: TradeExecutionAPI {
                     success(orderTransaction, conversion)
                 }
                 this.createOrder(from: payload, success: createOrderCompletion, error: error)
-        }, onError: { requestError in
+        }, onError: { [weak self] requestError in
+            guard let this = self else { return }
+            this.isExecuting = false
             guard let httpRequestError = requestError as? HTTPRequestError else {
                 error(requestError.localizedDescription)
                 return
@@ -116,7 +123,16 @@ class TradeExecutionService: TradeExecutionAPI {
     // swiftlint:enable function_body_length
 
     func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
-        wallet.sendOrderTransaction(assetType.legacy, success: success, error: error)
+        isExecuting = true
+        wallet.sendOrderTransaction(
+            assetType.legacy,
+            completion: { [weak self] in
+                guard let this = self else { return }
+                this.isExecuting = false
+        },
+            success: success,
+            error: error
+        )
     }
 
     func submitAndSend(
@@ -124,6 +140,7 @@ class TradeExecutionService: TradeExecutionAPI {
         success: @escaping (() -> Void),
         error: @escaping ((String) -> Void)
     ) {
+        isExecuting = true
         submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
             guard let this = self else { return }
             this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
@@ -189,6 +206,14 @@ class TradeExecutionService: TradeExecutionAPI {
             }
             success(orderTransactionLegacy)
         }
-        wallet.createOrderPayment(withOrderTransaction: orderTransactionLegacy, success: createOrderPaymentSuccess, error: error)
+        wallet.createOrderPayment(
+            withOrderTransaction: orderTransactionLegacy,
+            completion: { [weak self] in
+                guard let this = self else { return }
+                this.isExecuting = false
+            },
+            success: createOrderPaymentSuccess,
+            error: error
+        )
     }
 }
