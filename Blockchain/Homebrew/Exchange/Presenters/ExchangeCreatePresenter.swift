@@ -67,8 +67,8 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interactor.changeMarketPair(marketPair: marketPair)
     }
 
-    func onToggleFixTapped() {
-        interactor.toggleFix()
+    func onSwapPairsTapped() {
+        interactor.swapPairs()
     }
 
     func onUseMinimumTapped(assetAccount: AssetAccount) {

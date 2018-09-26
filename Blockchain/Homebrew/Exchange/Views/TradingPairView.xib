@@ -18,10 +18,12 @@
             <connections>
                 <outlet property="exchangeLabel" destination="mEa-sJ-jfN" id="7fg-j4-fbC"/>
                 <outlet property="leftButton" destination="GNR-OY-3hz" id="Uua-Ij-Ugm"/>
-                <outlet property="leftIconStatusImageView" destination="Bqm-I7-yVy" id="ZL0-F8-Hvp"/>
+                <outlet property="leftButtonConstraintToLabel" destination="D5I-rJ-glB" id="e2C-Wj-cfX"/>
+                <outlet property="leftButtonConstraintToTop" destination="oXF-vx-u0I" id="423-us-9ic"/>
                 <outlet property="receiveLabel" destination="HMc-y4-c3x" id="lPG-qE-A0l"/>
                 <outlet property="rightButton" destination="KVO-Wl-0DT" id="MIr-ct-XPn"/>
-                <outlet property="rightIconStatusImageView" destination="0ad-gs-pwk" id="Z0d-5h-9qS"/>
+                <outlet property="rightButtonConstraintToLabel" destination="OjX-fo-PlQ" id="dMM-du-ivZ"/>
+                <outlet property="rightButtonConstraintToTop" destination="OUS-Yq-n83" id="mZK-8s-RNo"/>
                 <outlet property="swapButton" destination="mjP-2F-nXO" id="QCP-pO-L4C"/>
             </connections>
         </placeholder>
@@ -31,7 +33,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjP-2F-nXO">
-                    <rect key="frame" x="165" y="65" width="44" height="44"/>
+                    <rect key="frame" x="165" y="56" width="44" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="O8B-tX-SWr"/>
                         <constraint firstAttribute="height" constant="44" id="kuj-TF-NM7"/>
@@ -42,25 +44,11 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mEa-sJ-jfN">
-                    <rect key="frame" x="0.0" y="0.0" width="59" height="15"/>
+                    <rect key="frame" x="0.0" y="0.0" width="58.5" height="15"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-StatusDot" translatesAutoresizingMaskIntoConstraints="NO" id="Bqm-I7-yVy">
-                    <rect key="frame" x="61" y="3.5" width="8" height="8"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="8" id="XXy-bd-3df"/>
-                        <constraint firstAttribute="height" constant="8" id="hL5-k6-7f6"/>
-                    </constraints>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-StatusDot" translatesAutoresizingMaskIntoConstraints="NO" id="0ad-gs-pwk">
-                    <rect key="frame" x="257" y="3.5" width="8" height="8"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="8" id="P8s-44-qb3"/>
-                        <constraint firstAttribute="width" constant="8" id="bmz-ZN-RoV"/>
-                    </constraints>
-                </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HMc-y4-c3x">
                     <rect key="frame" x="209" y="0.0" width="46" height="15"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
@@ -68,7 +56,8 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KVO-Wl-0DT">
-                    <rect key="frame" x="209" y="18" width="166" height="138"/>
+                    <rect key="frame" x="209" y="0.0" width="166" height="156"/>
+                    <color key="backgroundColor" red="0.58861437179999998" green="0.1192065683" blue="0.087561899159999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="-5" maxY="0.0"/>
                     <state key="normal" title="Ether" image="Icon-ETH"/>
@@ -77,7 +66,8 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GNR-OY-3hz">
-                    <rect key="frame" x="0.0" y="18" width="165" height="138"/>
+                    <rect key="frame" x="0.0" y="0.0" width="165" height="156"/>
+                    <color key="backgroundColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="-5" maxY="0.0"/>
                     <state key="normal" title="Bitcoin" image="Icon-BTC"/>
@@ -91,15 +81,12 @@
                 <constraint firstItem="mEa-sJ-jfN" firstAttribute="top" secondItem="QVq-IM-xha" secondAttribute="top" id="05V-f3-DJJ"/>
                 <constraint firstItem="mjP-2F-nXO" firstAttribute="leading" secondItem="GNR-OY-3hz" secondAttribute="trailing" id="1Sy-2Q-kTd"/>
                 <constraint firstItem="GNR-OY-3hz" firstAttribute="leading" secondItem="QVq-IM-xha" secondAttribute="leading" id="26e-iJ-ctS"/>
-                <constraint firstItem="0ad-gs-pwk" firstAttribute="centerY" secondItem="HMc-y4-c3x" secondAttribute="centerY" id="668-4M-jiQ"/>
                 <constraint firstItem="mjP-2F-nXO" firstAttribute="centerX" secondItem="QVq-IM-xha" secondAttribute="centerX" id="9gV-6O-eDg"/>
                 <constraint firstItem="GNR-OY-3hz" firstAttribute="top" secondItem="mEa-sJ-jfN" secondAttribute="bottom" constant="3" id="D5I-rJ-glB"/>
-                <constraint firstItem="0ad-gs-pwk" firstAttribute="leading" secondItem="HMc-y4-c3x" secondAttribute="trailing" constant="2" id="KRf-UT-5P5"/>
                 <constraint firstItem="KVO-Wl-0DT" firstAttribute="top" secondItem="QVq-IM-xha" secondAttribute="top" id="OUS-Yq-n83"/>
                 <constraint firstItem="KVO-Wl-0DT" firstAttribute="top" secondItem="HMc-y4-c3x" secondAttribute="bottom" constant="3" id="OjX-fo-PlQ"/>
                 <constraint firstItem="QVq-IM-xha" firstAttribute="trailing" secondItem="KVO-Wl-0DT" secondAttribute="trailing" id="Pps-t7-TES"/>
                 <constraint firstItem="mEa-sJ-jfN" firstAttribute="leading" secondItem="QVq-IM-xha" secondAttribute="leading" id="R2K-jp-pIL"/>
-                <constraint firstItem="Bqm-I7-yVy" firstAttribute="centerY" secondItem="mEa-sJ-jfN" secondAttribute="centerY" id="YBl-lr-JxV"/>
                 <constraint firstItem="KVO-Wl-0DT" firstAttribute="leading" secondItem="mjP-2F-nXO" secondAttribute="trailing" id="fkT-3J-ZC4"/>
                 <constraint firstItem="QVq-IM-xha" firstAttribute="bottom" secondItem="KVO-Wl-0DT" secondAttribute="bottom" id="mx8-iz-V9Q"/>
                 <constraint firstItem="HMc-y4-c3x" firstAttribute="leading" secondItem="KVO-Wl-0DT" secondAttribute="leading" id="n3G-md-mNs"/>
@@ -107,14 +94,13 @@
                 <constraint firstItem="HMc-y4-c3x" firstAttribute="top" secondItem="QVq-IM-xha" secondAttribute="top" id="qXo-7g-b9D"/>
                 <constraint firstItem="QVq-IM-xha" firstAttribute="bottom" secondItem="GNR-OY-3hz" secondAttribute="bottom" id="uU0-BO-dIN"/>
                 <constraint firstItem="mjP-2F-nXO" firstAttribute="centerY" secondItem="GNR-OY-3hz" secondAttribute="centerY" id="xW6-Pm-rP4"/>
-                <constraint firstItem="Bqm-I7-yVy" firstAttribute="leading" secondItem="mEa-sJ-jfN" secondAttribute="trailing" constant="2" id="yhR-C9-M2F"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="QVq-IM-xha"/>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="oXF-vx-u0I"/>
-                    <exclude reference="OUS-Yq-n83"/>
+                    <exclude reference="D5I-rJ-glB"/>
+                    <exclude reference="OjX-fo-PlQ"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="22.5" y="253"/>
@@ -123,7 +109,6 @@
     <resources>
         <image name="Icon-BTC" width="24" height="24"/>
         <image name="Icon-ETH" width="24" height="24"/>
-        <image name="Icon-Exchange" width="24" height="24"/>
-        <image name="Icon-StatusDot" width="8" height="8"/>
+        <image name="Icon-Exchange" width="20" height="18"/>
     </resources>
 </document>

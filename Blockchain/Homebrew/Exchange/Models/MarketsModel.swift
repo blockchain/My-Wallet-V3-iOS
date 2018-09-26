@@ -19,9 +19,13 @@ struct MarketPair {
 
 extension MarketPair {
     var pair: TradingPair {
-        let from = fromAccount.address.assetType
-        let to = toAccount.address.assetType
-        return TradingPair(from: from, to: to)!
+        let fromType = fromAccount.address.assetType
+        let toType = toAccount.address.assetType
+        return TradingPair(from: fromType, to: toType)!
+    }
+
+    func swapped() -> MarketPair {
+        return MarketPair(fromAccount: self.toAccount, toAccount: self.fromAccount)
     }
 }
 
@@ -75,8 +79,8 @@ extension MarketsModel {
         }
     }
 
-    func toggleFix() {
-        fix = fix.toggledFix()
+    func swapPairs() {
+        marketPair = marketPair.swapped()
     }
 }
 

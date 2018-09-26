@@ -200,9 +200,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         applyTradingLimit(limit: .max, assetAccount: assetAccount)
     }
 
-    func toggleFix() {
+    func swapPairs() {
         guard let model = model else { return }
-        model.toggleFix()
+        model.swapPairs()
         model.lastConversion = nil
         clearInputs()
         updatedInput()
