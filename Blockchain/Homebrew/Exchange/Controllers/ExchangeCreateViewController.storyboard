@@ -24,14 +24,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V30-pI-8jo" customClass="TradingPairView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="28" width="343" height="60"/>
+                                <rect key="frame" x="16" y="28" width="343" height="42"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="eAr-RZ-O8R"/>
+                                    <constraint firstAttribute="height" constant="42" id="eAr-RZ-O8R"/>
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
-                                <rect key="frame" x="16" y="169.5" width="343" height="44"/>
+                                <rect key="frame" x="16" y="151.5" width="343" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
                                         <rect key="frame" x="0.0" y="0.0" width="163.5" height="44"/>
@@ -59,15 +59,15 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcw-SG-3XL" customClass="ConversionRatesView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="15.5" y="293.5" width="343" height="273.5"/>
+                                <rect key="frame" x="15.5" y="277" width="343" height="288.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="269.5" width="343" height="321.5"/>
+                                <rect key="frame" x="16" y="251.5" width="343" height="339.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA3-pM-NKs">
-                                <rect key="frame" x="16" y="221.5" width="343" height="32"/>
+                                <rect key="frame" x="16" y="203.5" width="343" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.19 ETH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-S4-AAj">
                                         <rect key="frame" x="122" y="8.5" width="99" height="15"/>
@@ -126,7 +126,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf" userLabel="Fiat Button">
-                                <rect key="frame" x="321" y="118" width="54" height="51"/>
+                                <rect key="frame" x="321" y="100" width="54" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="54" id="0cT-0k-uqW"/>
                                     <constraint firstAttribute="height" constant="51" id="waH-3r-Rww"/>
@@ -138,13 +138,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
-                                <rect key="frame" x="154.5" y="141" width="65.5" height="20.5"/>
+                                <rect key="frame" x="154.5" y="123" width="65.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.01 BTC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
-                                <rect key="frame" x="16" y="96" width="342.5" height="41"/>
+                                <rect key="frame" x="16" y="78" width="342.5" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -161,13 +161,13 @@
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" constant="16" id="GHI-5B-7xh"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="HgH-sR-rJB"/>
-                            <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" constant="-8" id="XKu-Vm-Ove"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="width" secondItem="dfm-a1-ad2" secondAttribute="width" id="NgP-UU-rcW"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="height" secondItem="dfm-a1-ad2" secondAttribute="height" multiplier="0.85" id="PLc-ir-uPC"/>
                             <constraint firstItem="coY-Dg-Mc5" firstAttribute="centerY" secondItem="DUe-4D-nhJ" secondAttribute="centerY" id="Pxh-nT-mtp"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="centerX" secondItem="V30-pI-8jo" secondAttribute="centerX" id="Qr8-L9-lCF"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="TBU-fM-o9r"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
+                            <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" constant="-8" id="XKu-Vm-Ove"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerX" secondItem="dfm-a1-ad2" secondAttribute="centerX" id="bJ3-Vq-GwG"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="eA3-pM-NKs" secondAttribute="trailing" constant="16" id="bhv-Sp-60b"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerY" secondItem="dfm-a1-ad2" secondAttribute="centerY" id="dnB-8I-crf"/>

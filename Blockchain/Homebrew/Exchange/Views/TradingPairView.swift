@@ -25,12 +25,10 @@ class TradingPairView: NibBasedView {
     }
     
     enum ViewUpdate: Update {
-        case statusTintColor(UIColor)
         case titleColor(UIColor)
-        case leftStatusVisibility(Visibility)
-        case rightStatusVisibility(Visibility)
         case backgroundColors(left: UIColor, right: UIColor)
         case swapTintColor(UIColor)
+        case titleVisibility(Visibility)
     }
     
     enum ViewTransition: Transition {
@@ -44,11 +42,14 @@ class TradingPairView: NibBasedView {
     @IBOutlet fileprivate var leftButton: UIButton!
     @IBOutlet fileprivate var rightButton: UIButton!
     @IBOutlet fileprivate var swapButton: UIButton!
-    @IBOutlet fileprivate var leftIconStatusImageView: UIImageView!
-    @IBOutlet fileprivate var rightIconStatusImageView: UIImageView!
     @IBOutlet fileprivate var exchangeLabel: UILabel!
     @IBOutlet fileprivate var receiveLabel: UILabel!
-    
+
+    @IBOutlet fileprivate var leftButtonConstraintToTop: NSLayoutConstraint!
+    @IBOutlet fileprivate var leftButtonConstraintToLabel: NSLayoutConstraint!
+    @IBOutlet fileprivate var rightButtonConstraintToTop: NSLayoutConstraint!
+    @IBOutlet fileprivate var rightButtonConstraintToLabel: NSLayoutConstraint!
+
     // MARK: Public
     
     weak var delegate: TradingPairViewDelegate?
@@ -85,10 +86,7 @@ class TradingPairView: NibBasedView {
         let presentationUpdate = TradingPresentationUpdate(
             animations: [
                 .backgroundColors(left: pair.from.brandColor, right: pair.to.brandColor),
-                .statusTintColor(.green),
-                .swapTintColor(.grayBlue),
-                .rightStatusVisibility(.visible),
-                .leftStatusVisibility(.hidden)
+                .swapTintColor(.grayBlue)
             ],
             animation: animation
         )
@@ -128,22 +126,22 @@ class TradingPairView: NibBasedView {
             exchangeLabel.textColor = color
             receiveLabel.textColor = color
             
-        case .statusTintColor(let color):
-            rightIconStatusImageView.tintColor = color
-            leftIconStatusImageView.tintColor = color
-            
-        case .rightStatusVisibility(let visibility):
-            rightIconStatusImageView.alpha = visibility.defaultAlpha
-            
-        case .leftStatusVisibility(let visibility):
-            leftIconStatusImageView.alpha = visibility.defaultAlpha
-            
         case .backgroundColors(left: let leftColor, right: let rightColor):
             leftButton.backgroundColor = leftColor
             rightButton.backgroundColor = rightColor
             
         case .swapTintColor(let color):
             swapButton.tintColor = color
+
+        case .titleVisibility(let visibility):
+            exchangeLabel.alpha = visibility.defaultAlpha
+            receiveLabel.alpha = visibility.defaultAlpha
+            leftButtonConstraintToTop.isActive = (visibility == .hidden)
+            rightButtonConstraintToTop.isActive = (visibility == .hidden)
+            leftButtonConstraintToLabel.isActive = (visibility == .visible)
+            rightButtonConstraintToLabel.isActive = (visibility == .visible)
+            setNeedsUpdateConstraints()
+            updateConstraintsIfNeeded()
         }
     }
     
@@ -200,8 +198,6 @@ extension TradingPairView {
         let presentationUpdate = TradingPresentationUpdate(
             animations: [
                 .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
-                .leftStatusVisibility(.hidden),
-                .rightStatusVisibility(.hidden),
                 .swapTintColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
                 .titleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
             ],
@@ -256,8 +252,6 @@ extension TradingPairView {
         let presentationUpdate = TradingPresentationUpdate(
             animations: [
                 .backgroundColors(left: fromAsset.brandColor, right: toAsset.brandColor),
-                .leftStatusVisibility(.hidden),
-                .rightStatusVisibility(.hidden),
                 .swapTintColor(.brandPrimary),
                 .titleColor(.brandPrimary)
             ],
