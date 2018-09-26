@@ -30,6 +30,7 @@ protocol ExchangeMarketsAPI {
 
     var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
+    var errors: Observable<SocketError> { get }
     func updateConversion(model: MarketsModel)
 }
 
@@ -106,6 +107,17 @@ extension MarketsService: ExchangeMarketsAPI {
             return restMessageSubject.filter({ _ -> Bool in
                 return false
             })
+        }
+    }
+    
+    var errors: Observable<SocketError> {
+        // TODO: handle REST
+        // TICKET: IOS-1320
+        return socketMessageObservable.filter {
+            $0.type == .exchange &&
+                $0.JSONMessage is SocketError
+            }.map { message in
+                return message.JSONMessage as! SocketError
         }
     }
 
