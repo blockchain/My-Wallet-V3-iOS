@@ -51,7 +51,7 @@ class ExchangeDetailCoordinator: NSObject {
         switch event {
         case .updateConfirmDetails(let orderTransaction, let conversion):
             interface?.mostRecentConversion = conversion
-            handle(event: .pageLoaded(.confirm(orderTransaction, conversion, tradeExecution)))
+            handle(event: .pageLoaded(.confirm(orderTransaction, conversion)))
         case .pageLoaded(let model):
             
             // TODO: These are placeholder `ViewModels`
@@ -62,7 +62,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let orderTransaction, let conversion, _):
+            case .confirm(let orderTransaction, let conversion):
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle(LocalizationConstants.Exchange.confirmExchange)
                 
