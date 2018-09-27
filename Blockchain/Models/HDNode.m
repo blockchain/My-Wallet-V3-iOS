@@ -84,13 +84,10 @@
     BOOL testnetOn = [[[NSUserDefaults standardUserDefaults] objectForKey:USER_DEFAULTS_KEY_ENV] isEqual:ENV_INDEX_TESTNET];
 
     if (testnetOn) {
-        DLog(@"Testnet set in debug menu: using testnet");
         btcNetwork = [BTCNetwork testnet];
     } else if ([[network toDictionary] isEqual:[[WalletManager.sharedInstance.wallet executeJSSynchronous:@"MyWalletPhone.getNetworks().bitcoin"] toDictionary]]) {
-        DLog(@"Using mainnet");
         btcNetwork = [BTCNetwork mainnet];
     } else if ([[network toDictionary] isEqual:[[WalletManager.sharedInstance.wallet executeJSSynchronous:@"MyWalletPhone.getNetworks().testnet"] toDictionary]]) {
-        DLog(@"Using testnet");
         btcNetwork = [BTCNetwork testnet];
     } else {
         DLog(@"KeyPair error: unsupported network");
