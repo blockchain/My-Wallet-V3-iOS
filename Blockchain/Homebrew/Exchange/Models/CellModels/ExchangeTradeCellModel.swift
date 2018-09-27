@@ -146,7 +146,7 @@ extension ExchangeTradeModel {
         case .partner(let model):
             return model.pair.to.symbol
         case .homebrew(let model):
-            return model.withdrawal.symbol
+            return model.withdrawal?.symbol ?? ""
         }
     }
 
@@ -155,7 +155,7 @@ extension ExchangeTradeModel {
         case .partner(let model):
             return model.amountReceivedCryptoValue
         case .homebrew(let model):
-            return model.withdrawal.value
+            return model.withdrawal?.value ?? ""
         }
     }
     
@@ -252,7 +252,7 @@ struct ExchangeTradeCellModel: Decodable {
     let depositAddress: String
     let deposit: SymbolValue
     let withdrawalAddress: String
-    let withdrawal: SymbolValue
+    let withdrawal: SymbolValue?
     let withdrawalFee: SymbolValue
     let fiatValue: SymbolValue
     let depositTxHash: String?
@@ -318,7 +318,7 @@ struct ExchangeTradeCellModel: Decodable {
         depositAddress = try values.decode(String.self, forKey: .depositAddress)
         deposit = try values.decode(SymbolValue.self, forKey: .deposit)
         withdrawalAddress = try values.decode(String.self, forKey: .withdrawalAddress)
-        withdrawal = try values.decode(SymbolValue.self, forKey: .withdrawal)
+        withdrawal = try values.decodeIfPresent(SymbolValue.self, forKey: .withdrawal)
         withdrawalFee = try values.decode(SymbolValue.self, forKey: .withdrawalFee)
         fiatValue = try values.decode(SymbolValue.self, forKey: .fiatValue)
         depositTxHash = try values.decodeIfPresent(String.self, forKey: .depositTxHash)
