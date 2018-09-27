@@ -342,6 +342,7 @@ final class BlockchainSettings: NSObject {
         func reset() {
             // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
             // TODO: - reset all appropriate settings upon logging out
+            clearPin()
             App.shared.appBecameActiveCount = 0
             App.shared.shouldShowKYCAnnouncementCard = false
             Logger.shared.info("Application settings have been reset.")

@@ -212,8 +212,6 @@ import RxSwift
 
         pinEntryViewController = nil
 
-        BlockchainSettings.App.shared.clearPin()
-
         WalletManager.shared.close()
 
         BlockchainDataRepository.shared.clearCache()
