@@ -86,9 +86,26 @@ struct ExchangeServices: ExchangeDependencies {
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
             }, onError: { error in
+                AlertViewPresenter.shared.standardError(
+                    message: self.errorMessage(for: error),
+                    title: LocalizationConstants.Errors.error,
+                    in: self.rootViewController
+                )
                 Logger.shared.error("Failed to get user: \(error.localizedDescription)")
-                AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
             })
+    }
+
+    // TICKET: IOS-1168 - Complete error handling TODOs throughout the KYC
+    private func errorMessage(for error: Error) -> String {
+        guard let serverError = error as? HTTPRequestServerError,
+            case let .badStatusCode(_, badStatusCodeError) = serverError,
+            let nabuError = badStatusCodeError as? NabuNetworkError else {
+                return error.localizedDescription
+        }
+        switch nabuError.type {
+        case .conflict: return LocalizationConstants.KYC.emailAddressAlreadyInUse
+        default: return error.localizedDescription
+        }
     }
 
     private func showAppropriateExchange() {
