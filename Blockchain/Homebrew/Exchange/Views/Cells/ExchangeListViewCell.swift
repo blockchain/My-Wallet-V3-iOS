@@ -24,8 +24,8 @@ class ExchangeListViewCell: UITableViewCell {
 
     func configure(with cellModel: ExchangeTradeModel) {
         timestamp.text = cellModel.formattedDate
-        depositAmount.text = "-" + cellModel.amountDepositedCryptoValue + " \(cellModel.amountDepositedCryptoSymbol)"
-        receivedAmount.text = cellModel.amountReceivedCryptoValue + " \(cellModel.amountReceivedCryptoSymbol)"
+        depositAmount.text = "-" + cellModel.amountDepositedCrypto
+        receivedAmount.text = cellModel.amountReceivedCrypto
         
         status.text = cellModel.status.displayValue
 
@@ -33,7 +33,7 @@ class ExchangeListViewCell: UITableViewCell {
     }
 
     class func estimatedHeight(for model: ExchangeTradeModel) -> CGFloat {
-        let received = model.amountReceivedCryptoValue
+        let received = model.amountReceivedCrypto
         let status = model.status.displayValue
         
         guard let receivedFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16) else { return 0.0 }

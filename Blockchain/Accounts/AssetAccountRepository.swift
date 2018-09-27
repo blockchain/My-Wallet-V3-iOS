@@ -120,7 +120,9 @@ extension AssetAccountRepository {
         let accounts = allAccounts()
 
         // TICKET: IOS-1326 - Destination Name on Exchange Locked Screen Should Match Withdrawal Address
-        let destination = accounts.filter({ return $0.address.address == address }).first
+        let destination = accounts.filter({
+            return $0.address.address.lowercased() == address.lowercased()
+        }).first
         return destination?.name ?? ""
     }
 }

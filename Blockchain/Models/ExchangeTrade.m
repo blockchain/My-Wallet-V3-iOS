@@ -26,6 +26,8 @@
     trade.depositAmount = [ExchangeTrade decimalNumberFromDictValue:[quote objectForKey:DICTIONARY_KEY_DEPOSIT_AMOUNT]];
     trade.withdrawalAmount = [ExchangeTrade decimalNumberFromDictValue:[quote objectForKey:DICTIONARY_KEY_WITHDRAWAL_AMOUNT]];
     trade.minerFee = [ExchangeTrade decimalNumberFromDictValue:[quote objectForKey:DICTIONARY_KEY_MINER_FEE]];
+    trade.withdrawal = [quote objectForKey:DICTIONARY_KEY_WITHDRAWAL];
+    trade.deposit = [quote objectForKey:DICTIONARY_KEY_DEPOSIT];
     
     trade.exchangeRate = [ExchangeTrade decimalNumberFromDictValue:[quote objectForKey:DICTIONARY_KEY_QUOTED_RATE]];
     trade.exchangeRateString = [trade exchangeRateString];

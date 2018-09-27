@@ -21,6 +21,8 @@
 #define DICTIONARY_KEY_QUOTE @"quote"
 #define DICTIONARY_KEY_QUOTED_RATE @"quotedRate"
 #define DICTIONARY_KEY_ORDER_ID @"orderId"
+#define DICTIONARY_KEY_WITHDRAWAL @"withdrawal"
+#define DICTIONARY_KEY_DEPOSIT @"deposit"
 #define DICTIONARY_KEY_WITHDRAWAL_AMOUNT @"withdrawalAmount"
 #define DICTIONARY_KEY_EXPIRATION_DATE @"expirationDate"
 #define DICTIONARY_KEY_DEPOSIT_AMOUNT @"depositAmount"
@@ -32,6 +34,8 @@
 @property (nonatomic) NSDate *expirationDate;
 @property (nonatomic) NSString *status;
 @property (nonatomic) NSString *pair;
+@property (nonatomic) NSString *withdrawal;
+@property (nonatomic) NSString *deposit;
 @property (nonatomic) NSDecimalNumber *depositAmount;
 @property (nonatomic) NSDecimalNumber *withdrawalAmount;
 @property (nonatomic) NSDecimalNumber *transactionFee;
