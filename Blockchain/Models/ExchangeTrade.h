@@ -49,5 +49,6 @@
 - (NSString *)exchangeRateString;
 - (NSString *)depositCurrency;
 - (NSString *)withdrawalCurrency;
+- (NSString *)minerCurrency;
 
 @end

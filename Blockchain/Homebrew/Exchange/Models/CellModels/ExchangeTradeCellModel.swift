@@ -81,22 +81,13 @@ extension ExchangeTradeModel {
             return model.withdrawalAddress
         }
     }
-
-    var amountFeeSymbol: String {
+    
+    var feeDisplayValue: String {
         switch self {
-        case .partner:
-            return ""
+        case .partner(let model):
+            return model.minerFee
         case .homebrew(let model):
-            return model.withdrawalFee.symbol
-        }
-    }
-
-    var amountFeeValue: String {
-        switch self {
-        case .partner:
-            return ""
-        case .homebrew(let model):
-            return model.withdrawalFee.value
+            return model.withdrawalFee.value + " " + model.withdrawalFee.symbol
         }
     }
 
@@ -187,6 +178,7 @@ struct PartnerTrade {
     let pair: TradingPair
     let destination: String
     let deposit: String
+    let minerFee: String
     let transactionDate: Date
     let amountReceivedCryptoValue: String
     let amountReceivedFiatValue: String
@@ -199,6 +191,12 @@ struct PartnerTrade {
         transactionDate = trade.date
         destination = trade.withdrawal
         deposit = trade.deposit
+        
+        if let value = trade.minerFeeCryptoAmount() {
+            minerFee = value
+        } else {
+            fatalError("Failed to map \(trade.minerFee)")
+        }
         
         if let pairType = TradingPair(string: trade.pair) {
             pair = pairType
@@ -393,6 +391,11 @@ extension ExchangeTradeModel.TradeStatus {
 }
 
 fileprivate extension ExchangeTrade {
+    
+    fileprivate func minerFeeCryptoAmount() -> String? {
+        guard let assetType = AssetType(stringValue: minerCurrency()) else { return nil }
+        return toCrypto(from: assetType, amount: minerFee)
+    }
     
     fileprivate func inboundFiatAmount() -> String? {
         guard let toAsset = pair.components(separatedBy: "_").last else { return nil }

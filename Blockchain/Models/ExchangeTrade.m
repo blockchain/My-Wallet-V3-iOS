@@ -83,7 +83,12 @@
 {
     NSArray *components = [self.pair componentsSeparatedByString:@"_"];
     return components.lastObject;
-    
+}
+
+- (NSString *)minerCurrency
+{
+    NSArray *components = [self.pair componentsSeparatedByString:@"_"];
+    return components.firstObject;
 }
 
 @end
