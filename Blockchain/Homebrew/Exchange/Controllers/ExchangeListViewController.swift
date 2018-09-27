@@ -52,10 +52,19 @@ class ExchangeListViewController: UIViewController {
         dataProvider?.delegate = self
         delegate?.onLoaded()
         registerForNotifications()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         if let controller = navigationController as? BCNavigationController {
             controller.applyDarkAppearance()
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.onDisappear()
     }
     
     fileprivate func dependenciesSetup() {
@@ -71,11 +80,6 @@ class ExchangeListViewController: UIViewController {
             guard let this = self else { return }
             this.delegate?.onLoaded()
         }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        delegate?.onDisappear()
     }
     
     deinit {
