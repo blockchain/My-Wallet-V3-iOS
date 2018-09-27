@@ -110,10 +110,12 @@ struct ExchangeServices: ExchangeDependencies {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
                     withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
                     headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                    validateSecondPassword: true
-                ) { (secondPassword) in
-                    WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
-                }
+                    validateSecondPassword: true,
+                    confirmHandler: { (secondPassword) in
+                        WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
+                    },
+                    dismissHandler: {}
+                )
             } else {
                 WalletManager.shared.wallet.createEthAccount(forExchange: nil)
             }

@@ -12,6 +12,7 @@ import Foundation
 class PasswordConfirmView: BCModalContentView {
 
     typealias OnPasswordConfirmHandler = ((_ password: String) -> Void)
+    typealias OnPasswordDismissHandler = (() -> Void)
 
     @IBOutlet private weak var labelDescription: UILabel!
     @IBOutlet private weak var textFieldPassword: BCTextField!
@@ -20,6 +21,7 @@ class PasswordConfirmView: BCModalContentView {
     var validateSecondPassword = false
 
     var confirmHandler: OnPasswordConfirmHandler?
+    var dismissHandler: OnPasswordDismissHandler?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -56,6 +58,7 @@ class PasswordConfirmView: BCModalContentView {
 
     override func modalWasDismissed() {
         ModalPresenter.shared.closeAllModals()
+        self.dismissHandler?()
     }
 }
 

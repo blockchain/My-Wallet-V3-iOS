@@ -465,8 +465,8 @@
         [weakSelf error_restoring_wallet];
     };
 
-    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *helperText) {
-        [weakSelf getSecondPasswordSuccess:secondPassword error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
+    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *dismiss, JSValue *helperText) {
+        [weakSelf getSecondPasswordSuccess:secondPassword dismiss:dismiss error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
     };
 
     self.context[@"objc_get_private_key_password"] = ^(JSValue *privateKeyPassword) {
@@ -2665,7 +2665,7 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error dismiss:(void (^ _Nonnull)(void))dismiss
 {
     [self.context invokeOnceWithFunctionBlock:^{
         completion();
@@ -2676,6 +2676,10 @@
         completion();
         error(errorValue);
     } forJsFunctionName:@"objc_on_send_order_transaction_error"];
+
+    [self.context invokeOnceWithFunctionBlock:^{
+        dismiss();
+    } forJsFunctionName:@"objc_on_send_order_transaction_dismiss"];
     
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
@@ -3244,10 +3248,10 @@
     }
 }
 
-- (void)getSecondPasswordSuccess:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
+- (void)getSecondPasswordSuccess:(JSValue *)success dismiss:(JSValue *)dismiss error:(void(^)(id))_error helperText:(NSString *)helperText
 {
-    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:)]) {
-        [delegate getSecondPasswordWithSuccess:success];
+    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:dismiss:)]) {
+        [delegate getSecondPasswordWithSuccess:success dismiss:dismiss];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector getSecondPassword!", [delegate class]);
     }

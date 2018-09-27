@@ -43,7 +43,7 @@
 
 @class Wallet, Transaction, JSValue, JSContext, ExchangeRate, OrderTransactionLegacy;
 
-@protocol WalletSuccessCallback;
+@protocol WalletSuccessCallback, WalletDismissCallback;
 
 @protocol ExchangeAccountDelegate
 - (void)watchPendingTrades:(BOOL)shouldSync;
@@ -140,7 +140,7 @@
 - (void)walletDidGetAccountInfo:(Wallet *)wallet;
 - (void)walletDidGetBtcExchangeRates:(Wallet *)wallet;
 - (void)walletDidGetAccountInfoAndExchangeRates:(Wallet *)wallet;
-- (void)getSecondPasswordWithSuccess:(id<WalletSuccessCallback>)success;
+- (void)getSecondPasswordWithSuccess:(id<WalletSuccessCallback>)success dismiss:(id<WalletDismissCallback>)dismiss;
 - (void)getPrivateKeyPasswordWithSuccess:(id<WalletSuccessCallback>)success;
 - (void)walletUpgraded:(Wallet *)wallet;
 @end
@@ -463,7 +463,7 @@
 - (NSString *_Nullable)KYCUserId;
 - (NSString *_Nullable)KYCLifetimeToken;
 - (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction completion:(void (^ _Nonnull)(void))completion success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error;
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error;
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error dismiss:(void (^ _Nonnull)(void))dismiss;
 // Top Bar Display
 - (NSDecimalNumber *)btcDecimalBalance;
 - (NSDecimalNumber *)ethDecimalBalance;

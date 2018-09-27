@@ -124,14 +124,16 @@ class TradeExecutionService: TradeExecutionAPI {
 
     func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
         isExecuting = true
+        let executionDone = { [weak self] in
+            guard let this = self else { return }
+            this.isExecuting = false
+        }
         wallet.sendOrderTransaction(
             assetType.legacy,
-            completion: { [weak self] in
-                guard let this = self else { return }
-                this.isExecuting = false
-        },
+            completion: executionDone,
             success: success,
-            error: error
+            error: error,
+            dismiss: executionDone
         )
     }
 
