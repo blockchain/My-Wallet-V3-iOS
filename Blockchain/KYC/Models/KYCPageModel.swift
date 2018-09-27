@@ -12,5 +12,5 @@ enum KYCPageModel {
     case personalDetails(NabuUser)
     case address(NabuUser, KYCCountry?)
     case phone(NabuUser)
-    case verifyIdentity(KYCCountry)
+    case verifyIdentity(countryCode: String)
 }

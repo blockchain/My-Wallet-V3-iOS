@@ -231,8 +231,8 @@ protocol KYCCoordinatorDelegate: class {
             guard let current = user else { return }
             delegate?.apply(model: .phone(current))
         case .verifyIdentity:
-            guard let country = country else { return }
-            delegate?.apply(model: .verifyIdentity(country))
+            guard let countryCode = country?.code ?? user?.address?.countryCode else { return }
+            delegate?.apply(model: .verifyIdentity(countryCode: countryCode))
         }
     }
 
