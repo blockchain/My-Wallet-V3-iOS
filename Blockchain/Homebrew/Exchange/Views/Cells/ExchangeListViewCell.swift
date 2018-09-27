@@ -24,8 +24,8 @@ class ExchangeListViewCell: UITableViewCell {
 
     func configure(with cellModel: ExchangeTradeModel) {
         timestamp.text = cellModel.formattedDate
-        depositAmount.text = "-" + cellModel.amountDepositedCryptoValue
-        receivedAmount.text = cellModel.amountReceivedCryptoValue
+        depositAmount.text = "-" + cellModel.amountDepositedCryptoValue + " \(cellModel.amountDepositedCryptoSymbol)"
+        receivedAmount.text = cellModel.amountReceivedCryptoValue + " \(cellModel.amountReceivedCryptoSymbol)"
         
         status.text = cellModel.status.displayValue
 

@@ -52,6 +52,10 @@ class ExchangeListViewController: UIViewController {
         dataProvider?.delegate = self
         delegate?.onLoaded()
         registerForNotifications()
+        
+        if let controller = navigationController as? BCNavigationController {
+            controller.applyDarkAppearance()
+        }
     }
     
     fileprivate func dependenciesSetup() {
