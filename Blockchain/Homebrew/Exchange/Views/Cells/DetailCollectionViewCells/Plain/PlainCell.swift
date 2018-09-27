@@ -36,7 +36,7 @@ class PlainCell: ExchangeDetailCell {
         backgroundColor = payload.backgroundColor
         subject.textColor = payload.bold ? .darkGray : #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1)
         statusImageView.alpha = payload.statusVisibility.defaultAlpha
-        statusImageView.tintColor = .green
+        statusImageView.tintColor = payload.statusTintColor
 
         if let action = payload.descriptionActionBlock {
             tapActionBlock = action

@@ -148,7 +148,10 @@ extension SocketManager: WebSocketAdvancedDelegate {
         case "currencyRatio":
             Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "currencyRatioError":
-            onError("Currency ratio error: \(json)")
+            /// Though this is an error, we still decode the payload
+            /// as a `SocketMessage`, so it will use the `onSuccess`
+            /// closure and not the `onError`.
+            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "heartbeat", "subscribed", "authenticated":
             HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error":

@@ -2634,27 +2634,37 @@
     return nil;
 }
 
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction completion:(void (^ _Nonnull)(void))completion success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull response) {
+        completion();
+        success(response);
+    } forJsFunctionName:@"objc_on_create_order_payment_success"];
 
     NSString *tradeExecutionType;
     NSString *formattedAmount;
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
-        [self.context invokeOnceWithValueFunctionBlock:^(JSValue *_Nonnull value) {
-            [self showBTCPaymentError:[value toDictionary][DICTIONARY_KEY_ERROR]];
-            // error(@"Could not build payment");
+        [self.context invokeOnceWithValueFunctionBlock:^(JSValue *_Nonnull errorValue) {
+            [self showBTCPaymentError:[errorValue toDictionary][DICTIONARY_KEY_ERROR]];
+            completion();
+            error([errorValue toString]);
         } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
         tradeExecutionType = @"bitcoinCash";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
-        [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
+        [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+            completion();
+            error(errorValue);
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
         tradeExecutionType = @"ether";
         formattedAmount = orderTransaction.amount;
-        [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
+        [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+            completion();
+            error(errorValue);
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else {
         DLog(@"Unsupported legacy asset type");
         return;
@@ -2663,11 +2673,18 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
-
+    [self.context invokeOnceWithFunctionBlock:^{
+        completion();
+        success();
+    } forJsFunctionName:@"objc_on_send_order_transaction_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_send_order_transaction_error"];
+    
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
@@ -2679,7 +2696,7 @@
         DLog(@"Unsupported legacy asset type");
         return;
     }
-
+    
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
 }
 
@@ -4652,7 +4669,7 @@
     }
 
     if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR in:nil handler:nil];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge notEnoughFunds] title:BC_STRING_ERROR in:nil handler:nil];
     } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
         id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
         uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];

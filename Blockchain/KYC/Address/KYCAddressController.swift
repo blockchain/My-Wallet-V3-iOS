@@ -214,7 +214,9 @@ extension KYCAddressController: LocationSuggestionInterface {
     }
 
     func populateAddressEntryView(_ address: PostalAddress) {
-        addressTextField.text = "\(address.streetNumber ?? "") \(address.street ?? "")"
+        if let number = address.streetNumber, let street = address.street {
+            addressTextField.text = "\(number) \(street)"
+        }
         cityTextField.text = address.city
         stateTextField.text = address.state
         postalCodeTextField.text = address.postalCode

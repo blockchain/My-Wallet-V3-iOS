@@ -84,6 +84,7 @@ struct Constants {
         static let appEnteredBackground = NSNotification.Name("applicationDidEnterBackground")
         static let backupSuccess = NSNotification.Name("backupSuccess")
         static let getFiatAtTime = NSNotification.Name("getFiatAtTime")
+        static let exchangeSubmitted = NSNotification.Name("exchangeSubmitted")
     }
     struct PushNotificationKeys {
         static let userInfoType = "type"

@@ -145,7 +145,7 @@
     continueButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     continueButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
     [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [continueButton addTarget:self action:@selector(continueButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [continueButton addTarget:self action:@selector(continueButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:continueButton];
     self.continuePaymentButton = continueButton;
 }

@@ -39,11 +39,10 @@ class ExchangeAssetAccountListPresenter {
         self.assetAccountRepository = assetAccountRepository
     }
 
-    func presentPicker(excludingAssetType assetTypeToExclude: AssetType?, for action: ExchangeAction) {
+    func presentPicker(excludingAccount assetAccount: AssetAccount?, for action: ExchangeAction) {
         let accountsToPick = assetAccountRepository.allAccounts().filter { account -> Bool in
-            guard let assetTypeToExclude = assetTypeToExclude else { return true }
-
-            return account.address.assetType != assetTypeToExclude
+            guard let excluding = assetAccount else { return true }
+            return account != excluding
         }
         view?.showPicker(for: accountsToPick, action: action)
     }
