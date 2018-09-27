@@ -75,7 +75,7 @@ import RxSwift
         }
 
         // Show security reminder modal if needed
-        if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.reminderModalDate {
+        if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.dateOfLastSecurityReminder {
 
             // TODO: hook up debug settings to show security reminder
             let timeIntervalBetweenPrompts = Constants.Time.securityReminderModalTimeInterval

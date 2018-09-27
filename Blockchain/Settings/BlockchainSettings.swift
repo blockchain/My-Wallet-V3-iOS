@@ -207,7 +207,17 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var reminderModalDate: NSDate? {
+        /**
+         Keeps track of the last time the security reminder alert was shown to the user.
+
+         - Note:
+         The value of this setting is updated each time the `showSecurityReminder` method of the `ReminderPresenter` is called.
+
+         The value of this setting is set to `nil` upon calling the `didCreateNewAccount` method of the wallet delegate.
+
+         The default value of this setting is `nil`.
+        */
+        @objc var dateOfLastSecurityReminder: NSDate? {
             get {
                 return defaults.object(forKey: UserDefaults.Keys.reminderModalDate.rawValue) as? NSDate
             }

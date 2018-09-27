@@ -32,7 +32,7 @@ import Foundation
     // MARK: - Public Methods
 
     func showSecurityReminder() {
-        BlockchainSettings.App.shared.reminderModalDate = NSDate()
+        BlockchainSettings.App.shared.dateOfLastSecurityReminder = NSDate()
 
         let wallet = walletManager.wallet
 
