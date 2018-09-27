@@ -513,6 +513,7 @@
 		A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */; };
 		A269E92E1B32D51F0052F953 /* SecondPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */; };
 		A2913FA21B31830000DC6C15 /* BackupNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */; };
+		AA08439A215C0E210007BFD1 /* SocketMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084399215C0E210007BFD1 /* SocketMessageTests.swift */; };
 		AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A412D214ADD5B00807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A4147214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */; };
@@ -3005,6 +3006,7 @@
 		A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondPasswordViewController.swift; sourceTree = "<group>"; };
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
 		A5185A3368C92DCF1134710A /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA084399215C0E210007BFD1 /* SocketMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketMessageTests.swift; sourceTree = "<group>"; };
 		AA0A412B214AD75300807163 /* DebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeAssetAccountListPresenter.swift; sourceTree = "<group>"; };
 		AA0A414A214B152100807163 /* AssetAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAccount.swift; sourceTree = "<group>"; };
@@ -3842,10 +3844,11 @@
 		511356DF209CA48F00056D65 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				AAE94DC820C25111005A3595 /* API */,
 				511356E0209CA4BA00056D65 /* BlockchainAPI+PayloadTests.swift */,
 				51A862DE20921FCA00B338E0 /* BlockchainAPI+URLSuffixTests.swift */,
 				519435AB208E6279001EF882 /* CertificatePinnerTests.swift */,
+				AAE94DC820C25111005A3595 /* API */,
+				AA08438F215C0E010007BFD1 /* Models */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -6345,6 +6348,14 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
+		AA08438F215C0E010007BFD1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA084399215C0E210007BFD1 /* SocketMessageTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		AA0A4121214AD71100807163 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -7824,6 +7835,7 @@
 				602B9D192118E25F00BD3D60 /* LocationDataProvider.swift in Sources */,
 				3AB4D8EE212F2017004F0160 /* DateFormatterTests.swift in Sources */,
 				AABB74C920D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
+				AA08439A215C0E210007BFD1 /* SocketMessageTests.swift in Sources */,
 				511356BF209B7F6E00056D65 /* BlockchainAPI+Payload.swift in Sources */,
 				602B9D272118E28E00BD3D60 /* ValidationTextField.swift in Sources */,
 				3A26D527214055E600D79BDD /* TradingPairCell.swift in Sources */,

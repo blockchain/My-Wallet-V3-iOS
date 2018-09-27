@@ -84,10 +84,12 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     }
 
     func onExchangeButtonTapped() {
+        guard interactor.confirmationIsExecuting() == false else { return }
         interactor.confirmConversion()
     }
 
     func confirmConversion() {
+        guard interactor.confirmationIsExecuting() == false else { return }
         interactor.confirmConversion()
     }
 }

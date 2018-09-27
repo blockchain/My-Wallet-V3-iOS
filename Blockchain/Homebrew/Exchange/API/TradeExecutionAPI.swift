@@ -18,4 +18,8 @@ protocol TradeExecutionAPI {
 
     // Build a transaction and send it
     func submitAndSend(with conversion: Conversion, success: @escaping (() -> Void), error: @escaping ((String) -> Void))
+    
+    /// Check if the service is currently executing a request prior to
+    /// submitting an additional request.
+    var isExecuting: Bool { get set }
 }

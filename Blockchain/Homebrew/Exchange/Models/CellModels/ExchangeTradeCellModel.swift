@@ -248,15 +248,15 @@ struct ExchangeTradeCellModel: Decodable {
     let updatedAt: Date
     let pair: TradingPair
     let refundAddress: String
-    let rate: String
+    let rate: String?
     let depositAddress: String
     let deposit: SymbolValue
     let withdrawalAddress: String
     let withdrawal: SymbolValue
     let withdrawalFee: SymbolValue
     let fiatValue: SymbolValue
-    let depositTxHash: String
-    let withdrawalTxHash: String
+    let depositTxHash: String?
+    let withdrawalTxHash: String?
 
     // MARK: - Decodable
 
@@ -314,15 +314,15 @@ struct ExchangeTradeCellModel: Decodable {
         }
         
         refundAddress = try values.decode(String.self, forKey: .refundAddress)
-        rate = try values.decode(String.self, forKey: .rate)
+        rate = try values.decodeIfPresent(String.self, forKey: .rate)
         depositAddress = try values.decode(String.self, forKey: .depositAddress)
         deposit = try values.decode(SymbolValue.self, forKey: .deposit)
         withdrawalAddress = try values.decode(String.self, forKey: .withdrawalAddress)
         withdrawal = try values.decode(SymbolValue.self, forKey: .withdrawal)
         withdrawalFee = try values.decode(SymbolValue.self, forKey: .withdrawalFee)
         fiatValue = try values.decode(SymbolValue.self, forKey: .fiatValue)
-        depositTxHash = try values.decode(String.self, forKey: .depositTxHash)
-        withdrawalTxHash = try values.decode(String.self, forKey: .withdrawalTxHash)
+        depositTxHash = try values.decodeIfPresent(String.self, forKey: .depositTxHash)
+        withdrawalTxHash = try values.decodeIfPresent(String.self, forKey: .withdrawalTxHash)
     }
 }
 

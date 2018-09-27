@@ -47,9 +47,8 @@ class HomebrewExchangeService: HomebrewExchangeAPI {
         guard let baseURL = URL(string: BlockchainAPI.shared.retailCoreUrl) else {
             return .error(HomebrewExchangeServiceError.generic)
         }
-        
-        let timestamp = DateFormatter.sessionDateFormat.string(from: timestamp)
-        guard let endpoint = URL.endpoint(baseURL, pathComponents: ["trades"], queryParameters: ["before": timestamp]) else {
+        let dateParameter = DateFormatter.HTTPRequestDateFormat.string(from: timestamp)
+        guard let endpoint = URL.endpoint(baseURL, pathComponents: ["trades"], queryParameters: ["before": dateParameter]) else {
             return .error(HomebrewExchangeServiceError.generic)
         }
         

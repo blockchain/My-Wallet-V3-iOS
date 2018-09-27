@@ -22,6 +22,12 @@ extension DateFormatter {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         return formatter
     }()
+    
+    static let HTTPRequestDateFormat: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:SS'Z'"
+        return formatter
+    }()
 
     /// The API expects the user's DOB to be formatted
     /// this way.

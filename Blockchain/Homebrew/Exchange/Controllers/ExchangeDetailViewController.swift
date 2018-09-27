@@ -19,7 +19,7 @@ protocol ExchangeDetailDelegate: class {
 class ExchangeDetailViewController: UIViewController {
 
     enum PageModel {
-        case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
+        case confirm(OrderTransaction, Conversion)
         case locked(OrderTransaction, Conversion)
         case overview(ExchangeTradeModel)
     }

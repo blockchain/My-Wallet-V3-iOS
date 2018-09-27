@@ -63,7 +63,6 @@ struct ExchangeServices: ExchangeDependencies {
     private let walletManager: WalletManager
 
     private let walletService: WalletService
-    private let dependencies: ExchangeDependencies = ExchangeServices()
 
     private var disposable: Disposable?
     
@@ -148,7 +147,7 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
+            let listViewController = ExchangeListViewController.make(with: ExchangeServices(), coordinator: self)
             navigationController = BCNavigationController(
                 rootViewController: listViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -159,11 +158,7 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            guard let country = country else {
-                Logger.shared.warning("Country is nil. Cannot present partner exchange.")
-                return
-            }
-            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country.code)
+            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country?.code)
             let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -175,7 +170,7 @@ struct ExchangeServices: ExchangeDependencies {
     private func showCreateExchange(animated: Bool, type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
-            let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
+            let exchangeCreateViewController = ExchangeCreateViewController.make(with: ExchangeServices())
             if navigationController == nil {
                 guard let viewController = rootViewController else {
                     Logger.shared.error("View controller to present on is nil")
@@ -199,8 +194,8 @@ struct ExchangeServices: ExchangeDependencies {
             Logger.shared.error("No navigation controller found")
             return
         }
-        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
-        let confirmController = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
+        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion)
+        let confirmController = ExchangeDetailViewController.make(with: model, dependencies: ExchangeServices())
         navigationController.pushViewController(confirmController, animated: true)
     }
     
@@ -210,12 +205,12 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
         let model = ExchangeDetailViewController.PageModel.locked(orderTransaction, conversion)
-        let controller = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
+        let controller = ExchangeDetailViewController.make(with: model, dependencies: ExchangeServices())
         navigationController.present(controller, animated: true, completion: nil)
     }
 
     private func showTradeDetails(trade: ExchangeTradeModel) {
-        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: dependencies)
+        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: ExchangeServices())
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 

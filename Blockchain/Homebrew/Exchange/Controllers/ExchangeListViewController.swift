@@ -51,6 +51,7 @@ class ExchangeListViewController: UIViewController {
         dependenciesSetup()
         dataProvider?.delegate = self
         delegate?.onLoaded()
+        registerForNotifications()
     }
     
     fileprivate func dependenciesSetup() {
@@ -61,9 +62,20 @@ class ExchangeListViewController: UIViewController {
         delegate = presenter
     }
     
+    fileprivate func registerForNotifications() {
+        NotificationCenter.when(Constants.NotificationKeys.exchangeSubmitted) { [weak self] _ in
+            guard let this = self else { return }
+            this.delegate?.onLoaded()
+        }
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.onDisappear()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
