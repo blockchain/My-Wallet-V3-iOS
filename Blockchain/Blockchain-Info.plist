@@ -21,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5.1</string>
+	<string>2.6.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>9</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -67,6 +67,10 @@
 	<string>Blockchain needs access to your location to show you nearby businesses that accept Bitcoin.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Your permission is needed in order to upload documents from your photo library.</string>
+	<key>RETAIL_CORE_SOCKET_URL</key>
+	<string>$(RETAIL_CORE_SOCKET_URL)</string>
+	<key>RETAIL_CORE_URL</key>
+	<string>$(RETAIL_CORE_URL)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-ExtraLight.ttf</string>
@@ -92,10 +96,6 @@
 	<false/>
 	<key>WALLET_SERVER</key>
 	<string>$(WALLET_SERVER)</string>
-	<key>RETAIL_CORE_URL</key>
-	<string>$(RETAIL_CORE_URL)</string>
-	<key>RETAIL_CORE_SOCKET_URL</key>
-	<string>$(RETAIL_CORE_SOCKET_URL)</string>
 	<key>WEBSOCKET_SERVER</key>
 	<string>$(WEBSOCKET_SERVER)</string>
 	<key>WEBSOCKET_SERVER_BCH</key>
