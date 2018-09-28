@@ -2665,7 +2665,7 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error dismiss:(void (^ _Nonnull)(void))dismiss
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel
 {
     [self.context invokeOnceWithFunctionBlock:^{
         completion();
@@ -2678,7 +2678,7 @@
     } forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
     [self.context invokeOnceWithFunctionBlock:^{
-        dismiss();
+        cancel();
     } forJsFunctionName:@"objc_on_send_order_transaction_dismiss"];
     
     NSString *tradeExecutionType;

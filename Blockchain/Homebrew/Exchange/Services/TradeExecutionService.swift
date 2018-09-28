@@ -133,7 +133,7 @@ class TradeExecutionService: TradeExecutionAPI {
             completion: executionDone,
             success: success,
             error: error,
-            dismiss: executionDone
+            cancel: executionDone
         )
     }
 
