@@ -103,8 +103,10 @@ struct ExchangeServices: ExchangeDependencies {
                 return error.localizedDescription
         }
         switch (nabuError.type, nabuError.code) {
-        case (.conflict, .userRegisteredAlready): return LocalizationConstants.KYC.emailAddressAlreadyInUse
-        default: return error.localizedDescription
+        case (.conflict, .userRegisteredAlready):
+            return LocalizationConstants.KYC.emailAddressAlreadyInUse
+        default:
+            return error.localizedDescription
         }
     }
 
