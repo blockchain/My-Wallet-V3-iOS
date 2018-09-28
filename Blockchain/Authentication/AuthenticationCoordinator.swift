@@ -428,7 +428,7 @@ import RxSwift
         headerText: String,
         validateSecondPassword: Bool,
         confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler,
-        dismissHandler: @escaping PasswordConfirmView.OnPasswordDismissHandler
+        dismissHandler: PasswordConfirmView.OnPasswordDismissHandler?
     ) {
         let loadingViewPresenter = LoadingViewPresenter.shared
         let isLoadingShown = loadingViewPresenter.isLoadingShown
@@ -647,7 +647,7 @@ extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
                             confirmHandler: { (privateKeyPassword) in
                                 success.success(string: privateKeyPassword)
                             },
-                            dismissHandler: {}
+                            dismissHandler: nil
         )
     }
 }
