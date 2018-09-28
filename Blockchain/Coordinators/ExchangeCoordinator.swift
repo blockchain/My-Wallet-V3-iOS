@@ -113,8 +113,7 @@ struct ExchangeServices: ExchangeDependencies {
                     validateSecondPassword: true,
                     confirmHandler: { (secondPassword) in
                         self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
-                    },
-                    dismissHandler: {}
+                    }
                 )
             } else {
                 walletManager.wallet.createEthAccount(forExchange: nil)
