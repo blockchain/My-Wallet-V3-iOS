@@ -136,7 +136,7 @@
             [AuthenticationCoordinator.shared showPasswordConfirmWithDisplayText:[LocalizationConstantsObjcBridge secondPasswordDefaultDescription] headerText:[LocalizationConstantsObjcBridge secondPasswordRequired] validateSecondPassword:YES confirmHandler:^(NSString * _Nonnull secondPasswordInput) {
                 if (self.on_before_send) self.on_before_send();
                 [wallet transferFundsBackupWithListener:listener secondPassword:secondPasswordInput];
-            } dismissHandler: ^(){}];
+            } dismissHandler: nil];
         } else {
             if (self.on_before_send) self.on_before_send();
             [wallet transferFundsBackupWithListener:listener secondPassword:_secondPassword];
