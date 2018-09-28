@@ -195,43 +195,43 @@ struct PartnerTrade {
         if let value = trade.minerFeeCryptoAmount() {
             minerFee = value
         } else {
-            fatalError("Failed to map \(trade.minerFee)")
+            fatalError("Failed to map minerFee")
         }
         
         if let pairType = TradingPair(string: trade.pair) {
             pair = pairType
         } else {
-            fatalError("Failed to map \(trade.pair)")
+            fatalError("Failed to map pair")
         }
         
         if let value = trade.inboundCryptoAmount() {
             amountReceivedCryptoValue = value
         } else {
-            fatalError("Failed to map \(trade.inboundCryptoAmount() ?? "")")
+            fatalError("Failed to map amountReceivedCryptoValue)")
         }
         
         if let value = trade.inboundFiatAmount() {
             amountReceivedFiatValue = value
         } else {
-            fatalError("Failed to map \(trade.inboundFiatAmount() ?? "")")
+            fatalError("Failed to map amountReceivedFiatValue)")
         }
         
         if let value = trade.outboundCryptoAmount() {
             amountDepositedCryptoValue = value
         } else {
-            fatalError("Failed to map \(trade.outboundCryptoAmount() ?? "")")
+            fatalError("Failed to map amountDepositedCryptoValue)")
         }
         
         if let value = trade.outboundFiatAmount() {
             amountDepositedFiatValue = value
         } else {
-            fatalError("Failed to map \(trade.outboundFiatAmount() ?? "")")
+            fatalError("Failed to map amountDepositedFiatValue)")
         }
         
         if let asset = AssetType(stringValue: trade.withdrawalCurrency()) {
             assetType = asset
         } else {
-            fatalError("Failed to map \(trade.withdrawalCurrency())")
+            fatalError("Failed to map assetType")
         }
     }
 }
