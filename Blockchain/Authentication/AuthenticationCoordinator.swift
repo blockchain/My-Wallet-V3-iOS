@@ -629,14 +629,14 @@ extension AuthenticationCoordinator: SetupDelegate {
 }
 
 extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
-    func getSecondPassword(success: WalletSuccessCallback, dismiss: WalletDismissCallback) {
+    func getSecondPassword(success: WalletSuccessCallback, dismiss: WalletDismissCallback?) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.secondPasswordRequired,
                             validateSecondPassword: true,
                             confirmHandler: { (secondPassword) in
                                 success.success(string: secondPassword)
                             },
-                            dismissHandler: { dismiss.dismiss() }
+                            dismissHandler: { dismiss?.dismiss() }
         )
     }
 
