@@ -13,7 +13,7 @@ extension UserDefaults {
 
     // TICKET: IOS-1289 - Refactor key-value mapping such that key = value
     // Refactor enableCertificatePinning, simulateZeroTicker, shouldHideBuySellCard,
-    // swipeToReceiveEnabled such that key = value
+    // swipeToReceiveEnabled such that key = value (where possible)
     enum DebugKeys: String {
         case appReviewPromptCount = "debug_appReviewPromptCount"
         case enableCertificatePinning = "debug_certificatePinning"

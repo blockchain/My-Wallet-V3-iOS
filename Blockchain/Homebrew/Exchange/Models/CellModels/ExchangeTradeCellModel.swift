@@ -75,39 +75,26 @@ enum ExchangeTradeModel {
 extension ExchangeTradeModel {
     var withdrawalAddress: String {
         switch self {
-        case .partner:
-            // Not in ExchangeTableViewCell
-            return ""
+        case .partner(let model):
+            return model.destination
         case .homebrew(let model):
             return model.withdrawalAddress
         }
     }
-
-    var amountFeeSymbol: String {
+    
+    var feeDisplayValue: String {
         switch self {
-        case .partner:
-            // Not in ExchangeTableViewCell
-            return ""
+        case .partner(let model):
+            return model.minerFee
         case .homebrew(let model):
-            return model.withdrawalFee.symbol
-        }
-    }
-
-    var amountFeeValue: String {
-        switch self {
-        case .partner:
-            // Not in ExchangeTableViewCell
-            return ""
-        case .homebrew(let model):
-            return model.withdrawalFee.value
+            return model.withdrawalFee.value + " " + model.withdrawalFee.symbol
         }
     }
 
     var amountFiatValue: String {
         switch self {
-        case .partner:
-            // Currently calculated in ExchangeTableViewCell based on latest rates
-            return ""
+        case .partner(let model):
+            return model.amountReceivedFiatValue
         case .homebrew(let model):
             return model.fiatValue.value
         }
@@ -116,46 +103,31 @@ extension ExchangeTradeModel {
     var amountFiatSymbol: String {
         switch self {
         case .partner:
-            // Currently calculated in ExchangeTableViewCell cell based on latest rates
             return ""
         case .homebrew(let model):
             return model.fiatValue.symbol
         }
     }
-
-    var amountDepositedCryptoValue: String {
+    
+    var amountDepositedCrypto: String {
         switch self {
         case .partner(let model):
             return model.amountDepositedCryptoValue
         case .homebrew(let model):
-            return model.deposit.value
+            return model.deposit.value + " " + model.deposit.symbol
         }
     }
     
-    var amountDepositedCryptoSymbol: String {
-        switch self {
-        case .partner(let model):
-            return model.pair.from.symbol
-        case .homebrew(let model):
-            return model.deposit.symbol
-        }
-    }
-
-    var amountReceivedCryptoSymbol: String {
-        switch self {
-        case .partner(let model):
-            return model.pair.to.symbol
-        case .homebrew(let model):
-            return model.withdrawal.symbol
-        }
-    }
-
-    var amountReceivedCryptoValue: String {
+    var amountReceivedCrypto: String {
         switch self {
         case .partner(let model):
             return model.amountReceivedCryptoValue
         case .homebrew(let model):
-            return model.withdrawal.value
+            if let value = model.withdrawal?.value, let symbol = model.withdrawal?.symbol {
+                return value + " " + symbol
+            } else {
+                return ""
+            }
         }
     }
     
@@ -204,36 +176,62 @@ struct PartnerTrade {
     let status: TradeStatus
     let assetType: AssetType
     let pair: TradingPair
+    let destination: String
+    let deposit: String
+    let minerFee: String
     let transactionDate: Date
     let amountReceivedCryptoValue: String
+    let amountReceivedFiatValue: String
     let amountDepositedCryptoValue: String
+    let amountDepositedFiatValue: String
     
     init(with trade: ExchangeTrade) {
         identifier = trade.orderID
         status = TradeStatus(shapeshift: trade.status)
         transactionDate = trade.date
+        destination = trade.withdrawal
+        deposit = trade.deposit
+        
+        if let value = trade.minerFeeCryptoAmount() {
+            minerFee = value
+        } else {
+            fatalError("Failed to map minerFee")
+        }
+        
         if let pairType = TradingPair(string: trade.pair) {
             pair = pairType
         } else {
-            fatalError("Failed to map \(trade.pair)")
+            fatalError("Failed to map pair")
         }
         
-        if let value = trade.inboundDisplayAmount() {
+        if let value = trade.inboundCryptoAmount() {
             amountReceivedCryptoValue = value
         } else {
-            fatalError("Failed to map \(trade.inboundDisplayAmount() ?? "")")
+            fatalError("Failed to map amountReceivedCryptoValue)")
         }
         
-        if let value = trade.outboundDisplayAmount() {
+        if let value = trade.inboundFiatAmount() {
+            amountReceivedFiatValue = value
+        } else {
+            fatalError("Failed to map amountReceivedFiatValue)")
+        }
+        
+        if let value = trade.outboundCryptoAmount() {
             amountDepositedCryptoValue = value
         } else {
-            fatalError("Failed to map \(trade.outboundDisplayAmount() ?? "")")
+            fatalError("Failed to map amountDepositedCryptoValue)")
+        }
+        
+        if let value = trade.outboundFiatAmount() {
+            amountDepositedFiatValue = value
+        } else {
+            fatalError("Failed to map amountDepositedFiatValue)")
         }
         
         if let asset = AssetType(stringValue: trade.withdrawalCurrency()) {
             assetType = asset
         } else {
-            fatalError("Failed to map \(trade.withdrawalCurrency())")
+            fatalError("Failed to map assetType")
         }
     }
 }
@@ -252,7 +250,7 @@ struct ExchangeTradeCellModel: Decodable {
     let depositAddress: String
     let deposit: SymbolValue
     let withdrawalAddress: String
-    let withdrawal: SymbolValue
+    let withdrawal: SymbolValue?
     let withdrawalFee: SymbolValue
     let fiatValue: SymbolValue
     let depositTxHash: String?
@@ -318,7 +316,7 @@ struct ExchangeTradeCellModel: Decodable {
         depositAddress = try values.decode(String.self, forKey: .depositAddress)
         deposit = try values.decode(SymbolValue.self, forKey: .deposit)
         withdrawalAddress = try values.decode(String.self, forKey: .withdrawalAddress)
-        withdrawal = try values.decode(SymbolValue.self, forKey: .withdrawal)
+        withdrawal = try values.decodeIfPresent(SymbolValue.self, forKey: .withdrawal)
         withdrawalFee = try values.decode(SymbolValue.self, forKey: .withdrawalFee)
         fiatValue = try values.decode(SymbolValue.self, forKey: .fiatValue)
         depositTxHash = try values.decodeIfPresent(String.self, forKey: .depositTxHash)
@@ -394,55 +392,72 @@ extension ExchangeTradeModel.TradeStatus {
 
 fileprivate extension ExchangeTrade {
     
-    fileprivate func inboundDisplayAmount() -> String? {
-        if BlockchainSettings.sharedAppInstance().symbolLocal {
-            guard let currencySymbol = withdrawalCurrency() else { return nil }
-            guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
-            switch assetType {
-            case .bitcoin:
-                let value = NumberFormatter.parseBtcValue(from: withdrawalAmount.stringValue)
-                return NumberFormatter.formatMoney(value.magnitude)
-            case .ethereum:
-                guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
-                return NumberFormatter.formatEth(
-                    withLocalSymbol: withdrawalAmount.stringValue,
-                    exchangeRate: exchangeRate
-                )
-            case .bitcoinCash:
-                let value = NumberFormatter.parseBtcValue(from: withdrawalAmount.stringValue)
-                return NumberFormatter.formatBch(withSymbol: value.magnitude)
-            }
-        } else {
-            guard let toAsset = pair.components(separatedBy: "_").last else { return nil }
-            let formatted = toAsset.uppercased()
-            guard let amount = NumberFormatter.localFormattedString(withdrawalAmount.stringValue) else { return nil }
-            return amount + " " + formatted
+    fileprivate func minerFeeCryptoAmount() -> String? {
+        guard let assetType = AssetType(stringValue: minerCurrency()) else { return nil }
+        return toCrypto(from: assetType, amount: minerFee)
+    }
+    
+    fileprivate func inboundFiatAmount() -> String? {
+        guard let toAsset = pair.components(separatedBy: "_").last else { return nil }
+        guard let assetType = AssetType(stringValue: toAsset) else { return nil }
+        return toFiat(from: assetType, amount: withdrawalAmount)
+    }
+    
+    fileprivate func inboundCryptoAmount() -> String? {
+        guard let currencySymbol = withdrawalCurrency() else { return nil }
+        guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
+        return toCrypto(from: assetType, amount: withdrawalAmount)
+    }
+    
+    fileprivate func outboundFiatAmount() -> String? {
+        guard let fromAsset = pair.components(separatedBy: "_").first else { return nil }
+        guard let assetType = AssetType(stringValue: fromAsset) else { return nil }
+        return toFiat(from: assetType, amount: depositAmount)
+    }
+    
+    fileprivate func outboundCryptoAmount() -> String? {
+        guard let currencySymbol = depositCurrency() else { return nil }
+        guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
+        return toCrypto(from: assetType, amount: depositAmount)
+    }
+    
+    fileprivate func toFiat(from assetType: AssetType, amount: NSDecimalNumber) -> String? {
+        switch assetType {
+        case .bitcoin:
+            let value = NumberFormatter.formatMoney(
+                amount.uint64Value,
+                localCurrency: true
+            )
+            return value
+        case .ethereum:
+            let value = NumberFormatter.formatEthToFiat(
+                withSymbol: amount.stringValue,
+                exchangeRate: WalletManager.shared.wallet.latestEthExchangeRate
+            )
+            return value
+        case .bitcoinCash:
+            let value = NumberFormatter.formatBch(
+                withSymbol: amount.uint64Value,
+                localCurrency: true
+            )
+            return value
         }
     }
     
-    fileprivate func outboundDisplayAmount() -> String? {
-        if BlockchainSettings.sharedAppInstance().symbolLocal {
-            guard let currencySymbol = depositCurrency() else { return nil }
-            guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
-            switch assetType {
-            case .bitcoin:
-                let value = NumberFormatter.parseBtcValue(from: depositAmount.stringValue)
-                return NumberFormatter.formatMoney(value.magnitude)
-            case .ethereum:
-                guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
-                return NumberFormatter.formatEth(
-                    withLocalSymbol: depositAmount.stringValue,
-                    exchangeRate: exchangeRate
-                )
-            case .bitcoinCash:
-                let value = NumberFormatter.parseBtcValue(from: depositAmount.stringValue)
-                return NumberFormatter.formatBch(withSymbol: value.magnitude)
-            }
-        } else {
-            guard let fromAsset = pair.components(separatedBy: "_").first else { return nil }
-            let formatted = fromAsset.uppercased()
-            guard let amount = NumberFormatter.localFormattedString(depositAmount.stringValue) else { return nil }
-            return amount + " " + formatted
+    fileprivate func toCrypto(from assetType: AssetType, amount: NSDecimalNumber) -> String? {
+        switch assetType {
+        case .bitcoin:
+            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            return NumberFormatter.formatMoney(value.magnitude)
+        case .ethereum:
+            guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
+            return NumberFormatter.formatEth(
+                withLocalSymbol: amount.stringValue,
+                exchangeRate: exchangeRate
+            )
+        case .bitcoinCash:
+            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            return NumberFormatter.formatBch(withSymbol: value.magnitude)
         }
     }
 }

@@ -86,13 +86,32 @@ struct ExchangeServices: ExchangeDependencies {
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
             }, onError: { error in
+                AlertViewPresenter.shared.standardError(
+                    message: self.errorMessage(for: error),
+                    title: LocalizationConstants.Errors.error,
+                    in: self.rootViewController
+                )
                 Logger.shared.error("Failed to get user: \(error.localizedDescription)")
-                AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
             })
     }
 
+    // TICKET: IOS-1168 - Complete error handling TODOs throughout the KYC
+    private func errorMessage(for error: Error) -> String {
+        guard let serverError = error as? HTTPRequestServerError,
+            case let .badStatusCode(_, badStatusCodeError) = serverError,
+            let nabuError = badStatusCodeError as? NabuNetworkError else {
+                return error.localizedDescription
+        }
+        switch (nabuError.type, nabuError.code) {
+        case (.conflict, .userRegisteredAlready):
+            return LocalizationConstants.KYC.emailAddressAlreadyInUse
+        default:
+            return error.localizedDescription
+        }
+    }
+
     private func showAppropriateExchange() {
-        if WalletManager.shared.wallet.hasEthAccount() {
+        if walletManager.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
@@ -106,22 +125,23 @@ struct ExchangeServices: ExchangeDependencies {
             }
             checkForHomebrewAvailability(success: success, error: error)
         } else {
-            if WalletManager.shared.wallet.needsSecondPassword() {
+            if walletManager.wallet.needsSecondPassword() {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
                     withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
                     headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                    validateSecondPassword: true
-                ) { (secondPassword) in
-                    WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
-                }
+                    validateSecondPassword: true,
+                    confirmHandler: { (secondPassword) in
+                        self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
+                    }
+                )
             } else {
-                WalletManager.shared.wallet.createEthAccount(forExchange: nil)
+                walletManager.wallet.createEthAccount(forExchange: nil)
             }
         }
     }
 
     private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
-        guard let countryCode = WalletManager.sharedInstance().wallet.countryCodeGuess() else {
+        guard let countryCode = walletManager.wallet.countryCodeGuess() else {
             error(NetworkError.generic(message: "No country code found"))
             return
         }

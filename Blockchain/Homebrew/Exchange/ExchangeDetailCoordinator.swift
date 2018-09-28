@@ -180,7 +180,7 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             case .overview(let trade):
                 interface?.updateBackgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-                interface?.updateTitle(trade.amountReceivedCryptoValue + LocalizationConstants.Exchange.orderID + " " + trade.identifier)
+                interface?.updateTitle(trade.amountReceivedCrypto + LocalizationConstants.Exchange.orderID + " " + trade.identifier)
                 interface?.navigationBarVisibility(.visible)
                 
                 let status = ExchangeCellModel.Plain(
@@ -199,20 +199,20 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let exchange = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.exchange,
-                    value: trade.amountDepositedCryptoValue + " " + trade.amountDepositedCryptoSymbol,
+                    value: trade.amountDepositedCrypto,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let receive = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.receive,
-                    value: trade.amountReceivedCryptoValue + " " + trade.amountReceivedCryptoSymbol,
+                    value: trade.amountReceivedCrypto,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
                     bold: true
                 )
                 
                 let fees = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.fees,
-                    value: trade.amountFeeValue + " " + trade.amountFeeSymbol,
+                    value: trade.feeDisplayValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
@@ -291,7 +291,8 @@ extension ExchangeDetailCoordinator {
     func valueString(for amount: String, currencyCode: String) -> String {
         if let currencySymbol =  BlockchainSettings.sharedAppInstance().fiatSymbolFromCode(currencyCode: currencyCode) {
             // $2.34
-            return currencySymbol + amount
+            // `Partner` models already have the currency symbol appended.
+            return amount.contains(currencySymbol) ? amount : currencySymbol + amount
         } else {
             // 2.34 USD
             return amount + " " + currencyCode

@@ -44,6 +44,7 @@ class MarketsService {
 
     private let restMessageSubject = PublishSubject<Conversion>()
     private let authentication: NabuAuthenticationService
+    private let socketManager: SocketManager
     private let cachedExchangeRates = BehaviorRelay<ExchangeRates?>(value: nil)
     private let disposables = CompositeDisposable()
 
@@ -55,19 +56,24 @@ class MarketsService {
 
     var hasAuthenticated: Bool = false
 
-    init(authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared) {
+    init(
+        authenticationService: NabuAuthenticationService = NabuAuthenticationService.shared,
+        socketManager: SocketManager = SocketManager.shared
+    ) {
         self.authentication = authenticationService
+        self.socketManager = socketManager
     }
 
     deinit {
         disposables.dispose()
+        socketManager.disconnect(socketType: .exchange)
     }
 }
 
 // MARK: - Setup
 extension MarketsService {
     func setup() {
-        SocketManager.shared.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
+        socketManager.setupSocket(socketType: .exchange, url: URL(string: BlockchainAPI.shared.retailCoreSocketUrl)!)
     }
 }
 

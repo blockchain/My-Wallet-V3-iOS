@@ -54,6 +54,19 @@ class ExchangeListViewController: UIViewController {
         registerForNotifications()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let controller = navigationController as? BCNavigationController {
+            controller.applyDarkAppearance()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.onDisappear()
+    }
+    
     fileprivate func dependenciesSetup() {
         let interactor = ExchangeListInteractor(dependencies: dependencies)
         presenter = ExchangeListPresenter(interactor: interactor)
@@ -67,11 +80,6 @@ class ExchangeListViewController: UIViewController {
             guard let this = self else { return }
             this.delegate?.onLoaded()
         }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        delegate?.onDisappear()
     }
     
     deinit {

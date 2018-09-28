@@ -75,7 +75,7 @@ import RxSwift
         }
 
         // Show security reminder modal if needed
-        if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.reminderModalDate {
+        if let dateOfLastSecurityReminder = BlockchainSettings.App.shared.dateOfLastSecurityReminder {
 
             // TODO: hook up debug settings to show security reminder
             let timeIntervalBetweenPrompts = Constants.Time.securityReminderModalTimeInterval
@@ -212,11 +212,11 @@ import RxSwift
 
         pinEntryViewController = nil
 
-        BlockchainSettings.App.shared.clearPin()
-
         WalletManager.shared.close()
 
         BlockchainDataRepository.shared.clearCache()
+
+        BlockchainSettings.App.shared.reset()
 
         let appCoordinator = AppCoordinator.shared
         appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
@@ -251,6 +251,8 @@ import RxSwift
                 ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
                 self.walletManager.forgetWallet()
                 OnboardingCoordinator.shared.start()
+                // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
+                // BlockchainSettings.App.shared.clear()
             }
         )
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
@@ -427,7 +429,8 @@ import RxSwift
         withDisplayText displayText: String,
         headerText: String,
         validateSecondPassword: Bool,
-        confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler
+        confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler,
+        dismissHandler: PasswordConfirmView.OnPasswordDismissHandler? = nil
     ) {
         let loadingViewPresenter = LoadingViewPresenter.shared
         let isLoadingShown = loadingViewPresenter.isLoadingShown
@@ -455,6 +458,7 @@ import RxSwift
 
             confirmHandler(password)
         }
+        passwordConfirmView.dismissHandler = dismissHandler
         ModalPresenter.shared.showModal(
             withContent: passwordConfirmView,
             closeType: ModalCloseTypeClose,
@@ -627,19 +631,24 @@ extension AuthenticationCoordinator: SetupDelegate {
 }
 
 extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
-    func getSecondPassword(success: WalletSuccessCallback) {
+    func getSecondPassword(success: WalletSuccessCallback, dismiss: WalletDismissCallback?) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                            validateSecondPassword: true) { (secondPassword) in
+                            validateSecondPassword: true,
+                            confirmHandler: { (secondPassword) in
                                 success.success(string: secondPassword)
-        }
+                            },
+                            dismissHandler: { dismiss?.dismiss() }
+        )
     }
 
     func getPrivateKeyPassword(success: WalletSuccessCallback) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.privateKeyPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.privateKeyNeeded,
-                            validateSecondPassword: false) { (privateKeyPassword) in
+                            validateSecondPassword: false,
+                            confirmHandler: { (privateKeyPassword) in
                                 success.success(string: privateKeyPassword)
-        }
+                            }
+        )
     }
 }

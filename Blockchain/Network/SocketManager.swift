@@ -101,6 +101,7 @@ class SocketManager {
 
 extension SocketManager: WebSocketAdvancedDelegate {
     func websocketDidConnect(socket: WebSocket) {
+        Logger.shared.debug("Websocket connected to: \(socket.currentURL.absoluteString)")
         if socket == self.exchangeSocket {
             pendingSocketMessages.forEach { [unowned self] in
                 self.send(message: $0)
@@ -163,6 +164,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
     func websocketDidDisconnect(socket: WebSocket, error: Error?) {
         // Required by protocol
+        Logger.shared.debug("Websocket disconnected from: \(socket.currentURL.absoluteString)")
     }
 
     func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
