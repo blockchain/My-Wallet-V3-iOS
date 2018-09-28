@@ -120,7 +120,8 @@ extension ExchangeService: ExchangeHistoryAPI {
     }
     
     func isExecuting() -> Bool {
-        return tradeQueue.operations.count > 0 || homebrewOperation.isExecuting
+        guard let homebrew = homebrewOperation else { return false }
+        return tradeQueue.operations.count > 0 || homebrew.isExecuting
     }
     
     func cancel() {

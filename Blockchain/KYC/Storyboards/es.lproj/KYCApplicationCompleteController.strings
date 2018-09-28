@@ -1,0 +1,33 @@
+
+/* Class = "UINavigationItem"; title = "Application Complete"; ObjectID = "1Yy-en-UwY"; */
+"1Yy-en-UwY.title" = "Application Complete";
+
+/* Class = "UILabel"; text = "Video Uploaded"; ObjectID = "Ddc-sc-fJJ"; */
+"Ddc-sc-fJJ.text" = "Video Uploaded";
+
+/* Class = "UILabel"; text = "Device Verified"; ObjectID = "Kka-o3-LnN"; */
+"Kka-o3-LnN.text" = "Device Verified";
+
+/* Class = "UILabel"; text = "You successfuly submitted your information.\nYour account is now in review!"; ObjectID = "NXd-OI-udk"; */
+"NXd-OI-udk.text" = "You successfuly submitted your information.\nYour account is now in review!";
+
+/* Class = "UILabel"; text = "Done and Done!"; ObjectID = "OLG-9h-uZo"; */
+"OLG-9h-uZo.text" = "Done and Done!";
+
+/* Class = "UILabel"; text = "Country Selected"; ObjectID = "Puc-o5-mob"; */
+"Puc-o5-mob.text" = "Country Selected";
+
+/* Class = "UILabel"; text = "Profile Created"; ObjectID = "USd-te-JzK"; */
+"USd-te-JzK.text" = "Profile Created";
+
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "ZwK-eI-yC5"; */
+"ZwK-eI-yC5.normalTitle" = "Done";
+
+/* Class = "UIViewController"; title = "Application Complete View Controller"; ObjectID = "iQ4-fr-5d1"; */
+"iQ4-fr-5d1.title" = "Application Complete View Controller";
+
+/* Class = "UILabel"; text = "ID Uploaded"; ObjectID = "lae-zZ-Cfr"; */
+"lae-zZ-Cfr.text" = "ID Uploaded";
+
+/* Class = "UILabel"; text = "Home Address Added"; ObjectID = "wwO-B7-dU9"; */
+"wwO-B7-dU9.text" = "Home Address Added";

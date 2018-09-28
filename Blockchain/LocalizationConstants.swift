@@ -7,6 +7,7 @@
 //
 // swiftlint:disable line_length
 // swiftlint:disable identifier_name
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -693,6 +694,10 @@ struct LocalizationConstants {
         static let submittingInformation = NSLocalizedString(
             "Submitting information...",
             comment: "Text prompt to the user when the client is submitting the identity documents to Blockchain's servers."
+        )
+        static let emailAddressAlreadyInUse = NSLocalizedString(
+            "This email address has already been used to verify an existing wallet.",
+            comment: "The error message when a user attempts to start KYC using an existing email address."
         )
     }
 }

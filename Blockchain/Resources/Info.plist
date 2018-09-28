@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_URL</key>
+	<string>$(API_URL)</string>
+	<key>BUY_WEBVIEW_URL</key>
+	<string>$(BUY_WEBVIEW_URL)</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(APP_NAME)</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.rainydayapps.Blockchain$(BUNDLE_ID_SUFFIX)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(APP_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.5.1</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.blockchain.Blockchain</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bitcoin</string>
+				<string>blockchain-wallet</string>
+				<string>blockchain</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>$(FABRIC_API_KEY)</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
+	<key>LOCAL_CERTIFICATE_FILE</key>
+	<string>$(LOCAL_CERTIFICATE_FILE)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This is required for the app to scan QR codes.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Required for video capture.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you to securely access your wallet.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Blockchain needs access to your location to show you nearby businesses that accept Bitcoin.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Your permission is needed in order to upload documents from your photo library.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-ExtraLight.ttf</string>
+		<string>Montserrat-Light.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>WALLET_SERVER</key>
+	<string>$(WALLET_SERVER)</string>
+	<key>RETAIL_CORE_URL</key>
+	<string>$(RETAIL_CORE_URL)</string>
+	<key>RETAIL_CORE_SOCKET_URL</key>
+	<string>$(RETAIL_CORE_SOCKET_URL)</string>
+	<key>WEBSOCKET_SERVER</key>
+	<string>$(WEBSOCKET_SERVER)</string>
+	<key>WEBSOCKET_SERVER_BCH</key>
+	<string>$(WEBSOCKET_SERVER_BCH)</string>
+	<key>WEBSOCKET_SERVER_ETH</key>
+	<string>$(WEBSOCKET_SERVER_ETH)</string>
+</dict>
+</plist>

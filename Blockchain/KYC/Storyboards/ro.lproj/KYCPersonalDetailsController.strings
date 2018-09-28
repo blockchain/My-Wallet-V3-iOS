@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Regulations require that users must be 18 or older to trade crypto."; ObjectID = "IMs-GD-oqE"; */
+"IMs-GD-oqE.text" = "Regulations require that users must be 18 or older to trade crypto.";
+
+/* Class = "UIViewController"; title = "Personal Details View Controller"; ObjectID = "VK4-jv-eiz"; */
+"VK4-jv-eiz.title" = "Personal Details View Controller";
+
+/* Class = "UILabel"; text = "Why do we need this information?"; ObjectID = "tmZ-Mg-6Kp"; */
+"tmZ-Mg-6Kp.text" = "Why do we need this information?";
+
+/* Class = "UINavigationItem"; title = "Profile"; ObjectID = "yfh-XJ-JUf"; */
+"yfh-XJ-JUf.title" = "Profile";

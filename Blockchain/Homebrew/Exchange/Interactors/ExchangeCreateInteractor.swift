@@ -19,7 +19,7 @@ class ExchangeCreateInteractor {
         }
     }
 
-    private var disposable: Disposable?
+    private let disposables = CompositeDisposable()
     private var tradingLimitDisposable: Disposable?
 
     fileprivate let inputs: ExchangeInputsAPI
@@ -62,11 +62,10 @@ class ExchangeCreateInteractor {
     }
 
     deinit {
-        disposable?.dispose()
-        disposable = nil
-
         tradingLimitDisposable?.dispose()
         tradingLimitDisposable = nil
+        
+        disposables.dispose()
     }
 }
 
@@ -95,7 +94,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     func subscribeToConversions() {
-        disposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
+        let conversionsDisposable = markets.conversions.subscribe(onNext: { [weak self] conversion in
             guard let this = self else { return }
 
             guard let model = this.model else { return }
@@ -122,6 +121,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }, onError: { error in
             Logger.shared.error("Error subscribing to quote with trading pair")
         })
+        
+        let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
+            // TODO: Implement error handling from Socket.
+        })
+        
+        _ = disposables.insert(conversionsDisposable)
+        _ = disposables.insert(errorDisposable)
     }
 
     func updateMarketsConversion() {
@@ -260,7 +266,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
     }
 
-    func changeTradingPair(tradingPair: TradingPair) {
+    func changeMarketPair(marketPair: MarketPair) {
         guard let model = model else { return }
 
         // Unsubscribe from old pair conversions
@@ -268,9 +274,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         markets.unsubscribeToCurrencyPair(pair: model.pair.stringRepresentation)
 
         // Update to new pair
-        model.pair = tradingPair
+        model.marketPair = marketPair
         updatedInput()
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
+    }
+    
+    func confirmationIsExecuting() -> Bool {
+        return tradeExecution.isExecuting
     }
 
     func confirmConversion() {

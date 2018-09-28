@@ -1,0 +1,12 @@
+
+/* Class = "UIViewController"; title = "Address View Controller"; ObjectID = "1m4-Wz-u3W"; */
+"1m4-Wz-u3W.title" = "Address View Controller";
+
+/* Class = "UINavigationItem"; title = "Home Address"; ObjectID = "Nph-6g-WhM"; */
+"Nph-6g-WhM.title" = "Home Address";
+
+/* Class = "UILabel"; text = "What is the address used for?"; ObjectID = "TVk-mv-RzC"; */
+"TVk-mv-RzC.text" = "What is the address used for?";
+
+/* Class = "UILabel"; text = "We need this information to verify your identity."; ObjectID = "zsH-tV-aX0"; */
+"zsH-tV-aX0.text" = "We need this information to verify your identity.";

@@ -49,8 +49,6 @@ struct ExchangeServices: ExchangeDependencies {
         case shapeshift
     }
 
-    private(set) var user: NabuUser?
-
     static let shared = ExchangeCoordinator()
 
     // class function declared so that the ExchangeCoordinator singleton can be accessed from obj-C
@@ -65,7 +63,6 @@ struct ExchangeServices: ExchangeDependencies {
     private let walletManager: WalletManager
 
     private let walletService: WalletService
-    private let dependencies: ExchangeDependencies = ExchangeServices()
 
     private var disposable: Disposable?
     
@@ -79,27 +76,42 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Entry Point
 
     func start() {
-        if let theUser = user, theUser.status == .approved {
-            showAppropriateExchange(); return
-        }
         disposable = BlockchainDataRepository.shared.nabuUser
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in
-                self.user = $0
-                guard self.user?.status == .approved else {
+                guard $0.status == .approved else {
                     KYCCoordinator.shared.start(); return
                 }
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
             }, onError: { error in
+                AlertViewPresenter.shared.standardError(
+                    message: self.errorMessage(for: error),
+                    title: LocalizationConstants.Errors.error,
+                    in: self.rootViewController
+                )
                 Logger.shared.error("Failed to get user: \(error.localizedDescription)")
-                AlertViewPresenter.shared.standardError(message: error.localizedDescription, title: "Error", in: self.rootViewController)
             })
     }
 
+    // TICKET: IOS-1168 - Complete error handling TODOs throughout the KYC
+    private func errorMessage(for error: Error) -> String {
+        guard let serverError = error as? HTTPRequestServerError,
+            case let .badStatusCode(_, badStatusCodeError) = serverError,
+            let nabuError = badStatusCodeError as? NabuNetworkError else {
+                return error.localizedDescription
+        }
+        switch (nabuError.type, nabuError.code) {
+        case (.conflict, .userRegisteredAlready):
+            return LocalizationConstants.KYC.emailAddressAlreadyInUse
+        default:
+            return error.localizedDescription
+        }
+    }
+
     private func showAppropriateExchange() {
-        if WalletManager.shared.wallet.hasEthAccount() {
+        if walletManager.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
@@ -113,22 +125,23 @@ struct ExchangeServices: ExchangeDependencies {
             }
             checkForHomebrewAvailability(success: success, error: error)
         } else {
-            if WalletManager.shared.wallet.needsSecondPassword() {
+            if walletManager.wallet.needsSecondPassword() {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
                     withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
                     headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                    validateSecondPassword: true
-                ) { (secondPassword) in
-                    WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
-                }
+                    validateSecondPassword: true,
+                    confirmHandler: { (secondPassword) in
+                        self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
+                    }
+                )
             } else {
-                WalletManager.shared.wallet.createEthAccount(forExchange: nil)
+                walletManager.wallet.createEthAccount(forExchange: nil)
             }
         }
     }
 
     private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
-        guard let countryCode = WalletManager.sharedInstance().wallet.countryCodeGuess() else {
+        guard let countryCode = walletManager.wallet.countryCodeGuess() else {
             error(NetworkError.generic(message: "No country code found"))
             return
         }
@@ -147,14 +160,14 @@ struct ExchangeServices: ExchangeDependencies {
             .subscribe(onSuccess: success, onError: error)
     }
 
-    private func showExchange(type: ExchangeType) {
+    private func showExchange(type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
             guard let viewController = rootViewController else {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            let listViewController = ExchangeListViewController.make(with: dependencies, coordinator: self)
+            let listViewController = ExchangeListViewController.make(with: ExchangeServices(), coordinator: self)
             navigationController = BCNavigationController(
                 rootViewController: listViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -165,7 +178,7 @@ struct ExchangeServices: ExchangeDependencies {
                 Logger.shared.error("View controller to present on is nil")
                 return
             }
-            exchangeViewController = PartnerExchangeListViewController()
+            exchangeViewController = PartnerExchangeListViewController.create(withCountryCode: country?.code)
             let partnerNavigationController = BCNavigationController(
                 rootViewController: exchangeViewController,
                 title: LocalizationConstants.Exchange.navigationTitle
@@ -174,10 +187,10 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    private func showCreateExchange(animated: Bool, type: ExchangeType) {
+    private func showCreateExchange(animated: Bool, type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
-            let exchangeCreateViewController = ExchangeCreateViewController.make(with: dependencies)
+            let exchangeCreateViewController = ExchangeCreateViewController.make(with: ExchangeServices())
             if navigationController == nil {
                 guard let viewController = rootViewController else {
                     Logger.shared.error("View controller to present on is nil")
@@ -192,7 +205,7 @@ struct ExchangeServices: ExchangeDependencies {
                 navigationController?.pushViewController(exchangeCreateViewController, animated: animated)
             }
         case .shapeshift:
-            showExchange(type: .shapeshift)
+            showExchange(type: .shapeshift, country: country)
         }
     }
 
@@ -201,8 +214,8 @@ struct ExchangeServices: ExchangeDependencies {
             Logger.shared.error("No navigation controller found")
             return
         }
-        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion, dependencies.tradeExecution)
-        let confirmController = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
+        let model = ExchangeDetailViewController.PageModel.confirm(orderTransaction, conversion)
+        let confirmController = ExchangeDetailViewController.make(with: model, dependencies: ExchangeServices())
         navigationController.pushViewController(confirmController, animated: true)
     }
     
@@ -212,19 +225,19 @@ struct ExchangeServices: ExchangeDependencies {
             return
         }
         let model = ExchangeDetailViewController.PageModel.locked(orderTransaction, conversion)
-        let controller = ExchangeDetailViewController.make(with: model, dependencies: dependencies)
+        let controller = ExchangeDetailViewController.make(with: model, dependencies: ExchangeServices())
         navigationController.present(controller, animated: true, completion: nil)
     }
 
     private func showTradeDetails(trade: ExchangeTradeModel) {
-        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: dependencies)
+        let detailViewController = ExchangeDetailViewController.make(with: .overview(trade), dependencies: ExchangeServices())
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
-        case createPartnerExchange(animated: Bool, viewController: UIViewController?)
+        case createPartnerExchange(country: KYCCountry, animated: Bool, viewController: UIViewController?)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
         case sentTransaction(orderTransaction: OrderTransaction, conversion: Conversion)
         case showTradeDetails(trade: ExchangeTradeModel)
@@ -237,11 +250,11 @@ struct ExchangeServices: ExchangeDependencies {
                 rootViewController = viewController
             }
             showCreateExchange(animated: animated, type: .homebrew)
-        case .createPartnerExchange(let animated, let viewController):
+        case .createPartnerExchange(let country, let animated, let viewController):
             if viewController != nil {
                 rootViewController = viewController
             }
-            showCreateExchange(animated: animated, type: .shapeshift)
+            showCreateExchange(animated: animated, type: .shapeshift, country: country)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
         case .sentTransaction(orderTransaction: let transaction, conversion: let conversion):

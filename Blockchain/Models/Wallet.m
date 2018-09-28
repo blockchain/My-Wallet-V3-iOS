@@ -465,8 +465,8 @@
         [weakSelf error_restoring_wallet];
     };
 
-    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *helperText) {
-        [weakSelf getSecondPasswordSuccess:secondPassword error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
+    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *dismiss, JSValue *helperText) {
+        [weakSelf getSecondPasswordSuccess:secondPassword dismiss:dismiss error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
     };
 
     self.context[@"objc_get_private_key_password"] = ^(JSValue *privateKeyPassword) {
@@ -2634,11 +2634,18 @@
     return nil;
 }
 
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction completion:(void (^ _Nonnull)(void))completion success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
-
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull response) {
+        completion();
+        success(response);
+    } forJsFunctionName:@"objc_on_create_order_payment_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_create_order_payment_error"];
+    
     NSString *tradeExecutionType;
     NSString *formattedAmount;
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
@@ -2658,11 +2665,22 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel
 {
-    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
+    [self.context invokeOnceWithFunctionBlock:^{
+        completion();
+        success();
+    } forJsFunctionName:@"objc_on_send_order_transaction_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
+    [self.context invokeOnceWithFunctionBlock:^{
+        cancel();
+    } forJsFunctionName:@"objc_on_send_order_transaction_dismiss"];
+    
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
@@ -2674,7 +2692,7 @@
         DLog(@"Unsupported legacy asset type");
         return;
     }
-
+    
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
 }
 
@@ -3230,10 +3248,10 @@
     }
 }
 
-- (void)getSecondPasswordSuccess:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
+- (void)getSecondPasswordSuccess:(JSValue *)success dismiss:(JSValue *)dismiss error:(void(^)(id))_error helperText:(NSString *)helperText
 {
-    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:)]) {
-        [delegate getSecondPasswordWithSuccess:success];
+    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:dismiss:)]) {
+        [delegate getSecondPasswordWithSuccess:success dismiss:dismiss];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector getSecondPassword!", [delegate class]);
     }

@@ -89,7 +89,8 @@ struct NetworkRequest {
             }
 
             guard (200...299).contains(httpResponse.statusCode) else {
-                withCompletion(.error(HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode)), httpResponse.statusCode)
+                let errorStatusCode = HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode, error: nil)
+                withCompletion(.error(errorStatusCode), httpResponse.statusCode)
                 return
             }
 

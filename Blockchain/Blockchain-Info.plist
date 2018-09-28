@@ -58,19 +58,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>NSCameraUsageDescription</string>
+	<string>This is required for the app to scan QR codes.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Required for video capture.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Enabling Face ID allows you to securely access your wallet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Blockchain needs access to your location to show you nearby businesses that accept Bitcoin</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Required for video capture</string>
+	<string>Blockchain needs access to your location to show you nearby businesses that accept Bitcoin.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Your permission is needed in order to upload documents from your photo library</string>
-	<key>RETAIL_CORE_SOCKET_URL</key>
-	<string>$(RETAIL_CORE_SOCKET_URL)</string>
-	<key>RETAIL_CORE_URL</key>
-	<string>$(RETAIL_CORE_URL)</string>
+	<string>Your permission is needed in order to upload documents from your photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-ExtraLight.ttf</string>

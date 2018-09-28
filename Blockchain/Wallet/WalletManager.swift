@@ -601,8 +601,8 @@ extension WalletManager: WalletDelegate {
     }
 
     // MARK: - Second Password
-    @objc func getSecondPassword(withSuccess success: WalletSuccessCallback) {
-        secondPasswordDelegate?.getSecondPassword(success: success)
+    @objc func getSecondPassword(withSuccess success: WalletSuccessCallback, dismiss: WalletDismissCallback) {
+        secondPasswordDelegate?.getSecondPassword(success: success, dismiss: dismiss)
     }
 
     @objc func getPrivateKeyPassword(withSuccess success: WalletSuccessCallback) {

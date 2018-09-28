@@ -8,25 +8,48 @@
 
 import Foundation
 
+/// `MarketPair` is to keep track of what accounts
+/// the user is transferring from and to. We originally
+/// used just a `TradingPair` but some users may have
+/// multiple wallets of the same asset type.
+struct MarketPair {
+    let fromAccount: AssetAccount
+    let toAccount: AssetAccount
+}
+
+extension MarketPair {
+    var pair: TradingPair {
+        let from = fromAccount.address.assetType
+        let to = toAccount.address.assetType
+        return TradingPair(from: from, to: to)!
+    }
+}
+
 // State model for interacting with the MarketsService
 class MarketsModel {
-    var pair: TradingPair
+    var marketPair: MarketPair
     var fiatCurrencyCode: String
     var fiatCurrencySymbol: String
     var fix: Fix
     var volume: String
     var lastConversion: Conversion?
 
-    init(pair: TradingPair,
+    init(marketPair: MarketPair,
          fiatCurrencyCode: String,
          fiatCurrencySymbol: String,
          fix: Fix,
          volume: String) {
-        self.pair = pair
+        self.marketPair = marketPair
         self.fiatCurrencyCode = fiatCurrencyCode
         self.fiatCurrencySymbol = fiatCurrencySymbol
         self.fix = fix
         self.volume = volume
+    }
+}
+
+extension MarketsModel {
+    var pair: TradingPair {
+        return marketPair.pair
     }
 }
 
