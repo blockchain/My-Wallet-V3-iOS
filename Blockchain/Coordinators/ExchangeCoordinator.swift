@@ -102,8 +102,8 @@ struct ExchangeServices: ExchangeDependencies {
             let nabuError = badStatusCodeError as? NabuNetworkError else {
                 return error.localizedDescription
         }
-        switch nabuError.type {
-        case .conflict: return LocalizationConstants.KYC.emailAddressAlreadyInUse
+        switch (nabuError.type, nabuError.code) {
+        case (.conflict, .userRegisteredAlready): return LocalizationConstants.KYC.emailAddressAlreadyInUse
         default: return error.localizedDescription
         }
     }
