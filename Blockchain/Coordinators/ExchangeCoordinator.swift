@@ -92,7 +92,7 @@ struct ExchangeServices: ExchangeDependencies {
     }
 
     private func showAppropriateExchange() {
-        if WalletManager.shared.wallet.hasEthAccount() {
+        if walletManager.wallet.hasEthAccount() {
             let success = { [weak self] (isHomebrewAvailable: Bool) in
                 if isHomebrewAvailable {
                     self?.showExchange(type: .homebrew)
@@ -106,24 +106,24 @@ struct ExchangeServices: ExchangeDependencies {
             }
             checkForHomebrewAvailability(success: success, error: error)
         } else {
-            if WalletManager.shared.wallet.needsSecondPassword() {
+            if walletManager.wallet.needsSecondPassword() {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
                     withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
                     headerText: LocalizationConstants.Authentication.secondPasswordRequired,
                     validateSecondPassword: true,
                     confirmHandler: { (secondPassword) in
-                        WalletManager.shared.wallet.createEthAccount(forExchange: secondPassword)
+                        self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
                     },
                     dismissHandler: {}
                 )
             } else {
-                WalletManager.shared.wallet.createEthAccount(forExchange: nil)
+                walletManager.wallet.createEthAccount(forExchange: nil)
             }
         }
     }
 
     private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
-        guard let countryCode = WalletManager.sharedInstance().wallet.countryCodeGuess() else {
+        guard let countryCode = walletManager.wallet.countryCodeGuess() else {
             error(NetworkError.generic(message: "No country code found"))
             return
         }
