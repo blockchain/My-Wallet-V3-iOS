@@ -465,8 +465,8 @@
         [weakSelf error_restoring_wallet];
     };
 
-    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *helperText) {
-        [weakSelf getSecondPasswordSuccess:secondPassword error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
+    self.context[@"objc_get_second_password"] = ^(JSValue *secondPassword, JSValue *dismiss, JSValue *helperText) {
+        [weakSelf getSecondPasswordSuccess:secondPassword dismiss:dismiss error:nil helperText:[helperText isUndefined] ? nil :  [helperText toString]];
     };
 
     self.context[@"objc_get_private_key_password"] = ^(JSValue *privateKeyPassword) {
@@ -2634,22 +2634,37 @@
     return nil;
 }
 
-- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_NonNull))error
+- (void)createOrderPaymentWithOrderTransaction:(OrderTransactionLegacy *_Nonnull)orderTransaction completion:(void (^ _Nonnull)(void))completion success:(void (^)(NSString *_Nonnull))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
 {
-    [self.context invokeOnceWithStringFunctionBlock:success forJsFunctionName:@"objc_on_create_order_payment_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_create_order_payment_error"];
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull response) {
+        completion();
+        success(response);
+    } forJsFunctionName:@"objc_on_create_order_payment_success"];
 
     NSString *tradeExecutionType;
     NSString *formattedAmount;
     if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+        [self.context invokeOnceWithValueFunctionBlock:^(JSValue *_Nonnull errorValue) {
+            [self showBTCPaymentError:[errorValue toDictionary][DICTIONARY_KEY_ERROR]];
+            completion();
+            error([errorValue toString]);
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
         tradeExecutionType = @"bitcoinCash";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
+        [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+            completion();
+            error(errorValue);
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeEther) {
         tradeExecutionType = @"ether";
         formattedAmount = orderTransaction.amount;
+        [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+            completion();
+            error(errorValue);
+        } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else {
         DLog(@"Unsupported legacy asset type");
         return;
@@ -2658,11 +2673,22 @@
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel
 {
-    [self.context invokeOnceWithFunctionBlock:success forJsFunctionName:@"objc_on_send_order_transaction_success"];
-    [self.context invokeOnceWithStringFunctionBlock:error forJsFunctionName:@"objc_on_send_order_transaction_error"];
+    [self.context invokeOnceWithFunctionBlock:^{
+        completion();
+        success();
+    } forJsFunctionName:@"objc_on_send_order_transaction_success"];
+    
+    [self.context invokeOnceWithStringFunctionBlock:^(NSString * _Nonnull errorValue) {
+        completion();
+        error(errorValue);
+    } forJsFunctionName:@"objc_on_send_order_transaction_error"];
 
+    [self.context invokeOnceWithFunctionBlock:^{
+        cancel();
+    } forJsFunctionName:@"objc_on_send_order_transaction_dismiss"];
+    
     NSString *tradeExecutionType;
     if (legacyAssetType == LegacyAssetTypeBitcoin) {
         tradeExecutionType = @"bitcoin";
@@ -2674,7 +2700,7 @@
         DLog(@"Unsupported legacy asset type");
         return;
     }
-
+    
     [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
 }
 
@@ -3230,10 +3256,10 @@
     }
 }
 
-- (void)getSecondPasswordSuccess:(JSValue *)success error:(void(^)(id))_error helperText:(NSString *)helperText
+- (void)getSecondPasswordSuccess:(JSValue *)success dismiss:(JSValue *)dismiss error:(void(^)(id))_error helperText:(NSString *)helperText
 {
-    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:)]) {
-        [delegate getSecondPasswordWithSuccess:success];
+    if ([delegate respondsToSelector:@selector(getSecondPasswordWithSuccess:dismiss:)]) {
+        [delegate getSecondPasswordWithSuccess:success dismiss:dismiss];
     } else {
         DLog(@"Error: delegate of class %@ does not respond to selector getSecondPassword!", [delegate class]);
     }
@@ -3659,26 +3685,9 @@
 - (void)on_error_update_fee:(NSDictionary *)error updateType:(FeeUpdateType)updateType
 {
     DLog(@"on_error_update_fee");
-    NSString *message;
-    if ([error[DICTIONARY_KEY_MESSAGE] isKindOfClass:[NSString class]]) {
-        message = error[DICTIONARY_KEY_MESSAGE];
-    } else {
-        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
-        message = [errorObject isKindOfClass:[NSString class]] ? errorObject : errorObject[DICTIONARY_KEY_ERROR];
-    }
 
     if (updateType == FeeUpdateTypeConfirm) {
-        if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_NO_AVAILABLE_FUNDS title:BC_STRING_ERROR in:nil handler:nil];
-        } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
-            id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
-            uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR in:nil handler:nil];
-        } else if ([message isEqualToString:ERROR_FETCH_UNSPENT]) {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR in:nil handler:nil];
-        } else {
-            [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
-        }
+        [self showBTCPaymentError:error];
 
         if ([self.delegate respondsToSelector:@selector(enableSendPaymentButtons)]) {
             [self.delegate enableSendPaymentButtons];
@@ -4649,6 +4658,31 @@
 #endif
 
     [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:decription title:BC_STRING_ERROR in:nil handler:nil];
+}
+
+#pragma mark - Helper methods
+
+- (void)showBTCPaymentError:(NSDictionary *)error
+{
+    NSString *message;
+    if ([error[DICTIONARY_KEY_MESSAGE] isKindOfClass:[NSString class]]) {
+        message = error[DICTIONARY_KEY_MESSAGE];
+    } else {
+        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
+        message = [errorObject isKindOfClass:[NSString class]] ? errorObject : errorObject[DICTIONARY_KEY_ERROR];
+    }
+
+    if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge notEnoughFunds] title:BC_STRING_ERROR in:nil handler:nil];
+    } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
+        id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
+        uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[NSString stringWithFormat:BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD, threshold] title:BC_STRING_ERROR in:nil handler:nil];
+    } else if ([message isEqualToString:ERROR_FETCH_UNSPENT]) {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_SOMETHING_WENT_WRONG_CHECK_INTERNET_CONNECTION title:BC_STRING_ERROR in:nil handler:nil];
+    } else {
+        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:message title:BC_STRING_ERROR in:nil handler:nil];
+    }
 }
 
 #pragma mark - Settings Helpers

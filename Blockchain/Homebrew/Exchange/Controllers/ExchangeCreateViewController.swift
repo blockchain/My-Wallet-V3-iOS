@@ -127,7 +127,7 @@ class ExchangeCreateViewController: UIViewController {
         let interactor = ExchangeCreateInteractor(
             dependencies: dependencies,
             model: MarketsModel(
-                pair: TradingPair(from: fromAccount.address.assetType, to: toAccount.address.assetType)!,
+                marketPair: MarketPair(fromAccount: fromAccount, toAccount: toAccount),
                 fiatCurrencyCode: BlockchainSettings.sharedAppInstance().fiatCurrencyCode ?? "USD",
                 fiatCurrencySymbol: BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? "$",
                 fix: .base,
@@ -397,11 +397,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
 extension ExchangeCreateViewController: TradingPairViewDelegate {
     func onLeftButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: fromAccount.address.assetType, for: .exchanging)
+        assetAccountListPresenter.presentPicker(excludingAccount: fromAccount, for: .exchanging)
     }
 
     func onRightButtonTapped(_ view: TradingPairView, title: String) {
-        assetAccountListPresenter.presentPicker(excludingAssetType: toAccount.address.assetType, for: .receiving)
+        assetAccountListPresenter.presentPicker(excludingAccount: toAccount, for: .receiving)
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
@@ -419,12 +419,20 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
         assetAccounts.forEach { account in
             let alertAction = UIAlertAction(title: account.name, style: .default, handler: { [unowned self] _ in
                 Logger.shared.debug("Selected account titled: '\(account.name)' of type: '\(account.address.assetType.symbol)'")
+                
+                /// Note: Users should not be able to exchange between
+                /// accounts with the same assetType.
                 switch action {
                 case .exchanging:
-                    self.toAccount = account == self.toAccount ? self.fromAccount : self.toAccount
+                    if account.address.assetType == self.toAccount.address.assetType {
+                        self.toAccount = self.fromAccount
+                    }
+                    
                     self.fromAccount = account
                 case .receiving:
-                    self.fromAccount = account == self.fromAccount ? self.toAccount : self.fromAccount
+                    if account.address.assetType == self.fromAccount.address.assetType {
+                        self.fromAccount = self.toAccount
+                    }
                     self.toAccount = account
                 }
                 self.onTradingPairChanged()
@@ -434,18 +442,16 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
         actionSheetController.addAction(
             UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
         )
-
-        // Present picker
+        
         present(actionSheetController, animated: true)
     }
 
     private func onTradingPairChanged() {
-        guard let tradingPair = TradingPair(
-            from: fromAccount.address.assetType,
-            to: toAccount.address.assetType
-        ) else {
-            return
-        }
-        presenter.changeTradingPair(tradingPair: tradingPair)
+        presenter.changeMarketPair(
+            marketPair: MarketPair(
+                fromAccount: fromAccount,
+                toAccount: toAccount
+            )
+        )
     }
 }

@@ -41,7 +41,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
                                  DocumentMap.passport: DocumentType.passport,
                                  DocumentMap.residencePermitCard: DocumentType.residencePermit]
 
-    private var country: KYCCountry?
+    private var countryCode: String?
 
     private var disposable: Disposable?
 
@@ -53,8 +53,8 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     // MARK: - KYCCoordinatorDelegate
 
     override func apply(model: KYCPageModel) {
-        guard case let .verifyIdentity(country) = model else { return }
-        self.country = country
+        guard case let .verifyIdentity(countryCode) = model else { return }
+        self.countryCode = countryCode
     }
 
     // MARK: - Private Methods
@@ -85,15 +85,15 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         _ onfidoUser: OnfidoUser,
         _ providerCredentials: OnfidoCredentials
     ) -> OnfidoConfig? {
-        guard let country = country else {
-            Logger.shared.warning("Cannot construct OnfidoConfig. Country is nil.")
+        guard let countryCode = countryCode else {
+            Logger.shared.warning("Cannot construct OnfidoConfig. Country code is nil.")
             return nil
         }
 
         let config = try? OnfidoConfig.builder()
             .withToken(providerCredentials.key)
             .withApplicantId(onfidoUser.identifier)
-            .withDocumentStep(ofType: document, andCountryCode: country.code)
+            .withDocumentStep(ofType: document, andCountryCode: countryCode)
             .withFaceStep(ofVariant: .video)
             .build()
         return config
@@ -170,15 +170,18 @@ extension KYCVerifyIdentityController: OnfidoControllerDelegate {
     }
 
     func onOnfidoControllerSuccess(_ onfidoController: OnfidoController) {
-        onfidoController.dismiss(animated: true)
         LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.KYC.submittingInformation)
         _ = onfidoService.submitVerification(onfidoController.user)
             .subscribe(onCompleted: { [unowned self] in
                 LoadingViewPresenter.shared.hideBusyView()
-                self.coordinator.handle(event: .nextPageFromPageType(self.pageType, nil))
+                self.dismiss(animated: true, completion: {
+                    self.coordinator.handle(event: .nextPageFromPageType(self.pageType, nil))
+                })
             }, onError: { error in
                 LoadingViewPresenter.shared.hideBusyView()
-                AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
+                self.dismiss(animated: true, completion: {
+                    AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
+                })
                 Logger.shared.error("Failed to submit verification \(error.localizedDescription)")
             })
     }

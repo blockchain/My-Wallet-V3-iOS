@@ -7,6 +7,7 @@
 //
 // swiftlint:disable line_length
 // swiftlint:disable identifier_name
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -101,6 +102,7 @@ struct LocalizationConstants {
             """
             A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.
             """, comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
+        static let notEnoughFunds = NSLocalizedString("You don't have enough funds in this address to send that.", comment: "Message shown when the user has attempted to send more funds than the user has")
     }
 
     struct Authentication {
@@ -706,6 +708,10 @@ struct LocalizationConstants {
             "Submitting information...",
             comment: "Text prompt to the user when the client is submitting the identity documents to Blockchain's servers."
         )
+        static let emailAddressAlreadyInUse = NSLocalizedString(
+            "This email address has already been used to verify an existing wallet.",
+            comment: "The error message when a user attempts to start KYC using an existing email address."
+        )
     }
 }
 
@@ -835,6 +841,8 @@ struct LocalizationConstants {
     @objc class func continueKYCCardDescription() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardDescription }
 
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
+    
+    @objc class func notEnoughFunds() -> String { return LocalizationConstants.Errors.notEnoughFunds }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }
 

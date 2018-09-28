@@ -1,0 +1,12 @@
+
+/* Class = "UIViewController"; title = "Enter Mobile View Controller"; ObjectID = "7WR-uN-K1i"; */
+"7WR-uN-K1i.title" = "Enter Mobile View Controller";
+
+/* Class = "UILabel"; text = "Why do we need this?"; ObjectID = "PtR-Ju-hsT"; */
+"PtR-Ju-hsT.text" = "Why do we need this?";
+
+/* Class = "UILabel"; text = "We will send you a SMS with verification code."; ObjectID = "fxC-dO-8GT"; */
+"fxC-dO-8GT.text" = "We will send you a SMS with verification code.";
+
+/* Class = "UINavigationItem"; title = "Verify Your Device"; ObjectID = "zce-0p-WSv"; */
+"zce-0p-WSv.title" = "Verify Your Device";

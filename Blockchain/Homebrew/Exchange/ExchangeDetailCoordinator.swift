@@ -51,7 +51,7 @@ class ExchangeDetailCoordinator: NSObject {
         switch event {
         case .updateConfirmDetails(let orderTransaction, let conversion):
             interface?.mostRecentConversion = conversion
-            handle(event: .pageLoaded(.confirm(orderTransaction, conversion, tradeExecution)))
+            handle(event: .pageLoaded(.confirm(orderTransaction, conversion)))
         case .pageLoaded(let model):
             
             // TODO: These are placeholder `ViewModels`
@@ -62,7 +62,7 @@ class ExchangeDetailCoordinator: NSObject {
             var cellModels: [ExchangeCellModel] = []
             
             switch model {
-            case .confirm(let orderTransaction, let conversion, _):
+            case .confirm(let orderTransaction, let conversion):
                 interface?.updateBackgroundColor(#colorLiteral(red: 0.89, green: 0.95, blue: 0.97, alpha: 1))
                 interface?.updateTitle(LocalizationConstants.Exchange.confirmExchange)
                 
@@ -180,14 +180,15 @@ class ExchangeDetailCoordinator: NSObject {
                 delegate?.coordinator(self, updated: cellModels)
             case .overview(let trade):
                 interface?.updateBackgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-                interface?.updateTitle(trade.amountReceivedCryptoValue + LocalizationConstants.Exchange.orderID + " " + trade.identifier)
+                interface?.updateTitle(trade.amountReceivedCrypto + LocalizationConstants.Exchange.orderID + " " + trade.identifier)
                 interface?.navigationBarVisibility(.visible)
                 
                 let status = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.status,
                     value: trade.status.displayValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
-                    statusVisibility: .visible
+                    statusVisibility: .visible,
+                    statusTintColor: trade.status.tintColor
                 )
                 
                 let value = ExchangeCellModel.Plain(
@@ -198,20 +199,20 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let exchange = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.exchange,
-                    value: trade.amountDepositedCryptoValue + " " + trade.amountDepositedCryptoSymbol,
+                    value: trade.amountDepositedCrypto,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
                 let receive = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.receive,
-                    value: trade.amountReceivedCryptoValue + " " + trade.amountReceivedCryptoSymbol,
+                    value: trade.amountReceivedCrypto,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1),
                     bold: true
                 )
                 
                 let fees = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.fees,
-                    value: trade.amountFeeValue + " " + trade.amountFeeSymbol,
+                    value: trade.feeDisplayValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
                 
@@ -255,11 +256,31 @@ class ExchangeDetailCoordinator: NSObject {
                 Logger.shared.error("No conversion to use")
                 return
             }
-            tradeExecution.submitAndSend(with: lastConversion, success: { [weak self] in
+            guard tradeExecution.isExecuting == false else { return }
+            interface?.loadingVisibility(.visible, action: .confirmExchange)
+            
+            tradeExecution.submitAndSend(
+                with: lastConversion,
+                success: { [weak self] in
+                    guard let this = self else { return }
+                    
+                    NotificationCenter.default.post(
+                        Notification(name: Constants.NotificationKeys.exchangeSubmitted)
+                    )
+                    
+                    this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
+                    ExchangeCoordinator.shared.handle(
+                        event: .sentTransaction(
+                            orderTransaction: transaction,
+                            conversion: lastConversion
+                        )
+                    )
+                    this.delegate?.coordinator(this, completedTransaction: transaction)
+            }) { [weak self] errorDescription in
                 guard let this = self else { return }
-                ExchangeCoordinator.shared.handle(event: .sentTransaction(orderTransaction: transaction, conversion: lastConversion))
-                this.delegate?.coordinator(this, completedTransaction: transaction)
-            }) { AlertViewPresenter.shared.standardError(message: $0) }
+                this.interface?.loadingVisibility(.hidden, action: .confirmExchange)
+                AlertViewPresenter.shared.standardError(message: errorDescription)
+            }
         }
     }
 }
@@ -270,7 +291,8 @@ extension ExchangeDetailCoordinator {
     func valueString(for amount: String, currencyCode: String) -> String {
         if let currencySymbol =  BlockchainSettings.sharedAppInstance().fiatSymbolFromCode(currencyCode: currencyCode) {
             // $2.34
-            return currencySymbol + amount
+            // `Partner` models already have the currency symbol appended.
+            return amount.contains(currencySymbol) ? amount : currencySymbol + amount
         } else {
             // 2.34 USD
             return amount + " " + currencyCode

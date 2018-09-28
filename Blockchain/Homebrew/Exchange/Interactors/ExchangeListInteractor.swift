@@ -19,6 +19,7 @@ class ExchangeListInteractor: ExchangeListInput {
     }
     
     func fetchAllTrades() {
+        guard service.isExecuting() == false else { return }
         service.getAllTrades { [weak self] (result) in
             switch result {
             case .success(let models):

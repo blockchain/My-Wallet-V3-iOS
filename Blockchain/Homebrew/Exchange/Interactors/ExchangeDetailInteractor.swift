@@ -12,14 +12,12 @@ import RxSwift
 class ExchangeDetailInteractor {
     var disposable: Disposable?
     fileprivate let markets: ExchangeMarketsAPI
-    fileprivate let conversions: ExchangeConversionAPI
     fileprivate let tradeExecution: TradeExecutionAPI
 
     weak var output: ExchangeDetailOutput?
 
     init(dependencies: ExchangeDependencies) {
         self.markets = dependencies.markets
-        self.conversions = dependencies.conversions
         self.tradeExecution = dependencies.tradeExecution
     }
 
