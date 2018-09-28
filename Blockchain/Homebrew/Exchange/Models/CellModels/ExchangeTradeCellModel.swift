@@ -424,8 +424,8 @@ fileprivate extension ExchangeTrade {
     fileprivate func toFiat(from assetType: AssetType, amount: NSDecimalNumber) -> String? {
         switch assetType {
         case .bitcoin:
-            let value = NumberFormatter.formatBch(
-                withSymbol: amount.uint64Value,
+            let value = NumberFormatter.formatMoney(
+                amount.uint64Value,
                 localCurrency: true
             )
             return value
