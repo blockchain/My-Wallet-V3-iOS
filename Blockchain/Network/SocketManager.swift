@@ -161,7 +161,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
     func websocketDidDisconnect(socket: WebSocket, error: Error?) {
         // Required by protocol
-        Logger.shared.debug("Websocket disconnected to: \(socket.currentURL.absoluteString)")
+        Logger.shared.debug("Websocket disconnected from: \(socket.currentURL.absoluteString)")
     }
 
     func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
