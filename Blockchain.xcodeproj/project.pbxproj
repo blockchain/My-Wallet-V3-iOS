@@ -516,6 +516,16 @@
 		AA0843A0215C47290007BFD1 /* NabuNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08439E215C47290007BFD1 /* NabuNetworkError.swift */; };
 		AA0843C5215D72340007BFD1 /* MockSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0843C4215D72340007BFD1 /* MockSocketManager.swift */; };
 		AA0843C9215D73F50007BFD1 /* MarketsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0843C8215D73F50007BFD1 /* MarketsServiceTests.swift */; };
+		AA08440C215EEDF90007BFD1 /* Lockbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08440B215EEDF90007BFD1 /* Lockbox.swift */; };
+		AA08440D215EEDF90007BFD1 /* Lockbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08440B215EEDF90007BFD1 /* Lockbox.swift */; };
+		AA08440F215EEF320007BFD1 /* LockboxDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08440E215EEF320007BFD1 /* LockboxDeviceType.swift */; };
+		AA084410215EEF320007BFD1 /* LockboxDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA08440E215EEF320007BFD1 /* LockboxDeviceType.swift */; };
+		AA084412215EEF750007BFD1 /* LockboxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084411215EEF750007BFD1 /* LockboxAccount.swift */; };
+		AA084413215EEF750007BFD1 /* LockboxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084411215EEF750007BFD1 /* LockboxAccount.swift */; };
+		AA084415215EF04A0007BFD1 /* LockboxAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084414215EF04A0007BFD1 /* LockboxAsset.swift */; };
+		AA084416215EF04A0007BFD1 /* LockboxAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084414215EF04A0007BFD1 /* LockboxAsset.swift */; };
+		AA084418215EF4EC0007BFD1 /* LockboxRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084417215EF4EC0007BFD1 /* LockboxRepository.swift */; };
+		AA084419215EF4EC0007BFD1 /* LockboxRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA084417215EF4EC0007BFD1 /* LockboxRepository.swift */; };
 		AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A412D214ADD5B00807163 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A412B214AD75300807163 /* DebugSettings.swift */; };
 		AA0A4147214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */; };
@@ -3028,6 +3038,11 @@
 		AA08439E215C47290007BFD1 /* NabuNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NabuNetworkError.swift; sourceTree = "<group>"; };
 		AA0843C4215D72340007BFD1 /* MockSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocketManager.swift; sourceTree = "<group>"; };
 		AA0843C8215D73F50007BFD1 /* MarketsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsServiceTests.swift; sourceTree = "<group>"; };
+		AA08440B215EEDF90007BFD1 /* Lockbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lockbox.swift; sourceTree = "<group>"; };
+		AA08440E215EEF320007BFD1 /* LockboxDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxDeviceType.swift; sourceTree = "<group>"; };
+		AA084411215EEF750007BFD1 /* LockboxAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxAccount.swift; sourceTree = "<group>"; };
+		AA084414215EF04A0007BFD1 /* LockboxAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxAsset.swift; sourceTree = "<group>"; };
+		AA084417215EF4EC0007BFD1 /* LockboxRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxRepository.swift; sourceTree = "<group>"; };
 		AA0A412B214AD75300807163 /* DebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		AA0A4146214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeAssetAccountListPresenter.swift; sourceTree = "<group>"; };
 		AA0A414A214B152100807163 /* AssetAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAccount.swift; sourceTree = "<group>"; };
@@ -4020,6 +4035,7 @@
 				C75684C6212F04F600B5059C /* Homebrew */,
 				AA2F12292140A915006B1FC1 /* Javascript */,
 				5159C3052109153600955BD6 /* KYC */,
+				AA08441A215EFE820007BFD1 /* Lockbox */,
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				511356DF209CA48F00056D65 /* Network */,
@@ -6305,6 +6321,7 @@
 				C75F64F52124BB9000396B65 /* Homebrew */,
 				9F0CBAAB15135DF200CD945D /* JavaScript */,
 				602B9CA62118E15200BD3D60 /* KYC */,
+				AA084400215EEC630007BFD1 /* Lockbox */,
 				AA3CA9932107F10000C2AD46 /* Logging */,
 				678AD5EC19D4731C00E9A778 /* Modal Content Views */,
 				9F765F3A14BC7C3100048EFB /* Models */,
@@ -6448,6 +6465,33 @@
 				AA0843C8215D73F50007BFD1 /* MarketsServiceTests.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AA084400215EEC630007BFD1 /* Lockbox */ = {
+			isa = PBXGroup;
+			children = (
+				AA08440A215EEC740007BFD1 /* Models */,
+				AA084417215EF4EC0007BFD1 /* LockboxRepository.swift */,
+			);
+			path = Lockbox;
+			sourceTree = "<group>";
+		};
+		AA08440A215EEC740007BFD1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA08440B215EEDF90007BFD1 /* Lockbox.swift */,
+				AA084411215EEF750007BFD1 /* LockboxAccount.swift */,
+				AA084414215EF04A0007BFD1 /* LockboxAsset.swift */,
+				AA08440E215EEF320007BFD1 /* LockboxDeviceType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA08441A215EFE820007BFD1 /* Lockbox */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Lockbox;
 			sourceTree = "<group>";
 		};
 		AA0A4121214AD71100807163 /* Debug */ = {
@@ -7717,6 +7761,7 @@
 				3A1552D92135FFDB00683CEB /* Rates.swift in Sources */,
 				602B9D0E2118E23A00BD3D60 /* KYCVerifyIdentityController.swift in Sources */,
 				604598AE2118BAD000AE08C8 /* Settings+Table.swift in Sources */,
+				AA084416215EF04A0007BFD1 /* LockboxAsset.swift in Sources */,
 				AAA6648A21234250009C1C64 /* LocationUpdateAPI.swift in Sources */,
 				AAE94DCA20C25124005A3595 /* WalletServiceTests.swift in Sources */,
 				AA69118520D0967300DDB541 /* NetworkError.swift in Sources */,
@@ -7820,6 +7865,7 @@
 				AA126DBD212F4DA5005886A3 /* SignedRetailTokenResponse.swift in Sources */,
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				AA126DA6212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
+				AA084419215EF4EC0007BFD1 /* LockboxRepository.swift in Sources */,
 				AA7133B621220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
 				AAFA97AF2115110000D19ED3 /* SettingsTwoStepVC.swift in Sources */,
 				C7343C2221516A6F001B1EC9 /* ExchangeDetailInteractor.swift in Sources */,
@@ -7849,6 +7895,7 @@
 				C76D730520B2052000040B57 /* WalletPartnerExchangeDelegate.swift in Sources */,
 				AACE31C32092A99B00B7B806 /* AppDelegate.swift in Sources */,
 				602B9D232118E27100BD3D60 /* KYCEnterPhoneNumberController.swift in Sources */,
+				AA084413215EEF750007BFD1 /* LockboxAccount.swift in Sources */,
 				AA3CA9B32107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				AA0A4148214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */,
 				AA126CD9212C94CB005886A3 /* NabuCreateUserResponse.swift in Sources */,
@@ -7912,6 +7959,7 @@
 				C78893E620A36572003C0A8F /* Trade.swift in Sources */,
 				AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */,
 				3AB4D91D21309BE7004F0160 /* ExchangeListViewCell.swift in Sources */,
+				AA084410215EEF320007BFD1 /* LockboxDeviceType.swift in Sources */,
 				519435B1208E62F6001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				602B9D1D2118E26900BD3D60 /* KYCCountry.swift in Sources */,
 				602B9D0A2118E22B00BD3D60 /* KYCNetworkRequest.swift in Sources */,
@@ -7996,6 +8044,7 @@
 				C75684CA212F053200B5059C /* TradingPairTests.swift in Sources */,
 				AA1E52342097CC2C0099BD10 /* AuthenticationCoordinator.swift in Sources */,
 				3A258C0E210A486F00C023F5 /* ReusableView.swift in Sources */,
+				AA08440D215EEDF90007BFD1 /* Lockbox.swift in Sources */,
 				602B9D102118E23F00BD3D60 /* KYCWelcomeController.swift in Sources */,
 				C78893EF20A4D690003C0A8F /* WalletSendBitcoinDelegate.swift in Sources */,
 				AACE31C62092A99B00B7B806 /* LoadingViewPresenter.swift in Sources */,
@@ -8081,6 +8130,7 @@
 				AAA3314E20893CE100BBD292 /* PairingInstructionsView.swift in Sources */,
 				AAA3316B2089650B00BBD292 /* AlertViewPresenter.swift in Sources */,
 				51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */,
+				AA084418215EF4EC0007BFD1 /* LockboxRepository.swift in Sources */,
 				AA126CE2212C9753005886A3 /* KYCPagePayload.swift in Sources */,
 				C764372920ED199500CA7CA4 /* BalanceChartModel.swift in Sources */,
 				23FB5C101D9ABB730008C6AB /* TransactionDetailDateCell.m in Sources */,
@@ -8272,6 +8322,7 @@
 				5138375A210264F000767B2E /* BCPriceMarker.swift in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
 				3AAEF94A214083ED005852D1 /* LayoutAttributes.swift in Sources */,
+				AA08440C215EEDF90007BFD1 /* Lockbox.swift in Sources */,
 				23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */,
 				FCB33B6F1FC369D700317E6B /* ExchangeDetailView.m in Sources */,
 				C75817B62146FC5F00AA6A04 /* ExchangeConversionService.swift in Sources */,
@@ -8293,6 +8344,7 @@
 				67D95A261B3DD86B0012EBB1 /* BCTextField.swift in Sources */,
 				C77217E820AFCC3C0087836A /* WalletBackupDelegate.swift in Sources */,
 				5171E39020F4F98000E8913E /* Colors.swift in Sources */,
+				AA084412215EEF750007BFD1 /* LockboxAccount.swift in Sources */,
 				23FB5C0D1D9ABB650008C6AB /* TransactionDetailFromCell.m in Sources */,
 				A2599BA71B0B726900C2EA81 /* BackupVerifyViewController.swift in Sources */,
 				3A26AF7221274EF9003A8A08 /* ExchangeTradeCellModel.swift in Sources */,
@@ -8315,6 +8367,7 @@
 				C7A923ED1F8531FD003D9DAF /* GraphTimeFrame.m in Sources */,
 				5152AC2E2142E4B700E769CE /* AnnouncementCardView.swift in Sources */,
 				C77217CF20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift in Sources */,
+				AA08440F215EEF320007BFD1 /* LockboxDeviceType.swift in Sources */,
 				C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
 				C79EEFC21E898E380087DDCD /* WalletSetupViewController.m in Sources */,
 				6762507D1A2CC5800052B63F /* BCEditAccountView.m in Sources */,
@@ -8366,6 +8419,7 @@
 				AACE32002093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
 				3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */,
 				C76D730420B2052000040B57 /* WalletPartnerExchangeDelegate.swift in Sources */,
+				AA084415215EF04A0007BFD1 /* LockboxAsset.swift in Sources */,
 				602B9CE02118E15300BD3D60 /* KYCNetworkRequest.swift in Sources */,
 				9F91B607151666EC00ACB32D /* BCCreateWalletView.m in Sources */,
 				AAE94F2E20C644DE005A3595 /* PinPresenter.swift in Sources */,

@@ -2388,6 +2388,12 @@ MyWalletPhone.KYC = {
     }
 }
 
+MyWalletPhone.lockbox = {
+    devices: function() {
+        return MyWallet.wallet.lockbox.devices;
+    }
+}
+
 MyWalletPhone.createEthAccountForExchange = function(secondPassword, helperText) {
 
     var eth = MyWallet.wallet.eth;

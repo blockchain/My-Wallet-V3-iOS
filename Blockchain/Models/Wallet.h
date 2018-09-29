@@ -465,6 +465,9 @@
 - (NSString *_Nullable)KYCUserId;
 - (NSString *_Nullable)KYCLifetimeToken;
 
+// Lockbox
+- (NSArray *_Nonnull)getLockboxDevices;
+
 /// Call this method to build an Exchange order.
 /// It constructs and stores a payment object with a given AssetType, to, from, and amount (properties of OrderTransactionLegacy).
 /// To send the order, call sendOrderTransaction:completion:success:error:cancel.

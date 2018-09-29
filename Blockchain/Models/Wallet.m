@@ -2603,6 +2603,17 @@
     return NO;
 }
 
+# pragma mark - Lockbox
+
+- (NSArray *_Nonnull)getLockboxDevices
+{
+    if (!self.isInitialized) {
+        return [[NSArray alloc] init];
+    }
+    JSValue *devicesJsValue = [self.context evaluateScript:@"MyWalletPhone.lockbox.devices()"];
+    return [devicesJsValue toArray];
+}
+
 # pragma mark - Retail Core
 
 - (void)updateKYCUserCredentialsWithUserId:(NSString *)userId lifetimeToken:(NSString *)lifetimeToken success:(void (^)(NSString *))success error: (void (^)(NSString *))error
