@@ -1,0 +1,11 @@
+version: 2
+
+dev:
+  macos:
+    xcode: "10.0"
+
+jobs:
+  build:
+    steps:
+      - checkout
+      - run: echo "Hello World"
