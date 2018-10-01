@@ -22,7 +22,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
     lazy var wallet: Wallet = {
         let wallet = WalletManager.shared.wallet
-        WalletManager.shared.exchangeDelegate = self
+        WalletManager.shared.partnerExchangeDelegate = self
         return wallet
     }()
 
@@ -43,7 +43,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
     }
 }
 
-extension PartnerExchangeService: WalletExchangeDelegate {
+extension PartnerExchangeService: WalletPartnerExchangeDelegate {
     func didFailToGetExchangeTrades(errorDescription: String) {
         // Add this alert whenever the delegate is wired up.
         // TODO: AlertViewPresenter.shared.standardError(message: errorDescription)

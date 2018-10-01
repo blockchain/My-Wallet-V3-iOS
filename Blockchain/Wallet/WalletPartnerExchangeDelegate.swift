@@ -1,5 +1,5 @@
 //
-//  WalletExchangeDelegate.swift
+//  WalletPartnerExchangeDelegate.swift
 //  Blockchain
 //
 //  Created by kevinwu on 5/20/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc protocol WalletExchangeDelegate: class {
+@objc protocol WalletPartnerExchangeDelegate: class {
 
     /// Method invoked when trades have been fetched
     func didGetExchangeTrades(trades: NSArray)

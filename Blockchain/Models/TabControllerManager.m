@@ -32,7 +32,7 @@
     walletManager.settingsDelegate = self;
     walletManager.sendBitcoinDelegate = self;
     walletManager.sendEtherDelegate = self;
-    walletManager.exchangeIntermediateDelegate = self;
+    walletManager.partnerExchangeIntermediateDelegate = self;
     walletManager.transactionDelegate = self;
     walletManager.watchOnlyDelegate = self;
     walletManager.fiatAtTimeDelegate = self;
