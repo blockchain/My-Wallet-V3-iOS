@@ -120,10 +120,14 @@ struct ExchangeRates: SocketMessageCodable {
 
 extension ExchangeRates {
     func convert(balance: Decimal, fromCurrency: String, toCurrency: String) -> Decimal {
-        if let matchingPair = rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" }) {
+        if let matchingPair = pairRate(fromCurrency: fromCurrency, toCurrency: toCurrency) {
             return matchingPair.price * balance
         }
         return balance
+    }
+
+    func pairRate(fromCurrency: String, toCurrency: String) -> CurrencyPairRate? {
+        return rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" })
     }
 }
 
@@ -154,30 +158,6 @@ struct Conversion: SocketMessageCodable {
         case channel
         case type
         case quote
-    }
-}
-
-extension Conversion {
-    var baseToFiatDescription: String {
-        let fiatSymbol = quote.currencyRatio.base.fiat.symbol
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
-        return base + " = " + fiat
-    }
-    
-    var baseToCounterDescription: String {
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
-        return base + " = " + counter
-    }
-    
-    var counterToFiatDescription: String {
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let fiatSymbol = quote.currencyRatio.counter.fiat.symbol
-        let counter = "1" + " " + counterSymbol
-        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
-        return counter + " = " + fiat
     }
 }
 

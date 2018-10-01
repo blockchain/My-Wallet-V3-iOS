@@ -28,6 +28,12 @@ protocol ExchangeMarketsAPI {
     /// - Returns: an Observable returning the fiat balance
     func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal>
 
+    /// Returns the best exchange rates for all crypto-to-crypto and crypto-to-fiat pairs.
+    ///
+    /// - Parameter fiatCurrencyCode: the currency code for retrieving crypto-to-fiat rates
+    /// - Returns: an Observable emitting the best exchanges rates as they reported through the websocket
+    func bestExchangeRates(fiatCurrencyCode: String) -> Observable<ExchangeRates>
+
     var hasAuthenticated: Bool { get }
     var conversions: Observable<Conversion> { get }
     var errors: Observable<SocketError> { get }
@@ -141,6 +147,43 @@ extension MarketsService: ExchangeMarketsAPI {
         })
     }
 
+    func bestExchangeRates(fiatCurrencyCode: String) -> Observable<ExchangeRates> {
+
+        // Send exchange_rates socket message - get exchange rates for all possible pairs
+        sendBestExchangeRatesSocketMessage(fiatCurrencyCode: fiatCurrencyCode)
+
+        // Return exchange rates observable and start with cached rates if available
+        var exchangeRates = exchangeRatesObservable
+        if let cachedExchangeRates = cachedExchangeRates.value {
+            exchangeRates = exchangeRates.startWith(cachedExchangeRates)
+        }
+        return exchangeRates
+    }
+
+    private func sendBestExchangeRatesSocketMessage(fiatCurrencyCode: String) {
+        let allAssetTypes = AssetType.all
+        var allPairs: [String] = []
+
+        // Crypto-to-fiat pairs
+        let fiatPairs = allAssetTypes.map {
+            return "\($0.symbol)-\(fiatCurrencyCode)"
+        }
+        allPairs.append(contentsOf: fiatPairs)
+
+        // Crypto-to-crypto pairs
+        allAssetTypes.forEach { baseType in
+            let otherTypes = AssetType.all.filter { $0 != baseType }
+            otherTypes.forEach { counterType in
+                allPairs.append("\(baseType.symbol)-\(counterType.symbol)")
+            }
+        }
+
+        let params = CurrencyPairsSubscribeParams(pairs: allPairs)
+        let subscribe = Subscription(channel: "exchange_rate", params: params)
+        let message = SocketMessage(type: .exchange, JSONMessage: subscribe)
+        SocketManager.shared.send(message: message)
+    }
+
     func fiatBalance(forAssetAccount assetAccount: AssetAccount, fiatCurrencyCode: String) -> Observable<Decimal> {
 
         // Don't need to get exchange rates if the account balance is 0
@@ -148,23 +191,7 @@ extension MarketsService: ExchangeMarketsAPI {
             return Observable.just(0)
         }
 
-        // Send exchange_rates socket message - get exchange rates for all possible pairs
-        let allPairs = AssetType.all.map {
-            return "\($0.symbol)-\(fiatCurrencyCode)"
-        }
-        let params = CurrencyPairsSubscribeParams(pairs: allPairs)
-        let subscribe = Subscription(channel: "exchange_rate", params: params)
-        let message = SocketMessage(type: .exchange, JSONMessage: subscribe)
-        SocketManager.shared.send(message: message)
-
-        // Fetch exchange rate, or use cached rate if available, followed by computing the
-        // fiat value of `assetAccount`
-        var exchangeRates = exchangeRatesObservable
-        if let cachedExchangeRates = cachedExchangeRates.value {
-            exchangeRates = exchangeRates.startWith(cachedExchangeRates)
-        }
-
-        return exchangeRates.map { rates in
+        return bestExchangeRates(fiatCurrencyCode: fiatCurrencyCode).map { rates in
             return rates.convert(
                 balance: assetAccount.balance,
                 fromCurrency: assetAccount.address.assetType.symbol,
