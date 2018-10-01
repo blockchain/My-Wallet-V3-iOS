@@ -169,15 +169,15 @@ class TradeExecutionService: TradeExecutionAPI {
                     )
                     success(orderTransaction, conversion)
                 }
-                this.buildOrder(from: payload, success: createOrderCompletion, error: error)
+                this.buildOrder(from: payload, fromAccount: fromAccount, success: createOrderCompletion, error: error)
             }, onError: { [weak self] requestError in
-                    guard let this = self else { return }
-                    this.isExecuting = false
-                    guard let httpRequestError = requestError as? HTTPRequestError else {
-                        error(requestError.localizedDescription)
-                        return
-                    }
-                    error(httpRequestError.debugDescription)
+                guard let this = self else { return }
+                this.isExecuting = false
+                guard let httpRequestError = requestError as? HTTPRequestError else {
+                    error(requestError.localizedDescription)
+                    return
+                }
+                error(httpRequestError.debugDescription)
             })
     }
     // swiftlint:enable function_body_length
@@ -207,6 +207,7 @@ class TradeExecutionService: TradeExecutionAPI {
     
     fileprivate func buildOrder(
         from orderResult: OrderResult,
+        fromAccount: AssetAccount,
         success: @escaping ((OrderTransactionLegacy) -> Void),
         error: @escaping ((String) -> Void)
     ) {
@@ -223,10 +224,13 @@ class TradeExecutionService: TradeExecutionAPI {
         let pair = TradingPair(string: orderResult.pair)
         let assetType = pair!.from
         #endif
-        let legacyAssetType = assetType.legacy
+        guard assetType == fromAccount.address.assetType else {
+            error("AssetType from fromAccount and AssetType from OrderResult do not match")
+            return
+        }
         let orderTransactionLegacy = OrderTransactionLegacy(
-            legacyAssetType: legacyAssetType,
-            from: wallet.getDefaultAccountIndex(for: legacyAssetType),
+            legacyAssetType: fromAccount.address.assetType.legacy,
+            from: fromAccount.index,
             to: depositAddress,
             amount: depositQuantity,
             fees: nil
