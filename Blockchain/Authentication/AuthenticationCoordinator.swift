@@ -429,7 +429,8 @@ import RxSwift
         withDisplayText displayText: String,
         headerText: String,
         validateSecondPassword: Bool,
-        confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler
+        confirmHandler: @escaping PasswordConfirmView.OnPasswordConfirmHandler,
+        dismissHandler: PasswordConfirmView.OnPasswordDismissHandler? = nil
     ) {
         let loadingViewPresenter = LoadingViewPresenter.shared
         let isLoadingShown = loadingViewPresenter.isLoadingShown
@@ -457,6 +458,7 @@ import RxSwift
 
             confirmHandler(password)
         }
+        passwordConfirmView.dismissHandler = dismissHandler
         ModalPresenter.shared.showModal(
             withContent: passwordConfirmView,
             closeType: ModalCloseTypeClose,
@@ -629,19 +631,24 @@ extension AuthenticationCoordinator: SetupDelegate {
 }
 
 extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
-    func getSecondPassword(success: WalletSuccessCallback) {
+    func getSecondPassword(success: WalletSuccessCallback, dismiss: WalletDismissCallback?) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                            validateSecondPassword: true) { (secondPassword) in
+                            validateSecondPassword: true,
+                            confirmHandler: { (secondPassword) in
                                 success.success(string: secondPassword)
-        }
+                            },
+                            dismissHandler: { dismiss?.dismiss() }
+        )
     }
 
     func getPrivateKeyPassword(success: WalletSuccessCallback) {
         showPasswordConfirm(withDisplayText: LocalizationConstants.Authentication.privateKeyPasswordDefaultDescription,
                             headerText: LocalizationConstants.Authentication.privateKeyNeeded,
-                            validateSecondPassword: false) { (privateKeyPassword) in
+                            validateSecondPassword: false,
+                            confirmHandler: { (privateKeyPassword) in
                                 success.success(string: privateKeyPassword)
-        }
+                            }
+        )
     }
 }

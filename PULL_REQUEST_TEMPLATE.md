@@ -20,4 +20,5 @@
 - [ ] Areas of technical debt are marked with a `// TICKET:` comment that includes a ticket number.
 - [ ] All unit tests pass.
 - [ ] You have added unit tests.
+- [ ] You have added sufficient documentation (descriptive comments).
 - [ ] New files added are within the correct directory. (e.g. if a file is required for unit tests to compile, be sure it is added to the tests target.)
