@@ -296,9 +296,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             guard let this = self else { return }
             this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
             this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
-        }, error: { [weak self] errorMessage in
+        }, error: { [weak self] _ in
             guard let this = self else { return }
-            AlertViewPresenter.shared.standardError(message: errorMessage)
             this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
         })
     }

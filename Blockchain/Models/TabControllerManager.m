@@ -348,6 +348,11 @@
     }
 }
 
+- (void)didErrorWhileBuildingPayment:(NSString *)message
+{
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:message title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
+}
+
 #pragma mark - Eth Send
 
 - (void)didFetchEthExchangeRate:(NSNumber *)rate

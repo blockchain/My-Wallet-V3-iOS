@@ -130,9 +130,4 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
         interface?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
     }
-
-    func showInputError() {
-        interface?.clearInputLabelAnimations()
-        interface?.showTemporaryInputLabelsColor(color: UIColor.error)
-    }
 }

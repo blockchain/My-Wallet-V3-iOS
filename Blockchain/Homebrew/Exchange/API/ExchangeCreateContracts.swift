@@ -24,7 +24,6 @@ protocol ExchangeCreateInterface: class {
     func updateTradingPairView(pair: TradingPair, fix: Fix)
     func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
-    func showTemporaryInputLabelsColor(color: UIColor)
     func clearInputLabelAnimations()
 }
 
@@ -50,5 +49,4 @@ protocol ExchangeCreateOutput: class {
     func updateTradingPair(pair: TradingPair, fix: Fix)
     func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
-    func showInputError()
 }

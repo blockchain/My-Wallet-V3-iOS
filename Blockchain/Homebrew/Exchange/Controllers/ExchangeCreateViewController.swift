@@ -202,11 +202,6 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         secondaryAmountLabel.layer.removeAllAnimations()
     }
 
-    func showTemporaryInputLabelsColor(color: UIColor) {
-        primaryAmountLabel.showTemporaryTextColor(color: color, originalColor: UIColor.brandPrimary)
-        secondaryAmountLabel.showTemporaryTextColor(color: color, originalColor: UIColor.brandPrimary)
-    }
-
     func showError(type: ExchangeInputError, gestureReceiver: UIView) {
         let fromText = secondaryAmountLabel.text?.copy() as? String ?? ""
         var errorText: String?
@@ -453,5 +448,13 @@ extension ExchangeCreateViewController: ExchangeAssetAccountListView {
                 toAccount: toAccount
             )
         )
+    }
+}
+
+extension ExchangeCreateViewController: WalletExchangeDelegate {
+    func didErrorWhileBuildingExchangeOrder(error: String) {
+        clearInputLabelAnimations()
+        primaryAmountLabel.showTemporaryTextColor(color: UIColor.error, originalColor: UIColor.brandPrimary)
+        showError(type: .insufficientFunds, gestureReceiver: exchangeButton)
     }
 }

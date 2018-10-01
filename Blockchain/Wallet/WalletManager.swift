@@ -41,6 +41,7 @@ class WalletManager: NSObject {
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
     @objc weak var partnerExchangeDelegate: WalletPartnerExchangeDelegate?
     @objc weak var partnerExchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
+    @objc weak var exchangeDelegate: WalletExchangeDelegate?
     @objc weak var fiatAtTimeDelegate: WalletFiatAtTimeDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
@@ -302,6 +303,17 @@ extension WalletManager: WalletDelegate {
     func didReceivePaymentNotice(_ notice: String?) {
         DispatchQueue.main.async { [unowned self] in
             self.sendBitcoinDelegate?.didReceivePaymentNotice(notice: notice)
+        }
+    }
+
+    // Bitcoin only - not used for Bitcoin Cash
+    func didErrorWhenBuildingBitcoinPaymentWithError(_ error: String) {
+        DispatchQueue.main.async { [unowned self] in
+            if self.exchangeDelegate != nil {
+                self.exchangeDelegate?.didErrorWhileBuildingExchangeOrder(error: error)
+            } else {
+                self.sendBitcoinDelegate?.didErrorWhileBuildingPayment(error: error)
+            }
         }
     }
 

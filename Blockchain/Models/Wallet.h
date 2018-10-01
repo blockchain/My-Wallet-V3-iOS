@@ -143,6 +143,7 @@
 - (void)getSecondPasswordWithSuccess:(id<WalletSuccessCallback>)success dismiss:(id<WalletDismissCallback>)dismiss;
 - (void)getPrivateKeyPasswordWithSuccess:(id<WalletSuccessCallback>)success;
 - (void)walletUpgraded:(Wallet *)wallet;
+- (void)didErrorWhenBuildingBitcoinPaymentWithError:(NSString *)error;
 @end
 
 @interface Wallet : NSObject <UIWebViewDelegate, SRWebSocketDelegate, ExchangeAccountDelegate> {

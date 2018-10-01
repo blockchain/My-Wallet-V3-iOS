@@ -796,6 +796,8 @@
 		C7343BD8215003E6001B1EC9 /* ExchangeDetailContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BD0214FF9D0001B1EC9 /* ExchangeDetailContracts.swift */; };
 		C7343C1821516A64001B1EC9 /* ExchangeDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BC3214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift */; };
 		C7343C2221516A6F001B1EC9 /* ExchangeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BCE214FF93A001B1EC9 /* ExchangeDetailInteractor.swift */; };
+		C73E394C2162692600EAD063 /* WalletExchangeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E394B2162692600EAD063 /* WalletExchangeDelegate.swift */; };
+		C73E394D2162692600EAD063 /* WalletExchangeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E394B2162692600EAD063 /* WalletExchangeDelegate.swift */; };
 		C740FA89210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
 		C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */; };
 		C7414E451FD7131C001A89FA /* ConfirmStateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */; };
@@ -3176,6 +3178,7 @@
 		C7343BCE214FF93A001B1EC9 /* ExchangeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeDetailInteractor.swift; sourceTree = "<group>"; };
 		C7343BD0214FF9D0001B1EC9 /* ExchangeDetailContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeDetailContracts.swift; sourceTree = "<group>"; };
 		C73CFBE81EA16B4A00C115F0 /* PrivateHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrivateHeaders.h; sourceTree = "<group>"; };
+		C73E394B2162692600EAD063 /* WalletExchangeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExchangeDelegate.swift; sourceTree = "<group>"; };
 		C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExchangeIntermediateDelegate.swift; sourceTree = "<group>"; };
 		C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfirmStateViewController.h; sourceTree = "<group>"; };
 		C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfirmStateViewController.m; sourceTree = "<group>"; };
@@ -6662,6 +6665,7 @@
 		AABDED6A208EC320002D8BAC /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C73E394B2162692600EAD063 /* WalletExchangeDelegate.swift */,
 				C740FA88210BAF740060292F /* WalletExchangeIntermediateDelegate.swift */,
 				C74FEA222093B38A007CAB5D /* JSContextWithDOM.swift */,
 				C77217CE20AE44B20087836A /* WalletAccountInfoAndExchangeRatesDelegate.swift */,
@@ -7647,6 +7651,7 @@
 				602B9D142118E24F00BD3D60 /* LocationSuggestionCoordinator.swift in Sources */,
 				AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */,
 				3AB4D92021309C25004F0160 /* ExchangeListInteractor.swift in Sources */,
+				C73E394D2162692600EAD063 /* WalletExchangeDelegate.swift in Sources */,
 				3A01911E212DF0B300AED2BF /* AsyncBlockOperaiton.swift in Sources */,
 				C77217EE20AFCF940087836A /* WalletRecoveryDelegate.swift in Sources */,
 				AAE94F6C20C75C67005A3595 /* MockPinInteractor.swift in Sources */,
@@ -8118,6 +8123,7 @@
 				5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */,
 				C70576B2212CFFFC0027C6AA /* Nibable.swift in Sources */,
 				3A4EAB97214080D700081531 /* TextCell.swift in Sources */,
+				C73E394C2162692600EAD063 /* WalletExchangeDelegate.swift in Sources */,
 				AA7133B521220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
 				84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */,
 				602B9CE42118E15300BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,

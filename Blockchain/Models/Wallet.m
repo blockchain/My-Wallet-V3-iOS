@@ -4673,7 +4673,9 @@
     }
 
     if ([message isEqualToString:ERROR_NO_UNSPENT_OUTPUTS] || [message isEqualToString:ERROR_AMOUNTS_ADDRESSES_MUST_EQUAL]) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:[LocalizationConstantsObjcBridge notEnoughFunds] title:BC_STRING_ERROR in:nil handler:nil];
+        if ([self.delegate respondsToSelector:@selector(didErrorWhenBuildingBitcoinPaymentWithError:)]) {
+            [self.delegate didErrorWhenBuildingBitcoinPaymentWithError:[LocalizationConstantsObjcBridge notEnoughFunds]];
+        }
     } else if ([message isEqualToString:ERROR_BELOW_DUST_THRESHOLD]) {
         id errorObject = error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR];
         uint64_t threshold = [errorObject isKindOfClass:[NSString class]] ? [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_THRESHOLD] longLongValue] : [error[DICTIONARY_KEY_MESSAGE][DICTIONARY_KEY_ERROR][DICTIONARY_KEY_THRESHOLD] longLongValue];
