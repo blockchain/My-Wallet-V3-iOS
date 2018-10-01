@@ -156,8 +156,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 guard let this = self else { return }
                 // Here we should have an OrderResult object, with a deposit address.
                 // Fees must be fetched from wallet payment APIs
-                let createOrderCompletion: ((OrderTransactionLegacy) -> Void) = { [weak self] orderTransactionLegacy in
-                    guard let this = self else { return }
+                let createOrderCompletion: ((OrderTransactionLegacy) -> Void) = { orderTransactionLegacy in
                     let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
