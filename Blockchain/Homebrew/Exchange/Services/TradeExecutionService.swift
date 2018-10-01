@@ -158,7 +158,6 @@ class TradeExecutionService: TradeExecutionAPI {
                 // Fees must be fetched from wallet payment APIs
                 let createOrderCompletion: ((OrderTransactionLegacy) -> Void) = { [weak self] orderTransactionLegacy in
                     guard let this = self else { return }
-                    let addressString = this.wallet.getReceiveAddress(forAccount: 0, assetType: orderTransactionLegacy.legacyAssetType)
                     let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
