@@ -43,10 +43,79 @@ class TradeExecutionService: TradeExecutionAPI {
     
     // MARK: TradeExecutionAPI Functions
 
+    func buildOrder(
+        with conversion: Conversion,
+        from: AssetAccount,
+        to: AssetAccount,
+        success: @escaping ((OrderTransaction, Conversion) -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        guard let pair = TradingPair(string: conversion.quote.pair) else {
+            error("Invalid pair returned from server: \(conversion.quote.pair)")
+            return
+        }
+        guard pair.from == from.address.assetType,
+            pair.to == to.address.assetType else {
+            error("Asset types don't match.")
+            return
+        }
+        // This is not the real 'to' address because an order has not been submitted yet
+        // but this placeholder is needed to build the payment so that
+        // the fees can be returned and displayed by the view.
+        let placeholderAddress = from.address.address
+        let currencyRatio = conversion.quote.currencyRatio
+        let orderTransactionLegacy = OrderTransactionLegacy(
+            legacyAssetType: pair.from.legacy,
+            from: from.index,
+            to: placeholderAddress,
+            amount: currencyRatio.base.crypto.value,
+            fees: nil
+        )
+        let createOrderCompletion: ((OrderTransactionLegacy) -> Void) = { orderTransactionLegacy in
+            let orderTransactionTo = AssetAddressFactory.create(
+                fromAddressString: orderTransactionLegacy.to,
+                assetType: AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
+            )
+            let orderTransaction = OrderTransaction(
+                destination: to,
+                from: from,
+                to: orderTransactionTo,
+                amountToSend: orderTransactionLegacy.amount,
+                amountToReceive: currencyRatio.counter.crypto.value,
+                fees: orderTransactionLegacy.fees!
+            )
+            success(orderTransaction, conversion)
+        }
+        buildOrder(from: orderTransactionLegacy, success: createOrderCompletion, error: error)
+    }
+
+    func buildAndSend(
+        with conversion: Conversion,
+        from: AssetAccount,
+        to: AssetAccount,
+        success: @escaping (() -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        isExecuting = true
+        buildAndSendOrder(
+            with: conversion,
+            fromAccount: from,
+            toAccount: to,
+            success: { [weak self] orderTransaction, conversion in
+                guard let this = self else { return }
+                this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+            },
+            error: error
+        )
+    }
+    // MARK: Private
+
     // TICKET: IOS-1291 Refactor this
     // swiftlint:disable function_body_length
-    func submitOrder(
+    fileprivate func buildAndSendOrder(
         with conversion: Conversion,
+        fromAccount: AssetAccount,
+        toAccount: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
     ) {
@@ -57,7 +126,7 @@ class TradeExecutionService: TradeExecutionAPI {
         if settings.mockExchangeDeposit {
             settings.mockExchangeDepositQuantity = conversionQuote.fix == .base ||
                 conversionQuote.fix == .baseInFiat ?
-                conversionQuote.currencyRatio.base.crypto.value :
+                    conversionQuote.currencyRatio.base.crypto.value :
                 conversionQuote.currencyRatio.counter.crypto.value
             settings.mockExchangeDepositAssetTypeString = TradingPair(string: conversionQuote.pair)!.from.symbol
         }
@@ -73,9 +142,8 @@ class TradeExecutionService: TradeExecutionAPI {
             volume: conversionQuote.volume,
             currencyRatio: conversionQuote.currencyRatio
         )
-        let pair = TradingPair(string: quote.pair)!
-        let refundAddress = wallet.getReceiveAddress(ofDefaultAccount: pair.from.legacy)
-        let destinationAddress = wallet.getReceiveAddress(ofDefaultAccount: pair.to.legacy)
+        let refundAddress = wallet.getReceiveAddress(forAccount: fromAccount.index, assetType: fromAccount.address.assetType.legacy)
+        let destinationAddress = wallet.getReceiveAddress(forAccount: toAccount.index, assetType: toAccount.address.assetType.legacy)
         let order = Order(
             destinationAddress: destinationAddress!,
             refundAddress: refundAddress!,
@@ -92,16 +160,10 @@ class TradeExecutionService: TradeExecutionAPI {
                     guard let this = self else { return }
                     let addressString = this.wallet.getReceiveAddress(forAccount: 0, assetType: orderTransactionLegacy.legacyAssetType)
                     let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
-                    let fromAddress = AssetAddressFactory.create(fromAddressString: addressString!, assetType: assetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
-                        destination: payload.withdrawalAddress,
-                        from: AssetAccount(
-                            index: 0,
-                            address: fromAddress,
-                            balance: NSDecimalNumber(string: orderTransactionLegacy.amount).decimalValue,
-                            name: "assetAccount"
-                        ),
+                        destination: toAccount,
+                        from: fromAccount,
                         to: to,
                         amountToSend: orderTransactionLegacy.amount,
                         amountToReceive: payload.withdrawal.value,
@@ -109,46 +171,18 @@ class TradeExecutionService: TradeExecutionAPI {
                     )
                     success(orderTransaction, conversion)
                 }
-                this.createOrder(from: payload, success: createOrderCompletion, error: error)
-        }, onError: { [weak self] requestError in
-            guard let this = self else { return }
-            this.isExecuting = false
-            guard let httpRequestError = requestError as? HTTPRequestError else {
-                error(requestError.localizedDescription)
-                return
-            }
-            error(httpRequestError.debugDescription)
-        })
+                this.buildOrder(from: payload, success: createOrderCompletion, error: error)
+            }, onError: { [weak self] requestError in
+                    guard let this = self else { return }
+                    this.isExecuting = false
+                    guard let httpRequestError = requestError as? HTTPRequestError else {
+                        error(requestError.localizedDescription)
+                        return
+                    }
+                    error(httpRequestError.debugDescription)
+            })
     }
     // swiftlint:enable function_body_length
-
-    func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
-        isExecuting = true
-        let executionDone = { [weak self] in
-            guard let this = self else { return }
-            this.isExecuting = false
-        }
-        wallet.sendOrderTransaction(
-            assetType.legacy,
-            completion: executionDone,
-            success: success,
-            error: error,
-            cancel: executionDone
-        )
-    }
-
-    func submitAndSend(
-        with conversion: Conversion,
-        success: @escaping (() -> Void),
-        error: @escaping ((String) -> Void)
-    ) {
-        isExecuting = true
-        submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
-            guard let this = self else { return }
-            this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
-        }, error: error)
-    }
-    // MARK: Private
 
     fileprivate func process(order: Order) -> Single<OrderResult> {
         guard let baseURL = URL(
@@ -173,7 +207,7 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
     
-    fileprivate func createOrder(
+    fileprivate func buildOrder(
         from orderResult: OrderResult,
         success: @escaping ((OrderTransactionLegacy) -> Void),
         error: @escaping ((String) -> Void)
@@ -199,6 +233,15 @@ class TradeExecutionService: TradeExecutionAPI {
             amount: depositQuantity,
             fees: nil
         )
+        buildOrder(from: orderTransactionLegacy, success: success, error: error)
+    }
+
+    fileprivate func buildOrder(
+        from orderTransactionLegacy: OrderTransactionLegacy,
+        success: @escaping ((OrderTransactionLegacy) -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
+        let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
             if assetType == .bitcoin || assetType == .bitcoinCash {
                 let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
@@ -216,6 +259,21 @@ class TradeExecutionService: TradeExecutionAPI {
             },
             success: createOrderPaymentSuccess,
             error: error
+        )
+    }
+
+    fileprivate func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
+        isExecuting = true
+        let executionDone = { [weak self] in
+            guard let this = self else { return }
+            this.isExecuting = false
+        }
+        wallet.sendOrderTransaction(
+            assetType.legacy,
+            completion: executionDone,
+            success: success,
+            error: error,
+            cancel: executionDone
         )
     }
 }

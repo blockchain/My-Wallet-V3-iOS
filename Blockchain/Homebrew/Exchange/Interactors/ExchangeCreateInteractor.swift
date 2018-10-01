@@ -292,15 +292,25 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         output?.loadingVisibility(.visible, action: ExchangeCreateViewController.Action.createPayment)
 
         // Submit order to get payment information
-        tradeExecution.submitOrder(with: conversion, success: { [weak self] orderTransaction, conversion in
-            guard let this = self else { return }
-            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
-            this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
-        }, error: { [weak self] errorMessage in
-            guard let this = self else { return }
-            AlertViewPresenter.shared.standardError(message: errorMessage)
-            this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
-        })
+        guard let from = model?.marketPair.fromAccount,
+            let to = model?.marketPair.toAccount else {
+            AlertViewPresenter.shared.standardError(message: "Missing from or to asset account")
+            return
+        }
+        tradeExecution.buildOrder(
+            with: conversion,
+            from: from,
+            to: to,
+            success: { [weak self] orderTransaction, conversion in
+                guard let this = self else { return }
+                this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
+                this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
+            }, error: { [weak self] errorMessage in
+                guard let this = self else { return }
+                AlertViewPresenter.shared.standardError(message: errorMessage)
+                this.output?.loadingVisibility(.hidden, action: ExchangeCreateViewController.Action.createPayment)
+            }
+        )
     }
 
     // MARK: - Private

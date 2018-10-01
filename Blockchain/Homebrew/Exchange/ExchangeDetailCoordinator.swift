@@ -88,7 +88,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination)
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination.address.address)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -148,7 +148,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let sendTo = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.sendTo,
-                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination)
+                    value: accountRepository.nameOfAccountContaining(address: orderTransaction.destination.address.address)
                 )
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -259,8 +259,10 @@ class ExchangeDetailCoordinator: NSObject {
             guard tradeExecution.isExecuting == false else { return }
             interface?.loadingVisibility(.visible, action: .confirmExchange)
             
-            tradeExecution.submitAndSend(
+            tradeExecution.buildAndSend(
                 with: lastConversion,
+                from: transaction.from,
+                to: transaction.destination,
                 success: { [weak self] in
                     guard let this = self else { return }
                     
