@@ -13,10 +13,15 @@ jobs:
       - run:
           name: Install Node Version Manager (v0.33.11)
           command: |
+            node -v
+            npm -v
             cd ~/
             git clone https://github.com/creationix/nvm.git ~/.nvm
             cd ~/.nvm && git checkout v0.33.11 && source nvm.sh
             nvm install v7.9.0 && nvm use v7.9.0
+            node -v
+            npm -v
+            npm install -g npm@5.6.0
             node -v
             npm -v
       # - checkout
