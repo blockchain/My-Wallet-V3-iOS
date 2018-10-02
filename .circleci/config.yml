@@ -1,19 +1,23 @@
 # .circleci/config.yml
+# Run commands are executed using non-login shells by default,
+# so you must explicitly source any dotfiles as part of the command.
 version: 2
 jobs:
   build:
     macos:
       xcode: "10.0.0"
     environment:
+      BASH_ENV: "~/.nvm/nvm.sh"
       FASTLANE_LANE: staging
     shell: /bin/bash --login -o pipefail
     steps:
-      - run: cd ~/
-      - run: git clone https://github.com/creationix/nvm.git ~/.nvm
-      - run: cd ~/.nvm && git checkout v0.33.11
-      - run: source ~/.nvm/nvm.sh
-      - run: cd ~
-      - run: nvm install v7.9.0 && nvm use v7.9.0
+      - run:
+          name: Install Node Version Manager (v0.33.11)
+          command: |
+            cd ~/
+            git clone https://github.com/creationix/nvm.git ~/.nvm
+            cd ~/.nvm && git checkout v0.33.11 && cd ~
+            source $BASH_ENV && nvm install v7.9.0 && nvm use v7.9.0
       - checkout
       - run: git submodule update --init
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
