@@ -153,8 +153,7 @@ class ExchangeDetailCoordinator: NSObject {
 
                 var orderId = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.orderID,
-                    value: orderTransaction.orderIdentifier ?? "",
-                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
+                    value: orderTransaction.orderIdentifier ?? ""
                 )
                 orderId.descriptionActionBlock = {
                     guard let text = $0.text else { return }
