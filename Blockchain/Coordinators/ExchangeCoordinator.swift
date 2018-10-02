@@ -250,10 +250,7 @@ struct ExchangeServices: ExchangeDependencies {
                 rootViewController = viewController
             }
             showCreateExchange(animated: animated, type: .homebrew)
-        case .createPartnerExchange(let country, let animated, let viewController):
-            if viewController != nil {
-                rootViewController = viewController
-            }
+        case .createPartnerExchange(let country, let animated, _):
             showCreateExchange(animated: animated, type: .shapeshift, country: country)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)
