@@ -17,17 +17,19 @@ jobs:
             git clone https://github.com/creationix/nvm.git ~/.nvm
             cd ~/.nvm && git checkout v0.33.11 && source nvm.sh
             nvm install v7.9.0 && nvm use v7.9.0
-      - checkout
-      - run: git submodule update --init
-      - run: sh scripts/install-js.sh && sh scripts/build-js.sh
-      - run:
-          name: Build OpenSSL
-          command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
+            node -v
+            npm -v
+      # - checkout
+      # - run: git submodule update --init
+      # - run: sh scripts/install-js.sh && sh scripts/build-js.sh
+      # - run:
+      #     name: Build OpenSSL
+      #     command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
       #- run:
           # If beta version is required:
           # name: Install CocoaPods
           # command: gem install cocoapods --pre
-      - run: bundle install
-      - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
+      # - run: bundle install
+      # - run:
+      #     name: Fastlane
+      #     command: bundle exec fastlane $FASTLANE_LANE
