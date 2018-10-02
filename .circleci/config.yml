@@ -9,11 +9,9 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - run: touch ~/.bash_profile
-      - run: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-      - run: export NVM_DIR="$HOME/.nvm"
-      - run: [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      - run: [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+      - run: cd ~/
+      - run: git clone https://github.com/creationix/nvm.git .nvm
+      - run: cd ~/.nvm && git checkout v0.33.11 && . nvm.sh
       - run: nvm install v7.9.0 && nvm use v7.9.0
       - run: git submodule update --init
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
