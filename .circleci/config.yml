@@ -9,9 +9,10 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - run: git submodule update --init
+      - run: touch ~/.bash_profile
       - run: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
       - run: nvm install v7.9.0 && nvm use v7.9.0
+      - run: git submodule update --init
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
       - run:
           name: Build OpenSSL
