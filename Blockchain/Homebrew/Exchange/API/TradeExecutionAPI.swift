@@ -24,7 +24,7 @@ protocol TradeExecutionAPI {
         with conversion: Conversion,
         from: AssetAccount,
         to: AssetAccount,
-        success: @escaping (() -> Void),
+        success: @escaping ((String?) -> Void),
         error: @escaping ((String) -> Void)
     )
 

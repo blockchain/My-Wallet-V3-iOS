@@ -27,14 +27,14 @@
                         <constraint firstAttribute="width" constant="16" id="OYV-O1-lxo"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange Locked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-Yu-lLk">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Exchange Locked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-Yu-lLk">
                     <rect key="frame" x="100.5" y="52" width="173.5" height="24.5"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order ID BC123-456-789" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjw-qN-uw6">
-                    <rect key="frame" x="92.5" y="84.5" width="189" height="20"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order ID BC123-456-789" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjw-qN-uw6">
+                    <rect key="frame" x="16" y="85" width="343" height="65"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -56,6 +56,9 @@
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="24" id="AO0-lf-WOH"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="top" secondItem="IRa-Td-fNo" secondAttribute="bottom" constant="8" id="Ies-1J-X4l"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="centerX" secondItem="IRa-Td-fNo" secondAttribute="centerX" id="KxI-Qm-OfM"/>
+                <constraint firstItem="rjw-qN-uw6" firstAttribute="leading" secondItem="Qwk-jx-OBB" secondAttribute="leading" constant="16" id="S2F-zJ-Ydl"/>
+                <constraint firstItem="Qwk-jx-OBB" firstAttribute="bottom" secondItem="rjw-qN-uw6" secondAttribute="bottom" id="UOG-Sx-yIW"/>
+                <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="rjw-qN-uw6" secondAttribute="trailing" constant="16" id="VoL-tO-iaK"/>
                 <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="Xhk-3g-hRV" secondAttribute="trailing" constant="16" id="adc-Hy-3k1"/>
                 <constraint firstItem="rjw-qN-uw6" firstAttribute="centerX" secondItem="VGU-Yu-lLk" secondAttribute="centerX" id="bJL-Lh-N8c"/>
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="centerX" secondItem="Qwk-jx-OBB" secondAttribute="centerX" id="oqg-qO-8ek"/>
@@ -66,7 +69,7 @@
                 <outlet property="orderID" destination="rjw-qN-uw6" id="K30-3m-MAB"/>
                 <outlet property="title" destination="VGU-Yu-lLk" id="XOF-rI-RRn"/>
             </connections>
-            <point key="canvasLocation" x="-201" y="22"/>
+            <point key="canvasLocation" x="-201.5" y="22"/>
         </collectionReusableView>
     </objects>
     <resources>

@@ -285,11 +285,13 @@ extension TradeExecutionService {
     // Public helper method for combining processAndBuildOrder and sendTransaction.
     // Used as the final step to convert Exchange information into built payment
     // and immediately sending the order.
+    //
+    // For the success handler, the string returned is the order identifier.
     func buildAndSend(
         with conversion: Conversion,
         from: AssetAccount,
         to: AssetAccount,
-        success: @escaping (() -> Void),
+        success: @escaping ((String?) -> Void),
         error: @escaping ((String) -> Void)
     ) {
         processAndBuildOrder(
@@ -298,7 +300,12 @@ extension TradeExecutionService {
             toAccount: to,
             success: { [weak self] orderTransaction, conversion in
                 guard let this = self else { return }
-                this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+                this.sendTransaction(
+                    assetType: orderTransaction.to.assetType,
+                    success: {
+                        success(orderTransaction.orderIdentifier)
+                    },
+                    error: error)
             },
             error: error
         )

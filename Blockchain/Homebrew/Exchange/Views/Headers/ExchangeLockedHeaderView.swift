@@ -25,7 +25,7 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
     var orderIdentifier: String? {
         didSet {
             guard let identifier = orderIdentifier else { return }
-            orderID.text = LocalizationConstants.Exchange.orderID + " " + identifier
+            orderID.text = LocalizationConstants.Exchange.orderID + "\n" + identifier
         }
     }
     
@@ -46,7 +46,6 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
         guard let titleFont = UIFont(name: Constants.FontNames.montserratRegular, size: 20) else { return 0.0 }
         guard let orderFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16) else { return 0.0 }
         
-        
         let attributedTitle = NSAttributedString(
             string: LocalizationConstants.Exchange.exchangeLocked,
             attributes: [
@@ -54,11 +53,11 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
             ]
         )
         let attributedOrder = NSAttributedString(
-            string: LocalizationConstants.Exchange.exchangeLocked,
+            string: LocalizationConstants.Exchange.orderID,
             attributes: [
                 NSAttributedStringKey.font: orderFont
             ]
         )
-        return verticalPadding + attributedTitle.height + attributedOrder.height
+        return verticalPadding + attributedTitle.height + attributedOrder.height*2
     }
 }

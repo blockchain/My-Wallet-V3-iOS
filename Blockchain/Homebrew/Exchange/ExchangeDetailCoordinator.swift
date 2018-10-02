@@ -251,7 +251,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 delegate?.coordinator(self, updated: cellModels)
             }
-        case .confirmExchange(let transaction):
+        case .confirmExchange(var transaction):
             guard let lastConversion = interface?.mostRecentConversion else {
                 Logger.shared.error("No conversion to use")
                 return
@@ -263,9 +263,11 @@ class ExchangeDetailCoordinator: NSObject {
                 with: lastConversion,
                 from: transaction.from,
                 to: transaction.destination,
-                success: { [weak self] in
+                success: { [weak self] orderIdentifier in
                     guard let this = self else { return }
-                    
+
+                    transaction.orderIdentifier = orderIdentifier
+
                     NotificationCenter.default.post(
                         Notification(name: Constants.NotificationKeys.exchangeSubmitted)
                     )
