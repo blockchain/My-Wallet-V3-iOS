@@ -55,12 +55,14 @@ class TradeExecutionService: TradeExecutionAPI {
         error: @escaping ((String) -> Void)
     ) {
         guard let pair = TradingPair(string: conversion.quote.pair) else {
-            error("Invalid pair returned from server: \(conversion.quote.pair)")
+            error(LocalizationConstants.Exchange.tradeExecutionError)
+            Logger.shared.error("Invalid pair returned from server: \(conversion.quote.pair)")
             return
         }
         guard pair.from == from.address.assetType,
             pair.to == to.address.assetType else {
-                error("Asset types don't match.")
+                error(LocalizationConstants.Exchange.tradeExecutionError)
+                Logger.shared.error("Asset types don't match.")
                 return
         }
         // This is not the real 'to' address because an order has not been submitted yet
