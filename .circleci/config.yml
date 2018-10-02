@@ -19,11 +19,15 @@ jobs:
             nvm install v7.9.0 && nvm use v7.9.0
             npm install -g npm@5.6.0
       - checkout
-      - run: git submodule update --init
-      - run: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
-      # - run:
-      #     name: Build OpenSSL
-      #     command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
+      - run:
+          name: Initialize Submodules
+          command: git submodule update --init
+      - run:
+          name: Run Install & Build Scripts
+          command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
+      - run:
+          name: Build OpenSSL
+          command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
       #- run:
           # If beta version is required:
           # name: Install CocoaPods
