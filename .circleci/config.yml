@@ -1,8 +1,25 @@
+# .circleci/config.yml
 version: 2
 jobs:
   build:
     macos:
       xcode: "10.0.0"
+    environment:
+      FASTLANE_LANE: staging
+    shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - run: echo "Hello World"
+      - run: git submodule update --init
+      # - run: npm install -g npm@5.6.0
+      - run: sh scripts/install-js.sh && sh scripts/build-js.sh
+      - run:
+          name: Build OpenSSL
+          command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
+      #- run:
+          # If beta version is required:
+          # name: Install CocoaPods
+          # command: gem install cocoapods --pre
+      - run: bundle install
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane $FASTLANE_LANE
