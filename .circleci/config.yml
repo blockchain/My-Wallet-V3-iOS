@@ -2,18 +2,13 @@
 version: 2
 jobs:
   build:
-  machine:
-    node:
-      version: 7.9.0
-    npm:
-      version: 5.6.0
+  docker:
+    - image: circleci/node:7.9.0
     macos:
       xcode: "10.0.0"
     environment:
       FASTLANE_LANE: staging
     shell: /bin/bash --login -o pipefail
-    # docker:
-      # - image: circleci/node:7.9.0
     steps:
       - checkout
       - run: git submodule update --init
