@@ -10,8 +10,8 @@ import Foundation
 
 protocol TradeExecutionAPI {
 
-    // Build a transaction
-    func buildOrder(
+    // Build a transaction to display on the confirm screen
+    func prebuildOrder(
         with conversion: Conversion,
         from: AssetAccount,
         to: AssetAccount,

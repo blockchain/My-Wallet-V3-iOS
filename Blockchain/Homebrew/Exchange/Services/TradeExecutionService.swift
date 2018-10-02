@@ -41,23 +41,27 @@ class TradeExecutionService: TradeExecutionAPI {
         disposable?.dispose()
     }
     
-    // MARK: TradeExecutionAPI Functions
+    // MARK: - Main Functions
 
-    func buildOrder(
+    // Pre-build an order with Exchange information to get fee information.
+    // The result of this method is used for display purposes.
+    // Do not use this for actually building an order to send - use
+    // buildAndSend(with conversion...) instead.
+    func prebuildOrder(
         with conversion: Conversion,
         from: AssetAccount,
         to: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
-    ) {
+        ) {
         guard let pair = TradingPair(string: conversion.quote.pair) else {
             error("Invalid pair returned from server: \(conversion.quote.pair)")
             return
         }
         guard pair.from == from.address.assetType,
             pair.to == to.address.assetType else {
-            error("Asset types don't match.")
-            return
+                error("Asset types don't match.")
+                return
         }
         // This is not the real 'to' address because an order has not been submitted yet
         // but this placeholder is needed to build the payment so that
@@ -89,36 +93,91 @@ class TradeExecutionService: TradeExecutionAPI {
         buildOrder(from: orderTransactionLegacy, success: createOrderCompletion, error: error)
     }
 
-    func buildAndSend(
-        with conversion: Conversion,
-        from: AssetAccount,
-        to: AssetAccount,
-        success: @escaping (() -> Void),
+    // Build an order from an OrderTransactionLegacy struct.
+    // OrderTransactionLegacy is a representation of a regular payment object
+    // that has no Exchange information.
+    fileprivate func buildOrder(
+        from orderTransactionLegacy: OrderTransactionLegacy,
+        success: @escaping ((OrderTransactionLegacy) -> Void),
         error: @escaping ((String) -> Void)
     ) {
-        isExecuting = true
-        buildAndSendOrder(
-            with: conversion,
-            fromAccount: from,
-            toAccount: to,
-            success: { [weak self] orderTransaction, conversion in
+        let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
+        let createOrderPaymentSuccess: ((String) -> Void) = { fees in
+            if assetType == .bitcoin || assetType == .bitcoinCash {
+                let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
+                orderTransactionLegacy.fees = NumberFormatter.satoshi(toBTC: feeInSatoshi)
+            } else {
+                orderTransactionLegacy.fees = fees
+            }
+            success(orderTransactionLegacy)
+        }
+        wallet.createOrderPayment(
+            withOrderTransaction: orderTransactionLegacy,
+            completion: { [weak self] in
                 guard let this = self else { return }
-                this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+                this.isExecuting = false
             },
+            success: createOrderPaymentSuccess,
             error: error
         )
     }
-    // MARK: Private
 
+    // Post a trade to the server. This will create a trade object that will
+    // be seen in the ExchangeListViewController.
+    fileprivate func process(order: Order) -> Single<OrderResult> {
+        guard let baseURL = URL(
+            string: BlockchainAPI.shared.retailCoreUrl) else {
+                return .error(TradeExecutionAPIError.generic)
+        }
+
+        guard let endpoint = URL.endpoint(
+            baseURL,
+            pathComponents: PathComponents.trades.components,
+            queryParameters: nil) else {
+                return .error(TradeExecutionAPIError.generic)
+        }
+
+        return authentication.getSessionToken().flatMap { token in
+            return NetworkRequest.POST(
+                url: endpoint,
+                body: try? JSONEncoder().encode(order),
+                token: token.token,
+                type: OrderResult.self
+            )
+        }
+    }
+
+    // Sign and send the payment object created by either of the buildOrder methods.
+    fileprivate func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
+        isExecuting = true
+        let executionDone = { [weak self] in
+            guard let this = self else { return }
+            this.isExecuting = false
+        }
+        wallet.sendOrderTransaction(
+            assetType.legacy,
+            completion: executionDone,
+            success: success,
+            error: error,
+            cancel: executionDone
+        )
+    }
+}
+
+// Private Helper methods
+fileprivate extension TradeExecutionService {
+    // Method for combining process and build order.
+    // Called by buildAndSend(with conversion...)
+    //
     // TICKET: IOS-1291 Refactor this
     // swiftlint:disable function_body_length
-    fileprivate func buildAndSendOrder(
+    func processAndBuildOrder(
         with conversion: Conversion,
         fromAccount: AssetAccount,
         toAccount: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
-    ) {
+        ) {
         isExecuting = true
         let conversionQuote = conversion.quote
         #if DEBUG
@@ -182,35 +241,15 @@ class TradeExecutionService: TradeExecutionAPI {
     }
     // swiftlint:enable function_body_length
 
-    fileprivate func process(order: Order) -> Single<OrderResult> {
-        guard let baseURL = URL(
-            string: BlockchainAPI.shared.retailCoreUrl) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        guard let endpoint = URL.endpoint(
-            baseURL,
-            pathComponents: PathComponents.trades.components,
-            queryParameters: nil) else {
-                return .error(TradeExecutionAPIError.generic)
-        }
-        
-        return authentication.getSessionToken().flatMap { token in
-            return NetworkRequest.POST(
-                url: endpoint,
-                body: try? JSONEncoder().encode(order),
-                token: token.token,
-                type: OrderResult.self
-            )
-        }
-    }
-    
-    fileprivate func buildOrder(
+    // Private helper method for building an order from an OrderResult struct (returned from the trades endpoint).
+    // This method is called by the processAndBuildOrder(with conversion...) method
+    // and calls buildOrder(from orderTransactionLegacy...)
+    func buildOrder(
         from orderResult: OrderResult,
         fromAccount: AssetAccount,
         success: @escaping ((OrderTransactionLegacy) -> Void),
         error: @escaping ((String) -> Void)
-    ) {
+        ) {
         #if DEBUG
         let settings = DebugSettings.shared
         let depositAddress = settings.mockExchangeOrderDepositAddress ?? orderResult.depositAddress
@@ -237,45 +276,30 @@ class TradeExecutionService: TradeExecutionAPI {
         )
         buildOrder(from: orderTransactionLegacy, success: success, error: error)
     }
+}
 
-    fileprivate func buildOrder(
-        from orderTransactionLegacy: OrderTransactionLegacy,
-        success: @escaping ((OrderTransactionLegacy) -> Void),
+// TradeExecutionAPI Helper Functions
+extension TradeExecutionService {
+    // Public helper method for combining processAndBuildOrder and sendTransaction.
+    // Used as the final step to convert Exchange information into built payment
+    // and immediately sending the order.
+    func buildAndSend(
+        with conversion: Conversion,
+        from: AssetAccount,
+        to: AssetAccount,
+        success: @escaping (() -> Void),
         error: @escaping ((String) -> Void)
-    ) {
-        let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
-        let createOrderPaymentSuccess: ((String) -> Void) = { fees in
-            if assetType == .bitcoin || assetType == .bitcoinCash {
-                let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
-                orderTransactionLegacy.fees = NumberFormatter.satoshi(toBTC: feeInSatoshi)
-            } else {
-                orderTransactionLegacy.fees = fees
-            }
-            success(orderTransactionLegacy)
-        }
-        wallet.createOrderPayment(
-            withOrderTransaction: orderTransactionLegacy,
-            completion: { [weak self] in
-                guard let this = self else { return }
-                this.isExecuting = false
-            },
-            success: createOrderPaymentSuccess,
-            error: error
-        )
-    }
-
-    fileprivate func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
+        ) {
         isExecuting = true
-        let executionDone = { [weak self] in
-            guard let this = self else { return }
-            this.isExecuting = false
-        }
-        wallet.sendOrderTransaction(
-            assetType.legacy,
-            completion: executionDone,
-            success: success,
-            error: error,
-            cancel: executionDone
+        processAndBuildOrder(
+            with: conversion,
+            fromAccount: from,
+            toAccount: to,
+            success: { [weak self] orderTransaction, conversion in
+                guard let this = self else { return }
+                this.sendTransaction(assetType: orderTransaction.to.assetType, success: success, error: error)
+            },
+            error: error
         )
     }
 }

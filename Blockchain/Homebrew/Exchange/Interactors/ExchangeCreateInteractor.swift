@@ -297,7 +297,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             AlertViewPresenter.shared.standardError(message: "Missing from or to asset account")
             return
         }
-        tradeExecution.buildOrder(
+        tradeExecution.prebuildOrder(
             with: conversion,
             from: from,
             to: to,
