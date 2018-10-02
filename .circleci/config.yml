@@ -11,7 +11,8 @@ jobs:
       - checkout
       - run: cd ~/
       - run: git clone https://github.com/creationix/nvm.git .nvm
-      - run: cd ~/.nvm && git checkout v0.33.11 && . nvm.sh
+      - run: cd ~/.nvm && git checkout v0.33.11
+      - run: ls -la && source nvm.sh
       - run: nvm install v7.9.0 && nvm use v7.9.0
       - run: git submodule update --init
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
