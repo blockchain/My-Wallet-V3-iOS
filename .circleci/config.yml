@@ -20,7 +20,7 @@ jobs:
             npm install -g npm@5.6.0
       - checkout
       - run: git submodule update --init
-      - run: sh scripts/install-js.sh && sh scripts/build-js.sh
+      - run: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
       # - run:
       #     name: Build OpenSSL
       #     command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
