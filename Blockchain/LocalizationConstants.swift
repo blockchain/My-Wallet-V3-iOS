@@ -453,6 +453,10 @@ struct LocalizationConstants {
             "Exchange",
             comment: "Exchange"
         )
+        static let tradeExecutionError = NSLocalizedString(
+            "Sorry, an order cannot be placed at this time.",
+            comment: "Error message shown to a user if something went wrong during the exchange process and the user cannot continue"
+        )
     }
 
     struct AddressAndKeyImport {

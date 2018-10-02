@@ -53,14 +53,16 @@ class TradeExecutionService: TradeExecutionAPI {
         to: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
-        ) {
+    ) {
         guard let pair = TradingPair(string: conversion.quote.pair) else {
-            error("Invalid pair returned from server: \(conversion.quote.pair)")
+            error(LocalizationConstants.Exchange.tradeExecutionError)
+            Logger.shared.error("Invalid pair returned from server: \(conversion.quote.pair)")
             return
         }
         guard pair.from == from.address.assetType,
             pair.to == to.address.assetType else {
-                error("Asset types don't match.")
+                error(LocalizationConstants.Exchange.tradeExecutionError)
+                Logger.shared.error("Asset types don't match.")
                 return
         }
         // This is not the real 'to' address because an order has not been submitted yet
@@ -81,7 +83,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 assetType: AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
             )
             let orderTransaction = OrderTransaction(
-                orderIdentifier: nil,
+                orderIdentifier: "",
                 destination: to,
                 from: from,
                 to: orderTransactionTo,
@@ -105,6 +107,7 @@ class TradeExecutionService: TradeExecutionAPI {
         let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
             if assetType == .bitcoin || assetType == .bitcoinCash {
+                // TICKET: IOS-1395 - Use a helper method for this
                 let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
                 orderTransactionLegacy.fees = NumberFormatter.satoshi(toBTC: feeInSatoshi)
             } else {
@@ -296,7 +299,7 @@ extension TradeExecutionService {
             with: conversion,
             fromAccount: from,
             toAccount: to,
-            success: { [weak self] orderTransaction, conversion in
+            success: { [weak self] orderTransaction, _ in
                 guard let this = self else { return }
                 this.sendTransaction(
                     assetType: orderTransaction.to.assetType,

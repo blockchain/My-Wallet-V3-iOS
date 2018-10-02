@@ -237,7 +237,7 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Event handling
     enum ExchangeCoordinatorEvent {
         case createHomebrewExchange(animated: Bool, viewController: UIViewController?)
-        case createPartnerExchange(country: KYCCountry, animated: Bool, viewController: UIViewController?)
+        case createPartnerExchange(country: KYCCountry, animated: Bool)
         case confirmExchange(orderTransaction: OrderTransaction, conversion: Conversion)
         case sentTransaction(orderTransaction: OrderTransaction, conversion: Conversion)
         case showTradeDetails(trade: ExchangeTradeModel)
@@ -250,10 +250,7 @@ struct ExchangeServices: ExchangeDependencies {
                 rootViewController = viewController
             }
             showCreateExchange(animated: animated, type: .homebrew)
-        case .createPartnerExchange(let country, let animated, let viewController):
-            if viewController != nil {
-                rootViewController = viewController
-            }
+        case .createPartnerExchange(let country, let animated):
             showCreateExchange(animated: animated, type: .shapeshift, country: country)
         case .confirmExchange(let orderTransaction, let conversion):
             showConfirmExchange(orderTransaction: orderTransaction, conversion: conversion)

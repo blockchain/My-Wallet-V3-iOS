@@ -44,6 +44,7 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var conversionView: UIView!
+    @IBOutlet private var conversionTitleLabel: UILabel!
     @IBOutlet private var exchangeButton: UIButton!
 
     @IBAction func useMinimumButtonTapped(_ sender: Any) {
@@ -334,6 +335,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
 
     func updateRateLabels(first: String, second: String, third: String) {
+        conversionTitleLabel.text = first
         conversionRatesView.apply(
             baseToCounter: first,
             baseToFiat: second,

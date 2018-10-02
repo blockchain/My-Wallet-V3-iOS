@@ -188,6 +188,7 @@
                     </view>
                     <connections>
                         <outlet property="conversionRatesView" destination="Hcw-SG-3XL" id="2o2-Fx-Jb5"/>
+                        <outlet property="conversionTitleLabel" destination="C9l-S4-AAj" id="Z2S-dI-FzM"/>
                         <outlet property="conversionView" destination="eA3-pM-NKs" id="veU-HE-Ibp"/>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
                         <outlet property="hideRatesButton" destination="coY-Dg-Mc5" id="bEB-4e-zyz"/>
