@@ -178,7 +178,7 @@ fileprivate extension TradeExecutionService {
         toAccount: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
-        ) {
+    ) {
         isExecuting = true
         let conversionQuote = conversion.quote
         #if DEBUG
@@ -291,8 +291,7 @@ extension TradeExecutionService {
         to: AssetAccount,
         success: @escaping (() -> Void),
         error: @escaping ((String) -> Void)
-        ) {
-        isExecuting = true
+    ) {
         processAndBuildOrder(
             with: conversion,
             fromAccount: from,
