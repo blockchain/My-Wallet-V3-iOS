@@ -72,7 +72,7 @@ struct OrderResult: Codable {
 }
 
 struct OrderTransaction {
-    var orderIdentifier: String?
+    let orderIdentifier: String?
 
     // The destination is where the user will ultimately receive
     // funds from the exchange.
