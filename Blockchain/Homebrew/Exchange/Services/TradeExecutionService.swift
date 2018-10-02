@@ -81,6 +81,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 assetType: AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
             )
             let orderTransaction = OrderTransaction(
+                orderIdentifier: nil,
                 destination: to,
                 from: from,
                 to: orderTransactionTo,
@@ -219,6 +220,7 @@ fileprivate extension TradeExecutionService {
                     let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
                     let to = AssetAddressFactory.create(fromAddressString: orderTransactionLegacy.to, assetType: assetType)
                     let orderTransaction = OrderTransaction(
+                        orderIdentifier: payload.id,
                         destination: toAccount,
                         from: fromAccount,
                         to: to,

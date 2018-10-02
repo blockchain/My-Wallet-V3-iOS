@@ -197,7 +197,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
 
             return footer
             
-        case .locked:
+        case .locked(let orderTransaction, _):
             switch kind {
             case UICollectionElementKindSectionHeader:
                 guard let header = collectionView.dequeueReusableSupplementaryView(
@@ -205,6 +205,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                     withReuseIdentifier: ExchangeLockedHeaderView.identifier,
                     for: indexPath
                     ) as? ExchangeLockedHeaderView else { return UICollectionReusableView() }
+                header.orderIdentifier = orderTransaction.orderIdentifier ?? ""
                 header.closeTapped = { [weak self] in
                     guard let this = self else { return }
                     this.dismiss(animated: true, completion: nil)
