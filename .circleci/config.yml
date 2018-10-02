@@ -9,9 +9,8 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - run: node -v
-      - run: npm -v
       - run: git submodule update --init
+      - run: nvm install v7.9.0 && nvm use v7.9.0
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
       - run:
           name: Build OpenSSL
