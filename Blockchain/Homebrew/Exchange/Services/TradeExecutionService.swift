@@ -104,6 +104,7 @@ class TradeExecutionService: TradeExecutionAPI {
         let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
             if assetType == .bitcoin || assetType == .bitcoinCash {
+                // TICKET: IOS-1395 - Use a helper method for this
                 let feeInSatoshi = CUnsignedLongLong(truncating: NSDecimalNumber(string: fees))
                 orderTransactionLegacy.fees = NumberFormatter.satoshi(toBTC: feeInSatoshi)
             } else {
