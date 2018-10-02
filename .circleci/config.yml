@@ -1,11 +1,8 @@
 version: 2
 jobs:
   build:
-
     macos:
-      xcode: "10.0"
-
+      xcode: "10.0.0"
     steps:
       - checkout
-
       - run: echo "Hello World"
