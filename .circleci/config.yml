@@ -9,8 +9,8 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - run: echo node -v
-      - run: echo npm -v
+      - run: node -v
+      - run: npm -v
       - run: git submodule update --init
       - run: sh scripts/install-js.sh && sh scripts/build-js.sh
       - run:
