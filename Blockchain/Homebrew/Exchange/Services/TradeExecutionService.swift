@@ -53,7 +53,7 @@ class TradeExecutionService: TradeExecutionAPI {
         to: AssetAccount,
         success: @escaping ((OrderTransaction, Conversion) -> Void),
         error: @escaping ((String) -> Void)
-        ) {
+    ) {
         guard let pair = TradingPair(string: conversion.quote.pair) else {
             error("Invalid pair returned from server: \(conversion.quote.pair)")
             return
