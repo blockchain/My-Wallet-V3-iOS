@@ -25,6 +25,27 @@ struct TransitionPresentationUpdate<T: Transition> {
     }
 }
 
+struct TransitionPresentationUpdateGroup<T: Transition, C: CompletionEvent> {
+    let transitions: [T]
+    let transitionType: TransitionParameter
+    let completionEvents: [C]
+    let completion: UpdateCompletion<C>
+    
+    init(transitions: [T], transitionType: TransitionParameter, completionEvents: [C], completion: @escaping UpdateCompletion<C>) {
+        self.transitions = transitions
+        self.transitionType = transitionType
+        self.completionEvents = completionEvents
+        self.completion = completion
+    }
+    
+    func finish(completed: Bool) {
+        DispatchQueue.main.async {
+            self.completion(completed, self.completionEvents)
+        }
+    }
+}
+
+
 /// This is used in `TransitionPresentationUpdate`.
 /// You use this parameter value to change the style
 /// of the animation applied to the UI update.

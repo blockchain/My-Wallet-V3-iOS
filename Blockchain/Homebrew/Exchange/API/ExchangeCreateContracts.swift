@@ -9,22 +9,18 @@
 import Foundation
 
 protocol ExchangeCreateInterface: class {
-    func wigglePrimaryLabel()
-    func wiggleInputLabels()
+    typealias ViewUpdate = ExchangeCreateViewController.ViewUpdate
+    typealias AnimatedUpdate = AnimatablePresentationUpdate<ViewUpdate>
+    typealias PresentationUpdate = ExchangeCreateViewController.PresentationUpdate
+    typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
+    
     func styleTemplate() -> ExchangeStyleTemplate
-    func conversionViewVisibility(_ visibility: Visibility, animated: Bool)
-    func ratesViewVisibility(_ visibility: Visibility, animated: Bool)
-    func keypadViewVisibility(_ visibility: Visibility, animated: Bool)
-    func exchangeButtonVisibility(_ visibility: Visibility, animated: Bool)
-    func ratesChevronButtonVisibility(_ visibility: Visibility, animated: Bool)
-    func updateAttributedPrimary(_ primary: NSAttributedString?, secondary: String?)
-    func updateInputLabels(primary: String?, primaryDecimal: String?, secondary: String?)
-    func updateRateLabels(first: String, second: String, third: String)
     func updateTradingPairViewValues(left: String, right: String)
     func updateTradingPairView(pair: TradingPair, fix: Fix)
-    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
-    func clearInputLabelAnimations()
+    func apply(presentationUpdates: [PresentationUpdate])
+    func apply(animatedUpdate: AnimatedUpdate)
+    func apply(transitionUpdates: [TransitionUpdate])
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
@@ -43,10 +39,11 @@ protocol ExchangeCreateOutput: class {
     func entryRejected()
     func styleTemplate() -> ExchangeStyleTemplate
     func updatedInput(primary: NSAttributedString?, secondary: String?)
-    func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?)
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)
-    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action)
+    func entryBelowMinimumValue(minimum: String)
+    func entryAboveMaximumValue(maximum: String)
+    func loadingVisibility(_ visibility: Visibility)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
 }

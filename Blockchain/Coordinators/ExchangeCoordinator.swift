@@ -191,7 +191,6 @@ struct ExchangeServices: ExchangeDependencies {
         switch type {
         case .homebrew:
             let exchangeCreateViewController = ExchangeCreateViewController.make(with: ExchangeServices())
-            self.walletManager.exchangeDelegate = exchangeCreateViewController
             if navigationController == nil {
                 guard let viewController = rootViewController else {
                     Logger.shared.error("View controller to present on is nil")

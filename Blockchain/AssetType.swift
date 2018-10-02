@@ -100,4 +100,44 @@ extension AssetType {
             return UIColor(red: 0.24, green: 0.86, blue: 0.54, alpha: 1)
         }
     }
+    
+    func toFiat(amount: NSDecimalNumber) -> String? {
+        switch self {
+        case .bitcoin:
+            let value = NumberFormatter.formatMoney(
+                amount.uint64Value,
+                localCurrency: true
+            )
+            return value
+        case .ethereum:
+            let value = NumberFormatter.formatEthToFiat(
+                withSymbol: amount.stringValue,
+                exchangeRate: WalletManager.shared.wallet.latestEthExchangeRate
+            )
+            return value
+        case .bitcoinCash:
+            let value = NumberFormatter.formatBch(
+                withSymbol: amount.uint64Value,
+                localCurrency: true
+            )
+            return value
+        }
+    }
+    
+    func toCrypto(amount: NSDecimalNumber) -> String? {
+        switch self {
+        case .bitcoin:
+            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            return NumberFormatter.formatMoney(value.magnitude)
+        case .ethereum:
+            guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
+            return NumberFormatter.formatEth(
+                withLocalSymbol: amount.stringValue,
+                exchangeRate: exchangeRate
+            )
+        case .bitcoinCash:
+            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            return NumberFormatter.formatBch(withSymbol: value.magnitude)
+        }
+    }
 }

@@ -9,6 +9,12 @@
 import Foundation
 
 class ExchangeCreatePresenter {
+    
+    typealias ViewUpdate = ExchangeCreateViewController.ViewUpdate
+    typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
+    typealias AnimatableGroup  = AnimatablePresentationUpdateGroup<ViewUpdate, ViewUpdate>
+    typealias TransitionGroup = TransitionPresentationUpdateGroup<TransitionUpdate, TransitionUpdate>
+    
     fileprivate let interactor: ExchangeCreateInteractor
     weak var interface: ExchangeCreateInterface?
 
@@ -22,27 +28,58 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     func onViewLoaded() {
         interactor.viewLoaded()
         
-        interface?.conversionViewVisibility(.visible, animated: false)
-        interface?.keypadViewVisibility(.visible, animated: false)
-        interface?.exchangeButtonVisibility(.visible, animated: false)
+        interface?.apply(
+            presentationUpdates:[
+                .conversionRatesView(.hidden, animated: false),
+                .keypadVisibility(.visible, animated: false),
+            ]
+        )
         
-        interface?.ratesViewVisibility(.hidden, animated: false)
-        interface?.ratesChevronButtonVisibility(.hidden, animated: false)
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [
+                    .exchangeButton(.visible),
+                    .conversionView(.visible),
+                    .ratesChevron(.hidden)],
+                animation: .none)
+        )
     }
     
     func onDisplayRatesTapped() {
-        interface?.conversionViewVisibility(.hidden, animated: true)
-        interface?.keypadViewVisibility(.hidden, animated: true)
-        interface?.exchangeButtonVisibility(.hidden, animated: true)
+        interface?.apply(
+            presentationUpdates:[
+                .conversionRatesView(.visible, animated: true),
+                .keypadVisibility(.hidden, animated: true),
+                ]
+        )
+        
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.exchangeButton(.hidden),
+                             .conversionView(.hidden)],
+                animation: .easeIn(duration: 0.2)
+            )
+        )
     }
     
     func onHideRatesTapped() {
-        interface?.conversionViewVisibility(.visible, animated: true)
-        interface?.ratesViewVisibility(.hidden, animated: true)
-        interface?.ratesChevronButtonVisibility(.hidden, animated: true)
+        interface?.apply(
+            presentationUpdates:[
+                .conversionRatesView(.hidden, animated: true),
+                .keypadVisibility(.visible, animated: true),
+                ]
+        )
         
-        interface?.keypadViewVisibility(.visible, animated: true)
-        interface?.exchangeButtonVisibility(.visible, animated: true)
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [
+                    .conversionView(.visible),
+                    .ratesChevron(.hidden),
+                    .exchangeButton(.visible)
+                ],
+                animation: .easeIn(duration: 0.2)
+            )
+        )
     }
     
     func onDelimiterTapped(value: String) {
@@ -59,8 +96,13 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     
     func onKeypadVisibilityUpdated(_ visibility: Visibility, animated: Bool) {
         let ratesViewVisibility: Visibility = visibility == .hidden ? .visible : .hidden
-        interface?.ratesViewVisibility(ratesViewVisibility, animated: animated)
-        interface?.ratesChevronButtonVisibility(ratesViewVisibility, animated: animated)
+        interface?.apply(presentationUpdates: [.conversionRatesView(ratesViewVisibility, animated: animated)])
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.ratesChevron(ratesViewVisibility)],
+                animation: .easeIn(duration: 0.2)
+            )
+        )
     }
 
     func changeMarketPair(marketPair: MarketPair) {
@@ -95,12 +137,20 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
+    func entryBelowMinimumValue(minimum: String) {
+        
+    }
+    
+    func entryAboveMaximumValue(maximum: String) {
+        
+    }
+    
     func updateTradingPair(pair: TradingPair, fix: Fix) {
         interface?.updateTradingPairView(pair: pair, fix: fix)
     }
 
     func entryRejected() {
-        interface?.wigglePrimaryLabel()
+        interface?.apply(presentationUpdates: [.wigglePrimaryLabel])
     }
     
     func styleTemplate() -> ExchangeStyleTemplate {
@@ -108,23 +158,23 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     }
     
     func updatedInput(primary: NSAttributedString?, secondary: String?) {
-        interface?.updateAttributedPrimary(primary, secondary: secondary)
-    }
-    
-    func updatedInput(primary: String?, primaryDecimal: String?, secondary: String?) {
-        interface?.updateInputLabels(primary: primary, primaryDecimal: primaryDecimal, secondary: secondary)
+        interface?.apply(presentationUpdates: [
+            .updatePrimaryLabel(primary),
+            .updateSecondaryLabel(secondary)
+            ]
+        )
     }
     
     func updatedRates(first: String, second: String, third: String) {
-        interface?.updateRateLabels(first: first, second: second, third: third)
+        interface?.apply(presentationUpdates: [.updateRateLabels(first: first, second: second, third: third)])
     }
     
     func updateTradingPairValues(left: String, right: String) {
         interface?.updateTradingPairViewValues(left: left, right: right)
     }
 
-    func loadingVisibility(_ visibility: Visibility, action: ExchangeCreateViewController.Action) {
-        interface?.loadingVisibility(visibility, action: action)
+    func loadingVisibility(_ visibility: Visibility) {
+        interface?.apply(presentationUpdates: [.loadingIndicator(visibility)])
     }
 
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {

@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum TradeExecutionError: Int, Error {
+    case insufficientBalance = 43
+}
+
 protocol TradeExecutionAPI {
 
     // Build a transaction

@@ -8,9 +8,17 @@
 
 import Foundation
 
+/// When a `PresentationUpdateGroup` is created, there is the option
+/// to include an array of `CompletionEvent` enums to fire
+/// upon completion of the `AnimatablePresentationUpdate`.
+
+protocol CompletionEvent {}
+
 /// Have your `enum` of PresentationUpdates conform
 /// to this empty protocol and it can use `AnimatablePresentationUpdate`
 protocol Update { }
+
+typealias UpdateCompletion<C: CompletionEvent> = (Bool, [C]?) -> Void
 
 struct AnimatablePresentationUpdate<U: Update> {
     
@@ -20,6 +28,26 @@ struct AnimatablePresentationUpdate<U: Update> {
     init(animations: [U], animation: AnimationParameter) {
         self.animations = animations
         self.animationType = animation
+    }
+}
+
+struct AnimatablePresentationUpdateGroup<U: Update, C: CompletionEvent> {
+    let animations: [U]
+    let animationType: AnimationParameter
+    let completionEvents: [C]
+    let completion: UpdateCompletion<C>
+    
+    init(animations: [U], animation: AnimationParameter, completionEvents: [C], completion: @escaping UpdateCompletion<C>) {
+        self.animations = animations
+        self.animationType = animation
+        self.completionEvents = completionEvents
+        self.completion = completion
+    }
+    
+    func finish(completed: Bool) {
+        DispatchQueue.main.async {
+            self.completion(completed, self.completionEvents)
+        }
     }
 }
 
