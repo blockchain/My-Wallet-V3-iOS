@@ -7,6 +7,8 @@ jobs:
     environment:
       FASTLANE_LANE: staging
     shell: /bin/bash --login -o pipefail
+    docker:
+      - image: circleci/node:7.9.0
     steps:
       - checkout
       - run: git submodule update --init
