@@ -11,6 +11,14 @@
 
 version: 2
 jobs:
+  shellcheck:
+    docker:
+      - image: nlknguyen/alpine-shellcheck:v0.4.6
+    steps:
+      - checkout
+      - run:
+          name: Check Scripts
+          command: [ $(npm -v | grep -v "5.6.0") ] && $(npm install -g npm@5.6.0)
   build:
     macos:
       xcode: "10.0.0"
