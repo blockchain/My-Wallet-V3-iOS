@@ -156,11 +156,7 @@ MyWalletPhone.createAccount = function(label) {
     var success = function () {
         console.log('Created new account');
 
-        objc_loading_stop();
-
         objc_on_add_new_account();
-
-        objc_reload();
     };
 
     var error = function (error) {

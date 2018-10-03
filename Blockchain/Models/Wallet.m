@@ -3494,8 +3494,7 @@
         DLog(@"Error: delegate of class %@ does not respond to selector didBackupWallet!", [delegate class]);
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
-    // Hide the busy view if previously syncing
-    [self loading_stop];
+
     self.isSyncing = NO;
 
     if (self.isSettingDefaultAccount) {
@@ -4475,7 +4474,6 @@
         [self loading_start_create_account];
 
         self.isSyncing = YES;
-        self.shouldLoadMetadata = YES;
 
         // Wait a little bit to make sure the loading text is showing - then execute the blocking and kind of long create account
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ANIMATION_DURATION * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

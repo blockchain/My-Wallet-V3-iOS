@@ -263,6 +263,7 @@
 - (void)getHistoryIfNoTransactionMessage;
 - (void)getBitcoinCashHistoryIfNoTransactionMessage;
 - (void)getWalletAndHistory;
+- (void)getHistoryForAllAssets;
 
 - (id)getLegacyAddressBalance:(NSString *)address assetType:(LegacyAssetType)assetType;
 - (uint64_t)parseBitcoinValueFromTextField:(UITextField *)textField;
