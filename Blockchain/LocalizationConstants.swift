@@ -466,6 +466,15 @@ struct LocalizationConstants {
             "Insufficient funds",
             comment: "Error message shown when a user is attempting to exchange an amount greater than their balance"
         )
+        
+        static let yourMin = NSLocalizedString(
+            "Your Min is",
+            comment: "Error that displays what the minimum amount of fiat is required for a trade"
+        )
+        static let yourMax = NSLocalizedString(
+            "Your Max is",
+            comment: "Error that displays what the maximum amount of fiat allowed for a trade"
+        )
     }
 
     struct AddressAndKeyImport {

@@ -57,12 +57,39 @@ class ExchangeCreatePresenter {
     }
     
     fileprivate func errorDisappearanceTimerFired() {
+        interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+            animations: [.secondaryLabel(.visible)],
+            animation: .none
+            )
+        )
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [.errorLabel(.hidden)],
                 animation: .standard(duration: 0.2)
             )
         )
+    }
+    
+    fileprivate func displayError() {
+        let completion: ViewUpdateBlock = { [weak self] internalEvents in
+            guard let this = self else { return }
+            guard let events = internalEvents else { return }
+            events.forEach({ this.handle(internalEvent: $0) })
+        }
+        
+        let block = { [weak self] in
+            guard let this = self else { return }
+            this.setErrorDisappearanceTimer(duration: 2.5)
+        }
+        
+        let group = ViewUpdateGroup(
+            preparations: [.secondaryLabel(.hidden)],
+            animations: [.errorLabel(.visible)],
+            animation: .standard(duration: 0.2),
+            completionEvents: [.block(block)],
+            completion: completion
+        )
+        interface?.apply(presentationUpdateGroup: group)
     }
 }
 
@@ -182,29 +209,15 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func entryBelowMinimumValue(minimum: String) {
-        
-        let completion: ViewUpdateBlock = { [weak self] internalEvents in
-            guard let this = self else { return }
-            guard let events = internalEvents else { return }
-            events.forEach({ this.handle(internalEvent: $0) })
-        }
-        
-        let block = { [weak self] in
-            guard let this = self else { return }
-            this.setErrorDisappearanceTimer(duration: 2.5)
-        }
-        
-        let group = ViewUpdateGroup(
-            animations: [.errorLabel(.visible)],
-            animation: .standard(duration: 0.2),
-            completionEvents: [.block(block)],
-            completion: completion
-        )
-        interface?.apply(presentationUpdateGroup: group)
+        let display = LocalizationConstants.Exchange.yourMin + " " + minimum
+        interface?.apply(transitionUpdates: [.updateErrorLabel(display)])
+        displayError()
     }
     
     func entryAboveMaximumValue(maximum: String) {
-        
+        let display = LocalizationConstants.Exchange.yourMax + " " + maximum
+        interface?.apply(transitionUpdates: [.updateErrorLabel(display)])
+        displayError()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {

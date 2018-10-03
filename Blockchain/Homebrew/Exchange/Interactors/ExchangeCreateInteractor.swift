@@ -302,23 +302,17 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 guard let this = self else { return }
                 let minValue = payload.0
                 let maxValue = payload.1
-                let isFiat = model.isUsingFiat
                 
                 guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
                 switch candidate {
                 case ..<minValue:
                     
-                    var minimum: String = ""
-                    
-                    // TODO: Crypto
-                    if isFiat {
-                        let value = NumberFormatter.localCurrencyFormatter.string(for: minValue) ?? ""
-                        minimum = conversion.baseFiatSymbol + value
-                    }
+                    let value = NumberFormatter.localCurrencyFormatter.string(for: minValue) ?? ""
+                    let minimum = model.fiatCurrencySymbol + value
                     
                     output.entryBelowMinimumValue(minimum: minimum)
                 case maxValue..<Decimal.greatestFiniteMagnitude:
-                    guard let maximum = NumberFormatter.localCurrencyFormatter.string(for: minValue) else { return }
+                    guard let maximum = NumberFormatter.localCurrencyFormatter.string(for: maxValue) else { return }
                     output.entryAboveMaximumValue(maximum: maximum)
                 default:
                     output.loadingVisibility(.visible)

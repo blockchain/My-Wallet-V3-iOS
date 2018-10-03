@@ -65,6 +65,7 @@ class ExchangeCreateViewController: UIViewController {
         case conversionView(Visibility)
         case exchangeButton(Visibility)
         case ratesChevron(Visibility)
+        case secondaryLabel(Visibility)
         case errorLabel(Visibility)
     }
     
@@ -220,7 +221,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         let completion: () -> Void = {
             presentationUpdateGroup.finish()
         }
-        
+        presentationUpdateGroup.preparations.forEach({ apply(update: $0) })
         presentationUpdateGroup.animationType.perform(animations: { [weak self] in
             presentationUpdateGroup.animations.forEach({ self?.apply(update: $0) })
         }, completion: completion)
@@ -262,6 +263,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             exchangeButton.alpha = visibility.defaultAlpha
         case .ratesChevron(let visibility):
             hideRatesButton.alpha = visibility.defaultAlpha
+        case .secondaryLabel(let visibility):
+            secondaryAmountLabel.alpha = visibility.defaultAlpha
         case .errorLabel(let visibility):
             errorLabel.alpha = visibility.defaultAlpha
         }

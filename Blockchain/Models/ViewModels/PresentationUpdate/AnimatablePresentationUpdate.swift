@@ -32,12 +32,20 @@ struct AnimatablePresentationUpdate<U: Update> {
 }
 
 struct AnimatablePresentationUpdateGroup<U: Update, C: CompletionEvent> {
+    let preparations: [U]
     let animations: [U]
     let animationType: AnimationParameter
     let completionEvents: [C]
     let completion: UpdateCompletion<C>
     
-    init(animations: [U], animation: AnimationParameter, completionEvents: [C], completion: @escaping UpdateCompletion<C>) {
+    init(
+        preparations: [U] = [],
+        animations: [U],
+        animation: AnimationParameter,
+        completionEvents: [C],
+        completion: @escaping UpdateCompletion<C>
+        ) {
+        self.preparations = preparations
         self.animations = animations
         self.animationType = animation
         self.completionEvents = completionEvents
