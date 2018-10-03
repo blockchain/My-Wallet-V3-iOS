@@ -15,29 +15,54 @@ jobs:
     macos:
       xcode: "10.0.0"
     environment:
+      # Specifies which environment Fastlane should build against.
       FASTLANE_LANE: staging
+
+      # Specifies the required node version (also used as part of the cache key).
+      NODE_VERSION: v7.9.0
+
+      # Changing this value invalidates the cache, causing the new version of node to be installed.
+      NVM_CACHE_KEY: nvm-cache-{{ .Environment.NODE_VERSION }}
+
+      # Cache key of the compiled OpenSSL library.
+      OPENSSL_CACHE_KEY: openssl-cache
+
     shell: /bin/bash --login -o pipefail
     steps:
+      - restore_cache:
+          key: NVM_CACHE_KEY
       - run:
           name: Install node version manager (v0.33.11)
           command: |
             cd ~/
             git clone https://github.com/creationix/nvm.git ~/.nvm
             cd ~/.nvm && git checkout v0.33.11 && source nvm.sh
-            nvm install v7.9.0 && nvm use v7.9.0
-            npm install -g npm@5.6.0
-      - checkout
+            nvm install $NODE_VERSION && nvm use $NODE_VERSION
+      - save_cache:
+          key: NVM_CACHE_KEY
+          paths:
+            - ~/.nvm
       - run:
-          name: Initialize submodules
-          command: git submodule update --init
-      - run:
-          name: Build JS
-          command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
-      - run:
-          name: Build OpenSSL
+          name: Install node package manager (v5.6.0)
           command: |
-            cd Submodules/OpenSSL-for-iPhone
-            sh build-libssl.sh --cleanup
+            source ~/.nvm/nvm.sh
+            npm install -g npm@5.6.0
+      - save_cache:
+          key: npm-cache
+          paths:
+            - ~/.nvm/versions/node/$NODE_VERSION/lib/node_modules
+      # - checkout
+      # - run:
+      #     name: Initialize submodules
+      #     command: git submodule update --init
+      # - run:
+      #     name: Build JS
+      #     command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
+      # - run:
+      #     name: Build OpenSSL
+      #     command: |
+      #       cd Submodules/OpenSSL-for-iPhone
+      #       sh build-libssl.sh --cleanup
       #- run:
           # If beta version is required:
           # name: Install CocoaPods
