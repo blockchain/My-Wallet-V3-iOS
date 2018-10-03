@@ -261,7 +261,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     
                     output.entryBelowMinimumValue(minimum: minimum)
                 case maxValue..<Decimal.greatestFiniteMagnitude:
-                    guard let maximum = NumberFormatter.localCurrencyFormatter.string(for: maxValue) else { return }
+                    guard let value = NumberFormatter.localCurrencyFormatter.string(for: maxValue) else { return }
+                    let maximum = model.fiatCurrencySymbol + value
                     output.entryAboveMaximumValue(maximum: maximum)
                 default:
                     
