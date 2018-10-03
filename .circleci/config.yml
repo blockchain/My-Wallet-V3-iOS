@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Build OpenSSL
           command: |
-            if [ ! -d "/Users/distiller/project/Submodules/OpenSSL-for-iPhone/OpenSSL-for-iOS/bin" ]; then
+            if [ ! -d "./Submodules/OpenSSL-for-iPhone/bin" ]; then
               cd Submodules/OpenSSL-for-iPhone
               sh build-libssl.sh --cleanup
             fi
