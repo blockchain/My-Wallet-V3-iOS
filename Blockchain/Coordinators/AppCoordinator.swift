@@ -346,7 +346,7 @@ extension AppCoordinator: WalletBackupDelegate {
     }
 
     func didFailBackupWallet() {
-        walletManager.wallet.getAndHistory()
+        walletManager.wallet.getHistoryForAllAssets()
     }
 }
 
