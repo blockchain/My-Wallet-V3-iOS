@@ -44,7 +44,6 @@ jobs:
       - restore_cache:
           keys:
             - ${NODE_CACHE_KEY}
-            - ${OPENSSL_CACHE_KEY}
       - run:
           name: Install Node
           command: |
@@ -68,6 +67,9 @@ jobs:
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
             sh scripts/build-js.sh
+      - restore_cache:
+          keys:
+            - ${OPENSSL_CACHE_KEY}
       - run:
           name: Build OpenSSL
           command: |
