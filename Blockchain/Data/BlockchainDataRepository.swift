@@ -48,6 +48,14 @@ import RxSwift
 
     // MARK: - Public Methods
 
+    /// Prefetches data so that it can be cached
+    func prefetchData() {
+        _ = Observable.zip(
+            nabuUser,
+            countries.asObservable()
+        ).subscribe()
+    }
+
     /// Clears cached data in this repository
     func clearCache() {
         cachedUser = BehaviorRelay<NabuUser?>(value: nil)
