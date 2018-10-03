@@ -109,11 +109,11 @@ extension AssetType {
         
         switch self {
         case .bitcoin:
-            let value = NumberFormatter.formatMoney(
-                input.uint64Value,
+            let value = NumberFormatter.parseBtcValue(from: input.stringValue)
+            return NumberFormatter.formatMoney(
+                value.magnitude,
                 localCurrency: true
             )
-            return value
         case .ethereum:
             let value = NumberFormatter.formatEthToFiat(
                 withSymbol: input.stringValue,
@@ -121,11 +121,11 @@ extension AssetType {
             )
             return value
         case .bitcoinCash:
-            let value = NumberFormatter.formatBch(
-                withSymbol: input.uint64Value,
+            let value = NumberFormatter.parseBtcValue(from: input.stringValue)
+            return NumberFormatter.formatBch(
+                withSymbol: value.magnitude,
                 localCurrency: true
             )
-            return value
         }
     }
     
