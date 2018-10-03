@@ -81,6 +81,9 @@ jobs:
           key: ${OPENSSL_CACHE_KEY}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
+      - run:
+          name: Install Pods
+          command: pod install
       # - run: bundle install
       # - run:
       #     name: Fastlane
