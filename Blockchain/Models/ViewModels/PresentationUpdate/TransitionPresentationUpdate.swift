@@ -38,9 +38,9 @@ struct TransitionPresentationUpdateGroup<T: Transition, C: CompletionEvent> {
         self.completion = completion
     }
     
-    func finish(completed: Bool) {
+    func finish() {
         DispatchQueue.main.async {
-            self.completion(completed, self.completionEvents)
+            self.completion(self.completionEvents)
         }
     }
 }

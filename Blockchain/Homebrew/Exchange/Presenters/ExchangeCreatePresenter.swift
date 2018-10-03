@@ -10,7 +10,13 @@ import Foundation
 
 class ExchangeCreatePresenter {
     
+    enum InternalEvent: CompletionEvent {
+        case block(() -> Void)
+    }
+    
     typealias ViewUpdate = ExchangeCreateViewController.ViewUpdate
+    typealias ViewUpdateGroup = AnimatablePresentationUpdateGroup<ViewUpdate, InternalEvent>
+    typealias ViewUpdateBlock = UpdateCompletion<InternalEvent>
     typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
     
     fileprivate let interactor: ExchangeCreateInteractor
@@ -22,6 +28,15 @@ class ExchangeCreatePresenter {
     }
     
     // MARK: Private Functions
+    
+    fileprivate func handle(internalEvent: InternalEvent) {
+        switch internalEvent {
+        case .block(let block):
+            DispatchQueue.main.async {
+                block()
+            }
+        }
+    }
     
     fileprivate func cancelErrorDisappearanceTimer() {
         errorDisappearenceTimer?.invalidate()
@@ -68,7 +83,8 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
                 animations: [
                     .exchangeButton(.visible),
                     .conversionView(.visible),
-                    .ratesChevron(.hidden)],
+                    .ratesChevron(.hidden),
+                    .errorLabel(.hidden)],
                 animation: .none)
         )
     }
@@ -85,7 +101,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [.exchangeButton(.hidden),
                              .conversionView(.hidden)],
-                animation: .easeIn(duration: 0.2)
+                animation: .easeIn(duration: 2.0)
             )
         )
     }
@@ -167,6 +183,24 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func entryBelowMinimumValue(minimum: String) {
         
+        let completion: ViewUpdateBlock = { [weak self] internalEvents in
+            guard let this = self else { return }
+            guard let events = internalEvents else { return }
+            events.forEach({ this.handle(internalEvent: $0) })
+        }
+        
+        let block = { [weak self] in
+            guard let this = self else { return }
+            this.setErrorDisappearanceTimer(duration: 2.5)
+        }
+        
+        let group = ViewUpdateGroup(
+            animations: [.errorLabel(.visible)],
+            animation: .standard(duration: 0.2),
+            completionEvents: [.block(block)],
+            completion: completion
+        )
+        interface?.apply(presentationUpdateGroup: group)
     }
     
     func entryAboveMaximumValue(maximum: String) {

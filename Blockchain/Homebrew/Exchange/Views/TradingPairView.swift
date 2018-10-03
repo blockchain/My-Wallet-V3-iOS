@@ -107,10 +107,10 @@ class TradingPairView: NibBasedView {
     }
     
     func apply(presentationUpdate: TradingPresentationUpdate) {
-        presentationUpdate.animationType.perform { [weak self] in
+        presentationUpdate.animationType.perform(animations: { [weak self] in
             guard let this = self else { return }
             presentationUpdate.animations.forEach({this.handle($0)})
-        }
+        })
     }
     
     func apply(transitionUpdate: TradingTransitionUpdate) {

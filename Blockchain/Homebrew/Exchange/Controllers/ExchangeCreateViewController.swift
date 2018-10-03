@@ -216,15 +216,25 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
     
+    func apply(presentationUpdateGroup: ExchangeCreateInterface.PresentationUpdateGroup) {
+        let completion: () -> Void = {
+            presentationUpdateGroup.finish()
+        }
+        
+        presentationUpdateGroup.animationType.perform(animations: { [weak self] in
+            presentationUpdateGroup.animations.forEach({ self?.apply(update: $0) })
+        }, completion: completion)
+    }
+    
     func apply(presentationUpdates: [ExchangeCreateInterface.PresentationUpdate]) {
         presentationUpdates.forEach({ apply(presentationUpdate: $0) })
     }
     
     func apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate) {
-        animatedUpdate.animationType.perform { [weak self] in
+        animatedUpdate.animationType.perform(animations: { [weak self] in
             guard let this = self else { return }
             animatedUpdate.animations.forEach({ this.apply(update: $0) })
-        }
+        })
     }
     
     func apply(viewUpdates: [ExchangeCreateInterface.ViewUpdate]) {

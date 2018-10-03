@@ -12,12 +12,14 @@ protocol ExchangeCreateInterface: class {
     typealias ViewUpdate = ExchangeCreateViewController.ViewUpdate
     typealias AnimatedUpdate = AnimatablePresentationUpdate<ViewUpdate>
     typealias PresentationUpdate = ExchangeCreateViewController.PresentationUpdate
+    typealias PresentationUpdateGroup = AnimatablePresentationUpdateGroup<ViewUpdate, ExchangeCreatePresenter.InternalEvent>
     typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
     
     func styleTemplate() -> ExchangeStyleTemplate
     func updateTradingPairViewValues(left: String, right: String)
     func updateTradingPairView(pair: TradingPair, fix: Fix)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
+    func apply(presentationUpdateGroup: PresentationUpdateGroup)
     func apply(presentationUpdates: [PresentationUpdate])
     func apply(animatedUpdate: AnimatedUpdate)
     func apply(transitionUpdates: [TransitionUpdate])

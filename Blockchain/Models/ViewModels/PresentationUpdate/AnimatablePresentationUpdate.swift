@@ -18,7 +18,7 @@ protocol CompletionEvent {}
 /// to this empty protocol and it can use `AnimatablePresentationUpdate`
 protocol Update { }
 
-typealias UpdateCompletion<C: CompletionEvent> = (Bool, [C]?) -> Void
+typealias UpdateCompletion<C: CompletionEvent> = ([C]?) -> Void
 
 struct AnimatablePresentationUpdate<U: Update> {
     
@@ -44,9 +44,9 @@ struct AnimatablePresentationUpdateGroup<U: Update, C: CompletionEvent> {
         self.completion = completion
     }
     
-    func finish(completed: Bool) {
+    func finish() {
         DispatchQueue.main.async {
-            self.completion(completed, self.completionEvents)
+            self.completion(self.completionEvents)
         }
     }
 }
@@ -62,7 +62,7 @@ enum AnimationParameter {
     case crossFade(duration: TimeInterval)
     case none
     
-     func perform(animations: @escaping () -> Void) {
+    func perform(animations: @escaping () -> Void, completion: (() -> Void)? = nil) {
         
         switch self {
         case .crossFade(duration: let duration):
@@ -75,8 +75,11 @@ enum AnimationParameter {
                     .allowUserInteraction
                 ],
                 animations: animations,
-                completion: nil
-            )
+                completion: { finished in
+                    if let block = completion {
+                        block()
+                    }
+            })
             
         case .standard(let duration):
             UIView.animate(
@@ -87,8 +90,11 @@ enum AnimationParameter {
                     .allowUserInteraction
                 ],
                 animations: animations,
-                completion: nil
-            )
+                completion: { finished in
+                    if let block = completion {
+                        block()
+                    }
+            })
             
         case .easeIn(let duration):
             UIView.animate(
@@ -100,8 +106,11 @@ enum AnimationParameter {
                     .curveEaseIn
                 ],
                 animations: animations,
-                completion: nil
-            )
+                completion: { finished in
+                    if let block = completion {
+                        block()
+                    }
+            })
             
         case .easeOut(let duration):
             UIView.animate(
@@ -113,8 +122,11 @@ enum AnimationParameter {
                     .curveEaseOut
                 ],
                 animations: animations,
-                completion: nil
-            )
+                completion: { finished in
+                    if let block = completion {
+                        block()
+                    }
+            })
             
         case .none:
             animations()
