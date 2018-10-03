@@ -8,10 +8,16 @@
 # Run commands are executed using non-login shells by default,
 # so you must explicitly source any dotfiles as part of the command.
 # It’s possible to specify a multi-line command, each line of which will be run in the same shell.
+#
+# It is currently not possible to delete the cache in CircleCI 2.0
+#
 
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - ci # Temporary until CI is configured (to save minutes)
     macos:
       xcode: "10.0.0"
     environment:
