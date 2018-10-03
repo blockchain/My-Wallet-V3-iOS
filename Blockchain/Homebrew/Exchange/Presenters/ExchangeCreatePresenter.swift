@@ -18,13 +18,16 @@ class ExchangeCreatePresenter {
     typealias ViewUpdateGroup = AnimatablePresentationUpdateGroup<ViewUpdate, InternalEvent>
     typealias ViewUpdateBlock = UpdateCompletion<InternalEvent>
     typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
+    typealias TransitionUpdateGroup = TransitionPresentationUpdateGroup<TransitionUpdate, InternalEvent>
     
     fileprivate let interactor: ExchangeCreateInteractor
+    fileprivate let feedback: UINotificationFeedbackGenerator
     fileprivate var errorDisappearenceTimer: Timer?
     weak var interface: ExchangeCreateInterface?
 
     init(interactor: ExchangeCreateInteractor) {
         self.interactor = interactor
+        self.feedback = UINotificationFeedbackGenerator()
     }
     
     // MARK: Private Functions
@@ -36,6 +39,12 @@ class ExchangeCreatePresenter {
                 block()
             }
         }
+    }
+    
+    fileprivate func wigglePrimaryLabel() {
+        feedback.prepare()
+        interface?.apply(presentationUpdates: [.wigglePrimaryLabel])
+        feedback.notificationOccurred(.error)
     }
     
     fileprivate func cancelErrorDisappearanceTimer() {
@@ -68,6 +77,13 @@ class ExchangeCreatePresenter {
                 animation: .standard(duration: 0.2)
             )
         )
+        
+        interface?.apply(
+            transitionPresentation: ExchangeCreateInterface.AnimatedTransitionUpdate(
+                transitions: [.primaryLabelTextColor(.brandPrimary)],
+                transition: .crossFade(duration: 0.2)
+            )
+        )
     }
     
     fileprivate func displayError() {
@@ -90,6 +106,27 @@ class ExchangeCreatePresenter {
             completion: completion
         )
         interface?.apply(presentationUpdateGroup: group)
+    }
+    
+    fileprivate func triggerErrorFeedback() {
+        let completion: ViewUpdateBlock = { [weak self] internalEvents in
+            guard let this = self else { return }
+            guard let events = internalEvents else { return }
+            events.forEach({ this.handle(internalEvent: $0) })
+        }
+        
+        let block = { [weak self] in
+            guard let this = self else { return }
+            this.wigglePrimaryLabel()
+        }
+        
+        let group = TransitionUpdateGroup(
+            transitions: [.primaryLabelTextColor(.red)],
+            transitionType: .crossFade(duration: 0.2),
+            completionEvents: [.block(block)],
+            completion: completion
+        )
+        interface?.apply(transitionUpdateGroup: group)
     }
 }
 
@@ -210,14 +247,16 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func entryBelowMinimumValue(minimum: String) {
         let display = LocalizationConstants.Exchange.yourMin + " " + minimum
-        interface?.apply(transitionUpdates: [.updateErrorLabel(display)])
+        interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        triggerErrorFeedback()
     }
     
     func entryAboveMaximumValue(maximum: String) {
         let display = LocalizationConstants.Exchange.yourMax + " " + maximum
-        interface?.apply(transitionUpdates: [.updateErrorLabel(display)])
+        interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        triggerErrorFeedback()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {

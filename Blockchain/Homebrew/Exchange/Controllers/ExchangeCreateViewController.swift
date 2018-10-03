@@ -55,6 +55,7 @@ class ExchangeCreateViewController: UIViewController {
         case wigglePrimaryLabel
         case updatePrimaryLabel(NSAttributedString?)
         case updateSecondaryLabel(String?)
+        case updateErrorLabel(String)
         case updateRateLabels(first: String, second: String, third: String)
         case keypadVisibility(Visibility, animated: Bool)
         case conversionRatesView(Visibility, animated: Bool)
@@ -70,7 +71,6 @@ class ExchangeCreateViewController: UIViewController {
     }
     
     enum TransitionUpdate: Transition {
-        case updateErrorLabel(String)
         case primaryLabelTextColor(UIColor)
     }
 
@@ -216,6 +216,22 @@ extension ExchangeCreateViewController: NumberKeypadViewDelegate {
 }
 
 extension ExchangeCreateViewController: ExchangeCreateInterface {
+    func apply(transitionPresentation: TransitionPresentationUpdate<ExchangeCreateInterface.TransitionUpdate>) {
+        transitionPresentation.transitionType.perform(with: view, animations: { [weak self] in
+            guard let this = self else { return }
+            transitionPresentation.transitions.forEach({ this.apply(transition: $0) })
+        })
+    }
+    
+    func apply(transitionUpdateGroup: ExchangeCreateInterface.TransitionUpdateGroup) {
+        let completion: () -> Void = {
+            transitionUpdateGroup.finish()
+        }
+        transitionUpdateGroup.preparations.forEach({ apply(transition: $0) })
+        transitionUpdateGroup.transitionType.perform(with: view, animations: { [weak self] in
+            transitionUpdateGroup.transitions.forEach({ self?.apply(transition: $0) })
+        }, completion: completion)
+    }
     
     func apply(presentationUpdateGroup: ExchangeCreateInterface.PresentationUpdateGroup) {
         let completion: () -> Void = {
@@ -242,20 +258,14 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         viewUpdates.forEach({ apply(update: $0) })
     }
     
-    func apply(transitionUpdates: [ExchangeCreateInterface.TransitionUpdate]) {
-        transitionUpdates.forEach({ apply(transition: $0) })
-    }
-    
-    func apply(transition: TransitionUpdate, completion: ((Bool) -> Void)? = nil) {
+    func apply(transition: TransitionUpdate) {
         switch transition {
         case .primaryLabelTextColor(let color):
             primaryAmountLabel.textColor = color
-        case .updateErrorLabel(let value):
-            errorLabel.text = value
         }
     }
     
-    func apply(update: ViewUpdate, completion: ((Bool) -> Void)? = nil) {
+    func apply(update: ViewUpdate) {
         switch update {
         case .conversionView(let visibility):
             conversionView.alpha = visibility.defaultAlpha
@@ -299,6 +309,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             primaryAmountLabel.wiggle()
         case .updateRateLabels(first: let first, second: let second, third: let third):
             conversionRatesView.apply(baseToCounter: first, baseToFiat: second, counterToFiat: third)
+        case .updateErrorLabel(let value):
+            errorLabel.text = value
         }
     }
 

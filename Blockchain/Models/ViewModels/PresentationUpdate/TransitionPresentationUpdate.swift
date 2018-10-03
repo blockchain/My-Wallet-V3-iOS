@@ -26,6 +26,7 @@ struct TransitionPresentationUpdate<T: Transition> {
 }
 
 struct TransitionPresentationUpdateGroup<T: Transition, C: CompletionEvent> {
+    let preparations: [T] = []
     let transitions: [T]
     let transitionType: TransitionParameter
     let completionEvents: [C]
@@ -54,7 +55,7 @@ enum TransitionParameter {
     case crossFade(duration: TimeInterval)
     case none
     
-    func perform(with view: UIView, animations: @escaping () -> Void) {
+    func perform(with view: UIView, animations: @escaping () -> Void, completion: (() -> Void)? = nil) {
         switch self {
         case .crossFade(duration: let duration):
             UIView.transition(
@@ -66,7 +67,11 @@ enum TransitionParameter {
                     .allowUserInteraction
                 ],
                 animations: animations,
-                completion: nil
+                completion: { _ in
+                    if let block = completion {
+                        block()
+                    }
+                }
             )
             
         case .none:
