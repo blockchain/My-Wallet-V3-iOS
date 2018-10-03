@@ -22,7 +22,7 @@ jobs:
       NODE_VERSION: v7.9.0
 
       # Changing this value invalidates the cache, causing the new version of node to be installed.
-      NVM_CACHE_KEY: node-cache-{{ .Environment.NODE_VERSION }}
+      NODE_CACHE_KEY: node-cache-{{ .Environment.NODE_VERSION }}
 
       # Cache key of the compiled OpenSSL library.
       OPENSSL_CACHE_KEY: openssl-cache
@@ -30,7 +30,7 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
-          key: NVM_CACHE_KEY
+          key: "{{ NODE_CACHE_KEY }}"
       - run:
           name: Install Node
           command: |
@@ -40,7 +40,7 @@ jobs:
             nvm install $NODE_VERSION && nvm use $NODE_VERSION
             if [[ $(npm -v | grep -v "5.6.0") ]] ; then npm install -g npm@5.6.0; fi
       - save_cache:
-          key: NVM_CACHE_KEY
+          key: "{{ NODE_CACHE_KEY }}"
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
