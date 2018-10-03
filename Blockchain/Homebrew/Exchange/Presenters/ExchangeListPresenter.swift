@@ -77,6 +77,6 @@ extension ExchangeListPresenter: ExchangeListOutput {
     }
     
     func tradeFetchFailed(error: Error?) {
-        // TODO:
+        interface?.showError(message: error?.localizedDescription ?? LocalizationConstants.Exchange.exchangeListError)
     }
 }
