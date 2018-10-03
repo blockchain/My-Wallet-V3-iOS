@@ -101,42 +101,45 @@ extension AssetType {
         }
     }
     
-    func toFiat(amount: NSDecimalNumber) -> String? {
+    func toFiat(amount: Decimal) -> String? {
+        let input = amount as NSDecimalNumber
+        
         switch self {
         case .bitcoin:
             let value = NumberFormatter.formatMoney(
-                amount.uint64Value,
+                input.uint64Value,
                 localCurrency: true
             )
             return value
         case .ethereum:
             let value = NumberFormatter.formatEthToFiat(
-                withSymbol: amount.stringValue,
+                withSymbol: input.stringValue,
                 exchangeRate: WalletManager.shared.wallet.latestEthExchangeRate
             )
             return value
         case .bitcoinCash:
             let value = NumberFormatter.formatBch(
-                withSymbol: amount.uint64Value,
+                withSymbol: input.uint64Value,
                 localCurrency: true
             )
             return value
         }
     }
     
-    func toCrypto(amount: NSDecimalNumber) -> String? {
+    func toCrypto(amount: Decimal) -> String? {
+        let input = amount as NSDecimalNumber
         switch self {
         case .bitcoin:
-            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            let value = NumberFormatter.parseBtcValue(from: input.stringValue)
             return NumberFormatter.formatMoney(value.magnitude)
         case .ethereum:
             guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
             return NumberFormatter.formatEth(
-                withLocalSymbol: amount.stringValue,
+                withLocalSymbol: input.stringValue,
                 exchangeRate: exchangeRate
             )
         case .bitcoinCash:
-            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
+            let value = NumberFormatter.parseBtcValue(from: input.stringValue)
             return NumberFormatter.formatBch(withSymbol: value.magnitude)
         }
     }

@@ -247,46 +247,41 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let max = maxTradingLimit().asObservable()
         let disposable = Observable.zip(min, max) {
             return ($0, $1)
-            }.subscribe(onNext: { [weak self] payload in
-                guard let this = self else { return }
-                let minValue = payload.0
-                let maxValue = payload.1
+        }.subscribe(onNext: { [weak self] payload in
+            guard let this = self else { return }
+            let minValue = payload.0
+            let maxValue = payload.1
                 
-                guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
-                switch candidate {
-                case ..<minValue:
+            guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
+            switch candidate {
+            case ..<minValue:
+                let value = NumberFormatter.localCurrencyFormatter.string(for: minValue) ?? ""
+                let minimum = model.fiatCurrencySymbol + value
                     
-                    let value = NumberFormatter.localCurrencyFormatter.string(for: minValue) ?? ""
-                    let minimum = model.fiatCurrencySymbol + value
-                    
-                    output.entryBelowMinimumValue(minimum: minimum)
-                case maxValue..<Decimal.greatestFiniteMagnitude:
-                    guard let value = NumberFormatter.localCurrencyFormatter.string(for: maxValue) else { return }
-                    let maximum = model.fiatCurrencySymbol + value
+                output.entryBelowMinimumValue(minimum: minimum)
+            case maxValue..<Decimal.greatestFiniteMagnitude:
+                guard let value = NumberFormatter.localCurrencyFormatter.string(for: maxValue) else { return }
+                let maximum = model.fiatCurrencySymbol + value
                     output.entryAboveMaximumValue(maximum: maximum)
-                default:
-                    
-                    output.loadingVisibility(.visible)
-                    
-                    this.tradeExecution.prebuildOrder(
-                        with: conversion,
-                        from: model.marketPair.fromAccount,
-                        to: model.marketPair.toAccount,
-                        success: { [weak self] orderTransaction, conversion in
-                            guard let this = self else { return }
-                            this.output?.loadingVisibility(.hidden)
-                            this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
-                        }, error: { [weak self] errorMessage in
-                            guard let this = self else { return }
-                            AlertViewPresenter.shared.standardError(message: errorMessage)
-                            this.output?.loadingVisibility(.hidden)
-                        }
-                    )
-                }
-            })
-        
-        _ = disposables.insert(disposable)
-        
+            default:
+                output.loadingVisibility(.visible)
+                this.tradeExecution.prebuildOrder(
+                    with: conversion,
+                    from: model.marketPair.fromAccount,
+                    to: model.marketPair.toAccount,
+                    success: { [weak self] orderTransaction, conversion in
+                        guard let this = self else { return }
+                        this.output?.loadingVisibility(.hidden)
+                        this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
+                    }, error: { [weak self] errorMessage in
+                        guard let this = self else { return }
+                        AlertViewPresenter.shared.standardError(message: errorMessage)
+                        this.output?.loadingVisibility(.hidden)
+                    }
+                )
+            }
+        })
+        disposables.insertWithDiscardableResult(disposable)
     }
 
     // MARK: - Private
@@ -371,8 +366,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         
         return tradeLimitService.getTradeLimits(
-            withFiatCurrency: model.fiatCurrencyCode
-            ).map { tradingLimits -> Decimal in
+            withFiatCurrency: model.fiatCurrencyCode).map {
+                tradingLimits -> Decimal in
                 return tradingLimits.minOrder
             }.asMaybe()
     }
