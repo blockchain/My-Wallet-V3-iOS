@@ -43,6 +43,7 @@ jobs:
           key: NVM_CACHE_KEY
           paths:
             - ~/.nvm
+            - /usr/local/lib/node_modules
       # - checkout
       # - run:
       #     name: Initialize submodules
