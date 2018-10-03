@@ -1,6 +1,9 @@
 # .circleci/config.yml
+
 # Run commands are executed using non-login shells by default,
 # so you must explicitly source any dotfiles as part of the command.
+# It’s possible to specify a multi-line command, each line of which will be run in the same shell.
+
 version: 2
 jobs:
   build:
@@ -27,7 +30,9 @@ jobs:
           command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
       - run:
           name: Build OpenSSL
-          command: sh Submodules/OpenSSL-for-iPhone/build-libssl.sh
+          command: |
+            cd Submodules/OpenSSL-for-iPhone
+            sh build-libssl.sh --cleanup
       #- run:
           # If beta version is required:
           # name: Install CocoaPods
