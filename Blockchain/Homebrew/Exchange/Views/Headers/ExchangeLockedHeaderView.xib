@@ -34,10 +34,10 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xhk-3g-hRV">
-                    <rect key="frame" x="337" y="16" width="22" height="22"/>
+                    <rect key="frame" x="331" y="4" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="22" id="eEh-uD-Z4l"/>
-                        <constraint firstAttribute="height" constant="22" id="rqJ-DY-9ff"/>
+                        <constraint firstAttribute="width" constant="40" id="eEh-uD-Z4l"/>
+                        <constraint firstAttribute="height" constant="40" id="rqJ-DY-9ff"/>
                     </constraints>
                     <state key="normal" image="close"/>
                     <connections>
@@ -46,11 +46,11 @@
                 </button>
             </subviews>
             <constraints>
-                <constraint firstItem="Xhk-3g-hRV" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="16" id="5j5-pq-Icz"/>
+                <constraint firstItem="Xhk-3g-hRV" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="4" id="5j5-pq-Icz"/>
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="24" id="AO0-lf-WOH"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="top" secondItem="IRa-Td-fNo" secondAttribute="bottom" constant="8" id="Ies-1J-X4l"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="centerX" secondItem="IRa-Td-fNo" secondAttribute="centerX" id="KxI-Qm-OfM"/>
-                <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="Xhk-3g-hRV" secondAttribute="trailing" constant="16" id="adc-Hy-3k1"/>
+                <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="Xhk-3g-hRV" secondAttribute="trailing" constant="4" id="adc-Hy-3k1"/>
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="centerX" secondItem="Qwk-jx-OBB" secondAttribute="centerX" id="oqg-qO-8ek"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Qwk-jx-OBB"/>
