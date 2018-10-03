@@ -43,16 +43,9 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var conversionRatesView: ConversionRatesView!
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var fixToggleButton: UIButton!
     @IBOutlet private var conversionView: UIView!
     @IBOutlet private var exchangeButton: UIButton!
-
-    @IBAction func useMinimumButtonTapped(_ sender: Any) {
-        delegate?.onUseMinimumTapped(assetAccount: fromAccount)
-    }
-
-    @IBAction func useMaximumButtonTapped(_ sender: Any) {
-        delegate?.onUseMaximumTapped(assetAccount: fromAccount)
-    }
 
     // MARK: Action enum
     enum Action {
@@ -143,6 +136,20 @@ class ExchangeCreateViewController: UIViewController {
     }
     
     // MARK: - IBActions
+
+    @IBAction func useMinimumButtonTapped(_ sender: Any) {
+        delegate?.onUseMinimumTapped(assetAccount: fromAccount)
+    }
+
+    @IBAction func useMaximumButtonTapped(_ sender: Any) {
+        delegate?.onUseMaximumTapped(assetAccount: fromAccount)
+    }
+
+    @IBAction func fixToggleButtonTapped(_ sender: UIButton) {
+        let imageToggle = (fixToggleButton.currentImage == #imageLiteral(resourceName: "icon-toggle-left")) ? #imageLiteral(resourceName: "icon-toggle-right") : #imageLiteral(resourceName: "icon-toggle-left")
+        fixToggleButton.setImage(imageToggle, for: .normal)
+        presenter.onToggleFixTapped()
+    }
 
     @IBAction private func ratesViewTapped(_ sender: UITapGestureRecognizer) {
         delegate?.onDisplayRatesTapped()
@@ -375,7 +382,7 @@ extension ExchangeCreateViewController: TradingPairViewDelegate {
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
-        presenter.onToggleFixTapped()
+        // TICKET: https://blockchain.atlassian.net/browse/IOS-1350
     }
 }
 
