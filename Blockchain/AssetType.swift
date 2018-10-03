@@ -101,7 +101,10 @@ extension AssetType {
         }
     }
     
-    func toFiat(amount: Decimal) -> String? {
+    func toFiat(
+        amount: Decimal,
+        from wallet: Wallet = WalletManager.shared.wallet
+        ) -> String? {
         let input = amount as NSDecimalNumber
         
         switch self {
@@ -114,7 +117,7 @@ extension AssetType {
         case .ethereum:
             let value = NumberFormatter.formatEthToFiat(
                 withSymbol: input.stringValue,
-                exchangeRate: WalletManager.shared.wallet.latestEthExchangeRate
+                exchangeRate: wallet.latestEthExchangeRate
             )
             return value
         case .bitcoinCash:
@@ -126,14 +129,17 @@ extension AssetType {
         }
     }
     
-    func toCrypto(amount: Decimal) -> String? {
+    func toCrypto(
+        amount: Decimal,
+        from wallet: Wallet = WalletManager.shared.wallet
+        ) -> String? {
         let input = amount as NSDecimalNumber
         switch self {
         case .bitcoin:
             let value = NumberFormatter.parseBtcValue(from: input.stringValue)
             return NumberFormatter.formatMoney(value.magnitude)
         case .ethereum:
-            guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
+            guard let exchangeRate = wallet.latestEthExchangeRate else { return nil }
             return NumberFormatter.formatEth(
                 withLocalSymbol: input.stringValue,
                 exchangeRate: exchangeRate
