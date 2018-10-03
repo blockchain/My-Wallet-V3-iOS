@@ -75,7 +75,7 @@ jobs:
           command: |
             if [ ! -d "./Submodules/OpenSSL-for-iPhone/OpenSSL-for-iOS/bin" ]; then
               cd Submodules/OpenSSL-for-iPhone
-              sh build-libssl.sh --cleanup
+              # sh build-libssl.sh --cleanup
             fi
       - save_cache:
           key: ${OPENSSL_CACHE_KEY}
