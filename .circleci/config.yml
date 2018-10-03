@@ -30,7 +30,7 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
-          key: "{{ .Environment.NODE_CACHE_KEY }}"
+          key: "${NODE_CACHE_KEY}"
       - run:
           name: Install Node
           command: |
@@ -40,7 +40,7 @@ jobs:
             nvm install $NODE_VERSION && nvm use $NODE_VERSION
             if [[ $(npm -v | grep -v "5.6.0") ]] ; then npm install -g npm@5.6.0; fi
       - save_cache:
-          key: "{{ .Environment.NODE_CACHE_KEY }}"
+          key: "${NODE_CACHE_KEY}"
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
