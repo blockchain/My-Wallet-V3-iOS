@@ -50,7 +50,7 @@ jobs:
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
-      # - checkout
+      - checkout
       # - run:
       #     name: Initialize submodules
       #     command: git submodule update --init
