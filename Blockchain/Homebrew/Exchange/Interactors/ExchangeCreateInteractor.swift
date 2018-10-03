@@ -366,8 +366,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         
         return tradeLimitService.getTradeLimits(
-            withFiatCurrency: model.fiatCurrencyCode).map {
-                tradingLimits -> Decimal in
+            withFiatCurrency: model.fiatCurrencyCode).map { tradingLimits -> Decimal in
                 return tradingLimits.minOrder
             }.asMaybe()
     }
@@ -378,8 +377,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         
         return tradeLimitService.getTradeLimits(
-            withFiatCurrency: model.fiatCurrencyCode
-        ).map { tradingLimits -> Decimal in
+            withFiatCurrency: model.fiatCurrencyCode).map { tradingLimits -> Decimal in
             return tradingLimits.maxPossibleOrder
         }.asMaybe()
     }
