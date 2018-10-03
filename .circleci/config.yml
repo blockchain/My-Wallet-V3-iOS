@@ -14,7 +14,7 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - run:
-          name: Install Node Version Manager (v0.33.11)
+          name: Install node version manager (v0.33.11)
           command: |
             cd ~/
             git clone https://github.com/creationix/nvm.git ~/.nvm
@@ -23,10 +23,10 @@ jobs:
             npm install -g npm@5.6.0
       - checkout
       - run:
-          name: Initialize Submodules
+          name: Initialize submodules
           command: git submodule update --init
       - run:
-          name: Run Install & Build Scripts
+          name: Build JS
           command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
       - run:
           name: Build OpenSSL
