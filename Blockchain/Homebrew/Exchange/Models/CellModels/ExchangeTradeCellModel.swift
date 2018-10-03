@@ -394,70 +394,30 @@ fileprivate extension ExchangeTrade {
     
     fileprivate func minerFeeCryptoAmount() -> String? {
         guard let assetType = AssetType(stringValue: minerCurrency()) else { return nil }
-        return toCrypto(from: assetType, amount: minerFee)
+        return assetType.toCrypto(amount: minerFee as Decimal)
     }
     
     fileprivate func inboundFiatAmount() -> String? {
         guard let toAsset = pair.components(separatedBy: "_").last else { return nil }
         guard let assetType = AssetType(stringValue: toAsset) else { return nil }
-        return toFiat(from: assetType, amount: withdrawalAmount)
+        return assetType.toFiat(amount: withdrawalAmount as Decimal)
     }
     
     fileprivate func inboundCryptoAmount() -> String? {
         guard let currencySymbol = withdrawalCurrency() else { return nil }
         guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
-        return toCrypto(from: assetType, amount: withdrawalAmount)
+        return assetType.toCrypto(amount: withdrawalAmount as Decimal)
     }
     
     fileprivate func outboundFiatAmount() -> String? {
         guard let fromAsset = pair.components(separatedBy: "_").first else { return nil }
         guard let assetType = AssetType(stringValue: fromAsset) else { return nil }
-        return toFiat(from: assetType, amount: depositAmount)
+        return assetType.toFiat(amount: depositAmount as Decimal)
     }
     
     fileprivate func outboundCryptoAmount() -> String? {
         guard let currencySymbol = depositCurrency() else { return nil }
         guard let assetType = AssetType(stringValue: currencySymbol) else { return nil }
-        return toCrypto(from: assetType, amount: depositAmount)
-    }
-    
-    fileprivate func toFiat(from assetType: AssetType, amount: NSDecimalNumber) -> String? {
-        switch assetType {
-        case .bitcoin:
-            let value = NumberFormatter.formatMoney(
-                amount.uint64Value,
-                localCurrency: true
-            )
-            return value
-        case .ethereum:
-            let value = NumberFormatter.formatEthToFiat(
-                withSymbol: amount.stringValue,
-                exchangeRate: WalletManager.shared.wallet.latestEthExchangeRate
-            )
-            return value
-        case .bitcoinCash:
-            let value = NumberFormatter.formatBch(
-                withSymbol: amount.uint64Value,
-                localCurrency: true
-            )
-            return value
-        }
-    }
-    
-    fileprivate func toCrypto(from assetType: AssetType, amount: NSDecimalNumber) -> String? {
-        switch assetType {
-        case .bitcoin:
-            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
-            return NumberFormatter.formatMoney(value.magnitude)
-        case .ethereum:
-            guard let exchangeRate = WalletManager.shared.wallet.latestEthExchangeRate else { return nil }
-            return NumberFormatter.formatEth(
-                withLocalSymbol: amount.stringValue,
-                exchangeRate: exchangeRate
-            )
-        case .bitcoinCash:
-            let value = NumberFormatter.parseBtcValue(from: amount.stringValue)
-            return NumberFormatter.formatBch(withSymbol: value.magnitude)
-        }
+        return assetType.toCrypto(amount: depositAmount as Decimal)
     }
 }
