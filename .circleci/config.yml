@@ -37,6 +37,7 @@ jobs:
       # Cache key of the compiled OpenSSL library for the targeted SDK version.
       OPENSSL_CACHE_KEY: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
 
+    # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
 
     steps:
