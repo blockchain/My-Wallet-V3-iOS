@@ -148,6 +148,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your min is $4.56" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAr-Eh-XkB">
+                                <rect key="frame" x="107.5" y="189.5" width="159.5" height="44"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="19"/>
+                                <color key="textColor" red="0.95999999999999996" green="0.26000000000000001" blue="0.26000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -158,6 +165,7 @@
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="top" secondItem="V30-pI-8jo" secondAttribute="bottom" constant="8" id="7kf-Ns-aJR"/>
                             <constraint firstItem="dfm-a1-ad2" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="AHN-eg-W66"/>
                             <constraint firstItem="okC-2w-xB9" firstAttribute="height" secondItem="cbA-yh-J0A" secondAttribute="height" multiplier="0.5" id="AsX-Mv-rk9"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="height" secondItem="okC-2w-xB9" secondAttribute="height" id="BvY-ki-J1y"/>
                             <constraint firstItem="DUe-4D-nhJ" firstAttribute="top" secondItem="dfm-a1-ad2" secondAttribute="bottom" constant="16" id="EPf-w5-lBJ"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" constant="16" id="GHI-5B-7xh"/>
@@ -166,6 +174,7 @@
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="height" secondItem="dfm-a1-ad2" secondAttribute="height" multiplier="0.85" id="PLc-ir-uPC"/>
                             <constraint firstItem="coY-Dg-Mc5" firstAttribute="centerY" secondItem="DUe-4D-nhJ" secondAttribute="centerY" id="Pxh-nT-mtp"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="centerX" secondItem="V30-pI-8jo" secondAttribute="centerX" id="Qr8-L9-lCF"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" id="RFn-jm-ND2"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="TBU-fM-o9r"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerX" secondItem="dfm-a1-ad2" secondAttribute="centerX" id="bJ3-Vq-GwG"/>
@@ -176,6 +185,7 @@
                             <constraint firstItem="V30-pI-8jo" firstAttribute="top" secondItem="FIv-WY-bvA" secondAttribute="top" constant="8" id="fNG-KC-mpx"/>
                             <constraint firstItem="dfm-a1-ad2" firstAttribute="height" secondItem="jre-mq-FDr" secondAttribute="height" multiplier="0.375" id="jtO-7D-eg1"/>
                             <constraint firstItem="okC-2w-xB9" firstAttribute="centerX" secondItem="cbA-yh-J0A" secondAttribute="centerX" id="kRJ-eC-1n8"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="centerX" secondItem="okC-2w-xB9" secondAttribute="centerX" id="mYy-MV-An8"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="16" id="oTE-Cd-lXS"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="leading" secondItem="V30-pI-8jo" secondAttribute="leading" id="p9e-tX-pLR"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="dfm-a1-ad2" secondAttribute="trailing" constant="16" id="pXZ-qz-MkO"/>
@@ -189,6 +199,7 @@
                     <connections>
                         <outlet property="conversionRatesView" destination="Hcw-SG-3XL" id="2o2-Fx-Jb5"/>
                         <outlet property="conversionView" destination="eA3-pM-NKs" id="veU-HE-Ibp"/>
+                        <outlet property="errorLabel" destination="fAr-Eh-XkB" id="Lbh-2l-zky"/>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
                         <outlet property="hideRatesButton" destination="coY-Dg-Mc5" id="bEB-4e-zyz"/>
                         <outlet property="numberKeypadView" destination="dfm-a1-ad2" id="yN5-Le-zxp"/>

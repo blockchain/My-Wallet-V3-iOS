@@ -38,6 +38,10 @@ class ExchangeCreateViewController: UIViewController {
 
     // Amount being typed in converted to input crypto or input fiat
     @IBOutlet private var secondaryAmountLabel: UILabel!
+    
+    // Label that is hidden unlesss the user attempts to submit
+    // an exchange that is below the minimum value or above the max.
+    @IBOutlet private var errorLabel: UILabel!
 
     @IBOutlet private var hideRatesButton: UIButton!
     @IBOutlet private var conversionRatesView: ConversionRatesView!
@@ -57,16 +61,16 @@ class ExchangeCreateViewController: UIViewController {
         case loadingIndicator(Visibility)
     }
     
-    enum ViewUpdate: Update, CompletionEvent {
+    enum ViewUpdate: Update {
         case conversionView(Visibility)
         case exchangeButton(Visibility)
         case ratesChevron(Visibility)
+        case errorLabel(Visibility)
     }
     
-    enum TransitionUpdate: Transition, CompletionEvent {
-        case secondaryLabel(String)
+    enum TransitionUpdate: Transition {
+        case updateErrorLabel(String)
         case primaryLabelTextColor(UIColor)
-        case secondaryLabelTextColor(UIColor)
     }
 
     // MARK: Public Properties
@@ -233,12 +237,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     
     func apply(transition: TransitionUpdate, completion: ((Bool) -> Void)? = nil) {
         switch transition {
-        case .secondaryLabel(let value):
-            secondaryAmountLabel.text = value
-        case .secondaryLabelTextColor(let color):
-            secondaryAmountLabel.textColor = color
         case .primaryLabelTextColor(let color):
             primaryAmountLabel.textColor = color
+        case .updateErrorLabel(let value):
+            errorLabel.text = value
         }
     }
     
@@ -250,6 +252,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             exchangeButton.alpha = visibility.defaultAlpha
         case .ratesChevron(let visibility):
             hideRatesButton.alpha = visibility.defaultAlpha
+        case .errorLabel(let visibility):
+            errorLabel.alpha = visibility.defaultAlpha
         }
     }
     

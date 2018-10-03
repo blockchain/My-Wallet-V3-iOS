@@ -12,14 +12,42 @@ class ExchangeCreatePresenter {
     
     typealias ViewUpdate = ExchangeCreateViewController.ViewUpdate
     typealias TransitionUpdate = ExchangeCreateViewController.TransitionUpdate
-    typealias AnimatableGroup  = AnimatablePresentationUpdateGroup<ViewUpdate, ViewUpdate>
-    typealias TransitionGroup = TransitionPresentationUpdateGroup<TransitionUpdate, TransitionUpdate>
     
     fileprivate let interactor: ExchangeCreateInteractor
+    fileprivate var errorDisappearenceTimer: Timer?
     weak var interface: ExchangeCreateInterface?
 
     init(interactor: ExchangeCreateInteractor) {
         self.interactor = interactor
+    }
+    
+    // MARK: Private Functions
+    
+    fileprivate func cancelErrorDisappearanceTimer() {
+        errorDisappearenceTimer?.invalidate()
+        errorDisappearenceTimer = nil
+    }
+    
+    fileprivate func setErrorDisappearanceTimer(duration: TimeInterval) {
+        errorDisappearenceTimer?.invalidate()
+        errorDisappearenceTimer = Timer(
+            fire: Date(timeIntervalSinceNow: duration),
+            interval: 0,
+            repeats: false,
+            block: { [weak self] timer in
+                self?.errorDisappearanceTimerFired()
+        })
+        guard let timer = errorDisappearenceTimer else { return }
+        RunLoop.main.add(timer, forMode: .commonModes)
+    }
+    
+    fileprivate func errorDisappearanceTimerFired() {
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.errorLabel(.hidden)],
+                animation: .standard(duration: 0.2)
+            )
+        )
     }
 }
 

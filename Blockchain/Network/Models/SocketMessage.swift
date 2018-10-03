@@ -166,8 +166,17 @@ extension Conversion: Equatable {
 }
 
 extension Conversion {
+    
+    var baseFiatSymbol: String {
+        return quote.currencyRatio.base.fiat.symbol
+    }
+    
     var baseFiatValue: String {
         return quote.currencyRatio.base.fiat.value
+    }
+    
+    var baseCryptoSymbol: String {
+        return quote.currencyRatio.base.crypto.symbol
     }
     
     var baseCryptoValue: String {
