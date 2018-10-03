@@ -8,26 +8,18 @@
 
 class ExchangeLockedHeaderView: UICollectionReusableView {
     
-    // MARK: Public
+    // MARK: - Public
     
     static let identifier: String = String(describing: ExchangeLockedHeaderView.self)
     var closeTapped: (() -> Void)?
     
-    // MARK Private Static Properties
+    // MARK: - Private Static Properties
     
-    static fileprivate let verticalPadding: CGFloat = 82.0
+    static fileprivate let verticalPadding: CGFloat = 52.0
     
-    // MARK: Private IBOutlets
+    // MARK: - Private IBOutlets
     
     @IBOutlet fileprivate var title: UILabel!
-    @IBOutlet fileprivate var orderID: UILabel!
-    
-    var orderIdentifier: String? {
-        didSet {
-            guard let identifier = orderIdentifier else { return }
-            orderID.text = LocalizationConstants.Exchange.orderID + " " + identifier
-        }
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +27,7 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
         title.text = LocalizationConstants.Exchange.exchangeLocked
     }
     
-    // MARK: Actions
+    // MARK: - Actions
     
     @IBAction func closeButtonTapped(_ sender: UIButton) {
         closeTapped?()
@@ -44,8 +36,6 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
     static func estimatedHeight() -> CGFloat {
         
         guard let titleFont = UIFont(name: Constants.FontNames.montserratRegular, size: 20) else { return 0.0 }
-        guard let orderFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16) else { return 0.0 }
-        
         
         let attributedTitle = NSAttributedString(
             string: LocalizationConstants.Exchange.exchangeLocked,
@@ -53,12 +43,6 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
                 NSAttributedStringKey.font: titleFont
             ]
         )
-        let attributedOrder = NSAttributedString(
-            string: LocalizationConstants.Exchange.exchangeLocked,
-            attributes: [
-                NSAttributedStringKey.font: orderFont
-            ]
-        )
-        return verticalPadding + attributedTitle.height + attributedOrder.height
+        return verticalPadding + attributedTitle.height
     }
 }

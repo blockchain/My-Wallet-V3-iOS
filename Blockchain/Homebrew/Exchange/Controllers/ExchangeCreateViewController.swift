@@ -47,7 +47,9 @@ class ExchangeCreateViewController: UIViewController {
     @IBOutlet private var conversionRatesView: ConversionRatesView!
     @IBOutlet private var useMinimumButton: UIButton!
     @IBOutlet private var useMaximumButton: UIButton!
+    @IBOutlet private var fixToggleButton: UIButton!
     @IBOutlet private var conversionView: UIView!
+    @IBOutlet private var conversionTitleLabel: UILabel!
     @IBOutlet private var exchangeButton: UIButton!
     
     enum PresentationUpdate {
@@ -162,9 +164,15 @@ class ExchangeCreateViewController: UIViewController {
     @IBAction func useMinimumButtonTapped(_ sender: Any) {
         delegate?.onUseMinimumTapped(assetAccount: fromAccount)
     }
-    
+
     @IBAction func useMaximumButtonTapped(_ sender: Any) {
         delegate?.onUseMaximumTapped(assetAccount: fromAccount)
+    }
+
+    @IBAction func fixToggleButtonTapped(_ sender: UIButton) {
+        let imageToggle = (fixToggleButton.currentImage == #imageLiteral(resourceName: "icon-toggle-left")) ? #imageLiteral(resourceName: "icon-toggle-right") : #imageLiteral(resourceName: "icon-toggle-left")
+        fixToggleButton.setImage(imageToggle, for: .normal)
+        presenter.onToggleFixTapped()
     }
 
     @IBAction private func ratesViewTapped(_ sender: UITapGestureRecognizer) {
@@ -308,6 +316,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         case .wigglePrimaryLabel:
             primaryAmountLabel.wiggle()
         case .updateRateLabels(first: let first, second: let second, third: let third):
+            conversionTitleLabel.text = first
             conversionRatesView.apply(baseToCounter: first, baseToFiat: second, counterToFiat: third)
         case .updateErrorLabel(let value):
             errorLabel.text = value
@@ -400,7 +409,7 @@ extension ExchangeCreateViewController: TradingPairViewDelegate {
     }
 
     func onSwapButtonTapped(_ view: TradingPairView) {
-        presenter.onToggleFixTapped()
+        // TICKET: https://blockchain.atlassian.net/browse/IOS-1350
     }
 }
 

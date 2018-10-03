@@ -475,6 +475,10 @@ struct LocalizationConstants {
             "Your Max is",
             comment: "Error that displays what the maximum amount of fiat allowed for a trade"
         )
+        static let tradeExecutionError = NSLocalizedString(
+            "Sorry, an order cannot be placed at this time.",
+            comment: "Error message shown to a user if something went wrong during the exchange process and the user cannot continue"
+        )
     }
 
     struct AddressAndKeyImport {

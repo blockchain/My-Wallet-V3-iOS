@@ -42,7 +42,6 @@ protocol ExchangeCreateInterface: class {
 protocol ExchangeCreateInput: NumberKeypadViewDelegate {
     func viewLoaded()
     func displayInputTypeTapped()
-    func ratesViewTapped()
     func useMinimumAmount(assetAccount: AssetAccount)
     func useMaximumAmount(assetAccount: AssetAccount)
     func confirmationIsExecuting() -> Bool

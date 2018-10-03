@@ -120,10 +120,14 @@ struct ExchangeRates: SocketMessageCodable {
 
 extension ExchangeRates {
     func convert(balance: Decimal, fromCurrency: String, toCurrency: String) -> Decimal {
-        if let matchingPair = rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" }) {
+        if let matchingPair = pairRate(fromCurrency: fromCurrency, toCurrency: toCurrency) {
             return matchingPair.price * balance
         }
         return balance
+    }
+
+    func pairRate(fromCurrency: String, toCurrency: String) -> CurrencyPairRate? {
+        return rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" })
     }
 }
 
