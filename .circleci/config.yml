@@ -1,5 +1,10 @@
-# .circleci/config.yml
-
+#
+#  .circleci/config.yml
+#  Blockchain
+#
+#  Created by Maurice A. on 10/1/18.
+#  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
+#
 # Run commands are executed using non-login shells by default,
 # so you must explicitly source any dotfiles as part of the command.
 # It’s possible to specify a multi-line command, each line of which will be run in the same shell.
