@@ -125,18 +125,18 @@ extension SettingsTableViewController {
     }
 
     func getUserVerificationStatus(handler: @escaping (NabuUser?, Bool) -> Void) {
-        disposable = BlockchainDataRepository.shared.fetchNabuUser()
+        disposable = BlockchainDataRepository.shared.nabuUser
             .subscribeOn(MainScheduler.asyncInstance) // network call will be performed off the main thread
             .observeOn(MainScheduler.instance) // closures passed in subscribe will be on the main thread
-            .subscribe(onSuccess: { user in
+            .subscribe(onNext: { user in
                 handler(user, true)
-            }, onError: {  error in
+            }, onError: { error in
+                Logger.shared.error("Failed to get nabu user: \(error.localizedDescription)")
                 handler(nil, false)
             })
     }
 
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        self.createBadge(cell)
         self.getUserVerificationStatus { user, success in
             if success {
                 if let theUser = user {
