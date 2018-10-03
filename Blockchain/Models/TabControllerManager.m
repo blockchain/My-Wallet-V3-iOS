@@ -348,7 +348,7 @@
     }
 }
 
-- (void)didErrorWhileBuildingPayment:(NSString *)message
+- (void)didErrorWhileBuildingPaymentWithError:(NSString *)message
 {
     [[AlertViewPresenter sharedInstance] standardErrorWithMessage:message title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
 }
