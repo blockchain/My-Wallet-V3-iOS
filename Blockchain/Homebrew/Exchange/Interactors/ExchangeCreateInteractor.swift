@@ -325,6 +325,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 )
                 return
             }
+            
+            guard model.lastConversion != conversion else { return }
 
             // Store conversion
             model.lastConversion = conversion
