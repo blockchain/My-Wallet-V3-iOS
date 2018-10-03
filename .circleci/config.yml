@@ -32,25 +32,20 @@ jobs:
       - restore_cache:
           key: NVM_CACHE_KEY
       - run:
-          name: Install node version manager (v0.33.11)
+          name: Install Node
           command: |
             cd ~/
             git clone https://github.com/creationix/nvm.git ~/.nvm
-            cd ~/.nvm && git checkout v0.33.11 && source nvm.sh
+            cd ~/.nvm && git checkout v0.33.11 && . nvm.sh
             nvm install $NODE_VERSION && nvm use $NODE_VERSION
+            if [ $(node -v) != "5.6.0" ]; then
+              echo "Installing npm"
+              npm install -g npm@5.6.0
+            fi
       - save_cache:
           key: NVM_CACHE_KEY
           paths:
             - ~/.nvm
-      - run:
-          name: Install node package manager (v5.6.0)
-          command: |
-            source ~/.nvm/nvm.sh
-            npm install -g npm@5.6.0
-      - save_cache:
-          key: npm-cache
-          paths:
-            - ~/.nvm/versions/node/$NODE_VERSION/lib/node_modules
       # - checkout
       # - run:
       #     name: Initialize submodules
