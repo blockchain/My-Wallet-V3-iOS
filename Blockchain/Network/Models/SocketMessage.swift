@@ -186,28 +186,6 @@ extension Conversion {
     var baseCryptoValue: String {
         return quote.currencyRatio.base.crypto.value
     }
-    
-    var baseToFiatDescription: String {
-        let fiatSymbol = quote.currencyRatio.base.fiat.symbol
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
-        return base + " = " + fiat
-    }
-    
-    var baseToCounterDescription: String {
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
-        return base + " = " + counter
-    }
-    
-    var counterToFiatDescription: String {
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let fiatSymbol = quote.currencyRatio.counter.fiat.symbol
-        let counter = "1" + " " + counterSymbol
-        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
-        return counter + " = " + fiat
-    }
 }
 
 /// `SocketError` is for any type of error that
