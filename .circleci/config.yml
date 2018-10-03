@@ -15,6 +15,9 @@ jobs:
     macos:
       xcode: "10.0.0"
     environment:
+      # Target iOS SDK version
+      TARGET_IOS_SDK_VERSION: 12.0
+
       # Specifies which environment Fastlane should build against.
       FASTLANE_LANE: staging
 
@@ -24,13 +27,16 @@ jobs:
       # Changing this value invalidates the cache, causing the new version of node to be installed.
       NODE_CACHE_KEY: node-cache-{{ .Environment.NODE_VERSION }}
 
-      # Cache key of the compiled OpenSSL library.
-      OPENSSL_CACHE_KEY: openssl-cache
+      # Cache key of the compiled OpenSSL library for the targeted SDK version.
+      OPENSSL_CACHE_KEY: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
 
     shell: /bin/bash --login -o pipefail
+
     steps:
       - restore_cache:
-          keys: ${NODE_CACHE_KEY}
+          keys:
+            - ${NODE_CACHE_KEY}
+            - ${OPENSSL_CACHE_KEY}
       - run:
           name: Install Node
           command: |
@@ -50,7 +56,7 @@ jobs:
       #     command: git submodule update --init
       # - run:
       #     name: Build JS
-      #     command: source ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
+      #     command: . ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
       # - run:
       #     name: Build OpenSSL
       #     command: |
