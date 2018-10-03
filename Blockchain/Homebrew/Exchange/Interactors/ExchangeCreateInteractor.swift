@@ -125,7 +125,6 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         })
         
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
-            print(socketError)
             // TODO: Implement error handling from Socket.
         })
         

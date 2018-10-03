@@ -313,18 +313,6 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             errorLabel.text = value
         }
     }
-
-    func showError(type: ExchangeInputError, gestureReceiver: UIView) {
-        let fromText = secondaryAmountLabel.text?.copy() as? String ?? ""
-        var errorText: String?
-        switch type {
-        case .aboveTradingLimit: errorText = LocalizationConstants.Exchange.aboveTradingLimit
-        case .belowTradingLimit: errorText = LocalizationConstants.Exchange.belowTradingLimit
-        case .insufficientFunds: errorText = LocalizationConstants.Exchange.insufficientFunds
-        }
-        guard let intermediateText = errorText else { return }
-        secondaryAmountLabel.animate(fromText: fromText, toIntermediateText: intermediateText, speed: 1, gestureReceiver: gestureReceiver)
-    }
     
     func styleTemplate() -> ExchangeStyleTemplate {
         
