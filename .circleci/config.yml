@@ -15,6 +15,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/project
     branches:
       only:
         - ci # Temporary until CI is configured (to save minutes)
@@ -57,21 +58,26 @@ jobs:
             - ~/.nvm
             - /usr/local/lib/node_modules
       - checkout
-      # - run:
-      #     name: Initialize submodules
-      #     command: git submodule update --init
-      # - run:
-      #     name: Build JS
-      #     command: . ~/.nvm/nvm.sh && sh scripts/install-js.sh && sh scripts/build-js.sh
-      # - run:
-      #     name: Build OpenSSL
-      #     command: |
-      #       cd Submodules/OpenSSL-for-iPhone
-      #       sh build-libssl.sh --cleanup
-      #- run:
-          # If beta version is required:
-          # name: Install CocoaPods
-          # command: gem install cocoapods --pre
+      - run:
+          name: Initialize Submodules
+          command: git submodule update --init
+      - run:
+          name: Build JS
+          command: |
+            . ~/.nvm/nvm.sh
+            sh scripts/install-js.sh
+            sh scripts/build-js.sh
+      - run:
+          name: Build OpenSSL
+          command: |
+            if [ ! -d "./Submodules/OpenSSL-for-iPhone/OpenSSL-for-iOS/bin" ]; then
+              cd Submodules/OpenSSL-for-iPhone
+              sh build-libssl.sh --cleanup
+            fi
+      - save_cache:
+          key: ${OPENSSL_CACHE_KEY}
+          paths:
+            - ~/project/Submodules/OpenSSL-for-iPhone
       # - run: bundle install
       # - run:
       #     name: Fastlane
