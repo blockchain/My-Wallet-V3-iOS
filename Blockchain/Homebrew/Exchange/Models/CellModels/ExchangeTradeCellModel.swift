@@ -281,14 +281,20 @@ struct ExchangeTradeCellModel: Decodable {
         let updated = try values.decode(String.self, forKey: .updatedAt)
         let inserted = try values.decode(String.self, forKey: .createdAt)
         let formatter = DateFormatter.sessionDateFormat
+        let legacyFormatter = DateFormatter.iso8601Format
         
-        guard let transactionResult = formatter.date(from: inserted) else {
+        if let transactionResult = formatter.date(from: inserted) {
+            createdAt = transactionResult
+        } else if let transactionResult = legacyFormatter.date(from: inserted) {
+            createdAt = transactionResult
+        } else {
             throw DecodingError.dataCorruptedError(
                 forKey: .createdAt,
                 in: values,
                 debugDescription: "Date string does not match format expected by formatter."
             )
         }
+        
         guard let updatedResult = formatter.date(from: updated) else {
             throw DecodingError.dataCorruptedError(
                 forKey: .updatedAt,
@@ -297,7 +303,6 @@ struct ExchangeTradeCellModel: Decodable {
             )
         }
         
-        createdAt = transactionResult
         updatedAt = updatedResult
         
         identifier = try values.decode(String.self, forKey: .identifier)
