@@ -281,6 +281,12 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     
     func updatedRates(first: String, second: String, third: String) {
         interface?.apply(presentationUpdates: [.updateRateLabels(first: first, second: second, third: third)])
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.conversionTitleLabel(.visible)],
+                animation: .standard(duration: 0.2)
+            )
+        )
     }
     
     func updateTradingPairValues(left: String, right: String) {
