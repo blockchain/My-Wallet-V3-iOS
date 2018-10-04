@@ -245,7 +245,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         let min = minTradingLimit().asObservable()
         let max = maxTradingLimit().asObservable()
-        let account = model.marketPair.fromAccount
+        let usingBase = model.isUsingBase
+        let account = usingBase ? model.marketPair.fromAccount : model.marketPair.toAccount
         
         let disposable = Observable.zip(min, max) {
             return ($0, $1)
@@ -254,11 +255,18 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             let minValue = payload.0
             let maxValue = payload.1
             
-            guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
+            var volume: Decimal = 0.0
+            switch usingBase {
+            case true:
+                volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) ?? volume
+            case false:
+                volume = Decimal(string: conversion.quote.currencyRatio.counter.crypto.value) ?? volume
+            }
+            
             guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
             
             if account.balance < volume {
-                let symbol = conversion.baseCryptoSymbol
+                let symbol = usingBase ? conversion.baseCryptoSymbol : conversion.counterCryptoSymbol
                 let notEnough = LocalizationConstants.Exchange.notEnough + " " + symbol + "."
                 let yourBalance = LocalizationConstants.Exchange.yourBalance + " " + "\(account.balance)" + " " + symbol
                 let value = notEnough + " " + yourBalance + "."

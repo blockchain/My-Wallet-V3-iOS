@@ -186,6 +186,10 @@ extension Conversion {
     var baseCryptoValue: String {
         return quote.currencyRatio.base.crypto.value
     }
+    
+    var counterCryptoSymbol: String {
+        return quote.currencyRatio.counter.crypto.symbol
+    }
 }
 
 /// `SocketError` is for any type of error that
