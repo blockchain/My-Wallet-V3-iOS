@@ -1,5 +1,12 @@
 # My-Wallet-V3-iOS
 
+![GitHub](https://img.shields.io/github/license/blockchain/My-Wallet-V3-iOS.svg)
+![GitHub release](https://img.shields.io/github/release/blockchain/My-Wallet-V3-iOS/all.svg)
+![CircleCI branch](https://img.shields.io/circleci/project/github/blockchain/My-Wallet-V3-iOS/ci.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/blockchain/My-Wallet-V3-iOS.svg)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/blockchain/My-Wallet-V3-iOS.svg)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/blockchain/My-Wallet-V3-iOS.svg)
+
 # Building
 
 ## Install Git submodules
