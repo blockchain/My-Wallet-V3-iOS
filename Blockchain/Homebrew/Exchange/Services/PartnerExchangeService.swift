@@ -9,7 +9,6 @@
 import Foundation
 
 protocol PartnerExchangeServiceDelegate {
-    func partnerExchangeDidFailToGetTrades(_ service: PartnerExchangeService, errorDescription: String)
     func partnerExchange(_ service: PartnerExchangeService, didGet exchangeRate: ExchangeRate)
     func partnerExchange(_ service: PartnerExchangeService, didGetBTC availableBalance: NSDictionary)
     func partnerExchange(_ service: PartnerExchangeService, didGetETH availableBalance: NSDictionary)
@@ -47,13 +46,14 @@ extension PartnerExchangeService: WalletPartnerExchangeDelegate {
     func didFailToGetExchangeTrades(errorDescription: String) {
         // Add this alert whenever the delegate is wired up.
         // TODO: AlertViewPresenter.shared.standardError(message: errorDescription)
-        delegate?.partnerExchangeDidFailToGetTrades(self, errorDescription: errorDescription)
+        if let block = completionBlock {
+            block(.error(nil))
+        }
     }
     
     func didGetExchangeTrades(trades: NSArray) {
         if let block = completionBlock, trades.count == 0 {
-            block(.error(nil))
-            return
+            block(.success([]))
         }
         guard let input = trades as? [ExchangeTrade] else { return }
         let models: [ExchangeTradeModel] = input.map({
