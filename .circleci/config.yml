@@ -32,16 +32,13 @@ jobs:
       # Specifies the required node version (also used as part of the cache key).
       NODE_VERSION: v7.9.0
 
-      # Changing this value invalidates the cache, causing the new version of node to be installed.
-      NODE_CACHE_KEY: node-cache-{{ .Environment.NODE_VERSION }}
-
     # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
 
     steps:
       - restore_cache:
           keys:
-            - ${NODE_CACHE_KEY}
+            - node-cache-{{ .Environment.NODE_VERSION }}
       - run:
           name: Install Node
           command: |
@@ -51,7 +48,7 @@ jobs:
             nvm install $NODE_VERSION && nvm use $NODE_VERSION
             if [[ $(npm -v | grep -v "5.6.0") ]]; then npm install -g npm@5.6.0; fi
       - save_cache:
-          key: ${NODE_CACHE_KEY}
+          key: node-cache-{{ .Environment.NODE_VERSION }}
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
