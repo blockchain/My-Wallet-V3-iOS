@@ -7106,7 +7106,6 @@
 				CDE074730218D067FD5239E6 /* [CP] Check Pods Manifest.lock */,
 				9FB3636D14B60128004BEA02 /* Sources */,
 				9FB3636E14B60128004BEA02 /* Frameworks */,
-				23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */,
 				23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */,
 				9FB3636F14B60128004BEA02 /* Resources */,
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
@@ -7458,20 +7457,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		23321D781BB072AB0005624F /* Update, Clean, Build My-Wallet-V3 */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Update, Clean, Build My-Wallet-V3";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "# update submodule source\ngit submodule update ${SRCROOT}/Submodules/My-Wallet-V3\n\n# reinstall node modules, grunt build, and run tests\ncd ${SRCROOT} && sh ./scripts/install-js.sh && sh ./scripts/build-js.sh && cd ./Submodules/My-Wallet-V3 && yarn test --single-run\n";
-		};
 		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -7512,7 +7497,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -z \"${FABRIC_API_KEY}\" ] || [ -z \"${FABRIC_SECRET_KEY}\" ]; then\necho \"Fabric key(s) missing/empty - will not run Fabric.\";\nelse\n./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY};\nfi";
+			shellScript = "if [ -z \"${FABRIC_API_KEY}\" ] || [ -z \"${FABRIC_SECRET_KEY}\" ]; then\necho \"Fabric key(s) missing/empty - will not run Fabric.\";\nelse\n./Frameworks/Fabric.framework/run ${FABRIC_API_KEY} ${FABRIC_SECRET_KEY};\nfi\n";
 		};
 		CC48054CDB56EC35B93831BF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
