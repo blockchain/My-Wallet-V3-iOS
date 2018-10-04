@@ -19,9 +19,6 @@ version: 2
 jobs:
   build:
     working_directory: ~/project
-    branches:
-      only:
-        - ci # Temporary until CI is configured (to save minutes)
     macos:
       xcode: "10.0.0"
     environment:
