@@ -87,7 +87,9 @@ jobs:
       - restore_cache:
           keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
-      - run: bundle install --path vendor/bundle
+      - run:
+          name: Install Ruby Gems
+          command: bundle install --path vendor/bundle
       - save_cache:
         key: gems-cache-{{ checksum "Gemfile.lock" }}
         paths:
