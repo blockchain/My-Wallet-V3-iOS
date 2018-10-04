@@ -24,7 +24,7 @@ jobs:
       xcode: "10.0.0"
     environment:
       # Target iOS SDK version
-      TARGET_IOS_SDK_VERSION: 12.0
+      TARGET_IOS_SDK_VERSION: "12.0"
 
       # Specifies which environment Fastlane should build against.
       FASTLANE_LANE: staging
