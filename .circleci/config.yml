@@ -5,14 +5,14 @@
 #  Created by Maurice A. on 10/1/18.
 #  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 #
-# Run commands are executed using non-login shells by default,
-# so you must explicitly source any dotfiles as part of the command.
-# It’s possible to specify a multi-line command, each line of which will be run in the same shell.
+#  Run commands are executed using non-login shells by default,
+#  so you must explicitly source any dotfiles as part of the command.
+#  It’s possible to specify a multi-line command, each line of which will be run in the same shell.
 #
-# It is currently not possible to delete the cache in CircleCI 2.0
-# Workaround: rename the cache key to force generation of a new cache.
+#  It is currently not possible to delete the cache in CircleCI 2.0
+#  Workaround: rename the cache key to force generation of a new cache.
 #
-# Environment variables are defined in the project settings on circleci.com.
+#  Environment variables are defined in the project settings on circleci.com.
 #
 
 version: 2
