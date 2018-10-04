@@ -254,7 +254,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             let minValue = payload.0
             let maxValue = payload.1
             
-            guard let volume = Decimal(string: conversion.quote.volume) else { return }
+            guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
             guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
             
             if account.balance < volume {
