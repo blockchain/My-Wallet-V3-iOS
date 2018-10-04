@@ -125,6 +125,8 @@ class ExchangeCreateViewController: UIViewController {
         [primaryAmountLabel, secondaryAmountLabel].forEach {
             $0?.textColor = UIColor.brandPrimary
         }
+        
+        secondaryAmountLabel.font = styleTemplate().secondaryFont
 
         useMinimumButton.setTitle(LocalizationConstants.Exchange.useMin, for: .normal)
         useMaximumButton.setTitle(LocalizationConstants.Exchange.useMax, for: .normal)
