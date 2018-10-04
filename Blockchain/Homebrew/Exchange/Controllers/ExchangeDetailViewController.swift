@@ -139,7 +139,7 @@ class ExchangeDetailViewController: UIViewController {
                 withReuseIdentifier: ExchangeDetailHeaderView.identifier
             )
 
-            if trade.status == .expired || trade.status == .failed {
+            if trade.status == .expired {
                 let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
                 collectionView.register(
                     footerNib,

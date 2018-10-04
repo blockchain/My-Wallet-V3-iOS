@@ -265,7 +265,7 @@ class ExchangeDetailCoordinator: NSObject {
                     ]
                 )
                 
-                if trade.status == .expired || trade.status == .failed {
+                if trade.status == .expired {
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.alignment = .center
 
