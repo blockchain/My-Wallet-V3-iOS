@@ -52,6 +52,7 @@ extension PartnerExchangeService: WalletPartnerExchangeDelegate {
     func didGetExchangeTrades(trades: NSArray) {
         if let block = completionBlock, trades.count == 0 {
             block(.success([]))
+            return
         }
         guard let input = trades as? [ExchangeTrade] else { return }
         let models: [ExchangeTradeModel] = input.map({
