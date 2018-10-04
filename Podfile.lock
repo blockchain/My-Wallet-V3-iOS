@@ -1,0 +1,62 @@
+PODS:
+  - Alamofire (4.7.3)
+  - Charts (3.1.0):
+    - Charts/Core (= 3.1.0)
+  - Charts/Core (3.1.0)
+  - Onfido (10.0.0)
+  - PhoneNumberKit (2.1.0):
+    - PhoneNumberKit/PhoneNumberKitCore (= 2.1.0)
+    - PhoneNumberKit/UIKit (= 2.1.0)
+  - PhoneNumberKit/PhoneNumberKitCore (2.1.0)
+  - PhoneNumberKit/UIKit (2.1.0):
+    - PhoneNumberKit/PhoneNumberKitCore
+  - RxBlocking (4.3.1):
+    - RxSwift (~> 4.0)
+  - RxCocoa (4.3.1):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.3.1)
+  - RxTest (4.3.1):
+    - RxSwift (~> 4.0)
+  - Starscream (3.0.5)
+  - SwiftLint (0.27.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - Charts (= 3.1.0)
+  - Onfido
+  - PhoneNumberKit (~> 2.1)
+  - RxBlocking (~> 4.0)
+  - RxCocoa (~> 4.0)
+  - RxSwift (~> 4.0)
+  - RxTest (~> 4.0)
+  - Starscream (~> 3.0.2)
+  - SwiftLint
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - Charts
+    - Onfido
+    - PhoneNumberKit
+    - RxBlocking
+    - RxCocoa
+    - RxSwift
+    - RxTest
+    - Starscream
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  Charts: 0b0c96f6118b6ce63f11adbcaa3b31045ee4d772
+  Onfido: eb3bde6295f0dc6dd334b9eb01626d2bad5d3c1d
+  PhoneNumberKit: 62003f40ff75315fd3738286558bc365365ac222
+  RxBlocking: 64c051285261ca2339481e91b5f70eb06b03660a
+  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
+  RxTest: ea97a208826906f3904c0debdd09575ebcbfe216
+  Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
+
+PODFILE CHECKSUM: 5b874bc4278248a5cdfadd6d09ed8fdb07b5901d
+
+COCOAPODS: 1.6.0.beta.1

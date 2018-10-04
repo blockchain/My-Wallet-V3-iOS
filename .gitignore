@@ -22,6 +22,5 @@ profile
 .idea/
 
 Pods/
-Podfile.lock
 Blockchain/APIDefines.h
 External/*
