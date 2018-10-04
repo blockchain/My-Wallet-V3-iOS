@@ -44,8 +44,6 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
 extension PartnerExchangeService: WalletPartnerExchangeDelegate {
     func didFailToGetExchangeTrades(errorDescription: String) {
-        // Add this alert whenever the delegate is wired up.
-        // TODO: AlertViewPresenter.shared.standardError(message: errorDescription)
         if let block = completionBlock {
             block(.error(nil))
         }
