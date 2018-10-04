@@ -168,7 +168,7 @@ class ExchangeDetailCoordinator: NSObject {
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
-                
+
                 let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
                     ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
@@ -177,11 +177,11 @@ class ExchangeDetailCoordinator: NSObject {
                                  NSAttributedStringKey.font: attributedTextFont,
                                  NSAttributedStringKey.paragraphStyle: paragraphStyle]
                 )
-                
+
                 let text = ExchangeCellModel.Text(
                     attributedString: attributedText
                 )
-                
+
                 cellModels.append(contentsOf: [
                     .tradingPair(pair),
                     .plain(value),
@@ -192,7 +192,7 @@ class ExchangeDetailCoordinator: NSObject {
                     .text(text)
                     ]
                 )
-                
+
                 delegate?.coordinator(self, updated: cellModels)
             case .overview(let trade):
                 interface?.updateBackgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
@@ -265,6 +265,28 @@ class ExchangeDetailCoordinator: NSObject {
                     ]
                 )
                 
+                if trade.status == .expired || trade.status == .failed {
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.alignment = .center
+
+                    let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 12.0)
+                        ?? UIFont.systemFont(ofSize: 12.0, weight: .regular)
+                    let attributedText = NSAttributedString(
+                        string: LocalizationConstants.Exchange.refundDescription,
+                        attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
+                                     NSAttributedStringKey.font: attributedTextFont,
+                                     NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                    )
+
+                    let text = ExchangeCellModel.Text(
+                        attributedString: attributedText
+                    )
+                    cellModels.append(contentsOf: [
+                            .text(text)
+                        ]
+                    )
+                }
+
                 delegate?.coordinator(self, updated: cellModels)
             }
         case .confirmExchange(let transaction):
