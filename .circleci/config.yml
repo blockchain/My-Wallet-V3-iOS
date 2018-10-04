@@ -88,8 +88,8 @@ jobs:
           keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
         - run:
-          name: Install Ruby Gems
-          command: bundle install --path vendor/bundle
+            name: Install Ruby Gems
+            command: bundle install --path vendor/bundle
       # - run:
       #     name: Fastlane
       #     command: bundle exec fastlane $FASTLANE_LANE
