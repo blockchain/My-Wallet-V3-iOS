@@ -77,13 +77,14 @@ jobs:
             - pods-cache-{{ checksum "Podfile.lock" }}
       - run:
           name: Install Pods
-          command: pod install
+          command: |
+            pod repo update
+            pod install
       - save_cache:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
             - ~/.cocoapods
-            - /Users/distiller/Library/Caches/CocoaPods
-      # - run: bundle install
+      - run: bundle install
       # - run:
       #     name: Fastlane
       #     command: bundle exec fastlane $FASTLANE_LANE
