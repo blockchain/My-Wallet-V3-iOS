@@ -27,10 +27,10 @@ jobs:
       TARGET_IOS_SDK_VERSION: "12.0"
 
       # Specifies which environment Fastlane should build against.
-      FASTLANE_LANE: staging
+      FASTLANE_LANE: "staging"
 
       # Specifies the required node version (also used as part of the cache key).
-      NODE_VERSION: v7.9.0
+      NODE_VERSION: "v7.9.0"
 
     # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
