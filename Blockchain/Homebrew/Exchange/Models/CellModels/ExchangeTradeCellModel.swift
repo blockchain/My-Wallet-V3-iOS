@@ -283,6 +283,9 @@ struct ExchangeTradeCellModel: Decodable {
         let formatter = DateFormatter.sessionDateFormat
         let legacyFormatter = DateFormatter.iso8601Format
         
+        /// Some trades don't have a consistant date format. Some
+        /// use the same format as what we use for establishing a
+        /// secure session, some use ISO8601.
         if let transactionResult = formatter.date(from: inserted) {
             createdAt = transactionResult
         } else if let transactionResult = legacyFormatter.date(from: inserted) {
