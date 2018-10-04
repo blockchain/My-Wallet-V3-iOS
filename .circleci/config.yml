@@ -10,6 +10,7 @@
 # It’s possible to specify a multi-line command, each line of which will be run in the same shell.
 #
 # It is currently not possible to delete the cache in CircleCI 2.0
+# Workaround: rename the cache key to force generation of a new cache.
 #
 
 version: 2
@@ -81,9 +82,16 @@ jobs:
           key: ${OPENSSL_CACHE_KEY}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
+      - restore_cache:
+          keys:
+            - pods-cache-{{ checksum "Podfile" }}
       - run:
           name: Install Pods
           command: pod install
+      - save_cache:
+          key: pods-cache-{{ checksum "Podfile" }}
+          paths:
+            - /Users/distiller/Library/Caches/CocoaPods
       # - run: bundle install
       # - run:
       #     name: Fastlane
