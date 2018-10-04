@@ -12,6 +12,8 @@
 # It is currently not possible to delete the cache in CircleCI 2.0
 # Workaround: rename the cache key to force generation of a new cache.
 #
+# Environment variables are defined in the project settings on circleci.com.
+#
 
 version: 2
 jobs:
@@ -23,14 +25,8 @@ jobs:
     macos:
       xcode: "10.0.0"
     environment:
-      # Target iOS SDK version
-      # TARGET_IOS_SDK_VERSION: "12.0"
-
       # Specifies which environment Fastlane should build against.
-      # FASTLANE_LANE: "staging"
-
-      # Specifies the required node version (also used as part of the cache key).
-      # NODE_VERSION: "v7.9.0"
+      FASTLANE_LANE: "staging"
 
     # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
@@ -78,13 +74,14 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
       - restore_cache:
           keys:
-            - pods-cache-{{ checksum "Podfile" }}
+            - pods-cache-{{ checksum "Podfile.lock" }}
       - run:
           name: Install Pods
           command: pod install
       - save_cache:
-          key: pods-cache-{{ checksum "Podfile" }}
+          key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
+            - ~/.cocoapods
             - /Users/distiller/Library/Caches/CocoaPods
       # - run: bundle install
       # - run:
