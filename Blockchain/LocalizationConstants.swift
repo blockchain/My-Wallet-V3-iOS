@@ -483,6 +483,14 @@ struct LocalizationConstants {
             "Your Max is",
             comment: "Error that displays what the maximum amount of fiat allowed for a trade"
         )
+        static let notEnough = NSLocalizedString(
+            "Not enough",
+            comment: "Part of error message shown when the user doesn't have enough funds to make an exchange"
+        )
+        static let yourBalance = NSLocalizedString(
+            "Your balance is",
+            comment: "Part of error message shown when the user doesn't have enough funds to make an exchange"
+        )
         static let tradeExecutionError = NSLocalizedString(
             "Sorry, an order cannot be placed at this time.",
             comment: "Error message shown to a user if something went wrong during the exchange process and the user cannot continue"

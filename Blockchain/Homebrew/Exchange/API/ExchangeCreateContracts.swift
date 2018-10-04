@@ -56,6 +56,7 @@ protocol ExchangeCreateOutput: class {
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)
+    func insufficientFunds(balance: String)
     func entryBelowMinimumValue(minimum: String)
     func entryAboveMaximumValue(maximum: String)
     func loadingVisibility(_ visibility: Visibility)
