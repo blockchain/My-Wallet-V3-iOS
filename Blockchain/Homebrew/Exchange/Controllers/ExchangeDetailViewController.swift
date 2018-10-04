@@ -256,7 +256,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 ) as? ActionableFooterView else { return UICollectionReusableView() }
                 footer.title = LocalizationConstants.Exchange.requestRefund
                 footer.actionBlock = {
-                    guard let url = URL(string: Constants.Url.blockchainSupportRequest) else {
+                    guard let url = URL(string: Constants.Url.supportTicketBuySellExchange) else {
                         return
                     }
                     let viewController = SFSafariViewController(url: url)
