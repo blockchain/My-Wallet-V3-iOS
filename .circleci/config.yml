@@ -74,14 +74,14 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
       - restore_cache:
           keys:
-            - pods-cache-{{ checksum "Podfile.lock" }}
+            - pods-cache-{{ checksum "Podfile" }}
       - run:
           name: Install Pods
           command: |
             pod repo update
             pod install
       - save_cache:
-          key: pods-cache-{{ checksum "Podfile.lock" }}
+          key: pods-cache-{{ checksum "Podfile" }}
           paths:
             - ~/.cocoapods
       - restore_cache:
