@@ -65,6 +65,7 @@ class ExchangeCreateViewController: UIViewController {
     }
     
     enum ViewUpdate: Update {
+        case conversionTitleLabel(Visibility)
         case conversionView(Visibility)
         case exchangeButton(Visibility)
         case ratesChevron(Visibility)
@@ -277,6 +278,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     
     func apply(update: ViewUpdate) {
         switch update {
+        case .conversionTitleLabel(let visibility):
+            conversionTitleLabel.alpha = visibility.defaultAlpha
         case .conversionView(let visibility):
             conversionView.alpha = visibility.defaultAlpha
         case .exchangeButton(let visibility):

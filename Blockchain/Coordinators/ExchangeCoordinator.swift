@@ -77,6 +77,8 @@ struct ExchangeServices: ExchangeDependencies {
 
     func start() {
         disposable = BlockchainDataRepository.shared.nabuUser
+            .take(1)
+            .asSingle()
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [unowned self] in

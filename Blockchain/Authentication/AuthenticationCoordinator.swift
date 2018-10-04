@@ -61,6 +61,8 @@ import RxSwift
         tabControllerManager.sendBitcoinViewController?.reload()
         tabControllerManager.sendBitcoinCashViewController?.reload()
 
+        strongSelf.dataRepository.prefetchData()
+
         /// Prompt the user for push notification permission
         PushNotificationManager.shared.requestAuthorization()
 
@@ -108,6 +110,8 @@ import RxSwift
         }
     }
 
+    internal let dataRepository: BlockchainDataRepository
+
     internal let walletManager: WalletManager
 
     private let walletService: WalletService
@@ -136,10 +140,12 @@ import RxSwift
 
     init(
         walletManager: WalletManager = WalletManager.shared,
-        walletService: WalletService = WalletService.shared
+        walletService: WalletService = WalletService.shared,
+        dataRepository: BlockchainDataRepository = BlockchainDataRepository.shared
     ) {
         self.walletManager = walletManager
         self.walletService = walletService
+        self.dataRepository = dataRepository
         super.init()
         self.walletManager.secondPasswordDelegate = self
     }
@@ -214,7 +220,7 @@ import RxSwift
 
         WalletManager.shared.close()
 
-        BlockchainDataRepository.shared.clearCache()
+        dataRepository.clearCache()
 
         BlockchainSettings.App.shared.reset()
 
