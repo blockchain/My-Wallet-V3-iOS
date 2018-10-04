@@ -245,6 +245,13 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
+    
+    func insufficientFunds(balance: String) {
+        interface?.apply(presentationUpdates: [.updateErrorLabel(balance)])
+        displayError()
+        triggerErrorFeedback()
+    }
+    
     func entryBelowMinimumValue(minimum: String) {
         let display = LocalizationConstants.Exchange.yourMin + " " + minimum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
