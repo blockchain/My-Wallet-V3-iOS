@@ -165,7 +165,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [.exchangeButton(.hidden),
                              .conversionView(.hidden)],
-                animation: .easeIn(duration: 2.0)
+                animation: .easeIn(duration: 0.2)
             )
         )
     }
