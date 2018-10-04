@@ -129,11 +129,11 @@ extension AppSettingsController {
     /// MARK: -formatDetailCell
     func formatDetailCell(_ verified: Bool, _ cell: UITableViewCell) {
         if verified {
-            self.createBadge(cell, color: .green)
             cell.detailTextLabel?.text = LocalizationConstants.verified
+            self.createBadge(cell, color: .green)
         } else {
-            createBadge(cell, color: .unverified)
             cell.detailTextLabel?.text = LocalizationConstants.unverified
+            createBadge(cell, color: .unverified)
         }
     }
 
@@ -154,7 +154,8 @@ extension AppSettingsController {
         cell.detailTextLabel?.textColor = .white
         cell.detailTextLabel?.font = UIFont(name: Constants.FontNames.montserratSemiBold, size: Constants.FontSizes.Tiny)
         cell.detailTextLabel?.sizeToFit()
-        cell.detailTextLabel?.layoutIfNeeded()
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
     }
 
     /// MARK: -isMobileVerified
