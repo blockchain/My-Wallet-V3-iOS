@@ -59,13 +59,13 @@ class ExchangeCreatePresenter {
             interval: 0,
             repeats: false,
             block: { [weak self] timer in
-                self?.errorDisappearanceTimerFired()
+                self?.hideError()
         })
         guard let timer = errorDisappearenceTimer else { return }
         RunLoop.main.add(timer, forMode: .commonModes)
     }
     
-    fileprivate func errorDisappearanceTimerFired() {
+    fileprivate func hideError() {
         interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
             animations: [.secondaryLabel(.visible)],
             animation: .none
@@ -303,7 +303,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     }
 
     func exchangeButtonEnabled(_ enabled: Bool) {
-        errorDisappearanceTimerFired()
+        hideError()
         interface?.exchangeButtonEnabled(enabled)
     }
 
