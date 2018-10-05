@@ -32,3 +32,4 @@ Cert
 Config
 DerivedData
 profile
+.env.*
