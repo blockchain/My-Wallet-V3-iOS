@@ -265,14 +265,15 @@ class ExchangeDetailCoordinator: NSObject {
                     ]
                 )
                 
-                if trade.status == .expired {
+                if let description = trade.statusDescription {
+
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.alignment = .center
 
                     let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 12.0)
                         ?? UIFont.systemFont(ofSize: 12.0, weight: .regular)
                     let attributedText = NSAttributedString(
-                        string: LocalizationConstants.Exchange.refundDescription,
+                        string: description,
                         attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
                                      NSAttributedStringKey.font: attributedTextFont,
                                      NSAttributedStringKey.paragraphStyle: paragraphStyle]

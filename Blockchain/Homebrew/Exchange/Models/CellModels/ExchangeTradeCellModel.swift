@@ -73,6 +73,18 @@ enum ExchangeTradeModel {
 }
 
 extension ExchangeTradeModel {
+    var statusDescription: String? {
+        switch self {
+        case .partner:
+            return nil
+        case .homebrew:
+            switch self.status {
+            case .expired: return LocalizationConstants.Exchange.expiredDescription
+            case .failed: return LocalizationConstants.Exchange.failedDescription
+            default: return nil
+            }
+        }
+    }
     var withdrawalAddress: String {
         switch self {
         case .partner(let model):
