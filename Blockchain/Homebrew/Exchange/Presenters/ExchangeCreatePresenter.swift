@@ -47,24 +47,6 @@ class ExchangeCreatePresenter {
         feedback.notificationOccurred(.error)
     }
     
-    fileprivate func cancelErrorDisappearanceTimer() {
-        errorDisappearenceTimer?.invalidate()
-        errorDisappearenceTimer = nil
-    }
-    
-    fileprivate func setErrorDisappearanceTimer(duration: TimeInterval) {
-        errorDisappearenceTimer?.invalidate()
-        errorDisappearenceTimer = Timer(
-            fire: Date(timeIntervalSinceNow: duration),
-            interval: 0,
-            repeats: false,
-            block: { [weak self] timer in
-                self?.hideError()
-        })
-        guard let timer = errorDisappearenceTimer else { return }
-        RunLoop.main.add(timer, forMode: .commonModes)
-    }
-    
     fileprivate func hideError() {
         interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
             animations: [.secondaryLabel(.visible)],
@@ -95,27 +77,6 @@ class ExchangeCreatePresenter {
         )
 
         interface?.exchangeButtonEnabled(false)
-    }
-    
-    fileprivate func triggerErrorFeedback() {
-        let completion: ViewUpdateBlock = { [weak self] internalEvents in
-            guard let this = self else { return }
-            guard let events = internalEvents else { return }
-            events.forEach({ this.handle(internalEvent: $0) })
-        }
-        
-        let block = { [weak self] in
-            guard let this = self else { return }
-            this.wigglePrimaryLabel()
-        }
-        
-        let group = TransitionUpdateGroup(
-            transitions: [.primaryLabelTextColor(.red)],
-            transitionType: .crossFade(duration: 0.2),
-            completionEvents: [.block(block)],
-            completion: completion
-        )
-        interface?.apply(transitionUpdateGroup: group)
     }
 }
 
@@ -222,11 +183,6 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
     }
 
     func onExchangeButtonTapped() {
-        guard interactor.confirmationIsExecuting() == false else { return }
-        interactor.confirmConversion()
-    }
-
-    func confirmConversion() {
         guard interactor.confirmationIsExecuting() == false else { return }
         interactor.confirmConversion()
     }
