@@ -3,6 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/blockchain/My-Wallet-V3-iOS.svg)
 ![GitHub release](https://img.shields.io/github/release/blockchain/My-Wallet-V3-iOS/all.svg)
 ![CircleCI branch](https://img.shields.io/circleci/project/github/blockchain/My-Wallet-V3-iOS/ci.svg)
+[![Coverage Status](https://coveralls.io/repos/github/blockchain/My-Wallet-V3-iOS/badge.svg?branch=dev)](https://coveralls.io/github/blockchain/My-Wallet-V3-iOS?branch=dev)
 ![GitHub last commit](https://img.shields.io/github/last-commit/blockchain/My-Wallet-V3-iOS.svg)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/blockchain/My-Wallet-V3-iOS.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/blockchain/My-Wallet-V3-iOS.svg)
