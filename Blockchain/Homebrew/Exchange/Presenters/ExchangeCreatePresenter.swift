@@ -258,6 +258,12 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
     }
+
+    func genericSocketError() {
+        let display = LocalizationConstants.Errors.genericError
+        interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
+        displayError()
+    }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {
         interface?.updateTradingPairView(pair: pair, fix: fix)

@@ -366,12 +366,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
             guard let this = self else { return }
+            // There needs to be a better way to find out what the error
+            // is than parsing the string
             if socketError.description.contains("small") {
                 this.output?.entryBelowMinimumValue(minimum: nil)
             } else if socketError.description.contains("large") {
                 this.output?.entryAboveMaximumValue(maximum: nil)
             } else {
-                this.validateInput()
+                this.output?.genericSocketError()
             }
         })
 
