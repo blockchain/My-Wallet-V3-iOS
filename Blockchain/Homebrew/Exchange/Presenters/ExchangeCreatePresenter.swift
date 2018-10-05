@@ -141,7 +141,6 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [
-                    .exchangeButton(.visible),
                     .conversionView(.visible),
                     .ratesChevron(.hidden),
                     .errorLabel(.hidden)],
