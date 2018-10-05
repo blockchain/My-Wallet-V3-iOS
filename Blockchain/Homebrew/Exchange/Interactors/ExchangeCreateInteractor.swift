@@ -84,10 +84,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         
         markets.setup()
-        tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
 
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
+            self.tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
             self.subscribeToConversions()
             self.updateMarketsConversion()
             self.subscribeToBestRates()
