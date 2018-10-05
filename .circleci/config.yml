@@ -78,18 +78,6 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
       - restore_cache:
           keys:
-            - cocoapods-cache-{{ checksum "Podfile" }}
-      - run:
-          name: Install Pods
-          command: |
-            pod repo update
-            pod install
-      - save_cache:
-          key: cocoapods-cache-{{ checksum "Podfile" }}
-          paths:
-            - ~/.cocoapods
-      - restore_cache:
-          keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install Ruby Gems
