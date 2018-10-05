@@ -1,7 +1,3 @@
-*.der
-Cert
-Config
-DerivedData
 # Xcode
 .DS_Store
 build/
@@ -17,9 +13,22 @@ build/
 !default.xcworkspace
 xcuserdata/
 *.xcuserdatad
-profile
 *.moved-aside
-.idea/
 Blockchain/APIDefines.h
 External/*
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Dependencies
 vendor/
+
+# Other
+*.der
+Cert
+Config
+DerivedData
+profile
