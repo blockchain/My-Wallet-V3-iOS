@@ -20,6 +20,7 @@ External/*
 # Fastlane
 fastlane/report.xml
 fastlane/Preview.html
+fastlane/README.md
 fastlane/screenshots
 fastlane/test_output
 
