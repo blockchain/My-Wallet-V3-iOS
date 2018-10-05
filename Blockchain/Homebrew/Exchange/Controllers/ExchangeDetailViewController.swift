@@ -257,6 +257,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                         return
                     }
                     let viewController = SFSafariViewController(url: url)
+                    viewController.modalPresentationStyle = .overFullScreen
                     self.present(viewController, animated: true, completion: nil)
                 }
                 return footer
