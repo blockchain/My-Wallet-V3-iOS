@@ -39,8 +39,9 @@ class WalletManager: NSObject {
     @objc weak var backupDelegate: WalletBackupDelegate?
     @objc weak var sendBitcoinDelegate: WalletSendBitcoinDelegate?
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
+    @objc weak var partnerExchangeDelegate: WalletPartnerExchangeDelegate?
+    @objc weak var partnerExchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
     @objc weak var exchangeDelegate: WalletExchangeDelegate?
-    @objc weak var exchangeIntermediateDelegate: WalletExchangeIntermediateDelegate?
     @objc weak var fiatAtTimeDelegate: WalletFiatAtTimeDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
@@ -305,6 +306,17 @@ extension WalletManager: WalletDelegate {
         }
     }
 
+    // Bitcoin only - not used for Bitcoin Cash
+    func didErrorWhenBuildingBitcoinPaymentWithError(_ error: String) {
+        DispatchQueue.main.async { [unowned self] in
+            if self.exchangeDelegate != nil {
+                self.exchangeDelegate?.didErrorWhileBuildingExchangeOrder(error: error)
+            } else {
+                self.sendBitcoinDelegate?.didErrorWhileBuildingPayment(error: error)
+            }
+        }
+    }
+
     // MARK: - Send Ether
     func didUpdateEthPayment(_ payment: [AnyHashable: Any]!) {
         DispatchQueue.main.async { [unowned self] in
@@ -436,43 +448,49 @@ extension WalletManager: WalletDelegate {
 
     func didGetExchangeTrades(_ trades: [Any]!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
+            self.partnerExchangeDelegate?.didGetExchangeTrades(trades: trades as NSArray)
+        }
+    }
+
+    func didFail(toGetExchangeTrades errorDescription: String!) {
+        DispatchQueue.main.async { [unowned self] in
+            self.partnerExchangeDelegate?.didFailToGetExchangeTrades(errorDescription: errorDescription)
         }
     }
 
     func didGet(_ rate: ExchangeRate!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetExchangeRate(rate: rate)
+            self.partnerExchangeDelegate?.didGetExchangeRate(rate: rate)
         }
     }
 
     func didGetAvailableBtcBalance(_ result: [AnyHashable: Any]?) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary?)
+            self.partnerExchangeDelegate?.didGetAvailableBtcBalance(result: result as NSDictionary?)
         }
     }
 
     func didGetAvailableEthBalance(_ result: [AnyHashable: Any]!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didGetAvailableEthBalance(result: result as NSDictionary)
+            self.partnerExchangeDelegate?.didGetAvailableEthBalance(result: result as NSDictionary)
         }
     }
 
     func didBuildExchangeTrade(_ tradeInfo: [AnyHashable: Any]!) {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didBuildExchangeTrade(tradeInfo: tradeInfo as NSDictionary)
+            self.partnerExchangeDelegate?.didBuildExchangeTrade(tradeInfo: tradeInfo as NSDictionary)
         }
     }
 
     func didShiftPayment() {
         DispatchQueue.main.async { [unowned self] in
-            self.exchangeDelegate?.didShiftPayment()
+            self.partnerExchangeDelegate?.didShiftPayment()
         }
     }
 
     func didCreateEthAccountForExchange() {
         DispatchQueue.main.async {
-            self.exchangeIntermediateDelegate?.didCreateEthAccountForExchange()
+            self.partnerExchangeIntermediateDelegate?.didCreateEthAccountForExchange()
         }
     }
 

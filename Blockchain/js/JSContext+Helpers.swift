@@ -29,4 +29,11 @@ extension JSContext {
         }
         self.setObject(theBlock, forKeyedSubscript: functionName)
     }
+    @objc func invokeOnce(valueFunctionBlock: @escaping (JSValue) -> Void, forJsFunctionName functionName: (NSCopying & NSObjectProtocol)) {
+        let theBlock: @convention(block) (JSValue) -> Void = { [weak self] jsValue in
+            valueFunctionBlock(jsValue)
+            self?.setObject(nil, forKeyedSubscript: functionName)
+        }
+        self.setObject(theBlock, forKeyedSubscript: functionName)
+    }
 }

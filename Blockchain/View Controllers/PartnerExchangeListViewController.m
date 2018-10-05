@@ -23,7 +23,7 @@
 
 #define CELL_IDENTIFIER_EXCHANGE_CELL @"exchangeCell"
 
-@interface PartnerExchangeListViewController () <UITableViewDelegate, UITableViewDataSource, CloseButtonDelegate, ConfirmStateDelegate, WalletExchangeDelegate>
+@interface PartnerExchangeListViewController () <UITableViewDelegate, UITableViewDataSource, CloseButtonDelegate, ConfirmStateDelegate, WalletPartnerExchangeDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) NSArray *trades;
 @property (nonatomic) PartnerExchangeCreateViewController *createViewController;
@@ -45,7 +45,7 @@
 {
     [super viewDidLoad];
     
-    [WalletManager sharedInstance].exchangeDelegate = self;
+    [WalletManager sharedInstance].partnerExchangeDelegate = self;
     
     self.view.backgroundColor = UIColor.lightGray;
 
@@ -250,6 +250,11 @@
         self.createViewController.navigationController.viewControllers = @[self, self.createViewController];
     }
     [self.navigationController presentViewController:modalViewController animated:YES completion:nil];
+}
+
+- (void)didFailToGetExchangeTradesWithErrorDescription:(NSString * _Nonnull)errorDescription
+{
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:errorDescription title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
 }
 
 #pragma mark - Confirm State delegate

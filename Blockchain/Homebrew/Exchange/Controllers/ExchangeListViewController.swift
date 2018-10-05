@@ -115,6 +115,10 @@ extension ExchangeListViewController: ExchangeListInterface {
     func showNewExchange(animated: Bool) {
         coordinator.handle(event: .createHomebrewExchange(animated: animated, viewController: nil))
     }
+
+    func showError(message: String) {
+        AlertViewPresenter.shared.standardError(message: message)
+    }
 }
 
 extension ExchangeListViewController: ExchangeListDataProviderDelegate {

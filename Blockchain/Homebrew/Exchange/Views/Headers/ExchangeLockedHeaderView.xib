@@ -17,7 +17,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="PTd-oc-lub" customClass="ExchangeLockedHeaderView" customModule="Blockchain" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="110"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-Lock" translatesAutoresizingMaskIntoConstraints="NO" id="IRa-Td-fNo">
@@ -27,23 +27,17 @@
                         <constraint firstAttribute="width" constant="16" id="OYV-O1-lxo"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange Locked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-Yu-lLk">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Exchange Locked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-Yu-lLk">
                     <rect key="frame" x="100.5" y="52" width="173.5" height="24.5"/>
                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order ID BC123-456-789" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjw-qN-uw6">
-                    <rect key="frame" x="92.5" y="84.5" width="189" height="20"/>
-                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xhk-3g-hRV">
-                    <rect key="frame" x="337" y="16" width="22" height="22"/>
+                    <rect key="frame" x="331" y="4" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="22" id="eEh-uD-Z4l"/>
-                        <constraint firstAttribute="height" constant="22" id="rqJ-DY-9ff"/>
+                        <constraint firstAttribute="width" constant="40" id="eEh-uD-Z4l"/>
+                        <constraint firstAttribute="height" constant="40" id="rqJ-DY-9ff"/>
                     </constraints>
                     <state key="normal" image="close"/>
                     <connections>
@@ -52,21 +46,18 @@
                 </button>
             </subviews>
             <constraints>
-                <constraint firstItem="Xhk-3g-hRV" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="16" id="5j5-pq-Icz"/>
+                <constraint firstItem="Xhk-3g-hRV" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="4" id="5j5-pq-Icz"/>
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="top" secondItem="Qwk-jx-OBB" secondAttribute="top" constant="24" id="AO0-lf-WOH"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="top" secondItem="IRa-Td-fNo" secondAttribute="bottom" constant="8" id="Ies-1J-X4l"/>
                 <constraint firstItem="VGU-Yu-lLk" firstAttribute="centerX" secondItem="IRa-Td-fNo" secondAttribute="centerX" id="KxI-Qm-OfM"/>
-                <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="Xhk-3g-hRV" secondAttribute="trailing" constant="16" id="adc-Hy-3k1"/>
-                <constraint firstItem="rjw-qN-uw6" firstAttribute="centerX" secondItem="VGU-Yu-lLk" secondAttribute="centerX" id="bJL-Lh-N8c"/>
+                <constraint firstItem="Qwk-jx-OBB" firstAttribute="trailing" secondItem="Xhk-3g-hRV" secondAttribute="trailing" constant="4" id="adc-Hy-3k1"/>
                 <constraint firstItem="IRa-Td-fNo" firstAttribute="centerX" secondItem="Qwk-jx-OBB" secondAttribute="centerX" id="oqg-qO-8ek"/>
-                <constraint firstItem="rjw-qN-uw6" firstAttribute="top" secondItem="VGU-Yu-lLk" secondAttribute="bottom" constant="8" id="qYj-c7-o73"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Qwk-jx-OBB"/>
             <connections>
-                <outlet property="orderID" destination="rjw-qN-uw6" id="K30-3m-MAB"/>
                 <outlet property="title" destination="VGU-Yu-lLk" id="XOF-rI-RRn"/>
             </connections>
-            <point key="canvasLocation" x="-201" y="22"/>
+            <point key="canvasLocation" x="-201.5" y="22"/>
         </collectionReusableView>
     </objects>
     <resources>

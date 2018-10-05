@@ -16,6 +16,7 @@ protocol ExchangeListInterface: class {
     func enablePullToRefresh()
     func showNewExchange(animated: Bool)
     func showTradeDetails(trade: ExchangeTradeModel)
+    func showError(message: String)
 }
 
 protocol ExchangeListInput: class {

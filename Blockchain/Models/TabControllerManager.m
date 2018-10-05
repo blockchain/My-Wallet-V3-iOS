@@ -32,7 +32,7 @@
     walletManager.settingsDelegate = self;
     walletManager.sendBitcoinDelegate = self;
     walletManager.sendEtherDelegate = self;
-    walletManager.exchangeIntermediateDelegate = self;
+    walletManager.partnerExchangeIntermediateDelegate = self;
     walletManager.transactionDelegate = self;
     walletManager.watchOnlyDelegate = self;
     walletManager.fiatAtTimeDelegate = self;
@@ -346,6 +346,11 @@
     if (notice && self.tabViewController.selectedIndex == TAB_SEND && !LoadingViewPresenter.sharedInstance.isLoadingShown && !AuthenticationCoordinator.shared.pinEntryViewController && !self.tabViewController.presentedViewController) {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:notice title:[LocalizationConstantsObjcBridge information] in:self handler: nil];
     }
+}
+
+- (void)didErrorWhileBuildingPaymentWithError:(NSString *)message
+{
+    [[AlertViewPresenter sharedInstance] standardErrorWithMessage:message title:[LocalizationConstantsObjcBridge error] in:self handler:nil];
 }
 
 #pragma mark - Eth Send

@@ -34,4 +34,7 @@ import Foundation
 
     /// Method invoked when a message is emitted, usually to inform of network congestion/high fees
     func didReceivePaymentNotice(notice: String?)
+
+    /// Method invoked when an error occurs while building the payment
+    func didErrorWhileBuildingPayment(error: String)
 }

@@ -156,11 +156,7 @@ MyWalletPhone.createAccount = function(label) {
     var success = function () {
         console.log('Created new account');
 
-        objc_loading_stop();
-
         objc_on_add_new_account();
-
-        objc_reload();
     };
 
     var error = function (error) {
@@ -2560,8 +2556,7 @@ MyWalletPhone.getExchangeTrades = function() {
 
     var error = function(e) {
         console.log('Error getting trades');
-        console.log(e);
-        on_get_exchange_trades_error(e)
+        objc_on_get_exchange_trades_error(JSON.stringify(e))
     }
 
     return MyWallet.wallet.shapeshift.fetchFullTrades().then(success).catch(error);

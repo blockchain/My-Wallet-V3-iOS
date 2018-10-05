@@ -24,9 +24,10 @@ import RxSwift
 
     // MARK: - Public Properties
 
-    /// The NabuUser. This will use a cached value if available
-    var nabuUser: Single<NabuUser> {
-        return fetchData(
+    /// An Observable emitting the authenticated NabuUser. This Observable will first emit a value
+    /// from the cache, if available, followed by the value over the network.
+    var nabuUser: Observable<NabuUser> {
+        return fetchDataStartingWithCache(
             cachedValue: cachedUser,
             networkValue: fetchNabuUser()
         )
@@ -47,6 +48,14 @@ import RxSwift
 
     // MARK: - Public Methods
 
+    /// Prefetches data so that it can be cached
+    func prefetchData() {
+        _ = Observable.zip(
+            nabuUser,
+            countries.asObservable()
+        ).subscribe()
+    }
+
     /// Clears cached data in this repository
     func clearCache() {
         cachedUser = BehaviorRelay<NabuUser?>(value: nil)
@@ -66,6 +75,17 @@ import RxSwift
     }
 
     // MARK: - Private Methods
+
+    private func fetchDataStartingWithCache<ResponseType: Decodable>(
+        cachedValue: BehaviorRelay<ResponseType?>,
+        networkValue: Single<ResponseType>
+    ) -> Observable<ResponseType> {
+        let networkObservable = networkValue.asObservable()
+        guard let cachedValue = cachedValue.value else {
+            return networkObservable
+        }
+        return networkObservable.startWith(cachedValue)
+    }
 
     private func fetchData<ResponseType: Decodable>(
         cachedValue: BehaviorRelay<ResponseType?>,

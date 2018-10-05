@@ -179,6 +179,15 @@ extension ExchangeListDataProvider: UITableViewDataSource {
                     withIdentifier: loadingIdentifier,
                     for: indexPath
                     ) as? LoadingTableViewCell else { return UITableViewCell() }
+                
+                /// This particular cell shouldn't have a separator.
+                /// This is how we hide it.
+                cell.separatorInset = UIEdgeInsets(
+                    top: 0.0,
+                    left: 0.0,
+                    bottom: 0.0,
+                    right: .greatestFiniteMagnitude
+                )
                 return cell
             }
             
