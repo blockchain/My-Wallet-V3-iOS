@@ -130,8 +130,7 @@ class ExchangeDetailViewController: UIViewController {
                 forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
                 withReuseIdentifier: ActionableFooterView.identifier
             )
-            
-        case .overview(let trade):
+        case .overview:
             let headerNib = UINib(nibName: ExchangeDetailHeaderView.identifier, bundle: nil)
             collectionView.register(
                 headerNib,
@@ -139,14 +138,12 @@ class ExchangeDetailViewController: UIViewController {
                 withReuseIdentifier: ExchangeDetailHeaderView.identifier
             )
 
-            if trade.status == .expired {
-                let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
-                collectionView.register(
-                    footerNib,
-                    forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
-                    withReuseIdentifier: ActionableFooterView.identifier
-                )
-            }
+            let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
+            collectionView.register(
+                footerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                withReuseIdentifier: ActionableFooterView.identifier
+            )
         }
     }
 }
@@ -306,11 +303,11 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 width: collectionView.bounds.width,
                 height: ActionableFooterView.height()
             )
-        case .overview:
-            return CGSize(
+        case .overview(let trade):
+            return trade.status == .expired ? CGSize(
                 width: collectionView.bounds.width,
                 height: ActionableFooterView.height()
-            )
+            ) : .zero
         }
     }
 }
