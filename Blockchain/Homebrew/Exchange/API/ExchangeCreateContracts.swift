@@ -37,7 +37,7 @@ protocol ExchangeCreateInterface: class {
     func apply(animatedUpdate: AnimatedUpdate)
     func apply(transitionPresentation: AnimatedTransitionUpdate)
 
-    func exchangeEnabled(_ enabled: Bool)
+    func exchangeButtonEnabled(_ enabled: Bool)
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
@@ -63,6 +63,6 @@ protocol ExchangeCreateOutput: class {
     func entryBelowMinimumValue(minimum: String?)
     func entryAboveMaximumValue(maximum: String?)
     func loadingVisibility(_ visibility: Visibility)
-    func exchangeEnabled(_ enabled: Bool)
+    func exchangeButtonEnabled(_ enabled: Bool)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
 }

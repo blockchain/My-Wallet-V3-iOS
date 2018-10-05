@@ -101,7 +101,7 @@ class ExchangeCreatePresenter {
             completion: completion
         )
         interface?.apply(presentationUpdateGroup: group)
-        interface?.exchangeEnabled(false)
+        interface?.exchangeButtonEnabled(false)
     }
     
     fileprivate func triggerErrorFeedback() {
@@ -302,9 +302,9 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.apply(presentationUpdates: [.loadingIndicator(visibility)])
     }
 
-    func exchangeEnabled(_ enabled: Bool) {
+    func exchangeButtonEnabled(_ enabled: Bool) {
         errorDisappearanceTimerFired()
-        interface?.exchangeEnabled(enabled)
+        interface?.exchangeButtonEnabled(enabled)
     }
 
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
