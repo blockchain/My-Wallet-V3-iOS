@@ -82,7 +82,7 @@ jobs:
       - run:
           name: Install Ruby Gems
           command: |
-            gem install bundler
+            sudo gem install bundler
             bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
