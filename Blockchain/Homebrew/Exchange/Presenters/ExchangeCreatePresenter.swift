@@ -93,19 +93,15 @@ class ExchangeCreatePresenter {
             events.forEach({ this.handle(internalEvent: $0) })
         }
         
-        let block = { [weak self] in
-            guard let this = self else { return }
-            this.setErrorDisappearanceTimer(duration: 2.5)
-        }
-        
         let group = ViewUpdateGroup(
             preparations: [.secondaryLabel(.hidden)],
             animations: [.errorLabel(.visible)],
             animation: .standard(duration: 0.2),
-            completionEvents: [.block(block)],
+            completionEvents: [],
             completion: completion
         )
         interface?.apply(presentationUpdateGroup: group)
+        interface?.exchangeEnabled(false)
     }
     
     fileprivate func triggerErrorFeedback() {
@@ -249,21 +245,18 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func insufficientFunds(balance: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(balance)])
         displayError()
-        triggerErrorFeedback()
     }
     
-    func entryBelowMinimumValue(minimum: String) {
-        let display = LocalizationConstants.Exchange.yourMin + " " + minimum
+    func entryBelowMinimumValue(minimum: String?) {
+        let display = minimum == nil ? LocalizationConstants.Exchange.belowTradingLimit : LocalizationConstants.Exchange.yourMin + " " + minimum!
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
-        triggerErrorFeedback()
     }
     
-    func entryAboveMaximumValue(maximum: String) {
-        let display = LocalizationConstants.Exchange.yourMax + " " + maximum
+    func entryAboveMaximumValue(maximum: String?) {
+        let display = maximum == nil ? LocalizationConstants.Exchange.aboveTradingLimit : LocalizationConstants.Exchange.yourMax + " " + maximum!
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
-        triggerErrorFeedback()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {
@@ -302,6 +295,11 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
 
     func loadingVisibility(_ visibility: Visibility) {
         interface?.apply(presentationUpdates: [.loadingIndicator(visibility)])
+    }
+
+    func exchangeEnabled(_ enabled: Bool) {
+        errorDisappearanceTimerFired()
+        interface?.exchangeEnabled(enabled)
     }
 
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {

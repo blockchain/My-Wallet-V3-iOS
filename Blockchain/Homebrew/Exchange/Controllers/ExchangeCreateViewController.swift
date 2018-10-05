@@ -397,6 +397,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
         tradingPairView.apply(transitionUpdate: transitionUpdate)
     }
     
+    func exchangeEnabled(_ enabled: Bool) {
+        exchangeButton.alpha = enabled ? 1 : 0.5
+        exchangeButton.isEnabled = enabled
+    }
+    
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
         ExchangeCoordinator.shared.handle(event: .confirmExchange(orderTransaction: orderTransaction, conversion: conversion))
     }
