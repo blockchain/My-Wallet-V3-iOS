@@ -239,19 +239,19 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         displayError()
     }
     
-    func entryBelowMinimumValue(minimum: String?) {
-        let display = minimum == nil ? LocalizationConstants.Exchange.belowTradingLimit : LocalizationConstants.Exchange.yourMin + " " + minimum!
+    func entryBelowMinimumValue(minimum: String) {
+        let display = LocalizationConstants.Exchange.yourMin + " " + minimum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
     }
     
-    func entryAboveMaximumValue(maximum: String?) {
-        let display = maximum == nil ? LocalizationConstants.Exchange.aboveTradingLimit : LocalizationConstants.Exchange.yourMax + " " + maximum!
+    func entryAboveMaximumValue(maximum: String) {
+        let display = LocalizationConstants.Exchange.yourMax + " " + maximum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
     }
 
-    func genericSocketError(message: String) {
+    func genericError(message: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
         displayError()
     }

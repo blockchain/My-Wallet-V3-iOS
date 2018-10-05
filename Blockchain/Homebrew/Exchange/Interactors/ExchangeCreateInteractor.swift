@@ -75,6 +75,33 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         case min
         case max
     }
+
+    fileprivate enum ExchangeCreateError {
+        case aboveTradingLimit
+        case belowTradingLimit
+        case unknown
+
+        init(errorCode: NabuNetworkErrorCode) {
+            switch errorCode {
+            case .tooBigVolume:
+                self = .aboveTradingLimit
+            case .tooSmallVolume:
+                self = .belowTradingLimit
+            case .resultCurrencyRatioTooSmall:
+                self = .belowTradingLimit
+            default:
+                self = .unknown
+            }
+        }
+
+        var message: String {
+            switch self {
+            case .aboveTradingLimit: return LocalizationConstants.Exchange.aboveTradingLimit
+            case .belowTradingLimit: return LocalizationConstants.Exchange.belowTradingLimit
+            case .unknown: return LocalizationConstants.Errors.error
+            }
+        }
+    }
     
     func viewLoaded() {
         guard let output = output else { return }
@@ -366,15 +393,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
             guard let this = self else { return }
-            if socketError.code == .tooSmallVolume ||
-                socketError.code == .resultCurrencyRatioTooSmall {
-                this.output?.entryBelowMinimumValue(minimum: nil)
-            } else if socketError.code == .tooBigVolume {
-                this.output?.entryAboveMaximumValue(maximum: nil)
-            } else {
-                Logger.shared.error(socketError.description)
-                this.output?.genericSocketError(message: LocalizationConstants.Errors.genericError)
-            }
+            let exchangeError = ExchangeCreateError(errorCode: socketError.code)
+            Logger.shared.error(socketError.description)
+            this.output?.genericError(message: exchangeError.message)
         })
 
         disposables.insertWithDiscardableResult(conversionsDisposable)
