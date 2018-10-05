@@ -366,15 +366,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
             guard let this = self else { return }
-            // There needs to be a better way to find out what the error
-            // is than parsing the string
             if socketError.code == .tooSmallVolume ||
                 socketError.code == .resultCurrencyRatioTooSmall {
                 this.output?.entryBelowMinimumValue(minimum: nil)
             } else if socketError.code == .tooBigVolume {
                 this.output?.entryAboveMaximumValue(maximum: nil)
             } else {
-                this.output?.genericSocketError()
+                Logger.shared.error(socketError.description)
+                this.output?.genericSocketError(message: LocalizationConstants.Errors.genericError)
             }
         })
 

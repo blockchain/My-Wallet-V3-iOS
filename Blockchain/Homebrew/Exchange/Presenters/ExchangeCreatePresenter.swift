@@ -251,9 +251,8 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         displayError()
     }
 
-    func genericSocketError() {
-        let display = LocalizationConstants.Errors.genericError
-        interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
+    func genericSocketError(message: String) {
+        interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
         displayError()
     }
     

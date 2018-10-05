@@ -59,7 +59,7 @@ protocol ExchangeCreateOutput: class {
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)
     func insufficientFunds(balance: String)
-    func genericSocketError()
+    func genericSocketError(message: String)
     func entryBelowMinimumValue(minimum: String?)
     func entryAboveMaximumValue(maximum: String?)
     func loadingVisibility(_ visibility: Visibility)
