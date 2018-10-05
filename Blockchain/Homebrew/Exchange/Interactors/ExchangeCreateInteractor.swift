@@ -393,16 +393,21 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
             guard let this = self else { return }
-            let exchangeError = ExchangeCreateError(errorCode: socketError.code)
             Logger.shared.error(socketError.description)
-            this.output?.genericError(message: exchangeError.message)
+
+            switch socketError.errorType {
+            case .currencyRatioError:
+                let exchangeError = ExchangeCreateError(errorCode: socketError.code)
+                this.output?.genericError(message: exchangeError.message)
+            case .default:
+                this.output?.genericError(message: LocalizationConstants.Errors.error)
+            }
         })
 
         disposables.insertWithDiscardableResult(conversionsDisposable)
         disposables.insertWithDiscardableResult(errorDisposable)
     }
 
-    
     private func applyValue(stringValue: String) {
         stringValue.unicodeScalars.forEach { char in
             let charStringValue = String(char)
