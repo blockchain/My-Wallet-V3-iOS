@@ -207,26 +207,29 @@ struct SocketError: SocketMessageCodable, Error {
             }
         }
     }
-    
-    
+
     let errorType: SocketErrorType
     let channel: String
     let description: String
+    let code: NabuNetworkErrorCode
     
     private enum CodingKeys: CodingKey {
         case type
         case channel
         case error
+        case code
     }
     
     private enum ErrorKeys: CodingKey {
         case description
+        case code
     }
     
     init(channel: String, description: String) {
         self.errorType = .default
         self.channel = channel
         self.description = description
+        self.code = .notFound
     }
     
     init(from decoder: Decoder) throws {
@@ -236,6 +239,7 @@ struct SocketError: SocketMessageCodable, Error {
         channel = try container.decode(String.self, forKey: .channel)
         let errorContainer = try container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         description = try errorContainer.decode(String.self, forKey: .description)
+        code = try errorContainer.decode(NabuNetworkErrorCode.self, forKey: .code)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -244,6 +248,7 @@ struct SocketError: SocketMessageCodable, Error {
         try container.encode(channel, forKey: .channel)
         var errorContainer = container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         try errorContainer.encode(description, forKey: .description)
+        try errorContainer.encode(code, forKey: .code)
     }
 }
 
