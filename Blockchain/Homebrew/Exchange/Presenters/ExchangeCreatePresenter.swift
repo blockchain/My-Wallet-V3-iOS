@@ -47,7 +47,7 @@ class ExchangeCreatePresenter {
         feedback.notificationOccurred(.error)
     }
     
-    fileprivate func hideError() {
+    internal func hideError() {
         interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
             animations: [.secondaryLabel(.visible)],
             animation: .none
@@ -250,8 +250,20 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         interface?.apply(presentationUpdates: [.loadingIndicator(visibility)])
     }
 
+    func exchangeButtonVisibility(_ visibility: Visibility) {
+        if interface?.isShowingConversionRatesView() == true {
+            return
+        }
+
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.exchangeButton(visibility)],
+                animation: .easeIn(duration: 0.2)
+            )
+        )
+    }
+
     func exchangeButtonEnabled(_ enabled: Bool) {
-        hideError()
         interface?.exchangeButtonEnabled(enabled)
     }
 

@@ -327,6 +327,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 let maximum = model.fiatCurrencySymbol + value
                     output.entryAboveMaximumValue(maximum: maximum)
             default:
+                output.hideError()
+                output.exchangeButtonVisibility(.visible)
                 output.exchangeButtonEnabled(true)
             }
         })

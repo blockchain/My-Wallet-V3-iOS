@@ -398,8 +398,11 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     }
     
     func exchangeButtonEnabled(_ enabled: Bool) {
-        exchangeButton.alpha = enabled ? 1 : 0.5
         exchangeButton.isEnabled = enabled
+    }
+
+    func isShowingConversionRatesView() -> Bool {
+        return conversionRatesView.alpha == 1
     }
     
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {
