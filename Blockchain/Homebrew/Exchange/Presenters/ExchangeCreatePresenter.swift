@@ -87,20 +87,13 @@ class ExchangeCreatePresenter {
     }
     
     fileprivate func displayError() {
-        let completion: ViewUpdateBlock = { [weak self] internalEvents in
-            guard let this = self else { return }
-            guard let events = internalEvents else { return }
-            events.forEach({ this.handle(internalEvent: $0) })
-        }
-        
-        let group = ViewUpdateGroup(
-            preparations: [.secondaryLabel(.hidden)],
-            animations: [.errorLabel(.visible)],
-            animation: .standard(duration: 0.2),
-            completionEvents: [],
-            completion: completion
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.secondaryLabel(.hidden), .errorLabel(.visible)],
+                animation: .standard(duration: 0.2)
+            )
         )
-        interface?.apply(presentationUpdateGroup: group)
+
         interface?.exchangeButtonEnabled(false)
     }
     
