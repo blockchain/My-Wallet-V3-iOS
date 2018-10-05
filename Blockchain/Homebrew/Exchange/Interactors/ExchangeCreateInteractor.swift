@@ -370,7 +370,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             // is than parsing the string
             if socketError.description.contains("small") {
                 this.output?.entryBelowMinimumValue(minimum: nil)
-            } else if socketError.description.contains("large") {
+            } else if socketError.description.contains("big") {
                 this.output?.entryAboveMaximumValue(maximum: nil)
             } else {
                 this.output?.genericSocketError()
