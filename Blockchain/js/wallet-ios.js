@@ -2556,8 +2556,7 @@ MyWalletPhone.getExchangeTrades = function() {
 
     var error = function(e) {
         console.log('Error getting trades');
-        console.log(e);
-        on_get_exchange_trades_error(e)
+        objc_on_get_exchange_trades_error(JSON.stringify(e))
     }
 
     return MyWallet.wallet.shapeshift.fetchFullTrades().then(success).catch(error);

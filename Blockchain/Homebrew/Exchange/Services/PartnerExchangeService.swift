@@ -44,6 +44,7 @@ class PartnerExchangeService: PartnerExchangeAPI {
 
 extension PartnerExchangeService: WalletPartnerExchangeDelegate {
     func didFailToGetExchangeTrades(errorDescription: String) {
+        Logger.shared.error(errorDescription)
         if let block = completionBlock {
             block(.error(nil))
         }

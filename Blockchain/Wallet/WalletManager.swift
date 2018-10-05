@@ -452,6 +452,12 @@ extension WalletManager: WalletDelegate {
         }
     }
 
+    func didFail(toGetExchangeTrades errorDescription: String!) {
+        DispatchQueue.main.async { [unowned self] in
+            self.partnerExchangeDelegate?.didFailToGetExchangeTrades(errorDescription: errorDescription)
+        }
+    }
+
     func didGet(_ rate: ExchangeRate!) {
         DispatchQueue.main.async { [unowned self] in
             self.partnerExchangeDelegate?.didGetExchangeRate(rate: rate)
