@@ -14,6 +14,11 @@
 #
 #  Environment variables are defined in the project settings on circleci.com.
 #
+#  The setup_circle_ci Fastlane action must be in the before_all block to perform the following actions:
+#  - Create a new temporary keychain for use with Fastlane Match (see the code signing section for more details).
+#  - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
+#  - Set up log and test result paths to be easily collectible.
+#
 
 version: 2
 jobs:
@@ -23,12 +28,19 @@ jobs:
       xcode: "10.0.0"
     environment:
       # Specifies which environment Fastlane should build against.
-      FASTLANE_LANE: "staging"
+      FASTLANE_LANE: staging
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: test
 
     # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
 
     steps:
+      - run:
+          name: Set Locale
+          command: |
+            export LC_ALL=en_US.UTF-8
+            export LANG=en_US.UTF-8
       - restore_cache:
           keys:
             - node-cache-{{ .Environment.NODE_VERSION }}
@@ -86,11 +98,15 @@ jobs:
             - gems-cache-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install Ruby Gems
-          command: bundle install --path vendor/bundle
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      # - run:
-      #     name: Fastlane
-      #     command: bundle exec fastlane $FASTLANE_LANE
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane $FASTLANE_LANE
+      - store_artifacts:
+          path: output
+      - store_test_results:
+          path: output/scan
