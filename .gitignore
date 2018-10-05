@@ -20,8 +20,6 @@ xcuserdata/
 profile
 *.moved-aside
 .idea/
-
-Pods/
 Blockchain/APIDefines.h
 External/*
 vendor/
