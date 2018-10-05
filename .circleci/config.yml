@@ -36,11 +36,6 @@ jobs:
     shell: /bin/bash --login -o pipefail
 
     steps:
-      - run:
-          name: Set Locale
-          command: |
-            export LC_ALL=en_US.UTF-8
-            export LANG=en_US.UTF-8
       - restore_cache:
           keys:
             - node-cache-{{ .Environment.NODE_VERSION }}
