@@ -280,7 +280,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
             }, error: { [weak self] errorMessage in
                 guard let this = self else { return }
-                AlertViewPresenter.shared.standardError(message: errorMessage)
+                this.output?.showError(message: errorMessage)
                 this.output?.loadingVisibility(.hidden)
             }
         )
@@ -400,9 +400,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             switch socketError.errorType {
             case .currencyRatioError:
                 let exchangeError = ExchangeCreateError(errorCode: socketError.code)
-                this.output?.genericError(message: exchangeError.message)
+                this.output?.showError(message: exchangeError.message)
             case .default:
-                this.output?.genericError(message: LocalizationConstants.Errors.error)
+                this.output?.showError(message: LocalizationConstants.Errors.error)
             }
         })
 

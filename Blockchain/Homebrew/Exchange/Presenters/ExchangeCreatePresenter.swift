@@ -207,7 +207,7 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         displayError()
     }
 
-    func genericError(message: String) {
+    func showError(message: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
         displayError()
     }
