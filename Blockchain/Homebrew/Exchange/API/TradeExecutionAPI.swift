@@ -10,12 +10,25 @@ import Foundation
 
 protocol TradeExecutionAPI {
 
-    // Build a transaction
-    func submitOrder(with conversion: Conversion, success: @escaping ((OrderTransaction, Conversion) -> Void), error: @escaping ((String) -> Void))
-
-    // Send the transaction that was last built
-    func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void))
+    // Build a transaction to display on the confirm screen
+    func prebuildOrder(
+        with conversion: Conversion,
+        from: AssetAccount,
+        to: AssetAccount,
+        success: @escaping ((OrderTransaction, Conversion) -> Void),
+        error: @escaping ((String) -> Void)
+    )
 
     // Build a transaction and send it
-    func submitAndSend(with conversion: Conversion, success: @escaping (() -> Void), error: @escaping ((String) -> Void))
+    func buildAndSend(
+        with conversion: Conversion,
+        from: AssetAccount,
+        to: AssetAccount,
+        success: @escaping ((OrderTransaction) -> Void),
+        error: @escaping ((String) -> Void)
+    )
+
+    /// Check if the service is currently executing a request prior to
+    /// submitting an additional request.
+    var isExecuting: Bool { get set }
 }

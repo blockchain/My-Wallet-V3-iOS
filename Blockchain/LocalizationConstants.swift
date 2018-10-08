@@ -7,6 +7,7 @@
 //
 // swiftlint:disable line_length
 // swiftlint:disable identifier_name
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -101,6 +102,7 @@ struct LocalizationConstants {
             """
             A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.
             """, comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
+        static let notEnoughFunds = NSLocalizedString("You don't have enough funds in this address to send that.", comment: "Message shown when the user has attempted to send more funds than the user has")
     }
 
     struct Authentication {
@@ -422,6 +424,18 @@ struct LocalizationConstants {
         static let sendTo = NSLocalizedString(
             "Send to",
             comment: "Text displayed when reviewing where the result of an exchange order will be sent to")
+        static let requestRefund = NSLocalizedString(
+            "Request refund",
+            comment: "Button text shown to allow a user to request a refund for a failed or expired exchange order."
+        )
+        static let expiredDescription = NSLocalizedString(
+            "Your trade has expired. Any funds broadcast from your wallet will be returned minus the network fee. Contact User Support with your Order ID to request a refund.",
+            comment: "Helper text shown when a user is viewing an order that has expired."
+        )
+        static let failedDescription = NSLocalizedString(
+            "Your trade has failed. If any funds have been broadcast from your wallet, they will be returned automatically minus the network fee. Please return to the New Exchange screen to start a new trade.",
+            comment: "Helper text shown when a user is viewing an order that has expired."
+        )
         static let whatDoYouWantToExchange = NSLocalizedString(
             "What do you want to exchange?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
@@ -451,6 +465,43 @@ struct LocalizationConstants {
         static let exchange = NSLocalizedString(
             "Exchange",
             comment: "Exchange"
+        )
+        static let aboveTradingLimit = NSLocalizedString(
+            "Above trading limit",
+            comment: "Error message shown when a user is attempting to exchange an amount above their designated limit"
+        )
+        static let belowTradingLimit = NSLocalizedString(
+            "Below trading limit",
+            comment: "Error message shown when a user is attempting to exchange an amount below their designated limit"
+        )
+        static let insufficientFunds = NSLocalizedString(
+            "Insufficient funds",
+            comment: "Error message shown when a user is attempting to exchange an amount greater than their balance"
+        )
+        
+        static let yourMin = NSLocalizedString(
+            "Your Min is",
+            comment: "Error that displays what the minimum amount of fiat is required for a trade"
+        )
+        static let yourMax = NSLocalizedString(
+            "Your Max is",
+            comment: "Error that displays what the maximum amount of fiat allowed for a trade"
+        )
+        static let notEnough = NSLocalizedString(
+            "Not enough",
+            comment: "Part of error message shown when the user doesn't have enough funds to make an exchange"
+        )
+        static let yourBalance = NSLocalizedString(
+            "Your balance is",
+            comment: "Part of error message shown when the user doesn't have enough funds to make an exchange"
+        )
+        static let tradeExecutionError = NSLocalizedString(
+            "Sorry, an order cannot be placed at this time.",
+            comment: "Error message shown to a user if something went wrong during the exchange process and the user cannot continue"
+        )
+        static let exchangeListError = NSLocalizedString(
+            "Sorry, your orders cannot be fetched at this time.",
+            comment: "Error message shown to a user if something went wrong while fetching the user's exchange orders"
         )
     }
 
@@ -694,6 +745,10 @@ struct LocalizationConstants {
             "Submitting information...",
             comment: "Text prompt to the user when the client is submitting the identity documents to Blockchain's servers."
         )
+        static let emailAddressAlreadyInUse = NSLocalizedString(
+            "This email address has already been used to verify an existing wallet.",
+            comment: "The error message when a user attempts to start KYC using an existing email address."
+        )
     }
 }
 
@@ -823,6 +878,8 @@ struct LocalizationConstants {
     @objc class func continueKYCCardDescription() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardDescription }
 
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
+    
+    @objc class func notEnoughFunds() -> String { return LocalizationConstants.Errors.notEnoughFunds }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }
 

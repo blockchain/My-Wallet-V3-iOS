@@ -30,7 +30,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="156"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjP-2F-nXO">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjP-2F-nXO">
                     <rect key="frame" x="165" y="65" width="44" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="O8B-tX-SWr"/>
@@ -123,7 +123,7 @@
     <resources>
         <image name="Icon-BTC" width="24" height="24"/>
         <image name="Icon-ETH" width="24" height="24"/>
-        <image name="Icon-Exchange" width="24" height="24"/>
+        <image name="Icon-Exchange" width="20" height="18"/>
         <image name="Icon-StatusDot" width="8" height="8"/>
     </resources>
 </document>

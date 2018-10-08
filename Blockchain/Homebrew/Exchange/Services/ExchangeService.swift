@@ -87,9 +87,11 @@ extension ExchangeService: ExchangeHistoryAPI {
         partnerOperation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
             this.partnerAPI.fetchTransactions(with: { result in
-                
-                if case let .success(payload) = result {
+                switch result {
+                case .success(let payload):
                     this.tradeModels.append(contentsOf: payload)
+                case .error(let error):
+                    completion(.error(error))
                 }
                 complete()
             })
@@ -102,8 +104,9 @@ extension ExchangeService: ExchangeHistoryAPI {
                 case .success(let value):
                     this.canPage = value.count >= 50
                     this.tradeModels.append(contentsOf: value)
-                case .error:
+                case .error(let error):
                     this.canPage = false
+                    completion(.error(error))
                 }
                 complete()
             })
@@ -120,7 +123,8 @@ extension ExchangeService: ExchangeHistoryAPI {
     }
     
     func isExecuting() -> Bool {
-        return tradeQueue.operations.count > 0 || homebrewOperation.isExecuting
+        guard let homebrew = homebrewOperation else { return false }
+        return tradeQueue.operations.count > 0 || homebrew.isExecuting
     }
     
     func cancel() {

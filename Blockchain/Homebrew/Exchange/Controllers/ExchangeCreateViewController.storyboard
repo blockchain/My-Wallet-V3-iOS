@@ -30,12 +30,23 @@
                                     <constraint firstAttribute="height" constant="60" id="eAr-RZ-O8R"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf" userLabel="Fiat Button">
+                                <rect key="frame" x="308" y="115" width="70" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="4dm-4V-5VL"/>
+                                    <constraint firstAttribute="height" constant="70" id="fWa-MZ-Ert"/>
+                                </constraints>
+                                <state key="normal" image="Icon-Switch"/>
+                                <connections>
+                                    <action selector="displayInputTypeTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="f6g-9r-iu8"/>
+                                </connections>
+                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5uc-t6-nYA">
-                                <rect key="frame" x="16" y="169.5" width="343" height="44"/>
+                                <rect key="frame" x="16" y="269.5" width="295" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gyg-rh-rE6">
-                                        <rect key="frame" x="0.0" y="0.0" width="163.5" height="44"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="139.5" height="32"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                         <state key="normal" title="0.05 BTC Min">
                                             <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -44,8 +55,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyX-88-NsD">
-                                        <rect key="frame" x="179.5" y="0.0" width="163.5" height="44"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                        <rect key="frame" x="155.5" y="0.0" width="139.5" height="32"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                         <state key="normal" title="1.48 BTC Max">
                                             <color key="titleColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -55,23 +66,33 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="iIj-Hh-NEZ"/>
+                                    <constraint firstAttribute="height" constant="32" id="iIj-Hh-NEZ"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0b-5p-LkW">
+                                <rect key="frame" x="327" y="269.5" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="yuY-LZ-oDw"/>
+                                </constraints>
+                                <state key="normal" image="icon-toggle-left"/>
+                                <connections>
+                                    <action selector="fixToggleButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="cAV-Je-1Oa"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcw-SG-3XL" customClass="ConversionRatesView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="15.5" y="293.5" width="343" height="273.5"/>
+                                <rect key="frame" x="15.5" y="375" width="343" height="198.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfm-a1-ad2" customClass="NumberKeypadView" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="269.5" width="343" height="321.5"/>
+                                <rect key="frame" x="16" y="357.5" width="343" height="233.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA3-pM-NKs">
-                                <rect key="frame" x="16" y="221.5" width="343" height="32"/>
+                                <rect key="frame" x="16" y="309.5" width="343" height="32"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 BTC = 22.19 ETH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-S4-AAj">
-                                        <rect key="frame" x="122" y="8.5" width="99" height="15"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-S4-AAj">
+                                        <rect key="frame" x="172" y="16.5" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                         <color key="textColor" red="0.0" green="0.28999999999999998" blue="0.48999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -111,7 +132,7 @@
                                     <action selector="hideRatesButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="0os-JI-KVw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
                                 <rect key="frame" x="16" y="607" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -125,28 +146,23 @@
                                     <action selector="exchangeButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="yeg-hs-kSJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-Uz-yYf" userLabel="Fiat Button">
-                                <rect key="frame" x="321" y="118" width="54" height="51"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="54" id="0cT-0k-uqW"/>
-                                    <constraint firstAttribute="height" constant="51" id="waH-3r-Rww"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="19" minY="23" maxX="19" maxY="8"/>
-                                <state key="normal" image="Icon-Switch"/>
-                                <connections>
-                                    <action selector="displayInputTypeTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="f6g-9r-iu8"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
-                                <rect key="frame" x="154.5" y="141" width="65.5" height="20.5"/>
+                                <rect key="frame" x="155" y="208" width="65.5" height="53.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.01 BTC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
-                                <rect key="frame" x="16" y="96" width="342.5" height="41"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="0.01 BTC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-yh-J0A">
+                                <rect key="frame" x="16" y="96" width="342.5" height="108"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your min is $4.56" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAr-Eh-XkB">
+                                <rect key="frame" x="16" y="223" width="343" height="23.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="19"/>
+                                <color key="textColor" red="0.95999999999999996" green="0.26000000000000001" blue="0.26000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -154,32 +170,40 @@
                         <constraints>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="top" secondItem="okC-2w-xB9" secondAttribute="bottom" constant="8" id="5a3-e0-C6T"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DUe-4D-nhJ" secondAttribute="trailing" constant="16" id="5hU-Xa-xif"/>
+                            <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerY" secondItem="cbA-yh-J0A" secondAttribute="centerY" id="6OF-I7-jLH"/>
                             <constraint firstItem="DUe-4D-nhJ" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="6Rb-58-f8o"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="top" secondItem="V30-pI-8jo" secondAttribute="bottom" constant="8" id="7kf-Ns-aJR"/>
                             <constraint firstItem="dfm-a1-ad2" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="AHN-eg-W66"/>
+                            <constraint firstItem="okC-2w-xB9" firstAttribute="height" secondItem="cbA-yh-J0A" secondAttribute="height" multiplier="0.5" id="AsX-Mv-rk9"/>
                             <constraint firstItem="DUe-4D-nhJ" firstAttribute="top" secondItem="dfm-a1-ad2" secondAttribute="bottom" constant="16" id="EPf-w5-lBJ"/>
-                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="FZ3-8d-31D"/>
+                            <constraint firstItem="j0b-5p-LkW" firstAttribute="leading" secondItem="5uc-t6-nYA" secondAttribute="trailing" constant="16" id="Es9-o0-zzi"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="fAr-Eh-XkB" secondAttribute="trailing" constant="16" id="FMh-T4-biV"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" constant="16" id="GHI-5B-7xh"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="HgH-sR-rJB"/>
-                            <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" constant="-8" id="XKu-Vm-Ove"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="width" secondItem="dfm-a1-ad2" secondAttribute="width" id="NgP-UU-rcW"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="height" secondItem="dfm-a1-ad2" secondAttribute="height" multiplier="0.85" id="PLc-ir-uPC"/>
+                            <constraint firstItem="j0b-5p-LkW" firstAttribute="centerY" secondItem="5uc-t6-nYA" secondAttribute="centerY" id="Ppq-Xx-PSZ"/>
                             <constraint firstItem="coY-Dg-Mc5" firstAttribute="centerY" secondItem="DUe-4D-nhJ" secondAttribute="centerY" id="Pxh-nT-mtp"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="centerX" secondItem="V30-pI-8jo" secondAttribute="centerX" id="Qr8-L9-lCF"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="centerY" secondItem="okC-2w-xB9" secondAttribute="centerY" id="RFn-jm-ND2"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="top" secondItem="5uc-t6-nYA" secondAttribute="bottom" constant="8" id="TBU-fM-o9r"/>
                             <constraint firstItem="5uc-t6-nYA" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="Txz-FX-khz"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerX" secondItem="dfm-a1-ad2" secondAttribute="centerX" id="bJ3-Vq-GwG"/>
+                            <constraint firstItem="DPE-Uz-yYf" firstAttribute="centerX" secondItem="j0b-5p-LkW" secondAttribute="centerX" id="bdm-fi-6LK"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="eA3-pM-NKs" secondAttribute="trailing" constant="16" id="bhv-Sp-60b"/>
                             <constraint firstItem="Hcw-SG-3XL" firstAttribute="centerY" secondItem="dfm-a1-ad2" secondAttribute="centerY" id="dnB-8I-crf"/>
                             <constraint firstItem="eA3-pM-NKs" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="enm-Og-Fbn"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="trailing" secondItem="V30-pI-8jo" secondAttribute="trailing" id="fCT-6x-0Y5"/>
                             <constraint firstItem="V30-pI-8jo" firstAttribute="top" secondItem="FIv-WY-bvA" secondAttribute="top" constant="8" id="fNG-KC-mpx"/>
-                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="DPE-Uz-yYf" secondAttribute="trailing" id="i1C-yN-uMT"/>
+                            <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="j0b-5p-LkW" secondAttribute="trailing" constant="16" id="gZz-dZ-XiQ"/>
+                            <constraint firstItem="dfm-a1-ad2" firstAttribute="height" secondItem="jre-mq-FDr" secondAttribute="height" multiplier="0.35" id="jtO-7D-eg1"/>
                             <constraint firstItem="okC-2w-xB9" firstAttribute="centerX" secondItem="cbA-yh-J0A" secondAttribute="centerX" id="kRJ-eC-1n8"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="centerX" secondItem="okC-2w-xB9" secondAttribute="centerX" id="mYy-MV-An8"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="bottom" secondItem="DUe-4D-nhJ" secondAttribute="bottom" constant="16" id="oTE-Cd-lXS"/>
                             <constraint firstItem="cbA-yh-J0A" firstAttribute="leading" secondItem="V30-pI-8jo" secondAttribute="leading" id="p9e-tX-pLR"/>
                             <constraint firstItem="FIv-WY-bvA" firstAttribute="trailing" secondItem="dfm-a1-ad2" secondAttribute="trailing" constant="16" id="pXZ-qz-MkO"/>
                             <constraint firstItem="dfm-a1-ad2" firstAttribute="top" secondItem="eA3-pM-NKs" secondAttribute="bottom" constant="16" id="sAe-mI-cf2"/>
+                            <constraint firstItem="fAr-Eh-XkB" firstAttribute="leading" secondItem="FIv-WY-bvA" secondAttribute="leading" constant="16" id="sYk-ft-v7v"/>
                             <constraint firstItem="coY-Dg-Mc5" firstAttribute="centerX" secondItem="DUe-4D-nhJ" secondAttribute="centerX" id="wL1-Jj-oLT"/>
                             <constraint firstItem="okC-2w-xB9" firstAttribute="top" secondItem="cbA-yh-J0A" secondAttribute="bottom" constant="4" id="wMz-b9-sNk"/>
                         </constraints>
@@ -187,8 +211,11 @@
                     </view>
                     <connections>
                         <outlet property="conversionRatesView" destination="Hcw-SG-3XL" id="2o2-Fx-Jb5"/>
+                        <outlet property="conversionTitleLabel" destination="C9l-S4-AAj" id="Z2S-dI-FzM"/>
                         <outlet property="conversionView" destination="eA3-pM-NKs" id="veU-HE-Ibp"/>
+                        <outlet property="errorLabel" destination="fAr-Eh-XkB" id="Lbh-2l-zky"/>
                         <outlet property="exchangeButton" destination="DUe-4D-nhJ" id="8Ye-3x-3jU"/>
+                        <outlet property="fixToggleButton" destination="j0b-5p-LkW" id="loF-hg-LpF"/>
                         <outlet property="hideRatesButton" destination="coY-Dg-Mc5" id="bEB-4e-zyz"/>
                         <outlet property="numberKeypadView" destination="dfm-a1-ad2" id="yN5-Le-zxp"/>
                         <outlet property="primaryAmountLabel" destination="cbA-yh-J0A" id="xGh-pL-sDT"/>
@@ -211,6 +238,7 @@
     <resources>
         <image name="Icon-Switch" width="22" height="25"/>
         <image name="TapArrows" width="8" height="14"/>
+        <image name="icon-toggle-left" width="32" height="22"/>
         <image name="up_chevron" width="44" height="44"/>
     </resources>
 </document>

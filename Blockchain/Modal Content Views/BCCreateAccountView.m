@@ -61,10 +61,6 @@
         [AlertViewPresenter.sharedInstance showNoInternetConnectionAlert];
         return;
     }
-    if (!self.labelTextField.text ||!self.labelTextField.text.isEmail) {
-        [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_INVALID_EMAIL_ADDRESS title:BC_STRING_ERROR  in:nil handler:nil];
-        return;
-    }
     // Remove whitespace
     NSString *label = [self.labelTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 

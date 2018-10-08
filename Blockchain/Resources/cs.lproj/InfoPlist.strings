@@ -1,0 +1,14 @@
+/* Specifies the reason for your app to access the device’s camera. */
+"NSCameraUsageDescription" = "Toto vyžaduje aplikace pro načtení QR kódů.";
+
+/* Specifies the reason for your app to access any of the device’s microphones. */
+"NSMicrophoneUsageDescription" = "Required for video capture.";
+
+/* Specifies the reason for your app to use Face ID. */
+"NSFaceIDUsageDescription" = "Enabling Face ID allows you to securely access your wallet.";
+
+/* Specifies the reason for your app to access the user’s location information while your app is in use. */
+"NSLocationWhenInUseUsageDescription" = "Blockchain needs access to your location to show you nearby businesses that accept Bitcoin.";
+
+/* Specifies the reason for your app to access the user’s photo library.  */
+"NSPhotoLibraryUsageDescription" = "Your permission is needed in order to upload documents from your photo library.";

@@ -253,7 +253,7 @@
 
     BlockchainSettings.sharedAppInstance.hasSeenEmailReminder = NO;
     BlockchainSettings.sharedAppInstance.hasEndedFirstSession = NO;
-    BlockchainSettings.sharedAppInstance.reminderModalDate = NULL;
+    BlockchainSettings.sharedAppInstance.dateOfLastSecurityReminder = NULL;
     
     BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard = YES;
 }

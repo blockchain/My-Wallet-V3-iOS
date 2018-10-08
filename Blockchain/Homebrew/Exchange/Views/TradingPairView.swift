@@ -107,17 +107,17 @@ class TradingPairView: NibBasedView {
     }
     
     func apply(presentationUpdate: TradingPresentationUpdate) {
-        presentationUpdate.animationType.perform { [weak self] in
+        presentationUpdate.animationType.perform(animations: { [weak self] in
             guard let this = self else { return }
-            presentationUpdate.animations.forEach({this.handle($0)})
-        }
+            presentationUpdate.animations.forEach({ this.handle($0) })
+        })
     }
     
     func apply(transitionUpdate: TradingTransitionUpdate) {
-        transitionUpdate.transitionType.perform(with: self) { [weak self] in
+        transitionUpdate.transitionType.perform(with: self, animations: { [weak self] in
             guard let this = self else { return }
-            transitionUpdate.transitions.forEach({this.handle($0)})
-        }
+            transitionUpdate.transitions.forEach({ this.handle($0) })
+        })
     }
     
     // MARK: Private

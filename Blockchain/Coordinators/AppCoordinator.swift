@@ -342,11 +342,11 @@ extension AppCoordinator: WalletAccountInfoAndExchangeRatesDelegate {
 
 extension AppCoordinator: WalletBackupDelegate {
     func didBackupWallet() {
-        reload()
+        walletManager.wallet.getHistoryForAllAssets()
     }
 
     func didFailBackupWallet() {
-        walletManager.wallet.getAndHistory()
+        walletManager.wallet.getHistoryForAllAssets()
     }
 }
 

@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Enter the code sent to"; ObjectID = "5ml-0c-co0"; */
+"5ml-0c-co0.text" = "Enter the code sent to";
+
+/* Class = "UIButton"; normalTitle = "Resend Code"; ObjectID = "KYo-qh-R2k"; */
+"KYo-qh-R2k.normalTitle" = "Resend Code";
+
+/* Class = "UILabel"; text = "+1 (714) 333-4920"; ObjectID = "cDf-1e-GvH"; */
+"cDf-1e-GvH.text" = "+1 (714) 333-4920";
+
+/* Class = "UINavigationItem"; title = "Verify Your Device"; ObjectID = "cjv-4c-ncy"; */
+"cjv-4c-ncy.title" = "Verify Your Device";
+
+/* Class = "UIViewController"; title = "Confirm Mobile View Controller"; ObjectID = "gEL-b2-YEu"; */
+"gEL-b2-YEu.title" = "Confirm Mobile View Controller";

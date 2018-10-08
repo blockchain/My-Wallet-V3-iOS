@@ -101,6 +101,7 @@ class SocketManager {
 
 extension SocketManager: WebSocketAdvancedDelegate {
     func websocketDidConnect(socket: WebSocket) {
+        Logger.shared.debug("Websocket connected to: \(socket.currentURL.absoluteString)")
         if socket == self.exchangeSocket {
             pendingSocketMessages.forEach { [unowned self] in
                 self.send(message: $0)
@@ -148,11 +149,15 @@ extension SocketManager: WebSocketAdvancedDelegate {
         case "currencyRatio":
             Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "currencyRatioError":
-            onError("Currency ratio error: \(json)")
+            /// Though this is an error, we still decode the payload
+            /// as a `SocketMessage`, so it will use the `onSuccess`
+            /// closure and not the `onError`.
+            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "heartbeat", "subscribed", "authenticated":
             HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error":
             onError("Error returned: \(json)")
+            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         default:
             onError("Unsupported type: '\(type)'")
         }
@@ -160,6 +165,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
 
     func websocketDidDisconnect(socket: WebSocket, error: Error?) {
         // Required by protocol
+        Logger.shared.debug("Websocket disconnected from: \(socket.currentURL.absoluteString)")
     }
 
     func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {

@@ -1,0 +1,18 @@
+
+/* Class = "UILabel"; text = "Why do you need this?"; ObjectID = "2ON-l9-pXa"; */
+"2ON-l9-pXa.text" = "Why do you need this?";
+
+/* Class = "UISearchBar"; placeholder = "Search"; ObjectID = "UXv-PD-jDX"; */
+"UXv-PD-jDX.placeholder" = "Search";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "hxI-sm-sTC"; */
+"hxI-sm-sTC.text" = "Title";
+
+/* Class = "UINavigationItem"; title = "Country of Residence"; ObjectID = "lqm-oI-6In"; */
+"lqm-oI-6In.title" = "Country of Residence";
+
+/* Class = "UIViewController"; title = "Country Selection Controller"; ObjectID = "maQ-p3-MjV"; */
+"maQ-p3-MjV.title" = "Country Selection Controller";
+
+/* Class = "UILabel"; text = "Right now, digital currency conversions are only available in select countries."; ObjectID = "wZm-cR-Ltr"; */
+"wZm-cR-Ltr.text" = "Right now, digital currency conversions are only available in select countries.";

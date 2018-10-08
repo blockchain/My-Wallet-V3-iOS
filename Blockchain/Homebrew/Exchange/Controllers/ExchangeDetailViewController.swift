@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SafariServices
 
 protocol ExchangeDetailDelegate: class {
     func onViewLoaded()
@@ -19,7 +20,7 @@ protocol ExchangeDetailDelegate: class {
 class ExchangeDetailViewController: UIViewController {
 
     enum PageModel {
-        case confirm(OrderTransaction, Conversion, TradeExecutionAPI)
+        case confirm(OrderTransaction, Conversion)
         case locked(OrderTransaction, Conversion)
         case overview(ExchangeTradeModel)
     }
@@ -129,13 +130,19 @@ class ExchangeDetailViewController: UIViewController {
                 forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
                 withReuseIdentifier: ActionableFooterView.identifier
             )
-            
         case .overview:
             let headerNib = UINib(nibName: ExchangeDetailHeaderView.identifier, bundle: nil)
             collectionView.register(
                 headerNib,
                 forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
                 withReuseIdentifier: ExchangeDetailHeaderView.identifier
+            )
+
+            let footerNib = UINib(nibName: ActionableFooterView.identifier, bundle: nil)
+            collectionView.register(
+                footerNib,
+                forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                withReuseIdentifier: ActionableFooterView.identifier
             )
         }
     }
@@ -173,6 +180,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: height)
     }
 
+    // swiftlint:disable function_body_length
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind
@@ -228,16 +236,38 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 return UICollectionReusableView()
             }
         case .overview(let trade):
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionElementKindSectionHeader,
-                withReuseIdentifier: ExchangeDetailHeaderView.identifier,
-                for: indexPath
+            switch kind {
+            case UICollectionElementKindSectionHeader:
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionElementKindSectionHeader,
+                    withReuseIdentifier: ExchangeDetailHeaderView.identifier,
+                    for: indexPath
                 ) as? ExchangeDetailHeaderView else { return UICollectionReusableView() }
-            header.title = trade.amountReceivedCryptoValue + " " + trade.amountReceivedCryptoSymbol
-            return header
+                header.title = trade.amountReceivedCrypto
+                return header
+            case UICollectionElementKindSectionFooter:
+                guard let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionElementKindSectionFooter,
+                    withReuseIdentifier: ActionableFooterView.identifier,
+                    for: indexPath
+                ) as? ActionableFooterView else { return UICollectionReusableView() }
+                footer.title = LocalizationConstants.Exchange.requestRefund
+                footer.actionBlock = {
+                    guard let url = URL(string: Constants.Url.supportTicketBuySellExchange) else {
+                        return
+                    }
+                    let viewController = SFSafariViewController(url: url)
+                    viewController.modalPresentationStyle = .overFullScreen
+                    self.present(viewController, animated: true, completion: nil)
+                }
+                return footer
+            default:
+                return UICollectionReusableView()
+            }
         }
     }
-    
+    // swiftlint:enable function_body_length
+
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -253,7 +283,7 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 height: ExchangeLockedHeaderView.estimatedHeight()
             )
         case .overview(let trade):
-            let title = trade.amountReceivedCryptoValue
+            let title = trade.amountReceivedCrypto
             let height = ExchangeDetailHeaderView.height(for: title)
             return CGSize(
                 width: collectionView.bounds.width,
@@ -274,8 +304,11 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                 width: collectionView.bounds.width,
                 height: ActionableFooterView.height()
             )
-        case .overview:
-            return .zero
+        case .overview(let trade):
+            return trade.status == .expired ? CGSize(
+                width: collectionView.bounds.width,
+                height: ActionableFooterView.height()
+            ) : .zero
         }
     }
 }

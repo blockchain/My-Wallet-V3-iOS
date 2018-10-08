@@ -51,6 +51,20 @@ class ExchangeListViewController: UIViewController {
         dependenciesSetup()
         dataProvider?.delegate = self
         delegate?.onLoaded()
+        registerForNotifications()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let controller = navigationController as? BCNavigationController {
+            controller.applyDarkAppearance()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.onDisappear()
     }
     
     fileprivate func dependenciesSetup() {
@@ -61,9 +75,15 @@ class ExchangeListViewController: UIViewController {
         delegate = presenter
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        delegate?.onDisappear()
+    fileprivate func registerForNotifications() {
+        NotificationCenter.when(Constants.NotificationKeys.exchangeSubmitted) { [weak self] _ in
+            guard let this = self else { return }
+            this.delegate?.onLoaded()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -94,6 +114,10 @@ extension ExchangeListViewController: ExchangeListInterface {
     
     func showNewExchange(animated: Bool) {
         coordinator.handle(event: .createHomebrewExchange(animated: animated, viewController: nil))
+    }
+
+    func showError(message: String) {
+        AlertViewPresenter.shared.standardError(message: message)
     }
 }
 

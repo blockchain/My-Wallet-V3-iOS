@@ -13,26 +13,14 @@ extension UIView {
         return Bundle.main.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
     
-    func wiggle(withFeedback: Bool = true) {
+    func wiggle(duration: CFTimeInterval = 0.8) {
         guard layer.animationKeys() == nil else { return }
-        let wiggle = CABasicAnimation(keyPath: "position")
-        wiggle.duration = 0.05
-        wiggle.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-        wiggle.repeatCount = 1
-        wiggle.autoreverses = true
-        wiggle.fromValue = CGPoint(
-            x: center.x - 2.0,
-            y: center.y
-        )
-        wiggle.toValue = CGPoint(
-            x: center.x + 2.0,
-            y: center.y
-        )
-        layer.add(wiggle, forKey: wiggle.keyPath)
         
-        guard withFeedback else { return }
-        let feedback = UINotificationFeedbackGenerator()
-        feedback.prepare()
-        feedback.notificationOccurred(.error)
+        let translation = CAKeyframeAnimation(keyPath: "transform.translation.x");
+        translation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        translation.values = [-10, 10, -10, 10, -5, 5, -5, 5, -3, 3, -2, 2, 0]
+        translation.duration = duration
+        
+        self.layer.add(translation, forKey: translation.keyPath)
     }
 }
