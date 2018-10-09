@@ -15,6 +15,8 @@ class KYCStateSelectionInteractor {
             get: .listOfStates,
             pathComponents: country.urlPathComponentsForState,
             type: [KYCState].self
-        )
+        ).map { states -> [KYCState] in
+            return states.sorted(by: { $0.name.uppercased() < $1.name.uppercased() })
+        }
     }
 }
