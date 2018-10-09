@@ -142,6 +142,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler
+  dotenv
   fastlane
 
 BUNDLED WITH
