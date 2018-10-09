@@ -120,10 +120,14 @@ struct ExchangeRates: SocketMessageCodable {
 
 extension ExchangeRates {
     func convert(balance: Decimal, fromCurrency: String, toCurrency: String) -> Decimal {
-        if let matchingPair = rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" }) {
+        if let matchingPair = pairRate(fromCurrency: fromCurrency, toCurrency: toCurrency) {
             return matchingPair.price * balance
         }
         return balance
+    }
+
+    func pairRate(fromCurrency: String, toCurrency: String) -> CurrencyPairRate? {
+        return rates.first(where: { $0.pair == "\(fromCurrency)-\(toCurrency)" })
     }
 }
 
@@ -157,27 +161,30 @@ struct Conversion: SocketMessageCodable {
     }
 }
 
+extension Conversion: Equatable {
+    static func == (lhs: Conversion, rhs: Conversion) -> Bool {
+        return lhs.channel == rhs.channel &&
+        lhs.type == rhs.type &&
+        lhs.quote == rhs.quote
+    }
+}
+
 extension Conversion {
-    var baseToFiatDescription: String {
-        let fiatSymbol = quote.currencyRatio.base.fiat.symbol
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let fiat = fiatSymbol + quote.currencyRatio.baseToFiatRate
-        return base + " = " + fiat
+    
+    var baseFiatSymbol: String {
+        return quote.currencyRatio.base.fiat.symbol
     }
     
-    var baseToCounterDescription: String {
-        let base = "1" + " " + quote.currencyRatio.base.crypto.symbol
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let counter = quote.currencyRatio.baseToCounterRate + " " + counterSymbol
-        return base + " = " + counter
+    var baseFiatValue: String {
+        return quote.currencyRatio.base.fiat.value
     }
     
-    var counterToFiatDescription: String {
-        let counterSymbol = quote.currencyRatio.counter.crypto.symbol
-        let fiatSymbol = quote.currencyRatio.counter.fiat.symbol
-        let counter = "1" + " " + counterSymbol
-        let fiat = fiatSymbol + quote.currencyRatio.counterToFiatRate
-        return counter + " = " + fiat
+    var baseCryptoSymbol: String {
+        return quote.currencyRatio.base.crypto.symbol
+    }
+    
+    var baseCryptoValue: String {
+        return quote.currencyRatio.base.crypto.value
     }
 }
 
@@ -200,26 +207,29 @@ struct SocketError: SocketMessageCodable, Error {
             }
         }
     }
-    
-    
+
     let errorType: SocketErrorType
     let channel: String
     let description: String
+    let code: NabuNetworkErrorCode
     
     private enum CodingKeys: CodingKey {
         case type
         case channel
         case error
+        case code
     }
     
     private enum ErrorKeys: CodingKey {
         case description
+        case code
     }
     
     init(channel: String, description: String) {
         self.errorType = .default
         self.channel = channel
         self.description = description
+        self.code = .notFound
     }
     
     init(from decoder: Decoder) throws {
@@ -229,6 +239,7 @@ struct SocketError: SocketMessageCodable, Error {
         channel = try container.decode(String.self, forKey: .channel)
         let errorContainer = try container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         description = try errorContainer.decode(String.self, forKey: .description)
+        code = try errorContainer.decode(NabuNetworkErrorCode.self, forKey: .code)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -237,6 +248,7 @@ struct SocketError: SocketMessageCodable, Error {
         try container.encode(channel, forKey: .channel)
         var errorContainer = container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         try errorContainer.encode(description, forKey: .description)
+        try errorContainer.encode(code, forKey: .code)
     }
 }
 
@@ -284,6 +296,16 @@ struct Quote: Codable {
     let currencyRatio: CurrencyRatio
 }
 
+extension Quote: Equatable {
+    static func == (lhs: Quote, rhs: Quote) -> Bool {
+        return lhs.pair == rhs.pair &&
+        lhs.fiatCurrency == rhs.fiatCurrency &&
+        lhs.fix == rhs.fix &&
+        lhs.volume == rhs.volume &&
+        lhs.currencyRatio == rhs.currencyRatio
+    }
+}
+
 struct CurrencyRatio: Codable {
     let base: FiatCrypto
     let counter: FiatCrypto
@@ -293,9 +315,28 @@ struct CurrencyRatio: Codable {
     let counterToFiatRate: String
 }
 
+extension CurrencyRatio: Equatable {
+    static func == (lhs: CurrencyRatio, rhs: CurrencyRatio) -> Bool {
+        return lhs.base == rhs.base &&
+        lhs.counter == rhs.counter &&
+        lhs.baseToFiatRate == rhs.baseToFiatRate &&
+        lhs.counterToBaseRate == rhs.counterToBaseRate &&
+        lhs.counterToFiatRate == rhs.counterToFiatRate
+    }
+}
+
 struct FiatCrypto: Codable {
     let fiat: SymbolValue
     let crypto: SymbolValue
+}
+
+extension FiatCrypto: Equatable {
+    static func == (lhs: FiatCrypto, rhs: FiatCrypto) -> Bool {
+        return lhs.fiat.symbol == rhs.fiat.symbol &&
+            lhs.fiat.value == rhs.fiat.value &&
+            lhs.crypto.value == rhs.crypto.value &&
+            lhs.crypto.symbol == rhs.crypto.symbol
+    }
 }
 
 struct SymbolValue: Codable {

@@ -25,6 +25,28 @@ struct TransitionPresentationUpdate<T: Transition> {
     }
 }
 
+struct TransitionPresentationUpdateGroup<T: Transition, C: CompletionEvent> {
+    let preparations: [T] = []
+    let transitions: [T]
+    let transitionType: TransitionParameter
+    let completionEvents: [C]
+    let completion: UpdateCompletion<C>
+    
+    init(transitions: [T], transitionType: TransitionParameter, completionEvents: [C], completion: @escaping UpdateCompletion<C>) {
+        self.transitions = transitions
+        self.transitionType = transitionType
+        self.completionEvents = completionEvents
+        self.completion = completion
+    }
+    
+    func finish() {
+        DispatchQueue.main.async {
+            self.completion(self.completionEvents)
+        }
+    }
+}
+
+
 /// This is used in `TransitionPresentationUpdate`.
 /// You use this parameter value to change the style
 /// of the animation applied to the UI update.
@@ -33,7 +55,7 @@ enum TransitionParameter {
     case crossFade(duration: TimeInterval)
     case none
     
-    func perform(with view: UIView, animations: @escaping () -> Void) {
+    func perform(with view: UIView, animations: @escaping () -> Void, completion: (() -> Void)? = nil) {
         switch self {
         case .crossFade(duration: let duration):
             UIView.transition(
@@ -45,7 +67,11 @@ enum TransitionParameter {
                     .allowUserInteraction
                 ],
                 animations: animations,
-                completion: nil
+                completion: { _ in
+                    if let block = completion {
+                        block()
+                    }
+                }
             )
             
         case .none:

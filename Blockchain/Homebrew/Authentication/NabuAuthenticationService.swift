@@ -14,7 +14,7 @@ final class NabuAuthenticationService {
 
     static let shared = NabuAuthenticationService()
 
-    private var cachedSessionToken = BehaviorRelay<NabuSessionTokenResponse?>(value: nil)
+    private let cachedSessionToken = BehaviorRelay<NabuSessionTokenResponse?>(value: nil)
     private let wallet: Wallet
 
     // MARK: - Initialization
@@ -47,7 +47,6 @@ final class NabuAuthenticationService {
     // MARK: - Private Methods
 
     private func getSessionTokenIfNeeded(from userResponse: NabuCreateUserResponse) -> Single<NabuSessionTokenResponse> {
-
         guard let sessionToken = cachedSessionToken.value else {
             return requestNewSessionToken(from: userResponse)
         }
@@ -57,8 +56,9 @@ final class NabuAuthenticationService {
             return requestNewSessionToken(from: userResponse)
         }
 
-        // Make sure cached session token is not expired
-        guard let expiresAt = sessionToken.expiresAt, Date() < expiresAt else {
+        // Make sure cached session token is not within 30 seconds of the expiration time.
+        // 30 seconds was added to account for server-phone time differences
+        guard let expiresAt = sessionToken.expiresAt, Date() < expiresAt.addingTimeInterval(-30) else {
             return requestNewSessionToken(from: userResponse)
         }
 

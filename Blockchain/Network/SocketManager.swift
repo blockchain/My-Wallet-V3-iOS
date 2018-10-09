@@ -157,6 +157,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
             HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error":
             onError("Error returned: \(json)")
+            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         default:
             onError("Unsupported type: '\(type)'")
         }
