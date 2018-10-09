@@ -10,13 +10,18 @@
 /// specific views. It's easier to read
 enum Visibility: Int {
     case hidden
+    case transparent
     case visible
 
     var defaultAlpha: CGFloat {
-        return self == .visible ? 1 : 0
+        switch self {
+        case .hidden: return 0
+        case .transparent: return 0.5
+        case .visible: return 1
+        }
     }
 
     var isHidden: Bool {
-        return self == .visible ? false: true
+        return self == .hidden ? true : false
     }
 }

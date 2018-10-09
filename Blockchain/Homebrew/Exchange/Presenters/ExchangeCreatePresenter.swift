@@ -75,8 +75,11 @@ class ExchangeCreatePresenter {
                 animation: .standard(duration: 0.2)
             )
         )
+    }
 
+    fileprivate func disableExchangeButton() {
         interface?.exchangeButtonEnabled(false)
+        exchangeButtonVisibility(.transparent)
     }
 }
 
@@ -132,7 +135,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
                 animations: [
                     .conversionView(.visible),
                     .ratesChevron(.hidden),
-                    .exchangeButton(.visible)
+                    .exchangeButton(interface?.isExchangeButtonEnabled() == true ? .visible : .transparent)
                 ],
                 animation: .easeIn(duration: 0.2)
             )
@@ -193,23 +196,27 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func insufficientFunds(balance: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(balance)])
         displayError()
+        disableExchangeButton()
     }
     
     func entryBelowMinimumValue(minimum: String) {
         let display = LocalizationConstants.Exchange.yourMin + " " + minimum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        disableExchangeButton()
     }
     
     func entryAboveMaximumValue(maximum: String) {
         let display = LocalizationConstants.Exchange.yourMax + " " + maximum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        disableExchangeButton()
     }
 
     func showError(message: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
         displayError()
+        disableExchangeButton()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {

@@ -303,6 +303,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
                 )
             case .hidden:
                 LoadingViewPresenter.shared.hideBusyView()
+            default:
+                Logger.shared.warning("Visibility not handled")
             }
         case .conversionRatesView(let visibility, animated: let animated):
             conversionRatesView.updateVisibility(visibility, animated: animated)
@@ -403,6 +405,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     func isShowingConversionRatesView() -> Bool {
         return conversionRatesView.alpha == 1
+    }
+
+    func isExchangeButtonEnabled() -> Bool {
+        return exchangeButton.isEnabled
     }
     
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {

@@ -40,6 +40,7 @@ protocol ExchangeCreateInterface: class {
     func exchangeButtonEnabled(_ enabled: Bool)
 
     func isShowingConversionRatesView() -> Bool
+    func isExchangeButtonEnabled() -> Bool
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
