@@ -28,7 +28,7 @@ class KYCCountrySelectionInteractor {
     func selected(state: KYCState, shouldBeNotifiedWhenAvailable: Bool? = nil) -> Disposable {
         return sendSelection(
             countryCode: state.countryCode,
-            state: state.countryCode,
+            state: state.code,
             shouldBeNotifiedWhenAvailable: shouldBeNotifiedWhenAvailable
         )
     }
