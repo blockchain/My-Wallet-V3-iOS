@@ -56,7 +56,7 @@ protocol ExchangeCreateInput: NumberKeypadViewDelegate {
 protocol ExchangeCreateOutput: class {
     func entryRejected()
     func styleTemplate() -> ExchangeStyleTemplate
-    func updatedInput(primary: NSAttributedString?, secondary: String?)
+    func updatedInput(primary: NSAttributedString?, secondary: String?, primaryOffset: CGFloat)
     func updatedRates(first: String, second: String, third: String)
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)

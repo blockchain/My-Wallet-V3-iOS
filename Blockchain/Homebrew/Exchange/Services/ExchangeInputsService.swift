@@ -35,6 +35,12 @@ class ExchangeInputsService: ExchangeInputsAPI {
         isUsingFiat = usingFiat
     }
     
+    func estimatedSymbolWidth(currencySymbol: String, template: ExchangeStyleTemplate) -> CGFloat {
+        let component = InputComponent(value: currencySymbol, type: .symbol)
+        let value = component.attributedString(with: template)
+        return isUsingFiat ? (value.width / 2) : 0.0
+    }
+    
     func primaryFiatAttributedString(currencySymbol: String) -> NSAttributedString {
         guard components.count > 0 else { return NSAttributedString(string: "NaN")}
         let symbolComponent = InputComponent(

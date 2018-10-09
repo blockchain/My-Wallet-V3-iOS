@@ -48,11 +48,6 @@ class ExchangeCreatePresenter {
     }
     
     internal func hideError() {
-        interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
-            animations: [.secondaryLabel(.visible)],
-            animation: .none
-            )
-        )
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [.errorLabel(.hidden)],
@@ -71,7 +66,7 @@ class ExchangeCreatePresenter {
     fileprivate func displayError() {
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
-                animations: [.secondaryLabel(.hidden), .errorLabel(.visible)],
+                animations: [.errorLabel(.visible)],
                 animation: .standard(duration: 0.2)
             )
         )
@@ -224,9 +219,9 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         return interface?.styleTemplate() ?? .standard
     }
     
-    func updatedInput(primary: NSAttributedString?, secondary: String?) {
+    func updatedInput(primary: NSAttributedString?, secondary: String?, primaryOffset: CGFloat) {
         interface?.apply(presentationUpdates: [
-            .updatePrimaryLabel(primary),
+            .updatePrimaryLabel(primary, primaryOffset),
             .updateSecondaryLabel(secondary)
             ]
         )
