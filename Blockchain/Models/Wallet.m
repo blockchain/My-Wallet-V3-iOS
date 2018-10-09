@@ -2619,7 +2619,8 @@
     if ([self isInitialized]) {
         JSValue *userId = [self.context evaluateScript:@"MyWalletPhone.KYC.userId()"];
         if ([userId isNull] || [userId isUndefined]) return nil;
-        return [userId toString];
+        NSString *userIdString = [userId toString];
+        return userIdString.length > 0 ? userIdString : nil;
     }
     return nil;
 }
@@ -2629,7 +2630,8 @@
     if ([self isInitialized]) {
         JSValue *lifetimeToken = [self.context evaluateScript:@"MyWalletPhone.KYC.lifetimeToken()"];
         if ([lifetimeToken isNull] || [lifetimeToken isUndefined]) return nil;
-        return [lifetimeToken toString];
+        NSString *tokenString = [lifetimeToken toString];
+        return tokenString.length > 0 ? tokenString : nil;
     }
     return nil;
 }
