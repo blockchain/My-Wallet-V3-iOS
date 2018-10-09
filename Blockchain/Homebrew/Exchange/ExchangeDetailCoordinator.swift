@@ -76,7 +76,7 @@ class ExchangeDetailCoordinator: NSObject {
                 )
                 
                 let fees = ExchangeCellModel.Plain(
-                    description: LocalizationConstants.Exchange.estimatedFees,
+                    description: LocalizationConstants.Exchange.fees,
                     value: orderTransaction.fees + " " + orderTransaction.from.address.assetType.symbol
                 )
                 
