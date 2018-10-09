@@ -23,8 +23,9 @@ class ExchangeCreateViewController: UIViewController {
     
     // MARK: Private Static Properties
     
+    static let isLargerThan5S: Bool = Constants.Booleans.IsUsingScreenSizeLargerThan5s
     static let primaryFontName: String = Constants.FontNames.montserratMedium
-    static let primaryFontSize: CGFloat = 72.0
+    static let primaryFontSize: CGFloat = isLargerThan5S ? 72.0 : Constants.FontSizes.Gigantic
     static let secondaryFontName: String = Constants.FontNames.montserratRegular
     static let secondaryFontSize: CGFloat = Constants.FontSizes.Huge
 
@@ -126,6 +127,7 @@ class ExchangeCreateViewController: UIViewController {
         }
         
         secondaryAmountLabel.font = styleTemplate().secondaryFont
+        errorLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraSmall)
         
         [conversionView, hideRatesButton].forEach {
             addStyleToView($0)
