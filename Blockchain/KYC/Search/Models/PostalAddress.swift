@@ -20,7 +20,7 @@ struct PostalAddress {
 // TICKET: IOS-1145 - Combine PostalAddress and UserAddress models.
 struct UserAddress: Codable {
     let lineOne: String
-    let lineTwo: String
+    let lineTwo: String?
     let postalCode: String
     let city: String
     let state: String?
@@ -50,7 +50,6 @@ extension UserAddress: Equatable {
 extension UserAddress: Hashable {
     var hashValue: Int {
         return lineOne.hashValue ^
-            lineTwo.hashValue ^
             postalCode.hashValue ^
             city.hashValue ^
             countryCode.hashValue
