@@ -22,6 +22,22 @@ class KYCCountrySelectionInteractor {
     }
 
     func selected(country: KYCCountry, shouldBeNotifiedWhenAvailable: Bool? = nil) -> Disposable {
+        return sendSelection(countryCode: country.code, shouldBeNotifiedWhenAvailable: shouldBeNotifiedWhenAvailable)
+    }
+
+    func selected(state: KYCState, shouldBeNotifiedWhenAvailable: Bool? = nil) -> Disposable {
+        return sendSelection(
+            countryCode: state.countryCode,
+            state: state.countryCode,
+            shouldBeNotifiedWhenAvailable: shouldBeNotifiedWhenAvailable
+        )
+    }
+
+    private func sendSelection(
+        countryCode: String,
+        state: String? = nil,
+        shouldBeNotifiedWhenAvailable: Bool? = nil
+    ) -> Disposable {
         let sessionTokenSingle = authenticationService.getSessionToken()
         let signedRetailToken = walletService.getSignedRetailToken()
         return Single.zip(sessionTokenSingle, signedRetailToken, resultSelector: {
@@ -29,10 +45,13 @@ class KYCCountrySelectionInteractor {
         }).flatMapCompletable { (sessionToken, signedRetailToken) -> Completable in
             var payload = [
                 "jwt": signedRetailToken.token ?? "",
-                "countryCode": country.code
+                "countryCode": countryCode
             ]
             if let notify = shouldBeNotifiedWhenAvailable {
                 payload["notifyWhenAvailable"] = notify.description
+            }
+            if let state = state {
+                payload["state"] = state
             }
             let headers = [HttpHeaderField.authorization: sessionToken.token]
             return KYCNetworkRequest.request(post: .country, parameters: payload, headers: headers)
