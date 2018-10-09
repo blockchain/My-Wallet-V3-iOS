@@ -47,25 +47,7 @@ class ExchangeCreatePresenter {
         feedback.notificationOccurred(.error)
     }
     
-    fileprivate func cancelErrorDisappearanceTimer() {
-        errorDisappearenceTimer?.invalidate()
-        errorDisappearenceTimer = nil
-    }
-    
-    fileprivate func setErrorDisappearanceTimer(duration: TimeInterval) {
-        errorDisappearenceTimer?.invalidate()
-        errorDisappearenceTimer = Timer(
-            fire: Date(timeIntervalSinceNow: duration),
-            interval: 0,
-            repeats: false,
-            block: { [weak self] timer in
-                self?.errorDisappearanceTimerFired()
-        })
-        guard let timer = errorDisappearenceTimer else { return }
-        RunLoop.main.add(timer, forMode: .commonModes)
-    }
-    
-    fileprivate func errorDisappearanceTimerFired() {
+    internal func hideError() {
         interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
             animations: [.secondaryLabel(.visible)],
             animation: .none
@@ -87,46 +69,14 @@ class ExchangeCreatePresenter {
     }
     
     fileprivate func displayError() {
-        let completion: ViewUpdateBlock = { [weak self] internalEvents in
-            guard let this = self else { return }
-            guard let events = internalEvents else { return }
-            events.forEach({ this.handle(internalEvent: $0) })
-        }
-        
-        let block = { [weak self] in
-            guard let this = self else { return }
-            this.setErrorDisappearanceTimer(duration: 2.5)
-        }
-        
-        let group = ViewUpdateGroup(
-            preparations: [.secondaryLabel(.hidden)],
-            animations: [.errorLabel(.visible)],
-            animation: .standard(duration: 0.2),
-            completionEvents: [.block(block)],
-            completion: completion
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.secondaryLabel(.hidden), .errorLabel(.visible)],
+                animation: .standard(duration: 0.2)
+            )
         )
-        interface?.apply(presentationUpdateGroup: group)
-    }
-    
-    fileprivate func triggerErrorFeedback() {
-        let completion: ViewUpdateBlock = { [weak self] internalEvents in
-            guard let this = self else { return }
-            guard let events = internalEvents else { return }
-            events.forEach({ this.handle(internalEvent: $0) })
-        }
-        
-        let block = { [weak self] in
-            guard let this = self else { return }
-            this.wigglePrimaryLabel()
-        }
-        
-        let group = TransitionUpdateGroup(
-            transitions: [.primaryLabelTextColor(.red)],
-            transitionType: .crossFade(duration: 0.2),
-            completionEvents: [.block(block)],
-            completion: completion
-        )
-        interface?.apply(transitionUpdateGroup: group)
+
+        interface?.exchangeButtonEnabled(false)
     }
 }
 
@@ -145,7 +95,6 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [
-                    .exchangeButton(.visible),
                     .conversionView(.visible),
                     .ratesChevron(.hidden),
                     .errorLabel(.hidden)],
@@ -237,11 +186,6 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         guard interactor.confirmationIsExecuting() == false else { return }
         interactor.confirmConversion()
     }
-
-    func confirmConversion() {
-        guard interactor.confirmationIsExecuting() == false else { return }
-        interactor.confirmConversion()
-    }
 }
 
 extension ExchangeCreatePresenter: ExchangeCreateOutput {
@@ -249,21 +193,23 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func insufficientFunds(balance: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(balance)])
         displayError()
-        triggerErrorFeedback()
     }
     
     func entryBelowMinimumValue(minimum: String) {
         let display = LocalizationConstants.Exchange.yourMin + " " + minimum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
-        triggerErrorFeedback()
     }
     
     func entryAboveMaximumValue(maximum: String) {
         let display = LocalizationConstants.Exchange.yourMax + " " + maximum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
-        triggerErrorFeedback()
+    }
+
+    func showError(message: String) {
+        interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
+        displayError()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {
@@ -302,6 +248,23 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
 
     func loadingVisibility(_ visibility: Visibility) {
         interface?.apply(presentationUpdates: [.loadingIndicator(visibility)])
+    }
+
+    func exchangeButtonVisibility(_ visibility: Visibility) {
+        if interface?.isShowingConversionRatesView() == true {
+            return
+        }
+
+        interface?.apply(
+            animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
+                animations: [.exchangeButton(visibility)],
+                animation: .easeIn(duration: 0.2)
+            )
+        )
+    }
+
+    func exchangeButtonEnabled(_ enabled: Bool) {
+        interface?.exchangeButtonEnabled(enabled)
     }
 
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {

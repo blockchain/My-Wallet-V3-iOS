@@ -75,6 +75,33 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         case min
         case max
     }
+
+    fileprivate enum ExchangeCreateError {
+        case aboveTradingLimit
+        case belowTradingLimit
+        case unknown
+
+        init(errorCode: NabuNetworkErrorCode) {
+            switch errorCode {
+            case .tooBigVolume:
+                self = .aboveTradingLimit
+            case .tooSmallVolume:
+                self = .belowTradingLimit
+            case .resultCurrencyRatioTooSmall:
+                self = .belowTradingLimit
+            default:
+                self = .unknown
+            }
+        }
+
+        var message: String {
+            switch self {
+            case .aboveTradingLimit: return LocalizationConstants.Exchange.aboveTradingLimit
+            case .belowTradingLimit: return LocalizationConstants.Exchange.belowTradingLimit
+            case .unknown: return LocalizationConstants.Errors.error
+            }
+        }
+    }
     
     func viewLoaded() {
         guard let output = output else { return }
@@ -84,10 +111,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         updatedInput()
         
         markets.setup()
-        tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
 
         // Authenticate, then listen for conversions
         markets.authenticate(completion: { [unowned self] in
+            self.tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
             self.subscribeToConversions()
             self.updateMarketsConversion()
             self.subscribeToBestRates()
@@ -242,6 +269,30 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             return
         }
         guard let output = output else { return }
+        output.loadingVisibility(.visible)
+        self.tradeExecution.prebuildOrder(
+            with: conversion,
+            from: model.marketPair.fromAccount,
+            to: model.marketPair.toAccount,
+            success: { [weak self] orderTransaction, conversion in
+                guard let this = self else { return }
+                this.output?.loadingVisibility(.hidden)
+                this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
+            }, error: { [weak self] errorMessage in
+                guard let this = self else { return }
+                this.output?.showError(message: errorMessage)
+                this.output?.loadingVisibility(.hidden)
+            }
+        )
+    }
+
+    func validateInput() {
+        guard let model = model else { return }
+        guard let conversion = model.lastConversion else {
+            Logger.shared.error("No conversion stored")
+            return
+        }
+        guard let output = output else { return }
         
         let min = minTradingLimit().asObservable()
         let max = maxTradingLimit().asObservable()
@@ -249,8 +300,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         let disposable = Observable.zip(min, max) {
             return ($0, $1)
-        }.subscribe(onNext: { [weak self] payload in
-            guard let this = self else { return }
+        }.subscribe(onNext: { payload in
             let minValue = payload.0
             let maxValue = payload.1
             
@@ -277,21 +327,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 let maximum = model.fiatCurrencySymbol + value
                     output.entryAboveMaximumValue(maximum: maximum)
             default:
-                output.loadingVisibility(.visible)
-                this.tradeExecution.prebuildOrder(
-                    with: conversion,
-                    from: model.marketPair.fromAccount,
-                    to: model.marketPair.toAccount,
-                    success: { [weak self] orderTransaction, conversion in
-                        guard let this = self else { return }
-                        this.output?.loadingVisibility(.hidden)
-                        this.output?.showSummary(orderTransaction: orderTransaction, conversion: conversion)
-                    }, error: { [weak self] errorMessage in
-                        guard let this = self else { return }
-                        AlertViewPresenter.shared.standardError(message: errorMessage)
-                        this.output?.loadingVisibility(.hidden)
-                    }
-                )
+                output.hideError()
+                output.exchangeButtonVisibility(.visible)
+                output.exchangeButtonEnabled(true)
             }
         })
         disposables.insertWithDiscardableResult(disposable)
@@ -349,19 +387,29 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
             // Update trading pair view values
             this.updateTradingValues(left: this.conversions.baseOutput, right: this.conversions.counterOutput)
-            }, onError: { error in
-                Logger.shared.error("Error subscribing to quote with trading pair")
+
+            this.validateInput()
+        }, onError: { error in
+            Logger.shared.error("Error subscribing to quote with trading pair")
         })
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
-            // TODO: Implement error handling from Socket.
+            guard let this = self else { return }
+            Logger.shared.error(socketError.description)
+
+            switch socketError.errorType {
+            case .currencyRatioError:
+                let exchangeError = ExchangeCreateError(errorCode: socketError.code)
+                this.output?.showError(message: exchangeError.message)
+            case .default:
+                this.output?.showError(message: LocalizationConstants.Errors.error)
+            }
         })
 
         disposables.insertWithDiscardableResult(conversionsDisposable)
         disposables.insertWithDiscardableResult(errorDisposable)
     }
 
-    
     private func applyValue(stringValue: String) {
         stringValue.unicodeScalars.forEach { char in
             let charStringValue = String(char)

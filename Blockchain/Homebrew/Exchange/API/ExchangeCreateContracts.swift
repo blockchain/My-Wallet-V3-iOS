@@ -36,6 +36,10 @@ protocol ExchangeCreateInterface: class {
     func apply(presentationUpdates: [PresentationUpdate])
     func apply(animatedUpdate: AnimatedUpdate)
     func apply(transitionPresentation: AnimatedTransitionUpdate)
+
+    func exchangeButtonEnabled(_ enabled: Bool)
+
+    func isShowingConversionRatesView() -> Bool
 }
 
 // Conforms to NumberKeypadViewDelegate to avoid redundancy of keypad input methods
@@ -57,8 +61,12 @@ protocol ExchangeCreateOutput: class {
     func updateTradingPairValues(left: String, right: String)
     func updateTradingPair(pair: TradingPair, fix: Fix)
     func insufficientFunds(balance: String)
+    func showError(message: String)
     func entryBelowMinimumValue(minimum: String)
     func entryAboveMaximumValue(maximum: String)
     func loadingVisibility(_ visibility: Visibility)
+    func hideError()
+    func exchangeButtonVisibility(_ visibility: Visibility)
+    func exchangeButtonEnabled(_ enabled: Bool)
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion)
 }

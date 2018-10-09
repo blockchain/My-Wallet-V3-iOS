@@ -132,7 +132,7 @@
                                     <action selector="hideRatesButtonTapped:" destination="ZL9-nX-8IY" eventType="touchUpInside" id="0os-JI-KVw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-4D-nhJ">
                                 <rect key="frame" x="16" y="607" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>

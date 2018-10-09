@@ -424,6 +424,18 @@ struct LocalizationConstants {
         static let sendTo = NSLocalizedString(
             "Send to",
             comment: "Text displayed when reviewing where the result of an exchange order will be sent to")
+        static let requestRefund = NSLocalizedString(
+            "Request refund",
+            comment: "Button text shown to allow a user to request a refund for a failed or expired exchange order."
+        )
+        static let expiredDescription = NSLocalizedString(
+            "Your trade has expired. Any funds broadcast from your wallet will be returned minus the network fee. Contact User Support with your Order ID to request a refund.",
+            comment: "Helper text shown when a user is viewing an order that has expired."
+        )
+        static let failedDescription = NSLocalizedString(
+            "Your trade has failed. If any funds have been broadcast from your wallet, they will be returned automatically minus the network fee. Please return to the New Exchange screen to start a new trade.",
+            comment: "Helper text shown when a user is viewing an order that has expired."
+        )
         static let whatDoYouWantToExchange = NSLocalizedString(
             "What do you want to exchange?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange from."
