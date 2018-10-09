@@ -2647,9 +2647,8 @@
         tradeExecutionType = @"bitcoin";
         formattedAmount = [NSString stringWithFormat:@"%lld", [NSNumberFormatter parseBtcValueFromString:orderTransaction.amount]];
         [self.context invokeOnceWithValueFunctionBlock:^(JSValue *_Nonnull errorValue) {
-            [self showBTCPaymentError:[errorValue toDictionary][DICTIONARY_KEY_ERROR]];
             completion();
-            error([errorValue toString]);
+            error([LocalizationConstantsObjcBridge notEnoughFunds]);
         } forJsFunctionName:@"objc_on_create_order_payment_error"];
     } else if (orderTransaction.legacyAssetType == LegacyAssetTypeBitcoinCash) {
         tradeExecutionType = @"bitcoinCash";
