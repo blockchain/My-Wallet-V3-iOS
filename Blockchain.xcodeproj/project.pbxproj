@@ -608,6 +608,8 @@
 		AA54E4F4216D3B30005061F9 /* KYCStateSelectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E4F2216D3B30005061F9 /* KYCStateSelectionPresenter.swift */; };
 		AA54E4F6216D3B3F005061F9 /* KYCStateSelectionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E4F5216D3B3F005061F9 /* KYCStateSelectionInteractor.swift */; };
 		AA54E4F7216D3B3F005061F9 /* KYCStateSelectionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E4F5216D3B3F005061F9 /* KYCStateSelectionInteractor.swift */; };
+		AA54E4FA216D5C99005061F9 /* KYCStateSelectionPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E4F9216D5C99005061F9 /* KYCStateSelectionPresenterTests.swift */; };
+		AA54E4FC216D5CC4005061F9 /* MockKYCStateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E4FB216D5CC4005061F9 /* MockKYCStateSelectionView.swift */; };
 		AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56421D20DDBDA90092A022 /* PinTests.swift */; };
 		AA56423B20DDBDBB0092A022 /* String+EscapeJSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */; };
 		AA56423C20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */; };
@@ -3120,6 +3122,8 @@
 		AA54E4F1216D3157005061F9 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCStateSelectionController.strings; sourceTree = "<group>"; };
 		AA54E4F2216D3B30005061F9 /* KYCStateSelectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCStateSelectionPresenter.swift; sourceTree = "<group>"; };
 		AA54E4F5216D3B3F005061F9 /* KYCStateSelectionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCStateSelectionInteractor.swift; sourceTree = "<group>"; };
+		AA54E4F9216D5C99005061F9 /* KYCStateSelectionPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCStateSelectionPresenterTests.swift; sourceTree = "<group>"; };
+		AA54E4FB216D5CC4005061F9 /* MockKYCStateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKYCStateSelectionView.swift; sourceTree = "<group>"; };
 		AA56421D20DDBDA90092A022 /* PinTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
 		AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+EscapeJSTests.swift"; sourceTree = "<group>"; };
 		AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+AssetsTests.swift"; sourceTree = "<group>"; };
@@ -3971,6 +3975,7 @@
 				AA7133BF21222A7300CB2AA9 /* KYCCountrySelectionPresenterTests.swift */,
 				AA7133B7212221D400CB2AA9 /* KYCVerifyPhoneNumberPresenterTests.swift */,
 				AA74835421111849008F2768 /* Mock */,
+				AA54E4F8216D5C51005061F9 /* StateSelection */,
 			);
 			path = KYC;
 			sourceTree = "<group>";
@@ -6589,6 +6594,14 @@
 			path = StateSelection;
 			sourceTree = "<group>";
 		};
+		AA54E4F8216D5C51005061F9 /* StateSelection */ = {
+			isa = PBXGroup;
+			children = (
+				AA54E4F9216D5C99005061F9 /* KYCStateSelectionPresenterTests.swift */,
+			);
+			path = StateSelection;
+			sourceTree = "<group>";
+		};
 		AA63F84E20A12D88002B719B /* URL */ = {
 			isa = PBXGroup;
 			children = (
@@ -6651,9 +6664,10 @@
 		AA74835421111849008F2768 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
-				AA748358211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift */,
-				AA74835A21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift */,
 				AA7133CA21222AFC00CB2AA9 /* MockKYCCountrySelectionView.swift */,
+				AA748358211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift */,
+				AA54E4FB216D5CC4005061F9 /* MockKYCStateSelectionView.swift */,
+				AA74835A21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -7708,6 +7722,7 @@
 				AA69118520D0967300DDB541 /* NetworkError.swift in Sources */,
 				3AAEF95E2141CEE9005852D1 /* ExchangeDetailHeaderView.swift in Sources */,
 				51578AEB20B448BF00B0080A /* WalletKeyImportDelegate.swift in Sources */,
+				AA54E4FA216D5C99005061F9 /* KYCStateSelectionPresenterTests.swift in Sources */,
 				3A26D53521406C0200D79BDD /* ExchangeDetailCoordinator.swift in Sources */,
 				AACE31D02092A99B00B7B806 /* AuthenticationError.swift in Sources */,
 				3AC4F97D21234966003AA207 /* KYCPageModel.swift in Sources */,
@@ -7851,6 +7866,7 @@
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				3ADFE700214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
+				AA54E4FC216D5CC4005061F9 /* MockKYCStateSelectionView.swift in Sources */,
 				C7CE25BA2135E41900DCC43B /* ExchangeCreateInteractor.swift in Sources */,
 				AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */,
 				3A91F7972137067400CDC3FD /* Order.swift in Sources */,
