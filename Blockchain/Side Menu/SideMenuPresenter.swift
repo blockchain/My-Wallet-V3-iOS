@@ -77,6 +77,7 @@ class SideMenuPresenter {
         items.append(contentsOf: [
             .settings,
             .accountsAndAddresses,
+            .lockbox,
             .webLogin,
             .support,
             .logout

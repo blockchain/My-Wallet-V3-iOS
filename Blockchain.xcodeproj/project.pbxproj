@@ -146,6 +146,8 @@
 		3A76F902211A3BA5002F7946 /* DateFormatter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76F901211A3BA5002F7946 /* DateFormatter+Conveniences.swift */; };
 		3A7F7EE3210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
 		3A7F7EE4210F6C77001E20AF /* Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F7EE2210F6C77001E20AF /* Visibility.swift */; };
+		3A80B7C4216E820700679927 /* SideMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A80B7C3216E820700679927 /* SideMenuCell.xib */; };
+		3A80B7C5216E820700679927 /* SideMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A80B7C3216E820700679927 /* SideMenuCell.xib */; };
 		3A8B224C211CA7990091E706 /* PersonalDetailsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B224B211CA7990091E706 /* PersonalDetailsDelegate.swift */; };
 		3A8B227C211DFE110091E706 /* PrimaryButtonContainer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A8B227B211DFE110091E706 /* PrimaryButtonContainer.xib */; };
 		3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8B2289211E0B380091E706 /* KYCPersonalDetailsController.swift */; };
@@ -1243,6 +1245,7 @@
 		3A76F8FD211A067A002F7946 /* ValidationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationFormView.swift; sourceTree = "<group>"; };
 		3A76F901211A3BA5002F7946 /* DateFormatter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Conveniences.swift"; sourceTree = "<group>"; };
 		3A7F7EE2210F6C77001E20AF /* Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visibility.swift; sourceTree = "<group>"; };
+		3A80B7C3216E820700679927 /* SideMenuCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SideMenuCell.xib; sourceTree = "<group>"; };
 		3A8B224B211CA7990091E706 /* PersonalDetailsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDetailsDelegate.swift; sourceTree = "<group>"; };
 		3A8B227B211DFE110091E706 /* PrimaryButtonContainer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrimaryButtonContainer.xib; sourceTree = "<group>"; };
 		3A8B2289211E0B380091E706 /* KYCPersonalDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KYCPersonalDetailsController.swift; sourceTree = "<group>"; };
@@ -6584,6 +6587,7 @@
 				AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */,
 				AA447BC921276DA900EC0FA0 /* SideMenuPresenter.swift */,
 				AA447BC72127679A00EC0FA0 /* SideMenuViewController.swift */,
+				3A80B7C3216E820700679927 /* SideMenuCell.xib */,
 			);
 			path = "Side Menu";
 			sourceTree = "<group>";
@@ -7445,6 +7449,7 @@
 				3A49A8F02151802000760B8C /* ConversionRatesView.xib in Resources */,
 				3A49B2C62130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */,
 				3A91F7CE2138460900CDC3FD /* TradingPairView.xib in Resources */,
+				3A80B7C5216E820700679927 /* SideMenuCell.xib in Resources */,
 				3A53B95C213466670020ECAD /* ExchangeListHeaderView.xib in Resources */,
 				3AAEF93F2140829D005852D1 /* PlainCell.xib in Resources */,
 				AAD27A5420A0DE1200C0EAFC /* PasswordConfirmView.xib in Resources */,
@@ -7505,6 +7510,7 @@
 				51F5D09821542CEF003D6237 /* KYCCountrySelectionController.storyboard in Resources */,
 				3A76F8F72119EDE0002F7946 /* ValidationDateField.xib in Resources */,
 				C9BE91831945D8F600FD516D /* PEKeyboard-1.png in Resources */,
+				3A80B7C4216E820700679927 /* SideMenuCell.xib in Resources */,
 				515EFAE9210282B4002350B6 /* AccountsAndAddresses.storyboard in Resources */,
 				60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */,
 				3A49A8EF2151802000760B8C /* ConversionRatesView.xib in Resources */,

@@ -222,6 +222,9 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleBuyBitcoin()
         case .exchange:
             handleExchange()
+        case .lockbox:
+            // TODO: Present `Lockbox` screen.
+            return
         }
     }
 

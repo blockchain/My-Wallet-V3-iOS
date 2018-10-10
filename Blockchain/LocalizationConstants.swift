@@ -337,6 +337,14 @@ struct LocalizationConstants {
             "Support",
             comment: "Item displayed on the side menu of the app for when the user wants to contact support."
         )
+        static let new = NSLocalizedString(
+            "New",
+            comment: "New tag shown for menu items that are new."
+        )
+        static let lockbox = NSLocalizedString(
+            "Lockbox",
+            comment: "Lockbox menu itme title."
+        )
     }
 
     struct BuySell {
