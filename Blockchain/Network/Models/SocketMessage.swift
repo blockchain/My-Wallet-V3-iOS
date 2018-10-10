@@ -60,23 +60,23 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
     typealias JSONType = Subscription
     
     let channel: String
-    let operation = "subscribe"
+    let action = "subscribe"
     let params: SubscribeParams
 
     private enum CodingKeys: CodingKey {
         case channel
-        case operation
+        case action
         case params
     }
 }
 
 struct AuthSubscribeParams: Codable {
-    let type: String
+    let event: String
     let token: String
 }
 
 struct ConversionSubscribeParams: Codable {
-    let type: String
+    let event: String
     let pair: String
     let fiatCurrency: String
     let fix: Fix
@@ -98,12 +98,12 @@ struct Unsubscription<UnsubscribeParams: Codable>: SocketMessageCodable {
     typealias JSONType = Unsubscription
 
     let channel: String
-    let operation = "unsubscribe"
+    let action = "unsubscribe"
     let params: UnsubscribeParams
 }
 
 struct ConversionPairUnsubscribeParams: Codable {
-    let type = "conversionPair"
+    let event = "conversionPair"
     let pair: String
 }
 
@@ -112,7 +112,7 @@ struct ConversionPairUnsubscribeParams: Codable {
 struct ExchangeRates: SocketMessageCodable {
     typealias JSONType = ExchangeRates
 
-    let sequenceNumber: Int
+    let seqnum: Int
     let channel: String
     let type: String
     let rates: [CurrencyPairRate]
@@ -134,12 +134,12 @@ extension ExchangeRates {
 struct HeartBeat: SocketMessageCodable {
     typealias JSONType = HeartBeat
     
-    let sequenceNumber: Int
+    let seqnum: Int
     let channel: String
     let type: String
     
     private enum CodingKeys: String, CodingKey {
-        case sequenceNumber
+        case seqnum
         case channel
         case type
     }
@@ -148,15 +148,15 @@ struct HeartBeat: SocketMessageCodable {
 struct Conversion: SocketMessageCodable {
     typealias JSONType = Conversion
 
-    let sequenceNumber: Int
+    let seqnum: Int
     let channel: String
-    let type: String
+    let event: String
     let quote: Quote
 
     private enum CodingKeys: CodingKey {
-        case sequenceNumber
+        case seqnum
         case channel
-        case type
+        case event
         case quote
     }
 }
@@ -164,7 +164,7 @@ struct Conversion: SocketMessageCodable {
 extension Conversion: Equatable {
     static func == (lhs: Conversion, rhs: Conversion) -> Bool {
         return lhs.channel == rhs.channel &&
-        lhs.type == rhs.type &&
+        lhs.event == rhs.event &&
         lhs.quote == rhs.quote
     }
 }
@@ -214,7 +214,7 @@ struct SocketError: SocketMessageCodable, Error {
     let code: NabuNetworkErrorCode
     
     private enum CodingKeys: CodingKey {
-        case type
+        case event
         case channel
         case error
         case code
@@ -234,8 +234,8 @@ struct SocketError: SocketMessageCodable, Error {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let typeValue = try container.decode(String.self, forKey: .type)
-        errorType = SocketErrorType(rawValue: typeValue)
+        let eventValue = try container.decode(String.self, forKey: .event)
+        errorType = SocketErrorType(rawValue: eventValue)
         channel = try container.decode(String.self, forKey: .channel)
         let errorContainer = try container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         description = try errorContainer.decode(String.self, forKey: .description)
@@ -244,7 +244,7 @@ struct SocketError: SocketMessageCodable, Error {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(errorType.rawValue, forKey: .type)
+        try container.encode(errorType.rawValue, forKey: .event)
         try container.encode(channel, forKey: .channel)
         var errorContainer = container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         try errorContainer.encode(description, forKey: .description)
