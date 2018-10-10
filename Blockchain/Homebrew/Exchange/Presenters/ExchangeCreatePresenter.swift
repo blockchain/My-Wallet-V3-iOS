@@ -79,7 +79,7 @@ class ExchangeCreatePresenter {
 
     fileprivate func disableExchangeButton() {
         interface?.exchangeButtonEnabled(false)
-        exchangeButtonVisibility(.transparent)
+        exchangeButtonVisibility(.translucent)
     }
 }
 
@@ -135,7 +135,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
                 animations: [
                     .conversionView(.visible),
                     .ratesChevron(.hidden),
-                    .exchangeButton(interface?.isExchangeButtonEnabled() == true ? .visible : .transparent)
+                    .exchangeButton(interface?.isExchangeButtonEnabled() == true ? .visible : .translucent)
                 ],
                 animation: .easeIn(duration: 0.2)
             )
