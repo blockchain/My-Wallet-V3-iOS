@@ -114,7 +114,7 @@ struct ExchangeRates: SocketMessageCodable {
 
     let seqnum: Int
     let channel: String
-    let type: String
+    let event: String
     let rates: [CurrencyPairRate]
 }
 
@@ -136,12 +136,12 @@ struct HeartBeat: SocketMessageCodable {
     
     let seqnum: Int
     let channel: String
-    let type: String
+    let event: String
     
     private enum CodingKeys: String, CodingKey {
         case seqnum
         case channel
-        case type
+        case event
     }
 }
 
