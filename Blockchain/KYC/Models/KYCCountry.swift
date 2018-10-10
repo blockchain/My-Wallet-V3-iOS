@@ -8,11 +8,12 @@
 
 import Foundation
 
-struct KYCCountry: Codable {
+struct KYCCountry: Codable, SearchableItem {
     let code: String
     let name: String
     let regions: [String]
     let scopes: [String]?
+    let states: [String]
 }
 
 extension KYCCountry {
@@ -20,5 +21,10 @@ extension KYCCountry {
     /// Returns a boolean indicating if this country is supported by Blockchain's native KYC
     var isKycSupported: Bool {
         return scopes?.contains(where: { $0.lowercased() == "kyc" }) ?? false
+    }
+
+    /// The URL path components to get all the states for this country
+    var urlPathComponentsForState: [String] {
+        return ["countries", self.code, "states"]
     }
 }

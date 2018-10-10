@@ -35,6 +35,12 @@ class ExchangeInputsService: ExchangeInputsAPI {
         isUsingFiat = usingFiat
     }
     
+    func estimatedSymbolWidth(currencySymbol: String, template: ExchangeStyleTemplate) -> CGFloat {
+        let component = InputComponent(value: currencySymbol, type: .symbol)
+        let value = component.attributedString(with: template)
+        return isUsingFiat ? (value.width / 2) : 0.0
+    }
+    
     func primaryFiatAttributedString(currencySymbol: String) -> NSAttributedString {
         guard components.count > 0 else { return NSAttributedString(string: "NaN")}
         let symbolComponent = InputComponent(
@@ -53,6 +59,14 @@ class ExchangeInputsService: ExchangeInputsAPI {
         return inputComponents.primaryAssetAttributedString(suffixComponent)
     }
     
+    func maxFiatInteger() -> Int {
+        return 6
+    }
+    
+    func maxAssetInteger() -> Int {
+        return 5
+    }
+    
     func maxFiatFractional() -> Int {
         return NumberFormatter.localCurrencyFractionDigits
     }
@@ -67,18 +81,22 @@ class ExchangeInputsService: ExchangeInputsAPI {
     
     func canAddFiatCharacter(_ character: String) -> Bool {
         guard components.count > 0 else { return true }
-        if components.contains(where: { $0.type == .pendingFractional }) {
+        let pendingFractional = components.contains(where: { $0.type == .pendingFractional })
+        if pendingFractional {
             return components.filter({ $0.type == .fractional }).count < maxFiatFractional()
+        } else {
+            return components.filter({ $0.type == .whole }).count < maxFiatInteger()
         }
-        return true
     }
     
     func canAddAssetCharacter(_ character: String) -> Bool {
         guard components.count > 0 else { return true }
-        if components.contains(where: { $0.type == .pendingFractional }) {
+        let pendingFractional = components.contains(where: { $0.type == .pendingFractional })
+        if pendingFractional {
             return components.filter({ $0.type == .fractional }).count < maxAssetFractional()
+        } else {
+            return components.filter({ $0.type == .whole }).count < maxAssetInteger()
         }
-        return true
     }
     
     func canAddDelimiter() -> Bool {

@@ -27,6 +27,7 @@ final class KYCNetworkRequest {
             case listOfCountries
             case nextKYCMethod
             case currentUser
+            case listOfStates
 
             var pathComponents: [String] {
                 switch self {
@@ -42,6 +43,9 @@ final class KYCNetworkRequest {
                     return ["kyc", "next-method"]
                 case .currentUser:
                     return ["users", "current"]
+                case .listOfStates:
+                    // Path components should be constructed manually since the path depends on the country
+                    return []
                 }
             }
 
@@ -52,6 +56,7 @@ final class KYCNetworkRequest {
                      .healthCheck,
                      .listOfCountries,
                      .nextKYCMethod,
+                     .listOfStates,
                      .currentUser:
                     return nil
                 }
@@ -119,14 +124,16 @@ final class KYCNetworkRequest {
     /// HTTP GET Request
     @discardableResult convenience init?(
         get url: KYCEndpoints.GET,
+        pathComponents: [String]? = nil,
         headers: [String: String]? = nil,
         taskSuccess: @escaping TaskSuccess,
         taskFailure: @escaping TaskFailure
     ) {
         guard let base = URL(string: BlockchainAPI.shared.retailCoreUrl) else { return nil }
+        let pathComponents = pathComponents ?? url.pathComponents
         guard let endpoint = URL.endpoint(
             base,
-            pathComponents: url.pathComponents,
+            pathComponents: pathComponents,
             queryParameters: url.parameters
         ) else { return nil }
         self.init(url: endpoint, httpMethod: "GET")
@@ -314,11 +321,12 @@ extension KYCNetworkRequest {
 
     static func request<ResponseType: Decodable>(
         get url: KYCNetworkRequest.KYCEndpoints.GET,
+        pathComponents: [String]? = nil,
         headers: [String: String]? = nil,
         type: ResponseType.Type
     ) -> Single<ResponseType> {
         return Single.create(subscribe: { observer -> Disposable in
-            KYCNetworkRequest(get: url, headers: headers, taskSuccess: { responseData in
+            KYCNetworkRequest(get: url, pathComponents: pathComponents, headers: headers, taskSuccess: { responseData in
                 do {
                     let response = try JSONDecoder().decode(type.self, from: responseData)
                     observer(.success(response))
