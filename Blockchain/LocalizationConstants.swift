@@ -343,7 +343,7 @@ struct LocalizationConstants {
         )
         static let lockbox = NSLocalizedString(
             "Lockbox",
-            comment: "Lockbox menu itme title."
+            comment: "Lockbox menu item title."
         )
     }
 

@@ -223,7 +223,7 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         case .exchange:
             handleExchange()
         case .lockbox:
-            // TODO: Present `Lockbox` screen.
+            // TICKET: IOS-1397
             return
         }
     }
