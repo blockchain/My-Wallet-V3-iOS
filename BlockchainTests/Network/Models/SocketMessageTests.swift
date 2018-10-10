@@ -14,9 +14,9 @@ class SocketMessageTests: XCTestCase {
     func testDecodingExchangeRates() {
         let json = """
         {
-         "sequenceNumber":12,
+         "seqnum":12,
          "channel":"exchange_rate",
-         "type":"exchangeRate",
+         "event":"exchangeRate",
          "rates": [
             {"pair":"USD-BTC","price":"0.00015351"},
             {"pair":"USD-ETH","price":"0.00455498"},
