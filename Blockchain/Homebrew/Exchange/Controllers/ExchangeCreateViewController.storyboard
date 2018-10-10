@@ -111,7 +111,7 @@
                                 <rect key="frame" x="0.0" y="96" width="375" height="213.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gwW-KU-9VB">
-                                        <rect key="frame" x="0.0" y="41" width="375" height="132"/>
+                                        <rect key="frame" x="0.0" y="41.5" width="375" height="131"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$200.42" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okC-2w-xB9">
                                                 <rect key="frame" x="155" y="90" width="65.5" height="20.5"/>
@@ -120,7 +120,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your min is $4.56" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAr-Eh-XkB">
-                                                <rect key="frame" x="0.0" y="114.5" width="375" height="17.5"/>
+                                                <rect key="frame" x="0.0" y="114.5" width="375" height="16.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                                 <color key="textColor" red="0.95999999999999996" green="0.26000000000000001" blue="0.26000000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -151,10 +151,10 @@
                                             <constraint firstItem="fAr-Eh-XkB" firstAttribute="top" secondItem="okC-2w-xB9" secondAttribute="bottom" constant="4" id="Dse-WZ-OY8"/>
                                             <constraint firstAttribute="bottom" secondItem="fAr-Eh-XkB" secondAttribute="bottom" id="MrC-6v-eup"/>
                                             <constraint firstItem="cbA-yh-J0A" firstAttribute="top" secondItem="gwW-KU-9VB" secondAttribute="top" id="MzA-bE-IaC"/>
-                                            <constraint firstItem="cbA-yh-J0A" firstAttribute="leading" secondItem="gwW-KU-9VB" secondAttribute="leading" constant="16" id="PkR-1x-AFO"/>
+                                            <constraint firstItem="cbA-yh-J0A" firstAttribute="leading" relation="lessThanOrEqual" secondItem="gwW-KU-9VB" secondAttribute="leading" constant="16" id="PkR-1x-AFO"/>
                                             <constraint firstItem="okC-2w-xB9" firstAttribute="top" secondItem="cbA-yh-J0A" secondAttribute="bottom" constant="4" id="QpJ-IH-NaM"/>
                                             <constraint firstItem="fAr-Eh-XkB" firstAttribute="centerX" secondItem="okC-2w-xB9" secondAttribute="centerX" id="cAM-3p-PGb"/>
-                                            <constraint firstAttribute="trailing" secondItem="cbA-yh-J0A" secondAttribute="trailing" constant="16" id="oB3-g6-V6O"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cbA-yh-J0A" secondAttribute="trailing" constant="16" id="oB3-g6-V6O"/>
                                             <constraint firstItem="fAr-Eh-XkB" firstAttribute="leading" secondItem="gwW-KU-9VB" secondAttribute="leading" id="wX1-QX-Lf4"/>
                                         </constraints>
                                     </view>
