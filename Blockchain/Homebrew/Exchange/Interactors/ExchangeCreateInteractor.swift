@@ -153,15 +153,16 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         
         let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
+        let primaryOffset = inputs.estimatedSymbolWidth(currencySymbol: symbol, template: output.styleTemplate())
 
         if model.isUsingFiat {
             let primary = inputs.primaryFiatAttributedString(currencySymbol: symbol)
-            output.updatedInput(primary: primary, secondary: conversions.output)
+            output.updatedInput(primary: primary, secondary: conversions.output, primaryOffset: -primaryOffset)
         } else {
             let assetType = model.isUsingBase ? model.pair.from : model.pair.to
             let symbol = assetType.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
-            output.updatedInput(primary: primary, secondary: secondaryResult)
+            output.updatedInput(primary: primary, secondary: secondaryResult, primaryOffset: -primaryOffset)
         }
     }
 

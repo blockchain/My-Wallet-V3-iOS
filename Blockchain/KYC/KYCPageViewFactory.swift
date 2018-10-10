@@ -10,6 +10,8 @@ import Foundation
 
 /// Factory for constructing a KYCBaseViewController
 class KYCPageViewFactory {
+
+    // swiftlint:disable:next cyclomatic_complexity
     func createFrom(
         pageType: KYCPageType,
         in coordinator: KYCCoordinator,
@@ -20,6 +22,12 @@ class KYCPageViewFactory {
             return KYCWelcomeController.make(with: coordinator)
         case .country:
             return KYCCountrySelectionController.make(with: coordinator)
+        case .states:
+            let stateController = KYCStateSelectionController.make(with: coordinator)
+            if let payload = payload, case let .countrySelected(country) = payload {
+                stateController.country = country
+            }
+            return stateController
         case .profile:
             return KYCPersonalDetailsController.make(with: coordinator)
         case .address:

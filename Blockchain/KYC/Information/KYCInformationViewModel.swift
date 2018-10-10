@@ -26,9 +26,20 @@ extension KYCInformationViewModel {
     static func createForUnsupportedCountry(_ country: KYCCountry) -> KYCInformationViewModel {
         return KYCInformationViewModel(
             image: #imageLiteral(resourceName: "Welcome"),
-            title: String(format: LocalizationConstants.KYC.unsupportedCountryTitle, country.name),
+            title: String(format: LocalizationConstants.KYC.comingSoonToX, country.name),
             subtitle: nil,
             description: String(format: LocalizationConstants.KYC.unsupportedCountryDescription, country.name),
+            buttonTitle: LocalizationConstants.KYC.messageMeWhenAvailable,
+            badge: nil
+        )
+    }
+
+    static func createForUnsupportedState(_ state: KYCState) -> KYCInformationViewModel {
+        return KYCInformationViewModel(
+            image: #imageLiteral(resourceName: "Welcome"),
+            title: String(format: LocalizationConstants.KYC.comingSoonToX, state.name),
+            subtitle: nil,
+            description: String(format: LocalizationConstants.KYC.unsupportedStateDescription, state.name),
             buttonTitle: LocalizationConstants.KYC.messageMeWhenAvailable,
             badge: nil
         )

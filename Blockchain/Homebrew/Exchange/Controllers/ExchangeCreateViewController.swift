@@ -23,10 +23,11 @@ class ExchangeCreateViewController: UIViewController {
     
     // MARK: Private Static Properties
     
+    static let isLargerThan5S: Bool = Constants.Booleans.IsUsingScreenSizeLargerThan5s
     static let primaryFontName: String = Constants.FontNames.montserratMedium
-    static let primaryFontSize: CGFloat = Constants.FontSizes.Huge
-    static let secondaryFontName: String = Constants.FontNames.montserratMedium
-    static let secondaryFontSize: CGFloat = Constants.FontSizes.MediumLarge
+    static let primaryFontSize: CGFloat = isLargerThan5S ? 72.0 : Constants.FontSizes.Gigantic
+    static let secondaryFontName: String = Constants.FontNames.montserratRegular
+    static let secondaryFontSize: CGFloat = Constants.FontSizes.Huge
 
     // MARK: - IBOutlets
 
@@ -45,17 +46,16 @@ class ExchangeCreateViewController: UIViewController {
 
     @IBOutlet private var hideRatesButton: UIButton!
     @IBOutlet private var conversionRatesView: ConversionRatesView!
-    @IBOutlet private var useMinimumButton: UIButton!
-    @IBOutlet private var useMaximumButton: UIButton!
     @IBOutlet private var fixToggleButton: UIButton!
     @IBOutlet private var conversionView: UIView!
     @IBOutlet private var conversionTitleLabel: UILabel!
     @IBOutlet private var exchangeButton: UIButton!
+    @IBOutlet private var primaryLabelCenterXConstraint: NSLayoutConstraint!
     
     enum PresentationUpdate {
         case wiggleInputLabels
         case wigglePrimaryLabel
-        case updatePrimaryLabel(NSAttributedString?)
+        case updatePrimaryLabel(NSAttributedString?, CGFloat)
         case updateSecondaryLabel(String?)
         case updateErrorLabel(String)
         case updateRateLabels(first: String, second: String, third: String)
@@ -69,7 +69,6 @@ class ExchangeCreateViewController: UIViewController {
         case conversionView(Visibility)
         case exchangeButton(Visibility)
         case ratesChevron(Visibility)
-        case secondaryLabel(Visibility)
         case errorLabel(Visibility)
     }
     
@@ -128,10 +127,9 @@ class ExchangeCreateViewController: UIViewController {
         }
         
         secondaryAmountLabel.font = styleTemplate().secondaryFont
-
-        useMinimumButton.setTitle(LocalizationConstants.Exchange.useMin, for: .normal)
-        useMaximumButton.setTitle(LocalizationConstants.Exchange.useMax, for: .normal)
-        [useMaximumButton, useMinimumButton, conversionView, hideRatesButton].forEach {
+        errorLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.ExtraExtraSmall)
+        
+        [conversionView, hideRatesButton].forEach {
             addStyleToView($0)
         }
 
@@ -163,14 +161,6 @@ class ExchangeCreateViewController: UIViewController {
     }
     
     // MARK: - IBActions
-    
-    @IBAction func useMinimumButtonTapped(_ sender: Any) {
-        delegate?.onUseMinimumTapped(assetAccount: fromAccount)
-    }
-
-    @IBAction func useMaximumButtonTapped(_ sender: Any) {
-        delegate?.onUseMaximumTapped(assetAccount: fromAccount)
-    }
 
     @IBAction func fixToggleButtonTapped(_ sender: UIButton) {
         let imageToggle = (fixToggleButton.currentImage == #imageLiteral(resourceName: "icon-toggle-left")) ? #imageLiteral(resourceName: "icon-toggle-right") : #imageLiteral(resourceName: "icon-toggle-left")
@@ -286,8 +276,6 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
             exchangeButton.alpha = visibility.defaultAlpha
         case .ratesChevron(let visibility):
             hideRatesButton.alpha = visibility.defaultAlpha
-        case .secondaryLabel(let visibility):
-            secondaryAmountLabel.alpha = visibility.defaultAlpha
         case .errorLabel(let visibility):
             errorLabel.alpha = visibility.defaultAlpha
         }
@@ -303,6 +291,8 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
                 )
             case .hidden:
                 LoadingViewPresenter.shared.hideBusyView()
+            default:
+                Logger.shared.warning("Visibility not handled")
             }
         case .conversionRatesView(let visibility, animated: let animated):
             conversionRatesView.updateVisibility(visibility, animated: animated)
@@ -311,8 +301,12 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
                 guard let this = self else { return }
                 this.delegate?.onKeypadVisibilityUpdated(visibility, animated: animated)
             }
-        case .updatePrimaryLabel(let value):
+        case .updatePrimaryLabel(let value, let offset):
             primaryAmountLabel.attributedText = value
+            guard primaryLabelCenterXConstraint.constant != offset else { return }
+            primaryLabelCenterXConstraint.constant = offset
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         case .updateSecondaryLabel(let value):
             secondaryAmountLabel.text = value
         case .wiggleInputLabels:
@@ -403,6 +397,10 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
     func isShowingConversionRatesView() -> Bool {
         return conversionRatesView.alpha == 1
+    }
+
+    func isExchangeButtonEnabled() -> Bool {
+        return exchangeButton.isEnabled
     }
     
     func showSummary(orderTransaction: OrderTransaction, conversion: Conversion) {

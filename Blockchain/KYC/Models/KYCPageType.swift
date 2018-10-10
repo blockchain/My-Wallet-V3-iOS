@@ -13,6 +13,7 @@ enum KYCPageType {
 
     case welcome
     case country
+    case states
     case profile
     case address
     case enterPhone
@@ -25,11 +26,16 @@ enum KYCPageType {
 extension KYCPageType {
     /// The next page provided that the user successfully entered/selected
     /// information in this page.
-    func nextPage(for user: NabuUser?) -> KYCPageType? {
+    func nextPage(for user: NabuUser?, country: KYCCountry?) -> KYCPageType? {
         switch self {
         case .welcome:
             return .country
         case .country:
+            if let country = country, country.states.count != 0 {
+                return .states
+            }
+            return .profile
+        case .states:
             return .profile
         case .profile:
             return .address

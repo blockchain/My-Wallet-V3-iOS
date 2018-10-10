@@ -20,12 +20,6 @@ enum KYCEvent {
 
     /// Event emitted when the provided page type emits an error
     case failurePageForPageType(KYCPageType, KYCPageError)
-
-    // TODO:
-    /// Should the user go back in the KYC flow, we need to
-    /// prepopulate the screens with the data they already entered.
-    /// We may need another event type for this and hook into
-    /// `viewWillDisappear`.
 }
 
 protocol KYCCoordinatorDelegate: class {
@@ -115,7 +109,7 @@ protocol KYCCoordinatorDelegate: class {
             handleFailurePage(for: error)
         case .nextPageFromPageType(let type, let payload):
             handlePayloadFromPageType(type, payload)
-            guard let nextPage = type.nextPage(for: self.user) else { return }
+            guard let nextPage = type.nextPage(for: self.user, country: self.country) else { return }
             let controller = pageFactory.createFrom(
                 pageType: nextPage,
                 in: self,
@@ -159,7 +153,7 @@ protocol KYCCoordinatorDelegate: class {
         let endPage = pageTypeForUser()
         var currentPage = startingPage
         while currentPage != endPage {
-            guard let nextPage = currentPage.nextPage(for: user) else { return }
+            guard let nextPage = currentPage.nextPage(for: user, country: country) else { return }
 
             currentPage = nextPage
 
@@ -193,22 +187,36 @@ protocol KYCCoordinatorDelegate: class {
     }
 
     private func handleFailurePage(for error: KYCPageError) {
+
+        let informationViewController = KYCInformationController.make(with: self)
+        informationViewController.viewConfig = KYCInformationViewConfig(
+            titleColor: UIColor.gray5,
+            isPrimaryButtonEnabled: true
+        )
+
         switch error {
         case .countryNotSupported(let country):
-            let informationViewController = KYCInformationController.make(with: self)
             informationViewController.viewModel = KYCInformationViewModel.createForUnsupportedCountry(country)
-            informationViewController.viewConfig = KYCInformationViewConfig(
-                titleColor: UIColor.gray5,
-                isPrimaryButtonEnabled: true
-            )
             informationViewController.primaryButtonAction = { [unowned self] viewController in
                 viewController.presentingViewController?.presentingViewController?.dismiss(animated: true)
                 let interactor = KYCCountrySelectionInteractor()
-                let disposables = interactor.selected(
+                let disposable = interactor.selected(
                     country: country,
                     shouldBeNotifiedWhenAvailable: true
                 )
-                _ = self.disposables.insert(disposables)
+                self.disposables.insertWithDiscardableResult(disposable)
+            }
+            presentInNavigationController(informationViewController, in: navController)
+        case .stateNotSupported(let state):
+            informationViewController.viewModel = KYCInformationViewModel.createForUnsupportedState(state)
+            informationViewController.primaryButtonAction = { [unowned self] viewController in
+                viewController.presentingViewController?.presentingViewController?.dismiss(animated: true)
+                let interactor = KYCCountrySelectionInteractor()
+                let disposable = interactor.selected(
+                    state: state,
+                    shouldBeNotifiedWhenAvailable: true
+                )
+                self.disposables.insertWithDiscardableResult(disposable)
             }
             presentInNavigationController(informationViewController, in: navController)
         }
@@ -218,6 +226,7 @@ protocol KYCCoordinatorDelegate: class {
         switch type {
         case .welcome,
              .country,
+             .states,
              .accountStatus,
              .applicationComplete:
             break

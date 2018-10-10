@@ -713,12 +713,16 @@ struct LocalizationConstants {
             "What happens next?",
             comment: "Text displayed (subtitle) when KYC verification is under progress"
         )
-        static let unsupportedCountryTitle = NSLocalizedString(
+        static let comingSoonToX = NSLocalizedString(
             "Coming soon to %@!",
             comment: "Title text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
         static let unsupportedCountryDescription = NSLocalizedString(
             "Every country has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
+            comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
+        )
+        static let unsupportedStateDescription = NSLocalizedString(
+            "Every state has different rules on how to buy and sell cryptocurrencies. Keep your eyes peeled, we’ll let you know as soon as we launch in %@!",
             comment: "Description text displayed when the selected country by the user is not supported for crypto-to-crypto exchange"
         )
         static let messageMeWhenAvailable = NSLocalizedString(
