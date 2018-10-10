@@ -102,7 +102,7 @@ struct LocalizationConstants {
             """
             A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.
             """, comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
-        static let notEnoughFunds = NSLocalizedString("You don't have enough funds in this address to send that.", comment: "Message shown when the user has attempted to send more funds than the user has")
+        static let notEnoughXForFees = NSLocalizedString("Not enough %@ for fees", comment: "Message shown when the user has attempted to send more funds than the user can spend (input amount plus fees)")
     }
 
     struct Authentication {
@@ -883,7 +883,7 @@ struct LocalizationConstants {
 
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
     
-    @objc class func notEnoughFunds() -> String { return LocalizationConstants.Errors.notEnoughFunds }
+    @objc class func notEnoughXForFees() -> String { return LocalizationConstants.Errors.notEnoughXForFees }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }
 

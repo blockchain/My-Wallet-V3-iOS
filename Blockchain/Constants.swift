@@ -126,6 +126,11 @@ struct Constants {
         static let addressAndKeyImportWrongBipPass = "wrongBipPass"
         static let addressAndKeyImportWrongPrivateKey = "wrongPrivateKey"
     }
+    struct AssetTypeCodes {
+        static let bitcoin = "BTC"
+        static let ethereum = "ETH"
+        static let bitcoinCash = "BCH"
+    }
 }
 
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this
@@ -213,5 +218,9 @@ struct Constants {
 
     @objc class func infoLabelEdgeInsets() -> UIEdgeInsets {
         return Constants.Measurements.infoLabelEdgeInsets
+    }
+
+    @objc class func btcCode() -> String {
+        return Constants.AssetTypeCodes.bitcoin
     }
 }
