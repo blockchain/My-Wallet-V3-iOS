@@ -762,6 +762,50 @@ struct LocalizationConstants {
             comment: "The error message when a user attempts to start KYC using an existing email address."
         )
     }
+
+    struct Lockbox {
+        static let getYourLockbox = NSLocalizedString(
+            "Get Your Lockbox",
+            comment: "Title prompting the user to buy a lockbox."
+        )
+        static let safelyStoreYourLockbox = NSLocalizedString(
+            "Safely store your crypto currency offline.",
+            comment: "Subtitle prompting the user to buy a lockbox."
+        )
+        static let buyNowFor99 = NSLocalizedString(
+            "Buy Now for $99",
+            comment: "Price of a lockbox."
+        )
+        static let alreadyOwnOne = NSLocalizedString(
+            "Already own one?",
+            comment: "Title for anouncement card for the lockbox."
+        )
+        static let announcementCardSubtitle = NSLocalizedString(
+            "From your computer log into blockchain.com and connect your Lockbox.",
+            comment: "Subtitle for anouncement card for the lockbox."
+        )
+        static let balancesComingSoon = NSLocalizedString(
+            "Balances Coming Soon",
+            comment: "Title displayed to the user when they have a synced lockbox."
+        )
+        static let balancesComingSoonSubtitle = NSLocalizedString(
+            """
+                We are unable to display your Lockbox balance at this time.
+                Don’t worry, your funds are safe. We’ll be adding this feature soon.
+                While you wait, you can check your balance on the web.
+            """
+            ,
+            comment: "Subtitle display to the user when they have a synced lockbox."
+        )
+        static let checkMyBalance = NSLocalizedString(
+            "Check My Balance",
+            comment: "CTA for when the user has a synced lockbox."
+        )
+        static let wantToLearnMoreX = NSLocalizedString(
+            "Want to learn more? Tap here to visit %@",
+            comment: "Footer text in the lockbox view."
+        )
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this

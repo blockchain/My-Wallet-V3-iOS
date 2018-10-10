@@ -359,6 +359,10 @@
 		51E431F92135D39B004C2B0C /* KYCPersonalDetailsController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51E431FB2135D39B004C2B0C /* KYCPersonalDetailsController.storyboard */; };
 		51E5C73220741A130000A7FD /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C72F20741A130000A7FD /* AuthenticationManager.swift */; };
 		51E5C73320741A130000A7FD /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C73020741A130000A7FD /* LocalizationConstants.swift */; };
+		51F504C5216E71C400E1FE0C /* LockboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F504C4216E71C400E1FE0C /* LockboxViewController.swift */; };
+		51F504C6216E71C400E1FE0C /* LockboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F504C4216E71C400E1FE0C /* LockboxViewController.swift */; };
+		51F504D1216E725B00E1FE0C /* Lockbox.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51F504D0216E725B00E1FE0C /* Lockbox.xcassets */; };
+		51F504D5216E744000E1FE0C /* LockboxViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F504D4216E744000E1FE0C /* LockboxViewController.storyboard */; };
 		51F5D04321542B96003D6237 /* KYCConfirmPhoneNumberController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F5D04521542B96003D6237 /* KYCConfirmPhoneNumberController.storyboard */; };
 		51F5D09821542CEF003D6237 /* KYCCountrySelectionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F5D09A21542CEF003D6237 /* KYCCountrySelectionController.storyboard */; };
 		51F5D0ED21542D82003D6237 /* KYCEnterPhoneNumberController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51F5D0EF21542D82003D6237 /* KYCEnterPhoneNumberController.storyboard */; };
@@ -1597,6 +1601,9 @@
 		51E431FA2135D39B004C2B0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCPersonalDetailsController.storyboard; sourceTree = "<group>"; };
 		51E5C72F20741A130000A7FD /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		51E5C73020741A130000A7FD /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
+		51F504C4216E71C400E1FE0C /* LockboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxViewController.swift; sourceTree = "<group>"; };
+		51F504D0216E725B00E1FE0C /* Lockbox.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Lockbox.xcassets; sourceTree = "<group>"; };
+		51F504D4216E744000E1FE0C /* LockboxViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockboxViewController.storyboard; sourceTree = "<group>"; };
 		51F5CFA0215429A3003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
 		51F5CFA2215429A7003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
 		51F5CFA4215429B3003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
@@ -6470,8 +6477,11 @@
 		AA084400215EEC630007BFD1 /* Lockbox */ = {
 			isa = PBXGroup;
 			children = (
-				AA08440A215EEC740007BFD1 /* Models */,
+				51F504D4216E744000E1FE0C /* LockboxViewController.storyboard */,
 				AA084417215EF4EC0007BFD1 /* LockboxRepository.swift */,
+				51F504C4216E71C400E1FE0C /* LockboxViewController.swift */,
+				51F504D0216E725B00E1FE0C /* Lockbox.xcassets */,
+				AA08440A215EEC740007BFD1 /* Models */,
 			);
 			path = Lockbox;
 			sourceTree = "<group>";
@@ -7469,6 +7479,7 @@
 				51B767AB2106369A003CCD46 /* Montserrat-Bold.ttf in Resources */,
 				51B767AC2106369A003CCD46 /* Montserrat-BoldItalic.ttf in Resources */,
 				51B767AD2106369A003CCD46 /* Montserrat-ExtraBold.ttf in Resources */,
+				51F504D1216E725B00E1FE0C /* Lockbox.xcassets in Resources */,
 				3AB4D90B212F561A004F0160 /* LoadingTableViewCell.xib in Resources */,
 				51058F0B212F50C400AD8719 /* KYCApplicationCompleteController.storyboard in Resources */,
 				51B767AE2106369A003CCD46 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
@@ -7526,6 +7537,7 @@
 				3AAEF95321417563005852D1 /* ExchangeLockedHeaderView.xib in Resources */,
 				51383566210255E100767B2E /* Colors.xcassets in Resources */,
 				3A91F7CD2138460900CDC3FD /* TradingPairView.xib in Resources */,
+				51F504D5216E744000E1FE0C /* LockboxViewController.storyboard in Resources */,
 				602B9CD82118E15300BD3D60 /* KYCOnboardingNavigationController.storyboard in Resources */,
 				ECD244EF19A8AC45004B1F40 /* PEKeyboard-3.png in Resources */,
 				3A26D4FC2140227100D79BDD /* ExchangeDetailViewController.storyboard in Resources */,
@@ -7920,6 +7932,7 @@
 				3A91F7972137067400CDC3FD /* Order.swift in Sources */,
 				AA1E523E2097E6AC0099BD10 /* PinStoreResponse.swift in Sources */,
 				AACE31C92092A99B00B7B806 /* AlertViewPresenter.swift in Sources */,
+				51F504C6216E71C400E1FE0C /* LockboxViewController.swift in Sources */,
 				3A1552E8213600B400683CEB /* TradingPairConfiguration.swift in Sources */,
 				3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */,
 				3AB4D91821309BAD004F0160 /* ExchangeListContracts.swift in Sources */,
@@ -8200,6 +8213,7 @@
 				C774A1262102B87300DCCC17 /* ExchangeRate.swift in Sources */,
 				AA0A412C214AD75300807163 /* DebugSettings.swift in Sources */,
 				AACB48B821478472008FCCD0 /* Collection+Helpers.swift in Sources */,
+				51F504C5216E71C400E1FE0C /* LockboxViewController.swift in Sources */,
 				5114EA2320CD8B900098E26E /* UINavigationBar+TitleAttributes.swift in Sources */,
 				606399FA2110FC2D005B6DF5 /* SRSIMDHelpers.m in Sources */,
 				606399EE2110FC2D005B6DF5 /* SRHTTPConnectMessage.m in Sources */,
