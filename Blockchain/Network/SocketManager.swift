@@ -152,6 +152,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
                     Logger.shared.error("Incorrect type or type key not found: \(text)")
                     return
                 }
+
                 switch type {
                 case "currencyRatio":
                     Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
