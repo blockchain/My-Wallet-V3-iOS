@@ -135,7 +135,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
         }
 
         guard let channel = json["channel"] as? String else {
-            onError("Event is not a string value")
+            onError("Channel is not a string value")
             return
         }
 
