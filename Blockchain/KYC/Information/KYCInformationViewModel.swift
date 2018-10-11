@@ -111,7 +111,7 @@ extension KYCInformationViewConfig {
             isPrimaryButtonEnabled = true
         case .failed, .expired, .none:
             titleColor = UIColor.error
-            isPrimaryButtonEnabled = true
+            isPrimaryButtonEnabled = accountStatus != .failed
         case .pending:
             titleColor = UIColor.orange
             isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
