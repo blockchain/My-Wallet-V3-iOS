@@ -28,9 +28,8 @@ jobs:
       xcode: "10.0.0"
     environment:
       # Specifies which environment Fastlane should build against.
-      FASTLANE_LANE: staging
+      FASTLANE_LANE: dev
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: test
 
     # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
@@ -90,10 +89,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Fastlane
-          command: |
-            export LC_ALL=en_US.UTF-8
-            export LANG=en_US.UTF-8
-            bundle exec fastlane $FASTLANE_LANE
+          command: bundle exec fastlane $FASTLANE_LANE
       - store_artifacts:
           path: output
       - store_test_results:
