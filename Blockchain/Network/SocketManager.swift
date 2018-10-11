@@ -134,32 +134,43 @@ extension SocketManager: WebSocketAdvancedDelegate {
             return
         }
 
-        guard let type = json["event"] as? String else {
+        guard let channel = json["channel"] as? String else {
             onError("Event is not a string value")
             return
         }
 
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
-        switch type {
-        case "unsubscribed":
+        switch channel {
+        case "auth":
             onAcknowledge("Successfully unsubscribed. Payload: \(text)")
-        case "exchangeRate":
+        case "exchange_rate":
             Logger.shared.debug("Attempting to decode: \(text)")
             ExchangeRates.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-        case "currencyRatio":
-            Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-        case "currencyRatioError":
-            /// Though this is an error, we still decode the payload
-            /// as a `SocketMessage`, so it will use the `onSuccess`
-            /// closure and not the `onError`.
-            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "conversion":
+            if let event = json["event"] as? String, event == "updated" {
+                guard let type = json["type"] as? String else {
+                    Logger.shared.error("Incorrect type or type key not found: \(text)")
+                    return
+                }
+                switch type {
+                case "currencyRatio":
+                    Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+                case "currencyRatioError":
+                    /// Though this is an error, we still decode the payload
+                    /// as a `SocketMessage`, so it will use the `onSuccess`
+                    /// closure and not the `onError`.
+                    SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+                default:
+                    Logger.shared.error("Unsupported conversion type: \(text)")
+                }
+            }
         case "heartbeat", "subscribed", "authenticated":
             HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error":
             onError("Error returned: \(json)")
             SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         default:
-            onError("Unsupported type: '\(type)'")
+            onError("Unsupported channel: '\(channel)'")
         }
     }
 

@@ -204,7 +204,7 @@ extension MarketsService: ExchangeMarketsAPI {
         switch dataSource {
         case .socket:
             let params = ConversionSubscribeParams(
-                event: "conversionSpecification",
+                type: "conversionSpecification",
                 pair: model.pair.stringRepresentation,
                 fiatCurrency: model.fiatCurrencyCode,
                 fix: model.fix,
@@ -250,7 +250,7 @@ private extension MarketsService {
     func authenticateSocket() {
         let authenticationDisposable = authentication.getSessionToken(requestNewToken: true)
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
-                let params = AuthSubscribeParams(event: "auth", token: tokenResponse.token)
+                let params = AuthSubscribeParams(type: "auth", token: tokenResponse.token)
                 return Subscription(channel: "auth", params: params)
             }.map { message in
                 return SocketMessage(type: .exchange, JSONMessage: message)

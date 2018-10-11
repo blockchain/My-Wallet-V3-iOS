@@ -71,12 +71,12 @@ struct Subscription<SubscribeParams: Codable>: SocketMessageCodable {
 }
 
 struct AuthSubscribeParams: Codable {
-    let event: String
+    let type: String
     let token: String
 }
 
 struct ConversionSubscribeParams: Codable {
-    let event: String
+    let type: String
     let pair: String
     let fiatCurrency: String
     let fix: Fix
@@ -84,11 +84,11 @@ struct ConversionSubscribeParams: Codable {
 }
 
 struct AllCurrencyPairsUnsubscribeParams: Codable {
-    let event = "allCurrencyPairs"
+    let type = "allCurrencyPairs"
 }
 
 struct CurrencyPairsSubscribeParams: Codable {
-    let event = "exchangeRates"
+    let type = "exchangeRates"
     let pairs: [String]
 }
 
@@ -103,7 +103,7 @@ struct Unsubscription<UnsubscribeParams: Codable>: SocketMessageCodable {
 }
 
 struct ConversionPairUnsubscribeParams: Codable {
-    let event = "conversionPair"
+    let type = "conversionPair"
     let pair: String
 }
 
@@ -215,6 +215,7 @@ struct SocketError: SocketMessageCodable, Error {
     
     private enum CodingKeys: CodingKey {
         case event
+        case type
         case channel
         case error
         case code
@@ -234,8 +235,8 @@ struct SocketError: SocketMessageCodable, Error {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let eventValue = try container.decode(String.self, forKey: .event)
-        errorType = SocketErrorType(rawValue: eventValue)
+        let type = try container.decode(String.self, forKey: .type)
+        errorType = SocketErrorType(rawValue: type)
         channel = try container.decode(String.self, forKey: .channel)
         let errorContainer = try container.nestedContainer(keyedBy: ErrorKeys.self, forKey: .error)
         description = try errorContainer.decode(String.self, forKey: .description)
