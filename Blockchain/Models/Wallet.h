@@ -340,6 +340,7 @@
 
 - (BOOL)isBuyEnabled;
 - (BOOL)canUseSfox;
+- (BOOL)isLockboxEnabled;
 
 // Settings
 - (void)getAccountInfo;

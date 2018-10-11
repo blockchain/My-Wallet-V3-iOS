@@ -36,6 +36,9 @@
 
 #define DICTIONARY_KEY_CURRENCY @"currency"
 
+NSString * const kAccountInvitations = @"invited";
+NSString * const kLockboxInvitation = @"lockbox";
+
 @interface Wallet ()
 @property (nonatomic) JSContext *context;
 @property (nonatomic) BOOL isSettingDefaultAccount;
@@ -2407,6 +2410,17 @@
 - (BOOL)canUseSfox
 {
     return [[self.context evaluateScript:@"MyWalletPhone.canUseSfox()"] toBool];
+}
+
+- (BOOL)isLockboxEnabled
+{
+    if ([self.accountInfo objectForKey:kAccountInvitations]) {
+        NSDictionary *invitations = [self.accountInfo objectForKey:kAccountInvitations];
+        BOOL enabled = [invitations objectForKey:kLockboxInvitation];
+        return enabled;
+    } else {
+        return NO;
+    }
 }
 
 - (void)watchPendingTrades:(BOOL)shouldSync

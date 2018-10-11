@@ -63,6 +63,7 @@ class SideMenuPresenter {
 
     private func setMenuItems(showExchange: Bool) {
         var items: [SideMenuItem] = []
+        
         if wallet.isBuyEnabled() {
             items.append(.buyBitcoin)
         }
@@ -76,12 +77,19 @@ class SideMenuPresenter {
         }
         items.append(contentsOf: [
             .settings,
-            .accountsAndAddresses,
-            .lockbox,
-            .webLogin,
-            .support,
-            .logout
-        ])
+            .accountsAndAddresses
+            ]
+        )
+        if wallet.isLockboxEnabled() {
+            items.append(.lockbox)
+        }
+        items.append(
+            contentsOf: [
+                .webLogin,
+                .support,
+                .logout
+            ]
+        )
         view?.setMenu(items: items)
     }
 }
