@@ -12,8 +12,8 @@ class LockboxViewController: UIViewController {
 
     // MARK: Private Properties
 
-    private var lockboxIsAvailable: Bool {
-        return LockboxRepository().lockboxes().count == 0
+    private var hasSyncedLockbox: Bool {
+        return LockboxRepository().lockboxes().count > 0
     }
 
     // MARK: - IBOutlets
@@ -30,7 +30,6 @@ class LockboxViewController: UIViewController {
     @IBOutlet private var announcementCardImageView: UIImageView!
 
     @IBOutlet private var learnMoreLabel: UILabel!
-
     // MARK: - IBActions
 
     @IBAction func dismiss(_ sender: Any) {
@@ -38,7 +37,7 @@ class LockboxViewController: UIViewController {
     }
 
     @IBAction private func mainCardButtonTapped(_ sender: Any) {
-        if lockboxIsAvailable {
+        if hasSyncedLockbox {
             launchWebViewController(url: Constants.Url.blockchainWalletLogin, title: "Blockchain Wallet")
         } else {
             launchWebViewController(url: Constants.Url.lockbox, title: "Blockchain Lockbox")
@@ -54,7 +53,7 @@ class LockboxViewController: UIViewController {
 
         mainCardButton.layer.cornerRadius = 4
 
-        if lockboxIsAvailable {
+        if !hasSyncedLockbox {
             mainCardTitleLabel.text = LocalizationConstants.Lockbox.getYourLockbox
             mainCardDescriptionLabel.text = LocalizationConstants.Lockbox.safelyStoreYourLockbox
             mainCardImageView.image = #imageLiteral(resourceName: "Image-LockboxDevice")
@@ -67,6 +66,10 @@ class LockboxViewController: UIViewController {
         } else {
             mainCardTitleLabel.text = LocalizationConstants.Lockbox.balancesComingSoon
             mainCardDescriptionLabel.text = LocalizationConstants.Lockbox.balancesComingSoonSubtitle
+            mainCardDescriptionLabel.font = UIFont(
+                name: Constants.FontNames.montserratRegular,
+                size: Constants.FontSizes.Small
+            )
 
             mainCardImageView.image = #imageLiteral(resourceName: "Image-WebDashboard")
             mainCardButton.setTitle(LocalizationConstants.Lockbox.checkMyBalance, for: .normal)
