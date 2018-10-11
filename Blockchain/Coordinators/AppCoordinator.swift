@@ -223,8 +223,10 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         case .exchange:
             handleExchange()
         case .lockbox:
-            // TICKET: IOS-1397
-            return
+            let storyboard = UIStoryboard(name: "LockboxViewController", bundle: nil)
+            let lockboxViewController = storyboard.instantiateViewController(withIdentifier: "LockboxViewController") as! LockboxViewController
+            lockboxViewController.modalTransitionStyle = .coverVertical
+            UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(lockboxViewController, animated: true)
         }
     }
 

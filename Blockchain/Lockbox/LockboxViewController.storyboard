@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Lockbox View Controller-->
+        <scene sceneID="GB2-hH-UQV">
+            <objects>
+                <viewController storyboardIdentifier="LockboxViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fXY-oK-MrG" customClass="LockboxViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zh1-gM-VaR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aNa-vA-JRW">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.08235294118" green="0.2274509804" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bv-ZD-9LJ">
+                                <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                                <color key="barTintColor" red="0.082352941176470587" green="0.22745098039215686" blue="0.38431372549019605" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </textAttributes>
+                                <items>
+                                    <navigationItem title="Lockbox" id="h55-tN-9ay">
+                                        <barButtonItem key="rightBarButtonItem" image="close" id="Ye3-6h-AlI">
+                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="dismiss:" destination="fXY-oK-MrG" id="u6s-5Q-6Nu"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oj8-yZ-Cej" userLabel="Main Card View">
+                                <rect key="frame" x="16" y="104" width="343" height="350"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E5k-Im-feH" userLabel="Main Card Title Label">
+                                        <rect key="frame" x="121" y="32" width="101" height="25"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
+                                        <color key="textColor" red="0.0039215686274509803" green="0.29019607843137252" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Multi-Line Description Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ac-cw-vKG" userLabel="Main Card Description Label">
+                                        <rect key="frame" x="64" y="65" width="215" height="41.666666666666657"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                        <color key="textColor" red="0.37254901960784315" green="0.37254901960784315" blue="0.37254901960784315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="W0A-vj-BMy" userLabel="Main Card Image View">
+                                        <rect key="frame" x="80" y="129" width="183" height="129"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="W0A-vj-BMy" secondAttribute="height" multiplier="61:43" id="Aea-gJ-Owp"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tu3-rm-ykv" userLabel="Main Card Button">
+                                        <rect key="frame" x="24" y="282" width="295" height="44"/>
+                                        <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.89411764705882346" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="frx-RN-nMz"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="mainCardButtonTapped:" destination="fXY-oK-MrG" eventType="touchUpInside" id="8v0-Te-khA"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="W0A-vj-BMy" firstAttribute="top" relation="lessThanOrEqual" secondItem="7ac-cw-vKG" secondAttribute="bottom" constant="24" id="1fX-F3-AGU"/>
+                                    <constraint firstAttribute="trailing" secondItem="W0A-vj-BMy" secondAttribute="trailing" constant="80" id="A59-p8-ANc"/>
+                                    <constraint firstAttribute="width" secondItem="oj8-yZ-Cej" secondAttribute="height" multiplier="49:50" id="Nm1-BB-k2n"/>
+                                    <constraint firstAttribute="trailing" secondItem="7ac-cw-vKG" secondAttribute="trailing" constant="64" id="OAq-Ff-n1A"/>
+                                    <constraint firstItem="Tu3-rm-ykv" firstAttribute="leading" secondItem="oj8-yZ-Cej" secondAttribute="leading" constant="24" id="QSk-uU-Z9e"/>
+                                    <constraint firstAttribute="bottom" secondItem="Tu3-rm-ykv" secondAttribute="bottom" constant="24" id="RDR-xc-Wj7"/>
+                                    <constraint firstItem="W0A-vj-BMy" firstAttribute="leading" secondItem="oj8-yZ-Cej" secondAttribute="leading" constant="80" id="YMF-pm-0u1"/>
+                                    <constraint firstItem="7ac-cw-vKG" firstAttribute="leading" secondItem="oj8-yZ-Cej" secondAttribute="leading" constant="64" id="lBT-2f-pD9"/>
+                                    <constraint firstItem="E5k-Im-feH" firstAttribute="top" secondItem="oj8-yZ-Cej" secondAttribute="top" constant="32" id="nci-Cl-z9S"/>
+                                    <constraint firstItem="7ac-cw-vKG" firstAttribute="top" secondItem="E5k-Im-feH" secondAttribute="bottom" constant="8" id="t9f-ap-Kmm"/>
+                                    <constraint firstItem="E5k-Im-feH" firstAttribute="centerX" secondItem="oj8-yZ-Cej" secondAttribute="centerX" id="tTe-A9-YsV"/>
+                                    <constraint firstItem="Tu3-rm-ykv" firstAttribute="top" secondItem="W0A-vj-BMy" secondAttribute="bottom" constant="24" id="w6R-A2-NVd"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tu3-rm-ykv" secondAttribute="trailing" constant="24" id="xIQ-Yf-vOY"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4KV-fo-JpM" userLabel="Announcement Card View">
+                                <rect key="frame" x="16" y="470" width="343" height="150"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Title Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SQs-UU-ug1" userLabel="Announcement Card Title Label">
+                                        <rect key="frame" x="24" y="20" width="160" height="20"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
+                                        <color key="textColor" red="0.0039215686274509803" green="0.29019607843137252" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SVs-SB-5Fi" userLabel="Announcement Card Description Label">
+                                        <rect key="frame" x="24" y="48" width="160" height="86"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Multi-line description label. This label usually spans three lines.">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.37254901959999998" green="0.37254901959999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" size="14" name="Montserrat-Regular"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.2" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image-WebDashboardSlice" translatesAutoresizingMaskIntoConstraints="NO" id="dqx-F9-k0t" userLabel="Announcement Card Image View">
+                                        <rect key="frame" x="200" y="16" width="143" height="118"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="dqx-F9-k0t" secondAttribute="trailing" id="0c0-ef-zgd"/>
+                                    <constraint firstItem="dqx-F9-k0t" firstAttribute="top" secondItem="4KV-fo-JpM" secondAttribute="top" constant="16" id="1w4-VG-cVg"/>
+                                    <constraint firstAttribute="width" secondItem="4KV-fo-JpM" secondAttribute="height" multiplier="343:150" id="Bl0-Ms-ZcE"/>
+                                    <constraint firstItem="SQs-UU-ug1" firstAttribute="top" secondItem="4KV-fo-JpM" secondAttribute="top" constant="20" id="Oxe-kT-4GT"/>
+                                    <constraint firstItem="dqx-F9-k0t" firstAttribute="leading" secondItem="SQs-UU-ug1" secondAttribute="trailing" constant="16" id="Ptk-Pv-RLV"/>
+                                    <constraint firstItem="SVs-SB-5Fi" firstAttribute="top" secondItem="SQs-UU-ug1" secondAttribute="bottom" constant="8" id="VCR-Bx-Z4E"/>
+                                    <constraint firstItem="dqx-F9-k0t" firstAttribute="leading" secondItem="SVs-SB-5Fi" secondAttribute="trailing" constant="16" id="Va4-fl-oQ1"/>
+                                    <constraint firstItem="SQs-UU-ug1" firstAttribute="leading" secondItem="4KV-fo-JpM" secondAttribute="leading" constant="24" id="cqY-bK-YIm"/>
+                                    <constraint firstAttribute="bottom" secondItem="dqx-F9-k0t" secondAttribute="bottom" constant="16" id="dSy-Ie-gR7"/>
+                                    <constraint firstItem="SVs-SB-5Fi" firstAttribute="leading" secondItem="4KV-fo-JpM" secondAttribute="leading" constant="24" id="hkY-Ut-C0k"/>
+                                    <constraint firstAttribute="bottom" secondItem="SVs-SB-5Fi" secondAttribute="bottom" constant="16" id="shi-iT-1CG"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Want to learn more? Tap here to visit blockchain.com/lockbox" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="na8-9V-gdf" userLabel="Learn More Label">
+                                <rect key="frame" x="32" y="710" width="311" height="36"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="Vmy-hv-dAu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="CTq-N8-dzZ" appends="YES" id="thZ-Ie-WV6"/>
+                                </connections>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96470588235294119" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="4KV-fo-JpM" firstAttribute="leading" secondItem="Pv2-oD-KXS" secondAttribute="leading" constant="16" id="42u-UT-pdF"/>
+                            <constraint firstItem="aNa-vA-JRW" firstAttribute="top" secondItem="zh1-gM-VaR" secondAttribute="top" id="4nL-OA-WeE"/>
+                            <constraint firstItem="1Bv-ZD-9LJ" firstAttribute="top" secondItem="Pv2-oD-KXS" secondAttribute="top" id="5Xh-xv-erI"/>
+                            <constraint firstItem="oj8-yZ-Cej" firstAttribute="leading" secondItem="Pv2-oD-KXS" secondAttribute="leading" constant="16" id="7WH-OJ-vwt"/>
+                            <constraint firstItem="Pv2-oD-KXS" firstAttribute="trailing" secondItem="1Bv-ZD-9LJ" secondAttribute="trailing" id="Enj-GR-YZ7"/>
+                            <constraint firstItem="aNa-vA-JRW" firstAttribute="leading" secondItem="1Bv-ZD-9LJ" secondAttribute="leading" id="FPS-xi-mrp"/>
+                            <constraint firstItem="na8-9V-gdf" firstAttribute="leading" secondItem="Pv2-oD-KXS" secondAttribute="leading" constant="32" id="NqV-6M-Kgs"/>
+                            <constraint firstItem="4KV-fo-JpM" firstAttribute="top" secondItem="oj8-yZ-Cej" secondAttribute="bottom" constant="16" id="P84-5c-rbr"/>
+                            <constraint firstItem="aNa-vA-JRW" firstAttribute="bottom" secondItem="1Bv-ZD-9LJ" secondAttribute="top" id="TdX-PX-cyh"/>
+                            <constraint firstItem="oj8-yZ-Cej" firstAttribute="top" secondItem="1Bv-ZD-9LJ" secondAttribute="bottom" constant="16" id="bfc-Sd-jsp"/>
+                            <constraint firstItem="Pv2-oD-KXS" firstAttribute="trailing" secondItem="4KV-fo-JpM" secondAttribute="trailing" constant="16" id="fCM-rV-5AE"/>
+                            <constraint firstItem="Pv2-oD-KXS" firstAttribute="trailing" secondItem="na8-9V-gdf" secondAttribute="trailing" constant="32" id="jsM-hR-yox"/>
+                            <constraint firstItem="Pv2-oD-KXS" firstAttribute="trailing" secondItem="oj8-yZ-Cej" secondAttribute="trailing" constant="16" id="tQY-mS-no9"/>
+                            <constraint firstItem="Pv2-oD-KXS" firstAttribute="bottom" secondItem="na8-9V-gdf" secondAttribute="bottom" constant="32" id="uAQ-DD-Ag4"/>
+                            <constraint firstItem="aNa-vA-JRW" firstAttribute="trailing" secondItem="1Bv-ZD-9LJ" secondAttribute="trailing" id="uWb-Og-Zy5"/>
+                            <constraint firstItem="1Bv-ZD-9LJ" firstAttribute="leading" secondItem="Pv2-oD-KXS" secondAttribute="leading" id="v7q-Fb-Y5d"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Pv2-oD-KXS"/>
+                    </view>
+                    <connections>
+                        <outlet property="announcementCardDescriptionLabel" destination="SVs-SB-5Fi" id="I6T-tO-23s"/>
+                        <outlet property="announcementCardImageView" destination="dqx-F9-k0t" id="TPx-B4-9bx"/>
+                        <outlet property="announcementCardTitleLabel" destination="SQs-UU-ug1" id="QVP-Cu-mBN"/>
+                        <outlet property="announcementCardView" destination="4KV-fo-JpM" id="Wep-CA-0i8"/>
+                        <outlet property="learnMoreLabel" destination="na8-9V-gdf" id="iUf-rW-q5O"/>
+                        <outlet property="mainCardButton" destination="Tu3-rm-ykv" id="yG2-UA-JfG"/>
+                        <outlet property="mainCardDescriptionLabel" destination="7ac-cw-vKG" id="3jw-Y9-OOw"/>
+                        <outlet property="mainCardImageView" destination="W0A-vj-BMy" id="lZ9-xm-mJM"/>
+                        <outlet property="mainCardTitleLabel" destination="E5k-Im-feH" id="Y1e-2F-qE2"/>
+                        <outlet property="mainCardView" destination="oj8-yZ-Cej" id="rgb-Zp-B4R"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gj8-0q-8Xk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="CTq-N8-dzZ">
+                    <connections>
+                        <action selector="onFooterTapped:" destination="fXY-oK-MrG" id="K1Q-UA-9GS"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-98.400000000000006" y="-6.6502463054187197"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Image-WebDashboardSlice" width="126" height="123"/>
+        <image name="close" width="18" height="18"/>
+    </resources>
+</document>
