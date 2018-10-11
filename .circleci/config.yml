@@ -87,6 +87,18 @@ jobs:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - restore_cache:
+          keys:
+            - pods-cache-{{ checksum "Podfile.lock" }}
+      - run:
+          name: Install Pods
+          command: |
+            pod repo update
+            pod install
+      - save_cache:
+          key: pods-cache-{{ checksum "Podfile.lock" }}
+          paths:
+            - ~/.cocoapods
       - run:
           name: Fastlane
           command: |
