@@ -74,19 +74,19 @@ import UIKit
         let busyLabel = setUpBusyLabel(with: textWithSpinnerView.bounds)
         textWithSpinnerView.addSubview(busyLabel)
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let spinner = UIActivityIndicatorView(style: .gray)
         let posX = textWithSpinnerView.bounds.origin.x + textWithSpinnerView.bounds.size.width / 2
         let posY = textWithSpinnerView.bounds.origin.y + textWithSpinnerView.bounds.size.height/2 - 15
         spinner.center = CGPoint(x: posX, y: posY)
         textWithSpinnerView.addSubview(spinner)
-        textWithSpinnerView.bringSubview(toFront: spinner)
+        textWithSpinnerView.bringSubviewToFront(spinner)
         spinner.startAnimating()
 
         busyView!.containerView = textWithSpinnerView
         busyView!.fadeOut()
 
         view.addSubview(busyView!)
-        view.bringSubview(toFront: busyView!)
+        view.bringSubviewToFront(busyView!)
 
         NotificationCenter.default.addObserver(
         self, selector: #selector(didSucceedSync),
@@ -106,14 +106,14 @@ import UIKit
             closeButton.imageEdgeInsets = UIEdgeInsets(top: 3, left: 8, bottom: 0, right: 18)
             closeButton.contentHorizontalAlignment = .right
             closeButton.center = CGPoint(x: closeButton.center.x, y: headerLabel!.center.y)
-            closeButton.setImage(UIImage(named: "close"), for: UIControlState())
+            closeButton.setImage(UIImage(named: "close"), for: UIControl.State())
         } else {
             closeButton.frame = CGRect(x: 0, y: 12, width: 85, height: 51)
             closeButton.center = CGPoint(x: closeButton.center.x, y: topBar.frame.size.height/2)
-            closeButton.setTitle("", for: UIControlState())
+            closeButton.setTitle("", for: UIControl.State())
             closeButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 0, right: 0)
             closeButton.contentHorizontalAlignment = .left
-            closeButton.setImage(UIImage(named: "back_chevron_icon"), for: UIControlState())
+            closeButton.setImage(UIImage(named: "back_chevron_icon"), for: UIControl.State())
         }
     }
 
@@ -129,7 +129,7 @@ import UIKit
     }
 
     func setUpCloseButton(useSafeAreas: Bool) {
-        closeButton = UIButton(type: UIButtonType.custom)
+        closeButton = UIButton(type: UIButton.ButtonType.custom)
         closeButton.contentHorizontalAlignment = .left
         closeButton.titleLabel?.font = UIFont.systemFont(ofSize: Constants.FontSizes.Medium)
         closeButton.setTitleColor(UIColor(white: 0.56, alpha: 1.0), for: .highlighted)

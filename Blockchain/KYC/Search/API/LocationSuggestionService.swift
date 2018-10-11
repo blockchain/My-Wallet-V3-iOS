@@ -41,7 +41,7 @@ class LocationSuggestionService: NSObject, LocationSuggestionAPI {
         let completion = completer.results.first(where: {$0.title == suggestion.title && $0.subtitle == suggestion.subtitle})
         guard let selection = completion else { return }
 
-        let request = MKLocalSearchRequest(completion: selection)
+        let request = MKLocalSearch.Request(completion: selection)
         let search = MKLocalSearch(request: request)
         search.start { (response, error) in
             guard error == nil, let result = response else { return }

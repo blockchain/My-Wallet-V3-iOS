@@ -91,8 +91,8 @@ import Foundation
         for window in UIApplication.shared.windows.reversed() {
             let onMainScreen    = window.screen == UIScreen.main
             let isVisible       = !window.isHidden && window.alpha > 0
-            let levelIsNormal   = window.windowLevel == UIWindowLevelNormal
-            let levelIsStatus   = window.windowLevel == UIWindowLevelStatusBar
+            let levelIsNormal   = window.windowLevel == UIWindow.Level.normal
+            let levelIsStatus   = window.windowLevel == UIWindow.Level.statusBar
 
             if onMainScreen && isVisible && (levelIsNormal || levelIsStatus) {
                 window.addSubview(busyView)

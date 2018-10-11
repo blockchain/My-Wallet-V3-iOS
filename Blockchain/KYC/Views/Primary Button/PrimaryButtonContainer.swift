@@ -79,7 +79,7 @@ public class PrimaryButton: UIButton {
         backgroundColor = UIColor.brandSecondary
     }
 
-    override public func setTitle(_ title: String?, for state: UIControlState) {
+    override public func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         titleLabel?.text = title
     }

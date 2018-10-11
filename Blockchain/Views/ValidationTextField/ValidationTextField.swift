@@ -80,8 +80,8 @@ class ValidationTextField: NibBasedView {
                 ) ?? UIFont.systemFont(ofSize: 16)
             let value = NSAttributedString(
                 string: placeholder,
-                attributes: [NSAttributedStringKey.font: font,
-                             NSAttributedStringKey.foregroundColor: placeholderFillColor
+                attributes: [NSAttributedString.Key.font: font,
+                             NSAttributedString.Key.foregroundColor: placeholderFillColor
                 ])
             textField.attributedPlaceholder = value
         }

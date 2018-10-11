@@ -39,7 +39,7 @@ class ExchangeDetailHeaderView: UICollectionReusableView {
         guard let titleFont = UIFont(name: Constants.FontNames.montserratRegular, size: 32.0) else { return 0.0 }
         let attributedTitle = NSAttributedString(
             string: title,
-            attributes: [NSAttributedStringKey.font: titleFont]
+            attributes: [NSAttributedString.Key.font: titleFont]
         )
         return attributedTitle.height + verticalPadding + verticalPadding
     }

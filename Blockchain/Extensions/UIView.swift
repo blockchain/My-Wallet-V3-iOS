@@ -17,7 +17,7 @@ extension UIView {
         guard layer.animationKeys() == nil else { return }
         
         let translation = CAKeyframeAnimation(keyPath: "transform.translation.x");
-        translation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        translation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         translation.values = [-10, 10, -10, 10, -5, 5, -5, 5, -3, 3, -2, 2, 0]
         translation.duration = duration
         

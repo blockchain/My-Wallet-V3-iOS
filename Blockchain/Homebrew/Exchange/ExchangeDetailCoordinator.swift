@@ -98,9 +98,9 @@ class ExchangeDetailCoordinator: NSObject {
                     ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
                     string: LocalizationConstants.Exchange.amountVariation +  " \n\n " + LocalizationConstants.Exchange.orderStartDisclaimer,
-                    attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
-                                 NSAttributedStringKey.font: attributedTextFont,
-                                 NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                    attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
+                                 NSAttributedString.Key.font: attributedTextFont,
+                                 NSAttributedString.Key.paragraphStyle: paragraphStyle]
                 )
                 
                 let text = ExchangeCellModel.Text(
@@ -173,9 +173,9 @@ class ExchangeDetailCoordinator: NSObject {
                     ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
                 let attributedText = NSAttributedString(
                     string: LocalizationConstants.Exchange.amountVariation +  " \n\n " + LocalizationConstants.Exchange.orderStartDisclaimer,
-                    attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                 NSAttributedStringKey.font: attributedTextFont,
-                                 NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                    attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                 NSAttributedString.Key.font: attributedTextFont,
+                                 NSAttributedString.Key.paragraphStyle: paragraphStyle]
                 )
 
                 let text = ExchangeCellModel.Text(
@@ -274,9 +274,9 @@ class ExchangeDetailCoordinator: NSObject {
                         ?? UIFont.systemFont(ofSize: 12.0, weight: .regular)
                     let attributedText = NSAttributedString(
                         string: description,
-                        attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
-                                     NSAttributedStringKey.font: attributedTextFont,
-                                     NSAttributedStringKey.paragraphStyle: paragraphStyle]
+                        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.64, green: 0.64, blue: 0.64, alpha: 1),
+                                     NSAttributedString.Key.font: attributedTextFont,
+                                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
                     )
 
                     let text = ExchangeCellModel.Text(

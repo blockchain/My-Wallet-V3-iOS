@@ -111,11 +111,11 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
     func updatePreviousWordButton() {
         if wordsPageControl.currentPage == 0 {
             previousWordButton.isEnabled = false
-            previousWordButton.setTitleColor(UIColor.darkGray, for: UIControlState())
+            previousWordButton.setTitleColor(UIColor.darkGray, for: UIControl.State())
             previousWordButton.backgroundColor = .gray1
         } else {
             previousWordButton.isEnabled = true
-            previousWordButton.setTitleColor(UIColor.white, for: UIControlState())
+            previousWordButton.setTitleColor(UIColor.white, for: UIControl.State())
             previousWordButton.backgroundColor = .brandSecondary
         }
     }
@@ -148,12 +148,12 @@ class BackupWordsViewController: UIViewController, SecondPasswordDelegate, UIScr
         if let count = wordLabels?.count {
             if wordsPageControl.currentPage == count-1 {
                 nextWordButton.backgroundColor = .brandPrimary
-                nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
-                nextWordButton.setTitle(NSLocalizedString("Done", comment: ""), for: UIControlState())
+                nextWordButton.setTitleColor(UIColor.white, for: UIControl.State())
+                nextWordButton.setTitle(NSLocalizedString("Done", comment: ""), for: UIControl.State())
             } else if wordsPageControl.currentPage == count-2 {
                 nextWordButton.backgroundColor = .brandSecondary
-                nextWordButton.setTitleColor(UIColor.white, for: UIControlState())
-                nextWordButton.setTitle(NSLocalizedString("NEXT", comment: ""), for: UIControlState())
+                nextWordButton.setTitleColor(UIColor.white, for: UIControl.State())
+                nextWordButton.setTitle(NSLocalizedString("NEXT", comment: ""), for: UIControl.State())
             }
             updatePreviousWordButton()
         }

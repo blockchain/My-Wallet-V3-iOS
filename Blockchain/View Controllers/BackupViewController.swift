@@ -26,7 +26,7 @@ import UIKit
     }
 
     func setUpBackupWalletButton() {
-        backupWalletButton.setTitle(NSLocalizedString("BACKUP FUNDS", comment: ""), for: UIControlState())
+        backupWalletButton.setTitle(NSLocalizedString("BACKUP FUNDS", comment: ""), for: UIControl.State())
         backupWalletButton.titleLabel?.adjustsFontSizeToFitWidth = true
         backupWalletButton.contentHorizontalAlignment = .center
         backupWalletButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -51,14 +51,14 @@ import UIKit
         explanation.text = String(
             format: "%@\n\n%@", recoveryPhraseText,
             NSLocalizedString("Be sure to write down your phrase on a piece of paper and keep it somewhere safe and secure.", comment: ""))
-        backupWalletButton.setTitle(NSLocalizedString("START BACKUP", comment: ""), for: UIControlState())
+        backupWalletButton.setTitle(NSLocalizedString("START BACKUP", comment: ""), for: UIControl.State())
 
         if wallet!.isRecoveryPhraseVerified() {
             summaryLabel.text = NSLocalizedString("Backup Complete", comment: "")
             explanation.text = NSLocalizedString("Use your Recovery Phrase to restore your funds in case of a lost password.  Anyone with access to your Recovery Phrase can access your funds, so keep it offline somewhere safe and secure.", comment: "")
             backupIconImageView.image = UIImage(named: "success")?.withRenderingMode(.alwaysTemplate)
             backupIconImageView.tintColor = .green
-            backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControlState())
+            backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControl.State())
 
             if wallet!.didUpgradeToHd() &&
                 wallet!.getTotalBalanceForSpendableActiveLegacyAddresses() >= wallet!.dust() &&
@@ -87,9 +87,9 @@ import UIKit
         super.viewDidLayoutSubviews()
         finalHeight = view.frame.size.height
         if wallet!.isRecoveryPhraseVerified() {
-            backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControlState())
+            backupWalletButton.setTitle(NSLocalizedString("BACKUP AGAIN", comment: ""), for: UIControl.State())
         } else {
-            backupWalletButton.setTitle(NSLocalizedString("START BACKUP", comment: ""), for: UIControlState())
+            backupWalletButton.setTitle(NSLocalizedString("START BACKUP", comment: ""), for: UIControl.State())
         }
     }
 

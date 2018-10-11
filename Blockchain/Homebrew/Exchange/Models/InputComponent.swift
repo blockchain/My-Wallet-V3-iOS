@@ -46,7 +46,7 @@ extension InputComponent {
             
             let font = style.type == .fiat ? style.secondaryFont : style.primaryFont
             
-            var attributes: [NSAttributedStringKey: Any] = [.font: font]
+            var attributes: [NSAttributedString.Key: Any] = [.font: font]
             if style.type == .fiat {
                 attributes[.baselineOffset] = offset
             }
@@ -60,7 +60,7 @@ extension InputComponent {
             let font = style.type == .fiat ? style.secondaryFont : style.primaryFont
             let color = style.type == .fiat ? style.pendingColor : style.textColor
             
-            var attributes: [NSAttributedStringKey: Any] = [.font: font,
+            var attributes: [NSAttributedString.Key: Any] = [.font: font,
                                                             .foregroundColor: color]
             if style.type == .fiat {
                 attributes[.baselineOffset] = offset

@@ -35,7 +35,7 @@ import UIKit
     @IBInspectable var nibName: String? = "ToggleCell"
     @IBInspectable var cellTitle: String!
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
@@ -103,7 +103,7 @@ import UIKit
         styleCell()
         mockCell()
     }
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value1, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder aDecoder: NSCoder) {

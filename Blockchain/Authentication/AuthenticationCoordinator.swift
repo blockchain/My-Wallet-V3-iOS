@@ -254,7 +254,7 @@ import RxSwift
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.Authentication.forgetWallet, style: .default) { [unowned self] _ in
                 Logger.shared.info("Forgetting wallet")
-                ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+                ModalPresenter.shared.closeModal(withTransition: convertFromCATransitionType(CATransitionType.fade))
                 self.walletManager.forgetWallet()
                 OnboardingCoordinator.shared.start()
                 // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
@@ -458,7 +458,7 @@ import RxSwift
                 return
             }
 
-            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+            ModalPresenter.shared.closeModal(withTransition: convertFromCATransitionType(CATransitionType.fade))
 
             if isLoadingShown { loadingViewPresenter.showBusyView(withLoadingText: loadingViewPresenter.currentLoadingText!) }
 
@@ -657,4 +657,9 @@ extension AuthenticationCoordinator: WalletSecondPasswordDelegate {
                             }
         )
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCATransitionType(_ input: CATransitionType) -> String {
+	return input.rawValue
 }

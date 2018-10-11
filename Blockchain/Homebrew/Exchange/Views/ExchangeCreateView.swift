@@ -140,7 +140,7 @@ private extension ExchangeCreateView {
         amountView.addSubview(assetToggleButton)
         self.assetToggleButton = assetToggleButton
 
-        spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        spinner = UIActivityIndicatorView(style: .gray)
         spinner!.center = assetToggleButton.center
         amountView.addSubview(spinner!)
         spinner!.isHidden = true

@@ -12,15 +12,15 @@ class LocationSuggestionCell: UITableViewCell {
 
     func configure(with suggestion: LocationSuggestion) {
         
-        let titleAttributes = [NSAttributedStringKey.font: LocationSuggestionCell.titleFont(),
-                               NSAttributedStringKey.foregroundColor: UIColor.gray5]
-        let titleHighlightedAttributes = [NSAttributedStringKey.font: LocationSuggestionCell.highlightedTitleFont(),
-                                          NSAttributedStringKey.foregroundColor: UIColor.gray5]
+        let titleAttributes = [NSAttributedString.Key.font: LocationSuggestionCell.titleFont(),
+                               NSAttributedString.Key.foregroundColor: UIColor.gray5]
+        let titleHighlightedAttributes = [NSAttributedString.Key.font: LocationSuggestionCell.highlightedTitleFont(),
+                                          NSAttributedString.Key.foregroundColor: UIColor.gray5]
 
-        let subtitleAttributes = [NSAttributedStringKey.font: LocationSuggestionCell.subtitleFont(),
-                                  NSAttributedStringKey.foregroundColor: UIColor.gray5]
-        let subtitleHighlightedAttributes = [NSAttributedStringKey.font: LocationSuggestionCell.highlightedSubtitleFont(),
-                                             NSAttributedStringKey.foregroundColor: UIColor.gray5]
+        let subtitleAttributes = [NSAttributedString.Key.font: LocationSuggestionCell.subtitleFont(),
+                                  NSAttributedString.Key.foregroundColor: UIColor.gray5]
+        let subtitleHighlightedAttributes = [NSAttributedString.Key.font: LocationSuggestionCell.highlightedSubtitleFont(),
+                                             NSAttributedString.Key.foregroundColor: UIColor.gray5]
 
         let attributedTitle = NSMutableAttributedString(string: suggestion.title, attributes: titleAttributes)
         let attributedSubtitle = NSMutableAttributedString(string: suggestion.subtitle, attributes: subtitleAttributes)

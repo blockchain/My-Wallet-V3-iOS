@@ -22,7 +22,7 @@ class ExchangeDetailCell: UICollectionViewCell {
     /// Implements initial cell accessibility property values.
     internal func applyAccessibility() {
         isAccessibilityElement = true
-        accessibilityTraits = UIAccessibilityTraitNone
+        accessibilityTraits = UIAccessibilityTraits.none
         shouldGroupAccessibilityChildren = false
     }
 }

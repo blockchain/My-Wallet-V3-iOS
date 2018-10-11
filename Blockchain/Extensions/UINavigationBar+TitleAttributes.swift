@@ -10,11 +10,11 @@ import Foundation
 
 extension UINavigationBar {
     @objc static let standardTitleTextAttributes = [
-        NSAttributedStringKey.font: UIFont(name: "Montserrat-Regular", size: 20)!,
-        NSAttributedStringKey.foregroundColor: UIColor.white
+        NSAttributedString.Key.font: UIFont(name: "Montserrat-Regular", size: 20)!,
+        NSAttributedString.Key.foregroundColor: UIColor.white
     ]
     @objc static let largeTitleTextAttributes = [
-        NSAttributedStringKey.font: UIFont(name: "Montserrat-Regular", size: 23)!,
-        NSAttributedStringKey.foregroundColor: UIColor.white
+        NSAttributedString.Key.font: UIFont(name: "Montserrat-Regular", size: 23)!,
+        NSAttributedString.Key.foregroundColor: UIColor.white
     ]
 }

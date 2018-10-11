@@ -29,7 +29,7 @@ import Foundation
         )
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.goToSettings, style: .default) { _ in
-                guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else { return }
+                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
                 UIApplication.shared.open(settingsURL)
             }
         )

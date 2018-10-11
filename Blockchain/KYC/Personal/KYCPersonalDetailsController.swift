@@ -139,7 +139,7 @@ final class KYCPersonalDetailsController: KYCBaseViewController,
     }
 
     fileprivate func setupNotifications() {
-        NotificationCenter.when(.UIKeyboardWillHide) { [weak self] _ in
+        NotificationCenter.when(UIResponder.keyboardWillHideNotification) { [weak self] _ in
             self?.scrollView.setContentOffset(.zero, animated: true)
         }
     }

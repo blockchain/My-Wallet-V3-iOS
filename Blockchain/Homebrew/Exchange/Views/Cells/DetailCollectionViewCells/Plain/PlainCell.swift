@@ -50,12 +50,12 @@ class PlainCell: ExchangeDetailCell {
         guard case let .plain(payload) = model else { return 0.0 }
         let description = NSAttributedString(
             string: payload.description,
-            attributes: [NSAttributedStringKey.font: standardFont()]
+            attributes: [NSAttributedString.Key.font: standardFont()]
         )
         
         let value = NSAttributedString(
             string: payload.value,
-            attributes: [NSAttributedStringKey.font: standardFont()]
+            attributes: [NSAttributedString.Key.font: standardFont()]
         )
         
         let availableWidth = width - horizontalPadding - description.width

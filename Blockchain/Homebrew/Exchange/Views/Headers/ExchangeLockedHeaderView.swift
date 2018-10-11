@@ -40,7 +40,7 @@ class ExchangeLockedHeaderView: UICollectionReusableView {
         let attributedTitle = NSAttributedString(
             string: LocalizationConstants.Exchange.exchangeLocked,
             attributes: [
-                NSAttributedStringKey.font: titleFont
+                NSAttributedString.Key.font: titleFont
             ]
         )
         return verticalPadding + attributedTitle.height

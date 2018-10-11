@@ -24,7 +24,7 @@ class ExchangeListHeaderView: UITableViewHeaderFooterView {
         let header = LocalizationConstants.Exchange.orderHistory
         guard let headerFont = UIFont(name: Constants.FontNames.montserratRegular, size: 12) else { return 0.0 }
         
-        let headerHeight = NSAttributedString(string: header, attributes: [NSAttributedStringKey.font: headerFont]).height
+        let headerHeight = NSAttributedString(string: header, attributes: [NSAttributedString.Key.font: headerFont]).height
         return verticalPadding + headerHeight
     }
     

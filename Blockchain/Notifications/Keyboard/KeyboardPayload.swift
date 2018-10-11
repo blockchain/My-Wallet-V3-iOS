@@ -12,14 +12,14 @@ struct KeyboardPayload {
     let startingFrame: CGRect
     let endingFrame: CGRect
     let animationDuration: TimeInterval
-    let animationCurve: UIViewAnimationCurve
+    let animationCurve: UIView.AnimationCurve
 
     init(notification: Notification) {
         let payload = notification.userInfo
-        startingFrame = payload?[UIKeyboardFrameBeginUserInfoKey] as? CGRect ?? .zero
-        endingFrame = payload?[UIKeyboardFrameEndUserInfoKey] as? CGRect ?? .zero
-        animationDuration = payload?[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-        let value: NSNumber = payload?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber ?? .init(value: 7)
-        animationCurve = UIViewAnimationCurve(rawValue: value.intValue) ?? .linear
+        startingFrame = payload?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect ?? .zero
+        endingFrame = payload?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
+        animationDuration = payload?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
+        let value: NSNumber = payload?[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber ?? .init(value: 7)
+        animationCurve = UIView.AnimationCurve(rawValue: value.intValue) ?? .linear
     }
 }

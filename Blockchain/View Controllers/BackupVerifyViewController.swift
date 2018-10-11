@@ -70,7 +70,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
 
     override func viewDidAppear(_ animated: Bool) {
         verifyButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 46))
-        verifyButton?.setTitle(NSLocalizedString("Verify", comment: ""), for: UIControlState())
+        verifyButton?.setTitle(NSLocalizedString("Verify", comment: ""), for: UIControl.State())
         verifyButton?.setTitle(NSLocalizedString("Verify", comment: ""), for: .disabled)
         verifyButton?.backgroundColor = .gray1
         verifyButton?.setTitleColor(UIColor.lightGray, for: .disabled)
@@ -172,7 +172,7 @@ class BackupVerifyViewController: UIViewController, UITextFieldDelegate, SecondP
         if !word1.text!.isEmpty && !word2.text!.isEmpty && !word3.text!.isEmpty {
             verifyButton?.backgroundColor = .brandSecondary
             verifyButton?.isEnabled = true
-            verifyButton?.setTitleColor(UIColor.white, for: UIControlState())
+            verifyButton?.setTitleColor(UIColor.white, for: UIControl.State())
         } else if word1.text!.isEmpty || word2.text!.isEmpty || word3.text!.isEmpty {
             verifyButton?.backgroundColor = .gray1
             verifyButton?.isEnabled = false

@@ -22,7 +22,7 @@ import UIKit
             return
         }
         addAttribute(
-            NSAttributedStringKey.foregroundColor,
+            NSAttributedString.Key.foregroundColor,
             value: color,
             range: NSRange(range, in: string)
         )
@@ -48,7 +48,7 @@ public extension NSAttributedString {
 
     public func fontAttribute() -> UIFont? {
         guard length > 0 else { return nil }
-        guard let font = attribute(NSAttributedStringKey.font, at: 0, effectiveRange: nil) as? UIFont else { return nil }
+        guard let font = attribute(NSAttributedString.Key.font, at: 0, effectiveRange: nil) as? UIFont else { return nil }
         return font
     }
 
@@ -61,7 +61,7 @@ public extension NSAttributedString {
     public func withFont(_ font: UIFont) -> NSAttributedString {
         if fontAttribute() == .none {
             let copy = NSMutableAttributedString(attributedString: self)
-            copy.addAttribute(NSAttributedStringKey.font, value: font, range: NSMakeRange(0, copy.length))
+            copy.addAttribute(NSAttributedString.Key.font, value: font, range: NSMakeRange(0, copy.length))
             return copy
         }
         return copy() as! NSAttributedString

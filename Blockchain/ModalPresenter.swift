@@ -44,8 +44,8 @@ typealias OnModalResumed = () -> Void
 
         let animation = CATransition()
         animation.duration = Constants.Animation.duration
-        animation.type = kCATransitionFade
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.type = CATransitionType.fade
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
 
         UIApplication.shared.keyWindow?.layer.add(animation, forKey: AnimationKeys.hideModal)
 
@@ -80,13 +80,13 @@ typealias OnModalResumed = () -> Void
         // The movement based ones can have a subType to set which direction the movement is in.
         // In case the transition parameter is a direction, we use the MoveIn transition and the transition
         // parameter as the direction, otherwise we use the transition parameter as the transition type.
-        if transition != kCATransitionFade {
-            animation.type = kCATransitionMoveIn
-            animation.subtype = transition
+        if transition != convertFromCATransitionType(CATransitionType.fade) {
+            animation.type = CATransitionType.moveIn
+            animation.subtype = convertToOptionalCATransitionSubtype(transition)
         } else {
-            animation.type = transition
+            animation.type = convertToCATransitionType(transition)
         }
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         UIApplication.shared.keyWindow?.layer.add(animation, forKey: AnimationKeys.hideModal)
 
         modalView.onDismiss?()
@@ -162,13 +162,13 @@ typealias OnModalResumed = () -> Void
         animation.duration = Constants.Animation.duration
 
         if closeType == ModalCloseTypeBack {
-            animation.type = kCATransitionMoveIn
-            animation.subtype = kCATransitionFromRight
+            animation.type = CATransitionType.moveIn
+            animation.subtype = CATransitionSubtype.fromRight
         } else {
-            animation.type = kCATransitionFade
+            animation.type = CATransitionType.fade
         }
 
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         topMostView?.layer.add(animation, forKey: AnimationKeys.showModal)
 
         modalView = modalViewToShow
@@ -180,4 +180,20 @@ typealias OnModalResumed = () -> Void
         static let showModal = "ShowModal"
         static let hideModal = "HideModal"
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCATransitionType(_ input: CATransitionType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCATransitionSubtype(_ input: String?) -> CATransitionSubtype? {
+	guard let input = input else { return nil }
+	return CATransitionSubtype(rawValue: input)
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCATransitionType(_ input: String) -> CATransitionType {
+	return CATransitionType(rawValue: input)
 }

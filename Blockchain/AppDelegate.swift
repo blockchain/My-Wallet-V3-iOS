@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return nil
     }()
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
 
         BlockchainSettings.App.shared.appBecameActiveCount += 1
@@ -189,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
         let urlString = url.absoluteString
 
@@ -211,14 +211,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if urlScheme == Constants.Schemes.blockchain {
-            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+            ModalPresenter.shared.closeModal(withTransition: convertFromCATransitionType(CATransitionType.fade))
             return true
         }
 
         // Handle "bitcoin://" scheme
         if let bitcoinUrlPayload = BitcoinURLPayload(url: url) {
 
-            ModalPresenter.shared.closeModal(withTransition: kCATransitionFade)
+            ModalPresenter.shared.closeModal(withTransition: convertFromCATransitionType(CATransitionType.fade))
 
             AuthenticationCoordinator.shared.postAuthenticationRoute = .sendCoins
 
@@ -309,4 +309,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         privacyScreen?.alpha = 1
         UIApplication.shared.keyWindow?.addSubview(privacyScreen!)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCATransitionType(_ input: CATransitionType) -> String {
+	return input.rawValue
 }
