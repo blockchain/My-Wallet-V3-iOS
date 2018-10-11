@@ -134,8 +134,8 @@ extension SocketManager: WebSocketAdvancedDelegate {
             return
         }
 
-        guard let type = json["type"] as? String else {
-            onError("Type is not a string value")
+        guard let type = json["event"] as? String else {
+            onError("Event is not a string value")
             return
         }
 
