@@ -57,6 +57,8 @@ AppSettingsController, UITextFieldDelegate, EmailDelegate, WalletAccountInfoDele
     let walletManager: WalletManager
     
     var disposable: Disposable?
+    internal var nabuUser: NabuUser?
+    internal var didFetchNabuUser = false
     
     @IBOutlet var touchIDAsPin: SettingsToggleTableViewCell!
     @IBOutlet var swipeToReceive: SettingsToggleTableViewCell!
