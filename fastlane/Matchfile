@@ -1,9 +1,6 @@
 git_url("https://github.com/blockchain/wallet-ios-credentials")
 
-type("development") # The default type, can be: appstore, adhoc, enterprise or development
+type("appstore") # The default type, can be: appstore, adhoc, enterprise or development
 
 app_identifier(["com.rainydayapps.Blockchain", "com.rainydayapps.Blockchain.dev", "com.rainydayapps.Blockchain.staging"])
 username("ios-team@blockchain.com") # Your Apple Developer Portal username
-
-# For all available options run `fastlane match --help`
-# Remove the # in the beginning of the line to enable the other options
