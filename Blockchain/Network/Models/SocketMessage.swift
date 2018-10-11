@@ -84,11 +84,11 @@ struct ConversionSubscribeParams: Codable {
 }
 
 struct AllCurrencyPairsUnsubscribeParams: Codable {
-    let type = "allCurrencyPairs"
+    let event = "allCurrencyPairs"
 }
 
 struct CurrencyPairsSubscribeParams: Codable {
-    let type = "exchangeRates"
+    let event = "exchangeRates"
     let pairs: [String]
 }
 
