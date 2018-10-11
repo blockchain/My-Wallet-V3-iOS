@@ -789,12 +789,7 @@ struct LocalizationConstants {
             comment: "Title displayed to the user when they have a synced lockbox."
         )
         static let balancesComingSoonSubtitle = NSLocalizedString(
-            """
-                We are unable to display your Lockbox balance at this time.
-                Don’t worry, your funds are safe. We’ll be adding this feature soon.
-                While you wait, you can check your balance on the web.
-            """
-            ,
+            "We are unable to display your Lockbox balance at this time. Don’t worry, your funds are safe. We’ll be adding this feature soon. While you wait, you can check your balance on the web.",
             comment: "Subtitle display to the user when they have a synced lockbox."
         )
         static let checkMyBalance = NSLocalizedString(
