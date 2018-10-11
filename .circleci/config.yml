@@ -104,7 +104,8 @@ jobs:
           command: |
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
-            fastlane sigh download_all --download_xcode_profiles
+            sudo gem install fastlane
+            bundle exec fastlane sigh download_all --download_xcode_profiles
             bundle exec fastlane $FASTLANE_LANE
       - store_artifacts:
           path: output
