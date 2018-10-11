@@ -48,6 +48,7 @@ class SideMenuViewController: UIViewController {
             target: AppCoordinator.shared,
             action: #selector(AppCoordinator.toggleSideMenu)
         )
+        registerCells()
         initializeTableView()
         addShadow()
     }
@@ -71,6 +72,11 @@ class SideMenuViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    
+    private func registerCells() {
+        let nib = UINib(nibName: SideMenuCell.identifier, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: SideMenuCell.identifier)
+    }
 
     private func initializeTableView() {
         tableView.dataSource = self
@@ -132,7 +138,7 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let sideMenuCell = tableView.dequeueReusableCell(withIdentifier: "SideMenuCell") as? SideMenuCell else {
+        guard let sideMenuCell = tableView.dequeueReusableCell(withIdentifier: SideMenuCell.identifier) as? SideMenuCell else {
             Logger.shared.debug("Could not get SideMenuCell")
             return UITableViewCell()
         }
@@ -143,6 +149,7 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = sideMenuItems[indexPath.row]
         delegate?.sideMenuViewController(self, didTapOn: item)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

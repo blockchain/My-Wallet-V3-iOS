@@ -151,17 +151,18 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let symbol = model.fiatCurrencySymbol
         let suffix = model.pair.from.symbol
         
-        let secondaryAmount = conversions.output.count == 0 ? "0.00": conversions.output
+        let secondaryAmount = conversions.output == "0" ? "0.00": conversions.output
         let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
+        let primaryOffset = inputs.estimatedSymbolWidth(currencySymbol: symbol, template: output.styleTemplate())
 
         if model.isUsingFiat {
             let primary = inputs.primaryFiatAttributedString(currencySymbol: symbol)
-            output.updatedInput(primary: primary, secondary: conversions.output)
+            output.updatedInput(primary: primary, secondary: secondaryResult, primaryOffset: -primaryOffset)
         } else {
             let assetType = model.isUsingBase ? model.pair.from : model.pair.to
             let symbol = assetType.symbol
             let primary = inputs.primaryAssetAttributedString(symbol: symbol)
-            output.updatedInput(primary: primary, secondary: secondaryResult)
+            output.updatedInput(primary: primary, secondary: secondaryResult, primaryOffset: -primaryOffset)
         }
     }
 
@@ -395,6 +396,29 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         let errorDisposable = markets.errors.subscribe(onNext: { [weak self] socketError in
             guard let this = self else { return }
+            guard let model = this.model else { return }
+            guard let output = this.output else { return }
+            let symbol = model.fiatCurrencySymbol
+            let suffix = model.pair.from.symbol
+            
+            let secondaryAmount = "0.00"
+            let secondaryResult = model.isUsingFiat ? (secondaryAmount + " " + suffix) : (symbol + secondaryAmount)
+            let primaryOffset = this.inputs.estimatedSymbolWidth(currencySymbol: symbol, template: output.styleTemplate())
+            
+            /// When users are above or below the trading limit, `conversion.output` will not be updated
+            /// with the correct conversion value. This is because the volume entered is either too little
+            /// or too large. In this case we want the `secondaryAmountLabel` to read as `0.00`. We don't
+            /// want to update `conversion.output` manually though as that'd be a side-effect. 
+            if model.isUsingFiat {
+                let primary = this.inputs.primaryFiatAttributedString(currencySymbol: symbol)
+                output.updatedInput(primary: primary, secondary: secondaryResult, primaryOffset: -primaryOffset)
+            } else {
+                let assetType = model.isUsingBase ? model.pair.from : model.pair.to
+                let symbol = assetType.symbol
+                let primary = this.inputs.primaryAssetAttributedString(symbol: symbol)
+                output.updatedInput(primary: primary, secondary: secondaryResult, primaryOffset: -primaryOffset)
+            }
+            
             Logger.shared.error(socketError.description)
 
             switch socketError.errorType {

@@ -102,7 +102,7 @@ struct LocalizationConstants {
             """
             A connection cannot be established because the server certificate could not be validated. Please check your network settings and ensure that you are using a secure connection.
             """, comment: "Message shown when the app has detected a possible man-in-the-middle attack.")
-        static let notEnoughFunds = NSLocalizedString("You don't have enough funds in this address to send that.", comment: "Message shown when the user has attempted to send more funds than the user has")
+        static let notEnoughXForFees = NSLocalizedString("Not enough %@ for fees", comment: "Message shown when the user has attempted to send more funds than the user can spend (input amount plus fees)")
     }
 
     struct Authentication {
@@ -336,6 +336,14 @@ struct LocalizationConstants {
         static let support = NSLocalizedString(
             "Support",
             comment: "Item displayed on the side menu of the app for when the user wants to contact support."
+        )
+        static let new = NSLocalizedString(
+            "New",
+            comment: "New tag shown for menu items that are new."
+        )
+        static let lockbox = NSLocalizedString(
+            "Lockbox",
+            comment: "Lockbox menu item title."
         )
     }
 
@@ -754,6 +762,50 @@ struct LocalizationConstants {
             comment: "The error message when a user attempts to start KYC using an existing email address."
         )
     }
+
+    struct Lockbox {
+        static let getYourLockbox = NSLocalizedString(
+            "Get Your Lockbox",
+            comment: "Title prompting the user to buy a lockbox."
+        )
+        static let safelyStoreYourLockbox = NSLocalizedString(
+            "Safely store your crypto currency offline.",
+            comment: "Subtitle prompting the user to buy a lockbox."
+        )
+        static let buyNowFor99 = NSLocalizedString(
+            "Buy Now for $99",
+            comment: "Price of a lockbox."
+        )
+        static let alreadyOwnOne = NSLocalizedString(
+            "Already own one?",
+            comment: "Title for anouncement card for the lockbox."
+        )
+        static let announcementCardSubtitle = NSLocalizedString(
+            "From your computer log into blockchain.com and connect your Lockbox.",
+            comment: "Subtitle for anouncement card for the lockbox."
+        )
+        static let balancesComingSoon = NSLocalizedString(
+            "Balances Coming Soon",
+            comment: "Title displayed to the user when they have a synced lockbox."
+        )
+        static let balancesComingSoonSubtitle = NSLocalizedString(
+            """
+                We are unable to display your Lockbox balance at this time.
+                Don’t worry, your funds are safe. We’ll be adding this feature soon.
+                While you wait, you can check your balance on the web.
+            """
+            ,
+            comment: "Subtitle display to the user when they have a synced lockbox."
+        )
+        static let checkMyBalance = NSLocalizedString(
+            "Check My Balance",
+            comment: "CTA for when the user has a synced lockbox."
+        )
+        static let wantToLearnMoreX = NSLocalizedString(
+            "Want to learn more? Tap here to visit %@",
+            comment: "Footer text in the lockbox view."
+        )
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
@@ -883,7 +935,7 @@ struct LocalizationConstants {
 
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
     
-    @objc class func notEnoughFunds() -> String { return LocalizationConstants.Errors.notEnoughFunds }
+    @objc class func notEnoughXForFees() -> String { return LocalizationConstants.Errors.notEnoughXForFees }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }
 

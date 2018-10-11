@@ -248,7 +248,7 @@ private extension MarketsService {
     }
 
     func authenticateSocket() {
-        let authenticationDisposable = authentication.getSessionToken()
+        let authenticationDisposable = authentication.getSessionToken(requestNewToken: true)
             .map { tokenResponse -> Subscription<AuthSubscribeParams> in
                 let params = AuthSubscribeParams(event: "auth", token: tokenResponse.token)
                 return Subscription(channel: "auth", params: params)

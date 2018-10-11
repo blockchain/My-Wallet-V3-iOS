@@ -18,7 +18,10 @@ protocol ExchangeInputsAPI: class {
     
     func primaryFiatAttributedString(currencySymbol: String) -> NSAttributedString
     func primaryAssetAttributedString(symbol: String) -> NSAttributedString
+    func estimatedSymbolWidth(currencySymbol: String, template: ExchangeStyleTemplate) -> CGFloat
     
+    func maxFiatInteger() -> Int
+    func maxAssetInteger() -> Int
     func maxFiatFractional() -> Int
     func maxAssetFractional() -> Int
     
