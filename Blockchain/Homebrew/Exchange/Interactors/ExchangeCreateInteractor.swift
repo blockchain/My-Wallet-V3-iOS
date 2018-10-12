@@ -287,13 +287,20 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         )
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func validateInput() {
         guard let model = model else { return }
+        guard let output = output else { return }
+
+        if let errorMessage = canUseFrom(assetType: model.pair.from) {
+            output.showError(message: errorMessage)
+            return
+        }
+
         guard let conversion = model.lastConversion else {
             Logger.shared.error("No conversion stored")
             return
         }
-        guard let output = output else { return }
         
         let min = minTradingLimit().asObservable()
         let max = maxTradingLimit().asObservable()
@@ -398,6 +405,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             guard let this = self else { return }
             guard let model = this.model else { return }
             guard let output = this.output else { return }
+
+            if let errorMessage = this.canUseFrom(assetType: model.pair.from) {
+                output.showError(message: errorMessage)
+                return
+            }
+
             let symbol = model.fiatCurrencySymbol
             let suffix = model.pair.from.symbol
             
@@ -523,6 +536,16 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         case false:
             return inputs.canAddAssetCharacter(value)
         }
+    }
+
+    /// If the from asset type can be used, this method returns a nil string.
+    /// If it cannot be used, this method returns the localized error message explaining
+    /// why the asset type cannot be used.
+    private func canUseFrom(assetType: AssetType) -> String? {
+        if assetType == .ethereum && !tradeExecution.canSendEther {
+            return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
+        }
+        return nil
     }
 }
 

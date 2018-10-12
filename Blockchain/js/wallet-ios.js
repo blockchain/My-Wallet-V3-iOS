@@ -2446,7 +2446,6 @@ MyWalletPhone.sendEtherPaymentWithNote = function(note) {
     var eth = MyWallet.wallet.eth;
 
     var success = function(tx) {
-        MyWalletPhone.recordLastTransaction(tx.txHash);
         if (note != '') eth.setTxNote(tx.txHash, note);
         console.log('Send ether success');
         objc_on_send_ether_payment_success();
@@ -2464,20 +2463,25 @@ MyWalletPhone.sendEtherPaymentWithNote = function(note) {
 MyWalletPhone.sendEtherPayment = function(payment, success, error, dismiss) {
     var eth = MyWallet.wallet.eth;
 
+    let recordTx = function(tx) {
+        MyWalletPhone.recordLastTransaction(tx.txHash);
+        success()
+    }
+
     if (MyWallet.wallet.isDoubleEncrypted) {
         MyWalletPhone.getSecondPassword(function (pw) {
             var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
             payment.sign(privateKey);
             payment
             .publish()
-            .then(success).catch(error);
+            .then(recordTx).catch(error);
         }, dismiss);
     } else {
         var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount);
         payment.sign(privateKey);
         payment
         .publish()
-        .then(success).catch(error);
+        .then(recordTx).catch(error);
     }
 }
 

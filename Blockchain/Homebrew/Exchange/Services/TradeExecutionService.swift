@@ -30,6 +30,9 @@ class TradeExecutionService: TradeExecutionAPI {
     // MARK: TradeExecutionAPI
     
     var isExecuting: Bool = false
+    var canSendEther: Bool {
+        return !wallet.isWaitingOnEtherTransaction()
+    }
     
     init(service: NabuAuthenticationService = NabuAuthenticationService.shared,
          wallet: Wallet = WalletManager.shared.wallet) {

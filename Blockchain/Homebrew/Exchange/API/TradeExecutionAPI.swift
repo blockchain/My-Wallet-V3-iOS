@@ -31,4 +31,9 @@ protocol TradeExecutionAPI {
     /// Check if the service is currently executing a request prior to
     /// submitting an additional request.
     var isExecuting: Bool { get set }
+
+    /// Check if the user must wait for an ether transaction to confirm.
+    /// Currently the wallet is unable to support sending another ether
+    /// transaction until the last one is confirmed.
+    var canSendEther: Bool { get }
 }
