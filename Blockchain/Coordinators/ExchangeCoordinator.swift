@@ -132,26 +132,6 @@ struct ExchangeServices: ExchangeDependencies {
         }
     }
 
-    private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
-        guard let countryCode = walletManager.wallet.countryCodeGuess() else {
-            error(NetworkError.generic(message: "No country code found"))
-            return
-        }
-
-        #if DEBUG
-        guard !DebugSettings.shared.useHomebrewForExchange else {
-            success(true)
-            return
-        }
-        #endif
-
-        // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: success, onError: error)
-    }
-
     private func showExchange(type: ExchangeType, country: KYCCountry? = nil) {
         switch type {
         case .homebrew:
