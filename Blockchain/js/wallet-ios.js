@@ -2465,7 +2465,7 @@ MyWalletPhone.sendEtherPayment = function(payment, secondPassword, success, erro
 
     let recordTx = function(tx) {
         MyWalletPhone.recordLastTransaction(tx.txHash);
-        success()
+        return tx;
     }
 
     if (MyWallet.wallet.isDoubleEncrypted) {
@@ -2474,14 +2474,16 @@ MyWalletPhone.sendEtherPayment = function(payment, secondPassword, success, erro
             payment.sign(privateKey);
             payment
             .publish()
-            .then(recordTx).catch(error);
+            .then(recordTx)
+            .then(success).catch(error);
         } else {
             MyWalletPhone.getSecondPassword(function (pw) {
                 var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
                 payment.sign(privateKey);
                 payment
                 .publish()
-                .then(recordTx).catch(error);
+                .then(recordTx)
+                .then(success).catch(error);
             }, dismiss);
         }
     } else {
@@ -2489,7 +2491,8 @@ MyWalletPhone.sendEtherPayment = function(payment, secondPassword, success, erro
         payment.sign(privateKey);
         payment
         .publish()
-        .then(recordTx).catch(error);
+        .then(recordTx)
+        .then(success).catch(error);
     }
 }
 
