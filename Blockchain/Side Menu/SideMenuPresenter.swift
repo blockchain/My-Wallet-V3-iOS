@@ -52,15 +52,15 @@ class SideMenuPresenter {
         
         let homebrewRegion = walletService.isCountryInHomebrewRegion(
             countryCode: countryCodeGuess
-            ).asObservable()
+        ).asObservable()
         let partnerRegion = walletService.isInPartnerRegionForExchange(
             countryCode: countryCodeGuess,
             state: stateCodeGuess
-            ).asObservable()
+        ).asObservable()
         
         disposable = Observable.combineLatest(BlockchainDataRepository.shared.nabuUser, homebrewRegion, partnerRegion) {
             return ($0, $1, $2)
-            }.subscribeOn(MainScheduler.asyncInstance)
+        }.subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] payload in
                 guard let this = self else { return }
