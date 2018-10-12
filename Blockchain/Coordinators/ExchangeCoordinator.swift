@@ -85,6 +85,7 @@ struct ExchangeServices: ExchangeDependencies {
                 guard $0.status == .approved else {
                     KYCCoordinator.shared.start(); return
                 }
+                
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
             }, onError: { error in
@@ -114,18 +115,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     private func showAppropriateExchange() {
         if walletManager.wallet.hasEthAccount() {
-            let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if isHomebrewAvailable {
-                    self?.showExchange(type: .homebrew)
-                } else {
-                    self?.showExchange(type: .shapeshift)
-                }
-            }
-            let error = { (error: Error) in
-                Logger.shared.error("Error checking if homebrew is available: \(error) - showing shapeshift")
-                self.showExchange(type: .shapeshift)
-            }
-            checkForHomebrewAvailability(success: success, error: error)
+            showExchange(type: .homebrew)
         } else {
             if walletManager.wallet.needsSecondPassword() {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
