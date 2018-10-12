@@ -2699,7 +2699,7 @@ NSString * const kLockboxInvitation = @"lockbox";
     [self.context evaluateScript:script];
 }
 
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType secondPassword:(NSString* _Nullable)secondPassword completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel
 {
     [self.context invokeOnceWithFunctionBlock:^{
         completion();
@@ -2727,7 +2727,7 @@ NSString * const kLockboxInvitation = @"lockbox";
         return;
     }
     
-    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send()", tradeExecutionType]];
+    [self.context evaluateScript:[NSString stringWithFormat:@"MyWalletPhone.tradeExecution.%@.send(%@)", tradeExecutionType, [secondPassword escapedForJS]]];
 }
 
 # pragma mark - Ethereum
