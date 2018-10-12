@@ -292,8 +292,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         guard let model = model else { return }
         guard let output = output else { return }
 
-        if let errorMessage = canUseFrom(assetType: model.pair.from) {
-            output.showError(message: errorMessage)
+        guard tradeExecution.canTradeAssetType(model.pair.from) else {
+            if let errorMessage = errorMessage(for: model.pair.from) {
+                output.showError(message: errorMessage)
+            } else {
+                // This shouldn't happen because the only case (eth) should have an error message,
+                // but just in case show an error here
+                output.showError(message: LocalizationConstants.Errors.genericError)
+            }
             return
         }
 
@@ -406,8 +412,14 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             guard let model = this.model else { return }
             guard let output = this.output else { return }
 
-            if let errorMessage = this.canUseFrom(assetType: model.pair.from) {
-                output.showError(message: errorMessage)
+            guard this.tradeExecution.canTradeAssetType(model.pair.from) else {
+                if let errorMessage = this.errorMessage(for: model.pair.from) {
+                    output.showError(message: errorMessage)
+                } else {
+                    // This shouldn't happen because the only case (eth) should have an error message,
+                    // but just in case show an error here
+                    output.showError(message: LocalizationConstants.Errors.genericError)
+                }
                 return
             }
 
@@ -538,14 +550,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
     }
 
-    /// If the from asset type can be used, this method returns a nil string.
-    /// If it cannot be used, this method returns the localized error message explaining
-    /// why the asset type cannot be used.
-    private func canUseFrom(assetType: AssetType) -> String? {
-        if assetType == .ethereum && !tradeExecution.canSendEther {
-            return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
+    // Error message to show if the user is not allowed to trade a certain asset type
+    private func errorMessage(for assetType: AssetType) -> String? {
+        switch assetType {
+        case .ethereum: return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
+        default: return nil
         }
-        return nil
     }
 }
 

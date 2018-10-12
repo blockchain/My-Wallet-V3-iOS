@@ -32,8 +32,7 @@ protocol TradeExecutionAPI {
     /// submitting an additional request.
     var isExecuting: Bool { get set }
 
-    /// Check if the user must wait for an ether transaction to confirm.
     /// Currently the wallet is unable to support sending another ether
     /// transaction until the last one is confirmed.
-    var canSendEther: Bool { get }
+    func canTradeAssetType(_ assetType: AssetType) -> Bool
 }
