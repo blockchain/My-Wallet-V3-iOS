@@ -20,6 +20,7 @@ platform :ios do
     sync_code_signing(type: "development", readonly: true)
     build_app(
       clean: true,
+      export_method: development,
       include_bitcode: false,
       include_symbols: true,
       scheme: "Blockchain (Dev)",
