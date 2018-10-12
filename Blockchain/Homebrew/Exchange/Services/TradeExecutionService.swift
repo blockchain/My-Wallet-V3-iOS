@@ -141,7 +141,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 return .error(TradeExecutionAPIError.generic)
         }
 
-        return authentication.getSessionToken().flatMap { [weak self] token in
+        return authentication.getSessionToken().flatMap { token in
             return NetworkRequest.POST(
                 url: endpoint,
                 body: try? JSONEncoder().encode(order),
