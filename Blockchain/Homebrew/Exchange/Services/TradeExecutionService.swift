@@ -155,7 +155,12 @@ class TradeExecutionService: TradeExecutionAPI {
     }
 
     // Sign and send the payment object created by either of the buildOrder methods.
-    fileprivate func sendTransaction(assetType: AssetType, success: @escaping (() -> Void), error: @escaping ((String) -> Void)) {
+    fileprivate func sendTransaction(
+        assetType: AssetType,
+        secondPassword: String?,
+        success: @escaping (() -> Void),
+        error: @escaping ((String) -> Void)
+    ) {
         isExecuting = true
         let executionDone = { [weak self] in
             guard let this = self else { return }
@@ -163,6 +168,7 @@ class TradeExecutionService: TradeExecutionAPI {
         }
         wallet.sendOrderTransaction(
             assetType.legacy,
+            secondPassword: secondPassword,
             completion: executionDone,
             success: success,
             error: error,
@@ -298,20 +304,42 @@ extension TradeExecutionService {
         success: @escaping ((OrderTransaction) -> Void),
         error: @escaping ((String) -> Void)
     ) {
-        processAndBuildOrder(
-            with: conversion,
-            fromAccount: from,
-            toAccount: to,
-            success: { [weak self] orderTransaction, _ in
-                guard let this = self else { return }
-                this.sendTransaction(
-                    assetType: orderTransaction.to.assetType,
-                    success: {
-                        success(orderTransaction)
-                    },
-                    error: error)
-            },
-            error: error
-        )
+        let processAndBuild: ((String?) -> ()) = { [weak self] secondPassword in
+            guard let this = self else { return }
+            this.processAndBuildOrder(
+                with: conversion,
+                fromAccount: from,
+                toAccount: to,
+                success: { [weak self] orderTransaction, _ in
+                    guard let this = self else { return }
+                    this.sendTransaction(
+                        assetType: orderTransaction.to.assetType,
+                        secondPassword: secondPassword,
+                        success: {
+                            success(orderTransaction)
+                        },
+                        error: error
+                    )
+                },
+                error: error
+            )
+        }
+
+        // Second password must be prompted before an order is processed since it is
+        // a cancellable action - otherwise an order will be created even if cancelling
+        // second password
+        if wallet.needsSecondPassword() {
+            AuthenticationCoordinator.shared.showPasswordConfirm(
+                withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
+                headerText: LocalizationConstants.Authentication.secondPasswordRequired,
+                validateSecondPassword: true,
+                confirmHandler: { (secondPass) in
+                    processAndBuild(secondPass)
+                }
+            )
+        } else {
+            processAndBuild(nil)
+        }
+
     }
 }

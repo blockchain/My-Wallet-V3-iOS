@@ -2457,10 +2457,10 @@ MyWalletPhone.sendEtherPaymentWithNote = function(note) {
         objc_on_send_ether_payment_error(e);
     }
 
-    MyWalletPhone.sendEtherPayment(currentEtherPayment, success, error);
+    MyWalletPhone.sendEtherPayment(currentEtherPayment, null, success, error);
 }
 
-MyWalletPhone.sendEtherPayment = function(payment, success, error, dismiss) {
+MyWalletPhone.sendEtherPayment = function(payment, secondPassword, success, error, dismiss) {
     var eth = MyWallet.wallet.eth;
 
     let recordTx = function(tx) {
@@ -2469,13 +2469,21 @@ MyWalletPhone.sendEtherPayment = function(payment, success, error, dismiss) {
     }
 
     if (MyWallet.wallet.isDoubleEncrypted) {
-        MyWalletPhone.getSecondPassword(function (pw) {
-            var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
+        if (secondPassword) {
+            var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, secondPassword);
             payment.sign(privateKey);
             payment
             .publish()
             .then(recordTx).catch(error);
-        }, dismiss);
+        } else {
+            MyWalletPhone.getSecondPassword(function (pw) {
+                var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, pw);
+                payment.sign(privateKey);
+                payment
+                .publish()
+                .then(recordTx).catch(error);
+            }, dismiss);
+        }
     } else {
         var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount);
         payment.sign(privateKey);
@@ -3169,8 +3177,8 @@ MyWalletPhone.tradeExecution = {
                 return paymentPromise
             }).catch(objc_on_create_order_payment_error);
         },
-        send: function() {
-            MyWalletPhone.sendBitcoinPayment(currentPayment, null, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
+        send: function(secondPassword) {
+            MyWalletPhone.sendBitcoinPayment(currentPayment, secondPassword, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
         }
     },
 
@@ -3191,8 +3199,8 @@ MyWalletPhone.tradeExecution = {
                 objc_on_create_order_payment_success(maxAvailable, fee);
             }).catch(objc_on_create_order_payment_error);
         },
-        send: function() {
-            MyWalletPhone.sendBitcoinPayment(currentBitcoinCashPayment, null, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
+        send: function(secondPassword) {
+            MyWalletPhone.sendBitcoinPayment(currentBitcoinCashPayment, secondPassword, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
         },
     },
 
@@ -3208,8 +3216,8 @@ MyWalletPhone.tradeExecution = {
                 objc_on_create_order_payment_success(currentEtherPayment.fee);
             }).catch(objc_on_create_order_payment_error);
         },
-        send: function() {
-            MyWalletPhone.sendEtherPayment(currentEtherPayment, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
+        send: function(secondPassword) {
+            MyWalletPhone.sendEtherPayment(currentEtherPayment, secondPassword, objc_on_send_order_transaction_success, objc_on_send_order_transaction_error, objc_on_send_order_transaction_dismiss);
         }
     }
 }

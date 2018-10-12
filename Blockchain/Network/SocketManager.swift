@@ -35,7 +35,9 @@ class SocketManager {
     // MARK: - Public methods
     func setupSocket(socketType: SocketType, url: URL) {
         switch socketType {
-        case .exchange: self.exchangeSocket = WebSocket(url: url); self.exchangeSocket?.advancedDelegate = self
+        case .exchange:
+            self.exchangeSocket = WebSocket(url: url)
+            self.exchangeSocket?.advancedDelegate = self
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
@@ -62,6 +64,10 @@ class SocketManager {
             socket.connect()
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
+    }
+
+    func disconnectAll() {
+        SocketType.all.forEach { disconnect(socketType: $0) }
     }
 
     func disconnect(socketType: SocketType) {
@@ -103,9 +109,12 @@ extension SocketManager: WebSocketAdvancedDelegate {
     func websocketDidConnect(socket: WebSocket) {
         Logger.shared.debug("Websocket connected to: \(socket.currentURL.absoluteString)")
         if socket == self.exchangeSocket {
+            // TODO fix for different pending messages for different socket types. Not an issue now
+            // since there is only one socket type (i.e. exchange)
             pendingSocketMessages.forEach { [unowned self] in
                 self.send(message: $0)
             }
+            pendingSocketMessages = []
         }
     }
 
@@ -142,7 +151,7 @@ extension SocketManager: WebSocketAdvancedDelegate {
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
         switch channel {
         case "auth":
-            onAcknowledge("Successfully unsubscribed. Payload: \(text)")
+            onAcknowledge("Successfully subscribed. Websocket: \(socket), Payload: \(text)")
         case "exchange_rate":
             Logger.shared.debug("Attempting to decode: \(text)")
             ExchangeRates.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)

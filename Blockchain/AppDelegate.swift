@@ -145,6 +145,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             onboardingSettings.shouldShowBiometrySetup = true
         }
 
+        SocketManager.shared.disconnectAll()
+
         // UI-related background actions
         ModalPresenter.shared.closeAllModals()
 

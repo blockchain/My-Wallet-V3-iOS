@@ -17,6 +17,14 @@ enum SocketType: String {
     case bitcoin
     case ether
     case bitcoinCash
+
+    static let all: [SocketType] = [
+        .unassigned,
+        .exchange,
+        .bitcoin,
+        .ether,
+        .bitcoinCash
+    ]
 }
 
 struct SocketMessage {

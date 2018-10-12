@@ -231,12 +231,6 @@ class ExchangeDetailCoordinator: NSObject {
                     value: trade.feeDisplayValue,
                     backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
                 )
-                
-                let sendTo = ExchangeCellModel.Plain(
-                    description: LocalizationConstants.Exchange.sendTo,
-                    value: accountRepository.nameOfAccountContaining(address: trade.withdrawalAddress),
-                    backgroundColor: #colorLiteral(red: 0.9450980392, green: 0.9529411765, blue: 0.9607843137, alpha: 1)
-                )
 
                 var orderId = ExchangeCellModel.Plain(
                     description: LocalizationConstants.Exchange.orderID,
@@ -260,7 +254,6 @@ class ExchangeDetailCoordinator: NSObject {
                     .plain(exchange),
                     .plain(receive),
                     .plain(fees),
-                    .plain(sendTo),
                     .plain(orderId)
                     ]
                 )

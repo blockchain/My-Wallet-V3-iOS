@@ -41,7 +41,6 @@
 
 @class PEViewController;
 
-
 @interface PEPinEntryController : UINavigationController <PEViewControllerDelegate, UIScrollViewDelegate>
 {
 	BOOL verifyOnly;
@@ -57,6 +56,7 @@
 @property (nonatomic, readonly) BOOL verifyOptional;
 @property (nonatomic, readwrite) BOOL inSettings;
 @property (nonatomic) PinPresenter *pinPresenter;
+@property (nonatomic) Pin *lastEnteredPin;
 @property (nonatomic) UILongPressGestureRecognizer *longPressGesture;
 @property (nonatomic) UIButton *debugButton;
 @property (nonatomic) UIPageControl *scrollViewPageControl;
