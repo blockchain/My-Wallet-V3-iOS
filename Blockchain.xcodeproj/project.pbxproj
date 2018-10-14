@@ -9683,6 +9683,10 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+				"WARNING_CFLAGS[arch=*]" = (
+					"-fdiagnostics-show-option",
+					"-Wno-nullability-completeness",
+				);
 			};
 			name = "Debug Production";
 		};
@@ -9757,6 +9761,10 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+				"WARNING_CFLAGS[arch=*]" = (
+					"-fdiagnostics-show-option",
+					"-Wno-nullability-completeness",
+				);
 			};
 			name = "Debug Staging";
 		};
@@ -9831,6 +9839,12 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+				"WARNING_CFLAGS[arch=*]" = (
+					"-fdiagnostics-show-option",
+					"-Wno-nullability-completeness",
+					"-Wno-incompatible-property-type",
+					"-Wno-objc-property-synthesis",
+				);
 			};
 			name = "Debug Dev";
 		};
@@ -9868,6 +9882,7 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+				WARNING_CFLAGS = "-fdiagnostics-show-option";
 			};
 			name = Release;
 		};
