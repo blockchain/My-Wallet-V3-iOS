@@ -10012,7 +10012,7 @@
 				519435AA208E61F3001EF882 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug Production";
+			defaultConfigurationName = Release;
 		};
 		9FB3636B14B60128004BEA02 /* Build configuration list for PBXProject "Blockchain" */ = {
 			isa = XCConfigurationList;
@@ -10023,7 +10023,7 @@
 				517F5A43205811DF004826CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug Production";
+			defaultConfigurationName = Release;
 		};
 		9FB3638914B60128004BEA02 /* Build configuration list for PBXNativeTarget "Blockchain" */ = {
 			isa = XCConfigurationList;
@@ -10034,7 +10034,7 @@
 				517F5A44205811DF004826CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug Production";
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
