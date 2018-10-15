@@ -242,12 +242,6 @@ workflows:
       - install_gems
       - install_pods
       - run_tests:
-          filters:
-            branches:
-              only:
-                - ci
-                - dev
-                - release
           requires:
             - setup_node
             - init_sub_modules
