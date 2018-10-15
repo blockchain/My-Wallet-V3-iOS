@@ -12,7 +12,7 @@ target 'Blockchain' do
     pod 'SwiftLint'
     pod 'Onfido'
     pod 'Alamofire', '~> 4.7'
-    pod 'Charts', '3.1.0'
+    pod 'Charts'
     pod 'RxSwift', '~> 4.0'
     pod 'RxCocoa', '~> 4.0'
     pod 'PhoneNumberKit', '~> 2.1'
