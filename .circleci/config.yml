@@ -41,13 +41,13 @@ defaults: &defaults
   working_directory: /Users/distiller/project
   macos:
     xcode: "10.0.0"
+  shell: /bin/bash --login -o pipefail
 # --- Jobs ---
 version: 2
 jobs:
   # Install Dependencies
   install_deps:
     <<: *defaults
-    shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
           keys:
@@ -94,7 +94,6 @@ jobs:
   # Build OpenSSL library
   build_openssl:
     <<: *defaults
-    shell: /bin/bash --login -o pipefail
     steps:
       - attach_workspace:
           at: /Users/distiller/project
@@ -119,7 +118,6 @@ jobs:
   # Install Pods
   install_pods:
     <<: *defaults
-    shell: /bin/bash --login -o pipefail
     steps:
       - attach_workspace:
           at: /Users/distiller/project
@@ -149,7 +147,6 @@ jobs:
     environment:
       FASTLANE_LANE: dev
       FL_OUTPUT_DIR: output
-    shell: /bin/bash --login -o pipefail
     steps:
       - attach_workspace:
           at: /Users/distiller/project
@@ -170,7 +167,6 @@ jobs:
     environment:
       FASTLANE_LANE: test_dev
       FL_OUTPUT_DIR: test-results
-    shell: /bin/bash --login -o pipefail
     steps:
       - attach_workspace:
           at: /Users/distiller/project
