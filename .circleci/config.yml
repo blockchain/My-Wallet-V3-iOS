@@ -37,6 +37,10 @@
 #
 #  The Cocoapods master repository is fetched via the CircleCI mirror for performance.
 #
+#  Ruby Gems
+#  ---------
+#  Running `gem env` will show the installation directory of binaries
+#
 defaults: &defaults
   working_directory: /Users/distiller/project
   macos:
@@ -81,6 +85,10 @@ jobs:
       - run:
           name: Install Ruby Gems
           command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            gem env
+            sudo gem cleanup
             sudo gem install bundler
             bundle check || bundle install --path vendor/bundle
       - save_cache:
@@ -90,7 +98,7 @@ jobs:
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ./
+            - ./vendor
   # Build OpenSSL library
   build_openssl:
     <<: *defaults
@@ -127,6 +135,7 @@ jobs:
       - run:
           name: Install Pods
           command: |
+            pod --version
             if [ ! -d "/Users/distiller/.cocoapods" ]; then
               curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
             fi
@@ -141,25 +150,6 @@ jobs:
           paths:
             - ./Pods
             - ./Blockchain.xcworkspace
-  # Install fastlane
-  install_fastlane:
-    <<: *defaults
-    environment:
-      FASTLANE_LANE: dev
-      FL_OUTPUT_DIR: output
-    steps:
-      - attach_workspace:
-          at: /Users/distiller/project
-      - run:
-          name: Fastlane
-          command: |
-            export LANG=en_US.UTF-8
-            export LC_ALL=en_US.UTF-8
-            sudo gem install fastlane
-      - persist_to_workspace:
-          root: /Users/distiller/project
-          paths:
-            - ./
   # Run tests job:
   # - execute unit tests.
   run_tests:
@@ -218,15 +208,11 @@ workflows:
       - install_pods:
           requires:
           - install_deps
-      - install_fastlane:
-          requires:
-            - install_deps
       - run_tests:
           requires:
             - install_deps
             - build_openssl
             - install_pods
-            - install_fastlane
   # # Execute tests, create archive and upload to App Store Connect.
   # run_tests_and_upload:
   #   jobs:
