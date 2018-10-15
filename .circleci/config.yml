@@ -19,6 +19,9 @@
 #  - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
 #  - Set up log and test result paths to be easily collectible.
 #
+#  Workflows will ignore job-level branching. If you use job-level branching and later add workflows,
+#  you must remove the branching at the job level and instead declare it in the workflows section.
+#
 #  Builds without workflows require a build job.
 #
 # --- Jobs ---
@@ -26,11 +29,6 @@ version: 2
 jobs:
   # Setup Node and NPM
   setup_node:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     macos:
       xcode: "10.0.0"
     shell: /bin/bash --login -o pipefail
@@ -53,11 +51,6 @@ jobs:
             - /usr/local/lib/node_modules
   # Init Git Sub Modules
   init_sub_modules:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -72,11 +65,6 @@ jobs:
             sh scripts/build-js.sh
   # Build OpenSSL library
   build_openssl:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -95,11 +83,6 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
   # Install Ruby Gems
   install_gems:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -116,11 +99,6 @@ jobs:
             - vendor/bundle
   # Install Pods
   install_pods:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -137,11 +115,6 @@ jobs:
             - ~/.cocoapods
   # Install fastlane
   install_fastlane:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     macos:
       xcode: "10.0.0"
     environment:
@@ -166,11 +139,6 @@ jobs:
   # Run tests job:
   # - execute unit tests.
   run_tests:
-    branches:
-      only:
-        - ci
-        - dev
-        - release
     macos:
       xcode: "10.0.0"
     environment:
@@ -216,13 +184,20 @@ workflows:
             - init_sub_modules
       - install_gems
       - install_pods
+      - install_fastlane:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
+          requires:
+            - install_gems
       - run_tests:
-          filters:
-            branches:
-              only:
-                - ci
-                - dev
-                - release
+          branches:
+            only:
+              - ci
+              - dev
+              - release
           requires:
             - setup_node
             - init_sub_modules
@@ -232,16 +207,46 @@ workflows:
   # Execute tests, create archive and upload to App Store Connect.
   run_tests_and_upload:
     jobs:
-      - setup_node
+      - setup_node:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
       - init_sub_modules:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
           requires:
             - setup_node
       - build_openssl:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
           requires:
             - init_sub_modules
-      - install_gems
-      - install_pods
+      - install_gems:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
+      - install_pods:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
       - run_tests:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
           requires:
             - setup_node
             - init_sub_modules
