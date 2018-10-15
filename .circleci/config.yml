@@ -12,28 +12,26 @@
 #  It is currently not possible to delete the cache in CircleCI 2.0
 #  Workaround: rename the cache key to force generation of a new cache.
 #
-#  Environment variables are defined in the project settings on circleci.com.
+#  Environment variables (e.g. API keys) are defined in the project settings on circleci.com.
 #
 #  The setup_circle_ci Fastlane action must be in the before_all block to perform the following actions:
 #  - Create a new temporary keychain for use with Fastlane Match (see the code signing section for more details).
 #  - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
 #  - Set up log and test result paths to be easily collectible.
 #
-
-version: 2
+#  Builds without workflows require a build job.
+#
+# --- Jobs ---
 jobs:
-  build:
-    working_directory: ~/project
+  # Setup Node and NPM
+  setup_node:
+    branches:
+      only:
+        - dev
+        - release
     macos:
       xcode: "10.0.0"
-    environment:
-      # Specifies which environment Fastlane should build against.
-      FASTLANE_LANE: dev
-      FL_OUTPUT_DIR: output
-
-    # Use the error status of the first failure, rather than that of the last item in a pipeline.
     shell: /bin/bash --login -o pipefail
-
     steps:
       - restore_cache:
           keys:
@@ -51,6 +49,14 @@ jobs:
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
+  # Init Git Sub Modules
+  init_sub_modules:
+    branches:
+      only:
+        - dev
+        - release
+    shell: /bin/bash --login -o pipefail
+    steps:
       - checkout
       - run:
           name: Initialize Submodules
@@ -61,6 +67,14 @@ jobs:
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
             sh scripts/build-js.sh
+  # Build OpenSSL library
+  build_openssl:
+    branches:
+      only:
+        - dev
+        - release
+    shell: /bin/bash --login -o pipefail
+    steps:
       - restore_cache:
           keys:
             - openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
@@ -75,6 +89,14 @@ jobs:
           key: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
+  # Install Ruby Gems
+  install_gems:
+    branches:
+      only:
+        - dev
+        - release
+    shell: /bin/bash --login -o pipefail
+    steps:
       - restore_cache:
           keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
@@ -87,6 +109,14 @@ jobs:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+  # Install Pods
+  install_pods:
+    branches:
+      only:
+        - dev
+        - release
+    shell: /bin/bash --login -o pipefail
+    steps:
       - restore_cache:
           keys:
             - pods-cache-{{ checksum "Podfile.lock" }}
@@ -99,6 +129,19 @@ jobs:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
             - ~/.cocoapods
+  # Install fastlane
+  install_fastlane:
+    branches:
+      only:
+        - dev
+        - release
+    macos:
+      xcode: "10.0.0"
+    environment:
+      FASTLANE_LANE: dev
+      FL_OUTPUT_DIR: output
+    shell: /bin/bash --login -o pipefail
+    steps:
       - run:
           name: Fastlane
           command: |
@@ -113,3 +156,100 @@ jobs:
           path: output
       - store_test_results:
           path: output/scan
+  # Run tests job:
+  # - execute unit tests.
+  run_tests:
+    branches:
+      only:
+        - dev
+        - release
+    macos:
+      xcode: "10.0.0"
+    environment:
+      FASTLANE_LANE: test
+      FL_OUTPUT_DIR: test-results
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - run:
+          name: Fastlane
+          command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            sudo gem install fastlane
+            bundle exec fastlane $FASTLANE_LANE
+  # Archive and upload job:
+  # - create archive and upload to App Store Connect.
+  archive_and_upload:
+    branches:
+      only: release
+    macos:
+      xcode: "10.0.0"
+  # Draft GitHub release
+  # - generate change log since previous version.
+  # - create new release on GitHub using version tag and change log.
+  github_release:
+    filters:
+      tags:
+        only: /^v.*/
+# --- Workflows ---
+workflows:
+  version: 2
+  # Execute tests only.
+  run_tests_only:
+    jobs:
+      - setup_node
+      - init_sub_modules:
+          requires:
+            - setup_node
+      - build_openssl:
+          requires:
+            - init_sub_modules
+      - install_gems
+      - install_pods
+      - run_tests:
+          filters:
+            branches:
+              only:
+                - dev
+                - release
+          requires:
+            - setup_node
+            - init_sub_modules
+            - build_openssl
+            - install_gems
+            - install_pods
+  # Execute tests, create archive and upload to App Store Connect.
+  run_tests_and_upload:
+    jobs:
+      - setup_node
+      - init_sub_modules:
+          requires:
+            - setup_node
+      - build_openssl:
+          requires:
+            - init_sub_modules
+      - install_gems
+      - install_pods
+      - run_tests:
+          filters:
+            branches:
+              only:
+                - dev
+                - release
+          requires:
+            - setup_node
+            - init_sub_modules
+            - build_openssl
+            - install_gems
+            - install_pods
+      - archive_and_upload
+          requires:
+            - setup_node
+            - init_sub_modules
+            - build_openssl
+            - install_gems
+            - install_pods
+            - run_tests
+  draft_github_release:
+    jobs:
+      - github_release
