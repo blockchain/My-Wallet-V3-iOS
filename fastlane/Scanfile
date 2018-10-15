@@ -13,6 +13,7 @@ for_lane :test_dev do
   configuration("Debug Dev")
   output_style("basic") # Reflected in the console, not the generated files.
   scheme("Blockchain (Dev)")
+  skip_build(true)
   workspace("Blockchain.xcworkspace")
 end
 
@@ -21,6 +22,7 @@ for_lane :test_staging do
   code_coverage(true)
   configuration("Debug Staging")
   scheme("Blockchain (Staging)")
+  skip_build(true)
   workspace("Blockchain.xcworkspace")
 end
 
