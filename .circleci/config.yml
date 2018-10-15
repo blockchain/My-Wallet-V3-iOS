@@ -31,8 +31,8 @@ defaults: &defaults
 # --- Jobs ---
 version: 2
 jobs:
-  # Setup Node, NPM and Initialize Submodules
-  setup_node:
+  # Install Dependencies
+  install_deps:
     <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
@@ -62,6 +62,18 @@ jobs:
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
             sh scripts/build-js.sh
+      - restore_cache:
+          keys:
+            - gems-cache-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Install Ruby Gems
+          command: |
+            sudo gem install bundler
+            bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: gems-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
@@ -87,18 +99,6 @@ jobs:
           key: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
-      - restore_cache:
-          keys:
-            - gems-cache-{{ checksum "Gemfile.lock" }}
-      - run:
-          name: Install Ruby Gems
-          command: |
-            sudo gem install bundler
-            bundle check || bundle install --path vendor/bundle
-      - save_cache:
-          key: gems-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
   # Install Pods
   install_pods:
     <<: *defaults
@@ -182,7 +182,7 @@ workflows:
   # Execute tests only.
   run_tests_only:
     jobs:
-      - setup_node:
+      - install_deps:
           filters:
             branches:
               only:
@@ -191,8 +191,10 @@ workflows:
                 - release
       - build_openssl:
           requires:
-            - setup_node
-      - install_pods
+            - install_deps
+      - install_pods:
+          requires:
+          - install_deps
   #     - install_fastlane:
   #         branches:
   #           only:
@@ -208,7 +210,7 @@ workflows:
   #             - dev
   #             - release
   #         requires:
-  #           - setup_node
+  #           - install_deps
   #           - init_sub_modules
   #           - build_openssl
   #           - install_gems
@@ -216,7 +218,7 @@ workflows:
   # # Execute tests, create archive and upload to App Store Connect.
   # run_tests_and_upload:
   #   jobs:
-  #     - setup_node:
+  #     - install_deps:
   #         branches:
   #           only:
   #             - ci
@@ -229,7 +231,7 @@ workflows:
   #             - dev
   #             - release
   #         requires:
-  #           - setup_node
+  #           - install_deps
   #     - build_openssl:
   #         branches:
   #           only:
@@ -257,14 +259,14 @@ workflows:
   #             - dev
   #             - release
   #         requires:
-  #           - setup_node
+  #           - install_deps
   #           - init_sub_modules
   #           - build_openssl
   #           - install_gems
   #           - install_pods
   #     - archive_and_upload:
   #         requires:
-  #           - setup_node
+  #           - install_deps
   #           - init_sub_modules
   #           - build_openssl
   #           - install_gems
