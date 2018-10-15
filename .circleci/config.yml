@@ -176,11 +176,12 @@ workflows:
   run_tests_only:
     jobs:
       - setup_node:
-          branches:
-            only:
-              - ci
-              - dev
-              - release
+          filters:
+            branches:
+              only:
+                - ci
+                - dev
+                - release
   #     - init_sub_modules:
   #         requires:
   #           - setup_node
