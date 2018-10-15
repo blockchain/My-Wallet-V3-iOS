@@ -15,9 +15,18 @@ platform :ios do
   before_all do
     setup_circle_ci
   end
+  desc "Execute unit tests"
+  lane :test_dev do
+    # https://docs.fastlane.tools/actions/scan
+    scan
+    if is_ci?
+      # Send Slack notification to developer
+      # slack(message: "Your test results are in!")
+    end
+  end
   desc "Builds using the dev environment"
   lane :dev do
-    sync_code_signing(type: "development", readonly: true)
+    sync_code_signing(type: "appstore", readonly: true)
     build_app(
       clean: true,
       export_method: "app-store",
