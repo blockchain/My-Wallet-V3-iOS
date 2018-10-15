@@ -126,9 +126,11 @@ extension ExchangeTradeModel {
         case .partner(let model):
             return model.amountDepositedCryptoValue
         case .homebrew(let model):
-            return model.deposit != nil ?
-            model.deposit!.value + " " + model.deposit!.symbol :
-            "0" + " " + model.pair.from.symbol
+            if let value = model.deposit?.value, let symbol = model.deposit?.symbol {
+                return value + " " + symbol
+            } else {
+                return "0" + " " + model.pair.from.symbol
+            }
         }
     }
     
