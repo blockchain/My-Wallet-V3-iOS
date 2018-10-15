@@ -175,7 +175,12 @@ workflows:
   # Execute tests only.
   run_tests_only:
     jobs:
-      - setup_node
+      - setup_node:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
       - init_sub_modules:
           requires:
             - setup_node
