@@ -5,8 +5,9 @@
 #  Created by Maurice A. on 10/1/18.
 #  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 #
-#  Run commands are executed using non-login shells by default,
-#  so you must explicitly source any dotfiles as part of the command.
+#  CircleCI
+#  --------
+#  Run commands are executed using non-login shells by default, so you must explicitly source any dotfiles as part of the command.
 #  It’s possible to specify a multi-line command, each line of which will be run in the same shell.
 #
 #  It is currently not possible to delete the cache in CircleCI 2.0
@@ -14,7 +15,9 @@
 #
 #  Environment variables (e.g. API keys) are defined in the project settings on circleci.com.
 #
-#  The setup_circle_ci Fastlane action must be in the before_all block to perform the following actions:
+#  Fastlane
+#  --------
+#  The `setup_circle_ci` Fastlane action must be in the before_all block to perform the following actions:
 #  - Create a new temporary keychain for use with Fastlane Match (see the code signing section for more details).
 #  - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
 #  - Set up log and test result paths to be easily collectible.
@@ -23,6 +26,14 @@
 #  you must remove the branching at the job level and instead declare it in the workflows section.
 #
 #  Builds without workflows require a build job.
+#
+#  Cocoapods
+#  ---------
+#  Data persisted as a result of running `pod install`:
+#  - <project name>.xcworkspace
+#  - Podfile
+#  - Podfile.lock
+#  - Pods/
 #
 defaults: &defaults
   working_directory: /Users/distiller/project
@@ -104,11 +115,6 @@ jobs:
           paths:
             - ./Submodules/OpenSSL-for-iPhone
   # Install Pods
-  # Data persisted as a result of running `pod install`:
-  # - <project name>.xcworkspace
-	# - Podfile
-	# - Podfile.lock
-	# - Pods/
   install_pods:
     <<: *defaults
     shell: /bin/bash --login -o pipefail
