@@ -51,6 +51,8 @@ jobs:
             - /usr/local/lib/node_modules
   # Init Git Sub Modules
   init_sub_modules:
+    macos:
+      xcode: "10.0.0"
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -65,6 +67,8 @@ jobs:
             sh scripts/build-js.sh
   # Build OpenSSL library
   build_openssl:
+    macos:
+      xcode: "10.0.0"
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -83,6 +87,8 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
   # Install Ruby Gems
   install_gems:
+    macos:
+      xcode: "10.0.0"
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -99,6 +105,8 @@ jobs:
             - vendor/bundle
   # Install Pods
   install_pods:
+    macos:
+      xcode: "10.0.0"
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
