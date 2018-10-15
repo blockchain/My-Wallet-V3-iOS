@@ -28,6 +28,7 @@ jobs:
   setup_node:
     branches:
       only:
+        - ci
         - dev
         - release
     macos:
@@ -54,6 +55,7 @@ jobs:
   init_sub_modules:
     branches:
       only:
+        - ci
         - dev
         - release
     shell: /bin/bash --login -o pipefail
@@ -72,6 +74,7 @@ jobs:
   build_openssl:
     branches:
       only:
+        - ci
         - dev
         - release
     shell: /bin/bash --login -o pipefail
@@ -94,6 +97,7 @@ jobs:
   install_gems:
     branches:
       only:
+        - ci
         - dev
         - release
     shell: /bin/bash --login -o pipefail
@@ -114,6 +118,7 @@ jobs:
   install_pods:
     branches:
       only:
+        - ci
         - dev
         - release
     shell: /bin/bash --login -o pipefail
@@ -134,6 +139,7 @@ jobs:
   install_fastlane:
     branches:
       only:
+        - ci
         - dev
         - release
     macos:
@@ -162,6 +168,7 @@ jobs:
   run_tests:
     branches:
       only:
+        - ci
         - dev
         - release
     macos:
@@ -213,6 +220,7 @@ workflows:
           filters:
             branches:
               only:
+                - ci
                 - dev
                 - release
           requires:
@@ -237,6 +245,7 @@ workflows:
           filters:
             branches:
               only:
+                - ci
                 - dev
                 - release
           requires:
