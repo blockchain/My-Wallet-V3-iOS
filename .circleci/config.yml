@@ -190,9 +190,9 @@ workflows:
                 - ci
                 - dev
                 - release
-  #     - init_sub_modules:
-  #         requires:
-  #           - setup_node
+      - init_sub_modules:
+          requires:
+            - setup_node
   #     - build_openssl:
   #         requires:
   #           - init_sub_modules
