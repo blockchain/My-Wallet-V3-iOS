@@ -134,19 +134,12 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             sudo gem install fastlane
-      - run:
-          name: Codesign info
-          command: security find-identity -v -p codesigning
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
   # Run tests job:
   # - execute unit tests.
   run_tests:
     <<: *defaults
     environment:
-      FASTLANE_LANE: test
+      FASTLANE_LANE: test_dev
       FL_OUTPUT_DIR: test-results
     shell: /bin/bash --login -o pipefail
     steps:
@@ -158,6 +151,13 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             bundle exec fastlane $FASTLANE_LANE
+      - run:
+          name: Codesign info
+          command: security find-identity -v -p codesigning
+      - store_artifacts:
+          path: output
+      - store_test_results:
+          path: output/scan
   # Archive and upload job:
   # - create archive and upload to App Store Connect.
   # archive_and_upload:
