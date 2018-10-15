@@ -1,0 +1,32 @@
+# For more information about the Scanfile, see:
+# https://docs.fastlane.tools/actions/scan
+#
+# Notes:
+# - the parameter skip_detect_devices(true) seems to result in 0 tests in the output. Avoid using for now.
+# - the parameter clean(true) is required for all lanes to prevent the following error in the new Xcode build system:
+#   Cycle in dependencies between targets 'Blockchain' and 'RxCocoa'; building could produce unreliable results.
+#
+
+for_lane :test_dev do
+  clean(true)
+  configuration("Debug Dev")
+  output_style("basic") # Reflected in the console, not the generated files.
+  scheme("Blockchain (Dev)")
+  workspace("Blockchain.xcworkspace")
+end
+
+for_lane :test_staging do
+  clean(true)
+  code_coverage(true)
+  configuration("Debug Staging")
+  scheme("Blockchain (Staging)")
+  workspace("Blockchain.xcworkspace")
+end
+
+for_lane :test_release do
+  clean(true)
+  code_coverage(true)
+  configuration("Release")
+  scheme("Blockchain")
+  workspace("Blockchain.xcworkspace")
+end
