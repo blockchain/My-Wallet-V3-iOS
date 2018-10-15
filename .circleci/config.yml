@@ -195,26 +195,25 @@ workflows:
       - install_pods:
           requires:
           - install_deps
-  #     - install_fastlane:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #         requires:
-  #           - install_gems
-  #     - run_tests:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #         requires:
-  #           - install_deps
-  #           - init_sub_modules
-  #           - build_openssl
-  #           - install_gems
-  #           - install_pods
+      - install_fastlane:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
+          requires:
+            - install_deps
+      - run_tests:
+          branches:
+            only:
+              - ci
+              - dev
+              - release
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+            - install_fastlane
   # # Execute tests, create archive and upload to App Store Connect.
   # run_tests_and_upload:
   #   jobs:
