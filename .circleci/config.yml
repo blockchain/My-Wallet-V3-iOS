@@ -196,11 +196,12 @@ workflows:
           requires:
           - install_deps
       - install_fastlane:
-          branches:
-            only:
-              - ci
-              - dev
-              - release
+          filters:
+            branches:
+              only:
+                - ci
+                - dev
+                - release
           requires:
             - install_deps
       # - run_tests:
