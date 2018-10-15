@@ -98,7 +98,7 @@ jobs:
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ./vendor
+            - ./
   # Build OpenSSL library
   build_openssl:
     <<: *defaults
