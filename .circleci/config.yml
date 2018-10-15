@@ -180,20 +180,20 @@ jobs:
             bundle exec fastlane $FASTLANE_LANE
   # Archive and upload job:
   # - create archive and upload to App Store Connect.
-  archive_and_upload:
-    branches:
-      only: release
-    macos:
-      xcode: "10.0.0"
-    steps:
+  # archive_and_upload:
+  #   branches:
+  #     only: release
+  #   macos:
+  #     xcode: "10.0.0"
+  #   steps:
   # Draft GitHub release
   # - generate change log since previous version.
   # - create new release on GitHub using version tag and change log.
-  github_release:
-    filters:
-      tags:
-        only: /^v.*/
-    steps:
+  # github_release:
+  #   filters:
+  #     tags:
+  #       only: /^v.*/
+  #   steps:
 # --- Workflows ---
 workflows:
   version: 2
@@ -253,6 +253,6 @@ workflows:
             - install_gems
             - install_pods
             - run_tests
-  draft_github_release:
-    jobs:
-      - github_release
+  # draft_github_release:
+  #   jobs:
+  #     - github_release
