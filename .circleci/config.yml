@@ -125,7 +125,7 @@ jobs:
           at: /Users/distiller/project
       - restore_cache:
           keys:
-            - pods-cache-{{ checksum "Podfile" }}
+            - pods-cache-{{ checksum "Podfile.lock" }}
       - run:
           name: Install Pods
           command: |
@@ -134,7 +134,7 @@ jobs:
             fi
             pod install --verbose
       - save_cache:
-          key: pods-cache-{{ checksum "Podfile" }}
+          key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
             - ~/.cocoapods
             - ~/Library/Caches/CocoaPods
