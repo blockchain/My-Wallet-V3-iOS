@@ -91,6 +91,7 @@ jobs:
             sudo gem cleanup
             sudo gem install bundler
             bundle install --path vendor/bundle
+            bundle clean
       - save_cache:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
           paths:
