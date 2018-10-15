@@ -116,16 +116,19 @@ jobs:
       - run:
           name: Install Pods
           command: |
-            curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
+            if [ ! -d "/Users/distiller/.cocoapods" ]; then
+              curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
+            fi
             pod install --verbose
       - save_cache:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
             - ~/.cocoapods
+            - ~/Library/Caches/CocoaPods
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ./
+            - ./Pods
   # Install fastlane
   install_fastlane:
     <<: *defaults
