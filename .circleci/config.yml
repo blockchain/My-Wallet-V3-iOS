@@ -196,8 +196,8 @@ workflows:
       - build_openssl:
           requires:
             - init_sub_modules
-  #     - install_gems
-  #     - install_pods
+      - install_gems
+      - install_pods
   #     - install_fastlane:
   #         branches:
   #           only:
