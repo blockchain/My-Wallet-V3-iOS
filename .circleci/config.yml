@@ -243,7 +243,7 @@ workflows:
             - build_openssl
             - install_gems
             - install_pods
-      - archive_and_upload
+      - archive_and_upload:
           requires:
             - setup_node
             - init_sub_modules
