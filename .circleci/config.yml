@@ -87,13 +87,6 @@ jobs:
           key: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
-  # Install Ruby Gems
-  install_gems:
-    <<: *defaults
-    shell: /bin/bash --login -o pipefail
-    steps:
-      - attach_workspace:
-          at: /Users/distiller/project
       - restore_cache:
           keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
@@ -199,7 +192,6 @@ workflows:
       - build_openssl:
           requires:
             - setup_node
-      - install_gems
       - install_pods
   #     - install_fastlane:
   #         branches:
