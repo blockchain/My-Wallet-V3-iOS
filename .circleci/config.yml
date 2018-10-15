@@ -209,21 +209,9 @@ workflows:
           requires:
           - install_deps
       - install_fastlane:
-          filters:
-            branches:
-              only:
-                - ci
-                - dev
-                - release
           requires:
             - install_deps
       - run_tests:
-          filters:
-            branches:
-              only:
-                - ci
-                - dev
-                - release
           requires:
             - install_deps
             - build_openssl
