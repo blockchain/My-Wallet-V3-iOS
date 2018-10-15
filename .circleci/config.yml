@@ -185,6 +185,7 @@ jobs:
       only: release
     macos:
       xcode: "10.0.0"
+    steps:
   # Draft GitHub release
   # - generate change log since previous version.
   # - create new release on GitHub using version tag and change log.
@@ -192,6 +193,7 @@ jobs:
     filters:
       tags:
         only: /^v.*/
+    steps:
 # --- Workflows ---
 workflows:
   version: 2
