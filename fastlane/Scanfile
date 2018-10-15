@@ -3,6 +3,7 @@
 #
 # Notes:
 # - the parameter skip_detect_devices(true) seems to result in 0 tests in the output. Avoid using for now.
+#   Discussion: https://stackoverflow.com/questions/50709330/cycle-inside-building-could-produce-unreliable-results-xcode-10-error
 # - the parameter clean(true) is required for all lanes to prevent the following error in the new Xcode build system:
 #   Cycle in dependencies between targets 'Blockchain' and 'RxCocoa'; building could produce unreliable results.
 #
