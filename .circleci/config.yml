@@ -30,10 +30,12 @@
 #  Cocoapods
 #  ---------
 #  Data persisted as a result of running `pod install`:
-#  - <project name>.xcworkspace
+#  - Blockchain.xcworkspace
 #  - Podfile
 #  - Podfile.lock
 #  - Pods/
+#
+#  The Cocoapods master repository is fetched via the CircleCI mirror for performance.
 #
 defaults: &defaults
   working_directory: /Users/distiller/project
