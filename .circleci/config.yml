@@ -77,7 +77,7 @@ jobs:
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ./
+            - ./Submodules
   # Build OpenSSL library
   build_openssl:
     <<: *defaults
@@ -102,7 +102,7 @@ jobs:
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ./
+            - ./Submodules/OpenSSL-for-iPhone
   # Install Pods
   install_pods:
     <<: *defaults
