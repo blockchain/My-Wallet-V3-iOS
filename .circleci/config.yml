@@ -134,7 +134,6 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             sudo gem install fastlane
-            bundle exec fastlane $FASTLANE_LANE
       - run:
           name: Codesign info
           command: security find-identity -v -p codesigning
@@ -158,8 +157,7 @@ jobs:
           command: |
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
-            sudo gem install fastlane
-            # bundle exec fastlane $FASTLANE_LANE
+            bundle exec fastlane $FASTLANE_LANE
   # Archive and upload job:
   # - create archive and upload to App Store Connect.
   # archive_and_upload:
@@ -204,17 +202,18 @@ workflows:
                 - release
           requires:
             - install_deps
-      # - run_tests:
-      #     branches:
-      #       only:
-      #         - ci
-      #         - dev
-      #         - release
-      #     requires:
-      #       - install_deps
-      #       - build_openssl
-      #       - install_pods
-      #       - install_fastlane
+      - run_tests:
+          filters:
+            branches:
+              only:
+                - ci
+                - dev
+                - release
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+            - install_fastlane
   # # Execute tests, create archive and upload to App Store Connect.
   # run_tests_and_upload:
   #   jobs:
