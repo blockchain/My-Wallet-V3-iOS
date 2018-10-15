@@ -99,6 +99,10 @@ jobs:
           key: openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
           paths:
             - ~/project/Submodules/OpenSSL-for-iPhone
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - ./
   # Install Pods
   install_pods:
     <<: *defaults
@@ -118,6 +122,10 @@ jobs:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
             - ~/.cocoapods
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - ./
   # Install fastlane
   install_fastlane:
     <<: *defaults
@@ -134,6 +142,10 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             sudo gem install fastlane
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - ./
   # Run tests job:
   # - execute unit tests.
   run_tests:
