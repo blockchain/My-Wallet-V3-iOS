@@ -2416,7 +2416,7 @@ NSString * const kLockboxInvitation = @"lockbox";
 {
     if ([self.accountInfo objectForKey:kAccountInvitations]) {
         NSDictionary *invitations = [self.accountInfo objectForKey:kAccountInvitations];
-        BOOL enabled = [invitations objectForKey:kLockboxInvitation];
+        BOOL enabled = [[invitations objectForKey:kLockboxInvitation] boolValue];
         return enabled;
     } else {
         return NO;
