@@ -24,13 +24,16 @@
 #
 #  Builds without workflows require a build job.
 #
+defaults: &defaults
+  working_directory: /Users/distiller/project
+  macos:
+    xcode: "10.0.0"
 # --- Jobs ---
 version: 2
 jobs:
   # Setup Node and NPM
   setup_node:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
       - restore_cache:
@@ -51,8 +54,7 @@ jobs:
             - /usr/local/lib/node_modules
   # Init Git Sub Modules
   init_sub_modules:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -65,12 +67,18 @@ jobs:
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
             sh scripts/build-js.sh
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - ./
+
   # Build OpenSSL library
   build_openssl:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - restore_cache:
           keys:
             - openssl-cache-{{ .Environment.TARGET_IOS_SDK_VERSION }}
@@ -87,10 +95,11 @@ jobs:
             - ~/project/Submodules/OpenSSL-for-iPhone
   # Install Ruby Gems
   install_gems:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - restore_cache:
           keys:
             - gems-cache-{{ checksum "Gemfile.lock" }}
@@ -105,10 +114,11 @@ jobs:
             - vendor/bundle
   # Install Pods
   install_pods:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     shell: /bin/bash --login -o pipefail
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - restore_cache:
           keys:
             - pods-cache-{{ checksum "Podfile.lock" }}
@@ -123,13 +133,14 @@ jobs:
             - ~/.cocoapods
   # Install fastlane
   install_fastlane:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     environment:
       FASTLANE_LANE: dev
       FL_OUTPUT_DIR: output
     shell: /bin/bash --login -o pipefail
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - run:
           name: Fastlane
           command: |
@@ -147,13 +158,14 @@ jobs:
   # Run tests job:
   # - execute unit tests.
   run_tests:
-    macos:
-      xcode: "10.0.0"
+    <<: *defaults
     environment:
       FASTLANE_LANE: test
       FL_OUTPUT_DIR: test-results
     shell: /bin/bash --login -o pipefail
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - run:
           name: Fastlane
           command: |
