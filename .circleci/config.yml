@@ -104,6 +104,11 @@ jobs:
           paths:
             - ./Submodules/OpenSSL-for-iPhone
   # Install Pods
+  # Data persisted as a result of running `pod install`:
+  # - <project name>.xcworkspace
+	# - Podfile
+	# - Podfile.lock
+	# - Pods/
   install_pods:
     <<: *defaults
     shell: /bin/bash --login -o pipefail
@@ -129,6 +134,7 @@ jobs:
           root: /Users/distiller/project
           paths:
             - ./Pods
+            - ./Blockchain.xcworkspace
   # Install fastlane
   install_fastlane:
     <<: *defaults
