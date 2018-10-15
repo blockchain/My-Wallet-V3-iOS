@@ -31,7 +31,7 @@ defaults: &defaults
 # --- Jobs ---
 version: 2
 jobs:
-  # Setup Node and NPM
+  # Setup Node, NPM and Initialize Submodules
   setup_node:
     <<: *defaults
     shell: /bin/bash --login -o pipefail
@@ -52,11 +52,6 @@ jobs:
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
-  # Init Git Sub Modules
-  init_sub_modules:
-    <<: *defaults
-    shell: /bin/bash --login -o pipefail
-    steps:
       - checkout
       - run:
           name: Initialize Submodules
@@ -71,7 +66,6 @@ jobs:
           root: /Users/distiller/project
           paths:
             - ./
-
   # Build OpenSSL library
   build_openssl:
     <<: *defaults
@@ -202,9 +196,6 @@ workflows:
                 - ci
                 - dev
                 - release
-      - init_sub_modules:
-          requires:
-            - setup_node
       - build_openssl:
           requires:
             - init_sub_modules
