@@ -22,6 +22,7 @@
 #  Builds without workflows require a build job.
 #
 # --- Jobs ---
+version: 2
 jobs:
   # Setup Node and NPM
   setup_node:
