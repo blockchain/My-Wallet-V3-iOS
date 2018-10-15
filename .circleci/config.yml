@@ -193,9 +193,9 @@ workflows:
       - init_sub_modules:
           requires:
             - setup_node
-  #     - build_openssl:
-  #         requires:
-  #           - init_sub_modules
+      - build_openssl:
+          requires:
+            - init_sub_modules
   #     - install_gems
   #     - install_pods
   #     - install_fastlane:
