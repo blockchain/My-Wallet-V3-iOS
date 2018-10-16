@@ -7620,7 +7620,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect ${WALLET_SERVER}:443 -showcerts < /dev/null | openssl x509 -outform DER > ${LOCAL_CERTIFICATE_FILE}.der\n";
+			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect blockchain.com:443 -showcerts < /dev/null | openssl x509 -outform DER > blockchain.der\n";
 		};
 		51B9D9272063EA1D007DED65 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
