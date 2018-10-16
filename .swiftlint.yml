@@ -1,59 +1,56 @@
 disabled_rules:
   - force_cast
-  - void_return
-  - trailing_whitespace
+  - identifier_name
   - todo
+  - void_return
 excluded:
   - Submodules/
   - RxAlamofire/
   - Pods/
   - vendor/bundle
-attributes: true
-closure_end_indentation: true
-closure_spacing: true
-conditional_returns_on_newline: true
-discouraged_object_literal: true
-discouraged_optional_boolean: true
-empty_count: true
-empty_string: true
-explicit_enum_raw_value: true
-explicit_top_level_acl: true
-explicit_type_interface: true
-fatal_error_message: true
-file_header: true
+opt_in_rules:
+  - attributes
+  - closure_end_indentation
+  - closure_spacing
+  - conditional_returns_on_newline
+  - discouraged_object_literal
+  - discouraged_optional_boolean
+  - empty_count
+  - empty_string
+  - explicit_enum_raw_value
+  - explicit_top_level_acl
+  - explicit_type_interface
+  - fatal_error_message
+  - file_header
+  - first_where
+  - force_unwrapping
+  - implicit_return
+  - implicitly_unwrapped_optional
+  - let_var_whitespace
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_parameters
+  - operator_usage_whitespace
+  - override_in_extension
+  - private_action
+  - private_outlet
+  - required_enum_case
+  - sorted_imports
+  - strict_fileprivate
+  - switch_case_on_newline
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
 file_length:
   warning: 800
   error: 1200
-first_where: true
-force_unwrapping: true
 function_body_length:
   warning: 40
   error: 50
-identifier_name: false
-implicit_return: true
-implicitly_unwrapped_optional: true
-let_var_whitespace: true
 line_length:
   warning: 150
   error: 160
-literal_expression_end_indentation: true
-multiline_arguments: true
-multiline_parameters: true
-operator_usage_whitespace: true
-override_in_extension: true
-private_action: true
-private_outlet: true
-required_enum_case: true
-sorted_imports: true
-strict_fileprivate: true
-switch_case_on_newline: true
-todo: false
-trailing_closure: true
 type_body_length:
   warning: 500
   error: 1000
-unneeded_parentheses_in_closure_argument: true
-unused_optional_binding: true
-vertical_parameter_alignment: true
-vertical_parameter_alignment_on_call: true
-yoda_condition: true
