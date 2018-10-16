@@ -14,7 +14,7 @@ platform :ios do
     setup_circle_ci
   end
   desc "Execute unit tests"
-  lane :test_dev do
+  lane :run_tests do
     # https://docs.fastlane.tools/actions/scan
     scan
     if is_ci?
