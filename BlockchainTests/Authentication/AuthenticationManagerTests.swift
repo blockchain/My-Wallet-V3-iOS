@@ -96,7 +96,7 @@ class AuthenticationManagerTests: XCTestCase {
             authResultExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 10) { error in
+        waitForExpectations(timeout: 1) { error in
             if let error = error {
                 XCTFail("waitForExpectations fail: \(error.localizedDescription)")
             }
