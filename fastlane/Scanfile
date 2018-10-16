@@ -13,5 +13,4 @@ code_coverage(true)
 configuration("Debug Production")
 output_style("basic") # Reflected in the console, not the generated files.
 scheme("Blockchain")
-skip_build(true)
 workspace("Blockchain.xcworkspace")
