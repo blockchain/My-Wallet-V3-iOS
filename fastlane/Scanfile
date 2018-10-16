@@ -8,11 +8,9 @@
 #   Cycle in dependencies between targets 'Blockchain' and 'RxCocoa'; building could produce unreliable results.
 #
 
-for_lane :run_tests do
-  clean(true)
-  code_coverage(true)
-  configuration("Debug Production")
-  output_style("basic") # Reflected in the console, not the generated files.
-  scheme("Blockchain")
-  workspace("Blockchain.xcworkspace")
-end
+clean(true)
+code_coverage(true)
+configuration("Debug Production")
+output_style("basic") # Reflected in the console, not the generated files.
+scheme("Blockchain")
+workspace("Blockchain.xcworkspace")

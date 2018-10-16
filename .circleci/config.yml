@@ -164,7 +164,7 @@ jobs:
   run_tests:
     <<: *defaults
     environment:
-      FASTLANE_LANE: run_tests
+      FASTLANE_LANE: execute_tests
       FL_OUTPUT_DIR: test-results
     steps:
       - attach_workspace:
