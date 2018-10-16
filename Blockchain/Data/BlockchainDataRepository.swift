@@ -34,9 +34,16 @@ import RxSwift
     }
 
     var countries: Single<Countries> {
+        let countriesFetchedOverNetwork = KYCNetworkRequest.request(
+            get: .listOfCountries,
+            type: Countries.self
+        ).map { countries -> Countries in
+            return countries.sorted(by: { $0.name.uppercased() < $1.name.uppercased() })
+        }
+
         return fetchData(
             cachedValue: cachedCountries,
-            networkValue: KYCNetworkRequest.request(get: .listOfCountries, type: Countries.self)
+            networkValue: countriesFetchedOverNetwork
         )
     }
 

@@ -44,7 +44,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             encryptedPinPassword,
             password: decryptionKey,
             pbkdf2_iterations: Int32(Constants.Security.pinPBKDF2Iterations)
-            ), decryptedPassword.count > 0 else {
+        ), decryptedPassword.count > 0 else {
                 showPinError(withMessage: LocalizationConstants.Pin.decryptedPasswordLengthZero)
                 askIfUserWantsToResetPIN()
                 return
@@ -63,6 +63,10 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
     }
 
     func pinEntryControllerDidChangePin(_ controller: PEPinEntryController) {
+        // Set the last entered PIN so that during pin setting, if the user enabled biometric auth
+        // we can persist the pin to the keychain
+        self.lastEnteredPIN = controller.lastEnteredPin
+
         closePinEntryView(animated: true)
 
         let inSettings = pinEntryViewController?.inSettings ?? false

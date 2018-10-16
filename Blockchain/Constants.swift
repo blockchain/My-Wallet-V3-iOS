@@ -118,6 +118,8 @@ struct Constants {
         static let blockchainSupportRequest = blockchainSupport + "/hc/en-us/requests/new?"
         static let supportTicketBuySellExchange = blockchainSupportRequest + "ticket_form_id=360000014686"
         static let forgotPassword = "https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
+        static let blockchainWalletLogin = "https://login.blockchain.com"
+        static let lockbox = "https://blockchain.com/lockbox"
     }
     struct Wallet {
         static let swipeToReceiveAddressCount = 5
@@ -125,6 +127,11 @@ struct Constants {
     struct JSErrors {
         static let addressAndKeyImportWrongBipPass = "wrongBipPass"
         static let addressAndKeyImportWrongPrivateKey = "wrongPrivateKey"
+    }
+    struct AssetTypeCodes {
+        static let bitcoin = "BTC"
+        static let ethereum = "ETH"
+        static let bitcoinCash = "BCH"
     }
 }
 
@@ -213,5 +220,9 @@ struct Constants {
 
     @objc class func infoLabelEdgeInsets() -> UIEdgeInsets {
         return Constants.Measurements.infoLabelEdgeInsets
+    }
+
+    @objc class func btcCode() -> String {
+        return Constants.AssetTypeCodes.bitcoin
     }
 }

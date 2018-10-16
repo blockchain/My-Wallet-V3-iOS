@@ -137,17 +137,24 @@ extension SettingsTableViewController {
     }
 
     func prepareIdentityCell(_ cell: UITableViewCell) {
-        formatDetailCell(true, cell)
-        self.getUserVerificationStatus { [weak self] user in
-            guard let strongSelf = self else { return }
-            if let theUser = user {
-                let userModel = KYCInformationViewModel.create(for: theUser.status)
-                cell.detailTextLabel?.text = userModel.badge
-                strongSelf.createBadge(cell, theUser)
-            } else {
-                cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
-                strongSelf.createBadge(cell, color: .unverified)
+        guard didFetchNabuUser else {
+            cell.detailTextLabel?.isHidden = true
+            getUserVerificationStatus { [weak self] user in
+                guard let strongSelf = self else { return }
+                strongSelf.didFetchNabuUser = true
+                strongSelf.nabuUser = user
+                strongSelf.prepareIdentityCell(cell)
             }
+            return
+        }
+
+        if let nabuUser = nabuUser {
+            let userModel = KYCInformationViewModel.create(for: nabuUser.status)
+            cell.detailTextLabel?.text = userModel.badge
+            createBadge(cell, nabuUser)
+        } else {
+            cell.detailTextLabel?.text = LocalizationConstants.KYC.accountUnverifiedBadge
+            createBadge(cell, color: .unverified)
         }
     }
 

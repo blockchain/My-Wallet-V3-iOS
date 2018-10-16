@@ -47,22 +47,49 @@ class SideMenuPresenter {
         }
 
         setMenuItems(showExchange: false)
-
+        
         let stateCodeGuess = wallet.stateCodeGuess()
-        disposable = Observable.combineLatest(
-            walletService.isCountryInHomebrewRegion(countryCode: countryCodeGuess).asObservable(),
-            walletService.isInPartnerRegionForExchange(countryCode: countryCodeGuess, state: stateCodeGuess).asObservable()
-        ).subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (isHomebrewSupported, isPartnerSupported) in
-                self.setMenuItems(showExchange: isHomebrewSupported || isPartnerSupported)
-            }, onError: { [unowned self] error in
+        
+        let homebrewRegion = walletService.isCountryInHomebrewRegion(
+            countryCode: countryCodeGuess
+        ).asObservable()
+        let partnerRegion = walletService.isInPartnerRegionForExchange(
+            countryCode: countryCodeGuess,
+            state: stateCodeGuess
+        ).asObservable()
+        
+        disposable = Observable.combineLatest(BlockchainDataRepository.shared.nabuUser, homebrewRegion, partnerRegion) {
+            return ($0, $1, $2)
+        }.subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] payload in
+                guard let this = self else { return }
+                
+                let user = payload.0
+                let homebrewSupported = payload.1
+                let partnerSupported = payload.2
+                
+                /// Any user, regardless of their location should see
+                /// the exchange if they are approved.
+                if user.status == .approved {
+                    this.setMenuItems(showExchange: true)
+                } else {
+                    /// If the user is not approved, fall back on whether or not
+                    /// the region is HB or partner supported. 
+                    this.setMenuItems(
+                        showExchange: homebrewSupported || partnerSupported
+                    )
+                }
+            }, onError: { [weak self] error in
+                guard let this = self else { return }
                 Logger.shared.error("Failed to determine whether the country is supported by homebrew or by shapeshift.")
-                self.setMenuItems(showExchange: false)
+                this.setMenuItems(showExchange: false)
             })
     }
 
     private func setMenuItems(showExchange: Bool) {
         var items: [SideMenuItem] = []
+        
         if wallet.isBuyEnabled() {
             items.append(.buyBitcoin)
         }
@@ -76,11 +103,19 @@ class SideMenuPresenter {
         }
         items.append(contentsOf: [
             .settings,
-            .accountsAndAddresses,
-            .webLogin,
-            .support,
-            .logout
-        ])
+            .accountsAndAddresses
+            ]
+        )
+        if wallet.isLockboxEnabled() {
+            items.append(.lockbox)
+        }
+        items.append(
+            contentsOf: [
+                .webLogin,
+                .support,
+                .logout
+            ]
+        )
         view?.setMenu(items: items)
     }
 }

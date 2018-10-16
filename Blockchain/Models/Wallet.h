@@ -340,6 +340,7 @@
 
 - (BOOL)isBuyEnabled;
 - (BOOL)canUseSfox;
+- (BOOL)isLockboxEnabled;
 
 // Settings
 - (void)getAccountInfo;
@@ -465,6 +466,9 @@
 - (NSString *_Nullable)KYCUserId;
 - (NSString *_Nullable)KYCLifetimeToken;
 
+// Lockbox
+- (NSArray *_Nonnull)getLockboxDevices;
+
 /// Call this method to build an Exchange order.
 /// It constructs and stores a payment object with a given AssetType, to, from, and amount (properties of OrderTransactionLegacy).
 /// To send the order, call sendOrderTransaction:completion:success:error:cancel.
@@ -483,7 +487,7 @@
 ///   - completion: handler called when the payment is successfully sent
 ///   - error: handler called when an error occurs while sending the payment
 ///   - cancel: handler called when the payment is cancelled (e.g., when an intermediate screen such as second password is dismissed)
-- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel;
+- (void)sendOrderTransaction:(LegacyAssetType)legacyAssetType secondPassword:(NSString* _Nullable)secondPassword completion:(void (^ _Nonnull)(void))completion success:(void (^ _Nonnull)(void))success error:(void (^ _Nonnull)(NSString *_Nonnull))error cancel:(void (^ _Nonnull)(void))cancel;
 // Top Bar Display
 - (NSDecimalNumber *)btcDecimalBalance;
 - (NSDecimalNumber *)ethDecimalBalance;

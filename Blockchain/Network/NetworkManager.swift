@@ -157,12 +157,15 @@ class NetworkManager: NSObject, URLSessionDelegate {
         let host = challenge.protectionSpace.host
         Logger.shared.info("Received challenge from \(host)")
 
-        // TICKET: IOS-1194 - ⚠️ Do not ship `|| true`, this is for debugging purposes only.
-        if BlockchainAPI.PartnerHosts.rawValues.contains(host) || true {
+        #if DISABLE_CERT_PINNING
+        completionHandler(.performDefaultHandling, nil)
+        #else
+        if BlockchainAPI.PartnerHosts.rawValues.contains(host) {
             completionHandler(.performDefaultHandling, nil)
         } else {
             CertificatePinner.shared.didReceive(challenge, completion: completionHandler)
         }
+        #endif
     }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {}

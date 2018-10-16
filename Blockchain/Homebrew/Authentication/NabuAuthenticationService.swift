@@ -37,16 +37,22 @@ final class NabuAuthenticationService {
     ///   (2) using the JWT token, create a Nabu user
     ///   (3) the created Nabu user is then persisted in the wallet metadata
     ///
+    /// - Parameter requestNewToken: if a new token should be requested. Defaults to false so that a
+    ///       session token is only requested if the cached token is expired.
     /// - Returns: a Single returning the sesion token
-    func getSessionToken() -> Single<NabuSessionTokenResponse> {
+    func getSessionToken(requestNewToken: Bool = false) -> Single<NabuSessionTokenResponse> {
         return getOrCreateNabuUserResponse().flatMap {
-            self.getSessionTokenIfNeeded(from: $0)
+            self.getSessionTokenIfNeeded(from: $0, requestNewToken: requestNewToken)
         }
     }
 
     // MARK: - Private Methods
 
-    private func getSessionTokenIfNeeded(from userResponse: NabuCreateUserResponse) -> Single<NabuSessionTokenResponse> {
+    private func getSessionTokenIfNeeded(from userResponse: NabuCreateUserResponse, requestNewToken: Bool) -> Single<NabuSessionTokenResponse> {
+        guard !requestNewToken else {
+            return requestNewSessionToken(from: userResponse)
+        }
+
         guard let sessionToken = cachedSessionToken.value else {
             return requestNewSessionToken(from: userResponse)
         }

@@ -7,35 +7,50 @@
 //
 
 final class SideMenuCell: UITableViewCell {
+    
+    fileprivate static let newContainerViewTrailingPadding: CGFloat = 16.0
+    
+    /// You must take into accoun the `peekAmount` of `ECSlidingViewController`
+    /// otherwise the `newContainer` will not be visible.
+    lazy var peekPadding: CGFloat = {
+        let controller = AppCoordinator.shared.slidingViewController
+        return controller.anchorRightPeekAmount
+    }()
 
     static let defaultHeight: CGFloat = 54
 
+    @IBOutlet fileprivate var title: UILabel!
+    @IBOutlet fileprivate var icon: UIImageView!
+    @IBOutlet fileprivate var newContainerView: UIView!
+    @IBOutlet fileprivate var newLabel: UILabel!
+    @IBOutlet fileprivate var newContainerTrailingConstraint: NSLayoutConstraint!
+    
     var item: SideMenuItem? {
         didSet {
-            self.textLabel?.text = item?.title
-            self.imageView?.image = item?.image
+            title.text = item?.title
+            icon.image = item?.image
+            guard let value = item else {
+                newContainerView.alpha = 0.0
+                return
+            }
+            newContainerView.alpha = value.isNew ? 1.0 : 0.0
         }
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.textLabel?.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Small)
-        self.textLabel?.textColor = .gray5
-        self.textLabel?.highlightedTextColor = .gray5
-        self.imageView?.contentMode = .scaleAspectFill
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard let imageView = self.imageView else { return }
-        guard let textLabel = self.textLabel else { return }
-        let imageViewSize: CGFloat = 21
-        imageView.frame = CGRect(
-            x: 15,
-            y: ((frame.height / 2) - (imageViewSize / 2)),
-            width: imageViewSize,
-            height: imageViewSize
+        title.font = UIFont(
+            name: Constants.FontNames.montserratRegular,
+            size: Constants.FontSizes.Small
         )
-        textLabel.frame = CGRect(x: 55, y: textLabel.frame.minY, width: textLabel.frame.width, height: textLabel.frame.height)
+        title.textColor = .black
+        title.highlightedTextColor = .black
+        newContainerView.layer.cornerRadius = 4.0
+        newLabel.text = LocalizationConstants.SideMenu.new
+        let padding = SideMenuCell.newContainerViewTrailingPadding
+        guard newContainerTrailingConstraint.constant != padding + peekPadding else { return }
+        newContainerTrailingConstraint.constant = padding + peekPadding
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }

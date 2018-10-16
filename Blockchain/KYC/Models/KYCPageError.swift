@@ -10,4 +10,5 @@ import Foundation
 
 enum KYCPageError {
     case countryNotSupported(KYCCountry)
+    case stateNotSupported(KYCState)
 }

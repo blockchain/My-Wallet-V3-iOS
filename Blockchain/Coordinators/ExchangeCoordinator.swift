@@ -85,6 +85,7 @@ struct ExchangeServices: ExchangeDependencies {
                 guard $0.status == .approved else {
                     KYCCoordinator.shared.start(); return
                 }
+                
                 self.showAppropriateExchange()
                 Logger.shared.debug("Got user with ID: \($0.personalDetails?.identifier ?? "")")
             }, onError: { error in
@@ -114,18 +115,7 @@ struct ExchangeServices: ExchangeDependencies {
 
     private func showAppropriateExchange() {
         if walletManager.wallet.hasEthAccount() {
-            let success = { [weak self] (isHomebrewAvailable: Bool) in
-                if isHomebrewAvailable {
-                    self?.showExchange(type: .homebrew)
-                } else {
-                    self?.showExchange(type: .shapeshift)
-                }
-            }
-            let error = { (error: Error) in
-                Logger.shared.error("Error checking if homebrew is available: \(error) - showing shapeshift")
-                self.showExchange(type: .shapeshift)
-            }
-            checkForHomebrewAvailability(success: success, error: error)
+            showExchange(type: .homebrew)
         } else {
             if walletManager.wallet.needsSecondPassword() {
                 AuthenticationCoordinator.shared.showPasswordConfirm(
@@ -140,26 +130,6 @@ struct ExchangeServices: ExchangeDependencies {
                 walletManager.wallet.createEthAccount(forExchange: nil)
             }
         }
-    }
-
-    private func checkForHomebrewAvailability(success: @escaping (Bool) -> Void, error: @escaping (Error) -> Void) {
-        guard let countryCode = walletManager.wallet.countryCodeGuess() else {
-            error(NetworkError.generic(message: "No country code found"))
-            return
-        }
-
-        #if DEBUG
-        guard !DebugSettings.shared.useHomebrewForExchange else {
-            success(true)
-            return
-        }
-        #endif
-
-        // Since individual exchange flows have to fetch their own data on initialization, the caller is left responsible for dismissing the busy view
-        disposable = walletService.isCountryInHomebrewRegion(countryCode: countryCode)
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: success, onError: error)
     }
 
     private func showExchange(type: ExchangeType, country: KYCCountry? = nil) {

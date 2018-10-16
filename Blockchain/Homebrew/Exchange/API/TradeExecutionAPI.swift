@@ -31,4 +31,8 @@ protocol TradeExecutionAPI {
     /// Check if the service is currently executing a request prior to
     /// submitting an additional request.
     var isExecuting: Bool { get set }
+
+    /// Currently the wallet is unable to support sending another ether
+    /// transaction until the last one is confirmed.
+    func canTradeAssetType(_ assetType: AssetType) -> Bool
 }

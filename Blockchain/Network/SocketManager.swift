@@ -35,7 +35,9 @@ class SocketManager {
     // MARK: - Public methods
     func setupSocket(socketType: SocketType, url: URL) {
         switch socketType {
-        case .exchange: self.exchangeSocket = WebSocket(url: url); self.exchangeSocket?.advancedDelegate = self
+        case .exchange:
+            self.exchangeSocket = WebSocket(url: url)
+            self.exchangeSocket?.advancedDelegate = self
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
     }
@@ -62,6 +64,10 @@ class SocketManager {
             socket.connect()
         default: Logger.shared.error(errorUnsupportedSocketType)
         }
+    }
+
+    func disconnectAll() {
+        SocketType.all.forEach { disconnect(socketType: $0) }
     }
 
     func disconnect(socketType: SocketType) {
@@ -103,9 +109,12 @@ extension SocketManager: WebSocketAdvancedDelegate {
     func websocketDidConnect(socket: WebSocket) {
         Logger.shared.debug("Websocket connected to: \(socket.currentURL.absoluteString)")
         if socket == self.exchangeSocket {
+            // TODO fix for different pending messages for different socket types. Not an issue now
+            // since there is only one socket type (i.e. exchange)
             pendingSocketMessages.forEach { [unowned self] in
                 self.send(message: $0)
             }
+            pendingSocketMessages = []
         }
     }
 
@@ -134,32 +143,44 @@ extension SocketManager: WebSocketAdvancedDelegate {
             return
         }
 
-        guard let type = json["type"] as? String else {
-            onError("Type is not a string value")
+        guard let channel = json["channel"] as? String else {
+            onError("Channel is not a string value")
             return
         }
 
         // Optimization: avoid retyping "tryToDecode(data: data, onSuccess: onSuccess, onError: onError)" for each case
-        switch type {
-        case "unsubscribed":
-            onAcknowledge("Successfully unsubscribed. Payload: \(text)")
-        case "exchangeRate":
+        switch channel {
+        case "auth":
+            onAcknowledge("Successfully subscribed. Websocket: \(socket), Payload: \(text)")
+        case "exchange_rate":
             Logger.shared.debug("Attempting to decode: \(text)")
             ExchangeRates.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-        case "currencyRatio":
-            Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
-        case "currencyRatioError":
-            /// Though this is an error, we still decode the payload
-            /// as a `SocketMessage`, so it will use the `onSuccess`
-            /// closure and not the `onError`.
-            SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+        case "conversion":
+            if let event = json["event"] as? String, event == "updated" {
+                guard let type = json["type"] as? String else {
+                    Logger.shared.error("Incorrect type or type key not found: \(text)")
+                    return
+                }
+
+                switch type {
+                case "currencyRatio":
+                    Conversion.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+                case "currencyRatioError":
+                    /// Though this is an error, we still decode the payload
+                    /// as a `SocketMessage`, so it will use the `onSuccess`
+                    /// closure and not the `onError`.
+                    SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
+                default:
+                    Logger.shared.error("Unsupported conversion type: \(text)")
+                }
+            }
         case "heartbeat", "subscribed", "authenticated":
             HeartBeat.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         case "error":
             onError("Error returned: \(json)")
             SocketError.tryToDecode(socketType: socketType, data: data, onSuccess: onSuccess, onError: onError)
         default:
-            onError("Unsupported type: '\(type)'")
+            onError("Unsupported channel: '\(channel)'")
         }
     }
 

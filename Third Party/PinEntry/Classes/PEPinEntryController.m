@@ -56,10 +56,6 @@ static PEViewController *VerifyController()
 	return c;
 }
 
-@interface PEPinEntryController ()
-@property (nonatomic) Pin *lastEnteredPIN;
-@end
-
 @implementation PEPinEntryController
 
 @synthesize pinDelegate, verifyOnly, verifyOptional, inSettings;
@@ -273,14 +269,14 @@ static PEViewController *VerifyController()
 
 - (void)pinEntryControllerDidEnteredPin:(PEViewController *)controller
 {
+    Pin *pin = [[Pin alloc] initWithCode:[controller.pin intValue]];
 	switch (pinStage) {
 		case PS_VERIFY: {
-            self.lastEnteredPIN = [[Pin alloc] initWithCode:[controller.pin intValue]];
-            [self validateWithPin:self.lastEnteredPIN];
+            [self validateWithPin:pin];
 			break;
         }
 		case PS_ENTER1: {
-            [self didEnterFirstPinForChangePinFlowFrom:controller previousPin:self.lastEnteredPIN];
+            [self didEnterFirstPinForChangePinFlowFrom:controller previousPin:self.lastEnteredPin];
 			break;
 		}
 		case PS_ENTER2:
@@ -289,6 +285,7 @@ static PEViewController *VerifyController()
 		default:
 			break;
 	}
+    self.lastEnteredPin = pin;
 }
 
 - (void)goToEnter1Pin

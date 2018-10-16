@@ -48,11 +48,6 @@ class ExchangeCreatePresenter {
     }
     
     internal func hideError() {
-        interface?.apply(animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
-            animations: [.secondaryLabel(.visible)],
-            animation: .none
-            )
-        )
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
                 animations: [.errorLabel(.hidden)],
@@ -71,12 +66,15 @@ class ExchangeCreatePresenter {
     fileprivate func displayError() {
         interface?.apply(
             animatedUpdate: ExchangeCreateInterface.AnimatedUpdate(
-                animations: [.secondaryLabel(.hidden), .errorLabel(.visible)],
+                animations: [.errorLabel(.visible)],
                 animation: .standard(duration: 0.2)
             )
         )
+    }
 
+    fileprivate func disableExchangeButton() {
         interface?.exchangeButtonEnabled(false)
+        exchangeButtonVisibility(.translucent)
     }
 }
 
@@ -132,7 +130,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
                 animations: [
                     .conversionView(.visible),
                     .ratesChevron(.hidden),
-                    .exchangeButton(.visible)
+                    .exchangeButton(interface?.isExchangeButtonEnabled() == true ? .visible : .translucent)
                 ],
                 animation: .easeIn(duration: 0.2)
             )
@@ -193,23 +191,27 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
     func insufficientFunds(balance: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(balance)])
         displayError()
+        disableExchangeButton()
     }
     
     func entryBelowMinimumValue(minimum: String) {
         let display = LocalizationConstants.Exchange.yourMin + " " + minimum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        disableExchangeButton()
     }
     
     func entryAboveMaximumValue(maximum: String) {
         let display = LocalizationConstants.Exchange.yourMax + " " + maximum
         interface?.apply(presentationUpdates: [.updateErrorLabel(display)])
         displayError()
+        disableExchangeButton()
     }
 
     func showError(message: String) {
         interface?.apply(presentationUpdates: [.updateErrorLabel(message)])
         displayError()
+        disableExchangeButton()
     }
     
     func updateTradingPair(pair: TradingPair, fix: Fix) {
@@ -224,9 +226,9 @@ extension ExchangeCreatePresenter: ExchangeCreateOutput {
         return interface?.styleTemplate() ?? .standard
     }
     
-    func updatedInput(primary: NSAttributedString?, secondary: String?) {
+    func updatedInput(primary: NSAttributedString?, secondary: String?, primaryOffset: CGFloat) {
         interface?.apply(presentationUpdates: [
-            .updatePrimaryLabel(primary),
+            .updatePrimaryLabel(primary, primaryOffset),
             .updateSecondaryLabel(secondary)
             ]
         )
