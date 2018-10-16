@@ -10,9 +10,9 @@ target 'Blockchain' do
   inhibit_all_warnings!
   # Pods for Blockchain
     pod 'SwiftLint'
-    pod 'Onfido'
+    pod 'Onfido', '~> 10.0.0'
     pod 'Alamofire', '~> 4.7'
-    pod 'Charts'
+    pod 'Charts', '~> 3.2.1'
     pod 'RxSwift', '~> 4.0'
     pod 'RxCocoa', '~> 4.0'
     pod 'PhoneNumberKit', '~> 2.1'

@@ -22,8 +22,8 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
-  - Charts
-  - Onfido
+  - Charts (~> 3.2.1)
+  - Onfido (~> 10.0.0)
   - PhoneNumberKit (~> 2.1)
   - RxBlocking (~> 4.0)
   - RxCocoa (~> 4.0)
@@ -57,6 +57,6 @@ SPEC CHECKSUMS:
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
 
-PODFILE CHECKSUM: 44ef248213d8826f75a32defdaebec86a35ff56a
+PODFILE CHECKSUM: da7fd43bf72c2689fbb7689d5ffc7a221dde7743
 
 COCOAPODS: 1.5.3
