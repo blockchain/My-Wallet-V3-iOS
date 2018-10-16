@@ -15,6 +15,9 @@
 #
 #  ‣ Environment variables (e.g. API keys) are defined in the project settings on circleci.com.
 #
+#  ‣ Your project’s default branch will never auto cancel builds. This feature only applies to non-workflow builds,
+#    builds triggered by pushes to GitHub, or workflow builds that use the new build processing feature.
+#
 #  Fastlane
 #  --------
 #  ‣ The `setup_circle_ci` Fastlane action must be in the before_all block to perform the following actions:
