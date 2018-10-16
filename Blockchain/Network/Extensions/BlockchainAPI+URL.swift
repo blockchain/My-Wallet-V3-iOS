@@ -47,6 +47,10 @@ extension BlockchainAPI {
         return "https://\(PartnerHosts.etherscan.rawValue)"
     }
 
+    var stellarExplorerUrl: String {
+        return "https://\(PartnerHosts.stellarExplorer.rawValue)"
+    }
+
     var pushNotificationsUrl: String {
         return "\(walletUrl)/wallet?method=update-ios"
     }

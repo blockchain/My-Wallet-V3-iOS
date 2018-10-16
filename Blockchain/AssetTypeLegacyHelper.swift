@@ -19,6 +19,8 @@ import Foundation
             return .ethereum
         case .bitcoinCash:
             return .bitcoinCash
+        case .stellar:
+            return .stellar
         }
     }
 
@@ -30,6 +32,8 @@ import Foundation
             return .ether
         case .bitcoinCash:
             return .bitcoinCash
+        case .stellar:
+            return .stellar
         }
     }
 

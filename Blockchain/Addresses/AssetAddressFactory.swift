@@ -24,6 +24,8 @@ class AssetAddressFactory {
             return BitcoinCashAddress(string: address)
         case .ethereum:
             return EthereumAddress(string: address)
+        case .stellar:
+            return StellarAddress(string: address)
         }
     }
 

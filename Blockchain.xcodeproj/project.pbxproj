@@ -832,6 +832,8 @@
 		C7442E3A1FBB636300695E4C /* FromToView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7442E391FBB636300695E4C /* FromToView.m */; };
 		C7448A962034BF2F0041947E /* AssetSelectionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7448A952034BF2F0041947E /* AssetSelectionTableViewCell.m */; };
 		C7448A9C2034DDF80041947E /* AssetSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7448A9B2034DDF80041947E /* AssetSelectorView.m */; };
+		C74A0DE52174DFA000402A2F /* StellarAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74A0DE42174DFA000402A2F /* StellarAddress.swift */; };
+		C74A0DE62174DFA000402A2F /* StellarAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74A0DE42174DFA000402A2F /* StellarAddress.swift */; };
 		C74E21C12024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21C02024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m */; };
 		C74E21C72024E6D700A9FBB1 /* BCPricePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21C62024E6D700A9FBB1 /* BCPricePreviewView.m */; };
 		C74E21CD2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */; };
@@ -3273,6 +3275,7 @@
 		C7448A952034BF2F0041947E /* AssetSelectionTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetSelectionTableViewCell.m; sourceTree = "<group>"; };
 		C7448A9A2034DDF80041947E /* AssetSelectorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetSelectorView.h; sourceTree = "<group>"; };
 		C7448A9B2034DDF80041947E /* AssetSelectorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetSelectorView.m; sourceTree = "<group>"; };
+		C74A0DE42174DFA000402A2F /* StellarAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarAddress.swift; sourceTree = "<group>"; };
 		C74E21BF2024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBalanceChartLegendKeyView.h; sourceTree = "<group>"; };
 		C74E21C02024BA1C00A9FBB1 /* BCBalanceChartLegendKeyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCBalanceChartLegendKeyView.m; sourceTree = "<group>"; };
 		C74E21C52024E6D700A9FBB1 /* BCPricePreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCPricePreviewView.h; sourceTree = "<group>"; };
@@ -6709,6 +6712,7 @@
 				51A862D820921E7600B338E0 /* BitcoinAddress.swift */,
 				51A862DB20921EBD00B338E0 /* BitcoinCashAddress.swift */,
 				51DC2F5F20B7312600E03AF2 /* EthereumAddress.swift */,
+				C74A0DE42174DFA000402A2F /* StellarAddress.swift */,
 			);
 			path = Addresses;
 			sourceTree = "<group>";
@@ -7592,7 +7596,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
@@ -7605,7 +7609,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
@@ -7692,7 +7696,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${PODS_ROOT}/Onfido/Onfido.framework",
@@ -7700,6 +7704,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/stellar-ios-mac-sdk/stellarsdk.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -7710,10 +7715,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/stellarsdk.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -7988,6 +7994,7 @@
 				C7343BD8215003E6001B1EC9 /* ExchangeDetailContracts.swift in Sources */,
 				AACE3134209121B800B7B806 /* WalletManager.swift in Sources */,
 				C76143AC211A80D30041411E /* Codable+Coding.swift in Sources */,
+				C74A0DE62174DFA000402A2F /* StellarAddress.swift in Sources */,
 				AA748359211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift in Sources */,
 				AA68F43C2151AA1F0099BB83 /* TradeLimitsService.swift in Sources */,
 				3AAEF9582141B04F005852D1 /* ActionableFooterView.swift in Sources */,
@@ -8359,6 +8366,7 @@
 				6762507D1A2CC5800052B63F /* BCEditAccountView.m in Sources */,
 				C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */,
 				602B9CF32118E15300BD3D60 /* KYCInformationController.swift in Sources */,
+				C74A0DE52174DFA000402A2F /* StellarAddress.swift in Sources */,
 				AA63F87720A39DCF002B719B /* AppFeature.swift in Sources */,
 				3A91F7962137067400CDC3FD /* Order.swift in Sources */,
 				C7F041961E3BD4A6004E8B4A /* BuyBitcoinViewController.m in Sources */,

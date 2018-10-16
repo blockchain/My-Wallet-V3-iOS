@@ -38,6 +38,9 @@ import Foundation
             return "\(etherscanUrl)/tx/\(transactionHash)"
         case .bitcoinCash:
             return "\(blockchairUrl)/bitcoin-cash/transaction/\(transactionHash)"
+        case .stellar:
+            // TODO: confirm correct explorer
+            return "\(stellarExplorerUrl)/tx/\(transactionHash)"
         }
     }
 }

@@ -17,7 +17,7 @@ public class BitcoinCashAddress: NSObject & AssetAddress {
 
     public private(set) var address: String
 
-    public var assetType: AssetType
+    public let assetType: AssetType = .bitcoinCash
 
     override public var description: String {
         return address
@@ -27,7 +27,6 @@ public class BitcoinCashAddress: NSObject & AssetAddress {
 
     public required init(string: String) {
         self.address = string
-        self.assetType = .bitcoinCash
     }
 }
 
