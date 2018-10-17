@@ -169,18 +169,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
 
-                let attributedTextFont = UIFont(name: Constants.FontNames.montserratRegular, size: 16.0)
-                    ?? UIFont.systemFont(ofSize: 16.0, weight: .regular)
-                let attributedText = NSAttributedString(
-                    string: LocalizationConstants.Exchange.amountVariation +  " \n\n " + LocalizationConstants.Exchange.orderStartDisclaimer,
-                    attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                 NSAttributedStringKey.font: attributedTextFont,
-                                 NSAttributedStringKey.paragraphStyle: paragraphStyle]
-                )
-
-                let text = ExchangeCellModel.Text(
-                    attributedString: attributedText
-                )
+                let text = ExchangeCellModel.Text(attributedString: NSAttributedString())
 
                 cellModels.append(contentsOf: [
                     .tradingPair(pair),
