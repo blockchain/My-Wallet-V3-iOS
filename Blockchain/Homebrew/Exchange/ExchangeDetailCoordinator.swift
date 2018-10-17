@@ -169,6 +169,7 @@ class ExchangeDetailCoordinator: NSObject {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
 
+                // Setting an empty text in the exchange locked view since we want the space
                 let text = ExchangeCellModel.Text(attributedString: NSAttributedString())
 
                 cellModels.append(contentsOf: [
