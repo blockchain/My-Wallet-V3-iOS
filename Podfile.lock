@@ -18,6 +18,7 @@ PODS:
   - RxTest (4.3.1):
     - RxSwift (~> 4.0)
   - Starscream (3.0.6)
+  - stellar-ios-mac-sdk (1.4.7)
   - SwiftLint (0.27.0)
 
 DEPENDENCIES:
@@ -30,6 +31,7 @@ DEPENDENCIES:
   - RxSwift (~> 4.0)
   - RxTest (~> 4.0)
   - Starscream (~> 3.0.2)
+  - stellar-ios-mac-sdk (~> 1.4.7)
   - SwiftLint
 
 SPEC REPOS:
@@ -43,6 +45,7 @@ SPEC REPOS:
     - RxSwift
     - RxTest
     - Starscream
+    - stellar-ios-mac-sdk
     - SwiftLint
 
 SPEC CHECKSUMS:
@@ -55,8 +58,9 @@ SPEC CHECKSUMS:
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   RxTest: ea97a208826906f3904c0debdd09575ebcbfe216
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  stellar-ios-mac-sdk: 112012a49569b60afaa38dea99bf914d7ac9a32c
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
 
-PODFILE CHECKSUM: da7fd43bf72c2689fbb7689d5ffc7a221dde7743
+PODFILE CHECKSUM: 5b3f4145ebb805c9dcdcca740dd329b659cedc2d
 
 COCOAPODS: 1.5.3
