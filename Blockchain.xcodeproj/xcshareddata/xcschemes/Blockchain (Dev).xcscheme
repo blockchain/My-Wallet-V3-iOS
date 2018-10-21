@@ -37,6 +37,11 @@
                BlueprintName = "BlockchainTests"
                ReferencedContainer = "container:Blockchain.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AuthenticationManagerTests/testAuthWithValidPasswordSucceeds()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
