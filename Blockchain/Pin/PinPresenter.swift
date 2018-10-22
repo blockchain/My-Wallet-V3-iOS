@@ -95,7 +95,7 @@ import RxSwift
 
         let isBiometryFeatureEnabled = AppFeatureConfigurator.shared.configuration(
             for: .biometry
-        )?.isEnabled ?? false
+        ).isEnabled
         let shouldPersist = isBiometryFeatureEnabled && BlockchainSettings.App.shared.biometryEnabled
 
         let pinPayload = PinPayload(pinCode: pin.toString, keyPair: keyPair, persistLocally: shouldPersist)

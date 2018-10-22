@@ -28,7 +28,7 @@ import Foundation
     ///
     /// - Parameter feature: the feature
     /// - Returns: the configuration for the feature requested
-    @objc func configuration(for feature: AppFeature) -> AppFeatureConfiguration? {
-        return featureToConfigurations[feature]
+    @objc func configuration(for feature: AppFeature) -> AppFeatureConfiguration {
+        return featureToConfigurations[feature] ?? AppFeatureConfiguration(isEnabled: false)
     }
 }

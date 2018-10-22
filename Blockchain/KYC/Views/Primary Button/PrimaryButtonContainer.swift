@@ -10,6 +10,26 @@ import UIKit
 
 @IBDesignable
 class PrimaryButtonContainer: NibBasedView {
+    
+    enum PrimaryButtonFont: Int {
+        case kyc = 0
+        case send = 1
+        
+        var font: UIFont {
+            switch self {
+            case .kyc:
+                return UIFont(
+                    name: Constants.FontNames.montserratMedium,
+                    size: 20.0
+                    ) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
+            case .send:
+                return UIFont(
+                    name: Constants.FontNames.montserratRegular,
+                    size: 17.0
+                    ) ?? UIFont.systemFont(ofSize: 17.0, weight: .regular)
+            }
+        }
+    }
 
     // MARK: Private IBOutlets
 
@@ -28,12 +48,21 @@ class PrimaryButtonContainer: NibBasedView {
     }
 
     // MARK: IBInspectable
+    
+    @IBInspectable var primaryButtonFont: Int = 0 {
+        didSet {
+            let value = PrimaryButtonFont(rawValue: primaryButtonFont) ?? .kyc
+            primaryButton.titleLabel?.font = value.font
+        }
+    }
 
     @IBInspectable var buttonBackgroundColor: UIColor = UIColor.brandSecondary {
         didSet {
             primaryButton.backgroundColor = buttonBackgroundColor
         }
     }
+    
+    @IBInspectable var disabledButtonBackgroundColor: UIColor = UIColor.brandSecondary
 
     @IBInspectable var isLoading: Bool = false {
         didSet {
@@ -50,6 +79,7 @@ class PrimaryButtonContainer: NibBasedView {
     @IBInspectable var isEnabled: Bool = true {
         didSet {
             primaryButton.isEnabled = isEnabled
+            primaryButton.backgroundColor = isEnabled ? buttonBackgroundColor : disabledButtonBackgroundColor
         }
     }
 

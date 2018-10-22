@@ -37,7 +37,7 @@ UILabel *titleLabel;
 
     tabBar.delegate = self;
 
-    selectedIndex = TAB_DASHBOARD;
+    selectedIndex = [ConstantsObjcBridge tabDashboard];
   
     [self setupTabButtons];
 }
@@ -145,7 +145,7 @@ UILabel *titleLabel;
         [[contentView.subviews firstObject] removeFromSuperview];
     }
 
-    CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
+    CGFloat offsetForAssetSelector = (self.selectedIndex == [ConstantsObjcBridge tabDashboard]) ? 0 : [ConstantsObjcBridge assetTypeCellHeight];
     activeViewController.view.frame = CGRectMake(0,
                                                  offsetForAssetSelector,
                                                  contentView.frame.size.width,
@@ -181,14 +181,14 @@ UILabel *titleLabel;
 
 - (void)updateTopBarForIndex:(int)newIndex
 {
-    if (newIndex == TAB_DASHBOARD) {
+    if (newIndex == [ConstantsObjcBridge tabDashboard]) {
         [bannerView changeHeight:0];
         [self.assetSelectorView hide];
     } else {
-        [bannerView changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
+        [bannerView changeHeight:[ConstantsObjcBridge assetTypeCellHeight]];
         [self.assetSelectorView show];
     }
-    self.navigationItem.titleView.userInteractionEnabled = (newIndex == TAB_TRANSACTIONS);
+    self.navigationItem.titleView.userInteractionEnabled = (newIndex == [ConstantsObjcBridge tabTransactions]);
 }
 
 - (void)addTapGestureRecognizerToTabBar:(UITapGestureRecognizer *)tapGestureRecognizer
@@ -284,7 +284,7 @@ UILabel *titleLabel;
 - (void)didSelectAsset:(LegacyAssetType)assetType
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        CGFloat offsetForAssetSelector = (self.selectedIndex == TAB_DASHBOARD) ? 0 : ASSET_SELECTOR_ROW_HEIGHT;
+        CGFloat offsetForAssetSelector = (self.selectedIndex == [ConstantsObjcBridge tabDashboard]) ? 0 : [ConstantsObjcBridge assetTypeCellHeight];
         self.activeViewController.view.frame = CGRectMake(0,
                                                           offsetForAssetSelector,
                                                           self->contentView.frame.size.width,
@@ -297,7 +297,7 @@ UILabel *titleLabel;
 
 - (void)didOpenSelector
 {
-    CGFloat offsetForAssetSelector = ASSET_SELECTOR_ROW_HEIGHT * self.assetSelectorView.assets.count;
+    CGFloat offsetForAssetSelector = [ConstantsObjcBridge assetTypeCellHeight] * self.assetSelectorView.assets.count;
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         self.activeViewController.view.frame = CGRectMake(0,
                                                           offsetForAssetSelector,

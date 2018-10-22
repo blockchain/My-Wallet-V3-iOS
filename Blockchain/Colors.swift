@@ -52,6 +52,10 @@ extension UIColor {
 
     static let red = #colorLiteral(red: 0.9490196078, green: 0.4235294118, blue: 0.3411764706, alpha: 1)
 
+    static let darkBlue = #colorLiteral(red: 0, green: 0.2588235294, blue: 0.4352941176, alpha: 1)
+
+    static let darkBlueHighlight = #colorLiteral(red: 0, green: 0.1921568627, blue: 0.3294117647, alpha: 1)
+
     // MARK: - App-specific Colors
 
     static let emptyChart = #colorLiteral(red: 0.8666666667, green: 0.8666666667, blue: 0.8666666667, alpha: 1)

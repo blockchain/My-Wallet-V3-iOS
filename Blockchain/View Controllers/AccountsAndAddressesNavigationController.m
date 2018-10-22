@@ -39,7 +39,7 @@
 
     WalletManager.sharedInstance.addressesDelegate = self;
 
-    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(0, safeAreaInsetTop + navBarHeight, self.view.frame.size.width, ASSET_SELECTOR_ROW_HEIGHT) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
+    self.assetSelectorView = [[AssetSelectorView alloc] initWithFrame:CGRectMake(0, safeAreaInsetTop + navBarHeight, self.view.frame.size.width, [ConstantsObjcBridge assetTypeCellHeight]) assets:@[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] delegate:self];
     [self.view addSubview:self.assetSelectorView];
     
     [self setupBusyView];
@@ -173,7 +173,7 @@
 {
     if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
         AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
-        [accountsAndAddressesViewController.containerView changeYPosition:8 + ASSET_SELECTOR_ROW_HEIGHT];
+        [accountsAndAddressesViewController.containerView changeYPosition:8 + [ConstantsObjcBridge assetTypeCellHeight]];
     }
 }
 
@@ -198,7 +198,7 @@
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         if ([self.visibleViewController isMemberOfClass:[AccountsAndAddressesViewController class]]) {
             AccountsAndAddressesViewController *accountsAndAddressesViewController = (AccountsAndAddressesViewController *)self.visibleViewController;
-            [accountsAndAddressesViewController.containerView changeYPosition:8 + ASSET_SELECTOR_ROW_HEIGHT*self.assetSelectorView.assets.count];
+            [accountsAndAddressesViewController.containerView changeYPosition:8 + [ConstantsObjcBridge assetTypeCellHeight]*self.assetSelectorView.assets.count];
         }
     } completion:^(BOOL finished) {
         self.isOpeningSelector = NO;

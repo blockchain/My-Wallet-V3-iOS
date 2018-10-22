@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Assets.h"
 
-#define ASSET_SELECTOR_ROW_HEIGHT 36
 @protocol AssetSelectorViewDelegate
 - (void)didSelectAsset:(LegacyAssetType)assetType;
 - (void)didOpenSelector;

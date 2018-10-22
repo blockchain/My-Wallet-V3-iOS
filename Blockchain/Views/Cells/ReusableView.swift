@@ -16,7 +16,7 @@ protocol ReusableView {
 
 /// Implementation of the ReusableView protocol for
 /// `UITableViewCell`
-extension UITableViewCell: ReusableView {
+@objc extension UITableViewCell: ReusableView {
     static var identifier: String { return String(describing: self) }
 }
 

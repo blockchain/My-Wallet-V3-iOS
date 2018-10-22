@@ -7,13 +7,12 @@
 //
 
 #import "AssetSelectorView.h"
-#import "AssetSelectionTableViewCell.h"
 #import "UIView+ChangeFrameAttribute.h"
 #import "Blockchain-Swift.h"
 
 #define CELL_IDENTIFIER_ASSET_SELECTOR @"assetSelectorCell"
 
-@interface AssetSelectorView () <UITableViewDataSource, UITableViewDelegate>
+@interface AssetSelectorView () <UITableViewDataSource, UITableViewDelegate, AssetTypeCellDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic, readwrite) BOOL isOpen;
 @property (nonatomic, weak) id <AssetSelectorViewDelegate> delegate;
@@ -25,6 +24,11 @@
 - (id)initWithFrame:(CGRect)frame delegate:(id<AssetSelectorViewDelegate>)delegate
 {
     if (self == [super initWithFrame:frame]) {
+
+        self.assets = @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
+                        [NSNumber numberWithInteger:LegacyAssetTypeEther],
+                        [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash],
+                        [NSNumber numberWithInteger:LegacyAssetTypeStellar]];
         
         self.clipsToBounds = YES;
         
@@ -33,16 +37,13 @@
         self.tableView.separatorColor = [UIColor clearColor];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
+        [self.tableView registerNib:[UINib nibWithNibName:@"AssetTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[AssetTypeCell identifier]];
         [self addSubview:self.tableView];
-        
-        [self.tableView changeHeight:ASSET_SELECTOR_ROW_HEIGHT * 3];
-        
-        self.tableView.backgroundColor = UIColor.brandPrimary;
+
+        self.tableView.backgroundColor = UIColor.darkBlue;
         self.backgroundColor = [UIColor clearColor];
-        
-        self.assets = @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
-                        [NSNumber numberWithInteger:LegacyAssetTypeEther],
-                        [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]];
+
+        [self.tableView changeHeight:[ConstantsObjcBridge assetTypeCellHeight] * self.assets.count];
     }
     
     return self;
@@ -57,9 +58,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LegacyAssetType asset = self.isOpen ? [self.assets[indexPath.row] integerValue] : self.selectedAsset;
-    AssetSelectionTableViewCell *cell = [[AssetSelectionTableViewCell alloc] initWithAsset:asset];
-    cell.downwardChevron.hidden = indexPath.row != 0;
+    LegacyAssetType legacyAsset = self.isOpen ? [self.assets[indexPath.row] integerValue] : self.selectedAsset;
+    BOOL showChevron = indexPath.row == 0;
+    AssetType asset = [AssetTypeLegacyHelper convertFromLegacy:legacyAsset];
+
+    AssetTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:[AssetTypeCell identifier]];
+    [cell configureWith:asset showChevronButton:showChevron];
+    cell.delegate = self;
     return cell;
 }
 
@@ -71,9 +76,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.isOpen) {
-        AssetSelectionTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        self.selectedAsset = cell.assetType;
-        [self.delegate didSelectAsset:cell.assetType];
+        AssetTypeCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        self.selectedAsset = cell.legacyAssetType;
+        [self.delegate didSelectAsset:cell.legacyAssetType];
         [self close];
     } else {
         [self open];
@@ -83,7 +88,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return ASSET_SELECTOR_ROW_HEIGHT;
+    return [ConstantsObjcBridge assetTypeCellHeight];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    AssetTypeCell *assetTypeCell = (AssetTypeCell *)cell;
+    Direction direction = self.isOpen ? DirectionUp : DirectionDown;
+    [assetTypeCell pointChevronButton:direction];
 }
 
 - (void)hide
@@ -96,7 +108,7 @@
 - (void)show
 {
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-        [self changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
+        [self changeHeight:[ConstantsObjcBridge assetTypeCellHeight]];
     }];
 }
 
@@ -106,7 +118,7 @@
 
     [UIView animateWithDuration:ANIMATION_DURATION animations:^{
         [self.tableView reloadData];
-        [self changeHeight:ASSET_SELECTOR_ROW_HEIGHT * self.assets.count];
+        [self changeHeight:[ConstantsObjcBridge assetTypeCellHeight] * self.assets.count];
     }];
 }
 
@@ -117,7 +129,7 @@
         
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             [self.tableView reloadData];
-            [self changeHeight:ASSET_SELECTOR_ROW_HEIGHT];
+            [self changeHeight:[ConstantsObjcBridge assetTypeCellHeight]];
         }];
     }
 }
@@ -125,6 +137,19 @@
 - (void)reload
 {
     [self.tableView reloadData];
+}
+
+#pragma mark - AssetTypeCellDelegate
+
+- (void)didTapChevronButton
+{
+    if (self.isOpen) {
+        [self.delegate didSelectAsset:self.selectedAsset];
+        [self close];
+    } else {
+        [self open];
+        [self.delegate didOpenSelector];
+    }
 }
 
 @end

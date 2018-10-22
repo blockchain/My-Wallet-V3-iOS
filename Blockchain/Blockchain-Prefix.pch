@@ -509,10 +509,6 @@
 
 // TabViewController
 // TICKET: IOS-1297 - Complete Dashboard Swift Refactor
-#define TAB_SEND 0
-#define TAB_DASHBOARD 1
-#define TAB_TRANSACTIONS 2
-#define TAB_RECEIVE 3
 
 #define PIN_API_STATUS_CODE_DELETED 1
 #define PIN_API_STATUS_PIN_INCORRECT 2

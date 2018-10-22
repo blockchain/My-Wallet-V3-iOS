@@ -9,11 +9,9 @@
 import Foundation
 
 struct StellarAccount {
+    /// The account ID
     let identifier: String
-    var assetAccounts: [AssetAccount]
-    
-    init(identifier: String, accounts: [AssetAccount] = []) {
-        self.identifier = identifier
-        self.assetAccounts = accounts
-    }
+
+    /// The asset account
+    let assetAccount: AssetAccount
 }

@@ -801,6 +801,17 @@ struct LocalizationConstants {
             comment: "Footer text in the lockbox view."
         )
     }
+
+    struct Stellar {
+        static let defaultLabelName = NSLocalizedString(
+            "My Stellar Wallet",
+            comment: "The default label of the XLM wallet."
+        )
+        static let enterStellarAddress = NSLocalizedString(
+            "Enter Stellar address or select",
+            comment: "Placeholder text for the Lumens send screen."
+        )
+    }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this

@@ -167,8 +167,7 @@ import RxSwift
 
         if BlockchainSettings.App.shared.isPinSet {
             showPinEntryView()
-            if let config = AppFeatureConfigurator.shared.configuration(for: .biometry),
-                config.isEnabled,
+            if AppFeatureConfigurator.shared.configuration(for: .biometry).isEnabled,
                 BlockchainSettings.App.shared.biometryEnabled {
                 authenticateWithBiometrics()
             }

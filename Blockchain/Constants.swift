@@ -22,6 +22,12 @@ struct Constants {
         static let duration = 0.2
         static let durationLong = 0.5
     }
+    struct Navigation {
+        static let tabSend = 0
+        static let tabDashboard = 1
+        static let tabTransactions = 2
+        static let tabReceive = 3
+    }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
         // TODO: remove this once we use autolayout
@@ -43,6 +49,7 @@ struct Constants {
         static let infoLabelEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 9.5, bottom: 2, right: 9.5)
         static let buttonHeight: CGFloat = 40.0
         static let buttonCornerRadius: CGFloat = 4.0
+        static let assetTypeCellHeight: CGFloat = 44.0
     }
     struct FontSizes {
         static let Tiny: CGFloat = Booleans.IsUsingScreenSizeLargerThan5s ? 11.0 : 10.0
@@ -164,6 +171,26 @@ struct Constants {
 
     @objc class func notificationKeyGetFiatAtTime() -> String {
         return Constants.NotificationKeys.getFiatAtTime.rawValue
+    }
+
+    @objc class func tabSend() -> Int {
+        return Constants.Navigation.tabSend
+    }
+
+    @objc class func tabDashboard() -> Int {
+        return Constants.Navigation.tabDashboard
+    }
+
+    @objc class func tabReceive() -> Int {
+        return Constants.Navigation.tabReceive
+    }
+
+    @objc class func tabTransactions() -> Int {
+        return Constants.Navigation.tabTransactions
+    }
+
+    @objc class func assetTypeCellHeight() -> CGFloat {
+        return Constants.Measurements.assetTypeCellHeight
     }
 
     @objc class func bitcoinUriPrefix() -> String {

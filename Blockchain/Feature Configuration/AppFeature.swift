@@ -13,11 +13,12 @@ import Foundation
     case biometry
     case swipeToReceive
     case transferFundsFromImportedAddress
+    case stellar
 }
 
 extension AppFeature {
     // Use CaseIterable once upgraded to Swift 4.2
     static let allFeatures: [AppFeature] = [
-        .biometry, .swipeToReceive, .transferFundsFromImportedAddress
+        .biometry, .swipeToReceive, .transferFundsFromImportedAddress, .stellar
     ]
 }

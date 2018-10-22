@@ -1,6 +1,6 @@
 [submodule "Submodules/My-Wallet-V3"]
 	path = Submodules/My-Wallet-V3
-	url = git@github.com:blockchain/My-Wallet-V3.git
+	url = git@github.com:blockchain/My-Wallet-V3-Private.git
 	ignore = dirty
 [submodule "Submodules/OpenSSL-for-iPhone"]
 	path = Submodules/OpenSSL-for-iPhone

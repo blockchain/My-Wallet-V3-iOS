@@ -334,7 +334,7 @@
     if ([BlockchainSettings sharedAppInstance].isPinSet &&
         !pinEntryViewController &&
         [WalletManager.sharedInstance.wallet isInitialized] &&
-        tabControllerManager.tabViewController.selectedIndex == TAB_DASHBOARD
+        tabControllerManager.tabViewController.selectedIndex == [ConstantsObjcBridge tabDashboard]
         && ![ModalPresenter sharedInstance].modalView) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:BC_STRING_ERROR message:error preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_OK style:UIAlertActionStyleCancel handler:nil]];

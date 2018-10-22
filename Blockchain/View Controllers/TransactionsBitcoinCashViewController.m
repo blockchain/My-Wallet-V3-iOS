@@ -145,7 +145,7 @@
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
         TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
-        if (tabControllerManager.tabViewController.selectedIndex == TAB_RECEIVE && ![tabControllerManager isSending]) {
+        if (tabControllerManager.tabViewController.selectedIndex == [ConstantsObjcBridge tabReceive] && ![tabControllerManager isSending]) {
             uint64_t amount = [self getAmountForReceivedTransaction:transaction];
             [tabControllerManager paymentReceived:amount showBackupReminder:NO];
         }

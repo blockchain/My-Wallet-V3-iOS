@@ -1,7 +1,9 @@
 disabled_rules:
   - force_cast
   - identifier_name
+  - leading_whitespace
   - todo
+  - trailing_whitespace
   - void_return
 excluded:
   - Submodules/
@@ -24,7 +26,6 @@ opt_in_rules:
   - private_action
   - private_outlet
   - required_enum_case
-  - trailing_closure
   - unneeded_parentheses_in_closure_argument
   - vertical_parameter_alignment_on_call
   - yoda_condition

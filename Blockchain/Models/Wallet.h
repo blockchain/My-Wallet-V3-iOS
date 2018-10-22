@@ -298,6 +298,15 @@
 - (Boolean)hasAccount;
 - (Boolean)didUpgradeToHd;
 - (void)getRecoveryPhrase:(NSString *)secondPassword;
+
+/**
+ Returns the mnemonic used to generate the HD wallet. Similar to `getRecoveryPhrase`.
+
+ @param secondPassword the optional second password if set
+ @return the mnemonic, or nil if the wallet is not yet initialized
+ */
+- (NSString *_Nullable)getMnemonic:(NSString *_Nullable)secondPassword;
+
 - (BOOL)isRecoveryPhraseVerified;
 - (void)markRecoveryPhraseVerified;
 - (int)getDefaultAccountIndexForAssetType:(LegacyAssetType)assetType;
@@ -468,6 +477,10 @@
 
 // Lockbox
 - (NSArray *_Nonnull)getLockboxDevices;
+
+// XLM
+- (NSArray *_Nullable)getXlmAccounts;
+- (void)saveXlmAccount:(NSString *_Nonnull)publicKey label:(NSString *_Nullable)label sucess:(void (^ _Nonnull)(void))success error:(void (^)(NSString *_Nonnull))error;
 
 /// Call this method to build an Exchange order.
 /// It constructs and stores a payment object with a given AssetType, to, from, and amount (properties of OrderTransactionLegacy).

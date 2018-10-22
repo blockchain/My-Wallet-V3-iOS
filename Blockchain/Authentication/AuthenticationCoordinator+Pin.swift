@@ -30,7 +30,7 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 
     func pinEntryControllerDidObtainPasswordDecryptionKey(_ decryptionKey: String) {
         // verifyOptional indicates that the user is enabling touch ID (from settings)
-        if let config = AppFeatureConfigurator.shared.configuration(for: .biometry), config.isEnabled,
+        if AppFeatureConfigurator.shared.configuration(for: .biometry).isEnabled,
             self.pinEntryViewController?.verifyOptional ?? false {
             LoadingViewPresenter.shared.hideBusyView()
             BlockchainSettings.App.shared.biometryEnabled = true
