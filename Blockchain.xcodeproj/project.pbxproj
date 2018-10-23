@@ -245,6 +245,8 @@
 		3ADFE700214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADFE6FE214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift */; };
 		3AE5418921798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */; };
 		3AE5418A21798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */; };
+		3AE5419B217A677A001DDE02 /* StellarTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5419A217A677A001DDE02 /* StellarTransaction.swift */; };
+		3AE5419C217A677A001DDE02 /* StellarTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5419A217A677A001DDE02 /* StellarTransaction.swift */; };
 		3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
 		3AE92BDD2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
 		3AE92BDE2110DF33008D7BDC /* NotificationCenter+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */; };
@@ -320,6 +322,9 @@
 		5171E39020F4F98000E8913E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171E38F20F4F98000E8913E /* Colors.swift */; };
 		5176A45C2147F6600006769F /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A45B2147F6600006769F /* CardsView.swift */; };
 		5176A45D2147F6600006769F /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A45B2147F6600006769F /* CardsView.swift */; };
+		5176A4C7214AA5B80006769F /* DashboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A4C5214AA5B80006769F /* DashboardController.swift */; };
+		5176A4C8214AA5B80006769F /* DashboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5176A4C5214AA5B80006769F /* DashboardController.swift */; };
+		5176A4CC214AA5D70006769F /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5176A4CB214AA5D70006769F /* Dashboard.storyboard */; };
 		5185E11C208E7F7C00A26B64 /* BlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69F65E2086A7500054EFCE /* BlockchainSettings.swift */; };
 		5185E124208F6E5E00A26B64 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
 		5185E12A208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */; };
@@ -632,6 +637,8 @@
 		AA3CA9B62107F36800C2AD46 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B42107F36700C2AD46 /* LogLevel.swift */; };
 		AA3CA9B82107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */; };
 		AA3CA9B92107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */; };
+		AA3E589C217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */; };
+		AA3E589E217A7E8F00EFF992 /* ReceiveXlmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */; };
 		AA447BC62127677300EC0FA0 /* SideMenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA447BC52127677300EC0FA0 /* SideMenuViewController.storyboard */; };
 		AA447BC82127679A00EC0FA0 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA447BC72127679A00EC0FA0 /* SideMenuViewController.swift */; };
 		AA447BCA21276DA900EC0FA0 /* SideMenuPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA447BC921276DA900EC0FA0 /* SideMenuPresenter.swift */; };
@@ -974,7 +981,6 @@
 		C7CE25B92135E41900DCC43B /* ExchangeCreateInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CE25B82135E41900DCC43B /* ExchangeCreateInteractor.swift */; };
 		C7CE25BA2135E41900DCC43B /* ExchangeCreateInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CE25B82135E41900DCC43B /* ExchangeCreateInteractor.swift */; };
 		C7CE34B81F4DCB7E00032806 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34B71F4DCB7E00032806 /* CardsViewController.m */; };
-		C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BA1F4DE14500032806 /* DashboardViewController.m */; };
 		C7CE34BE1F4E128900032806 /* BCAmountInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7CE34BD1F4E128900032806 /* BCAmountInputView.m */; };
 		C7D5115C21237DE000359651 /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733A89221236F02007DADE0 /* HttpHeader.swift */; };
 		C7D5116621237DFA00359651 /* NabuAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* NabuAuthenticationService.swift */; };
@@ -1339,6 +1345,7 @@
 		3ADFE6FB214AE17600E7E2D5 /* ExchangeInputsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeInputsService.swift; sourceTree = "<group>"; };
 		3ADFE6FE214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeStyleTemplate.swift; sourceTree = "<group>"; };
 		3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarOperationsStreamAPI.swift; sourceTree = "<group>"; };
+		3AE5419A217A677A001DDE02 /* StellarTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTransaction.swift; sourceTree = "<group>"; };
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
 		3AEF9E8B21091B71006B1CF9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -1561,6 +1568,8 @@
 		516594A9204F1E1000C50E78 /* Testnet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Testnet.xcconfig; sourceTree = "<group>"; };
 		5171E38F20F4F98000E8913E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		5176A45B2147F6600006769F /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
+		5176A4C5214AA5B80006769F /* DashboardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardController.swift; sourceTree = "<group>"; };
+		5176A4CB214AA5D70006769F /* Dashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dashboard.storyboard; sourceTree = "<group>"; };
 		5177E7D8212B07A9008E13AB /* Pods-Blockchain.debug staging.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig"; sourceTree = "<group>"; };
 		5177E828212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig"; sourceTree = "<group>"; };
 		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enum+RawValued.swift"; sourceTree = "<group>"; };
@@ -3147,6 +3156,8 @@
 		AA3CA9B12107F2B700C2AD46 /* LogDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDestination.swift; sourceTree = "<group>"; };
 		AA3CA9B42107F36700C2AD46 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogDestination.swift; sourceTree = "<group>"; };
+		AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ReceiveXlmViewController.storyboard; sourceTree = "<group>"; };
+		AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveXlmViewController.swift; sourceTree = "<group>"; };
 		AA447BC52127677300EC0FA0 /* SideMenuViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SideMenuViewController.storyboard; sourceTree = "<group>"; };
 		AA447BC72127679A00EC0FA0 /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		AA447BC921276DA900EC0FA0 /* SideMenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuPresenter.swift; sourceTree = "<group>"; };
@@ -3448,8 +3459,6 @@
 		C7CE34B51F4DB8C100032806 /* Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assets.h; sourceTree = "<group>"; };
 		C7CE34B61F4DCB7E00032806 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
 		C7CE34B71F4DCB7E00032806 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
-		C7CE34B91F4DE14500032806 /* DashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardViewController.h; sourceTree = "<group>"; };
-		C7CE34BA1F4DE14500032806 /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
 		C7CE34BC1F4E128900032806 /* BCAmountInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCAmountInputView.h; sourceTree = "<group>"; };
 		C7CE34BD1F4E128900032806 /* BCAmountInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCAmountInputView.m; sourceTree = "<group>"; };
 		C7E0FCCD211E12AE00B85D37 /* NabuAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NabuAuthenticationService.swift; sourceTree = "<group>"; };
@@ -3857,6 +3866,7 @@
 				3A56AEB521766A0000044302 /* StellarConfiguration.swift */,
 				3A56AEB821766D4800044302 /* StellarAccount.swift */,
 				3A9A026E2178E19400E2848E /* StellarOperation.swift */,
+				3AE5419A217A677A001DDE02 /* StellarTransaction.swift */,
 				AA16D0EE217935550042AF7E /* StellarKeyPair.swift */,
 			);
 			path = Models;
@@ -4139,6 +4149,15 @@
 				516594A9204F1E1000C50E78 /* Testnet.xcconfig */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		5176A4C4214AA5900006769F /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5176A4CB214AA5D70006769F /* Dashboard.storyboard */,
+				5176A4C5214AA5B80006769F /* DashboardController.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		5194359F208E61F3001EF882 /* BlockchainTests */ = {
@@ -6437,6 +6456,7 @@
 				AAD279DE209A99CA00C0EAFC /* AV */,
 				9F1831F315176F2200FB3D52 /* Categories */,
 				AAA33338208811460019AD55 /* Coordinators */,
+				5176A4C4214AA5900006769F /* Dashboard */,
 				AAF2AF0B2124946F00687E30 /* Data */,
 				AA0A4121214AD71100807163 /* Debug */,
 				510EA19620811FF100A63AB8 /* Extensions */,
@@ -6454,6 +6474,7 @@
 				3A019119212DE54C00AED2BF /* Operations */,
 				AACE317E2092793300B7B806 /* Pin */,
 				51042C8820B1FDA600B022DE /* PrivateKeyReader */,
+				AA3E5890217A7E4D00EFF992 /* Receive */,
 				AACE31FA2093F9F200B7B806 /* Reminder */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
 				3A56AE9C21764CDA00044302 /* Send */,
@@ -6506,8 +6527,6 @@
 				C7CE34B71F4DCB7E00032806 /* CardsViewController.m */,
 				C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */,
 				C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */,
-				C7CE34B91F4DE14500032806 /* DashboardViewController.h */,
-				C7CE34BA1F4DE14500032806 /* DashboardViewController.m */,
 				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
 				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
 				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
@@ -6780,6 +6799,23 @@
 				AA3CA9B42107F36700C2AD46 /* LogLevel.swift */,
 			);
 			path = Logging;
+			sourceTree = "<group>";
+		};
+		AA3E5890217A7E4D00EFF992 /* Receive */ = {
+			isa = PBXGroup;
+			children = (
+				AA3E589A217A7E6500EFF992 /* ViewControllers */,
+			);
+			path = Receive;
+			sourceTree = "<group>";
+		};
+		AA3E589A217A7E6500EFF992 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */,
+				AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		AA54277820D88D1D00D5FEEE /* Swipe to Receive */ = {
@@ -7654,6 +7690,7 @@
 				51B767B32106369A003CCD46 /* Montserrat-LightItalic.ttf in Resources */,
 				51B767B42106369A003CCD46 /* Montserrat-Medium.ttf in Resources */,
 				51B767B52106369A003CCD46 /* Montserrat-MediumItalic.ttf in Resources */,
+				5176A4CC214AA5D70006769F /* Dashboard.storyboard in Resources */,
 				51B767B62106369A003CCD46 /* Montserrat-Regular.ttf in Resources */,
 				51B767B72106369A003CCD46 /* Montserrat-SemiBold.ttf in Resources */,
 				51B767B82106369A003CCD46 /* Montserrat-SemiBoldItalic.ttf in Resources */,
@@ -7731,6 +7768,7 @@
 				5138373B21025AD100767B2E /* alert-received.wav in Resources */,
 				ECD244F019A8AC45004B1F40 /* PEKeyboard-4-done.png in Resources */,
 				3A26AF5521272026003A8A08 /* ExchangeListViewController.storyboard in Resources */,
+				AA3E589C217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard in Resources */,
 				C75757512176504100CE7814 /* AssetTypeCell.xib in Resources */,
 				C9BE91841945D8F600FD516D /* PEKeyboard-2-done.png in Resources */,
 				5138373A21025AD100767B2E /* beep.wav in Resources */,
@@ -7894,6 +7932,7 @@
 				3A1552F12136FFE200683CEB /* TradeExecutionAPI.swift in Sources */,
 				3A019124212DF24700AED2BF /* ExchangeCreateView.swift in Sources */,
 				51135709209CF6C000056D65 /* SecondPasswordViewController.swift in Sources */,
+				5176A4C8214AA5B80006769F /* DashboardController.swift in Sources */,
 				C7BEE14B20C9775B0096003B /* WalletOptions.swift in Sources */,
 				AACE32012093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
 				3A26D51A2140405400D79BDD /* ExchangeCellModel.swift in Sources */,
@@ -7937,6 +7976,7 @@
 				C7C0DC22212F676E000EFE71 /* ExchangeCoordinator.swift in Sources */,
 				C75757462176501400CE7814 /* AssetTypeCell.swift in Sources */,
 				51B7682221065D52003CCD46 /* Environment.swift in Sources */,
+				3AE5419C217A677A001DDE02 /* StellarTransaction.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
 				C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */,
@@ -8280,6 +8320,7 @@
 				C7CE25B62135E3D300DCC43B /* ExchangeCreatePresenter.swift in Sources */,
 				C7FF110F2141E24000CBA3CB /* InputsState.swift in Sources */,
 				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
+				AA3E589E217A7E8F00EFF992 /* ReceiveXlmViewController.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
 				60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */,
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
@@ -8478,13 +8519,13 @@
 				602B9CFA2118E15300BD3D60 /* KYCWelcomeController.swift in Sources */,
 				AA68F43B2151AA1F0099BB83 /* TradeLimitsService.swift in Sources */,
 				C78893EE20A4D690003C0A8F /* WalletSendBitcoinDelegate.swift in Sources */,
+				3AE5419B217A677A001DDE02 /* StellarTransaction.swift in Sources */,
 				C787180120A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
 				3A56AEB22176637D00044302 /* StellarAccountService.swift in Sources */,
 				3AAEF9572141B04F005852D1 /* ActionableFooterView.swift in Sources */,
 				602B9CF62118E15300BD3D60 /* KYCOnboardingNavigationController.swift in Sources */,
 				602B9CE12118E15300BD3D60 /* KYCEnterPhoneNumberController.swift in Sources */,
 				511646C5208124E200C43522 /* AssetType.swift in Sources */,
-				C7CE34BB1F4DE14500032806 /* DashboardViewController.m in Sources */,
 				606399FC2110FC2D005B6DF5 /* SRIOConsumer.m in Sources */,
 				9FCA4D161514949500ECDFBE /* ReceiveBitcoinViewController.m in Sources */,
 				C7343BC4214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift in Sources */,
@@ -8505,6 +8546,7 @@
 				3ADFE6F9214AE0E300E7E2D5 /* InputComponent.swift in Sources */,
 				5138375A210264F000767B2E /* BCPriceMarker.swift in Sources */,
 				2326C6C21BBD7A8100AB7C4D /* UIViewController+AutoDismiss.m in Sources */,
+				5176A4C7214AA5B80006769F /* DashboardController.swift in Sources */,
 				3AAEF94A214083ED005852D1 /* LayoutAttributes.swift in Sources */,
 				AA08440C215EEDF90007BFD1 /* Lockbox.swift in Sources */,
 				23EA61C81B54282D0032B907 /* SettingsNavigationController.m in Sources */,

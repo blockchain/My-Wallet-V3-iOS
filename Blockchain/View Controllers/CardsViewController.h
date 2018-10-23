@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface CardsViewController : UIViewController
+// TICKET: IOS-1249 - Refactor CardsViewController
+@property (nonatomic) UIView *dashboardContentView;
+@property (nonatomic) UIScrollView *dashboardScrollView;
 - (void)reloadCards;
 @end

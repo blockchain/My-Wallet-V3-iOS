@@ -20,6 +20,7 @@
 #import "BuyBitcoinNavigationController.h"
 #import "BuyBitcoinViewController.h"
 #import "DebugTableViewController.h"
+#import "CardsViewController.h"
 #import "ECSlidingViewController.h"
 #import "GraphTimeFrame.h"
 #import "KeychainItemWrapper+Credentials.h"

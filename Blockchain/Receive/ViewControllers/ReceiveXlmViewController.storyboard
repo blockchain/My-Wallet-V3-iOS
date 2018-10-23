@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Qm-pq-Tdl">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--ReceiveXlmViewController-->
+        <scene sceneID="NIR-dR-dI2">
+            <objects>
+                <viewController title="ReceiveXlmViewController" id="9Qm-pq-Tdl" customClass="ReceiveXlmViewController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lcm-fs-qoh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to copy this address on your clipboard" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G41-8m-vtJ">
+                                <rect key="frame" x="40" y="178.5" width="295" height="17.5"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="c5i-rR-QlO">
+                                <rect key="frame" x="80" y="216" width="215" height="215"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="c5i-rR-QlO" secondAttribute="height" multiplier="1:1" id="alH-ks-4J1"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="CdE-pq-lJ5" appends="YES" id="FtX-9V-qdu"/>
+                                </connections>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jR4-cW-JcW">
+                                <rect key="frame" x="20" y="303.5" width="335" height="40"/>
+                                <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.89411764705882357" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="v1y-I4-oIR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Enter Your Second Password">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onEnterPasswordTapped:" destination="9Qm-pq-Tdl" eventType="touchUpInside" id="95b-B6-6rv"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vWw-wv-fHz" userLabel="address">
+                                <rect key="frame" x="187.5" y="451" width="0.0" height="0.0"/>
+                                <gestureRecognizers/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="KAa-Ln-QFa" appends="YES" id="VcX-2T-ogH"/>
+                                </connections>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i6D-j1-uS8">
+                                <rect key="frame" x="20" y="607" width="335" height="40"/>
+                                <color key="backgroundColor" red="0.062745098039215685" green="0.67843137254901964" blue="0.89411764705882357" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Vqa-zE-sTk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRequestPaymentTapped:" destination="9Qm-pq-Tdl" eventType="touchUpInside" id="KM9-SA-glD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JEc-kP-1G8" firstAttribute="bottom" secondItem="i6D-j1-uS8" secondAttribute="bottom" constant="20" id="2IN-fU-0Fw"/>
+                            <constraint firstItem="jR4-cW-JcW" firstAttribute="trailing" secondItem="i6D-j1-uS8" secondAttribute="trailing" id="47T-EC-atJ"/>
+                            <constraint firstItem="c5i-rR-QlO" firstAttribute="centerY" secondItem="JEc-kP-1G8" secondAttribute="centerY" constant="-20" id="5it-jW-fUF"/>
+                            <constraint firstItem="jR4-cW-JcW" firstAttribute="centerX" secondItem="c5i-rR-QlO" secondAttribute="centerX" id="97x-tn-sct"/>
+                            <constraint firstItem="vWw-wv-fHz" firstAttribute="top" secondItem="c5i-rR-QlO" secondAttribute="bottom" constant="20" id="HUC-Wh-2hy"/>
+                            <constraint firstItem="G41-8m-vtJ" firstAttribute="leading" secondItem="c5i-rR-QlO" secondAttribute="leading" constant="-40" id="IYC-Ta-ie2"/>
+                            <constraint firstItem="JEc-kP-1G8" firstAttribute="trailing" secondItem="i6D-j1-uS8" secondAttribute="trailing" constant="20" id="NLi-Qb-iP3"/>
+                            <constraint firstItem="G41-8m-vtJ" firstAttribute="trailing" secondItem="c5i-rR-QlO" secondAttribute="trailing" constant="40" id="PQ7-6K-h8l"/>
+                            <constraint firstItem="i6D-j1-uS8" firstAttribute="leading" secondItem="JEc-kP-1G8" secondAttribute="leading" constant="20" id="VtB-lf-hsH"/>
+                            <constraint firstItem="c5i-rR-QlO" firstAttribute="leading" secondItem="JEc-kP-1G8" secondAttribute="leading" constant="80" id="WZq-40-oux"/>
+                            <constraint firstItem="c5i-rR-QlO" firstAttribute="centerX" secondItem="JEc-kP-1G8" secondAttribute="centerX" id="XUm-Hk-hYh"/>
+                            <constraint firstItem="c5i-rR-QlO" firstAttribute="top" secondItem="G41-8m-vtJ" secondAttribute="bottom" constant="20" id="ddj-Nv-2cn"/>
+                            <constraint firstItem="JEc-kP-1G8" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vWw-wv-fHz" secondAttribute="trailing" constant="16" id="eTJ-fG-6Cy"/>
+                            <constraint firstItem="G41-8m-vtJ" firstAttribute="centerX" secondItem="JEc-kP-1G8" secondAttribute="centerX" id="flh-Bd-me9"/>
+                            <constraint firstItem="jR4-cW-JcW" firstAttribute="centerY" secondItem="c5i-rR-QlO" secondAttribute="centerY" id="i0r-Aa-Rev"/>
+                            <constraint firstItem="vWw-wv-fHz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JEc-kP-1G8" secondAttribute="leading" constant="16" id="jpP-6r-r7e"/>
+                            <constraint firstItem="JEc-kP-1G8" firstAttribute="trailing" secondItem="c5i-rR-QlO" secondAttribute="trailing" constant="80" id="l4w-sb-Rjd"/>
+                            <constraint firstItem="vWw-wv-fHz" firstAttribute="centerX" secondItem="JEc-kP-1G8" secondAttribute="centerX" id="sl8-0F-71Q"/>
+                            <constraint firstItem="jR4-cW-JcW" firstAttribute="leading" secondItem="i6D-j1-uS8" secondAttribute="leading" id="uDs-pv-di7"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JEc-kP-1G8"/>
+                    </view>
+                    <connections>
+                        <outlet property="buttonEnterPassword" destination="jR4-cW-JcW" id="zPf-ey-FpS"/>
+                        <outlet property="buttonRequestPayment" destination="i6D-j1-uS8" id="Xlg-aE-5kF"/>
+                        <outlet property="imageQrCode" destination="c5i-rR-QlO" id="WEI-v5-j2E"/>
+                        <outlet property="labelInstructions" destination="G41-8m-vtJ" id="wQd-1V-NuJ"/>
+                        <outlet property="labelPublicKey" destination="vWw-wv-fHz" id="YLW-no-bhe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J3L-h8-e4R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="CdE-pq-lJ5">
+                    <connections>
+                        <action selector="onAddressTapped:" destination="9Qm-pq-Tdl" id="TH9-ox-g9T"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="KAa-Ln-QFa">
+                    <connections>
+                        <action selector="onAddressTapped:" destination="9Qm-pq-Tdl" id="PP0-Hl-oNe"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+        </scene>
+    </scenes>
+</document>

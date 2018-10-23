@@ -221,7 +221,6 @@
 
 #define URL_MERCHANT PRODUCTION_MERCHANT_URL
 
-#define CHARTS_URL_SUFFIX_ARGUMENTS_BASE_QUOTE_START_SCALE @"/price/index-series?base=%@&quote=%@&start=%@&scale=%@&omitnull=true"
 #define TRANSACTION_RESULT_URL_SUFFIX_HASH_ARGUMENT_ADDRESS_ARGUMENT @"/q/txresult/%@/%@"
 
 #define URL_SURVEY @"https://blockchain.co1.qualtrics.com/SE/?SID=SV_8c6uSMW5eBV9nal"
@@ -506,9 +505,6 @@
 // TransactionsViewController
 #define FILTER_INDEX_ALL -1
 #define FILTER_INDEX_IMPORTED_ADDRESSES -2
-
-// TabViewController
-// TICKET: IOS-1297 - Complete Dashboard Swift Refactor
 
 #define PIN_API_STATUS_CODE_DELETED 1
 #define PIN_API_STATUS_PIN_INCORRECT 2

@@ -12,7 +12,6 @@
 #import "TransactionsBitcoinViewController.h"
 #import "SendBitcoinViewController.h"
 #import "ReceiveBitcoinViewController.h"
-#import "DashboardViewController.h"
 #import "SendEtherViewController.h"
 #import "TransactionsEtherViewController.h"
 #import "ReceiveEtherViewController.h"
@@ -29,8 +28,6 @@
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
 
 @property (weak, nonatomic) id <TabControllerDelegate> delegate;
-
-@property (strong, nonatomic) DashboardViewController *dashboardViewController;
 
 @property (strong, nonatomic) TransactionsBitcoinViewController *transactionsBitcoinViewController;
 @property (strong, nonatomic) ReceiveBitcoinViewController *receiveBitcoinViewController;

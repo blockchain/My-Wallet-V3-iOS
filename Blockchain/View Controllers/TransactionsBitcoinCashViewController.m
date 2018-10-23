@@ -37,9 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
-    
+
     [self setupFilter];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
@@ -50,8 +50,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:self.tableView];
-    
-    
+
+
     [self setupPullToRefresh];
 
     [self setupNoTransactionsViewInView:self.tableView assetType:LegacyAssetTypeBitcoinCash];
@@ -74,18 +74,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     self.balance = @"";
-    
+
     [self reload];
 }
 
 - (void)reload
 {
     [self loadTransactions];
-    
+
     [self updateBalance];
-    
+
     [self.detailViewController didGetHistory];
 }
 
@@ -108,9 +108,9 @@
 - (void)loadTransactions
 {
     self.transactions = [WalletManager.sharedInstance.wallet getBitcoinCashTransactions:self.filterIndex];
-    
+
     self.noTransactionsView.hidden = self.transactions.count > 0;
-    
+
     [self.tableView reloadData];
     [self.refreshControl endRefreshing];
 }
@@ -118,7 +118,7 @@
 - (void)reloadSymbols
 {
     [self reload];
-    
+
     [self.detailViewController reloadSymbols];
 }
 
@@ -137,11 +137,11 @@
 - (void)didGetNewTransaction
 {
     Transaction *transaction = [self.transactions firstObject];
-    
+
     if ([transaction.txType isEqualToString:TX_TYPE_SENT]) {
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     } else if ([transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
-        
+
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
         TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
@@ -165,24 +165,24 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"transaction"];
-    
+
     Transaction * transaction = [self.transactions objectAtIndex:[indexPath row]];
 
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionCell" owner:nil options:nil] objectAtIndex:0];
         cell.assetType = LegacyAssetTypeBitcoinCash;
     }
-    
+
     cell.transaction = transaction;
-    
+
     [cell reload];
-    
+
     [cell changeBtcButtonTitleText:[NSNumberFormatter formatBchWithSymbol:ABS(transaction.amount)]];
-    
+
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    
+
     cell.selectedBackgroundView = [self selectedBackgroundViewForCell:cell];
-    
+
     return cell;
 }
 
@@ -207,9 +207,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     TransactionTableCell *cell = (TransactionTableCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    
+
     [cell bitcoinCashTransactionClicked];
 }
 

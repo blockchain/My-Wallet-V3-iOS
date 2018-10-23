@@ -50,20 +50,15 @@
         self.scrollView.scrollEnabled = YES;
         self.scrollView.delegate = self;
         self.scrollView.showsHorizontalScrollIndicator = NO;
-        self.isUsingPageControl = YES;
-        [self.scrollView setContentOffset:CGPointMake(pageIndex * self.scrollView.frame.size.width, 0) animated:NO];
-        self.isUsingPageControl = NO;
         [self.view addSubview:self.scrollView];
         
         priceChartView.center = CGPointMake(pageIndex * self.scrollView.frame.size.width + self.scrollView.frame.size.width/2, self.scrollView.frame.size.height/2);
         
-        UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, priceChartView.frame.origin.y + priceChartView.frame.size.height + 16, 100, 30)];
-        pageControl.numberOfPages = 3;
-        [pageControl setCurrentPage:pageIndex];
-        [pageControl addTarget:self action:@selector(pageControlChanged:) forControlEvents:UIControlEventValueChanged];
-        pageControl.center = CGPointMake(self.view.frame.size.width/2, pageControl.center.y);
-        self.pageControl = pageControl;
-        [self.view addSubview:pageControl];
+        self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, priceChartView.frame.origin.y + priceChartView.frame.size.height + 16, 100, 30)];
+        self.pageControl.numberOfPages = 3;
+        [self.pageControl addTarget:self action:@selector(pageControlChanged:) forControlEvents:UIControlEventValueChanged];
+        self.pageControl.center = CGPointMake(self.view.frame.size.width/2, self.pageControl.center.y);
+        [self.view addSubview:self.pageControl];
         
         CGFloat buttonWidth = 50;
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(pageIndex*self.view.frame.size.width + self.view.frame.size.width - 8 - buttonWidth, 30, buttonWidth, buttonWidth)];
@@ -73,6 +68,12 @@
         self.scrollViewCloseButton = closeButton;
         [self.scrollView addSubview:closeButton];
     }
+
+    self.isUsingPageControl = YES;
+    [self.scrollView setContentOffset:CGPointMake(pageIndex * self.scrollView.frame.size.width, 0) animated:NO];
+    self.isUsingPageControl = NO;
+
+    [self.pageControl setCurrentPage:pageIndex];
 
     priceChartView.center = CGPointMake(pageIndex * self.scrollView.frame.size.width + self.scrollView.frame.size.width/2, self.scrollView.frame.size.height/2);
     self.priceChartView = priceChartView;

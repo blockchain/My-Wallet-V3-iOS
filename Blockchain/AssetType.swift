@@ -22,7 +22,13 @@ extension AssetType {
         "xlm": .stellar
     ]
 
-    static let all: [AssetType] = [.bitcoin, .ethereum, .bitcoinCash, .stellar]
+    static let all: [AssetType] = {
+        var allAssets: [AssetType] = [.bitcoin, .ethereum, .bitcoinCash]
+        if AppFeatureConfigurator.shared.configuration(for: .stellar).isEnabled {
+            allAssets.append(.stellar)
+        }
+        return allAssets
+    }()
     
     static func from(legacyAssetType: LegacyAssetType) -> AssetType {
         switch legacyAssetType {
@@ -118,7 +124,7 @@ extension AssetType {
     func toFiat(
         amount: Decimal,
         from wallet: Wallet = WalletManager.shared.wallet
-        ) -> String? {
+    ) -> String? {
         let input = amount as NSDecimalNumber
         
         switch self {
@@ -149,7 +155,7 @@ extension AssetType {
     func toCrypto(
         amount: Decimal,
         from wallet: Wallet = WalletManager.shared.wallet
-        ) -> String? {
+    ) -> String? {
         let input = amount as NSDecimalNumber
         switch self {
         case .bitcoin:

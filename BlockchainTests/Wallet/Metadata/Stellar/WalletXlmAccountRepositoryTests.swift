@@ -11,7 +11,7 @@ import XCTest
 
 private class MockXlmWallet: XlmWallet {
     var didCallSave: XCTestExpectation?
-    var accounts: [WalletXlmAccount]? = nil
+    var accounts: [WalletXlmAccount]?
     var needsSecondPasswordVal: Bool = false
     var mnenomic: String = "one two three four"
 
@@ -50,19 +50,13 @@ class WalletXlmAccountRepositoryTests: XCTestCase {
     /// Tests that XLM initialization works when the wallet has a second password set
     func testIntializeWallet_needsSecondPassword() {
         mockXlmWallet.needsSecondPasswordVal = true
-
-        let fetcherCalledExpectation = expectation(description: "Second password should be fetched.")
-        accountRepository.initializeMetadata(fetcher: { completion in
-            completion("second password")
-            fetcherCalledExpectation.fulfill()
-        })
+        accountRepository.initializeMetadata(secondPassword: "second password")
         XCTAssertEqual(1, mockXlmWallet.accounts?.count ?? 0)
-        wait(for: [fetcherCalledExpectation], timeout: 0.1)
     }
 
     /// Tests that XLM initialization works when the wallet has no accounts
     func testInitializeWallet_noAccounts() {
-        accountRepository.initializeMetadata(fetcher: { _ in })
+        accountRepository.initializeMetadata()
         XCTAssertEqual(1, mockXlmWallet.accounts?.count ?? 0)
     }
 
@@ -71,7 +65,7 @@ class WalletXlmAccountRepositoryTests: XCTestCase {
         mockXlmWallet.accounts = [
             WalletXlmAccount(publicKey: "key", label: "label")
         ]
-        accountRepository.initializeMetadata(fetcher: { _ in })
+        accountRepository.initializeMetadata()
         XCTAssertEqual(1, mockXlmWallet.accounts?.count ?? 0)
     }
 }

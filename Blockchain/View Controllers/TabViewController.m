@@ -38,7 +38,7 @@ UILabel *titleLabel;
     tabBar.delegate = self;
 
     selectedIndex = [ConstantsObjcBridge tabDashboard];
-  
+
     [self setupTabButtons];
 }
 

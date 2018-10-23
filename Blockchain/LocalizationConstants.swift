@@ -289,6 +289,10 @@ struct LocalizationConstants {
             "Price charts",
             comment: "The title of the balances label in the price chart view."
         )
+        static let chartsError = NSLocalizedString(
+            "An error occurred while retrieving the latest chart data. Please try again later.",
+            comment: "The error message for when the method fetchChartDataForAsset fails."
+        )
     }
 
     struct AnnouncementCards {
@@ -383,12 +387,12 @@ struct LocalizationConstants {
             "Refunded",
             comment: "Text shown on the exchange list cell indicating the trade status"
         )
-        
+
         static let orderHistory = NSLocalizedString(
             "Order History",
             comment: "Header for the exchange list"
         )
-        
+
         static let loading = NSLocalizedString(
             "Loading Exchange",
             comment: "Text presented when the wallet is loading the exchange"
@@ -452,7 +456,7 @@ struct LocalizationConstants {
             "What do you want to receive?",
             comment: "Text displayed on the action sheet that is presented when the user is selecting an account to exchange into."
         )
-        
+
         static let fees = NSLocalizedString("Fees", comment: "Fees")
         static let confirmExchange = NSLocalizedString(
             "Confirm Exchange",
@@ -486,7 +490,7 @@ struct LocalizationConstants {
             "Insufficient funds",
             comment: "Error message shown when a user is attempting to exchange an amount greater than their balance"
         )
-        
+
         static let yourMin = NSLocalizedString(
             "Your Min is",
             comment: "Error that displays what the minimum amount of fiat is required for a trade"
@@ -570,6 +574,21 @@ struct LocalizationConstants {
 
     struct SwipeToReceive {
         static let pleaseLoginToLoadMoreAddresses = NSLocalizedString("Please login to load more addresses.", comment: "")
+    }
+
+    struct Receive {
+        static let tapToCopyThisAddress = NSLocalizedString(
+            "Tap to copy this address. Share it with the sender via email or text.",
+            comment: "Text displayed on the receive screen instructing the user to copy their crypto address."
+        )
+        static let requestPayment = NSLocalizedString(
+            "Request Payment",
+            comment: "Text displayed on the button when requesting for payment to a crypto address."
+        )
+        static let copiedToClipboard = NSLocalizedString(
+            "Copied to clipboard",
+            comment: "Text displayed when a crypto address has been copied to the users clipboard."
+        )
     }
 
     struct ReceiveAsset {
@@ -811,12 +830,30 @@ struct LocalizationConstants {
             "Enter Stellar address or select",
             comment: "Placeholder text for the Lumens send screen."
         )
+        static let secondPasswordPrompt = NSLocalizedString(
+            "Your second password is required in order to create an XLM account.",
+            comment: "Text shown when the second password is required to create an XLM account."
+        )
+        static let pleaseSendXlmToX = NSLocalizedString(
+            "Please send XLM to %@",
+            comment: "Message when requesting XLM."
+        )
+        static let xlmPaymentRequest = NSLocalizedString(
+            "XLM payment request.",
+            comment: "Subject when requesting for XLM."
+        )
+        static let enterYourSecondPassword = NSLocalizedString(
+            "Enter Your Second Password",
+            comment: "Text on the button prompting the user to enter their second password to proceed with creating an XLM account."
+        )
     }
 }
 
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
+    @objc class func copiedToClipboard() -> String { return LocalizationConstants.Receive.copiedToClipboard }
+
     @objc class func createWalletLegalAgreementPrefix() -> String {
         return LocalizationConstants.Onboarding.termsOfServiceAndPrivacyPolicyNoticePrefix
     }
@@ -828,6 +865,10 @@ struct LocalizationConstants {
     @objc class func privacyPolicy() -> String {
         return LocalizationConstants.privacyPolicy
     }
+
+    @objc class func tapToCopyThisAddress() -> String { return LocalizationConstants.Receive.tapToCopyThisAddress }
+
+    @objc class func requestPayment() -> String { return LocalizationConstants.Receive.requestPayment }
 
     @objc class func continueString() -> String { return LocalizationConstants.continueString }
 
@@ -940,7 +981,7 @@ struct LocalizationConstants {
     @objc class func continueKYCCardDescription() -> String { return LocalizationConstants.AnnouncementCards.continueKYCCardDescription }
 
     @objc class func continueKYCActionButtonTitle() -> String { return LocalizationConstants.AnnouncementCards.continueKYCActionButtonTitle }
-    
+
     @objc class func notEnoughXForFees() -> String { return LocalizationConstants.Errors.notEnoughXForFees }
 
     @objc class func balances() -> String { return LocalizationConstants.balances }

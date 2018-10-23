@@ -41,7 +41,7 @@
     instructionsLabel.textAlignment = NSTextAlignmentCenter;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
-    instructionsLabel.text = BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    instructionsLabel.text = [LocalizationConstantsObjcBridge tapToCopyThisAddress];
     [instructionsLabel sizeToFit];
     instructionsLabel.center = CGPointMake(self.view.center.x, instructionsLabel.center.y);
     [self.view addSubview:instructionsLabel];
@@ -77,7 +77,7 @@
     CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - 20;
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.view.center.x, requestButton.center.y);
-    [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
+    [requestButton setTitle:[LocalizationConstantsObjcBridge requestPayment] forState:UIControlStateNormal];
     requestButton.backgroundColor = UIColor.brandSecondary;
     requestButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     requestButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -94,7 +94,7 @@
 - (void)showEtherAddress
 {
     NSString *etherAddress = [WalletManager.sharedInstance.wallet getEtherAddress];
-    self.instructionsLabel.text = etherAddress == nil ? BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    self.instructionsLabel.text = etherAddress == nil ? BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS : [LocalizationConstantsObjcBridge tapToCopyThisAddress];
     self.address = etherAddress;
     self.addressTextView.text = self.address;
     
@@ -112,7 +112,7 @@
 - (void)mainQRClicked
 {
     if (self.address) {
-        [self.addressTextView animateFromText:self.address toIntermediateText:BC_STRING_COPIED_TO_CLIPBOARD speed:1 gestureReceiver:self.addressTextView];
+        [self.addressTextView animateFromText:self.address toIntermediateText:[LocalizationConstantsObjcBridge copiedToClipboard] speed:1 gestureReceiver:self.addressTextView];
         [UIPasteboard generalPasteboard].string = self.address;
     }
 }

@@ -84,7 +84,9 @@
     
     if (localCurrency) {
         
-        if (!WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) return nil;
+        if (!WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
+            return nil;
+        }
         
         @try {
             NSDecimalNumber *number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:amount] decimalNumberByDividingBy:(NSDecimalNumber*)[NSDecimalNumber numberWithDouble:(double)WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.conversion]];

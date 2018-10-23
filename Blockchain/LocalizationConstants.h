@@ -52,7 +52,6 @@
 #define BC_STRING_PAYMENT_TRANSFERRED_FROM_ARGUMENT_ARGUMENT_OUTPUTS_ARGUMENT_ARGUMENT_TOO_SMALL NSLocalizedString(@"Transferred funds from %d %@. Outputs for %d %@ were too small.", nil)
 #define BC_STRING_PAYMENT_ASK_TO_ARCHIVE_TRANSFERRED_ADDRESSES NSLocalizedString(@"Would you like to archive the addresses used?", nil)
 #define BC_STRING_PAYMENT_RECEIVED NSLocalizedString(@"Payment Received", nil)
-#define BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS NSLocalizedString(@"Tap to copy this address. Share it with the sender via email or text.", nil)
 #define BC_STRING_ERROR_COPYING_TO_CLIPBOARD NSLocalizedString(@"An error occurred while copying your address to the clipboard. Please re-select the destination address or restart the app and try again.", nil)
 
 #define BC_STRING_TRADE_COMPLETED NSLocalizedString(@"Trade Completed", nil)
@@ -64,7 +63,6 @@
 #define BC_STRING_ADJUST_FEE NSLocalizedString(@"Adjust Fee", nil)
 #define BC_STRING_ASK_TO_ADD_TO_ADDRESS_BOOK NSLocalizedString(@"Would you like to add the bitcoin address %@ to your address book?", nil)
 #define BC_STRING_ARGUMENT_COPIED_TO_CLIPBOARD NSLocalizedString(@"%@ copied to clipboard", nil)
-#define BC_STRING_COPIED_TO_CLIPBOARD NSLocalizedString(@"Copied to clipboard", nil)
 #define BC_STRING_SEND_FROM NSLocalizedString(@"Send from...", nil)
 #define BC_STRING_SEND_TO NSLocalizedString(@"Send to...", nil)
 #define BC_STRING_RECEIVE_TO NSLocalizedString(@"Receive to...", nil)
@@ -219,7 +217,6 @@
 #define BC_STRING_CREATE_A_WALLET NSLocalizedString(@"Create a Wallet", nil)
 #define BC_STRING_REQUEST_AMOUNT NSLocalizedString(@"Request Amount", nil)
 #define BC_STRING_REQUEST NSLocalizedString(@"Request", nil)
-#define BC_STRING_REQUEST_PAYMENT NSLocalizedString(@"Request Payment", nil)
 #define BC_STRING_LABEL_ADDRESS NSLocalizedString(@"Label Address", nil)
 #define BC_STRING_SCAN_PRIVATE_KEY NSLocalizedString(@"Scan Private Key", nil)
 #define BC_STRING_IMPORT_ADDRESS NSLocalizedString(@"Import address", nil)
@@ -436,7 +433,6 @@
 #define BC_STRING_PLEASE_LOGIN_TO_LOAD_MORE_ADDRESSES NSLocalizedString(@"Please login to load more addresses.", nil)
 
 #define BC_STRING_ERROR_TICKER NSLocalizedString(@"An error occurred while retrieving currency conversion rates. Please try again later.", nil)
-#define BC_STRING_ERROR_CHARTS NSLocalizedString(@"An error occurred while retrieving the latest chart data. Please try again later.", nil)
 
 #define BC_STRING_DESCRIPTION NSLocalizedString(@"Description", nil)
 #define BC_STRING_DETAILS NSLocalizedString(@"Details", nil)

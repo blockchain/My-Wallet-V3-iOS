@@ -14,4 +14,5 @@ protocol StellarTransactionAPI {
     typealias AccountID = String
     
     func send(to accountID: String, amount: Decimal, completion: @escaping CompletionHandler)
+    func get(transaction transactionHash: String, completion: @escaping ((Result<StellarTransactionResponse>) -> Void))
 }

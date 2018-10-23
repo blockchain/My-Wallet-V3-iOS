@@ -263,7 +263,7 @@
     CGFloat requestButtonOriginY = self.view.frame.size.height - BUTTON_HEIGHT - 20;
     UIButton *requestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, requestButtonOriginY, self.view.frame.size.width - 40, BUTTON_HEIGHT)];
     requestButton.center = CGPointMake(self.bottomContainerView.center.x, requestButton.center.y);
-    [requestButton setTitle:BC_STRING_REQUEST_PAYMENT forState:UIControlStateNormal];
+    [requestButton setTitle:[LocalizationConstantsObjcBridge requestPayment] forState:UIControlStateNormal];
     requestButton.backgroundColor = UIColor.brandSecondary;
     requestButton.layer.cornerRadius = CORNER_RADIUS_BUTTON;
     requestButton.titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:17.0];
@@ -359,7 +359,7 @@
     instructionsLabel.textColor = UIColor.gray5;
     instructionsLabel.numberOfLines = 0;
     instructionsLabel.font = [UIFont fontWithName:FONT_GILL_SANS_REGULAR size:FONT_SIZE_SMALL];
-    instructionsLabel.text = (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? nil : BC_STRING_RECEIVE_SCREEN_INSTRUCTIONS;
+    instructionsLabel.text = (IS_USING_SCREEN_SIZE_4S && self.assetType == LegacyAssetTypeBitcoin) ? nil : [LocalizationConstantsObjcBridge tapToCopyThisAddress];
     [instructionsLabel sizeToFit];
     if (instructionsLabel.frame.size.height > 40) [instructionsLabel changeHeight:40];
     instructionsLabel.center = CGPointMake(self.view.frame.size.width/2, instructionsLabel.center.y);
@@ -591,7 +591,7 @@
 {
     if ([self.mainAddress isKindOfClass:[NSString class]]) {
         [UIPasteboard generalPasteboard].string = self.mainAddressLabel.text;
-        [self.mainAddressLabel animateFromText:[[self.mainAddress componentsSeparatedByString:@":"] lastObject] toIntermediateText:BC_STRING_COPIED_TO_CLIPBOARD speed:1 gestureReceiver:qrCodeMainImageView];
+        [self.mainAddressLabel animateFromText:[[self.mainAddress componentsSeparatedByString:@":"] lastObject] toIntermediateText:[LocalizationConstantsObjcBridge copiedToClipboard] speed:1 gestureReceiver:qrCodeMainImageView];
     } else {
         [[AlertViewPresenter sharedInstance] standardNotifyWithMessage:BC_STRING_ERROR_COPYING_TO_CLIPBOARD title:BC_STRING_ERROR in:self handler: nil];
     }

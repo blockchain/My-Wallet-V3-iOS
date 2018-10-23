@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Vr0-Qh-KrC">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Dashboard Controller-->
+        <scene sceneID="tTE-8C-Xj7">
+            <objects>
+                <viewController storyboardIdentifier="DashboardController" title="Dashboard Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Vr0-Qh-KrC" customClass="DashboardController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="d7z-2X-9sX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c43-J0-Phh">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96470588235294119" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Xfm-ZM-gia" firstAttribute="top" secondItem="c43-J0-Phh" secondAttribute="top" id="HRI-JL-26r"/>
+                            <constraint firstItem="c43-J0-Phh" firstAttribute="leading" secondItem="Xfm-ZM-gia" secondAttribute="leading" id="fbk-1F-jGZ"/>
+                            <constraint firstItem="Xfm-ZM-gia" firstAttribute="bottom" secondItem="c43-J0-Phh" secondAttribute="bottom" id="oCf-gc-Q2i"/>
+                            <constraint firstItem="Xfm-ZM-gia" firstAttribute="trailing" secondItem="c43-J0-Phh" secondAttribute="trailing" id="ycd-ml-867"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Xfm-ZM-gia"/>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="c43-J0-Phh" id="0hD-VC-Hpz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fg3-a0-aM9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-98.400000000000006" y="192.95352323838082"/>
+        </scene>
+    </scenes>
+</document>

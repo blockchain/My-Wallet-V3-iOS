@@ -25,6 +25,18 @@ import Foundation
         }
     }
 
+    /// Returns the URL for retrieving chart related information.
+    ///
+    /// - Parameters:
+    ///   - base: base currency (btc, eth, bch, xlm)
+    ///   - quote: the fiat currency symbol
+    ///   - startDate: unix timestamp of the starting date
+    ///   - scale: the scale in seconds
+    /// - Returns: the URL for retrieving chart related information
+    func chartsURL(for base: String, quote: String, startDate: Int, scale: String) -> String {
+        return "\(apiUrl)/price/index-series?base=\(base)&quote=\(quote)&start=\(String(startDate))&scale=\(scale)&omitnull=true"
+    }
+
     /// Returns the URL for the specified address's transaction detail.
     ///
     /// - Parameter transactionHash: the hash of the transaction

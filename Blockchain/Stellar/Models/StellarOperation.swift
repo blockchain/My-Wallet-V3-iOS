@@ -40,3 +40,19 @@ enum StellarOperation {
         let createdAt: Date
     }
 }
+
+extension StellarOperation {
+    
+    var transactionHash: String {
+        switch self {
+        case .accountCreated(let model):
+            return model.transactionHash
+        case .payment(let model):
+            return model.transactionHash
+        case .unknown:
+            Logger.shared.error("Unknown Operation Type")
+            return ""
+        }
+    }
+    
+}

@@ -21,45 +21,33 @@ protocol XlmWallet {
 /// Repository for `WalletXlmAccount` instances
 class WalletXlmAccountRepository {
 
-    typealias SecondPasswordFetcher = (SecondPasswordFetchCompletion) -> Void
-    typealias SecondPasswordFetchCompletion = (String) -> Void
-
     private let wallet: XlmWallet
 
     init(wallet: XlmWallet = WalletManager.shared.wallet) {
         self.wallet = wallet
     }
 
+    /// The default `WalletXlmAccount`, will be nil if it has not yet been initialized
+    var defaultAccount: WalletXlmAccount? {
+        return accounts()?.first
+    }
+
     /// Initializes a `WalletXlmAccount` in wallet metadata if no such account exists yet.
     ///
-    /// - Parameter fetcher: closure for fetching the wallet second password if one is set
-    func initializeMetadata(fetcher: SecondPasswordFetcher) {
+    /// - Parameter secondPassword: the second password for the wallet if it is double encrypted
+    func initializeMetadata(secondPassword: String? = nil) {
         // Don't initialize if the wallet already has accounts
         guard accounts() == nil else {
             Logger.shared.info("Not initializing a new WalletXlmAccount in wallet metadata. One already exists.")
             return
         }
 
-        let keyPairDeriver = StellarKeyPairDeriver()
-
-        // Get second password if needed
-        guard !wallet.needsSecondPassword() else {
-            fetcher { [weak self] secondPassword in
-                guard let mnemonic = wallet.getMnemonic(secondPassword) else {
-                    Logger.shared.warning("Mnemonic is nil.")
-                    return
-                }
-                let keyPair = keyPairDeriver.derive(mnemonic: mnemonic, passphrase: secondPassword)
-                self?.save(keyPair: keyPair)
-            }
-            return
-        }
-
-        // If no second password, derive and save XLM account
-        guard let mnemonic = wallet.getMnemonic(nil) else {
+        // Derive and save XLM account
+        guard let mnemonic = wallet.getMnemonic(secondPassword) else {
             Logger.shared.warning("Mnemonic is nil.")
             return
         }
+        let keyPairDeriver = StellarKeyPairDeriver()
         let keyPair = keyPairDeriver.derive(mnemonic: mnemonic)
         save(keyPair: keyPair)
     }
@@ -67,6 +55,8 @@ class WalletXlmAccountRepository {
     func accounts() -> [WalletXlmAccount]? {
         return wallet.xlmAccounts()
     }
+
+    // MARK: - Private
 
     private func save(keyPair: StellarKeyPair) {
         wallet.save(keyPair: keyPair, label: LocalizationConstants.Stellar.defaultLabelName) { errorMessage in

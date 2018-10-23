@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, CardConfiguration){
+typedef NS_ENUM(NSInteger, CardConfiguration) {
     CardConfigurationWelcome,
     CardConfigurationBuySell,
+    CardConfigurationContinueKYC
 };
 
 enum {

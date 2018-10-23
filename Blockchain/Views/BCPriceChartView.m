@@ -14,6 +14,7 @@
 #import "NSNumberFormatter+Currencies.h"
 
 #define X_INSET_GRAPH_CONTAINER 16
+#define USER_DEFAULTS_KEY_GRAPH_TIME_FRAME @"timeFrame"
 
 @import Charts;
 

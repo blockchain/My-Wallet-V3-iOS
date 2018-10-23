@@ -25,10 +25,14 @@
 {
     if (self == [super initWithFrame:frame]) {
 
-        self.assets = @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
-                        [NSNumber numberWithInteger:LegacyAssetTypeEther],
-                        [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash],
-                        [NSNumber numberWithInteger:LegacyAssetTypeStellar]];
+        NSMutableArray *allAssets = [
+                                     @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
+                                       [NSNumber numberWithInteger:LegacyAssetTypeEther],
+                                       [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]] mutableCopy];
+        if ([AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureStellar].isEnabled) {
+            [allAssets addObject:[NSNumber numberWithInteger:LegacyAssetTypeStellar]];
+        }
+        self.assets = [allAssets copy];
         
         self.clipsToBounds = YES;
         
