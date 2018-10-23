@@ -110,7 +110,7 @@ final class DashboardController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(resetScrollView),
-            name: .UIApplicationDidEnterBackground,
+            name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
 
