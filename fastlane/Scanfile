@@ -10,6 +10,6 @@
 
 clean(true)
 code_coverage(true)
-configuration("Debug Production")
-scheme("Blockchain")
+configuration("Debug Dev")
+scheme("Blockchain (Dev)")
 workspace("Blockchain.xcworkspace")
