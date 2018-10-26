@@ -13,7 +13,7 @@ enum StellarOperation {
     case payment(Payment)
     case unknown
     
-    struct AccountCreated {
+    struct AccountCreated: Identifiable {
         let identifier: String
         let funder: String
         let account: String
@@ -24,13 +24,14 @@ enum StellarOperation {
         let createdAt: Date
     }
     
-    struct Payment {
+    struct Payment: Identifiable {
         
         enum Direction {
             case credit
             case debit
         }
         
+        let token: String
         let identifier: String
         let fromAccount: String
         let toAccount: String
@@ -50,6 +51,18 @@ extension StellarOperation {
         case .payment(let model):
             return model.transactionHash
         case .unknown:
+            Logger.shared.error("Unknown Operation Type")
+            return ""
+        }
+    }
+    
+    var token: String {
+        switch self {
+        case .accountCreated(let model):
+            return model.token
+        case .payment(let model):
+            return model.token
+        default:
             Logger.shared.error("Unknown Operation Type")
             return ""
         }

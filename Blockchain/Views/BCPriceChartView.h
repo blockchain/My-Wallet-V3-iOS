@@ -24,7 +24,6 @@
 - (void)clear;
 - (void)updateTitleContainer;
 - (void)updateTitleContainerWithChartDataEntry:(ChartDataEntry *)dataEntry;
-- (void)updateEthExchangeRate:(NSDecimalNumber *)rate;
 - (ChartAxisBase *)leftAxis;
 - (ChartAxisBase *)xAxis;
 @end

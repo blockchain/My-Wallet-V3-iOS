@@ -21,6 +21,6 @@ protocol StellarOperationsStreamAPI {
     var stream: OperationsStreamItem? { get set }
     var service: stellarsdk.OperationsService { get set }
     
-    func stream(accountID: String, token: String?)
+    func start()
     func end()
 }

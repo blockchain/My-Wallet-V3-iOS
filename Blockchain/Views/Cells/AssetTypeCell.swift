@@ -36,6 +36,7 @@ import Foundation
     @objc func configure(with assetType: AssetType, showChevronButton: Bool) {
         self.assetType = assetType
         assetImageView.image = assetType.brandImage
+        assetImageView.tintColor = .white
         label.text = assetType.description
         chevronButton.isHidden = !showChevronButton
     }

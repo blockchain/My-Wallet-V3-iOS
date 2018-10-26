@@ -20,6 +20,8 @@
         return KEYCHAIN_KEY_BCH_SWIPE_ADDRESSES;
     } else if (assetType == LegacyAssetTypeEther) {
         return KEYCHAIN_KEY_ETHER_ADDRESS;
+    } else if (assetType == LegacyAssetTypeStellar) {
+        return @"xlmSwipeToReceiveAddress";
     } else {
         DLog(@"KeychainItemWrapper error: Unsupported asset type!")
         return nil;
@@ -88,30 +90,28 @@
     [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoin];
     [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeBitcoinCash];
     [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeEther];
+    [KeychainItemWrapper removeAllSwipeAddressesForAssetType:LegacyAssetTypeStellar];
 }
 
-+ (void)setSwipeEtherAddress:(NSString *)swipeAddress
+#pragma mark - Single Address Swipe to Receive
+
++ (void)setSingleSwipeAddress:(NSString *_Nonnull)swipeAddress forAssetType:(LegacyAssetType)assetType
 {
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:KEYCHAIN_KEY_ETHER_ADDRESS accessGroup:nil];
+    NSString *key = [self keychainKeyForAssetType:assetType];
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:key accessGroup:nil];
     [keychain setObject:(__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly forKey:(__bridge id)kSecAttrAccessible];
-    
-    [keychain setObject:KEYCHAIN_KEY_ETHER_ADDRESS forKey:(__bridge id)kSecAttrAccount];
+
+    [keychain setObject:key forKey:(__bridge id)kSecAttrAccount];
     [keychain setObject:[swipeAddress dataUsingEncoding:NSUTF8StringEncoding] forKey:(__bridge id)kSecValueData];
 }
 
-+ (void)removeSwipeEtherAddress
++ (NSString *_Nullable)getSingleSwipeAddressForAssetType:(LegacyAssetType)assetType
 {
-    KeychainItemWrapper *etherKeychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:LegacyAssetTypeEther] accessGroup:nil];
-    [etherKeychain resetKeychainItem];
-}
-
-+ (NSString *)getSwipeEtherAddress
-{
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:[self keychainKeyForAssetType:LegacyAssetTypeEther] accessGroup:nil];
-    NSData *etherAddressData = [keychain objectForKey:(__bridge id)kSecValueData];
-    NSString *etherAddress = [[NSString alloc] initWithData:etherAddressData encoding:NSUTF8StringEncoding];
-    
-    return etherAddress.length == 0 ? nil : etherAddress;
+    NSString *key = [self keychainKeyForAssetType:assetType];
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:key accessGroup:nil];
+    NSData *addressData = [keychain objectForKey:(__bridge id)kSecValueData];
+    NSString *address = [[NSString alloc] initWithData:addressData encoding:NSUTF8StringEncoding];
+    return address.length == 0 ? nil : address;
 }
 
 @end

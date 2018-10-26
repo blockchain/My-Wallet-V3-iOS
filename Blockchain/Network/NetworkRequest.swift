@@ -130,8 +130,8 @@ extension NetworkRequest {
 
     static func GET<ResponseType: Decodable>(
         url: URL,
-        body: Data?,
-        token: String?,
+        body: Data? = nil,
+        token: String? = nil,
         type: ResponseType.Type
     ) -> Single<ResponseType> {
         var request = self.init(endpoint: url, method: .get, body: body, authToken: token)

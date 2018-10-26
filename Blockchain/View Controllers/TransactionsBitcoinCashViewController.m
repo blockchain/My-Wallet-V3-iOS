@@ -96,9 +96,9 @@
 
 - (uint64_t)getBalance
 {
-    if (self.filterIndex == FILTER_INDEX_ALL) {
+    if (self.filterIndex == [ConstantsObjcBridge filterIndexAll]) {
         return [WalletManager.sharedInstance.wallet getBchBalance];
-    } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    } else if (self.filterIndex == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoinCash];
     } else {
         return [[WalletManager.sharedInstance.wallet getBalanceForAccount:(int)self.filterIndex assetType:LegacyAssetTypeBitcoinCash] longLongValue];
@@ -236,9 +236,9 @@
 - (void)didSelectFilter:(int)filter
 {
     self.filterIndex = filter;
-    if (filter == FILTER_INDEX_ALL) {
+    if (filter == [ConstantsObjcBridge filterIndexAll]) {
         self.filterSelectorLabel.text = BC_STRING_ALL_WALLETS;
-    } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    } else if (self.filterIndex == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         self.filterSelectorLabel.text = BC_STRING_IMPORTED_ADDRESSES;
     } else {
         self.filterSelectorLabel.text = [WalletManager.sharedInstance.wallet getLabelForAccount:filter assetType:LegacyAssetTypeBitcoinCash];

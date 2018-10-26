@@ -11,6 +11,7 @@
 - (void)bitcoinLegendTapped;
 - (void)etherLegendTapped;
 - (void)bitcoinCashLegendTapped;
+- (void)stellarLegendTapped;
 - (void)watchOnlyViewTapped;
 @end
 @interface BCBalancesChartView : UIView
@@ -26,6 +27,10 @@
 
 - (void)updateBitcoinCashBalance:(NSString *)balance;
 - (void)updateBitcoinCashFiatBalance:(double)fiatBalance;
+
+- (void)updateStellarBalance:(NSString *)balance;
+- (void)updateStellarFiatBalance:(double)fiatBalance;
+
 - (void)updateBitcoinCashWatchOnlyBalance:(NSString *)watchOnlyBalance;
 - (void)updateBitcoinCashWatchOnlyFiatBalance:(double)watchOnlyFiatBalance;
 

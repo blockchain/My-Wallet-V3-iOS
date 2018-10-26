@@ -37,9 +37,11 @@
 @property (nonatomic) UIButton *monthButton;
 @property (nonatomic) UIButton *weekButton;
 @property (nonatomic) UIButton *dayButton;
-@property (nonatomic) NSDecimalNumber *lastEthExchangeRate;
 
 @property (nonatomic) NSArray *lastUpdatedValues;
+
+// TICKET: IOS-1525 - rewrite BCPriceChartView in Swift, remove property and get price from PriceServiceClient
+@property (nonatomic) double lastXlmPrice;
 
 @property (nonatomic) UIActivityIndicatorView *spinner;
 @end
@@ -59,7 +61,7 @@
         titleContainerView.backgroundColor = [UIColor clearColor];
         titleContainerView.center = CGPointMake(self.bounds.size.width/2, titleContainerView.center.y);
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.textColor = UIColor.brandPrimary;
         titleLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_EXTRALIGHT size:FONT_SIZE_EXTRA_SMALL];
         [titleContainerView addSubview:titleLabel];
@@ -236,11 +238,6 @@
     [self.chartView clear];
 }
 
-- (void)updateEthExchangeRate:(NSDecimalNumber *)rate
-{
-    self.lastEthExchangeRate = rate;
-}
-
 - (void)updateWithValues:(NSArray *)values
 {
     [self updateTitleContainer:values];
@@ -260,13 +257,18 @@
     [self.titleLabel sizeToFit];
     self.titleLabel.center = CGPointMake([self.titleLabel superview].bounds.size.width/2, self.titleLabel.center.y);
     
-    self.priceLabel.text = [self getPriceLabelText];
-    [self.priceLabel sizeToFit];
-    
     double firstPrice = [[[values firstObject] objectForKey:DICTIONARY_KEY_PRICE] doubleValue];
     double lastPrice = [[[values lastObject] objectForKey:DICTIONARY_KEY_PRICE] doubleValue];
     double difference = lastPrice - firstPrice;
     double percentChange = (difference / firstPrice) * 100;
+
+    // TICKET: IOS-1525 - remove temporary code
+    if (self.assetType == LegacyAssetTypeStellar) {
+        self.lastXlmPrice = lastPrice;
+    }
+
+    self.priceLabel.text = [self getPriceLabelText];
+    [self.priceLabel sizeToFit];
     
     self.arrowImageView.hidden = NO;
     self.arrowImageView.tintColor = UIColor.green;
@@ -413,30 +415,36 @@
 
 - (NSString *)getChartTitleText
 {
-    LegacyAssetType assetType = self.assetType;
-    if (assetType == LegacyAssetTypeBitcoin) {
-        return [BC_STRING_BITCOIN_PRICE uppercaseString];
-    } else if (assetType == LegacyAssetTypeEther) {
-        return [BC_STRING_ETHER_PRICE uppercaseString];
-    } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        return [BC_STRING_BITCOIN_CASH_PRICE uppercaseString];
+    switch (self.assetType) {
+        case LegacyAssetTypeBitcoin:
+            return [[LocalizationConstantsObjcBridge dashboardBitcoinPrice] uppercaseString];
+        case LegacyAssetTypeEther:
+            return [[LocalizationConstantsObjcBridge dashboardEtherPrice] uppercaseString];
+        case LegacyAssetTypeBitcoinCash:
+            return [[LocalizationConstantsObjcBridge dashboardBitcoinCashPrice] uppercaseString];
+        case LegacyAssetTypeStellar:
+            return [[LocalizationConstantsObjcBridge dashboardStellarPrice] uppercaseString];
     }
-    DLog(@"Error: unknown asset type!");
-    return nil;
 }
 
 - (NSString *)getPriceLabelText
 {
-    LegacyAssetType assetType = self.assetType;
-    if (assetType == LegacyAssetTypeBitcoin) {
-        return [NSNumberFormatter formatMoney:SATOSHI localCurrency:YES];
-    } else if (assetType == LegacyAssetTypeEther) {
-        return [NSNumberFormatter formatEthToFiatWithSymbol:@"1" exchangeRate:self.lastEthExchangeRate];
-    } else if (assetType == LegacyAssetTypeBitcoinCash) {
-        return [NSNumberFormatter formatBchWithSymbol:SATOSHI localCurrency:YES];
+    NSDecimalNumber *ethExchangeRate = [AppCoordinator sharedInstance].tabControllerManager.latestEthExchangeRate;
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    switch (self.assetType) {
+        case LegacyAssetTypeBitcoin:
+            return [NSNumberFormatter formatMoney:SATOSHI localCurrency:YES];
+        case LegacyAssetTypeEther:
+            return [NSNumberFormatter formatEthToFiatWithSymbol:@"1" exchangeRate:ethExchangeRate];
+        case LegacyAssetTypeBitcoinCash:
+            return [NSNumberFormatter formatBchWithSymbol:SATOSHI localCurrency:YES];
+        case LegacyAssetTypeStellar:
+            // TODO: use formatter pool to source currencyFormatter
+            currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+            currencyFormatter.maximumFractionDigits = 2;
+            currencyFormatter.currencySymbol = [[WalletManager sharedInstance] latestMultiAddressResponse].symbol_local.symbol;
+            return [currencyFormatter stringFromNumber:[[NSNumber alloc] initWithDouble:self.lastXlmPrice]];
     }
-    DLog(@"Error: unknown asset type!");
-    return nil;
 }
 
 #pragma mark - Chart View Delegate

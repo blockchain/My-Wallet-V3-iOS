@@ -160,7 +160,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
         #if DISABLE_CERT_PINNING
         completionHandler(.performDefaultHandling, nil)
         #else
-        if BlockchainAPI.PartnerHosts.rawValues.contains(host) {
+        if  BlockchainAPI.PartnerHosts.allCases.contains(where: { $0.rawValue == host }) {
             completionHandler(.performDefaultHandling, nil)
         } else {
             CertificatePinner.shared.didReceive(challenge, completion: completionHandler)

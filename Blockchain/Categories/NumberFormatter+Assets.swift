@@ -51,11 +51,19 @@ extension NumberFormatter {
 
     // MARK: Digital Assets
     static let assetFractionDigits: Int = 8
+    static let stellarFractionDigits: Int = 7
 
     // Example: 1234.12345678
     static let assetFormatter: NumberFormatter = {
         return decimalStyleFormatter(withMinfractionDigits: 0,
                                      maxfractionDigits: assetFractionDigits,
+                                     usesGroupingSeparator: false)
+    }()
+
+    // TODO: genericize
+    static let stellarFormatter: NumberFormatter = {
+        return decimalStyleFormatter(withMinfractionDigits: 0,
+                                     maxfractionDigits: stellarFractionDigits,
                                      usesGroupingSeparator: false)
     }()
 

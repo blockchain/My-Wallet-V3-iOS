@@ -248,8 +248,8 @@
     // Data not loaded yet
     if (!self.data) {
         self.noTransactionsView.hidden = YES;
-
-        self.filterIndex = FILTER_INDEX_ALL;
+        
+        self.filterIndex = [ConstantsObjcBridge filterIndexAll];
 
         self.balance = @"";
         [self changeFilterLabel:@""];
@@ -497,9 +497,9 @@
 
 - (uint64_t)getBalance
 {
-    if (self.filterIndex == FILTER_INDEX_ALL) {
+    if (self.filterIndex == [ConstantsObjcBridge filterIndexAll]) {
         return [WalletManager.sharedInstance.wallet getTotalActiveBalance];
-    } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    } else if (self.filterIndex == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         return [WalletManager.sharedInstance.wallet getTotalBalanceForActiveLegacyAddresses:LegacyAssetTypeBitcoin];
     } else {
         return [[WalletManager.sharedInstance.wallet getBalanceForAccount:(int)self.filterIndex assetType:self.assetType] longLongValue];
@@ -508,9 +508,9 @@
 
 - (NSString *)getFilterLabel
 {
-    if (self.filterIndex == FILTER_INDEX_ALL) {
+    if (self.filterIndex == [ConstantsObjcBridge filterIndexAll]) {
         return BC_STRING_ALL_WALLETS;
-    } else if (self.filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    } else if (self.filterIndex == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         return BC_STRING_IMPORTED_ADDRESSES;
     } else {
         return [WalletManager.sharedInstance.wallet getLabelForAccount:(int)self.filterIndex assetType:self.assetType];
@@ -566,7 +566,7 @@
 {
     TabControllerManager *tabControllerManager = AppCoordinator.sharedInstance.tabControllerManager;
 
-    if (filter == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    if (filter == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         [tabControllerManager filterTransactionsByImportedAddresses];
     } else {
         NSString *filterLabel = [WalletManager.sharedInstance.wallet getLabelForAccount:filter assetType:self.assetType];

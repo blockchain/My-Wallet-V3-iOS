@@ -8,6 +8,7 @@
 
 import Foundation
 import stellarsdk
+import RxSwift
 
 protocol StellarAccountAPI {
     
@@ -15,6 +16,10 @@ protocol StellarAccountAPI {
     typealias CompletionHandler = ((Result<Bool>) -> Void)
     typealias AccountDetailsCompletion = ((Result<StellarAccount>) -> Void)
     
-    func accountDetails(for accountID: AccountID, completion: @escaping AccountDetailsCompletion)
+    var currentAccount: StellarAccount? { get }
+    
+    func currentStellarAccount(fromCache: Bool) -> Maybe<StellarAccount>
+    func accountResponse(for accountID: AccountID) -> Single<AccountResponse>
+    func accountDetails(for accountID: AccountID) -> Maybe<StellarAccount>
     func fundAccount(with accountID: AccountID, amount: Decimal, completion: @escaping CompletionHandler)
 }

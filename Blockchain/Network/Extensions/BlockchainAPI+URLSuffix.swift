@@ -51,8 +51,7 @@ import Foundation
         case .bitcoinCash:
             return "\(blockchairUrl)/bitcoin-cash/transaction/\(transactionHash)"
         case .stellar:
-            // TODO: confirm correct explorer
-            return "\(stellarExplorerUrl)/tx/\(transactionHash)"
+            return "\(stellarchainUrl)/tx/\(transactionHash)"
         }
     }
 }

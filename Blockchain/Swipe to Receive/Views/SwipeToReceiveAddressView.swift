@@ -48,7 +48,7 @@ import UIKit
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        imageViewAsset.tintColor = .gray5
+        imageViewAsset.tintColor = .brandSecondary
 
         buttonRequest.titleLabel?.font = UIFont(
             name: Constants.FontNames.montserratLight,
@@ -67,7 +67,7 @@ import UIKit
         )
     }
 
-    @IBAction func onRequestButtonTapped(_ sender: Any) {
+    @IBAction private func onRequestButtonTapped(_ sender: Any) {
         guard let address = address else {
             return
         }

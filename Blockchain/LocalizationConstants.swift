@@ -293,6 +293,26 @@ struct LocalizationConstants {
             "An error occurred while retrieving the latest chart data. Please try again later.",
             comment: "The error message for when the method fetchChartDataForAsset fails."
         )
+        static let bitcoinPrice = NSLocalizedString(
+            "Bitcoin Price",
+            comment: "The title of the Bitcoin price chart on the dashboard."
+        )
+        static let etherPrice = NSLocalizedString(
+            "Ether Price",
+            comment: "The title of the Ethereum price chart on the dashboard."
+        )
+        static let bitcoinCashPrice = NSLocalizedString(
+            "Bitcoin Cash Price",
+            comment: "The title of the Bitcoin Cash price chart on the dashboard."
+        )
+        static let stellarPrice = NSLocalizedString(
+            "Stellar Price",
+            comment: "The title of the Stellar price chart on the dashboard."
+        )
+        static let seeCharts = NSLocalizedString(
+            "See Charts",
+            comment: "The title of the action button in the price preview views."
+        )
     }
 
     struct AnnouncementCards {
@@ -555,6 +575,18 @@ struct LocalizationConstants {
             "Invalid %@ address: %@",
             comment: "String presented to the user when they try to scan a QR code with an invalid address."
         )
+        static let send = NSLocalizedString(
+            "Send",
+            comment: "Text displayed on the button for when a user wishes to send crypto."
+        )
+        static let confirmPayment = NSLocalizedString(
+            "Confirm Payment",
+            comment: "Header displayed asking the user to confirm their payment."
+        )
+        static let paymentSent = NSLocalizedString(
+            "Payment sent",
+            comment: "Alert message shown when crypto is successfully sent to a recipient."
+        )
     }
 
     struct SendEther {
@@ -593,6 +625,14 @@ struct LocalizationConstants {
 
     struct ReceiveAsset {
         static let xPaymentRequest = NSLocalizedString("%@ payment request", comment: "Subject of the email sent when requesting for payment from another user.")
+    }
+
+    struct Transactions {
+        static let allWallets = NSLocalizedString("All Wallets", comment: "Label of selectable item that allows user to show all transactions of a certain asset")
+        static let noTransactions = NSLocalizedString("No Transactions", comment: "Text displayed when no recent transactions are being shown")
+        static let noTransactionsAssetArgument = NSLocalizedString("Transactions occur when you send and receive %@.", comment: "Helper text displayed when no recent transactions are being shown")
+        static let requestArgument = NSLocalizedString("Request %@", comment: "Text shown when a user can request a certain asset")
+        static let getArgument = NSLocalizedString("Get %@", comment: "Text shown when a user can purchase a certain asset")
     }
 
     struct Backup {
@@ -838,6 +878,9 @@ struct LocalizationConstants {
             "Please send XLM to %@",
             comment: "Message when requesting XLM."
         )
+        static let viewOnArgument = NSLocalizedString(
+            "View on %@",
+            comment: "Button title for viewing a transaction on the explorer")
         static let xlmPaymentRequest = NSLocalizedString(
             "XLM payment request.",
             comment: "Subject when requesting for XLM."
@@ -845,6 +888,10 @@ struct LocalizationConstants {
         static let enterYourSecondPassword = NSLocalizedString(
             "Enter Your Second Password",
             comment: "Text on the button prompting the user to enter their second password to proceed with creating an XLM account."
+        )
+        static let cannotSendXLMAtThisTime = NSLocalizedString(
+            "Cannot send XLM at this time. Please try again.",
+            comment: "Error displayed when XLM cannot be sent due to an error."
         )
     }
 }
@@ -987,4 +1034,12 @@ struct LocalizationConstants {
     @objc class func balances() -> String { return LocalizationConstants.balances }
 
     @objc class func dashboardPriceCharts() -> String { return LocalizationConstants.Dashboard.priceCharts }
+
+    @objc class func dashboardBitcoinPrice() -> String { return LocalizationConstants.Dashboard.bitcoinPrice }
+
+    @objc class func dashboardEtherPrice() -> String { return LocalizationConstants.Dashboard.etherPrice }
+
+    @objc class func dashboardBitcoinCashPrice() -> String { return LocalizationConstants.Dashboard.bitcoinCashPrice }
+
+    @objc class func dashboardStellarPrice() -> String { return LocalizationConstants.Dashboard.stellarPrice }
 }

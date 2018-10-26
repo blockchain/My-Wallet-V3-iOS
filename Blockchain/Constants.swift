@@ -13,6 +13,9 @@ struct Constants {
     struct Conversions {
         // SATOSHI = 1e8 (100,000,000)
         static let satoshi = UInt64(1e8)
+
+        /// Stroop is a measurement of 1/10,000,000th of an XLM
+        static let stroopsInXlm = Int(1e7)
     }
 
     struct AppStore {
@@ -27,6 +30,13 @@ struct Constants {
         static let tabDashboard = 1
         static let tabTransactions = 2
         static let tabReceive = 3
+    }
+    struct TransactionTypes {
+        // TODO: change to enum, move to its own file,
+        // and deprecate TX_TYPE_* in Blockchain-Prefix
+        static let sent = "sent"
+        static let receive = "received"
+        static let transfer = "transfer"
     }
     struct Measurements {
         static let DefaultHeaderHeight: CGFloat = 65
@@ -101,6 +111,7 @@ struct Constants {
     struct Schemes {
         static let bitcoin = "bitcoin"
         static let bitcoinCash = "bitcoincash"
+        static let stellar = "web+stellar"
         static let blockchain = "blockchain"
         static let blockchainWallet = "blockchain-wallet"
         static let ethereum = "ethereum"
@@ -139,6 +150,10 @@ struct Constants {
         static let bitcoin = "BTC"
         static let ethereum = "ETH"
         static let bitcoinCash = "BCH"
+    }
+    struct FilterIndexes {
+        static let all: Int32 = -1
+        static let importedAddresses: Int32 = -2
     }
 }
 
@@ -187,6 +202,14 @@ struct Constants {
 
     @objc class func tabTransactions() -> Int {
         return Constants.Navigation.tabTransactions
+    }
+
+    @objc class func filterIndexAll() -> Int32 {
+        return Constants.FilterIndexes.all
+    }
+
+    @objc class func filterIndexImportedAddresses() -> Int32 {
+        return Constants.FilterIndexes.importedAddresses
     }
 
     @objc class func assetTypeCellHeight() -> CGFloat {

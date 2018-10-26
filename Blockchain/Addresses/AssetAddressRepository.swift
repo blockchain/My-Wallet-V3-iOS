@@ -48,8 +48,9 @@ import Foundation
             return
         }
 
-        // Only one address for ethereum
+        // Only one address for ethereum and stellar
         appSettings.swipeAddressForEther = wallet.getEtherAddress()
+        appSettings.swipeAddressForStellar = WalletXlmAccountRepository().defaultAccount?.publicKey
 
         // Retrieve swipe addresses for bitcoin and bitcoin cash
         let assetTypesWithHDAddresses = [AssetType.bitcoin, AssetType.bitcoinCash]
@@ -67,11 +68,19 @@ import Foundation
     /// - Parameter assetType: the AssetType
     /// - Returns: the swipe addresses
     @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [AssetAddress] {
+        let appSettings = BlockchainSettings.App.shared
         if assetType == .ethereum {
-            guard let swipeAddressForEther = BlockchainSettings.App.shared.swipeAddressForEther else {
+            guard let swipeAddressForEther = appSettings.swipeAddressForEther else {
                 return []
             }
             return [EthereumAddress(string: swipeAddressForEther)]
+        }
+
+        if assetType == .stellar {
+            guard let swipeAddressForStellar = appSettings.swipeAddressForStellar else {
+                return []
+            }
+            return [StellarAddress(string: swipeAddressForStellar)]
         }
 
         let swipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) as? [String] ?? []

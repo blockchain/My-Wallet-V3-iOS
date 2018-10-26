@@ -14,7 +14,7 @@
 @end
 @implementation BCConfirmPaymentViewModel
 
-- (id)initWithFrom:(NSString *)from
+- (instancetype)initWithFrom:(NSString *)from
                 To:(NSString *)to
             amount:(uint64_t)amount
                fee:(uint64_t)fee
@@ -37,7 +37,7 @@
     return self;
 }
 
-- (id)initWithTo:(NSString *)to
+- (instancetype)initWithTo:(NSString *)to
        ethAmount:(NSString *)ethAmount
           ethFee:(NSString *)ethFee
         ethTotal:(NSString *)ethTotal
@@ -57,7 +57,7 @@
     return self;
 }
 
-- (id)initWithFrom:(NSString *)from
+- (instancetype)initWithFrom:(NSString *)from
                 To:(NSString *)to
             bchAmount:(uint64_t)amount
                fee:(uint64_t)fee
@@ -91,6 +91,35 @@
             
             self.warningText = warning;
         }
+    }
+    return self;
+}
+
+- (instancetype)initWithFrom:(NSString *_Nonnull)from
+                          to:(NSString *_Nonnull)to
+             totalAmountText:(NSString *_Nonnull)totalAmountText
+         fiatTotalAmountText:(NSString *_Nonnull)fiatTotalAmountText
+    cryptoWithFiatAmountText:(NSString *_Nonnull)cryptoWithFiatAmountText
+       amountWithFiatFeeText:(NSString *_Nonnull)amountWithFiatFeeText
+                 buttonTitle:(NSString *_Nonnull)buttonTitle
+             showDescription:(BOOL)showDescription
+            surgeIsOccurring:(BOOL)surgeIsOccurring
+                    noteText:(NSString *_Nullable)noteText
+                 warningText:(NSAttributedString *_Nullable)warningText
+{
+    self = [super init];
+    if (self) {
+        self.from = from;
+        self.to = to;
+        self.totalAmountText = totalAmountText;
+        self.fiatTotalAmountText = fiatTotalAmountText;
+        self.cryptoWithFiatAmountText = cryptoWithFiatAmountText;
+        self.amountWithFiatFeeText = amountWithFiatFeeText;
+        self.buttonTitle = buttonTitle;
+        self.showDescription = showDescription;
+        self.surgeIsOccurring = surgeIsOccurring;
+        self.noteText = noteText;
+        self.warningText = warningText;
     }
     return self;
 }

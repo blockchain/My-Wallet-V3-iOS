@@ -15,7 +15,6 @@
 + (void)removeFirstSwipeAddressForAssetType:(LegacyAssetType)assetType;
 + (void)removeAllSwipeAddressesForAssetType:(LegacyAssetType)assetType;
 + (void)removeAllSwipeAddresses;
-+ (void)setSwipeEtherAddress:(NSString *)swipeAddress;
-+ (NSString *)getSwipeEtherAddress;
-+ (void)removeSwipeEtherAddress;
++ (void)setSingleSwipeAddress:(NSString *_Nonnull)swipeAddress forAssetType:(LegacyAssetType)assetType;
++ (NSString *_Nullable)getSingleSwipeAddressForAssetType:(LegacyAssetType)assetType;
 @end

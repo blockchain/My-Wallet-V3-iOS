@@ -241,11 +241,9 @@ static PEViewController *VerifyController()
         } else {
             swipeView.address = nextAddress;
         }
-    } else if (assetType == LegacyAssetTypeEther) {
-        NSString *etherAddress = [[assetAddressRepository swipeToReceiveAddressesFor:AssetTypeEthereum] firstObject].address;
-        if (etherAddress) {
-            swipeView.address = etherAddress;
-        }
+    } else if (assetType == LegacyAssetTypeEther || assetType == LegacyAssetTypeStellar) {
+        NSString *address = [[assetAddressRepository swipeToReceiveAddressesFor:[AssetTypeLegacyHelper convertFromLegacy:assetType]] firstObject].address;
+        swipeView.address = address;
     }
 }
 
@@ -337,7 +335,15 @@ static PEViewController *VerifyController()
 
 - (NSArray *)assets
 {
-    return @[[NSNumber numberWithInteger:LegacyAssetTypeBitcoin], [NSNumber numberWithInteger:LegacyAssetTypeEther], [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]];
+    NSMutableArray *allAssets = [@[
+                                  [NSNumber numberWithInteger:LegacyAssetTypeBitcoin],
+                                  [NSNumber numberWithInteger:LegacyAssetTypeEther],
+                                  [NSNumber numberWithInteger:LegacyAssetTypeBitcoinCash]
+                                  ] mutableCopy];
+    if ([AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureStellar].isEnabled) {
+        [allAssets addObject:[NSNumber numberWithInteger:LegacyAssetTypeStellar]];
+    }
+    return [allAssets copy];
 }
 
 #pragma mark Debug Menu

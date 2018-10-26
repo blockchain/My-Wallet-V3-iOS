@@ -16,6 +16,8 @@ import Foundation
     /// The asset's address (e.g. "1Amu4uPJnYbUXX2HhDFMNq7tSneDwWYDyv")
     @objc var address: String { get }
 
+    @objc var amount: String? { get }
+
     /// Same as scheme - mostly here for obj-c compatibility reasons
     @objc var schemeCompat: String { get }
 

@@ -3231,11 +3231,11 @@ NSString * const kLockboxInvitation = @"lockbox";
     TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
     TransactionsBitcoinViewController *transactionsBitcoinViewController = tabControllerManager.transactionsBitcoinViewController;
 
-    int filterIndex = transactionsBitcoinViewController ? (int)transactionsBitcoinViewController.filterIndex : FILTER_INDEX_ALL;
+    int filterIndex = transactionsBitcoinViewController ? (int)transactionsBitcoinViewController.filterIndex : [ConstantsObjcBridge filterIndexAll];
 
-    if (filterIndex == FILTER_INDEX_ALL) {
+    if (filterIndex == [ConstantsObjcBridge filterIndexAll]) {
         filter = @"";
-    } else if (filterIndex == FILTER_INDEX_IMPORTED_ADDRESSES) {
+    } else if (filterIndex == [ConstantsObjcBridge filterIndexImportedAddresses]) {
         filter = TRANSACTION_FILTER_IMPORTED;
     } else {
         filter = [NSString stringWithFormat:@"%d", filterIndex];

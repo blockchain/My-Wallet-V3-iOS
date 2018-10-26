@@ -17,7 +17,6 @@ opt_in_rules:
   - empty_string
   - fatal_error_message
   - first_where
-  - implicit_return
   - implicitly_unwrapped_optional
   - literal_expression_end_indentation
   - multiline_parameters

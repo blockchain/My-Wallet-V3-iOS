@@ -38,7 +38,7 @@ import RxSwift
             get: .listOfCountries,
             type: Countries.self
         ).map { countries -> Countries in
-            return countries.sorted(by: { $0.name.uppercased() < $1.name.uppercased() })
+            countries.sorted(by: { $0.name.uppercased() < $1.name.uppercased() })
         }
 
         return fetchData(

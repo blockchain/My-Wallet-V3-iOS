@@ -41,19 +41,7 @@
     
     [btcButton setTitle:[NSNumberFormatter formatMoney:ABS(transaction.amount)] forState:UIControlStateNormal];
     
-    if([transaction.txType isEqualToString:TX_TYPE_TRANSFER]) {
-        [btcButton setBackgroundColor:UIColor.grayBlue];
-        actionLabel.text = [BC_STRING_TRANSFERRED uppercaseString];
-        actionLabel.textColor = UIColor.grayBlue;
-    } else if ([transaction.txType isEqualToString:TX_TYPE_RECEIVED]) {
-        [btcButton setBackgroundColor:UIColor.aqua];
-        actionLabel.text = [BC_STRING_RECEIVED uppercaseString];
-        actionLabel.textColor = UIColor.aqua;
-    } else {
-        [btcButton setBackgroundColor:UIColor.red];
-        actionLabel.text = [BC_STRING_SENT uppercaseString];
-        actionLabel.textColor = UIColor.red;
-    }
+    [self setTxType:transaction.txType];
     
     infoLabel.adjustsFontSizeToFitWidth = YES;
     infoLabel.layer.cornerRadius = 5;
@@ -64,34 +52,15 @@
 
     actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 20, actionLabel.frame.size.width, actionLabel.frame.size.height);
     dateLabel.frame = CGRectMake(dateLabel.frame.origin.x, 3, dateLabel.frame.size.width, dateLabel.frame.size.height);
-    
-    UIFont *exchangeFont = [UIFont fontWithName:[ConstantsObjcBridge montserratSemiBold] size:infoLabel.font.pointSize];
-    UIColor *exchangeTextColor = [UIColor whiteColor];
-    UIColor *exchangeBackgroundColor = UIColor.brandPrimary;
-    UIColor *exchangeBorderColor = exchangeBackgroundColor;
 
     if ((([transaction.txType isEqualToString:TX_TYPE_RECEIVED] || [transaction.txType isEqualToString:TX_TYPE_TRANSFER]) && transaction.toWatchOnly) || ([transaction.txType isEqualToString:TX_TYPE_SENT] && transaction.fromWatchOnly)) {
-        infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratLight] size:infoLabel.font.pointSize];
-        infoLabel.text = [LocalizationConstantsObjcBridge nonSpendable];
-        infoLabel.textColor = UIColor.gray5;
-        infoLabel.backgroundColor = UIColor.gray6;
-        infoLabel.layer.borderColor = UIColor.gray2.CGColor;
+        [self setInfoType:TransactionInfoTypeNonSpendable];
     } else if ([WalletManager.sharedInstance.wallet isDepositTransaction:transaction.myHash]) {
-        infoLabel.font = exchangeFont;
-        infoLabel.text = BC_STRING_DEPOSITED_TO_SHAPESHIFT;
-        infoLabel.textColor = exchangeTextColor;
-        infoLabel.backgroundColor = exchangeBackgroundColor;
-        infoLabel.layer.borderColor = [exchangeBorderColor CGColor];
+        [self setInfoType:TransactionInfoTypeShapeshiftSend];
     } else if ([WalletManager.sharedInstance.wallet isWithdrawalTransaction:transaction.myHash]) {
-        infoLabel.font = exchangeFont;
-        infoLabel.text = BC_STRING_RECEIVED_FROM_SHAPESHIFT;
-        infoLabel.textColor = exchangeTextColor;
-        infoLabel.backgroundColor = exchangeBackgroundColor;
-        infoLabel.layer.borderColor = [exchangeBorderColor CGColor];
+        [self setInfoType:TransactionInfoTypeShapeshiftReceive];
     } else {
-        infoLabel.hidden = YES;
-        actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 29, actionLabel.frame.size.width, actionLabel.frame.size.height);
-        dateLabel.frame = CGRectMake(dateLabel.frame.origin.x, 11, dateLabel.frame.size.width, dateLabel.frame.size.height);
+        [self setInfoType:TransactionInfoTypeDefault];
     }
     
     [infoLabel sizeToFit];
@@ -184,9 +153,74 @@
     }
 }
 
-- (void)changeBtcButtonTitleText:(NSString *)text
+#pragma mark - Helpers
+
+- (void)setDateLabelText:(NSString *)text
+{
+    dateLabel.text = text;
+}
+
+- (void)setButtonText:(NSString *)text
 {
     [btcButton setTitle:text forState:UIControlStateNormal];
+}
+
+- (void)setInfoLabelText:(NSString *)text
+{
+    infoLabel.text = text;
+}
+
+- (void)setTxType:(NSString *)txType
+{
+    if([txType isEqualToString:TX_TYPE_TRANSFER]) {
+        [btcButton setBackgroundColor:UIColor.grayBlue];
+        actionLabel.text = [BC_STRING_TRANSFERRED uppercaseString];
+        actionLabel.textColor = UIColor.grayBlue;
+    } else if ([txType isEqualToString:TX_TYPE_RECEIVED]) {
+        [btcButton setBackgroundColor:UIColor.aqua];
+        actionLabel.text = [BC_STRING_RECEIVED uppercaseString];
+        actionLabel.textColor = UIColor.aqua;
+    } else {
+        [btcButton setBackgroundColor:UIColor.red];
+        actionLabel.text = [BC_STRING_SENT uppercaseString];
+        actionLabel.textColor = UIColor.red;
+    }
+}
+
+- (void)setInfoType:(TransactionInfoType)type
+{
+    switch (type) {
+        case TransactionInfoTypeNonSpendable: {
+            infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratLight] size:infoLabel.font.pointSize];
+            infoLabel.text = [LocalizationConstantsObjcBridge nonSpendable];
+            infoLabel.textColor = UIColor.gray5;
+            infoLabel.backgroundColor = UIColor.gray6;
+            infoLabel.layer.borderColor = UIColor.gray2.CGColor;
+            break;
+        }
+        case TransactionInfoTypeShapeshiftSend: {
+            infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratSemiBold] size:infoLabel.font.pointSize];
+            infoLabel.text = BC_STRING_DEPOSITED_TO_SHAPESHIFT;
+            infoLabel.textColor = [UIColor whiteColor];
+            infoLabel.backgroundColor = UIColor.brandPrimary;
+            infoLabel.layer.borderColor = [UIColor.brandPrimary CGColor];
+            break;
+        }
+        case TransactionInfoTypeShapeshiftReceive: {
+            infoLabel.font = [UIFont fontWithName:[ConstantsObjcBridge montserratSemiBold] size:infoLabel.font.pointSize];
+            infoLabel.text = BC_STRING_RECEIVED_FROM_SHAPESHIFT;
+            infoLabel.textColor = [UIColor whiteColor];
+            infoLabel.backgroundColor = UIColor.brandPrimary;
+            infoLabel.layer.borderColor = [UIColor.brandPrimary CGColor];
+            break;
+        }
+        case TransactionInfoTypeDefault: {
+            infoLabel.hidden = YES;
+            actionLabel.frame = CGRectMake(actionLabel.frame.origin.x, 29, actionLabel.frame.size.width, actionLabel.frame.size.height);
+            dateLabel.frame = CGRectMake(dateLabel.frame.origin.x, 11, dateLabel.frame.size.width, dateLabel.frame.size.height);
+            break;
+        }
+    }
 }
 
 @end

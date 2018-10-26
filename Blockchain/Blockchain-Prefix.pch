@@ -502,9 +502,8 @@
 
 #define TOTAL_AMOUNT_VIEW_HEIGHT IS_USING_SCREEN_SIZE_LARGER_THAN_5S ? 120 : 100
 
-// TransactionsViewController
-#define FILTER_INDEX_ALL -1
-#define FILTER_INDEX_IMPORTED_ADDRESSES -2
+// TabViewController
+// TICKET: IOS-1297 - Complete Dashboard Swift Refactor
 
 #define PIN_API_STATUS_CODE_DELETED 1
 #define PIN_API_STATUS_PIN_INCORRECT 2

@@ -103,7 +103,8 @@ const float imageWidth = 190;
 - (void)QRCodeClicked
 {
     [UIPasteboard generalPasteboard].string = self.address;
-    [self animateTextOfLabel:self.qrCodeFooterLabel toIntermediateText:[LocalizationConstantsObjcBridge copiedToClipboard] speed:1 gestureReceiver:self.qrCodeFooterLabel];
+    [self animateTextOfLabel:self.qrCodeFooterLabel toIntermediateText:[LocalizationConstantsObjcBridge copiedToClipboard]
+                       speed:1 gestureReceiver:self.qrCodeFooterLabel];
 }
 
 - (void)doneButtonClicked

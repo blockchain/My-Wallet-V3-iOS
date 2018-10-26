@@ -11,12 +11,12 @@
 @class BCConfirmPaymentViewModel;
 
 @protocol ConfirmPaymentViewDelegate
-- (void)setupNoteForTransaction:(NSString *)note;
+- (void)confirmButtonDidTap:(NSString *_Nullable)note;
 - (void)feeInformationButtonClicked;
 @end
 @interface BCConfirmPaymentView : BCDescriptionView
 
-- (id)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame;
+- (instancetype)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame;
 
 @property (nonatomic) UIButton *reallyDoPaymentButton;
 @property (nonatomic) UIButton *feeInformationButton;

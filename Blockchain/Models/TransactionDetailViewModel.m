@@ -14,11 +14,9 @@
 #import "Blockchain-Swift.h"
 
 @interface TransactionDetailViewModel ()
-@property (nonatomic) NSString *amountString;
 @property (nonatomic) uint64_t feeInSatoshi;
-@property (nonatomic) NSString *feeString;
-@property (nonatomic) NSDecimalNumber *exchangeRate;
 @end
+
 @implementation TransactionDetailViewModel
 
 - (id)initWithTransaction:(Transaction *)transaction

@@ -103,8 +103,20 @@ extension AssetType {
         case .ethereum:
             return #imageLiteral(resourceName: "Icon-ETH")
         case .stellar:
-            // TODO: use image assets
-            return #imageLiteral(resourceName: "Icon-ETH")
+            return #imageLiteral(resourceName: "symbol-xlm")
+        }
+    }
+
+    var symbolImageTemplate: UIImage {
+        switch self {
+        case .bitcoin:
+            return UIImage(named: "symbol-btc")!
+        case .bitcoinCash:
+            return UIImage(named: "symbol-bch")!
+        case .ethereum:
+            return UIImage(named: "symbol-eth")!
+        case .stellar:
+            return UIImage(named: "symbol-xlm")!
         }
     }
     

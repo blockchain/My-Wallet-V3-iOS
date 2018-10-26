@@ -648,9 +648,9 @@ typedef enum {
     }
 
     if (row == 0) {
-        [delegate didSelectFilter:FILTER_INDEX_ALL];
+        [delegate didSelectFilter:[ConstantsObjcBridge filterIndexAll]];
     } else if (accounts.count == row - 1) {
-        [delegate didSelectFilter:FILTER_INDEX_IMPORTED_ADDRESSES];
+        [delegate didSelectFilter:[ConstantsObjcBridge filterIndexImportedAddresses]];
     } else {
         int accountIndex = [WalletManager.sharedInstance.wallet getIndexOfActiveAccount:[[accounts objectAtIndex:row - 1] intValue] assetType:asset];
         [delegate didSelectFilter:accountIndex];

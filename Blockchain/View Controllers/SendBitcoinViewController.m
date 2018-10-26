@@ -24,10 +24,10 @@
 #import "NSNumberFormatter+Currencies.h"
 
 typedef enum {
-    TransactionTypeRegular = 100,
-    TransactionTypeSweep = 200,
-    TransactionTypeSweepAndConfirm = 300,
-} TransactionType;
+    SendTransactionTypeRegular = 100,
+    SendTransactionTypeSweep = 200,
+    SendTransactionTypeSweepAndConfirm = 300,
+} SendTransactionType;
 
 typedef enum {
     RejectionTypeDecline,
@@ -42,7 +42,7 @@ typedef enum {
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *continueButtonTopConstraint;
 
-@property (nonatomic) TransactionType transactionType;
+@property (nonatomic) SendTransactionType transactionType;
 
 @property (nonatomic, readwrite) DestinationAddressSource addressSource;
 
@@ -246,7 +246,7 @@ BOOL displayingLocalSymbolSend;
         [[ModalPresenter sharedInstance] closeModalWithTransition:kCATransitionPush];
     }
     
-    self.transactionType = TransactionTypeRegular;
+    self.transactionType = SendTransactionTypeRegular;
 }
 
 - (void)resetFromAddress
@@ -1400,7 +1400,7 @@ BOOL displayingLocalSymbolSend;
     
     [self doCurrencyConversion];
     
-    self.transactionType = TransactionTypeRegular;
+    self.transactionType = SendTransactionTypeRegular;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -1625,7 +1625,7 @@ BOOL displayingLocalSymbolSend;
 
 #pragma mark - Transaction Description Delegate
 
-- (void)setupNoteForTransaction:(NSString *)note
+- (void)confirmButtonDidTap:(NSString *_Nullable)note
 {
     self.noteToSet = note;
 }
@@ -1998,7 +1998,7 @@ BOOL displayingLocalSymbolSend;
     
     [self sweepPaymentRegular];
     
-    self.transactionType = TransactionTypeSweep;
+    self.transactionType = SendTransactionTypeSweep;
 }
 
 - (void)feeInformationButtonClicked
@@ -2075,7 +2075,7 @@ BOOL displayingLocalSymbolSend;
     
     [self disablePaymentButtons];
     
-    self.transactionType = TransactionTypeRegular;
+    self.transactionType = SendTransactionTypeRegular;
     
     if (self.feeType == FeeTypeCustom) {
         [self updateSatoshiPerByteWithUpdateType:FeeUpdateTypeConfirm];

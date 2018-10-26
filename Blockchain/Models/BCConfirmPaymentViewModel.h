@@ -10,14 +10,14 @@
 
 @interface BCConfirmPaymentViewModel : NSObject
 
-- (id)initWithFrom:(NSString *)from
+- (instancetype)initWithFrom:(NSString *)from
                   To:(NSString *)to
               amount:(uint64_t)amount
                  fee:(uint64_t)fee
                total:(uint64_t)total
                surge:(BOOL)surgePresent;
 
-- (id)initWithTo:(NSString *)to
+- (instancetype)initWithTo:(NSString *)to
        ethAmount:(NSString *)ethAmount
           ethFee:(NSString *)ethFee
         ethTotal:(NSString *)ethTotal
@@ -25,12 +25,24 @@
          fiatFee:(NSString *)fiatFee
        fiatTotal:(NSString *)fiatTotal;
 
-- (id)initWithFrom:(NSString *)from
+- (instancetype)initWithFrom:(NSString *)from
                 To:(NSString *)to
             bchAmount:(uint64_t)amount
                fee:(uint64_t)fee
              total:(uint64_t)total
              surge:(BOOL)surgePresent;
+
+- (instancetype)initWithFrom:(NSString *_Nonnull)from
+                          to:(NSString *_Nonnull)to
+             totalAmountText:(NSString *_Nonnull)totalAmountText
+         fiatTotalAmountText:(NSString *_Nonnull)fiatTotalAmountText
+    cryptoWithFiatAmountText:(NSString *_Nonnull)cryptoWithFiatAmountText
+       amountWithFiatFeeText:(NSString *_Nonnull)amountWithFiatFeeText
+                 buttonTitle:(NSString *_Nonnull)buttonTitle
+             showDescription:(BOOL)showDescription
+            surgeIsOccurring:(BOOL)surgeIsOccurring
+                    noteText:(NSString *_Nullable)noteText
+                 warningText:(NSAttributedString *_Nullable)warningText;
 
 @property (nonatomic) NSString *from;
 @property (nonatomic) NSString *to;

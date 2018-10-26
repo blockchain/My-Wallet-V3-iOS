@@ -40,4 +40,12 @@ import Foundation
     @objc static func description(for type: AssetType) -> String {
         return type.description
     }
+
+    @objc static func color(for type: LegacyAssetType) -> UIColor {
+        return convert(fromLegacy: type).brandColor
+    }
+
+    @objc static func symbol(for type: LegacyAssetType) -> String {
+        return convert(fromLegacy: type).symbol
+    }
 }

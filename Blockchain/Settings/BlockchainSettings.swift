@@ -273,14 +273,28 @@ final class BlockchainSettings: NSObject {
         /// Ether address to be used for swipe to receive
         @objc var swipeAddressForEther: String? {
             get {
-                return KeychainItemWrapper.getSwipeEtherAddress()
+                return KeychainItemWrapper.getSingleSwipeAddress(for: .ether)
             }
             set {
                 guard let etherAddress = newValue else {
-                    KeychainItemWrapper.removeSwipeEtherAddress()
+                    KeychainItemWrapper.removeAllSwipeAddresses(for: .ether)
                     return
                 }
-                KeychainItemWrapper.setSwipeEtherAddress(etherAddress)
+                KeychainItemWrapper.setSingleSwipeAddress(etherAddress, for: .ether)
+            }
+        }
+
+        /// XLM address to be used for swipe to receive
+        @objc var swipeAddressForStellar: String? {
+            get {
+                return KeychainItemWrapper.getSingleSwipeAddress(for: .stellar)
+            }
+            set {
+                guard let xlmAddress = newValue else {
+                    KeychainItemWrapper.removeAllSwipeAddresses(for: .stellar)
+                    return
+                }
+                KeychainItemWrapper.setSingleSwipeAddress(xlmAddress, for: .stellar)
             }
         }
 

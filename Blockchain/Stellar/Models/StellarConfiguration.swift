@@ -16,14 +16,17 @@ private struct HorizonServer {
 
 struct StellarConfiguration {
     let sdk: StellarSDK
+    let network: Network
 }
 
 extension StellarConfiguration {
     static let production = StellarConfiguration(
-        sdk: StellarSDK(withHorizonUrl: HorizonServer.production)
+        sdk: StellarSDK(withHorizonUrl: HorizonServer.production),
+        network: Network.public
     )
     
     static let test = StellarConfiguration(
-        sdk: StellarSDK(withHorizonUrl: HorizonServer.test)
+        sdk: StellarSDK(withHorizonUrl: HorizonServer.test),
+        network: Network.testnet
     )
 }

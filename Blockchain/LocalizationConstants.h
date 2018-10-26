@@ -559,8 +559,6 @@
 #define BC_STRING_ALL NSLocalizedString(@"All", nil)
 
 #define BC_STRING_AT NSLocalizedString(@"at", nil)
-#define BC_STRING_BITCOIN_PRICE NSLocalizedString(@"Bitcoin Price", nil)
-#define BC_STRING_ETHER_PRICE NSLocalizedString(@"Ether Price", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_TITLE NSLocalizedString(@"Contract addresses are not supported.", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_MESSAGE NSLocalizedString(@"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP.", nil)
 #define BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS NSLocalizedString(@"Tap the Request tab to setup your ether address.", nil)
@@ -627,7 +625,6 @@
 #define BC_STRING_PRICE NSLocalizedString(@"Price", nil)
 #define BC_STRING_SEE_CHARTS NSLocalizedString(@"See charts", nil)
 
-#define BC_STRING_BITCOIN_CASH_PRICE NSLocalizedString(@"Bitcoin Cash Price", nil)
 #define BC_STRING_ENTER_BITCOIN_CASH_ADDRESS_OR_SELECT NSLocalizedString(@"Enter Bitcoin Cash address or select", nil)
 #define BC_STRING_BUY_SELL_CARD_ACTION_TITLE BC_STRING_GET_STARTED
 

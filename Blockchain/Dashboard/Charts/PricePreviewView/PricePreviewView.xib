@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PricePreviewView" customModule="Blockchain" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bitcoin Price" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="568-lo-FUE" userLabel="Currency Title Label">
+                    <rect key="frame" x="16" y="30" width="311" height="17.5"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                    <color key="textColor" red="0.37254901959999998" green="0.37254901959999998" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$6,920.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1JP-yk-Npf" userLabel="Price Label">
+                    <rect key="frame" x="16" y="52.5" width="311" height="30"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="24"/>
+                    <color key="textColor" red="0.37254901960784315" green="0.37254901960784315" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dcR-LJ-L2H" userLabel="See Charts Button">
+                    <rect key="frame" x="129" y="98.5" width="85" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="GCF-yc-htv"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title=" See Charts">
+                        <color key="titleColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="seeCharts:" destination="iN0-l3-epB" eventType="touchUpInside" id="Q46-qx-CRv"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="dcR-LJ-L2H" firstAttribute="top" secondItem="1JP-yk-Npf" secondAttribute="bottom" constant="16" id="XCU-Cc-K3n"/>
+                <constraint firstAttribute="trailing" secondItem="568-lo-FUE" secondAttribute="trailing" constant="16" id="YhZ-wO-u6O"/>
+                <constraint firstItem="1JP-yk-Npf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="ZdT-M7-BJM"/>
+                <constraint firstItem="568-lo-FUE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="fed-lV-RGZ"/>
+                <constraint firstItem="568-lo-FUE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="iBm-p6-0yE"/>
+                <constraint firstItem="1JP-yk-Npf" firstAttribute="top" secondItem="568-lo-FUE" secondAttribute="bottom" constant="5" id="qLd-Tc-TzB"/>
+                <constraint firstAttribute="trailing" secondItem="1JP-yk-Npf" secondAttribute="trailing" constant="16" id="ru4-DC-MHj"/>
+                <constraint firstItem="dcR-LJ-L2H" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="vgI-Zp-wBC"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="actionButton" destination="dcR-LJ-L2H" id="Tac-qd-TDT"/>
+                <outlet property="currencyTitleLabel" destination="568-lo-FUE" id="abH-LZ-8Uc"/>
+                <outlet property="priceLabel" destination="1JP-yk-Npf" id="PrK-9F-0q0"/>
+            </connections>
+            <point key="canvasLocation" x="44" y="151.12443778110946"/>
+        </view>
+    </objects>
+</document>

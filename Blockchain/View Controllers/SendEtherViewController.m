@@ -384,7 +384,7 @@
 
 #pragma mark - Actions
 
-- (void)setupNoteForTransaction:(NSString *)note
+- (void)confirmButtonDidTap:(NSString *_Nullable)note
 {
     self.noteToSet = note;
 }

@@ -35,6 +35,9 @@
 @property (nonatomic) BOOL hideNote;
 @property (nonatomic) NSDecimalNumber *ethExchangeRate;
 @property (nonatomic) NSDecimalNumber *decimalAmount;
+@property (nonatomic) NSString *amountString;
+@property (nonatomic) NSString *feeString;
+@property (nonatomic) NSDecimalNumber *exchangeRate;
 
 - (id)initWithTransaction:(Transaction *)transaction;
 - (id)initWithEtherTransaction:(EtherTransaction *)etherTransaction exchangeRate:(NSDecimalNumber *)exchangeRate defaultAddress:(NSString *)defaultAddress;

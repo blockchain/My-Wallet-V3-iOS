@@ -8,6 +8,7 @@
 
 import UIKit
 import Charts
+import RxSwift
 
 @objc
 final class DashboardController: UIViewController {
@@ -25,20 +26,37 @@ final class DashboardController: UIViewController {
 
     private let horizontalPadding: CGFloat = 15
     private let priceChartPadding: CGFloat = 20
-    private let previewViewSpacing: CGFloat = 16
+    private let pricePreviewViewSpacing: CGFloat = 16
+    private let wallet: Wallet
+    private let tabControllerManager: TabControllerManager
+    private var lastEthExchangeRate: NSDecimalNumber = 0
     private var defaultContentHeight: CGFloat = 0
-    private var priceChartContainerView: UIView
-    private var bitcoinPricePreview, etherPricePreview, bitcoinCashPricePreview: BCPricePreviewView?
-    private var lastEthExchangeRate: NSDecimalNumber
-    private let wallet: Wallet, tabControllerManager: TabControllerManager
+    private var disposable: Disposable?
+    private var priceChartContainerView: UIView?
+    private var bitcoinPricePreviewView,
+                etherPricePreviewView,
+                bitcoinCashPricePreviewView,
+                stellarPricePreviewView: PricePreviewView?
 
     // TICKET: IOS-1512 - Move formatters to a global formatter pool
+
     private lazy var numberFormatter: NumberFormatter = {
         NumberFormatter()
     }()
 
     private lazy var dateFormatter: DateFormatter = {
         DateFormatter()
+    }()
+
+    private lazy var currencyFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = 2
+        if let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
+            let symbol = latestMultiAddressResponse.symbol_local.symbol {
+                formatter.currencySymbol = symbol
+        }
+        return formatter
     }()
 
     private lazy var chartContainerViewController: BCPriceChartContainerViewController = {
@@ -49,6 +67,7 @@ final class DashboardController: UIViewController {
     }()
 
     // TICKET: IOS-1249 - Refactor CardsViewController
+
     private lazy var cardsViewController: CardsViewController = {
         let theViewController = CardsViewController()
         theViewController.dashboardContentView = self.contentView
@@ -56,29 +75,20 @@ final class DashboardController: UIViewController {
         return theViewController
     }()
 
-    private lazy var balancesLabelFrame = {
-        CGRect(
-            x: horizontalPadding,
-            y: 16,
-            width: (view.frame.size.width / 2),
-            height: 40
-        )
-    }()
-
     private lazy var balancesChartView: BCBalancesChartView = {
         let balancesChartViewFrame = CGRect(
             x: horizontalPadding,
-            y: balancesLabelFrame.origin.y + balancesLabelFrame.size.height,
+            y: 16,
             width: view.frame.size.width - (horizontalPadding * 2),
-            height: 320
+            height: 425
         )
         let balancesChartView = BCBalancesChartView(frame: balancesChartViewFrame)
         balancesChartView.delegate = self
         balancesChartView.layer.masksToBounds = false
-        balancesChartView.layer.cornerRadius = 2
+        balancesChartView.layer.cornerRadius = 4
         balancesChartView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        balancesChartView.layer.shadowRadius = 3
-        balancesChartView.layer.shadowOpacity = 0.25
+        balancesChartView.layer.shadowRadius = 4
+        balancesChartView.layer.shadowOpacity = 0.1
         return balancesChartView
     }()
 
@@ -98,9 +108,12 @@ final class DashboardController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         wallet = WalletManager.shared.wallet
         tabControllerManager = AppCoordinator.shared.tabControllerManager
-        priceChartContainerView = UIView(frame: CGRect.zero)
         lastEthExchangeRate = NSDecimalNumber(value: 0)
         super.init(coder: aDecoder)
+    }
+
+    deinit {
+        disposable?.dispose()
     }
 
     // MARK: - View Lifecycle
@@ -116,15 +129,15 @@ final class DashboardController: UIViewController {
 
         view.backgroundColor = .lightGray
 
-        setupPieChart()
+        contentView.addSubview(balancesChartView)
 
-        setupPriceCharts()
+        setupPricePreviewViews()
 
         let balancesChartHeight = balancesChartView.frame.size.height
-        let titleLabelHeight: CGFloat = 2 * (40 + 16)
-        let pricePreviewHeight: CGFloat = 3 * 140
-        let pricePreviewSpacing: CGFloat = 3 * 16
-        let bottomPadding: CGFloat = 8
+        let titleLabelHeight: CGFloat = 40 + 16
+        let pricePreviewHeight: CGFloat = 4 * 150
+        let pricePreviewSpacing: CGFloat = 4 * 16
+        let bottomPadding: CGFloat = 16
 
         defaultContentHeight = balancesChartHeight + titleLabelHeight + pricePreviewHeight + pricePreviewSpacing + bottomPadding
 
@@ -137,9 +150,128 @@ final class DashboardController: UIViewController {
         cardsViewController.reloadCards()
     }
 
+    // TICKET: IOS-1507 - Refactor to use autolayout
+    // TODO: use UIStackView
+    // swiftlint:disable:next function_body_length
+    private func setupPricePreviewViews() {
+        let priceChartsLabelHeight: CGFloat = 40
+        let pricePreviewViewHeight: CGFloat = 150
+
+        let priceChartContainerViewFrame = CGRect(
+            x: horizontalPadding,
+            y: balancesChartView.frame.origin.y + balancesChartView.frame.size.height + pricePreviewViewSpacing,
+            width: view.frame.size.width - (horizontalPadding * 2),
+            height: priceChartsLabelHeight + (pricePreviewViewHeight * 4) + (pricePreviewViewSpacing * 3)
+        )
+
+        let priceChartsLabelFrame = CGRect(x: 8, y: 0, width: (view.frame.size.width / 2), height: priceChartsLabelHeight)
+
+        let bitcoinPricePreviewViewFrame = CGRect(
+            x: 0,
+            y: priceChartsLabelFrame.origin.y + priceChartsLabelFrame.size.height,
+            width: view.frame.size.width - (horizontalPadding * 2),
+            height: pricePreviewViewHeight
+        )
+
+        let etherPricePreviewViewFrame = bitcoinPricePreviewViewFrame.offsetBy(
+            dx: 0,
+            dy: pricePreviewViewHeight + pricePreviewViewSpacing
+        )
+
+        let bitcoinCashPricePreviewViewFrame = etherPricePreviewViewFrame.offsetBy(
+            dx: 0,
+            dy: pricePreviewViewHeight + pricePreviewViewSpacing
+        )
+
+        let stellarPricePreviewViewFrame = bitcoinCashPricePreviewViewFrame.offsetBy(
+            dx: 0,
+            dy: pricePreviewViewHeight + pricePreviewViewSpacing
+        )
+
+        priceChartContainerView = UIView(frame: priceChartContainerViewFrame)
+
+        let priceChartsLabel = UILabel(frame: priceChartsLabelFrame)
+        priceChartsLabel.textColor = .brandPrimary
+        priceChartsLabel.font = UIFont(name: Constants.FontNames.montserratRegular, size: Constants.FontSizes.Large)
+        priceChartsLabel.text = LocalizationConstants.Dashboard.priceCharts
+
+        bitcoinPricePreviewView = PricePreviewViewFactory.create(for: .bitcoin, buttonTapped: {
+            self.showChartContainerViewController(for: .bitcoin)
+        })
+
+        etherPricePreviewView = PricePreviewViewFactory.create(for: .ethereum, buttonTapped: {
+            self.showChartContainerViewController(for: .ethereum)
+        })
+
+        bitcoinCashPricePreviewView = PricePreviewViewFactory.create(for: .bitcoinCash, buttonTapped: {
+            self.showChartContainerViewController(for: .bitcoinCash)
+        })
+
+        stellarPricePreviewView = PricePreviewViewFactory.create(for: .stellar, buttonTapped: {
+            self.showChartContainerViewController(for: .stellar)
+        })
+
+        bitcoinPricePreviewView!.frame = bitcoinPricePreviewViewFrame
+        etherPricePreviewView!.frame = etherPricePreviewViewFrame
+        bitcoinCashPricePreviewView!.frame = bitcoinCashPricePreviewViewFrame
+        stellarPricePreviewView!.frame = stellarPricePreviewViewFrame
+
+        priceChartContainerView!.addSubview(priceChartsLabel)
+        priceChartContainerView!.addSubview(bitcoinPricePreviewView!)
+        priceChartContainerView!.addSubview(etherPricePreviewView!)
+        priceChartContainerView!.addSubview(bitcoinCashPricePreviewView!)
+        priceChartContainerView!.addSubview(stellarPricePreviewView!)
+        contentView.addSubview(priceChartContainerView!)
+    }
+
+    private func showChartContainerViewController(for assetType: AssetType) {
+        let pricePreviewChartPosition: Int
+        let legacyAssetType: LegacyAssetType
+        switch assetType {
+        case .bitcoin:
+            pricePreviewChartPosition = 0
+            legacyAssetType = .bitcoin
+        case .ethereum:
+            pricePreviewChartPosition = 1
+            legacyAssetType = .ether
+        case .bitcoinCash:
+            pricePreviewChartPosition = 2
+            legacyAssetType = .bitcoinCash
+        case .stellar:
+            pricePreviewChartPosition = 3
+            legacyAssetType = .stellar
+        }
+
+        let priceChartViewFrame = CGRect(
+            x: priceChartPadding,
+            y: priceChartPadding,
+            width: self.view.frame.size.width - priceChartPadding,
+            height: (self.view.frame.size.height * 0.75) - priceChartPadding
+        )
+        let priceChartView = BCPriceChartView(
+            frame: priceChartViewFrame,
+            assetType: legacyAssetType,
+            dataPoints: nil,
+            delegate: self
+        )
+        chartContainerViewController.add(priceChartView, at: pricePreviewChartPosition)
+        // TICKET: IOS-1508 - Encapsulate getBtcPrice, getEthPrice and getBchPrice into separate component & decouple from DashboardController.
+        fetchChartDataForAsset(type: assetType)
+
+        if chartContainerViewController.presentingViewController == nil {
+            tabControllerManager.present(chartContainerViewController, animated: true)
+        }
+    }
+
     // Objc backward compatible method to set asset type
     @objc func setAssetType(_ assetType: LegacyAssetType) {
         self.assetType = assetType
+    }
+
+    // Objc backward compatible method to set asset ethereum exchange rate
+    @objc func updateEthExchangeRate(_ rate: NSDecimalNumber) {
+        self.lastEthExchangeRate = rate
+        reloadPricePreviews()
     }
 
     // TICKET: IOS-1506 - Encapsulate methods to get balances into separate component & decouple from DashboardController
@@ -152,6 +284,10 @@ final class DashboardController: UIViewController {
         let btcFiatBalance = getBtcBalance()
         let ethFiatBalance = getEthBalance()
         let bchFiatBalance = getBchBalance()
+
+        // TODO: display XLM balance...
+        self.balancesChartView.updateStellarBalance("0")
+
         let watchOnlyFiatBalance = getBtcWatchOnlyBalance()
         guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
             let symbolLocal = latestMultiAddressResponse.symbol_local,
@@ -190,14 +326,14 @@ final class DashboardController: UIViewController {
                 balancesChartView.updateBitcoinWatchOnlyBalance(NumberFormatter.formatAmount(watchOnlyBalance, localCurrency: false))
                 // Increase height and Y positions to show watch only view
                 balancesChartView.showWatchOnlyView()
-                let offset = balancesChartView.frame.origin.y + balancesChartView.frame.size.height + previewViewSpacing
-                priceChartContainerView.changeYPosition(offset)
+                let offset = balancesChartView.frame.origin.y + balancesChartView.frame.size.height + pricePreviewViewSpacing
+                priceChartContainerView?.changeYPosition(offset)
                 contentView.changeHeight(defaultContentHeight + balancesChartView.watchOnlyViewHeight())
             } else {
                 // Show default heights and Y positions
                 balancesChartView.hideWatchOnlyView()
-                let offset = balancesChartView.frame.origin.y + balancesChartView.frame.size.height + previewViewSpacing
-                priceChartContainerView.changeYPosition(offset)
+                let offset = balancesChartView.frame.origin.y + balancesChartView.frame.size.height + pricePreviewViewSpacing
+                priceChartContainerView?.changeYPosition(offset)
                 contentView.changeHeight(defaultContentHeight)
             }
         }
@@ -218,7 +354,7 @@ final class DashboardController: UIViewController {
     }
 
     // swiftlint:disable:next function_body_length
-    private func fetchChartDataForAsset(type: LegacyAssetType) {
+    private func fetchChartDataForAsset(type: AssetType) {
         let timeFrame: GraphTimeFrame
         let graphTimeFrameKey = UserDefaults.Keys.graphTimeFrameKey.rawValue
         if let data = UserDefaults.standard.object(forKey: graphTimeFrameKey) as? Data,
@@ -238,14 +374,12 @@ final class DashboardController: UIViewController {
         case .bitcoinCash:
             base = AssetType.bitcoinCash.symbol.lowercased()
             entryDate = timeFrame.startDateBitcoinCash()
-        case .ether:
+        case .ethereum:
             base = AssetType.ethereum.symbol.lowercased()
             entryDate = timeFrame.startDateEther()
         case .stellar:
-            // TODO: implement chart data for stellar
             base = AssetType.stellar.symbol.lowercased()
-            entryDate = 0
-            return
+            entryDate = timeFrame.startDateStellar()
         }
 
         startDate = timeFrame.timeFrame == TimeFrameAll || timeFrame.startDate < entryDate ? entryDate : timeFrame.startDate
@@ -261,8 +395,7 @@ final class DashboardController: UIViewController {
                 self.showError(message: theError.localizedDescription)
                 return
             }
-            guard
-                let httpResponse = response as? HTTPURLResponse,
+            guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode),
                 let mimeType = httpResponse.mimeType,
                 mimeType == HttpHeaderValue.json,
@@ -284,148 +417,7 @@ final class DashboardController: UIViewController {
         task.resume()
     }
 
-    @objc func updateEthExchangeRate(_ rate: NSDecimalNumber) {
-        lastEthExchangeRate = rate
-        reloadPricePreviews()
-    }
-
-    private func showChartContainerViewController() {
-        if chartContainerViewController.presentingViewController == nil {
-            tabControllerManager.present(chartContainerViewController, animated: true)
-        }
-    }
-
-    @objc private func bitcoinChartTapped() {
-        showChartContainerViewController()
-
-        let priceChartViewFrame = CGRect(
-            x: priceChartPadding,
-            y: priceChartPadding,
-            width: self.view.frame.size.width - priceChartPadding,
-            height: (self.view.frame.size.height * (3 / 4)) - priceChartPadding
-        )
-        let priceChartView = BCPriceChartView(frame: priceChartViewFrame, assetType: .bitcoin, dataPoints: nil, delegate: self)
-        chartContainerViewController.add(priceChartView, at: 0)
-        fetchChartDataForAsset(type: .bitcoin)
-    }
-
-    @objc private func etherChartTapped() {
-        showChartContainerViewController()
-
-        let priceChartViewFrame = CGRect(
-            x: priceChartPadding,
-            y: priceChartPadding,
-            width: self.view.frame.size.width - priceChartPadding,
-            height: (self.view.frame.size.height * (3 / 4)) - priceChartPadding
-        )
-        let priceChartView = BCPriceChartView(frame: priceChartViewFrame, assetType: .ether, dataPoints: nil, delegate: self)
-        chartContainerViewController.add(priceChartView, at: 1)
-        chartContainerViewController.updateEthExchangeRate(lastEthExchangeRate)
-        fetchChartDataForAsset(type: .ether)
-    }
-
-    @objc private func bitcoinCashChartTapped() {
-        showChartContainerViewController()
-
-        let priceChartViewFrame = CGRect(
-            x: priceChartPadding,
-            y: priceChartPadding,
-            width: self.view.frame.size.width - priceChartPadding,
-            height: (self.view.frame.size.height * (3 / 4)) - priceChartPadding
-        )
-        let priceChartView = BCPriceChartView(frame: priceChartViewFrame, assetType: .bitcoinCash, dataPoints: nil, delegate: self)
-        chartContainerViewController.add(priceChartView, at: 2)
-        fetchChartDataForAsset(type: .bitcoinCash)
-    }
-
     // MARK: - Charts
-
-    // TICKET: IOS-1507 - Refactor to use autolayout
-    private func setupPieChart() {
-        let balancesLabel = UILabel(frame: balancesLabelFrame)
-        balancesLabel.textColor = .brandPrimary
-        balancesLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.Large)
-        balancesLabel.text = LocalizationConstants.balances.uppercased()
-        contentView.addSubview(balancesLabel)
-        contentView.addSubview(balancesChartView)
-    }
-
-    // swiftlint:disable:next function_body_length
-    private func setupPriceCharts() {
-        let labelHeight: CGFloat = 40, previewViewHeight: CGFloat = 140
-        let priceChartContainerViewFrame = CGRect(
-            x: horizontalPadding,
-            y: balancesChartView.frame.origin.y + balancesChartView.frame.size.height + previewViewSpacing,
-            width: view.frame.size.width - (horizontalPadding * 2),
-            height: labelHeight + (previewViewHeight * 3) + (previewViewSpacing * 2)
-        )
-        let priceChartContainerView = UIView(frame: priceChartContainerViewFrame)
-        contentView.addSubview(priceChartContainerView)
-
-        let balancesLabelFrame = CGRect(x: 0, y: 0, width: (view.frame.size.width / 2), height: labelHeight)
-        let balancesLabel = UILabel(frame: balancesLabelFrame)
-        balancesLabel.textColor = .brandPrimary
-        balancesLabel.font = UIFont(name: Constants.FontNames.montserratLight, size: Constants.FontSizes.Large)
-        balancesLabel.text = LocalizationConstants.Dashboard.priceCharts.uppercased()
-        priceChartContainerView.addSubview(balancesLabel)
-
-        let bitcoinPreviewViewFrame = CGRect(
-            x: 0,
-            y: balancesLabel.frame.origin.y + balancesLabel.frame.size.height,
-            width: (view.frame.size.width - (horizontalPadding * 2)),
-            height: previewViewHeight
-        )
-        // TICKET: IOS-1508 - Encapsulate getBtcPrice, getEthPrice and getBchPrice into separate component & decouple from DashboardController.
-        let bitcoinPreviewView = BCPricePreviewView(
-            frame: bitcoinPreviewViewFrame,
-            assetName: AssetType.bitcoin.description,
-            price: "0",
-            assetImage: "bitcoin_white"
-        )!
-        priceChartContainerView.addSubview(bitcoinPreviewView)
-        bitcoinPricePreview = bitcoinPreviewView
-
-        let bitcoinChartTapGesture = UITapGestureRecognizer(target: self, action: #selector(bitcoinChartTapped))
-        bitcoinPreviewView.addGestureRecognizer(bitcoinChartTapGesture)
-
-        let etherPreviewViewFrame = CGRect(
-            x: 0,
-            y: bitcoinPreviewView.frame.origin.y + bitcoinPreviewView.frame.size.height + previewViewSpacing,
-            width: (view.frame.size.width - (horizontalPadding * 2)),
-            height: previewViewHeight
-        )
-        let etherPreviewView = BCPricePreviewView(
-            frame: etherPreviewViewFrame,
-            assetName: AssetType.ethereum.description,
-            price: "0",
-            assetImage: "ether_white"
-        )!
-        priceChartContainerView.addSubview(etherPreviewView)
-        etherPricePreview = etherPreviewView
-
-        let etherChartTapGesture = UITapGestureRecognizer(target: self, action: #selector(etherChartTapped))
-        etherPreviewView.addGestureRecognizer(etherChartTapGesture)
-
-        let bitcoinCashPreviewViewFrame = CGRect(
-            x: 0,
-            y: etherPreviewView.frame.origin.y + etherPreviewView.frame.size.height + previewViewSpacing,
-            width: (view.frame.size.width - (horizontalPadding * 2)),
-            height: previewViewHeight
-        )
-        let bitcoinCashPreviewView = BCPricePreviewView(
-            frame: bitcoinCashPreviewViewFrame,
-            assetName: AssetType.bitcoinCash.description,
-            price: "0",
-            assetImage: "bitcoin_cash_white"
-        )!
-        priceChartContainerView.addSubview(bitcoinCashPreviewView)
-        bitcoinCashPricePreview = bitcoinCashPreviewView
-
-        let bitcoinCashChartTapGesture = UITapGestureRecognizer(target: self, action: #selector(bitcoinCashChartTapped))
-        bitcoinCashPreviewView.addGestureRecognizer(bitcoinCashChartTapGesture)
-
-        self.priceChartContainerView = priceChartContainerView
-    }
 
     @objc private func resetScrollView() {
         scrollView.setContentOffset(CGPoint.zero, animated: false)
@@ -447,57 +439,16 @@ final class DashboardController: UIViewController {
 
     // MARK: - Text Helpers
 
-    private func dateStringFromGraphValue(value: Double) -> String? {
-        guard let dateFormat = getDateFormat() else {
-            Logger.shared.warning("Failed to get date format!")
-            return nil
-        }
-        dateFormatter.dateFormat = dateFormat
-        return dateFormatter.string(from: Date(timeIntervalSince1970: value))
-    }
-
-    private func getDateFormat() -> String? {
+    private func dateStringFromGraphValue(value: Double) -> String {
         let key = UserDefaults.Keys.graphTimeFrameKey.rawValue
-        guard let data = UserDefaults.standard.object(forKey: key) as? Data,
-            let timeFrame = NSKeyedUnarchiver.unarchiveObject(with: data) as? GraphTimeFrame else {
-                Logger.shared.warning("Failed to unarchive the data object with key \(key)")
-                return nil
+        if let data = UserDefaults.standard.object(forKey: key) as? Data,
+            let timeFrame = NSKeyedUnarchiver.unarchiveObject(with: data) as? GraphTimeFrame,
+            let dateFormat = timeFrame.dateFormat {
+            dateFormatter.dateFormat = dateFormat
+        } else {
+            dateFormatter.dateFormat = GraphTimeFrame.timeFrameDay().dateFormat
         }
-        guard let dateFormat = timeFrame.dateFormat else {
-            Logger.shared.warning("Failed to get date format from GraphTimeFrame!")
-            return nil
-        }
-        return dateFormat
-    }
-
-    // TICKET: IOS-1508 - Encapsulate methods to get prices into separate component & decouple from DashboardController
-    // TICKET: IOS-1509 - Refactor NSNumberFormatter+Currencies to avoid returning nil on empty balances
-    private func getBtcPrice() -> String? {
-        guard wallet.isInitialized() else {
-            Logger.shared.warning("Returning nil because wallet was not initialized!")
-            return nil
-        }
-        return NumberFormatter.formatMoney(Constants.Conversions.satoshi, localCurrency: true)
-    }
-
-    private func getBchPrice() -> String? {
-        guard wallet.isInitialized() else {
-            Logger.shared.warning("Returning nil because wallet was not initialized!")
-            return nil
-        }
-        return NumberFormatter.formatBch(withSymbol: Constants.Conversions.satoshi, localCurrency: true)
-    }
-
-    private func getEthPrice() -> String? {
-        guard wallet.isInitialized() else {
-            Logger.shared.warning("Returning nil because wallet was not initialized!")
-            return nil
-        }
-        guard lastEthExchangeRate != 0 else {
-            Logger.shared.error("Returning nil because lastEthExchangeRate was not set!")
-            return nil
-        }
-        return NumberFormatter.formatEthToFiat(withSymbol: "1", exchangeRate: lastEthExchangeRate)
+        return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 
     private func getBtcBalance() -> Double {
@@ -532,9 +483,27 @@ final class DashboardController: UIViewController {
     }
 
     private func reloadPricePreviews() {
-        bitcoinPricePreview?.updatePrice(getBtcPrice())
-        etherPricePreview?.updatePrice(getEthPrice())
-        bitcoinCashPricePreview?.updatePrice(getBchPrice())
+        disposable = PriceServiceClient().allPrices(fiatSymbol: "USD")
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { priceMap in
+                AssetType.all.forEach { type in
+                    let price = priceMap[type]?.price ?? 0
+                    let formattedPrice = self.currencyFormatter.string(for: NSDecimalNumber(decimal: price))!
+                    switch type {
+                    case .bitcoin:
+                        self.bitcoinPricePreviewView?.price = formattedPrice
+                    case .ethereum:
+                        self.etherPricePreviewView?.price = formattedPrice
+                    case .bitcoinCash:
+                        self.bitcoinCashPricePreviewView?.price = formattedPrice
+                    case .stellar:
+                        self.stellarPricePreviewView?.price = formattedPrice
+                    }
+                }
+            }, onError: { error in
+                Logger.shared.error(error.localizedDescription)
+            })
     }
 }
 
@@ -554,6 +523,10 @@ extension DashboardController: BCBalancesChartViewDelegate {
         tabControllerManager.showTransactionsBitcoinCash()
     }
 
+    func stellarLegendTapped() {
+        // tabControllerManager.showTransactionsStellar()
+    }
+
     func watchOnlyViewTapped() {
         BlockchainSettings.sharedAppInstance().symbolLocal = !BlockchainSettings.sharedAppInstance().symbolLocal
     }
@@ -563,21 +536,11 @@ extension DashboardController: BCBalancesChartViewDelegate {
 
 extension DashboardController: BCPriceChartViewDelegate {
     func addPriceChartView(_ assetType: LegacyAssetType) {
-        switch assetType {
-        case .bitcoin:
-            bitcoinChartTapped()
-        case .ether:
-            etherChartTapped()
-        case .bitcoinCash:
-            bitcoinCashChartTapped()
-        case .stellar:
-            // TODO: implement stellarChartTapped()
-            return
-        }
+        showChartContainerViewController(for: AssetType.from(legacyAssetType: assetType))
     }
 
     func reloadPriceChartView(_ assetType: LegacyAssetType) {
-        fetchChartDataForAsset(type: assetType)
+        fetchChartDataForAsset(type: AssetType.from(legacyAssetType: assetType))
     }
 }
 
@@ -593,7 +556,7 @@ extension DashboardController: IAxisValueFormatter {
                     Logger.shared.warning("Failed to get symbol from latestMultiAddressResponse!")
                     return String()
             }
-            return String(format: "%@%.f", symbol)
+            return String(format: "%@%.f", symbol, value)
         case chartContainerViewController.xAxis():
             return dateStringFromGraphValue(value: value) ?? String()
         default:
@@ -602,13 +565,3 @@ extension DashboardController: IAxisValueFormatter {
         }
     }
 }
-
-// TICKET: IOS-1249 - Refactor CardsViewController
-
-// MARK: - AnnouncementCard Delegate
-
-//extension DashboardController: AnnouncementCardDelegate {
-//    func makeAnnouncement(📢 card: AnnouncementCard) {
-//
-//    }
-//}

@@ -75,4 +75,19 @@
     [AppCoordinator.sharedInstance.tabControllerManager showSendCoinsAnimated:YES];
 }
 
+#pragma mark - AVCaptureMetadataOutputObjectsDelegate
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
+{
+    if (metadataObjects != nil && [metadataObjects count] > 0) {
+        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects firstObject];
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode]) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self stopReadingQRCode];
+                [self.delegate qrCodeScannerViewController:self didScanString:[metadataObj stringValue]];
+            });
+        }
+    }
+}
+
 @end

@@ -20,30 +20,30 @@
 {
     if (self == [super initWithFrame:frame]) {
         
-        CGFloat lineHeight = 3;
-        CGFloat fontSize = 12.0;
+        CGFloat lineHeight = 4;
+        CGFloat fontSize = 14.0;
         
-        UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, lineHeight)];
+        UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, lineHeight)];
         colorView.backgroundColor = color;
         [self addSubview:colorView];
         
         CGFloat labelHeight = frame.size.height/3 - lineHeight/3;
-        UIColor *labelTextColor = UIColor.gray5;
+        UIColor *labelTextColor = UIColor.blackColor;
         
         UILabel *assetLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, colorView.frame.origin.y + colorView.frame.size.height, frame.size.width, labelHeight)];
-        assetLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];
+        assetLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_SEMIBOLD size:fontSize];
         assetLabel.text = name;
         assetLabel.textColor = labelTextColor;
         [self addSubview:assetLabel];
 
         UILabel *fiatBalanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, assetLabel.frame.origin.y + assetLabel.frame.size.height, frame.size.width, labelHeight)];
-        fiatBalanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:fontSize];
+        fiatBalanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];
         fiatBalanceLabel.textColor = labelTextColor;
         [self addSubview:fiatBalanceLabel];
         self.fiatBalanceLabel = fiatBalanceLabel;
 
         UILabel *balanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, fiatBalanceLabel.frame.origin.y + fiatBalanceLabel.frame.size.height, frame.size.width, labelHeight)];
-        balanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_LIGHT size:fontSize];
+        balanceLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:fontSize];
         balanceLabel.textColor = labelTextColor;
         balanceLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:balanceLabel];

@@ -16,6 +16,8 @@ import Foundation
             return BitcoinURLPayload.scheme
         case .bitcoinCash:
             return BitcoinCashURLPayload.scheme
+        case .stellar:
+            return StellarURLPayload.scheme
         default:
             return nil
         }
@@ -34,6 +36,8 @@ import Foundation
                 return BitcoinURLPayload(address: string, amount: nil)
             case .bitcoinCash:
                 return BitcoinCashURLPayload(address: string, amount: nil)
+            case .stellar:
+                return StellarURLPayload(address: string, amount: nil)
             default:
                 return nil
             }
@@ -51,6 +55,8 @@ import Foundation
             return BitcoinURLPayload(url: url)
         case BitcoinCashURLPayload.scheme:
             return BitcoinCashURLPayload(url: url)
+        case StellarURLPayload.scheme:
+            return StellarURLPayload(url: url)
         default:
             return nil
         }

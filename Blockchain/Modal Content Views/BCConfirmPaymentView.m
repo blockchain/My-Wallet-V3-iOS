@@ -23,7 +23,7 @@
 @end
 @implementation BCConfirmPaymentView
 
-- (id)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame
+- (instancetype)initWithFrame:(CGRect)frame viewModel:(BCConfirmPaymentViewModel *)viewModel sendButtonFrame:(CGRect)sendButtonFrame
 {
     self = [super initWithFrame:frame];
 
@@ -115,7 +115,7 @@
 
 - (void)reallyDoPaymentButtonClicked
 {
-    [self.confirmDelegate setupNoteForTransaction:self.note];
+    [self.confirmDelegate confirmButtonDidTap:self.note];
 }
 
 - (void)feeInformationButtonClicked

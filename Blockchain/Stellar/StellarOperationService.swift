@@ -8,6 +8,8 @@
 
 import Foundation
 import stellarsdk
+import RxSwift
+import RxCocoa
 
 protocol StellarOperationServiceDelegate: class {
     func service(_ service: StellarOperationService, recieved operations: [StellarOperation])
@@ -23,16 +25,28 @@ class StellarOperationService {
     weak var delegate: StellarOperationServiceDelegate?
 
     fileprivate let configuration: StellarConfiguration
+    fileprivate let repository: WalletXlmAccountRepository
+    
     lazy var service: stellarsdk.OperationsService = {
         configuration.sdk.operations
     }()
+    
+    fileprivate var disposable: Disposable?
+    var operations: Observable<[StellarOperation]> {
+        return privateOperations.asObservable()
+    }
+    fileprivate var privateOperations = BehaviorSubject<[StellarOperation]>(value: [])
 
-    init(configuration: StellarConfiguration = .production) {
+    init(
+        configuration: StellarConfiguration = .production,
+        repository: WalletXlmAccountRepository
+        ) {
         self.configuration = configuration
+        self.repository = repository
     }
     
     fileprivate func filter(operations: [OperationResponse]) -> [OperationResponse] {
-        return operations.filter { return $0.operationType == .payment || $0.operationType == .accountCreated }
+        return operations.filter { $0.operationType == .payment || $0.operationType == .accountCreated }
     }
     
     fileprivate func buildOperation(from response: OperationResponse, accountID: String) -> StellarOperation {
@@ -53,6 +67,7 @@ class StellarOperationService {
         case .payment:
             guard let op = response as? PaymentOperationResponse else { return .unknown }
             let payment = StellarOperation.Payment(
+                token: op.pagingToken,
                 identifier: op.id,
                 fromAccount: op.from,
                 toAccount: op.to,
@@ -77,7 +92,7 @@ extension StellarOperationService: StellarOperationsAPI {
         operation = AsyncBlockOperation(executionBlock: { [weak self] complete in
             guard let this = self else { return }
             
-            this.service.getOperations(forAccount: accountID, from: token, order: nil, limit: 50, response: { response in
+            this.service.getOperations(forAccount: accountID, from: token, order: .descending, limit: 50, response: { response in
                 switch response {
                 case .success(let payload):
                     this.canPage = payload.hasNextPage()
@@ -114,26 +129,52 @@ extension StellarOperationService: StellarOperationsAPI {
 
 extension StellarOperationService: StellarOperationsStreamAPI {
     
-    func stream(accountID: String, token: String?) {
-        stream = service.stream(for: .operationsForAccount(account: accountID, cursor: token))
-        stream?.onReceive(response: { [weak self] response in
+    func start() {
+        guard let account = repository.defaultAccount else {
+            privateOperations.onError(StellarServiceError.noXLMAccount)
+            return
+        }
+        
+        let accountID = account.publicKey
+        
+        operations(from: accountID, token: nil) { [weak self] result in
             guard let this = self else { return }
-            switch response {
-            case .open:
-                break
-            case .response(_, let payload):
-                let filtered = this.filter(operations: [payload])
-                guard filtered.count > 0 else { return }
-                let result = filtered.map { this.buildOperation(from: $0, accountID: accountID) }
-                this.delegate?.service(this, recieved: result)
+            switch result {
+            case .success(let payload):
+                guard let latest = payload.first else { return }
+                this.privateOperations.onNext(payload)
+                this.stream = this.service.stream(
+                    for: .operationsForAccount(
+                        account: accountID,
+                        cursor: latest.token
+                    )
+                )
+                this.stream?.onReceive(response: { response in
+                    switch response {
+                    case .open:
+                        break
+                    case .response(_, let payload):
+                        let filtered = this.filter(operations: [payload])
+                        let result = filtered.map { this.buildOperation(from: $0, accountID: accountID) }
+                        this.privateOperations.onNext(result)
+                    case .error(let error):
+                        Logger.shared.error(
+                            "Horizon Error: \(String(describing: error?.localizedDescription))"
+                        )
+                    }
+                })
             case .error(let error):
-                this.delegate?.service(this, returned: error)
+                Logger.shared.error(
+                    "Horizon Error: \(String(describing: error?.localizedDescription))"
+                )
+                this.privateOperations.onError(error ?? StellarServiceError.unknown)
             }
-        })
+        }
     }
     
     func end() {
         stream?.closeStream()
+        stream = nil
     }
     
 }

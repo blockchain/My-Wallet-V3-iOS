@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import RxSwift
 import UIKit
 
 @objc class ReceiveXlmViewController: UIViewController {
@@ -18,13 +19,15 @@ import UIKit
 
     private let wallet = WalletManager.shared.wallet
     private let xlmAccountRepository = WalletXlmAccountRepository()
+    private var disposable: Disposable?
 
     private var xlmAccount: WalletXlmAccount? {
         didSet {
             if let xlmAccount = xlmAccount {
                 labelInstructions.text = LocalizationConstants.Receive.tapToCopyThisAddress
                 imageQrCode.isHidden = false
-                imageQrCode.image = QRCodeGenerator().createQRImage(from: xlmAccount.publicKey)
+                let payload = StellarURLPayload.init(address: xlmAccount.publicKey)
+                imageQrCode.image = QRCodeGenerator().createQRImage(from: payload.payOperationURI)
                 labelPublicKey.text = xlmAccount.publicKey
                 buttonEnterPassword.isHidden = true
                 buttonRequestPayment.isHidden = false
@@ -36,6 +39,10 @@ import UIKit
                 buttonRequestPayment.isHidden = true
             }
         }
+    }
+
+    deinit {
+        disposable?.dispose()
     }
 
     override func viewDidLoad() {
@@ -77,27 +84,14 @@ import UIKit
 
     private func initXlmAccountIfNeeded() {
         xlmAccount = nil
-
-        guard xlmAccountRepository.defaultAccount == nil else {
-            Logger.shared.debug("XLM account is already initialized.")
-            xlmAccount = xlmAccountRepository.defaultAccount
-            return
-        }
-
-        guard !wallet.needsSecondPassword() else {
-            AuthenticationCoordinator.shared.showPasswordConfirm(
-                withDisplayText: LocalizationConstants.Stellar.secondPasswordPrompt,
-                headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                validateSecondPassword: true, confirmHandler: { [weak self] password in
-                    self?.xlmAccountRepository.initializeMetadata(secondPassword: password)
-                    self?.xlmAccount = self?.xlmAccountRepository.defaultAccount
-                }
-            )
-            return
-        }
-
-        xlmAccountRepository.initializeMetadata()
-        xlmAccount = xlmAccountRepository.defaultAccount
+        disposable = xlmAccountRepository.initializeMetadataMaybe()
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] xlmAccount in
+                self?.xlmAccount = xlmAccount
+            }, onError: { error in
+                Logger.shared.error("Failed to fetch XLM account.")
+            })
     }
 
     private func initViews() {

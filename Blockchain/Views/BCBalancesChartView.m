@@ -23,11 +23,13 @@
 @property (nonatomic) BalanceChartViewModel *bitcoin;
 @property (nonatomic) BalanceChartViewModel *ether;
 @property (nonatomic) BalanceChartViewModel *bitcoinCash;
+@property (nonatomic) BalanceChartViewModel *stellar;
 
 @property (nonatomic) PieChartView *chartView;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *etherLegendKey;
 @property (nonatomic) BCBalanceChartLegendKeyView *bitcoinCashLegendKey;
+@property (nonatomic) BCBalanceChartLegendKeyView *stellarLegendKey;
 @property (nonatomic) UIView *legendKeyContainerView;
 @property (nonatomic) BCLine *lineSeparator;
 @property (nonatomic) WatchOnlyBalanceView *watchOnlyBalanceView;
@@ -44,6 +46,7 @@
         [self setupChartViewWithFrame:frame];
         [self setupLegendWithFrame:frame];
         [self setupLineSeparator];
+        [self setupEmptyChartState];
         self.defaultHeight = self.bounds.size.height;
     }
     
@@ -52,11 +55,11 @@
 
 - (void)setupChartViewWithFrame:(CGRect)frame
 {
-    self.chartView = [[PieChartView alloc] initWithFrame:CGRectMake(0, 15, frame.size.width, 210)];
+    self.chartView = [[PieChartView alloc] initWithFrame:CGRectMake(0, 16, frame.size.width, 200)];
     self.chartView.drawCenterTextEnabled = YES;
     self.chartView.drawHoleEnabled = YES;
     self.chartView.holeColor = [UIColor clearColor];
-    self.chartView.holeRadiusPercent = 0.7;
+    self.chartView.holeRadiusPercent = 0.8;
     [self.chartView animateWithYAxisDuration:0.5];
     self.chartView.rotationEnabled = NO;
     self.chartView.legend.enabled = NO;
@@ -74,31 +77,68 @@
     [self addSubview:self.chartView];
 }
 
+- (void)setupEmptyChartState
+{
+    PieChartDataSet *dataSet;
+    ChartDataEntry *emptyValue = [[PieChartDataEntry alloc] initWithValue:1];
+    dataSet = [[PieChartDataSet alloc] initWithValues:@[emptyValue] label:[LocalizationConstantsObjcBridge balances]];
+    dataSet.colors = @[UIColor.emptyChart];
+    dataSet.selectionShift = 5;
+    self.chartView.highlightPerTapEnabled = NO;
+
+    dataSet.drawValuesEnabled = NO;
+
+    PieChartData *data = [[PieChartData alloc] initWithDataSet:dataSet];
+    [data setValueTextColor:UIColor.whiteColor];
+    self.chartView.data = data;
+
+    [self.bitcoinLegendKey changeBalance:[@"0" stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeBitcoin]]];
+    [self.bitcoinLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:@"0"]];
+
+    [self.etherLegendKey changeBalance:[@"0" stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeEther]]];
+    [self.etherLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:@"0"]];
+
+    [self.bitcoinCashLegendKey changeBalance:[@"0" stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeBitcoinCash]]];
+    [self.bitcoinCashLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:@"0"]];
+
+    [self.stellarLegendKey changeBalance:[@"0" stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeStellar]]];
+    [self.stellarLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:@"0"]];
+}
+
 - (void)setupLegendWithFrame:(CGRect)frame
 {
     CGFloat bottomPadding = CHART_VIEW_BOTTOM_PADDING;
     CGFloat containerViewHorizontalPadding = CONTAINER_VIEW_HORIZONTAL_PADDING;
-    UIView *legendKeyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizontalPadding, self.chartView.frame.origin.y + self.chartView.frame.size.height + bottomPadding, frame.size.width - containerViewHorizontalPadding*2, (frame.size.height - bottomPadding)/5)];
+
+    CGFloat legendKeySpacing = 16;
+    CGFloat legendKeyHeight = 80;
+    CGFloat legendKeyContainerHeight = (legendKeyHeight * 2) + legendKeySpacing;
+    CGFloat legendKeyContainerWidth = frame.size.width - (containerViewHorizontalPadding * 2);
+    CGFloat legendKeyWidth = (legendKeyContainerWidth - legendKeySpacing * 2) / 2;
+    CGFloat legendKeyContainerPosY = self.chartView.frame.origin.y + self.chartView.frame.size.height + bottomPadding;
+
+    UIView *legendKeyContainerView = [[UIView alloc] initWithFrame:CGRectMake(containerViewHorizontalPadding, legendKeyContainerPosY, legendKeyContainerWidth, legendKeyContainerHeight)];
     [self addSubview:legendKeyContainerView];
     
-    CGFloat legendKeySpacing = 12;
-    CGFloat legendKeyWidth = (legendKeyContainerView.frame.size.width - legendKeySpacing*2)/3;
-    CGFloat legendKeyHeight = legendKeyContainerView.frame.size.height;
-    
-    self.bitcoinLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(0, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandPrimary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]];
+    self.bitcoinLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(0, 0, legendKeyWidth, legendKeyHeight) assetColor:[AssetTypeLegacyHelper colorFor:LegacyAssetTypeBitcoin] assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin]];
     UITapGestureRecognizer *tapGestureBitcoin = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinLegendTapped)];
     [self.bitcoinLegendKey addGestureRecognizer:tapGestureBitcoin];
     [legendKeyContainerView addSubview:self.bitcoinLegendKey];
     
-     self.etherLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(legendKeyWidth + legendKeySpacing, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandSecondary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum]];
+     self.etherLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(legendKeyWidth + (legendKeySpacing * 2), 0, legendKeyWidth, legendKeyHeight) assetColor:[AssetTypeLegacyHelper colorFor:LegacyAssetTypeEther] assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum]];
     UITapGestureRecognizer *tapGestureEther = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(etherLegendTapped)];
     [self.etherLegendKey addGestureRecognizer:tapGestureEther];
      [legendKeyContainerView addSubview:self.etherLegendKey];
 
-    self.bitcoinCashLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake((legendKeyWidth + legendKeySpacing)*2, 0, legendKeyWidth, legendKeyHeight) assetColor:UIColor.brandTertiary assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash]];
+    self.bitcoinCashLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(0, (legendKeyHeight + legendKeySpacing), legendKeyWidth, legendKeyHeight) assetColor:[AssetTypeLegacyHelper colorFor:LegacyAssetTypeBitcoinCash] assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash]];
     UITapGestureRecognizer *tapGestureBitcoinCash = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bitcoinCashLegendTapped)];
     [self.bitcoinCashLegendKey addGestureRecognizer:tapGestureBitcoinCash];
     [legendKeyContainerView addSubview:self.bitcoinCashLegendKey];
+
+    self.stellarLegendKey = [[BCBalanceChartLegendKeyView alloc] initWithFrame:CGRectMake(legendKeyWidth + (legendKeySpacing * 2), (legendKeyHeight + legendKeySpacing), legendKeyWidth, legendKeyHeight) assetColor:[AssetTypeLegacyHelper colorFor:LegacyAssetTypeStellar] assetName:[AssetTypeLegacyHelper descriptionFor:AssetTypeStellar]];
+    UITapGestureRecognizer *tapGestureStellar = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stellarLegendTapped)];
+    [self.stellarLegendKey addGestureRecognizer:tapGestureStellar];
+    [legendKeyContainerView addSubview:self.stellarLegendKey];
 
     self.legendKeyContainerView = legendKeyContainerView;
 }
@@ -154,23 +194,36 @@
     [self.watchOnlyBalanceView updateTextWithBalance:watchOnlyBalance];
 }
 
-// Lazy initializers
 - (BalanceChartViewModel *)bitcoin
 {
-    if (!_bitcoin) _bitcoin = [[BalanceChartViewModel alloc] init];
+    if (!_bitcoin) {
+        _bitcoin = [[BalanceChartViewModel alloc] init];
+    }
     return _bitcoin;
 }
 
 - (BalanceChartViewModel *)ether
 {
-    if (!_ether) _ether = [[BalanceChartViewModel alloc] init];
+    if (!_ether) {
+        _ether = [[BalanceChartViewModel alloc] init];
+    }
     return _ether;
 }
 
 - (BalanceChartViewModel *)bitcoinCash
 {
-    if (!_bitcoinCash) _bitcoinCash = [[BalanceChartViewModel alloc] init];
+    if (!_bitcoinCash) {
+        _bitcoinCash = [[BalanceChartViewModel alloc] init];
+    }
     return _bitcoinCash;
+}
+
+- (BalanceChartViewModel *)stellar
+{
+    if (!_stellar) {
+        _stellar = [[BalanceChartViewModel alloc] init];
+    }
+    return _stellar;
 }
 
 - (void)hideChartMarker
@@ -181,6 +234,18 @@
 - (void)updateFiatSymbol:(NSString *)fiatSymbol
 {
     self.fiatSymbol = fiatSymbol;
+}
+
+- (void)updateTotalFiatBalance:(NSString *)fiatBalance
+{
+    self.chartView.centerAttributedText = fiatBalance ? [self balanceAttributedStringWithText:fiatBalance] : nil;
+}
+
+// Bitcoin
+
+- (void)updateBitcoinBalance:(NSString *)balance
+{
+    self.bitcoin.balance = balance;
 }
 
 - (void)updateBitcoinFiatBalance:(double)fiatBalance
@@ -200,12 +265,22 @@
 
 // Ethereum
 
+- (void)updateEtherBalance:(NSString *)balance
+{
+    self.ether.balance = balance;
+}
+
 - (void)updateEtherFiatBalance:(double)fiatBalance
 {
     self.ether.fiatBalance = fiatBalance;
 }
 
 // Bitcoin Cash
+
+- (void)updateBitcoinCashBalance:(NSString *)balance
+{
+    self.bitcoinCash.balance = balance;
+}
 
 - (void)updateBitcoinCashFiatBalance:(double)fiatBalance
 {
@@ -222,24 +297,16 @@
     self.bitcoinCash.watchOnly.fiatBalance = watchOnlyFiatBalance;
 }
 
-- (void)updateTotalFiatBalance:(NSString *)fiatBalance
+// Stellar
+
+- (void)updateStellarBalance:(NSString *)balance
 {
-    self.chartView.centerAttributedText = fiatBalance ? [self balanceAttributedStringWithText:fiatBalance] : nil;
+    self.stellar.balance = balance;
 }
 
-- (void)updateBitcoinBalance:(NSString *)balance
+- (void)updateStellarFiatBalance:(double)fiatBalance
 {
-    self.bitcoin.balance = balance;
-}
-
-- (void)updateEtherBalance:(NSString *)balance
-{
-    self.ether.balance = balance;
-}
-
-- (void)updateBitcoinCashBalance:(NSString *)balance
-{
-    self.bitcoinCash.balance = balance;
+    self.stellar.fiatBalance = fiatBalance;
 }
 
 - (void)updateChart
@@ -261,11 +328,18 @@
         NSDictionary *btcChartEntryData = @{@"currency": [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoin], @"symbol": fiatSymbol};
         NSDictionary *ethChartEntryData = @{@"currency": [AssetTypeLegacyHelper descriptionFor:AssetTypeEthereum], @"symbol": fiatSymbol};
         NSDictionary *bchChartEntryData = @{@"currency": [AssetTypeLegacyHelper descriptionFor:AssetTypeBitcoinCash], @"symbol": fiatSymbol};
+        NSDictionary *xlmChartEntryData = @{@"currency": [AssetTypeLegacyHelper descriptionFor:AssetTypeStellar], @"symbol": fiatSymbol};
         ChartDataEntry *bitcoinValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoin.fiatBalance data:btcChartEntryData];
         ChartDataEntry *etherValue = [[PieChartDataEntry alloc] initWithValue:self.ether.fiatBalance data:ethChartEntryData];
         ChartDataEntry *bitcoinCashValue = [[PieChartDataEntry alloc] initWithValue:self.bitcoinCash.fiatBalance data:bchChartEntryData];
-        dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue] label:[LocalizationConstantsObjcBridge balances]];
-        dataSet.colors = @[UIColor.brandPrimary, UIColor.brandSecondary, UIColor.brandTertiary];
+        ChartDataEntry *stellarValue = [[PieChartDataEntry alloc] initWithValue:self.stellar.fiatBalance data:xlmChartEntryData];
+        dataSet = [[PieChartDataSet alloc] initWithValues:@[bitcoinValue, etherValue, bitcoinCashValue, stellarValue] label:[LocalizationConstantsObjcBridge balances]];
+        dataSet.colors = @[
+                           [AssetTypeLegacyHelper colorFor:LegacyAssetTypeBitcoin],
+                           [AssetTypeLegacyHelper colorFor:LegacyAssetTypeEther],
+                           [AssetTypeLegacyHelper colorFor:LegacyAssetTypeBitcoinCash],
+                           [AssetTypeLegacyHelper colorFor:LegacyAssetTypeStellar]
+                           ];
         dataSet.selectionShift = 5;
         self.chartView.highlightPerTapEnabled = YES;
     }
@@ -279,14 +353,17 @@
         [self.chartView animateWithYAxisDuration:1.0];
     }
 
-    [self.bitcoinLegendKey changeBalance:[self.bitcoin.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BTC]];
+    [self.bitcoinLegendKey changeBalance:[self.bitcoin.balance stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeBitcoin]]];
     [self.bitcoinLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoin.fiatBalance]]];
 
-    [self.etherLegendKey changeBalance:[self.ether.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_ETH]];
+    [self.etherLegendKey changeBalance:[self.ether.balance stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeEther]]];
     [self.etherLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.ether.fiatBalance]]];
 
-    [self.bitcoinCashLegendKey changeBalance:[self.bitcoinCash.balance stringByAppendingFormat:@" %@", CURRENCY_SYMBOL_BCH]];
+    [self.bitcoinCashLegendKey changeBalance:[self.bitcoinCash.balance stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeBitcoinCash]]];
     [self.bitcoinCashLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.bitcoinCash.fiatBalance]]];
+
+    [self.stellarLegendKey changeBalance:[self.stellar.balance stringByAppendingFormat:@" %@", [AssetTypeLegacyHelper symbolFor:LegacyAssetTypeStellar]]];
+    [self.stellarLegendKey changeFiatBalance:[self.fiatSymbol stringByAppendingString:[NSNumberFormatter fiatStringFromDouble:self.stellar.fiatBalance]]];
 }
 
 - (void)clearLegendKeyBalances
@@ -299,13 +376,16 @@
 
     [self.bitcoinCashLegendKey changeBalance:nil];
     [self.bitcoinCashLegendKey changeFiatBalance:nil];
+
+    [self.stellarLegendKey changeBalance:nil];
+    [self.stellarLegendKey changeFiatBalance:nil];
 }
 
 - (NSAttributedString *)balanceAttributedStringWithText:(NSString *)text
 {
     UIFont *font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_MEDIUM];
     
-    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[UIColor.gray5, font] forKeys:@[NSForegroundColorAttributeName, NSFontAttributeName]];
+    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjects:@[UIColor.blackColor, font] forKeys:@[NSForegroundColorAttributeName, NSFontAttributeName]];
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:attributesDictionary];
     
@@ -325,6 +405,11 @@
 - (void)bitcoinCashLegendTapped
 {
     [self.delegate bitcoinCashLegendTapped];
+}
+
+- (void)stellarLegendTapped
+{
+    [self.delegate stellarLegendTapped];
 }
 
 - (void)watchOnlyViewTapped

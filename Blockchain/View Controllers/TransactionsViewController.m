@@ -32,7 +32,7 @@
 
 - (void)setupFilter
 {
-    self.filterIndex = FILTER_INDEX_ALL;
+    self.filterIndex = [ConstantsObjcBridge filterIndexAll];
     
     self.filterSelectorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
     self.filterSelectorView.backgroundColor = UIColor.lightGray;
