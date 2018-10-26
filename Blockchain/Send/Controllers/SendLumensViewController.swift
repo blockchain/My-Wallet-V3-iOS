@@ -125,14 +125,14 @@ protocol SendXLMViewControllerDelegate: class {
         delegate?.onAppear()
     }
     
-    fileprivate func useMaxAttributes() -> [NSAttributedStringKey: Any] {
+    fileprivate func useMaxAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
         return [.font: font,
                 .foregroundColor: UIColor.darkGray]
     }
     
-    fileprivate func useMaxActionAttributes() -> [NSAttributedStringKey: Any] {
+    fileprivate func useMaxActionAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
         return [.font: font,
