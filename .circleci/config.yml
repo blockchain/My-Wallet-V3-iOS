@@ -174,6 +174,7 @@ jobs:
           command: |
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
+            export SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
             bundle exec fastlane $FASTLANE_LANE
       - run:
           name: Codesign info
