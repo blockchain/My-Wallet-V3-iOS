@@ -7,11 +7,17 @@
 # - the parameter clean(true) is required for all lanes to prevent the following error in the new Xcode build system:
 #   Cycle in dependencies between targets 'Blockchain' and 'RxCocoa'; building could produce unreliable results.
 #
+# From: https://stackoverflow.com/questions/42962571/what-is-the-difference-between-skip-build-and-test-without-building-on-fastlane
+# The skip_build parameter will omit the build command from the generated xcodebuild command that ultimately gets executed by scan.
+# This means that if there is a built product in DerivedData, it will use it instead of recompiling your app.
+# If there is no build product in DerivedData, it will rebuild the product.
+#
 
 clean(true)
 code_coverage(true)
 configuration("Debug Dev")
 scheme("Blockchain (Dev)")
 slack_channel("#ios-ci")
-slack_url($SLACK_WEBHOOK_URL)
+slack_url(ENV["SLACK_WEBHOOK_URL"])
+skip_build(true)
 workspace("Blockchain.xcworkspace")
