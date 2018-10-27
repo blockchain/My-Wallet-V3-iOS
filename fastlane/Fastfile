@@ -18,8 +18,11 @@ platform :ios do
     # https://docs.fastlane.tools/actions/scan
     scan
     if is_ci?
-      # Send Slack notification to developer
-      # slack(message: "Your test results are in!")
+      slack(
+        channel: "#ios-ci",
+        message: "Your test results are in!",
+        slack_url: $SLACK_WEBHOOK_URL
+      )
     end
   end
   desc "Builds using the dev environment"
