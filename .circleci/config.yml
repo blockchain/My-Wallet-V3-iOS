@@ -164,7 +164,6 @@ jobs:
   run_tests:
     <<: *defaults
     environment:
-      FASTLANE_LANE: execute_tests
       FL_OUTPUT_DIR: test-results
     steps:
       - attach_workspace:
@@ -175,7 +174,7 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             export SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
-            bundle exec fastlane $FASTLANE_LANE
+            bundle exec fastlane scan
       - run:
           name: Codesign info
           command: security find-identity -v -p codesigning

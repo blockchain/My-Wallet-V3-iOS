@@ -13,10 +13,6 @@ platform :ios do
   before_all do
     setup_circle_ci
   end
-  desc "Execute unit tests"
-  lane :execute_tests do
-    scan
-  end
   desc "Builds using the dev environment"
   lane :dev do
     sync_code_signing(type: "appstore", readonly: true)
