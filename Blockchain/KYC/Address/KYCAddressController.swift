@@ -12,6 +12,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, BottomBut
 
     // MARK: BottomButtonContainerView
 
+    var optionalOffset: CGFloat = 0
     var originalBottomButtonConstraint: CGFloat!
     @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 

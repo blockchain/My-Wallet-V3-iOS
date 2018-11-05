@@ -8,6 +8,14 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Light.ttf">
+            <string>Montserrat-Light</string>
+        </array>
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Transactions Xlm View Controller-->
         <scene sceneID="Nnk-32-dlB">
@@ -21,18 +29,55 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="637"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Transactions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hL-3q-nOj">
+                                <rect key="frame" x="121" y="288" width="133" height="21"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <color key="textColor" red="0.16862745100000001" green="0.29411764709999999" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transactions occur when you send and request XLM." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3wI-8h-BLL">
+                                <rect key="frame" x="48" y="325" width="279" height="37"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="15"/>
+                                <color key="textColor" red="0.23100000000000001" green="0.23100000000000001" blue="0.23100000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1iK-3Y-5VZ">
+                                <rect key="frame" x="48" y="370" width="279" height="40"/>
+                                <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Fo5-lT-YjO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="GET XLM">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="CTATapped:" destination="RLZ-G0-Tsx" eventType="touchUpInside" id="fhG-og-Eco"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="1hL-3q-nOj" firstAttribute="centerX" secondItem="EPP-X5-ycO" secondAttribute="centerX" id="0Z2-as-Wyk"/>
+                            <constraint firstItem="3wI-8h-BLL" firstAttribute="centerY" secondItem="EPP-X5-ycO" secondAttribute="centerY" id="4Gc-9q-xc5"/>
+                            <constraint firstItem="3wI-8h-BLL" firstAttribute="centerX" secondItem="1hL-3q-nOj" secondAttribute="centerX" id="HMA-66-tOy"/>
                             <constraint firstItem="EPP-X5-ycO" firstAttribute="bottom" secondItem="oKm-eC-nFj" secondAttribute="bottom" constant="10" id="Hgt-XQ-7Ij"/>
+                            <constraint firstItem="3wI-8h-BLL" firstAttribute="width" secondItem="1iK-3Y-5VZ" secondAttribute="width" id="b2D-rr-Kqp"/>
+                            <constraint firstItem="1iK-3Y-5VZ" firstAttribute="top" secondItem="3wI-8h-BLL" secondAttribute="bottom" constant="8" id="luE-M1-J6c"/>
                             <constraint firstItem="oKm-eC-nFj" firstAttribute="leading" secondItem="EPP-X5-ycO" secondAttribute="leading" id="oLY-Zu-Nzh"/>
+                            <constraint firstItem="3wI-8h-BLL" firstAttribute="top" secondItem="1hL-3q-nOj" secondAttribute="bottom" constant="16" id="oLx-Nu-Pde"/>
+                            <constraint firstItem="1iK-3Y-5VZ" firstAttribute="leading" secondItem="EPP-X5-ycO" secondAttribute="leading" constant="48" id="vuZ-tZ-yuf"/>
                             <constraint firstItem="EPP-X5-ycO" firstAttribute="top" secondItem="oKm-eC-nFj" secondAttribute="top" id="xhI-ZA-r1O"/>
+                            <constraint firstItem="EPP-X5-ycO" firstAttribute="trailing" secondItem="1iK-3Y-5VZ" secondAttribute="trailing" constant="48" id="xt3-AC-0gD"/>
                             <constraint firstItem="EPP-X5-ycO" firstAttribute="trailing" secondItem="oKm-eC-nFj" secondAttribute="trailing" id="xt9-xs-ksU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="EPP-X5-ycO"/>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="oKm-eC-nFj" id="dz6-TZ-mZE"/>
+                        <outlet property="CTAButton" destination="1iK-3Y-5VZ" id="dVe-jp-hXm"/>
+                        <outlet property="noTransactionsDescriptionLabel" destination="3wI-8h-BLL" id="arA-9l-o66"/>
+                        <outlet property="noTransactionsLabel" destination="1hL-3q-nOj" id="DXo-up-1Ak"/>
+                        <outlet property="tableView" destination="oKm-eC-nFj" id="eSn-uM-yPs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dbX-j0-t2X" userLabel="First Responder" sceneMemberID="firstResponder"/>

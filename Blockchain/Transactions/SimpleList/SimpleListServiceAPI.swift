@@ -10,8 +10,10 @@ import Foundation
 
 protocol SimpleListServiceAPI {
     func fetchAllItems(output: SimpleListOutput?)
+    func fetchDetails(for item: Identifiable, output: SimpleListOutput?)
     func refresh(output: SimpleListOutput?)
     func nextPageBefore(identifier: String)
     func cancel()
+    func isExecuting() -> Bool
     func canPage() -> Bool
 }

@@ -18,6 +18,9 @@ target 'Blockchain' do
     pod 'PhoneNumberKit', '~> 2.1'
     pod 'Starscream', '~> 3.0.2'
     pod 'stellar-ios-mac-sdk', '~> 1.4.7'
+    pod 'Firebase/Core'
+    pod 'Firebase/DynamicLinks'
+    pod 'Firebase/RemoteConfig'
 
   target 'BlockchainTests' do
     inherit! :search_paths

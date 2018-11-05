@@ -116,6 +116,7 @@ class ExchangeDetailViewController: UIViewController {
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: ActionableFooterView.identifier
             )
+            AnalyticsService.shared.trackEvent(title: "exchange_detail_confirm")
         case .locked:
             let headerNib = UINib(nibName: ExchangeLockedHeaderView.identifier, bundle: nil)
             collectionView.register(
@@ -130,6 +131,7 @@ class ExchangeDetailViewController: UIViewController {
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: ActionableFooterView.identifier
             )
+            AnalyticsService.shared.trackEvent(title: "exchange_detail_locked")
         case .overview:
             let headerNib = UINib(nibName: ExchangeDetailHeaderView.identifier, bundle: nil)
             collectionView.register(
@@ -144,6 +146,7 @@ class ExchangeDetailViewController: UIViewController {
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: ActionableFooterView.identifier
             )
+            AnalyticsService.shared.trackEvent(title: "exchange_detail_overview")
         }
     }
 }

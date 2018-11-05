@@ -40,6 +40,7 @@ class ExchangeListViewController: UIViewController {
         let controller = ExchangeListViewController.makeFromStoryboard()
         controller.dependencies = dependencies
         controller.coordinator = coordinator
+        AnalyticsService.shared.trackEvent(title: "exchange_history")
         return controller
     }
     

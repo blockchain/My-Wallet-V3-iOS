@@ -14,6 +14,7 @@ protocol XLMDependencies {
     var ledger: StellarLedgerService { get }
     var operation: StellarOperationService { get }
     var transaction: StellarTransactionAPI { get }
+    var limits: StellarTradeLimitsAPI { get }
     var repository: WalletXlmAccountRepository { get }
     var prices: PriceServiceAPI { get }
 }
@@ -25,18 +26,31 @@ struct XLMServices: XLMDependencies {
     var operation: StellarOperationService
     var transaction: StellarTransactionAPI
     var prices: PriceServiceAPI
-    
+    var limits: StellarTradeLimitsAPI
+
     init(
         configuration: StellarConfiguration,
         wallet: Wallet = WalletManager.shared.wallet
     ) {
         repository = WalletXlmAccountRepository(wallet: wallet)
-        accounts = StellarAccountService(configuration: configuration, repository: repository)
         ledger = StellarLedgerService(configuration: configuration)
-        transaction = StellarTransactionService(configuration: configuration, accounts: accounts, repository: repository)
+        accounts = StellarAccountService(
+            configuration: configuration,
+            ledgerService: ledger,
+            repository: repository
+        )
+        transaction = StellarTransactionService(
+            configuration: configuration,
+            accounts: accounts,
+            repository: repository
+        )
         operation = StellarOperationService(configuration: configuration, repository: repository)
         prices = PriceServiceClient()
+        limits = StellarTradeLimitsService(ledgerService: ledger, accountsService: accounts)
     }
+    
+    static let test: XLMServices = XLMServices(configuration: .test)
+    static let production: XLMServices = XLMServices(configuration: .production)
 }
 
 class XLMServiceProvider: NSObject {
@@ -51,6 +65,16 @@ class XLMServiceProvider: NSObject {
         return services.accounts
     }
     
+    static let shared = XLMServiceProvider.make()
+    
+    @objc static func sharedInstance() -> XLMServiceProvider {
+        return shared
+    }
+    
+    @objc class func make() -> XLMServiceProvider {
+        return XLMServiceProvider(services: .production)
+    }
+    
     init(services: XLMServices) {
         self.services = services
         super.init()
@@ -63,5 +87,9 @@ class XLMServiceProvider: NSObject {
     fileprivate func setup() {
         let combine = Observable.combineLatest(ledger.current, accounts.currentStellarAccount(fromCache: false).asObservable()).subscribe()
         disposables.insertWithDiscardableResult(combine)
+    }
+    
+    @objc func tearDown() {
+        services.operation.end()
     }
 }

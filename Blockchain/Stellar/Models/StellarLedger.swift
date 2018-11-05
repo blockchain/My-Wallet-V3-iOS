@@ -31,3 +31,19 @@ extension StellarLedger: Equatable {
         lhs.baseReserveInStroops == rhs.baseReserveInStroops
     }
 }
+
+extension StellarLedger {
+    var baseFeeInXlm: Decimal? {
+        guard let feeInStroops = baseFeeInStroops else {
+            return nil
+        }
+        return Decimal(feeInStroops) / Decimal(Constants.Conversions.stroopsInXlm)
+    }
+
+    var baseReserveInXlm: Decimal? {
+        guard let reserveInStroops = baseReserveInStroops else {
+            return nil
+        }
+        return Decimal(reserveInStroops) / Decimal(Constants.Conversions.stroopsInXlm)
+    }
+}

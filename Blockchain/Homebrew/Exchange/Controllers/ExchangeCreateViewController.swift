@@ -93,6 +93,7 @@ class ExchangeCreateViewController: UIViewController {
     class func make(with dependencies: ExchangeDependencies) -> ExchangeCreateViewController {
         let controller = ExchangeCreateViewController.makeFromStoryboard()
         controller.dependencies = dependencies
+        AnalyticsService.shared.trackEvent(title: "exchange_create")
         return controller
     }
 
@@ -147,7 +148,7 @@ class ExchangeCreateViewController: UIViewController {
             model: MarketsModel(
                 marketPair: MarketPair(fromAccount: fromAccount, toAccount: toAccount),
                 fiatCurrencyCode: BlockchainSettings.sharedAppInstance().fiatCurrencyCode ?? "USD",
-                fiatCurrencySymbol: BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? "$",
+                fiatCurrencySymbol: BlockchainSettings.App.shared.fiatCurrencySymbol,
                 fix: .baseInFiat,
                 volume: "0"
             )

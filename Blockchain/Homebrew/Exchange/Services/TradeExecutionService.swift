@@ -9,8 +9,22 @@
 import Foundation
 import RxSwift
 
+protocol TradeExecutionDependencies {
+    var xlmServiceProvider: XLMServiceProvider { get }
+    var assetAccountRepository: AssetAccountRepository { get }
+}
+
+struct TradeExecutionServiceDependencies: TradeExecutionDependencies {
+    let xlmServiceProvider: XLMServiceProvider
+    let assetAccountRepository: AssetAccountRepository
+    init() {
+        xlmServiceProvider = XLMServiceProvider.shared
+        assetAccountRepository = AssetAccountRepository.shared
+    }
+}
+
 class TradeExecutionService: TradeExecutionAPI {
-    
+
     enum TradeExecutionAPIError: Error {
         case generic
     }
@@ -25,7 +39,11 @@ class TradeExecutionService: TradeExecutionAPI {
     
     private let authentication: NabuAuthenticationService
     private let wallet: Wallet
+    private let assetAccountRepository: AssetAccountRepository
+    private let xlmServiceProvider: XLMServiceProvider
     private var disposable: Disposable?
+
+    private var pendingXlmPaymentOperation: StellarPaymentOperation?
     
     // MARK: TradeExecutionAPI
     
@@ -40,9 +58,12 @@ class TradeExecutionService: TradeExecutionAPI {
     }
     
     init(service: NabuAuthenticationService = NabuAuthenticationService.shared,
-         wallet: Wallet = WalletManager.shared.wallet) {
+         wallet: Wallet = WalletManager.shared.wallet,
+         dependencies: TradeExecutionDependencies) {
         self.authentication = service
         self.wallet = wallet
+        self.xlmServiceProvider = dependencies.xlmServiceProvider
+        self.assetAccountRepository = dependencies.assetAccountRepository
     }
     
     deinit {
@@ -110,7 +131,8 @@ class TradeExecutionService: TradeExecutionAPI {
     fileprivate func buildOrder(
         from orderTransactionLegacy: OrderTransactionLegacy,
         success: @escaping ((OrderTransactionLegacy) -> Void),
-        error: @escaping ((String) -> Void)
+        error: @escaping ((String) -> Void),
+        memo: String? = nil // TODO: IOS-1291 Remove and separate
     ) {
         let assetType = AssetType.from(legacyAssetType: orderTransactionLegacy.legacyAssetType)
         let createOrderPaymentSuccess: ((String) -> Void) = { fees in
@@ -123,15 +145,38 @@ class TradeExecutionService: TradeExecutionAPI {
             }
             success(orderTransactionLegacy)
         }
-        wallet.createOrderPayment(
-            withOrderTransaction: orderTransactionLegacy,
-            completion: { [weak self] in
-                guard let this = self else { return }
-                this.isExecuting = false
-            },
-            success: createOrderPaymentSuccess,
-            error: error
-        )
+
+        // TICKET: IOS-1550 Move this to a different service
+        if assetType == .stellar {
+            guard let sourceAccount = xlmServiceProvider.services.repository.defaultAccount,
+            let ledger = xlmServiceProvider.services.ledger.currentLedger,
+            let fee = ledger.baseFeeInXlm,
+            let amount = Decimal(string: orderTransactionLegacy.amount) else { return }
+            
+            var paymentMemo: StellarMemoType?
+            if let value = memo {
+                paymentMemo = .text(value)
+            }
+
+            pendingXlmPaymentOperation = StellarPaymentOperation(
+                destinationAccountId: orderTransactionLegacy.to,
+                amountInXlm: amount,
+                sourceAccount: sourceAccount,
+                feeInXlm: fee,
+                memo: paymentMemo
+            )
+            createOrderPaymentSuccess("\(fee)")
+        } else {
+            wallet.createOrderPayment(
+                withOrderTransaction: orderTransactionLegacy,
+                completion: { [weak self] in
+                    guard let this = self else { return }
+                    this.isExecuting = false
+                },
+                success: createOrderPaymentSuccess,
+                error: error
+            )
+        }
     }
 
     // Post a trade to the server. This will create a trade object that will
@@ -166,19 +211,43 @@ class TradeExecutionService: TradeExecutionAPI {
         success: @escaping (() -> Void),
         error: @escaping ((String) -> Void)
     ) {
-        isExecuting = true
         let executionDone = { [weak self] in
             guard let this = self else { return }
             this.isExecuting = false
         }
-        wallet.sendOrderTransaction(
-            assetType.legacy,
-            secondPassword: secondPassword,
-            completion: executionDone,
-            success: success,
-            error: error,
-            cancel: executionDone
-        )
+        if assetType == .stellar {
+            guard let paymentOperation = pendingXlmPaymentOperation else {
+                Logger.shared.error("No pending payment operation found")
+                return
+            }
+            let services = xlmServiceProvider.services
+            let transaction = services.transaction
+            disposable = services.repository.loadStellarKeyPair()
+                .asObservable().flatMap { keyPair -> Completable in
+                    return transaction.send(paymentOperation, sourceKeyPair: keyPair)
+                }.subscribeOn(MainScheduler.asyncInstance)
+                .observeOn(MainScheduler.instance)
+                .subscribe(onError: { paymentError in
+                    executionDone()
+                    Logger.shared.error("Failed to send XLM. Error: \(paymentError)")
+                    if let operationError = paymentError as? StellarPaymentOperationError,
+                        operationError == .cancelled {
+                        // User cancelled transaction when shown second password - do not show an error.
+                        return
+                    }
+                    error(LocalizationConstants.Stellar.cannotSendXLMAtThisTime)
+                }, onCompleted: success)
+        } else {
+            isExecuting = true
+            wallet.sendOrderTransaction(
+                assetType.legacy,
+                secondPassword: secondPassword,
+                completion: executionDone,
+                success: success,
+                error: error,
+                cancel: executionDone
+            )
+        }
     }
 }
 
@@ -219,8 +288,8 @@ fileprivate extension TradeExecutionService {
             volume: conversionQuote.volume,
             currencyRatio: conversionQuote.currencyRatio
         )
-        let refundAddress = wallet.getReceiveAddress(forAccount: fromAccount.index, assetType: fromAccount.address.assetType.legacy)
-        let destinationAddress = wallet.getReceiveAddress(forAccount: toAccount.index, assetType: toAccount.address.assetType.legacy)
+        let refundAddress = getReceiveAddress(for: fromAccount.index, assetType: fromAccount.address.assetType)
+        let destinationAddress = getReceiveAddress(for: toAccount.index, assetType: toAccount.address.assetType)
         let order = Order(
             destinationAddress: destinationAddress!,
             refundAddress: refundAddress!,
@@ -293,7 +362,7 @@ fileprivate extension TradeExecutionService {
             amount: depositQuantity,
             fees: nil
         )
-        buildOrder(from: orderTransactionLegacy, success: success, error: error)
+        buildOrder(from: orderTransactionLegacy, success: success, error: error, memo: orderResult.depositMemo)
     }
 }
 
@@ -333,7 +402,7 @@ extension TradeExecutionService {
         // Second password must be prompted before an order is processed since it is
         // a cancellable action - otherwise an order will be created even if cancelling
         // second password
-        if wallet.needsSecondPassword() {
+        if wallet.needsSecondPassword() && from.address.assetType != .stellar {
             AuthenticationCoordinator.shared.showPasswordConfirm(
                 withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                 headerText: LocalizationConstants.Authentication.secondPasswordRequired,
@@ -346,5 +415,14 @@ extension TradeExecutionService {
             processAndBuild(nil)
         }
 
+    }
+}
+
+private extension TradeExecutionService {
+    func getReceiveAddress(for account: Int32, assetType: AssetType) -> String? {
+        if assetType == .stellar {
+            return assetAccountRepository.defaultStellarAccount()?.address.address
+        }
+        return wallet.getReceiveAddress(forAccount: account, assetType: assetType.legacy)
     }
 }

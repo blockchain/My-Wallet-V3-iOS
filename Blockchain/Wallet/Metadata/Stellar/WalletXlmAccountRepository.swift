@@ -122,12 +122,16 @@ extension Wallet: MnemonicAccess {
             AuthenticationCoordinator.shared.showPasswordConfirm(
                 withDisplayText: LocalizationConstants.Authentication.secondPasswordDefaultDescription,
                 headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                validateSecondPassword: true, confirmHandler: { [weak self] password in
+                validateSecondPassword: true,
+                confirmHandler: { [weak self] password in
                     guard let mnemonic = self?.getMnemonic(password) else {
                         observer(.completed)
                         return
                     }
                     observer(.success(mnemonic))
+                },
+                dismissHandler: {
+                    observer(.error(StellarPaymentOperationError.cancelled))
                 }
             )
             return Disposables.create()

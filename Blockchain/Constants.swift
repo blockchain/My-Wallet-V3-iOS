@@ -12,7 +12,7 @@ struct Constants {
 
     struct Conversions {
         // SATOSHI = 1e8 (100,000,000)
-        static let satoshi = UInt64(1e8)
+        static let satoshi = Double(1e8)
 
         /// Stroop is a measurement of 1/10,000,000th of an XLM
         static let stroopsInXlm = Int(1e7)
@@ -138,6 +138,8 @@ struct Constants {
         static let forgotPassword = "https://support.blockchain.com/hc/en-us/articles/211205343-I-forgot-my-password-What-can-you-do-to-help-"
         static let blockchainWalletLogin = "https://login.blockchain.com"
         static let lockbox = "https://blockchain.com/lockbox"
+        static let stellarMinimumBalanceInfo = "https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance"
+        static let airdropWaitlist = blockchainHome + "/getcrypto"
     }
     struct Wallet {
         static let swipeToReceiveAddressCount = 5
@@ -160,6 +162,8 @@ struct Constants {
 /// Constant class wrapper so that Constants can be accessed from Obj-C. Should deprecate this
 /// once Obj-C is no longer using this
 @objc class ConstantsObjcBridge: NSObject {
+    @objc class func airdropWaitlistUrl() -> String { return Constants.Url.airdropWaitlist }
+
     @objc class func animationDuration() -> Double { return Constants.Animation.duration }
 
     @objc class func animationDurationLong() -> Double { return Constants.Animation.durationLong }

@@ -8,29 +8,40 @@
 
 import Foundation
 
-enum StellarOperation {
+enum StellarOperation: Identifiable {
+    
+    var identifier: String {
+        return token
+    }
+    
+    func cellType() -> TransactionTableCell.Type {
+        return TransactionTableCell.self
+    }
+    
+    enum Direction {
+        case credit
+        case debit
+    }
+    
     case accountCreated(AccountCreated)
     case payment(Payment)
     case unknown
     
-    struct AccountCreated: Identifiable {
+    struct AccountCreated {
         let identifier: String
         let funder: String
         let account: String
+        let direction: Direction
         let balance: Decimal
         let token: String
         let sourceAccountID: String
         let transactionHash: String
         let createdAt: Date
+        var fee: Int?
+        var memo: String?
     }
     
-    struct Payment: Identifiable {
-        
-        enum Direction {
-            case credit
-            case debit
-        }
-        
+    struct Payment {
         let token: String
         let identifier: String
         let fromAccount: String
@@ -39,6 +50,51 @@ enum StellarOperation {
         let amount: String
         let transactionHash: String
         let createdAt: Date
+        var fee: Int?
+        var memo: String?
+    }
+}
+
+extension StellarOperation: Hashable {
+    static func == (lhs: StellarOperation, rhs: StellarOperation) -> Bool {
+        switch (lhs, rhs) {
+        case (.payment(let lhsValue), .payment(let rhsValue)):
+            return lhsValue.transactionHash == rhsValue.transactionHash &&
+            lhsValue.memo == rhsValue.memo &&
+            lhsValue.fee == rhsValue.fee
+        case (.accountCreated(let lhsValue), .accountCreated(let rhsValue)):
+            return lhsValue.transactionHash == rhsValue.transactionHash &&
+                lhsValue.memo == rhsValue.memo &&
+                lhsValue.fee == rhsValue.fee
+        case (.unknown, .unknown):
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var hashValue: Int {
+        switch self {
+        case .accountCreated(let created):
+            return created.account.hashValue ^
+            created.balance.hashValue ^
+            created.createdAt.hashValue ^
+            created.direction.hashValue ^
+            created.funder.hashValue ^
+            created.identifier.hashValue ^
+            created.transactionHash.hashValue
+        case .payment(let payment):
+            return payment.toAccount.hashValue ^
+                payment.fromAccount.hashValue ^
+                payment.createdAt.hashValue ^
+                payment.direction.hashValue ^
+                payment.amount.hashValue ^
+                payment.identifier.hashValue ^
+                payment.transactionHash.hashValue ^
+                payment.token.hashValue
+        case .unknown:
+            return 0
+        }
     }
 }
 

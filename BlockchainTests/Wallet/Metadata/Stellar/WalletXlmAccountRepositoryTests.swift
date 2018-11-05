@@ -11,23 +11,6 @@ import RxSwift
 import XCTest
 @testable import Blockchain
 
-private class MockXlmWallet: XlmWallet {
-    var didCallSave: XCTestExpectation?
-    var accounts: [WalletXlmAccount]?
-
-    func save(keyPair: StellarKeyPair, label: String, completion: @escaping KeyPairSaveCompletion) {
-        let account = WalletXlmAccount(publicKey: keyPair.accountId, label: label)
-        if accounts == nil {
-            accounts = []
-        }
-        accounts?.append(account)
-    }
-
-    func xlmAccounts() -> [WalletXlmAccount]? {
-        return accounts
-    }
-}
-
 private class MockMnemonicAccess: MnemonicAccess {
     var _mnemonic: Mnemonic?
     var _mnemonicForcePrompt: Mnemonic?

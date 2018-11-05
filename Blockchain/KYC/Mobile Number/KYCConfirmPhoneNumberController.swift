@@ -21,6 +21,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
     // MARK: BottomButtonContainerView
 
+    var optionalOffset: CGFloat = 0
     var originalBottomButtonConstraint: CGFloat!
     @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 

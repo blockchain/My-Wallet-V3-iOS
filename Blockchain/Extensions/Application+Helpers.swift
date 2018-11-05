@@ -7,8 +7,27 @@
 //
 
 import Foundation
+import SafariServices
 
 extension UIApplication {
+
+    // Prefer using SFSafariViewController over UIWebview due to privacy and security improvements.
+    // https://medium.com/ios-os-x-development/security-flaw-with-uiwebview-95bbd8508e3c
+    func openSafariViewController(url: String, presentingViewController: UIViewController) {
+        guard let urlTarget = URL(string: url) else {
+            return
+        }
+        let viewController = SFSafariViewController(url: urlTarget)
+        viewController.modalPresentationStyle = .overFullScreen
+        presentingViewController.present(viewController, animated: true, completion: nil)
+    }
+
+    @objc func openWebView(url: String, title: String, presentingViewController: UIViewController) {
+        let webViewController = SettingsWebViewController()
+        webViewController.urlTargetString = url
+        let navigationController = BCNavigationController(rootViewController: webViewController, title: title)
+        presentingViewController.present(navigationController, animated: true)
+    }
 
     // Opens the mail application, if possible, otherwise, displays an error
     @objc func openMailApplication() {

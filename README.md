@@ -81,6 +81,17 @@ Install a node version manager such as [nvm](https://github.com/creationix/nvm) 
     
     Add the contents of the above .xcconfig file to the end of `Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.xcconfig`
     
+## Add Firebase Config Files
+
+Create the following directories:
+
+```
+./Blockchain/Firebase/Dev
+./Blockchain/Firebase/Staging
+./Blockchain/Firebase/Prod
+```
+    
+    In each directory, you'll need to copy/paste the environment-specific GoogleService-Info.plist files that are in credentials repository.
 ## Open the project in Xcode
 
     open Blockchain.xcworkspace

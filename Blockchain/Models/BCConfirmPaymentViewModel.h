@@ -42,7 +42,8 @@
              showDescription:(BOOL)showDescription
             surgeIsOccurring:(BOOL)surgeIsOccurring
                     noteText:(NSString *_Nullable)noteText
-                 warningText:(NSAttributedString *_Nullable)warningText;
+                 warningText:(NSAttributedString *_Nullable)warningText
+            descriptionTitle:(NSString *_Nullable)descriptionTitle;
 
 @property (nonatomic) NSString *from;
 @property (nonatomic) NSString *to;
@@ -52,6 +53,7 @@
 @property (nonatomic) NSString *amountWithFiatFeeText;
 @property (nonatomic) NSString *noteText;
 @property (nonatomic) NSString *buttonTitle;
+@property (nonatomic, strong) NSString *descriptionTitle;
 @property (nonatomic) BOOL showDescription;
 @property (nonatomic) BOOL surgeIsOccurring;
 @property (nonatomic) NSAttributedString *warningText;

@@ -81,6 +81,7 @@ import Foundation
         window.makeKeyAndVisible()
         tabControllerManager.dashBoardClicked(nil)
 
+        AppFeatureConfigurator.shared.initialize()
         BuySellCoordinator.shared.start()
 
         // Display welcome screen if no wallet is authenticated
@@ -169,6 +170,7 @@ import Foundation
         tabControllerManager.hideSendAndReceiveKeyboards()
         tabControllerManager.transactionsBitcoinViewController?.loadedAllTransactions = false
         tabControllerManager.transactionsBitcoinViewController?.messageIdentifier = nil
+        tabControllerManager.dashBoardClicked(nil)
 
         closeSideMenu()
     }
@@ -203,6 +205,7 @@ import Foundation
 
 extension AppCoordinator: SideMenuViewControllerDelegate {
     func sideMenuViewController(_ viewController: SideMenuViewController, didTapOn item: SideMenuItem) {
+        AnalyticsService.shared.trackEvent(title: item.rawValue)
         switch item {
         case .upgrade:
             handleUpgrade()

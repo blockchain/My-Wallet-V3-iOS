@@ -23,13 +23,13 @@ protocol ExchangeInputsAPI: class {
     func maxFiatInteger() -> Int
     func maxAssetInteger() -> Int
     func maxFiatFractional() -> Int
-    func maxAssetFractional() -> Int
+    func maxAssetFractional(type: AssetType) -> Int
     
     func canBackspace() -> Bool
     func canAddFiatCharacter(_ character: String) -> Bool
-    func canAddAssetCharacter(_ character: String) -> Bool
+    func canAddAssetCharacter(_ character: String, type: AssetType) -> Bool
     func canAddFractionalFiat() -> Bool
-    func canAddFractionalAsset() -> Bool
+    func canAddFractionalAsset(type: AssetType) -> Bool
     func canAddDelimiter() -> Bool
     
     func add(character: String)

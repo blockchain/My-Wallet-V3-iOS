@@ -65,3 +65,14 @@ extension NSString {
         return validated
     }
 }
+
+// MARK: - Symbol formatting
+extension String {
+    func appendAssetSymbol(for assetType: AssetType) -> String {
+        return self + " " + assetType.symbol
+    }
+
+    func appendCurrencySymbol() -> String {
+        return BlockchainSettings.sharedAppInstance().fiatCurrencySymbol + self
+    }
+}

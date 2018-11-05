@@ -102,7 +102,7 @@
 
 #pragma mark button interactions
 
-- (IBAction)transactionClicked:(UIButton *)button
+- (IBAction)transactionClicked:(UIButton * _Nullable)button
 {
     TransactionDetailViewController *detailViewController = [TransactionDetailViewController new];
     detailViewController.transactionModel = [[TransactionDetailViewModel alloc] initWithTransaction:transaction];
@@ -146,6 +146,12 @@
 
 - (IBAction)btcbuttonclicked:(id)sender
 {
+    if (self.assetType == LegacyAssetTypeStellar) {
+        if (self.amountButtonSelected != nil) {
+            self.amountButtonSelected();
+        }
+        return;
+    }
     if (self.assetType == LegacyAssetTypeBitcoin) {
         [self transactionClicked:nil];
     } else {

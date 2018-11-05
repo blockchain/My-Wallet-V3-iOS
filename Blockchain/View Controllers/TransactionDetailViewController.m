@@ -111,7 +111,7 @@ const CGFloat rowHeightValueReceived = 80;
 {
     [WalletManager.sharedInstance.wallet getFiatAtTime:self.transactionModel.time value:self.transactionModel.decimalAmount currencyCode:[WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local.code lowercaseString] assetType:self.transactionModel.assetType];
     self.isGettingFiatAtTime = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterGetFiatAtTime) name:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterGetFiatAtTime:) name:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
 }
 
 - (NSString *)getNotePlaceholder
@@ -164,14 +164,14 @@ const CGFloat rowHeightValueReceived = 80;
     [self getFiatAtTime];
 }
 
-- (void)reloadDataAfterGetFiatAtTime
+- (void)reloadDataAfterGetFiatAtTime:(NSNotification * _Nullable)notification
 {
     self.isGettingFiatAtTime = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
-    [self reloadData];
+    [self reloadDataWithTransactionDetails:[notification object]];
 }
 
-- (void)reloadData
+- (void)reloadDataWithTransactionDetails:(NSMutableDictionary * _Nullable)details
 {
     [self.busyViewDelegate hideBusyView];
 
@@ -182,6 +182,13 @@ const CGFloat rowHeightValueReceived = 80;
         newTransactions = WalletManager.sharedInstance.wallet.etherTransactions;
     } else if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash) {
         newTransactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
+    } else if (self.transactionModel.assetType == LegacyAssetTypeStellar && details != nil) {
+        self.transactionModel.fiatAmountsAtTime = details;
+        [self.tableView reloadData];
+        if (self.refreshControl && self.refreshControl.isRefreshing) {
+            [self.refreshControl endRefreshing];
+        }
+        return;
     }
 
     [self findAndUpdateTransaction:newTransactions];
@@ -254,6 +261,9 @@ const CGFloat rowHeightValueReceived = 80;
         [cell configureWithTransactionModel:self.transactionModel];
         return cell;
     } else if ([rowType isEqualToString:CELL_IDENTIFIER_TRANSACTION_DETAIL_DESCRIPTION]) {
+        if (self.transactionModel.hideNote) {
+            return nil;
+        }
         TransactionDetailDescriptionCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER_TRANSACTION_DETAIL_DESCRIPTION forIndexPath:indexPath];
         cell.descriptionDelegate = self;
         [cell configureWithTransactionModel:self.transactionModel];

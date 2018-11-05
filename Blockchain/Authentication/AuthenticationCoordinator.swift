@@ -62,6 +62,7 @@ import RxSwift
         tabControllerManager.sendBitcoinCashViewController?.reload()
 
         strongSelf.dataRepository.prefetchData()
+        strongSelf.xlmServiceProvider.services.accounts.prefetch()
 
         /// Prompt the user for push notification permission
         PushNotificationManager.shared.requestAuthorization()
@@ -94,14 +95,8 @@ import RxSwift
         // Enabling touch ID and immediately backgrounding the app hides the status bar
         UIApplication.shared.setStatusBarHidden(false, with: .slide)
 
-        // Handle post authentication route, if any
-        if let route = strongSelf.postAuthenticationRoute {
-            switch route {
-            case .sendCoins:
-                tabControllerManager.showSendCoins(animated: true)
-            }
-            strongSelf.postAuthenticationRoute = nil
-        }
+        // Handle post authentication routing
+        strongSelf.handlePostAuthenticationRouting()
 
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController?.topMostViewController,
             BlockchainSettings.App.shared.isPinSet,
@@ -110,11 +105,27 @@ import RxSwift
         }
     }
 
+    private func handlePostAuthenticationRouting() {
+        if let route = postAuthenticationRoute {
+            switch route {
+            case .sendCoins:
+                AppCoordinator.shared.tabControllerManager.showSendCoins(animated: true)
+            }
+            postAuthenticationRoute = nil
+        }
+
+        // Handle airdrop routing
+        airDropRouter.routeIfNeeded()
+    }
+
     internal let dataRepository: BlockchainDataRepository
+    internal let xlmServiceProvider: XLMServiceProvider
 
     internal let walletManager: WalletManager
 
     private let walletService: WalletService
+
+    private let airDropRouter: StellarAirdropRouter
 
     @objc internal(set) var pinEntryViewController: PEPinEntryController?
 
@@ -141,11 +152,15 @@ import RxSwift
     init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared,
-        dataRepository: BlockchainDataRepository = BlockchainDataRepository.shared
+        dataRepository: BlockchainDataRepository = BlockchainDataRepository.shared,
+        xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared,
+        airDropRouter: StellarAirdropRouter = StellarAirdropRouter()
     ) {
         self.walletManager = walletManager
         self.walletService = walletService
         self.dataRepository = dataRepository
+        self.xlmServiceProvider = xlmServiceProvider
+        self.airDropRouter = airDropRouter
         super.init()
         self.walletManager.secondPasswordDelegate = self
     }
@@ -222,6 +237,7 @@ import RxSwift
         dataRepository.clearCache()
 
         BlockchainSettings.App.shared.reset()
+        BlockchainSettings.Onboarding.shared.reset()
 
         let appCoordinator = AppCoordinator.shared
         appCoordinator.tabControllerManager.clearSendToAddressAndAmountFields()
@@ -632,6 +648,10 @@ extension AuthenticationCoordinator: SetupDelegate {
 
             completion(true)
         }
+    }
+
+    func onWalletSetupViewControllerCompleted() {
+        handlePostAuthenticationRouting()
     }
 }
 

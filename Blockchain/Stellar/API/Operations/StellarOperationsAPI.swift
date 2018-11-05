@@ -8,15 +8,13 @@
 
 import Foundation
 import stellarsdk
+import RxSwift
 
 protocol StellarOperationsAPI {
     typealias AccountID = String
     typealias PageToken = String
-    typealias Completion = ((Result<[StellarOperation]>) -> Void)
     
-    var canPage: Bool { get set }
-
-    func operations(from accountID: AccountID, token: PageToken?, completion: @escaping Completion)
-    func isExecuting() -> Bool
-    func cancel()
+    var operations: Observable<[StellarOperation]> { get }
+    func isStreaming() -> Bool
+    func end()
 }

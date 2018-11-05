@@ -5,8 +5,8 @@
 /* Class = "UILabel"; text = "Why do we need this?"; ObjectID = "PtR-Ju-hsT"; */
 "PtR-Ju-hsT.text" = "Why do we need this?";
 
-/* Class = "UILabel"; text = "We will send you a SMS with verification code."; ObjectID = "fxC-dO-8GT"; */
-"fxC-dO-8GT.text" = "We will send you a SMS with verification code.";
+/* Class = "UILabel"; text = "This will help us to verify your identity today, and also keep your account secure in the future. To do this an SMS will be sent to your phone, with a verification code."; ObjectID = "fxC-dO-8GT"; */
+"fxC-dO-8GT.text" = "This will help us to verify your identity today, and also keep your account secure in the future. To do this an SMS will be sent to your phone, with a verification code.";
 
 /* Class = "UINavigationItem"; title = "Verify Your Device"; ObjectID = "zce-0p-WSv"; */
 "zce-0p-WSv.title" = "Verify Your Device";

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -26,20 +26,151 @@
                     <color key="textColor" red="0.0039215686274509803" green="0.29019607843137252" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O5O-L1-1fi" userLabel="Card Message">
-                    <rect key="frame" x="16" y="50" width="245" height="55.5"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="O5O-L1-1fi" userLabel="Card Message">
+                    <rect key="frame" x="16" y="50" width="253" height="75"/>
                     <attributedString key="attributedText">
+                        <fragment content="Lorem Ipsum is ">
+                            <attributes>
+                                <color key="NSColor" red="0.37254999999999999" green="0.37254999999999999" blue="0.37254999999999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name="Montserrat-Light"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                    <tabStops>
+                                        <textTab alignment="left" location="28">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="56">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="84">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="112">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="140">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="168">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="196">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="224">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="252">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="280">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="308">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="336">
+                                            <options/>
+                                        </textTab>
+                                    </tabStops>
+                                </paragraphStyle>
+                            </attributes>
+                        </fragment>
                         <fragment content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. ">
                             <attributes>
                                 <color key="NSColor" red="0.37254901960784315" green="0.37254901960784315" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="14" name="Montserrat-Light"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                    <tabStops>
+                                        <textTab alignment="left" location="28">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="56">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="84">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="112">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="140">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="168">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="196">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="224">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="252">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="280">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="308">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="336">
+                                            <options/>
+                                        </textTab>
+                                    </tabStops>
+                                </paragraphStyle>
+                            </attributes>
+                        </fragment>
+                        <fragment content="Lorem Ipsum is Lorem Ipsum is">
+                            <attributes>
+                                <color key="NSColor" red="0.37254999999999999" green="0.37254999999999999" blue="0.37254999999999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name="Montserrat-Light"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                    <tabStops>
+                                        <textTab alignment="left" location="28">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="56">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="84">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="112">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="140">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="168">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="196">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="224">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="252">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="280">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="308">
+                                            <options/>
+                                        </textTab>
+                                        <textTab alignment="left" location="336">
+                                            <options/>
+                                        </textTab>
+                                    </tabStops>
+                                </paragraphStyle>
                             </attributes>
                         </fragment>
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="luy-A8-JmJ" userLabel="Card Image">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="luy-A8-JmJ" userLabel="Card Image">
                     <rect key="frame" x="285" y="56.5" width="74" height="55"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="55" id="5K6-hO-M6f"/>
@@ -74,8 +205,8 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="4eX-Ib-LhG" secondAttribute="bottom" constant="8" id="3Q8-i4-lgR"/>
-                <constraint firstItem="4eX-Ib-LhG" firstAttribute="top" relation="lessThanOrEqual" secondItem="O5O-L1-1fi" secondAttribute="bottom" constant="24.5" id="MXU-9A-RY0"/>
-                <constraint firstItem="luy-A8-JmJ" firstAttribute="leading" secondItem="O5O-L1-1fi" secondAttribute="trailing" constant="24" id="VAc-4w-4Hm"/>
+                <constraint firstItem="4eX-Ib-LhG" firstAttribute="top" secondItem="O5O-L1-1fi" secondAttribute="bottom" constant="5" id="MXU-9A-RY0"/>
+                <constraint firstItem="luy-A8-JmJ" firstAttribute="leading" secondItem="O5O-L1-1fi" secondAttribute="trailing" constant="16" id="VAc-4w-4Hm"/>
                 <constraint firstItem="luy-A8-JmJ" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ZZ8-Zy-GSe"/>
                 <constraint firstAttribute="trailing" secondItem="luy-A8-JmJ" secondAttribute="trailing" constant="16" id="bqJ-bC-ulh"/>
                 <constraint firstItem="O5O-L1-1fi" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="fxB-MI-sRu"/>

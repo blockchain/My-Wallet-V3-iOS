@@ -29,7 +29,11 @@ final class DashboardController: UIViewController {
     private let pricePreviewViewSpacing: CGFloat = 16
     private let wallet: Wallet
     private let tabControllerManager: TabControllerManager
-    private var lastEthExchangeRate: NSDecimalNumber = 0
+    private let stellarAccountService: StellarAccountAPI
+    private var lastBtcExchangeRate,
+                lastBchExchangeRate,
+                lastEthExchangeRate,
+                lastXlmExchangeRate: NSDecimalNumber
     private var defaultContentHeight: CGFloat = 0
     private var disposable: Disposable?
     private var priceChartContainerView: UIView?
@@ -46,17 +50,6 @@ final class DashboardController: UIViewController {
 
     private lazy var dateFormatter: DateFormatter = {
         DateFormatter()
-    }()
-
-    private lazy var currencyFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.maximumFractionDigits = 2
-        if let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-            let symbol = latestMultiAddressResponse.symbol_local.symbol {
-                formatter.currencySymbol = symbol
-        }
-        return formatter
     }()
 
     private lazy var chartContainerViewController: BCPriceChartContainerViewController = {
@@ -108,7 +101,11 @@ final class DashboardController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         wallet = WalletManager.shared.wallet
         tabControllerManager = AppCoordinator.shared.tabControllerManager
+        lastBtcExchangeRate = NSDecimalNumber(value: 0)
+        lastBchExchangeRate = NSDecimalNumber(value: 0)
         lastEthExchangeRate = NSDecimalNumber(value: 0)
+        lastXlmExchangeRate = NSDecimalNumber(value: 0)
+        stellarAccountService = XLMServiceProvider.shared.services.accounts
         super.init(coder: aDecoder)
     }
 
@@ -147,7 +144,8 @@ final class DashboardController: UIViewController {
         scrollView.addSubview(contentView)
         scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: contentViewFrame.size.height)
 
-        cardsViewController.reloadCards()
+        cardsViewController.reloadAllCards()
+        AnalyticsService.shared.trackEvent(title: "dashboard")
     }
 
     // TICKET: IOS-1507 - Refactor to use autolayout
@@ -255,7 +253,6 @@ final class DashboardController: UIViewController {
             delegate: self
         )
         chartContainerViewController.add(priceChartView, at: pricePreviewChartPosition)
-        // TICKET: IOS-1508 - Encapsulate getBtcPrice, getEthPrice and getBchPrice into separate component & decouple from DashboardController.
         fetchChartDataForAsset(type: assetType)
 
         if chartContainerViewController.presentingViewController == nil {
@@ -269,58 +266,76 @@ final class DashboardController: UIViewController {
     }
 
     // Objc backward compatible method to set asset ethereum exchange rate
+    // TODO: deprecate since we are getting the price from PriceServiceClient
     @objc func updateEthExchangeRate(_ rate: NSDecimalNumber) {
         self.lastEthExchangeRate = rate
-        reloadPricePreviews()
     }
 
-    // TICKET: IOS-1506 - Encapsulate methods to get balances into separate component & decouple from DashboardController
-    // swiftlint:disable:next function_body_length
-    @objc func reload() {
-        guard wallet.isInitialized() else {
-            Logger.shared.warning("Returning nil because wallet was not initialized!")
-            return
+    /**
+        The functions to get the raw balances below need to be extracted from this class.
+        They do not return the balances in fiat. To convert them to fiat, their value must
+        be multiplied by the current exchange rate.
+    */
+
+    private func getBtcBalance() -> Double {
+        let balance = NSNumber(value: wallet.getTotalActiveBalance())
+        return balance.doubleValue / Constants.Conversions.satoshi
+    }
+
+    private func getEthBalance() -> Double {
+        // NOTE: only get truncated ETH balance for display purposes.
+        guard let balance = numberFormatter.number(from: wallet.getEthBalanceTruncated()) else {
+            Logger.shared.warning("Failed to get ETH balance!")
+            return 0
         }
-        let btcFiatBalance = getBtcBalance()
-        let ethFiatBalance = getEthBalance()
-        let bchFiatBalance = getBchBalance()
+        return balance.doubleValue
+    }
 
-        // TODO: display XLM balance...
-        self.balancesChartView.updateStellarBalance("0")
+    private func getBchBalance() -> Double {
+        let balance = NSNumber(value: wallet.getBchBalance())
+        return balance.doubleValue / Constants.Conversions.satoshi
+    }
 
-        let watchOnlyFiatBalance = getBtcWatchOnlyBalance()
-        guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-            let symbolLocal = latestMultiAddressResponse.symbol_local,
-            let symbol = symbolLocal.symbol else {
-                Logger.shared.warning("Failed to get symbol from latestMultiAddressResponse!")
-                return
-        }
+    private func getBtcWatchOnlyBalance() -> Double {
+        let watchOnlyBalance = NSNumber(value: wallet.getWatchOnlyBalance())
+        return watchOnlyBalance.doubleValue / Constants.Conversions.satoshi
+    }
 
-        let truncatedEthBalance = wallet.getEthBalanceTruncated()
+    private func reloadBalances(_ balances: [AssetType: Double]? = nil) {
+        let btcBalance = NSNumber(value: balances?[.bitcoin] ?? 0)
+        let btcFiatBalance = btcBalance.doubleValue * lastBtcExchangeRate.doubleValue
 
-        let bchBalance = wallet.getBchBalance()
+        let ethBalance = NSNumber(value: balances?[.ethereum] ?? 0)
+        let ethFiatBalance = ethBalance.doubleValue * lastEthExchangeRate.doubleValue
 
-        let totalActiveBalance = wallet.getTotalActiveBalance()
+        let bchBalance = NSNumber(value: balances?[.bitcoinCash] ?? 0)
+        let bchFiatBalance = bchBalance.doubleValue * lastBchExchangeRate.doubleValue
 
-        let totalFiatBalance = btcFiatBalance + ethFiatBalance + bchFiatBalance
+        let xlmBalance = NSNumber(value: balances?[.stellar] ?? 0)
+        let xlmFiatBalance = xlmBalance.doubleValue * lastXlmExchangeRate.doubleValue
 
-        let walletIsInitialized = wallet.isInitialized()
+        let totalBalance = NSNumber(value: btcFiatBalance + ethFiatBalance + bchFiatBalance + xlmFiatBalance)
 
-        if walletIsInitialized {
-            balancesChartView.updateFiatSymbol(symbol)
-            // Fiat balances
-            balancesChartView.updateBitcoinFiatBalance(btcFiatBalance)
-            balancesChartView.updateEtherFiatBalance(ethFiatBalance)
-            balancesChartView.updateBitcoinCashFiatBalance(bchFiatBalance)
-            balancesChartView.updateTotalFiatBalance(
-                NumberFormatter.appendString(toFiatSymbol: NumberFormatter.fiatString(from: totalFiatBalance))
-            )
-            // Balances
-            balancesChartView.updateBitcoinBalance(NumberFormatter.formatAmount(totalActiveBalance, localCurrency: false))
-            balancesChartView.updateEtherBalance(truncatedEthBalance)
-            balancesChartView.updateBitcoinCashBalance(NumberFormatter.formatAmount(bchBalance, localCurrency: false))
-            // Watch-only balances
+        balancesChartView.updateFiatSymbol(BlockchainSettings.App.shared.fiatCurrencySymbol)
+
+        balancesChartView.updateBitcoinBalance(btcBalance.stringValue)
+        balancesChartView.updateBitcoinFiatBalance(btcFiatBalance)
+
+        balancesChartView.updateEtherBalance(ethBalance.stringValue)
+        balancesChartView.updateEtherFiatBalance(ethFiatBalance)
+
+        balancesChartView.updateBitcoinCashBalance(bchBalance.stringValue)
+        balancesChartView.updateBitcoinCashFiatBalance(bchFiatBalance)
+
+        balancesChartView.updateStellarBalance(xlmBalance.stringValue)
+        balancesChartView.updateStellarFiatBalance(xlmFiatBalance)
+
+        balancesChartView.updateTotalFiatBalance(NumberFormatter.localCurrencyFormatterWithGroupingSeparator.string(from: totalBalance)?.appendCurrencySymbol())
+
+        if wallet.isInitialized() {
             let watchOnlyBalance = wallet.getWatchOnlyBalance()
+            let watchOnlyFiatBalance = getBtcWatchOnlyBalance() * lastBtcExchangeRate.doubleValue
+
             if watchOnlyBalance > 0 {
                 balancesChartView.updateBitcoinWatchOnlyFiatBalance(watchOnlyFiatBalance)
                 balancesChartView.updateBitcoinWatchOnlyBalance(NumberFormatter.formatAmount(watchOnlyBalance, localCurrency: false))
@@ -339,14 +354,65 @@ final class DashboardController: UIViewController {
         }
 
         balancesChartView.updateChart()
+    }
 
-        if !walletIsInitialized {
-            balancesChartView.clearLegendKeyBalances()
+    // TICKET: IOS-1506 - Encapsulate methods to get balances into separate component & decouple from DashboardController
+    // swiftlint:disable:next function_body_length
+    @objc func reload() {
+        if !wallet.isInitialized() {
+            reloadBalances()
         }
+        disposable = PriceServiceClient().allPrices(fiatSymbol: BlockchainSettings.App.shared.fiatCurrencyCode)
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { priceMap in
+                AssetType.all.forEach { type in
+                    let price = priceMap[type]?.price ?? 0
+                    let priceDecimal = NSDecimalNumber(decimal: price)
+                    guard let formatted = NumberFormatter.localCurrencyFormatterWithGroupingSeparator.string(from: priceDecimal) else {
+                        return
+                    }
+                    let formattedPrice = formatted.appendCurrencySymbol()
+                    switch type {
+                    case .bitcoin:
+                        self.lastBtcExchangeRate = NSDecimalNumber(decimal: price)
+                        self.bitcoinPricePreviewView?.price = formattedPrice
+                    case .ethereum:
+                        self.lastEthExchangeRate = NSDecimalNumber(decimal: price)
+                        self.etherPricePreviewView?.price = formattedPrice
+                    case .bitcoinCash:
+                        self.lastBchExchangeRate = NSDecimalNumber(decimal: price)
+                        self.bitcoinCashPricePreviewView?.price = formattedPrice
+                    case .stellar:
+                        self.lastXlmExchangeRate = NSDecimalNumber(decimal: price)
+                        self.stellarPricePreviewView?.price = formattedPrice
+                    }
+                }
+                let account = self.stellarAccountService.currentStellarAccount(fromCache: false)
+                _ = account
+                    .subscribeOn(MainScheduler.asyncInstance)
+                    .observeOn(MainScheduler.instance)
+                    .subscribe(onSuccess: { account in
+                        let xlmBalance = NSDecimalNumber(decimal: account.assetAccount.balance).doubleValue
+                        self.reloadBalances([
+                            AssetType.bitcoin: self.getBtcBalance(),
+                            AssetType.ethereum: self.getEthBalance(),
+                            AssetType.bitcoinCash: self.getBchBalance(),
+                            AssetType.stellar: xlmBalance
+                        ])
+                    }, onError: { _ in
+                        self.reloadBalances([
+                            AssetType.bitcoin: self.getBtcBalance(),
+                            AssetType.ethereum: self.getEthBalance(),
+                            AssetType.bitcoinCash: self.getBchBalance(),
+                            AssetType.stellar: 0
+                        ])
+                    })
+            }, onError: { error in
+                Logger.shared.error(error.localizedDescription)
+            })
 
-        reloadPricePreviews()
-
-        cardsViewController.reloadCards()
+        cardsViewController.reloadAllCards()
     }
 
     @objc func reloadSymbols() {
@@ -450,61 +516,6 @@ final class DashboardController: UIViewController {
         }
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
-
-    private func getBtcBalance() -> Double {
-        let balance = wallet.getTotalActiveBalance()
-        let amount = NumberFormatter.formatAmount(balance, localCurrency: true) ?? "0"
-        return numberFormatter.number(from: amount)?.doubleValue ?? 0
-    }
-
-    private func getEthBalance() -> Double {
-        guard let balance = wallet.getEthBalance() else {
-            Logger.shared.warning("Failed to get ETH balance!")
-            return 0
-        }
-        let amount = NumberFormatter.formatEth(
-            toFiat: balance,
-            exchangeRate: wallet.latestEthExchangeRate,
-            localCurrencyFormatter: NumberFormatter.localCurrencyFormatter
-        ) ?? "0"
-        return numberFormatter.number(from: amount)?.doubleValue ?? 0
-    }
-
-    private func getBchBalance() -> Double {
-        let balance = wallet.getBchBalance()
-        let amount = NumberFormatter.formatBch(balance, localCurrency: true) ?? "0"
-        return numberFormatter.number(from: amount)?.doubleValue ?? 0
-    }
-
-    private func getBtcWatchOnlyBalance() -> Double {
-        let balance = wallet.getWatchOnlyBalance()
-        let amount = NumberFormatter.formatAmount(balance, localCurrency: true) ?? "0"
-        return numberFormatter.number(from: amount)?.doubleValue ?? 0
-    }
-
-    private func reloadPricePreviews() {
-        disposable = PriceServiceClient().allPrices(fiatSymbol: "USD")
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { priceMap in
-                AssetType.all.forEach { type in
-                    let price = priceMap[type]?.price ?? 0
-                    let formattedPrice = self.currencyFormatter.string(for: NSDecimalNumber(decimal: price))!
-                    switch type {
-                    case .bitcoin:
-                        self.bitcoinPricePreviewView?.price = formattedPrice
-                    case .ethereum:
-                        self.etherPricePreviewView?.price = formattedPrice
-                    case .bitcoinCash:
-                        self.bitcoinCashPricePreviewView?.price = formattedPrice
-                    case .stellar:
-                        self.stellarPricePreviewView?.price = formattedPrice
-                    }
-                }
-            }, onError: { error in
-                Logger.shared.error(error.localizedDescription)
-            })
-    }
 }
 
 // MARK: - BCBalancesChartView Delegate
@@ -524,7 +535,7 @@ extension DashboardController: BCBalancesChartViewDelegate {
     }
 
     func stellarLegendTapped() {
-        // tabControllerManager.showTransactionsStellar()
+        tabControllerManager.showTransactionsStellar()
     }
 
     func watchOnlyViewTapped() {
@@ -550,15 +561,12 @@ extension DashboardController: IAxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         switch axis {
         case chartContainerViewController.leftAxis():
-            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-                let symbolLocal = latestMultiAddressResponse.symbol_local,
-                let symbol = symbolLocal.symbol else {
-                    Logger.shared.warning("Failed to get symbol from latestMultiAddressResponse!")
-                    return String()
+            guard let formatted = NumberFormatter.localCurrencyFormatter.string(from: NSNumber(value: value)) else {
+                return String(format: "%.2f").appendCurrencySymbol()
             }
-            return String(format: "%@%.f", symbol, value)
+            return formatted.appendCurrencySymbol()
         case chartContainerViewController.xAxis():
-            return dateStringFromGraphValue(value: value) ?? String()
+            return dateStringFromGraphValue(value: value)
         default:
             Logger.shared.warning("Warning: no axis found!")
             return String()

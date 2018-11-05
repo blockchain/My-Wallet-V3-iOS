@@ -35,46 +35,64 @@ extension SimpleListPresenter: SimpleListDelegate {
     }
 
     func onItemCellTapped(_ item: Identifiable) {
-        interface?.showItemDetails(item: item)
+        interactor.selected(item)
     }
 
     func onPullToRefresh() {
+        interface?.emptyStateVisibility(.hidden)
         interface?.refreshControlVisibility(.visible)
         interactor.refresh()
     }
 }
 
 extension SimpleListPresenter: SimpleListOutput {
+    func showItemDetails(_ item: Identifiable) {
+        interface?.loadingIndicatorVisibility(.hidden)
+        interface?.showItemDetails(item: item)
+    }
+    
     func willApplyUpdate() {
-        // TODO:
+        interface?.loadingIndicatorVisibility(.visible)
     }
 
     func didApplyUpdate() {
-        // TODO:
+        interface?.loadingIndicatorVisibility(.hidden)
     }
 
     func loadedItems(_ items: [Identifiable]) {
+        interface?.emptyStateVisibility(.hidden)
         interface?.refreshControlVisibility(.hidden)
         interface?.display(results: items)
     }
 
     func appendItems(_ items: [Identifiable]) {
+        interface?.emptyStateVisibility(.hidden)
         interface?.paginationActivityIndicatorVisibility(.hidden)
         interface?.append(results: items)
     }
 
     func refreshedItems(_ items: [Identifiable]) {
+        interface?.emptyStateVisibility(.hidden)
         interface?.refreshControlVisibility(.hidden)
         interface?.display(results: items)
-    }
-
-    func itemWithIdentifier(_ identifier: String) -> Identifiable? {
-        return interactor.itemSelectedWith(identifier: identifier)
     }
 
     func itemFetchFailed(error: Error?) {
         Logger.shared.error(error?.localizedDescription ?? "Unknown error")
         interface?.refreshControlVisibility(.hidden)
-        interface?.showError(message: LocalizationConstants.Errors.genericError)
+
+        if let serviceError = error as? StellarServiceError {
+            switch serviceError {
+            case .noDefaultAccount,
+                     .noXLMAccount:
+                interface?.emptyStateVisibility(.visible)
+            default:
+                interface?.emptyStateVisibility(.hidden)
+            }
+        } else {
+            interface?.showError(message: LocalizationConstants.Errors.genericError)
+        }
+
+        interface?.refreshAfterFailedFetch()
     }
 }

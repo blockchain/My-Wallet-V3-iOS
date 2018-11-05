@@ -71,7 +71,10 @@ class ExchangeInputsService: ExchangeInputsAPI {
         return NumberFormatter.localCurrencyFractionDigits
     }
     
-    func maxAssetFractional() -> Int {
+    func maxAssetFractional(type: AssetType) -> Int {
+        if type == .stellar {
+            return NumberFormatter.stellarFractionDigits
+        }
         return NumberFormatter.assetFractionDigits
     }
     
@@ -89,11 +92,11 @@ class ExchangeInputsService: ExchangeInputsAPI {
         }
     }
     
-    func canAddAssetCharacter(_ character: String) -> Bool {
+    func canAddAssetCharacter(_ character: String, type: AssetType) -> Bool {
         guard components.count > 0 else { return true }
         let pendingFractional = components.contains(where: { $0.type == .pendingFractional })
         if pendingFractional {
-            return components.filter({ $0.type == .fractional }).count < maxAssetFractional()
+            return components.filter({ $0.type == .fractional }).count < maxAssetFractional(type: type)
         } else {
             return components.filter({ $0.type == .whole }).count < maxAssetInteger()
         }
@@ -103,10 +106,10 @@ class ExchangeInputsService: ExchangeInputsAPI {
         return components.contains(where: { $0.type == .pendingFractional }) == false
     }
     
-    func canAddFractionalAsset() -> Bool {
+    func canAddFractionalAsset(type: AssetType) -> Bool {
         guard components.count > 0 else { return false }
         if components.contains(where: { $0.type == .pendingFractional }) {
-            return components.filter({ $0.type == .fractional }).count < maxAssetFractional()
+            return components.filter({ $0.type == .fractional }).count < maxAssetFractional(type: type)
         } else {
             return false
         }

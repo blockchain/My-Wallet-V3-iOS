@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VK4-jv-eiz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VK4-jv-eiz">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,16 +39,16 @@
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Regulations require that users must be 18 or older to trade crypto." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMs-GD-oqE">
-                                <rect key="frame" x="16" y="32" width="343" height="28"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="We need this to verify your identity, in order for you to use this improved feature. It should only take a couple of minutes." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMs-GD-oqE">
+                                <rect key="frame" x="16" y="32" width="343" height="44"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="oDQ-tQ-rDw">
-                                <rect key="frame" x="0.0" y="60" width="375" height="554"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" ambiguous="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="oDQ-tQ-rDw">
+                                <rect key="frame" x="0.0" y="84" width="375" height="530"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AKj-ci-QYf">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AKj-ci-QYf">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="553"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFe-4p-8Bl" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
@@ -147,7 +147,7 @@
                             <constraint firstItem="sxl-FD-HTb" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" id="7Cp-VL-P0Z"/>
                             <constraint firstItem="IMs-GD-oqE" firstAttribute="trailing" secondItem="tmZ-Mg-6Kp" secondAttribute="trailing" id="889-1g-2Ck"/>
                             <constraint firstItem="vzT-Yr-4Pj" firstAttribute="top" secondItem="oDQ-tQ-rDw" secondAttribute="bottom" constant="16" id="Ifn-5w-5IO"/>
-                            <constraint firstItem="oDQ-tQ-rDw" firstAttribute="top" secondItem="IMs-GD-oqE" secondAttribute="bottom" id="MyY-WO-lW9"/>
+                            <constraint firstItem="oDQ-tQ-rDw" firstAttribute="top" secondItem="IMs-GD-oqE" secondAttribute="bottom" constant="8" id="MyY-WO-lW9"/>
                             <constraint firstItem="IMs-GD-oqE" firstAttribute="leading" secondItem="tmZ-Mg-6Kp" secondAttribute="leading" id="NP6-i7-SFD"/>
                             <constraint firstItem="oDQ-tQ-rDw" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" id="NS6-cv-AqF"/>
                             <constraint firstItem="vzT-Yr-4Pj" firstAttribute="leading" secondItem="A6g-7V-Tpb" secondAttribute="leading" constant="16" id="QFQ-zO-d3o"/>

@@ -12,7 +12,16 @@ import Foundation
 /// Conforming to this protocol will auto-adjust the CTA button whenever the keyboard
 /// is presented/hidden.
 protocol BottomButtonContainerView {
+    
+    /// This is to be set equal to the original bottom constraint
+    /// set on the view pinning it to the bottom of it's parent. 
     var originalBottomButtonConstraint: CGFloat! { get set }
+    
+    /// Some screens may want to alter the offset of the
+    /// view. This is normally set to `0` but can be set to
+    /// any other value and it will be added to the keyboard's
+    /// height.
+    var optionalOffset: CGFloat { get set }
 
     var layoutConstraintBottomButton: NSLayoutConstraint! { get }
 }
@@ -39,7 +48,7 @@ extension BottomButtonContainerView where Self: UIViewController {
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(payload.animationDuration)
         UIView.setAnimationCurve(payload.animationCurve)
-        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height
+        layoutConstraintBottomButton.constant = originalBottomButtonConstraint + payload.endingFrame.height + optionalOffset
         view.layoutIfNeeded()
         UIView.commitAnimations()
     }

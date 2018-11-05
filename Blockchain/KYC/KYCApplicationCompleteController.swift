@@ -32,7 +32,7 @@ final class KYCApplicationCompleteController: KYCBaseViewController, Progressabl
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        BlockchainSettings.App.shared.shouldShowKYCAnnouncementCard = false
+        BlockchainSettings.App.shared.isCompletingKyc = false
     }
 
     // MARK: - IBActions

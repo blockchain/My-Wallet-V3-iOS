@@ -18,6 +18,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
     // MARK: BottomButtonContainerView
 
     var originalBottomButtonConstraint: CGFloat!
+    var optionalOffset: CGFloat = 0
     @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
 
     // MARK: IBOutlets

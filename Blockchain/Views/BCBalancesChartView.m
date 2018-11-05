@@ -313,7 +313,7 @@
 {
     [self hideChartMarker];
     
-    BOOL hasZeroBalances = !self.bitcoin.fiatBalance && !self.ether.fiatBalance && !self.bitcoinCash.fiatBalance;
+    BOOL hasZeroBalances = !self.bitcoin.fiatBalance && !self.ether.fiatBalance && !self.bitcoinCash.fiatBalance && !self.stellar.fiatBalance;
 
     PieChartDataSet *dataSet;
 

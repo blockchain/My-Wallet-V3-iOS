@@ -116,6 +116,9 @@
 		3A26D52A214055FE00D79BDD /* TradingPairCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A26D528214055FE00D79BDD /* TradingPairCell.xib */; };
 		3A26D53421406C0200D79BDD /* ExchangeDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26D53321406C0200D79BDD /* ExchangeDetailCoordinator.swift */; };
 		3A26D53521406C0200D79BDD /* ExchangeDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A26D53321406C0200D79BDD /* ExchangeDetailCoordinator.swift */; };
+		3A373C452188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */; };
+		3A373C462188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */; };
+		3A373C8F218BB56200DDFAFD /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
 		3A390748217E52AB00D2DA01 /* StellarLedgerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A390747217E52AB00D2DA01 /* StellarLedgerService.swift */; };
 		3A390749217E52AB00D2DA01 /* StellarLedgerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A390747217E52AB00D2DA01 /* StellarLedgerService.swift */; };
 		3A390750217E7D5A00D2DA01 /* XLMServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A39074F217E7D5A00D2DA01 /* XLMServiceProvider.swift */; };
@@ -262,8 +265,6 @@
 		3ADFE6FD214AE17600E7E2D5 /* ExchangeInputsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADFE6FB214AE17600E7E2D5 /* ExchangeInputsService.swift */; };
 		3ADFE6FF214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADFE6FE214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift */; };
 		3ADFE700214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADFE6FE214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift */; };
-		3AE5418921798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */; };
-		3AE5418A21798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */; };
 		3AE5419B217A677A001DDE02 /* StellarTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5419A217A677A001DDE02 /* StellarTransaction.swift */; };
 		3AE5419C217A677A001DDE02 /* StellarTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5419A217A677A001DDE02 /* StellarTransaction.swift */; };
 		3AE92BDB2110DB3C008D7BDC /* KeyboardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */; };
@@ -534,6 +535,9 @@
 		67FA1A4D1ABA092D000C9196 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FA1A4C1ABA092D000C9196 /* RegExCategories.m */; };
 		680CC422908E206C1581D626 /* Pods_Blockchain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08968EB2BC575FB3EBD71B28 /* Pods_Blockchain.framework */; };
 		6E2D90A21BBEC34800B719EC /* BCRecoveryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */; };
+		7A4E882E218B595C00CB798C /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4E882D218B595C00CB798C /* AnalyticsService.swift */; };
+		7ADD19D721874C220013A525 /* Firebase in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD19D621874C220013A525 /* Firebase */; };
+		7ADD19D821874C220013A525 /* Firebase in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD19D621874C220013A525 /* Firebase */; };
 		84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */; };
 		84B601CA197AD03800DA1829 /* BCModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C9197AD03800DA1829 /* BCModalView.m */; };
 		84F4BDFA197F21D700B7BF7B /* PairingCodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F4BDF9197F21D700B7BF7B /* PairingCodeParser.m */; };
@@ -548,7 +552,7 @@
 		9F1831EE151744EB00FB3D52 /* ReceiveTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1831ED151744EB00FB3D52 /* ReceiveTableCell.m */; };
 		9F1831F0151744FC00FB3D52 /* ReceiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F1831EF151744FC00FB3D52 /* ReceiveCell.xib */; };
 		9F2780B715343A7D0015F83F /* UncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2780B615343A7D0015F83F /* UncaughtExceptionHandler.m */; };
-		9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F2D934D14C0792D0053F0FF /* TransactionCell.xib */; };
+		9F2D934E14C0792D0053F0FF /* TransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F2D934D14C0792D0053F0FF /* TransactionTableCell.xib */; };
 		9F45F82C1514E53C00018AED /* UIButtonPressAndHold.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F45F81D1514D81700018AED /* UIButtonPressAndHold.m */; };
 		9F4A5092152F585E00F9ED9D /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4A5091152F585E00F9ED9D /* UIDevice+Hardware.m */; };
 		9F61B89E151519EF0083C57A /* BCAddressSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F61B89D151519EF0083C57A /* BCAddressSelectionView.m */; };
@@ -728,6 +732,18 @@
 		AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */; };
 		AA748359211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA748358211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift */; };
 		AA74835B21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA74835A21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift */; };
+		AA755EBA2187B26C00FC4894 /* StellarAirdropRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EB92187B26C00FC4894 /* StellarAirdropRouter.swift */; };
+		AA755EBB2187B26C00FC4894 /* StellarAirdropRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EB92187B26C00FC4894 /* StellarAirdropRouter.swift */; };
+		AA755ED621880F1200FC4894 /* StellarAccountServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755ED521880F1200FC4894 /* StellarAccountServiceTests.swift */; };
+		AA755EED2188ED6800FC4894 /* StellarTradeLimitsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EEC2188ED6800FC4894 /* StellarTradeLimitsAPI.swift */; };
+		AA755EEE2188ED6800FC4894 /* StellarTradeLimitsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EEC2188ED6800FC4894 /* StellarTradeLimitsAPI.swift */; };
+		AA755EF92188EDBB00FC4894 /* StellarTradeLimitsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EF82188EDBB00FC4894 /* StellarTradeLimitsService.swift */; };
+		AA755EFA2188EDBB00FC4894 /* StellarTradeLimitsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA755EF82188EDBB00FC4894 /* StellarTradeLimitsService.swift */; };
+		AA787A042187A63000E2D4CF /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA787A032187A63000E2D4CF /* DeepLinkHandler.swift */; };
+		AA787A052187A63000E2D4CF /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA787A032187A63000E2D4CF /* DeepLinkHandler.swift */; };
+		AA787A072187A86100E2D4CF /* DeepLinkRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA787A062187A86100E2D4CF /* DeepLinkRoute.swift */; };
+		AA787A082187A86100E2D4CF /* DeepLinkRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA787A062187A86100E2D4CF /* DeepLinkRoute.swift */; };
+		AA787A0B2187AC0500E2D4CF /* DeepLinkRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA787A0A2187AC0500E2D4CF /* DeepLinkRouteTests.swift */; };
 		AA7E7723210BA487009DFB4C /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA96721079B7500C2AD46 /* Strings.swift */; };
 		AA7E773E210BA487009DFB4C /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA96721079B7500C2AD46 /* Strings.swift */; };
 		AA7E773F210BA48B009DFB4C /* AuthenticationCoordinator+Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA98321079B8500C2AD46 /* AuthenticationCoordinator+Biometrics.swift */; };
@@ -752,6 +768,14 @@
 		AAA6648B2123426A009C1C64 /* PrimaryButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B9CD42118E15200BD3D60 /* PrimaryButtonContainer.swift */; };
 		AAB43A892162C19C0015C863 /* Rx+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB43A882162C19C0015C863 /* Rx+Helpers.swift */; };
 		AAB43A8A2162C19C0015C863 /* Rx+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB43A882162C19C0015C863 /* Rx+Helpers.swift */; };
+		AAB759F82189586500A0AD11 /* StellarAirdropRegistrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB759F72189586500A0AD11 /* StellarAirdropRegistrationService.swift */; };
+		AAB759FB21895C6C00A0AD11 /* StellarAirdropRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB759FA21895C6C00A0AD11 /* StellarAirdropRouterTests.swift */; };
+		AAB759FF21895CD200A0AD11 /* MockBlockchainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB759FE21895CD200A0AD11 /* MockBlockchainSettings.swift */; };
+		AAB75A00218960C300A0AD11 /* StellarAirdropRegistrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB759F72189586500A0AD11 /* StellarAirdropRegistrationService.swift */; };
+		AAB75A022189641900A0AD11 /* MockXlmWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB75A012189641900A0AD11 /* MockXlmWallet.swift */; };
+		AAB75A042189650D00A0AD11 /* MockBlockchainDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB75A032189650D00A0AD11 /* MockBlockchainDataRepository.swift */; };
+		AAB75A15218A733200A0AD11 /* CardsViewController+Airdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB75A14218A733200A0AD11 /* CardsViewController+Airdrop.swift */; };
+		AAB75A16218A733200A0AD11 /* CardsViewController+Airdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB75A14218A733200A0AD11 /* CardsViewController+Airdrop.swift */; };
 		AABB74C620D44AE300C0F7C5 /* AboutUsView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABB74C520D44AE300C0F7C5 /* AboutUsView.storyboard */; };
 		AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB74C720D44B0600C0F7C5 /* AboutUsViewController.swift */; };
 		AABB74C920D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB74C720D44B0600C0F7C5 /* AboutUsViewController.swift */; };
@@ -798,7 +822,6 @@
 		AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */; };
 		AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6F208FACB9002D8BAC /* Reachability.swift */; };
 		AACE31DA2092A99B00B7B806 /* Application+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE314B209152D800B7B806 /* Application+Helpers.swift */; };
-		AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
 		AACE31DC2092A99B00B7B806 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED3F208A6E8D002D8BAC /* UIViewController.swift */; };
 		AACE31DD2092A99B00B7B806 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513913EF2081206C002578FD /* UserDefaults.swift */; };
 		AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A7349020891EB3009727D5 /* BlockchainAPI.swift */; };
@@ -878,9 +901,9 @@
 		C702A7E7217E9D0400A8DED1 /* TransactionDetailViewModel+XLM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C702A7E5217E9D0400A8DED1 /* TransactionDetailViewModel+XLM.swift */; };
 		C70576B2212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
 		C70576B3212CFFFC0027C6AA /* Nibable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70576B1212CFFFC0027C6AA /* Nibable.swift */; };
-		C70B58562182A2360059D6FF /* StellarPaymentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA341D72182448800E09561 /* StellarPaymentOperation.swift */; };
 		C70B582D2182626B0059D6FF /* SendXLMModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70B582C2182626B0059D6FF /* SendXLMModelInterface.swift */; };
 		C70B582E2182626B0059D6FF /* SendXLMModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70B582C2182626B0059D6FF /* SendXLMModelInterface.swift */; };
+		C70B58562182A2360059D6FF /* StellarPaymentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA341D72182448800E09561 /* StellarPaymentOperation.swift */; };
 		C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */; };
 		C70FF5661E7B051C00AC7F8B /* ContactTransactionTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */; };
 		C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C71859461F3E227C00745A87 /* BCDescriptionView.m */; };
@@ -890,10 +913,16 @@
 		C718595B1F4B85E800745A87 /* Transactions.xib in Resources */ = {isa = PBXBuildFile; fileRef = C718595A1F4B85E800745A87 /* Transactions.xib */; };
 		C723F3461F61D35300A858A9 /* TransactionDetailViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C723F3451F61D35300A858A9 /* TransactionDetailViewModel.m */; };
 		C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C723F3481F64413400A858A9 /* TransactionsViewController.m */; };
+		C729D64421874C8B0084D497 /* NumberFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729D64321874C8B0084D497 /* NumberFormatterTests.swift */; };
+		C729E991218C9E85000FEA8A /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4E882D218B595C00CB798C /* AnalyticsService.swift */; };
 		C72AC7022134A90B001DA48B /* ExchangeInputsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72AC7012134A90B001DA48B /* ExchangeInputsAPI.swift */; };
 		C72AC7032134A90B001DA48B /* ExchangeInputsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72AC7012134A90B001DA48B /* ExchangeInputsAPI.swift */; };
 		C72D6CBF1EC0B4AB0000F922 /* BCFeeSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72D6CBE1EC0B4AB0000F922 /* BCFeeSelectionView.m */; };
 		C72D6CC21EC0B7F80000F922 /* FeeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C72D6CC11EC0B7F80000F922 /* FeeTableCell.m */; };
+		C73037A7218B4EE700F38BA8 /* InformationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C73037A6218B4EE700F38BA8 /* InformationViewController.storyboard */; };
+		C73037A8218B4EE700F38BA8 /* InformationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C73037A6218B4EE700F38BA8 /* InformationViewController.storyboard */; };
+		C73037AA218B508C00F38BA8 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73037A9218B508C00F38BA8 /* InformationViewController.swift */; };
+		C73037AB218B508C00F38BA8 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73037A9218B508C00F38BA8 /* InformationViewController.swift */; };
 		C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733A89221236F02007DADE0 /* HttpHeader.swift */; };
 		C73406221F54791C00143100 /* EtherAmountInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C73406211F54791C00143100 /* EtherAmountInputViewController.m */; };
 		C7343BC4214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7343BC3214FF8B1001B1EC9 /* ExchangeDetailPresenter.swift */; };
@@ -1349,6 +1378,7 @@
 		3A26D525214055E600D79BDD /* TradingPairCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPairCell.swift; sourceTree = "<group>"; };
 		3A26D528214055FE00D79BDD /* TradingPairCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TradingPairCell.xib; sourceTree = "<group>"; };
 		3A26D53321406C0200D79BDD /* ExchangeDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeDetailCoordinator.swift; sourceTree = "<group>"; };
+		3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTransactionCaching.swift; sourceTree = "<group>"; };
 		3A390747217E52AB00D2DA01 /* StellarLedgerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarLedgerService.swift; sourceTree = "<group>"; };
 		3A39074F217E7D5A00D2DA01 /* XLMServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLMServiceProvider.swift; sourceTree = "<group>"; };
 		3A390753217E7F6E00D2DA01 /* SendXLMInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendXLMInterface.swift; sourceTree = "<group>"; };
@@ -1429,7 +1459,6 @@
 		3ADFE6F8214AE0E300E7E2D5 /* InputComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputComponent.swift; sourceTree = "<group>"; };
 		3ADFE6FB214AE17600E7E2D5 /* ExchangeInputsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeInputsService.swift; sourceTree = "<group>"; };
 		3ADFE6FE214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeStyleTemplate.swift; sourceTree = "<group>"; };
-		3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarOperationsStreamAPI.swift; sourceTree = "<group>"; };
 		3AE5419A217A677A001DDE02 /* StellarTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTransaction.swift; sourceTree = "<group>"; };
 		3AE92BDA2110DB3C008D7BDC /* KeyboardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPayload.swift; sourceTree = "<group>"; };
 		3AE92BDC2110DF33008D7BDC /* NotificationCenter+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Conveniences.swift"; sourceTree = "<group>"; };
@@ -1660,6 +1689,170 @@
 		5177E828212B34A9008E13AB /* Pods-Blockchain.debug dev.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig"; sourceTree = "<group>"; };
 		5185E123208F6E5E00A26B64 /* Enum+RawValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enum+RawValued.swift"; sourceTree = "<group>"; };
 		5185E129208F7ACA00A26B64 /* BlockchainAPI+URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URI.swift"; sourceTree = "<group>"; };
+		518DBAB72188ACC40070453E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAB92188ACCB0070453E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBABB2188ACD30070453E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBABD2188ACDB0070453E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBABF2188ACE50070453E /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAC12188ACED0070453E /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAC32188ACF40070453E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBAC52188AD040070453E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAC72188AD0B0070453E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAC92188AD130070453E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBACB2188AD1B0070453E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBACD2188AD220070453E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBACF2188AD2C0070453E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAD12188AD330070453E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAD32188AD3A0070453E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAD52188AD440070453E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAD72188AD4C0070453E /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBAD92188AD530070453E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBADB2188AD5D0070453E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBADD2188AD640070453E /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBADF2188AD6B0070453E /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBAE12188AD720070453E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAE32188AD790070453E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAE52188AD850070453E /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAE72188AD8C0070453E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAE92188AD920070453E /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAEB2188AD9B0070453E /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAED2188ADA20070453E /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAEF2188ADA90070453E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAF12188ADB00070453E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAF32188ADB70070453E /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAF52188ADBE0070453E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAF72188ADC50070453E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAF92188ADCB0070453E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAFB2188ADD20070453E /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAFD2188ADD90070453E /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBAFF2188ADE00070453E /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
+		518DBB012188ADE70070453E /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBB032188ADEE0070453E /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBB052188ADF50070453E /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBB072188ADFC0070453E /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
+		518DBB092188AE480070453E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB0B2188AE520070453E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB0D2188AE590070453E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB0F2188AE620070453E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB112188AE6F0070453E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB132188AE780070453E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB152188AE800070453E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB172188AE850070453E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB192188AE8C0070453E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB1B2188AE920070453E /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB1D2188AE990070453E /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB1F2188AE9F0070453E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB212188AEA60070453E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB232188AEAD0070453E /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB252188AEB40070453E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB272188AEBA0070453E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB292188AEC10070453E /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB2B2188AEC70070453E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB2D2188AECF0070453E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB2F2188AED60070453E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB312188AEDD0070453E /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB332188AEE40070453E /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB352188AEEB0070453E /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB372188AEF20070453E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB392188AEF90070453E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB3B2188AF000070453E /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB3D2188AF070070453E /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB3F2188AF0E0070453E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB412188AF150070453E /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB432188AF1C0070453E /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB452188AF230070453E /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB472188AF290070453E /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB492188AF300070453E /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB4B2188AF370070453E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB4D2188AF3E0070453E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB4F2188AF450070453E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB512188AF4C0070453E /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB532188AF540070453E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB552188AF5B0070453E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB572188AF610070453E /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
+		518DBB592188AF690070453E /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
+		518DBB5B2188AFAB0070453E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB5D2188AFB20070453E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB5F2188AFB90070453E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB612188AFC00070453E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBB632188AFC70070453E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB652188AFCE0070453E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB672188AFD50070453E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB692188AFDC0070453E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB6B2188AFE30070453E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBB6D2188AFEA0070453E /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB6F2188AFF00070453E /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBB712188AFF70070453E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB732188AFFD0070453E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB752188B0050070453E /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB772188B00B0070453E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB792188B0130070453E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB7B2188B01C0070453E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB7D2188B0220070453E /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB7F2188B0280070453E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB812188B02F0070453E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB832188B0360070453E /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB852188B03D0070453E /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB872188B0430070453E /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB892188B04A0070453E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB8B2188B0510070453E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB8D2188B0580070453E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB8F2188B0600070453E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB912188B06A0070453E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB932188B0730070453E /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB952188B07A0070453E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB972188B0800070453E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB992188B0890070453E /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBB9B2188B0900070453E /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB9D2188B0BF0070453E /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBB9F2188B0C60070453E /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBBA12188B0CE0070453E /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBBA32188B0D50070453E /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBBA52188B0DC0070453E /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBBA72188B0E30070453E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
+		518DBBA92188B0ED0070453E /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBBAB2188B0F40070453E /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
+		518DBBAD2188B1400070453E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBAF2188B1470070453E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBB12188B14E0070453E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBB32188B1540070453E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBB52188B15B0070453E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBB72188B1620070453E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBB92188B1690070453E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBBB2188B1730070453E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBBD2188B1790070453E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBBF2188B1810070453E /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBC12188B1870070453E /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBC32188B18E0070453E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBC52188B1950070453E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBC72188B19C0070453E /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBC92188B1A20070453E /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBCB2188B1A90070453E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBCD2188B1B10070453E /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBCF2188B1BA0070453E /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBD12188B1C00070453E /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBD32188B1C70070453E /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBD52188B1D00070453E /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBD72188B1D60070453E /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBD92188B1DD0070453E /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
+		518DBBDB2188B1E40070453E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBDD2188B1EC0070453E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBDF2188B1F40070453E /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBE12188B1FA0070453E /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBE32188B2010070453E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBE52188B2080070453E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBE72188B20E0070453E /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBE92188B2160070453E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBEB2188B21C0070453E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBED2188B2240070453E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBEF2188B22A0070453E /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBF12188B2310070453E /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBF32188B2380070453E /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBF52188B23F0070453E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBF72188B2460070453E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBF92188B24F0070453E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBFB2188B2560070453E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
+		518DBBFD2188B25D0070453E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
 		51943595208E3005001EF882 /* BlockchainAPI+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockchainAPI+URL.swift"; sourceTree = "<group>"; };
 		5194359E208E61F3001EF882 /* BlockchainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockchainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		519435A0208E61F3001EF882 /* BlockchainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainTests.swift; sourceTree = "<group>"; };
@@ -1751,47 +1944,6 @@
 		51F504C4216E71C400E1FE0C /* LockboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxViewController.swift; sourceTree = "<group>"; };
 		51F504D0216E725B00E1FE0C /* Lockbox.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Lockbox.xcassets; sourceTree = "<group>"; };
 		51F504D4216E744000E1FE0C /* LockboxViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockboxViewController.storyboard; sourceTree = "<group>"; };
-		51F5CFA0215429A3003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFA2215429A7003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFA4215429B3003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFA6215429B7003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFA8215429BB003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFAA215429BE003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFAC215429C1003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFAE215429C3003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFB0215429C5003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFB2215429C7003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFB4215429CA003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFB6215429D1003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFB8215429D6003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFBA215429DC003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFBC215429DF003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFBE215429E1003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFC0215429E6003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFC2215429EC003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFC4215429EF003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFC6215429F1003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFC8215429F4003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFCA215429F5003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFCC215429F7003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFCE215429FE003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFD021542A00003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFD221542A01003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFD421542A03003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFD621542A04003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFD821542A06003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFDA21542A07003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFDC21542A0B003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFDE21542A0C003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFE021542A0D003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFE221542A0F003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFE421542A11003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFE621542A12003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFE821542A14003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFEA21542A16003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFEC21542A1A003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
-		51F5CFEE21542A1C003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCAddressController.strings"; sourceTree = "<group>"; };
-		51F5CFF021542A1D003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCAddressController.strings; sourceTree = "<group>"; };
 		51F5CFF221542A78003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCApplicationCompleteController.strings; sourceTree = "<group>"; };
 		51F5CFF421542A7A003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCApplicationCompleteController.strings; sourceTree = "<group>"; };
 		51F5CFF621542A7B003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCApplicationCompleteController.strings; sourceTree = "<group>"; };
@@ -1918,88 +2070,6 @@
 		51F5D0EA21542D30003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
 		51F5D0EC21542D31003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCCountrySelectionController.strings; sourceTree = "<group>"; };
 		51F5D0EE21542D82003D6237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCEnterPhoneNumberController.storyboard; sourceTree = "<group>"; };
-		51F5D0F121542D86003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0F321542D87003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0F521542D88003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0F721542D89003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D0F921542D8B003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0FB21542D8C003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0FD21542D8E003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D0FF21542D8F003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D10121542D90003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D10321542D91003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D10521542D92003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D10721542D93003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D10921542D96003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D10B21542D97003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D10D21542D98003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D10F21542D99003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D11121542D9A003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D11321542D9C003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D11521542D9D003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D11721542D9E003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D11921542DA0003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D11B21542DA1003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCEnterPhoneNumberController.strings"; sourceTree = "<group>"; };
-		51F5D11D21542DA2003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D11F21542DA3003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12121542DA5003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12321542DA6003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12521542DA7003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12721542DA9003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12921542DAA003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12B21542DAC003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12D21542DAD003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D12F21542DAF003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13121542DB0003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13321542DB2003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13521542DB3003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13721542DB4003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13921542DB5003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13B21542DB7003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13D21542DB8003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D13F21542DB9003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D14121542DBA003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCEnterPhoneNumberController.strings; sourceTree = "<group>"; };
-		51F5D14321542E3F003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D14521542E41003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D14721542E42003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D14921542E43003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D14B21542E44003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D14D21542E45003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D14F21542E47003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15121542E48003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15321542E4A003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15521542E4B003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15721542E4C003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D15921542E4E003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15B21542E4F003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15D21542E51003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D15F21542E52003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16121542E53003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16321542E57003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16521542E58003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16721542E59003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16921542E5A003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16B21542E5C003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16D21542E5D003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D16F21542E5E003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17121542E60003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17321542E61003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17521542E62003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17721542E64003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17921542E65003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17B21542E66003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17D21542E68003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D17F21542E6A003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D18121542E6B003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18321542E6D003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D18521542E6E003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18721542E72003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18921542E73003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18B21542E74003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18D21542E75003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
-		51F5D18F21542E77003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D19121542E78003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCPersonalDetailsController.strings; sourceTree = "<group>"; };
-		51F5D19321542E79003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCPersonalDetailsController.strings"; sourceTree = "<group>"; };
 		51F5D19521542ED4003D6237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCVerifyIdentityController.storyboard; sourceTree = "<group>"; };
 		51F5D19821542ED8003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCVerifyIdentityController.strings; sourceTree = "<group>"; };
 		51F5D19A21542ED9003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCVerifyIdentityController.strings; sourceTree = "<group>"; };
@@ -2043,47 +2113,6 @@
 		51F5D1E621542F11003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCVerifyIdentityController.strings; sourceTree = "<group>"; };
 		51F5D1E821542F13003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCVerifyIdentityController.strings; sourceTree = "<group>"; };
 		51F5D1EA21542F6D003D6237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCWelcomeController.storyboard; sourceTree = "<group>"; };
-		51F5D1ED21542F70003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1EF21542F73003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1F121542F74003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1F321542F75003D6237 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D1F521542F76003D6237 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1F721542F78003D6237 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1F921542F78003D6237 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1FB21542F7A003D6237 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D1FD21542F7B003D6237 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D1FF21542F7D003D6237 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20121542F7F003D6237 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D20321542F80003D6237 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20521542F81003D6237 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20721542F83003D6237 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20921542F84003D6237 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20B21542F86003D6237 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20D21542F87003D6237 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D20F21542F89003D6237 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21121542F8B003D6237 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21321542F8C003D6237 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21521542F8D003D6237 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21721542F8E003D6237 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21921542F8F003D6237 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21B21542F91003D6237 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21D21542F92003D6237 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D21F21542F93003D6237 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D22121542F95003D6237 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D22321542F96003D6237 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D22521542F98003D6237 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D22721542F99003D6237 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D22921542F9A003D6237 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D22B21542F9B003D6237 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D22D21542F9D003D6237 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D22F21542F9E003D6237 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23121542F9F003D6237 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23321542FA1003D6237 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/KYCWelcomeController.strings"; sourceTree = "<group>"; };
-		51F5D23521542FA2003D6237 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23721542FA3003D6237 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23921542FA5003D6237 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23B21542FA6003D6237 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
-		51F5D23D21542FA7003D6237 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/KYCWelcomeController.strings; sourceTree = "<group>"; };
 		51F5D29C21543447003D6237 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Settings.strings; sourceTree = "<group>"; };
 		51F5D29D21543449003D6237 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Settings.strings; sourceTree = "<group>"; };
 		51F5D29E2154344A003D6237 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Settings.strings; sourceTree = "<group>"; };
@@ -3126,6 +3155,8 @@
 		6E2D90A01BBEC34800B719EC /* BCRecoveryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCRecoveryView.h; sourceTree = "<group>"; };
 		6E2D90A11BBEC34800B719EC /* BCRecoveryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCRecoveryView.m; sourceTree = "<group>"; };
 		730695CB650E8C203CE31D50 /* Pods-BlockchainTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.release.xcconfig"; sourceTree = "<group>"; };
+		7A4E882D218B595C00CB798C /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		7ADD19D621874C220013A525 /* Firebase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Firebase; sourceTree = "<group>"; };
 		84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Blocks.h"; sourceTree = "<group>"; };
 		84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Blocks.m"; sourceTree = "<group>"; };
 		84B601C8197AD03800DA1829 /* BCModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCModalView.h; sourceTree = "<group>"; };
@@ -3157,7 +3188,7 @@
 		9F1831EF151744FC00FB3D52 /* ReceiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReceiveCell.xib; sourceTree = "<group>"; };
 		9F2780B515343A7D0015F83F /* UncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		9F2780B615343A7D0015F83F /* UncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UncaughtExceptionHandler.m; sourceTree = "<group>"; };
-		9F2D934D14C0792D0053F0FF /* TransactionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionCell.xib; sourceTree = "<group>"; };
+		9F2D934D14C0792D0053F0FF /* TransactionTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionTableCell.xib; sourceTree = "<group>"; };
 		9F45F81C1514D81700018AED /* UIButtonPressAndHold.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIButtonPressAndHold.h; sourceTree = "<group>"; };
 		9F45F81D1514D81700018AED /* UIButtonPressAndHold.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIButtonPressAndHold.m; sourceTree = "<group>"; };
 		9F4A5090152F585E00F9ED9D /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hardware.h"; sourceTree = "<group>"; };
@@ -3329,6 +3360,13 @@
 		AA722C1820B4BBA900262A5F /* AssetAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressRepository.swift; sourceTree = "<group>"; };
 		AA748358211129DF008F2768 /* MockKYCEnterPhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKYCEnterPhoneNumberView.swift; sourceTree = "<group>"; };
 		AA74835A21112A18008F2768 /* MockKYCVerifyPhoneNumberInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKYCVerifyPhoneNumberInteractor.swift; sourceTree = "<group>"; };
+		AA755EB92187B26C00FC4894 /* StellarAirdropRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarAirdropRouter.swift; sourceTree = "<group>"; };
+		AA755ED521880F1200FC4894 /* StellarAccountServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StellarAccountServiceTests.swift; sourceTree = "<group>"; };
+		AA755EEC2188ED6800FC4894 /* StellarTradeLimitsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTradeLimitsAPI.swift; sourceTree = "<group>"; };
+		AA755EF82188EDBB00FC4894 /* StellarTradeLimitsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTradeLimitsService.swift; sourceTree = "<group>"; };
+		AA787A032187A63000E2D4CF /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
+		AA787A062187A86100E2D4CF /* DeepLinkRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRoute.swift; sourceTree = "<group>"; };
+		AA787A0A2187AC0500E2D4CF /* DeepLinkRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouteTests.swift; sourceTree = "<group>"; };
 		AA94965D20CB5FA600A9C2DD /* AssetAddressFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactory.swift; sourceTree = "<group>"; };
 		AA94966220CB613100A9C2DD /* AssetAddressFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAddressFactoryTests.swift; sourceTree = "<group>"; };
 		AA9B30D020F6D85000A7F809 /* WalletUpgradeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletUpgradeDelegate.swift; sourceTree = "<group>"; };
@@ -3342,6 +3380,12 @@
 		AAA341B22180E61300E09561 /* MnemonicAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicAccess.swift; sourceTree = "<group>"; };
 		AAA341D72182448800E09561 /* StellarPaymentOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarPaymentOperation.swift; sourceTree = "<group>"; };
 		AAB43A882162C19C0015C863 /* Rx+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+Helpers.swift"; sourceTree = "<group>"; };
+		AAB759F72189586500A0AD11 /* StellarAirdropRegistrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarAirdropRegistrationService.swift; sourceTree = "<group>"; };
+		AAB759FA21895C6C00A0AD11 /* StellarAirdropRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarAirdropRouterTests.swift; sourceTree = "<group>"; };
+		AAB759FE21895CD200A0AD11 /* MockBlockchainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBlockchainSettings.swift; sourceTree = "<group>"; };
+		AAB75A012189641900A0AD11 /* MockXlmWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockXlmWallet.swift; sourceTree = "<group>"; };
+		AAB75A032189650D00A0AD11 /* MockBlockchainDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBlockchainDataRepository.swift; sourceTree = "<group>"; };
+		AAB75A14218A733200A0AD11 /* CardsViewController+Airdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardsViewController+Airdrop.swift"; sourceTree = "<group>"; };
 		AABB74C520D44AE300C0F7C5 /* AboutUsView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AboutUsView.storyboard; sourceTree = "<group>"; };
 		AABB74C720D44B0600C0F7C5 /* AboutUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
 		AABDED3F208A6E8D002D8BAC /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
@@ -3411,12 +3455,15 @@
 		C723F3451F61D35300A858A9 /* TransactionDetailViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailViewModel.m; sourceTree = "<group>"; };
 		C723F3471F64413400A858A9 /* TransactionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionsViewController.h; sourceTree = "<group>"; };
 		C723F3481F64413400A858A9 /* TransactionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionsViewController.m; sourceTree = "<group>"; };
+		C729D64321874C8B0084D497 /* NumberFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterTests.swift; sourceTree = "<group>"; };
 		C72AC7012134A90B001DA48B /* ExchangeInputsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeInputsAPI.swift; sourceTree = "<group>"; };
 		C72D6CBD1EC0B4AB0000F922 /* BCFeeSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCFeeSelectionView.h; sourceTree = "<group>"; };
 		C72D6CBE1EC0B4AB0000F922 /* BCFeeSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCFeeSelectionView.m; sourceTree = "<group>"; };
 		C72D6CC01EC0B7F80000F922 /* FeeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeeTableCell.h; sourceTree = "<group>"; };
 		C72D6CC11EC0B7F80000F922 /* FeeTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeeTableCell.m; sourceTree = "<group>"; };
 		C72D6CC91ED3472D0000F922 /* FeeTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeeTypes.h; sourceTree = "<group>"; };
+		C73037A6218B4EE700F38BA8 /* InformationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InformationViewController.storyboard; sourceTree = "<group>"; };
+		C73037A9218B508C00F38BA8 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
 		C733A89221236F02007DADE0 /* HttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpHeader.swift; sourceTree = "<group>"; };
 		C73406201F54791C00143100 /* EtherAmountInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtherAmountInputViewController.h; sourceTree = "<group>"; };
 		C73406211F54791C00143100 /* EtherAmountInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtherAmountInputViewController.m; sourceTree = "<group>"; };
@@ -3890,7 +3937,6 @@
 			isa = PBXGroup;
 			children = (
 				3A9A02602177F10200E2848E /* StellarOperationsAPI.swift */,
-				3AE5418821798C4A001DDE02 /* StellarOperationsStreamAPI.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -3995,11 +4041,13 @@
 				AA16D0E2217927890042AF7E /* StellarKeyPairDeriver.swift */,
 				3A390747217E52AB00D2DA01 /* StellarLedgerService.swift */,
 				3A1C7F9D2178FA7A001AC6D3 /* StellarOperationService.swift */,
+				AA755EF82188EDBB00FC4894 /* StellarTradeLimitsService.swift */,
 				3A56AEAE2176620400044302 /* StellarTransactionService.swift */,
-				C746905D2180ACCD001A7C52 /* URL */,
 				3A39074F217E7D5A00D2DA01 /* XLMServiceProvider.swift */,
+				AA755F232189361A00FC4894 /* Airdrop */,
 				3A56AEAD217661ED00044302 /* API */,
 				3A56AEB42176695700044302 /* Models */,
+				C746905D2180ACCD001A7C52 /* URL */,
 			);
 			path = Stellar;
 			sourceTree = "<group>";
@@ -4007,11 +4055,13 @@
 		3A56AEAD217661ED00044302 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				3A39074E217E55A300D2DA01 /* Operations */,
-				3A39074D217E559700D2DA01 /* Ledger */,
-				C7A8597F217A5BAE00502935 /* StellarTransactionServiceAPI.swift */,
-				3A56AEA621764D3A00044302 /* StellarTransactionAPI.swift */,
 				3A56AEA921765C2100044302 /* StellarAccountAPI.swift */,
+				3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */,
+				AA755EEC2188ED6800FC4894 /* StellarTradeLimitsAPI.swift */,
+				3A56AEA621764D3A00044302 /* StellarTransactionAPI.swift */,
+				C7A8597F217A5BAE00502935 /* StellarTransactionServiceAPI.swift */,
+				3A39074D217E559700D2DA01 /* Ledger */,
+				3A39074E217E55A300D2DA01 /* Operations */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -4352,6 +4402,7 @@
 				AA94966120CB611F00A9C2DD /* Addresses */,
 				AACE3206209782DD00B7B806 /* Authentication */,
 				3AB4D8EB212F1FEB004F0160 /* DateFormatterTests */,
+				AA787A092187ABEF00E2D4CF /* DeepLinking */,
 				51C9EBBF20DBE88000AB521D /* Extensions */,
 				C75684C6212F04F600B5059C /* Homebrew */,
 				AA2F12292140A915006B1FC1 /* Javascript */,
@@ -4360,10 +4411,12 @@
 				AACE320920978E9900B7B806 /* Mock */,
 				51A862E52092689500B338E0 /* Mock Data */,
 				511356DF209CA48F00056D65 /* Network */,
+				C729D64E21874CA60084D497 /* NumberFormatter */,
 				3A019120212DF0C800AED2BF /* Operations */,
 				AAE94F4C20C75B72005A3595 /* Pin */,
-				AA63F85220A12F4C002B719B /* URL */,
+				AA755ED421880F1200FC4894 /* Stellar */,
 				C7387ED321814D53005D35DA /* TextFieldInput */,
+				AA63F85220A12F4C002B719B /* URL */,
 				AA16D0F221794F8B0042AF7E /* Wallet */,
 			);
 			path = BlockchainTests;
@@ -6426,6 +6479,14 @@
 			path = RegEx;
 			sourceTree = "<group>";
 		};
+		7A4E8823218B593700CB798C /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				7A4E882D218B595C00CB798C /* AnalyticsService.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		84C25678198109AF00F901D1 /* Keys */ = {
 			isa = PBXGroup;
 			children = (
@@ -6610,6 +6671,8 @@
 		9FB3637B14B60128004BEA02 /* Blockchain */ = {
 			isa = PBXGroup;
 			children = (
+				7A4E8823218B593700CB798C /* Analytics */,
+				7ADD19D621874C220013A525 /* Firebase */,
 				C790E0F21E4913F00063D141 /* Blockchain.entitlements */,
 				A2599B9D1B0B5FC700C2EA81 /* Blockchain-Bridging-Header.h */,
 				67470A0519D438E000757D46 /* LocalizationConstants.h */,
@@ -6640,6 +6703,7 @@
 				5176A4C4214AA5900006769F /* Dashboard */,
 				AAF2AF0B2124946F00687E30 /* Data */,
 				AA0A4121214AD71100807163 /* Debug */,
+				AA787A022187A61700E2D4CF /* DeepLinking */,
 				510EA19620811FF100A63AB8 /* Extensions */,
 				AA63F87220A39D4E002B719B /* Feature Configuration */,
 				C75F64F52124BB9000396B65 /* Homebrew */,
@@ -6659,13 +6723,13 @@
 				AA3E5890217A7E4D00EFF992 /* Receive */,
 				AACE31FA2093F9F200B7B806 /* Reminder */,
 				C9D4B2AF193E023C00EDA9EA /* Resources */,
-				C7387ED221814CE2005D35DA /* TextFieldInput */,
 				3A56AE9C21764CDA00044302 /* Send */,
-				C7900C812177CEEB00F57A9F /* Transactions */,
 				AA69F65C2086A7330054EFCE /* Settings */,
 				AA31A7B82098DFB900FE6268 /* Side Menu */,
 				3A56AEAC217661D700044302 /* Stellar */,
 				AA54277820D88D1D00D5FEEE /* Swipe to Receive */,
+				C7387ED221814CE2005D35DA /* TextFieldInput */,
+				C7900C812177CEEB00F57A9F /* Transactions */,
 				AA63F84E20A12D88002B719B /* URL */,
 				9FCA4D18151494A300ECDFBE /* View Controllers */,
 				C9D4B2B2193E032200EDA9EA /* Views */,
@@ -6678,6 +6742,7 @@
 		9FCA4D18151494A300ECDFBE /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C73037A2218B4EB100F38BA8 /* Information */,
 				60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */,
 				60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */,
 				60FBE082211258F300AD514A /* Settings */,
@@ -6767,6 +6832,7 @@
 				CFA067201E65D49C008456C1 /* WebLoginViewController.h */,
 				CFA0671E1E65D426008456C1 /* WebLoginViewController.m */,
 				3AC4F97721234040003AA207 /* Storyboardable.swift */,
+				AAB75A14218A733200A0AD11 /* CardsViewController+Airdrop.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -7108,6 +7174,41 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		AA755ED421880F1200FC4894 /* Stellar */ = {
+			isa = PBXGroup;
+			children = (
+				AAB759F921895C5700A0AD11 /* Airdrop */,
+				AA755ED521880F1200FC4894 /* StellarAccountServiceTests.swift */,
+			);
+			path = Stellar;
+			sourceTree = "<group>";
+		};
+		AA755F232189361A00FC4894 /* Airdrop */ = {
+			isa = PBXGroup;
+			children = (
+				AA755EB92187B26C00FC4894 /* StellarAirdropRouter.swift */,
+				AAB759F72189586500A0AD11 /* StellarAirdropRegistrationService.swift */,
+			);
+			path = Airdrop;
+			sourceTree = "<group>";
+		};
+		AA787A022187A61700E2D4CF /* DeepLinking */ = {
+			isa = PBXGroup;
+			children = (
+				AA787A032187A63000E2D4CF /* DeepLinkHandler.swift */,
+				AA787A062187A86100E2D4CF /* DeepLinkRoute.swift */,
+			);
+			path = DeepLinking;
+			sourceTree = "<group>";
+		};
+		AA787A092187ABEF00E2D4CF /* DeepLinking */ = {
+			isa = PBXGroup;
+			children = (
+				AA787A0A2187AC0500E2D4CF /* DeepLinkRouteTests.swift */,
+			);
+			path = DeepLinking;
+			sourceTree = "<group>";
+		};
 		AA94966120CB611F00A9C2DD /* Addresses */ = {
 			isa = PBXGroup;
 			children = (
@@ -7162,6 +7263,14 @@
 				AAA341B22180E61300E09561 /* MnemonicAccess.swift */,
 			);
 			path = Mnemonic;
+			sourceTree = "<group>";
+		};
+		AAB759F921895C5700A0AD11 /* Airdrop */ = {
+			isa = PBXGroup;
+			children = (
+				AAB759FA21895C6C00A0AD11 /* StellarAirdropRouterTests.swift */,
+			);
+			path = Airdrop;
 			sourceTree = "<group>";
 		};
 		AABB74C420D44ACA00C0F7C5 /* Views */ = {
@@ -7260,12 +7369,15 @@
 		AACE320920978E9900B7B806 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
+				AAB75A032189650D00A0AD11 /* MockBlockchainDataRepository.swift */,
+				AAB759FE21895CD200A0AD11 /* MockBlockchainSettings.swift */,
 				AAE94DCE20C25F37005A3595 /* MockNetworkManager.swift */,
 				AAE94F6B20C75C67005A3595 /* MockPinInteractor.swift */,
 				AAE94F6920C75C4E005A3595 /* MockPinView.swift */,
 				AA0843C4215D72340007BFD1 /* MockSocketManager.swift */,
 				AACE320A20978EB100B7B806 /* MockWallet.swift */,
 				AA6911A020D18B6E00DDB541 /* MockWalletService.swift */,
+				AAB75A012189641900A0AD11 /* MockXlmWallet.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -7338,6 +7450,23 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		C729D64E21874CA60084D497 /* NumberFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				C729D64321874C8B0084D497 /* NumberFormatterTests.swift */,
+			);
+			path = NumberFormatter;
+			sourceTree = "<group>";
+		};
+		C73037A2218B4EB100F38BA8 /* Information */ = {
+			isa = PBXGroup;
+			children = (
+				C73037A6218B4EE700F38BA8 /* InformationViewController.storyboard */,
+				C73037A9218B508C00F38BA8 /* InformationViewController.swift */,
+			);
+			path = Information;
+			sourceTree = "<group>";
+		};
 		C7387ED221814CE2005D35DA /* TextFieldInput */ = {
 			isa = PBXGroup;
 			children = (
@@ -7353,7 +7482,7 @@
 			);
 			path = TextFieldInput;
 			sourceTree = "<group>";
-                };
+		};
 		C746905D2180ACCD001A7C52 /* URL */ = {
 			isa = PBXGroup;
 			children = (
@@ -7477,7 +7606,7 @@
 				C7442E301FBA1E5700695E4C /* ExchangeTableViewCell.xib */,
 				C7559CB31F5705D5005B2375 /* TransactionEtherCell.xib */,
 				C70FF5651E7B051C00AC7F8B /* ContactTransactionTableCell.xib */,
-				9F2D934D14C0792D0053F0FF /* TransactionCell.xib */,
+				9F2D934D14C0792D0053F0FF /* TransactionTableCell.xib */,
 				9F1831EF151744FC00FB3D52 /* ReceiveCell.xib */,
 			);
 			path = Cells;
@@ -7716,10 +7845,10 @@
 				CDE074730218D067FD5239E6 /* [CP] Check Pods Manifest.lock */,
 				9FB3636D14B60128004BEA02 /* Sources */,
 				9FB3636E14B60128004BEA02 /* Frameworks */,
-				23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */,
+				7ADD19D5218743A70013A525 /* Setup Firebase Environment */,
+				23FDEFA31D6E22C900FC80D6 /* Run SwiftLint */,
 				9FB3636F14B60128004BEA02 /* Resources */,
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
-				51B9D9272063EA1D007DED65 /* Run SwiftLint */,
 				C718594D1F460C4A00745A87 /* Run Fabric */,
 				D069129EFBA0297B3CA548DB /* [CP] Embed Pods Frameworks */,
 			);
@@ -7759,6 +7888,9 @@
 								enabled = 1;
 							};
 							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
 								enabled = 1;
 							};
 						};
@@ -7915,6 +8047,7 @@
 				C78238B02131F0CD008FCCAD /* ExchangeCreateViewController.storyboard in Resources */,
 				C75757522176504100CE7814 /* AssetTypeCell.xib in Resources */,
 				3AAEF95421417563005852D1 /* ExchangeLockedHeaderView.xib in Resources */,
+				7ADD19D821874C220013A525 /* Firebase in Resources */,
 				3AAEF9612141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */,
 				3AAEF95B2141B05A005852D1 /* ActionableFooterView.xib in Resources */,
 				3A26D52A214055FE00D79BDD /* TradingPairCell.xib in Resources */,
@@ -7922,6 +8055,7 @@
 				C78238BC2131F2F7008FCCAD /* NumberKeypadView.xib in Resources */,
 				3A49A8F02151802000760B8C /* ConversionRatesView.xib in Resources */,
 				3A49B2C62130B56C0068F443 /* NewOrderTableViewCell.xib in Resources */,
+				C73037A8218B4EE700F38BA8 /* InformationViewController.storyboard in Resources */,
 				3A91F7CE2138460900CDC3FD /* TradingPairView.xib in Resources */,
 				3A80B7C5216E820700679927 /* SideMenuCell.xib in Resources */,
 				3A53B95C213466670020ECAD /* ExchangeListHeaderView.xib in Resources */,
@@ -7994,7 +8128,7 @@
 				60A08C632118F733006DB9E8 /* Settings.storyboard in Resources */,
 				3A49A8EF2151802000760B8C /* ConversionRatesView.xib in Resources */,
 				C9BE91801945D8F600FD516D /* PEKeyboard-1-dot.png in Resources */,
-				9F2D934E14C0792D0053F0FF /* TransactionCell.xib in Resources */,
+				9F2D934E14C0792D0053F0FF /* TransactionTableCell.xib in Resources */,
 				3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */,
 				3AAEF9602141CF2C005852D1 /* ExchangeDetailHeaderView.xib in Resources */,
 				C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */,
@@ -8002,6 +8136,7 @@
 				3A4EAB98214080D700081531 /* TextCell.xib in Resources */,
 				C9BE91811945D8F600FD516D /* PEKeyboard-1-edit.png in Resources */,
 				3AAEF95321417563005852D1 /* ExchangeLockedHeaderView.xib in Resources */,
+				7ADD19D721874C220013A525 /* Firebase in Resources */,
 				51383566210255E100767B2E /* Colors.xcassets in Resources */,
 				3A91F7CD2138460900CDC3FD /* TradingPairView.xib in Resources */,
 				51F504D5216E744000E1FE0C /* LockboxViewController.storyboard in Resources */,
@@ -8027,6 +8162,7 @@
 				C9BE917F1945D8F600FD516D /* PEKeyboard-1-done.png in Resources */,
 				AA447BC62127677300EC0FA0 /* SideMenuViewController.storyboard in Resources */,
 				C9BE91871945D8F600FD516D /* PEKeyboard-2-next.png in Resources */,
+				C73037A7218B4EE700F38BA8 /* InformationViewController.storyboard in Resources */,
 				515EFAE2210282B4002350B6 /* MainWindow.xib in Resources */,
 				51FC1AFE21270D0D007BEB18 /* SettingsTableSectionHeader.xib in Resources */,
 				ECD244F419A8AC45004B1F40 /* PEKeyboard-4.png in Resources */,
@@ -8069,12 +8205,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
@@ -8084,21 +8222,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		23FDEFA31D6E22C900FC80D6 /* Get SSL Certificate */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Get SSL Certificate";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect blockchain.com:443 -showcerts < /dev/null | openssl x509 -outform DER > blockchain.der\n";
-		};
-		51B9D9272063EA1D007DED65 /* Run SwiftLint */ = {
+		23FDEFA31D6E22C900FC80D6 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -8111,6 +8235,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		7ADD19D5218743A70013A525 /* Setup Firebase Environment */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Firebase Environment";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Prod/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_STAG=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Staging/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\necho \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\nexit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\necho \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\nexit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\necho \"The current configuration is ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" == \"Debug Dev\" ]\nthen\necho \"Using ${GOOGLESERVICE_INFO_DEV}\"\ncp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nelif [ \"${CONFIGURATION}\" == \"Debug Staging\" ]\nthen\necho \"Using ${GOOGLESERVICE_INFO_STAG}\"\ncp \"${GOOGLESERVICE_INFO_STAG}\" \"${PLIST_DESTINATION}\"\nelse\necho \"Using ${GOOGLESERVICE_INFO_PROD}\"\ncp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nfi\n";
 		};
 		C718594D1F460C4A00745A87 /* Run Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -8171,22 +8313,30 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${PODS_ROOT}/Onfido/Onfido.framework",
 				"${BUILT_PRODUCTS_DIR}/PhoneNumberKit/PhoneNumberKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/stellar-ios-mac-sdk/stellarsdk.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PhoneNumberKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/stellarsdk.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8255,6 +8405,7 @@
 				3AE5419C217A677A001DDE02 /* StellarTransaction.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
+				C729E991218C9E85000FEA8A /* AnalyticsService.swift in Sources */,
 				C79B27B220A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */,
 				3A26D51321403E1200D79BDD /* ExchangeDetailCell.swift in Sources */,
 				AAF2AEC4212379D800687E30 /* PersonalDetailsDelegate.swift in Sources */,
@@ -8277,14 +8428,17 @@
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				AAF2AF072123952500687E30 /* KYCInformationViewModel.swift in Sources */,
 				5152AC2F2142E4B700E769CE /* AnnouncementCardView.swift in Sources */,
+				AA755EBB2187B26C00FC4894 /* StellarAirdropRouter.swift in Sources */,
 				C72AC7032134A90B001DA48B /* ExchangeInputsAPI.swift in Sources */,
 				AA722C1A20B4BBA900262A5F /* AssetAddressRepository.swift in Sources */,
 				511356E4209CAFC600056D65 /* NetworkManager+PushNotifications.swift in Sources */,
+				AA787A0B2187AC0500E2D4CF /* DeepLinkRouteTests.swift in Sources */,
 				3A3C7D622180F6920067F442 /* StellarAccountService.swift in Sources */,
 				AAD27A29209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
 				C740FA8A210BAF740060292F /* WalletExchangeIntermediateDelegate.swift in Sources */,
 				3AAEF94E21417547005852D1 /* ExchangeLockedHeaderView.swift in Sources */,
 				602B9D1C2118E26300BD3D60 /* PostalAddress.swift in Sources */,
+				AA755EEE2188ED6800FC4894 /* StellarTradeLimitsAPI.swift in Sources */,
 				C7CE25B72135E3D300DCC43B /* ExchangeCreatePresenter.swift in Sources */,
 				AACE31CD2092A99B00B7B806 /* BitcoinCashAddress.swift in Sources */,
 				AA126D92212E17A3005886A3 /* OnfidoService.swift in Sources */,
@@ -8297,7 +8451,6 @@
 				602B9D182118E25A00BD3D60 /* LocationSuggestionAPI.swift in Sources */,
 				3A1C7FA821790A49001AC6D3 /* StellarOperationService.swift in Sources */,
 				602B9D122118E24800BD3D60 /* KYCAddressController.swift in Sources */,
-				3AE5418A21798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */,
 				51A862E42092686300B338E0 /* CheckForUnusedAddressTests.swift in Sources */,
 				3A3C7D76218126F40067F442 /* ActionableLabel.swift in Sources */,
 				602B9D242118E27100BD3D60 /* KYCConfirmPhoneNumberController.swift in Sources */,
@@ -8314,6 +8467,7 @@
 				AAC9FCEF20AE456400E28B7A /* WalletTransactionDelegate.swift in Sources */,
 				AA63F84C20A12AE9002B719B /* URLs.swift in Sources */,
 				3AAEF96221421C6F005852D1 /* TextCell.swift in Sources */,
+				3A373C8F218BB56200DDFAFD /* UIDevice.swift in Sources */,
 				AA68F4302151A9CE0099BB83 /* TradeLimitsAPI.swift in Sources */,
 				C7EA091F21766F640050FE81 /* Direction.swift in Sources */,
 				C77C19B920C580E5005CB600 /* WalletSecondPasswordDelegate.swift in Sources */,
@@ -8340,7 +8494,6 @@
 				AA7E7740210BA48B009DFB4C /* AuthenticationCoordinator+Biometrics.swift in Sources */,
 				3A9A02702178E19400E2848E /* StellarOperation.swift in Sources */,
 				C7FF10EB2141AAB300CBA3CB /* MarketsModel.swift in Sources */,
-				AACE31DB2092A99B00B7B806 /* UIDevice.swift in Sources */,
 				AA126DBD212F4DA5005886A3 /* SignedRetailTokenResponse.swift in Sources */,
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				AA126DA6212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
@@ -8363,6 +8516,7 @@
 				C7F1577C217914B600A56376 /* SimpleTransactionsViewController.swift in Sources */,
 				AA126CDD212C94CB005886A3 /* NabuSessionTokenResponse.swift in Sources */,
 				AACE31CF2092A99B00B7B806 /* AuthenticationManager.swift in Sources */,
+				AA787A052187A63000E2D4CF /* DeepLinkHandler.swift in Sources */,
 				AA126DA0212E189C005886A3 /* OnfidoUser.swift in Sources */,
 				AACB48B921478472008FCCD0 /* Collection+Helpers.swift in Sources */,
 				51135707209CF68500056D65 /* BackupViewController.swift in Sources */,
@@ -8385,12 +8539,15 @@
 				3A91F7C2213845F700CDC3FD /* TradingPairView.swift in Sources */,
 				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
+				AAB759FB21895C6C00A0AD11 /* StellarAirdropRouterTests.swift in Sources */,
+				C729D64421874C8B0084D497 /* NumberFormatterTests.swift in Sources */,
 				AACE31D72092A99B00B7B806 /* Enum+Enumeratable.swift in Sources */,
 				3A1552EB2136EA8D00683CEB /* TradeExecutionService.swift in Sources */,
 				AACE31D82092A99B00B7B806 /* Enum+RawValued.swift in Sources */,
 				3A01914A212E17E500AED2BF /* ExchangeCreateViewController.swift in Sources */,
 				AA54E496216D2A4E005061F9 /* SearchableMap.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
+				AAB75A022189641900A0AD11 /* MockXlmWallet.swift in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				3ADFE700214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
@@ -8482,6 +8639,7 @@
 				3A3C7D39217F9D670067F442 /* StellarLedgerAPI.swift in Sources */,
 				AAFA97B02115110000D19ED3 /* SettingsProtocols.swift in Sources */,
 				C78893DB20A34DF4003C0A8F /* WalletSettingsDelegate.swift in Sources */,
+				C73037AB218B508C00F38BA8 /* InformationViewController.swift in Sources */,
 				602B9D132118E24C00BD3D60 /* SearchControllerDelegate.swift in Sources */,
 				3ADFE6EE214862E000E7E2D5 /* ExchangeInputComponent.swift in Sources */,
 				3AB4D92521309C76004F0160 /* HomebrewExchangeService.swift in Sources */,
@@ -8490,6 +8648,7 @@
 				C7BD107C209A01690062269E /* NumberFormatter+Assets.swift in Sources */,
 				51E52D20217F724B00066F8D /* PricePreviewViewFactory.swift in Sources */,
 				3A3D5D8D211B453800E6C241 /* ProgressableView.swift in Sources */,
+				AA755EFA2188EDBB00FC4894 /* StellarTradeLimitsService.swift in Sources */,
 				AACE31D12092A99B00B7B806 /* PasscodePayload.swift in Sources */,
 				5159C3212109156400955BD6 /* KYCCountrySelectionControllerTests.swift in Sources */,
 				C78238C52131FA08008FCCAD /* NumberKeypadView.swift in Sources */,
@@ -8541,6 +8700,7 @@
 				602B9D1A2118E26300BD3D60 /* LocationSuggestion.swift in Sources */,
 				3A56AEB721766A0000044302 /* StellarConfiguration.swift in Sources */,
 				3A01911F212DF0B700AED2BF /* AsyncOperation.swift in Sources */,
+				AAB75A042189650D00A0AD11 /* MockBlockchainDataRepository.swift in Sources */,
 				AA15DFE721765551006F30D9 /* WalletXlmAccountRepository.swift in Sources */,
 				51A862D620921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				5185E12B208F7ACA00A26B64 /* BlockchainAPI+URI.swift in Sources */,
@@ -8566,6 +8726,7 @@
 				AAE9113620A520D40093A431 /* WalletAccountInfoDelegate.swift in Sources */,
 				3A019122212DF0EB00AED2BF /* AsyncBlockOperationTests.swift in Sources */,
 				C7D5115C21237DE000359651 /* HttpHeader.swift in Sources */,
+				AAB75A00218960C300A0AD11 /* StellarAirdropRegistrationService.swift in Sources */,
 				AAF2AEC22123799800687E30 /* KYCPersonalDetailsController.swift in Sources */,
 				AA447BDB2127BC1100EC0FA0 /* SideMenuViewController.swift in Sources */,
 				3A3C7D512180D31D0067F442 /* StellarServiceError.swift in Sources */,
@@ -8580,6 +8741,7 @@
 				51E52D14217F6E6A00066F8D /* PricePreviewView.swift in Sources */,
 				AACE31D32092A99B00B7B806 /* OnboardingCoordinator.swift in Sources */,
 				C7E4E41920EE98590061059E /* WatchOnlyBalanceView.swift in Sources */,
+				AA755ED621880F1200FC4894 /* StellarAccountServiceTests.swift in Sources */,
 				AACE3132209121B300B7B806 /* PushNotificationManager.swift in Sources */,
 				C7E1A2902108FDFC0072DDA0 /* Colors.swift in Sources */,
 				602B9D0D2118E23800BD3D60 /* KYCOnboardingNavigationController.swift in Sources */,
@@ -8593,11 +8755,14 @@
 				3A9B7F122135CF9800754FD6 /* NetworkRequest.swift in Sources */,
 				AA126CE6212C99FF005886A3 /* KYCPageViewFactory.swift in Sources */,
 				3AB4D91B21309BCC004F0160 /* ExchangeListDataProvider.swift in Sources */,
+				AAB759FF21895CD200A0AD11 /* MockBlockchainSettings.swift in Sources */,
 				AA126CE0212C9735005886A3 /* KYCPageError.swift in Sources */,
 				3ADFE6FA214AE0E300E7E2D5 /* InputComponent.swift in Sources */,
 				600E18BB2118D46B003C1846 /* KeyboardPayload.swift in Sources */,
 				C764372A20ED199500CA7CA4 /* BalanceChartModel.swift in Sources */,
+				AA787A082187A86100E2D4CF /* DeepLinkRoute.swift in Sources */,
 				AADB023A20C0A871000FFFEC /* HttpMethod.swift in Sources */,
+				AAB75A16218A733200A0AD11 /* CardsViewController+Airdrop.swift in Sources */,
 				519435AC208E6279001EF882 /* CertificatePinnerTests.swift in Sources */,
 				3A49B2BA2130B5610068F443 /* NewOrderTableViewCell.swift in Sources */,
 				3AC4F97A2123493A003AA207 /* NabuUser.swift in Sources */,
@@ -8609,6 +8774,7 @@
 				AA126CE3212C9753005886A3 /* KYCPagePayload.swift in Sources */,
 				AA94966420CB613100A9C2DD /* AssetAddressFactoryTests.swift in Sources */,
 				C7387ED621814D6D005D35DA /* AmountTextFieldDelegateTests.swift in Sources */,
+				3A373C462188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */,
 				C76D732D20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 				C74690602180ACCD001A7C52 /* SEP7URI.swift in Sources */,
 			);
@@ -8630,6 +8796,7 @@
 				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
 				C7A85927217A294000502935 /* Identifiable.swift in Sources */,
 				AA3E589E217A7E8F00EFF992 /* ReceiveXlmViewController.swift in Sources */,
+				AA755EF92188EDBB00FC4894 /* StellarTradeLimitsService.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
 				60AEA56921125AB50053A753 /* SettingsCell.swift in Sources */,
 				C7442E371FBA448200695E4C /* ExchangeTrade.m in Sources */,
@@ -8812,6 +8979,7 @@
 				3A56AEB621766A0000044302 /* StellarConfiguration.swift in Sources */,
 				23BF73391C454B8C00204503 /* AccountsAndAddressesNavigationController.m in Sources */,
 				AA3CA9B52107F36800C2AD46 /* LogLevel.swift in Sources */,
+				AAB759F82189586500A0AD11 /* StellarAirdropRegistrationService.swift in Sources */,
 				51A862D520921A6E00B338E0 /* BlockchainAPI+URLSuffix.swift in Sources */,
 				2378271A1B7E472D00E9EE03 /* BCSecureTextField.swift in Sources */,
 				602B9CF02118E15300BD3D60 /* LocationSuggestionCoordinator.swift in Sources */,
@@ -8832,6 +9000,7 @@
 				AA126D91212E17A3005886A3 /* OnfidoService.swift in Sources */,
 				51DC2F6020B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				84B601CA197AD03800DA1829 /* BCModalView.m in Sources */,
+				AA755EBA2187B26C00FC4894 /* StellarAirdropRouter.swift in Sources */,
 				51C2ADD620BDECE700D66108 /* String+EscapeJS.swift in Sources */,
 				9F0CBAAA151351F400CD945D /* Wallet.m in Sources */,
 				3A3D5DCD211C9C6500E6C241 /* PersonalDetailsService.swift in Sources */,
@@ -8857,7 +9026,6 @@
 				3A3D5DC6211C992B00E6C241 /* PersonalDetailsAPI.swift in Sources */,
 				AA126CFD212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift in Sources */,
 				AA0A4147214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */,
-				3AE5418921798C4A001DDE02 /* StellarOperationsStreamAPI.swift in Sources */,
 				C75EE7D8201BBA820067BA16 /* UITextView+Animations.m in Sources */,
 				23C95EA61C0779C600E4692A /* SettingsChangePasswordViewController.m in Sources */,
 				AA08439F215C47290007BFD1 /* NabuNetworkError.swift in Sources */,
@@ -8926,6 +9094,7 @@
 				6762507D1A2CC5800052B63F /* BCEditAccountView.m in Sources */,
 				C723F3491F64413400A858A9 /* TransactionsViewController.m in Sources */,
 				602B9CF32118E15300BD3D60 /* KYCInformationController.swift in Sources */,
+				AA787A042187A63000E2D4CF /* DeepLinkHandler.swift in Sources */,
 				C74A0DE52174DFA000402A2F /* StellarAddress.swift in Sources */,
 				AA63F87720A39DCF002B719B /* AppFeature.swift in Sources */,
 				3A91F7962137067400CDC3FD /* Order.swift in Sources */,
@@ -8962,6 +9131,7 @@
 				AAA3316120895A9C00BBD292 /* LoadingViewPresenter.swift in Sources */,
 				606399DE2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */,
 				AA54E4F6216D3B3F005061F9 /* KYCStateSelectionInteractor.swift in Sources */,
+				AA755EED2188ED6800FC4894 /* StellarTradeLimitsAPI.swift in Sources */,
 				C7EA091E21766F640050FE81 /* Direction.swift in Sources */,
 				231FF2CD1B56F9F1009EEB02 /* SettingsWebViewController.m in Sources */,
 				C723F3461F61D35300A858A9 /* TransactionDetailViewModel.m in Sources */,
@@ -8976,6 +9146,7 @@
 				23FB5C0A1D9ABB590008C6AB /* TransactionDetailToCell.m in Sources */,
 				AACE32002093FA1A00B7B806 /* ReminderPresenter.swift in Sources */,
 				3A8B2292211E228C0091E706 /* KYCPageType.swift in Sources */,
+				7A4E882E218B595C00CB798C /* AnalyticsService.swift in Sources */,
 				C76D730420B2052000040B57 /* WalletPartnerExchangeDelegate.swift in Sources */,
 				AA084415215EF04A0007BFD1 /* LockboxAsset.swift in Sources */,
 				602B9CE02118E15300BD3D60 /* KYCNetworkRequest.swift in Sources */,
@@ -9021,6 +9192,7 @@
 				6780DB981A40BDF40048EED2 /* AccountInOut.m in Sources */,
 				51943596208E3005001EF882 /* BlockchainAPI+URL.swift in Sources */,
 				AA16D0EF217935550042AF7E /* StellarKeyPair.swift in Sources */,
+				C73037AA218B508C00F38BA8 /* InformationViewController.swift in Sources */,
 				23BF733C1C455DDB00204503 /* AccountsAndAddressesViewController.m in Sources */,
 				C7F157A82179214400A56376 /* SimpleListViewController.swift in Sources */,
 				AA94965E20CB5FA600A9C2DD /* AssetAddressFactory.swift in Sources */,
@@ -9030,6 +9202,7 @@
 				602B9CED2118E15300BD3D60 /* LocationSuggestionService.swift in Sources */,
 				AAE94F3F20C71379005A3595 /* AssetURLPayloadFactory.swift in Sources */,
 				9F1831E51516A45700FB3D52 /* NSString+SHA256.m in Sources */,
+				AA787A072187A86100E2D4CF /* DeepLinkRoute.swift in Sources */,
 				232ACBF51DAE84720072FB5E /* TransferAllFundsViewController.m in Sources */,
 				C7414E451FD7131C001A89FA /* ConfirmStateViewController.m in Sources */,
 				23E579541DB45F3A00220542 /* TransferAmountTableCell.m in Sources */,
@@ -9078,6 +9251,7 @@
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA126CE5212C99FF005886A3 /* KYCPageViewFactory.swift in Sources */,
 				C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */,
+				3A373C452188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,
 				3A26AF99212B36F2003A8A08 /* ExchangeCreateViewController.swift in Sources */,
 				AA126DA5212E2C3B005886A3 /* OnfidoCredentials.swift in Sources */,
@@ -9167,6 +9341,7 @@
 				C76D732C20B2F5CD00040B57 /* WalletFiatAtTimeDelegate.swift in Sources */,
 				AAD158DE2123740C0058B3C8 /* BlockchainDataRepository.swift in Sources */,
 				AAB43A892162C19C0015C863 /* Rx+Helpers.swift in Sources */,
+				AAB75A15218A733200A0AD11 /* CardsViewController+Airdrop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9596,47 +9771,47 @@
 			isa = PBXVariantGroup;
 			children = (
 				51E431FA2135D39B004C2B0C /* Base */,
-				51F5D14321542E3F003D6237 /* fr */,
-				51F5D14521542E41003D6237 /* es */,
-				51F5D14721542E42003D6237 /* de */,
-				51F5D14921542E43003D6237 /* zh-Hans */,
-				51F5D14B21542E44003D6237 /* ja */,
-				51F5D14D21542E45003D6237 /* it */,
-				51F5D14F21542E47003D6237 /* nl */,
-				51F5D15121542E48003D6237 /* ko */,
-				51F5D15321542E4A003D6237 /* sl */,
-				51F5D15521542E4B003D6237 /* hi */,
-				51F5D15721542E4C003D6237 /* es-ES */,
-				51F5D15921542E4E003D6237 /* vi */,
-				51F5D15B21542E4F003D6237 /* ms */,
-				51F5D15D21542E51003D6237 /* id */,
-				51F5D15F21542E52003D6237 /* uk */,
-				51F5D16121542E53003D6237 /* sk */,
-				51F5D16321542E57003D6237 /* ro */,
-				51F5D16521542E58003D6237 /* he */,
-				51F5D16721542E59003D6237 /* el */,
-				51F5D16921542E5A003D6237 /* hr */,
-				51F5D16B21542E5C003D6237 /* hu */,
-				51F5D16D21542E5D003D6237 /* cs */,
-				51F5D16F21542E5E003D6237 /* th */,
-				51F5D17121542E60003D6237 /* ar */,
-				51F5D17321542E61003D6237 /* tr */,
-				51F5D17521542E62003D6237 /* pl */,
-				51F5D17721542E64003D6237 /* ru */,
-				51F5D17921542E65003D6237 /* sv */,
-				51F5D17B21542E66003D6237 /* nb */,
-				51F5D17D21542E68003D6237 /* fi */,
-				51F5D17F21542E6A003D6237 /* da */,
-				51F5D18121542E6B003D6237 /* pt-PT */,
-				51F5D18321542E6D003D6237 /* pt */,
-				51F5D18521542E6E003D6237 /* zh-Hant */,
-				51F5D18721542E72003D6237 /* sv-SE */,
-				51F5D18921542E73003D6237 /* zh-CN */,
-				51F5D18B21542E74003D6237 /* zh-TW */,
-				51F5D18D21542E75003D6237 /* es-MX */,
-				51F5D18F21542E77003D6237 /* zh */,
-				51F5D19121542E78003D6237 /* ca */,
-				51F5D19321542E79003D6237 /* pt-BR */,
+				518DBB5B2188AFAB0070453E /* fr */,
+				518DBB5D2188AFB20070453E /* es */,
+				518DBB5F2188AFB90070453E /* de */,
+				518DBB612188AFC00070453E /* zh-Hans */,
+				518DBB632188AFC70070453E /* ja */,
+				518DBB652188AFCE0070453E /* it */,
+				518DBB672188AFD50070453E /* nl */,
+				518DBB692188AFDC0070453E /* ko */,
+				518DBB6B2188AFE30070453E /* zh-Hant */,
+				518DBB6D2188AFEA0070453E /* pt */,
+				518DBB6F2188AFF00070453E /* pt-PT */,
+				518DBB712188AFF70070453E /* da */,
+				518DBB732188AFFD0070453E /* fi */,
+				518DBB752188B0050070453E /* nb */,
+				518DBB772188B00B0070453E /* sv */,
+				518DBB792188B0130070453E /* ru */,
+				518DBB7B2188B01C0070453E /* tr */,
+				518DBB7D2188B0220070453E /* pl */,
+				518DBB7F2188B0280070453E /* ar */,
+				518DBB812188B02F0070453E /* th */,
+				518DBB832188B0360070453E /* cs */,
+				518DBB852188B03D0070453E /* hu */,
+				518DBB872188B0430070453E /* hr */,
+				518DBB892188B04A0070453E /* el */,
+				518DBB8B2188B0510070453E /* he */,
+				518DBB8D2188B0580070453E /* ro */,
+				518DBB8F2188B0600070453E /* sk */,
+				518DBB912188B06A0070453E /* uk */,
+				518DBB932188B0730070453E /* id */,
+				518DBB952188B07A0070453E /* ms */,
+				518DBB972188B0800070453E /* vi */,
+				518DBB992188B0890070453E /* es-ES */,
+				518DBB9B2188B0900070453E /* hi */,
+				518DBB9D2188B0BF0070453E /* sl */,
+				518DBB9F2188B0C60070453E /* sv-SE */,
+				518DBBA12188B0CE0070453E /* zh-CN */,
+				518DBBA32188B0D50070453E /* zh-TW */,
+				518DBBA52188B0DC0070453E /* es-MX */,
+				518DBBA72188B0E30070453E /* pt-BR */,
+				518DBBA92188B0ED0070453E /* ca */,
+				518DBBAB2188B0F40070453E /* zh */,
 			);
 			name = KYCPersonalDetailsController.storyboard;
 			sourceTree = "<group>";
@@ -9743,47 +9918,47 @@
 			isa = PBXVariantGroup;
 			children = (
 				51F5D0EE21542D82003D6237 /* Base */,
-				51F5D0F121542D86003D6237 /* fr */,
-				51F5D0F321542D87003D6237 /* es */,
-				51F5D0F521542D88003D6237 /* de */,
-				51F5D0F721542D89003D6237 /* zh-Hans */,
-				51F5D0F921542D8B003D6237 /* ja */,
-				51F5D0FB21542D8C003D6237 /* it */,
-				51F5D0FD21542D8E003D6237 /* nl */,
-				51F5D0FF21542D8F003D6237 /* ko */,
-				51F5D10121542D90003D6237 /* zh-Hant */,
-				51F5D10321542D91003D6237 /* pt */,
-				51F5D10521542D92003D6237 /* pt-PT */,
-				51F5D10721542D93003D6237 /* da */,
-				51F5D10921542D96003D6237 /* zh */,
-				51F5D10B21542D97003D6237 /* ca */,
-				51F5D10D21542D98003D6237 /* pt-BR */,
-				51F5D10F21542D99003D6237 /* es-MX */,
-				51F5D11121542D9A003D6237 /* zh-TW */,
-				51F5D11321542D9C003D6237 /* zh-CN */,
-				51F5D11521542D9D003D6237 /* sv-SE */,
-				51F5D11721542D9E003D6237 /* sl */,
-				51F5D11921542DA0003D6237 /* hi */,
-				51F5D11B21542DA1003D6237 /* es-ES */,
-				51F5D11D21542DA2003D6237 /* vi */,
-				51F5D11F21542DA3003D6237 /* ms */,
-				51F5D12121542DA5003D6237 /* id */,
-				51F5D12321542DA6003D6237 /* uk */,
-				51F5D12521542DA7003D6237 /* sk */,
-				51F5D12721542DA9003D6237 /* ro */,
-				51F5D12921542DAA003D6237 /* he */,
-				51F5D12B21542DAC003D6237 /* el */,
-				51F5D12D21542DAD003D6237 /* hr */,
-				51F5D12F21542DAF003D6237 /* hu */,
-				51F5D13121542DB0003D6237 /* cs */,
-				51F5D13321542DB2003D6237 /* th */,
-				51F5D13521542DB3003D6237 /* ar */,
-				51F5D13721542DB4003D6237 /* tr */,
-				51F5D13921542DB5003D6237 /* pl */,
-				51F5D13B21542DB7003D6237 /* ru */,
-				51F5D13D21542DB8003D6237 /* sv */,
-				51F5D13F21542DB9003D6237 /* nb */,
-				51F5D14121542DBA003D6237 /* fi */,
+				518DBB092188AE480070453E /* fr */,
+				518DBB0B2188AE520070453E /* es */,
+				518DBB0D2188AE590070453E /* de */,
+				518DBB0F2188AE620070453E /* zh-Hans */,
+				518DBB112188AE6F0070453E /* ja */,
+				518DBB132188AE780070453E /* it */,
+				518DBB152188AE800070453E /* nl */,
+				518DBB172188AE850070453E /* ko */,
+				518DBB192188AE8C0070453E /* zh-Hant */,
+				518DBB1B2188AE920070453E /* pt */,
+				518DBB1D2188AE990070453E /* pt-PT */,
+				518DBB1F2188AE9F0070453E /* da */,
+				518DBB212188AEA60070453E /* fi */,
+				518DBB232188AEAD0070453E /* nb */,
+				518DBB252188AEB40070453E /* sv */,
+				518DBB272188AEBA0070453E /* ru */,
+				518DBB292188AEC10070453E /* pl */,
+				518DBB2B2188AEC70070453E /* tr */,
+				518DBB2D2188AECF0070453E /* ar */,
+				518DBB2F2188AED60070453E /* th */,
+				518DBB312188AEDD0070453E /* cs */,
+				518DBB332188AEE40070453E /* hu */,
+				518DBB352188AEEB0070453E /* hr */,
+				518DBB372188AEF20070453E /* el */,
+				518DBB392188AEF90070453E /* he */,
+				518DBB3B2188AF000070453E /* zh */,
+				518DBB3D2188AF070070453E /* ca */,
+				518DBB3F2188AF0E0070453E /* pt-BR */,
+				518DBB412188AF150070453E /* es-MX */,
+				518DBB432188AF1C0070453E /* zh-TW */,
+				518DBB452188AF230070453E /* zh-CN */,
+				518DBB472188AF290070453E /* sv-SE */,
+				518DBB492188AF300070453E /* sl */,
+				518DBB4B2188AF370070453E /* ro */,
+				518DBB4D2188AF3E0070453E /* sk */,
+				518DBB4F2188AF450070453E /* uk */,
+				518DBB512188AF4C0070453E /* id */,
+				518DBB532188AF540070453E /* ms */,
+				518DBB552188AF5B0070453E /* vi */,
+				518DBB572188AF610070453E /* es-ES */,
+				518DBB592188AF690070453E /* hi */,
 			);
 			name = KYCEnterPhoneNumberController.storyboard;
 			sourceTree = "<group>";
@@ -9841,47 +10016,47 @@
 			isa = PBXVariantGroup;
 			children = (
 				51F5D1EA21542F6D003D6237 /* Base */,
-				51F5D1ED21542F70003D6237 /* fr */,
-				51F5D1EF21542F73003D6237 /* es */,
-				51F5D1F121542F74003D6237 /* de */,
-				51F5D1F321542F75003D6237 /* zh-Hans */,
-				51F5D1F521542F76003D6237 /* ja */,
-				51F5D1F721542F78003D6237 /* it */,
-				51F5D1F921542F78003D6237 /* nl */,
-				51F5D1FB21542F7A003D6237 /* ko */,
-				51F5D1FD21542F7B003D6237 /* zh-Hant */,
-				51F5D1FF21542F7D003D6237 /* pt */,
-				51F5D20121542F7F003D6237 /* pt-PT */,
-				51F5D20321542F80003D6237 /* da */,
-				51F5D20521542F81003D6237 /* fi */,
-				51F5D20721542F83003D6237 /* nb */,
-				51F5D20921542F84003D6237 /* sv */,
-				51F5D20B21542F86003D6237 /* ru */,
-				51F5D20D21542F87003D6237 /* pl */,
-				51F5D20F21542F89003D6237 /* tr */,
-				51F5D21121542F8B003D6237 /* ar */,
-				51F5D21321542F8C003D6237 /* th */,
-				51F5D21521542F8D003D6237 /* cs */,
-				51F5D21721542F8E003D6237 /* hu */,
-				51F5D21921542F8F003D6237 /* hr */,
-				51F5D21B21542F91003D6237 /* el */,
-				51F5D21D21542F92003D6237 /* he */,
-				51F5D21F21542F93003D6237 /* ro */,
-				51F5D22121542F95003D6237 /* zh */,
-				51F5D22321542F96003D6237 /* ca */,
-				51F5D22521542F98003D6237 /* pt-BR */,
-				51F5D22721542F99003D6237 /* es-MX */,
-				51F5D22921542F9A003D6237 /* zh-TW */,
-				51F5D22B21542F9B003D6237 /* zh-CN */,
-				51F5D22D21542F9D003D6237 /* sv-SE */,
-				51F5D22F21542F9E003D6237 /* sl */,
-				51F5D23121542F9F003D6237 /* hi */,
-				51F5D23321542FA1003D6237 /* es-ES */,
-				51F5D23521542FA2003D6237 /* vi */,
-				51F5D23721542FA3003D6237 /* ms */,
-				51F5D23921542FA5003D6237 /* id */,
-				51F5D23B21542FA6003D6237 /* uk */,
-				51F5D23D21542FA7003D6237 /* sk */,
+				518DBBAD2188B1400070453E /* fr */,
+				518DBBAF2188B1470070453E /* es */,
+				518DBBB12188B14E0070453E /* de */,
+				518DBBB32188B1540070453E /* zh-Hans */,
+				518DBBB52188B15B0070453E /* ja */,
+				518DBBB72188B1620070453E /* it */,
+				518DBBB92188B1690070453E /* nl */,
+				518DBBBB2188B1730070453E /* ko */,
+				518DBBBD2188B1790070453E /* zh-Hant */,
+				518DBBBF2188B1810070453E /* pt */,
+				518DBBC12188B1870070453E /* pt-PT */,
+				518DBBC32188B18E0070453E /* da */,
+				518DBBC52188B1950070453E /* fi */,
+				518DBBC72188B19C0070453E /* zh */,
+				518DBBC92188B1A20070453E /* ca */,
+				518DBBCB2188B1A90070453E /* pt-BR */,
+				518DBBCD2188B1B10070453E /* es-MX */,
+				518DBBCF2188B1BA0070453E /* zh-TW */,
+				518DBBD12188B1C00070453E /* zh-CN */,
+				518DBBD32188B1C70070453E /* sv-SE */,
+				518DBBD52188B1D00070453E /* sl */,
+				518DBBD72188B1D60070453E /* hi */,
+				518DBBD92188B1DD0070453E /* es-ES */,
+				518DBBDB2188B1E40070453E /* vi */,
+				518DBBDD2188B1EC0070453E /* ms */,
+				518DBBDF2188B1F40070453E /* id */,
+				518DBBE12188B1FA0070453E /* nb */,
+				518DBBE32188B2010070453E /* sv */,
+				518DBBE52188B2080070453E /* ru */,
+				518DBBE72188B20E0070453E /* pl */,
+				518DBBE92188B2160070453E /* tr */,
+				518DBBEB2188B21C0070453E /* ar */,
+				518DBBED2188B2240070453E /* th */,
+				518DBBEF2188B22A0070453E /* cs */,
+				518DBBF12188B2310070453E /* hu */,
+				518DBBF32188B2380070453E /* hr */,
+				518DBBF52188B23F0070453E /* el */,
+				518DBBF72188B2460070453E /* he */,
+				518DBBF92188B24F0070453E /* ro */,
+				518DBBFB2188B2560070453E /* sk */,
+				518DBBFD2188B25D0070453E /* uk */,
 			);
 			name = KYCWelcomeController.storyboard;
 			sourceTree = "<group>";
@@ -9890,47 +10065,47 @@
 			isa = PBXVariantGroup;
 			children = (
 				51FE911E213867FD00F49B12 /* Base */,
-				51F5CFA0215429A3003D6237 /* fr */,
-				51F5CFA2215429A7003D6237 /* es */,
-				51F5CFA4215429B3003D6237 /* de */,
-				51F5CFA6215429B7003D6237 /* zh-Hans */,
-				51F5CFA8215429BB003D6237 /* ja */,
-				51F5CFAA215429BE003D6237 /* zh */,
-				51F5CFAC215429C1003D6237 /* ca */,
-				51F5CFAE215429C3003D6237 /* pt-BR */,
-				51F5CFB0215429C5003D6237 /* es-MX */,
-				51F5CFB2215429C7003D6237 /* zh-TW */,
-				51F5CFB4215429CA003D6237 /* zh-CN */,
-				51F5CFB6215429D1003D6237 /* sv-SE */,
-				51F5CFB8215429D6003D6237 /* sl */,
-				51F5CFBA215429DC003D6237 /* hi */,
-				51F5CFBC215429DF003D6237 /* es-ES */,
-				51F5CFBE215429E1003D6237 /* vi */,
-				51F5CFC0215429E6003D6237 /* uk */,
-				51F5CFC2215429EC003D6237 /* it */,
-				51F5CFC4215429EF003D6237 /* nl */,
-				51F5CFC6215429F1003D6237 /* ko */,
-				51F5CFC8215429F4003D6237 /* zh-Hant */,
-				51F5CFCA215429F5003D6237 /* id */,
-				51F5CFCC215429F7003D6237 /* ms */,
-				51F5CFCE215429FE003D6237 /* sk */,
-				51F5CFD021542A00003D6237 /* ro */,
-				51F5CFD221542A01003D6237 /* he */,
-				51F5CFD421542A03003D6237 /* el */,
-				51F5CFD621542A04003D6237 /* hr */,
-				51F5CFD821542A06003D6237 /* hu */,
-				51F5CFDA21542A07003D6237 /* cs */,
-				51F5CFDC21542A0B003D6237 /* th */,
-				51F5CFDE21542A0C003D6237 /* ar */,
-				51F5CFE021542A0D003D6237 /* tr */,
-				51F5CFE221542A0F003D6237 /* pl */,
-				51F5CFE421542A11003D6237 /* ru */,
-				51F5CFE621542A12003D6237 /* sv */,
-				51F5CFE821542A14003D6237 /* fi */,
-				51F5CFEA21542A16003D6237 /* nb */,
-				51F5CFEC21542A1A003D6237 /* da */,
-				51F5CFEE21542A1C003D6237 /* pt-PT */,
-				51F5CFF021542A1D003D6237 /* pt */,
+				518DBAB72188ACC40070453E /* fr */,
+				518DBAB92188ACCB0070453E /* es */,
+				518DBABB2188ACD30070453E /* de */,
+				518DBABD2188ACDB0070453E /* zh-Hans */,
+				518DBABF2188ACE50070453E /* zh */,
+				518DBAC12188ACED0070453E /* ca */,
+				518DBAC32188ACF40070453E /* pt-BR */,
+				518DBAC52188AD040070453E /* ko */,
+				518DBAC72188AD0B0070453E /* nl */,
+				518DBAC92188AD130070453E /* it */,
+				518DBACB2188AD1B0070453E /* ja */,
+				518DBACD2188AD220070453E /* sk */,
+				518DBACF2188AD2C0070453E /* ro */,
+				518DBAD12188AD330070453E /* he */,
+				518DBAD32188AD3A0070453E /* uk */,
+				518DBAD52188AD440070453E /* vi */,
+				518DBAD72188AD4C0070453E /* es-ES */,
+				518DBAD92188AD530070453E /* ms */,
+				518DBADB2188AD5D0070453E /* zh-Hant */,
+				518DBADD2188AD640070453E /* pt */,
+				518DBADF2188AD6B0070453E /* pt-PT */,
+				518DBAE12188AD720070453E /* da */,
+				518DBAE32188AD790070453E /* fi */,
+				518DBAE52188AD850070453E /* id */,
+				518DBAE72188AD8C0070453E /* el */,
+				518DBAE92188AD920070453E /* hr */,
+				518DBAEB2188AD9B0070453E /* hu */,
+				518DBAED2188ADA20070453E /* nb */,
+				518DBAEF2188ADA90070453E /* sv */,
+				518DBAF12188ADB00070453E /* ru */,
+				518DBAF32188ADB70070453E /* pl */,
+				518DBAF52188ADBE0070453E /* tr */,
+				518DBAF72188ADC50070453E /* ar */,
+				518DBAF92188ADCB0070453E /* th */,
+				518DBAFB2188ADD20070453E /* cs */,
+				518DBAFD2188ADD90070453E /* hi */,
+				518DBAFF2188ADE00070453E /* sl */,
+				518DBB012188ADE70070453E /* sv-SE */,
+				518DBB032188ADEE0070453E /* zh-TW */,
+				518DBB052188ADF50070453E /* zh-CN */,
+				518DBB072188ADFC0070453E /* es-MX */,
 			);
 			name = KYCAddressController.storyboard;
 			sourceTree = "<group>";
@@ -10400,7 +10575,7 @@
 					"$(inherited)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rainydayapps.Blockchain;
 				PRODUCT_NAME = Blockchain;
@@ -10778,7 +10953,7 @@
 					"$(inherited)",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rainydayapps.Blockchain;
 				PRODUCT_NAME = Blockchain;

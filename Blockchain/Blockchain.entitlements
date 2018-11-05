@@ -4,5 +4,10 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:blockchainwallet.page.link</string>
+		<string>applinks:blockchainwalletstaging.page.link</string>
+	</array>
 </dict>
 </plist>

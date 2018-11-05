@@ -52,6 +52,7 @@ class PushNotificationManager: NSObject {
         userInfo: [AnyHashable: Any],
         fetchCompletionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
+        AnalyticsService.shared.trackEvent(title: "push_notification")
         if application.applicationState == .inactive {
             application.applicationIconBadgeNumber += 1
         }

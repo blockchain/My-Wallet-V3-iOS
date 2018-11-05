@@ -106,6 +106,7 @@
             surgeIsOccurring:(BOOL)surgeIsOccurring
                     noteText:(NSString *_Nullable)noteText
                  warningText:(NSAttributedString *_Nullable)warningText
+            descriptionTitle:(NSString * _Nullable)descriptionTitle
 {
     self = [super init];
     if (self) {
@@ -120,6 +121,7 @@
         self.surgeIsOccurring = surgeIsOccurring;
         self.noteText = noteText;
         self.warningText = warningText;
+        self.descriptionTitle = descriptionTitle;
     }
     return self;
 }

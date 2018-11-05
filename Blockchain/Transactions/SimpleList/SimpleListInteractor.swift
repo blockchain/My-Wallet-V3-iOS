@@ -35,8 +35,9 @@ class SimpleListInteractor: NSObject, SimpleListInput {
         return false
     }
 
-    func itemSelectedWith(identifier: String) -> Identifiable? {
-        return nil
+    func selected(_ item: Identifiable) {
+        guard service?.isExecuting() == false else { return }
+        service?.fetchDetails(for: item, output: output)
     }
 
     func nextPageBefore(identifier: String) {

@@ -11,22 +11,38 @@ import Foundation
 protocol SendXLMViewControllerDelegate: class {
     func onLoad()
     func onAppear()
+    func onMemoTextSelection()
+    func onMemoIDSelection()
     func onXLMEntry(_ value: String, latestPrice: Decimal)
     func onFiatEntry(_ value: String, latestPrice: Decimal)
-    func onPrimaryTapped(toAddress: String, amount: Decimal, feeInXlm: Decimal)
+    func onStellarAddressEntry()
+    func onPrimaryTapped(toAddress: String, amount: Decimal, feeInXlm: Decimal, memo: StellarMemoType?)
     func onConfirmPayTapped(_ paymentOperation: StellarPaymentOperation)
-    func onUseMaxTapped()
+    func onMinimumBalanceInfoTapped()
 }
 
 @objc class SendLumensViewController: UIViewController, BottomButtonContainerView {
-    
+
+    fileprivate static let topToStackView: CGFloat = 12.0
+    fileprivate static let maximumMemoTextLength: Int = 28
+
+    fileprivate var keyboardHeight: CGFloat {
+        let type = UIDevice.current.type
+        if type.isBelow(.iPhone8Plus) {
+            return 216
+        } else {
+            return 226
+        }
+    }
+
     // MARK: BottomButtonContainerView
-    
+
     var originalBottomButtonConstraint: CGFloat!
+    var optionalOffset: CGFloat = -50
     @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
-    
+
     // MARK: Private IBOutlets (UILabel)
-    
+
     @IBOutlet fileprivate var fromLabel: UILabel!
     @IBOutlet fileprivate var toLabel: UILabel!
     @IBOutlet fileprivate var walletNameLabel: UILabel!
@@ -35,46 +51,76 @@ protocol SendXLMViewControllerDelegate: class {
     @IBOutlet fileprivate var errorLabel: UILabel!
     @IBOutlet fileprivate var stellarSymbolLabel: UILabel!
     @IBOutlet fileprivate var fiatSymbolLabel: UILabel!
-    
+    @IBOutlet fileprivate var memoLabel: UILabel!
+
     // MARK: Private IBOutlets (UITextField)
-    
+
     @IBOutlet fileprivate var stellarAddressField: UITextField!
     @IBOutlet fileprivate var stellarAmountField: UITextField!
     @IBOutlet fileprivate var fiatAmountField: UITextField!
-    
+    @IBOutlet fileprivate var memoTextField: UITextField!
+    @IBOutlet fileprivate var memoIDTextField: UITextField!
+
+    fileprivate var inputFields: [UITextField] {
+        return [
+            stellarAddressField,
+            stellarAmountField,
+            fiatAmountField,
+            memoTextField,
+            memoIDTextField
+        ]
+    }
+
     // MARK: Private IBOutlets (Other)
-    
+
+    @IBOutlet fileprivate var topToStackViewConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate var useMaxLabel: ActionableLabel!
     @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
     @IBOutlet fileprivate var learnAbountStellarButton: UIButton!
-    
+    @IBOutlet fileprivate var bottomStackView: UIStackView!
+    @IBOutlet fileprivate var memoSelectionTypeButton: UIButton!
+
     weak var delegate: SendXLMViewControllerDelegate?
     fileprivate var coordinator: SendXLMCoordinator!
     fileprivate var trigger: ActionableTrigger?
+    fileprivate var memo: StellarMemoType?
+    fileprivate var toolbar: UIToolbar?
 
     // MARK: - Models
     private var pendingPaymentOperation: StellarPaymentOperation?
     private var latestPrice: Decimal? // fiat per whole unit
     private var xlmAmount: Decimal?
     private var xlmFee: Decimal?
+    private var baseReserve: Decimal?
 
     // MARK: Factory
-    
-    @objc class func make() -> SendLumensViewController {
+
+    @objc class func make(with provider: XLMServiceProvider) -> SendLumensViewController {
         let controller = SendLumensViewController.makeFromStoryboard()
+        controller.coordinator = SendXLMCoordinator(
+            serviceProvider: provider,
+            interface: controller,
+            modelInterface: controller
+        )
         return controller
     }
-    
+
     // MARK: ViewUpdate
-    
+
     enum PresentationUpdate {
         case activityIndicatorVisibility(Visibility)
         case errorLabelVisibility(Visibility)
         case learnAboutStellarButtonVisibility(Visibility)
         case actionableLabelVisibility(Visibility)
+        case memoTextFieldVisibility(Visibility)
+        case memoIDTextFieldVisibility(Visibility)
+        case memoSelectionButtonVisibility(Visibility)
+        case memoTextFieldShouldBeginEditing
+        case memoIDFieldShouldBeginEditing
         case errorLabelText(String)
         case feeAmountLabelText()
         case stellarAddressText(String)
+        case stellarAddressTextColor(UIColor)
         case xlmFieldTextColor(UIColor)
         case fiatFieldTextColor(UIColor)
         case actionableLabelTrigger(ActionableTrigger)
@@ -82,8 +128,9 @@ protocol SendXLMViewControllerDelegate: class {
         case showPaymentConfirmation(StellarPaymentOperation)
         case hidePaymentConfirmation
         case paymentSuccess
-        case stellarAmountText(String)
-        case fiatAmountText(String)
+        case stellarAmountText(String?)
+        case fiatAmountText(String?)
+        case fiatSymbolLabel(String?)
     }
 
     // MARK: Public Methods
@@ -94,14 +141,11 @@ protocol SendXLMViewControllerDelegate: class {
         qrCodeScanner.delegate = self
         present(qrCodeScanner, animated: false)
     }
-    
+
     // MARK: Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        let services = XLMServices(configuration: .test)
-        let provider = XLMServiceProvider(services: services)
-        coordinator = SendXLMCoordinator(serviceProvider: provider, interface: self, modelInterface: self)
         view.frame = UIView.rootViewSafeAreaFrame(
             navigationBar: true,
             tabBar: true,
@@ -109,13 +153,18 @@ protocol SendXLMViewControllerDelegate: class {
         )
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         setUpBottomButtonContainerView()
+        setupMemoIDField()
         useMaxLabel.delegate = self
+        memoTextField.delegate = self
+        stellarAddressField.delegate = self
         primaryButtonContainer.isEnabled = true
+        learnAbountStellarButton.titleLabel?.textAlignment = .center
         primaryButtonContainer.actionBlock = { [unowned self] in
             guard let toAddress = self.stellarAddressField.text else { return }
             guard let amount = self.xlmAmount else { return }
             guard let fee = self.xlmFee else { return }
-            self.delegate?.onPrimaryTapped(toAddress: toAddress, amount: amount, feeInXlm: fee)
+            self.inputFields.forEach({ $0.resignFirstResponder() })
+            self.delegate?.onPrimaryTapped(toAddress: toAddress, amount: amount, feeInXlm: fee, memo: self.memo)
         }
         delegate?.onLoad()
     }
@@ -124,14 +173,38 @@ protocol SendXLMViewControllerDelegate: class {
         super.viewDidAppear(animated)
         delegate?.onAppear()
     }
-    
+
+    fileprivate func clearMemoField() {
+        /// Users may change their mind and want to enter in a
+        /// `Int` as their memo as opposed to a string value.
+        /// So we do this when they have deleted everything in
+        /// the memo field.
+        [memoTextField, memoIDTextField].forEach({ $0?.resignFirstResponder() })
+        memo = nil
+        apply(updates: [.memoTextFieldVisibility(.visible),
+                        .memoIDTextFieldVisibility(.hidden),
+                        .memoSelectionButtonVisibility(.visible)])
+    }
+
+    fileprivate func setupMemoIDField() {
+        toolbar = UIToolbar()
+        toolbar?.sizeToFit()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(resignMemoIDField))
+        toolbar?.items = [doneButton]
+        memoIDTextField.inputAccessoryView = toolbar
+    }
+
+    @objc func resignMemoIDField() {
+        memoIDTextField.resignFirstResponder()
+    }
+
     fileprivate func useMaxAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
         return [.font: font,
                 .foregroundColor: UIColor.darkGray]
     }
-    
+
     fileprivate func useMaxActionAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
@@ -140,8 +213,19 @@ protocol SendXLMViewControllerDelegate: class {
     }
 
     // swiftlint:disable function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     fileprivate func apply(_ update: PresentationUpdate) {
         switch update {
+        case .memoTextFieldVisibility(let visibility):
+            memoTextField.alpha = visibility.defaultAlpha
+        case .memoIDTextFieldVisibility(let visibility):
+            memoIDTextField.alpha = visibility.defaultAlpha
+        case .memoSelectionButtonVisibility(let visibility):
+            memoSelectionTypeButton.alpha = visibility.defaultAlpha
+            guard visibility == .visible else { return }
+            memoIDTextField.text = nil
+            memoTextField.text = nil
+
         case .activityIndicatorVisibility(let visibility):
             primaryButtonContainer.isLoading = (visibility == .visible)
         case .errorLabelVisibility(let visibility):
@@ -150,6 +234,10 @@ protocol SendXLMViewControllerDelegate: class {
             learnAbountStellarButton.isHidden = visibility.isHidden
         case .actionableLabelVisibility(let visibility):
             useMaxLabel.isHidden = visibility.isHidden
+        case .memoTextFieldShouldBeginEditing:
+            memoTextField.becomeFirstResponder()
+        case .memoIDFieldShouldBeginEditing:
+            memoIDTextField.becomeFirstResponder()
         case .errorLabelText(let value):
             errorLabel.text = value
         case .feeAmountLabelText:
@@ -158,16 +246,15 @@ protocol SendXLMViewControllerDelegate: class {
             let assetType: AssetType = .stellar
             let xlmSymbol = assetType.symbol
             let feeFormatted = NumberFormatter.stellarFormatter.string(from: NSDecimalNumber(decimal: fee)) ?? "\(fee)"
-            guard let fiatCurrencySymbol = BlockchainSettings.sharedAppInstance().fiatCurrencySymbol else {
-                feeAmountLabel.text = feeFormatted + " " + xlmSymbol
-                return
-            }
+            let fiatCurrencySymbol = BlockchainSettings.sharedAppInstance().fiatCurrencySymbol
             let fiatAmount = price * fee
             let fiatFormatted = NumberFormatter.localCurrencyFormatter.string(from: NSDecimalNumber(decimal: fiatAmount)) ?? "\(fiatAmount)"
             let fiatText = fiatCurrencySymbol + fiatFormatted
-            feeAmountLabel.text = feeFormatted + " " + "(\(fiatText))"
+            feeAmountLabel.text = "\(feeFormatted) \(xlmSymbol) (\(fiatText))"
         case .stellarAddressText(let value):
             stellarAddressField.text = value
+        case .stellarAddressTextColor(let color):
+            stellarAddressField.textColor = color
         case .xlmFieldTextColor(let color):
             stellarAmountField.textColor = color
         case .fiatFieldTextColor(let color):
@@ -178,14 +265,14 @@ protocol SendXLMViewControllerDelegate: class {
                 string: trigger.primaryString,
                 attributes: useMaxAttributes()
             )
-            
+
             let CTA = NSAttributedString(
                 string: " " + trigger.callToAction,
                 attributes: useMaxActionAttributes()
             )
-            
+
             primary.append(CTA)
-            
+
             if let secondary = trigger.secondaryString {
                 let trailing = NSMutableAttributedString(
                     string: " " + secondary,
@@ -193,7 +280,7 @@ protocol SendXLMViewControllerDelegate: class {
                 )
                 primary.append(trailing)
             }
-            
+
             useMaxLabel.attributedText = primary
         case .primaryButtonEnabled(let enabled):
             primaryButtonContainer.isEnabled = enabled
@@ -207,8 +294,9 @@ protocol SendXLMViewControllerDelegate: class {
             stellarAmountField.text = text
         case .fiatAmountText(let text):
             fiatAmountField.text = text
+        case .fiatSymbolLabel(let text):
+            fiatSymbolLabel.text = text
         }
-
     }
 
     private func showPaymentSuccess() {
@@ -234,11 +322,42 @@ protocol SendXLMViewControllerDelegate: class {
             headerText: LocalizationConstants.SendAsset.confirmPayment
         )
     }
+
+    @IBAction private func learnAboutStellarButtonTapped(_ sender: Any) {
+        delegate?.onMinimumBalanceInfoTapped()
+    }
+
+    @IBAction private func memoSelectionTypeTapped(_ sender: UIButton) {
+        let title = LocalizationConstants.Stellar.memoDescription
+        let memoTextOption = LocalizationConstants.Stellar.memoText
+        let memoTextID = LocalizationConstants.Stellar.memoID
+        let controller = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+
+        [memoTextOption, memoTextID].forEach { option in
+            let action = UIAlertAction(title: option, style: .default, handler: { [unowned self] _ in
+                switch option {
+                case memoTextOption:
+                    self.delegate?.onMemoTextSelection()
+
+                case memoTextID:
+                    self.delegate?.onMemoIDSelection()
+                default:
+                    break
+                }
+            })
+            controller.addAction(action)
+        }
+        present(controller, animated: true, completion: nil)
+    }
 }
 
 extension SendLumensViewController: SendXLMInterface {
     func apply(updates: [PresentationUpdate]) {
         updates.forEach({ apply($0) })
+    }
+
+    func present(viewController: UIViewController) {
+        AppCoordinator.shared.tabControllerManager.tabViewController.present(viewController, animated: true)
     }
 }
 
@@ -260,7 +379,7 @@ extension SendLumensViewController: ActionableLabelDelegate {
     func targetRange(_ label: ActionableLabel) -> NSRange? {
         return trigger?.actionRange()
     }
-    
+
     func actionRequestingExecution(label: ActionableLabel) {
         guard let trigger = trigger else { return }
         trigger.execute()
@@ -287,34 +406,40 @@ extension BCConfirmPaymentViewModel {
     ) -> BCConfirmPaymentViewModel {
         // TODO: Refactor, move formatting out
         let assetType: AssetType = .stellar
-        let xlmSymbol = assetType.symbol
-        let fiatCurrencySymbol = BlockchainSettings.sharedAppInstance().fiatCurrencySymbol ?? ""
+        let amountXlm = paymentOperation.amountInXlm
+        let feeXlm = paymentOperation.feeInXlm
 
-        let amountXlmDecimalNumber = NSDecimalNumber(decimal: paymentOperation.amountInXlm)
-        let amountXlmString = NumberFormatter.stellarFormatter.string(from: amountXlmDecimalNumber) ?? "\(paymentOperation.amountInXlm)"
-        let amountXlmStringWithSymbol = amountXlmString + " " + xlmSymbol
+        let amountXlmDecimalNumber = NSDecimalNumber(decimal: amountXlm)
+        let amountXlmString = NumberFormatter.stellarFormatter.string(from: amountXlmDecimalNumber) ?? "\(amountXlm)"
+        let amountXlmStringWithSymbol = amountXlmString.appendAssetSymbol(for: assetType)
 
         let feeXlmDecimalNumber = NSDecimalNumber(decimal: paymentOperation.feeInXlm)
-        let feeXlmString = NumberFormatter.stellarFormatter.string(from: feeXlmDecimalNumber) ?? "\(paymentOperation.feeInXlm)"
-        let feeXlmStringWithSymbol = feeXlmString + " " + xlmSymbol
+        let feeXlmString = NumberFormatter.stellarFormatter.string(from: feeXlmDecimalNumber) ?? "\(feeXlm)"
+        let feeXlmStringWithSymbol = feeXlmString.appendAssetSymbol(for: assetType)
+
+        let totalXlmDecimalNumber = NSDecimalNumber(decimal: amountXlm + feeXlm)
+        let totalXlmString = NumberFormatter.stellarFormatter.string(from: totalXlmDecimalNumber) ?? "\(amountXlm)"
+        let totalXlmStringWithSymbol = totalXlmString.appendAssetSymbol(for: assetType)
 
         let fiatTotalAmountText: String
         let cryptoWithFiatAmountText: String
         let amountWithFiatFeeText: String
 
         if let decimalPrice = price {
-            let fiatAmount = NSDecimalNumber(decimal: decimalPrice).multiplying(by: NSDecimalNumber(decimal: paymentOperation.amountInXlm))
-            let fiatAmountFormatted = NumberFormatter.localCurrencyFormatter.string(from: fiatAmount)
-            fiatTotalAmountText = fiatAmountFormatted == nil ? "" : (fiatCurrencySymbol + fiatAmountFormatted!)
-            cryptoWithFiatAmountText = fiatTotalAmountText.isEmpty ?
-                amountXlmStringWithSymbol :
-                "\(amountXlmStringWithSymbol) (\(fiatTotalAmountText))"
-
-            let fiatFee = NSDecimalNumber(decimal: decimalPrice).multiplying(by: NSDecimalNumber(decimal: paymentOperation.feeInXlm))
-            let fiatFeeText = NumberFormatter.localCurrencyFormatter.string(from: fiatFee) ?? ""
-            amountWithFiatFeeText = fiatFeeText.isEmpty ?
-                feeXlmStringWithSymbol :
-                "\(feeXlmStringWithSymbol) (\(fiatCurrencySymbol)\(fiatFeeText))"
+            fiatTotalAmountText = NumberFormatter.localCurrencyAmount(
+                fromAmount: amountXlm + feeXlm,
+                fiatPerAmount: decimalPrice
+            ).appendCurrencySymbol()
+            cryptoWithFiatAmountText = NumberFormatter.formattedAssetAndFiatAmountWithSymbols(
+                fromAmount: amountXlm,
+                fiatPerAmount: decimalPrice,
+                assetType: .stellar
+            )
+            amountWithFiatFeeText = NumberFormatter.formattedAssetAndFiatAmountWithSymbols(
+                fromAmount: feeXlm,
+                fiatPerAmount: decimalPrice,
+                assetType: .stellar
+            )
         } else {
             fiatTotalAmountText = ""
             cryptoWithFiatAmountText = amountXlmStringWithSymbol
@@ -324,15 +449,16 @@ extension BCConfirmPaymentViewModel {
         return BCConfirmPaymentViewModel(
             from: paymentOperation.sourceAccount.label ?? "",
             to: paymentOperation.destinationAccountId,
-            totalAmountText: amountXlmStringWithSymbol,
+            totalAmountText: totalXlmStringWithSymbol,
             fiatTotalAmountText: fiatTotalAmountText,
             cryptoWithFiatAmountText: cryptoWithFiatAmountText,
             amountWithFiatFeeText: amountWithFiatFeeText,
             buttonTitle: LocalizationConstants.SendAsset.send,
-            showDescription: true,
+            showDescription: paymentOperation.memo != nil,
             surgeIsOccurring: false,
-            noteText: nil,
-            warningText: nil
+            noteText: paymentOperation.memo?.displayValue,
+            warningText: nil,
+            descriptionTitle: LocalizationConstants.Stellar.memoTitle
         )
     }
 }
@@ -346,41 +472,143 @@ extension SendLumensViewController: SendXLMModelInterface {
         latestPrice = value
     }
 
-    func updateXLMAmount(_ value: Decimal) {
+    func updateXLMAmount(_ value: Decimal?) {
         xlmAmount = value
+    }
+
+    func updateBaseReserve(_ value: Decimal?) {
+        baseReserve = value
     }
 }
 
 extension SendLumensViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard UIDevice.current.type.isBelow(.iPhone8Plus) else { return }
+        guard [memoTextField, memoIDTextField].contains(textField) else { return }
+        let toolbarHeight = toolbar?.frame.height ?? 0.0
+        let primaryButtonOffset = originalBottomButtonConstraint +
+            optionalOffset +
+            keyboardHeight +
+            primaryButtonContainer.frame.size.height +
+            toolbarHeight
+
+        let height = view.bounds.height
+        let bottomStackViewMaxY = bottomStackView.frame.maxY
+        let offset = (height - bottomStackViewMaxY) - primaryButtonOffset
+
+        guard topToStackViewConstraint.constant != offset else { return }
+        topToStackViewConstraint.constant = offset
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard topToStackViewConstraint.constant != SendLumensViewController.topToStackView else { return }
+        topToStackViewConstraint.constant = SendLumensViewController.topToStackView
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    // swiftlint:disable:next cyclomatic_complexity
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text,
+        if inputFields.contains(textField) {
+            switch textField {
+            case memoTextField:
+                guard let text = textField.text else { return true }
+                guard let current = Range(range, in: text) else { return true }
+                let value = text.replacingCharacters(in: current, with: string)
+                if value.count == 0 {
+                    clearMemoField()
+                    return true
+                }
+                let count = text.utf8.count + string.utf8.count - range.length
+                guard count <= SendLumensViewController.maximumMemoTextLength else { return false }
+                memo = .text(value)
+
+            case memoIDTextField:
+                guard let text = textField.text else { return true }
+                guard let range = Range(range, in: text) else { return true }
+                let value = text.replacingCharacters(in: range, with: string)
+                if value.count == 0 {
+                    clearMemoField()
+                    return true
+                }
+                guard let identifier = Int(value) else { return false }
+                if identifier <= Int64.max {
+                    memo = .identifier(identifier)
+                    return true
+                } else {
+                    return false
+                }
+            case stellarAddressField:
+                return addressField(
+                    textField,
+                    shouldChangeCharactersIn: range,
+                    replacementString: string
+                )
+            case fiatAmountField, stellarAmountField:
+                return amountField(
+                    textField,
+                    shouldChangeCharactersIn: range,
+                    replacementString: string
+                )
+            default:
+                return true
+            }
+        }
+        return true
+    }
+}
+
+// MARK: - Text Field handling
+extension SendLumensViewController {
+
+    func amountField(_ amountField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = amountField.text,
             let textRange = Range(range, in: text) {
             let newString = text.replacingCharacters(in: textRange, with: string)
 
             var maxDecimalPlaces: Int?
-            if textField == stellarAmountField {
+            if amountField == stellarAmountField {
                 maxDecimalPlaces = NumberFormatter.stellarFractionDigits
-            } else if textField == fiatAmountField {
+            } else if amountField == fiatAmountField {
                 maxDecimalPlaces = NumberFormatter.localCurrencyFractionDigits
             }
 
             guard let decimalPlaces = maxDecimalPlaces else {
-                // TODO: Handle to address field here
+                Logger.shared.error("Unhandled textfield")
                 return true
             }
 
             let amountDelegate = AmountTextFieldDelegate(maxDecimalPlaces: decimalPlaces)
-            let isInputValid = amountDelegate.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
+            let isInputValid = amountDelegate.textField(amountField, shouldChangeCharactersIn: range, replacementString: string)
             if !isInputValid {
                 return false
             }
 
             guard let price = latestPrice else { return true }
-            if textField == stellarAmountField {
+            if amountField == stellarAmountField {
                 delegate?.onXLMEntry(newString, latestPrice: price)
-            } else if textField == fiatAmountField {
+            } else if amountField == fiatAmountField {
                 delegate?.onFiatEntry(newString, latestPrice: price)
             }
+        }
+        return true
+    }
+
+    func addressField(_ addressField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if addressField == stellarAddressField {
+            delegate?.onStellarAddressEntry()
         }
         return true
     }

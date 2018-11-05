@@ -2357,6 +2357,8 @@ NSString * const kLockboxInvitation = @"lockbox";
         symbol = CURRENCY_SYMBOL_ETH;
     } else if (assetType == LegacyAssetTypeBitcoinCash) {
         symbol = CURRENCY_SYMBOL_BCH;
+    } else if (assetType == LegacyAssetTypeStellar) {
+        symbol = CURRENCY_SYMBOL_XLM;
     }
 
     NSURL *URL = [NSURL URLWithString:[[[BlockchainAPI sharedInstance] apiUrl] stringByAppendingString:[NSString stringWithFormat:URL_SUFFIX_PRICE_INDEX_ARGUMENTS_BASE_QUOTE_TIME, symbol, currencyCode, time]]];

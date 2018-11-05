@@ -20,6 +20,7 @@ extension NumberFormatter {
         formatter.usesGroupingSeparator = usesGroupingSeparator
         formatter.minimumFractionDigits = minfractionDigits
         formatter.maximumFractionDigits = maxfractionDigits
+        formatter.roundingMode = .down
         return formatter
     }
 
@@ -83,4 +84,65 @@ extension NumberFormatter {
         formatter.locale = Locale(identifier: Constants.Locales.englishUS)
         return formatter
     }()
+}
+
+// MARK: - Conversions
+extension NumberFormatter {
+    // Returns local currency amount with two decimal places (assuming stringFromNumber returns a string)
+    static func localCurrencyAmount(fromAmount: Decimal, fiatPerAmount: Decimal) -> String {
+        let conversionResult = fromAmount * fiatPerAmount
+        let formatter = NumberFormatter.localCurrencyFormatter
+        return formatter.string(from: NSDecimalNumber(decimal: conversionResult)) ?? "\(conversionResult)"
+    }
+
+    // Returns asset type amount with correct number of decimal places (currently 7 or 8 depending on asset type) (assuming stringFromNumber returns a string)
+    @objc static func assetTypeAmount(
+        fromAmount: Decimal,
+        fiatPerAmount: Decimal,
+        assetType: AssetType
+    ) -> String {
+        let conversionResult = fromAmount / fiatPerAmount
+        let formatter = assetType == .stellar ? NumberFormatter.stellarFormatter : NumberFormatter.assetFormatter
+        return formatter.string(from: NSDecimalNumber(decimal: conversionResult)) ?? "\(conversionResult)"
+    }
+
+    // Returns crypto with fiat amount in the format of
+    // crypto (fiat)
+    static func formattedAssetAndFiatAmountWithSymbols(
+        fromAmount: Decimal,
+        fiatPerAmount: Decimal,
+        assetType: AssetType
+    ) -> String {
+        let formatter = assetType == .stellar ? NumberFormatter.stellarFormatter : NumberFormatter.assetFormatter
+        let crypto = (formatter.string(from: NSDecimalNumber(decimal: fromAmount)) ?? "\(fromAmount)").appendAssetSymbol(for: assetType)
+        let fiat = NumberFormatter.localCurrencyAmount(fromAmount: fromAmount, fiatPerAmount: fiatPerAmount).appendCurrencySymbol()
+        return "\(crypto) (\(fiat))"
+    }
+
+    /// Returns an amount of a whole crypto unit (e.g. BTC) from the smallest
+    /// integer value (e.g. satoshis)
+    ///
+    /// - Parameters:
+    ///   - amount: the integer value (e.g. satoshi)
+    ///   - assetType: the asset type
+    /// - Returns: the concrete AssetAddress
+    static func integerToWholeUnit(
+        amount: Int,
+        assetType: AssetType
+    ) -> Decimal? {
+        let decimalAmount = Decimal(amount)
+        let integerPerUnit: Int
+        switch assetType {
+        case .bitcoin:
+            integerPerUnit = Int(Constants.Conversions.satoshi)
+        case .stellar:
+            integerPerUnit = Constants.Conversions.stroopsInXlm
+        default:
+            Logger.shared.error("Asset type conversion not yet supported by this method")
+            return nil
+        }
+        let decimalConversion = Decimal(integerPerUnit)
+        let wholeUnit = decimalAmount / decimalConversion
+        return wholeUnit
+    }
 }

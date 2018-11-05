@@ -122,8 +122,15 @@ protocol KYCCoordinatorDelegate: class {
 
     func presentAccountStatusView(for status: KYCAccountStatus, in viewController: UIViewController) {
         let accountStatusViewController = KYCInformationController.make(with: self)
-        accountStatusViewController.viewModel = KYCInformationViewModel.create(for: status)
-        accountStatusViewController.viewConfig = KYCInformationViewConfig.create(for: status)
+        let isReceivingAirdrop = BlockchainSettings.App.shared.didTapOnAirdropDeepLink
+        accountStatusViewController.viewModel = KYCInformationViewModel.create(
+            for: status,
+            isReceivingAirdrop: isReceivingAirdrop
+        )
+        accountStatusViewController.viewConfig = KYCInformationViewConfig.create(
+            for: status,
+            isReceivingAirdrop: isReceivingAirdrop
+        )
         accountStatusViewController.primaryButtonAction = { viewController in
             switch status {
             case .approved:
@@ -191,7 +198,8 @@ protocol KYCCoordinatorDelegate: class {
         let informationViewController = KYCInformationController.make(with: self)
         informationViewController.viewConfig = KYCInformationViewConfig(
             titleColor: UIColor.gray5,
-            isPrimaryButtonEnabled: true
+            isPrimaryButtonEnabled: true,
+            imageTintColor: nil
         )
 
         switch error {

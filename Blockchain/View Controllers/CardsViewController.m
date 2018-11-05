@@ -21,7 +21,6 @@
 // Onboarding cards
 @property (nonatomic) BOOL showWelcomeCards;
 @property (nonatomic) NSMutableArray *announcementCards;
-@property (nonatomic) CGFloat cardsViewHeight;
 @property (nonatomic) UIScrollView *cardsScrollView;
 @property (nonatomic) CardsView *cardsView;
 @property (nonatomic) BOOL isUsingPageControl;
@@ -38,67 +37,55 @@
  - SeeAlso: IOS-1249 - Refactor CardsViewController
  */
 
-- (void)reloadCards
+- (void)reloadWelcomeCards
 {
-    BOOL shouldShowKYCAnnouncementCard = BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard;
     self.cardsViewHeight = 0;
 
-    if (shouldShowKYCAnnouncementCard) {
-        TabControllerManager *tabControllerManager = [AppCoordinator sharedInstance].tabControllerManager;
-        AnnouncementCardViewModel *model = [[AnnouncementCardViewModel alloc]
-                                            initWithTitle:[[LocalizationConstantsObjcBridge continueKYCCardTitle] uppercaseString]
-                                            message:[LocalizationConstantsObjcBridge continueKYCCardDescription]
-                                            actionButtonTitle:[LocalizationConstantsObjcBridge continueKYCActionButtonTitle]
-                                            image:[UIImage imageNamed:@"identity_verification_card"]
-                                            action:^{
-                                                [[KYCCoordinator sharedInstance] startFrom:tabControllerManager];
-                                            }
-                                            onClose:^{
-                                                BlockchainSettings.sharedAppInstance.shouldShowKYCAnnouncementCard = NO;
-                                                [UIView animateWithDuration:.4f animations:^{
-                                                    [self.cardsView changeYPosition:-self.cardsView.frame.size.height];
-                                                    self.dashboardScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.dashboardContentView.frame.size.height);
-                                                    [self.dashboardContentView changeYPosition:0];
-                                                } completion:^(BOOL finished) {
-                                                    [self removeCardsView];
-                                                }];
-                                            }];
-        AnnouncementCardView *card = [AnnouncementCardView createWithModel:model];
-        self.cardsViewHeight = card.frame.size.height;
-        self.cardsView = [self prepareCardsView];
-        [self.cardsView addSubview:card];
-        [self.dashboardScrollView addSubview:self.cardsView];
-        [self.dashboardContentView changeYPosition:self.cardsViewHeight];
-    } else {
-        self.announcementCards = [NSMutableArray new];
-        self.showWelcomeCards = !BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards;
+    self.announcementCards = [NSMutableArray new];
+    self.showWelcomeCards = !BlockchainSettings.sharedOnboardingInstance.hasSeenAllCards;
 
-        if (!self.showWelcomeCards) {
-            if (!BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
-                [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
-            }
-        }
-
-        if (!self.showWelcomeCards && self.announcementCards.count == 0) {
-            self.cardsViewHeight = 0;
-        } else if (self.announcementCards.count > 0) {
-            self.cardsViewHeight = ANNOUNCEMENT_CARD_HEIGHT * self.announcementCards.count;
-        } else {
-            self.cardsViewHeight = 240;
-        }
-
-        if (self.showWelcomeCards && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
-            [self setupWelcomeCardsView];
-        } else if (self.announcementCards.count > 0) {
-            [self setupCardsViewWithConfigurations:self.announcementCards];
-        } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
-            [self removeCardsView];
+    if (!self.showWelcomeCards) {
+        if (!BlockchainSettings.sharedOnboardingInstance.shouldHideBuySellCard && [WalletManager.sharedInstance.wallet canUseSfox]) {
+            [self.announcementCards addObject:[NSNumber numberWithInteger:CardConfigurationBuySell]];
         }
     }
 
-    CGFloat width = self.view.frame.size.width;
-    CGFloat height = self.dashboardContentView.frame.size.height + self.cardsViewHeight;
-    self.dashboardScrollView.contentSize = CGSizeMake(width, height);
+    if (!self.showWelcomeCards && self.announcementCards.count == 0) {
+        self.cardsViewHeight = 0;
+    } else if (self.announcementCards.count > 0) {
+        self.cardsViewHeight = ANNOUNCEMENT_CARD_HEIGHT * self.announcementCards.count;
+    } else {
+        self.cardsViewHeight = 240;
+    }
+
+    if (self.showWelcomeCards && WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
+        [self setupWelcomeCardsView];
+    } else if (self.announcementCards.count > 0) {
+        [self setupCardsViewWithConfigurations:self.announcementCards];
+    } else if (WalletManager.sharedInstance.latestMultiAddressResponse.symbol_local) {
+        [self removeCardsView];
+    }
+}
+
+- (void)animateHideCards
+{
+    [UIView animateWithDuration:.4f animations:^{
+        [self.cardsView changeYPosition:-self.cardsView.frame.size.height];
+        self.dashboardScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.dashboardContentView.frame.size.height);
+        [self.dashboardContentView changeYPosition:0];
+    } completion:^(BOOL finished) {
+        [self removeCardsView];
+    }];
+}
+
+- (void)showSingleCardWithViewModel:(AnnouncementCardViewModel *)viewModel
+{
+    AnnouncementCardView *card = [AnnouncementCardView createWithModel:viewModel];
+    self.cardsViewHeight = card.frame.size.height;
+    self.cardsView = [self prepareCardsView];
+    [self.cardsView addSubview:card];
+    [self.dashboardScrollView addSubview:self.cardsView];
+    [self.dashboardContentView changeYPosition:self.cardsViewHeight];
 }
 
 - (CardsView *)prepareCardsView
@@ -329,7 +316,7 @@
         self.dashboardScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.dashboardContentView ? self.dashboardContentView.frame.size.height : 0);
         [self.dashboardContentView changeYPosition:newY];
     } completion:^(BOOL finished) {
-        [self reloadCards];
+        [self reloadWelcomeCards];
     }];
 }
 

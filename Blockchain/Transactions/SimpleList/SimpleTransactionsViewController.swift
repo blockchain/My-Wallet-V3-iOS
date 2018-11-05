@@ -30,7 +30,7 @@ class SimpleTransactionsViewController: SimpleListViewController {
             updateBalanceLabel()
         }
     }
-
+    
     // swiftlint:disable function_body_length
     private func setupFilter() {
         filterIndex = Constants.FilterIndexes.all

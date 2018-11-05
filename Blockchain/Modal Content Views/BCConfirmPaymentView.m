@@ -194,12 +194,14 @@
             if (self.viewModel.surgeIsOccurring) cell.detailTextLabel.textColor = UIColor.error;
         } else if ([textLabel isEqualToString:BC_STRING_DESCRIPTION]) {
             cell.textLabel.text = nil;
+            cell.detailTextLabel.text = nil;
             
             CGFloat leftMargin = IS_USING_6_OR_7_PLUS_SCREEN_SIZE ? 20 : 15;
             CGFloat labelHeight = 16;
             
             UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftMargin, cellHeight/2 - labelHeight/2, self.frame.size.width/2 - 8 - leftMargin, labelHeight)];
-            descriptionLabel.text = BC_STRING_DESCRIPTION;
+            NSString *cellTitle = self.viewModel.descriptionTitle.length > 0 ? self.viewModel.descriptionTitle : BC_STRING_DESCRIPTION;
+            descriptionLabel.text = cellTitle;
             descriptionLabel.font = [UIFont fontWithName:FONT_MONTSERRAT_REGULAR size:FONT_SIZE_SMALL];
             descriptionLabel.textColor = UIColor.gray5;
             

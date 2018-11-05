@@ -154,7 +154,7 @@ final class KYCNetworkRequest {
         self.init(url: endpoint, httpMethod: "POST")
         do {
             let body = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-            Logger.shared.debug("POST body: \(String(data: body, encoding: .utf8) ?? "")")
+//            Logger.shared.debug("POST body: \(String(data: body, encoding: .utf8) ?? "")")
             request.httpBody = body
 
             var allHeaders = [HttpHeaderField.contentType: HttpHeaderValue.json]
@@ -186,7 +186,7 @@ final class KYCNetworkRequest {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
 
             let body = try encoder.encode(parameters)
-            Logger.shared.debug("PUT body: \(String(data: body, encoding: .utf8) ?? "")")
+//            Logger.shared.debug("PUT body: \(String(data: body, encoding: .utf8) ?? "")")
             request.httpBody = body
 
             var allHeaders = [
@@ -210,7 +210,7 @@ final class KYCNetworkRequest {
     // MARK: - Private Methods
 
     private func send(taskSuccess: @escaping TaskSuccess, taskFailure: @escaping TaskFailure) {
-        Logger.shared.debug("Sending \(request.httpMethod ?? "") request to '\(request.url?.absoluteString ?? "")'")
+//        Logger.shared.debug("Sending \(request.httpMethod ?? "") request to '\(request.url?.absoluteString ?? "")'")
         let task = NetworkManager.shared.session.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -224,9 +224,9 @@ final class KYCNetworkRequest {
                 }
 
                 // Debugging
-                if let responseString = String(data: responseData, encoding: .utf8) {
-                    Logger.shared.debug("Response received: \(responseString)")
-                }
+//                if let responseString = String(data: responseData, encoding: .utf8) {
+//                    Logger.shared.debug("Response received: \(responseString)")
+//                }
 
                 guard (200...299).contains(httpResponse.statusCode) else {
                     let errorPayload = try? JSONDecoder().decode(NabuNetworkError.self, from: responseData)

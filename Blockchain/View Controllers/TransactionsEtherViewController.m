@@ -132,7 +132,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TransactionEtherTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"transaction"];
+    TransactionEtherTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionEtherTableViewCell"];
 
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionEtherCell" owner:nil options:nil] objectAtIndex:0];

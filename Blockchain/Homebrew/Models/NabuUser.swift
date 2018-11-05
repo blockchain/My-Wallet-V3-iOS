@@ -22,6 +22,7 @@ struct NabuUser: Decodable {
     let mobile: Mobile?
     let status: KYCAccountStatus
     let state: UserState
+    let tags: Tags?
 
     // MARK: - Decodable
 
@@ -35,6 +36,23 @@ struct NabuUser: Decodable {
         case mobileVerified = "mobileVerified"
         case identifier = "id"
         case state = "state"
+        case tags = "tags"
+    }
+
+    init(
+        personalDetails: PersonalDetails?,
+        address: UserAddress?,
+        mobile: Mobile?,
+        status: KYCAccountStatus,
+        state: UserState,
+        tags: Tags?
+    ) {
+        self.personalDetails = personalDetails
+        self.address = address
+        self.mobile = mobile
+        self.status = status
+        self.state = state
+        self.tags = tags
     }
 
     init(from decoder: Decoder) throws {
@@ -68,6 +86,7 @@ struct NabuUser: Decodable {
 
         status = KYCAccountStatus(rawValue: statusValue) ?? .none
         state = UserState(rawValue: userState) ?? .none
+        tags = try values.decodeIfPresent(Tags.self, forKey: .tags)
     }
 }
 
@@ -78,5 +97,21 @@ struct Mobile: Decodable {
     enum CodingKeys: String, CodingKey {
         case phone = "mobile"
         case verified = "mobileVerified"
+    }
+}
+
+struct Tags: Decodable {
+    let sunriver: Sunriver?
+
+    enum CodingKeys: String, CodingKey {
+        case sunriver = "SUNRIVER"
+    }
+}
+
+struct Sunriver: Decodable {
+    let campaignAddress: String
+
+    enum CodingKeys: String, CodingKey {
+        case campaignAddress = "x-campaign-address"
     }
 }

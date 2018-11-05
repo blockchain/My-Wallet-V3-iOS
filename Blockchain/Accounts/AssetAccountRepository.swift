@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 /// A repository for `AssetAccount` objects
 class AssetAccountRepository {
@@ -14,9 +15,21 @@ class AssetAccountRepository {
     static let shared = AssetAccountRepository()
 
     private let wallet: Wallet
+    private let xlmServiceProvider: XLMServiceProvider
+    private let stellarAccountService: StellarAccountAPI
+    private var disposable: Disposable?
 
-    init(wallet: Wallet = WalletManager.shared.wallet) {
+    init(
+        wallet: Wallet = WalletManager.shared.wallet,
+        xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared
+    ) {
         self.wallet = wallet
+        self.xlmServiceProvider = xlmServiceProvider
+        self.stellarAccountService = xlmServiceProvider.services.accounts
+    }
+
+    deinit {
+        disposable?.dispose()
     }
 
     // MARK: Public Methods
@@ -33,6 +46,13 @@ class AssetAccountRepository {
         if assetType == .ethereum {
             if let ethereumAccount = defaultEthereumAccount() {
                 return [ethereumAccount]
+            }
+            return []
+        }
+
+        if assetType == .stellar {
+            if let stellarAccount = defaultStellarAccount() {
+                return [stellarAccount]
             }
             return []
         }
@@ -61,6 +81,8 @@ class AssetAccountRepository {
     func defaultAccount(for assetType: AssetType) -> AssetAccount? {
         if assetType == .ethereum {
             return defaultEthereumAccount()
+        } else if assetType == .stellar {
+            return defaultStellarAccount()
         }
         let index = wallet.getDefaultAccountIndex(for: assetType.legacy)
         return AssetAccount.create(assetType: assetType, index: index, wallet: wallet)
@@ -85,6 +107,13 @@ class AssetAccountRepository {
             balance: ethBalance,
             name: LocalizationConstants.myEtherWallet
         )
+    }
+
+    func defaultStellarAccount() -> AssetAccount? {
+        guard let stellarAccount = stellarAccountService.currentAccount else {
+            return nil
+        }
+        return stellarAccount.assetAccount
     }
 }
 

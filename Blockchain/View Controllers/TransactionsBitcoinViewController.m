@@ -174,10 +174,10 @@
 
         Transaction * transaction = [self.transactions objectAtIndex:[indexPath row]];
 
-        TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"transaction"];
+        TransactionTableCell * cell = (TransactionTableCell*)[tableView dequeueReusableCellWithIdentifier:@"TransactionTableCell"];
 
         if (cell == nil) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionCell" owner:nil options:nil] objectAtIndex:0];
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"TransactionTableCell" owner:nil options:nil] objectAtIndex:0];
         }
 
         cell.transaction = transaction;

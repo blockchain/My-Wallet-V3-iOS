@@ -208,6 +208,9 @@
 - (void)dismiss
 {
     self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate onWalletSetupViewControllerCompleted];
+    }];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

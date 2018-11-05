@@ -20,6 +20,7 @@ struct KYCInformationViewModel {
 struct KYCInformationViewConfig {
     let titleColor: UIColor
     let isPrimaryButtonEnabled: Bool
+    let imageTintColor: UIColor?
 }
 
 extension KYCInformationViewModel {
@@ -45,7 +46,7 @@ extension KYCInformationViewModel {
         )
     }
 
-    static func create(for accountStatus: KYCAccountStatus) -> KYCInformationViewModel {
+    static func create(for accountStatus: KYCAccountStatus, isReceivingAirdrop: Bool = false) -> KYCInformationViewModel {
         switch accountStatus {
         case .approved:
             return KYCInformationViewModel(
@@ -66,14 +67,7 @@ extension KYCInformationViewModel {
                 badge: LocalizationConstants.KYC.verificationFailedBadge
             )
         case .pending:
-            return KYCInformationViewModel(
-                image: #imageLiteral(resourceName: "AccountInReview"),
-                title: LocalizationConstants.KYC.verificationInProgress,
-                subtitle: LocalizationConstants.KYC.whatHappensNext,
-                description: LocalizationConstants.KYC.verificationInProgressDescription,
-                buttonTitle: LocalizationConstants.KYC.notifyMe,
-                badge: LocalizationConstants.KYC.accountUnderReviewBadge
-            )
+            return createViewModelForPendingStatus(isReceivingAirdrop: isReceivingAirdrop)
         case .underReview:
             return KYCInformationViewModel(
                 image: #imageLiteral(resourceName: "AccountInReview"),
@@ -94,17 +88,44 @@ extension KYCInformationViewModel {
             )
         }
     }
+
+    // MARK: - Private
+
+    private static func createViewModelForPendingStatus(isReceivingAirdrop: Bool) -> KYCInformationViewModel {
+        if isReceivingAirdrop {
+            return KYCInformationViewModel(
+                image: #imageLiteral(resourceName: "symbol-xlm-large"),
+                title: LocalizationConstants.KYC.verificationInProgress,
+                subtitle: nil,
+                description: LocalizationConstants.KYC.verificationInProgressDescriptionAirdrop,
+                buttonTitle: LocalizationConstants.KYC.notifyMe,
+                badge: LocalizationConstants.KYC.accountUnderReviewBadge
+            )
+        } else {
+            return KYCInformationViewModel(
+                image: #imageLiteral(resourceName: "AccountInReview"),
+                title: LocalizationConstants.KYC.verificationInProgress,
+                subtitle: LocalizationConstants.KYC.whatHappensNext,
+                description: LocalizationConstants.KYC.verificationInProgressDescription,
+                buttonTitle: LocalizationConstants.KYC.notifyMe,
+                badge: LocalizationConstants.KYC.accountUnderReviewBadge
+            )
+        }
+    }
 }
 
 extension KYCInformationViewConfig {
     static let defaultConfig: KYCInformationViewConfig = KYCInformationViewConfig(
         titleColor: UIColor.gray5,
-        isPrimaryButtonEnabled: false
+        isPrimaryButtonEnabled: false,
+        imageTintColor: nil
     )
 
-    static func create(for accountStatus: KYCAccountStatus) -> KYCInformationViewConfig {
+    static func create(for accountStatus: KYCAccountStatus, isReceivingAirdrop: Bool = false) -> KYCInformationViewConfig {
         let titleColor: UIColor
         let isPrimaryButtonEnabled: Bool
+        var tintColor: UIColor?
+
         switch accountStatus {
         case .approved:
             titleColor = UIColor.green
@@ -113,15 +134,17 @@ extension KYCInformationViewConfig {
             titleColor = UIColor.error
             isPrimaryButtonEnabled = false
         case .pending:
-            titleColor = UIColor.orange
+            titleColor = isReceivingAirdrop ? UIColor.green : UIColor.pending
             isPrimaryButtonEnabled = !UIApplication.shared.isRegisteredForRemoteNotifications
+            tintColor = isReceivingAirdrop ? UIColor.brandSecondary : nil
         case .underReview:
             titleColor = .orange
             isPrimaryButtonEnabled = false
         }
         return KYCInformationViewConfig(
             titleColor: titleColor,
-            isPrimaryButtonEnabled: isPrimaryButtonEnabled
+            isPrimaryButtonEnabled: isPrimaryButtonEnabled,
+            imageTintColor: tintColor
         )
     }
 }

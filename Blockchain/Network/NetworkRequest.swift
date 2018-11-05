@@ -8,6 +8,8 @@
 
 import RxSwift
 
+typealias HTTPHeaders = [String: String]
+
 /// TICKET: IOS-1242 - Condense HttpHeaderField
 /// and HttpHeaderValue into enums and inject in a token
 struct NetworkRequest {
@@ -25,19 +27,28 @@ struct NetworkRequest {
     
     let method: NetworkMethod
     let endpoint: URL
-    let token: String?
+    let headers: HTTPHeaders?
+
+    // TODO: modify this to be an Encodable type so that JSON serialization is done in this class
+    // vs. having to serialize outside of this class
     let body: Data?
+
+    // Deprecate this field in favor of headers (i.e. the token should be passed in as an
+    // element in `headers`
+    let token: String?
+
     private let session: URLSession? = {
         guard let session = NetworkManager.shared.session else { return nil }
         return session
     }()
     private var task: URLSessionDataTask?
     
-    init(endpoint: URL, method: NetworkMethod, body: Data?, authToken: String? = nil) {
+    init(endpoint: URL, method: NetworkMethod, body: Data?, authToken: String? = nil, headers: HTTPHeaders? = nil) {
         self.endpoint = endpoint
         self.token = authToken
         self.method = method
         self.body = body
+        self.headers = headers
     }
     
     func URLRequest() -> URLRequest? {
@@ -55,6 +66,12 @@ struct NetworkRequest {
                 auth,
                 forHTTPHeaderField: HttpHeaderField.authorization
             )
+        }
+
+        if let headers = headers {
+            headers.forEach {
+                request.addValue($1, forHTTPHeaderField: $0)
+            }
         }
         
         if let data = body {
@@ -75,8 +92,15 @@ struct NetworkRequest {
             withCompletion(.error(nil), responseCode)
             return
         }
-        
-        task = session.dataTask(with: urlRequest) { (payload, response, error) in
+
+        // Debugging
+        Logger.shared.debug("Sending \(urlRequest.httpMethod ?? "") request to '\(urlRequest.url?.absoluteString ?? "")'")
+        if let body = urlRequest.httpBody,
+            let bodyString = String(data: body, encoding: .utf8) {
+            Logger.shared.debug("Body: \(bodyString)")
+        }
+
+        task = session.dataTask(with: urlRequest) { payload, response, error in
 
             if let error = error {
                 withCompletion(.error(HTTPRequestClientError.failedRequest(description: error.localizedDescription)), responseCode)
@@ -88,8 +112,19 @@ struct NetworkRequest {
                 return
             }
 
+            guard let responseData = payload else {
+                withCompletion(.error(HTTPRequestPayloadError.emptyData), responseCode)
+                return
+            }
+
+            // Debugging
+            if let responseString = String(data: responseData, encoding: .utf8) {
+                Logger.shared.debug("Response received: \(responseString)")
+            }
+
             guard (200...299).contains(httpResponse.statusCode) else {
-                let errorStatusCode = HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode, error: nil)
+                let errorPayload = try? JSONDecoder().decode(NabuNetworkError.self, from: responseData)
+                let errorStatusCode = HTTPRequestServerError.badStatusCode(code: httpResponse.statusCode, error: errorPayload)
                 withCompletion(.error(errorStatusCode), httpResponse.statusCode)
                 return
             }
@@ -135,8 +170,8 @@ extension NetworkRequest {
         type: ResponseType.Type
     ) -> Single<ResponseType> {
         var request = self.init(endpoint: url, method: .get, body: body, authToken: token)
-        return Single.create(subscribe: { (observer) -> Disposable in
-            request.execute(expecting: ResponseType.self, withCompletion: { (result, _) in
+        return Single.create(subscribe: { observer -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { result, _ in
                 switch result {
                 case .success(let value):
                     observer(.success(value))
@@ -152,11 +187,33 @@ extension NetworkRequest {
         url: URL,
         body: Data?,
         token: String?,
-        type: ResponseType.Type
+        type: ResponseType.Type,
+        headers: HTTPHeaders? = nil
     ) -> Single<ResponseType> {
-        var request = self.init(endpoint: url, method: .post, body: body, authToken: token)
-        return Single.create(subscribe: { (observer) -> Disposable in
-            request.execute(expecting: ResponseType.self, withCompletion: { (result, _) in
+        var request = self.init(endpoint: url, method: .post, body: body, authToken: token, headers: headers)
+        return Single.create(subscribe: { observer -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { result, _ in
+                switch result {
+                case .success(let value):
+                    observer(.success(value))
+                case .error(let error):
+                    observer(.error(error ?? NetworkError.generic))
+                }
+            })
+            return Disposables.create()
+        })
+    }
+
+    static func PUT<ResponseType: Decodable>(
+        url: URL,
+        body: Data?,
+        token: String?,
+        type: ResponseType.Type,
+        headers: HTTPHeaders? = nil
+    ) -> Single<ResponseType> {
+        var request = self.init(endpoint: url, method: .put, body: body, authToken: token, headers: headers)
+        return Single.create(subscribe: { observer -> Disposable in
+            request.execute(expecting: ResponseType.self, withCompletion: { result, _ in
                 switch result {
                 case .success(let value):
                     observer(.success(value))

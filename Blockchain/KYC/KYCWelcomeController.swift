@@ -10,9 +10,11 @@ import UIKit
 
 /// Welcome screen in KYC flow
 final class KYCWelcomeController: KYCBaseViewController {
-    
+
     // MARK: - IBOutlets
 
+    @IBOutlet private var imageViewMain: UIImageView!
+    @IBOutlet private var labelMain: UILabel!
     @IBOutlet private var labelTermsOfService: UILabel!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -32,10 +34,60 @@ final class KYCWelcomeController: KYCBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initMainView()
+        initFooter()
+    }
+
+    // MARK: - Actions
+    @IBAction func onCloseTapped(_ sender: Any) {
+        self.presentingViewController?.dismiss(animated: true)
+    }
+
+    @IBAction private func onLabelTapped(_ sender: UITapGestureRecognizer) {
+        guard let text = labelTermsOfService.text else {
+            return
+        }
+        if let tosRange = text.range(of: LocalizationConstants.tos),
+            sender.didTapAttributedText(in: labelTermsOfService, range: NSRange(tosRange, in: text)) {
+            UIApplication.shared.openWebView(
+                url: Constants.Url.termsOfService,
+                title: LocalizationConstants.tos,
+                presentingViewController: self
+            )
+        }
+        if let privacyPolicyRange = text.range(of: LocalizationConstants.privacyPolicy),
+            sender.didTapAttributedText(in: labelTermsOfService, range: NSRange(privacyPolicyRange, in: text)) {
+            UIApplication.shared.openWebView(
+                url: Constants.Url.privacyPolicy,
+                title: LocalizationConstants.privacyPolicy,
+                presentingViewController: self
+            )
+        }
+    }
+
+    @IBAction private func primaryButtonTapped(_ sender: Any) {
+        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
+        BlockchainSettings.App.shared.isCompletingKyc = true
+    }
+
+    // MARK: - Private Methods
+
+    private func initMainView() {
+        if BlockchainSettings.App.shared.didTapOnAirdropDeepLink {
+            labelMain.text = LocalizationConstants.KYC.welcomeMainTextSunRiverCampaign
+            imageViewMain.image = #imageLiteral(resourceName: "symbol-xlm-large")
+            imageViewMain.tintColor = #colorLiteral(red: 0.06274509804, green: 0.6784313725, blue: 0.8941176471, alpha: 1)
+        } else {
+            labelMain.text = LocalizationConstants.KYC.welcomeMainText
+            imageViewMain.image = #imageLiteral(resourceName: "Welcome")
+        }
+    }
+
+    private func initFooter() {
         let font = UIFont(
             name: Constants.FontNames.montserratRegular,
             size: Constants.FontSizes.ExtraExtraExtraSmall
-        ) ?? UIFont.systemFont(ofSize: Constants.FontSizes.ExtraExtraExtraSmall)
+            ) ?? UIFont.systemFont(ofSize: Constants.FontSizes.ExtraExtraExtraSmall)
         let labelAttributes = [
             NSAttributedString.Key.font: font,
             NSAttributedString.Key.foregroundColor: UIColor.gray5
@@ -51,39 +103,6 @@ final class KYCWelcomeController: KYCBaseViewController {
         labelText.addForegroundColor(UIColor.brandSecondary, to: LocalizationConstants.tos)
         labelText.addForegroundColor(UIColor.brandSecondary, to: LocalizationConstants.privacyPolicy)
         labelTermsOfService.attributedText = labelText
-    }
-
-    // MARK: - Actions
-    @IBAction func onCloseTapped(_ sender: Any) {
-        self.presentingViewController?.dismiss(animated: true)
-    }
-
-    @IBAction private func onLabelTapped(_ sender: UITapGestureRecognizer) {
-        guard let text = labelTermsOfService.text else {
-            return
-        }
-        if let tosRange = text.range(of: LocalizationConstants.tos),
-            sender.didTapAttributedText(in: labelTermsOfService, range: NSRange(tosRange, in: text)) {
-            launchWebViewController(url: Constants.Url.termsOfService, title: LocalizationConstants.tos)
-        }
-        if let privacyPolicyRange = text.range(of: LocalizationConstants.privacyPolicy),
-            sender.didTapAttributedText(in: labelTermsOfService, range: NSRange(privacyPolicyRange, in: text)) {
-            launchWebViewController(url: Constants.Url.privacyPolicy, title: LocalizationConstants.privacyPolicy)
-        }
-    }
-
-    @IBAction private func primaryButtonTapped(_ sender: Any) {
-        coordinator.handle(event: .nextPageFromPageType(pageType, nil))
-        BlockchainSettings.App.shared.shouldShowKYCAnnouncementCard = true
-    }
-
-    // MARK: - Private Methods
-
-    private func launchWebViewController(url: String, title: String) {
-        let viewController = SettingsWebViewController()
-        viewController.urlTargetString = url
-        let navigationController = BCNavigationController(rootViewController: viewController, title: title)
-        present(navigationController, animated: true)
     }
 }
 

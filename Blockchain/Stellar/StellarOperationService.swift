@@ -11,19 +11,25 @@ import stellarsdk
 import RxSwift
 import RxCocoa
 
-protocol StellarOperationServiceDelegate: class {
-    func service(_ service: StellarOperationService, recieved operations: [StellarOperation])
-    func service(_ service: StellarOperationService, returned error: Error?)
+/// Model for paginating through StellarSDK calls
+struct StellarPageReponse<A: Any> {
+    let hasNextPage: Bool
+    let items: [A]
 }
 
+/// The SDK provides a way to stream operations given a user's accountID.
+/// That said, you shouldn't use this as a replacement for fetching the operations.
+/// You should initially fetch the operations and then begin streaming given the
+/// last identifier/cursor of the item that you received.
+/// Note that sometimes you will receive an error from the streaming API.
+/// Despite receiving an error (on testnet) I still have received operations
+/// after the fact.
 class StellarOperationService {
     
-    fileprivate var operation: AsyncBlockOperation?
+    var isExecuting: Bool = false
     
-    var canPage: Bool = false
-    var stream: OperationsStreamItem?
-    weak var delegate: StellarOperationServiceDelegate?
-
+    fileprivate let disposables = CompositeDisposable()
+    fileprivate var stream: OperationsStreamItem?
     fileprivate let configuration: StellarConfiguration
     fileprivate let repository: WalletXlmAccountRepository
     
@@ -31,11 +37,28 @@ class StellarOperationService {
         configuration.sdk.operations
     }()
     
-    fileprivate var disposable: Disposable?
     var operations: Observable<[StellarOperation]> {
-        return privateOperations.asObservable()
+        /// We aren't streaming until we have a StellarAccountID.
+        /// Each time `operations` is subscribed to, we want to check
+        /// if the stream is currently in flight. If it is, we don't
+        /// want to restart it as the stream is already publishing to
+        /// `privateOperations`
+        guard privateReplayedOperations.hasObservers == false else { return privateReplayedOperations.asObserver() }
+        
+        let disposable = fetchOperationsStartingFromCache()
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { result in
+                self.privateReplayedOperations.onNext(result)
+            }, onError: { error in
+                self.privateReplayedOperations.onError(error)
+            })
+        disposables.insertWithDiscardableResult(disposable)
+        
+        return privateReplayedOperations.asObservable()
     }
-    fileprivate var privateOperations = BehaviorSubject<[StellarOperation]>(value: [])
+    
+    fileprivate var privateReplayedOperations: ReplaySubject<[StellarOperation]> = ReplaySubject<[StellarOperation]>.createUnbounded()
 
     init(
         configuration: StellarConfiguration = .production,
@@ -57,11 +80,14 @@ class StellarOperationService {
                 identifier: op.id,
                 funder: op.funder,
                 account: op.account,
+                direction: op.funder == accountID ? .debit : .credit,
                 balance: op.startingBalance,
                 token: op.pagingToken,
                 sourceAccountID: op.sourceAccount,
                 transactionHash: op.transactionHash,
-                createdAt: op.createdAt
+                createdAt: op.createdAt,
+                fee: op.funder == accountID ? 100 : nil,
+                memo: nil
             )
             return .accountCreated(created)
         case .payment:
@@ -74,107 +100,119 @@ class StellarOperationService {
                 direction: op.from == accountID ? .debit : .credit,
                 amount: op.amount,
                 transactionHash: op.transactionHash,
-                createdAt: op.createdAt
+                createdAt: op.createdAt,
+                fee: op.from == accountID ? 100 : nil,
+                memo: nil
             )
             return .payment(payment)
         default:
             return .unknown
         }
     }
-}
-
-extension StellarOperationService: StellarOperationsAPI {
-    func operations(from accountID: StellarOperationsAPI.AccountID, token: PageToken?, completion: @escaping StellarOperationsAPI.Completion) {
-        if let op = operation {
-            guard op.isExecuting == false else { return }
-        }
-        
-        operation = AsyncBlockOperation(executionBlock: { [weak self] complete in
-            guard let this = self else { return }
+    
+    fileprivate func operations(from accountID: AccountID, token: PageToken?) -> Observable<StellarPageReponse<StellarOperation>> {
+        return Observable<StellarPageReponse<StellarOperation>>.create { [weak self] observer -> Disposable in
+            guard let this = self else { return Disposables.create() }
             
-            this.service.getOperations(forAccount: accountID, from: token, order: .descending, limit: 50, response: { response in
+            this.service.getOperations(forAccount: accountID, from: token, order: .descending, limit: 200, response: { response in
                 switch response {
                 case .success(let payload):
-                    this.canPage = payload.hasNextPage()
+                    let hasNextPage = (payload.hasNextPage() && payload.records.count > 0)
+                    
                     let filtered = this.filter(operations: payload.records)
                     let models = filtered.map {
                         this.buildOperation(from: $0, accountID: accountID)
                     }
-                    
-                    DispatchQueue.main.async {
-                        completion(.success(models))
-                    }
+                    let response = StellarPageReponse<StellarOperation>(
+                        hasNextPage: hasNextPage,
+                        items: models
+                    )
+                    observer.onNext(response)
+                    observer.onCompleted()
                 case .failure(error: let horizonError):
-                    this.canPage = false
-                    DispatchQueue.main.async {
-                        completion(.error(horizonError))
-                    }
+                    observer.onError(horizonError.toStellarServiceError())
                 }
-                complete()
             })
-        })
-        operation?.start()
+            return Disposables.create()
+        }
     }
-
-    func isExecuting() -> Bool {
-        guard let op = operation else { return false }
-        return op.isExecuting
-    }
-
-    func cancel() {
-        guard let op = operation else { return }
-        op.cancel()
-    }
-}
-
-extension StellarOperationService: StellarOperationsStreamAPI {
     
-    func start() {
+    // MARK: Public
+    
+    fileprivate func stream(cursor: String? = nil) {
         guard let account = repository.defaultAccount else {
-            privateOperations.onError(StellarServiceError.noXLMAccount)
+            privateReplayedOperations.onError(StellarServiceError.noXLMAccount)
             return
         }
+        guard stream == nil else { return }
         
         let accountID = account.publicKey
         
-        operations(from: accountID, token: nil) { [weak self] result in
+        stream = service.stream(
+            for: .operationsForAccount(
+                account: accountID,
+                cursor: cursor
+            )
+        )
+        stream?.onReceive(response: { [weak self] response in
             guard let this = self else { return }
-            switch result {
-            case .success(let payload):
-                guard let latest = payload.first else { return }
-                this.privateOperations.onNext(payload)
-                this.stream = this.service.stream(
-                    for: .operationsForAccount(
-                        account: accountID,
-                        cursor: latest.token
-                    )
-                )
-                this.stream?.onReceive(response: { response in
-                    switch response {
-                    case .open:
-                        break
-                    case .response(_, let payload):
-                        let filtered = this.filter(operations: [payload])
-                        let result = filtered.map { this.buildOperation(from: $0, accountID: accountID) }
-                        this.privateOperations.onNext(result)
-                    case .error(let error):
-                        Logger.shared.error(
-                            "Horizon Error: \(String(describing: error?.localizedDescription))"
-                        )
-                    }
-                })
+            switch response {
+            case .open:
+                break
+            case .response(_, let payload):
+                let filtered = this.filter(operations: [payload])
+                let result = filtered.map { this.buildOperation(from: $0, accountID: accountID) }
+                this.privateReplayedOperations.onNext(result)
             case .error(let error):
                 Logger.shared.error(
                     "Horizon Error: \(String(describing: error?.localizedDescription))"
                 )
-                this.privateOperations.onError(error ?? StellarServiceError.unknown)
             }
-        }
+        })
+    }
+    
+    func isStreaming() -> Bool {
+        return stream != nil
     }
     
     func end() {
         stream?.closeStream()
         stream = nil
     }
+}
+
+extension StellarOperationService: StellarOperationsAPI {
     
+    fileprivate func fetchOperationsStartingFromCache() -> Observable<[StellarOperation]> {
+        guard let accountID = repository.defaultAccount?.publicKey else {
+            return Observable.just([])
+        }
+        return all(from: accountID)
+    }
+    
+    fileprivate func all(from accountID: String) -> Observable<[StellarOperation]> {
+        return allOperations(from: accountID, token: nil).map {
+            $0.items
+            }.reduce(
+                [],
+                accumulator: { $0 + $1 }
+        )
+    }
+    
+    /// Fetches all `StellarOperations` for a given account.
+    /// All the `StellarOperations` will have been fetched when
+    /// the `Observable` is `completed`.
+    func allOperations(from accountID: String, token: String?) -> Observable<StellarPageReponse<StellarOperation>> {
+        let observable = operations(from: accountID, token: token).takeWhile { [weak self] output -> Bool in
+            if let first = output.items.first?.token {
+                self?.stream(cursor: first)
+            }
+            return output.hasNextPage
+        }.flatMap { output -> Observable<StellarPageReponse<StellarOperation>> in
+            return Observable<StellarPageReponse<StellarOperation>>.just(output).concat(
+                self.allOperations(from: accountID, token: output.items.last?.token)
+            )
+        }
+        return observable
+    }
 }

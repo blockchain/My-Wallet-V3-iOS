@@ -57,6 +57,11 @@ final class KYCInformationController: KYCBaseViewController {
             assertionFailure("viewModel is not defined")
         }
 
+        applyViewModel()
+        applyViewConfig()
+    }
+
+    private func applyViewModel() {
         imageView.image = viewModel.image
         labelTitle.text = viewModel.title
         if let subtitle = viewModel.subtitle {
@@ -66,11 +71,16 @@ final class KYCInformationController: KYCBaseViewController {
         }
         labelDescription.text = viewModel.description
         buttonPrimaryContainer.title = viewModel.buttonTitle ?? ""
+    }
 
+    private func applyViewConfig() {
         labelTitle.textColor = viewConfig.titleColor
         buttonPrimaryContainer.isHidden = !viewConfig.isPrimaryButtonEnabled
         buttonPrimaryContainer.actionBlock = { [unowned self] in
             self.primaryButtonAction?(self)
+        }
+        if let tint = viewConfig.imageTintColor {
+            imageView.tintColor = tint
         }
     }
 }

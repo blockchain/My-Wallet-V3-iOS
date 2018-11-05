@@ -59,7 +59,7 @@
     [self.contentView addSubview:self.textView];
     self.textView.editable = NO;
     
-    [self addEditButton];
+    [self addEditButtonForTransaction:transactionModel];
 
     self.editButton.enabled = YES;
     
@@ -185,12 +185,13 @@
     self.isSetup = YES;
 }
 
-- (void)addEditButton
+- (void)addEditButtonForTransaction:(TransactionDetailViewModel *)transactionViewModel
 {
     self.editButton = [[UIButton alloc] initWithFrame:CGRectMake(self.textView.frame.origin.x + self.textView.frame.size.width, 0, self.contentView.frame.size.width - (self.textView.frame.origin.x + self.textView.frame.size.width), [self.descriptionDelegate getDefaultRowHeight])];
-    [self.editButton addTarget:self action:@selector(editDescription) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.contentView addSubview:self.editButton];
+    if (transactionViewModel.assetType != LegacyAssetTypeStellar) {
+        [self.editButton addTarget:self action:@selector(editDescription) forControlEvents:UIControlEventTouchUpInside];
+    }
 }
 
 - (void)addPlaceholderLabel

@@ -10,5 +10,7 @@ import Foundation
 
 protocol SendXLMInterface: class {
     typealias PresentationUpdate = SendLumensViewController.PresentationUpdate
+
     func apply(updates: [PresentationUpdate])
+    func present(viewController: UIViewController)
 }

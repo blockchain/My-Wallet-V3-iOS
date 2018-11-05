@@ -31,6 +31,7 @@ struct OrderResult: Codable {
     let withdrawal: SymbolValue
     let withdrawalFee: SymbolValue
     let fiatValue: SymbolValue
+    let depositMemo: String?
 
     private enum CodingKeys: CodingKey {
         case id
@@ -46,6 +47,7 @@ struct OrderResult: Codable {
         case withdrawal
         case withdrawalFee
         case fiatValue
+        case depositMemo
     }
 }
 

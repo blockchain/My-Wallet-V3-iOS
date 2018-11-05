@@ -26,6 +26,5 @@
 @property (nonatomic) CGFloat defaultTextViewHeight;
 @property (nonatomic) UIButton *editButton;
 @property (nonatomic) id<DescriptionDelegate> descriptionDelegate;
-- (void)addEditButton;
 
 @end

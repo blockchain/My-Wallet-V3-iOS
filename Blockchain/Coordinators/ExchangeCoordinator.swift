@@ -36,8 +36,8 @@ struct ExchangeServices: ExchangeDependencies {
         markets = MarketsService()
         conversions = ExchangeConversionService()
         inputs = ExchangeInputsService()
-        tradeExecution = TradeExecutionService()
         assetAccountRepository = AssetAccountRepository.shared
+        tradeExecution = TradeExecutionService(dependencies: TradeExecutionServiceDependencies())
         tradeLimits = TradeLimitsService()
     }
 }
@@ -114,21 +114,41 @@ struct ExchangeServices: ExchangeDependencies {
     }
 
     private func showAppropriateExchange() {
-        if walletManager.wallet.hasEthAccount() {
-            showExchange(type: .homebrew)
-        } else {
-            if walletManager.wallet.needsSecondPassword() {
-                AuthenticationCoordinator.shared.showPasswordConfirm(
-                    withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
-                    headerText: LocalizationConstants.Authentication.secondPasswordRequired,
-                    validateSecondPassword: true,
-                    confirmHandler: { (secondPassword) in
-                        self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
-                    }
-                )
+        initXlmAccountIfNeeded { [unowned self] in
+            if !self.walletManager.wallet.hasEthAccount() {
+                self.createEthAccountForExchange()
             } else {
-                walletManager.wallet.createEthAccount(forExchange: nil)
+                self.showExchange(type: .homebrew)
             }
+        }
+    }
+
+    private func initXlmAccountIfNeeded(completion: @escaping (() -> ())) {
+        disposable = xlmAccountRepository.initializeMetadataMaybe()
+            .flatMap({ [unowned self] _ in
+                return self.stellarAccountService.currentStellarAccount(fromCache: true)
+            })
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { _ in
+                completion()
+            }, onError: { error in
+                Logger.shared.error("Failed to fetch XLM account.")
+            })
+    }
+
+    private func createEthAccountForExchange() {
+        if walletManager.wallet.needsSecondPassword() {
+            AuthenticationCoordinator.shared.showPasswordConfirm(
+                withDisplayText: LocalizationConstants.Authentication.etherSecondPasswordPrompt,
+                headerText: LocalizationConstants.Authentication.secondPasswordRequired,
+                validateSecondPassword: true,
+                confirmHandler: { (secondPassword) in
+                    self.walletManager.wallet.createEthAccount(forExchange: secondPassword)
+            }
+            )
+        } else {
+            walletManager.wallet.createEthAccount(forExchange: nil)
         }
     }
 
@@ -236,18 +256,24 @@ struct ExchangeServices: ExchangeDependencies {
     // MARK: - Services
     private let marketsService: MarketsService
     private let exchangeService: ExchangeService
+    private let stellarAccountService: StellarAccountAPI
+    private let xlmAccountRepository: WalletXlmAccountRepository
 
     // MARK: - Lifecycle
     private init(
         walletManager: WalletManager = WalletManager.shared,
         walletService: WalletService = WalletService.shared,
         marketsService: MarketsService = MarketsService(),
-        exchangeService: ExchangeService = ExchangeService()
+        exchangeService: ExchangeService = ExchangeService(),
+        stellarAccountService: StellarAccountAPI = XLMServiceProvider.shared.services.accounts,
+        xlmAccountRepository: WalletXlmAccountRepository = XLMServiceProvider.shared.services.repository
     ) {
         self.walletManager = walletManager
         self.walletService = walletService
         self.marketsService = marketsService 
         self.exchangeService = exchangeService
+        self.stellarAccountService = stellarAccountService
+        self.xlmAccountRepository = xlmAccountRepository
         super.init()
     }
 

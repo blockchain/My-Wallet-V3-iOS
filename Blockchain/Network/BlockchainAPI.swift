@@ -53,7 +53,8 @@ final class BlockchainAPI: NSObject {
         sfox = "api.sfox.com",
         sfoxKYC = "sfox-kyc.s3.amazonaws.com",
         sfoxQuotes = "quotes.sfox.com",
-        shapeshift = "shapeshift.io"
+        shapeshift = "shapeshift.io",
+        firebaseAnalytics = "app-measurement.com"
     }
 
     struct Parameters {

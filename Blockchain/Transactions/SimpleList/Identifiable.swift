@@ -10,4 +10,5 @@ import Foundation
 
 protocol Identifiable {
     var identifier: String { get }
+    func cellType() -> TransactionTableCell.Type
 }

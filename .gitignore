@@ -30,8 +30,10 @@ vendor/
 
 # Other
 *.der
+.env.*
+.idea/
+GoogleService-Info.plist
 Cert
 Config
 DerivedData
 profile
-.env.*

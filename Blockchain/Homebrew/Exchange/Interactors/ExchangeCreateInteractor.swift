@@ -546,7 +546,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         case true:
             return inputs.canAddFiatCharacter(value)
         case false:
-            return inputs.canAddAssetCharacter(value)
+            let assetType = model.isUsingBase ? model.pair.from : model.pair.to
+            return inputs.canAddAssetCharacter(value, type: assetType)
         }
     }
 

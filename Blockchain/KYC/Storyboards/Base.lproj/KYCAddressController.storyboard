@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1m4-Wz-u3W">
-    <device id="retina4_0" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1m4-Wz-u3W">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,32 +23,32 @@
             <objects>
                 <viewController title="Address View Controller" id="1m4-Wz-u3W" customClass="KYCAddressController" customModule="Blockchain" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6kS-bR-6h1">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LU7-BL-Zrb">
-                                <rect key="frame" x="0.0" y="64" width="320" height="8"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="8"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="Sev-w9-pJR"/>
                                 </constraints>
                             </progressView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-6J-r0r">
-                                <rect key="frame" x="0.0" y="136.5" width="320" height="431.5"/>
+                                <rect key="frame" x="0.0" y="160" width="375" height="618"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableView>
                             <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-gf-4D1">
-                                <rect key="frame" x="8" y="80" width="304" height="56"/>
+                                <rect key="frame" x="8" y="104" width="359" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="Wz6-6Z-OCC"/>
                                 </constraints>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HTQ-Da-JDA">
-                                <rect key="frame" x="0.0" y="136" width="320" height="340"/>
+                                <rect key="frame" x="0.0" y="160" width="375" height="526"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HnA-P2-2Gj" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="40" width="288" height="56"/>
+                                        <rect key="frame" x="16" y="54.333333333333343" width="343" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="qiA-WP-2m1"/>
@@ -67,7 +66,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5mF-Bq-VW9" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="96" width="288" height="56"/>
+                                        <rect key="frame" x="16" y="110.33333333333331" width="343" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="OZn-hW-Aaj"/>
@@ -84,7 +83,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j8H-Lr-LlB" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="152" width="288" height="56"/>
+                                        <rect key="frame" x="16" y="166.33333333333331" width="343" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="vO7-yX-H6J"/>
@@ -102,7 +101,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQL-tY-eAz" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="208" width="136" height="56"/>
+                                        <rect key="frame" x="16" y="222.33333333333331" width="163.66666666666666" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="gxq-ds-nCp"/>
@@ -120,7 +119,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LF7-ax-XE2" customClass="ValidationTextField" customModule="Blockchain" customModuleProvider="target">
-                                        <rect key="frame" x="167.5" y="208" width="136.5" height="56"/>
+                                        <rect key="frame" x="195.66666666666663" y="222.33333333333331" width="163.33333333333337" height="56"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="5Kb-Nc-YfN"/>
@@ -137,14 +136,14 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="What is the address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVk-mv-RzC">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" ambiguous="YES" text="What is my address used for?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVk-mv-RzC">
                                         <rect key="frame" x="16" y="0.0" width="288" height="15"/>
                                         <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
                                         <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="999" text="We need this information to verify your identity." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zsH-tV-aX0">
-                                        <rect key="frame" x="16" y="17" width="288" height="15"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="999" ambiguous="YES" text="This information is only used to help us verify your identity." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zsH-tV-aX0">
+                                        <rect key="frame" x="16" y="17" width="288" height="29.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                         <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -180,11 +179,11 @@
                                 </connections>
                             </scrollView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FFX-OX-l36">
-                                <rect key="frame" x="141.5" y="334" width="37" height="37"/>
+                                <rect key="frame" x="169" y="450.66666666666669" width="37" height="37"/>
                                 <color key="color" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhb-q7-xBR" customClass="PrimaryButtonContainer" customModule="Blockchain" customModuleProvider="target">
-                                <rect key="frame" x="16" y="508" width="287.5" height="44"/>
+                                <rect key="frame" x="16" y="718" width="343" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="7OT-yL-tsy"/>

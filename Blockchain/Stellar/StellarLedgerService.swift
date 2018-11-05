@@ -12,6 +12,10 @@ import RxSwift
 import RxCocoa
 
 class StellarLedgerService: StellarLedgerAPI {
+
+    let fallbackBaseReserve: Decimal = 0.5
+    let fallbackBaseFee: Decimal = 0.00001
+
     var current: Observable<StellarLedger> {
         return fetchLedgerStartingWithCache(
             cachedValue: privateLedger,

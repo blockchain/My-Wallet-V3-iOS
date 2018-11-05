@@ -9,10 +9,11 @@
 import UIKit
 import Fabric
 import Crashlytics
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
     // The view used as an intermediary privacy screen when the application state changes to inactive
     fileprivate lazy var visualEffectView: UIVisualEffectView = self.lazyVisualEffectView()
 
@@ -27,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         view.alpha = 0
         return view
     }
-    
+
     // MARK: - Properties
     // NOTE: Xcode automatically creates the file name for each launch image
     /// The overlay shown when the application resigns active state.
@@ -50,9 +51,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return nil
     }()
-    
+
+    private lazy var deepLinkHandler: DeepLinkHandler = {
+        return DeepLinkHandler()
+    }()
+
+    // MARK: - Lifecycle Methods
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
+        FirebaseApp.configure()
 
         BlockchainSettings.App.shared.appBecameActiveCount += 1
         // MARK: - Global Appearance
@@ -107,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.showBlurCurtain()
             }
         }
-     
+
         if let pinEntryViewController = AuthenticationCoordinator.shared.pinEntryViewController, pinEntryViewController.verifyOnly {
             pinEntryViewController.reset()
         }
@@ -256,6 +264,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TICKET: IOS-1329 - Implement didFailToRegisterForRemoteNotificationsWithError
     }
 
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        guard let webpageUrl = userActivity.webpageURL else { return false }
+
+        let handled = DynamicLinks.dynamicLinks().handleUniversalLink(webpageUrl) { [weak self] dynamicLink, error in
+            guard error == nil else {
+                Logger.shared.error("Got error handling universal link: \(error!.localizedDescription)")
+                return
+            }
+
+            guard let deepLinkUrl = dynamicLink?.url else {
+                return
+            }
+
+            self?.deepLinkHandler.handle(deepLink: deepLinkUrl)
+        }
+        return handled
+    }
+
     // MARK: - State Checks
 
     func checkForNewInstall() {
@@ -299,7 +325,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.visualEffectView.removeFromSuperview()
         })
     }
-    
+
     func showBlurCurtain() {
         UIApplication.shared.keyWindow?.addSubview(visualEffectView)
         UIView.animate(withDuration: 0.64) {

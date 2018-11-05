@@ -28,7 +28,7 @@ final class BlockchainSettings: NSObject {
     // MARK: - App
 
     @objc
-    final class App: NSObject {
+    class App: NSObject {
         static let shared = App()
 
         private lazy var defaults: UserDefaults = {
@@ -150,12 +150,24 @@ final class BlockchainSettings: NSObject {
             }
         }
 
-        @objc var fiatCurrencySymbol: String? {
-            return WalletManager.shared.latestMultiAddressResponse?.symbol_local.symbol
+        @objc var fiatCurrencySymbol: String {
+            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
+            let symbolLocal = latestMultiAddressResponse.symbol_local,
+            let theSymbol = symbolLocal.symbol else {
+                Logger.shared.warning("Failed to get the fiat currency symbol from latestMultiAddressResponse!")
+                return Locale.current.currencySymbol!
+            }
+            return theSymbol
         }
 
-        @objc var fiatCurrencyCode: String? {
-            return WalletManager.shared.latestMultiAddressResponse?.symbol_local.code
+        @objc var fiatCurrencyCode: String {
+            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
+                let symbolLocal = latestMultiAddressResponse.symbol_local,
+                let theCode = symbolLocal.code else {
+                    Logger.shared.warning("Failed to get the fiat currency code from latestMultiAddressResponse!")
+                    return Locale.current.currencyCode!
+            }
+            return theCode
         }
 
         @objc func fiatSymbolFromCode(currencyCode: String) -> String? {
@@ -331,7 +343,8 @@ final class BlockchainSettings: NSObject {
         }
 
         /**
-         Determines if the application should show the *Continue verification* announcement card on the dashboard.
+         Determines if the user is currently completing the KYC process. This allow the application to determine
+         if it should show the *Continue verification* announcement card on the dashboard.
 
          - Note:
          This value is set to `true` whenever the user taps on the primary button on the KYC welcome screen.
@@ -341,16 +354,33 @@ final class BlockchainSettings: NSObject {
          - Important:
          This setting **MUST** be set to `false` upon logging the user out of the application.
          */
-        @objc var shouldShowKYCAnnouncementCard: Bool {
+        @objc var isCompletingKyc: Bool {
             get {
-                return defaults.bool(forKey: UserDefaults.Keys.shouldShowKYCAnnouncementCard.rawValue)
+                return defaults.bool(forKey: UserDefaults.Keys.isCompletingKyc.rawValue)
             }
             set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.shouldShowKYCAnnouncementCard.rawValue)
+                defaults.set(newValue, forKey: UserDefaults.Keys.isCompletingKyc.rawValue)
             }
         }
 
-        private override init() {
+        /**
+         Determines if the user deep linked into the app using the airdrop dynamic link. This value is used in various
+         places to handle the airdrop flow (e.g. prompt the user to KYC to finish the airdrop, to continue KYC'ing if
+         they have already gone through the KYC flow, etc.)
+
+         - Important:
+         This setting **MUST** be set to `false` upon logging the user out of the application.
+         */
+        @objc var didTapOnAirdropDeepLink: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.didTapOnAirdropDeepLink.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.didTapOnAirdropDeepLink.rawValue)
+            }
+        }
+
+         override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.
             super.init()
@@ -375,8 +405,9 @@ final class BlockchainSettings: NSObject {
             // TICKET: IOS-1365 - Finish UserDefaults refactor (tickets, documentation, linter issues)
             // TODO: - reset all appropriate settings upon logging out
             clearPin()
-            App.shared.appBecameActiveCount = 0
-            App.shared.shouldShowKYCAnnouncementCard = false
+            appBecameActiveCount = 0
+            isCompletingKyc = false
+            didTapOnAirdropDeepLink = false
             Logger.shared.info("Application settings have been reset.")
         }
 
@@ -502,10 +533,24 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /// Property indicating whether or not the user has already seen, and clicked, on the
+        /// Stellar "join the waitlist" onboarding card for receiving an XLM airdrop
+        @objc var hasSeenAirdropJoinWaitlistCard: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.hasSeenAirdropJoinWaitlistCard.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.hasSeenAirdropJoinWaitlistCard.rawValue)
+            }
+        }
+
         private override init() {
             super.init()
         }
 
+        func reset() {
+            hasSeenAirdropJoinWaitlistCard = false
+        }
     }
 
     private override init() {

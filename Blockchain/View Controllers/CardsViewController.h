@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class AnnouncementCardViewModel;
+
 @interface CardsViewController : UIViewController
 // TICKET: IOS-1249 - Refactor CardsViewController
+@property (nonatomic) CGFloat cardsViewHeight;
 @property (nonatomic) UIView *dashboardContentView;
 @property (nonatomic) UIScrollView *dashboardScrollView;
-- (void)reloadCards;
+- (void)reloadWelcomeCards;
+- (void)animateHideCards;
+- (void)showSingleCardWithViewModel:(AnnouncementCardViewModel *)viewModel;
 @end

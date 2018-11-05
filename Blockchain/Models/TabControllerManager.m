@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) DashboardController *dashboardViewController;
 @property (strong, nonatomic) SendLumensViewController *sendLumensViewController;
+@property (strong, nonatomic) TransactionsXlmViewController *transactionsStellarViewController;
 
 @end
 @implementation TabControllerManager
@@ -221,7 +222,7 @@
         [_tabViewController setActiveViewController:_sendBitcoinCashViewController animated:animated index:tabIndex];
     } else if (self.assetType == LegacyAssetTypeStellar) {
         if (!_sendLumensViewController) {
-            _sendLumensViewController = [SendLumensViewController make];
+            _sendLumensViewController = [SendLumensViewController makeWith:XLMServiceProvider.sharedInstance];
         }
 
         [_tabViewController setActiveViewController:_sendLumensViewController animated:animated index:tabIndex];
@@ -412,8 +413,6 @@
 
 - (void)didGetFiatAtTimeWithFiatAmount:(NSNumber * _Nonnull)fiatAmount currencyCode:(NSString * _Nonnull)currencyCode assetType:(AssetType)assetType
 {
-    BOOL didFindTransaction = NO;
-
     NSArray *transactions;
     NSString *targetHash;
 
@@ -428,19 +427,17 @@
         targetHash = self.transactionsBitcoinCashViewController.detailViewController.transactionModel.myHash;
     }
 
+    NSString *amount = [[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:fiatAmount];
+    NSDictionary *result = @{currencyCode : amount};
+    
     for (Transaction *transaction in transactions) {
         if ([transaction.myHash isEqualToString:targetHash]) {
-            [transaction.fiatAmountsAtTime setObject:[[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:fiatAmount] forKey:currencyCode];
-            didFindTransaction = YES;
+            [transaction.fiatAmountsAtTime setObject:amount forKey:currencyCode];
             break;
         }
     }
-
-    if (!didFindTransaction) {
-        DLog(@"didGetFiatAtTime: will not set fiat amount because the detail controller's transaction hash cannot be found.");
-    }
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:[ConstantsObjcBridge notificationKeyGetFiatAtTime] object:result];
 }
 
 - (void)didErrorWhenGettingFiatAtTimeWithError:(NSString * _Nullable)error
@@ -547,8 +544,11 @@
 
         [_tabViewController setActiveViewController:_transactionsBitcoinCashViewController animated:animated index:tabIndex];
     } else if (self.assetType == LegacyAssetTypeStellar) {
-        TransactionsXlmViewController *viewController = [TransactionsXlmViewController make];
-        [_tabViewController setActiveViewController:viewController animated:animated index:tabIndex];
+        if (!_transactionsStellarViewController) {
+            _transactionsStellarViewController = [TransactionsXlmViewController makeWith:XLMServiceProvider.sharedInstance];
+        }
+        [_transactionsStellarViewController reload];
+        [_tabViewController setActiveViewController:_transactionsStellarViewController animated:animated index:tabIndex];
     }
 }
 
@@ -754,6 +754,14 @@
     [_transactionsBitcoinCashViewController reload];
 }
 
+-(void)showTransactionsStellar
+{
+    [self changeAssetSelectorAsset:LegacyAssetTypeStellar];
+    [self showTransactionsAnimated:YES];
+    // TODO: reload transactions
+    [_transactionsStellarViewController reload];
+}
+
 - (void)changeAssetSelectorAsset:(LegacyAssetType)assetType
 {
     self.assetType = assetType;
@@ -841,7 +849,7 @@
             // Always creating a new SendLumensViewController for stellar. This is because there is a layout issue
             // when reusing an existing SendLumensViewController wherein after you scan the QR code, the view occupies
             // the full frame, and not the adjusted frame.
-            _sendLumensViewController = [SendLumensViewController make];
+            _sendLumensViewController = [SendLumensViewController makeWith:XLMServiceProvider.sharedInstance];
             [_sendLumensViewController scanQrCodeForDestinationAddress];
             viewControllerToPresent = _sendLumensViewController;
             break;

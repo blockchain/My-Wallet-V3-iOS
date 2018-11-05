@@ -22,3 +22,24 @@ struct StellarAccount {
     
     let subentryCount: Int
 }
+
+extension StellarAccount {
+    static func unfundedAccount(accountId: String) -> StellarAccount {
+        let assetAddress = AssetAddressFactory.create(
+            fromAddressString: accountId,
+            assetType: .stellar
+        )
+        let assetAccount = AssetAccount(
+            index: 0,
+            address: assetAddress,
+            balance: 0,
+            name: LocalizationConstants.Stellar.defaultLabelName
+        )
+        return StellarAccount(
+            identifier: accountId,
+            assetAccount: assetAccount,
+            sequence: 0,
+            subentryCount: 0
+        )
+    }
+}
