@@ -63,7 +63,7 @@ class StellarOperationService {
     init(
         configuration: StellarConfiguration = .production,
         repository: WalletXlmAccountRepository
-        ) {
+    ) {
         self.configuration = configuration
         self.repository = repository
     }
@@ -193,10 +193,11 @@ extension StellarOperationService: StellarOperationsAPI {
     fileprivate func all(from accountID: String) -> Observable<[StellarOperation]> {
         return allOperations(from: accountID, token: nil).map {
             $0.items
-            }.reduce(
-                [],
-                accumulator: { $0 + $1 }
-        )
+        }.reduce([], accumulator: { $0 + $1 })
+    }
+
+    func clear() {
+        privateReplayedOperations = ReplaySubject<[StellarOperation]>.createUnbounded()
     }
     
     /// Fetches all `StellarOperations` for a given account.

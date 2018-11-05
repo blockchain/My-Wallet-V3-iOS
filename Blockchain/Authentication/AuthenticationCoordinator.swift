@@ -236,6 +236,7 @@ import RxSwift
 
         dataRepository.clearCache()
 
+        XLMServiceProvider.shared.tearDown()
         BlockchainSettings.App.shared.reset()
         BlockchainSettings.Onboarding.shared.reset()
 
