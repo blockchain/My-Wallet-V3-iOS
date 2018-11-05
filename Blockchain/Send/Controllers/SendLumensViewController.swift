@@ -300,6 +300,8 @@ protocol SendXLMViewControllerDelegate: class {
     }
 
     private func showPaymentSuccess() {
+        let controller = AppCoordinator.shared.tabControllerManager
+        controller.showTransactionsStellar()
         AlertViewPresenter.shared.standardNotify(
             message: LocalizationConstants.SendAsset.paymentSent,
             title: LocalizationConstants.success
