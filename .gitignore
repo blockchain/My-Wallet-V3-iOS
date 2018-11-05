@@ -25,6 +25,7 @@ fastlane/screenshots
 fastlane/test_output
 
 # Dependencies
+Pods/
 vendor/
 
 # Other
