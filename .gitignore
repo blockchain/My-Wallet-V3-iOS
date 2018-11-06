@@ -16,6 +16,8 @@ xcuserdata/
 *.moved-aside
 Blockchain/APIDefines.h
 External/*
+*.ipa
+*.app.dSYM.zip
 
 # Fastlane
 fastlane/report.xml
