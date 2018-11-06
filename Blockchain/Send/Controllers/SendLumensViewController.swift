@@ -196,6 +196,8 @@ protocol SendXLMViewControllerDelegate: class {
 
     @objc func resignMemoIDField() {
         memoIDTextField.resignFirstResponder()
+        guard memoIDTextField.text != nil else { return }
+        clearMemoField()
     }
 
     fileprivate func useMaxAttributes() -> [NSAttributedString.Key: Any] {
@@ -349,6 +351,10 @@ protocol SendXLMViewControllerDelegate: class {
             })
             controller.addAction(action)
         }
+        let cancel = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel) { _ in
+            controller.dismiss(animated: true, completion: nil)
+        }
+        controller.addAction(cancel)
         present(controller, animated: true, completion: nil)
     }
 }
@@ -487,6 +493,9 @@ extension SendLumensViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        if [memoIDTextField, memoTextField].contains(textField), memo == nil {
+            clearMemoField()
+        }
         return true
     }
 
