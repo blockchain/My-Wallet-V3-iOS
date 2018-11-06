@@ -7843,6 +7843,7 @@
 				9FB3636E14B60128004BEA02 /* Frameworks */,
 				7ADD19D5218743A70013A525 /* Setup Firebase Environment */,
 				23FDEFA31D6E22C900FC80D6 /* Run SwiftLint */,
+				51E355EB2192063400753FEB /* Get SSL Certificate */,
 				9FB3636F14B60128004BEA02 /* Resources */,
 				5149BD072057192900DC88A0 /* Embed Frameworks */,
 				C718594D1F460C4A00745A87 /* Run Fabric */,
@@ -8231,6 +8232,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		51E355EB2192063400753FEB /* Get SSL Certificate */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Get SSL Certificate";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -ue\nif [ ! -d ${SRCROOT}/Cert ]; then\n    mkdir ${SRCROOT}/Cert\nfi\ncd ${SRCROOT}/Cert\nopenssl s_client -connect blockchain.com:443 -showcerts < /dev/null | openssl x509 -outform DER > blockchain.der\n";
 		};
 		7ADD19D5218743A70013A525 /* Setup Firebase Environment */ = {
 			isa = PBXShellScriptBuildPhase;
