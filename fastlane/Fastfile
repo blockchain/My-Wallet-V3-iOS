@@ -1,9 +1,11 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
 #
-# For a list of all available actions, check out
+#  Fastfile
 #
-#     https://docs.fastlane.tools/actions
+#  For more information about the Fastfile, see:
+#  You can find the documentation at https://docs.fastlane.tools
+#
+#  For a list of all available actions, check out
+#  https://docs.fastlane.tools/actions
 #
 
 opt_out_usage
@@ -13,44 +15,32 @@ platform :ios do
   before_all do
     setup_circle_ci
   end
-  desc "Builds using the dev environment"
+  desc "Builds using the production environment"
   lane :dev do
-    sync_code_signing(type: "appstore", readonly: true)
-    build_app(
-      clean: true,
-      export_method: "app-store",
-      include_bitcode: false,
-      include_symbols: true,
-      scheme: "Blockchain (Dev)",
-      workspace: "Blockchain.xcworkspace"
+    # Global parameters are loaded from the Matchfile
+    match(
+      readonly: true,
+      type: "appstore"
     )
+    # Global parameters are loaded from the Gymfile
+    # gym(
+    #   configuration: "Release",
+    #   export_method: "app-store",
+    #   export_options: "./exportOptions.plist",
+    #   scheme: "Blockchain"
+    # )
+    # upload_to_testflight
+    # increment_build_number(
+    #   build_number: app_store_build_number + 1,
+    #   xcodeproj: "Blockchain.xcodeproj"
+    # )
     if is_ci?
-      # Send Slack notification to #ios-ci channel
-      # slack(message: "App successfully build!")
+      slack(message: "App was successfully uploaded to TestFlight!")
     end
   end
-  desc "Deploys staging environment build to TestFlight"
-  lane :staging do
-    increment_build_number(
-      build_number: app_store_build_number + 1,
-      xcodeproj: "Blockchain.xcodeproj"
-    )
-    build_app(
-      clean: true,
-      include_bitcode: false,
-      include_symbols: true,
-      scheme: "Blockchain (Staging)",
-      workspace: "Blockchain.xcworkspace"
-    )
-    # upload_to_testflight
-  end
-  desc "Runs all unit tests"
-  lane :unit_tests do
-    scan(
-      workspace: "Blockchain.xcworkspace",
-      scheme: "Blockchain (Staging)",
-      devices: ["iPhone X"],
-      clean: true
-    )
+  desc "Upload to TestFlight"
+  lane :upload do
+    sync_code_signing(type: "appstore", readonly: true)
+    upload_to_testflight
   end
 end
