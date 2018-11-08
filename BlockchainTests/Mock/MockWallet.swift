@@ -10,6 +10,12 @@ import Foundation
 
 class MockWallet: Wallet {
 
+    var mockIsInitialized: Bool = false
+
+    override func isInitialized() -> Bool {
+        return mockIsInitialized
+    }
+
     /// When called, invokes the delegate's walletDidDecrypt and walletDidFinishLoad methods
     override func load(withGuid guid: String!, sharedKey: String!, password: String!) {
         self.delegate?.walletDidDecrypt!()

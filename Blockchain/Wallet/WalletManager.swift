@@ -131,10 +131,15 @@ class WalletManager: NSObject {
     }
 
     private func updateFiatSymbols() {
+        guard wallet.hasLoadedAccountInfo == true else { return }
+        
         guard let fiatCode = self.wallet.accountInfo["currency"] as? String else {
             Logger.shared.warning("Could not get fiat code")
             return
         }
+        
+        guard wallet.btcRates != nil else { return }
+        
         guard let currencySymbols = self.wallet.btcRates[fiatCode] as? [AnyHashable: Any] else {
             Logger.shared.warning("Currency symbols dictionary is nil")
             return

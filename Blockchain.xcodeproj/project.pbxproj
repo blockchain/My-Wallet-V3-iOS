@@ -782,6 +782,9 @@
 		AABDED40208A6E8D002D8BAC /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED3F208A6E8D002D8BAC /* UIViewController.swift */; };
 		AABDED70208FACB9002D8BAC /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6F208FACB9002D8BAC /* Reachability.swift */; };
 		AABDED92208FDFE3002D8BAC /* HTTPCookieStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */; };
+		AABE35EB21939AC00001AE4A /* WalletError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABE35EA21939AC00001AE4A /* WalletError.swift */; };
+		AABE35EC21939AC00001AE4A /* WalletError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABE35EA21939AC00001AE4A /* WalletError.swift */; };
+		AABE35EF21939C620001AE4A /* NabuAuthenticationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABE35EE21939C620001AE4A /* NabuAuthenticationServiceTests.swift */; };
 		AAC8F35620993BB8004B7D33 /* WebSocketCloseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */; };
 		AAC8F35820993BC1004B7D33 /* WebSocketCloseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */; };
 		AAC9FCE520ADF17100E28B7A /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC9FCE420ADF17100E28B7A /* SoundManager.swift */; };
@@ -3393,6 +3396,8 @@
 		AABDED6B208EC330002D8BAC /* WalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletManager.swift; sourceTree = "<group>"; };
 		AABDED6F208FACB9002D8BAC /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		AABDED91208FDFE3002D8BAC /* HTTPCookieStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPCookieStorage.swift; sourceTree = "<group>"; };
+		AABE35EA21939AC00001AE4A /* WalletError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletError.swift; sourceTree = "<group>"; };
+		AABE35EE21939C620001AE4A /* NabuAuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NabuAuthenticationServiceTests.swift; sourceTree = "<group>"; };
 		AAC8F35520993BB8004B7D33 /* WebSocketCloseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketCloseCode.swift; sourceTree = "<group>"; };
 		AAC9FCE420ADF17100E28B7A /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		AAC9FCED20AE456400E28B7A /* WalletTransactionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTransactionDelegate.swift; sourceTree = "<group>"; };
@@ -7323,8 +7328,25 @@
 				C79DD06D20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift */,
 				AA035C872176A38D00731CD5 /* Metadata */,
 				AAA341B12180E5E400E09561 /* Mnemonic */,
+				AABE35E021939AA00001AE4A /* Models */,
 			);
 			path = Wallet;
+			sourceTree = "<group>";
+		};
+		AABE35E021939AA00001AE4A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AABE35EA21939AC00001AE4A /* WalletError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AABE35ED21939C500001AE4A /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				AABE35EE21939C620001AE4A /* NabuAuthenticationServiceTests.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		AACE317E2092793300B7B806 /* Pin */ = {
@@ -7495,6 +7517,7 @@
 		C75684C6212F04F600B5059C /* Homebrew */ = {
 			isa = PBXGroup;
 			children = (
+				AABE35ED21939C500001AE4A /* Authentication */,
 				AA0843C6215D73780007BFD1 /* Exchange */,
 				C75684C9212F053200B5059C /* TradingPairTests.swift */,
 			);
@@ -8558,6 +8581,7 @@
 				AA54E496216D2A4E005061F9 /* SearchableMap.swift in Sources */,
 				C7C0DC25212F67A6000EFE71 /* ExchangeTradeCellModel.swift in Sources */,
 				AAB75A022189641900A0AD11 /* MockXlmWallet.swift in Sources */,
+				AABE35EF21939C620001AE4A /* NabuAuthenticationServiceTests.swift in Sources */,
 				AAE94F4420C736E9005A3595 /* AssetURLPayloadFactoryTests.swift in Sources */,
 				3ADFE700214AE1E100E7E2D5 /* ExchangeStyleTemplate.swift in Sources */,
 				602B9D172118E25A00BD3D60 /* LocationSuggestionInterface.swift in Sources */,
@@ -8738,6 +8762,7 @@
 				C7D5115C21237DE000359651 /* HttpHeader.swift in Sources */,
 				AAB75A00218960C300A0AD11 /* StellarAirdropRegistrationService.swift in Sources */,
 				AAF2AEC22123799800687E30 /* KYCPersonalDetailsController.swift in Sources */,
+				AABE35EC21939AC00001AE4A /* WalletError.swift in Sources */,
 				AA447BDB2127BC1100EC0FA0 /* SideMenuViewController.swift in Sources */,
 				3A3C7D512180D31D0067F442 /* StellarServiceError.swift in Sources */,
 				C7FF11102141E24000CBA3CB /* InputsState.swift in Sources */,
@@ -9260,6 +9285,7 @@
 				C76D731720B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				C7559CAF1F55E874005B2375 /* BCConfirmPaymentViewModel.m in Sources */,
 				AA126CE5212C99FF005886A3 /* KYCPageViewFactory.swift in Sources */,
+				AABE35EB21939AC00001AE4A /* WalletError.swift in Sources */,
 				C733A89321236F02007DADE0 /* HttpHeader.swift in Sources */,
 				3A373C452188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */,
 				AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */,

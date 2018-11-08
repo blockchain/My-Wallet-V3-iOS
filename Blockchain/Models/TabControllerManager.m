@@ -187,6 +187,8 @@
     self.receiveBitcoinViewController = nil;
     self.receiveEtherViewController = nil;
     self.receiveBitcoinCashViewController = nil;
+    self.transactionsStellarViewController = nil;
+    self.sendLumensViewController = nil;
     [_transactionsBitcoinViewController setData:nil];
 }
 

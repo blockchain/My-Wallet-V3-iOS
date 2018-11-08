@@ -21,6 +21,7 @@ protocol StellarAccountAPI {
     func currentStellarAccount(fromCache: Bool) -> Maybe<StellarAccount>
     func accountResponse(for accountID: AccountID) -> Single<AccountResponse>
     func accountDetails(for accountID: AccountID) -> Maybe<StellarAccount>
+    func clear()
 
     /// Funds an account. This operation is typically done when trying to send XLM to an address
     /// that does not yet have a stellar account.

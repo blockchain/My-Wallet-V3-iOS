@@ -30,14 +30,14 @@ extension TransactionDetailViewModel {
         if let fee = xlmTransaction.fee,
             let amount = Decimal(string: xlmTransaction.amount),
             let feeInWholeUnit = NumberFormatter.integerToWholeUnit(amount: fee, assetType: AssetType.from(legacyAssetType: assetType)) {
-            feeString = String(describing: feeInWholeUnit)
+            feeString = String(describing: feeInWholeUnit).appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
 
             // Fee is not fetched until tapping on a transaction cell because the SDK only provides a method
             // for fetching the fee for a single transaction. In the meantime we are hardcoding it for outgoing transactions.
             let displayAmount = xlmTransaction.direction == .credit ? amount : amount + feeInWholeUnit
-            amountString = "\(displayAmount)"
+            amountString = "\(displayAmount)".appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
         } else {
-            amountString = xlmTransaction.amount
+            amountString = "\(xlmTransaction.amount)".appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
         }
 
         decimalAmount = NSDecimalNumber(string: amountString)
@@ -81,14 +81,14 @@ extension TransactionDetailViewModel {
         
         if let fee = xlmTransaction.fee,
             let feeInWholeUnit = NumberFormatter.integerToWholeUnit(amount: fee, assetType: AssetType.from(legacyAssetType: assetType)) {
-            feeString = String(describing: feeInWholeUnit)
+            feeString = String(describing: feeInWholeUnit).appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
 
             // Fee is not fetched until tapping on a transaction cell because the SDK only provides a method
             // for fetching the fee for a single transaction. In the meantime we are hardcoding it for outgoing transactions.
             let displayAmount = xlmTransaction.direction == .credit ? xlmTransaction.balance : xlmTransaction.balance + feeInWholeUnit
-            amountString = "\(displayAmount)"
+            amountString = "\(displayAmount)".appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
         } else {
-            amountString = "\(xlmTransaction.balance)"
+            amountString = "\(xlmTransaction.balance)".appendAssetSymbol(for: AssetTypeLegacyHelper.convert(fromLegacy: assetType))
         }
 
         decimalAmount = NSDecimalNumber(string: amountString)

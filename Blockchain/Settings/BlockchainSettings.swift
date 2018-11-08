@@ -71,7 +71,9 @@ final class BlockchainSettings: NSObject {
         */
         var encryptedPinPassword: String? {
             get {
-                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+                // "encryptedPINPassword" is required for wallets that created a PIN prior to Homebrew release - see IOS-1537
+                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue) ??
+                    defaults.string(forKey: "encryptedPINPassword")
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
@@ -151,23 +153,19 @@ final class BlockchainSettings: NSObject {
         }
 
         @objc var fiatCurrencySymbol: String {
-            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-            let symbolLocal = latestMultiAddressResponse.symbol_local,
-            let theSymbol = symbolLocal.symbol else {
-                Logger.shared.warning("Failed to get the fiat currency symbol from latestMultiAddressResponse!")
-                return Locale.current.currencySymbol!
-            }
-            return theSymbol
+            let defaultValue = "$"
+            guard let addressResponse = WalletManager.shared.latestMultiAddressResponse else { return defaultValue }
+            guard let symbol = addressResponse.symbol_local else { return defaultValue }
+            guard let value = symbol.symbol else { return defaultValue }
+            return value
         }
 
         @objc var fiatCurrencyCode: String {
-            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-                let symbolLocal = latestMultiAddressResponse.symbol_local,
-                let theCode = symbolLocal.code else {
-                    Logger.shared.warning("Failed to get the fiat currency code from latestMultiAddressResponse!")
-                    return Locale.current.currencyCode!
-            }
-            return theCode
+            let defaultValue = "USD"
+            guard let addressResponse = WalletManager.shared.latestMultiAddressResponse else { return defaultValue }
+            guard let symbol = addressResponse.symbol_local else { return defaultValue }
+            guard let code = symbol.code else { return defaultValue }
+            return code
         }
 
         @objc func fiatSymbolFromCode(currencyCode: String) -> String? {

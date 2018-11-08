@@ -85,11 +85,16 @@ class XLMServiceProvider: NSObject {
         disposables.dispose()
     }
     fileprivate func setup() {
-        let combine = Observable.combineLatest(ledger.current, accounts.currentStellarAccount(fromCache: false).asObservable()).subscribe()
+        let combine = Observable.combineLatest(
+            ledger.current,
+            accounts.currentStellarAccount(fromCache: false).asObservable()
+        ).subscribe()
         disposables.insertWithDiscardableResult(combine)
     }
     
     @objc func tearDown() {
+        services.accounts.clear()
+        services.operation.clear()
         services.operation.end()
     }
 }

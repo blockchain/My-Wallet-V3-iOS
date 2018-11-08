@@ -17,4 +17,5 @@ protocol StellarOperationsAPI {
     var operations: Observable<[StellarOperation]> { get }
     func isStreaming() -> Bool
     func end()
+    func clear()
 }

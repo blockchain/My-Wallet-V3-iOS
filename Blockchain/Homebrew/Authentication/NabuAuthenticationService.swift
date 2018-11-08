@@ -41,6 +41,14 @@ final class NabuAuthenticationService {
     ///       session token is only requested if the cached token is expired.
     /// - Returns: a Single returning the sesion token
     func getSessionToken(requestNewToken: Bool = false) -> Single<NabuSessionTokenResponse> {
+
+        // The wallet must be initialized first before retrieving a session token because this service
+        // requires access to the wallet GUID and email (i.e. when creating a NabuUser) which is only
+        // obtained when the wallet has been initialized.
+        guard wallet.isInitialized() else {
+            return Single.error(WalletError.notInitialized)
+        }
+
         return getOrCreateNabuUserResponse().flatMap {
             self.getSessionTokenIfNeeded(from: $0, requestNewToken: requestNewToken)
         }
@@ -137,8 +145,7 @@ final class NabuAuthenticationService {
             }, error: { errorText in
                 Logger.shared.error("Failed to update wallet metadata: \(errorText ?? "")")
                 observer(.error(NSError(domain: "FailedToUpdateWalletMetadata", code: 0, userInfo: nil)))
-            }
-            )
+            })
             return Disposables.create()
         })
     }

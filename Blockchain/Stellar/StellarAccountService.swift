@@ -51,6 +51,10 @@ class StellarAccountService: StellarAccountAPI {
     }
     
     // MARK: Public Functions
+    func clear() {
+        privateAccount = BehaviorRelay<StellarAccount?>(value: nil)
+    }
+
     func prefetch() {
         disposable = currentStellarAccount(fromCache: true).subscribe()
     }
