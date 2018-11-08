@@ -228,6 +228,7 @@ workflows:
               only:
                 - ci
                 - dev
+                - maurice/IOS-1618/automate-build-upload
                 - release
       - build_openssl:
           requires:
