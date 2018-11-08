@@ -180,6 +180,7 @@ jobs:
             export LC_ALL=en_US.UTF-8
             export SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
             bundle exec fastlane scan
+            bundle exec fastlane dev
       - run:
           name: Codesign info
           command: security find-identity -v -p codesigning
