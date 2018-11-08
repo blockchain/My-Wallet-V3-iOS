@@ -104,6 +104,11 @@ jobs:
           key: gems-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - run:
+          name: Config Firebase
+          command: |
+            git clone -b firebase $CREDENTIALS_REPO /tmp/credentials
+            mv /tmp/credentials/Firebase /Users/distiller/project/Blockchain/Firebase
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
@@ -216,7 +221,7 @@ workflows:
             - install_deps
       - install_pods:
           requires:
-          - install_deps
+            - install_deps
       - run_tests:
           requires:
             - install_deps
