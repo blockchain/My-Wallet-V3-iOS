@@ -168,8 +168,6 @@ jobs:
   # - execute unit tests.
   run_tests:
     <<: *defaults
-    environment:
-      FL_OUTPUT_DIR: test-results
     steps:
       - attach_workspace:
           at: /Users/distiller/project
