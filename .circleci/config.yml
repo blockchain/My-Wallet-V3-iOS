@@ -143,6 +143,8 @@ jobs:
           paths:
             - ./Submodules/OpenSSL-for-iPhone
   # Install Pods
+  # - Install from cache (if possible).
+  # - Append build settings to .xcconfig files.
   install_pods:
     <<: *defaults
     steps:
@@ -159,6 +161,11 @@ jobs:
               curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
             fi
             pod install --verbose
+            git clone -b xcconfig-ci $CREDENTIALS_REPO /tmp/xcconfig
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ dev.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ dev.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ staging.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ staging.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ production.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ production.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.release.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"
       - save_cache:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
@@ -211,6 +218,11 @@ jobs:
             xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output | xcpretty
       - store_artifacts:
           path: output
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
 # --- Workflows ---
 workflows:
   version: 2
@@ -237,5 +249,18 @@ workflows:
             - build_openssl
             - install_pods
       - archive_and_export:
+          filters:
+            branches:
+              only:
+                - ci
+                - maurice/IOS-1618/automate-build-upload
+                - release
           requires:
             - run_tests
+      - deploy:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)/
+          requires:
+            - run_tests
+            - archive_and_export
