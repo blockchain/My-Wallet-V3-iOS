@@ -56,6 +56,11 @@ defaults: &defaults
 version: 2
 jobs:
   # Install Dependencies
+  # - Install node and npm.
+  # - Initialize git submodules.
+  # - Buid JavaScript source files.
+  # - Install Ruby gems.
+  # - Get Firebase config from private repo.
   install_deps:
     <<: *defaults
     steps:
@@ -82,7 +87,7 @@ jobs:
           name: Initialize Submodules
           command: git submodule update --init
       - run:
-          name: Build JS
+          name: Build JavaScript
           command: |
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
@@ -165,7 +170,7 @@ jobs:
             - ./Pods
             - ./Blockchain.xcworkspace
   # Run tests job:
-  # - execute unit tests.
+  # - Run unit tests and notify Slack channel.
   run_tests:
     <<: *defaults
     steps:
@@ -182,6 +187,11 @@ jobs:
           path: output
       - store_test_results:
           path: output/scan
+  # Archive and export application:
+  # - Update code signing.
+  # - Get export options plist file from private repo.
+  # - Archive the application.
+  # - Export the .ipa file.
   archive_and_export:
     <<: *defaults
     steps:
