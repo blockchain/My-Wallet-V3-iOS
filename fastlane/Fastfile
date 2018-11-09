@@ -34,9 +34,9 @@ platform :ios do
     #   build_number: app_store_build_number + 1,
     #   xcodeproj: "Blockchain.xcodeproj"
     # )
-    if is_ci?
-      slack(message: "App was successfully uploaded to TestFlight!")
-    end
+    # if is_ci?
+    #   slack(message: "App was successfully uploaded to TestFlight!")
+    # end
   end
   desc "Upload to TestFlight"
   lane :upload do
