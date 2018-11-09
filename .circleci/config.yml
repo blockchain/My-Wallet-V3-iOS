@@ -179,11 +179,7 @@ jobs:
             export LANG=en_US.UTF-8
             export LC_ALL=en_US.UTF-8
             export SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
-            # bundle exec fastlane scan
-            bundle exec fastlane dev
-            git clone -b xcodebuild $CREDENTIALS_REPO /tmp/xcodebuild
-            xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain -sdk iphoneos -configuration Release archive -archivePath ./output/Blockchain.xcarchive
-            xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output
+            bundle exec fastlane scan
       - run:
           name: Codesign info
           command: security find-identity -v -p codesigning
@@ -199,9 +195,14 @@ jobs:
       - run:
           name: Archive & Export Application
           command: |
-            # git clone -b xcodebuild $CREDENTIALS_REPO /tmp/xcodebuild
-            # xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain -sdk iphoneos -configuration Release archive -archivePath ./output/Blockchain.xcarchive
-            # xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            export CREDENTIALS_REPO=$CREDENTIALS_REPO
+            export FASTLANE_USER=$FASTLANE_USER
+            bundle exec fastlane match
+            git clone -b xcodebuild $CREDENTIALS_REPO /tmp/xcodebuild
+            xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain -sdk iphoneos -configuration Release archive -archivePath ./output/Blockchain.xcarchive
+            xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output
       - store_artifacts:
           path: output
   # Archive and upload job:
