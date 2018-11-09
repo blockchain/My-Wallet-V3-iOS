@@ -16,7 +16,7 @@ platform :ios do
     setup_circle_ci
   end
   desc "Builds using the production environment"
-  lane :dev do
+  lane :code_signing do
     # Global parameters are loaded from the Matchfile
     match(
       readonly: true,
