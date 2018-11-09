@@ -162,10 +162,10 @@ jobs:
             fi
             pod install --verbose
             git clone -b xcconfig-ci $CREDENTIALS_REPO /tmp/xcconfig
-            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ dev.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ dev.xcconfig"
-            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ staging.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ staging.xcconfig"
-            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug\ production.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.debug\ production.xcconfig"
-            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.release.xcconfig" >> "Pods/Target\ Support\ Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.release.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"
       - save_cache:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
