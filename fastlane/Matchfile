@@ -8,6 +8,6 @@
 #
 
 app_identifier("com.rainydayapps.Blockchain")
-git_url("git@github.com:blockchain/wallet-ios-credentials.git")
+git_url(ENV["CREDENTIALS_REPO"])
 type("appstore")
-username("ios-team@blockchain.com") # Your Apple Developer Portal username
+username(ENV["FASTLANE_USER"]) # Your Apple Developer Portal username
