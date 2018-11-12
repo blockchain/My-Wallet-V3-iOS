@@ -23,21 +23,6 @@ platform :ios do
       readonly: true,
       type: "appstore"
     )
-    # Global parameters are loaded from the Gymfile
-    # gym(
-    #   configuration: "Release",
-    #   export_method: "app-store",
-    #   export_options: "./exportOptions.plist",
-    #   scheme: "Blockchain"
-    # )
-    # upload_to_testflight
-    # increment_build_number(
-    #   build_number: app_store_build_number + 1,
-    #   xcodeproj: "Blockchain.xcodeproj"
-    # )
-    # if is_ci?
-    #   slack(message: "App was successfully uploaded to TestFlight!")
-    # end
   end
   desc "Upload to TestFlight"
   lane :upload do
