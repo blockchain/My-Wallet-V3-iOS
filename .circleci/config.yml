@@ -258,7 +258,9 @@ workflows:
                 - release
                 - release-test
           requires:
-            - run_tests
+            - install_deps
+            - build_openssl
+            - install_pods
       - deploy:
           filters:
             tags:
