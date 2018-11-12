@@ -254,7 +254,6 @@ workflows:
             branches:
               only:
                 - ci
-                - maurice/IOS-1618/automate-build-upload
                 - release
                 - release-test
           requires:
