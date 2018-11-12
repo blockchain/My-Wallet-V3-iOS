@@ -237,6 +237,7 @@ workflows:
                 - dev
                 - maurice/IOS-1618/automate-build-upload
                 - release
+                - release-test
       - build_openssl:
           requires:
             - install_deps
@@ -255,6 +256,7 @@ workflows:
                 - ci
                 - maurice/IOS-1618/automate-build-upload
                 - release
+                - release-test
           requires:
             - run_tests
       - deploy:
