@@ -232,7 +232,7 @@ workflows:
   version: 2
   # Run tests
   # - Only triggered on the dev branch.
-  build_and_test:
+  run_tests:
     jobs:
       - install_deps:
           filters:
