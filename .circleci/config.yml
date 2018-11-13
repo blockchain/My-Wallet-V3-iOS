@@ -241,6 +241,25 @@ workflows:
                 - ci
                 - dev
                 - maurice/IOS-1618/automate-build-upload
+      - build_openssl:
+          requires:
+            - install_deps
+      - install_pods:
+          requires:
+            - install_deps
+      - run_tests:
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+  # Create build and upload to App Store Connect
+  # - Only triggered on the release branch.
+  build_and_upload:
+    jobs:
+      - install_deps:
+          filters:
+            branches:
+              only:
                 - release
                 - release-test
       - build_openssl:
@@ -255,12 +274,6 @@ workflows:
             - build_openssl
             - install_pods
       - archive_and_export:
-          filters:
-            branches:
-              only:
-                - ci
-                - release
-                - release-test
           requires:
             - install_deps
             - build_openssl
