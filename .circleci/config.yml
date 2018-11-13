@@ -243,7 +243,7 @@ workflows:
   version: 2
   # Run tests
   # - Only triggered on the dev branch.
-  run-tests:
+  run-tests-only:
     jobs:
       - install_deps:
           filters:
