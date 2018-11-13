@@ -23,6 +23,8 @@
 #
 #  ‣ Builds without workflows require a build job.
 #
+#  ‣ Append `[ci skip]` to your commit message if you don't want to trigger CI for a given commit.
+#
 #  Fastlane
 #  --------
 #  ‣ The `setup_circle_ci` Fastlane action must be in the before_all block to perform the following actions:
