@@ -18,17 +18,19 @@
 #  ‣ Your project’s default branch will never auto cancel builds. This feature only applies to non-workflow builds,
 #    builds triggered by pushes to GitHub, or workflow builds that use the new build processing feature.
 #
+#  ‣ Workflows will ignore job-level branching. If you use job-level branching and later add workflows,
+#    you must remove the branching at the job level and instead declare it in the workflows section.
+#
+#  ‣ Builds without workflows require a build job.
+#
+#  ‣ Append `[ci skip]` to your commit message if you don't want to trigger CI for a given commit.
+#
 #  Fastlane
 #  --------
 #  ‣ The `setup_circle_ci` Fastlane action must be in the before_all block to perform the following actions:
 #    - Create a new temporary keychain for use with Fastlane Match (see the code signing section for more details).
 #    - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
 #    - Set up log and test result paths to be easily collectible.
-#
-#  ‣ Workflows will ignore job-level branching. If you use job-level branching and later add workflows,
-#    you must remove the branching at the job level and instead declare it in the workflows section.
-#
-#  ‣ Builds without workflows require a build job.
 #
 #  Cocoapods
 #  ---------
@@ -41,7 +43,7 @@
 #  ‣ The Cocoapods master repository is fetched via the CircleCI mirror for better performance.
 #
 #  ‣ Cocoapods is not specified in the Gemfile because it already comes bundled with the software container.
-#    Developers must install it manually using `sudo gem install cocoapods`.
+#    Developers must install it locally using `sudo gem install cocoapods`.
 #
 #  Ruby Gems
 #  ---------
@@ -52,7 +54,9 @@ defaults: &defaults
   macos:
     xcode: "10.1.0"
   shell: /bin/bash --login -o pipefail
-# --- Jobs ---
+# +------+
+# | Jobs |
+# +------+
 version: 2
 jobs:
   # Install Dependencies
@@ -223,11 +227,14 @@ jobs:
     steps:
       - attach_workspace:
           at: /Users/distiller/project
-# --- Workflows ---
+# +-----------+
+# | Workflows |
+# +-----------+
 workflows:
   version: 2
-  # Execute tests only.
-  build_and_test:
+  # Run tests
+  # - Only triggered on the dev branch.
+  run-tests:
     jobs:
       - install_deps:
           filters:
@@ -236,6 +243,25 @@ workflows:
                 - ci
                 - dev
                 - maurice/IOS-1618/automate-build-upload
+      - build_openssl:
+          requires:
+            - install_deps
+      - install_pods:
+          requires:
+            - install_deps
+      - run_tests:
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+  # Create build and upload to App Store Connect
+  # - Only triggered on the release branch.
+  build-and-upload:
+    jobs:
+      - install_deps:
+          filters:
+            branches:
+              only:
                 - release
                 - release-test
       - build_openssl:
@@ -250,12 +276,6 @@ workflows:
             - build_openssl
             - install_pods
       - archive_and_export:
-          filters:
-            branches:
-              only:
-                - ci
-                - release
-                - release-test
           requires:
             - install_deps
             - build_openssl
