@@ -222,11 +222,19 @@ jobs:
             xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output | xcpretty
       - store_artifacts:
           path: output
-  deploy:
+  upload:
     <<: *defaults
     steps:
       - attach_workspace:
           at: /Users/distiller/project
+      - run:
+          name: Upload to App Store Connect
+          command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            export CREDENTIALS_REPO=$CREDENTIALS_REPO
+            export FASTLANE_USER=$FASTLANE_USER
+            bundle exec fastlane upload
 # +-----------+
 # | Workflows |
 # +-----------+
@@ -280,7 +288,7 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - deploy:
+      - upload:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)/
