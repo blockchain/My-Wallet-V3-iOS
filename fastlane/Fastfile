@@ -19,14 +19,15 @@ platform :ios do
   desc "Builds using the production environment"
   lane :code_signing do
     # Global parameters are loaded from the Matchfile
-    match(
-      readonly: true,
-      type: "appstore"
-    )
+    match(type: "appstore", readonly: true)
   end
   desc "Upload to TestFlight"
   lane :upload do
-    sync_code_signing(type: "appstore", readonly: true)
-    upload_to_testflight
+    match(type: "appstore", readonly: true)
+    upload_to_testflight(
+      ipa: "output/Blockchain.ipa",
+      skip_submission: true,
+      skip_waiting_for_build_processing: true
+    )
   end
 end
