@@ -19,10 +19,7 @@ platform :ios do
   desc "Builds using the production environment"
   lane :code_signing do
     # Global parameters are loaded from the Matchfile
-    match(
-      readonly: true,
-      type: "appstore"
-    )
+    match(type: "appstore", readonly: true)
   end
   desc "Upload to TestFlight"
   lane :upload do
