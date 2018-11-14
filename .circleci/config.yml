@@ -221,6 +221,10 @@ jobs:
             xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain -sdk iphoneos -configuration Release archive -archivePath ./output/Blockchain.xcarchive | xcpretty
             xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output | xcpretty
             rm -rf output/Blockchain.xcarchive
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - output
       - store_artifacts:
           path: output
   upload:
