@@ -15,6 +15,9 @@ disabled_rules:
   - implicitly_unwrapped_optional
   - nesting
   - unused_closure_parameter
+  - discarded_notification_center_observer
+  - operator_whitespace
+  - function_body_length
 excluded:
   - Submodules/
   - RxAlamofire/
@@ -23,7 +26,6 @@ excluded:
 opt_in_rules:
   - empty_string
   - fatal_error_message
-  - first_where
   - implicitly_unwrapped_optional
   - literal_expression_end_indentation
   - multiline_parameters

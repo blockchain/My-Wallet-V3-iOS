@@ -57,7 +57,7 @@ class SendXLMCoordinator {
             .subscribe(onNext: { (account, ledger) in
                 // TODO:
             }, onError: { error in
-                guard let serviceError = error as? StellarServiceError else { return }
+                guard error is StellarServiceError else { return }
                 Logger.shared.error(error.localizedDescription)
             })
         disposables.insertWithDiscardableResult(disposable)
@@ -535,6 +535,6 @@ extension InformationViewModel {
 
         let body = NSMutableAttributedString()
         [explanationPlusCurrent, exampleOne, exampleTwo, available, footer].forEach { body.append($0) }
-        return body.copy() as! NSAttributedString
+        return body.copy() as? NSAttributedString
     }
 }

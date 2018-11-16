@@ -11,7 +11,6 @@ class ExchangeListViewCell: UITableViewCell {
     fileprivate static let separatorHeight: CGFloat = 1.0
     fileprivate static let totalVerticalPadding: CGFloat = 44.0
 
-
     // MARK: Private IBOutlets
 
     @IBOutlet fileprivate var depositAmount: UILabel!

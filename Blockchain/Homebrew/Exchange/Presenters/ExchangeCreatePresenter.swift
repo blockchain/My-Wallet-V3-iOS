@@ -86,7 +86,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.apply(
             presentationUpdates:[
                 .conversionRatesView(.hidden, animated: false),
-                .keypadVisibility(.visible, animated: false),
+                .keypadVisibility(.visible, animated: false)
             ]
         )
         
@@ -104,7 +104,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.apply(
             presentationUpdates:[
                 .conversionRatesView(.visible, animated: true),
-                .keypadVisibility(.hidden, animated: true),
+                .keypadVisibility(.hidden, animated: true)
                 ]
         )
         
@@ -121,7 +121,7 @@ extension ExchangeCreatePresenter: ExchangeCreateDelegate {
         interface?.apply(
             presentationUpdates:[
                 .conversionRatesView(.hidden, animated: true),
-                .keypadVisibility(.visible, animated: true),
+                .keypadVisibility(.visible, animated: true)
                 ]
         )
         

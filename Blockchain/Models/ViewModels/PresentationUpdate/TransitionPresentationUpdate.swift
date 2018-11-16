@@ -46,7 +46,6 @@ struct TransitionPresentationUpdateGroup<T: Transition, C: CompletionEvent> {
     }
 }
 
-
 /// This is used in `TransitionPresentationUpdate`.
 /// You use this parameter value to change the style
 /// of the animation applied to the UI update.

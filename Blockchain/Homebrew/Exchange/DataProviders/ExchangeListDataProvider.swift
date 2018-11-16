@@ -236,7 +236,6 @@ extension ExchangeListDataProvider: UITableViewDelegate {
         return header
     }
 
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let items = models else { return 0.0 }
         guard items.count > 0 else { return 0.0 }
