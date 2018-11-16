@@ -45,7 +45,7 @@ platform :ios do
     # upload_to_testflight
   end
   desc "Runs all unit tests"
-  lane :unit_tests do
+  lane :execute_tests do
     scan(
       workspace: "Blockchain.xcworkspace",
       scheme: "Blockchain (Staging)",

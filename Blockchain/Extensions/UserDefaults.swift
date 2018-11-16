@@ -36,6 +36,8 @@ extension UserDefaults {
         case didFailBiometrySetup
         case dontAskUserToShowAppReviewPrompt
         case encryptedPinPassword
+        // legacyEncryptedPinPassword is required for wallets that created a PIN prior to Homebrew release - see IOS-1537
+        case legacyEncryptedPinPassword = "encryptedPINPassword"
         case environment
         case firstRun
         case graphTimeFrameKey = "timeFrame"
@@ -53,6 +55,7 @@ extension UserDefaults {
         case shouldShowBiometrySetup
         case isCompletingKyc = "shouldShowKYCAnnouncementCard"
         case didTapOnAirdropDeepLink
+        case didSeeAirdropPending
         case swipeToReceiveEnabled = "swipeToReceive"
         case symbolLocal
         case hasSeenAirdropJoinWaitlistCard

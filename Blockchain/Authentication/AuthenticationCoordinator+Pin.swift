@@ -56,10 +56,10 @@ extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
             return
         }
 
-        closePinEntryView(animated: true)
-
-        let passcodePayload = PasscodePayload(guid: guid, password: decryptedPassword, sharedKey: sharedKey)
-        AuthenticationManager.shared.authenticate(using: passcodePayload, andReply: authHandler)
+        closePinEntryView(animated: true) {
+            let passcodePayload = PasscodePayload(guid: guid, password: decryptedPassword, sharedKey: sharedKey)
+            AuthenticationManager.shared.authenticate(using: passcodePayload, andReply: self.authHandler)
+        }
     }
 
     func pinEntryControllerDidChangePin(_ controller: PEPinEntryController) {

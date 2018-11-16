@@ -19,12 +19,12 @@ protocol PasswordRequiredViewDelegate: class {
 /// View displayed when a password is required for the user to access their wallet.
 /// This is typically displayed if the user has not yet set a pin.
 class PasswordRequiredView: UIView {
-    @IBOutlet weak var labelHeader: UILabel!
-    @IBOutlet weak var textFieldPassword: UITextField!
-    @IBOutlet weak var buttonContinue: UIButton!
-    @IBOutlet weak var buttonForgetWallet: UIButton!
-    @IBOutlet weak var buttonForgotPassword: UIButton!
-    @IBOutlet weak var labelForgetWallet: UILabel!
+    @IBOutlet fileprivate var labelHeader: UILabel!
+    @IBOutlet fileprivate var textFieldPassword: UITextField!
+    @IBOutlet fileprivate var buttonContinue: UIButton!
+    @IBOutlet fileprivate var buttonForgetWallet: UIButton!
+    @IBOutlet fileprivate var buttonForgotPassword: UIButton!
+    @IBOutlet fileprivate var labelForgetWallet: UILabel!
 
     weak var delegate: PasswordRequiredViewDelegate?
 
@@ -56,15 +56,15 @@ class PasswordRequiredView: UIView {
         addGestureRecognizer(tapGesture)
     }
 
-    @IBAction func onForgotPasswordTapped(_ sender: Any) {
+    @IBAction private func onForgotPasswordTapped(_ sender: Any) {
         delegate?.didTapForgotPassword()
     }
 
-    @IBAction func onForgetWalletTapped(_ sender: Any) {
+    @IBAction private func onForgetWalletTapped(_ sender: Any) {
         delegate?.didTapForgetWallet()
     }
 
-    @IBAction func onContinueTapped(_ sender: Any) {
+    @IBAction private func onContinueTapped(_ sender: Any) {
         authenticate()
     }
 

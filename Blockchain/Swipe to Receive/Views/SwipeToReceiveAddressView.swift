@@ -87,12 +87,16 @@ import UIKit
             return
         }
 
-        let qrCodeGenerator = QRCodeGenerator()
-        imageViewQRCode.isHidden = false
-        imageViewQRCode.image = viewModel.assetType == .bitcoin ?
-            qrCodeGenerator.qrImage(fromAddress: address) :
-            qrCodeGenerator.createQRImage(from: address)
         labelAddress.text = viewModel.textAddress
+
+        let qrText: String
+        if let url = AssetURLPayloadFactory.create(fromString: address, assetType: AssetTypeLegacyHelper.convert(fromLegacy: viewModel.assetType)) {
+            qrText = url.absoluteString
+        } else {
+            qrText = address
+        }
+        imageViewQRCode.isHidden = false
+        imageViewQRCode.image = QRCodeGenerator().createQRImage(from: qrText)
     }
 }
 

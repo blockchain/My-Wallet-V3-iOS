@@ -19,6 +19,14 @@ import Foundation
         return BitcoinURLPayload.scheme
     }
 
+    @objc var absoluteString: String {
+        let uri = "\(BitcoinURLPayload.scheme):\(address)"
+        if let amount = amount {
+            return "\(uri)?amount=\(amount)"
+        }
+        return uri
+    }
+
     @objc var address: String
 
     @objc var amount: String?

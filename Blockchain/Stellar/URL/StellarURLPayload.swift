@@ -24,14 +24,18 @@ class StellarURLPayload: SEP7URI {
         return StellarURLPayload.scheme
     }
 
+    var absoluteString: String {
+        let uriScheme = URIScheme()
+        var amountInDecimal: Decimal?
+        if let amount = amount {
+            amountInDecimal = Decimal(string: amount)
+        }
+        return uriScheme.getPayOperationURI(accountID: address, amount: amountInDecimal)
+    }
+
     var address: String
 
     var amount: String?
-
-    var payOperationURI: String {
-        let scheme = URIScheme()
-        return scheme.getPayOperationURI(accountID: address)
-    }
 
     required init(address: String, amount: String? = nil) {
         self.address = address

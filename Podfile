@@ -2,11 +2,11 @@
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 # Uncomment the next line to define a global platform for your project
- platform :ios, '10.0'
+platform :ios, '10.0'
+use_frameworks!
 
 target 'Blockchain' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
   inhibit_all_warnings!
   # Pods for Blockchain
     pod 'SwiftLint'
@@ -30,6 +30,18 @@ target 'Blockchain' do
   end
 
 end
+
+target 'StellarKit' do
+    pod 'RxSwift', '~> 4.0'
+    pod 'RxCocoa', '~> 4.0'
+    pod 'stellar-ios-mac-sdk', '~> 1.4.7'
+end
+
+target 'PlatformKit' do
+    inhibit_all_warnings!
+    pod 'RxSwift', '~> 4.0'
+end
+
 post_install do |installer|
     installer.pods_project.build_configurations.each do |config|
         config.build_settings.delete('CODE_SIGNING_ALLOWED')

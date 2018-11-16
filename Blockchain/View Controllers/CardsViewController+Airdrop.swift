@@ -47,7 +47,8 @@ extension CardsViewController {
         let shouldShowContinutKYCAnnouncementCard = appSettings.isCompletingKyc
         let shouldShowAirdropPending = airdropConfig.isEnabled &&
             appSettings.didTapOnAirdropDeepLink &&
-            nabuUser.status == .approved
+            nabuUser.status == .approved &&
+            !appSettings.didSeeAirdropPending
 
         if shouldShowAirdropPending {
             showAirdropPending()
@@ -64,6 +65,7 @@ extension CardsViewController {
 
     private func showAirdropPending() {
         let model = AnnouncementCardViewModel.airdropOnItsWay(action: {}, onClose: { [weak self] in
+            BlockchainSettings.App.shared.didSeeAirdropPending = true
             self?.animateHideCards()
         })
         showSingleCard(with: model)

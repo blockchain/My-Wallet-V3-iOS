@@ -48,6 +48,26 @@
                ReferencedContainer = "container:Blockchain.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3A686564219A0BBB0009FF29"
+               BuildableName = "PlatformKitTests.xctest"
+               BlueprintName = "PlatformKitTests"
+               ReferencedContainer = "container:Blockchain.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3A6865E4219A26A30009FF29"
+               BuildableName = "StellarKitTests.xctest"
+               BlueprintName = "StellarKitTests"
+               ReferencedContainer = "container:Blockchain.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

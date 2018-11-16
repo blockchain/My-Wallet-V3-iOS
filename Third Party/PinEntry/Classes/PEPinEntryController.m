@@ -201,50 +201,56 @@ static PEViewController *VerifyController()
 
 - (void)addAddressToSwipeToReceiveView:(SwipeToReceiveAddressView *)swipeView assetType:(LegacyAssetType)assetType
 {
+    AssetType type = [AssetTypeLegacyHelper convertFromLegacy:assetType];
+
     AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
-    if (assetType == LegacyAssetTypeBitcoin || assetType == LegacyAssetTypeBitcoinCash) {
+    NSString *address = [assetAddressRepository swipeToReceiveAddressesFor:type].firstObject.address;
+    swipeView.address = address;
 
-        AssetType type = [AssetTypeLegacyHelper convertFromLegacy:assetType];
+    [self removeUsedAddressIfNeeded:address forAssetType:type swipeView: swipeView];
+}
 
-        NSString *nextAddress = [[assetAddressRepository swipeToReceiveAddressesFor:type] firstObject].address;
-
-        if (nextAddress) {
-
-            void (^error)(void) = ^() {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizationConstantsObjcBridge.noInternetConnection message:BC_STRING_SWIPE_TO_RECEIVE_NO_INTERNET_CONNECTION_WARNING preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    swipeView.address = LocalizationConstantsObjcBridge.requestFailedCheckConnection;
-                }]];
-                [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:nextAddress assetType:assetType];
-                    swipeView.address = nextAddress;
-                }]];
-                self.errorAlert = alert;
-            };
-
-            void (^success)(NSString *, BOOL) = ^(NSString *address, BOOL isUnused) {
-
-                if (isUnused) {
-                    [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:nextAddress assetType:assetType];
-                    swipeView.address = address;
-                    self.errorAlert = nil;
-                } else {
-                    [assetAddressRepository removeFirstSwipeAddressFor:type];
-                    self.errorAlert = nil;
-                }
-            };
-            [[AssetAddressRepository sharedInstance] checkForUnusedAddress:nextAddress
-                                                            displayAddress:nextAddress
-                                                                 assetType:[AssetTypeLegacyHelper convertFromLegacy:assetType]
-                                                            successHandler:success
-                                                              errorHandler:error];
-        } else {
-            swipeView.address = nextAddress;
-        }
-    } else if (assetType == LegacyAssetTypeEther || assetType == LegacyAssetTypeStellar) {
-        NSString *address = [[assetAddressRepository swipeToReceiveAddressesFor:[AssetTypeLegacyHelper convertFromLegacy:assetType]] firstObject].address;
-        swipeView.address = address;
+- (void)removeUsedAddressIfNeeded:(NSString *_Nullable)address forAssetType:(AssetType)assetType swipeView:(SwipeToReceiveAddressView *)swipeView
+{
+    if (!address) {
+        return;
     }
+
+    if (assetType != AssetTypeBitcoin && assetType != AssetTypeBitcoinCash) {
+        // This method is only needed for BTC and BCH since those addresses are HD
+        return;
+    }
+
+    LegacyAssetType legacyAssetType = [AssetTypeLegacyHelper convertToLegacy:assetType];
+    AssetAddressRepository *assetAddressRepository = AssetAddressRepository.sharedInstance;
+    void (^error)(void) = ^() {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizationConstantsObjcBridge.noInternetConnection message:BC_STRING_SWIPE_TO_RECEIVE_NO_INTERNET_CONNECTION_WARNING preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CANCEL style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            swipeView.address = LocalizationConstantsObjcBridge.requestFailedCheckConnection;
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:BC_STRING_CONTINUE style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:address assetType:legacyAssetType];
+            swipeView.address = address;
+        }]];
+        self.errorAlert = alert;
+    };
+
+    void (^success)(NSString *, BOOL) = ^(NSString *address, BOOL isUnused) {
+
+        if (isUnused) {
+            [WalletManager.sharedInstance.wallet subscribeToSwipeAddress:address assetType:legacyAssetType];
+            swipeView.address = address;
+            self.errorAlert = nil;
+        } else {
+            [assetAddressRepository removeFirstSwipeAddressFor:assetType];
+            self.errorAlert = nil;
+        }
+    };
+    [[AssetAddressRepository sharedInstance] checkForUnusedAddress:address
+                                                    displayAddress:address
+                                                         assetType:assetType
+                                                    successHandler:success
+                                                      errorHandler:error];
 }
 
 - (void)paymentReceived:(LegacyAssetType)assetType

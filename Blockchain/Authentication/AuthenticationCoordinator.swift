@@ -341,7 +341,7 @@ import RxSwift
     // MARK: - Pin Entry Presentation
 
     // Closes the pin entry modal, if presented
-    @objc func closePinEntryView(animated: Bool) {
+    @objc func closePinEntryView(animated: Bool, completion: (() -> Void)? = nil) {
         guard let pinEntryViewController = pinEntryViewController else {
              return
         }
@@ -351,8 +351,9 @@ import RxSwift
         let rootViewController = UIApplication.shared.keyWindow!.rootViewController!
         if pinEntryViewController.view.isDescendant(of: rootViewController.view) {
             pinEntryViewController.view.removeFromSuperview()
+            completion?()
         } else {
-            pinEntryViewController.dismiss(animated: true)
+            pinEntryViewController.dismiss(animated: true, completion: completion)
         }
 
         self.pinEntryViewController = nil

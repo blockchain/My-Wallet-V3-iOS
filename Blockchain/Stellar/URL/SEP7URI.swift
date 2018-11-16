@@ -11,10 +11,6 @@ import stellarsdk
 
 /// A URI scheme that conforms to SEP 0007 (https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md)
 protocol SEP7URI: AssetURLPayload {
-
-    /// An optional amount attached to the URI
-    var amount: String? { get }
-
     init(address: String, amount: String?)
 
     init?(url: URL)

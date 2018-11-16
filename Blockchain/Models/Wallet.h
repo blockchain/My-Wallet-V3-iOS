@@ -152,7 +152,7 @@
 // Core Wallet Init Properties
 @property (readonly, nonatomic) JSContext *context;
 
-@property(nonatomic, strong) NSString *guid;
+@property(nonatomic, strong) NSString *_Nullable guid;
 @property(nonatomic, strong) NSString *sharedKey;
 @property(nonatomic, strong) NSString *password;
 
@@ -353,7 +353,7 @@
 
 // Settings
 - (void)getAccountInfo;
-- (NSString *)getEmail;
+- (NSString *_Nullable)getEmail;
 - (NSString *)getSMSNumber;
 - (BOOL)getSMSVerifiedStatus;
 - (NSDictionary *)getFiatCurrencies;

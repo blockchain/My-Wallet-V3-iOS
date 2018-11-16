@@ -43,8 +43,8 @@ extension BlockchainAPI {
         return "https://\(PartnerHosts.blockchair.rawValue)"
     }
 
-    var etherscanUrl: String {
-        return "https://\(PartnerHosts.etherscan.rawValue)"
+    var etherExplorerUrl: String {
+        return "\(walletUrl)/eth"
     }
 
     var stellarchainUrl: String {

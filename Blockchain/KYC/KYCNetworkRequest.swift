@@ -28,6 +28,7 @@ final class KYCNetworkRequest {
             case nextKYCMethod
             case currentUser
             case listOfStates
+            case supportedDocuments
 
             var pathComponents: [String] {
                 switch self {
@@ -43,7 +44,8 @@ final class KYCNetworkRequest {
                     return ["kyc", "next-method"]
                 case .currentUser:
                     return ["users", "current"]
-                case .listOfStates:
+                case .listOfStates,
+                     .supportedDocuments:
                     // Path components should be constructed manually since the path depends on the country
                     return []
                 }
@@ -57,7 +59,8 @@ final class KYCNetworkRequest {
                      .listOfCountries,
                      .nextKYCMethod,
                      .listOfStates,
-                     .currentUser:
+                     .currentUser,
+                     .supportedDocuments:
                     return nil
                 }
             }

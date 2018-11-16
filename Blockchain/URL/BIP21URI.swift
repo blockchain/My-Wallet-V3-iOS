@@ -10,16 +10,13 @@ import Foundation
 
 /// A URI scheme that conforms to BIP 21 (https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki)
 protocol BIP21URI: AssetURLPayload {
-
-    /// An optional amount attached to the URI
-    var amount: String? { get }
-
     init(address: String, amount: String?)
 
     init?(url: URL)
 }
 
 extension BIP21URI {
+
     init?(url: URL) {
         guard let urlScheme = url.scheme else {
             return nil

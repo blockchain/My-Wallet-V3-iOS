@@ -26,24 +26,24 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         return controller
     }
 
+    // MARK: - Views
+
+    @IBOutlet private var nextButton: PrimaryButtonContainer!
+
     // MARK: - Properties
 
     private let onfidoService = OnfidoService()
 
     private let currentProvider = VerificationProviders.onfido
 
-    fileprivate enum DocumentMap {
-        case driversLicense, identityCard, passport, residencePermitCard
-    }
-
-    fileprivate var onfidoMap = [DocumentMap.driversLicense: DocumentType.drivingLicence,
-                                 DocumentMap.identityCard: DocumentType.nationalIdentityCard,
-                                 DocumentMap.passport: DocumentType.passport,
-                                 DocumentMap.residencePermitCard: DocumentType.residencePermit]
-
     private var countryCode: String?
 
     private var disposable: Disposable?
+
+    private lazy var presenter: KYCVerifyIdentityPresenter = { [unowned self] in
+        let interactor = KYCVerifyIdentityInteractor()
+        return KYCVerifyIdentityPresenter(interactor: interactor, view: self)
+    }()
 
     deinit {
         disposable?.dispose()
@@ -57,22 +57,19 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         self.countryCode = countryCode
     }
 
-    // MARK: - Private Methods
+    // MARK: - Lifecycle Methods
 
-    private func setUpAndShowDocumentDialog() {
-        let documentDialog = UIAlertController(title: LocalizationConstants.KYC.whichDocumentAreYouUsing, message: nil, preferredStyle: .actionSheet)
-        let passportAction = UIAlertAction(title: LocalizationConstants.KYC.passport, style: .default, handler: { _ in
-            self.didSelect(.passport)
-        })
-        let driversLicenseAction = UIAlertAction(title: LocalizationConstants.KYC.driversLicense, style: .default, handler: { _ in
-            self.didSelect(.driversLicense)
-        })
-        let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
-        documentDialog.addAction(passportAction)
-        documentDialog.addAction(driversLicenseAction)
-        documentDialog.addAction(cancelAction)
-        present(documentDialog, animated: true)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        nextButton.actionBlock = { [unowned self] in
+            guard let countryCode = self.countryCode else {
+                return
+            }
+            self.presenter.presentDocumentTypeOptions(countryCode)
+        }
     }
+
+    // MARK: - Private Methods
 
     /// Sets up the Onfido config depending on user selection
     ///
@@ -108,10 +105,9 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
             Logger.shared.warning("Only Onfido is the supported provider as of now.")
             return
         }
-
         disposable = BlockchainDataRepository.shared.fetchNabuUser().flatMap { [unowned self] user in
             return self.onfidoService.createUserAndCredentials(user: user)
-        }.subscribeOn(MainScheduler.asyncInstance).observeOn(MainScheduler.instance).subscribe(onSuccess: { (onfidoUser, token) in
+        }.subscribeOn(MainScheduler.asyncInstance).observeOn(MainScheduler.instance).subscribe(onSuccess: { onfidoUser, token in
             self.launchOnfidoController(documentType, onfidoUser, token)
         }, onError: { error in
             Logger.shared.error("Failed to get onfido user and credentials. Error: \(error.localizedDescription)")
@@ -123,17 +119,14 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     /// - Parameters:
     ///   - document: enum of identity types mapped to an identity provider
     ///   - provider: the current provider of verification services
-    fileprivate func startVerificationFlow(_ document: DocumentMap, provider: VerificationProviders) {
+    fileprivate func startVerificationFlow(_ document: KYCDocumentType, provider: VerificationProviders) {
         switch provider {
         case .onfido:
-            guard let selectedOption = onfidoMap[document] else {
-                return
-            }
-            credentialsRequest(provider: provider, documentType: selectedOption)
+            credentialsRequest(provider: provider, documentType: document.toOnfidoType())
         }
     }
 
-    private func didSelect(_ document: DocumentMap) {
+    private func didSelect(_ document: KYCDocumentType) {
         startVerificationFlow(document, provider: currentProvider)
     }
 
@@ -148,13 +141,31 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         onfidoController.modalPresentationStyle = .overCurrentContext
         self.present(onfidoController, animated: true)
     }
+}
 
-    // MARK: - Actions
+extension KYCVerifyIdentityController: KYCVerifyIdentityView {
+    func showLoadingIndicator() {
+        nextButton.isLoading = true
+    }
 
-    @IBAction private func primaryButtonTapped(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.setUpAndShowDocumentDialog()
+    func hideLoadingIndicator() {
+        nextButton.isLoading = false
+    }
+
+    func showDocumentTypesActionSheet(_ types: [KYCDocumentType]) {
+        let documentDialog = UIAlertController(title: LocalizationConstants.KYC.whichDocumentAreYouUsing, message: nil, preferredStyle: .actionSheet)
+        types.forEach { documentType  in
+            let action = UIAlertAction(title: documentType.description, style: .default, handler: { [unowned self] _ in
+                self.didSelect(documentType)
+            })
+            documentDialog.addAction(action)
         }
+        documentDialog.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel))
+        present(documentDialog, animated: true)
+    }
+
+    func showErrorMessage(_ message: String) {
+        AlertViewPresenter.shared.standardError(message: message)
     }
 }
 
@@ -184,5 +195,20 @@ extension KYCVerifyIdentityController: OnfidoControllerDelegate {
                 })
                 Logger.shared.error("Failed to submit verification \(error.localizedDescription)")
             })
+    }
+}
+
+// MARK: KYCDocumentType
+
+extension KYCDocumentType {
+    func toOnfidoType() -> DocumentType {
+        switch self {
+        case .driversLicense:
+            return DocumentType.drivingLicence
+        case .passport:
+            return DocumentType.passport
+        case .nationalIdentityCard:
+            return DocumentType.nationalIdentityCard
+        }
     }
 }

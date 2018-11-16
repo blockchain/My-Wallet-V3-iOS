@@ -68,13 +68,16 @@ final class BlockchainSettings: NSObject {
 
          - Important:
          The encryption key is generated from the pin created by the user.
+         legacyEncryptedPinPassword is required for wallets that created a PIN prior to Homebrew release - see IOS-1537
         */
         var encryptedPinPassword: String? {
             get {
-                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+                return defaults.string(forKey: UserDefaults.Keys.encryptedPinPassword.rawValue) ??
+                    defaults.string(forKey: UserDefaults.Keys.legacyEncryptedPinPassword.rawValue)
             }
             set {
                 defaults.set(newValue, forKey: UserDefaults.Keys.encryptedPinPassword.rawValue)
+                defaults.set(nil, forKey: UserDefaults.Keys.legacyEncryptedPinPassword.rawValue)
             }
         }
 
@@ -151,23 +154,19 @@ final class BlockchainSettings: NSObject {
         }
 
         @objc var fiatCurrencySymbol: String {
-            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-            let symbolLocal = latestMultiAddressResponse.symbol_local,
-            let theSymbol = symbolLocal.symbol else {
-                Logger.shared.warning("Failed to get the fiat currency symbol from latestMultiAddressResponse!")
-                return Locale.current.currencySymbol!
-            }
-            return theSymbol
+            let defaultValue = "$"
+            guard let addressResponse = WalletManager.shared.latestMultiAddressResponse else { return defaultValue }
+            guard let symbol = addressResponse.symbol_local else { return defaultValue }
+            guard let value = symbol.symbol else { return defaultValue }
+            return value
         }
 
         @objc var fiatCurrencyCode: String {
-            guard let latestMultiAddressResponse = WalletManager.shared.latestMultiAddressResponse,
-                let symbolLocal = latestMultiAddressResponse.symbol_local,
-                let theCode = symbolLocal.code else {
-                    Logger.shared.warning("Failed to get the fiat currency code from latestMultiAddressResponse!")
-                    return Locale.current.currencyCode!
-            }
-            return theCode
+            let defaultValue = "USD"
+            guard let addressResponse = WalletManager.shared.latestMultiAddressResponse else { return defaultValue }
+            guard let symbol = addressResponse.symbol_local else { return defaultValue }
+            guard let code = symbol.code else { return defaultValue }
+            return code
         }
 
         @objc func fiatSymbolFromCode(currencyCode: String) -> String? {
@@ -380,6 +379,21 @@ final class BlockchainSettings: NSObject {
             }
         }
 
+        /**
+         Determines if the user saw the XLM airdrop pending onboarding card.
+
+         - Important:
+         This setting **MUST** be set to `false` upon logging the user out of the application.
+         */
+        var didSeeAirdropPending: Bool {
+            get {
+                return defaults.bool(forKey: UserDefaults.Keys.didSeeAirdropPending.rawValue)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaults.Keys.didSeeAirdropPending.rawValue)
+            }
+        }
+
          override init() {
             // Private initializer so that `shared` and `sharedInstance` are the only ways to
             // access an instance of this class.
@@ -408,6 +422,7 @@ final class BlockchainSettings: NSObject {
             appBecameActiveCount = 0
             isCompletingKyc = false
             didTapOnAirdropDeepLink = false
+            didSeeAirdropPending = false
             Logger.shared.info("Application settings have been reset.")
         }
 

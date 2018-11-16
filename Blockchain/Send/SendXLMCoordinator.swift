@@ -110,10 +110,21 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
         // that they have an `StellarAccount` as it must be funded.
         let disposable = services.accounts.currentStellarAccount(fromCache: true).asObservable()
             .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
+            .filter { account -> Bool in
                 /// The user has a StellarAccount, we should enable the input fields.
                 /// Begin observing operations and updating the user account.
+                /// If the user does not have a balance, it means the `StellarAccount`
+                /// does not exist (it hasn't been funded).
+                guard account.assetAccount.balance > 0 else {
+                    throw StellarServiceError.noDefaultAccount
+                }
+                return true
+            }
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] account in
+                if account.assetAccount.balance == 0 {
+                    self?.handle(internalEvent: .noStellarAccount)
+                }
                 self?.observeOperations()
             }, onError: { [weak self] error in
                 guard let this = self else { return }

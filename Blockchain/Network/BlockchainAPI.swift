@@ -46,7 +46,6 @@ final class BlockchainAPI: NSObject {
     enum PartnerHosts: String, CaseIterable {
         case blockchair = "blockchair.com",
         coinify = "app-api.coinify.com",
-        etherscan = "etherscan.io",
         stellarchain = "stellarchain.io",
         googleAnalytics = "www.google-analytics.com",
         iSignThis = "verify.isignthis.com",
@@ -87,8 +86,8 @@ final class BlockchainAPI: NSObject {
     @objc func coinify() -> String {
         return PartnerHosts.coinify.rawValue
     }
-    @objc func etherscan() -> String {
-        return PartnerHosts.etherscan.rawValue
+    @objc func etherExplorer() -> String {
+        return etherExplorerUrl
     }
     @objc func googleAnalytics() -> String {
         return PartnerHosts.googleAnalytics.rawValue

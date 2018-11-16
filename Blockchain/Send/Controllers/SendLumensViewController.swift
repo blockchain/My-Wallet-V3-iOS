@@ -22,10 +22,10 @@ protocol SendXLMViewControllerDelegate: class {
 }
 
 @objc class SendLumensViewController: UIViewController, BottomButtonContainerView {
-
+    
     fileprivate static let topToStackView: CGFloat = 12.0
     fileprivate static let maximumMemoTextLength: Int = 28
-
+    
     fileprivate var keyboardHeight: CGFloat {
         let type = UIDevice.current.type
         if type.isBelow(.iPhone8Plus) {
@@ -34,15 +34,15 @@ protocol SendXLMViewControllerDelegate: class {
             return 226
         }
     }
-
+    
     // MARK: BottomButtonContainerView
-
+    
     var originalBottomButtonConstraint: CGFloat!
     var optionalOffset: CGFloat = -50
     @IBOutlet var layoutConstraintBottomButton: NSLayoutConstraint!
-
+    
     // MARK: Private IBOutlets (UILabel)
-
+    
     @IBOutlet fileprivate var fromLabel: UILabel!
     @IBOutlet fileprivate var toLabel: UILabel!
     @IBOutlet fileprivate var walletNameLabel: UILabel!
@@ -52,15 +52,15 @@ protocol SendXLMViewControllerDelegate: class {
     @IBOutlet fileprivate var stellarSymbolLabel: UILabel!
     @IBOutlet fileprivate var fiatSymbolLabel: UILabel!
     @IBOutlet fileprivate var memoLabel: UILabel!
-
+    
     // MARK: Private IBOutlets (UITextField)
-
+    
     @IBOutlet fileprivate var stellarAddressField: UITextField!
     @IBOutlet fileprivate var stellarAmountField: UITextField!
     @IBOutlet fileprivate var fiatAmountField: UITextField!
     @IBOutlet fileprivate var memoTextField: UITextField!
     @IBOutlet fileprivate var memoIDTextField: UITextField!
-
+    
     fileprivate var inputFields: [UITextField] {
         return [
             stellarAddressField,
@@ -70,16 +70,16 @@ protocol SendXLMViewControllerDelegate: class {
             memoIDTextField
         ]
     }
-
+    
     // MARK: Private IBOutlets (Other)
-
+    
     @IBOutlet fileprivate var topToStackViewConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate var useMaxLabel: ActionableLabel!
     @IBOutlet fileprivate var primaryButtonContainer: PrimaryButtonContainer!
     @IBOutlet fileprivate var learnAbountStellarButton: UIButton!
     @IBOutlet fileprivate var bottomStackView: UIStackView!
     @IBOutlet fileprivate var memoSelectionTypeButton: UIButton!
-
+    
     weak var delegate: SendXLMViewControllerDelegate?
     fileprivate var coordinator: SendXLMCoordinator!
     fileprivate var trigger: ActionableTrigger?
@@ -94,7 +94,7 @@ protocol SendXLMViewControllerDelegate: class {
     private var baseReserve: Decimal?
 
     // MARK: Factory
-
+    
     @objc class func make(with provider: XLMServiceProvider) -> SendLumensViewController {
         let controller = SendLumensViewController.makeFromStoryboard()
         controller.coordinator = SendXLMCoordinator(
@@ -104,9 +104,9 @@ protocol SendXLMViewControllerDelegate: class {
         )
         return controller
     }
-
+    
     // MARK: ViewUpdate
-
+    
     enum PresentationUpdate {
         case activityIndicatorVisibility(Visibility)
         case errorLabelVisibility(Visibility)
@@ -141,9 +141,9 @@ protocol SendXLMViewControllerDelegate: class {
         qrCodeScanner.delegate = self
         present(qrCodeScanner, animated: false)
     }
-
+    
     // MARK: Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.frame = UIView.rootViewSafeAreaFrame(
@@ -173,7 +173,7 @@ protocol SendXLMViewControllerDelegate: class {
         super.viewDidAppear(animated)
         delegate?.onAppear()
     }
-
+    
     fileprivate func clearMemoField() {
         /// Users may change their mind and want to enter in a
         /// `Int` as their memo as opposed to a string value.
@@ -185,7 +185,7 @@ protocol SendXLMViewControllerDelegate: class {
                         .memoIDTextFieldVisibility(.hidden),
                         .memoSelectionButtonVisibility(.visible)])
     }
-
+    
     fileprivate func setupMemoIDField() {
         toolbar = UIToolbar()
         toolbar?.sizeToFit()
@@ -193,20 +193,25 @@ protocol SendXLMViewControllerDelegate: class {
         toolbar?.items = [doneButton]
         memoIDTextField.inputAccessoryView = toolbar
     }
-
+    
     @objc func resignMemoIDField() {
         memoIDTextField.resignFirstResponder()
-        guard memoIDTextField.text != nil else { return }
+        
+        /// If the user hasn't entered a value in the `memoIDTextField`
+        /// we call `clearMemoField()` to reset the memo state. This allows
+        /// users to see the action sheet again to select either `memoID` or
+        /// `memoText`
+        guard memoIDTextField.text == nil else { return }
         clearMemoField()
     }
-
+    
     fileprivate func useMaxAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
         return [.font: font,
                 .foregroundColor: UIColor.darkGray]
     }
-
+    
     fileprivate func useMaxActionAttributes() -> [NSAttributedString.Key: Any] {
         let fontName = Constants.FontNames.montserratRegular
         let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
@@ -227,7 +232,7 @@ protocol SendXLMViewControllerDelegate: class {
             guard visibility == .visible else { return }
             memoIDTextField.text = nil
             memoTextField.text = nil
-
+            
         case .activityIndicatorVisibility(let visibility):
             primaryButtonContainer.isLoading = (visibility == .visible)
         case .errorLabelVisibility(let visibility):
@@ -267,14 +272,14 @@ protocol SendXLMViewControllerDelegate: class {
                 string: trigger.primaryString,
                 attributes: useMaxAttributes()
             )
-
+            
             let CTA = NSAttributedString(
                 string: " " + trigger.callToAction,
                 attributes: useMaxActionAttributes()
             )
-
+            
             primary.append(CTA)
-
+            
             if let secondary = trigger.secondaryString {
                 let trailing = NSMutableAttributedString(
                     string: " " + secondary,
@@ -282,7 +287,7 @@ protocol SendXLMViewControllerDelegate: class {
                 )
                 primary.append(trailing)
             }
-
+            
             useMaxLabel.attributedText = primary
         case .primaryButtonEnabled(let enabled):
             primaryButtonContainer.isEnabled = enabled
@@ -326,23 +331,23 @@ protocol SendXLMViewControllerDelegate: class {
             headerText: LocalizationConstants.SendAsset.confirmPayment
         )
     }
-
+    
     @IBAction private func learnAboutStellarButtonTapped(_ sender: Any) {
         delegate?.onMinimumBalanceInfoTapped()
     }
-
+    
     @IBAction private func memoSelectionTypeTapped(_ sender: UIButton) {
         let title = LocalizationConstants.Stellar.memoDescription
         let memoTextOption = LocalizationConstants.Stellar.memoText
         let memoTextID = LocalizationConstants.Stellar.memoID
         let controller = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-
+        
         [memoTextOption, memoTextID].forEach { option in
             let action = UIAlertAction(title: option, style: .default, handler: { [unowned self] _ in
                 switch option {
                 case memoTextOption:
                     self.delegate?.onMemoTextSelection()
-
+                    
                 case memoTextID:
                     self.delegate?.onMemoIDSelection()
                 default:
@@ -387,7 +392,7 @@ extension SendLumensViewController: ActionableLabelDelegate {
     func targetRange(_ label: ActionableLabel) -> NSRange? {
         return trigger?.actionRange()
     }
-
+    
     func actionRequestingExecution(label: ActionableLabel) {
         guard let trigger = trigger else { return }
         trigger.execute()
@@ -490,7 +495,7 @@ extension SendLumensViewController: SendXLMModelInterface {
 }
 
 extension SendLumensViewController: UITextFieldDelegate {
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if [memoIDTextField, memoTextField].contains(textField), memo == nil {
@@ -498,7 +503,7 @@ extension SendLumensViewController: UITextFieldDelegate {
         }
         return true
     }
-
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         guard UIDevice.current.type.isBelow(.iPhone8Plus) else { return }
         guard [memoTextField, memoIDTextField].contains(textField) else { return }
@@ -508,11 +513,11 @@ extension SendLumensViewController: UITextFieldDelegate {
             keyboardHeight +
             primaryButtonContainer.frame.size.height +
             toolbarHeight
-
+        
         let height = view.bounds.height
         let bottomStackViewMaxY = bottomStackView.frame.maxY
         let offset = (height - bottomStackViewMaxY) - primaryButtonOffset
-
+        
         guard topToStackViewConstraint.constant != offset else { return }
         topToStackViewConstraint.constant = offset
         view.setNeedsLayout()
@@ -520,7 +525,7 @@ extension SendLumensViewController: UITextFieldDelegate {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard topToStackViewConstraint.constant != SendLumensViewController.topToStackView else { return }
         topToStackViewConstraint.constant = SendLumensViewController.topToStackView
@@ -529,7 +534,7 @@ extension SendLumensViewController: UITextFieldDelegate {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     // swiftlint:disable:next cyclomatic_complexity
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if inputFields.contains(textField) {
@@ -545,7 +550,7 @@ extension SendLumensViewController: UITextFieldDelegate {
                 let count = text.utf8.count + string.utf8.count - range.length
                 guard count <= SendLumensViewController.maximumMemoTextLength else { return false }
                 memo = .text(value)
-
+                
             case memoIDTextField:
                 guard let text = textField.text else { return true }
                 guard let range = Range(range, in: text) else { return true }
