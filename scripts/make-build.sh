@@ -15,11 +15,6 @@
 set -eu
 set -o pipefail
 
-if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
-  printf '\e[1;31m%-6s\e[m\n' "Making a new build requires that you have a clean git working directory. Please commit your changes or stash them to continue."
-  exit 1
-fi
-
 if ! [ -e "Blockchain.xcodeproj" ]; then
     printf '\e[1;31m%-6s\e[m\n' "Unable to find the Xcode project file. Please ensure you are in the root directory of this project."
     exit 1
@@ -73,9 +68,7 @@ git pull origin $release_branch > /dev/null 2>&1
 git merge $local_branch > /dev/null 2>&1
 agvtool new-marketing-version $project_version_number > /dev/null 2>&1
 agvtool new-version -all $build_number > /dev/null 2>&1
-git add Blockchain.xcodeproj/project.pbxproj
-git add Blockchain/Blockchain-Info.plist
-git add BlockchainTests/Info.plist
+git add .
 git commit -m "version bump: ${git_tag}" > /dev/null 2>&1
 git tag -s $git_tag -m "Release ${project_version_number}" > /dev/null 2>&1
 git push origin $git_tag > /dev/null 2>&1
