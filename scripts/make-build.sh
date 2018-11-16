@@ -55,7 +55,7 @@ if [ $(git tag -l "$git_tag") ]; then
   exit 1
 fi
 
-local_branch="maurice/IOS-1618/automate-build-upload"
+local_branch="ci"
 release_branch="release-test"
 user_branch=$(git branch | grep \* | cut -d ' ' -f2)
 build_number="${project_version_number}.${project_build_number}"
