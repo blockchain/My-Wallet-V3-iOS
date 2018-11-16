@@ -1,10 +1,16 @@
-# For more information about the Appfile, see:
-# https://docs.fastlane.tools/advanced/#appfile
+#
+#  Appfile
+#
+#  For more information about the Appfile, see:
+#  https://docs.fastlane.tools/advanced/#appfile
+#
 
-app_identifier(["com.rainydayapps.Blockchain", "com.rainydayapps.Blockchain.dev", "com.rainydayapps.Blockchain.staging"])
+for_lane :upload do
+  app_identifier "com.rainydayapps.Blockchain"
+end
 
 for_lane :dev do
-  app_identifier "com.rainydayapps.Blockchain.dev"
+  app_identifier "com.rainydayapps.Blockchain"
 end
 
 for_lane :staging do

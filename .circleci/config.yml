@@ -18,17 +18,19 @@
 #  ‣ Your project’s default branch will never auto cancel builds. This feature only applies to non-workflow builds,
 #    builds triggered by pushes to GitHub, or workflow builds that use the new build processing feature.
 #
+#  ‣ Workflows will ignore job-level branching. If you use job-level branching and later add workflows,
+#    you must remove the branching at the job level and instead declare it in the workflows section.
+#
+#  ‣ Builds without workflows require a build job.
+#
+#  ‣ Append `[ci skip]` to your commit message if you don't want to trigger CI for a given commit.
+#
 #  Fastlane
 #  --------
 #  ‣ The `setup_circle_ci` Fastlane action must be in the before_all block to perform the following actions:
 #    - Create a new temporary keychain for use with Fastlane Match (see the code signing section for more details).
 #    - Switch Fastlane Match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
 #    - Set up log and test result paths to be easily collectible.
-#
-#  ‣ Workflows will ignore job-level branching. If you use job-level branching and later add workflows,
-#    you must remove the branching at the job level and instead declare it in the workflows section.
-#
-#  ‣ Builds without workflows require a build job.
 #
 #  Cocoapods
 #  ---------
@@ -41,24 +43,42 @@
 #  ‣ The Cocoapods master repository is fetched via the CircleCI mirror for better performance.
 #
 #  ‣ Cocoapods is not specified in the Gemfile because it already comes bundled with the software container.
-#    Developers must install it manually using `sudo gem install cocoapods`.
+#    Developers must install it locally using `sudo gem install cocoapods`.
 #
 #  Ruby Gems
 #  ---------
-#  ‣ Running `gem env` will show the installation directory of binaries
+#  ‣ Running `gem env` will show the installation directory of binaries.
 #
 defaults: &defaults
   working_directory: /Users/distiller/project
   macos:
-    xcode: "10.0.0"
+    xcode: "10.1.0"
   shell: /bin/bash --login -o pipefail
-# --- Jobs ---
+# +------+
+# | Jobs |
+# +------+
 version: 2
 jobs:
+  # Setup Git Repository
+  setup_repo:
+    <<: *defaults
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - ./
   # Install Dependencies
+  # - Install node and npm.
+  # - Initialize git submodules.
+  # - Buid JavaScript source files.
+  # - Install Ruby gems.
+  # - Get Firebase config from private repo.
   install_deps:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: /Users/distiller/project
       - restore_cache:
           keys:
             - node-cache-{{ .Environment.NODE_VERSION }}
@@ -77,12 +97,11 @@ jobs:
           paths:
             - ~/.nvm
             - /usr/local/lib/node_modules
-      - checkout
       - run:
           name: Initialize Submodules
           command: git submodule update --init
       - run:
-          name: Build JS
+          name: Build JavaScript
           command: |
             . ~/.nvm/nvm.sh
             sh scripts/install-js.sh
@@ -138,6 +157,8 @@ jobs:
           paths:
             - ./Submodules/OpenSSL-for-iPhone
   # Install Pods
+  # - Install from cache (if possible).
+  # - Append build settings to .xcconfig files.
   install_pods:
     <<: *defaults
     steps:
@@ -154,6 +175,11 @@ jobs:
               curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
             fi
             pod install --verbose
+            git clone -b xcconfig-ci $CREDENTIALS_REPO /tmp/xcconfig
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug dev.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug staging.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.debug production.xcconfig"
+            cat "/tmp/xcconfig/Pods-Blockchain/Pods-Blockchain.release.xcconfig" >> "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release.xcconfig"
       - save_cache:
           key: pods-cache-{{ checksum "Podfile.lock" }}
           paths:
@@ -165,11 +191,9 @@ jobs:
             - ./Pods
             - ./Blockchain.xcworkspace
   # Run tests job:
-  # - execute unit tests.
+  # - Run unit tests and notify Slack channel.
   run_tests:
     <<: *defaults
-    environment:
-      FL_OUTPUT_DIR: test-results
     steps:
       - attach_workspace:
           at: /Users/distiller/project
@@ -180,110 +204,116 @@ jobs:
             export LC_ALL=en_US.UTF-8
             export SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
             bundle exec fastlane scan
-      - run:
-          name: Codesign info
-          command: security find-identity -v -p codesigning
       - store_artifacts:
           path: output
       - store_test_results:
           path: output/scan
-  # Archive and upload job:
-  # - create archive and upload to App Store Connect.
-  # archive_and_upload:
-  #   branches:
-  #     only: release
-  #   macos:
-  #     xcode: "10.0.0"
-  #   steps:
-  # Draft GitHub release
-  # - generate change log since previous version.
-  # - create new release on GitHub using version tag and change log.
-  # github_release:
-  #   filters:
-  #     tags:
-  #       only: /^v.*/
-  #   steps:
-# --- Workflows ---
+  # Archive and export application:
+  # - Update code signing.
+  # - Get export options plist file from private repo.
+  # - Archive the application.
+  # - Export the .ipa file.
+  archive_and_export:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Archive & Export Application
+          command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            export CREDENTIALS_REPO=$CREDENTIALS_REPO
+            export FASTLANE_USER=$FASTLANE_USER
+            bundle exec fastlane code_signing
+            security find-identity -v -p codesigning
+            git clone -b xcodebuild $CREDENTIALS_REPO /tmp/xcodebuild
+            xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain -sdk iphoneos -configuration Release archive -archivePath ./output/Blockchain.xcarchive | xcpretty
+            xcodebuild -exportArchive -archivePath output/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptions.plist -exportPath ./output | xcpretty
+            rm -rf output/Blockchain.xcarchive
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - output
+      - store_artifacts:
+          path: output
+  upload:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Upload to App Store Connect
+          command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            export CREDENTIALS_REPO=$CREDENTIALS_REPO
+            export FASTLANE_USER=$FASTLANE_USER
+            bundle exec fastlane upload
+# +-----------+
+# | Workflows |
+# +-----------+
 workflows:
   version: 2
-  # Execute tests only.
-  build_and_test:
+  # Run tests
+  # - Only triggered on the dev branch.
+  run-tests-only:
     jobs:
-      - install_deps:
+      - setup_repo:
           filters:
             branches:
               only:
                 - ci
                 - dev
-                - release
+                - maurice/IOS-1618/automate-build-upload
+      - install_deps:
+          requires:
+            - setup_repo
       - build_openssl:
           requires:
             - install_deps
       - install_pods:
           requires:
-            - install_deps
+            - setup_repo
       - run_tests:
           requires:
             - install_deps
             - build_openssl
             - install_pods
-  # # Execute tests, create archive and upload to App Store Connect.
-  # run_tests_and_upload:
-  #   jobs:
-  #     - install_deps:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #     - init_sub_modules:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #         requires:
-  #           - install_deps
-  #     - build_openssl:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #         requires:
-  #           - init_sub_modules
-  #     - install_gems:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #     - install_pods:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #     - run_tests:
-  #         branches:
-  #           only:
-  #             - ci
-  #             - dev
-  #             - release
-  #         requires:
-  #           - install_deps
-  #           - init_sub_modules
-  #           - build_openssl
-  #           - install_gems
-  #           - install_pods
-  #     - archive_and_upload:
-  #         requires:
-  #           - install_deps
-  #           - init_sub_modules
-  #           - build_openssl
-  #           - install_gems
-  #           - install_pods
-  #           - run_tests
-  # draft_github_release:
-  #   jobs:
-  #     - github_release
+  # Create build and upload to App Store Connect
+  # - Only triggered on the release branch.
+  build-and-upload:
+    jobs:
+      - setup_repo:
+          filters:
+            branches:
+              only:
+                - release
+                - release-test
+      - install_deps:
+          requires:
+            - setup_repo
+      - build_openssl:
+          requires:
+            - install_deps
+      - install_pods:
+          requires:
+            - setup_repo
+      - run_tests:
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+      - archive_and_export:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)/
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+      - upload:
+          requires:
+            - run_tests
+            - archive_and_export
+          type: approval

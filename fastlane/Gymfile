@@ -1,0 +1,16 @@
+#
+#  Gymfile
+#
+#  For more information about the Gymfile, see:
+#  https://docs.fastlane.tools/actions/gym/#gymfile
+#
+#  In general, you can use the options available
+#  fastlane gym --help
+#  gym, build_app => alias for build_ios_app
+#
+
+clean(true)
+include_bitcode(false)
+include_symbols(true)
+skip_profile_detection(true)
+workspace("Blockchain.xcworkspace")

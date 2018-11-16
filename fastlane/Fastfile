@@ -1,9 +1,11 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
 #
-# For a list of all available actions, check out
+#  Fastfile
 #
-#     https://docs.fastlane.tools/actions
+#  For more information about the Fastfile, see:
+#  You can find the documentation at https://docs.fastlane.tools
+#
+#  For a list of all available actions, check out
+#  https://docs.fastlane.tools/actions
 #
 
 opt_out_usage
@@ -11,6 +13,7 @@ opt_out_usage
 default_platform(:ios)
 platform :ios do
   before_all do
+    # This is required to setup the temporary keychain
     setup_circle_ci
   end
   desc "Builds using the dev environment"
@@ -51,6 +54,18 @@ platform :ios do
       scheme: "Blockchain (Staging)",
       devices: ["iPhone X"],
       clean: true
+  desc "Builds using the production environment"
+  lane :code_signing do
+    # Global parameters are loaded from the Matchfile
+    match(type: "appstore", readonly: true)
+  end
+  desc "Upload to TestFlight"
+  lane :upload do
+    match(type: "appstore", readonly: true)
+    upload_to_testflight(
+      ipa: "output/Blockchain.ipa",
+      skip_submission: true,
+      skip_waiting_for_build_processing: true
     )
   end
 end
