@@ -265,7 +265,6 @@ workflows:
               only:
                 - ci
                 - dev
-                - maurice/IOS-1618/automate-build-upload
       - install_deps:
           requires:
             - setup_repo
