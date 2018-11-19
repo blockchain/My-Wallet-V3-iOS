@@ -63,8 +63,8 @@ printf "\nPlease review the information about your build below:\n"
 printf "Xcode project version to use (CFBundleShortVersionString): ${project_version_number}\n"
 printf "Xcode project build number to use (CFBundleVersion): ${project_build_number}\n"
 printf "Git tag to use: ${git_tag}\n\n"
-printf "Development branch (will be merged into Release branch): ${local_branch}"
-printf "Release branch: ${release_branch}"
+printf "Development branch (will be merged into Release branch): ${local_branch}\n"
+printf "Release branch: ${release_branch}\n"
 read -p "‣ Would you like to proceed? [y/N]: " answer
 if printf "$answer" | grep -iq "^n" ; then
   printf '\e[1;31m%-6s\e[m' "Aborted the build process."
