@@ -36,7 +36,7 @@ printf '\e[1;34m%-6s\e[m\n\n' "\"With Great Power Comes Great Responsibility\" -
 
 git fetch --tags
 latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-read -p "‣ Enter the new value for the project version (latest tag is $latestTag), followed by [ENTER]: " project_version_number
+read -p "‣ Enter the new value for the project version (e.g., 2.3.4; latest tag is $latestTag), followed by [ENTER]: " project_version_number
 
 if ! [[ $project_version_number =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
   printf '\n\e[1;31m%-6s\e[m\n' "You have entered an invalid version number."
