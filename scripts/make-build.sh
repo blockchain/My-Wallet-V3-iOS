@@ -62,7 +62,9 @@ build_number="${project_version_number}.${project_build_number}"
 printf "\nPlease review the information about your build below:\n"
 printf "Xcode project version to use (CFBundleShortVersionString): ${project_version_number}\n"
 printf "Xcode project build number to use (CFBundleVersion): ${project_build_number}\n"
-printf "Git tag to use: ${git_tag}\n\n"
+printf "Git tag to use: ${git_tag}\n"
+printf "Development branch (will be merged into Release branch): ${local_branch}\n"
+printf "Release branch: ${release_branch}\n\n"
 read -p "‣ Would you like to proceed? [y/N]: " answer
 if printf "$answer" | grep -iq "^n" ; then
   printf '\e[1;31m%-6s\e[m' "Aborted the build process."
@@ -88,4 +90,6 @@ if printf "$answer" | grep -iq "^y" ; then
 fi
 rm Changelog.md
 git checkout $user_branch > /dev/null 2>&1
-printf '\n\e[1;32m%-6s\e[m\n' "Script completed successfully 🎉\nCircleCI is tracking the branch $release_branch.\nPlease check Jobs in CircleCI to view the progress of tests, archiving, and uploading the build."
+printf '\n\e[1;32m%-6s\e[m\n' "Script completed successfully 🎉"
+printf '\e[1;32m%-6s\e[m\n' "CircleCI is tracking the branch $release_branch."
+printf '\e[1;32m%-6s\e[m\n' "Please check Jobs in CircleCI to view the progress of tests, archiving, and uploading the build."
