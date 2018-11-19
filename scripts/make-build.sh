@@ -30,11 +30,11 @@ if ! [ -x "$(command -v agvtool)" ]; then
   exit 1
 fi
 
-printf "Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.\n"
-printf "You are about to make a new build. Please follow the instructions carefully.\n\n"
-printf '\e[1;34m%-6s\e[m\n\n' "\"With Great Power Comes Great Responsibility\" -Voltaire"
+printf "You are about to tag, archive, and upload a new build.\n"
 
-read -p "‣ Enter the new value for the project version (e.g. 2.3.4), followed by [ENTER]: " project_version_number
+git fetch --tags
+latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+read -p "‣ Enter the new value for the project version (e.g., 2.3.4; latest tag is $latestTag), followed by [ENTER]: " project_version_number
 
 if ! [[ $project_version_number =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
   printf '\n\e[1;31m%-6s\e[m\n' "You have entered an invalid version number."
@@ -77,14 +77,15 @@ git add Blockchain/Blockchain-Info.plist
 git add BlockchainTests/Info.plist
 git checkout .
 git commit -m "version bump: ${git_tag}" > /dev/null 2>&1
+latestTagCommit=$(git show-ref -s $latestTag)
 git tag -s $git_tag -m "Release ${project_version_number}" > /dev/null 2>&1
 git push origin $git_tag > /dev/null 2>&1
 git push origin $release_branch > /dev/null 2>&1
-git-changelog -t $(git describe --abbrev=0) > /dev/null 2>&1
+git-changelog -t $latestTagCommit > /dev/null 2>&1
 read -p "‣ Would you like to copy the contents of Changelog.md to your clipboard? [y/N]: " answer
 if printf "$answer" | grep -iq "^y" ; then
   cat Changelog.md | pbcopy
 fi
 rm Changelog.md
 git checkout $user_branch > /dev/null 2>&1
-printf '\n\e[1;32m%-6s\e[m\n' "Everything completed successfully 🎉"
+printf '\n\e[1;32m%-6s\e[m\n' "Script completed successfully 🎉\nCircleCI is tracking the branch $release_branch.\nPlease check Jobs in CircleCI to view the progress of tests, archiving, and uploading the build."
