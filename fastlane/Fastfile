@@ -54,6 +54,7 @@ platform :ios do
       scheme: "Blockchain (Staging)",
       devices: ["iPhone X"],
       clean: true
+    )
   desc "Builds using the production environment"
   lane :code_signing do
     # Global parameters are loaded from the Matchfile
