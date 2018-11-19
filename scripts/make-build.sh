@@ -77,10 +77,13 @@ git add Blockchain/Blockchain-Info.plist
 git add BlockchainTests/Info.plist
 git checkout .
 git commit -m "version bump: ${git_tag}" > /dev/null 2>&1
+git fetch --tags
+latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+latestTagCommit=$(git show-ref -s $latestTag)
 git tag -s $git_tag -m "Release ${project_version_number}" > /dev/null 2>&1
 git push origin $git_tag > /dev/null 2>&1
 git push origin $release_branch > /dev/null 2>&1
-git-changelog -t $(git describe --abbrev=0) > /dev/null 2>&1
+git-changelog -t $latestTagCommit > /dev/null 2>&1
 read -p "‣ Would you like to copy the contents of Changelog.md to your clipboard? [y/N]: " answer
 if printf "$answer" | grep -iq "^y" ; then
   cat Changelog.md | pbcopy
