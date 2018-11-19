@@ -30,9 +30,7 @@ if ! [ -x "$(command -v agvtool)" ]; then
   exit 1
 fi
 
-printf "Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.\n"
-printf "You are about to make a new build. Please follow the instructions carefully.\n\n"
-printf '\e[1;34m%-6s\e[m\n\n' "\"With Great Power Comes Great Responsibility\" -Voltaire"
+printf "You are about to tag, archive, and upload a new build.\n"
 
 git fetch --tags
 latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
@@ -90,4 +88,4 @@ if printf "$answer" | grep -iq "^y" ; then
 fi
 rm Changelog.md
 git checkout $user_branch > /dev/null 2>&1
-printf '\n\e[1;32m%-6s\e[m\n' "Everything completed successfully 🎉"
+printf '\n\e[1;32m%-6s\e[m\n' "Script completed successfully 🎉\nCircleCI is tracking the branch $release_branch.\nPlease check Jobs in CircleCI to view the progress of tests, archiving, and uploading the build."
