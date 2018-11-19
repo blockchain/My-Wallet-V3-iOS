@@ -15,6 +15,11 @@
 set -eu
 set -o pipefail
 
+if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
+  printf '\e[1;31m%-6s\e[m\n' "Making a new build requires that you have a clean git working directory. Please commit your changes or stash them to continue."
+  exit 1
+fi
+
 if ! [ -e "Blockchain.xcodeproj" ]; then
     printf '\e[1;31m%-6s\e[m\n' "Unable to find the Xcode project file. Please ensure you are in the root directory of this project."
     exit 1
