@@ -55,6 +55,7 @@ platform :ios do
       devices: ["iPhone X"],
       clean: true
     )
+  end
   desc "Builds using the production environment"
   lane :code_signing do
     # Global parameters are loaded from the Matchfile
