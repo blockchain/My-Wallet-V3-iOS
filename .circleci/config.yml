@@ -315,4 +315,3 @@ workflows:
           requires:
             - run_tests
             - archive_and_export
-          type: approval
