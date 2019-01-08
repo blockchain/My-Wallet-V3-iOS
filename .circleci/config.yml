@@ -264,6 +264,22 @@ jobs:
             - output
       - store_artifacts:
           path: output
+  upload_artifactory:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Install jFrog CLI
+          command: curl -fL https://getcli.jfrog.io | sh
+      - run:
+          name: Upload IPA to Artifactory
+          command: |
+            latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+            ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
+            ./jfrog rt u ./output/Blockchain.ipa docker/$latestTag.ipa --build-name=$latestTag --build-number=$CIRCLE_BUILD_NUM
+            ./jfrog rt bce $latestTag $CIRCLE_BUILD_NUM  # collects all environment variables on the agent
+            ./jfrog rt bp $latestTag $CIRCLE_BUILD_NUM  # attaches ^^ to the build in artifactory
   upload:
     <<: *defaults
     steps:
@@ -310,25 +326,50 @@ workflows:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
       - install_deps:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - setup_repo
       - build_openssl:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - install_deps
       - install_pods:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - setup_repo
       - run_tests:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - install_deps
             - build_openssl
             - install_pods
       - archive_and_export_production:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - install_deps
             - build_openssl
             - install_pods
       - upload:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
+          requires:
+            - run_tests
+            - archive_and_export_production
+      - upload_artifactory:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - run_tests
             - archive_and_export_production
@@ -344,25 +385,50 @@ workflows:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
       - install_deps:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - setup_repo
       - build_openssl:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - install_deps
       - install_pods:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - setup_repo
       - run_tests:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - install_deps
             - build_openssl
             - install_pods
       - archive_and_export_staging:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - install_deps
             - build_openssl
             - install_pods
       - upload:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
+          requires:
+            - run_tests
+            - archive_and_export_staging
+      - upload_artifactory:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - run_tests
             - archive_and_export_staging
