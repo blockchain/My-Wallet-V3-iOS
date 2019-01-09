@@ -9,5 +9,5 @@
 
 app_identifier("com.rainydayapps.Blockchain")
 git_url(ENV["CREDENTIALS_REPO"])
-type("appstore")
+type("adhoc")
 username(ENV["FASTLANE_USER"]) # Your Apple Developer Portal username

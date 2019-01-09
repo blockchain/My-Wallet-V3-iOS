@@ -213,7 +213,7 @@ jobs:
   # - Get export options plist file from private repo.
   # - Archive the application.
   # - Export the .ipa file.
-  archive_and_export_staging:
+  archive_and_export_staging_app_store:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -236,6 +236,29 @@ jobs:
             - output
       - store_artifacts:
           path: output
+  archive_and_export_staging_ad_hoc:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Archive & Export Application
+          command: |
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+            export CREDENTIALS_REPO=$CREDENTIALS_REPO
+            export FASTLANE_USER=$FASTLANE_USER
+            bundle exec fastlane code_signing
+            security find-identity -v -p codesigning
+            git clone -b xcodebuild $CREDENTIALS_REPO /tmp/xcodebuild
+            xcodebuild -workspace Blockchain.xcworkspace -scheme Blockchain\ \(Staging\) -sdk iphoneos -configuration Debug\ Staging archive -archivePath ./output_ad_hoc/Blockchain.xcarchive | xcpretty
+            xcodebuild -exportArchive -archivePath output_ad_hoc/Blockchain.xcarchive -exportOptionsPlist /tmp/xcodebuild/exportOptionsAdHoc.plist -exportPath ./output_ad_hoc | xcpretty
+      - persist_to_workspace:
+          root: /Users/distiller/project
+          paths:
+            - output_ad_hoc
+      - store_artifacts:
+          path: output_ad_hoc
   # Archive and export application (production):
   # - Update code signing.
   # - Get export options plist file from private repo.
@@ -277,10 +300,10 @@ jobs:
           command: |
             latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
             ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
-            ./jfrog rt u ./output/Blockchain.ipa docker/$latestTag.ipa --build-name=$latestTag --build-number=$CIRCLE_BUILD_NUM
+            ./jfrog rt u ./output_ad_hoc/Blockchain.ipa docker/$latestTag.ipa --build-name=$latestTag --build-number=$CIRCLE_BUILD_NUM
             ./jfrog rt bce $latestTag $CIRCLE_BUILD_NUM  # collects all environment variables on the agent
             ./jfrog rt bp $latestTag $CIRCLE_BUILD_NUM  # attaches ^^ to the build in artifactory
-  upload:
+  upload_app_store:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -359,7 +382,7 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - upload:
+      - upload_app_store:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
@@ -410,7 +433,7 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - archive_and_export_staging:
+      - archive_and_export_staging_app_store:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
@@ -418,17 +441,25 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - upload:
+      - archive_and_export_staging_ad_hoc:
+          filters:
+            tags:
+              only: /v\d+\.\d+\.\d+\(\d+\)staging$/
+          requires:
+            - install_deps
+            - build_openssl
+            - install_pods
+      - upload_app_store:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - run_tests
-            - archive_and_export_staging
+            - archive_and_export_staging_app_store
       - upload_artifactory:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
             - run_tests
-            - archive_and_export_staging
+            - archive_and_export_staging_ad_hoc

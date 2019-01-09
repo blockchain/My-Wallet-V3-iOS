@@ -56,6 +56,7 @@ platform :ios do
   lane :code_signing do
     # Global parameters are loaded from the Matchfile
     match(type: "appstore", readonly: true)
+    match(type: "adhoc", force_for_new_devices: true)
   end
   desc "Upload to TestFlight"
   lane :upload do
