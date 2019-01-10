@@ -287,6 +287,19 @@ jobs:
             - output
       - store_artifacts:
           path: output
+  upload_app_center:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Install App Center
+          command: npm install -g appcenter-cli
+      - run:
+          name: Distribute IPA
+          command: |
+            appcenter login --token $APP_CENTER_API_TOKEN
+            appcenter distribute release -f ./output_ad_hoc/Blockchain.ipa -g Testers --app $APP_CENTER_APP
   upload_artifactory:
     <<: *defaults
     steps:
@@ -389,7 +402,7 @@ workflows:
           requires:
             - run_tests
             - archive_and_export_production
-      - upload_artifactory:
+      - upload_app_center:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
@@ -456,7 +469,7 @@ workflows:
           requires:
             - run_tests
             - archive_and_export_staging_app_store
-      - upload_artifactory:
+      - upload_app_center:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
