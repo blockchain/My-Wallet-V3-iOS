@@ -434,14 +434,12 @@ workflows:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
-            - run_tests
             - archive_and_export_production_app_store
       - upload_app_center:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
-            - run_tests
             - archive_and_export_production_ad_hoc
 
   # Create build and upload a staging to App Store Connect
@@ -501,12 +499,10 @@ workflows:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
-            - run_tests
             - archive_and_export_staging_app_store
       - upload_app_center:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
           requires:
-            - run_tests
             - archive_and_export_staging_ad_hoc
