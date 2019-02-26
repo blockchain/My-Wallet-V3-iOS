@@ -117,11 +117,6 @@ public extension CryptoValue {
         let amount = mantissaValue + BigInt(decimalValue)
         return CryptoValue(currencyType: assetType, amount: amount)
     }
-
-    public func convertToFiatValue(exchangeRate: FiatValue) -> FiatValue {
-        let conversionAmount = majorValue * exchangeRate.amount
-        return FiatValue.create(amount: conversionAmount, currencyCode: exchangeRate.currencyCode)
-    }
 }
 
 // MARK: - Bitcoin
@@ -246,10 +241,6 @@ extension BigInt {
 }
 
 extension Decimal {
-    public var doubleValue: Double {
-        return NSDecimalNumber(decimal:self).doubleValue
-    }
-
     func roundTo(places: Int) -> Decimal {
         guard places >= 0 else {
             return self

@@ -9,7 +9,7 @@
 import RxSwift
 
 protocol PriceServiceAPI {
-    func fiatPrice(forAssetType assetType: AssetType, fiatSymbol: String) -> Single<PriceInFiatValue>
+    func fiatPrice(forAssetType assetType: AssetType, fiatSymbol: String) -> Single<PriceInFiat>
 }
 
 /// Class for interacting with Blockchain's Service-Price backend service. This
@@ -17,9 +17,9 @@ protocol PriceServiceAPI {
 /// Spec: https://api.blockchain.info/price/specs
 class PriceServiceClient: PriceServiceAPI {
 
-    typealias AssetTypesToPrices = [AssetType: PriceInFiatValue]
+    typealias AssetTypesToPrices = [AssetType: PriceInFiat]
 
-    func fiatPrice(forAssetType assetType: AssetType, fiatSymbol: String) -> Single<PriceInFiatValue> {
+    func fiatPrice(forAssetType assetType: AssetType, fiatSymbol: String) -> Single<PriceInFiat> {
         guard let baseUrl = URL(string: BlockchainAPI.shared.servicePriceUrl) else {
             return Single.error(NetworkError.generic(message: "URL is invalid."))
         }
@@ -30,9 +30,7 @@ class PriceServiceClient: PriceServiceAPI {
         ) else {
             return Single.error(NetworkError.generic(message: "URL is invalid."))
         }
-        return NetworkRequest.GET(url: url, type: PriceInFiat.self).map {
-            $0.toPriceInFiatValue(currencyCode: fiatSymbol)
-        }
+        return NetworkRequest.GET(url: url, type: PriceInFiat.self)
     }
 
     /// Returns a Single that emits a mapping between an AssetType and it's price in fiat
@@ -40,22 +38,20 @@ class PriceServiceClient: PriceServiceAPI {
     /// - Parameter fiatSymbol: the fiat to convert to
     /// - Returns: a Single emitting an AssetTypesToPrices
     func allPrices(fiatSymbol: String) -> Single<AssetTypesToPrices> {
-        let fiatPrices: [Single<(AssetType, PriceInFiatValue)>] = AssetType.all.map { assetType in
+        let fiatPrices: [Single<(AssetType, PriceInFiat)>] = AssetType.all.map { assetType in
             return fiatPrice(
                 forAssetType: assetType,
                 fiatSymbol: fiatSymbol
-            ).catchError { error -> Single<PriceInFiatValue> in
+            ).catchError { error -> Single<PriceInFiat> in
                 // If there's an error with the network call, just return "0" for the price
                 Logger.shared.error("Failed to fetch fiat price for asset type \(assetType.symbol). Error: \(error)")
-                return Single.just(
-                    PriceInFiat.empty.toPriceInFiatValue(currencyCode: fiatSymbol)
-                )
-            }.map { priceInFiat -> (AssetType, PriceInFiatValue) in
+                return Single.just(PriceInFiat.empty)
+            }.map { priceInFiat -> (AssetType, PriceInFiat) in
                 return (assetType, priceInFiat)
             }
         }
         return Single.zip(fiatPrices, { results -> AssetTypesToPrices in
-            var assetTypesToPrices: [AssetType: PriceInFiatValue] = [:]
+            var assetTypesToPrices: [AssetType: PriceInFiat] = [:]
             results.forEach { assetType, priceInFiat in
                 assetTypesToPrices[assetType] = priceInFiat
             }
