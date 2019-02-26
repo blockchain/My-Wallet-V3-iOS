@@ -167,7 +167,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
                 }
                 self.modelInterface.updateBaseReserve(ledger.baseReserveInXlm)
                 self.modelInterface.updateFee(feeInXlm)
-                self.modelInterface.updatePrice(price.priceInFiat.amount)
+                self.modelInterface.updatePrice(price.price)
                 self.interface.apply(updates: [.feeAmountLabelText()])
             }, onError: { [unowned self] error in
                 Logger.shared.error(error.localizedDescription)
@@ -355,7 +355,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
         .subscribe(onSuccess: { [weak self] price, ledger, account in
             guard let this = self else { return }
             this.showMinimumBalanceView(
-                latestPrice: price.priceInFiat.amount,
+                latestPrice: price.price,
                 fee: ledger.baseFeeInXlm ?? this.services.ledger.fallbackBaseFee,
                 balance: account.assetAccount.balance,
                 baseReserve: ledger.baseReserveInXlm ?? this.services.ledger.fallbackBaseReserve
@@ -408,7 +408,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
     }
 
     private func computeMaxSpendableAmount(for accountId: String) {
-        let fiatSymbol = BlockchainSettings.App.shared.fiatCurrencyCode
+        let fiatSymbol = BlockchainSettings.App.shared.fiatCurrencyCode ?? "USD"
         let disposable = Single.zip(
             services.prices.fiatPrice(forAssetType: .stellar, fiatSymbol: fiatSymbol),
             services.limits.maxSpendableAmount(for: accountId)
@@ -423,7 +423,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
                         self?.interface.apply(updates: [
                             .stellarAmountText(maxString)
                         ])
-                        self?.onXLMEntry("\(maxSpendableAmount)", latestPrice: price.priceInFiat.amount)
+                        self?.onXLMEntry("\(maxSpendableAmount)", latestPrice: price.price)
                     }
                 )
                 self?.interface.apply(updates: [

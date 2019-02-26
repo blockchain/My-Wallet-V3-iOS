@@ -8,7 +8,6 @@
 
 import UIKit
 import Charts
-import PlatformKit
 import RxSwift
 
 @objc
@@ -31,10 +30,10 @@ final class DashboardController: UIViewController {
     private let wallet: Wallet
     private let tabControllerManager: TabControllerManager
     private let stellarAccountService: StellarAccountAPI
-    private var lastBtcExchangeRate: FiatValue
-    private var lastBchExchangeRate: FiatValue
-    private var lastEthExchangeRate: FiatValue
-    private var lastXlmExchangeRate: FiatValue
+    private var lastBtcExchangeRate,
+                lastBchExchangeRate,
+                lastEthExchangeRate,
+                lastXlmExchangeRate: NSDecimalNumber
     private var defaultContentHeight: CGFloat = 0
     private var disposable: Disposable?
     private var priceChartContainerView: UIView?
@@ -102,11 +101,10 @@ final class DashboardController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         wallet = WalletManager.shared.wallet
         tabControllerManager = AppCoordinator.shared.tabControllerManager
-        let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
-        lastBtcExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
-        lastBchExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
-        lastEthExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
-        lastXlmExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
+        lastBtcExchangeRate = NSDecimalNumber(value: 0)
+        lastBchExchangeRate = NSDecimalNumber(value: 0)
+        lastEthExchangeRate = NSDecimalNumber(value: 0)
+        lastXlmExchangeRate = NSDecimalNumber(value: 0)
         stellarAccountService = XLMServiceProvider.shared.services.accounts
         super.init(coder: aDecoder)
     }
@@ -272,71 +270,79 @@ final class DashboardController: UIViewController {
         self.assetType = assetType
     }
 
+    // Objc backward compatible method to set asset ethereum exchange rate
+    // TODO: deprecate since we are getting the price from PriceServiceClient
+    @objc func updateEthExchangeRate(_ rate: NSDecimalNumber) {
+        self.lastEthExchangeRate = rate
+    }
+
     /**
         The functions to get the raw balances below need to be extracted from this class.
         They do not return the balances in fiat. To convert them to fiat, their value must
         be multiplied by the current exchange rate.
     */
-    private func getBtcBalance() -> CryptoValue {
-        return CryptoValue.bitcoinFromSatoshis(int: Int(wallet.getTotalActiveBalance()))
+
+    private func getBtcBalance() -> Double {
+        let balance = NSNumber(value: wallet.getTotalActiveBalance())
+        return balance.doubleValue / Constants.Conversions.satoshi
     }
 
-    private func getEthBalance() -> CryptoValue {
-        guard let ethBalance = wallet.getEthBalance() else {
-            return CryptoValue.etherFromMajor(decimal: 0)
+    private func getEthBalance() -> Double {
+        // NOTE: only get truncated ETH balance for display purposes.
+        guard let balance = numberFormatter.number(from: wallet.getEthBalanceTruncated()) else {
+            Logger.shared.warning("Failed to get ETH balance!")
+            return 0
         }
-        return CryptoValue.etherFromMajor(string: ethBalance) ?? CryptoValue.etherFromMajor(decimal: 0)
+        return balance.doubleValue
     }
 
-    private func getBchBalance() -> CryptoValue {
-        return CryptoValue.bitcoinCashFromSatoshis(int: Int(wallet.getBchBalance()))
+    private func getBchBalance() -> Double {
+        let balance = NSNumber(value: wallet.getBchBalance())
+        return balance.doubleValue / Constants.Conversions.satoshi
     }
 
-    private func getBtcWatchOnlyBalance() -> CryptoValue {
-        return CryptoValue.bitcoinFromSatoshis(int: Int(wallet.getWatchOnlyBalance()))
+    private func getBtcWatchOnlyBalance() -> Double {
+        let watchOnlyBalance = NSNumber(value: wallet.getWatchOnlyBalance())
+        return watchOnlyBalance.doubleValue / Constants.Conversions.satoshi
     }
 
-    private func reloadBalances(_ balances: [AssetType: CryptoValue]? = nil) {
-        let btcBalance = balances?[.bitcoin] ?? CryptoValue.bitcoinFromMajor(int: 0)
-        let btcFiatBalance = btcBalance.convertToFiatValue(exchangeRate: lastBtcExchangeRate)
+    private func reloadBalances(_ balances: [AssetType: Double]? = nil) {
+        let btcBalance = NSNumber(value: balances?[.bitcoin] ?? 0)
+        let btcFiatBalance = btcBalance.doubleValue * lastBtcExchangeRate.doubleValue
 
-        let ethBalance = balances?[.ethereum] ?? CryptoValue.etherFromMajor(decimal: 0)
-        let ethFiatBalance = ethBalance.convertToFiatValue(exchangeRate: lastEthExchangeRate)
+        let ethBalance = NSNumber(value: balances?[.ethereum] ?? 0)
+        let ethFiatBalance = ethBalance.doubleValue * lastEthExchangeRate.doubleValue
 
-        let bchBalance = balances?[.bitcoinCash] ?? CryptoValue.bitcoinCashFromMajor(int: 0)
-        let bchFiatBalance = bchBalance.convertToFiatValue(exchangeRate: lastBchExchangeRate)
+        let bchBalance = NSNumber(value: balances?[.bitcoinCash] ?? 0)
+        let bchFiatBalance = bchBalance.doubleValue * lastBchExchangeRate.doubleValue
 
-        let xlmBalance = balances?[.stellar] ?? CryptoValue.lumensFromMajor(decimal: 0)
-        let xlmFiatBalance = xlmBalance.convertToFiatValue(exchangeRate: lastXlmExchangeRate)
+        let xlmBalance = NSNumber(value: balances?[.stellar] ?? 0)
+        let xlmFiatBalance = xlmBalance.doubleValue * lastXlmExchangeRate.doubleValue
 
-        let totalBalance: FiatValue
-        do {
-            totalBalance = try btcFiatBalance + ethFiatBalance + bchFiatBalance + xlmFiatBalance
-        } catch {
-            totalBalance = FiatValue.create(amount: 0, currencyCode: btcFiatBalance.currencyCode)
-        }
+        let totalBalance = NSNumber(value: btcFiatBalance + ethFiatBalance + bchFiatBalance + xlmFiatBalance)
 
         balancesChartView.updateFiatSymbol(BlockchainSettings.App.shared.fiatCurrencySymbol)
 
-        balancesChartView.updateBitcoinBalance(btcBalance.toDisplayString(includeSymbol: false))
-        balancesChartView.updateBitcoinFiatBalance(btcFiatBalance.amount.doubleValue)
+        balancesChartView.updateBitcoinBalance(btcBalance.stringValue)
+        balancesChartView.updateBitcoinFiatBalance(btcFiatBalance)
 
-        balancesChartView.updateEtherBalance(ethBalance.toDisplayString(includeSymbol: false))
-        balancesChartView.updateEtherFiatBalance(ethFiatBalance.amount.doubleValue)
+        balancesChartView.updateEtherBalance(ethBalance.stringValue)
+        balancesChartView.updateEtherFiatBalance(ethFiatBalance)
 
-        balancesChartView.updateBitcoinCashBalance(bchBalance.toDisplayString(includeSymbol: false))
-        balancesChartView.updateBitcoinCashFiatBalance(bchFiatBalance.amount.doubleValue)
+        balancesChartView.updateBitcoinCashBalance(bchBalance.stringValue)
+        balancesChartView.updateBitcoinCashFiatBalance(bchFiatBalance)
 
-        balancesChartView.updateStellarBalance(xlmBalance.toDisplayString(includeSymbol: false))
-        balancesChartView.updateStellarFiatBalance(xlmFiatBalance.amount.doubleValue)
+        balancesChartView.updateStellarBalance(xlmBalance.stringValue)
+        balancesChartView.updateStellarFiatBalance(xlmFiatBalance)
 
-        balancesChartView.updateTotalFiatBalance(totalBalance.toDisplayString(includeSymbol: true))
+        balancesChartView.updateTotalFiatBalance(NumberFormatter.localCurrencyFormatterWithGroupingSeparator.string(from: totalBalance)?.appendCurrencySymbol())
 
         if wallet.isInitialized() {
             let watchOnlyBalance = wallet.getWatchOnlyBalance()
-            let watchOnlyFiatBalance = getBtcWatchOnlyBalance().convertToFiatValue(exchangeRate: lastBtcExchangeRate)
-            if watchOnlyFiatBalance.amount > 0 {
-                balancesChartView.updateBitcoinWatchOnlyFiatBalance(watchOnlyFiatBalance.amount.doubleValue)
+            let watchOnlyFiatBalance = getBtcWatchOnlyBalance() * lastBtcExchangeRate.doubleValue
+
+            if watchOnlyBalance > 0 {
+                balancesChartView.updateBitcoinWatchOnlyFiatBalance(watchOnlyFiatBalance)
                 balancesChartView.updateBitcoinWatchOnlyBalance(NumberFormatter.formatAmount(watchOnlyBalance, localCurrency: false))
                 // Increase height and Y positions to show watch only view
                 balancesChartView.showWatchOnlyView()
@@ -361,26 +367,29 @@ final class DashboardController: UIViewController {
         if !wallet.isInitialized() {
             reloadBalances()
         }
-        let fiatCurrencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
-        disposable = PriceServiceClient().allPrices(fiatSymbol: fiatCurrencyCode)
+        disposable = PriceServiceClient().allPrices(fiatSymbol: BlockchainSettings.App.shared.fiatCurrencyCode)
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { priceMap in
                 AssetType.all.forEach { type in
-                    let price = priceMap[type]?.priceInFiat ?? FiatValue.create(amount: 0, currencyCode: fiatCurrencyCode)
-                    let formattedPrice = price.toDisplayString(includeSymbol: true)
+                    let price = priceMap[type]?.price ?? 0
+                    let priceDecimal = NSDecimalNumber(decimal: price)
+                    guard let formatted = NumberFormatter.localCurrencyFormatterWithGroupingSeparator.string(from: priceDecimal) else {
+                        return
+                    }
+                    let formattedPrice = formatted.appendCurrencySymbol()
                     switch type {
                     case .bitcoin:
-                        self.lastBtcExchangeRate = price
+                        self.lastBtcExchangeRate = NSDecimalNumber(decimal: price)
                         self.bitcoinPricePreviewView?.price = formattedPrice
                     case .ethereum:
-                        self.lastEthExchangeRate = price
+                        self.lastEthExchangeRate = NSDecimalNumber(decimal: price)
                         self.etherPricePreviewView?.price = formattedPrice
                     case .bitcoinCash:
-                        self.lastBchExchangeRate = price
+                        self.lastBchExchangeRate = NSDecimalNumber(decimal: price)
                         self.bitcoinCashPricePreviewView?.price = formattedPrice
                     case .stellar:
-                        self.lastXlmExchangeRate = price
+                        self.lastXlmExchangeRate = NSDecimalNumber(decimal: price)
                         self.stellarPricePreviewView?.price = formattedPrice
                     }
                 }
@@ -389,18 +398,19 @@ final class DashboardController: UIViewController {
                     .subscribeOn(MainScheduler.asyncInstance)
                     .observeOn(MainScheduler.instance)
                     .subscribe(onSuccess: { account in
+                        let xlmBalance = NSDecimalNumber(decimal: account.assetAccount.balance).doubleValue
                         self.reloadBalances([
                             AssetType.bitcoin: self.getBtcBalance(),
                             AssetType.ethereum: self.getEthBalance(),
                             AssetType.bitcoinCash: self.getBchBalance(),
-                            AssetType.stellar: CryptoValue.lumensFromMajor(decimal: account.assetAccount.balance)
+                            AssetType.stellar: xlmBalance
                         ])
                     }, onError: { _ in
                         self.reloadBalances([
                             AssetType.bitcoin: self.getBtcBalance(),
                             AssetType.ethereum: self.getEthBalance(),
                             AssetType.bitcoinCash: self.getBchBalance(),
-                            AssetType.stellar: CryptoValue.lumensFromMajor(int: 0)
+                            AssetType.stellar: 0
                         ])
                     })
             }, onError: { error in
