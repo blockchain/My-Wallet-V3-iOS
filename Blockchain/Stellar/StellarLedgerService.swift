@@ -48,7 +48,7 @@ class StellarLedgerService: StellarLedgerAPI {
                             identifier: input.id,
                             token: input.pagingToken,
                             sequence: Int(input.sequenceNumber),
-                            transactionCount: input.transactionCount,
+                            transactionCount: input.successfulTransactionCount,
                             operationCount: input.operationCount,
                             closedAt: input.closedAt,
                             totalCoins: input.totalCoins,

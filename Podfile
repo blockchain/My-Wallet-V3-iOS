@@ -20,7 +20,7 @@ target 'Blockchain' do
   pod 'RxSwift', '~> 4.0'
   pod 'Starscream', '~> 3.0.2'
   pod 'SwiftLint'
-  pod 'stellar-ios-mac-sdk', '~> 1.4.7'
+  pod 'stellar-ios-mac-sdk', :git => 'https://github.com/thisisalexmcgregor/stellar-ios-mac-sdk', :commit => '672ec29bb3248eddd34878b694f773aa108c2528'
   pod 'VeriffSDK'
 
   target 'BlockchainTests' do
@@ -34,7 +34,8 @@ end
 target 'StellarKit' do
     pod 'RxSwift', '~> 4.0'
     pod 'RxCocoa', '~> 4.0'
-    pod 'stellar-ios-mac-sdk', '~> 1.4.7'
+    pod 'stellar-ios-mac-sdk', :git => 'https://github.com/thisisalexmcgregor/stellar-ios-mac-sdk', :commit => '672ec29bb3248eddd34878b694f773aa108c2528'
+
 end
 
 target 'PlatformKit' do
