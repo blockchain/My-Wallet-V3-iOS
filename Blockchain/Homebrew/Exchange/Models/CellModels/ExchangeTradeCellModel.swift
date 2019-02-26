@@ -322,15 +322,17 @@ struct ExchangeTradeCellModel: Decodable {
             )
         }
         
-        guard let updatedResult = formatter.date(from: updated) else {
+        if let updatedResult = formatter.date(from: updated) {
+            updatedAt = updatedResult
+        } else if let updatedResult = legacyFormatter.date(from: updated) {
+            updatedAt = updatedResult
+        } else {
             throw DecodingError.dataCorruptedError(
                 forKey: .updatedAt,
                 in: values,
                 debugDescription: "Date string does not match format expected by formatter."
             )
         }
-        
-        updatedAt = updatedResult
         
         identifier = try values.decode(String.self, forKey: .identifier)
         let pairValue = try values.decode(String.self, forKey: .pair)
