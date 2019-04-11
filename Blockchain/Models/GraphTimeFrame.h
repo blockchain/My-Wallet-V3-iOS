@@ -33,4 +33,5 @@ typedef enum {
 - (NSInteger)startDateEther;
 - (NSInteger)startDateBitcoinCash;
 - (NSInteger)startDateStellar;
+- (NSInteger)startDatePax;
 @end

@@ -77,8 +77,9 @@
 		3460EDB12216FDF600614F52 /* QRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDB02216FDF600614F52 /* QRCodeScannerViewController.swift */; };
 		3460EDB32216FE1600614F52 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDB22216FE1600614F52 /* QRCodeScannerView.swift */; };
 		3460EDB52217156600614F52 /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDB42217156600614F52 /* QRCodeScannerViewModel.swift */; };
-		34615BEA225FBBD600CEC8C4 /* PaxAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BE9225FBBD600CEC8C4 /* PaxAddress.swift */; };
-		34615BF7225FBD1000CEC8C4 /* PaxAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BE9225FBBD600CEC8C4 /* PaxAddress.swift */; };
+		34615BC4225F809D00CEC8C4 /* PaxService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BC3225F809D00CEC8C4 /* PaxService.swift */; };
+		34615C282260917200CEC8C4 /* PaxAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BE9225FBBD600CEC8C4 /* PaxAddress.swift */; };
+		34615C322260917300CEC8C4 /* PaxAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BE9225FBBD600CEC8C4 /* PaxAddress.swift */; };
 		346447332245258F00536705 /* EtherTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346447322245258F00536705 /* EtherTransactionTests.swift */; };
 		348B2B67221B0C4500394526 /* AppFeatureConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA63F87920A3A198002B719B /* AppFeatureConfigurator.swift */; };
 		348DAB7A221C27F80058782B /* MockQRCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348DAB79221C27F80058782B /* MockQRCodeScanner.swift */; };
@@ -116,6 +117,7 @@
 		34E66634224A6154007667FA /* EthereumTransactionFee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E66633224A6154007667FA /* EthereumTransactionFee.swift */; };
 		34E66648224A68DE007667FA /* StellarTransactionFee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E66647224A68DE007667FA /* StellarTransactionFee.swift */; };
 		34E7F94A2225904400A987CD /* ETHServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E7F9492225904400A987CD /* ETHServiceProvider.swift */; };
+		34EDB80A2260AE19009521D9 /* PAXServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EDB8092260AE19009521D9 /* PAXServiceProvider.swift */; };
 		34EFC7D12220815C00273640 /* EthereumWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EFC7D02220815C00273640 /* EthereumWalletTests.swift */; };
 		3A01911B212DE57A00AED2BF /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01911A212DE57A00AED2BF /* AsyncOperation.swift */; };
 		3A01911D212DEF8000AED2BF /* AsyncBlockOperaiton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01911C212DEF8000AED2BF /* AsyncBlockOperaiton.swift */; };
@@ -1815,6 +1817,7 @@
 		3460EDB02216FDF600614F52 /* QRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewController.swift; sourceTree = "<group>"; };
 		3460EDB22216FE1600614F52 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
 		3460EDB42217156600614F52 /* QRCodeScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewModel.swift; sourceTree = "<group>"; };
+		34615BC3225F809D00CEC8C4 /* PaxService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxService.swift; sourceTree = "<group>"; };
 		34615BE9225FBBD600CEC8C4 /* PaxAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxAddress.swift; sourceTree = "<group>"; };
 		346447322245258F00536705 /* EtherTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EtherTransactionTests.swift; sourceTree = "<group>"; };
 		348DAB79221C27F80058782B /* MockQRCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeScanner.swift; sourceTree = "<group>"; };
@@ -1842,6 +1845,7 @@
 		34E66633224A6154007667FA /* EthereumTransactionFee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionFee.swift; sourceTree = "<group>"; };
 		34E66647224A68DE007667FA /* StellarTransactionFee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarTransactionFee.swift; sourceTree = "<group>"; };
 		34E7F9492225904400A987CD /* ETHServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHServiceProvider.swift; sourceTree = "<group>"; };
+		34EDB8092260AE19009521D9 /* PAXServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAXServiceProvider.swift; sourceTree = "<group>"; };
 		34EFC7D02220815C00273640 /* EthereumWalletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumWalletTests.swift; sourceTree = "<group>"; };
 		3A01911A212DE57A00AED2BF /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		3A01911C212DEF8000AED2BF /* AsyncBlockOperaiton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperaiton.swift; sourceTree = "<group>"; };
@@ -4645,6 +4649,15 @@
 				3460EDB22216FE1600614F52 /* QRCodeScannerView.swift */,
 			);
 			path = QRCodeScanner;
+			sourceTree = "<group>";
+		};
+		34615BC2225F808700CEC8C4 /* Pax */ = {
+			isa = PBXGroup;
+			children = (
+				34615BC3225F809D00CEC8C4 /* PaxService.swift */,
+				34EDB8092260AE19009521D9 /* PAXServiceProvider.swift */,
+			);
+			path = Pax;
 			sourceTree = "<group>";
 		};
 		34A0BBF7222581C700F349CD /* Ethereum */ = {
@@ -8336,7 +8349,6 @@
 				C79A239720B3520D000D96B9 /* DestinationAddressSource.h */,
 				C7442E351FBA448200695E4C /* ExchangeTrade.h */,
 				C72D6CC91ED3472D0000F922 /* FeeTypes.h */,
-				C7A923EB1F8531FD003D9DAF /* GraphTimeFrame.h */,
 				231A66EC1DB9434B0043F862 /* HDNode.h */,
 				6780DB931A40BDCF0048EED2 /* InOut.h */,
 				23256A571DF1CFF7002B7A04 /* Invitation.h */,
@@ -8354,6 +8366,7 @@
 				C7559CB81F573763005B2375 /* EtherTransaction.h */,
 				C7559CB91F573763005B2375 /* EtherTransaction.m */,
 				C7442E361FBA448200695E4C /* ExchangeTrade.m */,
+				C7A923EB1F8531FD003D9DAF /* GraphTimeFrame.h */,
 				C7A923EC1F8531FD003D9DAF /* GraphTimeFrame.m */,
 				231A66ED1DB9434B0043F862 /* HDNode.m */,
 				6780DB941A40BDCF0048EED2 /* InOut.m */,
@@ -8510,6 +8523,7 @@
 				3A56AE9C21764CDA00044302 /* Send */,
 				AA69F65C2086A7330054EFCE /* Settings */,
 				AA31A7B82098DFB900FE6268 /* Side Menu */,
+				34615BC2225F808700CEC8C4 /* Pax */,
 				34E7F93F2225900200A987CD /* Ethereum */,
 				3A56AEAC217661D700044302 /* Stellar */,
 				AA54277820D88D1D00D5FEEE /* Swipe to Receive */,
@@ -11645,7 +11659,7 @@
 				AA47709D211B7BC3006356B1 /* BottomButtonContainerView.swift in Sources */,
 				AAF2AEE52123863200687E30 /* BlockchainDataRepository.swift in Sources */,
 				C75817B72146FC5F00AA6A04 /* ExchangeConversionService.swift in Sources */,
-				34615BF7225FBD1000CEC8C4 /* PaxAddress.swift in Sources */,
+				34615C322260917300CEC8C4 /* PaxAddress.swift in Sources */,
 				AACE31D22092A99B00B7B806 /* UINavigationController+PopToRootWithCompletion.swift in Sources */,
 				513C828720EBF30C00ECDE52 /* UIDevice+Biometrics.swift in Sources */,
 				AAF2AEC12123798C00687E30 /* PersonalDetailsAPI.swift in Sources */,
@@ -12082,7 +12096,6 @@
 				AA10767122011CA9000612A1 /* ExchangeNavigatableView.swift in Sources */,
 				67EE1DCC19E3325900DBBFC9 /* ECSlidingInteractiveTransition.m in Sources */,
 				6775569919E752A00054699B /* BCWebViewController.m in Sources */,
-				34615BEA225FBBD600CEC8C4 /* PaxAddress.swift in Sources */,
 				C7442E341FBA1E7800695E4C /* ExchangeTableViewCell.m in Sources */,
 				5176A45C2147F6600006769F /* CardsView.swift in Sources */,
 				3A26AF7D212B13FA003A8A08 /* PartnerExchangeService.swift in Sources */,
@@ -12137,6 +12150,7 @@
 				C71859471F3E227D00745A87 /* BCDescriptionView.m in Sources */,
 				678CD7481A2777E600748AA5 /* BCCreateAccountView.m in Sources */,
 				3AB4D9172130893E004F0160 /* ExchangeListPresenter.swift in Sources */,
+				34615C282260917200CEC8C4 /* PaxAddress.swift in Sources */,
 				23F8DE531DAEB11C001899AE /* BCNavigationController.m in Sources */,
 				AA477084211B73D1006356B1 /* BottomButtonContainerView.swift in Sources */,
 				C7A0E92E1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m in Sources */,
@@ -12255,6 +12269,7 @@
 				AA93227121AC7076000DB69B /* AppVersion.swift in Sources */,
 				C70FF55E1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m in Sources */,
 				6055D372210F692D000B8E95 /* UIView.swift in Sources */,
+				34EDB80A2260AE19009521D9 /* PAXServiceProvider.swift in Sources */,
 				3A26AF9B212B3743003A8A08 /* ExchangeCreateView.swift in Sources */,
 				602B9CEC2118E15300BD3D60 /* SearchControllerDelegate.swift in Sources */,
 				C732DF112200BA8500F3687A /* DeepLinkRouter.swift in Sources */,
@@ -12288,6 +12303,7 @@
 				AA54E495216D2A4E005061F9 /* SearchableMap.swift in Sources */,
 				23444F841DCD217000573C8C /* NSData+BTCData.m in Sources */,
 				3A1552ED2136EAF000683CEB /* TradeLimits.swift in Sources */,
+				34615BC4225F809D00CEC8C4 /* PaxService.swift in Sources */,
 				3A390748217E52AB00D2DA01 /* StellarLedgerService.swift in Sources */,
 				3A4EABA42140826800081531 /* PlainCell.swift in Sources */,
 				3AE74B3C21C0217000246A9C /* GradientView.swift in Sources */,

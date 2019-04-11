@@ -245,6 +245,37 @@ public extension CryptoValue {
     }
 }
 
+// MARK: - PAX
+
+public extension CryptoValue {
+//    public static func etherFromWei(string wei: String) -> CryptoValue? {
+//        guard let weiInBigInt = BigInt(wei) else {
+//            return nil
+//        }
+//        return CryptoValue(currencyType: .ethereum, amount: weiInBigInt)
+//    }
+//
+//    public static func etherFromGwei(string gwei: String) -> CryptoValue? {
+//        guard let gweiInBigInt = BigInt(gwei) else {
+//            return nil
+//        }
+//        let weiInBigInt = gweiInBigInt * BigInt(integerLiteral: 1_000_000_000)
+//
+//        return CryptoValue(currencyType: .ethereum, amount: weiInBigInt)
+//    }
+    
+    public static func paxFromMajor(decimal ether: Decimal) -> CryptoValue {
+        return createFromMajorValue(ether, assetType: .pax)
+    }
+    
+    public static func paxFromMajor(string pax: String) -> CryptoValue? {
+        guard let paxInDecimal = Decimal(string: pax) else {
+            return nil
+        }
+        return createFromMajorValue(paxInDecimal, assetType: .pax)
+    }
+}
+
 // MARK: - Number Extensions
 
 extension BigInt {

@@ -17,6 +17,7 @@
 #define ENTRY_TIME_ETH 1438992000
 #define ENTRY_TIME_BCH 1500854400
 #define ENTRY_TIME_XML 1525716000
+#define ENTRY_TIME_PAX 1555060318 // TODO - where do I get this from
 
 #define GRAPH_TIME_FRAME_DAY @"1day"
 #define GRAPH_TIME_FRAME_WEEK @"1weeks"
@@ -134,6 +135,11 @@
 - (NSInteger)startDateStellar
 {
     return ENTRY_TIME_XML;
+}
+
+- (NSInteger)startDatePax
+{
+    return ENTRY_TIME_PAX;
 }
 
 @end

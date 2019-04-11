@@ -21,6 +21,7 @@ extension AssetType {
         if AppFeatureConfigurator.shared.configuration(for: .stellar).isEnabled {
             allAssets.append(.stellar)
         }
+        allAssets.append(.pax)
         return allAssets
     }()
     
