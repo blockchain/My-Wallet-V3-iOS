@@ -246,6 +246,11 @@ final class DashboardController: UIViewController {
         case .stellar:
             pricePreviewChartPosition = 3
             legacyAssetType = .stellar
+        case .pax:
+            // TODO: IOS-2053
+            pricePreviewChartPosition = 4
+            legacyAssetType = .pax
+            fatalError("Not implemented yet")
         }
 
         let priceChartViewFrame = CGRect(
@@ -296,6 +301,7 @@ final class DashboardController: UIViewController {
     private func getBtcWatchOnlyBalance() -> CryptoValue {
         return CryptoValue.bitcoinFromSatoshis(int: Int(wallet.getWatchOnlyBalance()))
     }
+
 
     private func reloadBalances(_ balances: [AssetType: CryptoValue]? = nil) {
         /// NOTE: This is here due to an issue moving `Swap` to the tab bar caused.
@@ -396,6 +402,9 @@ final class DashboardController: UIViewController {
                     case .stellar:
                         self.lastXlmExchangeRate = price
                         self.stellarPricePreviewView?.price = formattedPrice
+                    case .pax:
+                        // TODO: IOS-2053
+                        fatalError("Not implemented yet")
                     }
                 }
                 let account = self.stellarAccountService.currentStellarAccount(fromCache: false)
@@ -455,6 +464,11 @@ final class DashboardController: UIViewController {
         case .stellar:
             base = AssetType.stellar.symbol.lowercased()
             entryDate = timeFrame.startDateStellar()
+        case .pax:
+            // TODO: IOS-2053
+            base = AssetType.pax.symbol.lowercased()
+            entryDate = 0 // TODO
+            fatalError("Not implemented yet")
         }
 
         startDate = timeFrame.timeFrame == TimeFrameAll || timeFrame.startDate < entryDate ? entryDate : timeFrame.startDate

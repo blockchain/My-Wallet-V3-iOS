@@ -220,7 +220,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 guard let self = self else { return }
                 guard type == self.model?.marketPair.pair.from else { return }
                 let fiatValue = FiatValue.create(amount: fiatBalance, currencyCode: model.fiatCurrencyCode)
-                let cryptoValue = CryptoValue.createFromMajorValue(cryptoBalance, assetType: type.toCryptoCurrency())
+                let cryptoValue = CryptoValue.createFromMajorValue(cryptoBalance, assetType: type.cryptoCurrency)
                 self.output?.updateBalance(
                     cryptoValue: cryptoValue,
                     fiatValue: fiatValue
@@ -405,7 +405,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 if account.balance < volume {
                     let cryptoValue = CryptoValue.createFromMajorValue(
                         account.balance,
-                        assetType: fromAssetType.toCryptoCurrency()
+                        assetType: fromAssetType.cryptoCurrency
                     )
                     strongSelf.status = .error(.insufficientFunds(cryptoValue))
                     return
@@ -664,23 +664,5 @@ extension ExchangeRates {
             return ""
         }
         return "1 \(fromCurrency) = \(rate.price) \(toCurrency)"
-    }
-}
-
-fileprivate extension AssetType {
-    /// NOTE: This is used for `ExchangeInputViewModel`.
-    /// The view model can provide a `FiatValue` or `CryptoValue`. When
-    /// returning a `CryptoValue` we must provide the `CrptoValue` 
-    func toCryptoCurrency() -> CryptoCurrency {
-        switch self {
-        case .bitcoin:
-            return .bitcoin
-        case .bitcoinCash:
-            return .bitcoinCash
-        case .stellar:
-            return .stellar
-        case .ethereum:
-            return .ethereum
-        }
     }
 }

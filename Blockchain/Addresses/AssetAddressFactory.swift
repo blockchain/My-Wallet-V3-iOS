@@ -26,6 +26,8 @@ class AssetAddressFactory {
             return EthereumAddress(string: address)
         case .stellar:
             return StellarAddress(string: address)
+        case .pax:
+            return PaxAddress(string: address)
         }
     }
 

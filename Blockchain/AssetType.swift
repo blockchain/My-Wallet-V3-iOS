@@ -7,21 +7,15 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// The asset type is used to distinguish between different types of digital assets.
 @objc public enum AssetType: Int {
-    case bitcoin, bitcoinCash, ethereum, stellar
+    case bitcoin, bitcoinCash, ethereum, stellar, pax
 }
 
 extension AssetType {
     
-    private static let assetTypeToSymbolMap: [String: AssetType] = [
-        "btc": .bitcoin,
-        "eth": .ethereum,
-        "bch": .bitcoinCash,
-        "xlm": .stellar
-    ]
-
     static let all: [AssetType] = {
         var allAssets: [AssetType] = [.bitcoin, .ethereum, .bitcoinCash]
         if AppFeatureConfigurator.shared.configuration(for: .stellar).isEnabled {
@@ -31,23 +25,27 @@ extension AssetType {
     }()
     
     static func from(legacyAssetType: LegacyAssetType) -> AssetType {
+        return AssetType(from: legacyAssetType)
+    }
+    
+    init(from legacyAssetType: LegacyAssetType) {
         switch legacyAssetType {
         case .bitcoin:
-            return AssetType.bitcoin
+            self = AssetType.bitcoin
         case .bitcoinCash:
-            return AssetType.bitcoinCash
+            self = AssetType.bitcoinCash
         case .ether:
-            return AssetType.ethereum
+            self = AssetType.ethereum
         case .stellar:
-            return AssetType.stellar
+            self = AssetType.stellar
+        case .pax:
+            self = AssetType.pax
         }
     }
 
     init?(stringValue: String) {
-        let input = stringValue.lowercased()
-        let map = AssetType.assetTypeToSymbolMap
-        if let value = map[input] {
-            self = value
+        if let value = CryptoCurrency(rawValue: stringValue) {
+            self = value.assetType
         } else {
             return nil
         }
@@ -63,61 +61,34 @@ extension AssetType {
             return LegacyAssetType.ether
         case .stellar:
             return LegacyAssetType.stellar
+        case .pax:
+            return LegacyAssetType.pax
         }
+    }
+    
+    /// NOTE: This is used for `ExchangeInputViewModel`.
+    /// The view model can provide a `FiatValue` or `CryptoValue`. When
+    /// returning a `CryptoValue` we must provide the `CrptoValue`
+    var cryptoCurrency: CryptoCurrency {
+        return CryptoCurrency(assetType: self)
     }
 }
 
 extension AssetType {
     var description: String {
-        switch self {
-        case .bitcoin:
-            return "Bitcoin"
-        case .bitcoinCash:
-            return "Bitcoin Cash"
-        case .ethereum:
-            return "Ether"
-        case .stellar:
-            return "Stellar"
-        }
+        return CryptoCurrency(assetType: self).description
     }
 
     var symbol: String {
-        switch self {
-        case .bitcoin:
-            return "BTC"
-        case .bitcoinCash:
-            return "BCH"
-        case .ethereum:
-            return "ETH"
-        case .stellar:
-            return "XLM"
-        }
+        return CryptoCurrency(assetType: self).symbol
     }
 
     var maxDecimalPlaces: Int {
-        switch self {
-        case .bitcoin:
-            return 8
-        case .ethereum:
-            return 18
-        case .bitcoinCash:
-            return 8
-        case .stellar:
-            return 7
-        }
+        return CryptoCurrency(assetType: self).maxDecimalPlaces
     }
 
     var maxDisplayableDecimalPlaces: Int {
-        switch self {
-        case .bitcoin:
-            return 8
-        case .ethereum:
-            return 8
-        case .bitcoinCash:
-            return 8
-        case .stellar:
-            return 7
-        }
+        return CryptoCurrency(assetType: self).maxDisplayableDecimalPlaces
     }
     
     var brandImage: UIImage {
@@ -130,19 +101,23 @@ extension AssetType {
             return #imageLiteral(resourceName: "Icon-ETH")
         case .stellar:
             return #imageLiteral(resourceName: "Icon-XLM")
+        case .pax:
+            return #imageLiteral(resourceName: "Icon-ETH")
         }
     }
 
     var symbolImageTemplate: UIImage {
         switch self {
         case .bitcoin:
-            return UIImage(named: "symbol-btc")!
+            return #imageLiteral(resourceName: "symbol-btc")
         case .bitcoinCash:
-            return UIImage(named: "symbol-bch")!
+            return #imageLiteral(resourceName: "symbol-bch")
         case .ethereum:
-            return UIImage(named: "symbol-eth")!
+            return #imageLiteral(resourceName: "symbol-eth")
         case .stellar:
-            return UIImage(named: "symbol-xlm")!
+            return #imageLiteral(resourceName: "symbol-xlm")
+        case .pax:
+            return #imageLiteral(resourceName: "symbol-eth")
         }
     }
     
@@ -156,6 +131,8 @@ extension AssetType {
             return UIColor(red: 0.24, green: 0.86, blue: 0.54, alpha: 1)
         case .stellar:
             return UIColor(red: 0.02, green: 0.71, blue: 0.90, alpha: 1)
+        case .pax:
+            return UIColor(red: 0.13, green: 0.24, blue: 0.65, alpha: 1)
         }
     }
     
@@ -187,6 +164,9 @@ extension AssetType {
         case .stellar:
             // TODO: add formatting methods
             return "stellar in fiat"
+        case .pax:
+            // TODO: add formatting methods
+            fatalError("Not implemented yet")
         }
     }
     
@@ -211,6 +191,41 @@ extension AssetType {
         case .stellar:
             // TODO: add formatting methods
             return "stellar in crypto"
+        case .pax:
+            // TODO: add formatting methods
+            fatalError("Not implemented yet")
+        }
+    }
+}
+
+extension CryptoCurrency {
+    init(assetType: AssetType) {
+        switch assetType {
+        case .bitcoin:
+            self = .bitcoin
+        case .bitcoinCash:
+            self = .bitcoinCash
+        case .ethereum:
+            self = .ethereum
+        case .stellar:
+            self = .stellar
+        case .pax:
+            self = .pax
+        }
+    }
+    
+    var assetType: AssetType {
+        switch self {
+        case .bitcoin:
+            return .bitcoin
+        case .bitcoinCash:
+            return .bitcoinCash
+        case .ethereum:
+            return .ethereum
+        case .stellar:
+            return .stellar
+        case .pax:
+            return .pax
         }
     }
 }

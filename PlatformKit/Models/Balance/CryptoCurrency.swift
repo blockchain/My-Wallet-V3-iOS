@@ -19,6 +19,7 @@ public enum CryptoCurrency: String {
     case bitcoinCash = "BCH"
     case ethereum = "ETH"
     case stellar = "XLM"
+    case pax = "PAX"
 }
 
 public extension CryptoCurrency {
@@ -32,6 +33,8 @@ public extension CryptoCurrency {
             return "Ether"
         case .stellar:
             return "Stellar"
+        case .pax:
+            return "USD Pax"
         }
     }
     
@@ -49,6 +52,8 @@ public extension CryptoCurrency {
             return 8
         case .stellar:
             return 7
+        case .pax:
+            return 18
         }
     }
     
@@ -62,6 +67,8 @@ public extension CryptoCurrency {
             return 8
         case .stellar:
             return 7
+        case .pax:
+            return 8
         }
     }
 }

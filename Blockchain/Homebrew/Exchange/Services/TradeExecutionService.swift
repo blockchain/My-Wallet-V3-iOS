@@ -310,7 +310,7 @@ class TradeExecutionService: TradeExecutionAPI {
                     case .ethereum:
                         orderTransactionLegacy.fees = ethereumFee.priorityGweiValue
                         orderTransactionLegacy.gasLimit = String(ethereumFee.gasLimit)
-                    case .stellar:
+                    case .stellar, .pax:
                         break
                     }
                     
@@ -554,7 +554,7 @@ fileprivate extension TradeExecutionService {
                 case .ethereum:
                     orderTransactionLegacy.fees = ethereumFee.priorityGweiValue
                     orderTransactionLegacy.gasLimit = String(ethereumFee.gasLimit)
-                case .stellar:
+                case .stellar, .pax:
                     break
                 }
                 

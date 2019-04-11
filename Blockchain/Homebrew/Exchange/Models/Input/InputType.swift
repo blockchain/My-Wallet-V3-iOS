@@ -47,7 +47,8 @@ extension InputType {
                 return NumberFormatter.stellarFractionDigits
             case .bitcoin,
                  .bitcoinCash,
-                 .ethereum:
+                 .ethereum,
+                 .pax:
                 return NumberFormatter.assetFractionDigits
             }
         }

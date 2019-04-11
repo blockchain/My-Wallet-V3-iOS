@@ -127,9 +127,9 @@ extension ExchangeError {
         case .waitingOnEthereumPayment:
             return #imageLiteral(resourceName: "eth_bad.pdf")
         case .aboveMaxVolume(let cryptoValue):
-            return cryptoValue.currencyType.toAssetType.errorImage
+            return cryptoValue.currencyType.assetType.errorImage
         case .insufficientFunds(let cryptoValue):
-            return cryptoValue.currencyType.toAssetType.errorImage
+            return cryptoValue.currencyType.assetType.errorImage
         case .default,
              .noVolumeProvided:
             return #imageLiteral(resourceName: "error-triangle.pdf")
@@ -154,22 +154,7 @@ extension ExchangeError {
     }
 }
 
-extension CryptoCurrency {
-    var toAssetType: AssetType {
-        switch self {
-        case .bitcoin:
-            return .bitcoin
-        case .bitcoinCash:
-            return .bitcoinCash
-        case .ethereum:
-            return .ethereum
-        case .stellar:
-            return .stellar
-        }
-    }
-}
-
-fileprivate extension AssetType {
+private extension AssetType {
     var errorImage: UIImage {
         switch self {
         case .bitcoin:
@@ -180,6 +165,8 @@ fileprivate extension AssetType {
             return #imageLiteral(resourceName: "eth_bad.pdf")
         case .stellar:
             return #imageLiteral(resourceName: "xlm_bad.pdf")
+        case .pax:
+            return #imageLiteral(resourceName: "eth_bad.pdf")
         }
     }
 }

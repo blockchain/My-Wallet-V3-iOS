@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, LegacyAssetType) {
     LegacyAssetTypeEther,
     LegacyAssetTypeBitcoinCash,
     LegacyAssetTypeStellar,
+    LegacyAssetTypePax,
 };
 
 #endif /* Assets_h */

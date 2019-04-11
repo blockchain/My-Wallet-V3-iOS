@@ -52,6 +52,9 @@ import Foundation
             return "\(bitcoinCashExplorerUrl)/tx/\(transactionHash)"
         case .stellar:
             return "\(stellarchainUrl)/tx/\(transactionHash)"
+        case .pax:
+            // TODO
+            fatalError("Not implemented yet")
         }
     }
 }

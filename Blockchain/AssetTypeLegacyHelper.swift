@@ -12,29 +12,11 @@ import Foundation
 // To be deprecated once LegacyAssetType has been removed.
 @objc class AssetTypeLegacyHelper: NSObject {
     @objc static func convert(fromLegacy type: LegacyAssetType) -> AssetType {
-        switch type {
-        case .bitcoin:
-            return .bitcoin
-        case .ether:
-            return .ethereum
-        case .bitcoinCash:
-            return .bitcoinCash
-        case .stellar:
-            return .stellar
-        }
+        return AssetType(from: type)
     }
 
     @objc static func convert(toLegacy type: AssetType) -> LegacyAssetType {
-        switch type {
-        case .bitcoin:
-            return .bitcoin
-        case .ethereum:
-            return .ether
-        case .bitcoinCash:
-            return .bitcoinCash
-        case .stellar:
-            return .stellar
-        }
+        return type.legacy
     }
 
     @objc static func description(for type: AssetType) -> String {
@@ -42,10 +24,10 @@ import Foundation
     }
 
     @objc static func color(for type: LegacyAssetType) -> UIColor {
-        return convert(fromLegacy: type).brandColor
+        return AssetType(from: type).brandColor
     }
 
     @objc static func symbol(for type: LegacyAssetType) -> String {
-        return convert(fromLegacy: type).symbol
+        return AssetType(from: type).symbol
     }
 }
