@@ -118,6 +118,8 @@
 		34E66648224A68DE007667FA /* StellarTransactionFee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E66647224A68DE007667FA /* StellarTransactionFee.swift */; };
 		34E7F94A2225904400A987CD /* ETHServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E7F9492225904400A987CD /* ETHServiceProvider.swift */; };
 		34EDB80A2260AE19009521D9 /* PAXServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EDB8092260AE19009521D9 /* PAXServiceProvider.swift */; };
+		34EDB8172260EA16009521D9 /* PAXServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EDB8092260AE19009521D9 /* PAXServiceProvider.swift */; };
+		34EDB8212260EA1A009521D9 /* PaxService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34615BC3225F809D00CEC8C4 /* PaxService.swift */; };
 		34EFC7D12220815C00273640 /* EthereumWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EFC7D02220815C00273640 /* EthereumWalletTests.swift */; };
 		3A01911B212DE57A00AED2BF /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01911A212DE57A00AED2BF /* AsyncOperation.swift */; };
 		3A01911D212DEF8000AED2BF /* AsyncBlockOperaiton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01911C212DEF8000AED2BF /* AsyncBlockOperaiton.swift */; };
@@ -11273,6 +11275,7 @@
 				C75757462176501400CE7814 /* AssetTypeCell.swift in Sources */,
 				51B7682221065D52003CCD46 /* Environment.swift in Sources */,
 				C7797DE121C047AE0088ABA5 /* ExchangeNavigationController.swift in Sources */,
+				34EDB8212260EA1A009521D9 /* PaxService.swift in Sources */,
 				3AE5419C217A677A001DDE02 /* StellarTransaction.swift in Sources */,
 				AACE31D92092A99B00B7B806 /* Reachability.swift in Sources */,
 				AACE31DE2092A99B00B7B806 /* BlockchainAPI.swift in Sources */,
@@ -11422,6 +11425,7 @@
 				C76D730520B2052000040B57 /* WalletPartnerExchangeDelegate.swift in Sources */,
 				AACE31C32092A99B00B7B806 /* AppDelegate.swift in Sources */,
 				602B9D232118E27100BD3D60 /* KYCEnterPhoneNumberController.swift in Sources */,
+				34EDB8172260EA16009521D9 /* PAXServiceProvider.swift in Sources */,
 				AA084413215EEF750007BFD1 /* LockboxAccount.swift in Sources */,
 				AA3CA9B32107F2B700C2AD46 /* LogDestination.swift in Sources */,
 				AA0A4148214B0B2100807163 /* ExchangeAssetAccountListPresenter.swift in Sources */,
