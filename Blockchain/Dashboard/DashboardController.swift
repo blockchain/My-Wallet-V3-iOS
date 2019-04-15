@@ -9,6 +9,7 @@
 import UIKit
 import Charts
 import PlatformKit
+import ERC20Kit
 import RxSwift
 
 @objc
@@ -31,7 +32,8 @@ final class DashboardController: UIViewController {
     private let wallet: Wallet
     private let tabControllerManager: TabControllerManager
     private let stellarAccountService: StellarAccountAPI
-    private let paxAccountService: PaxAccountAPI
+//    private let paxAccountService: PaxAccountAPI
+    private let paxAccountService: ERC20AssetAccountRepository
     private var lastBtcExchangeRate: FiatValue
     private var lastBchExchangeRate: FiatValue
     private var lastEthExchangeRate: FiatValue
@@ -111,8 +113,12 @@ final class DashboardController: UIViewController {
         lastEthExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
         lastXlmExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
         lastPaxExchangeRate = FiatValue.create(amount: 0, currencyCode: currencyCode)
+        
         stellarAccountService = XLMServiceProvider.shared.services.accounts
-        paxAccountService = PAXServiceProvider.shared.services.accounts
+        
+        
+        paxAccountService = PAXServiceProvider.shared.services.assetAccountRepository
+        
         super.init(coder: aDecoder)
     }
 
@@ -437,7 +443,11 @@ final class DashboardController: UIViewController {
                 let stellerBalance = self.stellarAccountService
                     .currentStellarAccount(fromCache: false)
                     .map { CryptoValue.lumensFromMajor(decimal: $0.assetAccount.balance) }
-                let paxBalance = self.paxAccountService.balance.asMaybe()
+                
+                let paxBalance = self.paxAccountService
+                    .currentAssetAccountDetails(fromCache: false)
+                    .map { $0.balance }
+                
                 _ = Maybe.zip(stellerBalance, paxBalance)
                     .subscribeOn(MainScheduler.asyncInstance)
                     .observeOn(MainScheduler.instance)

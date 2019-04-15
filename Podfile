@@ -44,6 +44,12 @@ target 'EthereumKit' do
   pod 'BigInt', '~> 3.1'
 end
 
+target 'ERC20Kit' do
+  pod 'RxSwift', '~> 4.0'
+  pod 'RxCocoa', '~> 4.0'
+  pod 'BigInt', '~> 3.1'
+end
+
 target 'PlatformKit' do
   inhibit_all_warnings!
   pod 'RxSwift', '~> 4.0'

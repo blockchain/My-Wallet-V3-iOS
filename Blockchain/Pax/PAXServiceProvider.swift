@@ -9,17 +9,26 @@
 import Foundation
 import RxSwift
 import EthereumKit
+import ERC20Kit
 
 protocol PAXDependencies {
-    var accounts: PaxAccountAPI { get }
+    var assetAccountRepository: ERC20AssetAccountRepository { get }
 }
 
 struct PAXServices: PAXDependencies {
     
-    let accounts: PaxAccountAPI
+    let assetAccountRepository: ERC20AssetAccountRepository
     
     init(wallet: Wallet = WalletManager.shared.wallet) {
-        self.accounts = PaxAccountService(with: wallet.ethereum)
+        let paxAccountClient = PaxAccountAPIClient()
+        
+        let service = ERC20AssetAccountDetailsService(
+            with: wallet.ethereum,
+            paxAccountClient: paxAccountClient
+        )
+        self.assetAccountRepository = ERC20AssetAccountRepository(
+            service: service
+        )
     }
 }
 
