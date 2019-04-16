@@ -13,5 +13,18 @@ import PlatformKit
 // TODO:
 // * document
 public protocol Token {
+    associatedtype AccountDetails: AssetAccountDetails
+    
+    static var details: AccountDetails.Type { get }
+}
+
+
+//import RxSwift
+//import PlatformKit
+import EthereumKit
+
+public struct PaxToken: Token {
+    
+    
     
 }

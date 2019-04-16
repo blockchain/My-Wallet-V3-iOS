@@ -11,11 +11,11 @@ import RxSwift
 import PlatformKit
 import EthereumKit
 
-public struct PaxToken: Token {
-    
-    
-    
-}
+//public struct PaxToken: Token {
+//
+//
+//
+//}
 
 
 protocol ERC20Contract {
@@ -34,31 +34,7 @@ public enum ERC20Error: Error {
     case unknown
 }
 
-public class PaxAccountService: PaxAccountAPI {
-    
-    public var balance: Single<CryptoValue> {
-        return bridge.address
-            .flatMap { [weak self] ethereumAddress in
-                guard let self = self else {
-                    return Single.error(ERC20Error.unknown) // TODO: Use proper error
-                }
-                return self.helper.fetchPaxBalance(ethereumAddress: ethereumAddress)
-            }
-            .debug()
-    }
-    
-    private let bridge: EthereumWalletBridgeAPI
-    
-    private let helper: PaxEthereumServiceHelper
-    
-    public init(with bridge: EthereumWalletBridgeAPI, paxAccountClient: PaxAccountAPIClientAPI) {
-        self.bridge = bridge
-        self.helper = PaxEthereumServiceHelper(
-            with: bridge,
-            paxAccountClient: paxAccountClient
-        )
-    }
-}
+
 
 public struct PaxTransafer: Decodable {
     let logIndex: String
@@ -131,36 +107,4 @@ public struct PaxAccount: Decodable {
     
 }
 
-public class PaxEthereumServiceHelper {
-    
-    var ethereumAddress: Single<String> {
-        return bridge.address
-    }
-    
-    private var cachedAccount: PaxAccount?
-    
-    private let bridge: EthereumWalletBridgeAPI
-    private let paxAccountClient: PaxAccountAPIClientAPI
-    
-    init(with bridge: EthereumWalletBridgeAPI, paxAccountClient: PaxAccountAPIClientAPI) {
-        self.bridge = bridge
-        self.paxAccountClient = paxAccountClient
-    }
-    
-    func fetchPaxBalance(ethereumAddress: String) -> Single<CryptoValue> {
-        if let cachedAccount = cachedAccount {
-            return Single.just(CryptoValue.paxFromMajor(string: cachedAccount.balance)!) // TODO: don't cache this
-        }
-        return self.paxAccountClient.fetchWalletAccount(ethereumAddress: ethereumAddress)
-            .map { account in
-                return CryptoValue.paxFromMajor(string: account.balance)!
-        }
-    }
-    
-}
 
-// https://api.staging.blockchain.info/v2/eth/data/account/<ethereum_address>/token/<erc20_contract_address>/wallet
-
-public protocol PaxAccountAPIClientAPI {
-    func fetchWalletAccount(ethereumAddress: String) -> Single<PaxAccount>
-}
