@@ -314,7 +314,7 @@ jobs:
             - output_ad_hoc
       - store_artifacts:
           path: output_ad_hoc
-  upload_app_center:
+  upload_app_center_staging:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -336,6 +336,28 @@ jobs:
             appcenter telemetry off --disable-telemetry
             appcenter login --token $APP_CENTER_API_TOKEN --quiet
             appcenter distribute release -f ./output_ad_hoc/Blockchain.ipa -g Testers --app $APP_CENTER_APP --release-notes-file ./output_ad_hoc/ReleaseNotes.txt --quiet
+  upload_app_center_production:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /Users/distiller/project
+      - run:
+          name: Setup keychain
+          command: |
+            security create-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_NAME
+            # Disable keychain locking timeout
+            security set-keychain-settings $KEYCHAIN_NAME
+            security unlock-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_NAME
+            security default-keychain -s $KEYCHAIN_NAME
+      - run:
+          name: Install App Center
+          command: npm install -g appcenter-cli
+      - run:
+          name: Distribute IPA
+          command: |
+            appcenter telemetry off --disable-telemetry
+            appcenter login --token $APP_CENTER_API_TOKEN --quiet
+            appcenter distribute release -f ./output_ad_hoc/Blockchain.ipa -g Testers --app $APP_CENTER_PRODUCTION_APP --release-notes-file ./output_ad_hoc/ReleaseNotes.txt --quiet
   upload_app_store:
     <<: *defaults
     steps:
@@ -410,7 +432,7 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - archive_and_export_production_app_store:
+      - archive_and_export_production_ad_hoc:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
@@ -418,13 +440,28 @@ workflows:
             - install_deps
             - build_openssl
             - install_pods
-      - upload_app_store:
+#      - archive_and_export_production_app_store:
+#          filters:
+#            tags:
+#              only: /v\d+\.\d+\.\d+\(\d+\)$/
+#          requires:
+#            - install_deps
+#            - build_openssl
+#            - install_pods
+#      - upload_app_store:
+#          filters:
+#            tags:
+#              only: /v\d+\.\d+\.\d+\(\d+\)$/
+#          requires:
+#            - run_tests
+#            - archive_and_export_production_app_store
+      - upload_app_center_production:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)$/
           requires:
             - run_tests
-            - archive_and_export_production_app_store
+            - archive_and_export_production_ad_hoc
 
   # Create build and upload a staging to App Store Connect
   # - Only triggered on a new tag on the staging branch
@@ -485,7 +522,7 @@ workflows:
           requires:
             - run_tests
             - archive_and_export_staging_app_store
-      - upload_app_center:
+      - upload_app_center_staging:
           filters:
             tags:
               only: /v\d+\.\d+\.\d+\(\d+\)staging$/
