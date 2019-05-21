@@ -14,12 +14,12 @@ import EthereumKit
 
 class ERC20EthereumWalletBridgeMock: EthereumWalletBridgeAPI {
     
-    var fetchBalanceValue = Single.just(CryptoValue.paxFromMajor(decimal: Decimal(1.0)))
+    var fetchBalanceValue = Single.just(CryptoValue.paxFromMajor(decimal: Decimal(2.0)))
     var fetchBalance: Single<CryptoValue> {
         return fetchBalanceValue
     }
     
-    var balanceValue: Single<CryptoValue> = Single.just(CryptoValue.paxFromMajor(decimal: Decimal(1.0)))
+    var balanceValue: Single<CryptoValue> = Single.just(CryptoValue.paxFromMajor(decimal: Decimal(2.0)))
     var balance: Single<CryptoValue> {
         return balanceValue
     }

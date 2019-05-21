@@ -32,60 +32,64 @@ struct MockEthereumWalletTestData {
         accountID: MockEthereumWalletTestData.account,
         privateKey: MockEthereumWalletTestData.privateKey
     )
+    
+    struct Transaction {
+        static let to = "0x3535353535353535353535353535353535353535"
+        static let value: BigUInt = 1
+        static let nonce: BigUInt = 9
+        static let gasPrice: BigUInt = 5_000_000_000
+        static let gasLimit: BigUInt = 21_000
+        static let gasLimitContract: BigUInt = 65_000
+        static let data: Data? = Data()
+    }
 }
 
 class EthereumTransactionCandidateBuilder {
-    var fromAddress: EthereumAssetAddress? = EthereumAssetAddress(
-        publicKey: MockEthereumWalletTestData.account
-    )
-    var toAddress: EthereumAssetAddress? = EthereumAssetAddress(
-        publicKey: MockEthereumWalletTestData.account // TODO
-    )
-    var amount: Decimal? = Decimal(1.0)
-    var createdAt: Date? = Date()
-    var memo: String?
-    
-    func with(fromAddress: String) -> Self {
-        self.fromAddress = EthereumAssetAddress(publicKey: fromAddress)
+    var to: EthereumKit.EthereumAddress? = EthereumKit.EthereumAddress(rawValue: "0x3535353535353535353535353535353535353535")
+    var value: BigUInt? = MockEthereumWalletTestData.Transaction.value
+    var gasPrice: BigUInt? = MockEthereumWalletTestData.Transaction.gasPrice
+    var gasLimit: BigUInt? = MockEthereumWalletTestData.Transaction.gasLimit
+    var data: Data?
+
+    func with(toAccountAddress: String) -> Self {
+        self.to = EthereumKit.EthereumAddress(rawValue: toAccountAddress)
         return self
     }
     
-    func with(toAddress: String) -> Self {
-        self.toAddress = EthereumAssetAddress(publicKey: toAddress)
+    func with(value: BigUInt) -> Self {
+        self.value = value
         return self
     }
     
-    func with(amount: Decimal) -> Self {
-        self.amount = amount
-        return self
-    }
-    
-    func with(memo: String) -> Self {
-        self.memo = memo
+    func with(gasPrice: BigUInt) -> Self {
+        self.gasPrice = gasPrice
         return self
     }
     
     func build() -> EthereumTransactionCandidate? {
         guard
-            let fromAddress = fromAddress,
-            let toAddress = toAddress,
-            let amount = amount
+            let to = to,
+            let value = value,
+            let gasPrice = gasPrice,
+            let gasLimit = gasLimit
         else {
             return nil
         }
-        let amountString = NSDecimalNumber(decimal: amount).stringValue
         return EthereumTransactionCandidate(
-            fromAddress: fromAddress,
-            toAddress: toAddress,
-            amount: amountString,
-            createdAt: Date(),
-            memo: memo
+            to: to,
+            gasPrice: gasPrice,
+            gasLimit: gasLimit,
+            value: value,
+            data: data
         )
     }
 }
 
 class EthereumTransactionCandidateCostedBuilder {
-    var candidate: EthereumTransactionCandidate {
+    
+    var web3swiftTransaction: web3swift.EthereumTransaction? 
+    
+    var candidate: EthereumTransactionCandidate? {
         didSet {
             candidateUpdated()
         }
@@ -96,10 +100,9 @@ class EthereumTransactionCandidateCostedBuilder {
         candidateUpdated()
     }
     
-    var web3swiftTransaction: web3swift.EthereumTransaction?
-    
     func with(candidate: EthereumTransactionCandidate) -> Self {
         self.candidate = candidate
+        candidateUpdated()
         return self
     }
     
@@ -119,18 +122,12 @@ class EthereumTransactionCandidateCostedBuilder {
     
     private func candidateUpdated() {
         web3swiftTransaction = web3swift.EthereumTransaction(
-            candidate: candidate
+            candidate: candidate!
         )
     }
 }
 
 class EthereumTransactionCandidateSignedBuilder {
-    var candidate: EthereumTransactionCandidate {
-        didSet {
-            candidateUpdated()
-        }
-    }
-    
     var costed: EthereumTransactionCandidateCosted? {
         didSet {
             web3swiftTransaction = costed?.transaction
@@ -139,14 +136,17 @@ class EthereumTransactionCandidateSignedBuilder {
     
     var web3swiftTransaction: web3swift.EthereumTransaction?
     
-    init(candidate: EthereumTransactionCandidate = EthereumTransactionCandidateBuilder().build()!) {
+    var candidate: EthereumTransactionCandidate? {
+        didSet {
+            candidateUpdated()
+        }
+    }
+
+    init() {}
+    
+    init(candidate: EthereumTransactionCandidate) {
         self.candidate = candidate
         candidateUpdated()
-    }
-    
-    func with(candidate: EthereumTransactionCandidate) -> Self {
-        self.candidate = candidate
-        return self
     }
     
     func with(costed: EthereumTransactionCandidateCosted) -> Self {
@@ -166,6 +166,8 @@ class EthereumTransactionCandidateSignedBuilder {
         
         let privateKeyData = MockEthereumWalletTestData.privateKeyData
         
+        transaction.nonce = MockEthereumWalletTestData.Transaction.nonce
+        
         // swiftlint:disable force_try
         try! Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData, useExtraEntropy: false)
         // swiftlint:enable force_try
@@ -177,19 +179,14 @@ class EthereumTransactionCandidateSignedBuilder {
     
     private func candidateUpdated() {
         let costed = EthereumTransactionCandidateCostedBuilder()
-            .with(candidate: candidate)
-            .build()
+            .with(candidate: candidate!)
+            .build()!
         self.costed = costed
     }
+
 }
 
 class EthereumTransactionFinalisedBuilder {
-    var candidate: EthereumTransactionCandidate {
-        didSet {
-            candidateUpdated()
-        }
-    }
-    
     var signed: EthereumTransactionCandidateSigned? {
         didSet {
             web3swiftTransaction = signed?.transaction
@@ -198,13 +195,22 @@ class EthereumTransactionFinalisedBuilder {
     
     var web3swiftTransaction: web3swift.EthereumTransaction?
     
-    init(candidate: EthereumTransactionCandidate = EthereumTransactionCandidateBuilder().build()!) {
+    var candidate: EthereumTransactionCandidate? {
+        didSet {
+            candidateUpdated()
+        }
+    }
+    
+    init() {}
+    
+    init(candidate: EthereumTransactionCandidate) {
         self.candidate = candidate
         candidateUpdated()
     }
     
     func with(candidate: EthereumTransactionCandidate) -> Self {
         self.candidate = candidate
+        candidateUpdated()
         return self
     }
     
@@ -234,7 +240,7 @@ class EthereumTransactionFinalisedBuilder {
     
     private func candidateUpdated() {
         let costed = EthereumTransactionCandidateCostedBuilder()
-            .with(candidate: candidate)
+            .with(candidate: candidate!)
             .build()!
         let signed = EthereumTransactionCandidateSignedBuilder()
             .with(costed: costed)
@@ -244,14 +250,15 @@ class EthereumTransactionFinalisedBuilder {
 }
 
 class EthereumTransactionPublishedBuilder {
-    var candidate: EthereumTransactionCandidate {
+    
+    var finalised: EthereumTransactionFinalised? =
+        EthereumTransactionFinalisedBuilder().build()
+    
+    var candidate: EthereumTransactionCandidate? {
         didSet {
             candidateUpdated()
         }
     }
-    
-    var finalised: EthereumTransactionFinalised? =
-        EthereumTransactionFinalisedBuilder().build()
     
     var transactionHash: String?
     
@@ -262,6 +269,7 @@ class EthereumTransactionPublishedBuilder {
     
     func with(candidate: EthereumTransactionCandidate) -> Self {
         self.candidate = candidate
+        candidateUpdated()
         return self
     }
     
@@ -293,7 +301,7 @@ class EthereumTransactionPublishedBuilder {
     
     private func candidateUpdated() {
         let costed = EthereumTransactionCandidateCostedBuilder()
-            .with(candidate: candidate)
+            .with(candidate: candidate!)
             .build()!
         let signed = EthereumTransactionCandidateSignedBuilder()
             .with(costed: costed)
@@ -306,18 +314,14 @@ class EthereumTransactionPublishedBuilder {
 }
 
 extension web3swift.EthereumTransaction {
-    init(candidate: EthereumTransactionCandidate,
-             nonce: BigUInt = 9,
-          gasPrice: BigUInt = 5_000_000_000,
-          gasLimit: BigUInt = 21_000) {
-        let to: web3swift.Address = web3swift.Address(candidate.toAddress.publicKey)
+    init(candidate: EthereumTransactionCandidate, nonce: BigUInt = 9) {
         self.init(
             nonce: nonce,
-            gasPrice: gasPrice,
-            gasLimit: gasLimit,
-            to: to,
-            value: candidate.amount,
-            data: Data()
+            gasPrice: candidate.gasPrice,
+            gasLimit: candidate.gasLimit,
+            to: candidate.to.web3swiftAddress,
+            value: candidate.value,
+            data: candidate.data ?? Data()
         )
         self.UNSAFE_setChainID(NetworkId.mainnet)
     }

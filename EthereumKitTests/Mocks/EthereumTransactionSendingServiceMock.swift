@@ -1,5 +1,5 @@
 //
-//  EthereumTransactionCreationServiceMock.swift
+//  EthereumTransactionSendingServiceMock.swift
 //  EthereumKitTests
 //
 //  Created by Jack on 14/05/2019.
@@ -15,7 +15,7 @@ enum EthereumTransactionCreationServiceMockError: Error {
     case mockError
 }
 
-class EthereumTransactionCreationServiceMock: EthereumTransactionCreationServiceAPI {
+class EthereumTransactionSendingServiceMock: EthereumTransactionSendingServiceAPI {
     var lastSendTransaction: EthereumTransactionCandidate?
     var lastSendKeyPair: EthereumKeyPair?
     var sendTransactionResponse: Single<EthereumTransactionPublished> =

@@ -20,13 +20,13 @@ public enum EthereumTransactionSignerError: Error {
 }
 
 public protocol EthereumTransactionSignerAPI {
-    func sign(transaction: EthereumTransactionCandidateCosted, keyPair: EthereumKeyPair) -> NewResult<EthereumTransactionCandidateSigned, EthereumTransactionSignerError>
+    func sign(transaction: EthereumTransactionCandidateCosted, nonce: BigUInt, keyPair: EthereumKeyPair) -> NewResult<EthereumTransactionCandidateSigned, EthereumTransactionSignerError>
 }
 
 public class EthereumTransactionSigner: EthereumTransactionSignerAPI {
     public static let shared = EthereumTransactionSigner()
     
-    public func sign(transaction: EthereumTransactionCandidateCosted, keyPair: EthereumKeyPair) -> NewResult<EthereumTransactionCandidateSigned, EthereumTransactionSignerError> {
+    public func sign(transaction: EthereumTransactionCandidateCosted, nonce: BigUInt, keyPair: EthereumKeyPair) -> NewResult<EthereumTransactionCandidateSigned, EthereumTransactionSignerError> {
         
         let mnemonics: Mnemonics
         do {
@@ -53,6 +53,8 @@ public class EthereumTransactionSigner: EthereumTransactionSignerAPI {
         guard transaction.intrinsicChainID == NetworkId.mainnet.rawValue else {
             return .failure(.incorrectChainId)
         }
+        
+        transaction.nonce = nonce
         
         do {
             try Web3Signer.signTX(transaction: &transaction, keystore: keystore, account: account, password: password)

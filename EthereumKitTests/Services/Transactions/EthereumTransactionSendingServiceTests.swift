@@ -1,5 +1,5 @@
 //
-//  EthereumTransactionCreationServiceTests.swift
+//  EthereumTransactionSendingServiceTests.swift
 //  EthereumKitTests
 //
 //  Created by Jack on 30/04/2019.
@@ -13,7 +13,7 @@ import BigInt
 import PlatformKit
 @testable import EthereumKit
 
-class EthereumTransactionCreationServiceTests: XCTestCase {
+class EthereumTransactionSendingServiceTests: XCTestCase {
     
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
@@ -26,7 +26,7 @@ class EthereumTransactionCreationServiceTests: XCTestCase {
     var transactionSigner: EthereumTransactionSigner!
     var transactionEncoder: EthereumTransactionEncoder!
     
-    var subject: EthereumTransactionCreationService!
+    var subject: EthereumTransactionSendingService!
     
     override func setUp() {
         super.setUp()
@@ -42,7 +42,7 @@ class EthereumTransactionCreationServiceTests: XCTestCase {
         transactionSigner = EthereumTransactionSigner.shared
         transactionEncoder = EthereumTransactionEncoder.shared
         
-        subject = EthereumTransactionCreationService(
+        subject = EthereumTransactionSendingService(
             with: bridge,
             ethereumAPIClient: ethereumAPIClient,
             feeService: feeService,
@@ -61,8 +61,8 @@ class EthereumTransactionCreationServiceTests: XCTestCase {
     
     func test_send() {
         // Arrange
-        
         let candidate = EthereumTransactionCandidateBuilder().build()!
+        
         let expectedPublished = EthereumTransactionPublishedBuilder()
             .with(candidate: candidate)
             .build()!

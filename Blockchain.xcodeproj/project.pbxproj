@@ -75,10 +75,13 @@
 		3422FF91226F6A50005FBB2E /* EthereumTransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3422FF90226F6A50005FBB2E /* EthereumTransactionSigner.swift */; };
 		3426B15722551D42001831CF /* EthereumKeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3426B15622551D42001831CF /* EthereumKeyPair.swift */; };
 		342799E72226D8B8001FA074 /* EthereumHistoricalTransactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342799E62226D8B8001FA074 /* EthereumHistoricalTransactionService.swift */; };
+		342A1BAA229203D30076C956 /* ERC20TokenValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342A1BA9229203D30076C956 /* ERC20TokenValue.swift */; };
+		342A1BBA2292B7BB0076C956 /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342A1BB92292B7BB0076C956 /* EthereumAddress.swift */; };
+		342A1BCD22930DC50076C956 /* ERC20AccountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342A1BCC22930DC50076C956 /* ERC20AccountResponse.swift */; };
 		3430443E224BE0530036345B /* CryptoFeeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34579863224BC65C00F50F92 /* CryptoFeeService.swift */; };
 		34304465224CF36C0036345B /* EthereumAssetAccountDetailsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34304464224CF36C0036345B /* EthereumAssetAccountDetailsServiceTests.swift */; };
 		3430446F224CFB960036345B /* EthereumWalletBridgeMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3430446E224CFB960036345B /* EthereumWalletBridgeMock.swift */; };
-		3430447A224D23A40036345B /* EthereumTransactionCreationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34304479224D23A40036345B /* EthereumTransactionCreationService.swift */; };
+		3430447A224D23A40036345B /* EthereumTransactionBuildingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34304479224D23A40036345B /* EthereumTransactionBuildingService.swift */; };
 		344B36712281DA5C0011A922 /* SendEthereumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344B36702281DA5C0011A922 /* SendEthereumService.swift */; };
 		344B3696228212530011A922 /* NetworkCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348658C4228191CA0007C563 /* NetworkCommunicator.swift */; };
 		344B36A42282F1560011A922 /* EthereumKeyDerivationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344B36A32282F1560011A922 /* EthereumKeyDerivationInput.swift */; };
@@ -103,6 +106,7 @@
 		346ED4D02273731D00D5179E /* EthereumTransactionCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346ED4CF2273731D00D5179E /* EthereumTransactionCandidate.swift */; };
 		347029DF225788AC007AD2C1 /* AnyEthereumKeyPairDeriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347029DE225788AC007AD2C1 /* AnyEthereumKeyPairDeriver.swift */; };
 		347029E32257981D007AD2C1 /* EthereumWalletAccountRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347029E22257981D007AD2C1 /* EthereumWalletAccountRepositoryTests.swift */; };
+		34732D452291DD7200F34AB5 /* EthereumValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34732D442291DD7100F34AB5 /* EthereumValue.swift */; };
 		347F47D92264C732006BCDDA /* ERC20AssetAccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F47D82264C732006BCDDA /* ERC20AssetAccountRepository.swift */; };
 		347F47F7226666B5006BCDDA /* ERC20Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F47F6226666B5006BCDDA /* ERC20Error.swift */; };
 		347F47F92266676D006BCDDA /* ERC20AccountAPIClientAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F47F82266676D006BCDDA /* ERC20AccountAPIClientAPI.swift */; };
@@ -114,8 +118,11 @@
 		349442D922649DB600593DEA /* ERC20AssetAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442C4226499E000593DEA /* ERC20AssetAccount.swift */; };
 		349442DA22649DB600593DEA /* ERC20AssetAccountDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442C622649A3300593DEA /* ERC20AssetAccountDetails.swift */; };
 		349442DC22649E5D00593DEA /* ERC20WalletAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442DB22649E5D00593DEA /* ERC20WalletAccount.swift */; };
-		349442E12264B66A00593DEA /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442E02264B66A00593DEA /* Token.swift */; };
+		349442E12264B66A00593DEA /* ERC20Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442E02264B66A00593DEA /* ERC20Token.swift */; };
 		349442E32264B69600593DEA /* PaxToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349442E22264B69600593DEA /* PaxToken.swift */; };
+		34998C42228F7061005B5CDD /* EthereumTransactionSendingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34998C41228F7061005B5CDD /* EthereumTransactionSendingService.swift */; };
+		34998C4F228F97D7005B5CDD /* ERC20BalanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34998C4E228F97D7005B5CDD /* ERC20BalanceService.swift */; };
+		34998C7E2290754E005B5CDD /* EthereumWalletAccountRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE8B202285ED830097F535 /* EthereumWalletAccountRepositoryMock.swift */; };
 		349C4B99221887A500332BFF /* QRCodeScannerParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349C4B98221887A500332BFF /* QRCodeScannerParsing.swift */; };
 		34A0BBEA2225597400F349CD /* Importable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A0BBE92225597400F349CD /* Importable.swift */; };
 		34A0BC02222585BE00F349CD /* LegacyEthereumWalletMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A0BC01222585BE00F349CD /* LegacyEthereumWalletMock.swift */; };
@@ -124,12 +131,14 @@
 		34A5121E225BB3D500C53DD6 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3426B13A2254E643001831CF /* AccessibilityIdentifiers.swift */; };
 		34A5121F225BB3D600C53DD6 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3426B13A2254E643001831CF /* AccessibilityIdentifiers.swift */; };
 		34A54DD4221A06B000FD99BC /* QRCodeScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A54DD3221A06B000FD99BC /* QRCodeScannerTests.swift */; };
-		34A5CBAD2278C12600F98E1F /* EthereumTransactionCreationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A5CBAC2278C12600F98E1F /* EthereumTransactionCreationServiceTests.swift */; };
+		34A5CBAD2278C12600F98E1F /* EthereumTransactionSendingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A5CBAC2278C12600F98E1F /* EthereumTransactionSendingServiceTests.swift */; };
+		34AD100022918A5B00FB464D /* ERC20Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AD0FFF22918A5B00FB464D /* ERC20Service.swift */; };
+		34AD100B22918BC600FB464D /* ERC20ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AD100A22918BC600FB464D /* ERC20ServiceTests.swift */; };
 		34BD57E2228A002D00882945 /* EthereumAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */; };
 		34BD57E3228A002E00882945 /* EthereumAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */; };
 		34BD57E5228A099800882945 /* push_tx_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 34BD57E4228A099800882945 /* push_tx_response.json */; };
 		34BD57E6228A119200882945 /* MockEthereumWalletTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341E5A602284354B007BE6A6 /* MockEthereumWalletTestData.swift */; };
-		34BD57EF228A386700882945 /* EthereumTransactionCreationServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BD57EE228A386700882945 /* EthereumTransactionCreationServiceMock.swift */; };
+		34BD57EF228A386700882945 /* EthereumTransactionSendingServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BD57EE228A386700882945 /* EthereumTransactionSendingServiceMock.swift */; };
 		34BD972C221B122D00D40D4C /* QRCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDA322149C5C00614F52 /* QRCodeScanner.swift */; };
 		34BD9736221B123000D40D4C /* PairingCodeQRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0AFF422196B6500D46361 /* PairingCodeQRCodeParser.swift */; };
 		34BD9737221B123300D40D4C /* PrivateKeyQRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0AFE922196B3E00D46361 /* PrivateKeyQRCodeParser.swift */; };
@@ -166,6 +175,8 @@
 		34C74363228AD6DA00C88347 /* EthereumTransactionCandidateSigned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C74362228AD6DA00C88347 /* EthereumTransactionCandidateSigned.swift */; };
 		34C74365228AD70600C88347 /* EthereumTransactionFinalised.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C74364228AD70600C88347 /* EthereumTransactionFinalised.swift */; };
 		34C74367228AD72E00C88347 /* EthereumTransactionPublished.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C74366228AD72E00C88347 /* EthereumTransactionPublished.swift */; };
+		34C74380228B015100C88347 /* ERC20API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C7437F228B015100C88347 /* ERC20API.swift */; };
+		34C74381228B08DD00C88347 /* MockEthereumWalletTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341E5A602284354B007BE6A6 /* MockEthereumWalletTestData.swift */; };
 		34D88F62221A96C300AE9DE5 /* AddressQRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D88F61221A96C300AE9DE5 /* AddressQRCodeParser.swift */; };
 		34D88F76221AC06F00AE9DE5 /* QRCodeScannerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D88F75221AC06F00AE9DE5 /* QRCodeScannerViewModelTests.swift */; };
 		34D88F84221AC56200AE9DE5 /* QRCodeScannerViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D88F83221AC56200AE9DE5 /* QRCodeScannerViewControllerBuilder.swift */; };
@@ -1932,9 +1943,12 @@
 		3426B15622551D42001831CF /* EthereumKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumKeyPair.swift; sourceTree = "<group>"; };
 		3426B161225533A9001831CF /* StellarSDK+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StellarSDK+Extensions.swift"; sourceTree = "<group>"; };
 		342799E62226D8B8001FA074 /* EthereumHistoricalTransactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumHistoricalTransactionService.swift; sourceTree = "<group>"; };
+		342A1BA9229203D30076C956 /* ERC20TokenValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20TokenValue.swift; sourceTree = "<group>"; };
+		342A1BB92292B7BB0076C956 /* EthereumAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
+		342A1BCC22930DC50076C956 /* ERC20AccountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AccountResponse.swift; sourceTree = "<group>"; };
 		34304464224CF36C0036345B /* EthereumAssetAccountDetailsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAssetAccountDetailsServiceTests.swift; sourceTree = "<group>"; };
 		3430446E224CFB960036345B /* EthereumWalletBridgeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumWalletBridgeMock.swift; sourceTree = "<group>"; };
-		34304479224D23A40036345B /* EthereumTransactionCreationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionCreationService.swift; sourceTree = "<group>"; };
+		34304479224D23A40036345B /* EthereumTransactionBuildingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionBuildingService.swift; sourceTree = "<group>"; };
 		344B36702281DA5C0011A922 /* SendEthereumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendEthereumService.swift; sourceTree = "<group>"; };
 		344B36A32282F1560011A922 /* EthereumKeyDerivationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumKeyDerivationInput.swift; sourceTree = "<group>"; };
 		344B36AE2282FFCB0011A922 /* StellarKeyDerivationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarKeyDerivationInput.swift; sourceTree = "<group>"; };
@@ -1957,6 +1971,7 @@
 		346ED4CF2273731D00D5179E /* EthereumTransactionCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionCandidate.swift; sourceTree = "<group>"; };
 		347029DE225788AC007AD2C1 /* AnyEthereumKeyPairDeriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEthereumKeyPairDeriver.swift; sourceTree = "<group>"; };
 		347029E22257981D007AD2C1 /* EthereumWalletAccountRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumWalletAccountRepositoryTests.swift; sourceTree = "<group>"; };
+		34732D442291DD7100F34AB5 /* EthereumValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumValue.swift; sourceTree = "<group>"; };
 		347F47D82264C732006BCDDA /* ERC20AssetAccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AssetAccountRepository.swift; sourceTree = "<group>"; };
 		347F47F6226666B5006BCDDA /* ERC20Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20Error.swift; sourceTree = "<group>"; };
 		347F47F82266676D006BCDDA /* ERC20AccountAPIClientAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AccountAPIClientAPI.swift; sourceTree = "<group>"; };
@@ -1967,16 +1982,20 @@
 		349442C622649A3300593DEA /* ERC20AssetAccountDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AssetAccountDetails.swift; sourceTree = "<group>"; };
 		349442C822649AAC00593DEA /* ERC20AssetAccountDetailsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AssetAccountDetailsService.swift; sourceTree = "<group>"; };
 		349442DB22649E5D00593DEA /* ERC20WalletAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20WalletAccount.swift; sourceTree = "<group>"; };
-		349442E02264B66A00593DEA /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		349442E02264B66A00593DEA /* ERC20Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20Token.swift; sourceTree = "<group>"; };
 		349442E22264B69600593DEA /* PaxToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxToken.swift; sourceTree = "<group>"; };
+		34998C41228F7061005B5CDD /* EthereumTransactionSendingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionSendingService.swift; sourceTree = "<group>"; };
+		34998C4E228F97D7005B5CDD /* ERC20BalanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20BalanceService.swift; sourceTree = "<group>"; };
 		349C4B98221887A500332BFF /* QRCodeScannerParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerParsing.swift; sourceTree = "<group>"; };
 		34A0BBE92225597400F349CD /* Importable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importable.swift; sourceTree = "<group>"; };
 		34A0BC01222585BE00F349CD /* LegacyEthereumWalletMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyEthereumWalletMock.swift; sourceTree = "<group>"; };
 		34A54DD3221A06B000FD99BC /* QRCodeScannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerTests.swift; sourceTree = "<group>"; };
-		34A5CBAC2278C12600F98E1F /* EthereumTransactionCreationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionCreationServiceTests.swift; sourceTree = "<group>"; };
+		34A5CBAC2278C12600F98E1F /* EthereumTransactionSendingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionSendingServiceTests.swift; sourceTree = "<group>"; };
+		34AD0FFF22918A5B00FB464D /* ERC20Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20Service.swift; sourceTree = "<group>"; };
+		34AD100A22918BC600FB464D /* ERC20ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20ServiceTests.swift; sourceTree = "<group>"; };
 		34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAPIClient.swift; sourceTree = "<group>"; };
 		34BD57E4228A099800882945 /* push_tx_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = push_tx_response.json; sourceTree = "<group>"; };
-		34BD57EE228A386700882945 /* EthereumTransactionCreationServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionCreationServiceMock.swift; sourceTree = "<group>"; };
+		34BD57EE228A386700882945 /* EthereumTransactionSendingServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionSendingServiceMock.swift; sourceTree = "<group>"; };
 		34BD973F221BF9A100D40D4C /* MockAVCaptureSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVCaptureSession.swift; sourceTree = "<group>"; };
 		34BE77B0225372AA0034A6BE /* StellarValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarValue.swift; sourceTree = "<group>"; };
 		34BE77B4225383D50034A6BE /* StellarValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarValueTests.swift; sourceTree = "<group>"; };
@@ -2003,6 +2022,7 @@
 		34C74362228AD6DA00C88347 /* EthereumTransactionCandidateSigned.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionCandidateSigned.swift; sourceTree = "<group>"; };
 		34C74364228AD70600C88347 /* EthereumTransactionFinalised.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionFinalised.swift; sourceTree = "<group>"; };
 		34C74366228AD72E00C88347 /* EthereumTransactionPublished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionPublished.swift; sourceTree = "<group>"; };
+		34C7437F228B015100C88347 /* ERC20API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20API.swift; sourceTree = "<group>"; };
 		34D88F61221A96C300AE9DE5 /* AddressQRCodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressQRCodeParser.swift; sourceTree = "<group>"; };
 		34D88F75221AC06F00AE9DE5 /* QRCodeScannerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewModelTests.swift; sourceTree = "<group>"; };
 		34D88F83221AC56200AE9DE5 /* QRCodeScannerViewControllerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewControllerBuilder.swift; sourceTree = "<group>"; };
@@ -4836,6 +4856,7 @@
 			isa = PBXGroup;
 			children = (
 				341E5A742284BCB8007BE6A6 /* EthereumKitError.swift */,
+				34732D442291DD7100F34AB5 /* EthereumValue.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -4887,10 +4908,35 @@
 				346ED4B0227354A600D5179E /* EthereumTransactionBuilder.swift */,
 				3422FF90226F6A50005FBB2E /* EthereumTransactionSigner.swift */,
 				344C42EA227C50C500CFAC33 /* EthereumTransactionEncoder.swift */,
-				34304479224D23A40036345B /* EthereumTransactionCreationService.swift */,
+				34998C41228F7061005B5CDD /* EthereumTransactionSendingService.swift */,
+				34304479224D23A40036345B /* EthereumTransactionBuildingService.swift */,
 				341E5A6D2284365F007BE6A6 /* EthereumWalletService.swift */,
 			);
 			path = Transactions;
+			sourceTree = "<group>";
+		};
+		342A1B9F229203BE0076C956 /* ERC20TokenValue */ = {
+			isa = PBXGroup;
+			children = (
+				342A1BA9229203D30076C956 /* ERC20TokenValue.swift */,
+			);
+			path = ERC20TokenValue;
+			sourceTree = "<group>";
+		};
+		342A1BB82292B7740076C956 /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				342A1BB92292B7BB0076C956 /* EthereumAddress.swift */,
+			);
+			path = Address;
+			sourceTree = "<group>";
+		};
+		342A1BCB22930D800076C956 /* NetworkModels */ = {
+			isa = PBXGroup;
+			children = (
+				342A1BCC22930DC50076C956 /* ERC20AccountResponse.swift */,
+			);
+			path = NetworkModels;
 			sourceTree = "<group>";
 		};
 		34304466224CF40B0036345B /* Mocks */ = {
@@ -4900,7 +4946,7 @@
 				341E5A602284354B007BE6A6 /* MockEthereumWalletTestData.swift */,
 				344C42DF227C4D4D00CFAC33 /* EthereumKeyPairDeriverMock.swift */,
 				34BE8B202285ED830097F535 /* EthereumWalletAccountRepositoryMock.swift */,
-				34BD57EE228A386700882945 /* EthereumTransactionCreationServiceMock.swift */,
+				34BD57EE228A386700882945 /* EthereumTransactionSendingServiceMock.swift */,
 				34C7432B228AD03400C88347 /* EthereumTransactionSignerMock.swift */,
 			);
 			path = Mocks;
@@ -4912,7 +4958,7 @@
 				346ED4BB2273551500D5179E /* EthereumTransactionBuilderTests.swift */,
 				3422FF85226F4B8A005FBB2E /* EthereumTransactionSignerTests.swift */,
 				344C42EC227C8F2900CFAC33 /* EthereumTransactionEncoderTests.swift */,
-				34A5CBAC2278C12600F98E1F /* EthereumTransactionCreationServiceTests.swift */,
+				34A5CBAC2278C12600F98E1F /* EthereumTransactionSendingServiceTests.swift */,
 				34BE8B152285D5970097F535 /* EthereumWalletServiceTests.swift */,
 			);
 			path = Transactions;
@@ -4972,6 +5018,7 @@
 		347F480C2267A669006BCDDA /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				34C7437C228AF54800C88347 /* Transactions */,
 				347F48162267A675006BCDDA /* Accounts */,
 			);
 			path = Services;
@@ -4996,6 +5043,7 @@
 		349442B52264994B00593DEA /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				34C74377228AF3B400C88347 /* Transactions */,
 				349442BF2264995800593DEA /* Accounts */,
 			);
 			path = Services;
@@ -5006,6 +5054,7 @@
 			children = (
 				347F47D82264C732006BCDDA /* ERC20AssetAccountRepository.swift */,
 				349442C822649AAC00593DEA /* ERC20AssetAccountDetailsService.swift */,
+				34998C4E228F97D7005B5CDD /* ERC20BalanceService.swift */,
 			);
 			path = Accounts;
 			sourceTree = "<group>";
@@ -5037,12 +5086,12 @@
 			path = Tokens;
 			sourceTree = "<group>";
 		};
-		349442DF2264B65900593DEA /* Token */ = {
+		349442DF2264B65900593DEA /* ERC20Token */ = {
 			isa = PBXGroup;
 			children = (
-				349442E02264B66A00593DEA /* Token.swift */,
+				349442E02264B66A00593DEA /* ERC20Token.swift */,
 			);
-			path = Token;
+			path = ERC20Token;
 			sourceTree = "<group>";
 		};
 		34A0BBF7222581C700F349CD /* Ethereum */ = {
@@ -5127,6 +5176,22 @@
 			path = Foundation;
 			sourceTree = "<group>";
 		};
+		34C74377228AF3B400C88347 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				34AD0FFF22918A5B00FB464D /* ERC20Service.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		34C7437C228AF54800C88347 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				34AD100A22918BC600FB464D /* ERC20ServiceTests.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
 		34E1C1D722244941006E70D3 /* Ethereum */ = {
 			isa = PBXGroup;
 			children = (
@@ -5158,6 +5223,7 @@
 			children = (
 				347F47F522666696006BCDDA /* Foundation */,
 				34EDB84C226107F5009521D9 /* APIs */,
+				342A1BCB22930D800076C956 /* NetworkModels */,
 				349442C2226499B700593DEA /* Models */,
 				349442B52264994B00593DEA /* Services */,
 				34EDB8292261065D009521D9 /* ERC20Kit.h */,
@@ -5180,8 +5246,10 @@
 		34EDB84C226107F5009521D9 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
-				349442DF2264B65900593DEA /* Token */,
+				342A1B9F229203BE0076C956 /* ERC20TokenValue */,
+				349442DF2264B65900593DEA /* ERC20Token */,
 				347F47F82266676D006BCDDA /* ERC20AccountAPIClientAPI.swift */,
+				34C7437F228B015100C88347 /* ERC20API.swift */,
 			);
 			path = APIs;
 			sourceTree = "<group>";
@@ -9992,6 +10060,7 @@
 		C7174B95220BA8FF0074ECF5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				342A1BB82292B7740076C956 /* Address */,
 				341E5A732284BCA4007BE6A6 /* General */,
 				3426B14B22551D1D001831CF /* Accounts */,
 				C7174BA2220BAC660074ECF5 /* AssetAccount */,
@@ -11488,6 +11557,11 @@
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/keccak.c/keccak.framework",
+				"${BUILT_PRODUCTS_DIR}/scrypt.c/scrypt.framework",
+				"${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework",
+				"${BUILT_PRODUCTS_DIR}/web3swift.pod/web3swift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
 				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
@@ -11500,6 +11574,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/keccak.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/web3swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
@@ -11783,10 +11862,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				349442DA22649DB600593DEA /* ERC20AssetAccountDetails.swift in Sources */,
+				34AD100022918A5B00FB464D /* ERC20Service.swift in Sources */,
 				347F47F7226666B5006BCDDA /* ERC20Error.swift in Sources */,
+				34C74380228B015100C88347 /* ERC20API.swift in Sources */,
 				349442CF22649DAB00593DEA /* ERC20AssetAccountDetailsService.swift in Sources */,
-				349442E12264B66A00593DEA /* Token.swift in Sources */,
+				34998C4F228F97D7005B5CDD /* ERC20BalanceService.swift in Sources */,
+				349442E12264B66A00593DEA /* ERC20Token.swift in Sources */,
+				342A1BCD22930DC50076C956 /* ERC20AccountResponse.swift in Sources */,
 				349442DC22649E5D00593DEA /* ERC20WalletAccount.swift in Sources */,
+				342A1BAA229203D30076C956 /* ERC20TokenValue.swift in Sources */,
 				349442E32264B69600593DEA /* PaxToken.swift in Sources */,
 				349442D922649DB600593DEA /* ERC20AssetAccount.swift in Sources */,
 				347F47D92264C732006BCDDA /* ERC20AssetAccountRepository.swift in Sources */,
@@ -11798,10 +11882,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34C74381228B08DD00C88347 /* MockEthereumWalletTestData.swift in Sources */,
 				34E90606226F1E5600550750 /* ERC20EthereumWalletBridgeMock.swift in Sources */,
+				34AD100B22918BC600FB464D /* ERC20ServiceTests.swift in Sources */,
 				347F48182267A6CF006BCDDA /* ERC20AssetAccountDetailsServiceTests.swift in Sources */,
 				34EDB8372261065D009521D9 /* ERC20KitTests.swift in Sources */,
 				34E90602226F1E0F00550750 /* ERC20AccountAPIClientMock.swift in Sources */,
+				34998C7E2290754E005B5CDD /* EthereumWalletAccountRepositoryMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11990,6 +12077,7 @@
 				C76E4D10220B59C500B21B82 /* EthereumWalletBridgeAPI.swift in Sources */,
 				34C74365228AD70600C88347 /* EthereumTransactionFinalised.swift in Sources */,
 				C7174BAD220BB33F0074ECF5 /* EthereumWalletAccountRepository.swift in Sources */,
+				34732D452291DD7200F34AB5 /* EthereumValue.swift in Sources */,
 				341E5A752284BCB8007BE6A6 /* EthereumKitError.swift in Sources */,
 				346ED4D02273731D00D5179E /* EthereumTransactionCandidate.swift in Sources */,
 				344C42EB227C50C500CFAC33 /* EthereumTransactionEncoder.swift in Sources */,
@@ -11997,7 +12085,7 @@
 				344B36A42282F1560011A922 /* EthereumKeyDerivationInput.swift in Sources */,
 				34C74367228AD72E00C88347 /* EthereumTransactionPublished.swift in Sources */,
 				342799E72226D8B8001FA074 /* EthereumHistoricalTransactionService.swift in Sources */,
-				3430447A224D23A40036345B /* EthereumTransactionCreationService.swift in Sources */,
+				3430447A224D23A40036345B /* EthereumTransactionBuildingService.swift in Sources */,
 				341E5A6E2284365F007BE6A6 /* EthereumWalletService.swift in Sources */,
 				344C42FC227CA56100CFAC33 /* EthereumAssetAccountService.swift in Sources */,
 				34C6CF2A22412E85009123E5 /* EthereumAssetAccountRepository.swift in Sources */,
@@ -12007,6 +12095,7 @@
 				34C74361228AD6B100C88347 /* EthereumTransactionCandidateCosted.swift in Sources */,
 				34C6CF3C224132B7009123E5 /* EthereumAssetAccountDetails.swift in Sources */,
 				346ED4B1227354A600D5179E /* EthereumTransactionBuilder.swift in Sources */,
+				342A1BBA2292B7BB0076C956 /* EthereumAddress.swift in Sources */,
 				C7174BAA220BB1D70074ECF5 /* EthereumWalletAccount.swift in Sources */,
 				34C74363228AD6DA00C88347 /* EthereumTransactionCandidateSigned.swift in Sources */,
 				C7174BA7220BACDB0074ECF5 /* EthereumAssetAddress.swift in Sources */,
@@ -12014,6 +12103,7 @@
 				347029DF225788AC007AD2C1 /* AnyEthereumKeyPairDeriver.swift in Sources */,
 				34BE8B422289A1800097F535 /* EthereumKeyPairDeriver.swift in Sources */,
 				C7174BA1220BA9270074ECF5 /* EthereumHistoricalTransaction.swift in Sources */,
+				34998C42228F7061005B5CDD /* EthereumTransactionSendingService.swift in Sources */,
 				34C6CF3E22413620009123E5 /* EthereumServiceError.swift in Sources */,
 				34E66634224A6154007667FA /* EthereumTransactionFee.swift in Sources */,
 			);
@@ -12025,11 +12115,11 @@
 			files = (
 				3422FF86226F4B8B005FBB2E /* EthereumTransactionSignerTests.swift in Sources */,
 				344C42E0227C4D4D00CFAC33 /* EthereumKeyPairDeriverMock.swift in Sources */,
-				34A5CBAD2278C12600F98E1F /* EthereumTransactionCreationServiceTests.swift in Sources */,
+				34A5CBAD2278C12600F98E1F /* EthereumTransactionSendingServiceTests.swift in Sources */,
 				3430446F224CFB960036345B /* EthereumWalletBridgeMock.swift in Sources */,
 				341E5A612284354B007BE6A6 /* MockEthereumWalletTestData.swift in Sources */,
 				34BE8B212285ED830097F535 /* EthereumWalletAccountRepositoryMock.swift in Sources */,
-				34BD57EF228A386700882945 /* EthereumTransactionCreationServiceMock.swift in Sources */,
+				34BD57EF228A386700882945 /* EthereumTransactionSendingServiceMock.swift in Sources */,
 				34C7432C228AD03400C88347 /* EthereumTransactionSignerMock.swift in Sources */,
 				347029E32257981D007AD2C1 /* EthereumWalletAccountRepositoryTests.swift in Sources */,
 				34BE8B162285D5970097F535 /* EthereumWalletServiceTests.swift in Sources */,

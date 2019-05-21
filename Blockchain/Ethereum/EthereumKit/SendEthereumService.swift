@@ -6,10 +6,13 @@
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+// TODO: Delete this file once the send PAX screen is implemented (IOS-2065)
+
 import RxSwift
 import BigInt
 import PlatformKit
 import EthereumKit
+import ERC20Kit
 
 extension EthereumWalletService {
     static let shared = EthereumWalletService(
@@ -17,14 +20,24 @@ extension EthereumWalletService {
         ethereumAPIClient: EthereumAPIClient.shared,
         feeService: EthereumFeeService.shared,
         walletAccountRepository: ETHServiceProvider.shared.repository,
-        transactionCreationService: EthereumTransactionCreationService.shared
+        transactionBuildingService: EthereumTransactionBuildingService.shared,
+        transactionSendingService: EthereumTransactionSendingService.shared
     )
 }
 
-extension EthereumTransactionCreationService {
-    static let shared = EthereumTransactionCreationService(
+extension EthereumTransactionSendingService {
+    static let shared = EthereumTransactionSendingService(
         with: WalletManager.shared.wallet.ethereum,
         ethereumAPIClient: EthereumAPIClient.shared,
+        feeService: EthereumFeeService.shared,
+        transactionBuilder: EthereumTransactionBuilder.shared,
+        transactionSigner: EthereumTransactionSigner.shared
+    )
+}
+
+extension EthereumTransactionBuildingService {
+    static let shared = EthereumTransactionBuildingService(
+        with: WalletManager.shared.wallet.ethereum,
         feeService: EthereumFeeService.shared
     )
 }
@@ -41,93 +54,121 @@ extension EthereumTransactionCreationService {
         return SendEthereumService.shared
     }
     
-    private var transactionBuilder: EthereumTransactionCandidateBuilder
+    private var disposeBag: DisposeBag = DisposeBag()
+    
+    private var toAddress: EthereumAssetAddress?
+    private var amountDecimal: Decimal?
     
     private let wallet: Wallet
-    private let walletService: EthereumWalletServiceAPI
-    private let ethereumWalletAccountRepository: EthereumWalletAccountRepository
+    private let walletService: EthereumWalletService
     
     init(wallet: Wallet = WalletManager.shared.wallet,
-         platformService: EthereumWalletServiceAPI = EthereumWalletService.shared,
-         ethereumWalletAccountRepository: EthereumWalletAccountRepository = ETHServiceProvider.shared.repository) {
+         platformService: EthereumWalletService = EthereumWalletService.shared) {
         self.wallet = wallet
         self.walletService = platformService
-        self.ethereumWalletAccountRepository = ethereumWalletAccountRepository
-        self.transactionBuilder = EthereumTransactionCandidateBuilder()
     }
     
     @objc func changePayment(to address: String) {
-        transactionBuilder.with(toAddress: address)
+        self.toAddress = EthereumAssetAddress(publicKey: address)
     }
     
     @objc func set(amount: NSDecimalNumber) {
-        transactionBuilder.with(amount: amount.decimalValue)
+        self.amountDecimal = amount.decimalValue
     }
     
     @objc func send() {
-        wallet.ethereum.address.subscribe(onSuccess: { address in
-            print(address)
-            self.transactionBuilder.with(fromAddress: address)
-            if let transaction = self.transactionBuilder.build() {
-                self.walletService.send(transaction: transaction)
-                    .subscribe(onSuccess: { ethereumTransactionPublished in
-                        print(ethereumTransactionPublished)
-                        self.wallet.delegate?.didSendEther?()
-                    }, onError: { error in
-                        print(error)
-                        self.wallet.delegate?.didErrorDuringEtherSend?(error.localizedDescription)
-                    })
-            }
-        }, onError: { error in
-            print(error)
-            print(error)
-        })
-    }
-}
-
-
-class EthereumTransactionCandidateBuilder {
-    
-    var fromAddress: EthereumAssetAddress?
-    var toAddress: EthereumAssetAddress?
-    var amountDecimal: Decimal?
-    var createdAt: Date?
-    
-    func with(fromAddress: String) -> Self {
-        self.fromAddress = EthereumAssetAddress(publicKey: fromAddress)
-        return self
-    }
-    
-    func with(toAddress: String) -> Self {
-        self.toAddress = EthereumAssetAddress(publicKey: toAddress)
-        return self
-    }
-    
-    func with(amount: Decimal) -> Self {
-        self.amountDecimal = amount
-        return self
-    }
-    
-    func build() -> EthereumTransactionCandidate? {
+        
         guard
-            let fromAddress = fromAddress,
             let toAddress = toAddress,
             let amountDecimal = amountDecimal
         else {
-            return nil
+            return
         }
-        let amountString = NSDecimalNumber(decimal: amountDecimal).stringValue
-        guard let amount = BigUInt(amountString, decimals: CryptoCurrency.ethereum.maxDecimalPlaces) else {
-            return nil
+        
+        let to = EthereumKit.EthereumAddress(rawValue: toAddress.publicKey)!
+        let cryptoValue = CryptoValue.etherFromMajor(decimal: amountDecimal)
+        
+        guard let ethereumValue = try? EthereumValue(crypto: cryptoValue) else { return }
+        
+        self.walletService.buildTransaction(with: ethereumValue, to: to)
+            .flatMap(weak: self) { (self, tx) -> Single<EthereumTransactionPublished> in
+                return self.walletService.send(
+                    transaction: tx
+                )
+            }
+            .subscribe(onSuccess: { ethereumTransactionPublished in
+                print(ethereumTransactionPublished)
+                self.wallet.delegate?.didSendEther?()
+            }, onError: { error in
+                print(error)
+                self.wallet.delegate?.didErrorDuringEtherSend?(error.localizedDescription)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+@objc class SendPAXService: NSObject {
+    
+    static let shared = SendPAXService()
+    
+    @objc class func sharedInstance() -> SendPAXService {
+        return SendPAXService.shared
+    }
+    
+    private var to: EthereumKit.EthereumAddress?
+    private var amount: CryptoValue?
+    
+    private var disposeBag: DisposeBag = DisposeBag()
+    
+    private let wallet: Wallet
+    private let walletService: EthereumWalletService
+    private let paxService: ERC20Service<PaxToken>
+    
+    init(wallet: Wallet = WalletManager.shared.wallet,
+         platformService: EthereumWalletService = EthereumWalletService.shared,
+         paxService: ERC20Service<PaxToken> = PAXServiceProvider.shared.services.paxService) {
+        self.wallet = wallet
+        self.walletService = platformService
+        self.paxService = paxService
+    }
+    
+    @objc func changePayment(to address: String) {
+        self.to = EthereumKit.EthereumAddress(rawValue: address)
+    }
+    
+    @objc func set(amount: NSDecimalNumber) {
+        self.amount = CryptoValue.paxFromMajor(decimal: amount.decimalValue)
+    }
+    
+    @objc func send() {
+        guard let to = to, let amount = amount else {
+            return
         }
-        let convertedAmountString = amount.string(unitDecimals: CryptoCurrency.ethereum.maxDecimalPlaces)
-        return EthereumTransactionCandidate(
-            fromAddress: fromAddress,
-            toAddress: toAddress,
-            amount: convertedAmountString,
-            createdAt: Date(),
-            memo: nil
-        )
+        
+        print("address to: \(to)")
+        print("amount.toDisplayString(includeSymbol: false): \(amount.toDisplayString(includeSymbol: false))")
+
+        do {
+            let paxAmount = try ERC20TokenValue<PaxToken>(crypto: amount)
+            self.paxService.transfer(to: to, amount: paxAmount)
+                .flatMap(weak: self) { (self, tx) -> Single<EthereumTransactionPublished> in
+                    return self.walletService.send(
+                        transaction: tx
+                    )
+                }
+                .subscribe(onSuccess: { [weak self] ethereumTransactionPublished in
+                    print(ethereumTransactionPublished)
+                    self?.wallet.delegate?.didSendEther?()
+                }, onError: { [weak self] error in
+                    print(error)
+                    self?.wallet.delegate?.didErrorDuringEtherSend?(error.localizedDescription)
+                })
+                .disposed(by: disposeBag)
+        } catch {
+            print("error: \(error)")
+            Logger.shared.log("Failed to build PAX transaction, error: \(error)", level: .error)
+        }
+        
     }
 }
 #endif

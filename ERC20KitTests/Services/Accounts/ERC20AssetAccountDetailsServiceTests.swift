@@ -14,7 +14,7 @@ import PlatformKit
 @testable import ERC20Kit
 
 class ERC20AssetAccountDetailsServiceTests: XCTestCase {
-    
+
     var subject: ERC20AssetAccountDetailsService<PaxToken>!
     var scheduler: TestScheduler!
     var bridge: ERC20EthereumWalletBridgeMock!
@@ -23,7 +23,7 @@ class ERC20AssetAccountDetailsServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        
+
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
         bridge = ERC20EthereumWalletBridgeMock()
@@ -40,7 +40,7 @@ class ERC20AssetAccountDetailsServiceTests: XCTestCase {
         bridge = nil
         accountClient = nil
         subject = nil
-        
+
         super.tearDown()
     }
 
@@ -49,11 +49,11 @@ class ERC20AssetAccountDetailsServiceTests: XCTestCase {
         let accountDetailsObservable = subject
             .accountDetails(for: "")
             .asObservable()
-        
+
         // Act
         let result: TestableObserver<ERC20AssetAccountDetails> = scheduler
             .start { accountDetailsObservable }
-        
+
         // Assert
         let expectedEvents: [Recorded<Event<ERC20AssetAccountDetails>>] = Recorded.events(
             .next(
@@ -64,12 +64,12 @@ class ERC20AssetAccountDetailsServiceTests: XCTestCase {
                         accountAddress: "",
                         name: ""
                     ),
-                    balance: CryptoValue.paxFromMajor(decimal: Decimal(0.0))
+                    balance: CryptoValue.paxFromMajor(decimal: Decimal(2.0))
                 )
             ),
             .completed(200)
         )
-        
+
         XCTAssertEqual(result.events, expectedEvents)
     }
 }

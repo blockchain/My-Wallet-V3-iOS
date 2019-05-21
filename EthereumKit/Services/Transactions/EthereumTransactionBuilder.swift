@@ -18,67 +18,37 @@ public enum EthereumTransactionBuilderError: Error {
 }
 
 public protocol EthereumTransactionBuilderAPI {
-    func build(
-        transaction: EthereumTransactionCandidate,
-        balance: CryptoValue,
-        nonce: BigUInt,
-        gasPrice: BigUInt,
-        gasLimit: BigUInt
-    ) -> NewResult<EthereumTransactionCandidateCosted, EthereumTransactionBuilderError>
+    func build(transaction: EthereumTransactionCandidate
+        ) -> NewResult<EthereumTransactionCandidateCosted, EthereumTransactionBuilderError>
 }
 
 public class EthereumTransactionBuilder: EthereumTransactionBuilderAPI {
     public static let shared = EthereumTransactionBuilder()
     
-    public func build(
-        transaction: EthereumTransactionCandidate,
-        balance: CryptoValue,
-        nonce: BigUInt,
-        gasPrice: BigUInt,
-        gasLimit: BigUInt
+    public func build(transaction: EthereumTransactionCandidate
         ) -> NewResult<EthereumTransactionCandidateCosted, EthereumTransactionBuilderError> {
+        print("transaction.value: \(transaction.value)")
         
-        print("transaction.amount: \(transaction.amount)")
-        
-        let value = transaction.amount
-        
-        let balanceUnisigned = BigUInt(balance.amount)
-        
+        let value = transaction.value
+        let gasPrice = transaction.gasPrice
+        let gasLimit = transaction.gasLimit
+        let data = transaction.data ?? Data()
+
         let fee = gasPrice * gasLimit
         
         print("gasPrice: \(gasPrice)")
         print("gasLimit: \(gasLimit)")
         print("     fee: \(fee)")
-        print("   value: \(value)")
-        print("\n")
-        print("             fee.string(unitDecimals: 18): \(fee.string(unitDecimals: CryptoCurrency.ethereum.maxDecimalPlaces))")
-        print("balanceUnisigned.string(unitDecimals: 18): \(balanceUnisigned.string(unitDecimals: CryptoCurrency.ethereum.maxDecimalPlaces))")
-        print("           value.string(unitDecimals: 18): \(value.string(unitDecimals: CryptoCurrency.ethereum.maxDecimalPlaces))")
         print("\n")
         
-        guard fee < balanceUnisigned else {
-            return .failure(.insufficientFunds)
-        }
-        
-        let availableBalance = balanceUnisigned - fee
-        
-        print("availableBalance: \(availableBalance)")
-        
-        guard value < availableBalance else {
-            return .failure(.insufficientFunds)
-        }
-        
-        // TODO:
-        // * Make sure this is an EIP-55 address
-        let to: web3swift.Address = web3swift.Address(transaction.toAddress.publicKey)
+        let to: web3swift.Address = transaction.to.web3swiftAddress
         
         var tx: web3swift.EthereumTransaction = web3swift.EthereumTransaction(
-            nonce: nonce,
             gasPrice: gasPrice,
             gasLimit: gasLimit,
             to: to,
             value: value,
-            data: Data()
+            data: data
         )
         tx.UNSAFE_setChainID(NetworkId.mainnet)
         

@@ -15,7 +15,8 @@ public struct EthereumTransactionFee: TransactionFee, Decodable {
         limits: EthereumTransactionFee.defaultLimits,
         regular: 5,
         priority: 11,
-        gasLimit: 21000
+        gasLimit: 21_000,
+        gasLimitContract: 65_000
     )
     public static let defaultLimits = TransactionFeeLimits(min: 23, max: 23)
     
@@ -23,12 +24,14 @@ public struct EthereumTransactionFee: TransactionFee, Decodable {
     public var regular: CryptoValue
     public var priority: CryptoValue
     public var gasLimit: Int
+    public var gasLimitContract: Int
     
     enum CodingKeys: String, CodingKey {
         case regular
         case priority
         case limits
         case gasLimit
+        case gasLimitContract
     }
 
     public init(from decoder: Decoder) throws {
@@ -54,13 +57,15 @@ public struct EthereumTransactionFee: TransactionFee, Decodable {
         priority = priorityValue
         limits = try values.decode(TransactionFeeLimits.self, forKey: .limits)
         gasLimit = try values.decode(Int.self, forKey: .gasLimit)
+        gasLimitContract = try values.decode(Int.self, forKey: .gasLimitContract)
     }
 
-    init(limits: TransactionFeeLimits, regular: Int, priority: Int, gasLimit: Int) {
+    init(limits: TransactionFeeLimits, regular: Int, priority: Int, gasLimit: Int, gasLimitContract: Int) {
         self.limits = limits
         self.regular = CryptoValue.etherFromGwei(string: String(regular))!
         self.priority = CryptoValue.etherFromGwei(string: String(priority))!
         self.gasLimit = gasLimit
+        self.gasLimitContract = gasLimitContract
     }
 }
 

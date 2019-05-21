@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import BigInt
 import PlatformKit
 import EthereumKit
 @testable import ERC20Kit
@@ -14,15 +15,16 @@ import EthereumKit
 class ERC20AccountAPIClientMock: ERC20AccountAPIClientAPI {
     typealias Token = PaxToken
     
-    static let a = ERC20AccountResponse<PaxToken>(
+    static let balance = CryptoValue.paxFromMajor(decimal: Decimal(2.0)).amount
+        .string(unitDecimals: 0)
+    static let accountResponse = ERC20AccountResponse<PaxToken>(
         accountHash: "",
         tokenHash: "",
-        balance: "1.0",
+        balance: balance,
         decimals: 0
     )
     
-    var fetchWalletAccountResponse: Single<ERC20AccountResponse<PaxToken>> =
-        Single<ERC20AccountResponse<PaxToken>>.just(a)
+    var fetchWalletAccountResponse = Single<ERC20AccountResponse<PaxToken>>.just(accountResponse)
     func fetchWalletAccount(ethereumAddress: String) -> Single<ERC20AccountResponse<PaxToken>> {
         return fetchWalletAccountResponse
     }

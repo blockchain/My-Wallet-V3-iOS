@@ -19,7 +19,7 @@ public final class AnyERC20AccountAPIClient<Token: ERC20Token>: ERC20AccountAPIC
         }
         guard let endpoint = URL.endpoint(
             baseURL,
-            pathComponents: [ "v2", "eth", "data", "account", ethereumAddress, "token", Token.contractAddress, "wallet" ],
+            pathComponents: [ "v2", "eth", "data", "account", ethereumAddress, "token", Token.contractAddress.rawValue, "wallet" ],
             queryParameters: nil
         ) else {
             return .error(TradeExecutionAPIError.generic)

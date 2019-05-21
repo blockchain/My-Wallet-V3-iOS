@@ -21,14 +21,16 @@ struct ETHServices: ETHDependencies {
     let assetAccountRepository: EthereumAssetAccountRepository
     let transactionService: EthereumHistoricalTransactionService
 
-    init(wallet: Wallet = WalletManager.shared.wallet, platformService: EthereumTransactionCreationServiceAPI = EthereumTransactionCreationService.shared) {
+    init(wallet: Wallet = WalletManager.shared.wallet) {
         self.repository = EthereumWalletAccountRepository(with: wallet.ethereum)
         self.assetAccountRepository = EthereumAssetAccountRepository(
             service: EthereumAssetAccountDetailsService(
                 with: wallet.ethereum
             )
         )
-        self.transactionService = EthereumHistoricalTransactionService(with: wallet.ethereum)
+        self.transactionService = EthereumHistoricalTransactionService(
+            with: wallet.ethereum
+        )
     }
 }
 

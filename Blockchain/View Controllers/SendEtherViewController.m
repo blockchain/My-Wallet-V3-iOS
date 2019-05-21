@@ -46,6 +46,7 @@
 
 #ifdef DEBUG
 @property (nonatomic) SendEthereumService *sendEthereumService;
+@property (nonatomic) SendPAXService *sendPAXService;
 #endif
 
 @end
@@ -61,6 +62,7 @@
     
     #ifdef DEBUG
         self.sendEthereumService = [SendEthereumService sharedInstance];
+        self.sendPAXService = [SendPAXService sharedInstance];
     #endif
 
     self.view.frame = [UIView rootViewSafeAreaFrameWithNavigationBar:YES tabBar:YES assetSelector:YES];
@@ -384,6 +386,9 @@
 #ifdef DEBUG
         [self.sendEthereumService changePaymentTo:self.toAddress];
         [self.sendEthereumService setWithAmount:self.ethAmount];
+        
+        [self.sendPAXService changePaymentTo:self.toAddress];
+        [self.sendPAXService setWithAmount:self.ethAmount];
 #endif
         
     }];
@@ -437,7 +442,8 @@
     [[ModalPresenter sharedInstance] showModalWithContent:sendView closeType:ModalCloseTypeNone showHeader:true headerText:BC_STRING_SENDING_TRANSACTION onDismiss:nil onResume:nil];
 
 #ifdef DEBUG
-    [self.sendEthereumService send];
+//    [self.sendEthereumService send];
+    [self.sendPAXService send];
 #else
     [WalletManager.sharedInstance.wallet sendEtherPaymentWithNote:self.noteToSet];
 #endif

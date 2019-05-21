@@ -32,11 +32,11 @@ public enum EthereumTransactionCreationServiceError: Error {
     case nullReferenceError
 }
 
-public protocol EthereumTransactionCreationServiceAPI {
+public protocol EthereumTransactionSendingServiceAPI {
     func send(transaction: EthereumTransactionCandidate, keyPair: EthereumKeyPair) -> Single<EthereumTransactionPublished>
 }
 
-public final class EthereumTransactionCreationService: EthereumTransactionCreationServiceAPI {
+public final class EthereumTransactionSendingService: EthereumTransactionSendingServiceAPI {
     
     public typealias Bridge = EthereumWalletBridgeAPI
     
@@ -63,7 +63,7 @@ public final class EthereumTransactionCreationService: EthereumTransactionCreati
     }
     
     public func send(transaction: EthereumTransactionCandidate, keyPair: EthereumKeyPair) -> Single<EthereumTransactionPublished> {
-        return create(transaction: transaction, keyPair: keyPair)
+        return finalise(transaction: transaction, keyPair: keyPair)
             .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionPublished> in
                 assert(transaction.web3swiftTransaction.intrinsicChainID == NetworkId.mainnet.rawValue)
                 print("transaction: \(transaction)")
@@ -73,36 +73,25 @@ public final class EthereumTransactionCreationService: EthereumTransactionCreati
             }
     }
 
-    private func create(transaction: EthereumTransactionCandidate, keyPair: EthereumKeyPair) -> Single<EthereumTransactionFinalised> {
-        return Single.zip(feeService.fees, bridge.nonce, bridge.balance)
-            .flatMap { [weak self] fee, nonce, balance -> Single<EthereumTransactionCandidateCosted> in
-                print("    fee: \(fee)")
-                print("  nonce: \(nonce)")
-                print("balance: \(balance)")
-                guard let self = self else {
-                    return Single.error(EthereumTransactionCreationServiceError.nullReferenceError)
-                }
-                return self.transactionBuilder
-                    .build(
-                        transaction: transaction,
-                        balance: balance,
-                        nonce: nonce,
-                        gasPrice: BigUInt(fee.regular.amount),
-                        gasLimit: BigUInt(fee.gasLimit)
-                    )
-                    .single
+    private func finalise(transaction: EthereumTransactionCandidate, keyPair: EthereumKeyPair) -> Single<EthereumTransactionFinalised> {
+        return bridge.nonce
+            .flatMap(weak: self) { (self, nonce) -> Single<(EthereumTransactionCandidateCosted, BigUInt)> in
+                return self.transactionBuilder.build(transaction: transaction).single
+                    .map { tx -> (EthereumTransactionCandidateCosted, BigUInt) in
+                        (tx, nonce)
+                    }
             }
-            .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionCandidateSigned> in
-                self.transactionSigner.sign(transaction: transaction, keyPair: keyPair).single
+            .flatMap(weak: self) { (self, value) -> Single<EthereumTransactionCandidateSigned> in
+                let (transaction, nonce) = value
+                return self.transactionSigner.sign(transaction: transaction, nonce: nonce, keyPair: keyPair).single
             }
             .flatMap(weak: self) { (self, signedTransaction) -> Single<EthereumTransactionFinalised> in
                 self.transactionEncoder.encode(signed: signedTransaction).single
             }
     }
-    
+
     private func publish(transaction: EthereumTransactionFinalised) -> Single<EthereumTransactionPublished> {
         return ethereumAPIClient.push(transaction: transaction)
-            .debug()
             .flatMap { response in
                 let publishedTransaction = try EthereumTransactionPublished(
                     finalisedTransaction: transaction,
@@ -112,3 +101,4 @@ public final class EthereumTransactionCreationService: EthereumTransactionCreati
             }
     }
 }
+
