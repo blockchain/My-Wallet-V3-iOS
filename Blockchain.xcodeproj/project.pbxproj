@@ -881,6 +881,7 @@
 		7A4E882E218B595C00CB798C /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4E882D218B595C00CB798C /* AnalyticsService.swift */; };
 		7ADD19D721874C220013A525 /* Firebase in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD19D621874C220013A525 /* Firebase */; };
 		7ADD19D821874C220013A525 /* Firebase in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD19D621874C220013A525 /* Firebase */; };
+		7E88A6A80E89C0F9764815CC /* Pods_PlatformUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDFAC5D480FA61A140B2842 /* Pods_PlatformUIKit.framework */; };
 		84B601C7197ACD6300DA1829 /* UITextField+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */; };
 		84B601CA197AD03800DA1829 /* BCModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B601C9197AD03800DA1829 /* BCModalView.m */; };
 		84FC02FA1981452D00B97D5B /* NSString+JSONParser_NSString.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FC02F91981452D00B97D5B /* NSString+JSONParser_NSString.m */; };
@@ -975,6 +976,10 @@
 		AA2BA64420DC754600F01954 /* BitcoinAddressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2BA64320DC754600F01954 /* BitcoinAddressTests.swift */; };
 		AA2D000120D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
 		AA2D000220D96FA300B7BE0E /* SwipeToReceiveAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */; };
+		AA2D2013228F74FC00EF8A36 /* StellarQRMetadataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D2012228F74FC00EF8A36 /* StellarQRMetadataFactory.swift */; };
+		AA2D2015228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D2014228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift */; };
+		AA2D2016228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D2014228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift */; };
+		AA2D2018228F7CE300EF8A36 /* ReceiveCryptoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2D2017228F7CE300EF8A36 /* ReceiveCryptoViewModel.swift */; };
 		AA2F121E21405BE6006B1FC1 /* JSContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */; };
 		AA2F121F21405BE6006B1FC1 /* JSContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */; };
 		AA2F122C2140A92E006B1FC1 /* JSContext+HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2F122A2140A92E006B1FC1 /* JSContext+HelpersTests.swift */; };
@@ -984,6 +989,7 @@
 		AA31A7BB2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
 		AA31A7BC2098DFCF00FE6268 /* SideMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7BA2098DFCF00FE6268 /* SideMenuItem.swift */; };
 		AA31A7D12099310B00FE6268 /* WalletBuySellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA31A7D02099310B00FE6268 /* WalletBuySellDelegate.swift */; };
+		AA374A5122946CEA00243A4B /* ETHServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E7F9492225904400A987CD /* ETHServiceProvider.swift */; };
 		AA3CA9AF2107F18C00C2AD46 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9AE2107F18C00C2AD46 /* Logger.swift */; };
 		AA3CA9B02107F18D00C2AD46 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9AE2107F18C00C2AD46 /* Logger.swift */; };
 		AA3CA9B22107F2B700C2AD46 /* LogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B12107F2B700C2AD46 /* LogDestination.swift */; };
@@ -992,8 +998,6 @@
 		AA3CA9B62107F36800C2AD46 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B42107F36700C2AD46 /* LogLevel.swift */; };
 		AA3CA9B82107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */; };
 		AA3CA9B92107F66E00C2AD46 /* ConsoleLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */; };
-		AA3E589C217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */; };
-		AA3E589E217A7E8F00EFF992 /* ReceiveXlmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */; };
 		AA447BC62127677300EC0FA0 /* SideMenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA447BC52127677300EC0FA0 /* SideMenuViewController.storyboard */; };
 		AA447BC82127679A00EC0FA0 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA447BC72127679A00EC0FA0 /* SideMenuViewController.swift */; };
 		AA447BCA21276DA900EC0FA0 /* SideMenuPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA447BC921276DA900EC0FA0 /* SideMenuPresenter.swift */; };
@@ -1013,6 +1017,9 @@
 		AA47709D211B7BC3006356B1 /* BottomButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA477083211B73D1006356B1 /* BottomButtonContainerView.swift */; };
 		AA4770B7211BA984006356B1 /* KYCAccountStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4770B6211BA984006356B1 /* KYCAccountStatus.swift */; };
 		AA4770B8211BA984006356B1 /* KYCAccountStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4770B6211BA984006356B1 /* KYCAccountStatus.swift */; };
+		AA521BBC228F4B5E005CF4AE /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31802092794D00B7B806 /* Pin.swift */; };
+		AA521BBD228F4B5E005CF4AE /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31802092794D00B7B806 /* Pin.swift */; };
+		AA521BBF228F6726005CF4AE /* CryptoAssetQRMetadataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA521BBE228F6726005CF4AE /* CryptoAssetQRMetadataFactory.swift */; };
 		AA54277C20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA54277B20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib */; };
 		AA54E485216D20C8005061F9 /* KYCState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E484216D20C8005061F9 /* KYCState.swift */; };
 		AA54E486216D20C8005061F9 /* KYCState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54E484216D20C8005061F9 /* KYCState.swift */; };
@@ -1033,8 +1040,12 @@
 		AA56423820DDBDAA0092A022 /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56421D20DDBDA90092A022 /* PinTests.swift */; };
 		AA56423B20DDBDBB0092A022 /* String+EscapeJSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */; };
 		AA56423C20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */; };
+		AA59274F22935BC3002A284D /* EthereumQRMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59274E22935BC3002A284D /* EthereumQRMetadata.swift */; };
+		AA59275122935DC5002A284D /* EthereumQRMetadataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59275022935DC5002A284D /* EthereumQRMetadataFactory.swift */; };
 		AA5B3B8020C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */; };
 		AA5B3B8120C9FC9C0026029D /* PEPinEntryController+PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */; };
+		AA5D8483228E2A2B00992810 /* ReceiveCryptoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D8482228E2A2B00992810 /* ReceiveCryptoViewController.swift */; };
+		AA5D848E228E2A4600992810 /* ReceiveCryptoViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA5D848D228E2A4600992810 /* ReceiveCryptoViewController.storyboard */; };
 		AA6336AF21BC5A430073ED4A /* KYCEnterEmailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6336AE21BC5A430073ED4A /* KYCEnterEmailController.swift */; };
 		AA6336B021BC5A430073ED4A /* KYCEnterEmailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6336AE21BC5A430073ED4A /* KYCEnterEmailController.swift */; };
 		AA6336B221BC5A630073ED4A /* KYCConfirmEmailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6336B121BC5A630073ED4A /* KYCConfirmEmailController.swift */; };
@@ -1166,8 +1177,6 @@
 		AACE314C209152D800B7B806 /* Application+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE314B209152D800B7B806 /* Application+Helpers.swift */; };
 		AACE31572091680B00B7B806 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED68208EB4FB002D8BAC /* PushNotificationManager.swift */; };
 		AACE31582091681100B7B806 /* WalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABDED6B208EC330002D8BAC /* WalletManager.swift */; };
-		AACE31812092794D00B7B806 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31802092794D00B7B806 /* Pin.swift */; };
-		AACE31822092858600B7B806 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACE31802092794D00B7B806 /* Pin.swift */; };
 		AACE31C32092A99B00B7B806 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3333220880A2B0019AD55 /* AppDelegate.swift */; };
 		AACE31C42092A99B00B7B806 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D95A271B3DDC900012EBB1 /* Constants.swift */; };
 		AACE31C62092A99B00B7B806 /* LoadingViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3316020895A9C00BBD292 /* LoadingViewPresenter.swift */; };
@@ -1519,7 +1528,6 @@
 		C7E0FCCE211E12AE00B85D37 /* NabuAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0FCCD211E12AE00B85D37 /* NabuAuthenticationService.swift */; };
 		C7E1A2902108FDFC0072DDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171E38F20F4F98000E8913E /* Colors.swift */; };
 		C7E1A2E8210A45B30072DDA0 /* ExchangeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1A2E7210A45B20072DDA0 /* ExchangeCoordinator.swift */; };
-		C7E2750B1F589C8D0054EFA5 /* ReceiveEtherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E2750A1F589C8D0054EFA5 /* ReceiveEtherViewController.m */; };
 		C7E2750E1F59C2D50054EFA5 /* UILabel+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */; };
 		C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */; };
 		C7E4E41820EE98590061059E /* WatchOnlyBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E4E41720EE98590061059E /* WatchOnlyBalanceView.swift */; };
@@ -1927,6 +1935,7 @@
 		23FDEFA81D6E43DE00FC80D6 /* TransactionDetailTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailTableCell.m; sourceTree = "<group>"; };
 		23FDEFAA1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+SendSynchronousRequest.h"; sourceTree = "<group>"; };
 		23FDEFAB1D6F669100FC80D6 /* NSURLSession+SendSynchronousRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+SendSynchronousRequest.m"; sourceTree = "<group>"; };
+		2B767CFDC37F16BE28F5F3AA /* Pods-PlatformUIKit.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.debug production.xcconfig"; sourceTree = "<group>"; };
 		2BC0397088C7193C5F0D95E6 /* Pods-EthereumKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EthereumKitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EthereumKitTests/Pods-EthereumKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D108A231ACAABFA2ACA5904 /* Pods-ERC20KitTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20KitTests.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-ERC20KitTests/Pods-ERC20KitTests.release staging.xcconfig"; sourceTree = "<group>"; };
 		2D27EB77F4AE77811F2F0DCE /* Pods_ERC20KitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ERC20KitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3097,7 +3106,9 @@
 		51FC1AFD21270D0D007BEB18 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
 		51FC1B0821270DBC007BEB18 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
 		51FE911E213867FD00F49B12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KYCAddressController.storyboard; sourceTree = "<group>"; };
+		55618F1FD6E6B5DB8034A8FD /* Pods-PlatformUIKit.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.release staging.xcconfig"; sourceTree = "<group>"; };
 		56792442C509B08249E150E8 /* Pods_PlatformKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatformKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C1CA5B1D1B1418F76A6E16D /* Pods-PlatformUIKit.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.debug staging.xcconfig"; sourceTree = "<group>"; };
 		5D19DB96575FC8960A70697A /* Pods-PlatformKit.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKit.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformKit/Pods-PlatformKit.release staging.xcconfig"; sourceTree = "<group>"; };
 		5F739D2B8E187320EC718998 /* Pods-EthereumKit.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EthereumKit.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-EthereumKit/Pods-EthereumKit.debug staging.xcconfig"; sourceTree = "<group>"; };
 		602B9CA82118E15200BD3D60 /* KYCInformationController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCInformationController.storyboard; sourceTree = "<group>"; };
@@ -3983,6 +3994,7 @@
 		60FBE084211258F300AD514A /* SettingsTwoStepVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTwoStepVC.swift; sourceTree = "<group>"; };
 		60FBE085211258F300AD514A /* SettingsProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsProtocols.swift; sourceTree = "<group>"; };
 		60FBE086211258F300AD514A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		638DFC4DF1C0186CD154DE3C /* Pods-PlatformUIKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.release.xcconfig"; sourceTree = "<group>"; };
 		64DE03E04D1BB6298B3099B1 /* Pods_PlatformKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatformKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6507374866BC906CB968E94D /* Pods-Blockchain.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release staging.xcconfig"; sourceTree = "<group>"; };
 		670595A21AB0F59D00D2D6D9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
@@ -4042,6 +4054,7 @@
 		78567AC130E4B30B91DB1F05 /* Pods-StellarKit.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug production.xcconfig"; path = "Pods/Target Support Files/Pods-StellarKit/Pods-StellarKit.debug production.xcconfig"; sourceTree = "<group>"; };
 		7A4E882D218B595C00CB798C /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		7ADD19D621874C220013A525 /* Firebase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Firebase; sourceTree = "<group>"; };
+		7CDFAC5D480FA61A140B2842 /* Pods_PlatformUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatformUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DC36ED432EFD47C17649A6F /* Pods-PlatformKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKit.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformKit/Pods-PlatformKit.debug dev.xcconfig"; sourceTree = "<group>"; };
 		84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Blocks.h"; sourceTree = "<group>"; };
 		84B601C6197ACD6300DA1829 /* UITextField+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Blocks.m"; sourceTree = "<group>"; };
@@ -4141,6 +4154,9 @@
 		AA25F1762146F87C0028C82E /* NabuAuthenticationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NabuAuthenticationError.swift; sourceTree = "<group>"; };
 		AA2BA64320DC754600F01954 /* BitcoinAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAddressTests.swift; sourceTree = "<group>"; };
 		AA2D000020D96FA300B7BE0E /* SwipeToReceiveAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReceiveAddressView.swift; sourceTree = "<group>"; };
+		AA2D2012228F74FC00EF8A36 /* StellarQRMetadataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarQRMetadataFactory.swift; sourceTree = "<group>"; };
+		AA2D2014228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveCryptoViewControllerProvider.swift; sourceTree = "<group>"; };
+		AA2D2017228F7CE300EF8A36 /* ReceiveCryptoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveCryptoViewModel.swift; sourceTree = "<group>"; };
 		AA2F121D21405BE6006B1FC1 /* JSContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSContext+Helpers.swift"; sourceTree = "<group>"; };
 		AA2F122A2140A92E006B1FC1 /* JSContext+HelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSContext+HelpersTests.swift"; sourceTree = "<group>"; };
 		AA2F96FF2118C04700EE7F21 /* KYCVerifyIdentity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = KYCVerifyIdentity.storyboard; sourceTree = "<group>"; };
@@ -4153,8 +4169,6 @@
 		AA3CA9B12107F2B700C2AD46 /* LogDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDestination.swift; sourceTree = "<group>"; };
 		AA3CA9B42107F36700C2AD46 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		AA3CA9B72107F66E00C2AD46 /* ConsoleLogDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogDestination.swift; sourceTree = "<group>"; };
-		AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ReceiveXlmViewController.storyboard; sourceTree = "<group>"; };
-		AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveXlmViewController.swift; sourceTree = "<group>"; };
 		AA447BC52127677300EC0FA0 /* SideMenuViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SideMenuViewController.storyboard; sourceTree = "<group>"; };
 		AA447BC72127679A00EC0FA0 /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		AA447BC921276DA900EC0FA0 /* SideMenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuPresenter.swift; sourceTree = "<group>"; };
@@ -4165,6 +4179,7 @@
 		AA46ECC2219A2EE10077B351 /* KYCVerifyIdentityInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCVerifyIdentityInteractor.swift; sourceTree = "<group>"; };
 		AA477083211B73D1006356B1 /* BottomButtonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtonContainerView.swift; sourceTree = "<group>"; };
 		AA4770B6211BA984006356B1 /* KYCAccountStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCAccountStatus.swift; sourceTree = "<group>"; };
+		AA521BBE228F6726005CF4AE /* CryptoAssetQRMetadataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoAssetQRMetadataFactory.swift; sourceTree = "<group>"; };
 		AA54277B20D88DD900D5FEEE /* SwipeToReceiveAddressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwipeToReceiveAddressView.xib; sourceTree = "<group>"; };
 		AA54E484216D20C8005061F9 /* KYCState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCState.swift; sourceTree = "<group>"; };
 		AA54E491216D28CE005061F9 /* KYCStateSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCStateSelectionController.swift; sourceTree = "<group>"; };
@@ -4222,7 +4237,11 @@
 		AA56421D20DDBDA90092A022 /* PinTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
 		AA56423920DDBDBB0092A022 /* String+EscapeJSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+EscapeJSTests.swift"; sourceTree = "<group>"; };
 		AA56423A20DDBDBB0092A022 /* NumberFormatter+AssetsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+AssetsTests.swift"; sourceTree = "<group>"; };
+		AA59274E22935BC3002A284D /* EthereumQRMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumQRMetadata.swift; sourceTree = "<group>"; };
+		AA59275022935DC5002A284D /* EthereumQRMetadataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumQRMetadataFactory.swift; sourceTree = "<group>"; };
 		AA5B3B7F20C9FC9C0026029D /* PEPinEntryController+PinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PEPinEntryController+PinView.swift"; sourceTree = "<group>"; };
+		AA5D8482228E2A2B00992810 /* ReceiveCryptoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveCryptoViewController.swift; sourceTree = "<group>"; };
+		AA5D848D228E2A4600992810 /* ReceiveCryptoViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ReceiveCryptoViewController.storyboard; sourceTree = "<group>"; };
 		AA6336AE21BC5A430073ED4A /* KYCEnterEmailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCEnterEmailController.swift; sourceTree = "<group>"; };
 		AA6336B121BC5A630073ED4A /* KYCConfirmEmailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCConfirmEmailController.swift; sourceTree = "<group>"; };
 		AA6336B421BC5A710073ED4A /* KYCVerifyEmailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCVerifyEmailPresenter.swift; sourceTree = "<group>"; };
@@ -4356,6 +4375,7 @@
 		AAFA97B4211511D000D19ED3 /* Settings+Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+Table.swift"; sourceTree = "<group>"; };
 		AAFE9E742100D169002E4E1E /* PinStoreKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStoreKeyPair.swift; sourceTree = "<group>"; };
 		AAFE9E9121016132002E4E1E /* PinError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinError.swift; sourceTree = "<group>"; };
+		AB58FFBC3EC75EE79AFD6A7F /* Pods-PlatformUIKit.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.debug testnet.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.debug testnet.xcconfig"; sourceTree = "<group>"; };
 		AF0292CBE23134E31A469E7D /* Pods-StellarKit.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-StellarKit/Pods-StellarKit.debug staging.xcconfig"; sourceTree = "<group>"; };
 		B3C4FE80E3F33396E768F07A /* Pods-PlatformKitTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKitTests.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformKitTests/Pods-PlatformKitTests.release staging.xcconfig"; sourceTree = "<group>"; };
 		B80E4D1416B1C896C8ADD94D /* Pods-StellarKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-StellarKit/Pods-StellarKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -4616,8 +4636,6 @@
 		C7CE34BD1F4E128900032806 /* BCAmountInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCAmountInputView.m; sourceTree = "<group>"; };
 		C7E0FCCD211E12AE00B85D37 /* NabuAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NabuAuthenticationService.swift; sourceTree = "<group>"; };
 		C7E1A2E7210A45B20072DDA0 /* ExchangeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeCoordinator.swift; sourceTree = "<group>"; };
-		C7E275091F589C8D0054EFA5 /* ReceiveEtherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiveEtherViewController.h; sourceTree = "<group>"; };
-		C7E2750A1F589C8D0054EFA5 /* ReceiveEtherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceiveEtherViewController.m; sourceTree = "<group>"; };
 		C7E2750C1F59C2D50054EFA5 /* UILabel+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Animations.h"; sourceTree = "<group>"; };
 		C7E2750D1F59C2D50054EFA5 /* UILabel+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Animations.m"; sourceTree = "<group>"; };
 		C7E4D291203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransactionsBitcoinCashViewController.h; sourceTree = "<group>"; };
@@ -4666,6 +4684,7 @@
 		D7C718F3AD0495A15FA2A9DC /* Pods-ERC20Kit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20Kit.release.xcconfig"; path = "Pods/Target Support Files/Pods-ERC20Kit/Pods-ERC20Kit.release.xcconfig"; sourceTree = "<group>"; };
 		DACF8BDA32CCE4E0D969A9D2 /* Pods-PlatformKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKitTests.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformKitTests/Pods-PlatformKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		E39B7E8BBCD71662AE223992 /* Pods-ERC20KitTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20KitTests.debug staging.xcconfig"; path = "Pods/Target Support Files/Pods-ERC20KitTests/Pods-ERC20KitTests.debug staging.xcconfig"; sourceTree = "<group>"; };
+		E616C7693B3A66BB46827D1F /* Pods-PlatformUIKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.debug dev.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.debug dev.xcconfig"; sourceTree = "<group>"; };
 		EA7622C563FE515F6DA88DE0 /* Pods-EthereumKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EthereumKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-EthereumKit/Pods-EthereumKit.release.xcconfig"; sourceTree = "<group>"; };
 		ECD244E119A8AC45004B1F40 /* PEKeyboard-3-done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-done.png"; sourceTree = "<group>"; };
 		ECD244E219A8AC45004B1F40 /* PEKeyboard-3-dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PEKeyboard-3-dot.png"; sourceTree = "<group>"; };
@@ -4752,6 +4771,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A6865BA219A11700009FF29 /* PlatformKit.framework in Frameworks */,
+				7E88A6A80E89C0F9764815CC /* Pods_PlatformUIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5119,21 +5139,6 @@
 				344B36702281DA5C0011A922 /* SendEthereumService.swift */,
 			);
 			path = EthereumKit;
-			sourceTree = "<group>";
-		};
-		34BD57E7228A17CA00882945 /* General */ = {
-			isa = PBXGroup;
-			children = (
-				34BD57E8228A17D900882945 /* Extensions */,
-			);
-			path = General;
-			sourceTree = "<group>";
-		};
-		34BD57E8228A17D900882945 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		34BE77AF225372910034A6BE /* Value */ = {
@@ -5678,6 +5683,9 @@
 		3A4E47EC21BAF64B001A799D /* Receive */ = {
 			isa = PBXGroup;
 			children = (
+				AA5D848D228E2A4600992810 /* ReceiveCryptoViewController.storyboard */,
+				AA5D8482228E2A2B00992810 /* ReceiveCryptoViewController.swift */,
+				AA2D2017228F7CE300EF8A36 /* ReceiveCryptoViewModel.swift */,
 				3A4E47F021BAF75B001A799D /* QRCode */,
 			);
 			path = Receive;
@@ -5694,9 +5702,10 @@
 		3A4E47F921BB2D11001A799D /* Receive */ = {
 			isa = PBXGroup;
 			children = (
-				3A4E480321BB2D45001A799D /* CryptoAssetQRMetadata.swift */,
-				3A4E480821BB31EE001A799D /* SEP7URI.swift */,
 				3A4E484D21BEE4CC001A799D /* BIP21URI.swift */,
+				3A4E480321BB2D45001A799D /* CryptoAssetQRMetadata.swift */,
+				AA521BBE228F6726005CF4AE /* CryptoAssetQRMetadataFactory.swift */,
+				3A4E480821BB31EE001A799D /* SEP7URI.swift */,
 			);
 			path = Receive;
 			sourceTree = "<group>";
@@ -5705,6 +5714,7 @@
 			isa = PBXGroup;
 			children = (
 				3A4E480621BB3057001A799D /* StellarQRMetadata.swift */,
+				AA2D2012228F74FC00EF8A36 /* StellarQRMetadataFactory.swift */,
 				3A4E480E21BB39F9001A799D /* StellarQRResponse.swift */,
 			);
 			path = Receive;
@@ -6111,7 +6121,6 @@
 		3A6A1A1821B9A64D00D97C74 /* EthereumKit */ = {
 			isa = PBXGroup;
 			children = (
-				34BD57E7228A17CA00882945 /* General */,
 				3A6A1A1921B9A64D00D97C74 /* EthereumKit.h */,
 				3A6A1A1A21B9A64D00D97C74 /* Info.plist */,
 				34C6CF4322417713009123E5 /* Foundation */,
@@ -9046,6 +9055,7 @@
 				A3B8A9AA1BF81706BA990C84 /* Pods_ERC20Kit.framework */,
 				2D27EB77F4AE77811F2F0DCE /* Pods_ERC20KitTests.framework */,
 				441F012EEFA9C1DB52465CFF /* Pods_EthereumKitTests.framework */,
+				7CDFAC5D480FA61A140B2842 /* Pods_PlatformUIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -9129,98 +9139,96 @@
 		9FCA4D18151494A300ECDFBE /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3AE74B7E21C1AE2700246A9C /* Transitions */,
-				C73037A2218B4EB100F38BA8 /* Information */,
-				60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */,
-				60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */,
-				60FBE082211258F300AD514A /* Settings */,
 				237C9E8E1C482132000754F7 /* AccountsAndAddressesDetailViewController.h */,
-				237C9E8F1C482132000754F7 /* AccountsAndAddressesDetailViewController.m */,
 				23BF73371C454B8C00204503 /* AccountsAndAddressesNavigationController.h */,
-				23BF73381C454B8C00204503 /* AccountsAndAddressesNavigationController.m */,
 				23BF733A1C455DDB00204503 /* AccountsAndAddressesViewController.h */,
+				235BD5641C58216000969B31 /* BCModalViewController.h */,
+				23F8DE511DAEB11C001899AE /* BCNavigationController.h */,
+				C74E21CB2028A61F00A9FBB1 /* BCPriceChartContainerViewController.h */,
+				C790E11F1E5345160063D141 /* BCVerifyEmailViewController.h */,
+				C790E1221E5358540063D141 /* BCVerifyMobileNumberViewController.h */,
+				6775569719E752A00054699B /* BCWebViewController.h */,
+				C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */,
+				C7F041941E3BD4A6004E8B4A /* BuyBitcoinViewController.h */,
+				C7CE34B61F4DCB7E00032806 /* CardsViewController.h */,
+				C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */,
+				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
+				FCB33B701FC36EA200317E6B /* ExchangeProgressViewController.h */,
+				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
+				C76135621F9E55DF0029E159 /* PartnerExchangeCreateViewController.h */,
+				C793E1FA1F8E7921001F171C /* PartnerExchangeListViewController.h */,
+				C7618B5F1F66C817003E7589 /* QRCodeScannerSendViewController.h */,
+				9FCA4D141514949500ECDFBE /* ReceiveBitcoinViewController.h */,
+				23B731D11E01AC1100129770 /* ReminderModalViewController.h */,
+				9FCA4D19151494BF00ECDFBE /* SendBitcoinViewController.h */,
+				C71859521F4B647100745A87 /* SendEtherViewController.h */,
+				23C95EA41C0779C600E4692A /* SettingsChangePasswordViewController.h */,
+				23EA61C61B54282D0032B907 /* SettingsNavigationController.h */,
+				60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */,
+				231FF2CB1B56F9F1009EEB02 /* SettingsWebViewController.h */,
+				C7414E511FD72574001A89FA /* StateSelectorViewController.h */,
+				9F7480E115140EA500BC4292 /* TabViewController.h */,
+				23BD046B1D79F1EC00DB69E6 /* TransactionDetailNavigationController.h */,
+				23FDEF981D6CBC7000FC80D6 /* TransactionDetailViewController.h */,
+				2390C1091D87376E00342C38 /* TransactionRecipientsViewController.h */,
+				C7E4D291203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.h */,
+				9F765F3014BC622E00048EFB /* TransactionsBitcoinViewController.h */,
+				C723F3471F64413400A858A9 /* TransactionsViewController.h */,
+				232ACBF31DAE84720072FB5E /* TransferAllFundsViewController.h */,
+				232232181B44D4CB00E5DF26 /* UpgradeViewController.h */,
+				C79EEFC01E898E380087DDCD /* WalletSetupViewController.h */,
+				CFA067201E65D49C008456C1 /* WebLoginViewController.h */,
+				237C9E8F1C482132000754F7 /* AccountsAndAddressesDetailViewController.m */,
+				23BF73381C454B8C00204503 /* AccountsAndAddressesNavigationController.m */,
 				23BF733B1C455DDB00204503 /* AccountsAndAddressesViewController.m */,
+				235BD5651C58216000969B31 /* BCModalViewController.m */,
+				23F8DE521DAEB11C001899AE /* BCNavigationController.m */,
+				C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */,
+				C790E1201E5345160063D141 /* BCVerifyEmailViewController.m */,
+				C790E1231E5358540063D141 /* BCVerifyMobileNumberViewController.m */,
+				6775569819E752A00054699B /* BCWebViewController.m */,
+				C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */,
+				C7F041951E3BD4A6004E8B4A /* BuyBitcoinViewController.m */,
+				C7CE34B71F4DCB7E00032806 /* CardsViewController.m */,
+				C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */,
+				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
+				FCB33B711FC36EA200317E6B /* ExchangeProgressViewController.m */,
+				C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */,
+				C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */,
+				C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */,
+				C7618B601F66C817003E7589 /* QRCodeScannerSendViewController.m */,
+				9FCA4D151514949500ECDFBE /* ReceiveBitcoinViewController.m */,
+				23B731D21E01AC1100129770 /* ReminderModalViewController.m */,
+				9FCA4D1A151494BF00ECDFBE /* SendBitcoinViewController.m */,
+				C71859531F4B647100745A87 /* SendEtherViewController.m */,
+				23C95EA51C0779C600E4692A /* SettingsChangePasswordViewController.m */,
+				23EA61C71B54282D0032B907 /* SettingsNavigationController.m */,
+				60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */,
+				231FF2CC1B56F9F1009EEB02 /* SettingsWebViewController.m */,
+				C7414E521FD72574001A89FA /* StateSelectorViewController.m */,
+				9F7480E215140EA500BC4292 /* TabViewController.m */,
+				23BD046C1D79F1EC00DB69E6 /* TransactionDetailNavigationController.m */,
+				23FDEF991D6CBC7000FC80D6 /* TransactionDetailViewController.m */,
+				2390C10A1D87376E00342C38 /* TransactionRecipientsViewController.m */,
+				C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */,
+				9F765F3114BC622E00048EFB /* TransactionsBitcoinViewController.m */,
+				C723F3481F64413400A858A9 /* TransactionsViewController.m */,
+				232ACBF41DAE84720072FB5E /* TransferAllFundsViewController.m */,
+				232232191B44D4CB00E5DF26 /* UpgradeViewController.m */,
+				C79EEFC11E898E380087DDCD /* WalletSetupViewController.m */,
+				CFA0671E1E65D426008456C1 /* WebLoginViewController.m */,
 				A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */,
 				A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */,
 				A2599B9E1B0B5FC800C2EA81 /* BackupViewController.swift */,
 				A2599BA41B0B725400C2EA81 /* BackupWordsViewController.swift */,
-				235BD5641C58216000969B31 /* BCModalViewController.h */,
-				235BD5651C58216000969B31 /* BCModalViewController.m */,
-				23F8DE511DAEB11C001899AE /* BCNavigationController.h */,
-				23F8DE521DAEB11C001899AE /* BCNavigationController.m */,
 				C7797DBE21C037070088ABA5 /* BCActionNavigationController.swift */,
-				C74E21CB2028A61F00A9FBB1 /* BCPriceChartContainerViewController.h */,
-				C74E21CC2028A61F00A9FBB1 /* BCPriceChartContainerViewController.m */,
-				C790E11F1E5345160063D141 /* BCVerifyEmailViewController.h */,
-				C790E1201E5345160063D141 /* BCVerifyEmailViewController.m */,
-				C790E1221E5358540063D141 /* BCVerifyMobileNumberViewController.h */,
-				C790E1231E5358540063D141 /* BCVerifyMobileNumberViewController.m */,
-				6775569719E752A00054699B /* BCWebViewController.h */,
-				6775569819E752A00054699B /* BCWebViewController.m */,
-				C70FF55C1E76D5C600AC7F8B /* BuyBitcoinNavigationController.h */,
-				C70FF55D1E76D5C600AC7F8B /* BuyBitcoinNavigationController.m */,
-				C7F041941E3BD4A6004E8B4A /* BuyBitcoinViewController.h */,
-				C7F041951E3BD4A6004E8B4A /* BuyBitcoinViewController.m */,
-				C7CE34B61F4DCB7E00032806 /* CardsViewController.h */,
-				C7CE34B71F4DCB7E00032806 /* CardsViewController.m */,
-				C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */,
-				C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */,
-				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
-				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
-				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
-				C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */,
-				C76135621F9E55DF0029E159 /* PartnerExchangeCreateViewController.h */,
-				C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */,
-				C793E1FA1F8E7921001F171C /* PartnerExchangeListViewController.h */,
-				C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */,
-				FCB33B701FC36EA200317E6B /* ExchangeProgressViewController.h */,
-				FCB33B711FC36EA200317E6B /* ExchangeProgressViewController.m */,
-				C7618B5F1F66C817003E7589 /* QRCodeScannerSendViewController.h */,
-				C7618B601F66C817003E7589 /* QRCodeScannerSendViewController.m */,
-				9FCA4D141514949500ECDFBE /* ReceiveBitcoinViewController.h */,
-				9FCA4D151514949500ECDFBE /* ReceiveBitcoinViewController.m */,
-				C7E275091F589C8D0054EFA5 /* ReceiveEtherViewController.h */,
-				C7E2750A1F589C8D0054EFA5 /* ReceiveEtherViewController.m */,
-				23B731D11E01AC1100129770 /* ReminderModalViewController.h */,
-				23B731D21E01AC1100129770 /* ReminderModalViewController.m */,
-				A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */,
-				9FCA4D19151494BF00ECDFBE /* SendBitcoinViewController.h */,
-				9FCA4D1A151494BF00ECDFBE /* SendBitcoinViewController.m */,
-				C71859521F4B647100745A87 /* SendEtherViewController.h */,
-				C71859531F4B647100745A87 /* SendEtherViewController.m */,
-				23C95EA41C0779C600E4692A /* SettingsChangePasswordViewController.h */,
-				23C95EA51C0779C600E4692A /* SettingsChangePasswordViewController.m */,
-				23EA61C61B54282D0032B907 /* SettingsNavigationController.h */,
-				23EA61C71B54282D0032B907 /* SettingsNavigationController.m */,
-				231FF2CB1B56F9F1009EEB02 /* SettingsWebViewController.h */,
-				231FF2CC1B56F9F1009EEB02 /* SettingsWebViewController.m */,
-				C7414E511FD72574001A89FA /* StateSelectorViewController.h */,
-				C7414E521FD72574001A89FA /* StateSelectorViewController.m */,
-				9F7480E115140EA500BC4292 /* TabViewController.h */,
-				9F7480E215140EA500BC4292 /* TabViewController.m */,
-				23BD046B1D79F1EC00DB69E6 /* TransactionDetailNavigationController.h */,
-				23BD046C1D79F1EC00DB69E6 /* TransactionDetailNavigationController.m */,
-				23FDEF981D6CBC7000FC80D6 /* TransactionDetailViewController.h */,
-				23FDEF991D6CBC7000FC80D6 /* TransactionDetailViewController.m */,
-				2390C1091D87376E00342C38 /* TransactionRecipientsViewController.h */,
-				2390C10A1D87376E00342C38 /* TransactionRecipientsViewController.m */,
-				C7E4D291203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.h */,
-				C7E4D292203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m */,
-				9F765F3014BC622E00048EFB /* TransactionsBitcoinViewController.h */,
-				9F765F3114BC622E00048EFB /* TransactionsBitcoinViewController.m */,
-				34C6CF532242623B009123E5 /* TransactionsEthereumViewController.swift */,
-				C723F3471F64413400A858A9 /* TransactionsViewController.h */,
-				C723F3481F64413400A858A9 /* TransactionsViewController.m */,
-				232ACBF31DAE84720072FB5E /* TransferAllFundsViewController.h */,
-				232ACBF41DAE84720072FB5E /* TransferAllFundsViewController.m */,
-				232232181B44D4CB00E5DF26 /* UpgradeViewController.h */,
-				232232191B44D4CB00E5DF26 /* UpgradeViewController.m */,
-				C79EEFC01E898E380087DDCD /* WalletSetupViewController.h */,
-				C79EEFC11E898E380087DDCD /* WalletSetupViewController.m */,
-				CFA067201E65D49C008456C1 /* WebLoginViewController.h */,
-				CFA0671E1E65D426008456C1 /* WebLoginViewController.m */,
-				3AC4F97721234040003AA207 /* Storyboardable.swift */,
 				AAB75A14218A733200A0AD11 /* CardsViewController+KYC.swift */,
+				A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */,
+				3AC4F97721234040003AA207 /* Storyboardable.swift */,
+				34C6CF532242623B009123E5 /* TransactionsEthereumViewController.swift */,
+				C73037A2218B4EB100F38BA8 /* Information */,
+				60FBE082211258F300AD514A /* Settings */,
+				3AE74B7E21C1AE2700246A9C /* Transitions */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -9445,18 +9453,9 @@
 		AA3E5890217A7E4D00EFF992 /* Receive */ = {
 			isa = PBXGroup;
 			children = (
-				AA3E589A217A7E6500EFF992 /* ViewControllers */,
+				AA2D2014228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift */,
 			);
 			path = Receive;
-			sourceTree = "<group>";
-		};
-		AA3E589A217A7E6500EFF992 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				AA3E589B217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard */,
-				AA3E589D217A7E8F00EFF992 /* ReceiveXlmViewController.swift */,
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		AA54277820D88D1D00D5FEEE /* Swipe to Receive */ = {
@@ -9527,6 +9526,15 @@
 				AA55B35A219DFD1100533533 /* WalletSettingsApiMethod.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		AA59274D22935BAD002A284D /* Receive */ = {
+			isa = PBXGroup;
+			children = (
+				AA59274E22935BC3002A284D /* EthereumQRMetadata.swift */,
+				AA59275022935DC5002A284D /* EthereumQRMetadataFactory.swift */,
+			);
+			path = Receive;
 			sourceTree = "<group>";
 		};
 		AA6336A421BC5A1C0073ED4A /* Email */ = {
@@ -10061,9 +10069,10 @@
 			isa = PBXGroup;
 			children = (
 				342A1BB82292B7740076C956 /* Address */,
-				341E5A732284BCA4007BE6A6 /* General */,
 				3426B14B22551D1D001831CF /* Accounts */,
 				C7174BA2220BAC660074ECF5 /* AssetAccount */,
+				341E5A732284BCA4007BE6A6 /* General */,
+				AA59274D22935BAD002A284D /* Receive */,
 				C7174B9F220BA91B0074ECF5 /* Transactions */,
 			);
 			path = Models;
@@ -10588,6 +10597,12 @@
 				463E9B6139832907930FEBC5 /* Pods-EthereumKitTests.debug dev.xcconfig */,
 				2BC0397088C7193C5F0D95E6 /* Pods-EthereumKitTests.release.xcconfig */,
 				0F2EE9DEFF3C952640ED8876 /* Pods-EthereumKitTests.release staging.xcconfig */,
+				2B767CFDC37F16BE28F5F3AA /* Pods-PlatformUIKit.debug production.xcconfig */,
+				5C1CA5B1D1B1418F76A6E16D /* Pods-PlatformUIKit.debug staging.xcconfig */,
+				E616C7693B3A66BB46827D1F /* Pods-PlatformUIKit.debug dev.xcconfig */,
+				AB58FFBC3EC75EE79AFD6A7F /* Pods-PlatformUIKit.debug testnet.xcconfig */,
+				638DFC4DF1C0186CD154DE3C /* Pods-PlatformUIKit.release.xcconfig */,
+				55618F1FD6E6B5DB8034A8FD /* Pods-PlatformUIKit.release staging.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -10767,6 +10782,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3A6865B4219A11660009FF29 /* Build configuration list for PBXNativeTarget "PlatformUIKit" */;
 			buildPhases = (
+				1F0D1A8433011521AB195F4D /* [CP] Check Pods Manifest.lock */,
 				3A6865A6219A11650009FF29 /* Headers */,
 				3A6865A7219A11650009FF29 /* Sources */,
 				3A6865A8219A11650009FF29 /* Frameworks */,
@@ -11208,6 +11224,7 @@
 				3AEA402321FBAAEF00952587 /* AlertView.xib in Resources */,
 				3A8994C622039FCE00CCA8FF /* PricePreviewCell.xib in Resources */,
 				3A3427FD2220B57B000D8032 /* BottomSheetView.xib in Resources */,
+				AA5D848E228E2A4600992810 /* ReceiveCryptoViewController.storyboard in Resources */,
 				3AC90D0421F78CF2006DD565 /* PaginatedContainerCell.xib in Resources */,
 				3A6865C1219A12290009FF29 /* PlatformUIKitAssets.xcassets in Resources */,
 				3A6865CD219A136C0009FF29 /* TransactionDetailCell.xib in Resources */,
@@ -11400,7 +11417,6 @@
 				5138373B21025AD100767B2E /* alert-received.wav in Resources */,
 				ECD244F019A8AC45004B1F40 /* PEKeyboard-4-done.png in Resources */,
 				3A26AF5521272026003A8A08 /* ExchangeListViewController.storyboard in Resources */,
-				AA3E589C217A7E7F00EFF992 /* ReceiveXlmViewController.storyboard in Resources */,
 				3A2BBCDC21C32197001E55BF /* KYCCTAHeaderView.xib in Resources */,
 				C75757512176504100CE7814 /* AssetTypeCell.xib in Resources */,
 				AAECF736217E6B54008B8832 /* AssetType.xcassets in Resources */,
@@ -11474,6 +11490,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1F0D1A8433011521AB195F4D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PlatformUIKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2074AAAC5C0670F34696C213 /* [CP] Check Pods Manifest.lock */ = {
@@ -11941,6 +11979,7 @@
 				3A4E480921BB31EE001A799D /* SEP7URI.swift in Sources */,
 				34BFDF562271F4FE008160CD /* NewResultExtensions.swift in Sources */,
 				3A847401219CAF2B00F22FA6 /* AccountValidationAPI.swift in Sources */,
+				AA521BBF228F6726005CF4AE /* CryptoAssetQRMetadataFactory.swift in Sources */,
 				34BE8B2622896BD10097F535 /* PasswordAccessAPI.swift in Sources */,
 				3A1FD14C224049CE00E613E8 /* NotificationCenter+Conveniences.swift in Sources */,
 				3A9B285421A4CD2200DB46C7 /* KeyPairProviderAPI.swift in Sources */,
@@ -12011,12 +12050,14 @@
 				3A4E47F221BAF764001A799D /* QRCode.swift in Sources */,
 				3A6865C9219A12B90009FF29 /* TransactionDetailCell.swift in Sources */,
 				3A3F3BA921E4180F003BFDFC /* CellModel+Conveniences.swift in Sources */,
+				AA2D2018228F7CE300EF8A36 /* ReceiveCryptoViewModel.swift in Sources */,
 				3A33F8F921FA6285001F96FC /* AlertModel.swift in Sources */,
 				3AC90D0221F78C96006DD565 /* PaginatedContainerCell.swift in Sources */,
 				3A3428012220B7A3000D8032 /* BottomSheet.swift in Sources */,
 				3A45608921F270B7006C2568 /* BaseViewController.swift in Sources */,
 				3A8994CE2203F83100CCA8FF /* AnimatedGradientContainerView.swift in Sources */,
 				3A6865D5219A1A510009FF29 /* UIDevice+Conveniences.swift in Sources */,
+				AA5D8483228E2A2B00992810 /* ReceiveCryptoViewController.swift in Sources */,
 				3A3F3B9421E400DE003BFDFC /* LayoutAttributes.swift in Sources */,
 				3AB692FF21FB8A840069CB90 /* UIView+Conveniences.swift in Sources */,
 				3A342805222465D1000D8032 /* ActionMetadata.swift in Sources */,
@@ -12042,6 +12083,7 @@
 				3A8473DD219B795000F22FA6 /* StellarLedgerAPI.swift in Sources */,
 				3A686617219A2DBB0009FF29 /* StellarOperation.swift in Sources */,
 				34BE77B1225372AA0034A6BE /* StellarValue.swift in Sources */,
+				AA2D2013228F74FC00EF8A36 /* StellarQRMetadataFactory.swift in Sources */,
 				34E66648224A68DE007667FA /* StellarTransactionFee.swift in Sources */,
 				3A8473D5219B6FF700F22FA6 /* StellarKeyPairDeriver.swift in Sources */,
 				3A4E480721BB3057001A799D /* StellarQRMetadata.swift in Sources */,
@@ -12080,6 +12122,7 @@
 				34732D452291DD7200F34AB5 /* EthereumValue.swift in Sources */,
 				341E5A752284BCB8007BE6A6 /* EthereumKitError.swift in Sources */,
 				346ED4D02273731D00D5179E /* EthereumTransactionCandidate.swift in Sources */,
+				AA59275122935DC5002A284D /* EthereumQRMetadataFactory.swift in Sources */,
 				344C42EB227C50C500CFAC33 /* EthereumTransactionEncoder.swift in Sources */,
 				34C6CF422241384C009123E5 /* EthereumAssetAccountDetailsService.swift in Sources */,
 				344B36A42282F1560011A922 /* EthereumKeyDerivationInput.swift in Sources */,
@@ -12093,6 +12136,7 @@
 				3426B15722551D42001831CF /* EthereumKeyPair.swift in Sources */,
 				C7174BA4220BAC820074ECF5 /* EthereumAssetAccount.swift in Sources */,
 				34C74361228AD6B100C88347 /* EthereumTransactionCandidateCosted.swift in Sources */,
+				AA59274F22935BC3002A284D /* EthereumQRMetadata.swift in Sources */,
 				34C6CF3C224132B7009123E5 /* EthereumAssetAccountDetails.swift in Sources */,
 				346ED4B1227354A600D5179E /* EthereumTransactionBuilder.swift in Sources */,
 				342A1BBA2292B7BB0076C956 /* EthereumAddress.swift in Sources */,
@@ -12155,6 +12199,7 @@
 				AA447BCB21276DA900EC0FA0 /* SideMenuPresenter.swift in Sources */,
 				C7C0DC24212F6783000EFE71 /* ExchangeService.swift in Sources */,
 				C787180220A22362000CC46E /* WalletAddressesDelegate.swift in Sources */,
+				AA2D2016228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift in Sources */,
 				AA31A7BC2098DFCF00FE6268 /* SideMenuItem.swift in Sources */,
 				AA63F85920A134DA002B719B /* BCTextField.swift in Sources */,
 				34BE77C82253D9EC0034A6BE /* StellarLedgerServiceTests.swift in Sources */,
@@ -12300,6 +12345,7 @@
 				AADF6B5321C0D3B900F8CA43 /* KYCPager.swift in Sources */,
 				5113570A209CF6CE00056D65 /* BCSecureTextField.swift in Sources */,
 				C7CE25AB2135E3B500DCC43B /* ExchangeCreateContracts.swift in Sources */,
+				AA521BBD228F4B5E005CF4AE /* Pin.swift in Sources */,
 				C76D731820B24B5400040B57 /* WalletTransferAllDelegate.swift in Sources */,
 				AA3CA9B62107F36800C2AD46 /* LogLevel.swift in Sources */,
 				AACE31D52092A99B00B7B806 /* Coordinator.swift in Sources */,
@@ -12321,6 +12367,7 @@
 				C79DD06F20B3B74A00DF3684 /* WalletWatchOnlyDelegate.swift in Sources */,
 				AA084419215EF4EC0007BFD1 /* LockboxRepository.swift in Sources */,
 				34BD973D221B124500D40D4C /* QRCodeScannerView.swift in Sources */,
+				AA374A5122946CEA00243A4B /* ETHServiceProvider.swift in Sources */,
 				348DAB7A221C27F80058782B /* MockQRCodeScanner.swift in Sources */,
 				3A390755217E7F6E00D2DA01 /* SendXLMInterface.swift in Sources */,
 				AA7133B621220B7100CB2AA9 /* KYCCountrySelectionPresenter.swift in Sources */,
@@ -12365,7 +12412,6 @@
 				AADB027F20C0BACA000FFFEC /* WalletCryptoService.swift in Sources */,
 				AA0843C5215D72340007BFD1 /* MockSocketManager.swift in Sources */,
 				3A91F7C2213845F700CDC3FD /* TradingPairView.swift in Sources */,
-				AACE31822092858600B7B806 /* Pin.swift in Sources */,
 				C7C0DC23212F677C000EFE71 /* MarketsService.swift in Sources */,
 				AAB759FB21895C6C00A0AD11 /* StellarAirdropRouterTests.swift in Sources */,
 				C729D64421874C8B0084D497 /* NumberFormatterTests.swift in Sources */,
@@ -12677,7 +12723,6 @@
 				3A3D5DB6211B96FA00E6C241 /* LocationUpdateAPI.swift in Sources */,
 				C7A85927217A294000502935 /* Identifiable.swift in Sources */,
 				AA8F21E421C719B700F45C42 /* WalletNabuSynchronizerService.swift in Sources */,
-				AA3E589E217A7E8F00EFF992 /* ReceiveXlmViewController.swift in Sources */,
 				34D88F62221A96C300AE9DE5 /* AddressQRCodeParser.swift in Sources */,
 				AA755EF92188EDBB00FC4894 /* StellarTradeLimitsService.swift in Sources */,
 				23444F8D1DCD219E00573C8C /* BTCData.m in Sources */,
@@ -12965,7 +13010,6 @@
 				AAD27A28209CFE2100C0EAFC /* PasswordConfirmView.swift in Sources */,
 				51979168210BA7AC0096E50B /* HTTPRequestError.swift in Sources */,
 				5138375C21026BC900767B2E /* Environment.swift in Sources */,
-				C7E2750B1F589C8D0054EFA5 /* ReceiveEtherViewController.m in Sources */,
 				3A1C7F9E2178FA7A001AC6D3 /* StellarOperationService.swift in Sources */,
 				AAC8F35620993BB8004B7D33 /* WebSocketCloseCode.swift in Sources */,
 				AAA3333F2088131D0019AD55 /* ModalPresenter.swift in Sources */,
@@ -12992,7 +13036,6 @@
 				C78893E520A36572003C0A8F /* Trade.swift in Sources */,
 				AA126DBF212F4E2D005886A3 /* SignedRetailTokenRequest.swift in Sources */,
 				AA1E523D2097E6AC0099BD10 /* PinStoreResponse.swift in Sources */,
-				AACE31812092794D00B7B806 /* Pin.swift in Sources */,
 				606399E22110FC2D005B6DF5 /* SRSecurityPolicy.m in Sources */,
 				23107F831BBEF0AC00A6A9D4 /* BCConfirmPaymentView.m in Sources */,
 				602B9CE72118E15300BD3D60 /* KYCCountry.swift in Sources */,
@@ -13060,6 +13103,7 @@
 				606399DE2110FC2D005B6DF5 /* NSRunLoop+SRWebSocket.m in Sources */,
 				AA54E4F6216D3B3F005061F9 /* KYCStateSelectionInteractor.swift in Sources */,
 				AA755EED2188ED6800FC4894 /* StellarTradeLimitsAPI.swift in Sources */,
+				AA521BBC228F4B5E005CF4AE /* Pin.swift in Sources */,
 				3A902D1221CD69780068C4D3 /* KYCTiersCoordinator.swift in Sources */,
 				C7EA091E21766F640050FE81 /* Direction.swift in Sources */,
 				231FF2CD1B56F9F1009EEB02 /* SettingsWebViewController.m in Sources */,
@@ -13122,6 +13166,7 @@
 				C711352321C19D7A00F70AF0 /* KYCTierState.swift in Sources */,
 				9F1831E21516A39500FB3D52 /* NSData+Hex.m in Sources */,
 				6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */,
+				AA2D2015228F789100EF8A36 /* ReceiveCryptoViewControllerProvider.swift in Sources */,
 				C79B27B120A6215B0061D0F2 /* WalletSendEtherDelegate.swift in Sources */,
 				AAA3333D208813040019AD55 /* OnboardingCoordinator.swift in Sources */,
 				3A26D53421406C0200D79BDD /* ExchangeDetailCoordinator.swift in Sources */,
@@ -16200,6 +16245,7 @@
 		};
 		3A6865B5219A11660009FF29 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B767CFDC37F16BE28F5F3AA /* Pods-PlatformUIKit.debug production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -16272,6 +16318,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -16280,6 +16327,7 @@
 		};
 		3A6865B6219A11660009FF29 /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C1CA5B1D1B1418F76A6E16D /* Pods-PlatformUIKit.debug staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -16352,6 +16400,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -16360,6 +16409,7 @@
 		};
 		3A6865B7219A11660009FF29 /* Debug Dev */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E616C7693B3A66BB46827D1F /* Pods-PlatformUIKit.debug dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -16432,6 +16482,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -16440,6 +16491,7 @@
 		};
 		3A6865B8219A11660009FF29 /* Debug Testnet */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB58FFBC3EC75EE79AFD6A7F /* Pods-PlatformUIKit.debug testnet.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -16512,7 +16564,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -16521,6 +16573,7 @@
 		};
 		3A6865B9219A11660009FF29 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 638DFC4DF1C0186CD154DE3C /* Pods-PlatformUIKit.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -16559,6 +16612,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -18788,6 +18842,7 @@
 		};
 		AAD7CC5721EFE03100B132F0 /* Release Staging */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55618F1FD6E6B5DB8034A8FD /* Pods-PlatformUIKit.release staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -18826,6 +18881,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

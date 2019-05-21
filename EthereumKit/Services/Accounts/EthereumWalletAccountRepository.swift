@@ -109,3 +109,5 @@ open class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI, 
             .disposed(by: disposeBag)
     }
 }
+
+extension EthereumWalletAccountRepository: WalletAccountInitializer { }

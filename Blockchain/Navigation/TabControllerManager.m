@@ -6,6 +6,7 @@
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+#import <PlatformUIKit/PlatformUIKit.h>
 #import "TabControllerManager.h"
 #import "BCNavigationController.h"
 #import "Transaction.h"
@@ -22,7 +23,6 @@
 
 @property (strong, nonatomic) PaxComingSoonViewController *activityPaxComingSoonViewController;
 @property (strong, nonatomic) PaxComingSoonViewController *sendPaxComingSoonViewController;
-@property (strong, nonatomic) PaxComingSoonViewController *receivePaxComingSoonViewController;
 
 @end
 @implementation TabControllerManager
@@ -163,7 +163,6 @@
     [_transactionsEtherViewController reload];
     [_transactionsBitcoinCashViewController reload];
     [_receiveBitcoinViewController reload];
-    [_receiveEtherViewController reload];
     [_receiveBitcoinCashViewController reload];
 }
 
@@ -175,7 +174,6 @@
     [_sendBitcoinCashViewController reloadAfterMultiAddressResponse];
     [_transactionsBitcoinViewController reload];
     [_receiveBitcoinViewController reload];
-    [_receiveEtherViewController reload];
     [_receiveBitcoinCashViewController reload];
 }
 
@@ -199,7 +197,6 @@
 - (void)forgetWallet
 {
     self.receiveBitcoinViewController = nil;
-    self.receiveEtherViewController = nil;
     self.receiveBitcoinCashViewController = nil;
     self.transactionsStellarViewController = nil;
     self.sendLumensViewController = nil;
@@ -427,7 +424,7 @@
 
 - (void)didGetEtherAddressWithSecondPassword
 {
-    [_receiveEtherViewController showEtherAddress];
+    // TODO: IOS-2193
 }
 
 - (void)didErrorDuringEtherSendWithError:(NSString * _Nonnull)error
@@ -483,7 +480,7 @@
 - (void)showReceiveAnimated:(BOOL)animated
 {
     int tabIndex = (int)[ConstantsObjcBridge tabReceive];
-    
+
     switch (self.assetType) {
         case LegacyAssetTypeBitcoin: {
             if (!_receiveBitcoinViewController) {
@@ -494,12 +491,7 @@
             break;
         }
         case LegacyAssetTypeEther: {
-            if (!_receiveEtherViewController) {
-                _receiveEtherViewController = [[ReceiveEtherViewController alloc] init];
-            }
-            
-            [_tabViewController setActiveViewController:_receiveEtherViewController animated:animated index:tabIndex];
-            [_receiveEtherViewController showEtherAddress];
+            [self setReceiveControllerIfNeededForAssetType:self.assetType animated:animated];
             break;
         }
         case LegacyAssetTypeBitcoinCash: {
@@ -512,19 +504,27 @@
             break;
         }
         case LegacyAssetTypeStellar: {
-            if (![_tabViewController.activeViewController isKindOfClass:[ReceiveXlmViewController class]]) {
-                ReceiveXlmViewController *receiveXlmViewController = [ReceiveXlmViewController newInstance];
-                [_tabViewController setActiveViewController:receiveXlmViewController animated:animated index:tabIndex];
-            }
+            [self setReceiveControllerIfNeededForAssetType:self.assetType animated:animated];
             break;
         }
         case LegacyAssetTypePax: {
-            if (!_receivePaxComingSoonViewController) {
-                _receivePaxComingSoonViewController = [[PaxComingSoonViewController alloc] init];
-            }
-            [_tabViewController setActiveViewController:_receivePaxComingSoonViewController animated:animated index:tabIndex];
+            [self setReceiveControllerIfNeededForAssetType:self.assetType animated:animated];
             break;
         }
+    }
+}
+
+- (void)setReceiveControllerIfNeededForAssetType:(LegacyAssetType)assetType animated:(BOOL)animated
+{
+    if ([_tabViewController.activeViewController isKindOfClass:[ReceiveCryptoViewController class]]) {
+        ReceiveCryptoViewController *receive = (ReceiveCryptoViewController *) _tabViewController.activeViewController;
+        if ([receive legacyAssetType] != assetType) {
+            ReceiveCryptoViewController *receiveCryptoViewController = [ReceiveCryptoViewController makeFor:assetType];
+            [_tabViewController setActiveViewController:receiveCryptoViewController animated:animated index:(int)[ConstantsObjcBridge tabReceive]];
+        }
+    } else {
+        ReceiveCryptoViewController *receiveCryptoViewController = [ReceiveCryptoViewController makeFor:assetType];
+        [_tabViewController setActiveViewController:receiveCryptoViewController animated:animated index:(int)[ConstantsObjcBridge tabReceive]];
     }
 }
 

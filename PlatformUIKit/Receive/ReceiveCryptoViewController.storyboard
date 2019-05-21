@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m7G-MK-s8N">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--ReceiveCryptoViewController-->
+        <scene sceneID="Ltd-GL-7cZ">
+            <objects>
+                <viewController title="ReceiveCryptoViewController" id="m7G-MK-s8N" customClass="ReceiveCryptoViewController" customModule="PlatformUIKit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fec-gn-PSB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to copy this address on your clipboard" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OkX-S3-Was">
+                                <rect key="frame" x="40" y="178.5" width="295" height="17.5"/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lFm-Iz-Uv4">
+                                <rect key="frame" x="80" y="216" width="215" height="215"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="lFm-Iz-Uv4" secondAttribute="height" multiplier="1:1" id="KQw-d2-x5V"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Kqp-WU-FdE" appends="YES" id="qDp-bx-cEK"/>
+                                </connections>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4yo-Tu-DGj">
+                                <rect key="frame" x="20" y="303.5" width="335" height="40"/>
+                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="xfD-U8-wUB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Enter Your Second Password">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onEnterPasswordTapped:" destination="m7G-MK-s8N" eventType="touchUpInside" id="cn9-6G-POs"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eH8-O8-nsQ" userLabel="address">
+                                <rect key="frame" x="187.5" y="451" width="0.0" height="0.0"/>
+                                <gestureRecognizers/>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Ihf-2U-L52" appends="YES" id="x4G-Ts-fTi"/>
+                                </connections>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z6R-1A-NAa">
+                                <rect key="frame" x="20" y="607" width="335" height="40"/>
+                                <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="tA8-MN-FfW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRequestPaymentTapped:" destination="m7G-MK-s8N" eventType="touchUpInside" id="7y8-pR-UhB"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="eH8-O8-nsQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WIf-Wa-mjk" secondAttribute="leading" constant="16" id="0TN-RJ-CbM"/>
+                            <constraint firstItem="lFm-Iz-Uv4" firstAttribute="top" secondItem="OkX-S3-Was" secondAttribute="bottom" constant="20" id="63z-TA-Ti2"/>
+                            <constraint firstItem="eH8-O8-nsQ" firstAttribute="centerX" secondItem="WIf-Wa-mjk" secondAttribute="centerX" id="7k4-Df-bz2"/>
+                            <constraint firstItem="Z6R-1A-NAa" firstAttribute="leading" secondItem="WIf-Wa-mjk" secondAttribute="leading" constant="20" id="CVt-gs-oLq"/>
+                            <constraint firstItem="lFm-Iz-Uv4" firstAttribute="centerY" secondItem="WIf-Wa-mjk" secondAttribute="centerY" constant="-20" id="CZR-Yp-HTX"/>
+                            <constraint firstItem="OkX-S3-Was" firstAttribute="leading" secondItem="lFm-Iz-Uv4" secondAttribute="leading" constant="-40" id="Cet-X8-Kh8"/>
+                            <constraint firstItem="WIf-Wa-mjk" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="eH8-O8-nsQ" secondAttribute="trailing" constant="16" id="GCX-4s-YGC"/>
+                            <constraint firstItem="4yo-Tu-DGj" firstAttribute="centerY" secondItem="lFm-Iz-Uv4" secondAttribute="centerY" id="JzL-X7-Hg1"/>
+                            <constraint firstItem="lFm-Iz-Uv4" firstAttribute="centerX" secondItem="WIf-Wa-mjk" secondAttribute="centerX" id="M3g-P7-ws1"/>
+                            <constraint firstItem="WIf-Wa-mjk" firstAttribute="bottom" secondItem="Z6R-1A-NAa" secondAttribute="bottom" constant="20" id="W3j-cr-SdS"/>
+                            <constraint firstItem="OkX-S3-Was" firstAttribute="trailing" secondItem="lFm-Iz-Uv4" secondAttribute="trailing" constant="40" id="Wfj-jo-rIV"/>
+                            <constraint firstItem="lFm-Iz-Uv4" firstAttribute="leading" secondItem="WIf-Wa-mjk" secondAttribute="leading" constant="80" id="aOZ-px-Lcq"/>
+                            <constraint firstItem="eH8-O8-nsQ" firstAttribute="top" secondItem="lFm-Iz-Uv4" secondAttribute="bottom" constant="20" id="eok-Ed-Qeb"/>
+                            <constraint firstItem="WIf-Wa-mjk" firstAttribute="trailing" secondItem="lFm-Iz-Uv4" secondAttribute="trailing" constant="80" id="iLM-wK-jAD"/>
+                            <constraint firstItem="OkX-S3-Was" firstAttribute="centerX" secondItem="WIf-Wa-mjk" secondAttribute="centerX" id="mrK-El-NpW"/>
+                            <constraint firstItem="4yo-Tu-DGj" firstAttribute="trailing" secondItem="Z6R-1A-NAa" secondAttribute="trailing" id="ol3-Ej-oOt"/>
+                            <constraint firstItem="WIf-Wa-mjk" firstAttribute="trailing" secondItem="Z6R-1A-NAa" secondAttribute="trailing" constant="20" id="ux3-U0-1mg"/>
+                            <constraint firstItem="4yo-Tu-DGj" firstAttribute="centerX" secondItem="lFm-Iz-Uv4" secondAttribute="centerX" id="vrp-Ts-AvD"/>
+                            <constraint firstItem="4yo-Tu-DGj" firstAttribute="leading" secondItem="Z6R-1A-NAa" secondAttribute="leading" id="yTZ-7o-KYC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="WIf-Wa-mjk"/>
+                    </view>
+                    <connections>
+                        <outlet property="buttonEnterPassword" destination="4yo-Tu-DGj" id="1fA-hb-Nyu"/>
+                        <outlet property="buttonRequestPayment" destination="Z6R-1A-NAa" id="D5K-HQ-8Ka"/>
+                        <outlet property="imageQrCode" destination="lFm-Iz-Uv4" id="5vb-AI-zlD"/>
+                        <outlet property="labelInstructions" destination="OkX-S3-Was" id="KeN-21-lQg"/>
+                        <outlet property="labelPublicKey" destination="eH8-O8-nsQ" id="6Lb-Be-h4h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uy3-0U-2sX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Kqp-WU-FdE">
+                    <connections>
+                        <action selector="onAddressTapped:" destination="m7G-MK-s8N" id="El3-xd-AL7"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Ihf-2U-L52">
+                    <connections>
+                        <action selector="onAddressTapped:" destination="m7G-MK-s8N" id="Qod-AY-sll"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+        </scene>
+    </scenes>
+</document>

@@ -150,10 +150,8 @@ struct LocalizationConstants {
         static let  BC_STRING_WARNING_TITLE = NSLocalizedString("Warning", comment: "")
         static let  BC_STRING_PAYMENT_REQUEST_BITCOIN_ARGUMENT_ARGUMENT = NSLocalizedString("Please send %@ to bitcoin address.\n%@", comment: "")
         static let  BC_STRING_PAYMENT_REQUEST_BITCOIN_CASH_ARGUMENT = NSLocalizedString("Please send BCH to the Bitcoin Cash address\n%@", comment: "")
-        static let  BC_STRING_PAYMENT_REQUEST_ETHER_ARGUMENT = NSLocalizedString("Please send ether to %@.", comment: "")
         static let  BC_STRING_AMOUNT = NSLocalizedString("Amount", comment: "")
         static let  BC_STRING_PAYMENT_REQUEST_HTML = NSLocalizedString("Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@", comment: "")
-        static let  BC_STRING_PAYMENT_REQUEST_ETHER_SUBJECT = NSLocalizedString("Ether payment request", comment: "")
         static let  BC_STRING_CLOSE = NSLocalizedString("Close", comment: "")
         static let  BC_STRING_TRANSACTION_DETAILS = NSLocalizedString("Transaction details", comment: "")
         static let  BC_STRING_CREATE = NSLocalizedString("Create", comment: "")
@@ -492,7 +490,6 @@ struct LocalizationConstants {
         static let  BC_STRING_AT = NSLocalizedString("at", comment: "")
         static let  BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_TITLE = NSLocalizedString("Contract addresses are not supported.", comment: "")
         static let  BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_MESSAGE = NSLocalizedString("At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP.", comment: "")
-        static let  BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS = NSLocalizedString("Tap the Request tab to setup your ether address.", comment: "")
         
         static let  BC_STRING_NOW_SUPPORTING_ETHER_TITLE = NSLocalizedString("Now supporting Ether", comment: "")
         static let  BC_STRING_NOW_SUPPORTING_ETHER_DESCRIPTION = NSLocalizedString("You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!", comment: "")
@@ -1326,6 +1323,23 @@ struct LocalizationConstants {
             "Copied to clipboard",
             comment: "Text displayed when a crypto address has been copied to the users clipboard."
         )
+        static let enterYourSecondPassword = NSLocalizedString(
+            "Enter Your Second Password",
+            comment: "Text on the button prompting the user to enter their second password to proceed with creating a crypto account."
+        )
+
+        static let secondPasswordPromptX = NSLocalizedString(
+            "Your second password is required in order to create a %@ account.",
+            comment: "Text shown when the second password is required to create an XLM account."
+        )
+        static let xPaymentRequest = NSLocalizedString(
+            "%@ payment request.",
+            comment: "Subject when requesting payment for a given asset."
+        )
+        static let pleaseSendXto = NSLocalizedString(
+            "Please send %@ to",
+            comment: "Message when requesting payment to a given asset."
+        )
     }
 
     struct ReceiveAsset {
@@ -1949,25 +1963,9 @@ struct LocalizationConstants {
             "Enter a Stellar address or select",
             comment: "Placeholder text for the Lumens send screen."
         )
-        static let secondPasswordPrompt = NSLocalizedString(
-            "Your second password is required in order to create an XLM account.",
-            comment: "Text shown when the second password is required to create an XLM account."
-        )
-        static let pleaseSendXlmToX = NSLocalizedString(
-            "Please send XLM to %@",
-            comment: "Message when requesting XLM."
-        )
         static let viewOnArgument = NSLocalizedString(
             "View on %@",
             comment: "Button title for viewing a transaction on the explorer")
-        static let xlmPaymentRequest = NSLocalizedString(
-            "XLM payment request.",
-            comment: "Subject when requesting for XLM."
-        )
-        static let enterYourSecondPassword = NSLocalizedString(
-            "Enter Your Second Password",
-            comment: "Text on the button prompting the user to enter their second password to proceed with creating an XLM account."
-        )
         static let cannotSendXLMAtThisTime = NSLocalizedString(
             "Cannot send XLM at this time. Please try again.",
             comment: "Error displayed when XLM cannot be sent due to an error."

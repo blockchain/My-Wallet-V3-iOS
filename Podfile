@@ -86,6 +86,12 @@ target 'PlatformKit' do
   end
 end
 
+
+target 'PlatformUIKit' do
+  inhibit_all_warnings!
+  pod 'RxSwift', '~> 4.0'
+end
+
 # Post Installation:
 # - Disable code signing for pods.
 post_install do |installer|

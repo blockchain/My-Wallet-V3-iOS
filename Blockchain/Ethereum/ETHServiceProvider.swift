@@ -14,12 +14,14 @@ protocol ETHDependencies {
     var repository: EthereumWalletAccountRepository { get }
     var assetAccountRepository: EthereumAssetAccountRepository { get }
     var transactionService: EthereumHistoricalTransactionService { get }
+    var qrMetadataFactory: EthereumQRMetadataFactory { get }
 }
 
 struct ETHServices: ETHDependencies {
     let repository: EthereumWalletAccountRepository
     let assetAccountRepository: EthereumAssetAccountRepository
     let transactionService: EthereumHistoricalTransactionService
+    let qrMetadataFactory: EthereumQRMetadataFactory
 
     init(wallet: Wallet = WalletManager.shared.wallet) {
         self.repository = EthereumWalletAccountRepository(with: wallet.ethereum)
@@ -31,6 +33,7 @@ struct ETHServices: ETHDependencies {
         self.transactionService = EthereumHistoricalTransactionService(
             with: wallet.ethereum
         )
+        self.qrMetadataFactory = EthereumQRMetadataFactory()
     }
 }
 
@@ -60,5 +63,9 @@ final class ETHServiceProvider {
     
     var transactionService: EthereumHistoricalTransactionService {
         return services.transactionService
+    }
+
+    var qrMetadataFactory: EthereumQRMetadataFactory {
+        return services.qrMetadataFactory
     }
 }
