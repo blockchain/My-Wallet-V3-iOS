@@ -35,7 +35,12 @@ Install a node version manager such as [nvm](https://github.com/creationix/nvm) 
     ./build-libssl.sh
 
 ## Install Cocoapods
-`sudo gem install cocoapods`
+
+Optionally install a Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
+
+Then install the cocoapods gem. You need to use version 1.5.3:
+
+`gem install cocoapods --version 1.5.3`
 
 ## Install Dependencies
 `pod install`
