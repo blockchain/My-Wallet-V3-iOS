@@ -8,6 +8,7 @@
 
 import Foundation
 import PlatformUIKit
+import PlatformKit
 import SafariServices
 import RxSwift
 

@@ -71,9 +71,8 @@ extension EtherTransaction {
         
         self.amount = transaction.amount
         self.amountTruncated = EtherTransaction.truncatedAmount(transaction.amount)
-        self.fee = CryptoValue
-            .etherFromGwei(string: "\(transaction.fee ?? 0)")?
-            .toDisplayString(includeSymbol: false)
+        let transactionFee = transaction.fee ?? CryptoValue.etherFromGwei(string: "0")
+        self.fee = transactionFee?.toDisplayString(includeSymbol: false)
         self.from = transaction.fromAddress.publicKey
         self.to = transaction.toAddress.publicKey
         self.myHash = transaction.transactionHash
@@ -133,7 +132,7 @@ extension EtherTransaction {
             amount: amount,
             transactionHash: myHash,
             createdAt: Date(timeIntervalSince1970: TimeInterval(legacyTransaction.time)),
-            fee: feeGwei,
+            fee: CryptoValue.etherFromGwei(string: "\(feeGwei)"),
             memo: legacyTransaction.note,
             confirmations: Int(legacyTransaction.confirmations)
         )
@@ -160,7 +159,7 @@ public class EthereumWallet: NSObject {
     }
 }
 
-extension EthereumWallet: EthereumWalletBridgeAPI {
+extension EthereumWallet: EthereumWalletBridgeAPI, EthereumWalletTransctionsBridgeAPI {
     
     public var fetchBalance: Single<CryptoValue> {
         return Single<String>.create(subscribe: { observer -> Disposable in

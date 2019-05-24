@@ -7,6 +7,7 @@
 //
 
 import PlatformUIKit
+import PlatformKit
 
 protocol TradingPairViewDelegate: class {
     func onLeftButtonTapped(_ view: TradingPairView, title: String)

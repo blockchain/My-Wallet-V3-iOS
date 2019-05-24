@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 /// Presenter for displaying various security-related reminders to the user.
 @objc class ReminderPresenter: NSObject {

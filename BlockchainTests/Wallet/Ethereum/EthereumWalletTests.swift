@@ -80,7 +80,7 @@ class EthereumWalletTests: XCTestCase {
                         amount: "amount",
                         transactionHash: "transactionHash",
                         createdAt: Date(),
-                        fee: 1,
+                        fee: CryptoValue.etherFromGwei(string: "231000"),
                         memo: "memo",
                         confirmations: 12
                     )

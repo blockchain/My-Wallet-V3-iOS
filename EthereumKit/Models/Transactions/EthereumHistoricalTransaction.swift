@@ -8,47 +8,40 @@
 
 import PlatformKit
 
-public struct EthereumHistoricalTransaction: HistoricalTransaction, Mineable {
+public protocol EthereumTransaction {
+    var isConfirmed: Bool { get }
+    var confirmations: Int { get }
+}
 
+public struct EthereumHistoricalTransaction: EthereumTransaction, HistoricalTransaction, Mineable {
+    
     public typealias Address = EthereumAssetAddress
-
-    public let identifier: String
-
-    public let fromAddress: Address
-
-    public let toAddress: Address
-
-    public let direction: Direction
-
-    public let amount: String
-
-    public let transactionHash: String
-
-    public let createdAt: Date
-
-    public let fee: Int?
-
-    public let memo: String?
-
-    // MARK: - Mineable
-
-    public let confirmations: Int
-
+    
+    public var fromAddress: EthereumAssetAddress
+    public var toAddress: EthereumAssetAddress
+    public var identifier: String
+    public var direction: Direction
+    public var amount: String
+    public var transactionHash: String
+    public var createdAt: Date
+    public var fee: CryptoValue?
+    public var memo: String?
+    public var confirmations: Int
     public var isConfirmed: Bool {
         return confirmations == 12
     }
     
     public init(
-                identifier: String,
-                fromAddress: Address,
-                toAddress: Address,
-                direction: Direction,
-                amount: String,
-                transactionHash: String,
-                createdAt: Date,
-                fee: Int?,
-                memo: String?,
-                confirmations: Int) {
+        identifier: String,
+        fromAddress: Address,
+        toAddress: Address,
+        direction: Direction,
+        amount: String,
+        transactionHash: String,
+        createdAt: Date,
+        fee: CryptoValue?,
+        memo: String?,
+        confirmations: Int) {
         self.identifier = identifier
         self.fromAddress = fromAddress
         self.toAddress = toAddress

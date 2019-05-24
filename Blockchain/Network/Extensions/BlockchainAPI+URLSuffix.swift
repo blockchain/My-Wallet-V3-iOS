@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 @objc extension BlockchainAPI {
     /// Returns the URL for the specified address's asset information (number of transactions,
@@ -53,8 +54,7 @@ import Foundation
         case .stellar:
             return "\(stellarchainUrl)/tx/\(transactionHash)"
         case .pax:
-            // TODO
-            fatalError("Not implemented yet")
+            return "\(etherExplorerUrl)/tx/\(transactionHash)"
         }
     }
 }

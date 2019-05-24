@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 extension BlockchainAPI {
     static func registerDeviceForPushNotifications(using payload: PushNotificationAuthPayload?) -> Data? {

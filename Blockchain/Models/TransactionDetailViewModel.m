@@ -131,6 +131,8 @@
         return [NSNumberFormatter formatBchWithSymbol:ABS(self.amountInSatoshi)];
     } else if (self.assetType == LegacyAssetTypeStellar) {
         return self.amountString;
+    } else if (self.assetType == LegacyAssetTypePax) {
+        return self.amountString;
     }
     
     return nil;
@@ -145,6 +147,8 @@
     } else if (self.assetType == LegacyAssetTypeBitcoinCash) {
         return [self getBchFeeString];
     } else if (self.assetType == LegacyAssetTypeStellar) {
+        return self.feeString;
+    } else if (self.assetType == LegacyAssetTypePax) {
         return self.feeString;
     }
     return nil;

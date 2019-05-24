@@ -24,6 +24,6 @@ public protocol HistoricalTransaction {
     var amount: String { get }
     var transactionHash: String { get }
     var createdAt: Date { get }
-    var fee: Int? { get }
+    var fee: CryptoValue? { get }
     var memo: String? { get }
 }

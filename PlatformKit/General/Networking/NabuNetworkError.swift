@@ -9,19 +9,19 @@
 import Foundation
 
 /// Describes an error returned by Nabu
-struct NabuNetworkError: Codable, Error {
-    let code: NabuNetworkErrorCode
-    let type: NabuNetworkErrorType
-    let description: String
+public struct NabuNetworkError: Codable, Error {
+    public let code: NabuNetworkErrorCode
+    public let type: NabuNetworkErrorType
+    public let description: String
     
-    init(code: NabuNetworkErrorCode, type: NabuNetworkErrorType = .internalServerError, description: String = "demo") {
+    public init(code: NabuNetworkErrorCode, type: NabuNetworkErrorType = .internalServerError, description: String = "demo") {
         self.code = code
         self.type = type
         self.description = description
     }
 }
 
-enum NabuNetworkErrorCode: Int, Codable {
+public enum NabuNetworkErrorCode: Int, Codable {
 
     // Generic HTTP errors
     case internalServerError = 1
@@ -101,7 +101,7 @@ enum NabuNetworkErrorCode: Int, Codable {
     case campaignInfoAlreadyUsed = 61
 }
 
-enum NabuNetworkErrorType: String, Codable {
+public enum NabuNetworkErrorType: String, Codable {
 
     // Generic HTTP errors
     case internalServerError = "INTERNAL_SERVER_ERROR"

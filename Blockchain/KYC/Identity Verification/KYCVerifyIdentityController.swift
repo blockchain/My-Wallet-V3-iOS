@@ -8,6 +8,7 @@
 
 import Veriff
 import PlatformUIKit
+import PlatformKit
 
 /// Account verification screen in KYC flow
 final class KYCVerifyIdentityController: KYCBaseViewController {

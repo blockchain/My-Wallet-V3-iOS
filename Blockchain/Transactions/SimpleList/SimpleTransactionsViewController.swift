@@ -8,6 +8,7 @@
 
 import Foundation
 import PlatformUIKit
+import PlatformKit
 
 // TICKET: IOS-1380 - Refactor and use autolayout
 class SimpleTransactionsViewController: SimpleListViewController {

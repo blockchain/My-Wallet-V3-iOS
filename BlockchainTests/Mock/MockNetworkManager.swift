@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 class MockNetworkManager: NetworkManager {
 

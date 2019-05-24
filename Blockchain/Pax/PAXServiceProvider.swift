@@ -13,11 +13,13 @@ import ERC20Kit
 
 protocol PAXDependencies {
     var assetAccountRepository: ERC20AssetAccountRepository<PaxToken> { get }
+    var historicalTransactionService: AnyERC20HistoricalTransactionService<PaxToken> { get }
     var paxService: ERC20Service<PaxToken> { get }
 }
 
 struct PAXServices: PAXDependencies {
     let assetAccountRepository: ERC20AssetAccountRepository<PaxToken>
+    let historicalTransactionService: AnyERC20HistoricalTransactionService<PaxToken>
     let paxService: ERC20Service<PaxToken>
     
     init(wallet: Wallet = WalletManager.shared.wallet,
@@ -28,6 +30,7 @@ struct PAXServices: PAXDependencies {
             accountClient: paxAccountClient
         )
         self.assetAccountRepository = ERC20AssetAccountRepository(service: service)
+        self.historicalTransactionService = AnyERC20HistoricalTransactionService<PaxToken>(bridge: wallet.ethereum)
         let ethereumAssetAccountRepository: EthereumAssetAccountRepository = EthereumAssetAccountRepository(
             service: EthereumAssetAccountDetailsService(
                 with: wallet.ethereum

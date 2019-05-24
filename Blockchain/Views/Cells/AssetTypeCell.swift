@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 @objc protocol AssetTypeCellDelegate {
     func didTapChevronButton()

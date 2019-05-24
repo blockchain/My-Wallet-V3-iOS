@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 typealias EmailAddress = String
 

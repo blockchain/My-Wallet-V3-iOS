@@ -95,8 +95,8 @@ public class ERC20Service<Token: ERC20Token>: ERC20API {
         }
     }
     
-    private func transferTransaction(to: EthereumKit.EthereumAddress, amount: BigUInt) -> Single<EthereumTransaction> {
-        let transaction: EthereumTransaction
+    private func transferTransaction(to: EthereumKit.EthereumAddress, amount: BigUInt) -> Single<web3swift.EthereumTransaction> {
+        let transaction: web3swift.EthereumTransaction
         do {
             let contractAddress: web3swift.Address = web3swift.Address(
                 Token.contractAddress.rawValue

@@ -41,7 +41,7 @@ class SimpleListInteractor: NSObject, SimpleListInput {
     }
 
     func nextPageBefore(identifier: String) {
-        service?.nextPageBefore(identifier: identifier)
+        service?.nextPageBefore(identifier: identifier, output: output)
     }
 
     func cancel() {

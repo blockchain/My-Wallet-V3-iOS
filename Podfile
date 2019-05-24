@@ -75,6 +75,7 @@ end
 
 target 'PlatformKit' do
   inhibit_all_warnings!
+  pod 'Alamofire', '~> 4.7'
   pod 'RxSwift', '~> 4.0'
   pod 'BigInt', '~> 3.1'
   

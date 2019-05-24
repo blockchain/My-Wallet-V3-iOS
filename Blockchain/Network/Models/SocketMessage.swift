@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 // TICKET: IOS-1318
 // Move structs into separate files

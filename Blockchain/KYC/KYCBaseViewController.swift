@@ -9,6 +9,7 @@
 import Foundation
 import SafariServices
 import PlatformUIKit
+import PlatformKit
 
 class KYCBaseViewController: UIViewController, KYCCoordinatorDelegate, KYCOnboardingNavigationControllerDelegate {
 

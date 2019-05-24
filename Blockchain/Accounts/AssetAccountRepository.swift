@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import PlatformKit
 
 /// A repository for `AssetAccount` objects
 // TICKET: [IOS-2087] - Integrate PlatformKit Account Repositories

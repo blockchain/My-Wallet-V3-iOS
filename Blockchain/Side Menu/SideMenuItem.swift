@@ -9,7 +9,7 @@
 import Foundation
 
 /// Model definition for an item that is presented in the side menu of the app.
-enum SideMenuItem: String, RawValued {
+enum SideMenuItem: String {
     case accountsAndAddresses = "accounts_and_addresses"
     case backup = "backup"
     case buyBitcoin = "buy_bitcoin"

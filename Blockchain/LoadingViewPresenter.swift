@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// Presenter in charge of displaying a view that displays a loading screen
 @objc class LoadingViewPresenter: NSObject {

@@ -18,7 +18,7 @@ public protocol HistoricalTransactionAPI {
     
     associatedtype Model: HistoricalTransaction
     
-    func fetchTransactions(for accountID: AccountID) -> Single<[Model]>
+    func fetchTransactions() -> Single<[Model]>
 }
 
 /// `HistoricalTransactionAPI` is used for fetching transactions that the user has already submitted.
@@ -30,5 +30,5 @@ public protocol TokenizedHistoricalTransactionAPI {
     
     associatedtype Model: HistoricalTransaction & Tokenized
     
-    func fetchTransactions(from accountID: AccountID, token: String?, size: Int) -> Observable<PageResult<Model>>
+    func fetchTransactions(token: String?, size: Int) -> Single<PageResult<Model>>
 }

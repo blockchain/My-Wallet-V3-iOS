@@ -8,14 +8,13 @@
 
 import Foundation
 import RxSwift
-import PlatformKit
 
-protocol NetworkCommunicatorAPI {
+public protocol NetworkCommunicatorAPI {
     func perform<ResponseType: Decodable>(request: NetworkRequest, responseType: ResponseType.Type) -> Completable
     func perform<ResponseType: Decodable>(request: NetworkRequest) -> Single<ResponseType>
 }
 
-enum NetworkCommunicatorError: Error {
+public enum NetworkCommunicatorError: Error {
     case clientError(HTTPRequestClientError)
     case serverError(HTTPRequestServerError)
     case payloadError(HTTPRequestPayloadError)
@@ -24,8 +23,8 @@ enum NetworkCommunicatorError: Error {
 // TODO:
 // * Handle network reachability
 
-final class NetworkCommunicator: NetworkCommunicatorAPI {
-    static let shared = NetworkCommunicator()
+final public class NetworkCommunicator: NetworkCommunicatorAPI {
+    public static let shared = NetworkCommunicator()
     
     private let session: URLSession
     
@@ -33,12 +32,12 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
         self.session = session
     }
     
-    func perform<ResponseType: Decodable>(request: NetworkRequest, responseType: ResponseType.Type) -> Completable {
+    public func perform<ResponseType: Decodable>(request: NetworkRequest, responseType: ResponseType.Type) -> Completable {
         let requestSingle: Single<ResponseType> = perform(request: request)
         return requestSingle.asCompletable()
     }
     
-    func perform<ResponseType: Decodable>(request: NetworkRequest) -> Single<ResponseType> {
+    public func perform<ResponseType: Decodable>(request: NetworkRequest) -> Single<ResponseType> {
         return Single<ResponseType>.from { [weak self] completed in
             self?.execute(request: request.URLRequest, expecting: ResponseType.self) { result in
                 completed(result)

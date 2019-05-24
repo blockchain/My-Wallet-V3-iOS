@@ -9,11 +9,11 @@
 import Alamofire
 import RxSwift
 
-typealias AuthChallengeHandler = (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
+public typealias AuthChallengeHandler = (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
 
 typealias JSON = [String: Any]
 
-typealias URLParameters = [String: Any]
+public typealias URLParameters = [String: Any]
 
 /**
  Manages network related tasks such as requests and sessions.
@@ -24,29 +24,29 @@ typealias URLParameters = [String: Any]
  */
 
 @objc
-class NetworkManager: NSObject, URLSessionDelegate {
+open class NetworkManager: NSObject, URLSessionDelegate {
 
     // MARK: - Properties
 
     /// The instance variable used to access functions of the `NetworkManager` class.
-    static let shared = NetworkManager()
+    public static let shared = NetworkManager()
 
     /// Default unknown network error
     static let unknownNetworkError = NSError(domain: "NetworkManagerDomain", code: -1, userInfo: nil)
 
     // TODO: remove once migration is complete
     /// Objective-C compatible class function
-    @objc class func sharedInstance() -> NetworkManager {
+    @objc public class func sharedInstance() -> NetworkManager {
         return NetworkManager.shared
     }
 
-    @objc var session: URLSession!
+    @objc public var session: URLSession!
 
     fileprivate var sessionConfiguration: URLSessionConfiguration!
 
     // MARK: - Initialization
 
-    override init() {
+    public override init() {
         super.init()
         sessionConfiguration = URLSessionConfiguration.default
         if let userAgent = NetworkManager.userAgent {
@@ -62,7 +62,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
 
     // MARK: - Rx
 
-    func request<ResponseType: Decodable>(
+    public func request<ResponseType: Decodable>(
         _ request: URLRequest,
         responseType: ResponseType.Type
     ) -> Single<ResponseType> {
@@ -74,7 +74,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
         }
     }
 
-    func requestData(_ request: URLRequest) -> Single<(HTTPURLResponse, Data)> {
+    public func requestData(_ request: URLRequest) -> Single<(HTTPURLResponse, Data)> {
         let dataRequestSingle: Single<DataRequest> = Single.create { observer -> Disposable in
             let dataRequest = SessionManager.default.request(request)
             Logger.shared.debug("Sending \(request.httpMethod ?? "") to '\(request.url?.absoluteString ?? "")'")
@@ -93,7 +93,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
     ///   - parameters: optional parameters for the request
     ///   - headers: optional headers
     /// - Returns: the Single
-    func requestData(
+    public func requestData(
         _ url: String,
         method: HttpMethod,
         parameters: URLParameters? = nil,
@@ -122,7 +122,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
     ///   - method: the HTTP method
     ///   - parameters: the parameters for the request
     /// - Returns: a Single returning the HTTPURLResponse and the decoded response data
-    func requestJsonOrString(
+    open func requestJsonOrString(
         _ url: String,
         method: HttpMethod,
         parameters: URLParameters? = nil,
@@ -183,7 +183,7 @@ class NetworkManager: NSObject, URLSessionDelegate {
 }
 
 extension DataRequest {
-    func responseData() -> Single<(HTTPURLResponse, Data)> {
+    public func responseData() -> Single<(HTTPURLResponse, Data)> {
         return Single.create { [unowned self] observer -> Disposable in
             self.responseData { dataResponse in
                 if let error = dataResponse.result.error {
@@ -200,7 +200,7 @@ extension DataRequest {
         }
     }
 
-    func responseJSONSingle() -> Single<(HTTPURLResponse, Any)> {
+    public func responseJSONSingle() -> Single<(HTTPURLResponse, Any)> {
         return Single.create { [unowned self] observer -> Disposable in
             self.responseJSON { jsonResponse in
                 if let error = jsonResponse.result.error {
@@ -219,7 +219,7 @@ extension DataRequest {
         }
     }
 
-    func responseStringSingle() -> Single<(HTTPURLResponse, Any)> {
+    public func responseStringSingle() -> Single<(HTTPURLResponse, Any)> {
         return Single.create { [unowned self] observer -> Disposable in
             self.responseString { stringResponse in
                 if let error = stringResponse.result.error {

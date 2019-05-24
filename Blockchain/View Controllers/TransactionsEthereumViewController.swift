@@ -126,8 +126,7 @@ final class TransactionsEthereumViewController: TransactionsViewController {
     }
     
     private func loadTransactions() {
-        let accountID = "0"
-        let disposable = transactionService.fetchTransactions(for: accountID)
+        let disposable = transactionService.fetchTransactions()
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] ethereumTransactions in

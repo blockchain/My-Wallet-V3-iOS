@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PlatformKit
 
 protocol SimpleListDataProviderDelegate: class {
     func dataProvider(_ dataProvider: SimpleListDataProvider, nextPageBefore identifier: String)
@@ -31,7 +32,7 @@ class SimpleListDataProvider: NSObject, UITableViewDataSource {
             guard let current = models else { return }
             guard isPaging != oldValue else { return }
             table.beginUpdates()
-            let path = IndexPath(row: current.count, section: 1)
+            let path = IndexPath(row: current.count, section: 0)
             switch isPaging {
             case true:
                 table.insertRows(at: [path], with: .automatic)

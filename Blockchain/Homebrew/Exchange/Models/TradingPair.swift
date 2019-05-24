@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 struct TradingPair {
     private var internalFrom: AssetType

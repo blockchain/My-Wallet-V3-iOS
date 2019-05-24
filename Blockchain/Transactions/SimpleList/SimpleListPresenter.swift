@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 class SimpleListPresenter {
     fileprivate let interactor: SimpleListInput

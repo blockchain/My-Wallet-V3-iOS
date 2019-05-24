@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 class SendXLMCoordinator {
     fileprivate let serviceProvider: XLMServiceProvider
@@ -152,7 +153,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
         interface.apply(updates: [.fiatSymbolLabel(fiatSymbol)])
         
         let disposable = Single.zip(
-                services.prices.fiatPrice(forAssetType: .stellar, fiatSymbol: fiatSymbol),
+                services.prices.fiatPrice(forCurrency: .stellar, fiatSymbol: fiatSymbol),
                 services.ledger.current.take(1).asSingle(),
                 services.feeService.fees
             )
@@ -352,7 +353,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
     func onMinimumBalanceInfoTapped() {
         let fiatSymbol = BlockchainSettings.App.shared.fiatCurrencyCode
         let disposable = Single.zip(
-            services.prices.fiatPrice(forAssetType: .stellar, fiatSymbol: fiatSymbol),
+            services.prices.fiatPrice(forCurrency: .stellar, fiatSymbol: fiatSymbol),
             services.ledger.current.take(1).asSingle(),
             services.accounts.currentStellarAccount(fromCache: true)
                 .ifEmpty(default: StellarAccount.empty())
@@ -416,7 +417,7 @@ extension SendXLMCoordinator: SendXLMViewControllerDelegate {
     private func computeMaxSpendableAmount(for accountId: String) {
         let fiatSymbol = BlockchainSettings.App.shared.fiatCurrencyCode
         let disposable = Single.zip(
-            services.prices.fiatPrice(forAssetType: .stellar, fiatSymbol: fiatSymbol),
+            services.prices.fiatPrice(forCurrency: .stellar, fiatSymbol: fiatSymbol),
             services.limits.maxSpendableAmount(for: accountId)
         ).subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)

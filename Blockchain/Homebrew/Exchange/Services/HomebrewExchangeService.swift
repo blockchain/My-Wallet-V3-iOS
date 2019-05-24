@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 protocol HomebrewExchangeAPI {
     // Currently this filters out trades with an unsupported trading pair.

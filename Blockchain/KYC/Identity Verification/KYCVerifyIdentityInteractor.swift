@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 protocol KYCVerifyIdentityInput: class {
     func submitVerification(

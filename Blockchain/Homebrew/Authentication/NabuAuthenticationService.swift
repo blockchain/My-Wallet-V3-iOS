@@ -8,6 +8,7 @@
 
 import RxCocoa
 import RxSwift
+import PlatformKit
 
 /// Component in charge of authenticating the Nabu user.
 final class NabuAuthenticationService {

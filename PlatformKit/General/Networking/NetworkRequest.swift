@@ -8,27 +8,27 @@
 
 import RxSwift
 
-typealias HTTPHeaders = [String: String]
+public typealias HTTPHeaders = [String: String]
 
-struct NetworkRequest {
+public struct NetworkRequest {
     
-    enum NetworkError: Error {
+    public enum NetworkError: Error {
         case generic
     }
     
-    enum NetworkMethod: String {
+    public enum NetworkMethod: String {
         case get = "GET"
         case post = "POST"
         case put = "PUT"
         case delete = "DELETE"
     }
 
-    enum ContentType: String {
+    public enum ContentType: String {
         case json = "application/json"
         case formUrlEncoded = "application/x-www-form-urlencoded"
     }
     
-    var URLRequest: URLRequest {
+    public var URLRequest: URLRequest {
         let request: NSMutableURLRequest = NSMutableURLRequest(
             url: endpoint,
             cachePolicy: .reloadIgnoringLocalCacheData,
@@ -65,7 +65,7 @@ struct NetworkRequest {
     }()
     private var task: URLSessionDataTask?
     
-    init(
+    public init(
         endpoint: URL,
         method: NetworkMethod,
         body: Data? = nil,
@@ -96,15 +96,15 @@ struct NetworkRequest {
         }
     }
     
-    static func POST(url: URL, body: Data?) -> NetworkRequest {
+    public static func POST(url: URL, body: Data?) -> NetworkRequest {
         return self.init(endpoint: url, method: .post, body: body)
     }
     
-    static func PUT(url: URL, body: Data?) -> NetworkRequest {
+    public static func PUT(url: URL, body: Data?) -> NetworkRequest {
         return self.init(endpoint: url, method: .put, body: body)
     }
     
-    static func DELETE(url: URL) -> NetworkRequest {
+    public static func DELETE(url: URL) -> NetworkRequest {
         return self.init(endpoint: url, method: .delete, body: nil)
     }
 }
@@ -113,7 +113,7 @@ struct NetworkRequest {
 
 extension NetworkRequest {
     
-    static func GET<ResponseType: Decodable>(
+    public static func GET<ResponseType: Decodable>(
         url: URL,
         body: Data? = nil,
         headers: HTTPHeaders? = nil,
@@ -123,7 +123,7 @@ extension NetworkRequest {
         return NetworkCommunicator.shared.perform(request: request)
     }
 
-    static func POST(
+    public static func POST(
         url: URL,
         body: Data?,
         headers: HTTPHeaders? = nil,
@@ -133,7 +133,7 @@ extension NetworkRequest {
         return NetworkCommunicator.shared.perform(request: request, responseType: EmptyNetworkResponse.self)
     }
 
-    static func POST<ResponseType: Decodable>(
+    public static func POST<ResponseType: Decodable>(
         url: URL,
         body: Data?,
         type: ResponseType.Type,
@@ -144,7 +144,7 @@ extension NetworkRequest {
         return NetworkCommunicator.shared.perform(request: request)
     }
     
-    static func PUT(
+    public static func PUT(
         url: URL,
         body: Data?,
         headers: HTTPHeaders? = nil
@@ -153,7 +153,7 @@ extension NetworkRequest {
         return NetworkCommunicator.shared.perform(request: request, responseType: EmptyNetworkResponse.self)
     }
 
-    static func PUT<ResponseType: Decodable>(
+    public static func PUT<ResponseType: Decodable>(
         url: URL,
         body: Data?,
         type: ResponseType.Type,
@@ -166,7 +166,7 @@ extension NetworkRequest {
 
 extension NSMutableURLRequest {
 
-    func encode(params: [String : String]) {
+    public func encode(params: [String : String]) {
         let encodedParamsArray = params.map { keyPair -> String in
             let (key, value) = keyPair
             return "\(key)=\(self.percentEscapeString(value))"

@@ -8,6 +8,7 @@
 
 import RxCocoa
 import RxSwift
+import PlatformKit
 
 /// Repository for fetching Blockchain data. Accessing properties in this repository
 /// will be fetched from the cache (if available), otherwise, data will be fetched over

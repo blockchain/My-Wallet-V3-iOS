@@ -9,7 +9,7 @@
 import Foundation
 
 /// An error when interacting with the NetworkError
-internal enum NetworkError: Error {
+public enum NetworkError: Error {
     /// Error parsing a JSON response from the server
     case jsonParseError
 

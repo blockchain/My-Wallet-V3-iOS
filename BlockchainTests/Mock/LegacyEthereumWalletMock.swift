@@ -62,7 +62,7 @@ class MockLegacyEthereumWallet: LegacyEthereumWalletProtocol, MnemonicAccessAPI 
             amount: "amount",
             transactionHash: "transactionHash",
             createdAt: Date(),
-            fee: 1,
+            fee: CryptoValue.etherFromGwei(string: "1"),
             memo: "memo",
             confirmations: 12
         ).legacyTransaction

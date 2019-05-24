@@ -16,21 +16,21 @@ import Foundation
  - Copyright: Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
  */
 @objc
-final class CertificatePinner: NSObject {
+final public class CertificatePinner: NSObject {
 
     // MARK: - Properties
 
     /// The instance variable used to access functions of the `CertificatePinner` class.
-    static let shared = CertificatePinner()
+    public static let shared = CertificatePinner()
 
     // TODO: remove once migration is complete
     /// Objective-C compatible class function
-    @objc class func sharedInstance() -> CertificatePinner {
+    @objc public class func sharedInstance() -> CertificatePinner {
         return CertificatePinner.shared
     }
 
     /// Path to the local certificate file
-    @objc var localCertificatePath: String? {
+    @objc public var localCertificatePath: String? {
         guard
             let path = Bundle.main.path(forResource: "blockchain", ofType: "der", inDirectory: "Cert") else {
                 return nil
@@ -45,7 +45,7 @@ final class CertificatePinner: NSObject {
         super.init()
     }
 
-    func pinCertificate() {
+    public func pinCertificate() {
         let walletUrl = BlockchainAPI.shared.walletUrl
         guard let url = URL(string: walletUrl) else {
                 fatalError("Failed to get wallet url from Bundle.")
@@ -74,7 +74,7 @@ final class CertificatePinner: NSObject {
     }
 
     @objc
-    func didReceive(_ challenge: URLAuthenticationChallenge, completion: @escaping AuthChallengeHandler) {
+    public func didReceive(_ challenge: URLAuthenticationChallenge, completion: @escaping AuthChallengeHandler) {
         respond(to: challenge, completion: completion)
     }
 
@@ -103,20 +103,9 @@ final class CertificatePinner: NSObject {
                 let credential = URLCredential(trust: serverTrust)
                 completion(.useCredential, credential)
             } else {
-                didFailToValidate()
+                Logger.shared.error("Failed Certificate Validation")
                 completion(.cancelAuthenticationChallenge, nil)
             }
         }
-    }
-
-    func didFailToValidate() {
-        let action = UIAlertAction(title: LocalizationConstants.okString, style: .cancel) { _ in
-            UIApplication.shared.suspendApp()
-        }
-        AlertViewPresenter.shared.standardNotify(
-            message: LocalizationConstants.Errors.failedToValidateCertificateMessage,
-            title: LocalizationConstants.Errors.failedToValidateCertificateTitle,
-            actions: [action]
-        )
     }
 }

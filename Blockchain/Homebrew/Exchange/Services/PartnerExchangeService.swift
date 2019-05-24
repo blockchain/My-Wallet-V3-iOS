@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 protocol PartnerExchangeServiceDelegate {
     func partnerExchange(_ service: PartnerExchangeService, didGet exchangeRate: ExchangeRate)

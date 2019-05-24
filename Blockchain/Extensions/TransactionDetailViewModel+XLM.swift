@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 // If TransactionDetailViewModel is converted to Swift, it should implement
 // methods like the ones in this file to allow configuration with Swift classes/structs

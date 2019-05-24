@@ -71,4 +71,8 @@ public extension CryptoCurrency {
             return 8
         }
     }
+    
+    public static let all: [CryptoCurrency] = {
+        return [.bitcoin, .ethereum, .bitcoinCash, .stellar, .pax]
+    }()
 }

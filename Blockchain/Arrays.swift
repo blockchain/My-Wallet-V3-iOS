@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 extension Array where Element: Equatable {
 

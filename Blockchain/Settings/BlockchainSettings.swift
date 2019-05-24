@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /**
  Settings for the current user.

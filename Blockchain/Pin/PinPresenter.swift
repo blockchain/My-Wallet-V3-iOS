@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 /// The View that the PinPresenter displays to.
 @objc protocol PinView {

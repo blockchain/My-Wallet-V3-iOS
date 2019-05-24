@@ -8,6 +8,7 @@
 
 import Foundation
 import StoreKit
+import PlatformKit
 
 /**
  App Review Prompt

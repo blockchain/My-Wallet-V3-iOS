@@ -1,5 +1,5 @@
 //
-//  Bundle.swift
+//  UserAgent.swift
 //  Blockchain
 //
 //  Created by Maurice A. on 4/16/18.
@@ -9,9 +9,23 @@
 import Foundation
 
 @objc
+extension NetworkManager {
+    static var userAgent: String? {
+        let systemVersion = UIDevice.current.systemVersion
+        guard
+            let version = Bundle.applicationVersion,
+            let build = Bundle.applicationBuildVersion else {
+                return nil
+        }
+        let versionAndBuild = String(format: "%@ b%@", version, build)
+        return String(format: "Blockchain-iOS/%@ (iOS/%@; %@)", versionAndBuild, systemVersion)
+    }
+}
+
+@objc
 extension Bundle {
     /// The application version. Equivalent to CFBundleShortVersionString.
-    static var applicationVersion: String? {
+    public static var applicationVersion: String? {
         guard let infoDictionary = main.infoDictionary else {
             return nil
         }
@@ -21,7 +35,7 @@ extension Bundle {
         return version
     }
     /// The build version of the application. Equivalent to CFBundleVersion.
-    static var applicationBuildVersion: String? {
+    public static var applicationBuildVersion: String? {
         guard let infoDictionary = main.infoDictionary else {
             return nil
         }

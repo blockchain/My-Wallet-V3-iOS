@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView, ProgressableView {
 

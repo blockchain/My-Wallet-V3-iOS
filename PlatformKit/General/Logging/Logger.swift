@@ -9,7 +9,7 @@
 import Foundation
 
 /// Class in charge of logging debug/info/warning/error messages to a `LogDestination`.
-@objc class Logger: NSObject {
+@objc public class Logger: NSObject {
 
     private var destinations = [LogDestination]()
 
@@ -19,7 +19,7 @@ import Foundation
         return formatter
     }()
 
-    static let shared: Logger = {
+    public static let shared: Logger = {
         let logger = Logger()
         #if DEBUG
         logger.destinations.append(ConsoleLogDestination())
@@ -27,11 +27,11 @@ import Foundation
         return logger
     }()
 
-    @objc class func sharedInstance() -> Logger { return shared }
+    @objc public class func sharedInstance() -> Logger { return shared }
 
     // MARK: - Public
 
-    func debug(
+    public func debug(
         _ message: String,
         file: String = #file,
         function: String = #function,
@@ -40,7 +40,7 @@ import Foundation
         log(message, level: .debug, file: file, function: function, line: line)
     }
 
-    func info(
+    public func info(
         _ message: String,
         file: String = #file,
         function: String = #function,
@@ -49,7 +49,7 @@ import Foundation
         log(message, level: .info, file: file, function: function, line: line)
     }
 
-    func warning(
+    public func warning(
         _ message: String,
         file: String = #file,
         function: String = #function,
@@ -58,7 +58,7 @@ import Foundation
         log(message, level: .warning, file: file, function: function, line: line)
     }
 
-    func error(
+    public func error(
         _ message: String,
         file: String = #file,
         function: String = #function,
@@ -67,11 +67,11 @@ import Foundation
         log(message, level: .error, file: file, function: function, line: line)
     }
     
-    func error(_ error: Error) {
+    public func error(_ error: Error) {
         log(error.localizedDescription, level: .error)
     }
 
-    func log (
+    public func log (
         _ message: String,
         level: LogLevel,
         file: String = #file,

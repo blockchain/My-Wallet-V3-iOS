@@ -26,10 +26,13 @@ public protocol EthereumWalletBridgeAPI: class {
     var balance: Single<CryptoValue> { get }
     var name: Single<String> { get }
     var address: Single<String> { get }
-    var transactions: Single<[EthereumHistoricalTransaction]> { get }
     var account: Single<EthereumAssetAccount> { get }
     var nonce: Single<BigUInt> { get }
     var isWaitingOnEtherTransaction: Single<Bool> { get }
     
     func recordLast(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished>
+}
+
+public protocol EthereumWalletTransctionsBridgeAPI: class {
+    var transactions: Single<[EthereumHistoricalTransaction]> { get }
 }

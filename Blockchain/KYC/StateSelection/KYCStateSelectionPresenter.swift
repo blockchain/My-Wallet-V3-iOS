@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 /// Protocol definition for the state selection view during the KYC flow
 protocol KYCStateSelectionView: class {

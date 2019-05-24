@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /*
 The FromToView has a weakly referenced delegate that is called when gestures are received.

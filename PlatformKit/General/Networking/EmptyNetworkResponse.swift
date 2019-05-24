@@ -9,5 +9,5 @@
 import Foundation
 
 /// Describes a response from the network wherein the response is empty/can be ignored.
-struct EmptyNetworkResponse: Decodable {
+public struct EmptyNetworkResponse: Decodable {
 }

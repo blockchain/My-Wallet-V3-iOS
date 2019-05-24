@@ -12,7 +12,7 @@ import RxSwift
 
 public final class EthereumHistoricalTransactionService: HistoricalTransactionAPI {
     
-    public typealias Bridge = EthereumWalletBridgeAPI
+    public typealias Bridge = EthereumWalletBridgeAPI & EthereumWalletTransctionsBridgeAPI
     
     // MARK: - Properties
     
@@ -24,7 +24,7 @@ public final class EthereumHistoricalTransactionService: HistoricalTransactionAP
         self.bridge = bridge
     }
     
-    public func fetchTransactions(for accountID: AccountID) -> Single<[EthereumHistoricalTransaction]> {
+    public func fetchTransactions() -> Single<[EthereumHistoricalTransaction]> {
         return bridge.transactions
     }
 }
