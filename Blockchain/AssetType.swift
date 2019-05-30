@@ -91,21 +91,6 @@ extension AssetType {
     var maxDisplayableDecimalPlaces: Int {
         return CryptoCurrency(assetType: self).maxDisplayableDecimalPlaces
     }
-    
-    var brandImage: UIImage {
-        switch self {
-        case .bitcoin:
-            return #imageLiteral(resourceName: "Icon-BTC")
-        case .bitcoinCash:
-            return #imageLiteral(resourceName: "Icon-BCH")
-        case .ethereum:
-            return #imageLiteral(resourceName: "Icon-ETH")
-        case .stellar:
-            return #imageLiteral(resourceName: "Icon-XLM")
-        case .pax:
-            return #imageLiteral(resourceName: "Icon-PAX")
-        }
-    }
 
     var filledImageSmall: UIImage {
         switch self {
@@ -134,6 +119,21 @@ extension AssetType {
             return #imageLiteral(resourceName: "filled_xlm_large")
         case .pax:
             return #imageLiteral(resourceName: "filled_pax_large")
+        }
+    }
+
+    var whiteImageSmall: UIImage {
+        switch self {
+        case .bitcoin:
+            return #imageLiteral(resourceName: "white_btc_small")
+        case .bitcoinCash:
+            return #imageLiteral(resourceName: "white_bch_small")
+        case .ethereum:
+            return #imageLiteral(resourceName: "white_eth_small")
+        case .stellar:
+            return #imageLiteral(resourceName: "white_xlm_small")
+        case .pax:
+            return #imageLiteral(resourceName: "white_pax_small")
         }
     }
 

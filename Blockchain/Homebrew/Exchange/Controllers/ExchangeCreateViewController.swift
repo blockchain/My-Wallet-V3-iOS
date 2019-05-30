@@ -333,7 +333,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
         let transitionUpdate = TradingPairView.TradingTransitionUpdate(
             transitions: [
-                .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                .images(left: fromAsset.whiteImageSmall, right: toAsset.whiteImageSmall),
                 .titles(left: "", right: "")
             ],
             transition: .crossFade(duration: 0.2)

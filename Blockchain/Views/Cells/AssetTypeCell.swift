@@ -36,8 +36,7 @@ import PlatformKit
 
     @objc func configure(with assetType: AssetType, showChevronButton: Bool) {
         self.assetType = assetType
-        assetImageView.image = assetType.brandImage
-        assetImageView.tintColor = .white
+        assetImageView.image = assetType.whiteImageSmall
         label.text = assetType.description
         chevronButton.isHidden = !showChevronButton
     }
