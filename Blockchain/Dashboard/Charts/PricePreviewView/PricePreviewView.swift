@@ -32,10 +32,9 @@ class PricePreviewView: UIView {
         }
     }
 
-    var buttonConfig: (color: UIColor, image: UIImage)? {
-        willSet(config) {
-            actionButton.setImage(config?.image, for: .normal)
-            actionButton.imageView?.tintColor = config?.color
+    var buttonImage: UIImage? {
+        willSet(buttonImage) {
+            actionButton.setImage(buttonImage, for: .normal)
         }
     }
 
@@ -59,8 +58,6 @@ class PricePreviewView: UIView {
         self.layer.shadowOpacity = 0.1
         self.layer.shadowRadius = 4
         actionButton.imageView?.contentMode = .scaleAspectFit
-        actionButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -6, bottom: 0, right: 0)
-        actionButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         actionButton.setTitle(LocalizationConstants.Dashboard.seeCharts, for: .normal)
     }
 }

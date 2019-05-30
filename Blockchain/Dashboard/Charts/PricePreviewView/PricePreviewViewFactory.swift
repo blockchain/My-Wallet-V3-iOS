@@ -16,7 +16,7 @@ final class PricePreviewViewFactory {
         let thePricePreviewView = PricePreviewView.fromNib() as PricePreviewView
         thePricePreviewView.price = price ?? "0"
         thePricePreviewView.currencyTitle = String(format: "%@ Price", assetType.description)
-        thePricePreviewView.buttonConfig = (color: assetType.brandColor, image: assetType.symbolImageTemplate)
+        thePricePreviewView.buttonImage = assetType.filledImageSmall
         thePricePreviewView.seeChartsButtonHandler = buttonTapped
         return thePricePreviewView
     }
