@@ -133,7 +133,7 @@ extension AssetType {
         case .stellar:
             return UIColor(red: 0.07, green: 0.11, blue: 0.20, alpha: 1)
         case .pax:
-            return UIColor(red: 0.13, green: 0.24, blue: 0.65, alpha: 1)
+            return UIColor(red: 0, green: 0.32, blue: 0.17, alpha: 1)
         }
     }
     
