@@ -1347,6 +1347,7 @@ struct LocalizationConstants {
     }
 
     struct Transactions {
+        static let paxfee = NSLocalizedString("PAX Fee", comment: "String displayed to indicate that a transaction is due to a fee associated to sending PAX.")
         static let allWallets = NSLocalizedString("All Wallets", comment: "Label of selectable item that allows user to show all transactions of a certain asset")
         static let noTransactions = NSLocalizedString("No Transactions", comment: "Text displayed when no recent transactions are being shown")
         static let noTransactionsAssetArgument = NSLocalizedString("Transactions occur when you send and receive %@.", comment: "Helper text displayed when no recent transactions are being shown")
@@ -2043,7 +2044,8 @@ struct LocalizationConstants {
 // TODO: deprecate this once Obj-C is no longer using this
 /// LocalizationConstants class wrapper so that LocalizationConstants can be accessed from Obj-C.
 @objc class LocalizationConstantsObjcBridge: NSObject {
-    
+    @objc class func paxFee() -> String { return LocalizationConstants.Transactions.paxfee }
+
     @objc class func copiedToClipboard() -> String { return LocalizationConstants.Receive.copiedToClipboard }
 
     @objc class func createWalletLegalAgreementPrefix() -> String {

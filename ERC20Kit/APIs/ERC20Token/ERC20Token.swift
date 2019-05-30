@@ -28,3 +28,7 @@ extension ERC20Token {
         return assetType.rawValue
     }
 }
+
+@objc public class ERC20TokenObjcBridge: NSObject {
+    @objc public class func paxContractAddress() -> String { return PaxToken.contractAddress.rawValue }
+}

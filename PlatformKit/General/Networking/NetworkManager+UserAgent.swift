@@ -12,13 +12,14 @@ import Foundation
 extension NetworkManager {
     static var userAgent: String? {
         let systemVersion = UIDevice.current.systemVersion
+        let modelName = UIDevice.current.model
         guard
             let version = Bundle.applicationVersion,
             let build = Bundle.applicationBuildVersion else {
                 return nil
         }
         let versionAndBuild = String(format: "%@ b%@", version, build)
-        return String(format: "Blockchain-iOS/%@ (iOS/%@; %@)", versionAndBuild, systemVersion)
+        return String(format: "Blockchain-iOS/%@ (iOS/%@; %@)", versionAndBuild, systemVersion, modelName)
     }
 }
 
