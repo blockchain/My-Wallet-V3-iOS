@@ -122,6 +122,21 @@ extension AssetType {
         }
     }
 
+    var filledImageLarge: UIImage {
+        switch self {
+        case .bitcoin:
+            return #imageLiteral(resourceName: "filled_btc_large")
+        case .bitcoinCash:
+            return #imageLiteral(resourceName: "filled_bch_large")
+        case .ethereum:
+            return #imageLiteral(resourceName: "filled_eth_large")
+        case .stellar:
+            return #imageLiteral(resourceName: "filled_xlm_large")
+        case .pax:
+            return #imageLiteral(resourceName: "filled_pax_large")
+        }
+    }
+
     var symbolImageTemplate: UIImage {
         switch self {
         case .bitcoin:

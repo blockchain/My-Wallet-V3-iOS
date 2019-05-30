@@ -24,7 +24,7 @@ import UIKit
                 buttonRequest.setTitle("", for: .normal)
                 return
             }
-            imageViewAsset.image = UIImage(named: viewModel.assetImageViewName)?.withRenderingMode(.alwaysTemplate)
+            imageViewAsset.image = UIImage(named: viewModel.assetImageViewName)
             buttonRequest.setTitle(viewModel.action, for: .normal)
             labelAddress.text = viewModel.address
             updateQRCodeAndLabel()
@@ -47,8 +47,6 @@ import UIKit
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        imageViewAsset.tintColor = .brandSecondary
 
         buttonRequest.titleLabel?.font = UIFont(
             name: Constants.FontNames.montserratLight,
