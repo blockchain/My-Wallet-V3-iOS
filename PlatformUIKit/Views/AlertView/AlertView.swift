@@ -444,7 +444,7 @@ public class AlertView: UIView {
         dimming.backgroundColor = .black
         dimming.alpha = 0.0
         dimming.isAccessibilityElement = true
-        dimming.accessibilityTraits = UIAccessibilityTraits.button
+        dimming.accessibilityTraits = .button
         dimming.accessibilityHint = NSLocalizedString(
             "Double tap to close",
             comment: "Dimmed background behind a modal alert. Double tap to close."

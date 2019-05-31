@@ -9,14 +9,14 @@
 import UIKit
 
 public struct AlertModel {
-    public let image: UIImage?
-    public let imageTintColor: UIColor?
-    public let headline: String?
-    public let body: String?
-    public let note: String?
-    public let actions: [AlertAction]
-    public let dismissable: Bool
-    public let style: AlertViewStyle
+    public var image: UIImage?
+    public var imageTintColor: UIColor?
+    public var headline: String?
+    public var body: String?
+    public var note: String?
+    public var actions: [AlertAction]
+    public var dismissable: Bool
+    public var style: AlertViewStyle
     
     public init(
         headline: String?,

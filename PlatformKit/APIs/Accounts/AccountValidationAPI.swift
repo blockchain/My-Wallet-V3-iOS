@@ -15,5 +15,5 @@ public protocol AccountValidationAPI {
     typealias AccountID = String
     
     // Checks if address is valid
-    func validate(accountID: AccountID) -> Single<Bool>
+    static func validate(accountID: AccountID) -> Single<Bool>
 }

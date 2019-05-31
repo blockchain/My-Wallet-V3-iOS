@@ -88,7 +88,7 @@ class SimpleListViewController: UIViewController, SimpleListInterface {
         switch visibility {
         case .visible:
             LoadingViewPresenter.shared.showBusyView(withLoadingText: LocalizationConstants.loading)
-        case .hidden, .translucent:
+        case .hidden:
             LoadingViewPresenter.shared.hideBusyView()
         }
     }

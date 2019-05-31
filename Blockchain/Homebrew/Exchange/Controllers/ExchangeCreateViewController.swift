@@ -364,6 +364,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     
     func exchangeButtonEnabled(_ enabled: Bool) {
         exchangeButton.isEnabled = enabled
+        exchangeButton.alpha = enabled ? 1.0 : 0.5
     }
 
     func isExchangeButtonEnabled() -> Bool {

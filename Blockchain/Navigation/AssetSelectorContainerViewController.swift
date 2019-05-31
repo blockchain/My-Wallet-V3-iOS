@@ -97,10 +97,26 @@ extension AssetSelectorContainerViewController: AssetSelectorViewDelegate {
 extension AssetSelectorContainerViewController: NavigatableView {
     
     var rightNavControllerCTAType: NavigationCTAType {
+        if let child = children.first as? NavigatableView {
+            return child.rightNavControllerCTAType
+        }
+        
         return .qrCode
     }
     
+    var rightCTATintColor: UIColor {
+        if let child = children.first as? NavigatableView {
+            return child.rightCTATintColor
+        }
+        
+        return .white
+    }
+    
     func navControllerRightBarButtonTapped(_ navController: UINavigationController) {
+        if let child = children.first as? NavigatableView {
+            return child.navControllerRightBarButtonTapped(navController)
+        }
+        
         delegate?.assetSelectorContainer(self, tappedQRReaderFor: currentAsset)
     }
     

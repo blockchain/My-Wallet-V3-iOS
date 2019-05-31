@@ -282,8 +282,7 @@ extension KYCTiersViewController: KYCTiersInterface {
             LoadingViewPresenter.shared.showBusyView(
                 withLoadingText: LocalizationConstants.loading
             )
-        case .hidden,
-             .translucent:
+        case .hidden:
             LoadingViewPresenter.shared.hideBusyView()
         }
     }

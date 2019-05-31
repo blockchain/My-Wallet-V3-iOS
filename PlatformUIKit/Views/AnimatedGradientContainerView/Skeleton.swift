@@ -70,7 +70,7 @@ public extension CAGradientLayer {
         )
         let group = CAAnimationGroup()
         group.animations = [startAnimation, endAnimation]
-        group.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        group.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         group.duration = skeleton.duration
         group.repeatCount = .infinity
         add(group, forKey: Skeleton.key)

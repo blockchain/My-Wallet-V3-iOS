@@ -67,7 +67,6 @@ class ExchangeCreatePresenter {
 
     fileprivate func disableExchangeButton() {
         interface?.exchangeButtonEnabled(false)
-        exchangeButtonVisibility(.translucent)
     }
     
     fileprivate func enableExchangeButton() {

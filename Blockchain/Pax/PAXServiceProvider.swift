@@ -15,15 +15,21 @@ protocol PAXDependencies {
     var assetAccountRepository: ERC20AssetAccountRepository<PaxToken> { get }
     var historicalTransactionService: AnyERC20HistoricalTransactionService<PaxToken> { get }
     var paxService: ERC20Service<PaxToken> { get }
+    var walletService: EthereumWalletServiceAPI { get }
+    var feeService: EthereumFeeServiceAPI { get }
 }
 
 struct PAXServices: PAXDependencies {
     let assetAccountRepository: ERC20AssetAccountRepository<PaxToken>
     let historicalTransactionService: AnyERC20HistoricalTransactionService<PaxToken>
     let paxService: ERC20Service<PaxToken>
+    let walletService: EthereumWalletServiceAPI
+    let feeService: EthereumFeeServiceAPI
     
     init(wallet: Wallet = WalletManager.shared.wallet,
-         feeService: EthereumFeeServiceAPI = EthereumFeeService.shared) {
+         feeService: EthereumFeeServiceAPI = EthereumFeeService.shared,
+         walletService: EthereumWalletServiceAPI = EthereumWalletService.shared) {
+        self.feeService = feeService
         let paxAccountClient = AnyERC20AccountAPIClient<PaxToken>()
         let service = ERC20AssetAccountDetailsService(
             with: wallet.ethereum,
@@ -41,6 +47,7 @@ struct PAXServices: PAXDependencies {
             ethereumAssetAccountRepository: ethereumAssetAccountRepository,
             feeService: feeService
         )
+        self.walletService = walletService
     }
 }
 

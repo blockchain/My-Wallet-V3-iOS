@@ -51,13 +51,6 @@ final public class NetworkCommunicator: NetworkCommunicatorAPI {
         expecting: ResponseType.Type,
         completion: @escaping (NewResult<ResponseType, NetworkCommunicatorError>) -> Void) {
         
-        // Debugging
-        Logger.shared.debug("Sending \(request.httpMethod ?? "") request to '\(request.url?.absoluteString ?? "")'")
-        if let body = request.httpBody,
-            let bodyString = String(data: body, encoding: .utf8) {
-            Logger.shared.debug("Body: \(bodyString)")
-        }
-        
         let task = session.dataTask(with: request) { payload, response, error in
             
             if let error = error {
@@ -73,11 +66,6 @@ final public class NetworkCommunicator: NetworkCommunicatorAPI {
             guard let responseData = payload else {
                 completion(.failure(.payloadError(.emptyData)))
                 return
-            }
-            
-            // Debugging
-            if let responseString = String(data: responseData, encoding: .utf8) {
-                Logger.shared.debug("Response received: \(responseString)")
             }
             
             guard (200...299).contains(httpResponse.statusCode) else {
@@ -96,7 +84,6 @@ final public class NetworkCommunicator: NetworkCommunicatorAPI {
             
             if let payload = payload, error == nil {
                 do {
-                    Logger.shared.debug("Received payload: \(String(data: payload, encoding: .utf8) ?? "")")
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .secondsSince1970
                     let final = try decoder.decode(ResponseType.self, from: payload)

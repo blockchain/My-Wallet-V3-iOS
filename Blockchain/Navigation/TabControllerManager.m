@@ -22,7 +22,8 @@
 @property (strong, nonatomic) ExchangeContainerViewController *exchangeContainerViewController;
 
 @property (strong, nonatomic) PaxActivityViewController *paxActivityViewController;
-@property (strong, nonatomic) PaxComingSoonViewController *sendPaxComingSoonViewController;
+
+@property (strong, nonatomic) SendPaxViewController *sendPaxViewController;
 
 @end
 @implementation TabControllerManager
@@ -250,10 +251,10 @@
             break;
         }
         case LegacyAssetTypePax: {
-            if (!_sendPaxComingSoonViewController) {
-                _sendPaxComingSoonViewController = [[PaxComingSoonViewController alloc] init];
+            if (!_sendPaxViewController) {
+                _sendPaxViewController = [SendPaxViewController make];
             }
-            [_tabViewController setActiveViewController:_sendPaxComingSoonViewController animated:animated index:tabIndex];
+            [_tabViewController setActiveViewController:_sendPaxViewController animated:animated index:tabIndex];
             break;
         }
     }

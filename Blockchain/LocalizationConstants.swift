@@ -1289,6 +1289,12 @@ struct LocalizationConstants {
         static let paxComingSoonTitle = NSLocalizedString("USD PAX Coming Soon!", comment: "")
         static let paxComingSoonMessage = NSLocalizedString("We’re bringing USD PAX to iOS. While you wait, Send, Receive & Exchange USD PAX on the web.", comment: "")
         static let paxComingSoonLinkText = NSLocalizedString("What is USD PAX?", comment: "")
+        static let notEnoughEth = NSLocalizedString("Not Enough ETH", comment: "")
+        static let notEnoughEthDescription = NSLocalizedString("You'll need ETH to send your ERC20 Token", comment: "")
+        static let invalidDestinationAddress = NSLocalizedString("Invalid ETH Address", comment: "")
+        static let invalidDestinationDescription = NSLocalizedString("You must enter a valid ETH address to send your ERC20 Token", comment: "")
+        static let notEnough = NSLocalizedString("Not Enough", comment: "")
+        static let myPaxWallet = NSLocalizedString("My PAX Wallet", comment: "")
     }
 
     struct SendEther {

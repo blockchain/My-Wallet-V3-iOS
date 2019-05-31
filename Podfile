@@ -32,6 +32,12 @@ target 'Blockchain' do
   end
 end
 
+target 'PlatformUIKit' do
+  inhibit_all_warnings!
+    pod 'RxSwift', '~> 4.0'
+    pod 'RxCocoa', '~> 4.0'
+end
+
 target 'StellarKit' do
   pod 'RxSwift', '~> 4.0'
   pod 'RxCocoa', '~> 4.0'
@@ -85,12 +91,6 @@ target 'PlatformKit' do
     pod 'RxSwift', '~> 4.0'
     pod 'BigInt', '~> 3.1'
   end
-end
-
-
-target 'PlatformUIKit' do
-  inhibit_all_warnings!
-  pod 'RxSwift', '~> 4.0'
 end
 
 # Post Installation:

@@ -8,6 +8,7 @@
 
 import RxSwift
 
+// TODO hook up to fees for ETH and the same for PAX
 public protocol PriceServiceAPI {
     func fiatPrice(forCurrency cryptoCurrency: CryptoCurrency, fiatSymbol: String) -> Single<PriceInFiatValue>
     func fiatPrice(forCurrency cryptoCurrency: CryptoCurrency, fiatSymbol: String, timestamp: Date) -> Single<PriceInFiatValue>

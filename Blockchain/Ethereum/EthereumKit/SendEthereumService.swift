@@ -15,7 +15,7 @@ import EthereumKit
 import ERC20Kit
 
 extension EthereumWalletService {
-    static let shared = EthereumWalletService(
+    public static let shared = EthereumWalletService(
         with: WalletManager.shared.wallet.ethereum,
         ethereumAPIClient: EthereumAPIClient.shared,
         feeService: EthereumFeeService.shared,

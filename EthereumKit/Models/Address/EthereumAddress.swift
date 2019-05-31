@@ -25,6 +25,10 @@ public struct EthereumAddress: EthereumAddressProtocols {
         }
         self.rawValue = eip55Address
     }
+    
+    public var isValid: Bool {
+        return web3swiftAddress.isValid
+    }
 }
 
 extension EthereumAddress {

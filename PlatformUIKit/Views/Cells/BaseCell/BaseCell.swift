@@ -42,7 +42,7 @@ public class BaseCell: UICollectionViewCell {
     /// Implements initial cell accessibility property values.
     internal func applyAccessibility() {
         isAccessibilityElement = true
-        accessibilityTraits = UIAccessibilityTraits.none
+        accessibilityTraits = .none
         shouldGroupAccessibilityChildren = false
     }
 }

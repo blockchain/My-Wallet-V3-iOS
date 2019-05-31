@@ -165,6 +165,10 @@ public extension CryptoValue {
         return majorValue.roundTo(places: currencyType.maxDecimalPlaces)
     }
     
+    public static func zero(assetType: CryptoCurrency) -> CryptoValue {
+        return CryptoValue(currencyType: assetType, amount: 0)
+    }
+    
     public static func createFromMinorValue(_ value: BigInt, assetType: CryptoCurrency) -> CryptoValue {
         return CryptoValue(currencyType: assetType, amount: value)
     }
