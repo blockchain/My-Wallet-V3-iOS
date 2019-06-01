@@ -35,7 +35,6 @@ class SendPaxCalculator {
     typealias Model = SendPaxViewModel
     typealias Input = SendPaxInput
     typealias Output = SendPaxOutput
-    typealias TransactionProposal = ERC20TransactionProposal<PaxToken>
     typealias Event = SendMoniesEventPublic
     
     fileprivate let bag: DisposeBag = DisposeBag()

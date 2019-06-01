@@ -89,7 +89,7 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onSuccess: { [weak self] transactionFee in
                 guard let self = self else { return }
-                let gasPrice = BigUInt(transactionFee.regular.amount)
+                let gasPrice = BigUInt(transactionFee.priority.amount)
                 let gasLimitContract = BigUInt(transactionFee.gasLimitContract)
                 let ethereumTransactionFee = gasPrice * gasLimitContract
                 let result = CryptoValue.etherFromWei(string: "\(ethereumTransactionFee)")

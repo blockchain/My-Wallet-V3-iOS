@@ -280,6 +280,7 @@
 		3A34280A22249DFB000D8032 /* SideMenuFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34280822249DFB000D8032 /* SideMenuFooterView.swift */; };
 		3A34280C22249E7F000D8032 /* SideMenuFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A34280B22249E7F000D8032 /* SideMenuFooterView.xib */; };
 		3A34280D22249E7F000D8032 /* SideMenuFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A34280B22249E7F000D8032 /* SideMenuFooterView.xib */; };
+		3A36ABDA22A1DFC200A43DE8 /* SendMoniesInternalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A55854822A04FD40046168C /* SendMoniesInternalError.swift */; };
 		3A373C452188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */; };
 		3A373C462188CBCE00DDFAFD /* StellarTransactionCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A373C442188CBCE00DDFAFD /* StellarTransactionCaching.swift */; };
 		3A373C8F218BB56200DDFAFD /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511646E1208523E300C43522 /* UIDevice.swift */; };
@@ -12414,6 +12415,7 @@
 				AA54E486216D20C8005061F9 /* KYCState.swift in Sources */,
 				AAE94F3D20C70F4B005A3595 /* BIP21URI.swift in Sources */,
 				AA126CFE212CE40E005886A3 /* KYCUpdatePersonalDetailsRequest.swift in Sources */,
+				3A36ABDA22A1DFC200A43DE8 /* SendMoniesInternalError.swift in Sources */,
 				51A862BE2090DD6400B338E0 /* PairingInstructionsView.swift in Sources */,
 				3A69705C221C9A6E005FBAC2 /* ExchangeContainerViewController.swift in Sources */,
 				AAF2AF072123952500687E30 /* KYCInformationViewModel.swift in Sources */,

@@ -12,6 +12,7 @@ import PlatformKit
 import StellarKit
 import EthereumKit
 import BitcoinKit
+import ERC20Kit
 
 class TradeExecutionService: TradeExecutionAPI {
     
@@ -37,15 +38,30 @@ class TradeExecutionService: TradeExecutionAPI {
         let assetAccountRepository: AssetAccountRepository
         let feeService: FeeServiceAPI
         let xlm: XLMDependencies
+        private let paxServiceProvider: PAXServiceProvider
+        
+        var erc20Service: ERC20Service<PaxToken> {
+            return paxServiceProvider.services.paxService
+        }
+        
+        var erc20AccountRepository: ERC20AssetAccountRepository<PaxToken> {
+            return paxServiceProvider.services.assetAccountRepository
+        }
+        
+        var ethereumWalletService: EthereumWalletServiceAPI {
+            return paxServiceProvider.services.walletService
+        }
         
         init(
             repository: AssetAccountRepository = AssetAccountRepository.shared,
             cryptoFeeService: FeeServiceAPI = FeeService.shared,
-            xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared
+            xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared,
+            serviceProvider: PAXServiceProvider = PAXServiceProvider.shared
         ) {
             assetAccountRepository = repository
             feeService = cryptoFeeService
             xlm = XLMDependencies(xlm: xlmServiceProvider)
+            self.paxServiceProvider = serviceProvider
         }
     }
     
@@ -64,7 +80,9 @@ class TradeExecutionService: TradeExecutionAPI {
     private let assetAccountRepository: AssetAccountRepository
     private let dependencies: Dependencies
     private let disposables = CompositeDisposable()
+    private let bag: DisposeBag = DisposeBag()
     private var pendingXlmPaymentOperation: StellarPaymentOperation?
+    private var ethereumTransactionCandidate: EthereumTransactionCandidate?
     
     private var bitcoinTransactionFee: Single<BitcoinTransactionFee> {
         return dependencies.feeService.bitcoin
@@ -291,6 +309,35 @@ class TradeExecutionService: TradeExecutionAPI {
                     createOrderPaymentSuccess("\(fee)")
                 })
             disposables.insertWithDiscardableResult(disposable)
+        } else if assetType == .pax {
+            guard let cryptoValue = CryptoValue.paxFromMajor(string: orderTransactionLegacy.amount) else { return }
+            // swiftlint:disable force_try
+            let tokenValue = try! ERC20TokenValue<PaxToken>.init(crypto: cryptoValue)
+            let address = EthereumKit.EthereumAddress(stringLiteral: orderTransactionLegacy.to)
+            dependencies.erc20Service.evaluate(amount: tokenValue)
+                .subscribeOn(MainScheduler.instance)
+                .observeOn(MainScheduler.asyncInstance)
+                .flatMap(weak: self, { (self, proposal) -> Single<EthereumTransactionCandidate> in
+                    return self.dependencies.erc20Service.transfer(to: address, amount: tokenValue)
+                })
+                .observeOn(MainScheduler.instance)
+                .subscribe(onSuccess: { [weak self] candidate in
+                    guard let self = self else { return }
+                    self.ethereumTransactionCandidate = candidate
+                    let feeAmount = candidate.gasLimit * candidate.gasPrice
+                    let wei = CryptoValue.etherFromWei(string: "\(feeAmount)")
+                    createOrderPaymentSuccess(wei?.toDisplayString(includeSymbol: false) ?? "1234")
+                }, onError: { erc20Error in
+                    // TODO: Better error messaging
+                    if let erc20Error = erc20Error as? ERC20ServiceError {
+                        let internalError = SendMoniesInternalError(erc20error: erc20Error)
+                        error(internalError.description ?? LocalizationConstants.Errors.genericError, nil, nil)
+                    } else {
+                        error(LocalizationConstants.Errors.genericError, nil, nil)
+                    }
+                    Logger.shared.error(erc20Error)
+                })
+                .disposed(by: bag)
         } else {
             let disposable = Observable.zip(
                     bitcoinTransactionFee.asObservable(),
@@ -401,6 +448,28 @@ class TradeExecutionService: TradeExecutionAPI {
                     success()
                 })
             disposables.insertWithDiscardableResult(disposable)
+        } else if assetType == .pax {
+            guard let candidate = ethereumTransactionCandidate else {
+                Logger.shared.error("No EthereumTransactionCandidate")
+                return
+            }
+            
+            dependencies.ethereumWalletService.send(transaction: candidate)
+                .subscribeOn(MainScheduler.instance)
+                .observeOn(MainScheduler.asyncInstance)
+                .subscribe(onSuccess: { published in
+                    executionDone()
+                    success()
+                }, onError: { ethereumError in
+                    executionDone()
+                    Logger.shared.error("Failed to send PAX. Error: \(ethereumError)")
+                    error(
+                        LocalizationConstants.Errors.genericError,
+                        transactionID,
+                        ethereumError as? NabuNetworkError
+                    )
+                })
+                .disposed(by: bag)
         } else {
             isExecuting = true
             wallet.sendOrderTransaction(
@@ -454,17 +523,24 @@ fileprivate extension TradeExecutionService {
             volume: conversionQuote.volume,
             currencyRatio: conversionQuote.currencyRatio
         )
-        let refundAddress = getReceiveAddress(for: fromAccount.index, assetType: fromAccount.address.assetType)
-        let destinationAddress = getReceiveAddress(for: toAccount.index, assetType: toAccount.address.assetType)
-        let order = Order(
-            destinationAddress: destinationAddress!,
-            refundAddress: refundAddress!,
-            quote: quote
-        )
+        let refund = getReceiveAddress(for: fromAccount.index, assetType: fromAccount.address.assetType)
+        let destination = getReceiveAddress(for: toAccount.index, assetType: toAccount.address.assetType)
         
-        let disposable = process(order: order)
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
+        Maybe.zip(refund, destination)
+            .subscribeOn(MainScheduler.instance)
+            .observeOn(MainScheduler.asyncInstance)
+            .flatMap(weak: self, { (self, tuple) -> Single<Order> in
+                let refundAddress = tuple.0
+                let destinationAddress = tuple.1
+                return Single.just(Order(
+                    destinationAddress: destinationAddress,
+                    refundAddress: refundAddress,
+                    quote: quote
+                ))
+            })
+            .flatMap { order -> Single<OrderResult> in
+                return self.process(order: order)
+            }
             .subscribe(onSuccess: { [weak self] payload in
                 guard let this = self else { return }
                 // Here we should have an OrderResult object, with a deposit address.
@@ -497,7 +573,7 @@ fileprivate extension TradeExecutionService {
                 }
                 error(httpRequestError.debugDescription, nil, nil)
             })
-        disposables.insertWithDiscardableResult(disposable)
+            .disposed(by: bag)
     }
     // swiftlint:enable function_body_length
 
@@ -650,10 +726,16 @@ extension TradeExecutionService {
 }
 
 private extension TradeExecutionService {
-    func getReceiveAddress(for account: Int32, assetType: AssetType) -> String? {
+    func getReceiveAddress(for account: Int32, assetType: AssetType) -> Maybe<String> {
         if assetType == .stellar {
-            return assetAccountRepository.defaultStellarAccount()?.address.address
+            guard let address = assetAccountRepository.defaultStellarAccount()?.address.address else { return Maybe.empty() }
+            return Maybe.just(address)
         }
-        return wallet.getReceiveAddress(forAccount: account, assetType: assetType.legacy)
+        if assetType == .pax {
+            return dependencies.erc20AccountRepository.assetAccountDetails.flatMap { details -> Maybe<String> in
+                return Maybe.just(details.account.accountAddress)
+            }
+        }
+        return Maybe.just(wallet.getReceiveAddress(forAccount: account, assetType: assetType.legacy))
     }
 }

@@ -106,6 +106,8 @@ struct Constants {
         static let exchangeSubmitted = NSNotification.Name("exchangeSubmitted")
         static let transactionReceived = NSNotification.Name("transactionReceived")
         static let kycStopped = NSNotification.Name("kycStopped")
+        static let swapFlowCompleted = NSNotification.Name("swapFlowCompleted")
+        static let swapToPaxFlowCompleted = NSNotification.Name("swapToPaxFlowCompleted")
     }
     struct PushNotificationKeys {
         static let userInfoType = "type"

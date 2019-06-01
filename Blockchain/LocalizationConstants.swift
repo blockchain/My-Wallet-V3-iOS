@@ -1294,7 +1294,7 @@ struct LocalizationConstants {
         static let invalidDestinationAddress = NSLocalizedString("Invalid ETH Address", comment: "")
         static let invalidDestinationDescription = NSLocalizedString("You must enter a valid ETH address to send your ERC20 Token", comment: "")
         static let notEnough = NSLocalizedString("Not Enough", comment: "")
-        static let myPaxWallet = NSLocalizedString("My PAX Wallet", comment: "")
+        static let myPaxWallet = NSLocalizedString("My USD PAX Wallet", comment: "")
     }
 
     struct SendEther {
@@ -1831,6 +1831,10 @@ struct LocalizationConstants {
     }
 
     struct Swap {
+        static let successfulExchangeDescription = NSLocalizedString("Success! Your Exchange has been started!", comment: "A successful swap alert")
+        static let viewOrderDetails = NSLocalizedString("View Order Details", comment: "View Order Details")
+        static let exchangeStarted = NSLocalizedString("Your Exchange has been started!", comment: "Your exchange has been started")
+        static let exchangeAirdropDescription = NSLocalizedString("Even better, since you need ETH to make USD PAX trades, we just airdropped enough ETH into your Wallet to cover your first 3 transactions 🙌🏻", comment: "ETH Airdrop description")
         static let viewMySwapLimit = NSLocalizedString(
             "View My Swap Limit",
             comment: "Text displayed on the CTA when the user wishes to view their swap limits."

@@ -12,11 +12,11 @@ import web3swift
 import BigInt
 
 public struct EthereumTransactionCandidate {
-    let to: EthereumAddress
-    let gasPrice: BigUInt
-    let gasLimit: BigUInt
-    let value: BigUInt
-    let data: Data?
+    public let to: EthereumAddress
+    public let gasPrice: BigUInt
+    public let gasLimit: BigUInt
+    public let value: BigUInt
+    public let data: Data?
     
     public init(to: EthereumAddress,
                 gasPrice: BigUInt,

@@ -91,7 +91,7 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
                 
                 let transactionCandidate = EthereumTransactionCandidate(
                     to: EthereumAddress(rawValue: transaction.to.address)!,
-                    gasPrice: BigUInt(fee.regular.amount),
+                    gasPrice: BigUInt(fee.priority.amount),
                     gasLimit: BigUInt(fee.gasLimitContract),
                     value: BigUInt(0),
                     data: transaction.data
@@ -128,7 +128,7 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
                 
                 let transactionProposal = ERC20TransactionProposal(
                     from: EthereumKit.EthereumAddress(stringLiteral: ethereumAccount.account.accountAddress),
-                    gasPrice: BigUInt(fee.regular.amount),
+                    gasPrice: BigUInt(fee.priority.amount),
                     gasLimit: BigUInt(fee.gasLimitContract),
                     value: cryptoValue
                 )
@@ -171,7 +171,7 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
         assetAccountDetails: EthereumAssetAccountDetails) throws {
         
         let tokenAmount = BigUInt(cryptoValue.amount)
-        let gasPrice = BigUInt(fee.regular.amount)
+        let gasPrice = BigUInt(fee.priority.amount)
         let gasLimitContract = BigUInt(fee.gasLimitContract)
         let tokenBalance = BigUInt(tokenAcocuntDetails.balance.amount)
         let ethereumBalance = BigUInt(assetAccountDetails.balance.amount)
