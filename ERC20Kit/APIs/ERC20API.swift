@@ -55,3 +55,10 @@ public protocol ERC20TransactionEvaluationAPI {
     
     func evaluate(amount cryptoValue: ERC20TokenValue<Token>, fee: EthereumTransactionFee) -> Single<ERC20TransactionProposal<Token>>
 }
+
+public protocol ERC20TransactionMemoAPI {
+    associatedtype Token: ERC20Token
+    
+    func memo(for transactionHash: String) -> Single<String?>
+    func save(transactionMemo: String, for transactionHash: String) -> Completable
+}

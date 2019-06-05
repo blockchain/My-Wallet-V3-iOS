@@ -36,4 +36,18 @@ extension JSContext {
         }
         self.setObject(theBlock, forKeyedSubscript: functionName)
     }
+    
+    @objc func setJsFunction(named functionName: (NSCopying & NSObjectProtocol), valueFunctionBlock: @escaping (JSValue) -> Void) {
+        let theBlock: @convention(block) (JSValue) -> Void = { jsValue in
+            valueFunctionBlock(jsValue)
+        }
+        self.setObject(theBlock, forKeyedSubscript: functionName)
+    }
+    
+    @objc func setJsFunction(named functionName: (NSCopying & NSObjectProtocol), functionBlock: @escaping () -> Void) {
+        let theBlock: @convention(block) () -> Void = {
+            functionBlock()
+        }
+        self.setObject(theBlock, forKeyedSubscript: functionName)
+    }
 }

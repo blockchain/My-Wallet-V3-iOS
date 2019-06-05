@@ -24,6 +24,8 @@ class ERC20ServiceTests: XCTestCase {
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
     
+    var erc20Bridge: ERC20BridgeMock!
+    
     var accountAPIClient: ERC20AccountAPIClientMock!
     var ethereumWalletBridge: ERC20EthereumWalletBridgeMock!
     var assetAccountDetailsService: ERC20AssetAccountDetailsService<PaxToken>!
@@ -40,6 +42,8 @@ class ERC20ServiceTests: XCTestCase {
         
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
+        
+        erc20Bridge = ERC20BridgeMock()
         
         accountAPIClient = ERC20AccountAPIClientMock()
         ethereumWalletBridge = ERC20EthereumWalletBridgeMock()
@@ -60,6 +64,7 @@ class ERC20ServiceTests: XCTestCase {
         
         feeService = EthereumFeeServiceMock()
         subject = ERC20Service(
+            with: erc20Bridge,
             assetAccountRepository: assetAccountRepository,
             ethereumAssetAccountRepository: ethereumAssetAccountRepository,
             feeService: feeService
@@ -67,6 +72,7 @@ class ERC20ServiceTests: XCTestCase {
     }
     
     override func tearDown() {
+        erc20Bridge = nil
         accountAPIClient = nil
         ethereumWalletBridge = nil
         assetAccountDetailsService = nil
@@ -229,4 +235,58 @@ class ERC20ServiceTests: XCTestCase {
         
         XCTAssertEqual(result.events, expectedEvents)
     }
+    
+    func test_get_memo_for_transaction_hash() throws {
+        // Arrange
+        let expectedMemo = "expectedMemo"
+        let transactionHash = "transactionHash"
+        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        
+        erc20Bridge.memoForTransactionHashValue = Single.just(expectedMemo)
+        
+        let memoObservable = subject.memo(for: transactionHash).asObservable()
+        
+        // Act
+        let result: TestableObserver<String?> = scheduler
+            .start { memoObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<String?>>] = Recorded.events(
+            .next(
+                200,
+                expectedMemo
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
+        XCTAssertEqual(erc20Bridge.lastTransactionHashFetched, transactionHash)
+        XCTAssertEqual(erc20Bridge.lastTokenContractAddressFetched, tokenContractAddress)
+    }
+    
+    func test_save_memo_for_transaction_hash() throws {
+        // Arrange
+        let transactionHash = "transactionHash"
+        let transactionMemo = "transactionMemo"
+        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        
+        let saveMemoObservable = subject
+            .save(transactionMemo: transactionMemo, for: transactionHash)
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<Never> = scheduler
+            .start { saveMemoObservable }
+        
+        // Assert
+        guard result.events.count == 1, let value = result.events.first?.value, value.isCompleted else {
+            XCTFail("Saving should complete successfully")
+            return
+        }
+        
+        XCTAssertEqual(erc20Bridge.lastTransactionMemoSaved, transactionMemo)
+        XCTAssertEqual(erc20Bridge.lastTransactionHashSaved, transactionHash)
+        XCTAssertEqual(erc20Bridge.lastTokenContractAddressSaved, tokenContractAddress)
+    }
+    
 }

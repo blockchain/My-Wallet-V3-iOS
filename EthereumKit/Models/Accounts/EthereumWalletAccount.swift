@@ -24,3 +24,13 @@ public struct EthereumWalletAccount: WalletAccount, Codable {
         self.archived = archived
     }
 }
+
+public struct LegacyEthereumWalletAccount: Codable {
+    public let addr: String
+    public let label: String
+    
+    public init(addr: String, label: String) {
+        self.addr = addr
+        self.label = label
+    }
+}

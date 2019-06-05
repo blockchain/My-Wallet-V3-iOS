@@ -12,7 +12,7 @@ import RxSwift
 
 public final class EthereumHistoricalTransactionService: HistoricalTransactionAPI {
     
-    public typealias Bridge = EthereumWalletBridgeAPI & EthereumWalletTransctionsBridgeAPI
+    public typealias Bridge = EthereumWalletBridgeAPI & EthereumWalletTransactionsBridgeAPI
     
     // MARK: - Properties
     

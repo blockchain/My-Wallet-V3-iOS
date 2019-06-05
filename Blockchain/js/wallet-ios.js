@@ -2298,6 +2298,11 @@ function WalletOptions (api) {
 
 // MARK: - Ethereum
 
+MyWalletPhone.ethereumAccountExists = function() {
+    var eth = MyWallet.wallet.eth;
+    return (eth.defaultAccount ? 1 : 0);
+};
+
 MyWalletPhone.getEthExchangeRate = function(currencyCode) {
 
     var success = function(result) {
@@ -2332,6 +2337,43 @@ MyWalletPhone.getEthTransactions = function() {
     } else {
         return {};
     }
+}
+
+MyWalletPhone.getEthTransactionsAsync = function(secondPassword) {
+    var convertTransactions = function () {
+        var eth = MyWallet.wallet.eth;
+        let transactions = MyWalletPhone.convertEthTransactionsToJSON(eth.defaultAccount.txs);
+        return Promise.resolve(transactions);
+    };
+    var success = function(transactions) {
+        objc_on_getEthTransactionsAsync_success(transactions);
+    };
+    var error = function(error) {
+        objc_on_getEthTransactionsAsync_error(error);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(convertTransactions)
+        .then(success)
+        .catch(error);
+}
+
+MyWalletPhone.createEthAccountIfNeeded = function(secondPassword) {
+    var eth = MyWallet.wallet.eth;
+    if (eth && eth.defaultAccount) { 
+        return Promise.resolve();
+    };
+    if (!MyWallet.getIsInitialized()) {
+        return Promise.reject('Failed to create account.');
+    };  
+    if (MyWallet.wallet.isDoubleEncrypted) {
+        if (secondPassword) {
+            return eth.createAccount(void 0, secondPassword);
+        } else {
+            return Promise.reject('Failed to create account.');
+        };
+    } else {
+        return eth.createAccount(void 0);
+    };
 }
 
 MyWalletPhone.convertEthTransactionsToJSON = function(transactions) {
@@ -2585,74 +2627,22 @@ MyWalletPhone.getEtherTransactionNonceAsync = function () {
     fetchNonce().then(success, error);
 };
 
-MyWalletPhone.getEtherAddressAsync = function(helperText) {
-
-    var eth = MyWallet.wallet.eth;
-
-    if (eth && eth.defaultAccount) {
-        objc_on_get_ether_address_success(eth.defaultAccount.address);
-    } else {
-        if (MyWallet.wallet.isDoubleEncrypted) {
-            MyWalletPhone.getSecondPassword(function (pw) {
-                eth.createAccount(void 0, pw).then(function() {
-                    objc_on_get_ether_address_success(eth.defaultAccount.address);
-                });
-            }, function(){}, helperText);
-        } else {
-            eth.createAccount(void 0).then(function() {
-                objc_on_get_ether_address_success(eth.defaultAccount.address);
-            });
-        }
-    }
-}
-
-MyWalletPhone.getEtherPendingTxAsync = function () {
-    var success = function (nonce) {
-        objc_on_get_ether_pending_tx_success_dict(nonce);
+MyWalletPhone.getEtherAddressAsync = function(secondPassword) {
+    var success = function () {
+        objc_on_get_ether_address_success(MyWallet.wallet.eth.defaultAccount.address);
     };
 
     var error = function (e) {
-        objc_on_get_ether_pending_tx_error(e);
+        objc_on_get_ether_address_error(e);
     };
 
-    var getPendingTx = function () {
-        var pending = currentEtherPayment;
-
-        if (pending == null) {
-            return Promise.reject('Invalid pending tx');
-        }
-
-        var eth = MyWallet.wallet.eth;
-        var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount);
-        pending.sign(privateKey);
-
-        var p = {
-            raw: pending.toRaw(),
-            json: pending.toJSON()
-        }
-
-        return Promise.resolve(p);
+    var getLastAddress = function () {
+        return Promise.resolve(MyWallet.wallet.eth.defaultAccount.address);
     }
-
-    getPendingTx().then(success, error);
-};
-
-MyWalletPhone.getEtherPrivateKeyAsync = function(helperText) {
-    var eth = MyWallet.wallet.eth;
-    if (eth && eth.defaultAccount) {
-        var secondPassword = null;
-        var privateKey = eth.getPrivateKeyForAccount(eth.defaultAccount, secondPassword);
-        var defaultAccountJSON = eth.defaultAccount.toJSON();
-        var pkd = {
-            defaultAccountJSON: defaultAccountJSON,
-            hex: privateKey.toString('hex'),
-            base64: privateKey.toString('base64'),
-            utf8: privateKey.toString('utf8'),
-        }
-        objc_on_get_ether_private_key_success_dict(pkd);
-    } else {
-        objc_on_get_ether_private_key_error('Failed to fetch private key');
-    }
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(getLastAddress)
+        .then(success)
+        .catch(error);
 }
 
 MyWalletPhone.sweepEtherPayment = function() {
@@ -2664,24 +2654,23 @@ MyWalletPhone.recordLastTransaction = function(hash) {
     MyWallet.wallet.eth.setLastTx(hash);
 }
 
-MyWalletPhone.recordLastTransactionAsync = function(txHash) {
+MyWalletPhone.recordLastTransactionAsync = function(txHash, secondPassword) {
     var success = function () {
         objc_on_recordLastTransactionAsync();
     };
-
     var error = function (e) {
         objc_on_recordLastTransactionAsync_error(e);
     };
-
     var setLastTx = function (hash) {
         return MyWallet.wallet.eth.setLastTxPromise(hash);
-    }
-
-    setLastTx(txHash).then(success, error);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(setLastTx(txHash))
+        .then(success)
+        .catch(error);
 }
 
 MyWalletPhone.isWaitingOnTransaction = function() {
-
     var eth = MyWallet.wallet.eth;
     var options = walletOptions.getValue();
     var lastTxFuse = options.ethereum.lastTxFuse;
@@ -2690,7 +2679,100 @@ MyWalletPhone.isWaitingOnTransaction = function() {
        return tx.hash === eth.lastTx;
     }) &&
     eth.lastTxTimestamp + lastTxFuse * 1000 > new Date().getTime();
-}
+};
+
+MyWalletPhone.isWaitingOnTransactionAsync = function(secondPassword) {
+    var success = function (isWaiting) {
+        objc_on_isWaitingOnTransactionAsync(isWaiting);
+    };
+    var error = function (e) {
+        objc_on_isWaitingOnTransactionAsync_error(e);
+    };
+    var waiting = function () {
+        return Promise.resolve(MyWalletPhone.isWaitingOnTransaction());
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(waiting)
+        .then(success)
+        .catch(error);
+};
+
+MyWalletPhone.saveEtherAccountAsync = function (privateKey, label) {
+    var success = function () {
+        objc_on_didSaveEtherAccountAsync();
+    };
+    var error = function (e) {
+        objc_on_error_savingEtherAccountAsync(e);
+    };
+    var saveAccount = function (accountPrivateKey, accountLabel) {
+        var eth = MyWallet.wallet.eth;
+        if (eth && eth.defaultAccount) {
+            return Promise.reject("Account already exists");
+        } else {
+            return eth.createAccountFromPrivateKey(accountPrivateKey, accountLabel);
+        }
+    }
+    saveAccount(accountLabel).then(success, error);
+};
+
+MyWalletPhone.getEtherAccountsAsync = function (secondPassword) {
+    var fetchAccounts = function () {
+        var eth = MyWallet.wallet.eth;
+        var accounts = [
+            eth.defaultAccount.toJSON()
+        ];
+        return Promise.resolve(accounts);
+    };
+    var success = function (accounts) {
+        objc_on_didGetEtherAccountsAsync(accounts);
+    };
+    var error = function (e) {
+        console.log('Error fetching accounts')
+        console.log(e);
+        objc_on_error_gettingEtherAccountsAsync(e);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(fetchAccounts)
+        .then(success)
+        .catch(error);
+};
+
+MyWalletPhone.getERC20TokensAsync = function (secondPassword) {
+    var getERC20Tokens = function () {
+        var erc20 = MyWallet.wallet.eth.erc20;
+        if (erc20) return Promise.resolve(erc20);
+        return Promise.reject('failed to fetch ERC20Tokens')
+    };
+    var success = function (tokens) {
+        objc_on_didGetERC20TokensAsync(tokens);
+    };
+    var error = function (e) {
+        objc_on_error_gettingERC20TokensAsync(e);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(getERC20Tokens)
+        .then(success)
+        .catch(error);
+};
+
+MyWalletPhone.setERC20TokensAsync = function (erc20Tokens, secondPassword) {
+    var setERC20Tokens = function (tokens) {
+        var tokensParsed = JSON.parse(tokens);
+        return MyWallet.wallet.eth.setERC20Tokens(tokensParsed);
+    };
+    var success = function () {
+        objc_on_didSetERC20TokensAsync();
+    };
+    var error = function (e) {
+        console.log('ERROR setERC20TokensAsync')
+        console.log(e);
+        objc_on_error_settingERC20TokensAsync(e);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(setERC20Tokens(erc20Tokens))
+        .then(success)
+        .catch(error);
+};
 
 MyWalletPhone.getMobileMessage = function(languageCode) {
     var options = walletOptions.getValue();
@@ -2784,6 +2866,23 @@ MyWalletPhone.getAvailableEthBalance = function() {
     MyWallet.wallet.eth.accounts[0].fetchBalance().then(function() {
             MyWallet.wallet.eth.accounts[0].getAvailableBalance().then(success).catch(error);
     });
+}
+
+MyWalletPhone.getAvailableEthBalanceAsync = function(secondPassword) {
+    var success = function(result) {
+        objc_on_fetch_available_eth_balance_success(result.amount, result.fee);
+    };
+    var error = function(e) {
+        console.log('Error getting eth balance');
+        console.log(e);
+        objc_on_fetch_available_eth_balance_error(e);
+    };
+    var fetchBalance = function () {
+        return MyWallet.wallet.eth.accounts[0].fetchBalance().then(function() {
+            MyWallet.wallet.eth.accounts[0].getAvailableBalance().then(success).catch(error);
+        });
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword).then(fetchBalance);
 }
 
 MyWalletPhone.getLabelForEthAccount = function() {

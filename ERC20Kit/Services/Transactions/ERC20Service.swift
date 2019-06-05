@@ -38,13 +38,16 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
         return ethereumAssetAccountRepository.assetAccountDetails.asObservable().asSingle()
     }
     
+    private let bridge: ERC20BridgeAPI
     private let assetAccountRepository: ERC20AssetAccountRepository<Token>
     private let ethereumAssetAccountRepository: EthereumAssetAccountRepository
     private let feeService: EthereumFeeServiceAPI
 
-    public init(assetAccountRepository: ERC20AssetAccountRepository<Token>,
+    public init(with bridge: ERC20BridgeAPI,
+                assetAccountRepository: ERC20AssetAccountRepository<Token>,
                 ethereumAssetAccountRepository: EthereumAssetAccountRepository,
                 feeService: EthereumFeeServiceAPI) {
+        self.bridge = bridge
         self.assetAccountRepository = assetAccountRepository
         self.ethereumAssetAccountRepository = ethereumAssetAccountRepository
         self.feeService = feeService
@@ -185,5 +188,21 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
             throw ERC20ServiceError.insufficientTokenBalance
         }
     }
-        
+}
+
+extension ERC20Service: ERC20TransactionMemoAPI {
+    public func memo(for transactionHash: String) -> Single<String?> {
+        return bridge.memo(
+            for: transactionHash,
+            tokenContractAddress: Token.contractAddress.rawValue
+        )
+    }
+    
+    public func save(transactionMemo: String, for transactionHash: String) -> Completable {
+        return bridge.save(
+            transactionMemo: transactionMemo,
+            for: transactionHash,
+            tokenContractAddress: Token.contractAddress.rawValue
+        )
+    }
 }

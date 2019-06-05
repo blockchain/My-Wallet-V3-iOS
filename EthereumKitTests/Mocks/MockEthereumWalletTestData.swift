@@ -26,7 +26,8 @@ struct MockEthereumWalletTestData {
     
     static let privateKey = EthereumPrivateKey(
         mnemonic: MockEthereumWalletTestData.mnemonic,
-        password: MockEthereumWalletTestData.password
+        password: MockEthereumWalletTestData.password,
+        data: MockEthereumWalletTestData.privateKeyData
     )
     static let keyPair = EthereumKeyPair(
         accountID: MockEthereumWalletTestData.account,

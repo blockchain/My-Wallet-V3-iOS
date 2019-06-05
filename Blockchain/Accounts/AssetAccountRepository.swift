@@ -163,7 +163,7 @@ class AssetAccountRepository {
                 return Disposables.create()
             }
             
-            self.wallet.fetchEthereumBalance({ balance in
+            self.wallet.fetchEthereumBalance(with: nil, success: { balance in
                 let account = AssetAccount(
                     index: 0,
                     address: AssetAddressFactory.create(fromAddressString: ethereumAddress, assetType: .ethereum),

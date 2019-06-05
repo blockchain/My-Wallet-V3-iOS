@@ -11,14 +11,14 @@ import PlatformKit
 import EthereumKit
 import RxSwift
 
-public protocol ERC20WalletTransctionsBridgeAPI: class {
+public protocol ERC20WalletTranscationsBridgeAPI: class {
     associatedtype Token
     var transactions: Single<[EthereumTransaction]> { get }
 }
 
 public class AnyERC20HistoricalTransactionService<Token: ERC20Token>: TokenizedHistoricalTransactionAPI {
     public typealias Model = ERC20HistoricalTransaction<Token>
-    public typealias Bridge = ERC20WalletTransctionsBridgeAPI
+    public typealias Bridge = ERC20WalletTranscationsBridgeAPI
     public typealias PageModel = PageResult<Model>
     
     private let bridge: EthereumWalletBridgeAPI

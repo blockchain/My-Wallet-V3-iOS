@@ -22,11 +22,6 @@ public protocol EthereumWalletServiceAPI {
 }
 
 public final class EthereumWalletService: EthereumWalletServiceAPI {
-    
-    // TODOs:
-    // * Support for 2nd PW: https://blockchain.atlassian.net/browse/IOS-2193
-    // * Support for legacy wallets
-    
     public typealias Bridge = EthereumWalletBridgeAPI
     
     private var isWaitingOnEtherTransaction: Single<Void> {
@@ -102,8 +97,6 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
     }
     
     private func record(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> {
-        print("transaction: \(transaction)")
-        print("transaction.web3swiftTransaction: \(transaction.web3swiftTransaction)")
         return bridge.recordLast(transaction: transaction)
     }
 }

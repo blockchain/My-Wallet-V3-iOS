@@ -38,7 +38,8 @@ class EthereumTransactionEncoderTests: XCTestCase {
             accountID: expectedAccountString,
             privateKey: EthereumPrivateKey(
                 mnemonic: mnemonicsString,
-                password: password
+                password: password,
+                data: MockEthereumWalletTestData.privateKeyData
             )
         )
         

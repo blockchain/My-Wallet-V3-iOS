@@ -65,4 +65,13 @@ extension Single {
     }
 }
 
-
+extension PrimitiveSequence where TraitType == SingleTrait {
+    public func flatMapCompletable<A: AnyObject>(weak object: A, _ selector: @escaping (A, ElementType) throws -> Completable)
+        -> Completable {
+        return asObservable()
+            .flatMap(weak: object) { object, value in
+                try selector(object, value).asObservable()
+            }
+            .asCompletable()
+    }
+}

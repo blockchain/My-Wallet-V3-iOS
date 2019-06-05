@@ -9,6 +9,7 @@
 import UIKit
 import PlatformKit
 import EthereumKit
+import ERC20Kit
 import RxSwift
 
 extension TransactionsViewController {
@@ -44,6 +45,9 @@ final class TransactionsEthereumViewController: TransactionsViewController {
     private var transactions: [EtherTransaction] = []
     
     private let disposables = CompositeDisposable()
+    
+    private let repository = ETHServiceProvider.shared.repository
+    
     private let assetAccountRepository = ETHServiceProvider.shared.assetAccountRepository
     private let transactionService = ETHServiceProvider.shared.transactionService
     
@@ -109,26 +113,23 @@ final class TransactionsEthereumViewController: TransactionsViewController {
         let tableViewController = UITableViewController()
         tableViewController.tableView = tableView
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(getHistory), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(reload), for: .valueChanged)
         tableViewController.refreshControl = refreshControl
-    }
-    
-    @objc private func getHistory() {
-        LoadingViewPresenter.shared.showBusyView(
-            withLoadingText: LocalizationConstants.ObjCStrings.BC_STRING_LOADING_LOADING_TRANSACTIONS
-        )
-        
-        WalletManager.shared.wallet.perform(
-            #selector(getHistory),
-            with: nil,
-            afterDelay: 0.1
-        )
     }
     
     private func loadTransactions() {
         let disposable = transactionService.fetchTransactions()
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
+            .do(onDispose: { [weak self] in
+                self?.refreshControl.endRefreshing()
+            })
+            .do(onSuccess: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            })
+            .do(onError: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            })
             .subscribe(onSuccess: { [weak self] ethereumTransactions in
                 guard let `self` = self else { return }
                 
@@ -138,14 +139,13 @@ final class TransactionsEthereumViewController: TransactionsViewController {
                 self.transactions = legacyTransactions
                 self._noTransactionsView.isHidden = self.transactions.count > 0
                 self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
             }, onError: { [weak self] _ in
                 guard let `self` = self else { return }
                 
                 self._noTransactionsView.isHidden = self.transactions.count > 0
                 self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
             })
+
         disposables.insertWithDiscardableResult(disposable)
     }
     
