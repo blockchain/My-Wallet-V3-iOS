@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import ERC20Kit
 import RxSwift
 import PlatformKit
 import BitcoinKit
@@ -20,6 +21,9 @@ enum TradeExecutionAPIError: Error {
     /// an amount more than their minimum balance, we will
     /// return this error. 
     case exceededMaxVolume(CryptoValue)
+
+    /// Wraps an `ERC20ServiceError`
+    case erc20Error(ERC20ServiceError)
 }
 
 protocol TradeExecutionAPI {
@@ -68,5 +72,5 @@ protocol TradeExecutionAPI {
     /// return `nil` for this function.
     /// For more information on minimum balances, please refer to this:
     /// https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance
-    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Single<TradeExecutionAPIError?>
+    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Completable
 }

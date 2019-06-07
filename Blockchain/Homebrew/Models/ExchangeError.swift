@@ -21,6 +21,10 @@ enum ExchangeError: Error, Equatable {
     /// from the JS layer.
     case insufficientFundsForFees(AssetType)
     case waitingOnEthereumPayment
+
+    /// Error when there is not enough gas (ETH) to spend to complete an ERC20 transaction.
+    case insufficientGasForERC20Tx(AssetType)
+
     case `default`(String?)
 }
 
@@ -48,6 +52,8 @@ extension ExchangeError {
             return left == right
         case (.noVolumeProvided, .noVolumeProvided):
             return true
+        case (.insufficientGasForERC20Tx(let left), insufficientGasForERC20Tx(let right)):
+            return left == right
         default:
             return false
         }
@@ -78,6 +84,8 @@ extension ExchangeError {
             return String(format: LocalizationConstants.Errors.notEnoughXForFees, cryptoValue.symbol)
         case .waitingOnEthereumPayment:
             return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
+        case .insufficientGasForERC20Tx(_):
+            return LocalizationConstants.SendAsset.notEnoughEth
         case .default:
             return LocalizationConstants.Errors.genericError
         }
@@ -109,6 +117,8 @@ extension ExchangeError {
             return nil
         case .noVolumeProvided:
             return nil
+        case .insufficientGasForERC20Tx(let assetType):
+            return String(format: "\(LocalizationConstants.SendAsset.notEnoughEthDescription), %@.", assetType.description)
         case .default(let value):
             return value
         }
@@ -130,6 +140,8 @@ extension ExchangeError {
             return cryptoValue.currencyType.assetType.errorImage
         case .insufficientFunds(let cryptoValue):
             return cryptoValue.currencyType.assetType.errorImage
+        case .insufficientGasForERC20Tx(_):
+            return #imageLiteral(resourceName: "eth_bad.pdf")
         case .default,
              .noVolumeProvided:
             return #imageLiteral(resourceName: "error-triangle.pdf")
@@ -148,6 +160,8 @@ extension ExchangeError {
                 pathComponents: ["hc", "en-us", "articles", "360018353031-What-are-the-minimum-and-maximum-amounts-I-can-Swap-"],
                 queryParameters: nil
             )
+        case .insufficientGasForERC20Tx(let assetType) where assetType == AssetType.pax:
+            return URL(string: Constants.Url.ethGasExplanationForPax)
         default:
             return nil
         }

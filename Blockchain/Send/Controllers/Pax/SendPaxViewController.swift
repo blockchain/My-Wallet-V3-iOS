@@ -140,7 +140,7 @@ class SendPaxViewController: UIViewController {
             style: .sheet
         )
         if error == .insufficientFeeCoverage {
-            guard let url = URL(string: "https://support.blockchain.com/hc/en-us/articles/360027492092-Why-do-I-need-ETH-to-send-my-PAX-") else { return }
+            guard let url = URL(string: Constants.Url.ethGasExplanationForPax) else { return }
             let action = AlertAction(style: .confirm(LocalizationConstants.AnnouncementCards.learnMore), metadata: .url(url))
             alert.actions = [action]
         }

@@ -150,6 +150,7 @@ struct Constants {
         static let airdropWaitlist = blockchainHome + "/getcrypto"
         static let requiredIdentityVerificationURL = "https://support.blockchain.com/hc/en-us/articles/360018359871-What-Blockchain-products-require-identity-verification-"
         static let learnMoreAboutPaxURL = "https://support.blockchain.com/hc/en-us/sections/360004368351-USD-Pax-FAQ"
+        static let ethGasExplanationForPax = "https://support.blockchain.com/hc/en-us/articles/360027492092-Why-do-I-need-ETH-to-send-my-PAX-"
     }
     struct Wallet {
         static let swipeToReceiveAddressCount = 5
