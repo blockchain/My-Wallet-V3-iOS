@@ -89,8 +89,7 @@ public class HorizontalContainerCell: NestedCollectionViewCell, Container {
         let availableTitleWidth = width - titleHorizontalPadding - detailWidth
         
         if let title = model.title {
-            let titleAttributes = [NSAttributedStringKey.font: BaseCell.sectionTitleFont()]
-            titleHeight = NSAttributedString(string: title, attributes: titleAttributes).heightForWidth(width: availableTitleWidth)
+            titleHeight = NSAttributedString(string: title, attributes: [.font: BaseCell.sectionTitleFont()]).heightForWidth(width: availableTitleWidth)
             titleToCollection = titleToCollectionView
         }
         
@@ -104,7 +103,7 @@ public class HorizontalContainerCell: NestedCollectionViewCell, Container {
         isAccessibilityElement = false
         shouldGroupAccessibilityChildren = true
         title.accessibilityLabel = title.text
-        title.accessibilityTraits = UIAccessibilityTraitHeader
+        title.accessibilityTraits = .header
     }
     
     // MARK: Class Methods

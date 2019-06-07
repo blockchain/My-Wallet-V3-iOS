@@ -21,7 +21,7 @@ class EtherTransactionTests: XCTestCase {
             amount: "0.09888244",
             transactionHash: "transactionHash",
             createdAt: Date(),
-            fee: 231000,
+            fee: CryptoValue.etherFromGwei(string: "231000"),
             memo: "memo",
             confirmations: 12
         )

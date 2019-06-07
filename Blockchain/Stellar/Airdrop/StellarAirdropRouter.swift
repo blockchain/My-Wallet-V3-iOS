@@ -8,6 +8,7 @@
 
 import RxSwift
 import StellarKit
+import PlatformKit
 
 /// Router for handling the XLM airdrop flow
 class StellarAirdropRouter: DeepLinkRouting {

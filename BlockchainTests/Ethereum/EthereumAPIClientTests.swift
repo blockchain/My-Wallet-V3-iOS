@@ -49,7 +49,10 @@ class EthereumAPIClientTests: XCTestCase {
 
     func test_push_transaction() {
         // Arrange
-        let transaction = EthereumTransactionFinalisedBuilder().build()!
+        let candidate = EthereumTransactionCandidateBuilder().build()!
+        let transaction = EthereumTransactionFinalisedBuilder()
+            .with(candidate: candidate)
+            .build()!
         let expectedResponse: EthereumKit.EthereumPushTxResponse
             = EthereumPushTxResponse(txHash: transaction.transactionHash)
         

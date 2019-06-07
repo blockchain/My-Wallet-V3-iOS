@@ -32,7 +32,7 @@ open class ERC20AssetAccountRepository<Token: ERC20Token>: AssetAccountRepositor
     
     // MARK: Private Functions
     
-    fileprivate func fetchAssetAccountDetails(for accountID: String) -> Maybe<Details> {
+    private func fetchAssetAccountDetails(for accountID: String) -> Maybe<Details> {
         return service.accountDetails(for: accountID).do(onNext: { [weak self] account in
             self?.privateAccountDetails.accept(account)
         })

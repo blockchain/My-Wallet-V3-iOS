@@ -36,10 +36,13 @@ public class ERC20AssetAccountDetailsService<Token: ERC20Token>: AssetAccountDet
     public func accountDetails(for accountID: AccountID) -> Maybe<AccountDetails> {
         return bridge.address
             .flatMap { [weak self] address -> Single<(String, CryptoValue)> in
-                guard let self = self else { return Single.error(ERC20Error.unknown) }
-                return self.service.balance(for: address)
+                guard let self = self else { throw ERC20Error.unknown }
+                guard let ethereumAddress = EthereumAddress(rawValue: address) else {
+                    throw ERC20Error.unknown
+                }
+                return self.service.balance(for: ethereumAddress)
                     .flatMap { balance -> Single<(String, CryptoValue)> in
-                        return Single.just((address, balance))
+                        return Single.just((address, balance.value))
                     }
             }
             .flatMap { value -> Single<AccountDetails> in
@@ -59,36 +62,3 @@ public class ERC20AssetAccountDetailsService<Token: ERC20Token>: AssetAccountDet
     }
 }
 
-public protocol ERC20BalanceServiceAPI {
-    associatedtype Token: ERC20Token
-    
-    func balance(for address: String) -> Single<CryptoValue>
-}
-
-public class AnyERC20BalanceService<Token: ERC20Token>: ERC20BalanceServiceAPI {
-    
-    public var ethereumAddress: Single<String> {
-        return bridge.address
-    }
-    
-    public var balanceForDetaultAccount: Single<CryptoValue> {
-        return ethereumAddress
-            .flatMap { [weak self] address -> Single<CryptoValue> in
-                guard let self = self else { return Single.error(ERC20Error.unknown) }
-                return self.balance(for: address)
-            }
-    }
-    
-    private let bridge: EthereumWalletBridgeAPI
-    private let accountClient: AnyERC20AccountAPIClient<Token>
-    
-    init<C: ERC20AccountAPIClientAPI>(with bridge: EthereumWalletBridgeAPI, accountClient: C) where C.Token == Token {
-        self.bridge = bridge
-        self.accountClient = AnyERC20AccountAPIClient(accountAPIClient: accountClient)
-    }
-    
-    public func balance(for address: String) -> Single<CryptoValue> {
-        return self.accountClient.fetchWalletAccount(ethereumAddress: address)
-            .map { Token.cryptoValueFrom(minor: $0.balance) ?? Token.cryptoValue(from: Decimal(0)) }
-    }
-}

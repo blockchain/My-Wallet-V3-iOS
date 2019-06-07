@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import PlatformKit
 import PlatformUIKit
 import SafariServices
 import Veriff

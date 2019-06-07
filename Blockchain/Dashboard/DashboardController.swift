@@ -407,7 +407,7 @@ final class DashboardController: UIViewController {
             .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { priceMap in
                 AssetType.all.forEach { type in
-                    let price = priceMap[type]?.priceInFiat ?? FiatValue.create(amount: 0, currencyCode: fiatCurrencyCode)
+                    let price = priceMap[type.cryptoCurrency]?.priceInFiat ?? FiatValue.create(amount: 0, currencyCode: fiatCurrencyCode)
                     let formattedPrice = price.toDisplayString(includeSymbol: true)
                     switch type {
                     case .bitcoin:
@@ -446,7 +446,7 @@ final class DashboardController: UIViewController {
                             AssetType.stellar: stellar,
                             AssetType.pax: pax
                         ])
-                    }, onError: { _ in
+                    }, onError: { error in
                         self.reloadBalances([
                             AssetType.bitcoin: self.getBtcBalance(),
                             AssetType.ethereum: self.getEthBalance(),

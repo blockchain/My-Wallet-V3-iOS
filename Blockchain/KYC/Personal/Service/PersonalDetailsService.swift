@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 class PersonalDetailsService: NSObject, PersonalDetailsAPI {
 

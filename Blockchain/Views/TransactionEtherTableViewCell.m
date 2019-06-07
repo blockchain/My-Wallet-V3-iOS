@@ -6,6 +6,7 @@
 //  Copyright © 2017 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+#import <ERC20Kit/ERC20Kit.h>
 #import "TransactionEtherTableViewCell.h"
 #import "EtherTransaction.h"
 #import "NSDateFormatter+TimeAgoString.h"
@@ -52,8 +53,9 @@
         self.actionLabel.text = [BC_STRING_RECEIVED uppercaseString];
         self.actionLabel.textColor = UIColor.aqua;
     } else {
+        BOOL isPaxTransaction = [[self.transaction.to uppercaseString] isEqualToString:[ERC20TokenObjcBridge.paxContractAddress uppercaseString]];
         [self.ethButton setBackgroundColor:UIColor.red];
-        self.actionLabel.text = [BC_STRING_SENT uppercaseString];
+        self.actionLabel.text = isPaxTransaction ? [LocalizationConstantsObjcBridge.paxFee uppercaseString] : [BC_STRING_SENT uppercaseString];
         self.actionLabel.textColor = UIColor.red;
     }
     

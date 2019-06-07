@@ -9,6 +9,8 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import PlatformKit
+import ERC20Kit
 
 /// A repository for `AssetAccount` objects
 // TICKET: [IOS-2087] - Integrate PlatformKit Account Repositories
@@ -19,15 +21,18 @@ class AssetAccountRepository {
 
     private let wallet: Wallet
     private let xlmServiceProvider: XLMServiceProvider
+    private let paxAccountRepository: ERC20AssetAccountRepository<PaxToken>
     private let stellarAccountService: StellarAccountAPI
     private var cachedAccounts = BehaviorRelay<[AssetAccount]?>(value: nil)
     private let disposables = CompositeDisposable()
 
     init(
         wallet: Wallet = WalletManager.shared.wallet,
-        xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared
+        xlmServiceProvider: XLMServiceProvider = XLMServiceProvider.shared,
+        paxServiceProvider: PAXServiceProvider = PAXServiceProvider.shared
     ) {
         self.wallet = wallet
+        self.paxAccountRepository = paxServiceProvider.services.assetAccountRepository
         self.xlmServiceProvider = xlmServiceProvider
         self.stellarAccountService = xlmServiceProvider.services.accounts
     }
@@ -46,8 +51,18 @@ class AssetAccountRepository {
         }
         
         if assetType == .pax {
-            Logger.shared.info(".pax currently not supported.")
-            return Maybe.empty()
+            return paxAccountRepository.assetAccountDetails.flatMap {
+                let account = AssetAccount(
+                    index: 0,
+                    address: AssetAddressFactory.create(
+                        fromAddressString: $0.account.accountAddress,
+                        assetType: .pax
+                    ),
+                    balance: $0.balance.majorValue,
+                    name: "My USD PAX Wallet"
+                )
+                return Maybe.just([account])
+            }
         }
         
         if fromCache {
@@ -148,7 +163,7 @@ class AssetAccountRepository {
                 return Disposables.create()
             }
             
-            self.wallet.fetchEthereumBalance({ balance in
+            self.wallet.fetchEthereumBalance(with: nil, success: { balance in
                 let account = AssetAccount(
                     index: 0,
                     address: AssetAddressFactory.create(fromAddressString: ethereumAddress, assetType: .ethereum),

@@ -8,6 +8,7 @@
 
 import Foundation
 import PlatformUIKit
+import PlatformKit
 import SafariServices
 import RxSwift
 
@@ -74,12 +75,13 @@ class ExchangeCreateViewController: UIViewController {
 
     // MARK: Private Properties
 
-    fileprivate var presenter: ExchangeCreatePresenter!
-    fileprivate var dependencies: ExchangeDependencies = ExchangeServices()
-    fileprivate var assetAccountListPresenter: ExchangeAssetAccountListPresenter!
-    fileprivate var fromAccount: AssetAccount!
-    fileprivate var toAccount: AssetAccount!
-    fileprivate let disposables = CompositeDisposable()
+    private var presenter: ExchangeCreatePresenter!
+    private var dependencies: ExchangeDependencies = ExchangeServices()
+    private var assetAccountListPresenter: ExchangeAssetAccountListPresenter!
+    private var fromAccount: AssetAccount!
+    private var toAccount: AssetAccount!
+    private let disposables = CompositeDisposable()
+    private let bag: DisposeBag = DisposeBag()
 
     // MARK: Lifecycle
     
@@ -101,6 +103,7 @@ class ExchangeCreateViewController: UIViewController {
             })
         disposables.insertWithDiscardableResult(disposable)
         exchangeButton.isExclusiveTouch = true
+        setupNotifications()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,6 +138,40 @@ class ExchangeCreateViewController: UIViewController {
         exchangeButtonBottomConstraint.constant = isAboveSE ? 16.0 : 0.0
         view.setNeedsLayout()
         view.layoutIfNeeded()
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.when(Constants.NotificationKeys.swapFlowCompleted) { [weak self] _ in
+            guard let self = self else { return }
+            self.showSwapSuccessAlert()
+        }
+        
+        NotificationCenter.when(Constants.NotificationKeys.swapToPaxFlowCompleted) { [weak self] _ in
+            guard let self = self else { return }
+            self.isETHAirdropEligible()
+                .subscribeOn(MainScheduler.instance)
+                .observeOn(MainScheduler.asyncInstance)
+                .subscribe(onSuccess: { eligible in
+                    switch eligible {
+                    case true:
+                        self.showETHAirdropAlert()
+                    case false:
+                        self.showSwapSuccessAlert()
+                    }
+                }, onError: { error in
+                    Logger.shared.error(error)
+                })
+            .disposed(by: self.bag)
+        }
+    }
+    
+    private func isETHAirdropEligible() -> Single<Bool> {
+        return BlockchainDataRepository.shared.nabuUser.take(1).asSingle().flatMap { user -> Single<Bool> in
+            guard let tiers = user.tiers else { return Single.just(false) }
+            guard let tags = user.tags else { return Single.just(false) }
+            let eligible = tiers.current == .tier2 && tags.powerPax == nil
+            return Single.just(eligible)
+        }
     }
 
     fileprivate func dependenciesSetup() -> Completable {
@@ -184,6 +221,53 @@ class ExchangeCreateViewController: UIViewController {
         guard let controller = AppCoordinator.shared.tabControllerManager.tabViewController else { return }
         viewController.modalPresentationStyle = .overCurrentContext
         controller.present(viewController, animated: true, completion: nil)
+    }
+    
+    private func showETHAirdropAlert() {
+        let alert = AlertModel(
+            headline: LocalizationConstants.Swap.exchangeStarted,
+            body: LocalizationConstants.Swap.exchangeAirdropDescription,
+            actions: [exchangeHistoryAction],
+            image: #imageLiteral(resourceName: "green-checkmark"),
+            style: .sheet
+        )
+        let alertView = AlertView.make(with: alert) { action in
+            guard case let .block(block)? = action.metadata else { return }
+            block()
+        }
+        alertView.show()
+    }
+    
+    private func showSwapSuccessAlert() {
+        let alert = AlertModel(
+            headline: LocalizationConstants.Swap.successfulExchangeDescription,
+            body: nil,
+            actions: [exchangeHistoryAction],
+            image: #imageLiteral(resourceName: "green-checkmark"),
+            style: .sheet
+        )
+        let alertView = AlertView.make(with: alert) { action in
+            guard case let .block(block)? = action.metadata else { return }
+            block()
+        }
+        alertView.show()
+    }
+    
+    private var exchangeHistoryAction: AlertAction {
+        return AlertAction(
+            style: .default(LocalizationConstants.Swap.viewOrderDetails),
+            metadata: .block({
+                guard let root = UIApplication.shared.keyWindow?.rootViewController else {
+                        Logger.shared.error("No navigation controller found")
+                        return
+                }
+                let controller = ExchangeListViewController.make(with: self.dependencies)
+                let navController = BaseNavigationController(rootViewController: controller)
+                navController.modalTransitionStyle = .coverVertical
+                root.present(navController, animated: true, completion: nil)
+            }
+            )
+        )
     }
     
     // MARK: - IBActions
@@ -309,8 +393,6 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
                 )
             case .hidden:
                 LoadingViewPresenter.shared.hideBusyView()
-            default:
-                Logger.shared.warning("Visibility not handled")
             }
         case .updatePrimaryLabel(let value):
             primaryAmountLabel.attributedText = value
@@ -332,7 +414,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
 
         let transitionUpdate = TradingPairView.TradingTransitionUpdate(
             transitions: [
-                .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                .images(left: fromAsset.whiteImageSmall, right: toAsset.whiteImageSmall),
                 .titles(left: "", right: "")
             ],
             transition: .crossFade(duration: 0.2)
@@ -363,6 +445,7 @@ extension ExchangeCreateViewController: ExchangeCreateInterface {
     
     func exchangeButtonEnabled(_ enabled: Bool) {
         exchangeButton.isEnabled = enabled
+        exchangeButton.alpha = enabled ? 1.0 : 0.5
     }
 
     func isExchangeButtonEnabled() -> Bool {

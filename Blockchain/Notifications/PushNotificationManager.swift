@@ -8,6 +8,7 @@
 
 import Foundation
 import UserNotifications
+import PlatformKit
 
 /**
  Manager object for push notifications

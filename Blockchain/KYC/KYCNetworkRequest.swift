@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 /// Handles network requests for the KYC flow
 final class KYCNetworkRequest {

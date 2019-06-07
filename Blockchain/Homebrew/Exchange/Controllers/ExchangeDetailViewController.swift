@@ -9,6 +9,7 @@
 import Foundation
 import SafariServices
 import PlatformUIKit
+import PlatformKit
 
 protocol ExchangeDetailDelegate: class {
     func onViewLoaded()
@@ -220,10 +221,15 @@ extension ExchangeDetailViewController: UICollectionViewDelegateFlowLayout {
                     self.coordinator.handle(event: .confirmExchange(order))
                     self.dismiss(animated: false, completion: nil)
                 }
-            case .locked:
+            case .locked(let transaction, _):
                 footer.actionBlock = { [weak self] in
                     guard let this = self else { return }
                     this.dismiss(animated: true, completion: nil)
+                    if transaction.to.assetType == .pax {
+                        NotificationCenter.default.post(Notification(name: Constants.NotificationKeys.swapToPaxFlowCompleted))
+                    } else {
+                        NotificationCenter.default.post(Notification(name: Constants.NotificationKeys.swapFlowCompleted))
+                    }
                 }
             case .overview:
                 footer.actionBlock = {

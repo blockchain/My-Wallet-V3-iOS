@@ -18,7 +18,7 @@ import BigInt
 public protocol EthereumWalletAccountBridgeAPI: class {
     var ethereumWallets: Single<[EthereumWalletAccount]> { get }
     
-    func save(keyPair: EthereumKeyPair, label: String) -> Single<String>
+    func save(keyPair: EthereumKeyPair, label: String) -> Completable
 }
 
 public protocol EthereumWalletBridgeAPI: class {
@@ -26,10 +26,14 @@ public protocol EthereumWalletBridgeAPI: class {
     var balance: Single<CryptoValue> { get }
     var name: Single<String> { get }
     var address: Single<String> { get }
-    var transactions: Single<[EthereumHistoricalTransaction]> { get }
     var account: Single<EthereumAssetAccount> { get }
     var nonce: Single<BigUInt> { get }
     var isWaitingOnEtherTransaction: Single<Bool> { get }
     
-    func recordLast(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished>
+    func recordLast(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> // TODO: CHECK THIS
 }
+
+public protocol EthereumWalletTransactionsBridgeAPI: class {
+    var transactions: Single<[EthereumHistoricalTransaction]> { get }
+}
+

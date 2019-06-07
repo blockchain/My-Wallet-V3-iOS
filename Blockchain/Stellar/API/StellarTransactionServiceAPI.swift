@@ -134,7 +134,7 @@ class StellarTransactionServiceAPI: SimpleListServiceAPI {
         blockOperation?.start()
     }
     
-    func nextPageBefore(identifier: String) {
+    func nextPageBefore(identifier: String, output: SimpleListOutput?) {
         // TODO: Not necessary given that we aren't paginating
     }
 

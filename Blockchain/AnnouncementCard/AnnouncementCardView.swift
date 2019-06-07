@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PlatformKit
 
 class AnnouncementCardView: UIView {
 

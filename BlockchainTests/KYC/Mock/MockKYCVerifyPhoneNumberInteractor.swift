@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import PlatformKit
 
 class MockKYCVerifyPhoneNumberInteractor: KYCVerifyPhoneNumberInteractor {
     var shouldSucceed = true

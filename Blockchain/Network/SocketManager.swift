@@ -9,6 +9,7 @@
 import Foundation
 import Starscream
 import RxSwift
+import PlatformKit
 
 class SocketManager {
     static let shared = SocketManager()

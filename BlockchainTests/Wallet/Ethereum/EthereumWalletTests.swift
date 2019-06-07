@@ -8,20 +8,30 @@
 
 import XCTest
 import RxSwift
+import RxTest
 @testable import PlatformKit
 @testable import EthereumKit
+@testable import ERC20Kit
 @testable import PlatformUIKit
 @testable import Blockchain
 
 class EthereumWalletTests: XCTestCase {
+    
+    var scheduler: TestScheduler!
+    var disposeBag: DisposeBag!
     
     var subject: EthereumWallet!
     var legacyWalletMock: MockLegacyEthereumWallet!
 
     override func setUp() {
         super.setUp()
+        
+        scheduler = TestScheduler(initialClock: 0)
+        disposeBag = DisposeBag()
+        
         legacyWalletMock = MockLegacyEthereumWallet()
         subject = EthereumWallet(wallet: legacyWalletMock)
+        _ = subject.walletLoaded().subscribeOn(scheduler)
     }
 
     override func tearDown() {
@@ -31,112 +41,306 @@ class EthereumWalletTests: XCTestCase {
     }
     
     func test_wallet_balance() {
-        let expectation = self.expectation(description: "the wallet should return the correct balance")
-
-        _ = subject.balance
-            .subscribe(onSuccess: { balance in
-                XCTAssertEqual(balance, CryptoValue.etherFromMajor(decimal: 1337))
-                expectation.fulfill()
-            }, onError: nil)
-
-        waitForExpectations(timeout: 5)
+        // Arrange
+        let expectedBalance: CryptoValue = CryptoValue.etherFromMajor(decimal: Decimal(1337.0))
+        let balanceObservable: Observable<CryptoValue> = subject
+            .balance
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<CryptoValue> = scheduler
+            .start { balanceObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<CryptoValue>>] = Recorded.events(
+            .next(
+                200,
+                expectedBalance
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
     }
     
     func test_wallet_name() {
-        let expectation = self.expectation(description: "the wallet should return the correct name")
-
-        _ = subject.name
-            .subscribe(onSuccess: { name in
-                XCTAssertEqual(name, "account: 0, assetType: 1")
-                expectation.fulfill()
-            }, onError: nil)
-
-        waitForExpectations(timeout: 5)
+        // Arrange
+        let expectedName = "My ETH Wallet"
+        let nameObservable: Observable<String> = subject
+            .name
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<String> = scheduler
+            .start { nameObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<String>>] = Recorded.events(
+            .next(
+                200,
+                expectedName
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
     }
 
     func test_wallet_address() {
-        let expectation = self.expectation(description: "the wallet should return the correct address")
+        // Arrange
+        let expectedAddress = "address"
+        let addressObservable: Observable<String> = subject
+            .address
+            .asObservable()
         
-        _ = subject.address
-            .subscribe(onSuccess: { addressString in
-                XCTAssertEqual(addressString, "address")
-                expectation.fulfill()
-            }, onError: nil)
+        // Act
+        let result: TestableObserver<String> = scheduler
+            .start { addressObservable }
         
-        waitForExpectations(timeout: 5)
+        // Assert
+        let expectedEvents: [Recorded<Event<String>>] = Recorded.events(
+            .next(
+                200,
+                expectedAddress
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
     }
     
     func test_wallet_transactions() {
-        let expectation = self.expectation(description: "the wallet should return the correct transactions")
-
-        _ = subject.transactions
-            .subscribe(onSuccess: { transactions in
-                let expectedTransactions: [EthereumHistoricalTransaction] = [
-                    EthereumHistoricalTransaction(
-                        identifier: "identifier",
-                        fromAddress: EthereumHistoricalTransaction.Address(publicKey: "fromAddress.publicKey"),
-                        toAddress: EthereumHistoricalTransaction.Address(publicKey: "toAddress.publicKey"),
-                        direction: .credit,
-                        amount: "amount",
-                        transactionHash: "transactionHash",
-                        createdAt: Date(),
-                        fee: 1,
-                        memo: "memo",
-                        confirmations: 12
-                    )
-                ].compactMap { $0 }
-                XCTAssertEqual(transactions.count, expectedTransactions.count)
-                
-                expectation.fulfill()
-            }, onError: nil)
-
-        waitForExpectations(timeout: 5)
+        // Arrange
+        let expectedTransactions: [EthereumHistoricalTransaction] = [
+            EthereumHistoricalTransaction(
+                identifier: "transactionHash",
+                fromAddress: EthereumHistoricalTransaction.Address(publicKey: "fromAddress.publicKey"),
+                toAddress: EthereumHistoricalTransaction.Address(publicKey: "toAddress.publicKey"),
+                direction: .credit,
+                amount: "amount",
+                transactionHash: "transactionHash",
+                createdAt: Date(),
+                fee: CryptoValue.etherFromGwei(string: "231000"),
+                memo: "memo",
+                confirmations: 12
+            )
+        ].compactMap { $0 }
+        
+        let legacyTransactions = expectedTransactions.compactMap { $0.legacyTransaction }
+        legacyWalletMock.getEthereumTransactionsCompletion = .success(legacyTransactions)
+        
+        let transactionsObservable: Observable<[EthereumHistoricalTransaction]> = subject
+            .transactions
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<[EthereumHistoricalTransaction]> = scheduler
+            .start { transactionsObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<[EthereumHistoricalTransaction]>>] = Recorded.events(
+            .next(
+                200,
+                expectedTransactions
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
     }
     
     func test_wallet_account() {
-        let expectation = self.expectation(description: "the wallet should return the correct account details")
-
-        _ = subject.account
-            .subscribe(onSuccess: { account in
-                let expectedAccount = EthereumAssetAccount(
-                    walletIndex: 0,
-                    accountAddress: "address",
-                    name: "account: 0, assetType: 1"
-                )
-                XCTAssertEqual(account.walletIndex, expectedAccount.walletIndex)
-                XCTAssertEqual(account.accountAddress, expectedAccount.accountAddress)
-                XCTAssertEqual(account.name, expectedAccount.name)
-                expectation.fulfill()
-            }, onError: nil)
-
-        waitForExpectations(timeout: 5)
+        // Arrange
+        let expectedAccount = EthereumAssetAccount(
+            walletIndex: 0,
+            accountAddress: MockEthereumWalletTestData.account,
+            name: "My ETH Wallet"
+        )
+        
+        let accountObservable: Observable<EthereumAssetAccount> = subject
+            .account
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<EthereumAssetAccount> = scheduler
+            .start { accountObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<EthereumAssetAccount>>] = Recorded.events(
+            .next(
+                200,
+                expectedAccount
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
     }
     
     func test_wallet_not_initialised() {
-        let expectation = self.expectation(description: "the wallet should return a not initialised error")
+        // Arrange
+        legacyWalletMock.ethereumAccountsCompletion = .failure(
+            MockLegacyEthereumWallet.MockLegacyEthereumWalletError.notInitialized
+        )
         
-        legacyWalletMock.getEtherAddressCompletion = .failure(.notInitialized)
-        legacyWalletMock.labelForAccount = nil
-        legacyWalletMock.getEthBalanceTruncatedNumberValue = nil
-        legacyWalletMock.ethTransactions = nil
+        let expectedAccount = EthereumAssetAccount(
+            walletIndex: 0,
+            accountAddress: MockEthereumWalletTestData.account,
+            name: "My ETH Wallet"
+        )
         
-        _ = Single.zip(
-                subject.balance,
-                subject.name,
-                subject.address,
-                subject.transactions,
-                subject.account
+        let walletObservable: Observable<EthereumAssetAccount> = subject
+            .account
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<EthereumAssetAccount> = scheduler
+            .start { walletObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<EthereumAssetAccount>>] = Recorded.events(
+            .error(200, Blockchain.WalletError.unknown)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
+    }
+    
+    func test_get_token_accounts() {
+        // Arrange
+        let paxTokenAccount = ERC20TokenAccount(
+            label: "My PAX Wallet",
+            contractAddress: PaxToken.contractAddress.rawValue,
+            hasSeen: false,
+            transactionNotes: [
+                "transaction_hash": "memo"
+            ]
+        )
+        let expectedTokenAccounts: [String: ERC20TokenAccount] = [ PaxToken.metadataKey: paxTokenAccount ]
+
+        let tokenAccountsObservable: Observable<[String: ERC20TokenAccount]> = subject
+            .erc20TokenAccounts
+            .asObservable()
+
+        // Act
+        let result: TestableObserver<[String: ERC20TokenAccount]> = scheduler
+            .start { tokenAccountsObservable }
+
+        // Assert
+        let expectedEvents: [Recorded<Event<[String: ERC20TokenAccount]>>] = Recorded.events(
+            .next(
+                200,
+                expectedTokenAccounts
+            ),
+            .completed(200)
+        )
+
+        XCTAssertEqual(result.events, expectedEvents)
+    }
+    
+    func test_save_token_accounts() {
+        // Arrange
+        let paxTokenAccount = ERC20TokenAccount(
+            label: "My PAX Wallet",
+            contractAddress: PaxToken.contractAddress.rawValue,
+            hasSeen: false,
+            transactionNotes: [
+                "transaction_hash": "memo"
+            ]
+        )
+        let tokenAccounts: [String: ERC20TokenAccount] = [ PaxToken.metadataKey: paxTokenAccount ]
+        
+        let saveTokenAccountsObservable: Observable<Never> = subject
+            .save(erc20TokenAccounts: tokenAccounts)
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<Never> = scheduler
+            .start { saveTokenAccountsObservable }
+        
+        // Assert
+        guard result.events.count == 1, let value = result.events.first?.value, value.isCompleted else {
+            XCTFail("Saving should complete successfully")
+            return
+        }
+        
+        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"pax\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":false,\"tx_notes\":{\"transaction_hash\":\"memo\"}}}")
+    }
+    
+    func test_get_transaction_memo_for_token_transaction_hash() {
+        // Arrange
+        let expectedMemo = "memo"
+        
+        let transactionHash = "transaction_hash"
+        let tokenKey = PaxToken.metadataKey
+        
+        let memoObservable: Observable<String?> = subject
+            .memo(for: transactionHash, tokenKey: tokenKey)
+            .asObservable()
+        
+        // Act
+        let result: TestableObserver<String?> = scheduler
+            .start { memoObservable }
+        
+        // Assert
+        let expectedEvents: [Recorded<Event<String?>>] = Recorded.events(
+            .next(
+                200,
+                expectedMemo
+            ),
+            .completed(200)
+        )
+        
+        XCTAssertEqual(result.events, expectedEvents)
+    }
+    
+    func test_save_transaction_memo_for_token_transaction_hash() {
+        // Arrange
+        let memo = "memo"
+        
+        let transactionHash = "transactionHash"
+        let tokenKey = PaxToken.metadataKey
+        
+        let saveTokenAccountsObservable: Observable<Never> = subject
+            .save(
+                transactionMemo: memo,
+                for: transactionHash,
+                tokenKey: tokenKey
             )
-            .subscribe(onSuccess: { _ in
-                XCTFail("The wallet should return an error")
-            }, onError: { e in
-                if let error = e as? Blockchain.WalletError, error == .notInitialized {
-                    expectation.fulfill()
-                    return
-                }
-                XCTFail("expected a not initialised error")
-            })
+            .asObservable()
         
-        waitForExpectations(timeout: 5)
+        // Act
+        let result: TestableObserver<Never> = scheduler
+            .start { saveTokenAccountsObservable }
+        
+        // Assert
+        guard result.events.count == 1, let value = result.events.first?.value, value.isCompleted else {
+            XCTFail("Saving should complete successfully")
+            return
+        }
+        
+        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"pax\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":false,\"tx_notes\":{\"transactionHash\":\"memo\",\"transaction_hash\":\"memo\"}}}")
+    }
+}
+
+extension ERC20TokenAccount: Equatable {
+    public static func == (lhs: ERC20TokenAccount, rhs: ERC20TokenAccount) -> Bool {
+        return lhs.label == rhs.label
+            && lhs.contractAddress == rhs.contractAddress
+            && lhs.hasSeen == rhs.hasSeen
+            && lhs.transactionNotes == rhs.transactionNotes
+    }
+}
+
+extension EthereumHistoricalTransaction: Equatable {
+    public static func == (lhs: EthereumHistoricalTransaction, rhs: EthereumHistoricalTransaction) -> Bool {
+        return lhs.amount == rhs.amount
+            && lhs.confirmations == rhs.confirmations
+            && Calendar(identifier: .gregorian).compare(lhs.createdAt, to: rhs.createdAt, toGranularity: Calendar.Component.nanosecond) == .orderedSame
+            && lhs.direction == rhs.direction
+            && lhs.fee == rhs.fee
+            && lhs.fromAddress == rhs.fromAddress
+            && lhs.memo == rhs.memo
+            && lhs.toAddress == rhs.toAddress
+            && lhs.transactionHash == rhs.transactionHash
     }
 }

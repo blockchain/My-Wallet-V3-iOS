@@ -46,7 +46,8 @@ public class EthereumKeyPairDeriver: EthereumKeyPairDeriverAPI {
                 accountID: accountAddress,
                 privateKey: EthereumPrivateKey(
                     mnemonic: mnemonic,
-                    password: password
+                    password: password,
+                    data: privateKey
                 )
             )
         )

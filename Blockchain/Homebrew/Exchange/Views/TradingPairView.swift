@@ -7,6 +7,7 @@
 //
 
 import PlatformUIKit
+import PlatformKit
 
 protocol TradingPairViewDelegate: class {
     func onLeftButtonTapped(_ view: TradingPairView, title: String)
@@ -89,7 +90,7 @@ class TradingPairView: NibBasedView {
         
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [
-                .images(left: pair.from.brandImage, right: pair.to.brandImage),
+                .images(left: pair.from.whiteImageSmall, right: pair.to.whiteImageSmall),
                 .titles(left: pair.from.description, right: pair.to.description),
                 .swapImage(#imageLiteral(resourceName: "trading-pair-arrow").withRenderingMode(.alwaysTemplate))
             ],
@@ -190,7 +191,7 @@ extension TradingPairView {
         // is built and how it is to be used for the exchangeLocked screen
         let transitionUpdate = TradingTransitionUpdate(
             transitions: [.swapImage(#imageLiteral(resourceName: "trading-pair-arrow")),
-                          .images(left: fromAsset.brandImage, right: toAsset.brandImage),
+                          .images(left: fromAsset.whiteImageSmall, right: toAsset.whiteImageSmall),
                           .titles(left: "123 BTC", right: "123 ETH")
             ],
             transition: .none

@@ -77,8 +77,8 @@ class EthereumWalletBridgeMock: EthereumWalletBridgeAPI, EthereumWalletAccountBr
         return Single.just([])
     }
     
-    func save(keyPair: EthereumKeyPair, label: String) -> Single<String> {
-        return Single.just("")
+    func save(keyPair: EthereumKeyPair, label: String) -> Completable {
+        return Completable.empty()
     }
     
     // MARK: - MnemonicAccessAPI

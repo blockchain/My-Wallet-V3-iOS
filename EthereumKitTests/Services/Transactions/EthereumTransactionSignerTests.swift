@@ -53,6 +53,7 @@ class EthereumTransactionSignerTests: XCTestCase {
         let result = subject
             .sign(
                 transaction: costedTransaction,
+                nonce: nonce,
                 keyPair: keyPair
             )
         

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 extension NetworkManager {
     static func registerDeviceForPushNotifications(withDeviceToken token: String) {

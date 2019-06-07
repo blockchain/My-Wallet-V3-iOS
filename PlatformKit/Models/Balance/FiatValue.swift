@@ -35,6 +35,10 @@ extension FiatValue {
     public static func create(amount: Decimal, currencyCode: String) -> FiatValue {
         return FiatValue(currencyCode: currencyCode, amount: amount)
     }
+    
+    public static func zero(currencyCode: String) -> FiatValue {
+        return FiatValue(currencyCode: currencyCode, amount: 0.0)
+    }
 }
 
 extension FiatValue: Money {

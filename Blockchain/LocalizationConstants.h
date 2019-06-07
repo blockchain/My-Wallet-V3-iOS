@@ -168,10 +168,8 @@
 
 #define BC_STRING_PAYMENT_REQUEST_BITCOIN_ARGUMENT_ARGUMENT NSLocalizedString(@"Please send %@ to bitcoin address.\n%@", nil)
 #define BC_STRING_PAYMENT_REQUEST_BITCOIN_CASH_ARGUMENT NSLocalizedString(@"Please send BCH to the Bitcoin Cash address\n%@", nil)
-#define BC_STRING_PAYMENT_REQUEST_ETHER_ARGUMENT NSLocalizedString(@"Please send ether to %@.", nil)
 #define BC_STRING_AMOUNT NSLocalizedString(@"Amount", nil)
 #define BC_STRING_PAYMENT_REQUEST_HTML NSLocalizedString(@"Please send payment to bitcoin address (<a href=\"https://blockchain.info/wallet/bitcoin-faq\">help?</a>): %@", nil)
-#define BC_STRING_PAYMENT_REQUEST_ETHER_SUBJECT NSLocalizedString(@"Ether payment request", nil)
 #define BC_STRING_CLOSE NSLocalizedString(@"Close", nil)
 
 #define BC_STRING_TRANSACTION_DETAILS NSLocalizedString(@"Transaction details", nil)
@@ -561,7 +559,6 @@
 #define BC_STRING_AT NSLocalizedString(@"at", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_TITLE NSLocalizedString(@"Contract addresses are not supported.", nil)
 #define BC_STRING_CONTRACT_ADDRESSES_NOT_SUPPORTED_MESSAGE NSLocalizedString(@"At the moment we only support ETH. You cannot receive REP, ICN, GNT, GNO, DGD, BCP.", nil)
-#define BC_STRING_RECEIVE_ETHER_REENTER_SECOND_PASSWORD_INSTRUCTIONS NSLocalizedString(@"Tap the Request tab to setup your ether address.", nil)
 
 #define BC_STRING_NOW_SUPPORTING_ETHER_TITLE NSLocalizedString(@"Now supporting Ether", nil)
 #define BC_STRING_NOW_SUPPORTING_ETHER_DESCRIPTION NSLocalizedString(@"You asked, we listened. We’re excited to announce that your Blockchain wallet will now allow you to seamlessly send and receive ether!", nil)

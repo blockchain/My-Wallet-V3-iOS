@@ -142,7 +142,7 @@ public class AlertView: UIView {
     }
     
     public func registerForNotifications() {
-        NotificationCenter.when(.UIApplicationDidEnterBackground) { [weak self] _ in
+        NotificationCenter.when(UIApplication.didEnterBackgroundNotification) { [weak self] _ in
             guard let self = self else { return }
             self.teardown()
         }
@@ -444,7 +444,7 @@ public class AlertView: UIView {
         dimming.backgroundColor = .black
         dimming.alpha = 0.0
         dimming.isAccessibilityElement = true
-        dimming.accessibilityTraits = UIAccessibilityTraitButton
+        dimming.accessibilityTraits = .button
         dimming.accessibilityHint = NSLocalizedString(
             "Double tap to close",
             comment: "Dimmed background behind a modal alert. Double tap to close."

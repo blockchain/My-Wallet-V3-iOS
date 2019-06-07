@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import StellarKit
+import PlatformKit
 
 enum ExchangeCoordinatorEvent {
     case createPartnerExchange(country: KYCCountry, animated: Bool)

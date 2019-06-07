@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// Extension for wallet-related alerts
 extension AlertViewPresenter {

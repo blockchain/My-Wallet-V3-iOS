@@ -68,7 +68,8 @@ class EthereumKeyPairDeriverTests: XCTestCase {
             accountID: expectedAccount,
             privateKey: EthereumPrivateKey(
                 mnemonic: mnemonic,
-                password: password
+                password: password,
+                data: MockEthereumWalletTestData.privateKeyData
             )
         )
         let keyDerivationInput = EthereumKeyDerivationInput(

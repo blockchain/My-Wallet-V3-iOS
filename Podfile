@@ -32,6 +32,12 @@ target 'Blockchain' do
   end
 end
 
+target 'PlatformUIKit' do
+  inhibit_all_warnings!
+    pod 'RxSwift', '~> 4.0'
+    pod 'RxCocoa', '~> 4.0'
+end
+
 target 'StellarKit' do
   pod 'RxSwift', '~> 4.0'
   pod 'RxCocoa', '~> 4.0'
@@ -60,6 +66,7 @@ target 'ERC20Kit' do
   pod 'RxSwift', '~> 4.0'
   pod 'RxCocoa', '~> 4.0'
   pod 'BigInt', '~> 3.1'
+  pod 'web3swift.pod', '~> 2.1.10'
 
   target 'ERC20KitTests' do
     inherit! :search_paths
@@ -68,11 +75,13 @@ target 'ERC20Kit' do
     pod 'RxBlocking', '~> 4.0'
     pod 'RxTest', '~> 4.0'
     pod 'BigInt', '~> 3.1'
+    pod 'web3swift.pod', '~> 2.1.10'
   end
 end
 
 target 'PlatformKit' do
   inhibit_all_warnings!
+  pod 'Alamofire', '~> 4.7'
   pod 'RxSwift', '~> 4.0'
   pod 'BigInt', '~> 3.1'
   

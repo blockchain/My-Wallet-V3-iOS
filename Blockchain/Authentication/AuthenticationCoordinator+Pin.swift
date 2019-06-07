@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 extension AuthenticationCoordinator: PEPinEntryControllerDelegate {
 

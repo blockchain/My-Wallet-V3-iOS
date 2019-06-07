@@ -8,6 +8,7 @@
 
 import RxSwift
 import StellarKit
+import PlatformKit
 
 struct StellarRegisterCampaignResponse: Codable {
     let message: String

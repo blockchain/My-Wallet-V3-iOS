@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import Blockchain
+import PlatformKit
 import RxBlocking
 
 class WalletServiceTests: XCTestCase {

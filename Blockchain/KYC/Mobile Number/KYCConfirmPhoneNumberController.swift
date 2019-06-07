@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButtonContainerView {
 

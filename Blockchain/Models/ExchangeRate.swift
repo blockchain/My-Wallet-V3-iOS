@@ -8,6 +8,7 @@
 
 import Foundation
 import JavaScriptCore
+import PlatformKit
 
 /// Used to return exchange information from the ShapeShift API and wallet-options to the ExchangeCreateViewController.
 @objc class ExchangeRate: NSObject {

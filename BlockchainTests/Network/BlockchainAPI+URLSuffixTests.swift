@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import PlatformKit
 @testable import Blockchain
 
 class BlockchainAPIURLSuffixTests: XCTestCase {

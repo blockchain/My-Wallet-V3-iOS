@@ -7,6 +7,7 @@
 //
 
 import PlatformUIKit
+import PlatformKit
 
 protocol KYCVerifyIdentityView: class {
     func showDocumentTypes(_ types: [KYCDocumentType])

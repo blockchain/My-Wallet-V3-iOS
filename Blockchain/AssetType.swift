@@ -91,19 +91,49 @@ extension AssetType {
     var maxDisplayableDecimalPlaces: Int {
         return CryptoCurrency(assetType: self).maxDisplayableDecimalPlaces
     }
-    
-    var brandImage: UIImage {
+
+    var filledImageSmall: UIImage {
         switch self {
         case .bitcoin:
-            return #imageLiteral(resourceName: "Icon-BTC")
+            return #imageLiteral(resourceName: "filled_btc_small")
         case .bitcoinCash:
-            return #imageLiteral(resourceName: "Icon-BCH")
+            return #imageLiteral(resourceName: "filled_bch_small")
         case .ethereum:
-            return #imageLiteral(resourceName: "Icon-ETH")
+            return #imageLiteral(resourceName: "filled_eth_small")
         case .stellar:
-            return #imageLiteral(resourceName: "Icon-XLM")
+            return #imageLiteral(resourceName: "filled_xlm_small")
         case .pax:
-            return #imageLiteral(resourceName: "Icon-PAX")
+            return #imageLiteral(resourceName: "filled_pax_small")
+        }
+    }
+
+    var filledImageLarge: UIImage {
+        switch self {
+        case .bitcoin:
+            return #imageLiteral(resourceName: "filled_btc_large")
+        case .bitcoinCash:
+            return #imageLiteral(resourceName: "filled_bch_large")
+        case .ethereum:
+            return #imageLiteral(resourceName: "filled_eth_large")
+        case .stellar:
+            return #imageLiteral(resourceName: "filled_xlm_large")
+        case .pax:
+            return #imageLiteral(resourceName: "filled_pax_large")
+        }
+    }
+
+    var whiteImageSmall: UIImage {
+        switch self {
+        case .bitcoin:
+            return #imageLiteral(resourceName: "white_btc_small")
+        case .bitcoinCash:
+            return #imageLiteral(resourceName: "white_bch_small")
+        case .ethereum:
+            return #imageLiteral(resourceName: "white_eth_small")
+        case .stellar:
+            return #imageLiteral(resourceName: "white_xlm_small")
+        case .pax:
+            return #imageLiteral(resourceName: "white_pax_small")
         }
     }
 
@@ -133,7 +163,7 @@ extension AssetType {
         case .stellar:
             return UIColor(red: 0.07, green: 0.11, blue: 0.20, alpha: 1)
         case .pax:
-            return UIColor(red: 0.13, green: 0.24, blue: 0.65, alpha: 1)
+            return UIColor(red: 0, green: 0.32, blue: 0.17, alpha: 1)
         }
     }
     

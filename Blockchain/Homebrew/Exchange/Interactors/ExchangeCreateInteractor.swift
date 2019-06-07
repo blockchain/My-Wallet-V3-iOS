@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import ERC20Kit
 import Foundation
 import RxSwift
 import PlatformKit
@@ -353,7 +354,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         guard waitingOnConversion(conversion) == false else { return }
         guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
         guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
-        
+
+        // TICKET: IOS-2243
+        // Description: Input validation should be broken up into its own component and this interactor
+        // can request the concrete input validator based on the desired cryptocurrency type that the
+        // user is swapping from. Currently all asset validation is done in one place and this can get
+        // out of hand.
         status = .inflight
         guard tradeExecution.canTradeAssetType(model.pair.from) else {
             if let _ = errorMessage(for: model.pair.from) {
@@ -376,24 +382,18 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let disposable = tradeExecution.validateVolume(volume, for: model.marketPair.fromAccount)
             .asObservable()
             .subscribeOn(MainScheduler.asyncInstance)
-            .flatMapLatest { [weak self] error -> Observable<([AssetAccount], Decimal, Decimal, Decimal?, Decimal?)> in
-                guard let strongSelf = self else {
-                    return Observable.empty()
-                }
-                if let error = error {
-                    return Observable.error(error)
-                }
-                let min = strongSelf.minTradingLimit().asObservable()
-                let max = strongSelf.maxTradingLimit().asObservable()
-                let daily = strongSelf.dailyAvailable().asObservable()
-                let annual = strongSelf.annualAvailable().asObservable()
-                
+            .flatMapLatest(weak: self, selector: { (self, _) -> Observable<([AssetAccount], Decimal, Decimal, Decimal?, Decimal?)> in
+                let min = self.minTradingLimit().asObservable()
+                let max = self.maxTradingLimit().asObservable()
+                let daily = self.dailyAvailable().asObservable()
+                let annual = self.annualAvailable().asObservable()
+
                 /// The reason we have a `repository` in this class is we need to
                 /// validate that the user has the necessary funds to make a swap.
                 /// So, we have to do a fresh fetch of the account details for the asset.
-                let accounts = strongSelf.repository.accounts(for: fromAssetType).asObservable()
+                let accounts = self.repository.accounts(for: fromAssetType).asObservable()
                 return Observable.zip(accounts, min, max, daily, annual)
-            }
+            })
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] payload in
                 guard let strongSelf = self else {
@@ -443,6 +443,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                         self?.status = .error(.default(nil))
                     case .exceededMaxVolume(let value):
                         self?.status = .error(.aboveMaxVolume(value))
+                    case .erc20Error(let erc20Error):
+                        if erc20Error == .insufficientEthereumBalance {
+                            self?.status = .error(.insufficientGasForERC20Tx(fromAssetType))
+                        }
                     }
                 }
             })

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// Manager object for playing sounds in the app.
 @objc class SoundManager: NSObject {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 protocol SideMenuViewControllerDelegate: class {
     func sideMenuViewController(_ viewController: SideMenuViewController, didTapOn item: SideMenuItem)

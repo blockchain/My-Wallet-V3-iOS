@@ -8,6 +8,7 @@
 
 import Foundation
 import JavaScriptCore
+import PlatformKit
 
 /// JavaScriptCore is pure JavaScript - it lacks functions that are normally part of the DOM.
 /// This class is intended to define these missing functions in order to make it compatible with JS libraries that use them.

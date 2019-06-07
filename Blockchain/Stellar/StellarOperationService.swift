@@ -11,6 +11,7 @@ import stellarsdk
 import RxSwift
 import RxCocoa
 import StellarKit
+import PlatformKit
 
 /// Model for paginating through StellarSDK calls
 struct StellarPageReponse<A: Any> {

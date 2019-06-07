@@ -8,6 +8,7 @@
 
 import Foundation
 import StellarKit
+import PlatformKit
 
 /// Repository for asset addresses
 @objc class AssetAddressRepository: NSObject {

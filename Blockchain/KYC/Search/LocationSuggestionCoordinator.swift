@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 protocol LocationSuggestionCoordinatorDelegate: class {
     func coordinator(_ locationCoordinator: LocationSuggestionCoordinator, updated model: LocationSearchResult)

@@ -29,7 +29,9 @@ class EthereumWalletServiceTests: XCTestCase {
     
     var walletAccountRepository: EthereumWalletAccountRepositoryMock!
     
-    var transactionCreationService: EthereumTransactionCreationService!
+    var transactionBuildingService: EthereumTransactionBuildingService!
+    
+    var transactionSendingService: EthereumTransactionSendingService!
     
     var subject: EthereumWalletService!
     
@@ -45,11 +47,12 @@ class EthereumWalletServiceTests: XCTestCase {
         
         transactionBuilder = EthereumTransactionBuilder.shared
         transactionSigner = EthereumTransactionSigner.shared
+        
         transactionEncoder = EthereumTransactionEncoder.shared
         
         walletAccountRepository = EthereumWalletAccountRepositoryMock()
         
-        transactionCreationService = EthereumTransactionCreationService(
+        transactionSendingService = EthereumTransactionSendingService(
             with: bridge,
             ethereumAPIClient: ethereumAPIClient,
             feeService: feeService,
@@ -57,13 +60,19 @@ class EthereumWalletServiceTests: XCTestCase {
             transactionSigner: transactionSigner,
             transactionEncoder: transactionEncoder
         )
+
+        transactionBuildingService = EthereumTransactionBuildingService(
+            with: bridge,
+            feeService: feeService
+        )
         
         subject = EthereumWalletService(
             with: bridge,
             ethereumAPIClient: ethereumAPIClient,
             feeService: feeService,
             walletAccountRepository: walletAccountRepository,
-            transactionCreationService: transactionCreationService
+            transactionBuildingService: transactionBuildingService,
+            transactionSendingService: transactionSendingService
         )
     }
     
@@ -82,7 +91,7 @@ class EthereumWalletServiceTests: XCTestCase {
         
         walletAccountRepository = nil
         
-        transactionCreationService = nil
+        transactionSendingService = nil
         
         subject = nil
         
@@ -92,7 +101,9 @@ class EthereumWalletServiceTests: XCTestCase {
     func test_send_successfully() {
         // Arrange
         let candidate = EthereumTransactionCandidateBuilder().build()!
-        let expectedFinalised = EthereumTransactionFinalisedBuilder().build()!
+        let expectedFinalised = EthereumTransactionFinalisedBuilder()
+            .with(candidate: candidate)
+            .build()!
         let expectedPublished = EthereumTransactionPublishedBuilder()
             .with(candidate: candidate)
             .build()!
@@ -155,87 +166,86 @@ class EthereumWalletServiceTests: XCTestCase {
         XCTAssertEqual(result.events, expectedEvents)
     }
     
-    func test_sending_amount_over_balance() {
+    func test_building_amount_over_balance() throws {
         // Arrange
-        let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(1.0))
-            .build()!
-        let expectedPublished = EthereumTransactionPublishedBuilder()
-            .with(candidate: candidate)
-            .build()!
-        
+        let cryptoValue = CryptoValue.etherFromMajor(decimal: Decimal(1.0))
+        let ethereumValue = try EthereumValue(crypto: cryptoValue)
+        let toAddress = EthereumAddress(
+            rawValue: MockEthereumWalletTestData.Transaction.to
+        )!
+
         bridge.balanceValue = Single.just(CryptoValue.etherFromMajor(decimal: Decimal(0.1)))
-        bridge.recordLastTransactionValue = Single.just(expectedPublished)
-        
-        let sendObservable: Observable<EthereumTransactionPublished> = subject
-            .send(transaction: candidate)
+
+        let buildObservable: Observable<EthereumTransactionCandidate> = subject
+            .buildTransaction(with: ethereumValue, to: toAddress)
             .asObservable()
-        
+
         // Act
-        let result: TestableObserver<EthereumTransactionPublished> = scheduler
-            .start { sendObservable }
-        
+        let result: TestableObserver<EthereumTransactionCandidate> = scheduler
+            .start { buildObservable }
+
         // Assert
-        let expectedEvents: [Recorded<Event<EthereumTransactionPublished>>] = Recorded.events(
+        let expectedEvents: [Recorded<Event<EthereumTransactionCandidate>>] = Recorded.events(
             .error(200, EthereumTransactionBuilderError.insufficientFunds)
         )
-        
+
         XCTAssertEqual(result.events, expectedEvents)
     }
     
-    func test_sending_fees_over_balance() {
+    func test_sending_fees_over_balance() throws {
         // Arrange
-        let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(0.01))
-            .build()!
-        let expectedPublished = EthereumTransactionPublishedBuilder()
-            .with(candidate: candidate)
-            .build()!
+        let cryptoValue = CryptoValue.etherFromMajor(decimal: Decimal(0.01))
+        let ethereumValue = try EthereumValue(crypto: cryptoValue)
+        let toAddress = EthereumAddress(
+            rawValue: MockEthereumWalletTestData.Transaction.to
+        )!
         
-        let l = TransactionFeeLimits(
+        let limits = TransactionFeeLimits(
             min: 100,
             max: 1_100
         )
-        let f = EthereumTransactionFee(
-            limits: l,
+        let fee = EthereumTransactionFee(
+            limits: limits,
             regular: 1_000,
             priority: 1_000,
-            gasLimit: 21_000
+            gasLimit: Int(MockEthereumWalletTestData.Transaction.gasLimit),
+            gasLimitContract: Int(MockEthereumWalletTestData.Transaction.gasLimitContract)
         )
-        feeService.feesValue = Single.just(f)
+        feeService.feesValue = Single.just(fee)
         bridge.balanceValue = Single.just(CryptoValue.etherFromMajor(decimal: Decimal(0.02)))
-        bridge.recordLastTransactionValue = Single.just(expectedPublished)
-        
-        let sendObservable: Observable<EthereumTransactionPublished> = subject
-            .send(transaction: candidate)
+
+        let buildObservable: Observable<EthereumTransactionCandidate> = subject
+            .buildTransaction(with: ethereumValue, to: toAddress)
             .asObservable()
-        
+
         // Act
-        let result: TestableObserver<EthereumTransactionPublished> = scheduler
-            .start { sendObservable }
-        
+        let result: TestableObserver<EthereumTransactionCandidate> = scheduler
+            .start { buildObservable }
+
         // Assert
-        let expectedEvents: [Recorded<Event<EthereumTransactionPublished>>] = Recorded.events(
+        let expectedEvents: [Recorded<Event<EthereumTransactionCandidate>>] = Recorded.events(
             .error(200, EthereumTransactionBuilderError.insufficientFunds)
         )
-        
+
         XCTAssertEqual(result.events, expectedEvents)
     }
     
     func test_signing_error() {
         // Arrange
         let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(0.01))
+            .with(value: BigUInt(0.01))
             .build()!
-        let expectedCandidateCosted = EthereumTransactionCandidateCostedBuilder().build()!
+        let expectedCandidateCosted = EthereumTransactionCandidateCostedBuilder()
+            .with(candidate: candidate)
+            .build()!
         let expectedPublished = EthereumTransactionPublishedBuilder()
             .with(candidate: candidate)
             .build()!
-        
+
         let transactionSignerMock = EthereumTransactionSignerMock()
         transactionSigner = transactionSignerMock
         
-        transactionCreationService = EthereumTransactionCreationService(
+        transactionSendingService = EthereumTransactionSendingService(
             with: bridge,
             ethereumAPIClient: ethereumAPIClient,
             feeService: feeService,
@@ -249,7 +259,8 @@ class EthereumWalletServiceTests: XCTestCase {
             ethereumAPIClient: ethereumAPIClient,
             feeService: feeService,
             walletAccountRepository: walletAccountRepository,
-            transactionCreationService: transactionCreationService
+            transactionBuildingService: transactionBuildingService,
+            transactionSendingService: transactionSendingService
         )
         
         let sendObservable: Observable<EthereumTransactionPublished> = subject
@@ -286,7 +297,7 @@ class EthereumWalletServiceTests: XCTestCase {
     func test_failed_to_publish_transaction() {
         // Arrange
         let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(1.0))
+            .with(value: 1)
             .build()!
         
         ethereumAPIClient.pushTransactionValue = Single.error(EthereumAPIClientMockError.mockError)
@@ -310,7 +321,7 @@ class EthereumWalletServiceTests: XCTestCase {
     func test_failed_to_record_transaction() {
         // Arrange
         let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(1.0))
+            .with(value: 1)
             .build()!
         let expectedPublished = EthereumTransactionPublishedBuilder()
             .with(candidate: candidate)
@@ -336,29 +347,26 @@ class EthereumWalletServiceTests: XCTestCase {
         XCTAssertEqual(bridge.lastRecordedTransaction, expectedPublished)
     }
     
-    func test_failed_to_fetch_balance() {
+    func test_failed_to_fetch_balance() throws {
         // Arrange
-        let candidate = EthereumTransactionCandidateBuilder()
-            .with(amount: Decimal(1.0))
-            .build()!
-        let expectedPublished = EthereumTransactionPublishedBuilder()
-            .with(candidate: candidate)
-            .build()!
-
-        ethereumAPIClient.pushTransactionValue = Single.just(EthereumPushTxResponse(txHash: expectedPublished.transactionHash))
+        let cryptoValue = CryptoValue.etherFromMajor(decimal: Decimal(1.0))
+        let ethereumValue = try EthereumValue(crypto: cryptoValue)
+        let toAddress = EthereumAddress(
+            rawValue: MockEthereumWalletTestData.Transaction.to
+        )!
+        
         bridge.balanceValue = Single.error(EthereumWalletBridgeMockError.mockError)
-        bridge.recordLastTransactionValue = Single.just(expectedPublished)
 
-        let sendObservable: Observable<EthereumTransactionPublished> = subject
-            .send(transaction: candidate)
+        let buildObservable: Observable<EthereumTransactionCandidate> = subject
+            .buildTransaction(with: ethereumValue, to: toAddress)
             .asObservable()
 
         // Act
-        let result: TestableObserver<EthereumTransactionPublished> = scheduler
-            .start { sendObservable }
+        let result: TestableObserver<EthereumTransactionCandidate> = scheduler
+            .start { buildObservable }
 
         // Assert
-        let expectedEvents: [Recorded<Event<EthereumTransactionPublished>>] = Recorded.events(
+        let expectedEvents: [Recorded<Event<EthereumTransactionCandidate>>] = Recorded.events(
             .error(200, EthereumWalletBridgeMockError.mockError)
         )
 
@@ -383,5 +391,16 @@ extension EthereumTransactionCandidateCosted: Equatable {
     public static func == (lhs: EthereumTransactionCandidateCosted, rhs: EthereumTransactionCandidateCosted) -> Bool {
         return lhs.transaction.gasLimit == rhs.transaction.gasLimit
             && lhs.transaction.gasPrice == rhs.transaction.gasPrice
+    }
+}
+
+class EthereumTransactionBuildingServiceMock: EthereumTransactionBuildingServiceAPI {
+    var lastAmount: EthereumValue?
+    var lastTo: EthereumKit.EthereumAddress?
+    var buildTransactionValue = Single.just(EthereumTransactionCandidateBuilder().build()!)
+    func buildTransaction(with amount: EthereumValue, to: EthereumKit.EthereumAddress) -> Single<EthereumTransactionCandidate> {
+        lastAmount = amount
+        lastTo = to
+        return buildTransactionValue
     }
 }

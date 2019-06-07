@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import PlatformKit
 
 /// Service that interacts with the Blockchain API
 @objc class WalletService: NSObject {

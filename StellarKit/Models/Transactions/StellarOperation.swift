@@ -13,12 +13,14 @@ public enum StellarOperation: HistoricalTransaction, Tokenized {
 
     public typealias Address = StellarAssetAddress
 
-    public var fee: Int? {
+    public var fee: CryptoValue? {
         switch self {
         case .accountCreated(let value):
-            return value.fee
+            guard let fee = value.fee else { return nil }
+            return CryptoValue.lumensFromStroops(int: fee)
         case .payment(let value):
-            return value.fee
+            guard let fee = value.fee else { return nil }
+            return CryptoValue.lumensFromStroops(int: fee)
         }
     }
     

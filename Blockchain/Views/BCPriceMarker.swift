@@ -8,6 +8,7 @@
 
 import Foundation
 import Charts
+import PlatformKit
 
 open class BCPriceMarker: MarkerImage {
     @objc open var color: UIColor

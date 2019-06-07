@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 import PlatformKit
 import RxSwift
 
@@ -16,16 +17,22 @@ enum EthereumWalletServiceError: Error {
 }
 
 public protocol EthereumWalletServiceAPI {
+    func buildTransaction(with value: EthereumValue, to: EthereumAddress) -> Single<EthereumTransactionCandidate>
     func send(transaction: EthereumTransactionCandidate) -> Single<EthereumTransactionPublished>
 }
 
 public final class EthereumWalletService: EthereumWalletServiceAPI {
-    
-    // TODOs:
-    // * Support for 2nd PW: https://blockchain.atlassian.net/browse/IOS-2193
-    // * Support for legacy wallets?
-    
     public typealias Bridge = EthereumWalletBridgeAPI
+    
+    private var handlePendingTransaction: Single<Void> {
+        return bridge.isWaitingOnEtherTransaction
+            .flatMap { isWaiting -> Single<Void> in
+                guard !isWaiting else {
+                    throw EthereumWalletServiceError.waitingOnPendingTransaction
+                }
+                return Single.just(())
+            }
+    }
     
     private var fetchBalance: Single<CryptoValue> {
         return bridge.fetchBalance
@@ -39,40 +46,49 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
     private let ethereumAPIClient: EthereumAPIClientAPI
     private let feeService: EthereumFeeServiceAPI
     private let walletAccountRepository: EthereumWalletAccountRepositoryAPI
-    private let transactionCreationService: EthereumTransactionCreationService
+    private let transactionBuildingService: EthereumTransactionBuildingServiceAPI
+    private let transactionSendingService: EthereumTransactionSendingServiceAPI
     
     public init(with bridge: Bridge,
                 ethereumAPIClient: EthereumAPIClientAPI,
                 feeService: EthereumFeeServiceAPI,
                 walletAccountRepository: EthereumWalletAccountRepositoryAPI,
-                transactionCreationService: EthereumTransactionCreationService) {
+                transactionBuildingService: EthereumTransactionBuildingServiceAPI,
+                transactionSendingService: EthereumTransactionSendingServiceAPI) {
         self.bridge = bridge
         self.ethereumAPIClient = ethereumAPIClient
         self.feeService = feeService
         self.walletAccountRepository = walletAccountRepository
-        self.transactionCreationService = transactionCreationService
+        self.transactionBuildingService = transactionBuildingService
+        self.transactionSendingService = transactionSendingService
+    }
+    
+    public func buildTransaction(with value: EthereumValue, to: EthereumAddress) -> Single<EthereumTransactionCandidate> {
+        return transactionBuildingService.buildTransaction(with: value, to: to)
     }
     
     public func send(transaction: EthereumTransactionCandidate) -> Single<EthereumTransactionPublished> {
-        return bridge.isWaitingOnEtherTransaction
-            .flatMap { isWaiting -> Single<Void> in
-                guard !isWaiting else {
-                    return Single.error(EthereumWalletServiceError.waitingOnPendingTransaction)
-                }
-                return Single.just(())
-            }
+        return handlePendingTransaction
             .flatMap(weak: self) { (self, _) -> Single<EthereumKeyPair> in
                 self.loadKeyPair
             }
             .flatMap(weak: self) { (self, keyPair) -> Single<EthereumTransactionPublished> in
-                self.transactionCreationService.send(
-                    transaction: transaction,
-                    keyPair: keyPair
-                )
+                self.prepareAndPush(transaction: transaction, keyPair: keyPair)
             }
             .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionPublished> in
-                self.record(transaction: transaction)
+                self.recordAndUpdateBalance(transaction: transaction)
             }
+    }
+    
+    private func prepareAndPush(transaction: EthereumTransactionCandidate, keyPair: EthereumKeyPair) -> Single<EthereumTransactionPublished> {
+        return transactionSendingService.send(
+            transaction: transaction,
+            keyPair: keyPair
+        )
+    }
+    
+    private func recordAndUpdateBalance(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> {
+        return record(transaction: transaction)
             .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionPublished> in
                 return self.fetchBalance.map { _ -> EthereumTransactionPublished in
                     transaction
@@ -81,8 +97,6 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
     }
     
     private func record(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> {
-        print("transaction: \(transaction)")
-        print("transaction.web3swiftTransaction: \(transaction.web3swiftTransaction)")
         return bridge.recordLast(transaction: transaction)
     }
 }

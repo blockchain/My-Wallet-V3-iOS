@@ -22,6 +22,8 @@ private struct Keys {
     static let xlm = "xlm"
 }
 
+typealias JSON = [String: Any]
+
 // TODO: Conform to Decodable
 struct WalletOptions {
 

@@ -28,7 +28,7 @@ public struct BitcoinTransaction: HistoricalTransaction, Mineable {
 
     public let createdAt: Date
 
-    public let fee: Int?
+    public let fee: CryptoValue?
 
     public let memo: String?
 

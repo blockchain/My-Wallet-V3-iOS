@@ -146,21 +146,39 @@ struct Mobile: Decodable {
 struct Tags: Decodable {
     let sunriver: Sunriver?
     let coinify: Bool?
+    let powerPax: PowerPax?
 
     enum CodingKeys: String, CodingKey {
         case sunriver = "SUNRIVER"
         case coinify = "COINIFY"
+        case powerPax = "POWER_PAX"
     }
     
-    init(sunriver: Sunriver? = nil, coinify: Bool = false) {
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        sunriver = try values.decodeIfPresent(Sunriver.self, forKey: .sunriver)
+        coinify = try values.decodeIfPresent(Bool.self, forKey: .coinify)
+        powerPax = try values.decodeIfPresent(PowerPax.self, forKey: .powerPax)
+    }
+    
+    init(sunriver: Sunriver? = nil, coinify: Bool = false, powerPax: PowerPax? = nil) {
         self.sunriver = sunriver
         self.coinify = coinify
+        self.powerPax = powerPax
     }
 }
 
 struct Sunriver: Decodable {
     let campaignAddress: String
 
+    enum CodingKeys: String, CodingKey {
+        case campaignAddress = "x-campaign-address"
+    }
+}
+
+struct PowerPax: Decodable {
+    let campaignAddress: String
+    
     enum CodingKeys: String, CodingKey {
         case campaignAddress = "x-campaign-address"
     }

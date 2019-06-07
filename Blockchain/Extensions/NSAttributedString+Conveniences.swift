@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PlatformKit
 
 @objc public extension NSMutableAttributedString {
 

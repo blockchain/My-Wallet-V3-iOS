@@ -8,6 +8,7 @@
 
 import RxCocoa
 import RxSwift
+import PlatformKit
 
 class TradeLimitsService: TradeLimitsAPI {
 

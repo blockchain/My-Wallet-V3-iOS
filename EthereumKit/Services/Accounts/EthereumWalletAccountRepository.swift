@@ -69,21 +69,16 @@ open class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI, 
     // MARK: - Private methods
     
     private func loadDefaultAccount() -> Maybe<WalletAccount> {
-        return Single.zip(bridge.address, bridge.name)
-            .asObservable()
-            .flatMap { address, name -> Maybe<EthereumWalletAccount> in
-                let account = EthereumWalletAccount(
-                    index: 0,
-                    publicKey: address,
-                    label: name,
-                    archived: false // TODO: This should be checked/enforced somehow
-                )
-                return Maybe.just(account)
+        return bridge.ethereumWallets.asMaybe()
+            .flatMap { accounts -> Maybe<WalletAccount> in
+                guard let first = accounts.first else {
+                    return Maybe.empty()
+                }
+                return Maybe.just(first)
             }
             .do(onNext: { account in
                 self.defaultAccount = account
             })
-            .asMaybe()
     }
     
     // MARK: - KeyPairProviderAPI
@@ -101,11 +96,9 @@ open class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI, 
         bridge.save(keyPair: keyPair, label: "My Ethereum Wallet")
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
-            .subscribe(onSuccess: { message in
-                print(message)
-            }, onError: { error in
-                print(error)
-            })
+            .subscribe()
             .disposed(by: disposeBag)
     }
 }
+
+extension EthereumWalletAccountRepository: WalletAccountInitializer { }

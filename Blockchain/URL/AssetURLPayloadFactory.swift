@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 @objc class AssetURLPayloadFactory: NSObject {
 
@@ -18,6 +19,8 @@ import Foundation
             return BitcoinCashURLPayload.scheme
         case .stellar:
             return StellarURLPayload.scheme
+        case .pax:
+            return EthereumURLPayload.scheme
         default:
             return nil
         }
@@ -38,6 +41,8 @@ import Foundation
                 return BitcoinCashURLPayload(address: string, amount: nil)
             case .stellar:
                 return StellarURLPayload(address: string, amount: nil)
+            case .pax:
+                return EthereumURLPayload(address: string, amount: nil)
             default:
                 return nil
             }
@@ -57,6 +62,8 @@ import Foundation
             return BitcoinCashURLPayload(url: url)
         case StellarURLPayload.scheme:
             return StellarURLPayload(url: url)
+        case EthereumURLPayload.scheme:
+            return EthereumURLPayload(url: url)
         default:
             return nil
         }
