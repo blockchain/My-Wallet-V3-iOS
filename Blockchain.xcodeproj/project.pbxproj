@@ -91,6 +91,11 @@
 		344C42FC227CA56100CFAC33 /* EthereumAssetAccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344C42FB227CA56100CFAC33 /* EthereumAssetAccountService.swift */; };
 		34579859224BC53E00F50F92 /* CryptoFeeServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34579858224BC53E00F50F92 /* CryptoFeeServiceAPI.swift */; };
 		34579864224BC65D00F50F92 /* CryptoFeeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34579863224BC65C00F50F92 /* CryptoFeeService.swift */; };
+		345F7DB922A9B4490049F236 /* EthereumURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345F7DB822A9B4490049F236 /* EthereumURLPayload.swift */; };
+		345F7DBB22AA72B10049F236 /* EIP67URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345F7DBA22AA72B10049F236 /* EIP67URI.swift */; };
+		345F7DBD22AA8E590049F236 /* ERC20TransactionProposal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345F7DBC22AA8E590049F236 /* ERC20TransactionProposal.swift */; };
+		345F7DD322AADB1E0049F236 /* EthereumURLPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345F7DB822A9B4490049F236 /* EthereumURLPayload.swift */; };
+		345F7DDD22AADB390049F236 /* EIP67URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345F7DBA22AA72B10049F236 /* EIP67URI.swift */; };
 		3460EDA422149C5C00614F52 /* QRCodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDA322149C5C00614F52 /* QRCodeScanner.swift */; };
 		3460EDB12216FDF600614F52 /* QRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDB02216FDF600614F52 /* QRCodeScannerViewController.swift */; };
 		3460EDB32216FE1600614F52 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460EDB22216FE1600614F52 /* QRCodeScannerView.swift */; };
@@ -1974,6 +1979,9 @@
 		344C42FB227CA56100CFAC33 /* EthereumAssetAccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAssetAccountService.swift; sourceTree = "<group>"; };
 		34579858224BC53E00F50F92 /* CryptoFeeServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFeeServiceAPI.swift; sourceTree = "<group>"; };
 		34579863224BC65C00F50F92 /* CryptoFeeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFeeService.swift; sourceTree = "<group>"; };
+		345F7DB822A9B4490049F236 /* EthereumURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumURLPayload.swift; sourceTree = "<group>"; };
+		345F7DBA22AA72B10049F236 /* EIP67URI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP67URI.swift; sourceTree = "<group>"; };
+		345F7DBC22AA8E590049F236 /* ERC20TransactionProposal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20TransactionProposal.swift; sourceTree = "<group>"; };
 		3460EDA322149C5C00614F52 /* QRCodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScanner.swift; sourceTree = "<group>"; };
 		3460EDB02216FDF600614F52 /* QRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewController.swift; sourceTree = "<group>"; };
 		3460EDB22216FE1600614F52 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
@@ -5021,6 +5029,15 @@
 			path = Transactions;
 			sourceTree = "<group>";
 		};
+		345F7DAE22A9B4390049F236 /* URL */ = {
+			isa = PBXGroup;
+			children = (
+				345F7DB822A9B4490049F236 /* EthereumURLPayload.swift */,
+				345F7DBA22AA72B10049F236 /* EIP67URI.swift */,
+			);
+			path = URL;
+			sourceTree = "<group>";
+		};
 		3460ED9922149C2800614F52 /* QRCodeScanner */ = {
 			isa = PBXGroup;
 			children = (
@@ -5242,6 +5259,7 @@
 		34E7F93F2225900200A987CD /* Ethereum */ = {
 			isa = PBXGroup;
 			children = (
+				345F7DAE22A9B4390049F236 /* URL */,
 				34E7F9492225904400A987CD /* ETHServiceProvider.swift */,
 				34AE2AD3224E3DF10080C219 /* EthereumKit */,
 			);
@@ -6407,6 +6425,7 @@
 			isa = PBXGroup;
 			children = (
 				3A90BFE0228DFE78003C1151 /* ERC20HistoricalTransaction.swift */,
+				345F7DBC22AA8E590049F236 /* ERC20TransactionProposal.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -9299,16 +9318,13 @@
 				C7F041941E3BD4A6004E8B4A /* BuyBitcoinViewController.h */,
 				C7CE34B61F4DCB7E00032806 /* CardsViewController.h */,
 				C7414E431FD7131C001A89FA /* ConfirmStateViewController.h */,
-				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
 				FCB33B701FC36EA200317E6B /* ExchangeProgressViewController.h */,
 				C7A0E92C1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.h */,
 				C76135621F9E55DF0029E159 /* PartnerExchangeCreateViewController.h */,
 				C793E1FA1F8E7921001F171C /* PartnerExchangeListViewController.h */,
-				C7618B5F1F66C817003E7589 /* QRCodeScannerSendViewController.h */,
 				9FCA4D141514949500ECDFBE /* ReceiveBitcoinViewController.h */,
 				23B731D11E01AC1100129770 /* ReminderModalViewController.h */,
 				9FCA4D19151494BF00ECDFBE /* SendBitcoinViewController.h */,
-				C71859521F4B647100745A87 /* SendEtherViewController.h */,
 				23C95EA41C0779C600E4692A /* SettingsChangePasswordViewController.h */,
 				23EA61C61B54282D0032B907 /* SettingsNavigationController.h */,
 				60AEA5BE21125DDD0053A753 /* SettingsSelectorTableViewController.h */,
@@ -9338,15 +9354,18 @@
 				C7F041951E3BD4A6004E8B4A /* BuyBitcoinViewController.m */,
 				C7CE34B71F4DCB7E00032806 /* CardsViewController.m */,
 				C7414E441FD7131C001A89FA /* ConfirmStateViewController.m */,
+				C73406201F54791C00143100 /* EtherAmountInputViewController.h */,
 				C73406211F54791C00143100 /* EtherAmountInputViewController.m */,
 				FCB33B711FC36EA200317E6B /* ExchangeProgressViewController.m */,
 				C7A0E92D1FA8FFBF004F4267 /* PartnerExchangeConfirmViewController.m */,
 				C76135631F9E55DF0029E159 /* PartnerExchangeCreateViewController.m */,
 				C793E1FB1F8E7921001F171C /* PartnerExchangeListViewController.m */,
+				C7618B5F1F66C817003E7589 /* QRCodeScannerSendViewController.h */,
 				C7618B601F66C817003E7589 /* QRCodeScannerSendViewController.m */,
 				9FCA4D151514949500ECDFBE /* ReceiveBitcoinViewController.m */,
 				23B731D21E01AC1100129770 /* ReminderModalViewController.m */,
 				9FCA4D1A151494BF00ECDFBE /* SendBitcoinViewController.m */,
+				C71859521F4B647100745A87 /* SendEtherViewController.h */,
 				C71859531F4B647100745A87 /* SendEtherViewController.m */,
 				23C95EA51C0779C600E4692A /* SettingsChangePasswordViewController.m */,
 				23EA61C71B54282D0032B907 /* SettingsNavigationController.m */,
@@ -12029,6 +12048,7 @@
 				349442DA22649DB600593DEA /* ERC20AssetAccountDetails.swift in Sources */,
 				34AD100022918A5B00FB464D /* ERC20Service.swift in Sources */,
 				347F47F7226666B5006BCDDA /* ERC20Error.swift in Sources */,
+				345F7DBD22AA8E590049F236 /* ERC20TransactionProposal.swift in Sources */,
 				34C74380228B015100C88347 /* ERC20API.swift in Sources */,
 				349442CF22649DAB00593DEA /* ERC20AssetAccountDetailsService.swift in Sources */,
 				34998C4F228F97D7005B5CDD /* ERC20BalanceService.swift in Sources */,
@@ -12604,6 +12624,7 @@
 				602B9D262118E27100BD3D60 /* KYCVerifyPhoneNumberInteractor.swift in Sources */,
 				3ADFE6FD214AE17600E7E2D5 /* ExchangeInputsService.swift in Sources */,
 				51FC1B0A21270DBC007BEB18 /* SettingsTableSectionHeader.swift in Sources */,
+				345F7DD322AADB1E0049F236 /* EthereumURLPayload.swift in Sources */,
 				AA2F121F21405BE6006B1FC1 /* JSContext+Helpers.swift in Sources */,
 				51DC2F6120B7312600E03AF2 /* EthereumAddress.swift in Sources */,
 				AA24D4C820D9D1EC0096DD5D /* AssetTypeLegacyHelper.swift in Sources */,
@@ -12691,6 +12712,7 @@
 				5159C3212109156400955BD6 /* KYCCountrySelectionControllerTests.swift in Sources */,
 				C78238C52131FA08008FCCAD /* NumberKeypadView.swift in Sources */,
 				C7D5116621237DFA00359651 /* NabuAuthenticationService.swift in Sources */,
+				345F7DDD22AADB390049F236 /* EIP67URI.swift in Sources */,
 				3AC25E5D2243F8140033FB9D /* ExchangeError.swift in Sources */,
 				AA722C1520B4B9F300262A5F /* WalletSwipeAddressDelegate.swift in Sources */,
 				AAF2AEC521237A1A00687E30 /* PersonalDetailsInterface.swift in Sources */,
@@ -12890,6 +12912,7 @@
 				AA6336B521BC5A710073ED4A /* KYCVerifyEmailPresenter.swift in Sources */,
 				23FB5C101D9ABB730008C6AB /* TransactionDetailDateCell.m in Sources */,
 				606399EC2110FC2D005B6DF5 /* SRMutex.m in Sources */,
+				345F7DB922A9B4490049F236 /* EthereumURLPayload.swift in Sources */,
 				670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */,
 				3A3D5DD0211CA2CD00E6C241 /* PersonalDetailsInterface.swift in Sources */,
 				AAFA97B5211511D000D19ED3 /* Settings+Helpers.swift in Sources */,
@@ -13404,6 +13427,7 @@
 				AAA3333320880A2C0019AD55 /* AppDelegate.swift in Sources */,
 				C7640FBF2056B70E00D14D51 /* BCSwipeAddressViewModel.m in Sources */,
 				3ADFE6FC214AE17600E7E2D5 /* ExchangeInputsService.swift in Sources */,
+				345F7DBB22AA72B10049F236 /* EIP67URI.swift in Sources */,
 				3A26AF5321272019003A8A08 /* ExchangeListViewController.swift in Sources */,
 				AA63F85020A12DA6002B719B /* BitcoinURLPayload.swift in Sources */,
 				3460EDB52217156600614F52 /* QRCodeScannerViewModel.swift in Sources */,

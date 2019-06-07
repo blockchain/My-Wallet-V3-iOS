@@ -24,7 +24,7 @@ public protocol EthereumWalletServiceAPI {
 public final class EthereumWalletService: EthereumWalletServiceAPI {
     public typealias Bridge = EthereumWalletBridgeAPI
     
-    private var isWaitingOnEtherTransaction: Single<Void> {
+    private var handlePendingTransaction: Single<Void> {
         return bridge.isWaitingOnEtherTransaction
             .flatMap { isWaiting -> Single<Void> in
                 guard !isWaiting else {
@@ -68,7 +68,7 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
     }
     
     public func send(transaction: EthereumTransactionCandidate) -> Single<EthereumTransactionPublished> {
-        return isWaitingOnEtherTransaction
+        return handlePendingTransaction
             .flatMap(weak: self) { (self, _) -> Single<EthereumKeyPair> in
                 self.loadKeyPair
             }

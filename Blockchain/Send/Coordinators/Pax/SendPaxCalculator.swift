@@ -77,7 +77,9 @@ class SendPaxCalculator {
                 .disposed(by: bag)
         case .addressEntryEvent(let value):
             var input = model.input
-            input.address = Address(stringLiteral: value)
+            if let address = Address(rawValue: value) {
+                input.address = address
+            }
             validate(input: input)
         }
     }
@@ -91,9 +93,11 @@ class SendPaxCalculator {
         /// Conversion completed regardless of user ETH or token balance
         let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
         /// Conversion completed regardless of user ETH or token balance
-        return priceService.fiatPrice(
-            forCurrency: input.paxAmount.currencyType,
-            fiatSymbol: currencyCode)
+        return priceService
+            .fiatPrice(
+                forCurrency: input.paxAmount.currencyType,
+                fiatSymbol: currencyCode
+            )
             .asObservable()
             .flatMapLatest { priceInFiatValue -> Observable<SendPaxInput> in
                 let exchangeRate = priceInFiatValue.priceInFiat.amount
@@ -103,7 +107,7 @@ class SendPaxCalculator {
                 // swiftlint:disable force_try
                 input.paxAmount = try! ERC20TokenValue<PaxToken>(crypto: cryptoValue)
                 return Observable.just(input)
-        }
+            }
     }
     
     private func updatePaxValue(_ value: ERC20TokenValue<PaxToken>) -> Observable<SendPaxInput> {
@@ -111,9 +115,11 @@ class SendPaxCalculator {
         var input = model.input
         let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
         /// Conversion completed regardless of user ETH or token balance
-        return priceService.fiatPrice(
-            forCurrency: value.currencyType,
-            fiatSymbol: currencyCode)
+        return priceService
+            .fiatPrice(
+                forCurrency: value.currencyType,
+                fiatSymbol: currencyCode
+            )
             .asObservable()
             .flatMapLatest { priceInFiatValue -> Observable<SendPaxInput> in
                 let fiatValue = priceInFiatValue.priceInFiat
@@ -122,7 +128,7 @@ class SendPaxCalculator {
                 input.fiatAmount = converted
                 input.paxAmount = value
                 return Observable.just(input)
-        }
+            }
     }
     
     /// Can error from insufficient balances
@@ -140,18 +146,27 @@ class SendPaxCalculator {
         erc20Service.evaluate(amount: input.paxAmount)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
-            .map({ proposal -> Output in
-                if let address = input.address, address.isValid {
-                    updates.insert(.sendButtonEnabled(true))
-                    updates.insert(.toAddressTextField(address.rawValue))
-                } else {
-                    updates.insert(.sendButtonEnabled(false))
-                    viewModel.internalError = .invalidDestinationAddress
+            .map { proposal -> Output in
+                
+                var sendButtonEnabled = false
+                
+                if let address = input.address {
+                    if address.isValid {
+                        sendButtonEnabled = true
+                        updates.insert(.toAddressTextField(address.rawValue))
+                    } else {
+                        viewModel.internalError = .invalidDestinationAddress
+                    }
                 }
+                
+                sendButtonEnabled = proposal.aboveMinimumSpendable
+                
+                updates.insert(.sendButtonEnabled(sendButtonEnabled))
+                
                 viewModel.proposal = proposal
                 return Output(presentationUpdates: updates, model: viewModel)
-            })
-            .catchError({ error -> Single<Output> in
+            }
+            .catchError { error -> Single<Output> in
                 if let error = error as? ERC20ServiceError {
                     let internalError = SendMoniesInternalError(erc20error: error)
                     viewModel.internalError = internalError
@@ -160,7 +175,7 @@ class SendPaxCalculator {
                 updates.insert(.sendButtonEnabled(false))
                 let output = Output(presentationUpdates: updates, model: viewModel)
                 return Single.just(output)
-            })
+            }
             .subscribe(onSuccess: { value in
                 self.model = value.model
                 self.output.on(.next(value))

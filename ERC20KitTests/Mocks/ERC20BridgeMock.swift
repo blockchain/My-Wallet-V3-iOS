@@ -15,33 +15,42 @@ import EthereumKit
 
 class ERC20BridgeMock: ERC20BridgeAPI {
     
-    var erc20TokenAccountsValue: Single<[ERC20TokenAccount]> = Single.just([])
-    var erc20TokenAccounts: Single<[ERC20TokenAccount]> {
+    var isWaitingOnEtherTransactionValue: Single<Bool> = Single.just(false)
+    var isWaitingOnEtherTransaction: Single<Bool> {
+        return isWaitingOnEtherTransactionValue
+    }
+    
+    func tokenAccount(for key: String) -> Single<ERC20TokenAccount?> {
+        return Single.just(nil)
+    }
+    
+    var erc20TokenAccountsValue: Single<[String: ERC20TokenAccount]> = Single.just([:])
+    var erc20TokenAccounts: Single<[String: ERC20TokenAccount]> {
         return erc20TokenAccountsValue
     }
     
     var saveERC20TokenAccountsValue: Completable = Completable.empty()
-    func save(erc20TokenAccounts: [ERC20TokenAccount]) -> Completable {
+    func save(erc20TokenAccounts: [String: ERC20TokenAccount]) -> Completable {
         return saveERC20TokenAccountsValue
     }
     
     var lastTransactionHashFetched: String?
-    var lastTokenContractAddressFetched: String?
+    var lastTokenKeyFetched: String?
     var memoForTransactionHashValue: Single<String?> = Single.just("memo")
-    func memo(for transactionHash: String, tokenContractAddress: String) -> Single<String?> {
+    func memo(for transactionHash: String, tokenKey: String) -> Single<String?> {
         lastTransactionHashFetched = transactionHash
-        lastTokenContractAddressFetched = tokenContractAddress
+        lastTokenKeyFetched = tokenKey
         return memoForTransactionHashValue
     }
     
     var lastTransactionMemoSaved: String?
     var lastTransactionHashSaved: String?
-    var lastTokenContractAddressSaved: String?
+    var lastTokenKeySaved: String?
     var saveTransactionMemoForTransactionHashValue: Completable = Completable.empty()
-    func save(transactionMemo: String, for transactionHash: String, tokenContractAddress: String) -> Completable {
+    func save(transactionMemo: String, for transactionHash: String, tokenKey: String) -> Completable {
         lastTransactionMemoSaved = transactionMemo
         lastTransactionHashSaved = transactionHash
-        lastTokenContractAddressSaved = tokenContractAddress
+        lastTokenKeySaved = tokenKey
         return saveTransactionMemoForTransactionHashValue
     }
 }

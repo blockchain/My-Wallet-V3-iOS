@@ -33,7 +33,7 @@ class SendPaxCoordinator {
         interface: SendPAXInterface,
         serviceProvider: PAXServiceProvider = PAXServiceProvider.shared,
         priceService: PriceServiceAPI = PriceServiceClient()
-        ) {
+    ) {
         self.interface = interface
         self.calculator = SendPaxCalculator(erc20Service: serviceProvider.services.paxService)
         self.serviceProvider = serviceProvider
@@ -96,7 +96,8 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                 self.interface.apply(updates: [.feeValueLabel(result)])
             }, onError: { error in
                 Logger.shared.error(error)
-            }).disposed(by: bag)
+            })
+            .disposed(by: bag)
     }
     
     // TODO: Should be ERCTokenValue
@@ -148,15 +149,17 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                     noteText: nil,
                     warningText: nil,
                     descriptionTitle: nil
-                    )!
+                )!
                 return model
-            }.subscribe(onSuccess: { [weak self] viewModel in
-                guard let self = self else { return }
-                self.interface.display(confirmation: viewModel)
-                self.interface.apply(updates: [.loadingIndicatorVisibility(.hidden)])
-                }, onError: { error in
-                    Logger.shared.error(error)
-            }).disposed(by: bag)
+            }
+            .subscribe(onSuccess: { [weak self] viewModel in
+                self?.interface.display(confirmation: viewModel)
+                self?.interface.apply(updates: [.loadingIndicatorVisibility(.hidden)])
+            }, onError: { [weak self]  error in
+                Logger.shared.error(error)
+                self?.interface.apply(updates: [.showAlertSheetForError(SendMoniesInternalError.default)])
+            })
+            .disposed(by: bag)
     }
     
     func onConfirmSendTapped() {
@@ -167,28 +170,34 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
         services.paxService.transfer(proposal: proposal, to: address)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
+            .flatMap(weak: self) { (self, candidate) -> Single<EthereumTransactionPublished> in
+                return self.services.walletService.send(transaction: candidate)
+            }
             .do(onDispose: { [weak self] in
                 guard let self = self else { return }
                 self.interface.apply(updates: [.loadingIndicatorVisibility(.hidden)])
-            })
-            .flatMap(weak: self, { (self, candidate) -> Single<EthereumTransactionPublished> in
-                return self.services.walletService.send(transaction: candidate)
             })
             .subscribe(onSuccess: { [weak self] published in
                 guard let self = self else { return }
                 self.calculator.handle(event: .start)
                 self.interface.apply(updates: [.hideConfirmationModal,
+                                               .toAddressTextField(nil),
                                                .showAlertSheetForSuccess])
                 Logger.shared.debug("Published PAX transaction: \(published)")
-            }, onError: { error in
+            }, onError: { [weak self] error in
                 Logger.shared.error(error)
-            }).disposed(by: bag)
+                self?.interface.apply(updates: [.showAlertSheetForError(SendMoniesInternalError.default)])
+            })
+            .disposed(by: bag)
     }
     
-    func onRightBarButtonItemTapped() {
+    func onErrorBarButtonItemTapped() {
         guard let output = output else { return }
         guard let error = output.model.internalError else { return }
         interface.apply(updates: [.showAlertSheetForError(error)])
     }
     
+    func onQRBarButtonItemTapped() {
+        interface.displayQRCodeScanner()
+    }
 }

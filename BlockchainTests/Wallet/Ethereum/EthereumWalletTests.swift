@@ -210,23 +210,23 @@ class EthereumWalletTests: XCTestCase {
         let paxTokenAccount = ERC20TokenAccount(
             label: "My PAX Wallet",
             contractAddress: PaxToken.contractAddress.rawValue,
-            hasSeen: "false",
+            hasSeen: false,
             transactionNotes: [
                 "transaction_hash": "memo"
             ]
         )
-        let expectedTokenAccounts: [ERC20TokenAccount] = [ paxTokenAccount ]
+        let expectedTokenAccounts: [String: ERC20TokenAccount] = [ PaxToken.metadataKey: paxTokenAccount ]
 
-        let tokenAccountsObservable: Observable<[ERC20TokenAccount]> = self.subject
+        let tokenAccountsObservable: Observable<[String: ERC20TokenAccount]> = subject
             .erc20TokenAccounts
             .asObservable()
 
         // Act
-        let result: TestableObserver<[ERC20TokenAccount]> = self.scheduler
+        let result: TestableObserver<[String: ERC20TokenAccount]> = scheduler
             .start { tokenAccountsObservable }
 
         // Assert
-        let expectedEvents: [Recorded<Event<[ERC20TokenAccount]>>] = Recorded.events(
+        let expectedEvents: [Recorded<Event<[String: ERC20TokenAccount]>>] = Recorded.events(
             .next(
                 200,
                 expectedTokenAccounts
@@ -242,12 +242,12 @@ class EthereumWalletTests: XCTestCase {
         let paxTokenAccount = ERC20TokenAccount(
             label: "My PAX Wallet",
             contractAddress: PaxToken.contractAddress.rawValue,
-            hasSeen: "false",
+            hasSeen: false,
             transactionNotes: [
                 "transaction_hash": "memo"
             ]
         )
-        let tokenAccounts: [ERC20TokenAccount] = [ paxTokenAccount ]
+        let tokenAccounts: [String: ERC20TokenAccount] = [ PaxToken.metadataKey: paxTokenAccount ]
         
         let saveTokenAccountsObservable: Observable<Never> = subject
             .save(erc20TokenAccounts: tokenAccounts)
@@ -263,7 +263,7 @@ class EthereumWalletTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":\"false\",\"tx_notes\":{\"transaction_hash\":\"memo\"}}}")
+        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"pax\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":false,\"tx_notes\":{\"transaction_hash\":\"memo\"}}}")
     }
     
     func test_get_transaction_memo_for_token_transaction_hash() {
@@ -271,10 +271,10 @@ class EthereumWalletTests: XCTestCase {
         let expectedMemo = "memo"
         
         let transactionHash = "transaction_hash"
-        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        let tokenKey = PaxToken.metadataKey
         
         let memoObservable: Observable<String?> = subject
-            .memo(for: transactionHash, tokenContractAddress: tokenContractAddress)
+            .memo(for: transactionHash, tokenKey: tokenKey)
             .asObservable()
         
         // Act
@@ -298,13 +298,13 @@ class EthereumWalletTests: XCTestCase {
         let memo = "memo"
         
         let transactionHash = "transactionHash"
-        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        let tokenKey = PaxToken.metadataKey
         
         let saveTokenAccountsObservable: Observable<Never> = subject
             .save(
                 transactionMemo: memo,
                 for: transactionHash,
-                tokenContractAddress: tokenContractAddress
+                tokenKey: tokenKey
             )
             .asObservable()
         
@@ -318,7 +318,7 @@ class EthereumWalletTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":\"false\",\"tx_notes\":{\"transactionHash\":\"memo\",\"transaction_hash\":\"memo\"}}}")
+        XCTAssertEqual(legacyWalletMock.lastSavedTokensJSONString, "{\"pax\":{\"label\":\"My PAX Wallet\",\"contract\":\"0x8E870D67F660D95d5be530380D0eC0bd388289E1\",\"has_seen\":false,\"tx_notes\":{\"transactionHash\":\"memo\",\"transaction_hash\":\"memo\"}}}")
     }
 }
 

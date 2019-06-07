@@ -918,7 +918,9 @@
             break;
         }
         case LegacyAssetTypePax: {
-            // TODO 
+            _sendPaxViewController = [SendPaxViewController make];
+            [_sendPaxViewController scanQrCodeForDestinationAddress];
+            viewControllerToPresent = _sendPaxViewController;
             break;
         }
     }

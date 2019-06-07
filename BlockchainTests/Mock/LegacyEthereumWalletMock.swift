@@ -162,10 +162,10 @@ class MockLegacyEthereumWallet: LegacyEthereumWalletProtocol, MnemonicAccessAPI 
     }
     
     static let tokenAccounts: [String: [String: Any]] = [
-        "0x8E870D67F660D95d5be530380D0eC0bd388289E1": [
+        "pax": [
             "label": "My PAX Wallet",
             "contract": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
-            "has_seen": "false",
+            "has_seen": false,
             "tx_notes": [
                 "transaction_hash": "memo"
             ]

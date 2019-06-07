@@ -2656,13 +2656,15 @@ MyWalletPhone.recordLastTransaction = function(hash) {
 
 MyWalletPhone.recordLastTransactionAsync = function(txHash, secondPassword) {
     var success = function () {
-        objc_on_recordLastTransactionAsync();
+        objc_on_recordLastTransactionAsync_success();
     };
     var error = function (e) {
+        console.log('Error recording last transaction')
+        console.log(e);
         objc_on_recordLastTransactionAsync_error(e);
     };
     var setLastTx = function (hash) {
-        return MyWallet.wallet.eth.setLastTxPromise(hash);
+        return MyWallet.wallet.eth.setLastTxAndSync(hash);
     };
     MyWalletPhone.createEthAccountIfNeeded(secondPassword)
         .then(setLastTx(txHash))

@@ -23,7 +23,9 @@ protocol SendPaxViewControllerDelegate: class {
     func onPaxEntry(_ value: CryptoValue?)
     func onFiatEntry(_ value: FiatValue)
     func onAddressEntry(_ value: String?)
-    func onRightBarButtonItemTapped()
+    func onErrorBarButtonItemTapped()
+    func onQRBarButtonItemTapped()
+    
     var rightNavigationCTAType: NavigationCTAType { get }
 }
 
@@ -61,6 +63,8 @@ class SendPaxViewController: UIViewController {
     
     private var coordinator: SendPaxCoordinator!
     
+    private var qrScannerViewModel: QRCodeScannerViewModel<AddressQRCodeParser>?
+    
     // MARK: Class Functions
     
     @objc class func make() -> SendPaxViewController {
@@ -78,6 +82,8 @@ class SendPaxViewController: UIViewController {
         topGravityStackView.addBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         sendNowButton.layer.cornerRadius = 4.0
         delegate?.onLoad()
+        
+        setupKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,7 +91,20 @@ class SendPaxViewController: UIViewController {
         delegate?.onAppear()
     }
     
-    fileprivate func apply(_ update: SendMoniesPresentationUpdate) {
+    private func setupKeyboard() {
+        let bar = UIToolbar()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        bar.items = [ flexibleSpace, doneButton ]
+        bar.sizeToFit()
+        
+        paxAddressTextField.inputAccessoryView = bar
+        fiatTextField.inputAccessoryView = bar
+        paxTextField.inputAccessoryView = bar
+        hideKeyboardWhenTappedAround()
+    }
+    
+    private func apply(_ update: SendMoniesPresentationUpdate) {
         switch update {
         case .cryptoValueTextField(let amount):
             guard paxTextField.isFirstResponder == false else { return }
@@ -179,7 +198,7 @@ class SendPaxViewController: UIViewController {
 
 extension SendPaxViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text else { return }
+        guard let text = textField.text, !text.isEmpty else { return }
         if textField == paxAddressTextField {
             delegate?.onAddressEntry(text)
         }
@@ -217,7 +236,9 @@ extension SendPaxViewController: UITextFieldDelegate {
 extension SendPaxViewController: NavigatableView {
     func navControllerRightBarButtonTapped(_ navController: UINavigationController) {
         if let type = delegate?.rightNavigationCTAType, type == .error {
-            delegate?.onRightBarButtonItemTapped()
+            delegate?.onErrorBarButtonItemTapped()
+        } else if let type = delegate?.rightNavigationCTAType, type == .qrCode {
+            delegate?.onQRBarButtonItemTapped()
         } else if let parent = parent as? AssetSelectorContainerViewController {
             parent.navControllerRightBarButtonTapped(navController)
         }
@@ -253,7 +274,7 @@ extension SendPaxViewController: SendPAXInterface {
             frame: view.frame,
             viewModel: confirmation,
             sendButtonFrame: sendNowButton.frame
-            )!
+        )!
         confirmView.confirmDelegate = self
         ModalPresenter.shared.showModal(
             withContent: confirmView,
@@ -261,6 +282,10 @@ extension SendPaxViewController: SendPAXInterface {
             showHeader: true,
             headerText: LocalizationConstants.SendAsset.confirmPayment
         )
+    }
+    
+    func displayQRCodeScanner() {
+        scanQrCodeForDestinationAddress()
     }
 }
 
@@ -271,5 +296,61 @@ extension SendPaxViewController: ConfirmPaymentViewDelegate {
     
     func feeInformationButtonClicked() {
         // TODO
+    }
+}
+
+extension SendPaxViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SendPaxViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// TODO: Clean this up, move to Coordinator
+extension SendPaxViewController {
+    @objc func scanQrCodeForDestinationAddress() {
+        guard let scanner = QRCodeScanner() else { return }
+        
+        let parser = AddressQRCodeParser(assetType: .pax)
+        let textViewModel = AddressQRCodeTextViewModel()
+        
+        qrScannerViewModel = QRCodeScannerViewModel(
+            parser: parser,
+            textViewModel: textViewModel,
+            scanner: scanner,
+            completed: { [weak self] result in
+                self?.handleAddressScan(result: result)
+            }
+        )
+        
+        let viewController = QRCodeScannerViewControllerBuilder(viewModel: qrScannerViewModel)?
+            .with(dismissAnimated: false)
+            .build()
+        
+        guard let qrCodeScannerViewController = viewController else { return }
+        
+        DispatchQueue.main.async {
+            guard let controller = AppCoordinator.shared.tabControllerManager.tabViewController else { return }
+            controller.present(qrCodeScannerViewController, animated: true, completion: nil)
+        }
+    }
+    
+    private func handleAddressScan(result: NewResult<AddressQRCodeParser.Address, AddressQRCodeParser.AddressQRCodeParserError>) {
+        if case .success(let assetURL) = result {
+            delegate?.onAddressEntry(assetURL.payload.address)
+            
+            guard
+                let amount = assetURL.payload.amount,
+                let value = CryptoValue.paxFromMajor(string: amount)
+            else {
+                return
+            }
+            delegate?.onPaxEntry(value)
+        }
     }
 }

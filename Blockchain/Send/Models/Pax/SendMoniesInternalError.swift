@@ -15,17 +15,22 @@ enum SendMoniesInternalError: Error {
     case insufficientFeeCoverage
     case insufficientTokenBalance
     case invalidDestinationAddress
+    case pendingTransaction
     case `default`
     
     init(erc20error: ERC20ServiceError) {
         switch erc20error {
+        case .pendingTransaction:
+            self = .pendingTransaction
         case .insufficientEthereumBalance:
             self = .insufficientFeeCoverage
         case .insufficientTokenBalance:
             self = .insufficientTokenBalance
         case .invalidEthereumAddress:
             self = .invalidDestinationAddress
-        case .invalidCyptoValue:
+        case .invalidCryptoValue:
+            self = .default
+        case .cryptoValueBelowMinimumSpendable:
             self = .default
         }
     }
@@ -40,6 +45,8 @@ extension SendMoniesInternalError {
             return String(format: "\(LocalizationConstants.SendAsset.notEnough) %@", AssetType.pax.description)
         case .invalidDestinationAddress:
             return LocalizationConstants.SendAsset.invalidDestinationAddress
+        case .pendingTransaction:
+            return LocalizationConstants.SendEther.waitingForPaymentToFinishTitle
         case .default:
             return LocalizationConstants.Errors.error
         }
@@ -53,6 +60,8 @@ extension SendMoniesInternalError {
             return String(format: "\(LocalizationConstants.SendAsset.notEnough) %@", AssetType.pax.description)
         case .invalidDestinationAddress:
             return LocalizationConstants.SendAsset.invalidDestinationDescription
+        case .pendingTransaction:
+            return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
         case .default:
             return LocalizationConstants.Errors.error
         }

@@ -30,7 +30,7 @@ public class EthereumWallet: NSObject {
     private static let defaultPAXAccount = ERC20TokenAccount(
         label: LocalizationConstants.SendAsset.myPaxWallet,
         contractAddress: PaxToken.contractAddress.rawValue,
-        hasSeen: "false",
+        hasSeen: false,
         transactionNotes: [String: String]()
     )
     
@@ -141,7 +141,7 @@ public class EthereumWallet: NSObject {
     private func saveDefaultPAXAccountIfNeeded() -> Completable {
         return erc20TokenAccounts
             .flatMapCompletable(weak: self) { (self, tokenAccounts) -> Completable in
-                if tokenAccounts.contains(where: { $0.contractAddress.lowercased() == PaxToken.contractAddress.rawValue.lowercased() }) {
+                guard tokenAccounts[PaxToken.metadataKey] == nil else {
                     return Completable.empty()
                 }
                 return self.saveDefaultPAXAccount().asCompletable()
@@ -150,7 +150,7 @@ public class EthereumWallet: NSObject {
     
     private func saveDefaultPAXAccount() -> Single<ERC20TokenAccount> {
         let paxAccount = EthereumWallet.defaultPAXAccount
-        return save(erc20TokenAccounts: [ paxAccount ])
+        return save(erc20TokenAccounts: [ PaxToken.metadataKey : paxAccount ])
             .asObservable()
             .flatMap(weak: self) { (self, _) -> Observable<ERC20TokenAccount> in
                 return Observable.just(paxAccount)
@@ -159,8 +159,15 @@ public class EthereumWallet: NSObject {
     }
 }
 
-extension EthereumWallet: ERC20BridgeAPI {
-    public func save(erc20TokenAccounts: [ERC20TokenAccount]) -> Completable {
+extension EthereumWallet: ERC20BridgeAPI { 
+    public func tokenAccount(for key: String) -> Single<ERC20TokenAccount?> {
+        return erc20TokenAccounts
+            .flatMap { tokenAccounts -> Single<ERC20TokenAccount?> in
+                Single.just(tokenAccounts[key])
+            }
+    }
+    
+    public func save(erc20TokenAccounts: [String: ERC20TokenAccount]) -> Completable {
         return secondPasswordIfAccountCreationNeeded
             .asObservable()
             .flatMap(weak: self) { (self, secondPassword) -> Observable<Never> in
@@ -173,58 +180,49 @@ extension EthereumWallet: ERC20BridgeAPI {
             .asCompletable()
     }
     
-    public var erc20TokenAccounts: Single<[ERC20TokenAccount]> {
+    public var erc20TokenAccounts: Single<[String: ERC20TokenAccount]> {
         return secondPasswordIfAccountCreationNeeded
-            .flatMap(weak: self) { (self, secondPassword) -> Single<[ERC20TokenAccount]> in
+            .flatMap(weak: self) { (self, secondPassword) -> Single<[String: ERC20TokenAccount]> in
                 self.erc20TokenAccounts(secondPassword: secondPassword)
             }
     }
     
-    public func memo(for transactionHash: String, tokenContractAddress: String) -> Single<String?> {
-        return erc20TokenAccounts.flatMap(weak: self) { (self, tokenAccounts) -> Single<ERC20TokenAccount?> in
-            Single.just(tokenAccounts.first(where: { $0.contractAddress.lowercased() == tokenContractAddress.lowercased() }))
-        }
-        .map { tokenAccount -> String? in
-            tokenAccount?.transactionNotes[transactionHash]
-        }
+    public func memo(for transactionHash: String, tokenKey: String) -> Single<String?> {
+        return erc20TokenAccounts
+            .map { tokenAccounts -> ERC20TokenAccount? in
+                tokenAccounts[tokenKey]
+            }
+            .map { tokenAccount -> String? in
+                tokenAccount?.transactionNotes[transactionHash]
+            }
     }
     
-    public func save(transactionMemo: String, for transactionHash: String, tokenContractAddress: String) -> Completable {
+    public func save(transactionMemo: String, for transactionHash: String, tokenKey: String) -> Completable {
         return erc20TokenAccounts
-            .flatMap(weak: self) { (self, tokenAccounts) -> Single<([ERC20TokenAccount], ERC20TokenAccount)> in
-                guard let tokenAccount = tokenAccounts.first(where: { $0.contractAddress.lowercased() == tokenContractAddress.lowercased() }) else {
-                    return self.saveDefaultPAXAccount()
-                        .flatMap(weak: self) { (self, tokenAccount) -> Single<([ERC20TokenAccount], ERC20TokenAccount)> in
-                            Single.just((tokenAccounts + [ tokenAccount ], tokenAccount))
-                        }
+            .flatMap { tokenAccounts -> Single<([String: ERC20TokenAccount], ERC20TokenAccount)> in
+                guard let tokenAccount = tokenAccounts[tokenKey] else {
+                    throw WalletError.failedToSaveMemo
                 }
                 return Single.just((tokenAccounts, tokenAccount))
             }
             .asObservable()
             .flatMap(weak: self) { (self, tuple) -> Observable<Never> in
                 var (tokenAccounts, tokenAccount) = tuple
+                _ = tokenAccounts.removeValue(forKey: tokenKey)
                 tokenAccount.update(memo: transactionMemo, for: transactionHash)
-                tokenAccounts.removeAll(where: {
-                    $0.contractAddress.lowercased() == tokenContractAddress.lowercased()
-                })
-                return self.save(erc20TokenAccounts: tokenAccounts + [ tokenAccount ]).asObservable()
+                tokenAccounts[tokenKey] = tokenAccount
+                return self.save(erc20TokenAccounts: tokenAccounts).asObservable()
             }
             .asCompletable()
     }
     
-    private func save(erc20TokenAccounts: [ERC20TokenAccount], secondPassword: String?) -> Completable {
+    private func save(erc20TokenAccounts: [String: ERC20TokenAccount], secondPassword: String?) -> Completable {
         return Completable.create(subscribe: { [weak self] observer -> Disposable in
             guard let wallet = self?.wallet else {
                 observer(.error(WalletError.notInitialized))
                 return Disposables.create()
             }
-            
-            var erc20TokensDictionary: [String: ERC20TokenAccount] = [:]
-            for token in erc20TokenAccounts {
-                erc20TokensDictionary[token.contractAddress] = token
-            }
-            
-            guard let jsonData = try? JSONEncoder().encode(erc20TokensDictionary) else {
+            guard let jsonData = try? JSONEncoder().encode(erc20TokenAccounts) else {
                 observer(.error(WalletError.unknown))
                 return Disposables.create()
             }
@@ -237,7 +235,7 @@ extension EthereumWallet: ERC20BridgeAPI {
         })
     }
     
-    private func erc20TokenAccounts(secondPassword: String? = nil) -> Single<[ERC20TokenAccount]> {
+    private func erc20TokenAccounts(secondPassword: String? = nil) -> Single<[String: ERC20TokenAccount]> {
         return Single<[String: [String: Any]]>.create(subscribe: { [weak self] observer -> Disposable in
             guard let wallet = self?.wallet else {
                 observer(.error(WalletError.notInitialized))
@@ -250,8 +248,8 @@ extension EthereumWallet: ERC20BridgeAPI {
             })
             return Disposables.create()
         })
-        .flatMap(weak: self) { (self, erc20Accounts) -> Single<[ERC20TokenAccount]> in
-            let accounts: [ERC20TokenAccount] = erc20Accounts.decodeJSONValues(type: ERC20TokenAccount.self)
+        .flatMap { erc20Accounts -> Single<[String: ERC20TokenAccount]> in
+            let accounts: [String: ERC20TokenAccount] = erc20Accounts.decodeJSONObjects(type: ERC20TokenAccount.self)
             return Single.just(accounts)
         }
     }

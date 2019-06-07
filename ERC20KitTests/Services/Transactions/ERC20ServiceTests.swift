@@ -240,7 +240,7 @@ class ERC20ServiceTests: XCTestCase {
         // Arrange
         let expectedMemo = "expectedMemo"
         let transactionHash = "transactionHash"
-        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        let tokenKey = PaxToken.metadataKey
         
         erc20Bridge.memoForTransactionHashValue = Single.just(expectedMemo)
         
@@ -261,14 +261,14 @@ class ERC20ServiceTests: XCTestCase {
         
         XCTAssertEqual(result.events, expectedEvents)
         XCTAssertEqual(erc20Bridge.lastTransactionHashFetched, transactionHash)
-        XCTAssertEqual(erc20Bridge.lastTokenContractAddressFetched, tokenContractAddress)
+        XCTAssertEqual(erc20Bridge.lastTokenKeyFetched, tokenKey)
     }
     
     func test_save_memo_for_transaction_hash() throws {
         // Arrange
         let transactionHash = "transactionHash"
         let transactionMemo = "transactionMemo"
-        let tokenContractAddress = "0x8E870D67F660D95d5be530380D0eC0bd388289E1"
+        let tokenKey = PaxToken.metadataKey
         
         let saveMemoObservable = subject
             .save(transactionMemo: transactionMemo, for: transactionHash)
@@ -286,7 +286,7 @@ class ERC20ServiceTests: XCTestCase {
         
         XCTAssertEqual(erc20Bridge.lastTransactionMemoSaved, transactionMemo)
         XCTAssertEqual(erc20Bridge.lastTransactionHashSaved, transactionHash)
-        XCTAssertEqual(erc20Bridge.lastTokenContractAddressSaved, tokenContractAddress)
+        XCTAssertEqual(erc20Bridge.lastTokenKeySaved, tokenKey)
     }
     
 }

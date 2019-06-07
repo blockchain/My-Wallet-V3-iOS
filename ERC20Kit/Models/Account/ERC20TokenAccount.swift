@@ -21,13 +21,13 @@ public struct ERC20TokenAccount: Codable {
     
     public let label: String
     public let contractAddress: String
-    public let hasSeen: String
+    public let hasSeen: Bool
     public private(set) var transactionNotes: [String: String]
     
     public init(
         label: String,
         contractAddress: String,
-        hasSeen: String,
+        hasSeen: Bool,
         transactionNotes: [String: String]) {
         self.label = label
         self.contractAddress = contractAddress

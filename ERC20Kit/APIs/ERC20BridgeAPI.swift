@@ -12,9 +12,12 @@ import PlatformKit
 import EthereumKit
 
 public protocol ERC20BridgeAPI: class {
-    var erc20TokenAccounts: Single<[ERC20TokenAccount]> { get }
+    var isWaitingOnEtherTransaction: Single<Bool> { get }
     
-    func save(erc20TokenAccounts: [ERC20TokenAccount]) -> Completable
-    func memo(for transactionHash: String, tokenContractAddress: String) -> Single<String?>
-    func save(transactionMemo: String, for transactionHash: String, tokenContractAddress: String) -> Completable
+    var erc20TokenAccounts: Single<[String: ERC20TokenAccount]> { get }
+   
+    func tokenAccount(for key: String) -> Single<ERC20TokenAccount?>
+    func save(erc20TokenAccounts: [String: ERC20TokenAccount]) -> Completable
+    func memo(for transactionHash: String, tokenKey: String) -> Single<String?>
+    func save(transactionMemo: String, for transactionHash: String, tokenKey: String) -> Completable
 }

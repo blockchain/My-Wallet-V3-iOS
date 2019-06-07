@@ -66,9 +66,6 @@ public final class EthereumTransactionSendingService: EthereumTransactionSending
         return finalise(transaction: transaction, keyPair: keyPair)
             .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionPublished> in
                 assert(transaction.web3swiftTransaction.intrinsicChainID == NetworkId.mainnet.rawValue)
-                print("transaction: \(transaction)")
-                print("transaction.web3swiftTransaction: \(transaction.web3swiftTransaction)")
-                print("Going to publish! \n")
                 return self.publish(transaction: transaction)
             }
     }
@@ -92,6 +89,7 @@ public final class EthereumTransactionSendingService: EthereumTransactionSending
 
     private func publish(transaction: EthereumTransactionFinalised) -> Single<EthereumTransactionPublished> {
         return ethereumAPIClient.push(transaction: transaction)
+            .observeOn(MainScheduler.instance)
             .flatMap { response in
                 let publishedTransaction = try EthereumTransactionPublished(
                     finalisedTransaction: transaction,

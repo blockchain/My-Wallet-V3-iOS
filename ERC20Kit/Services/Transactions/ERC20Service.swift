@@ -13,12 +13,10 @@ import web3swift
 import PlatformKit
 import EthereumKit
 
-// TODO:
-// * Add ERC20 field in ethereum metadata
-// * Add tx_notes to metadata
-
 public enum ERC20ServiceError: Error {
-    case invalidCyptoValue
+    case pendingTransaction
+    case invalidCryptoValue
+    case cryptoValueBelowMinimumSpendable
     case insufficientEthereumBalance
     case insufficientTokenBalance
     case invalidEthereumAddress
@@ -28,6 +26,30 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
     
     enum ERC20ContractMethod: String {
         case transfer
+    }
+    
+    private struct ValidationInputs {
+        let value: ERC20TokenValue<Token>
+        let fee: EthereumTransactionFee
+        let tokenAccountDetails: ERC20AssetAccountDetails
+        let ethereumAccountDetails: EthereumAssetAccountDetails
+    }
+    
+    private struct ValidatedInputs {
+        let value: ERC20TokenValue<Token>
+        let fee: EthereumTransactionFee
+        let tokenAccountDetails: ERC20AssetAccountDetails
+        let ethereumAccountDetails: EthereumAssetAccountDetails
+    }
+    
+    private var handlePendingTransaction: Single<Void> {
+        return bridge.isWaitingOnEtherTransaction
+            .flatMap { isWaiting -> Single<Void> in
+                guard !isWaiting else {
+                    throw ERC20ServiceError.pendingTransaction
+                }
+                return Single.just(())
+            }
     }
     
     private var tokenAssetAccountDetails: Single<ERC20AssetAccountDetails> {
@@ -67,6 +89,7 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
     
     public func transfer(proposal: ERC20TransactionProposal<Token>, to address: EthereumKit.EthereumAddress) -> Single<EthereumTransactionCandidate> {
         guard address.isValid else { return Single.error(ERC20ServiceError.invalidEthereumAddress) }
+        guard proposal.aboveMinimumSpendable else { return Single.error(ERC20ServiceError.cryptoValueBelowMinimumSpendable) }
         return buildTransactionCandidate(to: address, amount: proposal.value, fee: nil)
     }
     
@@ -74,23 +97,36 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
         to: EthereumKit.EthereumAddress,
         amount cryptoValue: ERC20TokenValue<Token>,
         fee: EthereumTransactionFee? = nil
-        ) -> Single<EthereumTransactionCandidate> {
+    ) -> Single<EthereumTransactionCandidate> {
         let tokenAmount = BigUInt(cryptoValue.amount)
-        return Single.zip(
-            feesFor(feeValue: fee),
-            tokenAssetAccountDetails,
-            ethereumAssetAccountDetails,
-            transferTransaction(to: to, amount: tokenAmount)
-            )
-            .flatMap(weak: self, { (self, tuple) -> Single<EthereumTransactionCandidate> in
-                let (fee, tokenAccount, ethereumAccount, transaction) = tuple
-                
-                try self.validateTokenAndBalanceCoverage(
-                    cryptoValue,
-                    fee: fee,
-                    tokenAcocuntDetails: tokenAccount,
-                    assetAccountDetails: ethereumAccount
+        return handlePendingTransaction
+            .flatMap(weak: self) { (self, _) -> Single<(EthereumTransactionFee, ERC20AssetAccountDetails, EthereumAssetAccountDetails)> in
+                return Single.zip(
+                    self.feesFor(feeValue: fee),
+                    self.tokenAssetAccountDetails,
+                    self.ethereumAssetAccountDetails
                 )
+            }
+            .flatMap(weak: self) { (self, tuple) -> Single<ValidatedInputs> in
+                let (fee, tokenAccount, ethereumAccount) = tuple
+                return self.validateTokenAndBalanceCoverage(
+                    for: ValidationInputs(
+                        value: cryptoValue,
+                        fee: fee,
+                        tokenAccountDetails: tokenAccount,
+                        ethereumAccountDetails: ethereumAccount
+                    )
+                )
+            }
+            .flatMap(weak: self) { (self, validatedInputs) -> Single<(EthereumTransactionFee, web3swift.EthereumTransaction)> in
+                let fee = validatedInputs.fee
+                return self.transferTransaction(to: to, amount: tokenAmount)
+                    .flatMap(weak: self) { (self, transaction) -> Single<(EthereumTransactionFee, web3swift.EthereumTransaction)> in
+                        return Single.just((fee, transaction))
+                    }
+            }
+            .flatMap(weak: self) { (self, tuple) -> Single<EthereumTransactionCandidate> in
+                let (fee, transaction) = tuple
                 
                 let transactionCandidate = EthereumTransactionCandidate(
                     to: EthereumAddress(rawValue: transaction.to.address)!,
@@ -99,9 +135,8 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
                     value: BigUInt(0),
                     data: transaction.data
                 )
-                
                 return Single.just(transactionCandidate)
-            })
+            }
     }
     
     // MARK: ERC20TransactionEvaluationAPI
@@ -118,26 +153,35 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
         with cryptoValue: ERC20TokenValue<Token>,
         fee: EthereumTransactionFee? = nil)
         -> Single<ERC20TransactionProposal<Token>> {
-        return Single.zip(feesFor(feeValue: fee), tokenAssetAccountDetails, ethereumAssetAccountDetails)
-            .flatMap(weak: self, { (self, tuple) -> Single<ERC20TransactionProposal<Token>> in
-                let (fee, tokenAccount, ethereumAccount) = tuple
-                
-                try self.validateTokenAndBalanceCoverage(
-                    cryptoValue,
-                    fee: fee,
-                    tokenAcocuntDetails: tokenAccount,
-                    assetAccountDetails: ethereumAccount
+        return handlePendingTransaction
+            .flatMap(weak: self) { (self, _) -> Single<(EthereumTransactionFee, ERC20AssetAccountDetails, EthereumAssetAccountDetails)> in
+                return Single.zip(
+                    self.feesFor(feeValue: fee),
+                    self.tokenAssetAccountDetails,
+                    self.ethereumAssetAccountDetails
                 )
-                
+            }
+            .flatMap(weak: self) { (self, tuple) -> Single<ERC20Service<Token>.ValidatedInputs> in
+                let (fee, tokenAccount, ethereumAccount) = tuple
+                return self.validateTokenAndBalanceCoverage(
+                    for: ERC20Service<Token>.ValidationInputs(
+                        value: cryptoValue,
+                        fee: fee,
+                        tokenAccountDetails: tokenAccount,
+                        ethereumAccountDetails: ethereumAccount
+                    )
+                )
+            }
+            .flatMap(weak: self) { (self, validatedInputs) -> Single<ERC20TransactionProposal<Token>> in
+                let (fee, ethereumAccount) = (validatedInputs.fee, validatedInputs.ethereumAccountDetails)
                 let transactionProposal = ERC20TransactionProposal(
                     from: EthereumKit.EthereumAddress(stringLiteral: ethereumAccount.account.accountAddress),
                     gasPrice: BigUInt(fee.priority.amount),
                     gasLimit: BigUInt(fee.gasLimitContract),
                     value: cryptoValue
                 )
-                
                 return Single.just(transactionProposal)
-            })
+            }
     }
     
     private func transferTransaction(to: EthereumKit.EthereumAddress, amount: BigUInt) -> Single<web3swift.EthereumTransaction> {
@@ -167,26 +211,33 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
         return Single.just(fee)
     }
     
-    private func validateTokenAndBalanceCoverage(
-        _ cryptoValue: ERC20TokenValue<Token>,
-        fee: EthereumTransactionFee,
-        tokenAcocuntDetails: ERC20AssetAccountDetails,
-        assetAccountDetails: EthereumAssetAccountDetails) throws {
+    private func validateTokenAndBalanceCoverage(for inputs: ValidationInputs) -> Single<ValidatedInputs> {
+        let (value, fee, tokenAccountDetails, ethereumAccountDetails) =
+            (inputs.value, inputs.fee, inputs.tokenAccountDetails, inputs.ethereumAccountDetails)
         
-        let tokenAmount = BigUInt(cryptoValue.amount)
+        let tokenAmount = BigUInt(value.amount)
         let gasPrice = BigUInt(fee.priority.amount)
         let gasLimitContract = BigUInt(fee.gasLimitContract)
-        let tokenBalance = BigUInt(tokenAcocuntDetails.balance.amount)
-        let ethereumBalance = BigUInt(assetAccountDetails.balance.amount)
+        let tokenBalance = BigUInt(tokenAccountDetails.balance.amount)
+        let ethereumBalance = BigUInt(ethereumAccountDetails.balance.amount)
         let ethereumTransactionFee = gasPrice * gasLimitContract
         
         guard ethereumTransactionFee < ethereumBalance else {
-            throw ERC20ServiceError.insufficientEthereumBalance
+            return Single.error(ERC20ServiceError.insufficientEthereumBalance)
         }
         
         guard tokenAmount <= tokenBalance else {
-            throw ERC20ServiceError.insufficientTokenBalance
+            return Single.error(ERC20ServiceError.insufficientTokenBalance)
         }
+        
+        return Single.just(
+            ValidatedInputs(
+                value: value,
+                fee: fee,
+                tokenAccountDetails: tokenAccountDetails,
+                ethereumAccountDetails: ethereumAccountDetails
+            )
+        )
     }
 }
 
@@ -194,7 +245,7 @@ extension ERC20Service: ERC20TransactionMemoAPI {
     public func memo(for transactionHash: String) -> Single<String?> {
         return bridge.memo(
             for: transactionHash,
-            tokenContractAddress: Token.contractAddress.rawValue
+            tokenKey: Token.metadataKey
         )
     }
     
@@ -202,7 +253,8 @@ extension ERC20Service: ERC20TransactionMemoAPI {
         return bridge.save(
             transactionMemo: transactionMemo,
             for: transactionHash,
-            tokenContractAddress: Token.contractAddress.rawValue
+            tokenKey: Token.metadataKey
         )
     }
 }
+

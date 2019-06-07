@@ -11,4 +11,5 @@ import Foundation
 protocol SendPAXInterface: class {
     func apply(updates: Set<SendMoniesPresentationUpdate>)
     func display(confirmation: BCConfirmPaymentViewModel)
+    func displayQRCodeScanner()
 }

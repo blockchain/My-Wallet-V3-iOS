@@ -12,32 +12,6 @@ import RxSwift
 import PlatformKit
 import EthereumKit
 
-public struct ERC20TransactionProposal<Token: ERC20Token> {
-    public let from: EthereumKit.EthereumAddress
-    public let gasPrice: BigUInt
-    public let gasLimit: BigUInt
-    public let value: ERC20TokenValue<Token>
-    
-    public init(from: EthereumKit.EthereumAddress,
-                gasPrice: BigUInt,
-                gasLimit: BigUInt,
-                value: ERC20TokenValue<Token>) {
-        self.from = from
-        self.gasPrice = gasPrice
-        self.gasLimit = gasLimit
-        self.value = value
-    }
-}
-
-extension ERC20TransactionProposal: Equatable {
-    public static func == (lhs: ERC20TransactionProposal, rhs: ERC20TransactionProposal) -> Bool {
-        return lhs.from == rhs.from &&
-            lhs.gasLimit == rhs.gasLimit
-            && lhs.gasPrice == rhs.gasPrice
-            && lhs.value.value == rhs.value.value
-    }
-}
-
 public protocol ERC20API {
     associatedtype Token: ERC20Token
     
