@@ -149,6 +149,8 @@ class SendPaxViewController: UIViewController {
             if let navController = navigationController as? BaseNavigationController {
                 navController.update()
             }
+        case .walletLabel(let accountLabel):
+            paxWalletLabel.text = accountLabel
         }
     }
     

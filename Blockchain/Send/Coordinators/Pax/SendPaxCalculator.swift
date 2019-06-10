@@ -45,6 +45,7 @@ class SendPaxCalculator {
     private let priceService: PriceServiceAPI
     private let erc20Service: ERC20Service<PaxToken>
     private var model: Model
+    private let tokenAccount = BehaviorRelay<ERC20TokenAccount?>(value: nil)
     
     init(serviceAPI: PriceServiceAPI = PriceServiceClient(),
          erc20Service: ERC20Service<PaxToken>,
@@ -136,14 +137,59 @@ class SendPaxCalculator {
     /// Error getting wallet account info
     /// misc.
     private func validate(input: Input) {
-        var viewModel: SendPaxViewModel = SendPaxViewModel(input: input)
+        let tokenAccountSingle: Single<ERC20TokenAccount?>
+        if tokenAccount.value == nil {
+            tokenAccountSingle = erc20Service.tokenAccount
+                .do(onSuccess: { [weak self] account in
+                    self?.tokenAccount.accept(account)
+                })
+        } else {
+            tokenAccountSingle = tokenAccount.asObservable().asSingle()
+        }
+        Single.zip(
+                validateSingle(input: input),
+                tokenAccountSingle
+            )
+            .flatMap { value -> Single<Output> in
+                let (output, account) = value
+                var model = output.model
+                var presentationUpdates = output.presentationUpdates
+                if account?.label != output.model.walletLabel {
+                    model.updateWalletLabel(with: account)
+                    presentationUpdates.insert(.walletLabel(account?.label))
+                }
+                let newOutput = Output(
+                    presentationUpdates: presentationUpdates,
+                    model: model
+                )
+                return Single.just(newOutput)
+            }
+            .subscribe(onSuccess: { value in
+                self.model = value.model
+                self.output.on(.next(value))
+                self.status.on(.next(.stopped))
+            }, onError: { error in
+                /// ⚠️ Errors that occur here are not handled as they are not
+                /// being applied to the `Model`. Most, if not all errors should
+                /// be applied to the `Model` as the `SendPaxViewController` must
+                /// know what error occured in order to show the proper alert.
+                Logger.shared.error(error)
+                self.output.on(.error(error))
+                self.status.on(.next(.stopped))
+            })
+            .disposed(by: bag)
+    }
+    
+    private func validateSingle(input: Input) -> Single<Output> {
+        var viewModel: SendPaxViewModel = SendPaxViewModel(
+            input: input
+        )
         var updates: Set<SendMoniesPresentationUpdate> = [
             .cryptoValueTextField(input.paxAmount.value),
             .fiatValueTextField(input.fiatAmount),
             .updateNavigationItems
         ]
-        
-        erc20Service.evaluate(amount: input.paxAmount)
+        return erc20Service.evaluate(amount: input.paxAmount)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
             .map { proposal -> Output in
@@ -176,19 +222,5 @@ class SendPaxCalculator {
                 let output = Output(presentationUpdates: updates, model: viewModel)
                 return Single.just(output)
             }
-            .subscribe(onSuccess: { value in
-                self.model = value.model
-                self.output.on(.next(value))
-                self.status.on(.next(.stopped))
-            }, onError: { error in
-                /// ⚠️ Errors that occur here are not handled as they are not
-                /// being applied to the `Model`. Most, if not all errors should
-                /// be applied to the `Model` as the `SendPaxViewController` must
-                /// know what error occured in order to show the proper alert.
-                Logger.shared.error(error)
-                self.output.on(.error(error))
-                self.status.on(.next(.stopped))
-            })
-            .disposed(by: bag)
     }
 }

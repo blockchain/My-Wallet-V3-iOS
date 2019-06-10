@@ -241,6 +241,12 @@ public class ERC20Service<Token: ERC20Token>: ERC20API, ERC20TransactionEvaluati
     }
 }
 
+extension ERC20Service: ERC20WalletAPI {
+    public var tokenAccount: Single<ERC20TokenAccount?> {
+        return bridge.tokenAccount(for: Token.metadataKey)
+    }
+}
+
 extension ERC20Service: ERC20TransactionMemoAPI {
     public func memo(for transactionHash: String) -> Single<String?> {
         return bridge.memo(

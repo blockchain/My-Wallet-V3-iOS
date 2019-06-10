@@ -12,6 +12,7 @@ import EthereumKit
 import ERC20Kit
 
 struct SendPaxViewModel {
+    var walletLabel: String?
     var address: EthereumKit.EthereumAddress?
     var paxAmount: ERC20TokenValue<PaxToken>
     var fiatAmount: FiatValue
@@ -30,6 +31,12 @@ struct SendPaxViewModel {
         self.address = input.address
         self.paxAmount = input.paxAmount
         self.fiatAmount = input.fiatAmount
+    }
+    
+    mutating func updateWalletLabel(with tokenAccount: ERC20TokenAccount?) {
+        if let tokenAccount = tokenAccount {
+            walletLabel = tokenAccount.label
+        }
     }
     
     var description: String {
