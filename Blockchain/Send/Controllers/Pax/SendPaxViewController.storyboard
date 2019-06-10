@@ -253,6 +253,7 @@
                         <viewLayoutGuide key="safeArea" id="ryk-1h-eqh"/>
                     </view>
                     <connections>
+                        <outlet property="currencyLabel" destination="6pg-Pn-3aR" id="IF5-0k-oYe"/>
                         <outlet property="fiatTextField" destination="aob-e1-5lc" id="HoF-xQ-M4d"/>
                         <outlet property="networkFeesLabel" destination="vb9-rq-Q2N" id="g3q-kh-wWd"/>
                         <outlet property="networkFeesToolTip" destination="Yjp-lJ-dJr" id="eN0-DP-3Du"/>

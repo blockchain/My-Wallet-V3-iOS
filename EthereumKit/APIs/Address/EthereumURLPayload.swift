@@ -1,45 +1,46 @@
 //
 //  EthereumURLPayload.swift
-//  Blockchain
+//  EthereumKit
 //
 //  Created by Jack on 06/06/2019.
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
 import Foundation
+import PlatformKit
 
-class EthereumURLPayload: EIP67URI, RawRepresentable {
+public class EthereumURLPayload: EIP67URI, RawRepresentable {
     
     private enum QueryItemKeys: String {
         case value
         case gas
     }
     
-    static var scheme: String {
-        return Constants.Schemes.ethereum
+    public static var scheme: String {
+        return "ethereum"
     }
     
-    var schemeCompat: String {
+    public var schemeCompat: String {
         return EthereumURLPayload.scheme
     }
     
-    var absoluteString: String {
+    public var absoluteString: String {
         return components.url!.absoluteString
     }
     
-    var rawValue: String {
+    public var rawValue: String {
         return absoluteString
     }
     
-    let address: String
+    public let address: String
     
-    private(set) var amount: String?
+    public private(set) var amount: String?
     
-    private(set) var gas: String?
+    public private(set) var gas: String?
     
     private let components: URLComponents
     
-    required init?(address: String, amount: String? = nil, gas: String? = nil) {
+    required public init?(address: String, amount: String? = nil, gas: String? = nil) {
         let components = EthereumURLPayload.urlComponents(from: address, amount: amount, gas: gas)
         guard EthereumURLPayload.valid(components: components) else {
             return nil
@@ -50,11 +51,11 @@ class EthereumURLPayload: EIP67URI, RawRepresentable {
         self.gas = gas
     }
     
-    required convenience init?(url: URL) {
+    required convenience public init?(url: URL) {
         self.init(rawValue: url.absoluteString)
     }
     
-    required init?(rawValue: String) {
+    required public init?(rawValue: String) {
         guard let components: URLComponents = URLComponents(string: rawValue) else {
             return nil
         }
