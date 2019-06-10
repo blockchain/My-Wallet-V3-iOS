@@ -430,10 +430,12 @@ final class DashboardController: UIViewController {
                 let stellerBalance = self.stellarAccountService
                     .currentStellarAccount(fromCache: false)
                     .map { CryptoValue.lumensFromMajor(decimal: $0.assetAccount.balance) }
+                    .catchError { _ in Maybe.just(CryptoValue.lumensFromMajor(int: 0)) }
                 
                 let paxBalance = self.paxAccountRepository
                     .currentAssetAccountDetails(fromCache: false)
                     .map { $0.balance }
+                    .catchError { _ in Maybe.just(CryptoValue.paxFromMajor(decimal: Decimal(0))) }
                 
                 _ = Maybe.zip(stellerBalance, paxBalance)
                     .subscribeOn(MainScheduler.asyncInstance)
@@ -447,6 +449,7 @@ final class DashboardController: UIViewController {
                             AssetType.pax: pax
                         ])
                     }, onError: { error in
+                        Logger.shared.error(error)
                         self.reloadBalances([
                             AssetType.bitcoin: self.getBtcBalance(),
                             AssetType.ethereum: self.getEthBalance(),

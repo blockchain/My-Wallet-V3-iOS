@@ -108,7 +108,7 @@ PODS:
   - secp256k1.c (0.1.2)
   - SipHash (1.2.2)
   - Starscream (3.0.6)
-  - stellar-ios-mac-sdk (1.6.0)
+  - stellar-ios-mac-sdk (1.6.6)
   - SwiftLint (0.30.1)
   - VeriffSDK (2.0.4)
   - web3swift.pod (2.1.10):
@@ -131,7 +131,7 @@ DEPENDENCIES:
   - RxSwift (~> 4.0)
   - RxTest (~> 4.0)
   - Starscream (~> 3.0.2)
-  - "stellar-ios-mac-sdk (from `git@github.com:jackpooleybc/stellar-ios-mac-sdk.git`, commit `4a86886656b0e89895d9fe89e004f5903359f333`)"
+  - "stellar-ios-mac-sdk (from `git@github.com:bchrisarriola/stellar-ios-mac-sdk.git`, commit `fe5cfb8eda5d62f57f634b75023c6b854d87e128`)"
   - SwiftLint
   - VeriffSDK (~> 2.0.4)
   - web3swift.pod (~> 2.1.10)
@@ -171,13 +171,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   stellar-ios-mac-sdk:
-    :commit: 4a86886656b0e89895d9fe89e004f5903359f333
-    :git: "git@github.com:jackpooleybc/stellar-ios-mac-sdk.git"
+    :commit: fe5cfb8eda5d62f57f634b75023c6b854d87e128
+    :git: "git@github.com:bchrisarriola/stellar-ios-mac-sdk.git"
 
 CHECKOUT OPTIONS:
   stellar-ios-mac-sdk:
-    :commit: 4a86886656b0e89895d9fe89e004f5903359f333
-    :git: "git@github.com:jackpooleybc/stellar-ios-mac-sdk.git"
+    :commit: fe5cfb8eda5d62f57f634b75023c6b854d87e128
+    :git: "git@github.com:bchrisarriola/stellar-ios-mac-sdk.git"
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
@@ -207,11 +207,11 @@ SPEC CHECKSUMS:
   secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
-  stellar-ios-mac-sdk: da6e4623e6574e54b2755e2ff14a317385062f8a
+  stellar-ios-mac-sdk: fa4cffe71666226af2404ca37359ce51dcdb74c3
   SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
   VeriffSDK: c9fe64b14ebab9a85aa9d78048146b7f079f6969
   web3swift.pod: e3bd1c18a84e9fc1c4bfab8ebc0754b0806a7bcd
 
-PODFILE CHECKSUM: 5368f92cc2ca201a7744b23c06cb304f178c860b
+PODFILE CHECKSUM: 82579a04df796dee3142b225d6de3126fd0106c7
 
 COCOAPODS: 1.5.3
