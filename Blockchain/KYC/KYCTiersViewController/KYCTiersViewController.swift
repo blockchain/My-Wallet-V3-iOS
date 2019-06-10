@@ -200,14 +200,18 @@ extension KYCTiersViewController: UICollectionViewDelegateFlowLayout {
                 ofKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: KYCTiersFooterView.identifier,
                 for: indexPath
-                ) as? KYCTiersFooterView else { return UICollectionReusableView() }
-            let trigger = ActionableTrigger( text: disclaimer, CTA: LocalizationConstants.ObjCStrings.BC_STRING_LEARN_MORE) { [weak self] in
-                guard let strongSelf = self else { return }
-                guard let supportURL = URL(string: Constants.Url.airdropProgram) else { return }
-                let controller = SFSafariViewController(url: supportURL)
-                strongSelf.present(controller, animated: true, completion: nil)
+            ) as? KYCTiersFooterView else { return UICollectionReusableView() }
+            if AppFeatureConfigurator.shared.configuration(for: .stellarLargeBacklog).isEnabled {
+                footer.configure(with: disclaimer)
+            } else {
+                let trigger = ActionableTrigger(text: disclaimer, CTA: LocalizationConstants.ObjCStrings.BC_STRING_LEARN_MORE) { [weak self] in
+                    guard let strongSelf = self else { return }
+                    guard let supportURL = URL(string: Constants.Url.airdropProgram) else { return }
+                    let controller = SFSafariViewController(url: supportURL)
+                    strongSelf.present(controller, animated: true, completion: nil)
+                }
+                footer.configure(with: trigger)
             }
-            footer.configure(with: trigger)
             return footer
         case UICollectionView.elementKindSectionHeader:
             guard let header = collectionView.dequeueReusableSupplementaryView(
@@ -240,7 +244,7 @@ extension KYCTiersViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForFooterInSection section: Int
-        ) -> CGSize {
+    ) -> CGSize {
         guard let disclaimer = pageModel.disclaimer else { return .zero }
         let height = KYCTiersFooterView.estimatedHeight(
             for: disclaimer,

@@ -18,7 +18,12 @@ extension KYCTiersPageModel {
     var disclaimer: String? {
         guard let tierTwo = cells.filter({ $0.tier == .tier2 }).first else { return nil }
         guard tierTwo.status != .rejected else { return nil }
-        return LocalizationConstants.KYC.completingTierTwoAutoEligible
+        let hasLargeBacklog = AppFeatureConfigurator.shared.configuration(for: .stellarLargeBacklog).isEnabled
+        if tierTwo.status == KYCTierCellModel.ApprovalStatus.inReview && hasLargeBacklog {
+            return LocalizationConstants.KYC.airdropLargeBacklogNotice
+        } else {
+            return LocalizationConstants.KYC.completingTierTwoAutoEligible
+        }
     }
     
     func trackPresentation() {

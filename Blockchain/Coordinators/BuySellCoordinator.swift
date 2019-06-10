@@ -220,11 +220,11 @@ import PlatformKit
             metadata: ActionMetadata.url(tosURL)
         )
         let alert = AlertModel(
-            headline: LocalizationConstants.AnnouncementCards.verifyAndGetCrypto,
+            headline: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoTitle,
             body: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoDescription,
             note: LocalizationConstants.BuySell.buySellAgreement,
             actions: [beginNow, termsOfService],
-            image: AssetType.stellar.symbolImageTemplate,
+            image: #imageLiteral(resourceName: "Icon-Information"),
             style: .sheet
         )
         let alertView = AlertView.make(with: alert) { action in

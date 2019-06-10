@@ -90,7 +90,7 @@ extension KYCInformationViewModel {
     private static func createViewModelForPendingStatus(isReceivingAirdrop: Bool) -> KYCInformationViewModel {
         if isReceivingAirdrop {
             return KYCInformationViewModel(
-                image: #imageLiteral(resourceName: "symbol-xlm-large"),
+                image: #imageLiteral(resourceName: "Icon-Verified-Large"),
                 title: LocalizationConstants.KYC.verificationInProgress,
                 subtitle: nil,
                 description: LocalizationConstants.KYC.verificationInProgressDescriptionAirdrop,

@@ -883,16 +883,15 @@ struct LocalizationConstants {
 
     struct AnnouncementCards {
         static let registerAirdropSuccessTitle = NSLocalizedString(
-            "You're All Set!",
+            "Success!",
             comment: "Title of an alert that notifies the user that airdrop registration has succeded"
         )
         static let registerAirdropSuccessDescription = NSLocalizedString(
-            "Once your profile is approved for Gold, we will airdrop your free crypto into your Wallet.",
+            "You’re now eligible for future Airdrops.",
             comment: "Description of an alert that notifies the user that airdrop registration has succeded"
         )
         static let bottomSheetCoinifyInfoTitle = NSLocalizedString("More Info Needed", comment: "Title of an alert informing a user that personal information needs to be updated.")
-        static let bottomSheetCoinifyInfoDescription = NSLocalizedString("To use Buy & Sell, we'll need you to update your profile. We'll airdrop at least $25 of XLM as a thank you when you do!", comment: "Description of an alert informing a user that personal information needs to be updated.")
-        static let bottomSheetCoinifyInfoAction = NSLocalizedString("Get Free XLM", comment: "Action button title of an alert informing a user that personal information needs to be updated.")
+        static let bottomSheetCoinifyInfoDescription = NSLocalizedString("To keep using Buy & Sell, you'll need to update your profile. Once completed, you'll also unlock higher trading limits in Swap. ", comment: "Description of an alert informing a user that personal information needs to be updated.")
         static let updateNow = NSLocalizedString("Update Now", comment: "Title of a button that a user can tap on to update their information")
         static let learnMore = NSLocalizedString("Learn More", comment: "Title of a button that a user can tap on to learn more about an announcement")
         static let bottomSheetPromptForKycTitle = NSLocalizedString(
@@ -900,7 +899,7 @@ struct LocalizationConstants {
             comment: "Title of a bottom sheet alert prompting the user to complete KYC"
         )
         static let bottomSheetPromptForKycDescription = NSLocalizedString(
-            "Complete your profile today and we will airdrop free Stellar (XLM) in your Wallet.",
+            "Complete your profile to start instantly trading crypto from the security of your wallet. Pro tip: Gold level gets you higher limits and future airdrops. ",
             comment: "Description of a bottom sheet alert prompting the user to complete KYC"
         )
         static let bottomSheetPromptForKycAction = NSLocalizedString(
@@ -908,15 +907,15 @@ struct LocalizationConstants {
             comment: "Action button title of a bottom sheet alert prompting the user to complete KYC"
         )
         static let bottomSheetPromptForAirdropRegistrationTitle = NSLocalizedString(
-            "Claim Your Free Crypto",
-            comment: "Title of a bottom sheet alert prompting the user to complete KYC"
+            "Airdrop Program",
+            comment: "Title of a bottom sheet alert prompting the user to opt-in for airdrop upon finishing KYC"
         )
         static let bottomSheetPromptForAirdropRegistrationDescription = NSLocalizedString(
-            "Tap the button to automatically receive free Stellar (XLM) once Gold level is unlocked.",
-            comment: "Description of a bottom sheet alert prompting the user to complete KYC"
+            "You’re eligible for future airdrops.",
+            comment: "Description of a bottom sheet alert prompting the user to opt-in for airdrop upon finishing KYC"
         )
         static let bottomSheetPromptForAirdropRegistrationAction = NSLocalizedString(
-            "Claim Your XLM",
+            "Opt-in Now",
             comment: "Action button title of a bottom sheet alert prompting the user to complete KYC"
         )
         static let bottomSheetPromptForAirdropRegistrationCancel = NSLocalizedString(
@@ -937,7 +936,6 @@ struct LocalizationConstants {
         )
         static let buySellCardTitle = NSLocalizedString("The wait is over", comment: "The title of the card.")
         static let continueKYCCardTitle = NSLocalizedString("Verify Your Identity", comment: "The title of the card.")
-        static let verifyAndGetCrypto = NSLocalizedString("Verify & Get Free Crypto", comment: "Alert that is shown when a user taps Buy/Sell")
         static let buySellCardDescription = NSLocalizedString(
             "Buy and sell bitcoin directly from your Blockchain wallet. Start by creating an account in the Buy & Sell tab.",
             comment: "The description displayed on the card."
@@ -1492,7 +1490,7 @@ struct LocalizationConstants {
             comment: "Text displayed when user is starting KYC"
         )
         static let welcomeMainTextSunRiverCampaign = NSLocalizedString(
-            "Verify your identity to claim your XLM. It only takes a few minutes. Once verified, you'll be able to use our next generation trading product.",
+            "Complete your profile to start instantly trading crypto from the security of your wallet and become eligible for our Airdrop Program.",
             comment: "Text displayed when user is starting KYC coming from the airdrop link"
         )
         static let invalidPhoneNumber = NSLocalizedString(
@@ -1515,7 +1513,7 @@ struct LocalizationConstants {
             comment: "Description for when KYC verification is in progress."
         )
         static let verificationInProgressDescriptionAirdrop = NSLocalizedString(
-            "Your information is being reviewed. The review should complete in 5 minutes. Once you're successfully verified, we'll send your XLM within one week.",
+            "Your information is being reviewed. The review should complete in 5 minutes. Please be aware there is a large waiting list for Stellar airdrops and unfortunately not all applications for free XLM will be successful.",
             comment: "Description for when KYC verification is in progress and the user is waiting for a Stellar airdrop."
         )
         static let accountApproved = NSLocalizedString(
@@ -1815,6 +1813,22 @@ struct LocalizationConstants {
             "Please allow your Blockchain App access your camera to upload your ID and take a Selfie.",
             comment: "Description as to why the user should permit camera access"
         )
+        static let isCountrySupportedHeader = NSLocalizedString(
+            "Is my country supported?",
+            comment: "Header for text notifying the user that maybe not all countries are supported for airdrop."
+        )
+        static let isCountrySupportedDescription1 = NSLocalizedString(
+            "Not all countries are supported at this time. Check our up to date",
+            comment: "Description for text notifying the user that maybe not all countries are supported for airdrop."
+        )
+        static let isCountrySupportedDescription2 = NSLocalizedString(
+            "list of countries",
+            comment: "Description for text notifying the user that maybe not all countries are supported for airdrop."
+        )
+        static let isCountrySupportedDescription3 = NSLocalizedString(
+            "before proceeding.",
+            comment: "Description for text notifying the user that maybe not all countries are supported for airdrop."
+        )
         static let allowCameraAccess = NSLocalizedString(
             "Allow camera access?",
             comment: "Headline in alert asking the user to allow camera access."
@@ -1828,6 +1842,10 @@ struct LocalizationConstants {
         static let state = NSLocalizedString("State", comment: "state")
         static let stateRegionProvinceCountry = NSLocalizedString("State / Region / Province / Country", comment: "State / Region / Province / Country")
         static let postalCode = NSLocalizedString("Postal Code", comment: "postal code")
+        static let airdropLargeBacklogNotice = NSLocalizedString(
+            "Gold verification is under review, once verified you'll be able to use Swap and trade up to our Gold Level limit.\n\nPlease be aware there is a large waiting list for Stellar airdrops and unfortunately not all applications for free XLM will be successful.",
+            comment: "Footer in the tiers page notifying the user that the airdrop program has a large backlog."
+        )
     }
 
     struct Swap {
@@ -1997,9 +2015,13 @@ struct LocalizationConstants {
             "Minimum of 1.0 XLM needed for new accounts",
             comment: "This is the error shown when too little XLM is sent to a primary key that does not yet have an XLM account"
         )
-        static let claimYourStellarXLM = NSLocalizedString(
-            "Claim Your Stellar (XLM)",
+        static let kycAirdropTitle = NSLocalizedString(
+            "Go for Gold",
             comment: "Title displayed in the onboarding card prompting the user to join the waitlist to receive Stellar."
+        )
+        static let kycAirdropDescription = NSLocalizedString(
+            "Complete your profile to start instantly trading crypto from the security of your wallet.",
+            comment: "Description displayed on the onboarding card prompting the user to complete KYC to receive their airdrop."
         )
         static let weNowSupportStellar = NSLocalizedString(
             "We Now Support Stellar",
@@ -2009,13 +2031,9 @@ struct LocalizationConstants {
             "XLM is a token that enables quick, low cost global transactions. Send, receive, and trade XLM in the wallet today.",
             comment: "Description displayed in the onboarding card showing that we support Stellar."
         )
-        static let claimYourFreeXLMNow = NSLocalizedString(
-            "Claim Your Free XLM Now",
+        static let getStellarNow = NSLocalizedString(
+            "Get Stellar Now",
             comment: "CTA prompting the user to join the XLM waitlist."
-        )
-        static let claimYourStellarDescription = NSLocalizedString(
-            "Looks like you've started verifying your identity but didn't finish. Pick up where you left off.",
-            comment: "Description displayed on the onboarding card prompting the user to complete KYC to receive their airdrop."
         )
         static let yourXLMIsOnItsWay = NSLocalizedString(
             "Your XLM is on its way",

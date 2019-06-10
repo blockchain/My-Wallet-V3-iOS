@@ -6,9 +6,10 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Veriff
-import PlatformUIKit
 import PlatformKit
+import PlatformUIKit
+import SafariServices
+import Veriff
 
 /// Account verification screen in KYC flow
 final class KYCVerifyIdentityController: KYCBaseViewController {
@@ -40,7 +41,9 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
     @IBOutlet private var driversLicense: UILabel!
     @IBOutlet private var enableCamera: UILabel!
     @IBOutlet private var enableCameraDescription: UILabel!
-    
+    @IBOutlet private var countrySupportedHeader: UILabel!
+    @IBOutlet private var countrySupportedDescription: ActionableLabel!
+
     // MARK: UIStackView
     
     @IBOutlet private var documentTypeStackView: UIStackView!
@@ -59,6 +62,8 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
 
     private var presenter: KYCVerifyIdentityPresenter!
 
+    private var countrySupportedTrigger: ActionableTrigger!
+
     // MARK: - KYCCoordinatorDelegate
 
     override func apply(model: KYCPageModel) {
@@ -70,6 +75,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addAccessibilityIds()
         dependenciesSetup()
         nextButton.actionBlock = { [unowned self] in
             switch self.currentProvider {
@@ -83,6 +89,68 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
         nationalIDCard.text = LocalizationConstants.KYC.nationalIdentityCard
         residenceCard.text = LocalizationConstants.KYC.residencePermit
         driversLicense.text = LocalizationConstants.KYC.driversLicense
+        setupCountrySupportedText()
+    }
+
+    private func setupCountrySupportedText() {
+        countrySupportedHeader.text = LocalizationConstants.KYC.isCountrySupportedHeader
+
+        countrySupportedDescription.delegate = self
+
+        countrySupportedTrigger = ActionableTrigger(
+            text: LocalizationConstants.KYC.isCountrySupportedDescription1,
+            CTA: LocalizationConstants.KYC.isCountrySupportedDescription2,
+            secondary: LocalizationConstants.KYC.isCountrySupportedDescription3
+        ) { [unowned self] in
+            guard let url = URL(string: "https://support.blockchain.com/hc/en-us/articles/360018751932") else {
+                return
+            }
+            let viewController = SFSafariViewController(url: url)
+            self.present(viewController, animated: true)
+        }
+
+        let description = NSMutableAttributedString(
+            string: countrySupportedTrigger.primaryString,
+            attributes: defaultAttributes()
+        )
+        description.append(
+            NSAttributedString(
+                string: " " + countrySupportedTrigger.callToAction,
+                attributes: actionAttributes()
+            )
+        )
+        if let secondaryString = countrySupportedTrigger.secondaryString {
+            description.append(
+                NSAttributedString(
+                    string: " " + secondaryString,
+                    attributes: defaultAttributes()
+                )
+            )
+        }
+        countrySupportedDescription.attributedText = description
+    }
+
+    private func addAccessibilityIds() {
+        headline.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.headerText
+        subheadline.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.subheaderText
+        passport.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.passportText
+        nationalIDCard.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.nationalIDCardText
+        residenceCard.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.residenceCardText
+        driversLicense.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.driversLicenseText
+        enableCamera.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.enableCameraHeaderText
+        enableCameraDescription.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.enableCameraSubheaderText
+        countrySupportedHeader.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.countrySupportedHeaderText
+        countrySupportedDescription.accessibilityIdentifier = AccessibilityIdentifiers.KYCVerifyIdentityScreen.countrySupportedSubheaderText
+    }
+
+    private func actionAttributes() -> [NSAttributedString.Key: Any] {
+        return [.font: Font(.branded(.montserratRegular), size: .custom(18.0)).result,
+                .foregroundColor: UIColor.brandSecondary]
+    }
+
+    private func defaultAttributes() -> [NSAttributedString.Key: Any] {
+        return [.font: Font(.branded(.montserratRegular), size: .custom(18.0)).result,
+                .foregroundColor: countrySupportedDescription.textColor]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,6 +183,16 @@ final class KYCVerifyIdentityController: KYCBaseViewController {
 
     private func didSelect(_ document: KYCDocumentType) {
         startVerificationFlow(document, provider: currentProvider)
+    }
+}
+
+extension KYCVerifyIdentityController: ActionableLabelDelegate {
+    func targetRange(_ label: ActionableLabel) -> NSRange? {
+        return countrySupportedTrigger.actionRange()
+    }
+
+    func actionRequestingExecution(label: ActionableLabel) {
+        countrySupportedTrigger.execute()
     }
 }
 

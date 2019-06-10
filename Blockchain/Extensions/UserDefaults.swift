@@ -58,7 +58,6 @@ extension UserDefaults {
         case isCompletingKyc = "shouldShowKYCAnnouncementCard"
         case shouldHideSwapCard
         case didTapOnAirdropDeepLink
-        case didSeeAirdropPending
         case swipeToReceiveEnabled = "swipeToReceive"
         case symbolLocal
         case hasSeenAirdropJoinWaitlistCard

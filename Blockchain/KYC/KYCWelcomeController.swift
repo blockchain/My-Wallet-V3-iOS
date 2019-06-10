@@ -75,8 +75,7 @@ final class KYCWelcomeController: KYCBaseViewController {
     private func initMainView() {
         if coordinator.user?.isSunriverAirdropRegistered == true {
             labelMain.text = LocalizationConstants.KYC.welcomeMainTextSunRiverCampaign
-            imageViewMain.image = #imageLiteral(resourceName: "symbol-xlm-large")
-            imageViewMain.tintColor = #colorLiteral(red: 0.06274509804, green: 0.6784313725, blue: 0.8941176471, alpha: 1)
+            imageViewMain.image = #imageLiteral(resourceName: "Icon-Verified-Large")
         } else {
             labelMain.text = LocalizationConstants.KYC.welcomeMainText
             imageViewMain.image = #imageLiteral(resourceName: "Welcome")

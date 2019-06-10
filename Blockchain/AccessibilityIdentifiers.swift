@@ -55,6 +55,19 @@ class AccessibilityIdentifiers: NSObject {
         @objc static let continueButton = "WalletSetupReminderScreen.continueButton"
         @objc static let cancelButton = "WalletSetupReminderScreen.cancelButton"
     }
+
+    class KYCVerifyIdentityScreen: NSObject {
+        static let headerText = "KYCVerifyIdentityScreen.headerText"
+        static let subheaderText = "KYCVerifyIdentityScreen.subheaderText"
+        static let passportText = "KYCVerifyIdentityScreen.passportText"
+        static let nationalIDCardText = "KYCVerifyIdentityScreen.nationalIDCardText"
+        static let residenceCardText = "KYCVerifyIdentityScreen.residenceCardText"
+        static let driversLicenseText = "KYCVerifyIdentityScreen.driversLicenseText"
+        static let enableCameraHeaderText = "KYCVerifyIdentityScreen.enableCameraHeaderText"
+        static let enableCameraSubheaderText = "KYCVerifyIdentityScreen.enableCameraSubheaderText"
+        static let countrySupportedHeaderText = "KYCVerifyIdentityScreen.countrySupportedHeaderText"
+        static let countrySupportedSubheaderText = "KYCVerifyIdentityScreen.countrySupportedSubheaderText"
+    }
     
     @objc(AccessibilityIdentifiers_TabViewContainerScreen) class TabViewContainerScreen: NSObject {
         @objc static let activity = "TabViewContainerScreen.activity"

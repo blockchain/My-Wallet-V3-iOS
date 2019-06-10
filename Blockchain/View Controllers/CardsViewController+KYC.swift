@@ -18,9 +18,22 @@ extension CardsViewController {
     @objc func registerForNotifications() {
         NotificationCenter.when(Constants.NotificationKeys.walletSetupViewControllerDismissed) { [weak self] _ in
             guard let self = self else { return }
-            let hasSeenXLMModel = BlockchainSettings.Onboarding.shared.hasSeenGetFreeXlmModal
+
+            let hasSeenXLMModal = BlockchainSettings.Onboarding.shared.hasSeenGetFreeXlmModal
+            guard !hasSeenXLMModal else {
+                return
+            }
+
             let didDeepLink = BlockchainSettings.App.shared.didTapOnAirdropDeepLink
-            guard hasSeenXLMModel == false, didDeepLink == false else { return }
+            guard !didDeepLink else {
+                return
+            }
+
+            let isPopUpEnabled = AppFeatureConfigurator.shared.configuration(for: .stellarAirdropPopup).isEnabled
+            guard isPopUpEnabled else {
+                return
+            }
+
             self.showStellarModalPromptForKyc()
         }
     }
@@ -79,18 +92,16 @@ extension CardsViewController {
         guard appSettings.isPinSet == true else { return false }
 
         let airdropConfig = AppFeatureConfigurator.shared.configuration(for: .stellarAirdrop)
+        let stellarPopupConfig = AppFeatureConfigurator.shared.configuration(for: .stellarAirdropPopup)
         let coinifyConfig = AppFeatureConfigurator.shared.configuration(for: .notifyCoinifyUserToKyc)
         let kycSettings = KYCSettings.shared
         let onboardingSettings = BlockchainSettings.Onboarding.shared
 
         let shouldShowStellarAirdropCard = airdropConfig.isEnabled &&
             !onboardingSettings.hasSeenAirdropJoinWaitlistCard &&
-            !appSettings.didTapOnAirdropDeepLink
+            !appSettings.didTapOnAirdropDeepLink &&
+            stellarPopupConfig.isEnabled
         let shouldShowContinueKYCAnnouncementCard = kycSettings.isCompletingKyc
-        let shouldShowAirdropPending = airdropConfig.isEnabled &&
-            nabuUser.isSunriverAirdropRegistered &&
-            nabuUser.status == .approved &&
-            !appSettings.didSeeAirdropPending
         let shouldShowStellarView = airdropConfig.isEnabled &&
             !appSettings.didTapOnAirdropDeepLink &&
             tiersResponse.canCompleteTier2
@@ -106,9 +117,6 @@ extension CardsViewController {
 
         if shouldShowCoinifyKycModal {
             showCoinifyKycModal()
-            return true
-        } else if shouldShowAirdropPending {
-            showAirdropPending()
             return true
         } else if nabuUser.needsDocumentResubmission != nil {
             showUploadDocumentsCard()
@@ -131,14 +139,6 @@ extension CardsViewController {
             return true
         }
         return false
-    }
-
-    private func showAirdropPending() {
-        let model = AnnouncementCardViewModel.airdropOnItsWay(action: {}, onClose: { [weak self] in
-            BlockchainSettings.App.shared.didSeeAirdropPending = true
-            self?.animateHideCards()
-        })
-        showSingleCard(with: model)
     }
 
     private func showStellarAirdropCard() {
@@ -191,14 +191,13 @@ extension CardsViewController {
     private func showCoinifyKycModal() {
         didShowCoinifyKycModal = true
 
-        let updateNow = AlertAction(style: .confirm(LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoAction))
+        let updateNow = AlertAction(style: .confirm(LocalizationConstants.beginNow))
         let learnMore = AlertAction(style: .default(LocalizationConstants.AnnouncementCards.learnMore))
         let alertModel = AlertModel(
             headline: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoTitle,
             body: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoDescription,
             actions: [updateNow, learnMore],
-            image: UIImage(named: "symbol-xlm"),
-            imageTintColor: AssetType.stellar.brandColor,
+            image: UIImage(named: "Icon-Information"),
             dismissable: true,
             style: .sheet
         )
@@ -257,20 +256,18 @@ extension CardsViewController {
             headline: LocalizationConstants.AnnouncementCards.bottomSheetPromptForAirdropRegistrationTitle,
             body: LocalizationConstants.AnnouncementCards.bottomSheetPromptForAirdropRegistrationDescription,
             actions: [getFreeXlm, dismiss],
-            image: UIImage(named: "symbol-xlm"),
-            imageTintColor: AssetType.stellar.brandColor,
+            image: UIImage(named: "Icon-Verified"),
             dismissable: true,
             style: .sheet
         )
         let alert = AlertView.make(with: alertModel) { action in
+            BlockchainSettings.Onboarding.shared.hasSeenStellarAirdropRegistrationAlert = true
             switch action.style {
             case .confirm:
-                BlockchainSettings.Onboarding.shared.hasSeenStellarAirdropRegistrationAlert = true
                 self.stellarModalPromptForAirdropRegistrationActionTapped()
-            case .default:
+            case .default,
+                 .dismiss:
                 break
-            case .dismiss:
-                BlockchainSettings.Onboarding.shared.hasSeenStellarAirdropRegistrationAlert = true
             }
         }
         alert.show()

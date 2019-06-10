@@ -376,21 +376,6 @@ final class BlockchainSettings: NSObject {
                 defaults.set(newValue, forKey: UserDefaults.Keys.didTapOnAirdropDeepLink.rawValue)
             }
         }
-
-        /**
-         Determines if the user saw the XLM airdrop pending onboarding card.
-
-         - Important:
-         This setting **MUST** be set to `false` upon logging the user out of the application.
-         */
-        var didSeeAirdropPending: Bool {
-            get {
-                return defaults.bool(forKey: UserDefaults.Keys.didSeeAirdropPending.rawValue)
-            }
-            set {
-                defaults.set(newValue, forKey: UserDefaults.Keys.didSeeAirdropPending.rawValue)
-            }
-        }
         
         /**
          Determines if the user has dismissed the `Swap` card. Users that have not completed
@@ -492,7 +477,6 @@ final class BlockchainSettings: NSObject {
             clearPin()
             appBecameActiveCount = 0
             didTapOnAirdropDeepLink = false
-            didSeeAirdropPending = false
             didAttemptToRouteForAirdrop = false
             didTapOnKycDeepLink = false
             didAcceptCoinifyTOS = false
