@@ -51,8 +51,6 @@ class SendPaxViewController: UIViewController {
     @IBOutlet private var fiatTextField: UITextField!
     
     @IBOutlet private var sendNowButton: UIButton!
-    @IBOutlet private var paxAddressToolTip: UIButton!
-    @IBOutlet private var networkFeesToolTip: UIButton!
     
     private var fields: [UITextField] {
         return [
@@ -81,7 +79,6 @@ class SendPaxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         coordinator = SendPaxCoordinator(interface: self)
-        [paxAddressToolTip, networkFeesToolTip].forEach({ $0?.setImage(#imageLiteral(resourceName: "icon_help"), for: .normal) })
         fields.forEach({ $0.delegate = self })
         topGravityStackView.addBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         sendNowButton.layer.cornerRadius = 4.0
@@ -191,14 +188,6 @@ class SendPaxViewController: UIViewController {
     
     @IBAction func sendNowTapped(_ sender: UIButton) {
         delegate?.onSendProposed()
-    }
-    
-    @IBAction func paxAddressToolTipTapped(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func networkFeesToolTipTapped(_ sender: UIButton) {
-        
     }
 }
 
