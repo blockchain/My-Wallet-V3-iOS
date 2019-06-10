@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// A URI scheme that conforms to BIP 21 (https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki)
 protocol BIP21URI: AssetURLPayload {

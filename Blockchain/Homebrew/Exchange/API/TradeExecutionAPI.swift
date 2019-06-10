@@ -72,5 +72,5 @@ protocol TradeExecutionAPI {
     /// return `nil` for this function.
     /// For more information on minimum balances, please refer to this:
     /// https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance
-    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Completable
+    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Single<TradeExecutionAPIError?>
 }

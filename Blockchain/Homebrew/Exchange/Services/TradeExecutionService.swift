@@ -109,7 +109,7 @@ class TradeExecutionService: TradeExecutionAPI {
         }
     }
     
-    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Completable {
+    func validateVolume(_ volume: Decimal, for assetAccount: AssetAccount) -> Single<TradeExecutionAPIError?> {
         let assetType = assetAccount.address.assetType
         switch assetType {
         case .stellar:
@@ -119,30 +119,30 @@ class TradeExecutionService: TradeExecutionAPI {
         case .bitcoin,
              .bitcoinCash,
              .ethereum:
-            return Completable.empty()
+            return Single.just(nil)
         }
     }
-
-    private func validatePax(volume: Decimal, for assetAccount: AssetAccount) -> Completable {
+    
+    private func validatePax(volume: Decimal, for assetAccount: AssetAccount) -> Single<TradeExecutionAPIError?> {
         let value = CryptoValue.createFromMajorValue(volume, assetType: .pax)
         do {
             let tokenValue = try ERC20TokenValue<PaxToken>(crypto: value)
             return dependencies.erc20Service.evaluate(amount: tokenValue)
-                .flatMapCompletable { _ -> Completable in
-                    return Completable.empty()
+                .flatMap { _ -> Single<TradeExecutionAPIError?> in
+                    Single.just(nil)
                 }
-                .catchError { error -> Completable in
+                .catchError { error -> Single<TradeExecutionAPIError?> in
                     if let error = error as? ERC20ServiceError {
-                        return Completable.error(TradeExecutionAPIError.erc20Error(error))
+                        return Single.just(TradeExecutionAPIError.erc20Error(error))
                     }
                     throw error
                 }
         } catch {
-            return Completable.error(error)
+            return Single.error(error)
         }
     }
 
-    private func validateXlm(volume: Decimal, for assetAccount: AssetAccount) -> Completable {
+    private func validateXlm(volume: Decimal, for assetAccount: AssetAccount) -> Single<TradeExecutionAPIError?> {
         let accountId = assetAccount.address.address
         let isSpendable = dependencies.xlm.limits.isSpendable(amount: volume, for: accountId)
         let max = dependencies.xlm.limits.maxSpendableAmount(for: accountId)
@@ -153,13 +153,13 @@ class TradeExecutionService: TradeExecutionAPI {
                 }
                 throw error
             }
-            .flatMapCompletable { isSpendable, maxSpendable -> Completable in
+            .flatMap { isSpendable, maxSpendable -> Single<TradeExecutionAPIError?> in
                 guard !isSpendable else {
-                    return Completable.empty()
+                    return Single.just(nil)
                 }
-
+                
                 let crytpo = CryptoValue.createFromMajorValue(maxSpendable, assetType: .stellar)
-                return Completable.error(TradeExecutionAPIError.exceededMaxVolume(crytpo))
+                return Single.error(TradeExecutionAPIError.exceededMaxVolume(crytpo))
             }
     }
     

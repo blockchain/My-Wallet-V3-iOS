@@ -33,6 +33,8 @@ class SendPaxViewController: UIViewController {
     
     // MARK: Public Properties
     
+    var appSettings: BlockchainSettings.App!
+    
     weak var delegate: SendPaxViewControllerDelegate?
     
     // MARK: Private IBOutlets
@@ -42,6 +44,7 @@ class SendPaxViewController: UIViewController {
 
     @IBOutlet private var paxWalletLabel: UILabel!
     @IBOutlet private var networkFeesLabel: UILabel!
+    @IBOutlet private var currencyLabel: UILabel!
     
     @IBOutlet private var paxAddressTextField: UITextField!
     @IBOutlet private var paxTextField: UITextField!
@@ -69,6 +72,7 @@ class SendPaxViewController: UIViewController {
     
     @objc class func make() -> SendPaxViewController {
         let controller = SendPaxViewController.makeFromStoryboard()
+        controller.appSettings = BlockchainSettings.App.shared
         return controller
     }
     
@@ -82,7 +86,7 @@ class SendPaxViewController: UIViewController {
         topGravityStackView.addBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         sendNowButton.layer.cornerRadius = 4.0
         delegate?.onLoad()
-        
+        currencyLabel.text = appSettings.fiatCurrencyCode
         setupKeyboard()
     }
     

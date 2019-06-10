@@ -206,7 +206,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let address = model.marketPair.fromAccount.address.address
         let type = model.marketPair.pair.from
         
-        repository.accounts(for: type).asObservable()
+        repository.accounts(for: type)
+            .asObservable()
             .subscribeOn(MainScheduler.asyncInstance)
             .flatMapLatest { [weak self] accounts -> Observable<(Decimal, Decimal)> in
                 guard let self = self else { return Observable.empty() }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 import stellarsdk
 
 /// A URI scheme that conforms to SEP 0007 (https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0007.md)
