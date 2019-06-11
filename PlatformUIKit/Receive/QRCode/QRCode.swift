@@ -17,7 +17,10 @@ public struct QRCode {
     private let data: Data
     
     public init?(metadata: CryptoAssetQRMetadata) {
-        if let value = metadata.absoluteString.data(using: .utf8) {
+        // TODO:
+        // * Decide what to do about this (address vs url)
+        // * Add tests
+        if let value = metadata.address.data(using: .utf8) {
             self.data = value
         } else {
             return nil

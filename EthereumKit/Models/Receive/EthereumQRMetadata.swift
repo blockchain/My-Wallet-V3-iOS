@@ -7,14 +7,13 @@
 //
 
 import PlatformKit
-import web3swift
 
 public struct EthereumQRMetadata: CryptoAssetQRMetadata {
     public var address: String
     public var amount: String?
     public var absoluteString: String {
         // TODO: encode `amount`, too
-        return EIP67Code(address: Address(address)).toString()
+        return EthereumURLPayload(address: address)!.absoluteString
     }
     public static var scheme: String {
         return "ethereum"
