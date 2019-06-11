@@ -27,6 +27,8 @@ public class EthereumWallet: NSObject {
     
     private weak var wallet: WalletAPI?
     
+    @objc private(set) var etherTransactions: [EtherTransaction] = []
+    
     private static let defaultPAXAccount = ERC20TokenAccount(
         label: LocalizationConstants.SendAsset.myPaxWallet,
         contractAddress: PaxToken.contractAddress.rawValue,
@@ -282,6 +284,21 @@ extension EthereumWallet: EthereumWalletBridgeAPI, EthereumWalletTransactionsBri
             .flatMap(weak: self) { (self, secondPassword) -> Single<String> in
                 return self.address(secondPassword: secondPassword)
             }
+    }
+    
+    // TODO: IOS-2289 add test cases to it
+    /** Fetch ether transactions using an injected service */
+    func fetchEthereumTransactions(using service: EthereumHistoricalTransactionService) -> Single<[EtherTransaction]> {
+        return service.fetchTransactions()
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .map { [weak self] legacyTransactions in
+                let result = legacyTransactions
+                    .map { $0.legacyTransaction }
+                    .compactMap { $0 }
+                self?.etherTransactions = result
+                return result
+        }
     }
     
     public var transactions: Single<[EthereumHistoricalTransaction]> {

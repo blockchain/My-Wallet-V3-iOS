@@ -51,6 +51,8 @@ final class TransactionsEthereumViewController: TransactionsViewController {
     private let assetAccountRepository = ETHServiceProvider.shared.assetAccountRepository
     private let transactionService = ETHServiceProvider.shared.transactionService
     
+    private let wallet = WalletManager.shared.wallet.ethereum
+    
     deinit {
         disposables.dispose()
     }
@@ -118,34 +120,24 @@ final class TransactionsEthereumViewController: TransactionsViewController {
     }
     
     private func loadTransactions() {
-        let disposable = transactionService.fetchTransactions()
-            .subscribeOn(MainScheduler.asyncInstance)
-            .observeOn(MainScheduler.instance)
-            .do(onDispose: { [weak self] in
+        // On completed
+        let onCompleted = { [weak self] in
+            guard let self = self else { return }
+            self.refreshControl.endRefreshing()
+            self._noTransactionsView.isHidden = self.transactions.count > 0
+            self.tableView.reloadData()
+        }
+        
+        let disposable = wallet.fetchEthereumTransactions(using: transactionService)
+            .asObservable()
+            .subscribe(onNext: { [weak self] transactions in
+                self?.transactions = transactions
+                onCompleted()
+            }, onError: { _ in
+                onCompleted()
+            }, onDisposed: { [weak self] in
                 self?.refreshControl.endRefreshing()
             })
-            .do(onSuccess: { [weak self] _ in
-                self?.refreshControl.endRefreshing()
-            })
-            .do(onError: { [weak self] _ in
-                self?.refreshControl.endRefreshing()
-            })
-            .subscribe(onSuccess: { [weak self] ethereumTransactions in
-                guard let `self` = self else { return }
-                
-                let legacyTransactions = ethereumTransactions
-                    .map { $0.legacyTransaction }
-                    .compactMap { $0 }
-                self.transactions = legacyTransactions
-                self._noTransactionsView.isHidden = self.transactions.count > 0
-                self.tableView.reloadData()
-            }, onError: { [weak self] _ in
-                guard let `self` = self else { return }
-                
-                self._noTransactionsView.isHidden = self.transactions.count > 0
-                self.tableView.reloadData()
-            })
-
         disposables.insertWithDiscardableResult(disposable)
     }
     

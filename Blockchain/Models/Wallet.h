@@ -205,7 +205,6 @@
 
 @property (readonly, nonatomic) EthereumWallet * _Nonnull ethereum;
 
-@property (nonatomic) NSArray<EtherTransaction *> *etherTransactions;
 @property (nonatomic) NSDecimalNumber *latestEthExchangeRate;
 
 - (id)init;

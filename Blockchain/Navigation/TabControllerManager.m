@@ -451,7 +451,7 @@
         transactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
         targetHash = self.transactionsBitcoinViewController.detailViewController.transactionModel.myHash;
     } else if (assetType == AssetTypeEthereum) {
-        transactions = WalletManager.sharedInstance.wallet.etherTransactions;
+        transactions = WalletManager.sharedInstance.wallet.ethereum.etherTransactions;
         targetHash = self.transactionsEtherViewController.detailViewController.transactionModel.myHash;
     } else if (assetType == AssetTypeBitcoinCash) {
         transactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;

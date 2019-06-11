@@ -180,7 +180,7 @@ const CGFloat rowHeightValueReceived = 80;
     if (self.transactionModel.assetType == LegacyAssetTypeBitcoin) {
         newTransactions = WalletManager.sharedInstance.latestMultiAddressResponse.transactions;
     } else if (self.transactionModel.assetType == LegacyAssetTypeEther) {
-        newTransactions = WalletManager.sharedInstance.wallet.etherTransactions;
+        newTransactions = WalletManager.sharedInstance.wallet.ethereum.etherTransactions;
     } else if (self.transactionModel.assetType == LegacyAssetTypeBitcoinCash) {
         newTransactions = WalletManager.sharedInstance.wallet.bitcoinCashTransactions;
     } else if (self.transactionModel.assetType == LegacyAssetTypeStellar && details != nil) {
