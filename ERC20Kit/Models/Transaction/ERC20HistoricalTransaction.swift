@@ -79,7 +79,7 @@ public struct ERC20HistoricalTransaction<Token: ERC20Token>: Decodable, Hashable
         createdAt: Date,
         fee: CryptoValue? = nil,
         memo: String? = nil
-        ) {
+    ) {
         self.fromAddress = fromAddress
         self.toAddress = toAddress
         self.direction = direction
@@ -117,12 +117,16 @@ public struct ERC20HistoricalTransaction<Token: ERC20Token>: Decodable, Hashable
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let from = try values.decode(String.self, forKey: .from)
         let to = try values.decode(String.self, forKey: .to)
-        let timestamp = try values.decode(String.self, forKey: .timestamp)
+        let timestampString = try values.decode(String.self, forKey: .timestamp)
         transactionHash = try values.decode(String.self, forKey: .transactionHash)
         amount = try values.decode(String.self, forKey: .value)
         fromAddress = EthereumAssetAddress(publicKey: from)
         toAddress = EthereumAssetAddress(publicKey: to)
-        createdAt = DateFormatter.iso8601Format.date(from: timestamp) ?? Date()
+        if let timeSinceEpoch = Double(timestampString) {
+            createdAt = Date(timeIntervalSince1970: timeSinceEpoch)
+        } else {
+            createdAt = Date()
+        }
         
         // ⚠️ NOTE: The direction is populated when you fetch transactions
         // and the user's ETH address is passed in. That's the only way to know
