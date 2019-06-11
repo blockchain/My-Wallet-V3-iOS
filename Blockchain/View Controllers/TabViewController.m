@@ -107,6 +107,11 @@
             break;
     }
     [self updateTopBarForIndex:newIndex];
+
+    if ([self.childViewControllers.firstObject isKindOfClass:[BaseNavigationController class]]) {
+        BaseNavigationController *controller = (BaseNavigationController *) self.childViewControllers.firstObject;
+        [controller update];
+    }
 }
 
 - (void)insertActiveView
