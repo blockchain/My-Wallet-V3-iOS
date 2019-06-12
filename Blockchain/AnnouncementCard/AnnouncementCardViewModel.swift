@@ -6,6 +6,7 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import PlatformUIKit
 import Foundation
 
 @objc class AnnouncementCardPallete: NSObject {
@@ -71,6 +72,24 @@ import Foundation
 }
 
 extension AnnouncementCardViewModel {
+    static func paxIntro(action: @escaping Action, onClose: @escaping Action) -> AnnouncementCardViewModel {
+        let palette = AnnouncementCardPallete(
+            isNew: true,
+            backgroundImage: #imageLiteral(resourceName: "announcement_pax_background"),
+            titleTextColor: .black,
+            messageTextColor: UIColor.gray5,
+            actionTextColor: UIColor.brandPrimary
+        )
+        return AnnouncementCardViewModel(
+            title: LocalizationConstants.AnnouncementCards.paxIntroTitle,
+            message: LocalizationConstants.AnnouncementCards.paxIntroDescription,
+            actionButtonTitle: LocalizationConstants.AnnouncementCards.paxIntroCTA,
+            palette: palette,
+            action: action,
+            onClose: onClose
+        )
+    }
+
     @objc class func joinAirdropWaitlist(action: @escaping Action, onClose: @escaping Action) -> AnnouncementCardViewModel {
         return AnnouncementCardViewModel(
             title: LocalizationConstants.Stellar.weNowSupportStellar,

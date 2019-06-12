@@ -49,41 +49,127 @@ extension CardsViewController {
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] nabuUser, tiers, hasTrades in
-                guard let strongSelf = self else { return }
-                let canShowSwapCTA = nabuUser.swapApproved()
-                let shouldHideSwapCTA = BlockchainSettings.App.shared.shouldHideSwapCard
-                
-                /// We display the `Swap` card if the user has not submitted a trade,
-                /// has not hidden the card before, and if the user is at least tier1 approved.
-                let displaySwapCTA = (hasTrades == false && shouldHideSwapCTA == false && canShowSwapCTA)
-                if displaySwapCTA {
-                    strongSelf.showSwapCTA()
-                }
-                
-                /// If the user has traded before we need to set this flag as this is the only way
-                /// `CardsViewController` can determine if it needs to show the `Swap` card.
-                if hasTrades == true {
-                    BlockchainSettings.App.shared.shouldHideSwapCard = true
-                }
-                
-                let didShowAirdropAndKycCards = strongSelf.showAirdropAndKycCards(nabuUser: nabuUser, tiersResponse: tiers)
-                if !didShowAirdropAndKycCards {
-                    strongSelf.reloadWelcomeCards()
-                }
-                strongSelf.dashboardScrollView.contentSize = CGSize(
-                    width: strongSelf.view.frame.size.width,
-                    height: strongSelf.dashboardContentView.frame.size.height + strongSelf.cardsViewHeight
-                )
+                guard let self = self else { return }
+                self.presentCards(nabuUser: nabuUser, tiers: tiers, hasTrades: hasTrades)
             }, onError: { [weak self] error in
-                guard let strongSelf = self else { return }
-                Logger.shared.error("Failed to get nabu user")
-                strongSelf.reloadWelcomeCards()
-                strongSelf.dashboardScrollView.contentSize = CGSize(
-                    width: strongSelf.view.frame.size.width,
-                    height: strongSelf.dashboardContentView.frame.size.height + strongSelf.cardsViewHeight
+                guard let self = self else { return }
+                Logger.shared.error("Failed reloading cards: \(error)")
+                self.reloadWelcomeCards()
+                self.dashboardScrollView.contentSize = CGSize(
+                    width: self.view.frame.size.width,
+                    height: self.dashboardContentView.frame.size.height + self.cardsViewHeight
+                )
+            }, onCompleted: { [weak self] in
+                guard let self = self else { return }
+                self.dashboardScrollView.contentSize = CGSize(
+                    width: self.view.frame.size.width,
+                    height: self.dashboardContentView.frame.size.height + self.cardsViewHeight
                 )
             })
     }
+
+    private func presentCards(nabuUser: NabuUser, tiers: KYCUserTiersResponse, hasTrades: Bool) {
+        // Priority of cards
+        // 1. PAX
+        // 2. Swap
+        // 3. Coinify
+        // 4. Airdrop + KYC cards
+        // 5. Welcome cards
+        let didShowPaxCard = showPaxCardIfNeeded()
+        if didShowPaxCard {
+            return
+        }
+
+        let didShowSwapCard = showSwapCardIfNeeded(hasTrades: hasTrades, nabuUser: nabuUser)
+        if didShowSwapCard {
+            return
+        }
+
+        let didShowCoinifyCard = showCoinifyCardIfNeeded(nabuUser: nabuUser, tiersResponse: tiers)
+        if didShowCoinifyCard {
+            return
+        }
+
+        let didShowAirdropAndKycCards = showAirdropAndKycCards(nabuUser: nabuUser, tiersResponse: tiers)
+        if didShowAirdropAndKycCards {
+            return
+        }
+
+        self.reloadWelcomeCards()
+    }
+
+    // MARK: - PAX
+
+    private func showPaxCardIfNeeded() -> Bool {
+        // TICKET: IOS-2297
+        // TODO: Use Announcement architecture for new announcements, too
+        let list = DashboardAnnouncements.shared.announcements(presenter: self)
+        let nextAnnouncement = list.showNextAnnouncement()
+        return nextAnnouncement != nil
+    }
+
+    // MARK: - Swap
+
+    private func showSwapCardIfNeeded(hasTrades: Bool, nabuUser: NabuUser) -> Bool {
+        let canShowSwapCTA = nabuUser.swapApproved()
+        let shouldHideSwapCTA = BlockchainSettings.App.shared.shouldHideSwapCard
+        guard hasTrades == false && shouldHideSwapCTA == false && canShowSwapCTA else {
+            return false
+        }
+
+        let model = AnnouncementCardViewModel.swapCTA(action: {
+            let tabController = AppCoordinator.shared.tabControllerManager
+            tabController.swapTapped(nil)
+        }, onClose: { [weak self] in
+            BlockchainSettings.App.shared.shouldHideSwapCard = true
+            self?.animateHideCards()
+        })
+        showSingleCard(with: model)
+        return true
+    }
+
+    // MARK: - Coinify
+
+    private func showCoinifyCardIfNeeded(nabuUser: NabuUser, tiersResponse: KYCUserTiersResponse) -> Bool {
+        let coinifyConfig = AppFeatureConfigurator.shared.configuration(for: .notifyCoinifyUserToKyc)
+        let shouldShowCoinifyKycModal = coinifyConfig.isEnabled &&
+            tiersResponse.canCompleteTier2 &&
+            WalletManager.shared.wallet.isCoinifyTrader() &&
+            !didShowCoinifyKycModal
+        guard shouldShowCoinifyKycModal else {
+            return false
+        }
+
+        didShowCoinifyKycModal = true
+
+        let updateNow = AlertAction(style: .confirm(LocalizationConstants.beginNow))
+        let learnMore = AlertAction(style: .default(LocalizationConstants.AnnouncementCards.learnMore))
+        let alertModel = AlertModel(
+            headline: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoTitle,
+            body: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoDescription,
+            actions: [updateNow, learnMore],
+            image: UIImage(named: "Icon-Information"),
+            dismissable: true,
+            style: .sheet
+        )
+        let alert = AlertView.make(with: alertModel) { action in
+            switch action.style {
+            case .confirm:
+                self.coinifyKycActionTapped()
+            case .default:
+                UIApplication.shared.openSafariViewController(
+                    url: Constants.Url.requiredIdentityVerificationURL,
+                    presentingViewController: AppCoordinator.shared.tabControllerManager.tabViewController)
+            case .dismiss:
+                break
+            }
+        }
+        alert.show()
+
+        return true
+    }
+
+    // MARK: - Airdrop + KYC
 
     private func showAirdropAndKycCards(nabuUser: NabuUser, tiersResponse: KYCUserTiersResponse) -> Bool {
         // appSettings.isPinSet needs to be checked in order to prevent
@@ -93,7 +179,6 @@ extension CardsViewController {
 
         let airdropConfig = AppFeatureConfigurator.shared.configuration(for: .stellarAirdrop)
         let stellarPopupConfig = AppFeatureConfigurator.shared.configuration(for: .stellarAirdropPopup)
-        let coinifyConfig = AppFeatureConfigurator.shared.configuration(for: .notifyCoinifyUserToKyc)
         let kycSettings = KYCSettings.shared
         let onboardingSettings = BlockchainSettings.Onboarding.shared
 
@@ -105,20 +190,14 @@ extension CardsViewController {
         let shouldShowStellarView = airdropConfig.isEnabled &&
             !appSettings.didTapOnAirdropDeepLink &&
             tiersResponse.canCompleteTier2
-        let shouldShowCoinifyKycModal = coinifyConfig.isEnabled &&
-            tiersResponse.canCompleteTier2 &&
-            WalletManager.shared.wallet.isCoinifyTrader() &&
-            !didShowCoinifyKycModal
+
         let hasSeenStellarRegistrationAlert = onboardingSettings.hasSeenStellarAirdropRegistrationAlert
         let shouldShowStellarModalPromptForAirdropRegistration =
             nabuUser.isSunriverAirdropRegistered == false &&
             (tiersResponse.isTier2Pending || tiersResponse.isTier2Verified) &&
             hasSeenStellarRegistrationAlert == false
 
-        if shouldShowCoinifyKycModal {
-            showCoinifyKycModal()
-            return true
-        } else if nabuUser.needsDocumentResubmission != nil {
+        if nabuUser.needsDocumentResubmission != nil {
             showUploadDocumentsCard()
             return true
         } else if shouldShowContinueKYCAnnouncementCard {
@@ -150,17 +229,6 @@ extension CardsViewController {
         })
         showSingleCard(with: model)
     }
-    
-    private func showSwapCTA() {
-        let model = AnnouncementCardViewModel.swapCTA(action: {
-            let tabController = AppCoordinator.shared.tabControllerManager
-            tabController.swapTapped(nil)
-        }) { [weak self] in
-            BlockchainSettings.App.shared.shouldHideSwapCard = true
-            self?.animateHideCards()
-        }
-        showSingleCard(with: model)
-    }
 
     private func showContinueKycCard(isAirdropUser: Bool) {
         let kycSettings = KYCSettings.shared
@@ -186,34 +254,6 @@ extension CardsViewController {
                 let tier = user.tiers?.selected ?? .tier1
                 KYCCoordinator.shared.start(from: AppCoordinator.shared.tabControllerManager, tier: tier)
             })
-    }
-
-    private func showCoinifyKycModal() {
-        didShowCoinifyKycModal = true
-
-        let updateNow = AlertAction(style: .confirm(LocalizationConstants.beginNow))
-        let learnMore = AlertAction(style: .default(LocalizationConstants.AnnouncementCards.learnMore))
-        let alertModel = AlertModel(
-            headline: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoTitle,
-            body: LocalizationConstants.AnnouncementCards.bottomSheetCoinifyInfoDescription,
-            actions: [updateNow, learnMore],
-            image: UIImage(named: "Icon-Information"),
-            dismissable: true,
-            style: .sheet
-        )
-        let alert = AlertView.make(with: alertModel) { action in
-            switch action.style {
-            case .confirm:
-                self.coinifyKycActionTapped()
-            case .default:
-                UIApplication.shared.openSafariViewController(
-                    url: Constants.Url.requiredIdentityVerificationURL,
-                    presentingViewController: AppCoordinator.shared.tabControllerManager.tabViewController)
-            case .dismiss:
-                break
-            }
-        }
-        alert.show()
     }
 
     private func showUploadDocumentsCard() {
@@ -285,3 +325,5 @@ extension CardsViewController {
         showSingleCard(with: model)
     }
 }
+
+extension CardsViewController: AnnouncementPresenter { }

@@ -960,6 +960,18 @@ struct LocalizationConstants {
             "Upload documents",
             comment: "The title of the action on the announcement card for when a user needs to submit documents to verify their identity."
         )
+        static let paxIntroTitle = NSLocalizedString(
+            "Digital US Dollars",
+            comment: "Title of the announcement card shown when introducing PAX"
+        )
+        static let paxIntroDescription = NSLocalizedString(
+            "Introducing USD PAX, a safe and stable crypto asset you can use to store value. 1 PAX equals 1 USD.",
+            comment: "Description of the announcement card shown when introducing PAX"
+        )
+        static let paxIntroCTA = NSLocalizedString(
+            "Get USD PAX Now",
+            comment: "CTA of the announcement card shown when introducing PAX"
+        )
     }
 
     struct SideMenu {
