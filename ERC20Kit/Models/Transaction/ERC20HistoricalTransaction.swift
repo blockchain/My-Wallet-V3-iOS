@@ -233,6 +233,6 @@ public struct ERC20HistoricalTransaction<Token: ERC20Token>: Decodable, Hashable
 private extension ERC20HistoricalTransaction.ERC20TransactionDetails {
     var fee: CryptoValue {
         let amount = gasUsed * gasPrice
-        return CryptoValue.createFromMinorValue(amount, assetType: T.assetType)
+        return CryptoValue.createFromMinorValue(amount, assetType: .ethereum)
     }
 }
