@@ -59,7 +59,7 @@ class AssetAccountRepository {
                         assetType: .pax
                     ),
                     balance: $0.balance.majorValue,
-                    name: "My USD PAX Wallet"
+                    name: $0.account.name
                 )
                 return Maybe.just([account])
             }
