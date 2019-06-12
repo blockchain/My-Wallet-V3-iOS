@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -55,9 +55,6 @@
                                 <real key="value" value="3.5"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="btcbuttonclicked:" destination="2" eventType="touchUpInside" id="22"/>
-                        </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SENT" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Vev-GY-VUP">
                         <rect key="frame" x="8" y="21" width="152" height="21"/>
@@ -83,7 +80,7 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="actionLabel" destination="Vev-GY-VUP" id="29I-7s-dXU"/>
-                <outlet property="btcButton" destination="10" id="17"/>
+                <outlet property="amountButton" destination="10" id="P7i-tq-Ksr"/>
                 <outlet property="dateLabel" destination="tgB-FW-xJl" id="pKC-nO-06o"/>
                 <outlet property="infoLabel" destination="P1g-Nr-dFe" id="cDl-Id-Pkw"/>
                 <outlet property="warningImageView" destination="34B-px-WE4" id="47h-Su-rSh"/>

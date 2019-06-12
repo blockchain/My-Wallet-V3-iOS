@@ -56,11 +56,6 @@ class TransactionsXlmDataProvider: SimpleListDataProvider {
                 
                 cell.selectionStyle = .none
                 
-                cell.amountButtonSelected = { [weak self] in
-                    guard let this = self else { return }
-                    this.delegate?.dataProvider(this, didSelect: model)
-                }
-                
                 return cell
             }
             
@@ -68,7 +63,7 @@ class TransactionsXlmDataProvider: SimpleListDataProvider {
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: loadingIdentifier,
                     for: indexPath
-                    ) as? LoadingTableViewCell else { return UITableViewCell() }
+                ) as? LoadingTableViewCell else { return UITableViewCell() }
                 
                 /// This particular cell shouldn't have a separator.
                 /// This is how we hide it.

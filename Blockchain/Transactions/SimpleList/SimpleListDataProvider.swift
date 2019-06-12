@@ -141,7 +141,7 @@ class SimpleListDataProvider: NSObject, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: LoadingTableViewCell.identifier,
             for: indexPath
-            ) as? LoadingTableViewCell else { return UITableViewCell() }
+        ) as? LoadingTableViewCell else { return UITableViewCell() }
         /// This particular cell shouldn't have a separator.
         /// This is how we hide it.
         cell.separatorInset = UIEdgeInsets(

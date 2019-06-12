@@ -34,7 +34,7 @@ typedef enum {
 @interface TransactionTableCell : UITableViewCell {
     Transaction * transaction;
     IBOutlet UILabel * dateLabel;
-    IBOutlet UIButton * btcButton;
+    IBOutlet UIButton * amountButton;
     IBOutlet BCInsetLabel *infoLabel;
     
     IBOutlet UILabel *actionLabel;    
@@ -43,10 +43,8 @@ typedef enum {
 
 -(IBAction)transactionClicked:(UIButton * _Nullable)button;
 - (void)bitcoinCashTransactionClicked;
--(IBAction)btcbuttonclicked:(id)sender;
 
 @property(nonatomic, strong)  Transaction * transaction;
-@property (nonatomic, copy) void (^amountButtonSelected)(void);
 @property(nonatomic)  LegacyAssetType assetType;
 
 - (void)reload;

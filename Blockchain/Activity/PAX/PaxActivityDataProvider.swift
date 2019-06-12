@@ -45,7 +45,7 @@ class PaxActivityDataProvider: SimpleListDataProvider {
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: model.cellType().identifier,
                     for: indexPath
-                    ) as? TransactionTableCell else { return UITableViewCell() }
+                ) as? TransactionTableCell else { return UITableViewCell() }
                 /// This particular cell shouldn't have a separator.
                 /// This is how we hide it.
                 cell.separatorInset = UIEdgeInsets(
@@ -59,11 +59,6 @@ class PaxActivityDataProvider: SimpleListDataProvider {
                 
                 cell.selectionStyle = .none
                 
-                cell.amountButtonSelected = { [weak self] in
-                    guard let this = self else { return }
-                    this.delegate?.dataProvider(this, didSelect: model)
-                }
-                
                 return cell
             }
             
@@ -71,7 +66,7 @@ class PaxActivityDataProvider: SimpleListDataProvider {
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: loadingIdentifier,
                     for: indexPath
-                    ) as? LoadingTableViewCell else { return UITableViewCell() }
+                ) as? LoadingTableViewCell else { return UITableViewCell() }
                 
                 /// This particular cell shouldn't have a separator.
                 /// This is how we hide it.

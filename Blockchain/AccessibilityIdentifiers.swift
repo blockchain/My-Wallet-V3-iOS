@@ -68,6 +68,14 @@ class AccessibilityIdentifiers: NSObject {
         static let countrySupportedHeaderText = "KYCVerifyIdentityScreen.countrySupportedHeaderText"
         static let countrySupportedSubheaderText = "KYCVerifyIdentityScreen.countrySupportedSubheaderText"
     }
+
+    @objc(AccessibilityIdentifiers_TransactionListItem) class TransactionListItem: NSObject {
+        @objc static let date = "TransactionListItem.date"
+        @objc static let amount = "TransactionListItem.amount"
+        @objc static let info = "TransactionListItem.info"
+        @objc static let action = "TransactionListItem.action"
+        @objc static let warning = "TransactionListItem.warning"
+    }
     
     @objc(AccessibilityIdentifiers_TabViewContainerScreen) class TabViewContainerScreen: NSObject {
         @objc static let activity = "TabViewContainerScreen.activity"
