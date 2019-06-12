@@ -42,10 +42,26 @@ class SendPaxCalculator {
     let status: PublishSubject<Status> = PublishSubject<Status>()
     let output: PublishSubject<SendPaxOutput> = PublishSubject<SendPaxOutput>()
     
+    private var tokenAccount: Single<ERC20TokenAccount?> {
+        return Single.deferred { [weak self] in
+            guard let self = self else {
+                return Single.just(nil)
+            }
+            guard let value = self.currentTokenAccount else {
+                return self.erc20Service.tokenAccount
+            }
+            return Single.just(value)
+        }
+        .do(onSuccess: { [weak self] account in
+            self?.currentTokenAccount = account
+        })
+    }
+    
+    private var currentTokenAccount: ERC20TokenAccount?
+    private var model: Model
+    
     private let priceService: PriceServiceAPI
     private let erc20Service: ERC20Service<PaxToken>
-    private var model: Model
-    private let tokenAccount = BehaviorRelay<ERC20TokenAccount?>(value: nil)
     
     init(serviceAPI: PriceServiceAPI = PriceServiceClient(),
          erc20Service: ERC20Service<PaxToken>,
@@ -137,18 +153,9 @@ class SendPaxCalculator {
     /// Error getting wallet account info
     /// misc.
     private func validate(input: Input) {
-        let tokenAccountSingle: Single<ERC20TokenAccount?>
-        if tokenAccount.value == nil {
-            tokenAccountSingle = erc20Service.tokenAccount
-                .do(onSuccess: { [weak self] account in
-                    self?.tokenAccount.accept(account)
-                })
-        } else {
-            tokenAccountSingle = tokenAccount.asObservable().asSingle()
-        }
         Single.zip(
                 validateSingle(input: input),
-                tokenAccountSingle
+                tokenAccount
             )
             .flatMap { value -> Single<Output> in
                 let (output, account) = value
