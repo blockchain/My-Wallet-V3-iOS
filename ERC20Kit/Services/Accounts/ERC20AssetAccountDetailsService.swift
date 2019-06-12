@@ -47,12 +47,13 @@ public class ERC20AssetAccountDetailsService<Token: ERC20Token>: AssetAccountDet
             }
             .flatMap { value -> Single<AccountDetails> in
                 let (address, balance) = value
+                // TICKET: IOS-2298
                 return Single.just(
                     ERC20AssetAccountDetails(
                         account: ERC20AssetAccountDetails.Account(
                             walletIndex: 0,
                             accountAddress: address,
-                            name: ""
+                            name: "My \(Token.assetType.description) Wallet"
                         ),
                         balance: balance
                     )
