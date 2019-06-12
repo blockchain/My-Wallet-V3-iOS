@@ -56,6 +56,9 @@ class ExchangeCreateInteractor {
         }
     }
 
+    /// A PublishSubject that emits the desired volume that the user wishes to Swap.
+    private let volumeSubject = PublishSubject<CryptoValue>()
+
     init(dependencies: ExchangeDependencies, model: MarketsModel) {
         self.markets = dependencies.markets
         self.inputs = dependencies.inputs
@@ -130,9 +133,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     func setup() {
         
         updatedInput()
-        
         markets.setup()
-        
+        subscribeToVolumeChanges()
+
         NotificationCenter.when(Constants.NotificationKeys.transactionReceived) { [weak self] _ in
             self?.refreshAccounts()
         }
@@ -154,7 +157,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         }
         
         updateOutput()
-        
+
         markets.authenticate(completion: { [unowned self] in
             self.tradeLimitService.initialize(withFiatCurrency: model.fiatCurrencyCode)
             self.subscribeToConversions()
@@ -341,49 +344,35 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         )
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
-    func validateInput() {
-        guard status != .inflight else { return }
-        guard let model = model else { return }
-        guard let output = output else { return }
-        guard let conversion = model.lastConversion else {
-            Logger.shared.error("No conversion stored")
-            return
-        }
-        /// If we are still waiting on a conversion for the user's latest input
-        /// than we don't want to validate yet.
-        guard waitingOnConversion(conversion) == false else { return }
-        guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
-        guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
+    private func subscribeToVolumeChanges() {
+        let disposable = volumeSubject.asObservable()
+            .distinctUntilChanged()
+            .observeOn(MainScheduler.instance)
+            .do(onNext: { [weak self] _ in self?.status = .inflight })
+            .observeOn(MainScheduler.asyncInstance)
+            .flatMapLatest(weak: self, selector: { (self, distinctVolume) -> Observable<(MarketsModel, TradeExecutionAPIError?, CryptoValue)> in
+                guard let model = self.model else { return Observable.empty() }
+                let validateVolumeObservable = self.tradeExecution
+                    .validateVolume(distinctVolume.majorValue, for: model.marketPair.fromAccount)
+                    .asObservable()
+                return Observable.zip(
+                    Observable.just(model),
+                    validateVolumeObservable,
+                    Observable.just(distinctVolume)
+                )
+            })
+            .flatMapLatest(weak: self, selector: { (self, payload) -> Observable<(
+                    MarketsModel,
+                    [AssetAccount],
+                    Decimal,
+                    Decimal,
+                    Decimal?,
+                    Decimal?,
+                    CryptoValue
+                )> in
 
-        // TICKET: IOS-2243
-        // Description: Input validation should be broken up into its own component and this interactor
-        // can request the concrete input validator based on the desired cryptocurrency type that the
-        // user is swapping from. Currently all asset validation is done in one place and this can get
-        // out of hand.
-        status = .inflight
-        guard tradeExecution.canTradeAssetType(model.pair.from) else {
-            if let _ = errorMessage(for: model.pair.from) {
-                status = .error(.waitingOnEthereumPayment)
-            } else {
-                // This shouldn't happen because the only case (eth) should have an error message,
-                // but just in case show an error here
-                status = .error(.default(nil))
-            }
-            return
-        }
-        
-        let fromAssetType = model.marketPair.pair.from
-        let address = model.marketPair.fromAccount.address.address
-        
-        /// Volume is used for XLM in this case. `tradeExecution` has
-        /// references to XLM specific services so it can validate
-        /// that the volume valid by using the ledger.
-        /// This will return `true` for all other asset types other than `.stellar` O
-        let disposable = tradeExecution.validateVolume(volume, for: model.marketPair.fromAccount)
-            .asObservable()
-            .subscribeOn(MainScheduler.asyncInstance)
-            .flatMapLatest(weak: self, selector: { (self, _) -> Observable<([AssetAccount], Decimal, Decimal, Decimal?, Decimal?)> in
+                let model = payload.0
+                let volume = payload.2
                 let min = self.minTradingLimit().asObservable()
                 let max = self.maxTradingLimit().asObservable()
                 let daily = self.dailyAvailable().asObservable()
@@ -392,24 +381,57 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 /// The reason we have a `repository` in this class is we need to
                 /// validate that the user has the necessary funds to make a swap.
                 /// So, we have to do a fresh fetch of the account details for the asset.
-                let accounts = self.repository.accounts(for: fromAssetType).asObservable()
-                return Observable.zip(accounts, min, max, daily, annual)
+                let accounts = self.repository
+                    .accounts(for: volume.currencyType.assetType)
+                    .asObservable()
+                return Observable.zip(
+                    Observable.just(model),
+                    accounts,
+                    min,
+                    max,
+                    daily,
+                    annual,
+                    Observable.just(volume)
+                )
             })
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] payload in
-                guard let strongSelf = self else {
+                guard let strongSelf = self else { return }
+                let model = payload.0
+                guard let conversion = model.lastConversion else {
+                    Logger.shared.error("No conversion stored")
+                    return
+                }
+                guard let output = strongSelf.output else { return }
+                guard let candidate = Decimal(string: conversion.baseFiatValue) else { return }
+
+                // TICKET: IOS-2243
+                // Description: Input validation should be broken up into its own component and this interactor
+                // can request the concrete input validator based on the desired cryptocurrency type that the
+                // user is swapping from. Currently all asset validation is done in one place and this can get
+                // out of hand.
+                let volume = payload.6
+                let fromAssetType = volume.currencyType.assetType
+                guard strongSelf.tradeExecution.canTradeAssetType(model.pair.from) else {
+                    if strongSelf.errorMessage(for: fromAssetType) != nil {
+                        strongSelf.status = .error(.waitingOnEthereumPayment)
+                    } else {
+                        // This shouldn't happen because the only case (eth) should have an error message,
+                        // but just in case show an error here
+                        strongSelf.status = .error(.default(nil))
+                    }
                     return
                 }
 
-                let accounts = payload.0
-                let minValue = payload.1
-                let maxValue = payload.2
-                let daily = payload.3
-                let annual = payload.4
-                
-                guard let account = accounts.first(where: { $0.address.address == address }) else { return }
+                let accounts = payload.1
+                let minValue = payload.2
+                let maxValue = payload.3
+                let daily = payload.4
+                let annual = payload.5
+                let address = model.marketPair.fromAccount.address.address
 
-                if account.balance < volume {
+                guard let account = accounts.first(where: { $0.address.address == address }) else { return }
+                if account.balance < volume.majorValue {
                     let cryptoValue = CryptoValue.createFromMajorValue(
                         account.balance,
                         assetType: fromAssetType.cryptoCurrency
@@ -446,12 +468,30 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                         self?.status = .error(.aboveMaxVolume(value))
                     case .erc20Error(let erc20Error):
                         if erc20Error == .insufficientEthereumBalance {
+                            guard let model = self?.model else { return }
+                            let fromAssetType = model.marketPair.pair.from
                             self?.status = .error(.insufficientGasForERC20Tx(fromAssetType))
                         }
                     }
                 }
             })
         disposables.insertWithDiscardableResult(disposable)
+    }
+
+    func validateInput() {
+        guard status != .inflight else { return }
+        guard let model = model else { return }
+        guard let conversion = model.lastConversion else {
+            Logger.shared.error("No conversion stored")
+            return
+        }
+
+        /// If we are still waiting on a conversion for the user's latest input
+        /// than we don't want to validate yet.
+        guard waitingOnConversion(conversion) == false else { return }
+        guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
+        let fromAssetType = model.marketPair.pair.from
+        volumeSubject.onNext(CryptoValue.createFromMajorValue(volume, assetType: fromAssetType.cryptoCurrency))
     }
 
     // MARK: - Private
