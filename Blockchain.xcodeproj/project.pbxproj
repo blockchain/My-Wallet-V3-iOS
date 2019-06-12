@@ -140,6 +140,9 @@
 		34AC02EB22A015FF008B9857 /* EthereumJSInteropDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC02EA22A015FF008B9857 /* EthereumJSInteropDispatcher.swift */; };
 		34AD100022918A5B00FB464D /* ERC20Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AD0FFF22918A5B00FB464D /* ERC20Service.swift */; };
 		34AD100B22918BC600FB464D /* ERC20ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AD100A22918BC600FB464D /* ERC20ServiceTests.swift */; };
+		34BA9FC922B13B5E00A5698F /* PaxEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BA9FC822B13B5E00A5698F /* PaxEmptyStateView.swift */; };
+		34BA9FD522B13C3E00A5698F /* PaxEmptyStateContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BA9FD422B13C3E00A5698F /* PaxEmptyStateContentView.swift */; };
+		34BA9FD822B13C8100A5698F /* PaxEmptyStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BA9FD722B13C8100A5698F /* PaxEmptyStateViewModel.swift */; };
 		34BD57E2228A002D00882945 /* EthereumAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */; };
 		34BD57E3228A002E00882945 /* EthereumAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */; };
 		34BD57E5228A099800882945 /* push_tx_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 34BD57E4228A099800882945 /* push_tx_response.json */; };
@@ -2018,6 +2021,9 @@
 		34AD0FFF22918A5B00FB464D /* ERC20Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20Service.swift; sourceTree = "<group>"; };
 		34AD100A22918BC600FB464D /* ERC20ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20ServiceTests.swift; sourceTree = "<group>"; };
 		34AE2AD4224E3E090080C219 /* EthereumAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumAPIClient.swift; sourceTree = "<group>"; };
+		34BA9FC822B13B5E00A5698F /* PaxEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxEmptyStateView.swift; sourceTree = "<group>"; };
+		34BA9FD422B13C3E00A5698F /* PaxEmptyStateContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxEmptyStateContentView.swift; sourceTree = "<group>"; };
+		34BA9FD722B13C8100A5698F /* PaxEmptyStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxEmptyStateViewModel.swift; sourceTree = "<group>"; };
 		34BD57E4228A099800882945 /* push_tx_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = push_tx_response.json; sourceTree = "<group>"; };
 		34BD57EE228A386700882945 /* EthereumTransactionSendingServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTransactionSendingServiceMock.swift; sourceTree = "<group>"; };
 		34BD973F221BF9A100D40D4C /* MockAVCaptureSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVCaptureSession.swift; sourceTree = "<group>"; };
@@ -5194,6 +5200,23 @@
 			path = EthereumKit;
 			sourceTree = "<group>";
 		};
+		34BA9FD322B13C2100A5698F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				34BA9FC822B13B5E00A5698F /* PaxEmptyStateView.swift */,
+				34BA9FD422B13C3E00A5698F /* PaxEmptyStateContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		34BA9FD622B13C6A00A5698F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				34BA9FD722B13C8100A5698F /* PaxEmptyStateViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		34BE77AF225372910034A6BE /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -6595,6 +6618,8 @@
 		3AE6AF68228F302100BF8F56 /* PAX */ = {
 			isa = PBXGroup;
 			children = (
+				34BA9FD622B13C6A00A5698F /* ViewModels */,
+				34BA9FD322B13C2100A5698F /* Views */,
 				3AE6AF69228F303E00BF8F56 /* PaxActivityViewController.swift */,
 				3AE6AF6B228F304D00BF8F56 /* PaxActivityViewController.storyboard */,
 				3AE6AFAA22936FE500BF8F56 /* PaxActivityDataProvider.swift */,
@@ -13456,7 +13481,9 @@
 				3A1552ED2136EAF000683CEB /* TradeLimits.swift in Sources */,
 				34615BC4225F809D00CEC8C4 /* ERC20AccountAPIClient.swift in Sources */,
 				3A390748217E52AB00D2DA01 /* StellarLedgerService.swift in Sources */,
+				34BA9FC922B13B5E00A5698F /* PaxEmptyStateView.swift in Sources */,
 				3A4EABA42140826800081531 /* PlainCell.swift in Sources */,
+				34BA9FD522B13C3E00A5698F /* PaxEmptyStateContentView.swift in Sources */,
 				3AE74B3C21C0217000246A9C /* GradientView.swift in Sources */,
 				AABB74C820D44B0600C0F7C5 /* AboutUsViewController.swift in Sources */,
 				606399F82110FC2D005B6DF5 /* SRRandom.m in Sources */,
@@ -13468,6 +13495,7 @@
 				C7773330217E21F200899930 /* TransactionsXlmPresenter.swift in Sources */,
 				C7B6855B1F17AE2A00A18A5C /* BCEmptyPageView.m in Sources */,
 				3A8B228A211E0B380091E706 /* KYCPersonalDetailsController.swift in Sources */,
+				34BA9FD822B13C8100A5698F /* PaxEmptyStateViewModel.swift in Sources */,
 				AA7133D921223AE000CB2AA9 /* Arrays.swift in Sources */,
 				AA31A7B42098DA4900FE6268 /* AlertViewPresenter+Wallet.swift in Sources */,
 				51E52D13217F6E6A00066F8D /* PricePreviewView.swift in Sources */,

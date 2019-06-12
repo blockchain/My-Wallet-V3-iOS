@@ -61,7 +61,8 @@ extension SimpleListPresenter: SimpleListOutput {
     }
 
     func loadedItems(_ items: [Identifiable]) {
-        interface?.emptyStateVisibility(.hidden)
+        let emptyStateVisibility: Visibility = items.isEmpty ? .visible : .hidden
+        interface?.emptyStateVisibility(emptyStateVisibility)
         interface?.refreshControlVisibility(.hidden)
         interface?.display(results: items)
     }

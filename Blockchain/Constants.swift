@@ -59,6 +59,7 @@ struct Constants {
 
         static let infoLabelEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 9.5, bottom: 2, right: 9.5)
         static let buttonHeight: CGFloat = 40.0
+        static let buttonHeightLarge: CGFloat = 56.0
         static let buttonCornerRadius: CGFloat = 4.0
         static let assetTypeCellHeight: CGFloat = 44.0
     }

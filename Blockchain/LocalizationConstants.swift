@@ -1299,6 +1299,15 @@ struct LocalizationConstants {
         static let waitingForPaymentToFinishTitle = NSLocalizedString("Waiting for payment", comment: "")
         static let waitingForPaymentToFinishMessage = NSLocalizedString("Please wait until your last ether transaction confirms.", comment: "")
     }
+    
+    struct Activity {
+        struct Pax {
+            static let emptyStateTitle = NSLocalizedString("USD PAX", comment: "")
+            static let emptyStateMessage = NSLocalizedString("Your USD PAX transactions will show up here once you make your first transaction.", comment: "")
+            static let emptyStateLinkText = NSLocalizedString("Learn more about USD PAX", comment: "")
+            static let emptyStateCTATitle = NSLocalizedString("Swap for USD PAX Now", comment: "")
+        }
+    }
 
     struct Settings {
         static let notificationsDisabled = NSLocalizedString(

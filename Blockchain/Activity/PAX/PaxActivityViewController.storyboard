@@ -9,14 +9,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Montserrat-Light.ttf">
-            <string>Montserrat-Light</string>
-        </array>
-        <array key="Montserrat-Regular.ttf">
-            <string>Montserrat-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Pax Activity View Controller-->
         <scene sceneID="dQh-2Z-gg5">
@@ -30,60 +22,30 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="637"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Transactions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2JW-kW-bmU">
-                                <rect key="frame" x="126" y="290" width="123" height="20"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <color key="textColor" red="0.16862745100000001" green="0.29411764709999999" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transactions occur when you send and request XLM." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Os-3V-gy6">
-                                <rect key="frame" x="48" y="326" width="279" height="35"/>
-                                <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="15"/>
-                                <color key="textColor" red="0.23100000000000001" green="0.23100000000000001" blue="0.23100000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JaR-gg-bjQ">
-                                <rect key="frame" x="48" y="369" width="279" height="40"/>
-                                <color key="backgroundColor" red="0.059999999999999998" green="0.68000000000000005" blue="0.89000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="2JQ-bH-kOs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                <state key="normal" title="GET PAX">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="CTATapped:" destination="EeZ-5y-JeM" eventType="touchUpInside" id="sdI-hn-H0m"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PkU-Et-JpK" customClass="PaxEmptyStateView" customModule="Blockchain" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="20" width="375" height="637"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <viewLayoutGuide key="safeArea" id="MgE-dC-dc6"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="13Z-9l-XPu" firstAttribute="bottom" secondItem="1my-vu-4t6" secondAttribute="bottom" constant="10" id="24i-co-hqj"/>
-                            <constraint firstItem="4Os-3V-gy6" firstAttribute="centerY" secondItem="13Z-9l-XPu" secondAttribute="centerY" id="4VW-n2-Cou"/>
                             <constraint firstItem="13Z-9l-XPu" firstAttribute="trailing" secondItem="1my-vu-4t6" secondAttribute="trailing" id="6TJ-Kk-MNE"/>
                             <constraint firstItem="1my-vu-4t6" firstAttribute="top" secondItem="13Z-9l-XPu" secondAttribute="top" id="Asn-kg-MST"/>
-                            <constraint firstItem="JaR-gg-bjQ" firstAttribute="leading" secondItem="13Z-9l-XPu" secondAttribute="leading" constant="48" id="BwB-oo-iIf"/>
                             <constraint firstItem="1my-vu-4t6" firstAttribute="leading" secondItem="13Z-9l-XPu" secondAttribute="leading" id="LYq-2e-IKs"/>
-                            <constraint firstItem="2JW-kW-bmU" firstAttribute="centerX" secondItem="13Z-9l-XPu" secondAttribute="centerX" id="Nvt-X2-Xc6"/>
-                            <constraint firstItem="13Z-9l-XPu" firstAttribute="trailing" secondItem="JaR-gg-bjQ" secondAttribute="trailing" constant="48" id="WVm-Sb-nWx"/>
-                            <constraint firstItem="4Os-3V-gy6" firstAttribute="width" secondItem="JaR-gg-bjQ" secondAttribute="width" id="aW5-nr-oyo"/>
-                            <constraint firstItem="JaR-gg-bjQ" firstAttribute="top" secondItem="4Os-3V-gy6" secondAttribute="bottom" constant="8" id="den-Bt-9jS"/>
-                            <constraint firstItem="4Os-3V-gy6" firstAttribute="top" secondItem="2JW-kW-bmU" secondAttribute="bottom" constant="16" id="xOO-Wf-GLL"/>
-                            <constraint firstItem="4Os-3V-gy6" firstAttribute="centerX" secondItem="2JW-kW-bmU" secondAttribute="centerX" id="xbm-vH-bEq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="13Z-9l-XPu"/>
                     </view>
                     <connections>
-                        <outlet property="CTAButton" destination="JaR-gg-bjQ" id="p88-cT-WWB"/>
-                        <outlet property="noTransactionsDescriptionLabel" destination="4Os-3V-gy6" id="Kw0-fh-4Wd"/>
-                        <outlet property="noTransactionsLabel" destination="2JW-kW-bmU" id="VNg-LC-lO4"/>
+                        <outlet property="emptyStateView" destination="PkU-Et-JpK" id="bfn-XU-4nj"/>
                         <outlet property="tableView" destination="1my-vu-4t6" id="Qiu-iO-8qP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vLs-ym-BFH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="447" y="-243"/>
+            <point key="canvasLocation" x="445.60000000000002" y="-243.32833583208398"/>
         </scene>
     </scenes>
 </document>

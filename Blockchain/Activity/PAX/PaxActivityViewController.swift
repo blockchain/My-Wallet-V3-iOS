@@ -12,30 +12,17 @@ import ERC20Kit
 
 class PaxActivityViewController: SimpleTransactionsViewController {
     
-    var disposable: Disposable?
-    
     private var assetAccountRepository: ERC20AssetAccountRepository<PaxToken> = {
         return PAXServiceProvider.shared.services.assetAccountRepository
     }()
     
-    deinit {
-        disposable?.dispose()
-        disposable = nil
-    }
+    private var disposeBag = DisposeBag()
     
-    @IBOutlet fileprivate var noTransactionsLabel: UILabel!
-    @IBOutlet fileprivate var noTransactionsDescriptionLabel: UILabel!
-    @IBOutlet fileprivate var CTAButton: UIButton!
-    
-    fileprivate var emptyStateSubviews: [UIView] {
-        return [noTransactionsLabel,
-                noTransactionsDescriptionLabel,
-                CTAButton]
-    }
-    
+    @IBOutlet private var emptyStateView: PaxEmptyStateView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        CTAButton.layer.cornerRadius = 4.0
+        setup()
     }
     
     @objc class func make() -> PaxActivityViewController {
@@ -73,7 +60,7 @@ class PaxActivityViewController: SimpleTransactionsViewController {
     }
     
     func getBalance(displayError: Bool? = false) {
-        disposable = assetAccountRepository.currentAssetAccountDetails(fromCache: false)
+        assetAccountRepository.currentAssetAccountDetails(fromCache: false)
             .map { $0.balance }
             .subscribeOn(MainScheduler.asyncInstance)
             .observeOn(MainScheduler.instance)
@@ -84,12 +71,13 @@ class PaxActivityViewController: SimpleTransactionsViewController {
                     AlertViewPresenter.shared.standardError(message: LocalizationConstants.Errors.genericError)
                 }
             })
+            .disposed(by: disposeBag)
     }
     
     // MARK: Overrides
     
     override func emptyStateVisibility(_ visibility: Visibility) {
-        emptyStateSubviews.forEach({ $0.alpha = visibility.defaultAlpha })
+        emptyStateView.alpha = visibility.defaultAlpha
     }
     
     override func append(results: [Identifiable]) {
@@ -108,10 +96,47 @@ class PaxActivityViewController: SimpleTransactionsViewController {
         getBalance(displayError: false)
     }
     
-    // MARK: Actions
+    // MARK: Private methods
     
-    @IBAction fileprivate func CTATapped(_ sender: UIButton) {
-        let controller = AppCoordinator.shared.tabControllerManager
-        controller.receiveCoinClicked(nil)
+    private func setup() {
+        emptyStateView.alpha = 0.0
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
+            emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
+            emptyStateView.topAnchor.constraint(equalTo: view.topAnchor, constant: 24.0),
+            emptyStateView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -24.0)
+        ])
+        
+        let viewModel = PaxEmptyStateViewModel(
+            title: LocalizationConstants.Activity.Pax.emptyStateTitle,
+            subTitle: LocalizationConstants.Activity.Pax.emptyStateMessage,
+            link: PaxEmptyStateViewModel.Link(
+                text: LocalizationConstants.Activity.Pax.emptyStateLinkText,
+                action: { [weak self] in
+                    self?.learnMoreAction()
+                }
+            ),
+            ctaButton: PaxEmptyStateViewModel.CTAButton(
+                title: LocalizationConstants.Activity.Pax.emptyStateCTATitle,
+                action: { [weak self] in
+                    self?.ctaAction()
+                }
+            )
+        )
+        
+        emptyStateView.configure(with: viewModel)
+    }
+    
+    private func learnMoreAction() {
+        UIApplication.shared.openSafariViewController(
+            url: Constants.Url.learnMoreAboutPaxURL,
+            presentingViewController: AppCoordinator.shared.tabControllerManager.tabViewController
+        )
+    }
+    
+    private func ctaAction() {
+        AppCoordinator.shared.tabControllerManager.swapTapped(nil)
     }
 }
