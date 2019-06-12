@@ -349,6 +349,7 @@ static PEViewController *VerifyController()
     if ([AppFeatureConfigurator.sharedInstance configurationFor:AppFeatureStellar].isEnabled) {
         [allAssets addObject:[NSNumber numberWithInteger:LegacyAssetTypeStellar]];
     }
+    [allAssets addObject:[NSNumber numberWithInteger:LegacyAssetTypePax]];
     return [allAssets copy];
 }
 

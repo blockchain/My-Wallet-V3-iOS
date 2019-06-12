@@ -9,6 +9,8 @@
 import Foundation
 import StellarKit
 import PlatformKit
+import ERC20Kit
+import RxSwift
 
 /// Repository for asset addresses
 @objc class AssetAddressRepository: NSObject {
@@ -20,12 +22,17 @@ import PlatformKit
 
     private let walletManager: WalletManager
     private let stellarWalletAccountRepository: StellarWalletAccountRepository
-
+    private let paxAssetAccountRepository: ERC20AssetAccountRepository<PaxToken>
+    
+    private let disposeBag = DisposeBag()
+    
     init(walletManager: WalletManager = WalletManager.shared,
-         stellarWalletRepository: StellarWalletAccountRepository = StellarWalletAccountRepository(with: WalletManager.shared.wallet)
+         stellarWalletRepository: StellarWalletAccountRepository = StellarWalletAccountRepository(with: WalletManager.shared.wallet),
+         paxAssetAccountRepository: ERC20AssetAccountRepository<PaxToken> = PAXServiceProvider.shared.services.assetAccountRepository
         ) {
         self.walletManager = walletManager
         self.stellarWalletAccountRepository = stellarWalletRepository
+        self.paxAssetAccountRepository = paxAssetAccountRepository
         super.init()
         self.walletManager.swipeAddressDelegate = self
     }
@@ -57,7 +64,10 @@ import PlatformKit
         // Only one address for ethereum and stellar
         appSettings.swipeAddressForEther = wallet.getEtherAddress()
         appSettings.swipeAddressForStellar = stellarWalletAccountRepository.defaultAccount?.publicKey
-
+        paxAssetAccountRepository.assetAccountDetails.subscribe(onSuccess: { details in
+            appSettings.swipeAddressForPax = details.account.accountAddress
+        }).disposed(by: disposeBag)
+        
         // Retrieve swipe addresses for bitcoin and bitcoin cash
         let assetTypesWithHDAddresses = [AssetType.bitcoin, AssetType.bitcoinCash]
         assetTypesWithHDAddresses.forEach {
@@ -75,18 +85,26 @@ import PlatformKit
     /// - Returns: the swipe addresses
     @objc func swipeToReceiveAddresses(for assetType: AssetType) -> [AssetAddress] {
         let appSettings = BlockchainSettings.App.shared
-        if assetType == .ethereum {
+        
+        // TODO: In `BlockchainSettings.App`, create a method that receives an enum and returns a swipe address
+        switch assetType {
+        case .ethereum:
             guard let swipeAddressForEther = appSettings.swipeAddressForEther else {
                 return []
             }
             return [EthereumAddress(string: swipeAddressForEther)]
-        }
-
-        if assetType == .stellar {
+        case .stellar:
             guard let swipeAddressForStellar = appSettings.swipeAddressForStellar else {
                 return []
             }
             return [StellarAddress(string: swipeAddressForStellar)]
+        case .pax:
+            guard let swipeAddressForPax = appSettings.swipeAddressForPax else {
+                return []
+            }
+            return [PaxAddress(string: swipeAddressForPax)]
+        default:
+            break
         }
 
         let swipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: assetType.legacy) as? [String] ?? []

@@ -327,6 +327,20 @@ final class BlockchainSettings: NSObject {
                 KeychainItemWrapper.setSingleSwipeAddress(xlmAddress, for: .stellar)
             }
         }
+        
+        /// XLM address to be used for swipe to receive
+        @objc var swipeAddressForPax: String? {
+            get {
+                return KeychainItemWrapper.getSingleSwipeAddress(for: .pax)
+            }
+            set {
+                guard let paxAddress = newValue else {
+                    KeychainItemWrapper.removeAllSwipeAddresses(for: .pax)
+                    return
+                }
+                KeychainItemWrapper.setSingleSwipeAddress(paxAddress, for: .pax)
+            }
+        }
 
         /**
          Determines the number of labeled addresses for the default account.

@@ -22,6 +22,8 @@
         return KEYCHAIN_KEY_ETHER_ADDRESS;
     } else if (assetType == LegacyAssetTypeStellar) {
         return @"xlmSwipeToReceiveAddress";
+    } else if (assetType == LegacyAssetTypePax) {
+        return @"paxSwipeToReceiveAddress";
     } else {
         DLog(@"KeychainItemWrapper error: Unsupported asset type!")
         return nil;
