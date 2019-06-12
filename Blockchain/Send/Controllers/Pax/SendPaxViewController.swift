@@ -109,14 +109,22 @@ class SendPaxViewController: UIViewController {
         switch update {
         case .cryptoValueTextField(let amount):
             guard paxTextField.isFirstResponder == false else { return }
-            paxTextField.text = amount?.toDisplayString(includeSymbol: false)
+            if amount?.amount == 0 {
+                paxTextField.text = ""
+            } else {
+                paxTextField.text = amount?.toDisplayString(includeSymbol: false)
+            }
         case .feeValueLabel(let fee):
             networkFeesLabel.text = fee?.toDisplayString(includeSymbol: true)
         case .toAddressTextField(let address):
             paxAddressTextField.text = address
         case .fiatValueTextField(let amount):
             guard fiatTextField.isFirstResponder == false else { return }
-            fiatTextField.text = amount?.toDisplayString(includeSymbol: false, locale: Locale.current)
+            if amount?.amount == 0 {
+                fiatTextField.text = ""
+            } else {
+                fiatTextField.text = amount?.toDisplayString(includeSymbol: false, locale: Locale.current)
+            }
         case .loadingIndicatorVisibility(let visibility):
             switch visibility {
             case .hidden:
