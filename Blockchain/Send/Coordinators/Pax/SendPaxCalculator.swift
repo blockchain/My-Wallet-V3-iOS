@@ -207,6 +207,8 @@ class SendPaxCalculator {
                     if address.isValid {
                         sendButtonEnabled = true
                         updates.insert(.toAddressTextField(address.rawValue))
+                    } else if address.isEmpty {
+                        viewModel.internalError = nil
                     } else {
                         viewModel.internalError = .invalidDestinationAddress
                     }

@@ -203,9 +203,6 @@ class SendPaxViewController: UIViewController {
 extension SendPaxViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text, !text.isEmpty else { return }
-        if textField == paxAddressTextField {
-            delegate?.onAddressEntry(text)
-        }
         if textField == paxTextField {
             let value = CryptoValue.paxFromMajor(string: text)
             delegate?.onPaxEntry(value)
@@ -215,6 +212,13 @@ extension SendPaxViewController: UITextFieldDelegate {
             let value = FiatValue.create(amountString: text, currencyCode: currencyCode)
             delegate?.onFiatEntry(value)
         }
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        if textField == paxAddressTextField {
+            delegate?.onAddressEntry("")
+        }
+        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

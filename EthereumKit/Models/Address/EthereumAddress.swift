@@ -29,6 +29,10 @@ public struct EthereumAddress: EthereumAddressProtocols {
     public var isValid: Bool {
         return web3swiftAddress.isValid
     }
+    
+    public var isEmpty: Bool {
+        return rawValue == "0x"
+    }
 }
 
 extension EthereumAddress {
