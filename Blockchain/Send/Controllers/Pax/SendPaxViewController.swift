@@ -82,6 +82,7 @@ class SendPaxViewController: UIViewController {
         fields.forEach({ $0.delegate = self })
         topGravityStackView.addBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         sendNowButton.layer.cornerRadius = 4.0
+        sendNowButton.setTitle(LocalizationConstants.continueString, for: .normal)
         delegate?.onLoad()
         currencyLabel.text = appSettings.fiatCurrencyCode
         setupKeyboard()
