@@ -132,7 +132,12 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                 let cryptoDisplayValue = proposal.value.value.toDisplayString(includeSymbol: true)
                 let fiatValue = proposal.value.value.convertToFiatValue(exchangeRate: priceInFiat)
                 let fee = proposal.gasLimit * proposal.gasPrice
-                let fiatFee = CryptoValue.etherFromWei(string: "\(fee)")?.convertToFiatValue(exchangeRate: fiatValue)
+                let etherFee = CryptoValue.etherFromWei(string: "\(fee)")
+                let fiatFee = etherFee?.convertToFiatValue(exchangeRate: fiatValue)
+                
+                let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true, locale: Locale.current) ?? ""
+                let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true, locale: Locale.current) ?? ""
+                let displayFee = "\(etherDisplayFee) (\(fiatDisplayFee))"
                 
                 let cryptoWithFiat = "\(cryptoDisplayValue) (\(fiatValue.toDisplayString(includeSymbol: true, locale: Locale.current)))"
                 
@@ -142,7 +147,7 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                     totalAmountText: cryptoDisplayValue,
                     fiatTotalAmountText: fiatValue.toDisplayString(includeSymbol: true, locale: Locale.current),
                     cryptoWithFiatAmountText: cryptoWithFiat,
-                    amountWithFiatFeeText: fiatFee?.toDisplayString() ?? "",
+                    amountWithFiatFeeText: displayFee,
                     buttonTitle: LocalizationConstants.SendAsset.send,
                     showDescription: false,
                     surgeIsOccurring: false,
