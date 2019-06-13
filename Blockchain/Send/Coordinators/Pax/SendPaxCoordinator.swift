@@ -121,9 +121,14 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     
     func onSendProposed() {
         guard let model = output?.model else { return }
+        guard let address = model.addressStatus.address else {
+            interface.apply(updates: [.showAlertSheetForError(.invalidDestinationAddress)])
+            return
+        }
         guard let proposal = model.proposal else { return }
-        interface.apply(updates: [.loadingIndicatorVisibility(.visible)])
         let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
+
+        interface.apply(updates: [.loadingIndicatorVisibility(.visible)])
         priceAPI.fiatPrice(forCurrency: .pax, fiatSymbol: currencyCode)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
@@ -143,7 +148,7 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                 
                 let model = BCConfirmPaymentViewModel(
                     from: LocalizationConstants.SendAsset.myPaxWallet,
-                    to: model.address?.rawValue ?? "",
+                    to: address.rawValue,
                     totalAmountText: cryptoDisplayValue,
                     fiatTotalAmountText: fiatValue.toDisplayString(includeSymbol: true, locale: Locale.current),
                     cryptoWithFiatAmountText: cryptoWithFiat,
@@ -171,9 +176,9 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     func onConfirmSendTapped() {
         guard let model = output?.model else { return }
         guard let proposal = model.proposal else { return }
-        guard let address = model.address else { return }
+        guard case .valid(let address) = model.addressStatus else { return }
         interface.apply(updates: [.loadingIndicatorVisibility(.visible)])
-        services.paxService.transfer(proposal: proposal, to: address)
+        services.paxService.transfer(proposal: proposal, to: address.ethereumAddress)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
             .flatMap(weak: self) { (self, candidate) -> Single<EthereumTransactionPublished> in

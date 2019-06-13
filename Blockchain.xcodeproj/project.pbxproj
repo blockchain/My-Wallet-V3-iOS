@@ -891,6 +891,8 @@
 		60AEA57621125B210053A753 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBE086211258F300AD514A /* SettingsViewController.swift */; };
 		60AEA5BF21125DDD0053A753 /* SettingsSelectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AEA5BD21125DDD0053A753 /* SettingsSelectorTableViewController.m */; };
 		6412F490EA0D47C6C2B6351E /* Pods_EthereumKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 441F012EEFA9C1DB52465CFF /* Pods_EthereumKitTests.framework */; };
+		6526A5B022B2BB260079AF6B /* AddressStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6526A5AF22B2BB260079AF6B /* AddressStatus.swift */; };
+		6526A5B122B2BB260079AF6B /* AddressStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6526A5AF22B2BB260079AF6B /* AddressStatus.swift */; };
 		670595A41AB0F59D00D2D6D9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */; };
 		6710DA0E1A8E82D80089DDED /* BCLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6710DA0D1A8E82D80089DDED /* BCLine.m */; };
 		674709EC19D1D14300757D46 /* BCWelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 674709EB19D1D14300757D46 /* BCWelcomeView.m */; };
@@ -4066,6 +4068,7 @@
 		638DFC4DF1C0186CD154DE3C /* Pods-PlatformUIKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.release.xcconfig"; sourceTree = "<group>"; };
 		64DE03E04D1BB6298B3099B1 /* Pods_PlatformKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatformKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6507374866BC906CB968E94D /* Pods-Blockchain.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blockchain.release staging.xcconfig"; path = "Pods/Target Support Files/Pods-Blockchain/Pods-Blockchain.release staging.xcconfig"; sourceTree = "<group>"; };
+		6526A5AF22B2BB260079AF6B /* AddressStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressStatus.swift; sourceTree = "<group>"; };
 		670595A21AB0F59D00D2D6D9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		670595A31AB0F59D00D2D6D9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		6710DA0C1A8E82D80089DDED /* BCLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCLine.h; sourceTree = "<group>"; };
@@ -5945,6 +5948,7 @@
 			children = (
 				3A55854822A04FD40046168C /* SendMoniesInternalError.swift */,
 				3A55854A22A050030046168C /* SendMoniesPresentationUpdate.swift */,
+				6526A5AF22B2BB260079AF6B /* AddressStatus.swift */,
 				3A55854C22A050200046168C /* SendPaxInput.swift */,
 				3A55854E22A0502B0046168C /* SendPaxOutput.swift */,
 				3A55855022A050740046168C /* SendPaxViewModel.swift */,
@@ -12890,6 +12894,7 @@
 				51135706209CF64900056D65 /* BackupNavigationViewController.swift in Sources */,
 				34BD9738221B123500D40D4C /* AddressQRCodeParser.swift in Sources */,
 				C75684CA212F053200B5059C /* TradingPairTests.swift in Sources */,
+				6526A5B122B2BB260079AF6B /* AddressStatus.swift in Sources */,
 				AA30893621A5F6FA002F9B37 /* DeepLinkPayload.swift in Sources */,
 				AA278EB022B18468009F203D /* PAXAnnouncement.swift in Sources */,
 				AA1E52342097CC2C0099BD10 /* AuthenticationCoordinator.swift in Sources */,
@@ -13036,6 +13041,7 @@
 				C76143AB211A80D30041411E /* Codable+Coding.swift in Sources */,
 				C7A9E7A61FAB5FF600027F22 /* UILabel+CGRectForSubstring.m in Sources */,
 				AAC9FCE520ADF17100E28B7A /* SoundManager.swift in Sources */,
+				6526A5B022B2BB260079AF6B /* AddressStatus.swift in Sources */,
 				C7343BD1214FF9D0001B1EC9 /* ExchangeDetailContracts.swift in Sources */,
 				C7E4D293203E12AA00F6DCEB /* TransactionsBitcoinCashViewController.m in Sources */,
 				23F720F21C32DC0A00577738 /* DebugTableViewController.m in Sources */,

@@ -31,7 +31,6 @@ class SendPaxCalculator {
         case stopped
     }
     
-    typealias Address = EthereumKit.EthereumAddress
     typealias Model = SendPaxViewModel
     typealias Input = SendPaxInput
     typealias Output = SendPaxOutput
@@ -94,9 +93,15 @@ class SendPaxCalculator {
                 .disposed(by: bag)
         case .addressEntryEvent(let value):
             var input = model.input
-            if let address = Address(rawValue: value) {
-                input.address = address
+            let addressStatus: AddressStatus
+            if value.isEmpty {
+                addressStatus = .empty
+            } else if let address = EthereumAccountAddress(rawValue: value) {
+                addressStatus = .valid(address)
+            } else {
+                addressStatus = .invalid
             }
+            input.addressStatus = addressStatus
             validate(input: input)
         }
     }
@@ -199,19 +204,19 @@ class SendPaxCalculator {
         return erc20Service.evaluate(amount: input.paxAmount)
             .subscribeOn(MainScheduler.instance)
             .observeOn(MainScheduler.asyncInstance)
+            .flatMap { proposal -> Single<ERC20TransactionProposal<PaxToken>> in
+                guard case .invalid = input.addressStatus else {
+                    return Single.just(proposal)
+                }
+                throw SendMoniesInternalError.invalidDestinationAddress
+            }
             .map { proposal -> Output in
                 
                 var sendButtonEnabled = false
                 
-                if let address = input.address {
-                    if address.isValid {
-                        sendButtonEnabled = true
-                        updates.insert(.toAddressTextField(address.rawValue))
-                    } else if address.isEmpty {
-                        viewModel.internalError = nil
-                    } else {
-                        viewModel.internalError = .invalidDestinationAddress
-                    }
+                if case .valid(let address) = input.addressStatus {
+                    sendButtonEnabled = true
+                    updates.insert(.toAddressTextField(address.rawValue))
                 }
                 
                 sendButtonEnabled = proposal.aboveMinimumSpendable
@@ -225,6 +230,8 @@ class SendPaxCalculator {
                 if let error = error as? ERC20ServiceError {
                     let internalError = SendMoniesInternalError(erc20error: error)
                     viewModel.internalError = internalError
+                } else if let error = error as? SendMoniesInternalError {
+                    viewModel.internalError = error
                 }
                 
                 updates.insert(.sendButtonEnabled(false))

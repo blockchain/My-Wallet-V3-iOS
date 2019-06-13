@@ -13,6 +13,7 @@ import web3swift
 typealias EthereumAddressProtocols = Hashable & ExpressibleByStringLiteral & RawRepresentable
 
 public struct EthereumAddress: EthereumAddressProtocols {
+    
     public let rawValue: String
     
     public init(stringLiteral value: String) {
@@ -28,10 +29,6 @@ public struct EthereumAddress: EthereumAddressProtocols {
     
     public var isValid: Bool {
         return web3swiftAddress.isValid
-    }
-    
-    public var isEmpty: Bool {
-        return rawValue == "0x"
     }
 }
 

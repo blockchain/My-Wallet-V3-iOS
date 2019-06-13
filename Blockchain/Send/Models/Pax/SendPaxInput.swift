@@ -12,14 +12,14 @@ import EthereumKit
 import ERC20Kit
 
 struct SendPaxInput {
-    var address: EthereumKit.EthereumAddress?
+    var addressStatus: AddressStatus
     var paxAmount: ERC20TokenValue<PaxToken>
     var fiatAmount: FiatValue
     
-    init(address: EthereumKit.EthereumAddress? = nil,
+    init(addressStatus: AddressStatus = .empty,
          paxAmount: ERC20TokenValue<PaxToken>,
          fiatAmount: FiatValue) {
-        self.address = address
+        self.addressStatus = addressStatus
         self.paxAmount = paxAmount
         self.fiatAmount = fiatAmount
     }
