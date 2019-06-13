@@ -189,6 +189,7 @@
             [self.feeInformationButton setImage:[[UIImage imageNamed:@"help"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
             self.feeInformationButton.tintColor = UIColor.brandSecondary;
             [self.feeInformationButton addTarget:self action:@selector(feeInformationButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            [self.feeInformationButton setHidden:!self.viewModel.showsFeeInformationButton];
             [cell.contentView addSubview:self.feeInformationButton];
             
             if (self.viewModel.surgeIsOccurring) cell.detailTextLabel.textColor = UIColor.error;

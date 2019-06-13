@@ -41,6 +41,7 @@
                  buttonTitle:(NSString *_Nonnull)buttonTitle
              showDescription:(BOOL)showDescription
             surgeIsOccurring:(BOOL)surgeIsOccurring
+          showsFeeInformationButton:(BOOL)showsFeeInformationButton
                     noteText:(NSString *_Nullable)noteText
                  warningText:(NSAttributedString *_Nullable)warningText
             descriptionTitle:(NSString *_Nullable)descriptionTitle;
@@ -56,5 +57,6 @@
 @property (nonatomic, strong) NSString *descriptionTitle;
 @property (nonatomic) BOOL showDescription;
 @property (nonatomic) BOOL surgeIsOccurring;
+@property (nonatomic) BOOL showsFeeInformationButton;
 @property (nonatomic) NSAttributedString *warningText;
 @end

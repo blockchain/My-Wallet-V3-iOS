@@ -487,6 +487,7 @@ extension BCConfirmPaymentViewModel {
             buttonTitle: LocalizationConstants.SendAsset.send,
             showDescription: paymentOperation.memo != nil,
             surgeIsOccurring: false,
+            showsFeeInformationButton: false,
             noteText: paymentOperation.memo?.displayValue,
             warningText: nil,
             descriptionTitle: LocalizationConstants.Stellar.memoTitle

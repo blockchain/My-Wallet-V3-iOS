@@ -33,6 +33,7 @@
         self.cryptoWithFiatAmountText = [self formatAmountInBTCAndFiat:amount];
         self.amountWithFiatFeeText = [self formatAmountInBTCAndFiat:fee];
         self.showDescription = YES;
+        self.showsFeeInformationButton = YES;
     }
     return self;
 }
@@ -53,6 +54,7 @@
         self.cryptoWithFiatAmountText = [NSString stringWithFormat:@"%@ (%@)", ethAmount, fiatAmount];
         self.amountWithFiatFeeText = [NSString stringWithFormat:@"%@ (%@)", ethFee, fiatFee];
         self.showDescription = YES;
+        self.showsFeeInformationButton = YES;
     }
     return self;
 }
@@ -76,6 +78,7 @@
         self.cryptoWithFiatAmountText = [self formatAmountInBCHAndFiat:amount];
         self.amountWithFiatFeeText = [self formatAmountInBCHAndFiat:fee];
         self.showDescription = YES;
+        self.showsFeeInformationButton = YES;
         
         if ([WalletManager.sharedInstance.wallet isValidAddress:self.to assetType:LegacyAssetTypeBitcoin]) {
             CGFloat fontSize = FONT_SIZE_EXTRA_SMALL;
@@ -104,6 +107,7 @@
                  buttonTitle:(NSString *_Nonnull)buttonTitle
              showDescription:(BOOL)showDescription
             surgeIsOccurring:(BOOL)surgeIsOccurring
+          showsFeeInformationButton:(BOOL)showsFeeInformationButton
                     noteText:(NSString *_Nullable)noteText
                  warningText:(NSAttributedString *_Nullable)warningText
             descriptionTitle:(NSString * _Nullable)descriptionTitle
@@ -119,6 +123,7 @@
         self.buttonTitle = buttonTitle;
         self.showDescription = showDescription;
         self.surgeIsOccurring = surgeIsOccurring;
+        self.showsFeeInformationButton = showsFeeInformationButton;
         self.noteText = noteText;
         self.warningText = warningText;
         self.descriptionTitle = descriptionTitle;

@@ -151,6 +151,7 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                     buttonTitle: LocalizationConstants.SendAsset.send,
                     showDescription: false,
                     surgeIsOccurring: false,
+                    showsFeeInformationButton: false,
                     noteText: nil,
                     warningText: nil,
                     descriptionTitle: nil
