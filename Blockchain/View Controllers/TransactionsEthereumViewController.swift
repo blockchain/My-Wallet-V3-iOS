@@ -38,7 +38,7 @@ extension TransactionsViewController {
 
 final class TransactionsEthereumViewController: TransactionsViewController {
     
-    @objc var detailViewController: TransactionDetailViewController!
+    @objc var detailViewController: TransactionDetailViewController?
     
     private var tableView: UITableView!
     private var refreshControl: UIRefreshControl!
@@ -89,7 +89,7 @@ final class TransactionsEthereumViewController: TransactionsViewController {
     @objc func reloadSymbols() {
         updateBalance()
         tableView.reloadData()
-        detailViewController.reloadSymbols()
+        detailViewController?.reloadSymbols()
     }
     
     private func updateBalance() {
