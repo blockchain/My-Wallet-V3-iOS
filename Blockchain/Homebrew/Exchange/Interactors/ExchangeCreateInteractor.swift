@@ -725,8 +725,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     // Error message to show if the user is not allowed to trade a certain asset type
     private func errorMessage(for assetType: AssetType) -> String? {
         switch assetType {
-        case .ethereum: return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
-        default: return nil
+        case .ethereum, .pax:
+            return LocalizationConstants.SendEther.waitingForPaymentToFinishMessage
+        default:
+            return nil
         }
     }
 }

@@ -332,7 +332,7 @@ extension ExchangeDetailViewController: ExchangeDetailInterface {
         /// and the footer with the submission button will be visible again.
         guard let model = model else { return }
         guard model.alertModel == nil else {
-             Logger.shared.info("Not updating confirm details. Alert is currently presented.")
+            Logger.shared.info("Not updating confirm details. Alert is currently presented.")
             return
         }
         coordinator.handle(event: .updateConfirmDetails(orderTransaction, conversion))

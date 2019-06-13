@@ -102,7 +102,7 @@ class TradeExecutionService: TradeExecutionAPI {
 
     func canTradeAssetType(_ assetType: AssetType) -> Bool {
         switch assetType {
-        case .ethereum:
+        case .ethereum, .pax:
             return !wallet.isWaitingOnEtherTransaction()
         default:
             return true
@@ -336,14 +336,17 @@ class TradeExecutionService: TradeExecutionAPI {
                 })
             disposables.insertWithDiscardableResult(disposable)
         } else if assetType == .pax {
-            guard let cryptoValue = CryptoValue.paxFromMajor(string: orderTransactionLegacy.amount) else { return }
-            // swiftlint:disable force_try
-            let tokenValue = try! ERC20TokenValue<PaxToken>.init(crypto: cryptoValue)
-            let address = EthereumKit.EthereumAddress(stringLiteral: orderTransactionLegacy.to)
+            guard
+                let cryptoValue = CryptoValue.paxFromMajor(string: orderTransactionLegacy.amount),
+                let tokenValue = try? ERC20TokenValue<PaxToken>.init(crypto: cryptoValue),
+                let address = EthereumAccountAddress(rawValue: orderTransactionLegacy.to)?.ethereumAddress
+            else {
+                return
+            }
             dependencies.erc20Service.evaluate(amount: tokenValue)
                 .subscribeOn(MainScheduler.instance)
                 .observeOn(MainScheduler.asyncInstance)
-                .flatMap(weak: self, { (self, proposal) -> Single<EthereumTransactionCandidate> in
+                .flatMap(weak: self, { (self, _) -> Single<EthereumTransactionCandidate> in
                     return self.dependencies.erc20Service.transfer(to: address, amount: tokenValue)
                 })
                 .observeOn(MainScheduler.instance)
