@@ -55,6 +55,8 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     }
     
     func onLoad() {
+        interface.apply(updates: [.maxAvailable(nil)])
+
         // Load any pending send metadata and prefill
         calculator.status
             .subscribeOn(MainScheduler.instance)
@@ -94,6 +96,17 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                 let ethereumTransactionFee = gasPrice * gasLimitContract
                 let result = CryptoValue.etherFromWei(string: "\(ethereumTransactionFee)")
                 self.interface.apply(updates: [.feeValueLabel(result)])
+            }, onError: { error in
+                Logger.shared.error(error)
+            })
+            .disposed(by: bag)
+
+        services.assetAccountRepository
+            .assetAccountDetails
+            .subscribeOn(MainScheduler.asyncInstance)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] details in
+                self?.interface.apply(updates: [.maxAvailable(details.balance)])
             }, onError: { error in
                 Logger.shared.error(error)
             })

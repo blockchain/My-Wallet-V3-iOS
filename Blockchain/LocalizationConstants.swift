@@ -1275,6 +1275,10 @@ struct LocalizationConstants {
     }
 
     struct SendAsset {
+        static let useTotalAvailable = NSLocalizedString(
+            "Use total available: ",
+            comment: "String displayed to the user when they want to send their full balance to an address."
+        )
         static let invalidXAddressY = NSLocalizedString(
             "Invalid %@ address: %@",
             comment: "String presented to the user when they try to scan a QR code with an invalid address."

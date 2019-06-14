@@ -22,4 +22,5 @@ enum SendMoniesPresentationUpdate: Hashable {
     case showAlertSheetForSuccess
     case hideConfirmationModal
     case loadingIndicatorVisibility(Visibility)
+    case maxAvailable(CryptoValue?)
 }

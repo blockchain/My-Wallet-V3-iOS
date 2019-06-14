@@ -45,7 +45,8 @@ class SendPaxViewController: UIViewController {
     @IBOutlet private var paxWalletLabel: UILabel!
     @IBOutlet private var networkFeesLabel: UILabel!
     @IBOutlet private var currencyLabel: UILabel!
-    
+    @IBOutlet private var maxAvailableLabel: ActionableLabel!
+
     @IBOutlet private var paxAddressTextField: UITextField!
     @IBOutlet private var paxTextField: UITextField!
     @IBOutlet private var fiatTextField: UITextField!
@@ -63,8 +64,31 @@ class SendPaxViewController: UIViewController {
     // MARK: Private Properties
     
     private var coordinator: SendPaxCoordinator!
-    
+
     private var qrScannerViewModel: QRCodeScannerViewModel<AddressQRCodeParser>?
+
+    private var maxAvailableTrigger: ActionableTrigger? {
+        didSet {
+            guard let trigger = maxAvailableTrigger else {
+                maxAvailableLabel.text = ""
+                return
+            }
+
+            let maxText = NSMutableAttributedString(
+                string: trigger.primaryString,
+                attributes: useMaxAttributes()
+            )
+
+            let CTA = NSAttributedString(
+                string: trigger.callToAction,
+                attributes: useMaxActionAttributes()
+            )
+
+            maxText.append(CTA)
+
+            maxAvailableLabel.attributedText = maxText
+        }
+    }
     
     // MARK: Class Functions
     
@@ -83,6 +107,7 @@ class SendPaxViewController: UIViewController {
         topGravityStackView.addBackgroundColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))
         sendNowButton.layer.cornerRadius = 4.0
         sendNowButton.setTitle(LocalizationConstants.continueString, for: .normal)
+        maxAvailableLabel.delegate = self
         delegate?.onLoad()
         currencyLabel.text = appSettings.fiatCurrencyCode
         setupKeyboard()
@@ -157,10 +182,36 @@ class SendPaxViewController: UIViewController {
             }
         case .walletLabel(let accountLabel):
             paxWalletLabel.text = accountLabel
+        case .maxAvailable(let max):
+            maxAvailableTrigger = ActionableTrigger(
+                text: LocalizationConstants.SendAsset.useTotalAvailable,
+                CTA: max?.toDisplayString(includeSymbol: true) ?? "..."
+            ) { [weak self] in
+                guard let max = max else { return }
+                self?.delegate?.onPaxEntry(max)
+            }
         }
     }
     
     // MARK: Private Helpers
+
+    private func useMaxAttributes() -> [NSAttributedString.Key: Any] {
+        let fontName = Constants.FontNames.montserratRegular
+        let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
+        return [
+            .font: font,
+            .foregroundColor: UIColor.darkGray
+        ]
+    }
+
+    private func useMaxActionAttributes() -> [NSAttributedString.Key: Any] {
+        let fontName = Constants.FontNames.montserratRegular
+        let font = UIFont(name: fontName, size: 13.0) ?? UIFont.systemFont(ofSize: 13.0)
+        return [
+            .font: font,
+            .foregroundColor: UIColor.brandSecondary
+        ]
+    }
     
     fileprivate func handle(error: SendMoniesInternalError) {
         fields.forEach({ $0.resignFirstResponder() })
@@ -360,5 +411,16 @@ extension SendPaxViewController {
             }
             delegate?.onPaxEntry(value)
         }
+    }
+}
+
+extension SendPaxViewController: ActionableLabelDelegate {
+    func targetRange(_ label: ActionableLabel) -> NSRange? {
+        return maxAvailableTrigger?.actionRange()
+    }
+
+    func actionRequestingExecution(label: ActionableLabel) {
+        guard let trigger = maxAvailableTrigger else { return }
+        trigger.execute()
     }
 }
