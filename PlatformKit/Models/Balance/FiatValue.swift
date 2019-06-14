@@ -39,6 +39,18 @@ extension FiatValue {
     public static func zero(currencyCode: String) -> FiatValue {
         return FiatValue(currencyCode: currencyCode, amount: 0.0)
     }
+
+    /// Converts this value into a corresponding CryptoValue given an exchange rate for a given currency
+    ///
+    /// - Parameters:
+    ///   - exchangeRate: the cost of 1 unit of cryptoCurrency provided in FiatValue
+    ///   - cryptoCurrency: the currency to convert to
+    /// - Returns: the converted FiatValue in CryptoValue
+    public func convertToCryptoValue(exchangeRate: FiatValue, cryptoCurrency: CryptoCurrency) -> CryptoValue {
+        let exchangeRate = exchangeRate.amount
+        let cryptoMajorValue = amount / exchangeRate
+        return CryptoValue.createFromMajorValue(cryptoMajorValue, assetType: cryptoCurrency)
+    }
 }
 
 extension FiatValue: Money {

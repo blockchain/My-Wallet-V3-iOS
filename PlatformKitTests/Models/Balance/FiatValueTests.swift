@@ -72,6 +72,15 @@ class FiatValueTests: XCTestCase {
         )
     }
 
+    func testConvertToCryptoValue() {
+        let amount = FiatValue.create(amountString: "4,000.00", currencyCode: "USD")
+        let exchangeRate = FiatValue.create(amountString: "8,000.00", currencyCode: "USD")
+        XCTAssertEqual(
+            amount.convertToCryptoValue(exchangeRate: exchangeRate, cryptoCurrency: .bitcoin),
+            CryptoValue.bitcoinFromMajor(string: "0.5")
+        )
+    }
+
     // MARK: toDisplayString tests
 
     func testDisplayUSDinUS() {

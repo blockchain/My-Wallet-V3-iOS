@@ -122,10 +122,8 @@ class SendPaxCalculator {
             )
             .asObservable()
             .flatMapLatest { priceInFiatValue -> Observable<SendPaxInput> in
-                let exchangeRate = priceInFiatValue.priceInFiat.amount
-                let majorValue = value.amount * exchangeRate
-                let cryptoValue = CryptoValue.createFromMajorValue(majorValue, assetType: .pax)
                 input.fiatAmount = value
+                let cryptoValue = value.convertToCryptoValue(exchangeRate: priceInFiatValue.priceInFiat, cryptoCurrency: .pax)
                 // swiftlint:disable force_try
                 input.paxAmount = try! ERC20TokenValue<PaxToken>(crypto: cryptoValue)
                 return Observable.just(input)
