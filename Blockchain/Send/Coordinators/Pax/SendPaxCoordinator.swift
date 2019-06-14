@@ -142,22 +142,27 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
         let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
 
         interface.apply(updates: [.loadingIndicatorVisibility(.visible)])
-        priceAPI.fiatPrice(forCurrency: .pax, fiatSymbol: currencyCode)
+        Single.zip(
+            priceAPI.fiatPrice(forCurrency: .ethereum, fiatSymbol: currencyCode),
+            priceAPI.fiatPrice(forCurrency: .pax, fiatSymbol: currencyCode)
+        )
             .subscribeOn(MainScheduler.instance)
+            .map { (ethPrice, paxPrice) -> (FiatValue, FiatValue) in
+                return (ethPrice.priceInFiat, paxPrice.priceInFiat)
+            }
             .observeOn(MainScheduler.asyncInstance)
-            .map { priceInFiatValue -> BCConfirmPaymentViewModel in
-                let priceInFiat = priceInFiatValue.priceInFiat
+            .map { (ethFiatPrice, paxFiatPrice) -> BCConfirmPaymentViewModel in
                 let cryptoDisplayValue = proposal.value.value.toDisplayString(includeSymbol: true)
-                let fiatValue = proposal.value.value.convertToFiatValue(exchangeRate: priceInFiat)
+                let fiatValue = proposal.value.value.convertToFiatValue(exchangeRate: paxFiatPrice)
                 let fee = proposal.gasLimit * proposal.gasPrice
                 let etherFee = CryptoValue.etherFromWei(string: "\(fee)")
-                let fiatFee = etherFee?.convertToFiatValue(exchangeRate: fiatValue)
+                let fiatFee = etherFee?.convertToFiatValue(exchangeRate: ethFiatPrice)
                 
-                let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true, locale: Locale.current) ?? ""
-                let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true, locale: Locale.current) ?? ""
+                let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true) ?? ""
+                let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true) ?? ""
                 let displayFee = "\(etherDisplayFee) (\(fiatDisplayFee))"
                 
-                let cryptoWithFiat = "\(cryptoDisplayValue) (\(fiatValue.toDisplayString(includeSymbol: true, locale: Locale.current)))"
+                let cryptoWithFiat = "\(cryptoDisplayValue) (\(fiatValue.toDisplayString(includeSymbol: true)))"
                 
                 let model = BCConfirmPaymentViewModel(
                     from: LocalizationConstants.SendAsset.myPaxWallet,
