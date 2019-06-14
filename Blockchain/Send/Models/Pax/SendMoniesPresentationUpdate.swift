@@ -23,4 +23,5 @@ enum SendMoniesPresentationUpdate: Hashable {
     case hideConfirmationModal
     case loadingIndicatorVisibility(Visibility)
     case maxAvailable(CryptoValue?)
+    case fiatCurrencyLabel(String?)
 }

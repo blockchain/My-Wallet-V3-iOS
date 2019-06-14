@@ -33,8 +33,6 @@ class SendPaxViewController: UIViewController {
     
     // MARK: Public Properties
     
-    var appSettings: BlockchainSettings.App!
-    
     weak var delegate: SendPaxViewControllerDelegate?
     
     // MARK: Private IBOutlets
@@ -93,9 +91,7 @@ class SendPaxViewController: UIViewController {
     // MARK: Class Functions
     
     @objc class func make() -> SendPaxViewController {
-        let controller = SendPaxViewController.makeFromStoryboard()
-        controller.appSettings = BlockchainSettings.App.shared
-        return controller
+        return SendPaxViewController.makeFromStoryboard()
     }
     
     // MARK: Lifecycle
@@ -109,7 +105,6 @@ class SendPaxViewController: UIViewController {
         sendNowButton.setTitle(LocalizationConstants.continueString, for: .normal)
         maxAvailableLabel.delegate = self
         delegate?.onLoad()
-        currencyLabel.text = appSettings.fiatCurrencyCode
         setupKeyboard()
     }
     
@@ -190,6 +185,8 @@ class SendPaxViewController: UIViewController {
                 guard let max = max else { return }
                 self?.delegate?.onPaxEntry(max)
             }
+        case .fiatCurrencyLabel(let fiatCurrency):
+            currencyLabel.text = fiatCurrency
         }
     }
     

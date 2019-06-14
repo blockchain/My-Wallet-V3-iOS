@@ -85,6 +85,8 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     }
     
     func onAppear() {
+        let fiatCurrencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
+        interface.apply(updates: [.fiatCurrencyLabel(fiatCurrencyCode)])
         // TODO: Check ETH balance to cover fees. Only fees.
         // Don't care how much PAX they are sending.
         fees.subscribeOn(MainScheduler.instance)
