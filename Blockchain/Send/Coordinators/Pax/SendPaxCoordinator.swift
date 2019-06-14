@@ -16,6 +16,17 @@ import ERC20Kit
 
 class SendPaxCoordinator {
     
+    /// Aggregates the amounts before displaying them
+    private struct DisplayAmounts {
+        let fee: String
+        let cryptoAmount: String
+        let fiatAmount: String
+        
+        var totalAmount: String {
+            return "\(cryptoAmount) (\(fiatAmount))"
+        }
+    }
+    
     fileprivate let interface: SendPAXInterface
     fileprivate let serviceProvider: PAXServiceProvider
     fileprivate var services: PAXServices {
@@ -28,6 +39,10 @@ class SendPaxCoordinator {
     fileprivate let priceAPI: PriceServiceAPI
     fileprivate var isExecuting: Bool = false
     fileprivate var output: SendPaxOutput?
+    
+    private var fees: Single<EthereumTransactionFee> {
+        return services.feeService.fees
+    }
     
     init(
         interface: SendPAXInterface,
@@ -42,9 +57,43 @@ class SendPaxCoordinator {
             controller.delegate = self
         }
     }
+}
+
+// MARK: - Private
+
+extension SendPaxCoordinator {
     
-    private var fees: Single<EthereumTransactionFee> {
-        return services.feeService.fees
+    /// Fetches updated transaction and fee amounts for display purpose
+    private var displayAmounts: Single<DisplayAmounts> {
+        let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
+        return Single.zip(
+                priceAPI.fiatPrice(forCurrency: .ethereum, fiatSymbol: currencyCode),
+                priceAPI.fiatPrice(forCurrency: .pax, fiatSymbol: currencyCode),
+                fees
+            )
+            .map { (ethPrice, paxPrice, etherTransactionFee) -> (FiatValue, FiatValue, EthereumTransactionFee) in
+                return (ethPrice.priceInFiat, paxPrice.priceInFiat, etherTransactionFee)
+            }
+            .map { [weak self] (ethFiatPrice, paxFiatPrice, etherTransactionFee) -> DisplayAmounts in
+                let gasPrice = BigUInt(etherTransactionFee.priority.amount)
+                let gasLimit = BigUInt(etherTransactionFee.gasLimitContract)
+                let fee = gasPrice * gasLimit
+                
+                let etherFee = CryptoValue.etherFromWei(string: "\(fee)")
+                let fiatFee = etherFee?.convertToFiatValue(exchangeRate: ethFiatPrice)
+                let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true) ?? ""
+                let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true) ?? ""
+                let displayFee = "\(etherDisplayFee) (\(fiatDisplayFee))"
+                
+                // In case
+                let value = self?.output?.model.proposal?.value.value
+                let cryptoAmount = value?.toDisplayString(includeSymbol: true) ?? ""
+                let fiatValue = value?.convertToFiatValue(exchangeRate: paxFiatPrice)
+                let fiatAmount = fiatValue?.toDisplayString(includeSymbol: true) ?? ""
+                
+                return DisplayAmounts(fee: displayFee, cryptoAmount: cryptoAmount, fiatAmount: fiatAmount)
+            }
+            .observeOn(MainScheduler.asyncInstance)
     }
 }
 
@@ -87,22 +136,17 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     func onAppear() {
         let fiatCurrencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
         interface.apply(updates: [.fiatCurrencyLabel(fiatCurrencyCode)])
+        
         // TODO: Check ETH balance to cover fees. Only fees.
         // Don't care how much PAX they are sending.
-        fees.subscribeOn(MainScheduler.instance)
-            .observeOn(MainScheduler.asyncInstance)
-            .subscribe(onSuccess: { [weak self] transactionFee in
-                guard let self = self else { return }
-                let gasPrice = BigUInt(transactionFee.priority.amount)
-                let gasLimitContract = BigUInt(transactionFee.gasLimitContract)
-                let ethereumTransactionFee = gasPrice * gasLimitContract
-                let result = CryptoValue.etherFromWei(string: "\(ethereumTransactionFee)")
-                self.interface.apply(updates: [.feeValueLabel(result)])
+        displayAmounts
+            .subscribe(onSuccess: { [weak self] amounts in
+                self?.interface.apply(updates: [.feeValueLabel(amounts.fee)])
             }, onError: { error in
                 Logger.shared.error(error)
             })
             .disposed(by: bag)
-
+        
         services.assetAccountRepository
             .assetAccountDetails
             .subscribeOn(MainScheduler.asyncInstance)
@@ -140,39 +184,17 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
             interface.apply(updates: [.showAlertSheetForError(.invalidDestinationAddress)])
             return
         }
-        guard let proposal = model.proposal else { return }
-        let currencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
-
         interface.apply(updates: [.loadingIndicatorVisibility(.visible)])
-        Single.zip(
-            priceAPI.fiatPrice(forCurrency: .ethereum, fiatSymbol: currencyCode),
-            priceAPI.fiatPrice(forCurrency: .pax, fiatSymbol: currencyCode)
-        )
-            .subscribeOn(MainScheduler.instance)
-            .map { (ethPrice, paxPrice) -> (FiatValue, FiatValue) in
-                return (ethPrice.priceInFiat, paxPrice.priceInFiat)
-            }
-            .observeOn(MainScheduler.asyncInstance)
-            .map { (ethFiatPrice, paxFiatPrice) -> BCConfirmPaymentViewModel in
-                let cryptoDisplayValue = proposal.value.value.toDisplayString(includeSymbol: true)
-                let fiatValue = proposal.value.value.convertToFiatValue(exchangeRate: paxFiatPrice)
-                let fee = proposal.gasLimit * proposal.gasPrice
-                let etherFee = CryptoValue.etherFromWei(string: "\(fee)")
-                let fiatFee = etherFee?.convertToFiatValue(exchangeRate: ethFiatPrice)
-                
-                let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true) ?? ""
-                let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true) ?? ""
-                let displayFee = "\(etherDisplayFee) (\(fiatDisplayFee))"
-                
-                let cryptoWithFiat = "\(cryptoDisplayValue) (\(fiatValue.toDisplayString(includeSymbol: true)))"
-                
+        
+        displayAmounts
+            .map { amounts -> BCConfirmPaymentViewModel in
                 let model = BCConfirmPaymentViewModel(
                     from: LocalizationConstants.SendAsset.myPaxWallet,
                     to: address.rawValue,
-                    totalAmountText: cryptoDisplayValue,
-                    fiatTotalAmountText: fiatValue.toDisplayString(includeSymbol: true, locale: Locale.current),
-                    cryptoWithFiatAmountText: cryptoWithFiat,
-                    amountWithFiatFeeText: displayFee,
+                    totalAmountText: amounts.cryptoAmount,
+                    fiatTotalAmountText: amounts.fiatAmount,
+                    cryptoWithFiatAmountText: amounts.totalAmount,
+                    amountWithFiatFeeText: amounts.fee,
                     buttonTitle: LocalizationConstants.SendAsset.send,
                     showDescription: false,
                     surgeIsOccurring: false,

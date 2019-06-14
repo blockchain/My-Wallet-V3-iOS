@@ -13,7 +13,7 @@ enum SendMoniesPresentationUpdate: Hashable {
     case cryptoValueTextField(CryptoValue?)
     case fiatValueTextField(FiatValue?)
     case toAddressTextField(String?)
-    case feeValueLabel(CryptoValue?)
+    case feeValueLabel(String?)
     case walletLabel(String?)
     case sendButtonEnabled(Bool)
     case updateNavigationItems

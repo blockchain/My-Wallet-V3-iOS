@@ -136,7 +136,7 @@ class SendPaxViewController: UIViewController {
                 paxTextField.text = amount?.toDisplayString(includeSymbol: false)
             }
         case .feeValueLabel(let fee):
-            networkFeesLabel.text = fee?.toDisplayString(includeSymbol: true)
+            networkFeesLabel.text = fee
         case .toAddressTextField(let address):
             paxAddressTextField.text = address
         case .fiatValueTextField(let amount):
