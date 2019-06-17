@@ -1275,8 +1275,8 @@ struct LocalizationConstants {
     }
 
     struct SendAsset {
-        static let useTotalAvailable = NSLocalizedString(
-            "Use total available: ",
+        static let useTotalAvailableMinusFee = NSLocalizedString(
+            "Use total available minus fee: ",
             comment: "String displayed to the user when they want to send their full balance to an address."
         )
         static let invalidXAddressY = NSLocalizedString(

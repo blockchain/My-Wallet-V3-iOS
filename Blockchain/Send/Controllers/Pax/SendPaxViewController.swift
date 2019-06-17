@@ -179,7 +179,7 @@ class SendPaxViewController: UIViewController {
             paxWalletLabel.text = accountLabel
         case .maxAvailable(let max):
             maxAvailableTrigger = ActionableTrigger(
-                text: LocalizationConstants.SendAsset.useTotalAvailable,
+                text: LocalizationConstants.SendAsset.useTotalAvailableMinusFee,
                 CTA: max?.toDisplayString(includeSymbol: true) ?? "..."
             ) { [weak self] in
                 guard let max = max else { return }
