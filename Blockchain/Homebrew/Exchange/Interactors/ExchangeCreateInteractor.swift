@@ -57,6 +57,8 @@ class ExchangeCreateInteractor {
     }
 
     /// A PublishSubject that emits the desired volume that the user wishes to Swap.
+    /// TICKET: [IOS-2311] - Refactor MarketsModel and conversion
+    /// subscriptions in ExchangeCreateInteractor
     private let volumeSubject = PublishSubject<CryptoValue>()
 
     init(dependencies: ExchangeDependencies, model: MarketsModel) {
@@ -181,6 +183,21 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             return
         }
         
+        /// In the event that a user enters a whole value (e.g. `5`)
+        /// and then a delimiter (e.g. `5.0`), than we *do not* want to
+        /// resubscribe to the socket with a new volume value. If we do
+        /// validation will never complete, because we use `.distinctUntilChanged()`
+        /// in subscribing to volume changes. Since the two values above are the same,
+        /// the subscription closure doesn't get called. This means the interactors status
+        /// of `.unknown` never gets set to `valid` 
+        let volume = inputs.activeInputValue
+        let fromAssetType = model.marketPair.pair.from
+        guard let cryptoValue = CryptoValue.createFromMajorValue(string: volume, assetType: fromAssetType.cryptoCurrency) else { return }
+        guard let modelCryptoValue = model.cryptoValue else { return }
+        guard modelCryptoValue != cryptoValue else {
+            return
+        }
+        
         status = .unknown
         model.volume = inputs.activeInputValue
 
@@ -296,6 +313,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
 
         // Update to new pair
         model.marketPair = marketPair
+        clearInputs()
         
         /// Fetching the user's balance can sometimes take as much as two seconds
         /// so if that request is still in flight, we want to dispose of it by
@@ -720,6 +738,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     }
 
     private func clearInputs() {
+        guard let model = model else { return }
+        let fromAssetType = model.marketPair.pair.from
+        volumeSubject.onNext(CryptoValue.zero(assetType: fromAssetType.cryptoCurrency))
         inputs.clear()
         conversions.clear()
         output?.updateTradingPairValues(left: "", right: "")

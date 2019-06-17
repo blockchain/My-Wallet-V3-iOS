@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PlatformKit
 
 /// `MarketPair` is to keep track of what accounts
 /// the user is transferring from and to. We originally
@@ -50,6 +51,10 @@ class MarketsModel {
 extension MarketsModel {
     var pair: TradingPair {
         return marketPair.pair
+    }
+    
+    var cryptoValue: CryptoValue? {
+        return CryptoValue.createFromMajorValue(string: volume, assetType: pair.from.cryptoCurrency)
     }
 }
 
