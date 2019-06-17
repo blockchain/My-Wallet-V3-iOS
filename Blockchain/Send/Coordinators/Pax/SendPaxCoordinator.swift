@@ -58,8 +58,8 @@ extension SendPaxCoordinator {
         let etherInFiat: FiatValue
         let paxInFiat: FiatValue
         let etherFee: CryptoValue?
-        private(set) var balanceAfterFee: CryptoValue?
-        
+        let balance: CryptoValue?
+
         var fiatFee: FiatValue? {
             return etherFee?.convertToFiatValue(exchangeRate: etherInFiat)
         }
@@ -76,12 +76,7 @@ extension SendPaxCoordinator {
             let gasLimit = BigUInt(etherFee.gasLimitContract)
             let fee = gasPrice * gasLimit
             self.etherFee = CryptoValue.etherFromWei(string: "\(fee)")
-            
-            if let paxFee = paxFee {
-                self.balanceAfterFee = try? balance - paxFee
-            } else {
-                self.balanceAfterFee = nil
-            }
+            self.balance = balance
         }
         
         func displayData(using erc20Value: CryptoValue? = nil) -> DisplayData {
@@ -213,7 +208,7 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
         metadata
             .observeOn(MainScheduler.instance)
             .do(onSuccess: { [weak self] data in
-                self?.interface.apply(updates: [.maxAvailable(data.balanceAfterFee)])
+                self?.interface.apply(updates: [.maxAvailable(data.balance)])
             })
             .map { return $0.displayData() }
             .subscribe(onSuccess: { [weak self] data in
