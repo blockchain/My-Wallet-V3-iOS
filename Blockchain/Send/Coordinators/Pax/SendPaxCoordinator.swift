@@ -58,7 +58,15 @@ extension SendPaxCoordinator {
         let etherInFiat: FiatValue
         let paxInFiat: FiatValue
         let etherFee: CryptoValue?
-        let balanceAfterFee: CryptoValue?
+        private(set) var balanceAfterFee: CryptoValue?
+        
+        var fiatFee: FiatValue? {
+            return etherFee?.convertToFiatValue(exchangeRate: etherInFiat)
+        }
+        
+        var paxFee: CryptoValue? {
+            return fiatFee?.convertToCryptoValue(exchangeRate: paxInFiat, cryptoCurrency: .pax)
+        }
         
         init(etherInFiat: FiatValue, paxInFiat: FiatValue, etherFee: EthereumTransactionFee, balance: CryptoValue) {
             self.etherInFiat = etherInFiat
@@ -69,8 +77,7 @@ extension SendPaxCoordinator {
             let fee = gasPrice * gasLimit
             self.etherFee = CryptoValue.etherFromWei(string: "\(fee)")
             
-            let fiatFee = self.etherFee?.convertToFiatValue(exchangeRate: etherInFiat)
-            if let paxFee = fiatFee?.convertToCryptoValue(exchangeRate: paxInFiat, cryptoCurrency: .pax) {
+            if let paxFee = paxFee {
                 self.balanceAfterFee = try? balance - paxFee
             } else {
                 self.balanceAfterFee = nil
@@ -79,7 +86,7 @@ extension SendPaxCoordinator {
         
         func displayData(using erc20Value: CryptoValue? = nil) -> DisplayData {
             // Calculate fees
-            let fiatFee = etherFee?.convertToFiatValue(exchangeRate: etherInFiat)
+            let fiatFee = self.fiatFee
             let fiatDisplayFee = fiatFee?.toDisplayString(includeSymbol: true) ?? ""
             let etherDisplayFee = etherFee?.toDisplayString(includeSymbol: true) ?? ""
             let displayFee = "\(etherDisplayFee) (\(fiatDisplayFee))"
@@ -89,9 +96,25 @@ extension SendPaxCoordinator {
             let fiatValue = erc20Value?.convertToFiatValue(exchangeRate: paxInFiat)
             let fiatAmount = fiatValue?.toDisplayString(includeSymbol: true) ?? ""
 
+            let totalFiatDisplayValue: String
+            if let fiatFee = fiatFee, let fiatValue = fiatValue, let totalFiatIncludingFee = try? fiatValue + fiatFee {
+                totalFiatDisplayValue = totalFiatIncludingFee.toDisplayString(includeSymbol: true)
+            } else {
+                totalFiatDisplayValue = ""
+            }
+            
+            let totalCryptoDisplayValue: String
+            if let cryptoValue = erc20Value, let cryptoFee = paxFee, let totalCryptoIncludingFee = try? cryptoValue + cryptoFee {
+                totalCryptoDisplayValue = totalCryptoIncludingFee.toDisplayString(includeSymbol: true)
+            } else {
+                totalCryptoDisplayValue = ""
+            }
+    
             return DisplayData(fee: displayFee,
                                cryptoAmount: cryptoAmount,
-                               fiatAmount: fiatAmount)
+                               fiatAmount: fiatAmount,
+                               totalFiatIncludingFee: totalFiatDisplayValue,
+                               totalCryptoIncludingFee: totalCryptoDisplayValue)
         }
     }
     
@@ -100,6 +123,9 @@ extension SendPaxCoordinator {
         let fee: String
         let cryptoAmount: String
         let fiatAmount: String
+        
+        var totalFiatIncludingFee: String
+        var totalCryptoIncludingFee: String
         
         var totalAmount: String {
             return "\(cryptoAmount) (\(fiatAmount))"
@@ -230,8 +256,8 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
                 let model = BCConfirmPaymentViewModel(
                     from: LocalizationConstants.SendAsset.myPaxWallet,
                     to: address.rawValue,
-                    totalAmountText: data?.cryptoAmount ?? "",
-                    fiatTotalAmountText: data?.fiatAmount ?? "",
+                    totalAmountText: data?.totalCryptoIncludingFee ?? "",
+                    fiatTotalAmountText: data?.totalFiatIncludingFee ?? "",
                     cryptoWithFiatAmountText: data?.totalAmount ?? "",
                     amountWithFiatFeeText: data?.fee ?? "",
                     buttonTitle: LocalizationConstants.SendAsset.send,
