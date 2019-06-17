@@ -489,9 +489,12 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         /// If we are still waiting on a conversion for the user's latest input
         /// than we don't want to validate yet.
         guard waitingOnConversion(conversion) == false else { return }
-        guard let volume = Decimal(string: conversion.quote.currencyRatio.base.crypto.value) else { return }
+
+        let volume = conversion.quote.currencyRatio.base.crypto.value
         let fromAssetType = model.marketPair.pair.from
-        volumeSubject.onNext(CryptoValue.createFromMajorValue(volume, assetType: fromAssetType.cryptoCurrency))
+        guard let cryptoVolume = CryptoValue.createFromMajorValue(string: volume, assetType: fromAssetType.cryptoCurrency) else { return }
+
+        volumeSubject.onNext(cryptoVolume)
     }
 
     // MARK: - Private

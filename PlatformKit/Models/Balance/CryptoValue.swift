@@ -172,7 +172,16 @@ public extension CryptoValue {
     public static func createFromMinorValue(_ value: BigInt, assetType: CryptoCurrency) -> CryptoValue {
         return CryptoValue(currencyType: assetType, amount: value)
     }
-    
+
+    public static func createFromMajorValue(string value: String, assetType: CryptoCurrency) -> CryptoValue? {
+        guard let valueDecimal = Decimal(string: value) else {
+            return nil
+        }
+        let minorDecimal = valueDecimal * pow(10, assetType.maxDecimalPlaces)
+        return CryptoValue(currencyType: assetType, amount: BigInt(stringLiteral: "\(minorDecimal.roundTo(places: 0))"))
+    }
+
+    @available(*, deprecated, message: "This method can create precision errors. Use `createFromMajorValue(string:assetType:)` instead.")
     public static func createFromMajorValue(_ value: Decimal, assetType: CryptoCurrency) -> CryptoValue {
         let decimalNumberValue = NSDecimalNumber(decimal: value)
         let doubleValue = Double(truncating: decimalNumberValue)
@@ -203,7 +212,7 @@ public extension CryptoValue {
     }
     
     public static func bitcoinFromMajor(int bitcoin: Int) -> CryptoValue {
-        return createFromMajorValue(Decimal(bitcoin), assetType: .bitcoin)
+        return createFromMajorValue(string: "\(bitcoin)", assetType: .bitcoin)!
     }
     
     public static func bitcoinFromMajor(decimal bitcoin: Decimal) -> CryptoValue {
@@ -211,10 +220,7 @@ public extension CryptoValue {
     }
 
     public static func bitcoinFromMajor(string bitcoin: String) -> CryptoValue? {
-        guard let bitcoinInDecimal = Decimal(string: bitcoin) else {
-            return nil
-        }
-        return createFromMajorValue(bitcoinInDecimal, assetType: .bitcoin)
+        return createFromMajorValue(string: bitcoin, assetType: .bitcoin)
     }
 }
 
@@ -242,10 +248,7 @@ public extension CryptoValue {
     }
 
     public static func etherFromMajor(string ether: String) -> CryptoValue? {
-        guard let etherInDecimal = Decimal(string: ether) else {
-            return nil
-        }
-        return createFromMajorValue(etherInDecimal, assetType: .ethereum)
+        return createFromMajorValue(string: ether, assetType: .ethereum)
     }
 }
 
@@ -264,7 +267,7 @@ public extension CryptoValue {
     }
     
     public static func bitcoinCashFromMajor(int bitcoinCash: Int) -> CryptoValue {
-        return createFromMajorValue(Decimal(bitcoinCash), assetType: .bitcoinCash)
+        return createFromMajorValue(string: "\(bitcoinCash)", assetType: .bitcoinCash)!
     }
     
     public static func bitcoinCashFromMajor(decimal bitcoinCash: Decimal) -> CryptoValue {
@@ -272,10 +275,7 @@ public extension CryptoValue {
     }
 
     public static func bitcoinCashFromMajor(string bitcoinCash: String) -> CryptoValue? {
-        guard let bitcoinInDecimal = Decimal(string: bitcoinCash) else {
-            return nil
-        }
-        return createFromMajorValue(bitcoinInDecimal, assetType: .bitcoinCash)
+        return createFromMajorValue(string: bitcoinCash, assetType: .bitcoinCash)
     }
 }
 
@@ -294,7 +294,7 @@ public extension CryptoValue {
     }
 
     public static func lumensFromMajor(int lumens: Int) -> CryptoValue {
-        return createFromMajorValue(Decimal(lumens), assetType: .stellar)
+        return createFromMajorValue(string: "\(lumens)", assetType: .stellar)!
     }
     
     public static func lumensFromMajor(decimal lumens: Decimal) -> CryptoValue {
@@ -302,10 +302,7 @@ public extension CryptoValue {
     }
 
     public static func lumensFromMajor(string lumens: String) -> CryptoValue? {
-        guard let lumensInDecimal = Decimal(string: lumens) else {
-            return nil
-        }
-        return createFromMajorValue(lumensInDecimal, assetType: .stellar)
+        return createFromMajorValue(string: lumens, assetType: .stellar)
     }
 }
 
@@ -317,10 +314,7 @@ public extension CryptoValue {
     }
     
     public static func paxFromMajor(string pax: String) -> CryptoValue? {
-        guard let paxInDecimal = Decimal(string: pax) else {
-            return nil
-        }
-        return createFromMajorValue(paxInDecimal, assetType: .pax)
+        return createFromMajorValue(string: pax, assetType: .pax)
     }
 }
 
@@ -336,6 +330,18 @@ extension BigInt {
 extension Decimal {
     public var doubleValue: Double {
         return NSDecimalNumber(decimal:self).doubleValue
+    }
+
+    static func preciseConvert(string: String) -> Decimal? {
+        guard let decimal = Decimal(string: string) else {
+            return nil
+        }
+        guard let peroidIndex = string.firstIndex(of: ".") else {
+            return decimal
+        }
+
+        let places = String(string[string.index(after: peroidIndex)..<string.endIndex]).count
+        return decimal.roundTo(places: places)
     }
 
     func roundTo(places: Int) -> Decimal {

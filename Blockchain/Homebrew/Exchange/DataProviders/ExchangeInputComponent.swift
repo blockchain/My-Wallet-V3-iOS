@@ -73,8 +73,7 @@ class ExchangeInputViewModel {
     func cryptoValue() -> CryptoValue? {
         guard case let .nonfiat(currency) = inputType else { return nil }
         let value = components.map({ $0.value }).joined()
-        guard let decimal = Decimal(string: value) else { return nil }
-        return CryptoValue.createFromMajorValue(decimal, assetType: currency)
+        return CryptoValue.createFromMajorValue(string: value, assetType: currency)
     }
     
     func canAppend(character: Character) -> Bool {
