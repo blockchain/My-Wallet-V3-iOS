@@ -134,8 +134,9 @@ class TradeExecutionService: TradeExecutionAPI {
                 .catchError { error -> Single<TradeExecutionAPIError?> in
                     if let error = error as? ERC20ServiceError {
                         return Single.just(TradeExecutionAPIError.erc20Error(error))
+                    } else {
+                        throw error
                     }
-                    throw error
                 }
         } catch {
             return Single.error(error)
@@ -150,8 +151,9 @@ class TradeExecutionService: TradeExecutionAPI {
             .catchError { error -> Single<(Bool, Decimal)> in
                 if let stellarError = error as? StellarServiceError, stellarError == StellarServiceError.noDefaultAccount {
                     return Single.just((false, 0))
+                } else {
+                    throw error
                 }
-                throw error
             }
             .flatMap { isSpendable, maxSpendable -> Single<TradeExecutionAPIError?> in
                 guard !isSpendable else {
@@ -159,7 +161,7 @@ class TradeExecutionService: TradeExecutionAPI {
                 }
                 
                 let crytpo = CryptoValue.createFromMajorValue(maxSpendable, assetType: .stellar)
-                return Single.error(TradeExecutionAPIError.exceededMaxVolume(crytpo))
+                return Single.just(TradeExecutionAPIError.exceededMaxVolume(crytpo))
             }
     }
     

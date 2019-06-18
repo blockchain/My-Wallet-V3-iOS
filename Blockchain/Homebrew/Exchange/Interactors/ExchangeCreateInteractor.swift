@@ -10,6 +10,7 @@ import ERC20Kit
 import Foundation
 import RxSwift
 import PlatformKit
+import RxCocoa
 
 class ExchangeCreateInteractor {
 
@@ -59,7 +60,7 @@ class ExchangeCreateInteractor {
     /// A PublishSubject that emits the desired volume that the user wishes to Swap.
     /// TICKET: [IOS-2311] - Refactor MarketsModel and conversion
     /// subscriptions in ExchangeCreateInteractor
-    private let volumeSubject = PublishSubject<CryptoValue>()
+    private let volumeSubject = PublishRelay<CryptoValue>()
 
     init(dependencies: ExchangeDependencies, model: MarketsModel) {
         self.markets = dependencies.markets
@@ -366,9 +367,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let disposable = volumeSubject.asObservable()
             .distinctUntilChanged()
             .observeOn(MainScheduler.instance)
-            .do(onNext: { [weak self] _ in self?.status = .inflight })
             .observeOn(MainScheduler.asyncInstance)
             .flatMapLatest(weak: self, selector: { (self, distinctVolume) -> Observable<(MarketsModel, TradeExecutionAPIError?, CryptoValue)> in
+                self.status = .inflight
                 guard let model = self.model else { return Observable.empty() }
                 let validateVolumeObservable = self.tradeExecution
                     .validateVolume(distinctVolume.majorValue, for: model.marketPair.fromAccount)
@@ -386,9 +387,10 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     Decimal,
                     Decimal?,
                     Decimal?,
+                    TradeExecutionAPIError?,
                     CryptoValue
                 )> in
-
+                
                 let model = payload.0
                 let volume = payload.2
                 let min = self.minTradingLimit().asObservable()
@@ -409,6 +411,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     max,
                     daily,
                     annual,
+                    Observable.just(payload.1),
                     Observable.just(volume)
                 )
             })
@@ -416,6 +419,23 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
             .subscribe(onNext: { [weak self] payload in
                 guard let strongSelf = self else { return }
                 let model = payload.0
+                
+                if let tradingError = payload.6 {
+                    switch tradingError {
+                    case .generic:
+                        strongSelf.status = .error(.default(nil))
+                    case .exceededMaxVolume(let value):
+                        strongSelf.status = .error(.aboveMaxVolume(value))
+                    case .erc20Error(let erc20Error):
+                        if erc20Error == .insufficientEthereumBalance {
+                            
+                            let fromAssetType = model.marketPair.pair.from
+                            strongSelf.status = .error(.insufficientGasForERC20Tx(fromAssetType))
+                        }
+                    }
+                    return
+                }
+                
                 guard let conversion = model.lastConversion else {
                     Logger.shared.error("No conversion stored")
                     return
@@ -428,7 +448,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                 // can request the concrete input validator based on the desired cryptocurrency type that the
                 // user is swapping from. Currently all asset validation is done in one place and this can get
                 // out of hand.
-                let volume = payload.6
+                let volume = payload.7
                 let fromAssetType = volume.currencyType.assetType
                 guard strongSelf.tradeExecution.canTradeAssetType(model.pair.from) else {
                     if strongSelf.errorMessage(for: fromAssetType) != nil {
@@ -477,21 +497,8 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     output.exchangeButtonVisibility(.visible)
                     output.exchangeButtonEnabled(true)
                 }
-            }, onError: { [weak self] error in
-                if let tradingError = error as? TradeExecutionAPIError {
-                    switch tradingError {
-                    case .generic:
-                        self?.status = .error(.default(nil))
-                    case .exceededMaxVolume(let value):
-                        self?.status = .error(.aboveMaxVolume(value))
-                    case .erc20Error(let erc20Error):
-                        if erc20Error == .insufficientEthereumBalance {
-                            guard let model = self?.model else { return }
-                            let fromAssetType = model.marketPair.pair.from
-                            self?.status = .error(.insufficientGasForERC20Tx(fromAssetType))
-                        }
-                    }
-                }
+            }, onError: { error in
+                Logger.shared.error(error)
             })
         disposables.insertWithDiscardableResult(disposable)
     }
@@ -512,7 +519,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         let fromAssetType = model.marketPair.pair.from
         guard let cryptoVolume = CryptoValue.createFromMajorValue(string: volume, assetType: fromAssetType.cryptoCurrency) else { return }
 
-        volumeSubject.onNext(cryptoVolume)
+        volumeSubject.accept(cryptoVolume)
     }
 
     // MARK: - Private
@@ -740,7 +747,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
     private func clearInputs() {
         guard let model = model else { return }
         let fromAssetType = model.marketPair.pair.from
-        volumeSubject.onNext(CryptoValue.zero(assetType: fromAssetType.cryptoCurrency))
+        volumeSubject.accept(CryptoValue.zero(assetType: fromAssetType.cryptoCurrency))
         inputs.clear()
         conversions.clear()
         output?.updateTradingPairValues(left: "", right: "")
