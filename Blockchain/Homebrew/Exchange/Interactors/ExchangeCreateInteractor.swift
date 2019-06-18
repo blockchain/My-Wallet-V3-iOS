@@ -177,7 +177,9 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         markets.updateConversion(model: model)
     }
 
-    func updatedInput() {
+    /// Invoked upon any changes to the input, and pass changes on to output, model, etc.
+    /// - Parameter forcesUpdate: if `true`, updates will be forced even if there was no change to the crypto value
+    func updatedInput(forcesUpdate: Bool = false) {
         // Update model volume
         guard let model = model else {
             Logger.shared.error("Updating input with no model")
@@ -190,12 +192,13 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         /// validation will never complete, because we use `.distinctUntilChanged()`
         /// in subscribing to volume changes. Since the two values above are the same,
         /// the subscription closure doesn't get called. This means the interactors status
-        /// of `.unknown` never gets set to `valid` 
+        /// of `.unknown` never gets set to `valid`
+        /// One execption is the case of crypto pair change, where balance update is required.
         let volume = inputs.activeInputValue
         let fromAssetType = model.marketPair.pair.from
         guard let cryptoValue = CryptoValue.createFromMajorValue(string: volume, assetType: fromAssetType.cryptoCurrency) else { return }
         guard let modelCryptoValue = model.cryptoValue else { return }
-        guard modelCryptoValue != cryptoValue else {
+        guard forcesUpdate || modelCryptoValue != cryptoValue else {
             return
         }
         
@@ -322,7 +325,7 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
         /// every time they change their wallet selection. Typically this
         /// is when the user has mulitple HD accounts.
         accountDisposeBag = DisposeBag()
-        updatedInput()
+        updatedInput(forcesUpdate: true)
         output?.updateTradingPair(pair: model.pair, fix: model.fix)
     }
     
