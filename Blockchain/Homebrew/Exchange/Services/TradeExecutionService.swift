@@ -556,8 +556,7 @@ fileprivate extension TradeExecutionService {
         let destination = getReceiveAddress(for: toAccount.index, assetType: toAccount.address.assetType)
         
         Maybe.zip(refund, destination)
-            .subscribeOn(MainScheduler.instance)
-            .observeOn(MainScheduler.asyncInstance)
+            .subscribeOn(MainScheduler.asyncInstance)
             .flatMap(weak: self, { (self, tuple) -> Single<Order> in
                 let refundAddress = tuple.0
                 let destinationAddress = tuple.1
@@ -570,6 +569,7 @@ fileprivate extension TradeExecutionService {
             .flatMap { order -> Single<OrderResult> in
                 return self.process(order: order)
             }
+            .observeOn(MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] payload in
                 guard let this = self else { return }
                 // Here we should have an OrderResult object, with a deposit address.
