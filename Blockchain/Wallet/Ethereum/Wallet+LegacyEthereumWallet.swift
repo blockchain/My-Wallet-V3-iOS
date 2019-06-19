@@ -202,7 +202,7 @@ extension Wallet: LegacyEthereumWalletProtocol {
                 error(errorMessage.localizedDescription)
             }
         }
-        let escapedTransactionHash = transactionHash.escapedForJS()
+        let escapedTransactionHash = "'\(transactionHash.escapedForJS())'"
         let function: String = "MyWalletPhone.recordLastTransactionAsync"
         let script: String
         if let escapedSecondPassword = secondPassword?.escapedForJS() {
@@ -211,7 +211,6 @@ extension Wallet: LegacyEthereumWalletProtocol {
             script = "\(function)(\(escapedTransactionHash))"
         }
         context.evaluateScript(script)
-        
     }
     
     public func getEthereumTransactionNonce(with secondPassword: String?, success: @escaping (String) -> Void, error: @escaping (String) -> Void) {
