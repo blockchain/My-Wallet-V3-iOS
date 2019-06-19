@@ -427,16 +427,17 @@ extension ExchangeCreateInteractor: ExchangeCreateInput {
                     switch tradingError {
                     case .generic:
                         strongSelf.status = .error(.default(nil))
+                        return
                     case .exceededMaxVolume(let value):
                         strongSelf.status = .error(.aboveMaxVolume(value))
+                        return
                     case .erc20Error(let erc20Error):
                         if erc20Error == .insufficientEthereumBalance {
-                            
                             let fromAssetType = model.marketPair.pair.from
                             strongSelf.status = .error(.insufficientGasForERC20Tx(fromAssetType))
+                            return
                         }
                     }
-                    return
                 }
                 
                 guard let conversion = model.lastConversion else {
