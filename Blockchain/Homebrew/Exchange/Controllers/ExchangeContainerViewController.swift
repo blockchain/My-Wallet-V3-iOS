@@ -16,6 +16,7 @@ class ExchangeContainerViewController: BaseNavigationController {
     
     // MARK: Private Properties
     
+    private let bag: DisposeBag = DisposeBag()
     private let disposables = CompositeDisposable()
     private let coordinator: ExchangeCoordinator = ExchangeCoordinator.shared
     private let wallet: Wallet = WalletManager.shared.wallet
@@ -32,6 +33,14 @@ class ExchangeContainerViewController: BaseNavigationController {
         super.viewDidLoad()
         setupNotifications()
         setupExchangeIfPermitted()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        accountsRepository.fetchETHHistoryIfNeeded
+            .subscribe()
+            .disposed(by: bag)
     }
     
     @objc func showExchange() {

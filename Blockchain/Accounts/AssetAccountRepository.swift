@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import PlatformKit
+import EthereumKit
 import ERC20Kit
 
 /// A repository for `AssetAccount` objects
@@ -22,6 +23,7 @@ class AssetAccountRepository {
     private let wallet: Wallet
     private let xlmServiceProvider: XLMServiceProvider
     private let paxAccountRepository: ERC20AssetAccountRepository<PaxToken>
+    private let ethereumWalletService: EthereumWalletServiceAPI
     private let stellarAccountService: StellarAccountAPI
     private var cachedAccounts = BehaviorRelay<[AssetAccount]?>(value: nil)
     private let disposables = CompositeDisposable()
@@ -33,6 +35,7 @@ class AssetAccountRepository {
     ) {
         self.wallet = wallet
         self.paxAccountRepository = paxServiceProvider.services.assetAccountRepository
+        self.ethereumWalletService = paxServiceProvider.services.walletService
         self.xlmServiceProvider = xlmServiceProvider
         self.stellarAccountService = xlmServiceProvider.services.accounts
     }
@@ -108,7 +111,11 @@ class AssetAccountRepository {
         }
         return Observable.just(value)
     }
-
+    
+    var fetchETHHistoryIfNeeded: Single<Void> {
+        return ethereumWalletService.fetchHistoryIfNeeded
+    }
+    
     func fetchAccounts() -> Single<[AssetAccount]> {
         var observables: [Observable<[AssetAccount]>] = []
         AssetType.all.forEach {

@@ -199,6 +199,10 @@ extension SendPaxCoordinator: SendPaxViewControllerDelegate {
     }
     
     func onAppear() {
+        serviceProvider.services.walletService.fetchHistoryIfNeeded
+            .subscribe()
+            .disposed(by: bag)
+        
         let fiatCurrencyCode = BlockchainSettings.App.shared.fiatCurrencyCode
         interface.apply(updates: [.fiatCurrencyLabel(fiatCurrencyCode)])
         

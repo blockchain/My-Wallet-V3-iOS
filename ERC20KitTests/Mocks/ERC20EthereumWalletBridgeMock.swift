@@ -13,6 +13,15 @@ import EthereumKit
 @testable import ERC20Kit
 
 class ERC20EthereumWalletBridgeMock: EthereumWalletBridgeAPI {
+    var fetchHistoryValue = Single.just(())
+    var fetchHistory: Single<Void> {
+        return fetchHistoryValue
+    }
+    
+    var fetchHistoryIfNeededValue = Single.just(())
+    var fetchHistoryIfNeeded: Single<Void> {
+        return fetchHistoryIfNeededValue
+    }
     
     var fetchBalanceValue = Single.just(CryptoValue.paxFromMajor(decimal: Decimal(2.0)))
     var fetchBalance: Single<CryptoValue> {

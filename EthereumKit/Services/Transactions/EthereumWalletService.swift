@@ -17,12 +17,22 @@ enum EthereumWalletServiceError: Error {
 }
 
 public protocol EthereumWalletServiceAPI {
+    var fetchHistoryIfNeeded: Single<Void> { get }
+    
     func buildTransaction(with value: EthereumValue, to: EthereumAddress) -> Single<EthereumTransactionCandidate>
     func send(transaction: EthereumTransactionCandidate) -> Single<EthereumTransactionPublished>
 }
 
 public final class EthereumWalletService: EthereumWalletServiceAPI {
     public typealias Bridge = EthereumWalletBridgeAPI
+    
+    public var fetchHistoryIfNeeded: Single<Void> {
+        return bridge.fetchHistoryIfNeeded
+    }
+    
+    public var fetchHistory: Single<Void> {
+        return bridge.fetchHistory
+    }
     
     private var handlePendingTransaction: Single<Void> {
         return bridge.isWaitingOnEtherTransaction
@@ -32,10 +42,6 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
                 }
                 return Single.just(())
             }
-    }
-    
-    private var fetchBalance: Single<CryptoValue> {
-        return bridge.fetchBalance
     }
     
     private var loadKeyPair: Single<EthereumKeyPair> {
@@ -90,7 +96,7 @@ public final class EthereumWalletService: EthereumWalletServiceAPI {
     private func recordAndUpdateBalance(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> {
         return record(transaction: transaction)
             .flatMap(weak: self) { (self, transaction) -> Single<EthereumTransactionPublished> in
-                return self.fetchBalance.map { _ -> EthereumTransactionPublished in
+                return self.fetchHistory.map { _ -> EthereumTransactionPublished in
                     transaction
                 }
             }

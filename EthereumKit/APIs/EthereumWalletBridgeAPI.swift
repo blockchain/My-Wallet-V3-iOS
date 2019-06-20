@@ -28,6 +28,8 @@ public protocol EthereumWalletBridgeAPI: class {
     var address: Single<String> { get }
     var account: Single<EthereumAssetAccount> { get }
     var nonce: Single<BigUInt> { get }
+    var fetchHistory: Single<Void> { get }
+    var fetchHistoryIfNeeded: Single<Void> { get }
     var isWaitingOnEtherTransaction: Single<Bool> { get }
     
     func recordLast(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished> // TODO: CHECK THIS

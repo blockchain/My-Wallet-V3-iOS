@@ -36,6 +36,15 @@ public class EthereumWallet: NSObject {
         transactionNotes: [String: String]()
     )
     
+    private static let refreshInterval: TimeInterval = 60.0
+    
+    private var shouldRefreshHistory: Bool {
+        let lastRefreshInterval = Date(timeIntervalSinceNow: -EthereumWallet.refreshInterval)
+        return lastHistoryRefresh.compare(lastRefreshInterval) == .orderedAscending
+    }
+    
+    private var lastHistoryRefresh: Date = Date(timeIntervalSinceNow: -EthereumWallet.refreshInterval)
+    
     private var secondPassword: String?
     private var ethereumAccountExists: Bool?
     
@@ -121,6 +130,13 @@ public class EthereumWallet: NSObject {
         }
         context.setJsFunction(named: "objc_on_error_gettingEtherAccountsAsync" as NSString) { [weak self] errorMessage in
             self?.delegate.didFailToGetAccounts(errorMessage: errorMessage)
+        }
+        
+        context.setJsFunction(named: "objc_on_fetch_eth_history_async_success" as NSString) { [weak self] in
+            self?.delegate.didFetchHistory()
+        }
+        context.setJsFunction(named: "objc_on_fetch_eth_history_async_error" as NSString) { [weak self] errorMessage in
+            self?.delegate.didFailToFetchHistory(errorMessage: errorMessage)
         }
     }
     
@@ -258,6 +274,21 @@ extension EthereumWallet: ERC20BridgeAPI {
 }
 
 extension EthereumWallet: EthereumWalletBridgeAPI, EthereumWalletTransactionsBridgeAPI {
+    
+    public var fetchHistoryIfNeeded: Single<Void> {
+        return secondPasswordIfAccountCreationNeeded
+            .flatMap(weak: self) { (self, secondPassword) -> Single<Void> in
+                self.fetchHistoryIfNeeded(secondPassword: secondPassword)
+            }
+    }
+    
+    public var fetchHistory: Single<Void> {
+        return secondPasswordIfAccountCreationNeeded
+            .flatMap(weak: self) { (self, secondPassword) -> Single<Void> in
+                self.fetchHistory(secondPassword: secondPassword)
+            }
+    }
+    
     public var fetchBalance: Single<CryptoValue> {
         return secondPasswordIfAccountCreationNeeded
             .flatMap(weak: self) { (self, secondPassword) -> Single<CryptoValue> in
@@ -332,8 +363,14 @@ extension EthereumWallet: EthereumWalletBridgeAPI, EthereumWalletTransactionsBri
     
     public var isWaitingOnEtherTransaction: Single<Bool> {
         return secondPasswordIfAccountCreationNeeded
+            .flatMap(weak: self) { (self, secondPassword) -> Single<String?> in
+                self.fetchHistoryIfNeeded(secondPassword: secondPassword)
+                    .flatMap { _ -> Single<String?> in
+                        Single.just(secondPassword)
+                    }
+            }
             .flatMap(weak: self) { (self, secondPassword) -> Single<Bool> in
-                return self.isWaitingOnEtherTransaction(secondPassword: secondPassword)
+                self.isWaitingOnEtherTransaction(secondPassword: secondPassword)
             }
     }
     
@@ -484,6 +521,31 @@ extension EthereumWallet: EthereumWalletBridgeAPI, EthereumWalletTransactionsBri
                 observer(.error(WalletError.unknown))
             })
             return Disposables.create()
+        })
+    }
+    
+    private func fetchHistoryIfNeeded(secondPassword: String? = nil) -> Single<Void> {
+        guard self.shouldRefreshHistory else {
+            return Single.just(())
+        }
+        return self.fetchHistory(secondPassword: secondPassword)
+    }
+    
+    private func fetchHistory(secondPassword: String? = nil) -> Single<Void> {
+        return Single.create(subscribe: { [weak self] observer -> Disposable in
+            guard let wallet = self?.wallet else {
+                observer(.error(WalletError.notInitialized))
+                return Disposables.create()
+            }
+            wallet.fetchHistory(with: secondPassword, success: {
+                observer(.success(()))
+            }, error: { errorMessage in
+                observer(.error(WalletError.unknown))
+            })
+            return Disposables.create()
+        })
+        .do(onSuccess: { [weak self] in
+            self?.lastHistoryRefresh = Date()
         })
     }
     

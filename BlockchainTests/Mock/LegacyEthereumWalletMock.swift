@@ -14,6 +14,8 @@ import RxSwift
 @testable import Blockchain
 
 class MockLegacyEthereumWallet: LegacyEthereumWalletProtocol, MnemonicAccessAPI {
+
+    
     enum MockLegacyEthereumWalletError: Error {
         case notInitialized
         case unknown
@@ -123,6 +125,16 @@ class MockLegacyEthereumWallet: LegacyEthereumWalletProtocol, MnemonicAccessAPI 
         switch getEthereumTransactionsCompletion {
         case .success(let value):
             success(value)
+        case .failure(let e):
+            error("\(e.localizedDescription)")
+        }
+    }
+    
+    var fetchHistoryCompletion: NewResult<Void, MockLegacyEthereumWalletError> = .success(())
+    func fetchHistory(with secondPassword: String?, success: @escaping () -> Void, error: @escaping (String) -> Void) {
+        switch fetchHistoryCompletion {
+        case .success:
+            success()
         case .failure(let e):
             error("\(e.localizedDescription)")
         }

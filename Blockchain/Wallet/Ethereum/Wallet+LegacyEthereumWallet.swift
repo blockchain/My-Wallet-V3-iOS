@@ -24,7 +24,9 @@ public protocol LegacyEthereumWalletProtocol: class {
     func ethereumBalance(with secondPassword: String?, success: @escaping (String) -> Void, error: @escaping (String) -> Void)
     func getEthereumTransactions(with secondPassword: String?, success: @escaping ([EtherTransaction]) -> Void, error: @escaping (String) -> Void)
     
+    func fetchHistory(with secondPassword: String?, success: @escaping () -> Void, error: @escaping (String) -> Void)
     func isWaitingOnEthereumTransaction(with secondPassword: String?, success: @escaping (Bool) -> Void, error: @escaping (String) -> Void)
+    
     func recordLastEthereumTransaction(with secondPassword: String?, transactionHash: String, success: @escaping () -> Void, error: @escaping (String) -> Void)
     func getEthereumTransactionNonce(with secondPassword: String?, success: @escaping (String) -> Void, error: @escaping (String) -> Void)
     
@@ -157,6 +159,29 @@ extension Wallet: LegacyEthereumWalletProtocol {
             }
         }
         let function: String = "MyWalletPhone.getEthTransactionsAsync"
+        let script: String
+        if let escapedSecondPassword = secondPassword?.escapedForJS() {
+            script = "\(function)(\(escapedSecondPassword))"
+        } else {
+            script = "\(function)()"
+        }
+        context.evaluateScript(script)
+    }
+    
+    public func fetchHistory(with secondPassword: String?, success: @escaping () -> Void, error: @escaping (String) -> Void) {
+        guard isInitialized() else {
+            error("Wallet is not yet initialized.")
+            return
+        }
+        ethereum.interopDispatcher.fetchHistory.addObserver { result in
+            switch result {
+            case .success:
+                success()
+            case .failure(let errorMessage):
+                error(errorMessage.localizedDescription)
+            }
+        }
+        let function: String = "MyWalletPhone.fetchETHHistoryAsync"
         let script: String
         if let escapedSecondPassword = secondPassword?.escapedForJS() {
             script = "\(function)(\(escapedSecondPassword))"

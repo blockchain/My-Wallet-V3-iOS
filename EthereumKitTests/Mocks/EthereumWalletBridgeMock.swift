@@ -18,6 +18,16 @@ enum EthereumWalletBridgeMockError: Error {
 
 class EthereumWalletBridgeMock: EthereumWalletBridgeAPI, EthereumWalletAccountBridgeAPI, MnemonicAccessAPI, PasswordAccessAPI {
     
+    var fetchHistoryValue = Single.just(())
+    var fetchHistory: Single<Void> {
+        return fetchHistoryValue
+    }
+    
+    var fetchHistoryIfNeededValue = Single.just(())
+    var fetchHistoryIfNeeded: Single<Void> {
+        return fetchHistoryIfNeededValue
+    }
+    
     var fetchBalanceValue: Single<CryptoValue> = Single.just(CryptoValue.etherFromMajor(decimal: Decimal(2.0)))
     var fetchBalance: Single<CryptoValue> {
         return fetchBalanceValue

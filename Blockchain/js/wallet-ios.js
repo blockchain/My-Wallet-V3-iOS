@@ -2699,6 +2699,22 @@ MyWalletPhone.isWaitingOnTransactionAsync = function(secondPassword) {
         .catch(error);
 };
 
+MyWalletPhone.fetchETHHistoryAsync = function (secondPassword) {
+    var success = function() {
+        console.log('Success fetching eth history')
+        objc_on_fetch_eth_history_async_success();
+    };
+    var error = function(error) {
+        console.log('Error fetching eth history')
+        console.log(error);
+        objc_on_fetch_eth_history_async_error(error);
+    };
+    MyWalletPhone.createEthAccountIfNeeded(secondPassword)
+        .then(MyWallet.wallet.eth.fetchHistory())
+        .then(success)
+        .catch(error);
+}
+
 MyWalletPhone.saveEtherAccountAsync = function (privateKey, label) {
     var success = function () {
         objc_on_didSaveEtherAccountAsync();
