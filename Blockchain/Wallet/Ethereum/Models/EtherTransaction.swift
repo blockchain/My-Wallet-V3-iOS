@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class EtherTransaction: NSObject {
+@objc public class EtherTransaction: NSObject, TransactionProtocol {
     
     private enum Keys: String {
         case amount
@@ -32,11 +32,12 @@ import Foundation
     @objc public var txType: String?
     @objc public var time: UInt64
     @objc public var confirmations: UInt
-    @objc public var fiatAmountsAtTime: [String: Any]?
+    @objc public var fiatAmountsAtTime: NSMutableDictionary?
     
     @objc public override init() {
         self.time = 0
         self.confirmations = 0
+        self.fiatAmountsAtTime = NSMutableDictionary()
         super.init()
     }
     
@@ -80,8 +81,6 @@ import Foundation
         if let confirmations = dict[Keys.confirmations.rawValue] as? UInt {
             transaction.confirmations = confirmations
         }
-        
-        transaction.fiatAmountsAtTime = [String: Any]()
         
         return transaction
     }

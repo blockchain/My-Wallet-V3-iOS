@@ -463,10 +463,13 @@
     NSString *amount = [[NSNumberFormatter localCurrencyFormatterWithGroupingSeparator] stringFromNumber:fiatAmount];
     NSDictionary *result = @{currencyCode : amount};
     
-    for (Transaction *transaction in transactions) {
-        if ([transaction.myHash isEqualToString:targetHash]) {
-            [transaction.fiatAmountsAtTime setObject:amount forKey:currencyCode];
-            break;
+    for (id item in transactions) {
+        if ([item conformsToProtocol:@protocol(TransactionProtocol)]) {
+            id<TransactionProtocol> transaction = (id<TransactionProtocol>)item;
+            if ([transaction.myHash isEqualToString:targetHash]) {
+                [transaction.fiatAmountsAtTime setObject:amount forKey:currencyCode];
+                break;
+            }
         }
     }
     
