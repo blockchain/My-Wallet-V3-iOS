@@ -316,7 +316,7 @@ class TradeExecutionService: TradeExecutionAPI {
             disposables.insertWithDiscardableResult(disposable)
         } else if assetType == .pax {
             guard
-                let cryptoValue = CryptoValue.paxFromMajor(string: orderTransactionLegacy.amount),
+                let cryptoValue = CryptoValue.createFromMajorValue(string: orderTransactionLegacy.amount, assetType: .pax, locale: Locale.US),
                 let tokenValue = try? ERC20TokenValue<PaxToken>.init(crypto: cryptoValue),
                 let address = EthereumAccountAddress(rawValue: orderTransactionLegacy.to)?.ethereumAddress
             else {
