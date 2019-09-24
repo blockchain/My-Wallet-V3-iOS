@@ -23,7 +23,7 @@ target 'Blockchain' do
   pod 'Starscream', '3.1.0'
   pod 'SwiftLint', '0.30.1'
   pod 'stellar-ios-mac-sdk', git: 'git@github.com:thisisalexmcgregor/stellar-ios-mac-sdk.git', commit: '03aefcdc14a43a16c46b483ffaea90ce9c210071'
-  pod 'VeriffSDK', '2.5.0-patch3'
+  pod 'VeriffSDK', '2.0.5'
 
   target 'BlockchainTests' do
     inherit! :search_paths

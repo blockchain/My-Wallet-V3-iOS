@@ -3,7 +3,7 @@ PODS:
   - Charts (3.2.2):
     - Charts/Core (= 3.2.2)
   - Charts/Core (3.2.2)
-  - Crashlytics (3.14.0):
+  - Crashlytics (3.13.4):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
   - Firebase/Core (5.17.0):
@@ -32,7 +32,7 @@ PODS:
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
-  - FirebaseAnalyticsInterop (1.4.0)
+  - FirebaseAnalyticsInterop (1.2.0)
   - FirebaseCore (5.3.0):
     - GoogleUtilities/Logger (~> 5.2)
   - FirebaseDynamicLinks (3.4.0):
@@ -95,18 +95,16 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (2.6.0)
   - PhoneNumberKit/UIKit (2.6.0):
     - PhoneNumberKit/PhoneNumberKitCore
-  - Presentr (1.9)
-  - PromiseKit (6.11.0):
-    - PromiseKit/CorePromise (= 6.11.0)
-    - PromiseKit/Foundation (= 6.11.0)
-    - PromiseKit/UIKit (= 6.11.0)
-  - PromiseKit/CorePromise (6.11.0)
-  - PromiseKit/Foundation (6.11.0):
+  - PromiseKit (6.10.0):
+    - PromiseKit/CorePromise (= 6.10.0)
+    - PromiseKit/Foundation (= 6.10.0)
+    - PromiseKit/UIKit (= 6.10.0)
+  - PromiseKit/CorePromise (6.10.0)
+  - PromiseKit/Foundation (6.10.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.11.0):
+  - PromiseKit/UIKit (6.10.0):
     - PromiseKit/CorePromise
-  - Protobuf (3.9.0)
-  - ReachabilitySwift (4.3.1)
+  - Protobuf (3.8.0)
   - RxBlocking (5.0.0):
     - RxSwift (~> 5)
   - RxCocoa (5.0.0):
@@ -119,17 +117,10 @@ PODS:
     - RxSwift (~> 5)
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.2)
-  - Socket.IO-Client-Swift (15.0.0):
-    - Starscream (~> 3.1)
   - Starscream (3.1.0)
   - stellar-ios-mac-sdk (1.6.6)
   - SwiftLint (0.30.1)
-  - VeriffSDK (2.5.0-patch3):
-    - Presentr (~> 1.9)
-    - ReachabilitySwift (~> 4.3.1)
-    - Socket.IO-Client-Swift (~> 15.0.0)
-    - VeriffWebRTC (~> 1.0.1)
-  - VeriffWebRTC (1.0.1)
+  - VeriffSDK (2.0.5)
   - web3swift.pod (2.1.10):
     - BigInt (~> 4.0)
     - keccak.c (~> 0.1)
@@ -155,7 +146,7 @@ DEPENDENCIES:
   - Starscream (= 3.1.0)
   - "stellar-ios-mac-sdk (from `git@github.com:thisisalexmcgregor/stellar-ios-mac-sdk.git`, commit `03aefcdc14a43a16c46b483ffaea90ce9c210071`)"
   - SwiftLint (= 0.30.1)
-  - VeriffSDK (= 2.5.0-patch3)
+  - VeriffSDK (= 2.0.5)
   - "web3swift.pod (from `git@github.com:thisisalexmcgregor/web3swift.git`, commit `39abb613bef9f63f7bff5633172b3b474e54c165`)"
 
 SPEC REPOS:
@@ -178,10 +169,8 @@ SPEC REPOS:
     - keccak.c
     - nanopb
     - PhoneNumberKit
-    - Presentr
     - PromiseKit
     - Protobuf
-    - ReachabilitySwift
     - RxBlocking
     - RxCocoa
     - RxRelay
@@ -189,11 +178,9 @@ SPEC REPOS:
     - RxTest
     - scrypt.c
     - secp256k1.c
-    - Socket.IO-Client-Swift
     - Starscream
     - SwiftLint
     - VeriffSDK
-    - VeriffWebRTC
 
 EXTERNAL SOURCES:
   LibWally:
@@ -222,12 +209,12 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   BigInt: 2aad1a9942dc932ec8b84290d2c564a3d76f97ab
   Charts: f69cf0518b6d1d62608ca504248f1bbe0b6ae77e
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: 59d557e064217fab6a03ff00baa73c06e73832e6
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
   FirebaseAnalytics: 75e4bbc6417d190cc98ec1f17c41a4fad4c2c976
-  FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
+  FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: c0c4befb82374d6aef64d800e569f47625352edc
   FirebaseDynamicLinks: 83a0071c95ad715bc324fcb8f51028d5b6a58af0
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
@@ -239,10 +226,8 @@ SPEC CHECKSUMS:
   LibWally: 37b7c926e9aa02cc7d4c5a2a2a3a4f8925ea5038
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PhoneNumberKit: 167ee1f0bbb6efce7c62559e620eae745595532f
-  Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
-  PromiseKit: e4863d06976e7dee5e41c04fc7371c16b3600292
-  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
-  ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
+  PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
+  Protobuf: 3f617b9a6e73605565086864c9bc26b2bf2dd5a3
   RxBlocking: c67185d26498ea3cbe3e121917c3c16739e43123
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
@@ -250,12 +235,10 @@ SPEC CHECKSUMS:
   RxTest: 4349afe98f564e0a9bc19063368904622d17d49a
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
-  Socket.IO-Client-Swift: c039a808195d22a7192962841b8c035cb61ea49e
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   stellar-ios-mac-sdk: ed1d2a48774d3c703e8743bdde2bd03ac196b2df
   SwiftLint: a54bf1fe12b55c68560eb2a7689dfc81458508f7
-  VeriffSDK: 68b7a8c2b062edc98a81977e1605b1dc0a8a327a
-  VeriffWebRTC: 47806fee639a69ae5f82f2b031d20f0014d4a016
+  VeriffSDK: 267342aa5a224ab5799ef0cef5eacc7de094d643
   web3swift.pod: 98e8653f39e1bcd7b45f46dd982ec49cdfc6c46a
 
 PODFILE CHECKSUM: 74de4eb1bf014da440934599e694e4a12a552ff1
