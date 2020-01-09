@@ -40,7 +40,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>COINIFY_URL</key>
 	<string>$(COINIFY_URL)</string>
 	<key>EXPLORER_SERVER</key>
