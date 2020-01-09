@@ -951,11 +951,6 @@
 		3AC90D0621F79377006DD565 /* PaginatedContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC90D0521F79377006DD565 /* PaginatedContainerModel.swift */; };
 		3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
-		3AD00A5D23C3AAF3004BF792 /* Localization.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AD00A5B23C3AAF3004BF792 /* Localization.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3AD00A7223C3C1C5004BF792 /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD00A7123C3C1C5004BF792 /* LocalizationConstants.swift */; };
-		3AD00A7323C3C8AB004BF792 /* LocalizationConstants+TimeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CB9F072372EF1B0004BBC2 /* LocalizationConstants+TimeUnits.swift */; };
-		3AD00A7423C3C8C6004BF792 /* LocalizationConstants+Biometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65380E3E239835CB00BE66E7 /* LocalizationConstants+Biometry.swift */; };
-		3AD00A7523C3C8F8004BF792 /* LocalizationConstants+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D57277234CBDC400D14342 /* LocalizationConstants+TextField.swift */; };
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
 		3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7EE9F21125156006B924F /* ValidationTextField.xib */; };
 		3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EEA121126578006B924F /* NibBasedView.swift */; };
@@ -1053,6 +1048,7 @@
 		3AFEC7CC23148C5F003D2C1E /* PulseContainerViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEC7CB23148C5F003D2C1E /* PulseContainerViewProtocol.swift */; };
 		3CDCD49C57B2CC1417C124FF /* Pods_NetworkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 445FBCE3BB2844EEE953FE3F /* Pods_NetworkKit.framework */; };
 		3DF65FD365B52BE1679E1EB1 /* Pods_ToolKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F44D74EA6CC6F4A21FD2D505 /* Pods_ToolKit.framework */; };
+		4AE0F9ED791456F44287090A /* Pods_LocalizationKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B95B576803978649487DDEC /* Pods_LocalizationKitTests.framework */; };
 		4F60A60AB6755946AB298A35 /* Pods_ToolKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F444D1BA5FA14CB8C76992FA /* Pods_ToolKitTests.framework */; };
 		51058EFE212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */; };
 		51058EFF212F327E00AD8719 /* KYCApplicationCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */; };
@@ -1464,6 +1460,16 @@
 		653E0D1E2355CF9E00023D5B /* RegisterWalletScreenInteracting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E0D1C2355CF9E00023D5B /* RegisterWalletScreenInteracting.swift */; };
 		653E0D202355CFB700023D5B /* RecoverWalletScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E0D1F2355CFB700023D5B /* RecoverWalletScreenInteractor.swift */; };
 		653E0D212355CFB700023D5B /* RecoverWalletScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E0D1F2355CFB700023D5B /* RecoverWalletScreenInteractor.swift */; };
+		653FBA8D23C7623C0030220F /* LocalizationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 653FBA8423C7623B0030220F /* LocalizationKit.framework */; };
+		653FBA9423C7623C0030220F /* LocalizationKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FBA9323C7623C0030220F /* LocalizationKitTests.swift */; };
+		653FBA9623C7623C0030220F /* LocalizationKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 653FBA8623C7623B0030220F /* LocalizationKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		653FBA9923C7623C0030220F /* LocalizationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 653FBA8423C7623B0030220F /* LocalizationKit.framework */; };
+		653FBA9A23C7623C0030220F /* LocalizationKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 653FBA8423C7623B0030220F /* LocalizationKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		653FBAAB23C762B50030220F /* LocalizationConstants+Biometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FBAA723C762B30030220F /* LocalizationConstants+Biometry.swift */; };
+		653FBAAC23C762B50030220F /* LocalizationConstants+TimeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FBAA823C762B40030220F /* LocalizationConstants+TimeUnits.swift */; };
+		653FBAAD23C762B50030220F /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FBAA923C762B40030220F /* LocalizationConstants.swift */; };
+		653FBAAE23C762B50030220F /* LocalizationConstants+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FBAAA23C762B40030220F /* LocalizationConstants+TextField.swift */; };
+		653FBABE23C76DDD0030220F /* LocalizationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 653FBA8423C7623B0030220F /* LocalizationKit.framework */; };
 		654026CC236CBF61008683A2 /* ShimmeringViewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6567FDE222C8B0750035CB16 /* ShimmeringViewing.swift */; };
 		654026CE236CBF71008683A2 /* ShimmeringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654026CD236CBF70008683A2 /* ShimmeringView.swift */; };
 		654154F522C4F0CA00E78814 /* DisplayAddressStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654154F422C4F0CA00E78814 /* DisplayAddressStatus.swift */; };
@@ -2558,6 +2564,7 @@
 		C8B25F5422F29A230031D1B2 /* BridgeBitpayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B25F5322F29A230031D1B2 /* BridgeBitpayService.swift */; };
 		C8B25F5622F29AB00031D1B2 /* BitpayServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B25F5522F29AB00031D1B2 /* BitpayServiceProtocol.swift */; };
 		C9BE918C1945F5FC00FD516D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9BE918B1945F5FC00FD516D /* Images.xcassets */; };
+		CC92F81C077DFCEA98682981 /* Pods_LocalizationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C745EFCDA1DD090B6CCB3676 /* Pods_LocalizationKit.framework */; };
 		CD298FA625AB9A541396CBFB /* Pods_EthereumKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783375F97FE29D6B3B692D1A /* Pods_EthereumKitTests.framework */; };
 		CFA0671F1E65D426008456C1 /* WebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA0671E1E65D426008456C1 /* WebLoginViewController.m */; };
 		CFD602B11E64AC2D006F6208 /* wallet-ios.js in Resources */ = {isa = PBXBuildFile; fileRef = CFD602B01E64AC2D006F6208 /* wallet-ios.js */; };
@@ -2911,20 +2918,6 @@
 			remoteGlobalIDString = 34C3C94023059284008F2154;
 			remoteInfo = TestKit;
 		};
-		3AD00A5E23C3AAF3004BF792 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3AD00A5823C3AAF2004BF792;
-			remoteInfo = Localization;
-		};
-		3AD00A7823C3C96F004BF792 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3AD00A5823C3AAF2004BF792;
-			remoteInfo = Localization;
-		};
 		3AD00A8123C3DF28004BF792 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
@@ -3002,6 +2995,27 @@
 			remoteGlobalIDString = F6BDA802145900D200FE3253;
 			remoteInfo = "SocketRocketTests-iOS";
 		};
+		653FBA8E23C7623C0030220F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 653FBA8323C7623B0030220F;
+			remoteInfo = LocalizationKit;
+		};
+		653FBA9023C7623C0030220F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FB3637014B60128004BEA02;
+			remoteInfo = Blockchain;
+		};
+		653FBA9723C7623C0030220F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 653FBA8323C7623B0030220F;
+			remoteInfo = LocalizationKit;
+		};
 		AAE5D1A921A3C85300D4A77A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9FB3636814B60128004BEA02 /* Project object */;
@@ -3028,6 +3042,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				653FBA9A23C7623C0030220F /* LocalizationKit.framework in Embed Frameworks */,
 				34EE987223AA5B3100074EC0 /* NetworkKit.framework in Embed Frameworks */,
 				3A4E489721BF3070001A799D /* BitcoinKit.framework in Embed Frameworks */,
 				3A6A1A2D21B9A64D00D97C74 /* EthereumKit.framework in Embed Frameworks */,
@@ -3059,7 +3074,9 @@
 		0168EBF005D19AEE1613A5F7 /* Pods-EthereumKitTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EthereumKitTests.debug staging.xcconfig"; path = "Target Support Files/Pods-EthereumKitTests/Pods-EthereumKitTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		035EA4F6D7AAF200A4222D98 /* Pods-CommonCryptoKit.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonCryptoKit.release staging.xcconfig"; path = "Target Support Files/Pods-CommonCryptoKit/Pods-CommonCryptoKit.release staging.xcconfig"; sourceTree = "<group>"; };
 		037816308C57A6D54117F749 /* Pods-PlatformUIKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKitTests.release.xcconfig"; path = "Target Support Files/Pods-PlatformUIKitTests/Pods-PlatformUIKitTests.release.xcconfig"; sourceTree = "<group>"; };
+		03FB7EF7DED34D410B2BFBE5 /* Pods-LocalizationKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKitTests.release.xcconfig"; path = "Target Support Files/Pods-LocalizationKitTests/Pods-LocalizationKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		0739E412278E05F29513A3A6 /* Pods-ToolKitTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToolKitTests.release staging.xcconfig"; path = "Target Support Files/Pods-ToolKitTests/Pods-ToolKitTests.release staging.xcconfig"; sourceTree = "<group>"; };
+		099FD0B82170AEA7C5DF2755 /* Pods-LocalizationKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKit.debug dev.xcconfig"; path = "Target Support Files/Pods-LocalizationKit/Pods-LocalizationKit.debug dev.xcconfig"; sourceTree = "<group>"; };
 		0BAD32C44A3DA46D1191AEDC /* Pods_BlockchainTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C1F705B397CF41BAB05FD8D /* Pods-ERC20Kit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20Kit.debug dev.xcconfig"; path = "Target Support Files/Pods-ERC20Kit/Pods-ERC20Kit.debug dev.xcconfig"; sourceTree = "<group>"; };
 		0D5F99BDED42064A32CFD259 /* Pods-PlatformKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKit.debug dev.xcconfig"; path = "Target Support Files/Pods-PlatformKit/Pods-PlatformKit.debug dev.xcconfig"; sourceTree = "<group>"; };
@@ -3190,6 +3207,7 @@
 		2ED52536226EFE287C0577C1 /* Pods_HDWalletKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HDWalletKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		303425286E14CC0A2FD4C1CF /* Pods-BlockchainTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainTests.debug dev.xcconfig"; path = "Target Support Files/Pods-BlockchainTests/Pods-BlockchainTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		31CEF6BA2BFC257F3AA880D4 /* Pods-ERC20KitTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20KitTests.release staging.xcconfig"; path = "Target Support Files/Pods-ERC20KitTests/Pods-ERC20KitTests.release staging.xcconfig"; sourceTree = "<group>"; };
+		31ED4F382F1497BDF70CE2E8 /* Pods-LocalizationKitTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKitTests.debug production.xcconfig"; path = "Target Support Files/Pods-LocalizationKitTests/Pods-LocalizationKitTests.debug production.xcconfig"; sourceTree = "<group>"; };
 		33547CB749093BA5AC9E3A29 /* Pods-ToolKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToolKitTests.release.xcconfig"; path = "Target Support Files/Pods-ToolKitTests/Pods-ToolKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		340ABD5F230AAF580032278D /* CommonCryptoKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCryptoKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		340ABD61230AAF5A0032278D /* CommonCryptoKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonCryptoKit.h; sourceTree = "<group>"; };
@@ -3832,10 +3850,6 @@
 		3AC90D0321F78CF2006DD565 /* PaginatedContainerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaginatedContainerCell.xib; sourceTree = "<group>"; };
 		3AC90D0521F79377006DD565 /* PaginatedContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedContainerModel.swift; sourceTree = "<group>"; };
 		3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Conveniences.swift"; sourceTree = "<group>"; };
-		3AD00A5923C3AAF2004BF792 /* Localization.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Localization.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3AD00A5B23C3AAF3004BF792 /* Localization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localization.h; sourceTree = "<group>"; };
-		3AD00A5C23C3AAF3004BF792 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3AD00A7123C3C1C5004BF792 /* LocalizationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		3AD7EE7521124F0C006B924F /* ValidationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTextField.swift; sourceTree = "<group>"; };
 		3AD7EE9F21125156006B924F /* ValidationTextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValidationTextField.xib; sourceTree = "<group>"; };
 		3AD7EEA121126578006B924F /* NibBasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NibBasedView.swift; sourceTree = "<group>"; };
@@ -3934,6 +3948,7 @@
 		4577979D6CE743D41EEC05F2 /* Pods-PlatformKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformKitTests.debug dev.xcconfig"; path = "Target Support Files/Pods-PlatformKitTests/Pods-PlatformKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		46664DE59CA3FB12C48384ED /* Pods-HDWalletKitTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HDWalletKitTests.debug staging.xcconfig"; path = "Target Support Files/Pods-HDWalletKitTests/Pods-HDWalletKitTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		477DFA662DC282D4CA4D8469 /* Pods-StellarKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug dev.xcconfig"; path = "Target Support Files/Pods-StellarKit/Pods-StellarKit.debug dev.xcconfig"; sourceTree = "<group>"; };
+		4B95B576803978649487DDEC /* Pods_LocalizationKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LocalizationKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FDD196AC4C71BA12F09043E /* Pods_BitcoinKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BitcoinKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5003E855D4B138EEF2426E33 /* Pods-StellarKit.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug staging.xcconfig"; path = "Target Support Files/Pods-StellarKit/Pods-StellarKit.debug staging.xcconfig"; sourceTree = "<group>"; };
 		51058EFD212F327E00AD8719 /* KYCApplicationCompleteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KYCApplicationCompleteController.swift; sourceTree = "<group>"; };
@@ -5456,7 +5471,6 @@
 		65380E3B239835CB00BE66E7 /* BiometryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryProvider.swift; sourceTree = "<group>"; };
 		65380E3C239835CB00BE66E7 /* BiometryProviding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryProviding.swift; sourceTree = "<group>"; };
 		65380E3D239835CB00BE66E7 /* Biometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Biometry.swift; sourceTree = "<group>"; };
-		65380E3E239835CB00BE66E7 /* LocalizationConstants+Biometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+Biometry.swift"; sourceTree = "<group>"; };
 		65380E43239835F500BE66E7 /* MissingCredentialsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingCredentialsError.swift; sourceTree = "<group>"; };
 		65380E452398363900BE66E7 /* Reachability+API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Reachability+API.swift"; sourceTree = "<group>"; };
 		65380E482398370100BE66E7 /* TopMostViewControllerProviding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopMostViewControllerProviding.swift; sourceTree = "<group>"; };
@@ -5482,6 +5496,16 @@
 		653C421E234633F700AAD154 /* AnalyticsEvents+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnalyticsEvents+Request.swift"; sourceTree = "<group>"; };
 		653E0D1C2355CF9E00023D5B /* RegisterWalletScreenInteracting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterWalletScreenInteracting.swift; sourceTree = "<group>"; };
 		653E0D1F2355CFB700023D5B /* RecoverWalletScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverWalletScreenInteractor.swift; sourceTree = "<group>"; };
+		653FBA8423C7623B0030220F /* LocalizationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LocalizationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		653FBA8623C7623B0030220F /* LocalizationKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationKit.h; sourceTree = "<group>"; };
+		653FBA8723C7623B0030220F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		653FBA8C23C7623C0030220F /* LocalizationKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocalizationKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		653FBA9323C7623C0030220F /* LocalizationKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationKitTests.swift; sourceTree = "<group>"; };
+		653FBA9523C7623C0030220F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		653FBAA723C762B30030220F /* LocalizationConstants+Biometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+Biometry.swift"; sourceTree = "<group>"; };
+		653FBAA823C762B40030220F /* LocalizationConstants+TimeUnits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+TimeUnits.swift"; sourceTree = "<group>"; };
+		653FBAA923C762B40030220F /* LocalizationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
+		653FBAAA23C762B40030220F /* LocalizationConstants+TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+TextField.swift"; sourceTree = "<group>"; };
 		654026CD236CBF70008683A2 /* ShimmeringView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShimmeringView.swift; sourceTree = "<group>"; };
 		654154F422C4F0CA00E78814 /* DisplayAddressStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAddressStatus.swift; sourceTree = "<group>"; };
 		6541550022C549E700E78814 /* AddressFetchingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFetchingError.swift; sourceTree = "<group>"; };
@@ -5693,7 +5717,6 @@
 		65C981B82302B2F0007AE27F /* SendInputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInputState.swift; sourceTree = "<group>"; };
 		65CB9EF32372DCC70004BBC2 /* DataProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviding.swift; sourceTree = "<group>"; };
 		65CB9F052372EE9C0004BBC2 /* Accessibility+DashboardComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accessibility+DashboardComponents.swift"; sourceTree = "<group>"; };
-		65CB9F072372EF1B0004BBC2 /* LocalizationConstants+TimeUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+TimeUnits.swift"; sourceTree = "<group>"; };
 		65CB9F33237312E00004BBC2 /* AssetPieChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetPieChart.swift; sourceTree = "<group>"; };
 		65CB9F34237312E00004BBC2 /* LoadingState+AssetPieChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoadingState+AssetPieChart.swift"; sourceTree = "<group>"; };
 		65CB9F35237312E00004BBC2 /* AssetPieChartInteracting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetPieChartInteracting.swift; sourceTree = "<group>"; };
@@ -5767,7 +5790,6 @@
 		65D5725C234C91D800D14342 /* TextValidating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidating.swift; sourceTree = "<group>"; };
 		65D5725E234C91F300D14342 /* TextFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldType.swift; sourceTree = "<group>"; };
 		65D57260234C923A00D14342 /* Rx+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+TextField.swift"; sourceTree = "<group>"; };
-		65D57277234CBDC400D14342 /* LocalizationConstants+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalizationConstants+TextField.swift"; sourceTree = "<group>"; };
 		65D6FC002368A76500A44A1D /* ERC20AssetBalanceFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ERC20AssetBalanceFetcher.swift; sourceTree = "<group>"; };
 		65D6FC0F2368B4DE00A44A1D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		65D80EC62331433500AE3BBC /* RemoteNotificationAuthorizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationAuthorizerTests.swift; sourceTree = "<group>"; };
@@ -5877,6 +5899,7 @@
 		7B60078B2A3440A01E1395A7 /* Pods-ERC20KitTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20KitTests.debug production.xcconfig"; path = "Target Support Files/Pods-ERC20KitTests/Pods-ERC20KitTests.debug production.xcconfig"; sourceTree = "<group>"; };
 		7BF416BE87930DD50754DC15 /* Pods-NetworkKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkKit.debug dev.xcconfig"; path = "Target Support Files/Pods-NetworkKit/Pods-NetworkKit.debug dev.xcconfig"; sourceTree = "<group>"; };
 		8027B763DEC2C2FA9BC09A67 /* Pods-BitcoinKitTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinKitTests.debug production.xcconfig"; path = "Target Support Files/Pods-BitcoinKitTests/Pods-BitcoinKitTests.debug production.xcconfig"; sourceTree = "<group>"; };
+		806811FED611674001E48C84 /* Pods-LocalizationKitTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKitTests.release staging.xcconfig"; path = "Target Support Files/Pods-LocalizationKitTests/Pods-LocalizationKitTests.release staging.xcconfig"; sourceTree = "<group>"; };
 		811778200F70F741BA8904ED /* Pods-StellarKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKitTests.release.xcconfig"; path = "Target Support Files/Pods-StellarKitTests/Pods-StellarKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		8404B784A4B397960533D33C /* Pods-NetworkKitTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkKitTests.debug staging.xcconfig"; path = "Target Support Files/Pods-NetworkKitTests/Pods-NetworkKitTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		84B601C5197ACD6300DA1829 /* UITextField+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Blocks.h"; sourceTree = "<group>"; };
@@ -5934,6 +5957,7 @@
 		9F765F4514BC8AEF00048EFB /* MultiAddressResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiAddressResponse.h; sourceTree = "<group>"; };
 		9F765F4614BC8AEF00048EFB /* MultiAddressResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiAddressResponse.m; sourceTree = "<group>"; };
 		9F7BA015ED8AB0833203F9BA /* Pods-StellarKitTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKitTests.debug production.xcconfig"; path = "Target Support Files/Pods-StellarKitTests/Pods-StellarKitTests.debug production.xcconfig"; sourceTree = "<group>"; };
+		9FB338A46BFF2129746E109A /* Pods-LocalizationKit.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKit.release staging.xcconfig"; path = "Target Support Files/Pods-LocalizationKit/Pods-LocalizationKit.release staging.xcconfig"; sourceTree = "<group>"; };
 		9FB3637114B60128004BEA02 /* Blockchain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blockchain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FB3638314B60128004BEA02 /* Blockchain-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockchain-Prefix.pch"; sourceTree = "<group>"; };
 		9FCA4D141514949500ECDFBE /* ReceiveBitcoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiveBitcoinViewController.h; sourceTree = "<group>"; };
@@ -5947,6 +5971,7 @@
 		A2599BA61B0B726900C2EA81 /* BackupVerifyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupVerifyViewController.swift; sourceTree = "<group>"; };
 		A269E92D1B32D51F0052F953 /* SecondPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondPasswordViewController.swift; sourceTree = "<group>"; };
 		A2913FA11B31830000DC6C15 /* BackupNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupNavigationViewController.swift; sourceTree = "<group>"; };
+		A32A85C3D103BA829B8CDC02 /* Pods-LocalizationKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKit.release.xcconfig"; path = "Target Support Files/Pods-LocalizationKit/Pods-LocalizationKit.release.xcconfig"; sourceTree = "<group>"; };
 		A4E0929C3A2EE7DBBE8DD419 /* Pods_PlatformUIKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatformUIKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9292ECC469F03075C7D7C02 /* Pods_HDWalletKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HDWalletKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA02104A21B8AA3B0083088B /* CryptoFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFormatter.swift; sourceTree = "<group>"; };
@@ -6168,7 +6193,9 @@
 		BB880FD15C7EFFDF9BF5B10B /* Pods-HDWalletKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HDWalletKitTests.debug dev.xcconfig"; path = "Target Support Files/Pods-HDWalletKitTests/Pods-HDWalletKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		BC4372BAFD2E13E495F41C97 /* Pods-ERC20Kit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ERC20Kit.release.xcconfig"; path = "Target Support Files/Pods-ERC20Kit/Pods-ERC20Kit.release.xcconfig"; sourceTree = "<group>"; };
 		BDCD631986DD7ADF84D431C7 /* Pods-PlatformUIKit.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKit.debug dev.xcconfig"; path = "Target Support Files/Pods-PlatformUIKit/Pods-PlatformUIKit.debug dev.xcconfig"; sourceTree = "<group>"; };
+		BEEAC2E21CA8AE45613A94BB /* Pods-LocalizationKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKitTests.debug dev.xcconfig"; path = "Target Support Files/Pods-LocalizationKitTests/Pods-LocalizationKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		BF3ECE43F583AB999D93296C /* Pods_EthereumKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EthereumKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C20B307B47451C71824327B7 /* Pods-LocalizationKit.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKit.debug staging.xcconfig"; path = "Target Support Files/Pods-LocalizationKit/Pods-LocalizationKit.debug staging.xcconfig"; sourceTree = "<group>"; };
 		C618DD881701EF6BAA5632CC /* Pods-PlatformUIKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKitTests.debug dev.xcconfig"; path = "Target Support Files/Pods-PlatformUIKitTests/Pods-PlatformUIKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		C702A7D9217E9BD200A8DED1 /* TransactionTableCell+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionTableCell+ViewModel.swift"; sourceTree = "<group>"; };
 		C702A7E5217E9D0400A8DED1 /* TransactionDetailViewModel+XLM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionDetailViewModel+XLM.swift"; sourceTree = "<group>"; };
@@ -6225,6 +6252,7 @@
 		C7442E391FBB636300695E4C /* FromToView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FromToView.m; sourceTree = "<group>"; };
 		C7448A9A2034DDF80041947E /* AssetSelectorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetSelectorView.h; sourceTree = "<group>"; };
 		C7448A9B2034DDF80041947E /* AssetSelectorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetSelectorView.m; sourceTree = "<group>"; };
+		C745EFCDA1DD090B6CCB3676 /* Pods_LocalizationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LocalizationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C746905E2180ACCD001A7C52 /* SEP7URI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SEP7URI.swift; sourceTree = "<group>"; };
 		C74690612180B246001A7C52 /* StellarURLPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarURLPayload.swift; sourceTree = "<group>"; };
 		C74A0DE42174DFA000402A2F /* StellarAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellarAddress.swift; sourceTree = "<group>"; };
@@ -6424,6 +6452,7 @@
 		E801A7BF7E014F041AE50FCE /* Pods-StellarKit.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.release staging.xcconfig"; path = "Target Support Files/Pods-StellarKit/Pods-StellarKit.release staging.xcconfig"; sourceTree = "<group>"; };
 		E803854F7FBE18B0F67D5DB4 /* Pods-PlatformUIKitTests.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatformUIKitTests.debug production.xcconfig"; path = "Target Support Files/Pods-PlatformUIKitTests/Pods-PlatformUIKitTests.debug production.xcconfig"; sourceTree = "<group>"; };
 		EA8D1A204B19A0449DCE4ABE /* Pods_ERC20KitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ERC20KitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB06035D518B15AD30A109BC /* Pods-LocalizationKitTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKitTests.debug staging.xcconfig"; path = "Target Support Files/Pods-LocalizationKitTests/Pods-LocalizationKitTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		ECD244F519A8B444004B1F40 /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
 		ECD244F619A8B444004B1F40 /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utils.m"; sourceTree = "<group>"; };
 		EF253EF9771CDAA89D2C27E7 /* Pods-StellarKit.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug production.xcconfig"; path = "Target Support Files/Pods-StellarKit/Pods-StellarKit.debug production.xcconfig"; sourceTree = "<group>"; };
@@ -6435,6 +6464,7 @@
 		F44D74EA6CC6F4A21FD2D505 /* Pods_ToolKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToolKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7B8C83721A5E607005CAA0D /* DeepLinkPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkPayload.swift; sourceTree = "<group>"; };
 		F7B8C84221A5EB81005CAA0D /* DeepLinkPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkPayloadTests.swift; sourceTree = "<group>"; };
+		F856168F1712696A46CCF41F /* Pods-LocalizationKit.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocalizationKit.debug production.xcconfig"; path = "Target Support Files/Pods-LocalizationKit/Pods-LocalizationKit.debug production.xcconfig"; sourceTree = "<group>"; };
 		F8A41D4A415FF0F0652F729E /* Pods-StellarKit.debug testnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StellarKit.debug testnet.xcconfig"; path = "Target Support Files/Pods-StellarKit/Pods-StellarKit.debug testnet.xcconfig"; sourceTree = "<group>"; };
 		FA2AAB86AEF5A775A2B94BB3 /* Pods-BitcoinKitTests.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinKitTests.debug dev.xcconfig"; path = "Target Support Files/Pods-BitcoinKitTests/Pods-BitcoinKitTests.debug dev.xcconfig"; sourceTree = "<group>"; };
 		FA6323371A433B1C00EB3974 /* Foundation-Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Foundation-Utility.h"; sourceTree = "<group>"; };
@@ -6610,6 +6640,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				653FBABE23C76DDD0030220F /* LocalizationKit.framework in Frameworks */,
 				3A6865BA219A11700009FF29 /* PlatformKit.framework in Frameworks */,
 				34EE993B23AB923500074EC0 /* NetworkKit.framework in Frameworks */,
 				34EE98B923AA81E800074EC0 /* ToolKit.framework in Frameworks */,
@@ -6658,13 +6689,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3AD00A5623C3AAF2004BF792 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5194359B208E61F3001EF882 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6677,6 +6701,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		653FBA8123C7623B0030220F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC92F81C077DFCEA98682981 /* Pods_LocalizationKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		653FBA8923C7623C0030220F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				653FBA8D23C7623C0030220F /* LocalizationKit.framework in Frameworks */,
+				4AE0F9ED791456F44287090A /* Pods_LocalizationKitTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9FB3636E14B60128004BEA02 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6684,6 +6725,7 @@
 				340ABD74230AAF5C0032278D /* CommonCryptoKit.framework in Frameworks */,
 				34838CE22399D02B003F945A /* Starscream.framework in Frameworks */,
 				34EE982B23AA595100074EC0 /* ToolKit.framework in Frameworks */,
+				653FBA9923C7623C0030220F /* LocalizationKit.framework in Frameworks */,
 				34C3C98A2305A593008F2154 /* HDWalletKit.framework in Frameworks */,
 				34838CE62399D02B003F945A /* WebRTC.framework in Frameworks */,
 				3A686572219A0BBB0009FF29 /* PlatformKit.framework in Frameworks */,
@@ -6823,6 +6865,16 @@
 				D4EC2EF637A3B620E741C6BB /* Pods-ToolKitTests.debug dev.xcconfig */,
 				33547CB749093BA5AC9E3A29 /* Pods-ToolKitTests.release.xcconfig */,
 				0739E412278E05F29513A3A6 /* Pods-ToolKitTests.release staging.xcconfig */,
+				F856168F1712696A46CCF41F /* Pods-LocalizationKit.debug production.xcconfig */,
+				C20B307B47451C71824327B7 /* Pods-LocalizationKit.debug staging.xcconfig */,
+				099FD0B82170AEA7C5DF2755 /* Pods-LocalizationKit.debug dev.xcconfig */,
+				A32A85C3D103BA829B8CDC02 /* Pods-LocalizationKit.release.xcconfig */,
+				9FB338A46BFF2129746E109A /* Pods-LocalizationKit.release staging.xcconfig */,
+				31ED4F382F1497BDF70CE2E8 /* Pods-LocalizationKitTests.debug production.xcconfig */,
+				EB06035D518B15AD30A109BC /* Pods-LocalizationKitTests.debug staging.xcconfig */,
+				BEEAC2E21CA8AE45613A94BB /* Pods-LocalizationKitTests.debug dev.xcconfig */,
+				03FB7EF7DED34D410B2BFBE5 /* Pods-LocalizationKitTests.release.xcconfig */,
+				806811FED611674001E48C84 /* Pods-LocalizationKitTests.release staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -9708,19 +9760,6 @@
 			path = PaginatedContainerCell;
 			sourceTree = "<group>";
 		};
-		3AD00A5A23C3AAF3004BF792 /* Localization */ = {
-			isa = PBXGroup;
-			children = (
-				3AD00A5B23C3AAF3004BF792 /* Localization.h */,
-				3AD00A5C23C3AAF3004BF792 /* Info.plist */,
-				65D57277234CBDC400D14342 /* LocalizationConstants+TextField.swift */,
-				65380E3E239835CB00BE66E7 /* LocalizationConstants+Biometry.swift */,
-				65CB9F072372EF1B0004BBC2 /* LocalizationConstants+TimeUnits.swift */,
-				3AD00A7123C3C1C5004BF792 /* LocalizationConstants.swift */,
-			);
-			path = Localization;
-			sourceTree = "<group>";
-		};
 		3AD7EE7421124D56006B924F /* ValidationTextField */ = {
 			isa = PBXGroup;
 			children = (
@@ -12569,6 +12608,28 @@
 			path = Colors;
 			sourceTree = "<group>";
 		};
+		653FBA8523C7623B0030220F /* LocalizationKit */ = {
+			isa = PBXGroup;
+			children = (
+				653FBA8623C7623B0030220F /* LocalizationKit.h */,
+				653FBA8723C7623B0030220F /* Info.plist */,
+				653FBAA923C762B40030220F /* LocalizationConstants.swift */,
+				653FBAA723C762B30030220F /* LocalizationConstants+Biometry.swift */,
+				653FBAAA23C762B40030220F /* LocalizationConstants+TextField.swift */,
+				653FBAA823C762B40030220F /* LocalizationConstants+TimeUnits.swift */,
+			);
+			path = LocalizationKit;
+			sourceTree = "<group>";
+		};
+		653FBA9223C7623C0030220F /* LocalizationKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				653FBA9323C7623C0030220F /* LocalizationKitTests.swift */,
+				653FBA9523C7623C0030220F /* Info.plist */,
+			);
+			path = LocalizationKitTests;
+			sourceTree = "<group>";
+		};
 		654026CF236CBF8F008683A2 /* Shimmering */ = {
 			isa = PBXGroup;
 			children = (
@@ -13631,7 +13692,8 @@
 				34C3C9832305A593008F2154 /* HDWalletKitTests */,
 				340ABD60230AAF5A0032278D /* CommonCryptoKit */,
 				340ABD6D230AAF5C0032278D /* CommonCryptoKitTests */,
-				3AD00A5A23C3AAF3004BF792 /* Localization */,
+				653FBA8523C7623B0030220F /* LocalizationKit */,
+				653FBA9223C7623C0030220F /* LocalizationKitTests */,
 				9FB3637414B60128004BEA02 /* Frameworks */,
 				9FB3637214B60128004BEA02 /* Products */,
 				C9D4B2AE193E020D00EDA9EA /* Third Party */,
@@ -13667,7 +13729,8 @@
 				34EE981E23AA595100074EC0 /* ToolKitTests.xctest */,
 				34EE985C23AA5B3100074EC0 /* NetworkKit.framework */,
 				34EE986423AA5B3100074EC0 /* NetworkKitTests.xctest */,
-				3AD00A5923C3AAF2004BF792 /* Localization.framework */,
+				653FBA8423C7623B0030220F /* LocalizationKit.framework */,
+				653FBA8C23C7623C0030220F /* LocalizationKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -13708,6 +13771,8 @@
 				574845CCA548417179F69CA8 /* Pods_StellarKitTests.framework */,
 				F44D74EA6CC6F4A21FD2D505 /* Pods_ToolKit.framework */,
 				F444D1BA5FA14CB8C76992FA /* Pods_ToolKitTests.framework */,
+				C745EFCDA1DD090B6CCB3676 /* Pods_LocalizationKit.framework */,
+				4B95B576803978649487DDEC /* Pods_LocalizationKitTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -15188,11 +15253,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3AD00A5423C3AAF2004BF792 /* Headers */ = {
+		653FBA7F23C7623B0030220F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AD00A5D23C3AAF3004BF792 /* Localization.h in Headers */,
+				653FBA9623C7623C0030220F /* LocalizationKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15561,7 +15626,6 @@
 			dependencies = (
 				34EE98BC23AA81E800074EC0 /* PBXTargetDependency */,
 				34EE993E23AB923500074EC0 /* PBXTargetDependency */,
-				3AD00A7923C3C96F004BF792 /* PBXTargetDependency */,
 			);
 			name = PlatformUIKit;
 			productName = PlatformUIKit;
@@ -15652,24 +15716,6 @@
 			productReference = 3A6A1A1F21B9A64D00D97C74 /* EthereumKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3AD00A5823C3AAF2004BF792 /* Localization */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3AD00A7023C3AAF3004BF792 /* Build configuration list for PBXNativeTarget "Localization" */;
-			buildPhases = (
-				3AD00A5423C3AAF2004BF792 /* Headers */,
-				3AD00A5523C3AAF2004BF792 /* Sources */,
-				3AD00A5623C3AAF2004BF792 /* Frameworks */,
-				3AD00A5723C3AAF2004BF792 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Localization;
-			productName = Localization;
-			productReference = 3AD00A5923C3AAF2004BF792 /* Localization.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		5194359D208E61F3001EF882 /* BlockchainTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 519435A5208E61F3001EF882 /* Build configuration list for PBXNativeTarget "BlockchainTests" */;
@@ -15690,6 +15736,45 @@
 			name = BlockchainTests;
 			productName = BlockchainTests;
 			productReference = 5194359E208E61F3001EF882 /* BlockchainTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		653FBA8323C7623B0030220F /* LocalizationKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 653FBA9B23C7623C0030220F /* Build configuration list for PBXNativeTarget "LocalizationKit" */;
+			buildPhases = (
+				FF63EB6C6514165C303E18AB /* [CP] Check Pods Manifest.lock */,
+				653FBA7F23C7623B0030220F /* Headers */,
+				653FBA8023C7623B0030220F /* Sources */,
+				653FBA8123C7623B0030220F /* Frameworks */,
+				653FBA8223C7623B0030220F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LocalizationKit;
+			productName = LocalizationKit;
+			productReference = 653FBA8423C7623B0030220F /* LocalizationKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		653FBA8B23C7623C0030220F /* LocalizationKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 653FBAA123C7623C0030220F /* Build configuration list for PBXNativeTarget "LocalizationKitTests" */;
+			buildPhases = (
+				15C7BBF82EB516A4EA43F535 /* [CP] Check Pods Manifest.lock */,
+				653FBA8823C7623C0030220F /* Sources */,
+				653FBA8923C7623C0030220F /* Frameworks */,
+				653FBA8A23C7623C0030220F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				653FBA8F23C7623C0030220F /* PBXTargetDependency */,
+				653FBA9123C7623C0030220F /* PBXTargetDependency */,
+			);
+			name = LocalizationKitTests;
+			productName = LocalizationKitTests;
+			productReference = 653FBA8C23C7623C0030220F /* LocalizationKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		9FB3637014B60128004BEA02 /* Blockchain */ = {
@@ -15722,8 +15807,8 @@
 				34EDB83B2261065E009521D9 /* PBXTargetDependency */,
 				34EE982A23AA595100074EC0 /* PBXTargetDependency */,
 				34EE987023AA5B3100074EC0 /* PBXTargetDependency */,
-				3AD00A5F23C3AAF3004BF792 /* PBXTargetDependency */,
 				3AD00A8223C3DF28004BF792 /* PBXTargetDependency */,
+				653FBA9823C7623C0030220F /* PBXTargetDependency */,
 			);
 			name = Blockchain;
 			productName = Blockchain;
@@ -15853,15 +15938,19 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 9FB3637014B60128004BEA02;
 					};
-					3AD00A5823C3AAF2004BF792 = {
-						CreatedOnToolsVersion = 11.2.1;
-						LastSwiftMigration = 1120;
-					};
 					5194359D208E61F3001EF882 = {
 						CreatedOnToolsVersion = 9.3;
 						DevelopmentTeam = NZ6PH75U7K;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
+						TestTargetID = 9FB3637014B60128004BEA02;
+					};
+					653FBA8323C7623B0030220F = {
+						CreatedOnToolsVersion = 11.2.1;
+						LastSwiftMigration = 1120;
+					};
+					653FBA8B23C7623C0030220F = {
+						CreatedOnToolsVersion = 11.2.1;
 						TestTargetID = 9FB3637014B60128004BEA02;
 					};
 					9FB3637014B60128004BEA02 = {
@@ -15965,7 +16054,8 @@
 				34C3C97C2305A593008F2154 /* HDWalletKitTests */,
 				340ABD5E230AAF580032278D /* CommonCryptoKit */,
 				340ABD66230AAF5A0032278D /* CommonCryptoKitTests */,
-				3AD00A5823C3AAF2004BF792 /* Localization */,
+				653FBA8323C7623B0030220F /* LocalizationKit */,
+				653FBA8B23C7623C0030220F /* LocalizationKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -16214,13 +16304,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3AD00A5723C3AAF2004BF792 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5194359C208E61F3001EF882 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -16291,6 +16374,20 @@
 				65E11C382362F01400C0154C /* TotalBalanceTableViewCell.xib in Resources */,
 				C7773310217A65F400899930 /* SimpleListViewController.storyboard in Resources */,
 				6587FD1622F97F5F00206575 /* SendViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		653FBA8223C7623B0030220F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		653FBA8A23C7623C0030220F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -16470,6 +16567,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Blockchain/Pods-Blockchain-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		15C7BBF82EB516A4EA43F535 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LocalizationKitTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1795B9EDE5DDEC40F8059D91 /* [CP] Check Pods Manifest.lock */ = {
@@ -17203,6 +17322,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-StellarKitTests/Pods-StellarKitTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF63EB6C6514165C303E18AB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LocalizationKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -17939,17 +18080,6 @@
 				347B6A1222CCD59E002C80E9 /* EthereumWalletServiceMock.swift in Sources */,
 				344C42ED227C8F2900CFAC33 /* EthereumTransactionEncoderTests.swift in Sources */,
 				346ED4BC2273551500D5179E /* EthereumTransactionBuilderTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3AD00A5523C3AAF2004BF792 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3AD00A7223C3C1C5004BF792 /* LocalizationConstants.swift in Sources */,
-				3AD00A7423C3C8C6004BF792 /* LocalizationConstants+Biometry.swift in Sources */,
-				3AD00A7523C3C8F8004BF792 /* LocalizationConstants+TextField.swift in Sources */,
-				3AD00A7323C3C8AB004BF792 /* LocalizationConstants+TimeUnits.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -18766,6 +18896,25 @@
 				C74690602180ACCD001A7C52 /* SEP7URI.swift in Sources */,
 				C7F1267A21C716F7008D8F2A /* KYCTierPostBody.swift in Sources */,
 				3A1D3C45223AF16B006F0D22 /* InputType.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		653FBA8023C7623B0030220F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				653FBAAD23C762B50030220F /* LocalizationConstants.swift in Sources */,
+				653FBAAB23C762B50030220F /* LocalizationConstants+Biometry.swift in Sources */,
+				653FBAAE23C762B50030220F /* LocalizationConstants+TextField.swift in Sources */,
+				653FBAAC23C762B50030220F /* LocalizationConstants+TimeUnits.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		653FBA8823C7623C0030220F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				653FBA9423C7623C0030220F /* LocalizationKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19853,25 +20002,29 @@
 			target = 34C3C94023059284008F2154 /* TestKit */;
 			targetProxy = 3ABC3AFA2332BF1300D1BDF5 /* PBXContainerItemProxy */;
 		};
-		3AD00A5F23C3AAF3004BF792 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3AD00A5823C3AAF2004BF792 /* Localization */;
-			targetProxy = 3AD00A5E23C3AAF3004BF792 /* PBXContainerItemProxy */;
-		};
-		3AD00A7923C3C96F004BF792 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3AD00A5823C3AAF2004BF792 /* Localization */;
-			targetProxy = 3AD00A7823C3C96F004BF792 /* PBXContainerItemProxy */;
-		};
 		3AD00A8223C3DF28004BF792 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3AD00A5823C3AAF2004BF792 /* Localization */;
 			targetProxy = 3AD00A8123C3DF28004BF792 /* PBXContainerItemProxy */;
 		};
 		519435A4208E61F3001EF882 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9FB3637014B60128004BEA02 /* Blockchain */;
 			targetProxy = 519435A3208E61F3001EF882 /* PBXContainerItemProxy */;
+		};
+		653FBA8F23C7623C0030220F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 653FBA8323C7623B0030220F /* LocalizationKit */;
+			targetProxy = 653FBA8E23C7623C0030220F /* PBXContainerItemProxy */;
+		};
+		653FBA9123C7623C0030220F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FB3637014B60128004BEA02 /* Blockchain */;
+			targetProxy = 653FBA9023C7623C0030220F /* PBXContainerItemProxy */;
+		};
+		653FBA9823C7623C0030220F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 653FBA8323C7623B0030220F /* LocalizationKit */;
+			targetProxy = 653FBA9723C7623C0030220F /* PBXContainerItemProxy */;
 		};
 		AAE5D1AA21A3C85300D4A77A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -27893,375 +28046,6 @@
 			};
 			name = Release;
 		};
-		3AD00A6223C3AAF3004BF792 /* Debug Production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 0;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Localization/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = blockchain.Localization;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Debug Production";
-		};
-		3AD00A6323C3AAF3004BF792 /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 0;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Localization/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = blockchain.Localization;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Debug Staging";
-		};
-		3AD00A6423C3AAF3004BF792 /* Debug Dev */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 0;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Localization/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = blockchain.Localization;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Debug Dev";
-		};
-		3AD00A6523C3AAF3004BF792 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 0;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Localization/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = blockchain.Localization;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		3AD00A6623C3AAF3004BF792 /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 0;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Localization/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = blockchain.Localization;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Release Staging";
-		};
 		51659492204EFD1000C50E78 /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -28919,6 +28703,704 @@
 				WARNING_CFLAGS = "-fdiagnostics-show-option";
 			};
 			name = Release;
+		};
+		653FBA9C23C7623C0030220F /* Debug Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F856168F1712696A46CCF41F /* Pods-LocalizationKit.debug production.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug Production";
+		};
+		653FBA9D23C7623C0030220F /* Debug Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C20B307B47451C71824327B7 /* Pods-LocalizationKit.debug staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug Staging";
+		};
+		653FBA9E23C7623C0030220F /* Debug Dev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 099FD0B82170AEA7C5DF2755 /* Pods-LocalizationKit.debug dev.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug Dev";
+		};
+		653FBA9F23C7623C0030220F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A32A85C3D103BA829B8CDC02 /* Pods-LocalizationKit.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = LocalizationKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		653FBAA023C7623C0030220F /* Release Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9FB338A46BFF2129746E109A /* Pods-LocalizationKit.release staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = LocalizationKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Release Staging";
+		};
+		653FBAA223C7623C0030220F /* Debug Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 31ED4F382F1497BDF70CE2E8 /* Pods-LocalizationKitTests.debug production.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+			};
+			name = "Debug Production";
+		};
+		653FBAA323C7623C0030220F /* Debug Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB06035D518B15AD30A109BC /* Pods-LocalizationKitTests.debug staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+			};
+			name = "Debug Staging";
+		};
+		653FBAA423C7623C0030220F /* Debug Dev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEEAC2E21CA8AE45613A94BB /* Pods-LocalizationKitTests.debug dev.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = LocalizationKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+			};
+			name = "Debug Dev";
+		};
+		653FBAA523C7623C0030220F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 03FB7EF7DED34D410B2BFBE5 /* Pods-LocalizationKitTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = LocalizationKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+			};
+			name = Release;
+		};
+		653FBAA623C7623C0030220F /* Release Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 806811FED611674001E48C84 /* Pods-LocalizationKitTests.release staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = LocalizationKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = blockchain.LocalizationKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blockchain.app/Blockchain";
+			};
+			name = "Release Staging";
 		};
 		9FB3638714B60128004BEA02 /* Debug Production */ = {
 			isa = XCBuildConfiguration;
@@ -29889,18 +30371,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3AD00A7023C3AAF3004BF792 /* Build configuration list for PBXNativeTarget "Localization" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3AD00A6223C3AAF3004BF792 /* Debug Production */,
-				3AD00A6323C3AAF3004BF792 /* Debug Staging */,
-				3AD00A6423C3AAF3004BF792 /* Debug Dev */,
-				3AD00A6523C3AAF3004BF792 /* Release */,
-				3AD00A6623C3AAF3004BF792 /* Release Staging */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		519435A5208E61F3001EF882 /* Build configuration list for PBXNativeTarget "BlockchainTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -29909,6 +30379,30 @@
 				519435A8208E61F3001EF882 /* Debug Dev */,
 				519435AA208E61F3001EF882 /* Release */,
 				AAD7CC5421EFE03100B132F0 /* Release Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		653FBA9B23C7623C0030220F /* Build configuration list for PBXNativeTarget "LocalizationKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				653FBA9C23C7623C0030220F /* Debug Production */,
+				653FBA9D23C7623C0030220F /* Debug Staging */,
+				653FBA9E23C7623C0030220F /* Debug Dev */,
+				653FBA9F23C7623C0030220F /* Release */,
+				653FBAA023C7623C0030220F /* Release Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		653FBAA123C7623C0030220F /* Build configuration list for PBXNativeTarget "LocalizationKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				653FBAA223C7623C0030220F /* Debug Production */,
+				653FBAA323C7623C0030220F /* Debug Staging */,
+				653FBAA423C7623C0030220F /* Debug Dev */,
+				653FBAA523C7623C0030220F /* Release */,
+				653FBAA623C7623C0030220F /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

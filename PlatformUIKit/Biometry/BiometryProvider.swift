@@ -9,7 +9,7 @@
 import PlatformKit
 import LocalAuthentication
 import RxSwift
-import Localization
+import LocalizationKit
 
 /// This objectp provides biometry authentication support
 public final class BiometryProvider: BiometryProviding {

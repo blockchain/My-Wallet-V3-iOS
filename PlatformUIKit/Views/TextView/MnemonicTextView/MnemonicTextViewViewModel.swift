@@ -9,7 +9,7 @@
 import RxSwift
 import RxRelay
 import RxCocoa
-import Localization
+import LocalizationKit
 
 /// A view model for `MnemonicTextViewViewModel`
 public struct MnemonicTextViewViewModel {

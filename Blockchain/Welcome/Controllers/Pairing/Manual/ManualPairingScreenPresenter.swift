@@ -261,7 +261,7 @@ final class ManualPairingScreenPresenter {
 }
 
 /// NOTE: This is here rather than in `PlatformKit` to prevent having to add
-/// `Localization.framework` as a dependency for `PlatformKit`
+/// `LocalizationKit.framework` as a dependency for `PlatformKit`
 fileprivate extension AuthenticatorType {
     var name: String {
         switch self {

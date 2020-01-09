@@ -3,7 +3,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Localization/Localization-Swift.h>
+#import <LocalizationKit/LocalizationKit-Swift.h>
 #import "BCWebViewController.h"
 #import "AccountsAndAddressesNavigationController.h"
 #import "SendBitcoinViewController.h"

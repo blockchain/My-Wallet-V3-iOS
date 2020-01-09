@@ -45,6 +45,13 @@ target 'ToolKit' do
   end
 end
 
+target 'LocalizationKit' do
+  target 'LocalizationKitTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+end
+
 target 'NetworkKit' do
   pod 'RxSwift', '5.0'
 
