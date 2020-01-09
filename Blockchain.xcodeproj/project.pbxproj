@@ -952,15 +952,10 @@
 		3AC9755A210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AC9755B210FBD10006A9263 /* NSAttributedString+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC97559210FBD10006A9263 /* NSAttributedString+Conveniences.swift */; };
 		3AD00A5D23C3AAF3004BF792 /* Localization.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AD00A5B23C3AAF3004BF792 /* Localization.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3AD00A6023C3AAF3004BF792 /* Localization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD00A5923C3AAF2004BF792 /* Localization.framework */; };
-		3AD00A6123C3AAF3004BF792 /* Localization.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD00A5923C3AAF2004BF792 /* Localization.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3AD00A7223C3C1C5004BF792 /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD00A7123C3C1C5004BF792 /* LocalizationConstants.swift */; };
 		3AD00A7323C3C8AB004BF792 /* LocalizationConstants+TimeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CB9F072372EF1B0004BBC2 /* LocalizationConstants+TimeUnits.swift */; };
 		3AD00A7423C3C8C6004BF792 /* LocalizationConstants+Biometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65380E3E239835CB00BE66E7 /* LocalizationConstants+Biometry.swift */; };
 		3AD00A7523C3C8F8004BF792 /* LocalizationConstants+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D57277234CBDC400D14342 /* LocalizationConstants+TextField.swift */; };
-		3AD00A7623C3C96F004BF792 /* Localization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD00A5923C3AAF2004BF792 /* Localization.framework */; };
-		3AD00A7723C3C96F004BF792 /* Localization.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD00A5923C3AAF2004BF792 /* Localization.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3AD00A8023C3DF28004BF792 /* Localization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD00A5923C3AAF2004BF792 /* Localization.framework */; };
 		3AD7EE7621124F0C006B924F /* ValidationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EE7521124F0C006B924F /* ValidationTextField.swift */; };
 		3AD7EEA021125156006B924F /* ValidationTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7EE9F21125156006B924F /* ValidationTextField.xib */; };
 		3AD7EEA221126578006B924F /* NibBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7EEA121126578006B924F /* NibBasedView.swift */; };
@@ -3023,7 +3018,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3AD00A7723C3C96F004BF792 /* Localization.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3036,7 +3030,6 @@
 			files = (
 				34EE987223AA5B3100074EC0 /* NetworkKit.framework in Embed Frameworks */,
 				3A4E489721BF3070001A799D /* BitcoinKit.framework in Embed Frameworks */,
-				3AD00A6123C3AAF3004BF792 /* Localization.framework in Embed Frameworks */,
 				3A6A1A2D21B9A64D00D97C74 /* EthereumKit.framework in Embed Frameworks */,
 				34EE982C23AA595100074EC0 /* ToolKit.framework in Embed Frameworks */,
 				34EDB83D2261065E009521D9 /* ERC20Kit.framework in Embed Frameworks */,
@@ -6621,7 +6614,6 @@
 				34EE993B23AB923500074EC0 /* NetworkKit.framework in Frameworks */,
 				34EE98B923AA81E800074EC0 /* ToolKit.framework in Frameworks */,
 				39EFB20B9AEBB515C494788E /* Pods_PlatformUIKit.framework in Frameworks */,
-				3AD00A7623C3C96F004BF792 /* Localization.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6692,7 +6684,6 @@
 				340ABD74230AAF5C0032278D /* CommonCryptoKit.framework in Frameworks */,
 				34838CE22399D02B003F945A /* Starscream.framework in Frameworks */,
 				34EE982B23AA595100074EC0 /* ToolKit.framework in Frameworks */,
-				3AD00A6023C3AAF3004BF792 /* Localization.framework in Frameworks */,
 				34C3C98A2305A593008F2154 /* HDWalletKit.framework in Frameworks */,
 				34838CE62399D02B003F945A /* WebRTC.framework in Frameworks */,
 				3A686572219A0BBB0009FF29 /* PlatformKit.framework in Frameworks */,
@@ -6707,7 +6698,6 @@
 				515315F12056C0EE000161DF /* libicucore.tbd in Frameworks */,
 				3A6865B2219A11660009FF29 /* PlatformUIKit.framework in Frameworks */,
 				3AEF9E8C21091B72006B1CF9 /* MapKit.framework in Frameworks */,
-				3AD00A8023C3DF28004BF792 /* Localization.framework in Frameworks */,
 				67F4A67AC7DDA0AE49F5D0E3 /* Pods_Blockchain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
