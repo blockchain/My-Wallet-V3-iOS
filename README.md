@@ -110,9 +110,9 @@ WEBSOCKET_SERVER_ETH = ws.blockchain.info/eth/inv
 
 Clone `wallet-ios-credentials` repository and copy it's `Firebase` directory into `Blockchain` directory, it contains a `GoogleService-Info.plist` for each environment.
 ```
-Firease/Dev/GoogleService-Info.plist
-Firease/Prod/GoogleService-Info.plist
-Firease/Staging/GoogleService-Info.plist
+Firebase/Dev/GoogleService-Info.plist
+Firebase/Prod/GoogleService-Info.plist
+Firebase/Staging/GoogleService-Info.plist
 ```
 
 ## XcodeGen
