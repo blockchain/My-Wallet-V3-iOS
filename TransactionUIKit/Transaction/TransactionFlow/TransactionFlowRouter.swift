@@ -81,7 +81,7 @@ final class TransactionFlowRouter: ViewableRouter<TransactionFlowInteractable, T
 
     func didTapBack() {
         guard let child = children.last else { return }
-        viewController.pop()
+        pop()
         detachChild(child)
     }
 

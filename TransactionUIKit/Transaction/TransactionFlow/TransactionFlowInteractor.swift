@@ -132,6 +132,13 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     override func willResignActive() {
         super.willResignActive()
     }
+    
+    func didSelect(blockchainAccount: BlockchainAccount) {
+        guard let target = blockchainAccount as? TransactionTarget else {
+            fatalError("Account \(blockchainAccount.self) is not currently supported.")
+        }
+        didSelect(target: target)
+    }
 
     func didSelect(target: TransactionTarget) {
         transactionModel.state
