@@ -256,49 +256,52 @@ class StellarOperationService: StellarOperationsAPI {
     }
     
     private func stream(cursor: String? = nil) {
-        guard let account = repository.defaultAccount else {
-            privateReplayedOperations.onError(StellarAccountError.noXLMAccount)
-            return
-        }
-        guard stream == nil else { return }
-        
-        let accountID = account.publicKey
-        
-        operationsService
-            .subscribe(onSuccess: { [weak self] operationsService in
-                self?.stream = operationsService.stream(
-                    for: .operationsForAccount(
-                        account: accountID,
-                        cursor: cursor
-                    )
-                )
-                self?.stream?.onReceive(response: { [weak self] response in
-                    guard let this = self else { return }
-                    switch response {
-                    case .open:
-                        break
-                    case .response(_, let payload):
-                        let filtered = this.filter(operations: [payload])
-                        let disposable = Observable.from(filtered)
-                            .flatMapLatest { operationResponse -> Observable<StellarOperation> in
-                                this.getTransactionDetails(for: operationResponse, accountID: accountID)
-                            }
-                            .toArray()
-                            .subscribe(onSuccess: { result in
-                                this.privateReplayedOperations.onNext(result)
-                            })
-                        this.disposables.insertWithDiscardableResult(disposable)
-                    case .error(let error):
-                        Logger.shared.error(
-                            "Horizon Error: \(String(describing: error?.localizedDescription))"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let account = self.repository.defaultAccount else {
+                self.privateReplayedOperations.onError(StellarAccountError.noXLMAccount)
+                return
+            }
+            guard self.stream == nil else { return }
+            
+            let accountID = account.publicKey
+            
+            self.operationsService
+                .subscribe(onSuccess: { [weak self] operationsService in
+                    self?.stream = operationsService.stream(
+                        for: .operationsForAccount(
+                            account: accountID,
+                            cursor: cursor
                         )
-                    }
+                    )
+                    self?.stream?.onReceive(response: { [weak self] response in
+                        guard let this = self else { return }
+                        switch response {
+                        case .open:
+                            break
+                        case .response(_, let payload):
+                            let filtered = this.filter(operations: [payload])
+                            let disposable = Observable.from(filtered)
+                                .flatMapLatest { operationResponse -> Observable<StellarOperation> in
+                                    this.getTransactionDetails(for: operationResponse, accountID: accountID)
+                                }
+                                .toArray()
+                                .subscribe(onSuccess: { result in
+                                    this.privateReplayedOperations.onNext(result)
+                                })
+                            this.disposables.insertWithDiscardableResult(disposable)
+                        case .error(let error):
+                            Logger.shared.error(
+                                "Horizon Error: \(String(describing: error?.localizedDescription))"
+                            )
+                        }
+                    })
+                }, onError: { error in
+                    Logger.shared.error(
+                        "Error: \(String(describing: error.localizedDescription))"
+                    )
                 })
-            }, onError: { error in
-                Logger.shared.error(
-                    "Error: \(String(describing: error.localizedDescription))"
-                )
-            })
-            .disposed(by: bag)
+                .disposed(by: self.bag)
+        }
     }
 }

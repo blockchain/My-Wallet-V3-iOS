@@ -92,14 +92,6 @@ final class DashboardRouter {
     
     private func handle(action: DashboadDetailsAction) {
         switch action {
-        case .buy:
-            break
-        case .request(let currency):
-            navigationRouter.topMostViewControllerProvider?.topMostViewController?.dismiss(animated: true, completion: nil)
-            routing.toReceive(currency)
-        case .send(let currency):
-            navigationRouter.topMostViewControllerProvider?.topMostViewController?.dismiss(animated: true, completion: nil)
-            routing.toSend(currency)
         case .nonCustodial(let currency):
             nonCustodialActionRouterAPI.start(with: currency)
         case .trading(let currency):

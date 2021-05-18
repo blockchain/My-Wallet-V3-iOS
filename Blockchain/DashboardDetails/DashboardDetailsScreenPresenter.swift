@@ -14,9 +14,6 @@ import RxSwift
 
 /// This enum aggregates possible action types that can be done in the dashboard
 enum DashboadDetailsAction {
-    case send(CryptoCurrency)
-    case request(CryptoCurrency)
-    case buy(CryptoCurrency)
     case trading(CryptoCurrency)
     case savings(CryptoCurrency)
     case nonCustodial(CryptoCurrency)

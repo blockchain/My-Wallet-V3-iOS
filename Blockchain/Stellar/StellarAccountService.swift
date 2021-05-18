@@ -127,16 +127,21 @@ class StellarAccountService: StellarAccountAPI {
     }
     
     func currentStellarAccount(fromCache: Bool) -> Maybe<StellarAccount> {
-        if let cached = privateAccount.value, fromCache == true {
-            return Maybe.just(cached)
-        }
-        guard let XLMAccount = defaultXLMAccount() else {
-            return Maybe.error(StellarAccountError.noXLMAccount)
-        }
-        let accountID = XLMAccount.publicKey
-        return accountDetails(for: accountID).do(onNext: { [weak self] account in
-            self?.privateAccount.accept(account)
-        })
+        Maybe.just(())
+            .observeOn(MainScheduler.asyncInstance)
+            .flatMap(weak: self) { (self, _) -> Maybe<StellarAccount> in
+                if let cached = self.privateAccount.value, fromCache == true {
+                    return Maybe.just(cached)
+                }
+                guard let XLMAccount = self.defaultXLMAccount() else {
+                    return Maybe.error(StellarAccountError.noXLMAccount)
+                }
+                let accountID = XLMAccount.publicKey
+                return self.accountDetails(for: accountID)
+                    .do(onNext: { [weak self] account in
+                        self?.privateAccount.accept(account)
+                    })
+            }
     }
     
     func currentStellarAccountAsSingle(fromCache: Bool) -> Single<StellarAccount?> {

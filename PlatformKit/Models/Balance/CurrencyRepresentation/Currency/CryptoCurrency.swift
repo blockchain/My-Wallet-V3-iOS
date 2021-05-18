@@ -85,15 +85,15 @@ extension CryptoCurrency {
     /// Used whenever we don't have access to the new Account architecture.
     public var hasNonCustodialWithdrawalSupport: Bool {
         switch self {
-        case .algorand,
-             .tether,
-             .wDGLD:
+        case .algorand:
             return false
         case .bitcoin,
              .bitcoinCash,
              .ethereum,
              .pax,
-             .stellar:
+             .stellar,
+             .tether,
+             .wDGLD:
             return true
         }
     }

@@ -32,13 +32,16 @@ final class CustodyWithdrawalRouter: CustodyWithdrawalRouterAPI {
     private let navigationRouter: NavigationRouterAPI
     private let webViewService: WebViewServiceAPI
     private let internalFeatureService: InternalFeatureFlagServiceAPI
+    private let featureConfiguring: FeatureConfiguring
     private var currency: CryptoCurrency!
     private let disposeBag = DisposeBag()
     
     init(navigationRouter: NavigationRouterAPI = NavigationRouter(),
          dataProviding: DataProviding = DataProvider.default,
          webViewService: WebViewServiceAPI = resolve(),
+         featureConfiguring: FeatureConfiguring = resolve(),
          internalFeatureService: InternalFeatureFlagServiceAPI = resolve()) {
+        self.featureConfiguring = featureConfiguring
         self.internalFeatureService = internalFeatureService
         self.dataProviding = dataProviding
         self.navigationRouter = navigationRouter
@@ -85,7 +88,7 @@ final class CustodyWithdrawalRouter: CustodyWithdrawalRouterAPI {
     }
     
     private func showWithdrawalScreen() {
-        if internalFeatureService.isEnabled(.internalSendP2) {
+        if featureConfiguring.configuration(for: .internalSendEnabled).isEnabled {
             internalSendRelay.accept(())
         } else {
             let interactor = CustodyWithdrawalScreenInteractor(

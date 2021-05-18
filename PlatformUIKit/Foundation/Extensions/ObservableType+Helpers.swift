@@ -14,7 +14,7 @@ extension ObservableType {
                                    line: Int = #line,
                                    function: String = #function) -> Driver<Element> {
         asDriver { error -> Driver<Element> in
-            fatalError("Binding error to observers: \(error). file: \(file), line: \(line), function: \(function)")
+            fatalError("Binding error to observers. file: \(file), line: \(line), function: \(function), error: \(error).")
         }
     }
 }

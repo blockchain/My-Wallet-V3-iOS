@@ -142,7 +142,7 @@ extension ObservableType {
         function: String = #function
     ) -> Disposable {
         self.do(onError: { error in
-            fatalError("Binding error to publish relay: \(error). file: \(file), line: \(line), function: \(function)")
+            fatalError("Binding error to publish relay. file: \(file), line: \(line), function: \(function), error: \(error).")
         })
         .subscribe { event in
             switch event {
@@ -174,7 +174,7 @@ extension ObservableType {
         function: String = #function
     ) -> Disposable {
         self.do(onError: { error in
-            fatalError("Binding error to behavior relay: \(error). file: \(file), line: \(line), function: \(function)")
+            fatalError("Binding error to behavior relay. file: \(file), line: \(line), function: \(function), error: \(error).")
         })
         .subscribe { event in
             switch event {
@@ -224,7 +224,7 @@ extension ObservableType {
         function: String = #function
     ) -> Disposable where Observer.Element == Element {
         self.do(onError: { error in
-            fatalError("Binding error to observers: \(error). file: \(file), line: \(line), function: \(function)")
+            fatalError("Binding error to observers. file: \(file), line: \(line), function: \(function), error: \(error).")
         })
         .subscribe { event in
             observers.forEach { $0.on(event) }

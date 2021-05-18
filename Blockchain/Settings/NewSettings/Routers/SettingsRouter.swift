@@ -159,7 +159,7 @@ final class SettingsRouter: SettingsRouterAPI {
             )
             cardRouter.load()
         case .showAddBankScreen(let fiatCurrency):
-            if featureConfiguring.configuration(for: .achBuyFlowEnabled).isEnabled && fiatCurrency == .USD {
+            if featureConfiguring.configuration(for: .achSettingsEnabled).isEnabled && fiatCurrency == .USD {
                 showLinkBankFlow()
                 return
             }

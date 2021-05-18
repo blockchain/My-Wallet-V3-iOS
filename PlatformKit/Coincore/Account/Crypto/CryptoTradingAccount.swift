@@ -56,6 +56,11 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
             }
     }
 
+    public var withdrawableBalance: Single<MoneyValue> {
+        balanceFetching
+            .withdrawableMoney
+    }
+
     // swiftlint:disable:next opening_brace
     public var onTxCompleted: (TransactionResult) -> Completable {
         { [weak self] result -> Completable in

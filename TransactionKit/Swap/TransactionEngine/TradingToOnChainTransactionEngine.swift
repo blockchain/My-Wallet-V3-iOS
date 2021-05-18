@@ -36,6 +36,10 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
     var askForRefreshConfirmation: ((Bool) -> Completable)!
     var sourceAccount: CryptoAccount!
     var transactionTarget: TransactionTarget!
+
+    var sourceTradingAccount: CryptoTradingAccount! {
+        sourceAccount as? CryptoTradingAccount
+    }
     
     var target: CryptoAccount { transactionTarget as! CryptoAccount }
     var targetAsset: CryptoCurrency { target.asset }
@@ -80,11 +84,11 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
     }
     
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        guard sourceAccount != nil else {
+        guard sourceTradingAccount != nil else {
             return .just(pendingTransaction)
         }
-        return sourceAccount
-            .actionableBalance
+        return sourceTradingAccount
+            .withdrawableBalance
             .map { actionableBalance -> PendingTransaction in
                 pendingTransaction.update(amount: amount, available: actionableBalance)
             }
@@ -92,20 +96,13 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
     
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         fiatAmountAndFees(from: pendingTransaction)
-            .map(weak: self) { (self, input) -> PendingTransaction in
+            .map(\.amount)
+            .map(weak: self) { (self, amount) -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
-                let (amount, fees) = input
                 var values: [TransactionConfirmation] = [
                     .source(.init(value: self.sourceAccount.label)),
                     .destination(.init(value: self.target.label)),
-                    .feedTotal(
-                        .init(
-                            amount: pendingTransaction.amount,
-                            fee: pendingTransaction.fees,
-                            exchangeAmount: amount.moneyValue,
-                            exchangeFee: fees.moneyValue
-                        )
-                    )
+                    .total(.init(total: amount.moneyValue))
                 ]
                 if self.isNoteSupported {
                     values.append(.destination(.init(value: "")))
@@ -149,9 +146,12 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
     // MARK: - Private Functions
     
     private func validateAmounts(pendingTransaction: PendingTransaction) -> Completable {
-        sourceAccount
-            .actionableBalance
-            .flatMapCompletable { balance -> Completable in
+        sourceTradingAccount
+            .withdrawableBalance
+            .flatMapCompletable(weak: self) { (self, balance) -> Completable in
+                guard try pendingTransaction.amount > .zero(currency: self.sourceAsset) else {
+                    throw TransactionValidationFailure(state: .invalidAmount)
+                }
                 guard try balance >= pendingTransaction.amount else {
                     throw TransactionValidationFailure(state: .insufficientFunds)
                 }

@@ -23,7 +23,7 @@ final class AddBankInteractor: AddSpecificPaymentMethodInteractorAPI {
         return beneficiariesService.availableCurrenciesForBankLinkage
             .map { currencies -> Bool in
                 if fiatCurrency == .USD {
-                    return featureConfiguring.configuration(for: .achBuyFlowEnabled).isEnabled
+                    return featureConfiguring.configuration(for: .achSettingsEnabled).isEnabled && currencies.contains(fiatCurrency)
                 }
                 return currencies.contains(fiatCurrency)
             }

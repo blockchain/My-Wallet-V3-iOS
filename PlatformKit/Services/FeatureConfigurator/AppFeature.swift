@@ -46,6 +46,12 @@ public enum AppFeature: Int, CaseIterable {
     case achEnabled
 
     case achBuyFlowEnabled
+
+    case achSettingsEnabled
+    
+    /// Sending from custodial to non-custodial
+    /// via the transaction flow
+    case internalSendEnabled
 }
 
 extension AppFeature {
@@ -76,6 +82,10 @@ extension AppFeature {
             return "ach_enabled"
         case .achBuyFlowEnabled:
             return "ach_buy_flow_enabled_ios"
+        case .achSettingsEnabled:
+            return "ach_settings_enabled_ios"
+        case .internalSendEnabled:
+            return "internal_send_enabled_ios"
         case .biometry,
              .swipeToReceive,
              .transferFundsFromImportedAddress:

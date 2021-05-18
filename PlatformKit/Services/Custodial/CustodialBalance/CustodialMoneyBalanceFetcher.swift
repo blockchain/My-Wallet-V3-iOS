@@ -47,6 +47,20 @@ public final class CustodialMoneyBalanceFetcher: CustodialAccountBalanceFetching
             .map { $0 ?? .zero(currency: currencyType) }
     }
 
+    public var withdrawableObservable: Observable<MoneyValue> {
+        _ = setup
+        let currencyType = self.currencyType
+        return balanceRelay
+            .map { $0?.withdrawable }
+            .map { $0 ?? .zero(currency: currencyType) }
+    }
+
+    public var withdrawableMoney: Single<MoneyValue> {
+        withdrawableObservable
+            .take(1)
+            .asSingle()
+    }
+
     public var isFunded: Observable<Bool> {
         fundsState.map { $0 != .absent }
     }
@@ -68,7 +82,6 @@ public final class CustodialMoneyBalanceFetcher: CustodialAccountBalanceFetching
     }
 
     // MARK: - Private Properties
-
     private let balanceRelay: BehaviorRelay<CustodialAccountBalance?>
     private let currencyType: CurrencyType
     private let disposeBag = DisposeBag()

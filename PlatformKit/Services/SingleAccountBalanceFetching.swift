@@ -51,11 +51,17 @@ public protocol CustodialAccountBalanceFetching: SingleAccountBalanceFetching {
     
     /// Returns the funds state
     var fundsState: Observable<AccountBalanceState<CustodialAccountBalance>> { get }
+
+    /// Streams  the withdrawable amount, based on the dat provided by the API
+    var withdrawableObservable: Observable<MoneyValue> { get }
+
+    /// Single result of the withdrawable amount, based on the dat provided by the API.
+    var withdrawableMoney: Single<MoneyValue> { get }
 }
 
 /// AccountBalanceFetching implementation representing a absent account.
 public final class AbsentAccountBalanceFetching: CustodialAccountBalanceFetching {
-    
+
     public let accountType: SingleAccountType
     
     public var pendingBalanceMoney: Single<MoneyValue> {
@@ -79,6 +85,17 @@ public final class AbsentAccountBalanceFetching: CustodialAccountBalanceFetching
         balanceRelay
             .asObservable()
     }
+
+    public var withdrawableObservable: Observable<MoneyValue> {
+        withdrawableRelay
+            .asObservable()
+    }
+
+    public var withdrawableMoney: Single<MoneyValue> {
+        withdrawableObservable
+            .take(1)
+            .asSingle()
+    }
     
     public var isFunded: Observable<Bool> {
         .just(false)
@@ -91,16 +108,19 @@ public final class AbsentAccountBalanceFetching: CustodialAccountBalanceFetching
     public let balanceFetchTriggerRelay: PublishRelay<Void> = .init()
     private let balanceRelay: BehaviorRelay<MoneyValue>
     private let pendingBalanceRelay: BehaviorRelay<MoneyValue>
+    private let withdrawableRelay: BehaviorRelay<MoneyValue>
 
     public init(currencyType: CurrencyType, accountType: SingleAccountType) {
         switch accountType {
         case .custodial:
             pendingBalanceRelay = BehaviorRelay(value: .zero(currency: currencyType))
             balanceRelay = BehaviorRelay(value: .zero(currency: currencyType))
+            withdrawableRelay = BehaviorRelay(value: .zero(currency: currencyType))
         case .nonCustodial:
             guard let currency = currencyType.cryptoCurrency else { fatalError("Expected a CryptoCurrency: \(currencyType)") }
             pendingBalanceRelay = BehaviorRelay(value: .zero(currency: currency))
             balanceRelay = BehaviorRelay(value: .zero(currency: currency))
+            withdrawableRelay = BehaviorRelay(value: .zero(currency: currencyType))
         }
         self.accountType = accountType
     }
