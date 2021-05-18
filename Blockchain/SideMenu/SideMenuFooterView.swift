@@ -6,48 +6,60 @@
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
 import PlatformUIKit
+import RxCocoa
+import RxRelay
+import RxSwift
 
-protocol SideMenuFooterDelegate: class {
-    func footerView(_ footerView: SideMenuFooterView, selectedAction: SideMenuFooterView.Action)
+struct SideMenuFooterViewModel {
+    let top: SideMenuItem
+    let bottom: SideMenuItem
 }
 
 /// `SideMenuFooterView` is shown at the base of `SideMenuViewController`. It's not
 /// really a footer view (though it could be used as one). But it's only supposed to be shown at the bottom
-/// of said screen (per the designs). 
+/// of said screen (per the designs).
 class SideMenuFooterView: NibBasedView {
-    
-    enum Action {
-        case pairWebWallet
-        case logout
+
+    var itemTapped: Signal<SideMenuItem> {
+        itemRelay.asSignal()
     }
-    
-    weak var delegate: SideMenuFooterDelegate?
-    
-    @IBOutlet fileprivate var pairButton: UIButton!
-    @IBOutlet fileprivate var logoutButton: UIButton!
-    
+    var model: SideMenuFooterViewModel! {
+        didSet {
+            topButton.setTitle(model.top.title, for: .normal)
+            topButton.setImage(model.top.image, for: .normal)
+            bottomButton.setTitle(model.bottom.title, for: .normal)
+            bottomButton.setImage(model.bottom.image, for: .normal)
+        }
+    }
+
+    @IBOutlet private var topButton: UIButton!
+    @IBOutlet private var bottomButton: UIButton!
     @IBOutlet private var buttonHeightConstraints: NSLayoutConstraint!
-    
+    private let disposeBag = DisposeBag()
+    private let itemRelay: PublishRelay<SideMenuItem> = .init()
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         buttonHeightConstraints.constant = SideMenuCell.defaultHeight
-        
+
         let font = UIFont.main(.medium, DevicePresenter.type == .superCompact ? 14 : 17)
-        
-        pairButton.setTitle(LocalizationConstants.SideMenu.loginToWebWallet, for: .normal)
-        pairButton.titleLabel?.font = font
-        logoutButton.setTitle(LocalizationConstants.SideMenu.logout, for: .normal)
-        logoutButton.titleLabel?.font = font
-    }
-    
-    @IBAction func pairTapped(_ sender: UIButton) {
-        delegate?.footerView(self, selectedAction: .pairWebWallet)
-    }
-    
-    @IBAction func logoutTapped(_ sender: UIButton) {
-        delegate?.footerView(self, selectedAction: .logout)
+        topButton.titleLabel?.font = font
+        bottomButton.titleLabel?.font = font
+
+        topButton.rx.tap
+            .compactMap { [weak self] _ in
+                self?.model?.top
+            }
+            .bind(to: itemRelay)
+            .disposed(by: disposeBag)
+
+        bottomButton.rx.tap
+            .compactMap { [weak self] _ in
+                self?.model?.bottom
+            }
+            .bind(to: itemRelay)
+            .disposed(by: disposeBag)
     }
 }

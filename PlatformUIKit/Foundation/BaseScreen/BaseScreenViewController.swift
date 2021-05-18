@@ -29,7 +29,7 @@ open class BaseScreenViewController: UIViewController {
             setBackground(by: barStyle)
         }
     }
-    
+
     /**
      The title style of the navigation bar.
      By setting this property, the title of the navigation bar
@@ -41,7 +41,17 @@ open class BaseScreenViewController: UIViewController {
             set(titleViewStyle: titleViewStyle)
         }
     }
-        
+
+    /// Indicates if the view controller should extend safe area under the navigation bar.
+    /// This is achieved by making `additionalSafeAreaInsets.top` the negative of navigation bar height.
+    public var extendSafeAreaUnderNavigationBar = false {
+        didSet {
+            if oldValue != extendSafeAreaUnderNavigationBar {
+                viewIfLoaded?.setNeedsLayout()
+            }
+        }
+    }
+
     /**
      The style of the left button in the navigation bar.
      By setting this property, the left button of the navigation bar
@@ -132,7 +142,21 @@ open class BaseScreenViewController: UIViewController {
             currentNavigationItem?.setLeftBarButton(leadingBarButtonItem, animated: false)
         }
     }
-    
+
+    private func updateExtendSafeAreaUnderNavigationBar() {
+        guard isViewLoaded else {
+            // Do not trigger if view is not loaded.
+            return
+        }
+        let navigationBarHeight: CGFloat
+        if extendSafeAreaUnderNavigationBar {
+            navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        } else {
+            navigationBarHeight = 0
+        }
+        additionalSafeAreaInsets.top = -navigationBarHeight
+    }
+
     // MARK: - Lifecycle
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -142,6 +166,11 @@ open class BaseScreenViewController: UIViewController {
             UIApplication.shared.statusBarStyle = determineStatusBarStyle()
         }
         currentNavigationItem?.setHidesBackButton(true, animated: false)
+    }
+
+    open override func viewWillLayoutSubviews() {
+        updateExtendSafeAreaUnderNavigationBar()
+        super.viewWillLayoutSubviews()
     }
         
     // MARK: - Setup

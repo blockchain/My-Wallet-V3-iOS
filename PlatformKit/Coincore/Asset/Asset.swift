@@ -6,6 +6,7 @@
 //  Copyright © 2020 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import DIKit
 import RxSwift
 import ToolKit
 
@@ -33,6 +34,10 @@ public protocol Asset {
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup>
     
     func transactionTargets(account: SingleAccount) -> Single<[SingleAccount]>
+
+    /// Validates the given address
+    /// - Parameter address: A `String` value of the address to be parse
+    func parse(address: String) -> Single<ReceiveAddress?>
 }
 
 public protocol CryptoAsset: Asset {
@@ -42,14 +47,17 @@ public protocol CryptoAsset: Asset {
 
 public enum CryptoAssetError: Error {
     case noDefaultAccount
+    case addressParseFailure
 }
 
 extension CryptoAsset {
+    
     public func transactionTargets(account: SingleAccount) -> Single<[SingleAccount]> {
         guard let crypto = account as? CryptoAccount else {
             fatalError("Expected a CryptoAccount: \(account)")
         }
         precondition(crypto.asset == asset)
+        // TODO: Fetch exchange accounts
         switch crypto {
         case is CryptoTradingAccount:
             return accountGroup(filter: .nonCustodial)

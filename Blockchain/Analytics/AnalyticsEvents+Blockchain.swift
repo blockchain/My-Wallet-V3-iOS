@@ -95,6 +95,7 @@ extension AnalyticsEvents {
         case sideNavSupport
         case sideNavUpgrade
         case sideNavWebLogin
+        case sideNavSecureChannel
         case sideNavAirdropCenter
         case sideNavLockbox
         case sideNavExchange
@@ -134,6 +135,8 @@ extension AnalyticsEvents {
             // Menu - exchange clicked
             case .sideNavExchange:
                 return "side_nav_exchange"
+            case .sideNavSecureChannel:
+                return "side_nav_secure_channel"
             }
         }
     }

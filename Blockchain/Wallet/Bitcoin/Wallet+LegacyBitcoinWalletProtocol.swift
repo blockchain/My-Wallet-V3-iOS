@@ -24,9 +24,12 @@ protocol LegacyBitcoinWalletProtocol: class {
     func saveBitcoinMemo(for transaction: String, memo: String?)
 
     func getBitcoinReceiveAddress(forXPub xpub: String) -> Result<String, BitcoinReceiveAddressError>
+    
+    func validateBitcoin(address: String) -> Bool
 }
 
 enum BitcoinReceiveAddressError: Error {
+    case incompleteAddress
     case uninitialized
     case jsReturnedNil
     case jsValueNotString
@@ -34,6 +37,12 @@ enum BitcoinReceiveAddressError: Error {
 }
 
 extension Wallet: LegacyBitcoinWalletProtocol {
+    
+    func validateBitcoin(address: String) -> Bool {
+        let escapedString = address.escapedForJS()
+        guard let result = context.evaluateScript("Helpers.isBitcoinAddress(\"\(escapedString)\");") else { return false }
+        return result.toBool()
+    }
 
     func getBitcoinReceiveAddress(forXPub xpub: String) -> Result<String, BitcoinReceiveAddressError> {
         guard isInitialized() else {

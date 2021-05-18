@@ -11,11 +11,11 @@ public final class TextFieldTableViewCell: UITableViewCell {
     // MARK: - Properties
     
     public var bottomInset: CGFloat {
-        set {
-            textFieldView.bottomInset = newValue
-        }
         get {
             textFieldView.bottomInset
+        }
+        set {
+            textFieldView.bottomInset = newValue
         }
     }
     

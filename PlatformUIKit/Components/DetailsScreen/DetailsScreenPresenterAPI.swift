@@ -21,6 +21,7 @@ public protocol DetailsScreenPresenterAPI: AnyObject {
     var buttons: [ButtonViewModel] { get }
     var cells: [DetailsScreen.CellType] { get }
 
+    var extendSafeAreaUnderNavigationBar: Bool { get }
     var titleView: Driver<Screen.Style.TitleView> { get }
     var titleViewRelay: BehaviorRelay<Screen.Style.TitleView> { get }
     var navigationBarAppearance: DetailsScreen.NavigationBarAppearance { get }
@@ -35,6 +36,8 @@ public protocol DetailsScreenPresenterAPI: AnyObject {
 }
 
 public extension DetailsScreenPresenterAPI {
+
+    var extendSafeAreaUnderNavigationBar: Bool { false }
     
     var buttons: [ButtonViewModel] { [] }
 

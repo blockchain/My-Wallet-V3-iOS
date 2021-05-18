@@ -37,6 +37,10 @@ class FiatAsset: Asset {
         }
     }
 
+    func parse(address: String) -> Single<ReceiveAddress?> {
+        .just(nil)
+    }
+
     // MARK: - Helpers
 
     private var allAccountsGroup: Single<AccountGroup> {
@@ -61,4 +65,5 @@ class FiatAsset: Asset {
         // TODO: Currently Android returns an empty array.
         .just([])
     }
+    
 }

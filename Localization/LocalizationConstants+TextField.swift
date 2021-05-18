@@ -143,6 +143,10 @@ public extension LocalizationConstants {
                 "Zip",
                 comment: "Placeholder for zip text field"
             )
+            public static let cryptoAddress = NSLocalizedString(
+                "%@ address",
+                comment: "Placeholder for crypto address"
+            )
         }
         
         public struct PasswordScore {

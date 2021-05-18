@@ -10,6 +10,8 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
+/// A view compose of two views (main and side) that each can be configured with different content types.
+/// Check `CompositeStatusViewType` to see the available content types.
 public final class CompositeStatusView: UIView {
 
     final class ContainerView: UIView {
@@ -26,7 +28,11 @@ public final class CompositeStatusView: UIView {
         private let disposeBag = DisposeBag()
         
         // MARK: - Setup
-        
+
+        /// Default initializer.
+        /// - Parameters:
+        ///   - edge: The length of the axis of this element.
+        ///   - contentSizeRatio: The ratio of the size of the elements that will be added to this view.
         init(edge: CGFloat,
              contentSizeRatio: CGFloat = 0.80) {
             self.contentSizeRatio = contentSizeRatio
@@ -127,9 +133,9 @@ public final class CompositeStatusView: UIView {
     
     public init(edge: CGFloat,
                 mainContainerViewRatio: CGFloat = 0.85,
-                sizeContainerViewRatio: CGFloat = 0.35) {
+                sideContainerViewRatio: CGFloat = 0.35) {
         self.mainContainerViewRatio = mainContainerViewRatio
-        self.sideContainerViewRatio = sizeContainerViewRatio
+        self.sideContainerViewRatio = sideContainerViewRatio
                 
         let mainContainerViewEdge = edge * mainContainerViewRatio
         

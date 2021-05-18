@@ -26,6 +26,11 @@ extension LocalizationConstants {
             "%@ Trade Wallet",
             comment: "Must contain %@. Used for naming trading accounts e.g. Ethereum Trade Wallet"
         )
+        
+        public static let myExchangeAccount = NSLocalizedString(
+            "%@ Exchange",
+            comment: "Must contain %@. Used for naming trading accounts e.g. Ethereum Trade Wallet"
+        )
 
         public static let lowFees = NSLocalizedString(
             "Low Fees",

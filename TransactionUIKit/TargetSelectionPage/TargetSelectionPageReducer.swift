@@ -6,6 +6,7 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+import DIKit
 import Localization
 import PlatformKit
 import PlatformUIKit
@@ -48,37 +49,25 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
                 return .just(.source(header: self.provideSourceSectionHeader(for: action), items: items))
             }
         
-        let sourceAccount = interactorState
+        let sourceAccountStrategy = interactorState
             .map(\.interactors)
             .compactMap(\.sourceInteractor)
             .map(\.account)
+            .map { account -> TargetDestinationsStrategyAPI in
+                if account is TradingAccount {
+                    return TradingSourceDestinationStrategy(sourceAccount: account)
+                } else {
+                    return NonTradingSourceDestinationStrategy(sourceAccount: account)
+                }
+            }
+            .map(TargetDestinationSections.init(strategy:))
 
         let destinationSections = interactorState
             .map(\.interactors)
             .map(\.destinationInteractors)
-            .map { items -> [TargetSelectionPageCellItem] in
-                items.map { interactor in
-                    TargetSelectionPageCellItem(interactor: interactor, assetAction: action)
-                }
-            }
-            .withLatestFrom(sourceAccount) { [unowned self] (items, sourceAccount) -> [TargetSelectionPageCellItem] in
-                guard self.action == .send else { return items }
-                guard sourceAccount is TradingAccount else { return items }
-                let currencyCode = sourceAccount.currencyType.displayCode
-                let title = LocalizationIds.Card.internalSendOnly
-                let description = String(format: LocalizationIds.Card.description, currencyCode, currencyCode, currencyCode)
-                return [
-                    .init(
-                        cardView: .transactionViewModel(
-                            with: title,
-                            description: description
-                        )
-                    )
-                ] + items
-            }
-            .flatMap { [weak self] items -> Driver<TargetSelectionPageSectionModel> in
-                guard let self = self else { return .empty() }
-                return .just(.destination(header: self.provideDestinationSectionHeader(action: action), items: items))
+            .withLatestFrom(sourceAccountStrategy) { ($0, $1) }
+            .map { (items, strategy) -> [TargetSelectionPageSectionModel] in
+                strategy.sections(interactors: items, action: action)
             }
         
         let button = interactorState
@@ -92,7 +81,7 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
         
         let sections = Driver
             .combineLatest(sourceSection, destinationSections)
-            .map { [$0] + [$1] }
+            .map { [$0] + $1 }
 
         let navigationModel = self.navigationModel
         return Driver.combineLatest(sections, button)
@@ -120,33 +109,6 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
                 headerType: .section(
                     .init(
                         sectionTitle: LocalizationConstants.Transaction.from
-                    )
-                )
-            )
-        case .deposit,
-             .receive,
-             .sell,
-             .viewActivity,
-             .withdraw:
-            unimplemented()
-        }
-    }
-
-    private func provideDestinationSectionHeader(action: AssetAction) -> TargetSelectionHeaderBuilder {
-        switch action {
-        case .swap:
-            return TargetSelectionHeaderBuilder(
-                headerType: .section(
-                    .init(
-                        sectionTitle: LocalizationConstants.Transaction.receive
-                    )
-                )
-            )
-        case .send:
-            return TargetSelectionHeaderBuilder(
-                headerType: .section(
-                    .init(
-                        sectionTitle: LocalizationConstants.Transaction.to
                     )
                 )
             )

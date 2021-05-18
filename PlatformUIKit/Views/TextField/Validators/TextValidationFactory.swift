@@ -7,6 +7,7 @@
 //
 
 import Localization
+import PlatformKit
 
 /// A factory for text validators
 public final class TextValidationFactory {

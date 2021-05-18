@@ -20,4 +20,7 @@ extension CryptoCurrency {
     public var defaultWalletName: String {
         String(format: LocalizedString.myWallet, displayCode)
     }
+    public var defaultExchangeName: String {
+        String(format: LocalizedString.myExchangeAccount, displayCode)
+    }
 }

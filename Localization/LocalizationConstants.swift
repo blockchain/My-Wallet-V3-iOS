@@ -640,6 +640,10 @@ public enum LocalizationConstants {
             "Exchange",
             comment: "The Exchange"
         )
+        public static let secureChannel = NSLocalizedString(
+            "Web Log In",
+            comment: "Web Log In menu item title."
+        )
     }
 
     public struct BuySell {

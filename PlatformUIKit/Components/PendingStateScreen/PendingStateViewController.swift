@@ -94,7 +94,8 @@ public final class PendingStateViewController: BaseScreenViewController {
 
         compositeStatusView = .init(
             edge: presenter.pendingStatusViewEdgeSize,
-            sizeContainerViewRatio: presenter.pendingStatusViewSideContainerRatio
+            mainContainerViewRatio: presenter.pendingStatusViewMainContainerViewRatio,
+            sideContainerViewRatio: presenter.pendingStatusViewSideContainerRatio
         )
         view.addSubview(compositeStatusView)
         compositeStatusView.layout(edge: .bottom, to: .top, of: labelsStackView, relation: .equal, offset: -Spacing.outer)

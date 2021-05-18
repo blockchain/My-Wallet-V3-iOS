@@ -131,3 +131,9 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         descriptionRelay.accept(account.currencyType.name)
     }
 }
+
+extension AccountCurrentBalanceCellPresenter: Equatable {
+    public static func == (lhs: AccountCurrentBalanceCellPresenter, rhs: AccountCurrentBalanceCellPresenter) -> Bool {
+        lhs.account.id == rhs.account.id
+    }
+}

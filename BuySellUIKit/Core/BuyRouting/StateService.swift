@@ -36,7 +36,7 @@ public final class StateService: StateServiceAPI {
         /// Maps the instance of `States` into a new instance where the appended
         /// state is the current
         func states(byAppending state: State) -> States {
-            return States(
+            States(
                 current: state,
                 previous: previous + [current]
             )
@@ -119,15 +119,6 @@ public final class StateService: StateServiceAPI {
         
         /// Inactive state - no buy flow is performed at the moment
         case inactive
-        
-        var isInactive: Bool {
-            switch self {
-            case .inactive:
-                return true
-            default:
-                return false
-            }
-        }
         
         var isPaymentMethods: Bool {
             switch self {

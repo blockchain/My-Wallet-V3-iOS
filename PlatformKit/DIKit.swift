@@ -47,6 +47,10 @@ extension DependencyContainer {
         factory { UserCreationClient() as UserCreationClientAPI }
         
         factory { NabuAuthenticationClient() as NabuAuthenticationClientAPI }
+        
+        // MARK: Exchange
+        
+        factory { ExchangeAccountsClient() as ExchangeAccountsClientAPI }
 
         // MARK: CustodialClient
 
@@ -115,6 +119,10 @@ extension DependencyContainer {
         single { EmailVerificationService() as EmailVerificationServiceAPI }
         
         factory { SwapActivityService() as SwapActivityServiceAPI }
+        
+        factory { ExchangeAccountsProvider() as ExchangeAccountsProviderAPI }
+        
+        factory { ExchangeAccountStatusService() as ExchangeAccountStatusServiceAPI }
 
         single { () -> Coincore in
             Coincore(

@@ -11,6 +11,7 @@ import Foundation
 /// Defines an internal feature as part of a FeatureFlag
 public enum InternalFeature: String, CaseIterable {
     case nonCustodialSendP2
+    case secureChannel
     
     internal var defaultsKey: String {
         "internal-flag-\(rawValue)-key"

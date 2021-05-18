@@ -54,3 +54,9 @@ extension CardViewViewModel {
         .init(title: title, description: description, style: .transaction)
     }
 }
+
+extension CardViewViewModel: Equatable {
+    public static func ==(lhs: CardViewViewModel, rhs: CardViewViewModel) -> Bool {
+        lhs.identifier == rhs.identifier
+    }
+}

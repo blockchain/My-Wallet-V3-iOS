@@ -119,6 +119,10 @@ public extension LocalizationConstants.Transaction {
         "Select a Wallet",
         comment: "Select a Wallet"
     )
+    static let orSelectAWallet = NSLocalizedString(
+        "or Select a Wallet",
+        comment: "Select a Wallet"
+    )
 }
 
 public extension LocalizationConstants.Transaction.Send {

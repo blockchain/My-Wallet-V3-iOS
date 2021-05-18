@@ -15,7 +15,7 @@ final class YodleePendingView: UIView {
 
     private lazy var stackView = UIStackView()
     private(set) lazy var compositeView: CompositeStatusView = {
-        CompositeStatusView(edge: 80, mainContainerViewRatio: 1.0, sizeContainerViewRatio: 0.45)
+        CompositeStatusView(edge: 80, mainContainerViewRatio: 1.0, sideContainerViewRatio: 0.45)
     }()
     private(set) lazy var mainTitle = UILabel()
     private(set) lazy var subtitle = InteractableTextView()

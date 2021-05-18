@@ -133,19 +133,18 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
         super.willResignActive()
     }
 
-    func didSelect(blockchainAccount: BlockchainAccount) {
+    func didSelect(target: TransactionTarget) {
         transactionModel.state
             .take(1)
             .asSingle()
             .subscribe(onSuccess: { [weak self] state in
                 switch state.step {
                 case .selectSource:
-                    self?.didSelectSourceAccount(account: blockchainAccount as! CryptoAccount)
+                    self?.didSelectSourceAccount(account: target as! CryptoAccount)
                 case .selectTarget:
                     let selectedSource = state.source!
-                    let selectedTarget = blockchainAccount as! TransactionTarget
-                    self?.didSelectDestinationAccount(target: selectedTarget)
-                    self?.analyticsHook.onPairConfirmed(selectedSource.currencyType, target: selectedTarget)
+                    self?.didSelectDestinationAccount(target: target)
+                    self?.analyticsHook.onPairConfirmed(selectedSource.currencyType, target: target)
                 default:
                     break
                 }
@@ -228,7 +227,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             /// and `.send`. Otherwise we should show the account picker to select
             /// the destination/target.
             let internalSendEnabled = featureConfiguring.configuration(for: .internalSendEnabled).isEnabled
-            if internalSendEnabled && action == .send {
+            let nonCustodialSendP2 = internalFeatureService.isEnabled(.nonCustodialSendP2)
+            if (internalSendEnabled || nonCustodialSendP2) && action == .send {
                 router?.routeToTargetSelectionPicker(transactionModel: transactionModel, action: action)
                 return
             }

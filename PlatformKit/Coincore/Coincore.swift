@@ -53,6 +53,13 @@ public final class Coincore {
         self.reactiveWallet = reactiveWallet
     }
 
+    public subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
+        guard let asset = cryptoAssets[cryptoCurrency] else {
+            fatalError("Unknown crypto currency.")
+        }
+        return asset
+    }
+
     /// We are looking for targets of our action.
     /// Action is considered what the source account wants to do.
     public func getTransactionTargets(

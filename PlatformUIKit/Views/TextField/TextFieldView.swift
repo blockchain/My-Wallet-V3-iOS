@@ -51,6 +51,8 @@ public class TextFieldView: UIView {
     
     @IBOutlet private var topInsetConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomInsetConstraint: NSLayoutConstraint!
+    
+    private let button = UIButton()
 
     /// Scroll view container.
     /// To being the text field into focus when it becomes first responder
@@ -176,6 +178,16 @@ public class TextFieldView: UIView {
             .bindAndCatch(to: textField.rx.isEnabled)
             .disposed(by: disposeBag)
         
+        button.rx.tap
+            .throttle(
+                .milliseconds(200),
+                latest: false,
+                scheduler: ConcurrentDispatchQueueScheduler(qos: .background)
+            )
+            .observeOn(MainScheduler.instance)
+            .bindAndCatch(to: viewModel.tapRelay)
+            .disposed(by: disposeBag)
+        
         if viewModel.type == .newPassword || viewModel.type == .confirmNewPassword {
             textField.rx.text.orEmpty
                 .bindAndCatch(weak: self) { [weak viewModel] (self, text) in
@@ -222,6 +234,7 @@ public class TextFieldView: UIView {
     
     fileprivate func set(accessoryContentType: TextFieldViewModel.AccessoryContentType) {
         let resetAccessoryView = { [weak self] in
+            self?.button.removeFromSuperview()
             self?.accessoryView.subviews.forEach { $0.removeFromSuperview() }
         }
         
@@ -236,9 +249,16 @@ public class TextFieldView: UIView {
                 let badgeImageView = BadgeImageView()
                 badgeImageView.viewModel = viewModel
                 accessoryView.addSubview(badgeImageView)
+                accessoryView.addSubview(button)
+                
+                button.layoutToSuperview(.leading)
+                button.layoutToSuperview(.trailing, offset: -16)
+                button.layoutToSuperview(axis: .vertical)
+                
                 badgeImageView.layoutToSuperview(.leading)
                 badgeImageView.layoutToSuperview(.trailing, offset: -16)
                 badgeImageView.layoutToSuperview(axis: .vertical)
+                
             }
         case .badgeLabel(let viewModel):
             if let badgeView = accessoryView.subviews.first as? BadgeView {

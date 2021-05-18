@@ -6,6 +6,7 @@
 //  Copyright © 2020 Blockchain Luxembourg S.A. All rights reserved.
 //
 
+/// Describes the type of content inside the `CompositeStatusView`
 public enum CompositeStatusViewType: Equatable {
     
     public struct Composite: Equatable {

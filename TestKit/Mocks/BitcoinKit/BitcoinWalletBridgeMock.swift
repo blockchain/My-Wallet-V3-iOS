@@ -33,6 +33,10 @@ class BitcoinWalletBridgeMock: BitcoinWalletBridgeAPI {
     func updateMemo(for transactionHash: String, memo: String?) -> Completable {
         .empty()
     }
+    
+    func validateBitcoin(address: String) -> Bool {
+        true
+    }
 
     var hdWalletValue: Single<PayloadBitcoinHDWallet> = Single.error(MockError.error)
     var hdWallet: Single<PayloadBitcoinHDWallet> {

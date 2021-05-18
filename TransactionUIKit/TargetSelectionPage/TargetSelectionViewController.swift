@@ -34,6 +34,8 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     private let backButtonRelay = PublishRelay<Void>()
     private let closeButtonRelay = PublishRelay<Void>()
 
+    private var keyboardInteractionController: KeyboardInteractionController!
+
     private lazy var dataSource: RxDataSource = {
         RxDataSource(configureCell: { [weak self] dataSource, tableView, indexPath, item in
             guard let self = self else { return UITableViewCell() }
@@ -46,6 +48,8 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
                 cell = self.radioCell(for: indexPath, presenter: presenter)
             case .singleAccount(let presenter):
                 cell = self.balanceCell(for: indexPath, presenter: presenter)
+            case .walletInputField(let viewModel):
+                cell = self.walletTextfieldCell(for: indexPath, viewModel: viewModel)
             }
             cell.selectionStyle = .none
             return cell
@@ -64,6 +68,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        self.keyboardInteractionController = KeyboardInteractionController(in: self)
         setupUI()
     }
 
@@ -165,6 +170,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         tableView.register(CurrentBalanceTableViewCell.self)
         tableView.register(RadioSelectionTableViewCell.self)
         tableView.register(CardTableViewCell.self)
+        tableView.register(TextFieldTableViewCell.self)
 
         view.addSubview(tableView)
         tableView.layoutToSuperview(.top, .leading, .trailing)
@@ -176,6 +182,12 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         actionButton.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
         actionButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
         actionButton.layout(dimension: .height, to: 48)
+    }
+
+    private func walletTextfieldCell(for indexPath: IndexPath, viewModel: TextFieldViewModel) -> UITableViewCell {
+        let cell = tableView.dequeue(TextFieldTableViewCell.self, for: indexPath)
+        cell.setup(viewModel: viewModel, keyboardInteractionController: keyboardInteractionController, scrollView: tableView)
+        return cell
     }
     
     private func radioCell(for indexPath: IndexPath, presenter: RadioSelectionCellPresenter) -> UITableViewCell {

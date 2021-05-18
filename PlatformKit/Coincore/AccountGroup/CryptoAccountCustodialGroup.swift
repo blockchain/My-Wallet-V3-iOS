@@ -59,3 +59,9 @@ public class CryptoAccountCustodialGroup: AccountGroup {
         self.accounts = accounts
     }
 }
+
+extension CryptoAccountCustodialGroup {
+    public static func empty(asset: CryptoCurrency) -> CryptoAccountCustodialGroup {
+        .init(asset: asset, accounts: [])
+    }
+}

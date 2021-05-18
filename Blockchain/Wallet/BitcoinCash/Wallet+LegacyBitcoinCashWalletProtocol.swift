@@ -18,10 +18,21 @@ protocol LegacyBitcoinCashWalletProtocol: class {
     func bitcoinCashDefaultWallet() -> [String: Any]?
 
     func getBitcoinCashReceiveAddress(forXPub xpub: String) -> Result<String, BitcoinReceiveAddressError>
+    
+    func validateBitcoinCash(address: String) -> Bool
 }
 
 extension Wallet: LegacyBitcoinCashWalletProtocol {
-
+    
+    func validateBitcoinCash(address: String) -> Bool {
+        let escapedString = address.escapedForJS()
+        guard let result = context.evaluateScript("MyWalletPhone.bch.isValidAddress(\"\(escapedString)\");") else {
+            return false
+        }
+        
+        return result.toBool()
+    }
+    
     func getBitcoinCashReceiveAddress(forXPub xpub: String) -> Result<String, BitcoinReceiveAddressError> {
         guard isInitialized() else {
             return .failure(.uninitialized)

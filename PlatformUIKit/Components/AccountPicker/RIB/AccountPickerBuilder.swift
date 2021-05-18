@@ -23,7 +23,7 @@ public protocol AccountPickerBuildable: Buildable {
 }
 
 public protocol AccountPickerListener: AnyObject {
-    func didSelect(blockchainAccount: BlockchainAccount)
+    func didSelect(target: TransactionTarget)
     func didTapBack()
     func didTapClose()
 }

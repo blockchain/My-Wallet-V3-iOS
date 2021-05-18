@@ -272,6 +272,8 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
             handleSellCrypto()
         case .exchange:
             handleExchange()
+        case .secureChannel:
+            handleSecureChannel()
         case .lockbox:
             let lockboxViewController = LockboxViewController.makeFromStoryboard()
             lockboxViewController.modalPresentationStyle = .fullScreen
@@ -286,6 +288,10 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     
     private func handleUpgrade() {
         AppCoordinator.shared.showHdUpgradeView()
+    }
+
+    private func handleSecureChannel() {
+        // TODO: (paulo) Modern Wallet P3 - Show new QR code screen.
     }
 
     func startBackupFlow() {

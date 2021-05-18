@@ -12,8 +12,6 @@ import ToolKit
 
 /// Model definition for an item that is presented in the side menu of the app.
 enum SideMenuItem {
-    typealias PulseAction = () -> Void
-    typealias Title = String
     case accountsAndAddresses
     case backup
     case buy
@@ -23,7 +21,10 @@ enum SideMenuItem {
     case settings
     case support
     case upgrade
+    /// Legacy QR code connection flow
     case webLogin
+    /// Secure Channel QR code connection flow
+    case secureChannel
     case lockbox
     case exchange
 }
@@ -57,6 +58,8 @@ extension SideMenuItem {
             return .sideNavLockbox
         case .exchange:
             return .sideNavExchange
+        case .secureChannel:
+            return .sideNavSecureChannel
         }
     }
     
@@ -86,6 +89,8 @@ extension SideMenuItem {
             return LocalizationConstants.SideMenu.lockbox
         case .exchange:
             return LocalizationConstants.SideMenu.exchange
+        case .secureChannel:
+            return LocalizationConstants.SideMenu.secureChannel
         }
     }
 
@@ -115,6 +120,8 @@ extension SideMenuItem {
             return "menu-icon-lockbox"
         case .exchange:
             return "menu-icon-exchange"
+        case .secureChannel:
+            return "menu-icon-laptop"
         }
     }
 
@@ -134,7 +141,8 @@ extension SideMenuItem {
              .airdrops,
              .upgrade,
              .lockbox,
-             .webLogin:
+             .webLogin,
+             .secureChannel:
             return false
         case .exchange:
             return true

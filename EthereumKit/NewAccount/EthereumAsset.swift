@@ -25,13 +25,19 @@ final class EthereumAsset: CryptoAsset {
             }
     }
     
+    private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let repository: EthereumWalletAccountRepositoryAPI
     private let errorRecorder: ErrorRecording
+    private let internalFeatureFlag: InternalFeatureFlagServiceAPI
 
     init(repository: EthereumWalletAccountRepositoryAPI = resolve(),
-         errorRecorder: ErrorRecording = resolve()) {
+         errorRecorder: ErrorRecording = resolve(),
+         exchangeAccountProvider: ExchangeAccountsProviderAPI = resolve(),
+         internalFeatureFlag: InternalFeatureFlagServiceAPI = resolve()) {
+        self.exchangeAccountProvider = exchangeAccountProvider
         self.repository = repository
         self.errorRecorder = errorRecorder
+        self.internalFeatureFlag = internalFeatureFlag
     }
 
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup> {
@@ -47,13 +53,36 @@ final class EthereumAsset: CryptoAsset {
         }
     }
 
+    func parse(address: String) -> Single<ReceiveAddress?> {
+        guard !address.isEmpty else {
+            return .just(nil)
+        }
+        let validated = EthereumAddress(stringLiteral: address)
+        guard validated.isValid else {
+            return .just(nil)
+        }
+        return .just(
+            EthereumReceiveAddress(
+                address: address,
+                label: address,
+                onTxCompleted: { _ in Completable.empty() }
+            )
+        )
+    }
+
     // MARK: - Helpers
 
     private var allAccountsGroup: Single<AccountGroup> {
         let asset = self.asset
-        return Single.zip(nonCustodialGroup, custodialGroup, interestGroup)
-            .map { (nonCustodialGroup, custodialGroup, interestGroup) -> [SingleAccount] in
-                nonCustodialGroup.accounts + custodialGroup.accounts + interestGroup.accounts
+        return Single.zip(nonCustodialGroup,
+                          custodialGroup,
+                          interestGroup,
+                          exchangeGroup)
+            .map { (nonCustodialGroup, custodialGroup, interestGroup, exchangeGroup) -> [SingleAccount] in
+                    nonCustodialGroup.accounts +
+                    custodialGroup.accounts +
+                    interestGroup.accounts +
+                    exchangeGroup.accounts
             }
             .map { accounts -> AccountGroup in
                 CryptoAccountNonCustodialGroup(asset: asset, accounts: accounts)
@@ -62,6 +91,32 @@ final class EthereumAsset: CryptoAsset {
 
     private var custodialGroup: Single<AccountGroup> {
         .just(CryptoAccountCustodialGroup(asset: asset, accounts: [CryptoTradingAccount(asset: asset)]))
+    }
+    
+    private var exchangeGroup: Single<AccountGroup> {
+        let asset = self.asset
+        guard internalFeatureFlag.isEnabled(.nonCustodialSendP2) else {
+            return .just(CryptoAccountCustodialGroup(asset: asset, accounts: []))
+        }
+        return exchangeAccountProvider
+            .account(for: asset)
+            .catchError { error in
+                /// TODO: This shouldn't prevent users from seeing all accounts.
+                /// Potentially return nil should this fail.
+                guard let serviceError = error as? ExchangeAccountsNetworkError else {
+                    throw error
+                }
+                switch serviceError {
+                case .missingAccount:
+                    return Single.just(nil)
+                }
+            }
+            .map { account in
+                guard let account = account else {
+                    return CryptoAccountCustodialGroup(asset: asset, accounts: [])
+                }
+                return CryptoAccountCustodialGroup(asset: asset, accounts: [account])
+            }
     }
 
     private var interestGroup: Single<AccountGroup> {

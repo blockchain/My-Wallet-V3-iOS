@@ -35,6 +35,7 @@ public final class DetailsScreenViewController: BaseTableViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        extendSafeAreaUnderNavigationBar = presenter.extendSafeAreaUnderNavigationBar
         tableView.delegate = self
         tableView.dataSource = self
         tableView.selfSizingBehaviour = .fill

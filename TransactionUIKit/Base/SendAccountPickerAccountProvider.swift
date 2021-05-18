@@ -44,13 +44,15 @@ final class SendAccountPickerAccountProvider: AccountPickerAccountProviding {
                 action: .send,
                 failSequence: false,
                 onError: { [weak self] account in
-                    let error: Error
+                    guard let self = self else { return }
+                    let asset: String
                     if let account = account as? SingleAccount {
-                        error = .failedLoadingWallet(asset: account.currencyType.displaySymbol, name: account.label)
+                        asset = account.currencyType.displaySymbol
                     } else {
-                        error = .failedLoadingWallet(asset: "unknown", name: account.label)
+                        asset = "unknown"
                     }
-                    self?.errorRecorder.error(error)
+                    let error: Error = .failedLoadingWallet(asset: asset, name: account.label)
+                    self.errorRecorder.error(error)
                 }
             )
     }

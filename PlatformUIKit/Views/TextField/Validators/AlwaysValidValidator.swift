@@ -9,7 +9,7 @@
 import RxRelay
 import RxSwift
 
-/// A validato
+/// A validator that is always valid
 final class AlwaysValidValidator: TextValidating {
     
     // MARK: - TextValidating Properties

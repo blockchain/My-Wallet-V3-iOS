@@ -54,6 +54,23 @@ extension Coincore {
                           )
                     )
                 }
+        case (is CryptoAccount, .send):
+            let factory = { () -> OnChainTransactionEngineFactory in resolve(tag: account.asset) }()
+            /// `Target` must be a `CryptoReceiveAddress`
+            guard let destination = target as? SingleAccount else {
+                fatalError("Expected a SingleAccount: \(target)")
+            }
+            let data = Single.zip(destination.receiveAddress,
+                                  account.requireSecondPassword)
+            return data
+                .map { values -> TransactionProcessor in
+                    let (receiveAddress, requiresSecondPassword) = values
+                    return .init(
+                        sourceAccount: account,
+                        transactionTarget: receiveAddress,
+                        engine: factory.build(requiresSecondPassword: requiresSecondPassword)
+                    )
+                }
         default:
             unimplemented()
         }

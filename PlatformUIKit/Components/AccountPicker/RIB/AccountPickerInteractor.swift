@@ -73,8 +73,9 @@ final class AccountPickerInteractor: PresentableInteractor<AccountPickerPresenta
     private func handle(effects: Effects) {
         switch effects {
         case .select(let account):
+            let destination = account as! TransactionTarget
             didSelect?(account)
-            listener?.didSelect(blockchainAccount: account)
+            listener?.didSelect(target: destination)
         case .back:
             listener?.didTapBack()
         case .closed:

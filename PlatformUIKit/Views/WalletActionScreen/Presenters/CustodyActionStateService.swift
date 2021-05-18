@@ -212,6 +212,7 @@ public final class CustodyActionStateService: CustodyActionStateServiceAPI {
                     .asObservable()
             }
             .map { $0.isTier2Approved }
+            .catchErrorJustReturn(false)
             .bindAndCatch(weak: self) { (self, isKYCApproved) in
                 let nextStates = self.statesRelay.value.states(byAppending: .withdrawalFiat(isKYCApproved: isKYCApproved))
                 self.apply(action: .next(.withdrawalFiat(isKYCApproved: isKYCApproved)), states: nextStates)

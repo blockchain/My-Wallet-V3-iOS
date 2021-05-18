@@ -67,7 +67,7 @@ extension Screen.Style {
         /// Custom view
         case view(value: UIView)
 
-        /// Visual image based view. Only the width can be customized
+        /// Visual image based view. Only the width can be customized.
         case image(name: String, width: CGFloat)
 
         /// No title view
@@ -159,7 +159,11 @@ extension Screen.Style.Bar {
         }
     }
 
-    /// Ignores the status bar if marked as `true`
+    /// Indicates if, when setting the style on a view, the `UIAppliation.statusBarStyle` bar should be ignored (not updated).
+    ///
+    /// `false`: Status bar will be set to `lightContent'/'default' accordingly to this bar style.
+    ///
+    /// `true`: Status bar style will not be modified
     var ignoresStatusBar: Bool {
         switch self {
         case .darkContent(ignoresStatusBar: let value, isTranslucent: _, background: _),

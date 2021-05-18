@@ -277,6 +277,11 @@ extension BitcoinWallet: BitcoinWalletBridgeAPI {
             .waitUntilInitializedSingle
             .flatMap { memo }
     }
+    
+    func validateBitcoin(address: String) -> Bool {
+        guard let wallet = wallet else { return false }
+        return wallet.validateBitcoin(address: address)
+    }
 
     var hdWallet: Single<PayloadBitcoinHDWallet> {
         reactiveWallet

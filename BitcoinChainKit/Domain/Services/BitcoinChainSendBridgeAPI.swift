@@ -1,5 +1,5 @@
 //
-//  BitcoinChainWalletBridgeAPI.swift
+//  BitcoinChainSendBridgeAPI.swift
 //  BitcoinChainKit
 //
 //  Created by Alex McGregor on 12/7/20.

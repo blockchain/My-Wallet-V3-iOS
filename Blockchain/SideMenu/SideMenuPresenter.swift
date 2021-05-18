@@ -13,13 +13,6 @@ import RxCocoa
 import RxSwift
 import ToolKit
 
-/// Protocol definition for a view that displays a list of
-/// SideMenuItem objects.
-protocol SideMenuView: class {
-    func setMenu(items: [SideMenuItem])
-    func presentBuySellNavigationPlaceholder(controller: UINavigationController)
-}
-
 /// Presenter for the side menu of the app. This presenter
 /// will handle the logic as to what side menu items should be
 /// presented in the SideMenuView.
@@ -29,23 +22,31 @@ class SideMenuPresenter {
     
     var sideMenuItems: Observable<[SideMenuItem]> {
         reactiveWallet.waitUntilInitialized
-            .flatMap(weak: self) { (self, _: ()) in
+            .flatMap(weak: self) { (self, _) -> Observable<Bool> in
                 self.featureFetcher
                     .fetchBool(for: .simpleBuyEnabled)
                     .asObservable()
-                    .map { isSimpleBuyEnabled in
-                        self.menuItems(showSimpleBuy: isSimpleBuyEnabled)
-                    }
+            }
+            .map(weak: self) { (self, isSimpleBuyEnabled) in
+                self.menuItems(showSimpleBuy: isSimpleBuyEnabled)
             }
             .startWith([])
             .observeOn(MainScheduler.instance)
     }
-    
+
+    var sideMenuFooterItems: Observable<(top: SideMenuItem, bottom: SideMenuItem)> {
+        let secureChannelEnabled = secureChannelInternalEnabled || secureChannelConfiguration.isEnabled
+        return Observable.just((
+            top: secureChannelEnabled ? .secureChannel : .webLogin,
+            bottom: .logout
+        ))
+    }
+
     var itemSelection: Signal<SideMenuItem> {
         itemSelectionRelay.asSignal()
     }
 
-    private weak var view: SideMenuView?
+    private let secureChannelInternalEnabled: Bool
     private var introductionSequence = WalletIntroductionSequence()
     private let introInterator: WalletIntroductionInteractor
     private let featureFetcher: FeatureFetching
@@ -58,30 +59,30 @@ class SideMenuPresenter {
     private let walletService: WalletOptionsAPI
     private let reactiveWallet: ReactiveWalletAPI
     private let exchangeConfiguration: AppFeatureConfiguration
+    private let secureChannelConfiguration: AppFeatureConfiguration
     private let analyticsRecorder: AnalyticsEventRecording
     private let disposeBag = DisposeBag()
     private var disposable: Disposable?
     
     init(
-        view: SideMenuView,
         wallet: Wallet = WalletManager.shared.wallet,
         walletService: WalletOptionsAPI = resolve(),
         reactiveWallet: ReactiveWalletAPI = WalletManager.shared.reactiveWallet,
         featureFetcher: FeatureFetching = resolve(),
-        exchangeConfiguration: AppFeatureConfiguration = { () -> AppFeatureConfigurator in
-            resolve()
-        }().configuration(for: .exchangeLinking),
+        appFeatureConfigurator: AppFeatureConfigurator = resolve(),
+        internalFeatureFlagService: InternalFeatureFlagServiceAPI = resolve(),
         onboardingSettings: BlockchainSettings.Onboarding = .shared,
         analyticsRecorder: AnalyticsEventRecording = resolve()
     ) {
-        self.view = view
         self.wallet = wallet
         self.walletService = walletService
         self.reactiveWallet = reactiveWallet
-        self.exchangeConfiguration = exchangeConfiguration
         self.introInterator = WalletIntroductionInteractor(onboardingSettings: onboardingSettings, screen: .sideMenu)
         self.analyticsRecorder = analyticsRecorder
         self.featureFetcher = featureFetcher
+        exchangeConfiguration = appFeatureConfigurator.configuration(for: .exchangeLinking)
+        secureChannelConfiguration = appFeatureConfigurator.configuration(for: .secureChannel)
+        secureChannelInternalEnabled = internalFeatureFlagService.isEnabled(.secureChannel)
     }
 
     deinit {

@@ -74,7 +74,7 @@ public protocol TransactionEngine: AnyObject {
 public extension TransactionEngine {
 
     var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        fatalError("This property should be overridden in the Engine implementation")
+        .empty()
     }
 
     var canTransactFiat: Bool { false }

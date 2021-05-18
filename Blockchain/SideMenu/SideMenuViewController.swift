@@ -13,7 +13,7 @@ import PlatformUIKit
 import RxSwift
 import ToolKit
 
-protocol SideMenuViewControllerDelegate: class {
+protocol SideMenuViewControllerDelegate: AnyObject {
     func sideMenuViewController(_ viewController: SideMenuViewController, didTapOn item: SideMenuItem)
 }
 
@@ -42,7 +42,7 @@ class SideMenuViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private lazy var presenter: SideMenuPresenter = {
-        SideMenuPresenter(view: self)
+        SideMenuPresenter()
     }()
 
     private var sideMenuItems: [SideMenuItem] = [] {
@@ -72,22 +72,30 @@ class SideMenuViewController: UIViewController {
         registerCells()
         initializeTableView()
         addShadow()
-        footerView.delegate = self
         
         presenter.sideMenuItems
             .subscribe(onNext: { [weak self] items in
                 guard let self = self else { return }
                 self.sideMenuItems = items
-                self.tableView?.reloadData()
             })
+            .disposed(by: disposeBag)
+
+        presenter.sideMenuFooterItems
+            .bind(onNext: { [weak self] items in
+                self?.footerView.model = .init(top: items.top, bottom: items.bottom)
+            })
+            .disposed(by: disposeBag)
+
+        footerView.itemTapped
+            .emit(weak: self) { (self, item) in
+                self.didTapItem(item)
+            }
             .disposed(by: disposeBag)
         
         presenter.itemSelection
-            .emit(onNext: { [weak self] item in
-                guard let self = self else { return }
-                self.analyticsRecorder.record(event: item.analyticsEvent)
-                self.delegate?.sideMenuViewController(self, didTapOn: item)
-            })
+            .emit(weak: self) { (self, item) in
+                self.didTapItem(item)
+            }
             .disposed(by: disposeBag)
     }
 
@@ -110,6 +118,11 @@ class SideMenuViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+
+    private func didTapItem(_ item: SideMenuItem) {
+        analyticsRecorder.record(event: item.analyticsEvent)
+        delegate?.sideMenuViewController(self, didTapOn: item)
+    }
     
     private func registerCells() {
         tableView.registerNibCell(SideMenuCell.self)
@@ -200,17 +213,6 @@ extension SideMenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension SideMenuViewController: SideMenuView {
-    
-    func presentBuySellNavigationPlaceholder(controller: UINavigationController) {
-        present(controller, animated: true, completion: nil)
-    }
-    
-    func setMenu(items: [SideMenuItem]) {
-        self.sideMenuItems = items
-    }
-}
-
 extension SideMenuViewController: ECSlidingViewControllerDelegate {
     func slidingViewController(
         _ slidingViewController: ECSlidingViewController!,
@@ -222,16 +224,5 @@ extension SideMenuViewController: ECSlidingViewControllerDelegate {
             setSideMenuGestures()
         }
         return nil
-    }
-}
-
-extension SideMenuViewController: SideMenuFooterDelegate {
-    func footerView(_ footerView: SideMenuFooterView, selectedAction: SideMenuFooterView.Action) {
-        switch selectedAction {
-        case .logout:
-            delegate?.sideMenuViewController(self, didTapOn: .logout)
-        case .pairWebWallet:
-            delegate?.sideMenuViewController(self, didTapOn: .webLogin)
-        }
     }
 }

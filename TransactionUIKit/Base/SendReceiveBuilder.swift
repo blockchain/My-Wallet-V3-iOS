@@ -42,8 +42,13 @@ public final class SendReceiveBuilder {
             titleViewStyle: .text(value: LocalizedReceive.Text.request),
             barStyle: .lightContent()
         )
-        let builder = AccountPickerBuilder(
+        let accountProvider = AccountPickerDefaultAccountProvider(
             singleAccountsOnly: true,
+            action: .receive,
+            failSequence: false
+        )
+        let builder = AccountPickerBuilder(
+            accountProvider: accountProvider,
             action: .receive
         )
         let didSelect: AccountPickerDidSelect = { [weak self] account in

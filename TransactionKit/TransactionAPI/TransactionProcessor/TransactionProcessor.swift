@@ -59,8 +59,11 @@ public final class TransactionProcessor {
         self.engine.start(
             sourceAccount: sourceAccount,
             transactionTarget: transactionTarget,
-            askForRefreshConfirmation: { [unowned self] revalidate in
-                self.refreshConfirmations(revalidate: revalidate)
+            askForRefreshConfirmation: { [weak self] revalidate in
+                guard let self = self else {
+                    return .empty()
+                }
+                return self.refreshConfirmations(revalidate: revalidate)
             }
         )
         self.engine.assertInputsValid()
