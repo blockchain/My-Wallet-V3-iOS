@@ -42,8 +42,13 @@ final class WalletUpgradeService: WalletUpgradeServicing {
         case v3
     }
 
+    enum WalletError: Error {
+        case walletNotInitialized
+    }
+
     // MARK: Private Properties
 
+    private let errorRecorder: ErrorRecording
     private let walletUpgradeJSService: WalletUpgradeJSServicing
     private let walletProvider: WalletUpgradingProvider
     private var wallet: WalletUpgradingAPI {
@@ -53,16 +58,20 @@ final class WalletUpgradeService: WalletUpgradeServicing {
     // MARK: Init
 
     init(walletProvider: WalletUpgradingProvider = resolve(),
-         walletUpgradeJSService: WalletUpgradeJSServicing = resolve()) {
+         walletUpgradeJSService: WalletUpgradeJSServicing = resolve(),
+         errorRecorder: ErrorRecording = resolve()) {
         self.walletProvider = walletProvider
         self.walletUpgradeJSService = walletUpgradeJSService
+        self.errorRecorder = errorRecorder
     }
 
     // MARK: WalletUpgradeServicing
 
     var needsWalletUpgrade: Bool {
         guard wallet.isInitialized() else {
-            fatalError("Wallet is not initialized yet.")
+            // TODO: SegWit/V4 Wallet - Consumer must wait for wallet to be ready.
+            errorRecorder.error(WalletError.walletNotInitialized)
+            return false
         }
         return !necessaryUpgrades.isEmpty
     }
