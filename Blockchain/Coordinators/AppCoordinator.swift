@@ -15,6 +15,7 @@ import PlatformKit
 import PlatformUIKit
 import RxSwift
 import WalletPayloadKit
+import ToolKit
 
 /// TODO: This class should be refactored so any view would load
 /// as late as possible and also would be deallocated when is no longer in use
@@ -300,10 +301,18 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
         )
     }
 
+    private enum WalletError: Error {
+        case walletNotInitialized
+        case walletNotUpgradedToHD
+    }
+
     private func didPresentAccountsAndAddressesNavigationController() {
         let wallet = walletManager.wallet
-        guard wallet.didUpgradeToHd() else {
-            fatalError("Wallet upgrade is not optional.")
+        if !wallet.isInitialized() {
+            Logger.shared.error(WalletError.walletNotInitialized)
+        }
+        if !wallet.didUpgradeToHd() {
+            Logger.shared.error(WalletError.walletNotUpgradedToHD)
         }
         guard accountsAndAddressesNavigationController.viewControllers.count == 1 else {
             return

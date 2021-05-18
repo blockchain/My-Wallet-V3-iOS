@@ -186,7 +186,7 @@ extension CryptoCurrency {
         case .ethereum:
             return "Ether"
         case .polkadot:
-            return "DOT"
+            return "Polkadot"
         case .pax:
             return "USD \(LocalizationConstants.digital)"
         case .stellar:
@@ -196,7 +196,7 @@ extension CryptoCurrency {
         case .wDGLD:
             return "Wrapped-DGLD"
         case .yearnFinance:
-            return "YFI"
+            return "Yearn Finance"
         }
     }
 

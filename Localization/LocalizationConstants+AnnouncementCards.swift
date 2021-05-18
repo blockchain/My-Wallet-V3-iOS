@@ -140,15 +140,15 @@ extension LocalizationConstants {
         }
         public enum AaveYfiDot {
             public static let title = NSLocalizedString(
-                "Aave, DeFi and DOT available!",
+                "Aave, YFI and Polkadot available!",
                 comment: "Aave Yfi Dot announcement card title"
             )
             public static let description = NSLocalizedString(
-                "Aave, DeFi and Polkadot tokens are now available to Buy, Sell, Swap and Send in your Wallet.",
+                "Aave, YFI and Polkadot tokens are now available to Buy, Sell and Swap in your Wallet.",
                 comment: "Aave Yfi Dot announcement card description"
             )
             public static let ctaButton = NSLocalizedString(
-                "Check Them Out",
+                "Buy Now",
                 comment: "Aave Yfi Dot announcement card CTA button title"
             )
         }
