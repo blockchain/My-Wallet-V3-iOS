@@ -39,8 +39,11 @@ public final class AccountPickerBuilder: AccountPickerBuildable {
 
     public convenience init(singleAccountsOnly: Bool,
                             action: AssetAction) {
-        self.init(accountProvider: AccountPickerDefaultAccountProvider(singleAccountsOnly: singleAccountsOnly, action: action),
-                  action: action)
+        let provider = AccountPickerDefaultAccountProvider(
+            singleAccountsOnly: singleAccountsOnly,
+            action: action
+        )
+        self.init(accountProvider: provider, action: action)
     }
 
     public init(accountProvider: AccountPickerAccountProviding,

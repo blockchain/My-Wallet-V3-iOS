@@ -85,7 +85,7 @@ public class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI, 
                 Account(
                     index: 0,
                     publicKey: keyPair.accountID,
-                    label: "My Stellar Wallet",
+                    label: CryptoCurrency.stellar.defaultWalletName,
                     archived: false
                 )
             }
@@ -95,12 +95,12 @@ public class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI, 
         Completable.create(weak: self) { (self, observer) -> Disposable in
             self.bridge.save(
                 keyPair: keyPair,
-                label: "My Stellar Wallet",
-                completion: { error in
-                    switch error {
-                    case .none:
+                label: CryptoCurrency.stellar.defaultWalletName,
+                completion: { result in
+                    switch result {
+                    case .success:
                         observer(.completed)
-                    case .some:
+                    case .failure:
                         observer(.error(StellarAccountError.unableToSaveNewAccount))
                     }
                 }

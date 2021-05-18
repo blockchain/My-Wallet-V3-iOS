@@ -40,7 +40,7 @@ final class ERC20OnChainTransactionEngine<Token: ERC20Token>: OnChainTransaction
 
     // MARK: - Private Properties
     
-    private let feeService: AnyCryptoFeeService<EthereumTransactionFee>
+    private let feeService: AnyCryptoFeeService<ERC20TransactionFee<Token>>
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let ethereumWalletService: EthereumWalletServiceAPI
     private let priceService: PriceServiceAPI
@@ -58,7 +58,7 @@ final class ERC20OnChainTransactionEngine<Token: ERC20Token>: OnChainTransaction
          balanceFetching: CryptoAccountBalanceFetching = { () -> CryptoAccountBalanceFetching in resolve(tag: CryptoCurrency.ethereum) }(),
          priceService: PriceServiceAPI = resolve(),
          fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-         feeService: AnyCryptoFeeService<EthereumTransactionFee> = resolve(),
+         feeService: AnyCryptoFeeService<ERC20TransactionFee<Token>> = resolve(),
          ethereumWalletService: EthereumWalletServiceAPI = resolve(),
          ethereumWalletBridgeAPI: EthereumWalletBridgeAPI = resolve(),
          erc20service: AnyERC20Service<Token> = resolve(),
@@ -315,6 +315,7 @@ final class ERC20OnChainTransactionEngine<Token: ERC20Token>: OnChainTransaction
     private func absoluteFee(with feeLevel: FeeLevel) -> Single<CryptoValue> {
         feeService
             .fees
+            .map(\.ethereumFee)
             .map { (fees: EthereumTransactionFee) -> CryptoValue in
                 let level: EthereumTransactionFee.FeeLevel
                 switch feeLevel {

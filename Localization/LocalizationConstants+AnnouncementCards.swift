@@ -138,18 +138,18 @@ extension LocalizationConstants {
                 comment: "Finish identity verification announcement card CTA button title"
             )
         }
-        public enum Algorand {
+        public enum AaveYfiDot {
             public static let title = NSLocalizedString(
-                "Say Hello to Algorand!",
-                comment: "Algorand announcement card title"
+                "Aave, DeFi and DOT available!",
+                comment: "Aave Yfi Dot announcement card title"
             )
             public static let description = NSLocalizedString(
-                "Algorand is a scalable, secure and decentralized digital currency and transactions platform.",
-                comment: "Algorand announcement card description"
+                "Aave, DeFi and Polkadot tokens are now available to Buy, Sell, Swap and Send in your Wallet.",
+                comment: "Aave Yfi Dot announcement card description"
             )
             public static let ctaButton = NSLocalizedString(
-                "Buy Algorand",
-                comment: "Algorand announcement card CTA button title"
+                "Check Them Out",
+                comment: "Aave Yfi Dot announcement card CTA button title"
             )
         }
         public enum CloudBackup {
@@ -164,20 +164,6 @@ extension LocalizationConstants {
             public static let ctaButton = NSLocalizedString(
                 "Learn more",
                 comment: "Cloud Backup announcement card CTA button title"
-            )
-        }
-        public enum Tether {
-            public static let title = NSLocalizedString(
-                "Say Hello to Tether!",
-                comment: "Tether announcement card title"
-            )
-            public static let description = NSLocalizedString(
-                "USDT is the world's largest Stablecoin. Buy and swap from your app. Full Send and Receive functionality are available on the Web wallet.",
-                comment: "Tether announcement card description"
-            )
-            public static let ctaButton = NSLocalizedString(
-                "Buy Tether Now",
-                comment: "Tether announcement card CTA button title"
             )
         }
         public enum Exchange {

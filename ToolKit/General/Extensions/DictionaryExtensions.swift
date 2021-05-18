@@ -10,41 +10,38 @@ import Foundation
 
 extension Dictionary {
     public func compactMapValues<T>(_ transform: (Value) throws -> T?) rethrows -> Dictionary<Key, T> {
-        try self.reduce(into: [Key: T](), { (result, x) in
-            if let value = try transform(x.value) {
-                result[x.key] = value
+        try reduce(into: [Key: T]()) { (result, element) in
+            if let value = try transform(element.value) {
+                result[element.key] = value
             }
-        })
-    }
-}
-
-extension Dictionary {
-    /// Merges two dictionary. duplicate keys would cause values to be overridden
-    public mutating func append(with dictionary: Dictionary<Key, Value>) {
-        for (key, value) in dictionary {
-            self[key] = value
         }
     }
-    /// Merges two dictionary. duplicate keys would cause values to be overridden
-    public func merge(with dictionary: Dictionary<Key, Value>) -> Dictionary<Key, Value> {
-        var mutableSelf = self
-        for (key, value) in dictionary {
-            mutableSelf[key] = value
-        }
-        return mutableSelf
-    }
-}
 
-/// Convenience alternative to `append`
-public func += <Key, Value> (lhs: inout Dictionary<Key, Value>,
-                             rhs: Dictionary<Key, Value>) {
-    lhs.append(with: rhs)
+    /// Merges the given dictionary into this dictionary. In case of duplicate keys, uses the value from the given dictionary.
+    public mutating func merge(_ other: Dictionary<Key, Value>) {
+        merge(other) { lhs, rhs in
+            rhs
+        }
+    }
+
+    /// Creates a dictionary by merging the given dictionary into this dictionary. In case of duplicate keys, uses the value from the given dictionary.
+    public func merging(_ other: Dictionary<Key, Value>) -> Dictionary<Key, Value> {
+        merging(other) { lhs, rhs in
+            rhs
+        }
+    }
 }
 
 /// Convenience alternative to `merge`
-public func + <Key, Value> (lhs: Dictionary<Key, Value>,
-                            rhs: Dictionary<Key, Value>) -> Dictionary<Key, Value> {
-    lhs.merge(with: rhs)
+public func +=<Key, Value>(lhs: inout Dictionary<Key, Value>,
+                           rhs: Dictionary<Key, Value>) {
+    lhs.merge(rhs)
+}
+
+/// Convenience alternative to `merging`
+public func +<Key, Value>(lhs: Dictionary<Key, Value>,
+                          rhs: Dictionary<Key, Value>) -> Dictionary<Key, Value> {
+    lhs.merging(rhs)
 }
 
 extension Dictionary where Key == String, Value == [String: Any] {

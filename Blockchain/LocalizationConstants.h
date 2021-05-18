@@ -86,7 +86,6 @@
 #define BC_STRING_LOW_FEE_NOT_RECOMMENDED NSLocalizedString(@"Low fee not recommended", nil)
 #define BC_STRING_MAKE_DEFAULT NSLocalizedString(@"Make Default", nil)
 #define BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD NSLocalizedString(@"Amount must be greater than or equal to the dust threshold (%lld Satoshi)", nil)
-#define BC_STRING_MY_BITCOIN_WALLET NSLocalizedString(@"My Bitcoin Wallet", nil)
 #define BC_STRING_NAME NSLocalizedString(@"Name", nil)
 #define BC_STRING_NEW_ADDRESS NSLocalizedString(@"New Address", nil)
 #define BC_STRING_NEW_ADDRESS_CREATE_NEW NSLocalizedString(@"Create new address", nil)

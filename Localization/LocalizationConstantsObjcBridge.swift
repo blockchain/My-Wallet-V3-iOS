@@ -92,25 +92,11 @@ import Foundation
 
     @objc public class func invalidXAddressY() -> String { LocalizationConstants.SendAsset.invalidXAddressY }
 
-    @objc public class func upgradeSuccess() -> String { LocalizationConstants.LegacyUpgrade.upgradeSuccess }
-
-    @objc public class func upgradeSuccessTitle() -> String { LocalizationConstants.LegacyUpgrade.upgradeSuccessTitle }
-
-    @objc public class func upgrade() -> String { LocalizationConstants.LegacyUpgrade.upgrade }
-
-    @objc public class func upgradeFeatureOne() -> String { LocalizationConstants.LegacyUpgrade.upgradeFeatureOne }
-
-    @objc public class func upgradeFeatureTwo() -> String { LocalizationConstants.LegacyUpgrade.upgradeFeatureTwo }
-
-    @objc public class func upgradeFeatureThree() -> String { LocalizationConstants.LegacyUpgrade.upgradeFeatureThree }
-
     @objc public class func nonSpendable() -> String { LocalizationConstants.AddressAndKeyImport.nonSpendable }
 
     @objc public class func dontShowAgain() -> String { LocalizationConstants.dontShowAgain }
 
     @objc public class func loadingExchange() -> String { LocalizationConstants.Swap.loading }
-
-    @objc public class func myEtherWallet() -> String { LocalizationConstants.myEtherWallet }
 
     @objc public class func notEnoughXForFees() -> String { LocalizationConstants.Errors.notEnoughXForFees }
 
@@ -138,7 +124,9 @@ import Foundation
 
     @objc public class func yesterday() -> String { LocalizationConstants.Transactions.yesterday }
 
-    @objc public class func myBitcoinWallet() -> String { LocalizationConstants.ObjCStrings.BC_STRING_MY_BITCOIN_WALLET }
-
     @objc public class func balancesErrorGeneric() -> String { LocalizationConstants.Errors.balancesGeneric }
+
+    @objc public class func myBitcoinWallet() -> String { LocalizationConstants.Account.myWallet }
+
+    @objc public class func myEtherWallet() -> String { LocalizationConstants.Account.myWallet }
 }

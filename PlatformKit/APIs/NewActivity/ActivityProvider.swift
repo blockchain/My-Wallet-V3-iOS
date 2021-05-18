@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import ToolKit
 
 public protocol ActivityProviding: class {
     /// Returns the activity service
@@ -58,75 +59,32 @@ public final class ActivityProvider: ActivityProviding {
     public func refresh() {
         services.values.forEach { $0.refresh() }
     }
-    
-    private var fiatActivityItemsLoadingState: Observable<ActivityItemEventsLoadingStates> {
-        Observable.combineLatest(
-            services[.fiat(.GBP)]!.activityLoadingStateObservable,
-            services[.fiat(.EUR)]!.activityLoadingStateObservable,
-            services[.fiat(.USD)]!.activityLoadingStateObservable
-        )
-        .map {
-            ActivityItemEventsLoadingStates(
-                statePerCurrency: [
-                    .fiat(.GBP): $0.0,
-                    .fiat(.EUR): $0.1,
-                    .fiat(.USD): $0.2
-                ]
-            )
-        }
-    }
-    
-    private var cryptoActivityItemsLoadingState: Observable<ActivityItemEventsLoadingStates> {
-        let bitcoins = Observable.zip(services[.crypto(.bitcoin)]!.activityLoadingStateObservable,
-                                      services[.crypto(.bitcoinCash)]!.activityLoadingStateObservable)
-        let erc20 = Observable.zip(services[.crypto(.wDGLD)]!.activityLoadingStateObservable,
-                                   services[.crypto(.pax)]!.activityLoadingStateObservable,
-                                   services[.crypto(.algorand)]!.activityLoadingStateObservable)
-        return Observable.combineLatest(
-            services[.crypto(.ethereum)]!.activityLoadingStateObservable,
-            services[.crypto(.stellar)]!.activityLoadingStateObservable,
-            bitcoins,
-            erc20
-        )
-        .map { values in
-            let ethereum = values.0
-            let stellar = values.1
-            let bitcoins = (btc: values.2.0, bch: values.2.1)
-            let erc20 = (wDGLD: values.3.0, pax: values.3.1, algo: values.3.2)
-            return ActivityItemEventsLoadingStates(
-                statePerCurrency: [
-                    .crypto(.ethereum): ethereum,
-                    .crypto(.stellar): stellar,
-                    .crypto(.bitcoin): bitcoins.btc,
-                    .crypto(.bitcoinCash): bitcoins.bch,
-                    .crypto(.wDGLD): erc20.wDGLD,
-                    .crypto(.pax): erc20.pax,
-                    .crypto(.algorand): erc20.algo
-                ]
-            )
-        }
-    }
-    
+
     private var activityItemsLoadingStates: Observable<ActivityItemEventsLoadingStates> {
-        Observable.combineLatest(
-            fiatActivityItemsLoadingState,
-            cryptoActivityItemsLoadingState
-        )
-        .map {
-            ActivityItemEventsLoadingStates(
-                statePerCurrency: [
-                    .fiat(.GBP): $0.0[.fiat(.GBP)],
-                    .fiat(.EUR): $0.0[.fiat(.EUR)],
-                    .fiat(.USD): $0.0[.fiat(.USD)],
-                    .crypto(.ethereum): $0.1[.crypto(.ethereum)],
-                    .crypto(.pax): $0.1[.crypto(.pax)],
-                    .crypto(.stellar): $0.1[.crypto(.stellar)],
-                    .crypto(.bitcoin): $0.1[.crypto(.bitcoin)],
-                    .crypto(.bitcoinCash): $0.1[.crypto(.bitcoinCash)],
-                    .crypto(.wDGLD): $0.1[.crypto(.wDGLD)]
-                ]
-            )
-        }
-        .share()
+        // Array of `activityLoadingStateObservable` observables from currencies we want to fetch.
+        let observables = services
+            .reduce(into: [Observable<[CurrencyType : ActivityItemEventsLoadingState]>]()) { (result, element) in
+                let observable = element.value.activityLoadingStateObservable
+                    // Map the `activityLoadingState` so it remains attached to its currency.
+                    .map { activityLoadingState -> [CurrencyType : ActivityItemEventsLoadingState] in
+                        [element.key: activityLoadingState]
+                    }
+                result.append(observable)
+            }
+
+        return Observable
+            .combineLatest(observables)
+            .map { data -> [CurrencyType : ActivityItemEventsLoadingState] in
+                // Reduce our `[Dictionary]` into a single `Dictionary`.
+                data.reduce(into: [CurrencyType : ActivityItemEventsLoadingState]()) { (result, this) in
+                    result.merge(this)
+                }
+            }
+            .map { statePerCurrency -> ActivityItemEventsLoadingStates in
+                ActivityItemEventsLoadingStates(
+                    statePerCurrency: statePerCurrency
+                )
+            }
+            .share()
     }
 }

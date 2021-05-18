@@ -30,7 +30,7 @@ final class TransactionDetailService: TransactionDetailServiceAPI {
     
     func transactionDetailURL(for transactionHash: String, cryptoCurrency: CryptoCurrency) -> String? {
         switch cryptoCurrency {
-        case .algorand:
+        case .algorand, .polkadot:
             return nil
         case .bitcoin:
             return "\(blockchainAPI.bitcoinExplorerUrl)/tx/\(transactionHash)"
@@ -40,11 +40,7 @@ final class TransactionDetailService: TransactionDetailServiceAPI {
             return "\(blockchainAPI.bitcoinCashExplorerUrl)/tx/\(transactionHash)"
         case .stellar:
             return "\(blockchainAPI.stellarchainUrl)/tx/\(transactionHash)"
-        case .pax:
-            return "\(blockchainAPI.etherExplorerUrl)/tx/\(transactionHash)"
-        case .tether:
-            return "\(blockchainAPI.etherExplorerUrl)/tx/\(transactionHash)"
-        case .wDGLD:
+        case .aave, .pax, .tether, .wDGLD, .yearnFinance:
             return "\(blockchainAPI.etherExplorerUrl)/tx/\(transactionHash)"
         }
     }

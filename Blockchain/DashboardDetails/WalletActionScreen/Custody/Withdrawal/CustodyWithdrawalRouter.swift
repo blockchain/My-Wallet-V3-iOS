@@ -102,9 +102,7 @@ final class CustodyWithdrawalRouter: CustodyWithdrawalRouterAPI {
                 stateService: stateService
             )
             let controller = CustodyWithdrawalViewController(presenter: presenter)
-            if #available(iOS 13.0, *) {
-                controller.isModalInPresentation = true
-            }
+            controller.isModalInPresentation = true
             navigationRouter.present(viewController: controller, using: .modalOverTopMost)
         }
     }

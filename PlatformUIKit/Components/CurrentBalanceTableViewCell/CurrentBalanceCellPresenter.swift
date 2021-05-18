@@ -15,10 +15,9 @@ import RxSwift
 public final class CurrentBalanceCellPresenter: CurrentBalanceCellPresenting {
     
     public typealias DescriptionValue = () -> Observable<String>
-    
     private typealias LocalizedString = LocalizationConstants.DashboardDetails.BalanceCell
     
-    public var iconImageViewContent: Driver<ImageViewContent> {
+    public var iconImageViewContent: Driver<BadgeImageViewModel> {
         iconImageViewContentRelay.asDriver()
     }
     
@@ -84,7 +83,7 @@ public final class CurrentBalanceCellPresenter: CurrentBalanceCellPresenting {
     
     private let badgeRelay = BehaviorRelay<BadgeImageViewModel>(value: .empty)
     private let separatorVisibilityRelay = BehaviorRelay<Visibility>(value: .hidden)
-    private let iconImageViewContentRelay = BehaviorRelay<ImageViewContent>(value: .empty)
+    private let iconImageViewContentRelay = BehaviorRelay<BadgeImageViewModel>(value: .empty)
     private let pendingLabelVisibilityRelay = BehaviorRelay<Visibility>(value: .hidden)
     private let titleRelay = BehaviorRelay<String>(value: "")
     private let descriptionRelay = BehaviorRelay<String>(value: "")
@@ -134,17 +133,43 @@ public final class CurrentBalanceCellPresenter: CurrentBalanceCellPresenting {
             badgeRelay.accept(badgeImageViewModel)
         }
         
+        let model: BadgeImageViewModel
         switch (interactor.accountType, currency) {
-        case (.nonCustodial, _):
-            titleRelay.accept(currency.name)
-        case (.custodial(.trading), .crypto):
-            iconImageViewContentRelay.accept(ImageViewContent(imageName: "icon_custody_lock", bundle: Bundle.platformUIKit))
-            titleRelay.accept(LocalizedString.Title.trading)
-        case (.custodial(.savings), .crypto):
-            iconImageViewContentRelay.accept(.empty)
-            titleRelay.accept(LocalizedString.Title.savings)
+        case (.nonCustodial, .fiat(let fiatCurrency)):
+            model = .empty
+            titleRelay.accept(fiatCurrency.defaultWalletName)
+        case (.nonCustodial, .crypto(let cryptoCurrency)):
+            model = .template(
+                with: "ic-private-account",
+                templateColor: currency.brandColor,
+                backgroundColor: .white,
+                cornerRadius: .round,
+                accessibilityIdSuffix: ""
+            )
+            titleRelay.accept(cryptoCurrency.defaultWalletName)
+        case (.custodial(.trading), .crypto(let cryptoCurrency)):
+            model = .template(
+                with: "ic-trading-account",
+                templateColor: currency.brandColor,
+                backgroundColor: .white,
+                cornerRadius: .round,
+                accessibilityIdSuffix: ""
+            )
+            titleRelay.accept(cryptoCurrency.defaultTradingWalletName)
+        case (.custodial(.savings), .crypto(let cryptoCurrency)):
+            model = .template(
+                with: "ic-interest-account",
+                templateColor: currency.brandColor,
+                backgroundColor: .white,
+                cornerRadius: .round,
+                accessibilityIdSuffix: ""
+            )
+            titleRelay.accept(cryptoCurrency.defaultInterestWalletName)
         case (.custodial, .fiat(let currency)):
+            model = .empty
             titleRelay.accept(currency.name)
         }
+        model.marginOffsetRelay.accept(1)
+        iconImageViewContentRelay.accept(model)
     }
 }

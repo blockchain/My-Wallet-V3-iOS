@@ -67,6 +67,7 @@ class BitcoinCashCryptoAccount: CryptoNonCustodialAccount {
             }
     }
 
+    private let hdAccountIndex: Int
     private let exchangeService: PairExchangeServiceAPI
     private let balanceService: BalanceServiceAPI
     private let bridge: BitcoinCashWalletBridgeAPI
@@ -74,15 +75,32 @@ class BitcoinCashCryptoAccount: CryptoNonCustodialAccount {
     init(id: String,
          label: String?,
          isDefault: Bool,
+         hdAccountIndex: Int,
          exchangeProviding: ExchangeProviding = resolve(),
          balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainCoin.bitcoinCash),
          bridge: BitcoinCashWalletBridgeAPI = resolve()) {
         self.id = id
         self.label = label ?? CryptoCurrency.bitcoinCash.defaultWalletName
         self.isDefault = isDefault
+        self.hdAccountIndex = hdAccountIndex
         self.exchangeService = exchangeProviding[.bitcoinCash]
         self.balanceService = balanceService
         self.bridge = bridge
+    }
+
+    func can(perform action: AssetAction) -> Single<Bool> {
+        switch action {
+        case .receive,
+             .send,
+             .viewActivity:
+            return .just(true)
+        case .deposit,
+             .sell,
+             .withdraw:
+            return .just(false)
+        case .swap:
+            return isFunded
+        }
     }
 
     func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue> {
@@ -93,5 +111,9 @@ class BitcoinCashCryptoAccount: CryptoNonCustodialAccount {
             ) { (exchangeRate: $0, balance: $1) }
             .map { try MoneyValuePair(base: $0.balance, exchangeRate: $0.exchangeRate.moneyValue) }
             .map(\.quote)
+    }
+
+    func updateLabel(_ newLabel: String) -> Completable {
+        bridge.update(accountIndex: hdAccountIndex, label: newLabel)
     }
 }

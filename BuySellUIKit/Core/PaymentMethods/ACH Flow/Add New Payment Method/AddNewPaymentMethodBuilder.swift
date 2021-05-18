@@ -26,9 +26,7 @@ final class AddNewPaymentMethodBuilder: AddNewPaymentMethodBuildable {
 
     func build(listener: AddNewPaymentMethodListener) -> AddNewPaymentMethodRouting {
         let viewController = AddNewPaymentMethodViewController()
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
+        viewController.isModalInPresentation = true
         let interactor = AddNewPaymentMethodInteractor(presenter: viewController,
                                                        paymentMethodService: paymentMethodService)
         interactor.listener = listener

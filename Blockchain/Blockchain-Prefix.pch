@@ -144,14 +144,20 @@
 #define KEYCHAIN_KEY_SHARED_KEY @"sharedKey"
 #define KEYCHAIN_KEY_GUID @"guid"
 #define KEYCHAIN_KEY_PIN @"pin"
-#define KEYCHAIN_KEY_BTC_SWIPE_ADDRESSES @"btcSwipeAddresses"
-#define KEYCHAIN_KEY_BCH_SWIPE_ADDRESSES @"bchSwipeAddresses"
-#define KEYCHAIN_KEY_ETHER_ADDRESS @"etherAddress"
-#define KEYCHAIN_KEY_XLM_ADDRESS @"xlmSwipeToReceiveAddress"
-#define KEYCHAIN_KEY_PAX_ADDRESS @"paxSwipeToReceiveAddress"
+
+# pragma mark - Keychain keys for swipe to receive.
+
+#define KEYCHAIN_KEY_AAVE_ADDRESS @"aaveSwipeToReceiveAddress"
 #define KEYCHAIN_KEY_ALGO_ADDRESS @"algoSwipeToReceiveAddress"
+#define KEYCHAIN_KEY_BCH_SWIPE_ADDRESSES @"bchSwipeAddresses"
+#define KEYCHAIN_KEY_BTC_SWIPE_ADDRESSES @"btcSwipeAddresses"
+#define KEYCHAIN_KEY_DOT_ADDRESS @"dotSwipeToReceiveAddress"
+#define KEYCHAIN_KEY_ETHER_ADDRESS @"etherAddress"
+#define KEYCHAIN_KEY_PAX_ADDRESS @"paxSwipeToReceiveAddress"
 #define KEYCHAIN_KEY_USDT_ADDRESS @"usdtSwipeToReceiveAddress"
 #define KEYCHAIN_KEY_WDGLD_ADDRESS @"wdgldSwipeToReceiveAddress"
+#define KEYCHAIN_KEY_XLM_ADDRESS @"xlmSwipeToReceiveAddress"
+#define KEYCHAIN_KEY_YFI_ADDRESS @"yfiSwipeToReceiveAddress"
 
 #define UNSAFE_CHECK_PATH_CYDIA @"/Applications/Cydia.app"
 #define UNSAFE_CHECK_PATH_MOBILE_SUBSTRATE @"/Library/MobileSubstrate/MobileSubstrate.dylib"

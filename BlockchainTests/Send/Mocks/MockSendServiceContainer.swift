@@ -40,10 +40,10 @@ struct MockSendServiceContainer: SendServiceContaining {
         bus = WalletActionEventBus()
         self.fiatCurrency = fiatCurrency
         switch asset {
-        case .ethereum, .pax, .tether, .wDGLD:
+        case .ethereum:
             sourceAccountProvider = EtherSendSourceAccountProvider()
             self.balance = MockAccountBalanceFetcher(expectedBalance: MoneyValue(cryptoValue: balance))
-        case .algorand, .bitcoin, .bitcoinCash, .stellar:
+        default:
             fatalError("\(#function) is not implemented for \(asset)")
         }
     }

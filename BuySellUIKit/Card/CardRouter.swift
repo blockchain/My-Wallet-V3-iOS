@@ -118,9 +118,7 @@ public final class CardRouter: RIBs.Router<CardRouterInteractor> {
     
     private func showCardDetailsScreen() {
         let viewController = builder.cardDetails()
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
+        viewController.isModalInPresentation = true
         navigationRouter.present(viewController: viewController)
     }
     

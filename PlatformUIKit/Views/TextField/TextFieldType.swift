@@ -404,17 +404,9 @@ extension TextFieldType {
         case .email:
             return .emailAddress
         case .oneTimeCode:
-            if #available(iOS 12.0, *) {
-                return .oneTimeCode
-            } else {
-                return UITextContentType(rawValue: "")
-            }
+            return .oneTimeCode
         case .newPassword, .confirmNewPassword:
-            if #available(iOS 12.0, *) {
-                return .newPassword
-            } else {
-                return UITextContentType(rawValue: "")
-            }
+            return .newPassword
         case .password:
             /// Disable password suggestions (avoid setting `.password` as value)
             return UITextContentType(rawValue: "")

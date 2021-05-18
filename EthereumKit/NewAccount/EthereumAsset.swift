@@ -16,11 +16,13 @@ final class EthereumAsset: CryptoAsset {
     let asset: CryptoCurrency = .ethereum
 
     var defaultAccount: Single<SingleAccount> {
-        repository.defaultAccount
-            .map { walletAccount -> SingleAccount in
+        repository
+            .defaultAccount
+            .map { account -> SingleAccount in
                 EthereumCryptoAccount(
-                    id: walletAccount.publicKey,
-                    label: walletAccount.label
+                    id: account.publicKey,
+                    label: account.label,
+                    hdAccountIndex: account.index
                 )
             }
     }
@@ -38,6 +40,15 @@ final class EthereumAsset: CryptoAsset {
         self.repository = repository
         self.errorRecorder = errorRecorder
         self.internalFeatureFlag = internalFeatureFlag
+    }
+
+    func initialize() -> Completable {
+        // Run wallet renaming procedure on initialization.
+        nonCustodialGroup.map(\.accounts)
+            .flatMapCompletable(weak: self) { (self, accounts) -> Completable in
+                self.upgradeLegacyLabels(accounts: accounts)
+            }
+            .onErrorComplete()
     }
 
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup> {

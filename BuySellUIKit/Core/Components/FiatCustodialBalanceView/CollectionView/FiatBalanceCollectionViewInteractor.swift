@@ -39,6 +39,7 @@ public final class FiatBalanceCollectionViewInteractor {
     private let balanceProvider: BalanceProviding
     private let paymentMethodsService: PaymentMethodsServiceAPI
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let refreshRelay = PublishRelay<Void>()
     
     // MARK: - Accessors
@@ -47,8 +48,11 @@ public final class FiatBalanceCollectionViewInteractor {
     private let disposeBag = DisposeBag()
     
     private lazy var setup: Void = {
+        
+        let preferredFiatCurrency = fiatCurrencyService.currencyObservable
+        
         let enabledFiatCurrencies = enabledCurrenciesService.allEnabledFiatCurrencies
-        Observable
+        let balances = Observable
             .combineLatest(
                 featureFetcher.fetchBool(for: .simpleBuyFundsEnabled).asObservable(),
                 balanceProvider.fiatFundsBalances,
@@ -59,11 +63,14 @@ public final class FiatBalanceCollectionViewInteractor {
             .filter { $0.tiers.isTier2Approved }
             .map { $0.balances }
             .filter { $0.isValue } // All balances must contain value to load
-            .map {
+            
+        Observable.combineLatest(balances, preferredFiatCurrency)
+            .map { (balances, preferredFiatCurrency) in
                 Array.init(
-                    balancePairsCalculationStates: $0,
+                    balancePairsCalculationStates: balances,
                     supportedFiatCurrencies: enabledFiatCurrencies
                 )
+                .sorted { (lhs, _) -> Bool in lhs.balance.base.code == preferredFiatCurrency.code }
             }
             .map { .value($0) }
             .startWith(.calculating)
@@ -76,12 +83,14 @@ public final class FiatBalanceCollectionViewInteractor {
                 balanceProvider: BalanceProviding,
                 enabledCurrenciesService: EnabledCurrenciesServiceAPI,
                 paymentMethodsService: PaymentMethodsServiceAPI,
-                featureFetcher: FeatureFetching) {
+                featureFetcher: FeatureFetching,
+                fiatCurrencyService: FiatCurrencyServiceAPI) {
         self.tiersService = tiersService
         self.balanceProvider = balanceProvider
         self.featureFetcher = featureFetcher
         self.paymentMethodsService = paymentMethodsService
         self.enabledCurrenciesService = enabledCurrenciesService
+        self.fiatCurrencyService = fiatCurrencyService
     }
     
     public func refresh() {

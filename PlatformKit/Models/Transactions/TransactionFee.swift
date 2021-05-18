@@ -31,10 +31,15 @@ extension CryptoCurrency: HasPathComponent {
 
 public protocol TransactionFee {
     static var cryptoType: HasPathComponent { get }
+    static var contractAddress: String? { get }
     static var `default`: Self { get }
     static var defaultLimits: TransactionFeeLimits { get }
     
     var limits: TransactionFeeLimits { get }
     var regular: CryptoValue { get }
     var priority: CryptoValue { get }
+}
+
+public extension TransactionFee {
+    static var contractAddress: String? { nil }
 }

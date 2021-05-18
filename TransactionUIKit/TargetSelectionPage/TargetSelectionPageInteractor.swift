@@ -141,38 +141,48 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
                 self?.targetSelectionPageModel.process(action: .destinationDeselected)
             })
             .disposeOnDeactivate(interactor: self)
-        
+
         let interactorState = targetSelectionPageModel
             .state
             .observeOn(MainScheduler.instance)
-            .scan(.empty) { (state, updater) -> TargetSelectionPageInteractor.State in
-                guard let sourceAccount = updater.sourceAccount as? SingleAccount else {
-                    fatalError("You should have a source account.")
+            .scan(.empty) { [weak self] (state, updater) -> TargetSelectionPageInteractor.State in
+                guard let self = self else {
+                    return state
                 }
-                let targets = updater.availableTargets
-                    .compactMap { $0 as? SingleAccount }
-                
-                let interactors: TargetSelectionPageInteractor.State.Interactors = .init(
-                    sourceAccount: sourceAccount,
-                    availableTargets: targets,
-                    target: updater.destination as? SingleAccount,
-                    cryptoAddressViewModel: self.cryptoAddressViewModel
-                )
-
-                return state
-                    /// Update the `Interactors` for the cells.
-                    .update(keyPath: \.interactors, value: interactors)
-                    /// Update the enabled state of the `Next` button.
-                    .update(keyPath: \.actionButtonEnabled, value: updater.nextEnabled)
+                return self.calculateNextState(with: state, updater: updater)
             }
             .asDriverCatchError()
-        
+
         presenter.connect(state: interactorState)
             .drive(onNext: handle(effects:))
             .disposeOnDeactivate(interactor: self)
     }
 
     // MARK: - Private methods
+
+    private func calculateNextState(
+        with state: State,
+        updater: TargetSelectionPageState
+    ) -> State {
+        guard let sourceAccount = updater.sourceAccount as? SingleAccount else {
+            fatalError("You should have a source account.")
+        }
+        let targets = updater.availableTargets
+            .compactMap { $0 as? SingleAccount }
+
+        let interactors = TargetSelectionPageInteractor.State.Interactors(
+            sourceAccount: sourceAccount,
+            availableTargets: targets,
+            target: updater.destination as? SingleAccount,
+            cryptoAddressViewModel: cryptoAddressViewModel
+        )
+
+        return state
+            /// Update the `Interactors` for the cells.
+            .update(keyPath: \.interactors, value: interactors)
+            /// Update the enabled state of the `Next` button.
+            .update(keyPath: \.actionButtonEnabled, value: updater.nextEnabled)
+    }
 
     private func handle(effects: Effects) {
         switch effects {

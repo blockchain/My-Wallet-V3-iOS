@@ -46,7 +46,7 @@ final class AnnouncementRecorderTests: XCTestCase {
     private var cache: MemoryCacheSuite!
     private var dismissRecorder: AnnouncementRecorder!
     private var entry: AnnouncementRecorder.Entry!
-    private let key = AnnouncementRecord.Key.algorand
+    private let key = AnnouncementRecord.Key.cloudBackup
 
     override func setUp() {
         super.setUp()
@@ -71,7 +71,7 @@ final class AnnouncementRecorderTests: XCTestCase {
 final class AnnouncementTests: XCTestCase {
     func testAnnouncementQueue() {
         let cache = MemoryCacheSuite()
-        let oneTimeAnnouncements = [MockOneTimeAnnouncement(type: .algorand, cacheSuite: cache, dismiss: {}),
+        let oneTimeAnnouncements = [MockOneTimeAnnouncement(type: .cloudBackup, cacheSuite: cache, dismiss: {}),
                                     MockOneTimeAnnouncement(type: .exchangeLinking, cacheSuite: cache, dismiss: {})]
         oneTimeAnnouncements[1].markRemoved()
         XCTAssertFalse(oneTimeAnnouncements[0].isDismissed)

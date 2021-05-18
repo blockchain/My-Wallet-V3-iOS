@@ -18,7 +18,7 @@ final class BitcoinAsset: CryptoAsset {
 
     var defaultAccount: Single<SingleAccount> {
         repository.defaultAccount
-            .map { BitcoinCryptoAccount(id: $0.publicKey, label: $0.label, isDefault: true) }
+            .map { BitcoinCryptoAccount(id: $0.publicKey, label: $0.label, isDefault: true, hdAccountIndex: $0.index) }
     }
 
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
@@ -38,6 +38,15 @@ final class BitcoinAsset: CryptoAsset {
         self.addressValidator = addressValidator
         self.internalFeatureFlag = internalFeatureFlag
    }
+
+    func initialize() -> Completable {
+        // Run wallet renaming procedure on initialization.
+        nonCustodialGroup.map(\.accounts)
+            .flatMapCompletable(weak: self) { (self, accounts) -> Completable in
+                self.upgradeLegacyLabels(accounts: accounts)
+            }
+            .onErrorComplete()
+    }
 
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup> {
         switch filter {
@@ -123,23 +132,22 @@ final class BitcoinAsset: CryptoAsset {
     }
 
     private var nonCustodialGroup: Single<AccountGroup> {
-        let asset = self.asset
-        return repository
-            .accounts
+        repository.accounts
             .flatMap(weak: self) { (self, accounts) -> Single<(defaultAccount: BitcoinWalletAccount, accounts: [BitcoinWalletAccount])> in
                 self.repository.defaultAccount
                     .map { ($0, accounts) }
             }
             .map { (defaultAccount, accounts) -> [SingleAccount] in
-                accounts.map {
+                accounts.map { account in
                     BitcoinCryptoAccount(
-                        id: $0.publicKey,
-                        label: $0.label,
-                        isDefault: $0.publicKey == defaultAccount.publicKey
+                        id: account.publicKey,
+                        label: account.label,
+                        isDefault: account.publicKey == defaultAccount.publicKey,
+                        hdAccountIndex: account.index
                     )
                 }
             }
-            .map { accounts -> AccountGroup in
+            .map { [asset] accounts -> AccountGroup in
                 CryptoAccountNonCustodialGroup(asset: asset, accounts: accounts)
             }
             .recordErrors(on: errorRecorder)

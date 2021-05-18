@@ -282,19 +282,18 @@ final class DashboardDetailsScreenPresenter {
         let descriptionValue: () -> Observable<String> = { [weak self] in
             guard let self = self else { return .empty() }
             switch accountType {
-            case .nonCustodial:
-                return .just(LocalizedString.Description.nonCustodial)
+            case .nonCustodial,
+                 .custodial(.trading):
+                return .just(self.currency.name)
             case .custodial(.savings):
                 return self.interactor
                     .rate
                     .asObservable()
                     .compactMap { $0 }
                     .map { "\(LocalizedString.Description.savingsPrefix) \($0)\(LocalizedString.Description.savingsSuffix)" }
-            case .custodial(.trading):
-                return .just(LocalizedString.Description.trading)
             }
         }
-    
+        
         return CurrentBalanceCellPresenter(
             interactor: CurrentBalanceCellInteractor(
                 balanceFetching: interactor.balanceFetcher,

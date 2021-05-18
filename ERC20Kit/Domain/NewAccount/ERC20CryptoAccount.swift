@@ -65,6 +65,25 @@ final class ERC20CryptoAccount<Token: ERC20Token>: CryptoNonCustodialAccount {
         self.featureFetcher = featureFetcher
     }
 
+    func can(perform action: AssetAction) -> Single<Bool> {
+        switch action {
+        case .receive,
+             .viewActivity:
+            return .just(true)
+        case .send:
+            return .just(Token.legacySendSupport)
+        case .deposit,
+             .sell,
+             .withdraw:
+            return .just(false)
+        case .swap:
+            guard Token.nonCustodialTransactionSupport.contains(.swap) else {
+                return .just(false)
+            }
+            return isFunded
+        }
+    }
+
     func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue> {
         Single
             .zip(

@@ -166,12 +166,13 @@ MyWalletPhone.upgradeToV3 = function(firstAccountName) {
 
         MyWallet.wallet.getHistory();
         objc_loading_stop();
-        objc_upgrade_success();
+        objc_upgrade_V3_success();
     };
 
     var error = function (e) {
         console.log('Error upgrading legacy wallet to HD wallet: ' + e);
         objc_loading_stop();
+        objc_upgrade_V3_error();
     };
 
     if (MyWallet.wallet.isDoubleEncrypted) {
@@ -2086,24 +2087,6 @@ MyWalletPhone.recordLastTransactionAsync = function(txHash) {
     return MyWallet.wallet.eth.setLastTxAndSync(txHash)
         .then(success)
         .catch(error);
-};
-
-MyWalletPhone.saveEtherAccountAsync = function (privateKey, label) {
-    var success = function () {
-        objc_on_didSaveEtherAccountAsync();
-    };
-    var error = function (e) {
-        objc_on_error_savingEtherAccountAsync(e);
-    };
-    var saveAccount = function (accountPrivateKey, accountLabel) {
-        var eth = MyWallet.wallet.eth;
-        if (eth && eth.defaultAccount) {
-            return Promise.reject("Account already exists");
-        } else {
-            return eth.createAccountFromPrivateKey(accountPrivateKey, accountLabel);
-        }
-    }
-    saveAccount(accountLabel).then(success, error);
 };
 
 MyWalletPhone.getEtherAccountsAsync = function (secondPassword) {

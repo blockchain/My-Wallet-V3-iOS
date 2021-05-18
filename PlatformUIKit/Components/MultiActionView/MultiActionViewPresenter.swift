@@ -34,10 +34,6 @@ public final class DefaultActionViewPresenter: MultiActionViewPresenting {
     // MARK: - Setup
     
     public init(using items: [SegmentedViewModel.Item]) {
-        if #available(iOS 13.0, *) {
-            self.segmentedViewModel = .default(items: items, isMomentary: false)
-        } else {
-            self.segmentedViewModel = .legacy(items: items, isMomentary: false)
-        }
+        segmentedViewModel = .default(items: items, isMomentary: false)
     }
 }

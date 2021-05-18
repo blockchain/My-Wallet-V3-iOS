@@ -62,7 +62,7 @@ class EthereumWallet: NSObject {
     private let schedulerType: SchedulerType
     
     private static let defaultPAXAccount = ERC20TokenAccount(
-        label: LocalizationConstants.SendAsset.myPaxWallet,
+        label: LocalizationConstants.Account.myWallet,
         contractAddress: PaxToken.contractAddress.publicKey,
         hasSeen: false,
         transactionNotes: [String: String]()
@@ -258,6 +258,17 @@ extension EthereumWallet: ERC20BridgeAPI {
 }
 
 extension EthereumWallet: EthereumWalletBridgeAPI {
+
+    func update(accountIndex: Int, label: String) -> Completable {
+        reactiveWallet
+            .waitUntilInitializedSingle
+            .flatMapCompletable(weak: self) { (self, _) -> Completable in
+                guard let wallet = self.wallet else {
+                    return .error(WalletError.notInitialized)
+                }
+                return wallet.updateAccountLabel(.ethereum, index: accountIndex, label: label)
+            }
+    }
 
     func updateMemo(for transactionHash: String, memo: String?) -> Completable {
         let saveMemo: Completable = Completable.create { completable in
@@ -461,29 +472,6 @@ extension EthereumWallet: PasswordAccessAPI {
 }
 
 extension EthereumWallet: EthereumWalletAccountBridgeAPI {
-    func save(keyPair: EthereumKeyPair, label: String) -> Completable {
-        guard let base58PrivateKey = keyPair.privateKey.base58EncodedString else {
-            return Completable.error(WalletError.failedToSaveKeyPair("Invalid private key"))
-        }
-        return Completable.create { [weak self] observer -> Disposable in
-            guard let wallet = self?.wallet else {
-                observer(.error(WalletError.notInitialized))
-                return Disposables.create()
-            }
-            wallet.saveEthereumAccount(
-                with: base58PrivateKey,
-                label: label,
-                success: {
-                    observer(.completed)
-                },
-                error: { errorMessage in
-                    observer(.error(WalletError.failedToSaveKeyPair(errorMessage)))
-                }
-            )
-            return Disposables.create()
-        }
-    }
-    
     var wallets: Single<[EthereumWalletAccount]> {
         reactiveWallet
             .waitUntilInitializedSingle

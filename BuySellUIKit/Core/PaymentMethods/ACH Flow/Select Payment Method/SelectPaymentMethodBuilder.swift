@@ -26,9 +26,7 @@ final class SelectPaymentMethodBuilder: SelectPaymentMethodBuildable {
 
     func build(listener: SelectPaymentMethodListener) -> SelectPaymentMethodRouting {
         let viewController = SelectPaymentMethodViewController()
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
+        viewController.isModalInPresentation = true
         let interactor = SelectPaymentMethodInteractor(presenter: viewController,
                                                        paymentMethodService: paymentMethodService)
         interactor.listener = listener

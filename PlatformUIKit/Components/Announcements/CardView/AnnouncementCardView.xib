@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,32 +39,31 @@
             <rect key="frame" x="0.0" y="0.0" width="376" height="187"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gqc-Aa-cm0">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gqc-Aa-cm0" userLabel="Background Image View">
                     <rect key="frame" x="0.0" y="0.0" width="376" height="187"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCM-a8-OZI" customClass="BadgeImageView" customModule="PlatformUIKit" customModuleProvider="target">
-                    <rect key="frame" x="24" y="24" width="32" height="49"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <rect key="frame" x="24" y="24" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="GCM-a8-OZI" secondAttribute="height" multiplier="1:1" priority="251" id="Tj3-GC-WrU"/>
-                        <constraint firstAttribute="width" constant="32" id="srv-yf-MSF"/>
+                        <constraint firstAttribute="width" constant="40" placeholder="YES" id="C3G-1O-yAu"/>
+                        <constraint firstAttribute="height" constant="40" placeholder="YES" id="U1q-mS-D4L"/>
                     </constraints>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bss-d6-2O7">
-                    <rect key="frame" x="24" y="24" width="49" height="49"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bss-d6-2O7" userLabel="Thumb Image View">
+                    <rect key="frame" x="24" y="24" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" priority="250" constant="40" id="JDd-7s-Ywf"/>
-                        <constraint firstAttribute="width" secondItem="Bss-d6-2O7" secondAttribute="height" priority="251" id="bx9-ph-S9b"/>
+                        <constraint firstAttribute="width" constant="40" placeholder="YES" id="Gfp-tE-skS"/>
+                        <constraint firstAttribute="height" constant="40" placeholder="YES" id="meF-KO-23s"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tMG-Cl-pfd">
-                    <rect key="frame" x="24" y="89" width="328" height="24.5"/>
+                    <rect key="frame" x="24" y="80" width="328" height="24.5"/>
                     <fontDescription key="fontDescription" name="Inter-SemiBold" family="Inter" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNw-GW-unC">
-                    <rect key="frame" x="24" y="121.5" width="328" height="17"/>
+                    <rect key="frame" x="24" y="112.5" width="328" height="17"/>
                     <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="14"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -97,7 +96,8 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="fCk-NU-QfN"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="GCM-a8-OZI" firstAttribute="leading" secondItem="tMG-Cl-pfd" secondAttribute="leading" id="3ua-Kd-ALT"/>
                 <constraint firstAttribute="bottom" secondItem="cdS-N6-92a" secondAttribute="bottom" constant="24" id="5QN-Xa-RWU"/>
@@ -128,7 +128,6 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="fCk-NU-QfN"/>
             <point key="canvasLocation" x="-71.014492753623188" y="-114.84375"/>
         </view>
     </objects>

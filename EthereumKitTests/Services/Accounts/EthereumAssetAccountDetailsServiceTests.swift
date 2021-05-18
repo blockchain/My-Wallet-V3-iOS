@@ -52,7 +52,7 @@ class EthereumAssetAccountDetailsServiceTests: XCTestCase {
         let account = EthereumAssetAccountDetails.Account(
             walletIndex: 0,
             accountAddress: MockEthereumWalletTestData.account,
-            name: "My Ether Wallet"
+            name: CryptoCurrency.ethereum.defaultWalletName
         )
         let balanceDetails = BalanceDetailsResponse(balance: "2.0", nonce: 1)
         client.balanceDetailsValue = .just(balanceDetails)

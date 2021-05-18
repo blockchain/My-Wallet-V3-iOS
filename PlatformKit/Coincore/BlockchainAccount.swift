@@ -9,24 +9,42 @@
 import RxSwift
 import ToolKit
 
+public typealias AvailableActions = Set<AssetAction>
+
 public protocol TradingAccount { }
 
 public protocol NonCustodialAccount { }
 
 public protocol BlockchainAccount {
+
+    /// This account ID.
+    ///
+    /// This may be an internal ID, a public key, or something else.
     var id: String { get }
 
+    /// This account label.
     var label: String { get }
 
+    /// The total balance on this account.
     var balance: Single<MoneyValue> { get }
 
+    /// The pending balance of this account.
     var pendingBalance: Single<MoneyValue> { get }
 
+    /// Emits `Set` containing all actions this account can execute.
     var actions: Single<AvailableActions> { get }
 
+    /// Indicates if this account is funded.
+    ///
+    /// Depending of the account implementation, this may not strictly mean a positive balance.
+    /// Some accounts may be set as `isFunded` if they have ever had a positive balance in the past.
     var isFunded: Single<Bool> { get }
 
+    /// The balance of this account exchanged to the given fiat currency.
     func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue>
+
+    /// Checks if this account can execute the given action.
+    func can(perform action: AssetAction) -> Single<Bool>
 }
 
 extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<BlockchainAccount> {
@@ -39,7 +57,10 @@ extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<Blo
     ) -> PrimitiveSequence<SingleTrait, Element> {
         flatMap { accounts -> Single<Element> in
             let elements: [Single<BlockchainAccount?>] = accounts.map { account in
+                // Check if account can perform action
                 account.can(perform: action)
+                    // If account can perform, return itself, else return nil
+                    .map { $0 ? account : nil }
                     .catchError { error -> Single<BlockchainAccount?> in
                         onError?(account)
                         if failSequence {
@@ -50,6 +71,7 @@ extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<Blo
             }
 
             return Single.zip(elements)
+                // Filter nil elements (accounts that can't perform action)
                 .map { accounts -> Element in
                     accounts.compactMap { $0 }
                 }
@@ -67,8 +89,10 @@ extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<Sin
     ) -> PrimitiveSequence<SingleTrait, Element> {
         flatMap { accounts -> Single<Element> in
             let elements: [Single<SingleAccount?>] = accounts.map { account in
+                // Check if account can perform action
                 account.can(perform: action)
-                    .map { $0 as? Element.Element }
+                    // If account can perform, return itself, else return nil
+                    .map { $0 ? account : nil }
                     .catchError { error -> Single<SingleAccount?> in
                         onError?(account)
                         if failSequence {
@@ -78,6 +102,7 @@ extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<Sin
                     }
             }
             return Single.zip(elements)
+                // Filter nil elements (accounts that can't perform action)
                 .map { accounts -> Element in
                     accounts.compactMap { $0 }
                 }
@@ -94,15 +119,6 @@ extension PrimitiveSequenceType where Trait == SingleTrait, Element == Array<Sin
                 .map { accounts -> Element in
                     accounts.compactMap { $0 }
                 }
-        }
-    }
-}
-
-extension BlockchainAccount {
-    /// Emits `self` if it can perform the given action, otherwise emit `nil`.
-    fileprivate func can(perform action: AssetAction) -> Single<BlockchainAccount?> {
-        actions.map { actions in
-            actions.contains(action) ? self : nil
         }
     }
 }

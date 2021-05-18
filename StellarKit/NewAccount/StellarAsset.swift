@@ -31,7 +31,7 @@ final class StellarAsset: CryptoAsset {
                 return account
             }
             .map { account -> SingleAccount in
-                StellarCryptoAccount(id: account.publicKey, label: account.label)
+                StellarCryptoAccount(id: account.publicKey, label: account.label, hdAccountIndex: account.index)
             }
     }
     
@@ -48,6 +48,15 @@ final class StellarAsset: CryptoAsset {
         self.accountRepository = accountRepository
         self.errorRecorder = errorRecorder
         self.internalFeatureFlag = internalFeatureFlag
+    }
+
+    func initialize() -> Completable {
+        // Run wallet renaming procedure on initialization.
+        nonCustodialGroup.map(\.accounts)
+            .flatMapCompletable(weak: self) { (self, accounts) -> Completable in
+                self.upgradeLegacyLabels(accounts: accounts)
+            }
+            .onErrorComplete()
     }
 
     func parse(address: String) -> Single<ReceiveAddress?> {

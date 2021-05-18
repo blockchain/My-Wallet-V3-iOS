@@ -230,6 +230,7 @@ extension PinRouter {
             navigationController.delegate = self
             switch flow.origin {
             case .background:
+                // Sets view controller as rootViewController of the window
                 UIApplication.shared.keyWindow!.rootViewController = navigationController
             case .foreground(parent: let boxedParent):
                 if let parent = boxedParent.value {
@@ -262,7 +263,7 @@ extension PinRouter {
         switch flow.origin {
         case .foreground:
             guard let controller = navigationController else {
-                // The contorller MUST be allocated at that point. report non-fatal in case something goes wrong
+                // The controller MUST be allocated at that point. report non-fatal in case something goes wrong
                 recorder.error(PinRouting.FlowError.navigationControllerIsNotInitialized)
                 return
             }
@@ -271,8 +272,9 @@ extension PinRouter {
             }
             controller.dismiss(animated: animated, completion: cleanup)
         case .background(flowProvider: let box):
-            if let provider = box.value, completedSuccessfully {
-                UIApplication.shared.keyWindow!.rootViewController = provider.setupMainFlow(forced: false)
+            if let _ = box.value, completedSuccessfully {
+                // NOOP
+                // Any change to the key window rootViewController will be done after the wallet finishes loading.
             }
             cleanup()
         }

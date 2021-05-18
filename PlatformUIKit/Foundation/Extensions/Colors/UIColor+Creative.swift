@@ -22,14 +22,17 @@ extension UIColor {
 
     // Crypto
 
+    static let aaveColor = color(named: "Aave")
     static let algo = color(named: "Algorand")
-    static let btc = color(named: "Bitcoin")
-    static let eth = color(named: "Ethereum")
     static let bch = color(named: "BitcoinCash")
-    static let xlm = color(named: "Stellar")
+    static let btc = color(named: "Bitcoin")
+    static let dot = color(named: "Polkadot")
+    static let eth = color(named: "Ethereum")
     static let pax = color(named: "Pax")
     static let usdt = color(named: "Tether")
     static let wDGLD = color(named: "wDGLD")
+    static let xlm = color(named: "Stellar")
+    static let yfi = color(named: "YearnFinance")
 
     // Tiers
 

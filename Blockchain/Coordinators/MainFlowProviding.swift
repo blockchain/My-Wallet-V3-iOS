@@ -9,6 +9,6 @@
 import Foundation
 
 @objc
-protocol MainFlowProviding: class {
-    func setupMainFlow(forced: Bool) -> UIViewController
+protocol MainFlowProviding: AnyObject {
+    func setupMainFlow() -> UIViewController
 }

@@ -248,9 +248,7 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
     private func showIntroductionScreen() {
         let presenter = CustodyInformationScreenPresenter(stateService: stateService)
         let controller = CustodyInformationViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            controller.isModalInPresentation = true
-        }
+        controller.isModalInPresentation = true
         navigationRouter.present(viewController: controller, using: .modalOverTopMost)
     }
 

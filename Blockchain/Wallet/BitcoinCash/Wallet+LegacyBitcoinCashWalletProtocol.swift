@@ -6,10 +6,18 @@
 //  Copyright © 2020 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import PlatformKit
+import RxSwift
 
 protocol LegacyBitcoinCashWalletProtocol: class {
+    
     var hasBitcoinCashAccount: Bool { get }
+
+    func updateAccountLabel(
+        _ cryptoCurrency: CryptoCurrency,
+        index: Int,
+        label: String
+    ) -> Completable
 
     func bitcoinCashDefaultWalletIndex() -> Int?
 

@@ -43,7 +43,9 @@ class AssetAddressRepositoryMock: AssetAddressFetching {
         var result: [AssetAddress] = []
         for address in addresses {
             switch asset {
-            case .algorand:
+            case .aave:
+                result += [AnyERC20AssetAddress<AaveToken>(publicKey: address)]
+            case .algorand, .polkadot:
                 break
             case .bitcoin:
                 result += [BitcoinAssetAddress(publicKey: address)]
@@ -59,6 +61,8 @@ class AssetAddressRepositoryMock: AssetAddressFetching {
                 result += [AnyERC20AssetAddress<TetherToken>(publicKey: address)]
             case .wDGLD:
                 result += [AnyERC20AssetAddress<WDGLDToken>(publicKey: address)]
+            case .yearnFinance:
+                result += [AnyERC20AssetAddress<YearnFinanceToken>(publicKey: address)]
             }
         }
         return result

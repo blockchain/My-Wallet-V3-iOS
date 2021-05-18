@@ -16,6 +16,10 @@ import PlatformUIKit
 
 class MockLegacyEthereumWallet: LegacyEthereumWalletAPI, LegacyWalletAPI, MnemonicAccessAPI {
 
+    func updateAccountLabel(_ cryptoCurrency: CryptoCurrency, index: Int, label: String) -> Completable {
+        .empty()
+    }
+
     var initializationState: Single<WalletSetup.State> = .just(.initialized)
 
     func setEthereumMemo(for transaction: String, memo: String?) {
@@ -101,19 +105,6 @@ class MockLegacyEthereumWallet: LegacyEthereumWalletAPI, LegacyWalletAPI, Mnemon
         switch getLabelForEthereumAccountCompletion {
         case .success(let value):
             success(value)
-        case .failure(let e):
-            error("\(e.localizedDescription)")
-        }
-    }
-    
-    var saveEthereumAccountCompletion: Result<Void, MockLegacyEthereumWalletError> = .success(())
-    func saveEthereumAccount(with privateKey: String,
-                             label: String?,
-                             success: @escaping () -> Void,
-                             error: @escaping (String) -> Void) {
-        switch saveEthereumAccountCompletion {
-        case .success:
-            success()
         case .failure(let e):
             error("\(e.localizedDescription)")
         }

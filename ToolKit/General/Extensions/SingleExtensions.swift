@@ -41,6 +41,29 @@ extension Single {
     }
 }
 
+extension PrimitiveSequence where Trait == SingleTrait, Element == Array<Single<Bool>> {
+    /// Flat maps the array element of this stream, concatenating its elements into a `Single<Bool>` that returns `true` at first chance.
+    public func flatMapConcatFirst() -> Single<Bool> {
+        flatMap { array -> Single<Bool> in
+            // Reduce the `Array<Single<Bool>>`
+            array.reduce(Single.just(false)) { (stream, thisSingle) -> Single<Bool> in
+                // Flat map the previously reduced value.
+                stream
+                    .flatMap { streamResult -> Single<Bool> in
+                        switch streamResult {
+                        case true:
+                            // If the stream result was true, return.
+                            return .just(true)
+                        case false:
+                            // Else, concatenate stream on the array.
+                            return thisSingle
+                        }
+                    }
+            }
+        }
+    }
+}
+
 extension PrimitiveSequence where Trait == SingleTrait {
     public func map<A: AnyObject, R>(weak object: A, _ selector: @escaping (A, Element) throws -> R) -> PrimitiveSequence<SingleTrait, R> {
         map { [weak object] element -> R in

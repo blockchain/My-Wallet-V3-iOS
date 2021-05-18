@@ -12,9 +12,7 @@ extension TabViewController {
     func showInterestIdentityVerificationScreen(_ controller: InterestDashboardAnnouncementViewController) {
         controller.transitioningDelegate = sheetPresenter
         controller.modalPresentationStyle = .custom
-        if #available(iOS 13.0, *) {
-            controller.isModalInPresentation = true
-        }
+        controller.isModalInPresentation = true
         present(controller, animated: true, completion: nil)
     }
 }

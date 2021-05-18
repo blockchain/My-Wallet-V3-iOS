@@ -6,13 +6,13 @@
 //  Copyright © 2018 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import DebugUIKit
 import ActivityKit
 import ActivityUIKit
 import AlgorandKit
 import BitcoinCashKit
 import BitcoinChainKit
 import BitcoinKit
+import DebugUIKit
 import DIKit
 import EthereumKit
 import Firebase
@@ -23,8 +23,9 @@ import KYCUIKit
 import NetworkKit
 import PlatformKit
 import PlatformUIKit
-import RxSwift
+import PolkadotKit
 import RIBs
+import RxSwift
 import ToolKit
 import TransactionUIKit
 import WalletPayloadKit
@@ -90,6 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             DependencyContainer.interestKit;
             DependencyContainer.platformUIKit;
             DependencyContainer.algorandKit;
+            DependencyContainer.polkadotKit;
             DependencyContainer.ethereumKit;
             DependencyContainer.erc20Kit;
             DependencyContainer.bitcoinChainKit;
@@ -354,7 +356,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
 
-            // Check that the version of the link (if provided) is supported, if not, prompt the user to upgrade
+            // Check that the version of the link (if provided) is supported, if not, prompt the user to update
             if let minimumAppVersionStr = dynamicLink?.minimumAppVersion,
                 let minimumAppVersion = AppVersion(string: minimumAppVersionStr),
                 let appVersionStr = Bundle.applicationVersion,

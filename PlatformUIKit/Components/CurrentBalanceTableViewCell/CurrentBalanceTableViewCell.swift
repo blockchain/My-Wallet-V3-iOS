@@ -20,7 +20,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
             guard let presenter = presenter else {
                 assetBalanceView.presenter = nil
                 badgeImageView.viewModel = nil
-                thumbSideImageView.set(nil)
+                thumbSideImageView.viewModel = nil
                 labelStackView.clear()
                 multiBadgeView.model = nil
                 return
@@ -41,7 +41,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                 .disposed(by: disposeBag)
 
             presenter.iconImageViewContent
-                .drive(thumbSideImageView.rx.content)
+                .drive(thumbSideImageView.rx.viewModel)
                 .disposed(by: disposeBag)
 
             presenter.title
@@ -108,7 +108,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
     private var labelStackViewBottomMultiBadgeView: NSLayoutConstraint!
 
     private let badgeImageView = BadgeImageView()
-    private let thumbSideImageView = UIImageView()
+    private let thumbSideImageView = BadgeImageView()
     private let labelStackView = ThreeLabelStackView()
     private let assetBalanceView = AssetBalanceView()
     private let separatorView = UIView()
@@ -171,13 +171,8 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                                                                    offset: 0,
                                                                    priority: .penultimateHigh,
                                                                    activate: false)
-        thumbSideImageView.image = UIImage(named: "icon_custody_lock",
-                                           in: .platformUIKit,
-                                           compatibleWith: nil)
         separatorView.backgroundColor = .lightBorder
-
         layoutIfNeeded()
-
         assetBalanceView.shimmer(
             estimatedFiatLabelSize: CGSize(width: 90, height: 16),
             estimatedCryptoLabelSize: CGSize(width: 100, height: 14)

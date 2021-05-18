@@ -62,13 +62,14 @@ public final class CustodialActionScreenPresenter: WalletActionScreenPresenting 
         self.interactor = interactor
         self.enabledCurrenciesService = enabledCurrenciesService
         self.eligiblePaymentService = eligiblePaymentService
-        
+
+        let currency = interactor.currency
         let descriptionValue: () -> Observable<String> = {
-            switch interactor.currency {
-            case .crypto:
-                return .just(LocalizationConstants.DashboardDetails.BalanceCell.Description.trading)
+            switch currency {
+            case .crypto(let cryptoCurrency):
+                return .just(cryptoCurrency.name)
             case .fiat(let fiatCurrency):
-                return .just(fiatCurrency.code)
+                return .just(fiatCurrency.displayCode)
             }
         }
         

@@ -28,11 +28,10 @@ extension AnnouncementRecord {
         case newSwap = "announcement-cache-new-swap"
         
         // MARK: - One Time
-        
+
+        case aaveYfiDot = "announcement-cache-aave-yfi-dot-received"
         case blockstackAirdropReceived = "announcement-cache-kyc-stx-airdrop-received"
         case identityVerification = "announcement-cache-identity-verification"
-        case algorand = "announcement-cache-algorand"
-        case tether = "announcement-cache-tether"
         case exchange = "announcement-cache-pit"
         case bitpay = "announcement-cache-bitpay"
         case resubmitDocuments = "announcement-cache-resubmit-documents"

@@ -8,7 +8,7 @@
 
 import JavaScriptCore
 
-public protocol JSContextProviderAPI: class {
+public protocol JSContextProviderAPI: AnyObject {
     var jsContext: JSContext { get }
     func fetchJSContext() -> JSContext
 }

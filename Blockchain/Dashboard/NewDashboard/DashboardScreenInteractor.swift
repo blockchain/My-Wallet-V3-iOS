@@ -43,7 +43,8 @@ final class DashboardScreenInteractor {
          enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve(),
          featureFetcher: FeatureFetching = resolve(),
          reactiveWallet: ReactiveWalletAPI = WalletManager.shared.reactiveWallet,
-         userPropertyInteractor: AnalyticsUserPropertyInteractor = AnalyticsUserPropertyInteractor()) {
+         userPropertyInteractor: AnalyticsUserPropertyInteractor = AnalyticsUserPropertyInteractor(),
+         fiatCurrencyService: FiatCurrencyServiceAPI = resolve()) {
         self.historicalProvider = historicalProvider
         self.balanceProvider = balanceProvider
         self.balanceChangeProvider = balanceChangeProvider
@@ -62,7 +63,8 @@ final class DashboardScreenInteractor {
             balanceProvider: balanceProvider,
             featureFetcher: featureFetcher,
             paymentMethodsService: paymentMethodsService,
-            enabledCurrenciesService: enabledCurrenciesService
+            enabledCurrenciesService: enabledCurrenciesService,
+            fiatCurrencyService: fiatCurrencyService
         )
         
         NotificationCenter.when(.walletInitialized) { [weak self] _ in

@@ -58,6 +58,10 @@ public class CryptoInterestAccount: CryptoAccount {
         self.balanceFetching = balanceProviding[asset.currency].savings
     }
 
+    public func can(perform action: AssetAction) -> Single<Bool> {
+        .just(false)
+    }
+
     public func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue> {
         Single
             .zip(

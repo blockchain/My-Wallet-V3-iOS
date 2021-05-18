@@ -19,9 +19,7 @@ final class LinkBankFailureScreenBuilder: LinkBankFailureScreenBuildable {
         let interactor = LinkBankFailureScreenInteractor()
         let presenter = LinkBankFailureScreenPresenter(interactor: interactor)
         let viewController = PendingStateViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
+        viewController.isModalInPresentation = true
         interactor.listener = listener
         return LinkBankFailureScreenRouter(interactor: interactor, viewController: viewController)
     }

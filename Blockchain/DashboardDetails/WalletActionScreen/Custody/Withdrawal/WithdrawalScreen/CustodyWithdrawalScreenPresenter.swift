@@ -24,19 +24,11 @@ final class CustodyWithdrawalScreenPresenter {
     // MARK: - Navigation Properties
     
     var trailingButton: Screen.Style.TrailingButton {
-        if #available(iOS 13.0, *) {
-            return .content(.init(title: nil, image: #imageLiteral(resourceName: "cancel_icon").withTintColor(.red), accessibility: nil))
-        } else {
-            return .none
-        }
+        .content(.init(title: nil, image: #imageLiteral(resourceName: "cancel_icon").withTintColor(.red), accessibility: nil))
     }
     
     var leadingButton: Screen.Style.LeadingButton {
-        if #available(iOS 13.0, *) {
-            return .none
-        } else {
-            return .close
-        }
+        .none
     }
     
     var titleView: Screen.Style.TitleView {
@@ -44,11 +36,7 @@ final class CustodyWithdrawalScreenPresenter {
     }
     
     var barStyle: Screen.Style.Bar {
-        if #available(iOS 13.0, *) {
-            return .darkContent()
-        } else {
-            return .lightContent()
-        }
+        .darkContent()
     }
     
     var activityIndicatorVisibility: Driver<Visibility> {

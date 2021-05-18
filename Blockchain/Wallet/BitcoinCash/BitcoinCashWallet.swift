@@ -58,6 +58,14 @@ final class BitcoinCashWallet: BitcoinCashWalletBridgeAPI {
             .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
     }
 
+    func update(accountIndex: Int, label: String) -> Completable {
+        reactiveWallet
+            .waitUntilInitializedSingle
+            .flatMapCompletable(weak: self) { (self, _) -> Completable in
+                self.wallet.updateAccountLabel(.bitcoinCash, index: accountIndex, label: label)
+            }
+    }
+
     // MARK: - Private
 
     private func fetchAllWallets() -> Single<[BitcoinCashWalletAccount]> {

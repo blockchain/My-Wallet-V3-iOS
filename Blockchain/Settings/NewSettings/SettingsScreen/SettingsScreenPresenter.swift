@@ -22,11 +22,7 @@ final class SettingsScreenPresenter {
     let trailingButton: Screen.Style.TrailingButton = .none
     
     var leadingButton: Screen.Style.LeadingButton {
-        if #available(iOS 13.0, *) {
-            return .none
-        } else {
-            return .close
-        }
+        .none
     }
     
     let barStyle: Screen.Style.Bar = .lightContent()

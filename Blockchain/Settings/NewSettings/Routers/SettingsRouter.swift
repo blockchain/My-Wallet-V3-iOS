@@ -300,9 +300,7 @@ final class SettingsRouter: SettingsRouterAPI {
             interactor: interactor
         )
         let viewController = SelectionScreenViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
+        viewController.isModalInPresentation = true
         navigationRouter.present(viewController: viewController)
         
         interactor.selectedIdOnDismissal

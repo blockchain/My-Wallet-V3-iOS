@@ -12,12 +12,8 @@ public final class AnnouncementTableViewCell: UITableViewCell {
 
     /// Set custom spacing
     public var bottomSpacing: CGFloat {
-        set {
-            bottomSpacingConstraint.constant = -newValue
-        }
-        get {
-            -bottomSpacingConstraint.constant
-        }
+        get { -bottomSpacingConstraint.constant }
+        set { bottomSpacingConstraint.constant = -newValue }
     }
     
     private var bottomSpacingConstraint: NSLayoutConstraint!

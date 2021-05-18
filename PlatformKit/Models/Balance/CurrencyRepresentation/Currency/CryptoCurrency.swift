@@ -20,6 +20,9 @@ public enum CryptoCurrency: String, Currency, Codable, CaseIterable, Comparable 
     case bitcoinCash = "BCH"
     case stellar = "XLM"
     case algorand = "ALGO"
+    case polkadot = "DOT"
+    case aave = "AAVE"
+    case yearnFinance = "YFI"
     case wDGLD = "WDGLD"
     case pax = "PAX"
     case tether = "USDT"
@@ -55,12 +58,18 @@ extension CryptoCurrency {
             return 3
         case .algorand:
             return 4
-        case .wDGLD:
+        case .polkadot:
             return 5
-        case .pax:
+        case .aave:
             return 6
-        case .tether:
+        case .yearnFinance:
             return 7
+        case .wDGLD:
+            return 8
+        case .pax:
+            return 9
+        case .tether:
+            return 10
         }
     }
 
@@ -68,15 +77,18 @@ extension CryptoCurrency {
     /// Used whenever we don't have access to the new Account architecture.
     public var hasNonCustodialReceiveSupport: Bool {
         switch self {
-        case .algorand:
+        case .algorand,
+             .polkadot:
             return false
-        case .bitcoin,
+        case .aave,
+             .bitcoin,
              .bitcoinCash,
              .ethereum,
              .pax,
              .stellar,
              .tether,
-             .wDGLD:
+             .wDGLD,
+             .yearnFinance:
             return true
         }
     }
@@ -85,15 +97,18 @@ extension CryptoCurrency {
     /// Used whenever we don't have access to the new Account architecture.
     public var hasNonCustodialWithdrawalSupport: Bool {
         switch self {
-        case .algorand:
+        case .algorand,
+             .polkadot:
             return false
-        case .bitcoin,
+        case .aave,
+             .bitcoin,
              .bitcoinCash,
              .ethereum,
              .pax,
              .stellar,
              .tether,
-             .wDGLD:
+             .wDGLD,
+             .yearnFinance:
             return true
         }
     }
@@ -102,49 +117,38 @@ extension CryptoCurrency {
     /// Used whenever we don't have access to the new Account architecture.
     public var hasNonCustodialActivitySupport: Bool {
         switch self {
-        case .algorand:
+        case .algorand,
+             .polkadot:
             return false
-        case .bitcoin,
+        case .aave,
+             .bitcoin,
              .bitcoinCash,
              .ethereum,
              .pax,
              .tether,
              .stellar,
-             .wDGLD:
+             .wDGLD,
+             .yearnFinance:
             return true
         }
     }
 
-    /// CryptoCurrency is supported in New Swap
-    /// Used whenever we don't have access to the new Account architecture.
+    /// CryptoCurrency has Non Custodial support in Swap.
+    /// Used only if we don't have access to the new Account architecture.
     public var hasSwapSupport: Bool {
         switch self {
-        case .algorand:
+        case .algorand,
+             .polkadot:
             return false
-        case .bitcoin,
+        case .aave,
+             .bitcoin,
              .bitcoinCash,
              .ethereum,
              .pax,
              .stellar,
              .tether,
-             .wDGLD:
-            return true
-        }
-    }
-
-    /// CryptoCurrency is supported in Legacy Swap
-    /// Used whenever we don't have access to the new Account architecture.
-    public var hasLegacySwapSupport: Bool {
-        switch self {
-        case .algorand,
-             .tether,
-             .wDGLD:
-            return false
-        case .bitcoin,
-             .bitcoinCash,
-             .ethereum,
-             .pax,
-             .stellar:
+             .wDGLD,
+             .yearnFinance:
             return true
         }
     }
@@ -153,9 +157,12 @@ extension CryptoCurrency {
     /// Used whenever we don't have access to the new Account architecture.
     public var hasLegacySendSupport: Bool {
         switch self {
-        case .algorand,
+        case .aave,
+             .algorand,
+             .polkadot,
              .tether,
-             .wDGLD:
+             .wDGLD,
+             .yearnFinance:
             return false
         case .bitcoin,
              .bitcoinCash,
@@ -168,6 +175,8 @@ extension CryptoCurrency {
 
     public var name: String {
         switch self {
+        case .aave:
+            return "Aave"
         case .algorand:
             return "Algorand"
         case .bitcoin:
@@ -176,6 +185,8 @@ extension CryptoCurrency {
             return "Bitcoin Cash"
         case .ethereum:
             return "Ether"
+        case .polkadot:
+            return "DOT"
         case .pax:
             return "USD \(LocalizationConstants.digital)"
         case .stellar:
@@ -184,6 +195,8 @@ extension CryptoCurrency {
             return "Tether"
         case .wDGLD:
             return "Wrapped-DGLD"
+        case .yearnFinance:
+            return "YFI"
         }
     }
 
@@ -194,7 +207,14 @@ extension CryptoCurrency {
         
     public var displayCode: String {
         switch self {
-        case .algorand, .bitcoin, .bitcoinCash, .ethereum, .stellar:
+        case .aave,
+             .algorand,
+             .bitcoin,
+             .bitcoinCash,
+             .ethereum,
+             .polkadot,
+             .stellar,
+             .yearnFinance:
             return code
         case .tether:
             return "USDT"
@@ -207,22 +227,21 @@ extension CryptoCurrency {
 
     public var maxDecimalPlaces: Int {
         switch self {
-        case .algorand:
+        case .algorand, .tether:
             return 6
-        case .bitcoin:
-            return 8
-        case .bitcoinCash:
-            return 8
-        case .ethereum:
-            return 18
-        case .pax:
-            return 18
         case .stellar:
             return 7
-        case .tether:
-            return 6
-        case .wDGLD:
+        case .bitcoin,
+             .bitcoinCash,
+             .wDGLD:
             return 8
+        case .polkadot:
+            return 10
+        case .aave,
+             .ethereum,
+             .pax,
+             .yearnFinance:
+            return 18
         }
     }
 
@@ -230,29 +249,29 @@ extension CryptoCurrency {
         switch self {
         case .algorand:
             return 2
-        case .bitcoin:
-            return 8
-        case .bitcoinCash:
-            return 8
-        case .ethereum:
-            return 8
-        case .pax:
-            return 8
-        case .stellar:
-            return 7
         case .tether:
             return 6
-        case .wDGLD:
+        case .stellar:
+            return 7
+        case .aave,
+             .bitcoin,
+             .bitcoinCash,
+             .ethereum,
+             .pax,
+             .wDGLD,
+             .yearnFinance:
             return 8
+        case .polkadot:
+            return 10
         }
     }
     
     /// Returns `true` for any ERC20 asset
     public var isERC20: Bool {
         switch self {
-        case .pax, .tether, .wDGLD:
+        case .aave, .pax, .tether, .wDGLD, .yearnFinance:
             return true
-        case .algorand, .bitcoin, .bitcoinCash, .ethereum, .stellar:
+        case .algorand, .bitcoin, .bitcoinCash, .ethereum, .polkadot, .stellar:
             return false
         }
     }

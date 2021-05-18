@@ -15,11 +15,11 @@ import XCTest
 
 final class AnnouncementTests: XCTestCase {
 
-    // MARK: PAX
+    // MARK: CloudBackup
     
-    func testAlgorandAnnouncementShows() {
+    func testCloudBackupAnnouncementShows() {
         let cache = MemoryCacheSuite()
-        let announcement = AlgorandAnnouncement(
+        let announcement = CloudBackupAnnouncement(
             cacheSuite: cache,
             dismiss: {},
             action: {}

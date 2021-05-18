@@ -13,4 +13,5 @@ public protocol BitcoinCashWalletBridgeAPI {
     var wallets: Single<[BitcoinCashWalletAccount]> { get }
 
     func receiveAddress(forXPub xpub: String) -> Single<String>
+    func update(accountIndex: Int, label: String) -> Completable 
 }

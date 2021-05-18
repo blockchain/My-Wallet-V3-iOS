@@ -74,23 +74,13 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(0, noGrouping)
     }
 
-    func testLocalCurrencyFormatterWithUSLocale() {
-        let testStringFromNumber = { (input: NSNumber) in
-            let formatter = NumberFormatter.localCurrencyFormatterWithUSLocale
-            self.testUSLocaleFormatter(formatter: formatter, input: input)
-        }
-
-        testStringFromNumber(1234.56)
-        testStringFromNumber(1234)
-    }
-
     // MARK: Digital Assets
     func testAssetFormatter() {
         // Setup test
         let name = "assetFormatter"
         let groupingTuple = self.expectGrouping(expect: false, functionName: name)
         let testStringFromNumber = { (input: NSNumber, decimalTuple: ExpectDecimal) -> Void in
-            self.testFormatter(formatter: NumberFormatter.assetFormatter,
+            self.testFormatter(formatter: NumberFormatter.bitcoinAssetFormatter,
                           inputAmount: input,
                           grouping: groupingTuple,
                           decimalPlaces: decimalTuple)
@@ -107,10 +97,10 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(0, decimals(0))
     }
 
-    func testAssetFormatterWithGroupingSeparator() {
-        let name = "assetFormatterWithGroupingSeparator"
+    func testBitcoinFormatterWithGroupingSeparator() {
+        let name = "bitcoinFormatterWithGroupingSeparator"
         let testStringFromNumber = { (input: NSNumber, groupingTuple: ExpectGrouping, decimalTuple: ExpectDecimal) -> Void in
-            self.testFormatter(formatter: NumberFormatter.assetFormatterWithGroupingSeparator,
+            self.testFormatter(formatter: NumberFormatter.bitcoinFormatterWithGroupingSeparator,
                                inputAmount: input,
                                grouping: groupingTuple,
                                decimalPlaces: decimalTuple)
@@ -128,16 +118,6 @@ class NumberFormatterAssetsTests: XCTestCase {
         testStringFromNumber(1234, grouping, decimals(0))
         testStringFromNumber(123.1234, noGrouping, decimals(4))
         testStringFromNumber(0, noGrouping, decimals(0))
-    }
-
-    func testAssetFormatterWithUSLocale() {
-        let testStringFromNumber = { (input: NSNumber) in
-            let formatter = NumberFormatter.assetFormatterWithUSLocale
-            self.testUSLocaleFormatter(formatter: formatter, input: input)
-        }
-
-        testStringFromNumber(1234.56)
-        testStringFromNumber(1234)
     }
 
     // MARK: Helpers

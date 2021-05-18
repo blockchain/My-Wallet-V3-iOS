@@ -16,8 +16,6 @@ extension LocalizationConstants {
                 public static let savings = NSLocalizedString("Interest", comment: "Interest")
             }
             public struct Description {
-                public static let nonCustodial = NSLocalizedString("Wallet Balance", comment: "Wallet Balance")
-                public static let trading = NSLocalizedString("Trading Wallet", comment: "Trading Wallet")
                 public static let savingsPrefix = NSLocalizedString("Earn", comment: "Earn 3% APY")
                 public static let savingsSuffix = NSLocalizedString("% APY", comment: "Earn 3% APY")
             }

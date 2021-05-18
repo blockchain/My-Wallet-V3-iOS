@@ -11,12 +11,7 @@ import PlatformKit
 /// Helper to convert between CryptoCurrency <-> LegacyAssetType.
 // To be deprecated once LegacyAssetType has been removed.
 @objc class AssetTypeLegacyHelper: NSObject {
-    
-    @objc
-    static func convert(fromLegacy type: LegacyAssetType) -> LegacyCryptoCurrency {
-        LegacyCryptoCurrency(CryptoCurrency(legacyAssetType: type))
-    }
-    
+
     @objc
     static func displayCode(for type: LegacyAssetType) -> String {
         CryptoCurrency(legacyAssetType: type).displayCode

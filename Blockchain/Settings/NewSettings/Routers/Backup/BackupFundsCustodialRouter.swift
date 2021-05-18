@@ -84,9 +84,7 @@ final class BackupFundsCustodialRouter: BackupRouterAPI {
     private func showBackupFunds(presentationType: PresentationType, entry: BackupRouterEntry) {
         let presenter = BackupFundsScreenPresenter(stateService: stateService, entry: entry)
         let controller = DetailsScreenViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            controller.isModalInPresentation = true
-        }
+        controller.isModalInPresentation = true
         navigationRouter.present(viewController: controller, using: presentationType)
     }
 }

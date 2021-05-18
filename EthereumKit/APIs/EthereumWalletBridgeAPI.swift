@@ -17,8 +17,6 @@ import RxSwift
 /// describing this.
 public protocol EthereumWalletAccountBridgeAPI: class {
     var wallets: Single<[EthereumWalletAccount]> { get }
-    
-    func save(keyPair: EthereumKeyPair, label: String) -> Completable
 }
 
 public protocol EthereumWalletBridgeAPI {
@@ -41,6 +39,9 @@ public protocol EthereumWalletBridgeAPI {
     func updateMemo(for transactionHash: String, memo: String?) -> Completable
     
     func recordLast(transaction: EthereumTransactionPublished) -> Single<EthereumTransactionPublished>
+
+    /// Updates the Ethereum account label at the given index.
+    func update(accountIndex: Int, label: String) -> Completable
 }
 
 public typealias CompleteEthereumWalletBridgeAPI =

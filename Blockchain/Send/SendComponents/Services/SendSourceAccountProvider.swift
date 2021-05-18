@@ -6,7 +6,7 @@
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import PlatformKit
 
 /// Provider protocol for a source account on the send screen
 protocol SendSourceAccountProviding {
@@ -28,5 +28,5 @@ extension SendSourceAccountProviding {
 // MARK: - Asset Specific
 
 class EtherSendSourceAccountProvider: SendSourceAccountProviding {
-    let accounts = [SendSourceAccount(label: LocalizationConstants.myEtherWallet)]
+    let accounts = [SendSourceAccount(label: CryptoCurrency.ethereum.defaultWalletName)]
 }

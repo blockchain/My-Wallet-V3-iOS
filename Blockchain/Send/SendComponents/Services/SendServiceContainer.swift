@@ -56,7 +56,16 @@ struct SendServiceContainer: SendServiceContaining {
             exchange = DataProvider.default.exchange[CurrencyType.crypto(.ethereum)]
             sourceAccountProvider = EtherSendSourceAccountProvider()
             balance = { () -> CryptoAccountBalanceFetching in resolve(tag: asset) }()
-        case .algorand, .bitcoin, .bitcoinCash, .pax, .stellar, .tether, .wDGLD:
+        case .aave,
+             .algorand,
+             .bitcoin,
+             .bitcoinCash,
+             .pax,
+             .polkadot,
+             .stellar,
+             .tether,
+             .wDGLD,
+             .yearnFinance:
             fatalError("\(#function) is not implemented for \(asset)")
         }
     }

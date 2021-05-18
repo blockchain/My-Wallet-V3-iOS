@@ -36,19 +36,11 @@ final class CustodyWithdrawalSummaryPresenter {
     // MARK: - Navigation Properties
     
     var trailingButton: Screen.Style.TrailingButton {
-        if #available(iOS 13.0, *) {
-            return .content(.init(title: nil, image: #imageLiteral(resourceName: "cancel_icon"), accessibility: nil))
-        } else {
-            return .none
-        }
+        .content(.init(title: nil, image: #imageLiteral(resourceName: "cancel_icon"), accessibility: nil))
     }
     
     var leadingButton: Screen.Style.LeadingButton {
-        if #available(iOS 13.0, *) {
-            return .none
-        } else {
-            return .close
-        }
+        .none
     }
     
     var titleView: Screen.Style.TitleView {
@@ -56,11 +48,7 @@ final class CustodyWithdrawalSummaryPresenter {
     }
     
     var barStyle: Screen.Style.Bar {
-        if #available(iOS 13.0, *) {
-            return .darkContent()
-        } else {
-            return .lightContent()
-        }
+        .darkContent()
     }
     
     // MARK: - Public Properties

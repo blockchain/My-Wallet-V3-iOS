@@ -40,24 +40,31 @@ public final class BalanceChangeProvider: BalanceChangeProviding {
     
     public init(
         currencies: [CryptoCurrency],
-        ether: AssetBalanceChangeProviding,
-        pax: AssetBalanceChangeProviding,
-        stellar: AssetBalanceChangeProviding,
+        aave: AssetBalanceChangeProviding,
+        algorand: AssetBalanceChangeProviding,
         bitcoin: AssetBalanceChangeProviding,
         bitcoinCash: AssetBalanceChangeProviding,
-        algorand: AssetBalanceChangeProviding,
+        ether: AssetBalanceChangeProviding,
+        pax: AssetBalanceChangeProviding,
+        polkadot: AssetBalanceChangeProviding,
+        stellar: AssetBalanceChangeProviding,
         tether: AssetBalanceChangeProviding,
-        wDGLD: AssetBalanceChangeProviding) {
+        wDGLD: AssetBalanceChangeProviding,
+        yearnFinance: AssetBalanceChangeProviding
+    ) {
         self.currencies = currencies.map { $0.currency }
         services = [
-            .crypto(.ethereum): ether,
-            .crypto(.pax): pax,
-            .crypto(.stellar): stellar,
+            .crypto(.aave): aave,
+            .crypto(.algorand): algorand,
             .crypto(.bitcoin): bitcoin,
             .crypto(.bitcoinCash): bitcoinCash,
-            .crypto(.algorand): algorand,
+            .crypto(.ethereum): ether,
+            .crypto(.pax): pax,
+            .crypto(.polkadot): polkadot,
+            .crypto(.stellar): stellar,
             .crypto(.tether): tether,
-            .crypto(.wDGLD): wDGLD
+            .crypto(.wDGLD): wDGLD,
+            .crypto(.yearnFinance): yearnFinance
         ]
     }
 

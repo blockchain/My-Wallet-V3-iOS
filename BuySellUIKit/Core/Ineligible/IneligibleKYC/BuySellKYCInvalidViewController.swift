@@ -34,12 +34,8 @@ final class BuySellKYCInvalidViewController: BaseScreenViewController {
         setupTableView()
         setupNavigationBar()
         
-        if #available(iOS 13.0, *) {
-            navigationController?.setNavigationBarHidden(true, animated: false)
-        } else {
-            navigationController?.setNavigationBarHidden(false, animated: false)
-        }
-        
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
         tableView.reloadData()
     }
     

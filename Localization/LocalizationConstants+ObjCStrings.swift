@@ -95,7 +95,6 @@ extension LocalizationConstants.ObjCStrings {
     public static let BC_STRING_LOW_FEE_NOT_RECOMMENDED = NSLocalizedString("Low fee not recommended", comment: "")
     public static let BC_STRING_MAKE_DEFAULT = NSLocalizedString("Make Default", comment: "")
     public static let BC_STRING_MUST_BE_ABOVE_OR_EQUAL_TO_DUST_THRESHOLD = NSLocalizedString("Amount must be greater than or equal to the dust threshold (%lld Satoshi)", comment: "")
-    public static let BC_STRING_MY_BITCOIN_WALLET = NSLocalizedString("My Bitcoin Wallet", comment: "")
     public static let BC_STRING_NAME = NSLocalizedString("Name", comment: "")
     public static let BC_STRING_NEW_ADDRESS = NSLocalizedString("New Address", comment: "")
     public static let BC_STRING_NEW_ADDRESS_CREATE_NEW = NSLocalizedString("Create new address", comment: "")

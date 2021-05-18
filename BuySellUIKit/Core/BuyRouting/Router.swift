@@ -248,10 +248,8 @@ public final class Router: RouterAPI {
             interactor: interactor
         )
         let viewController = SelectionScreenViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
-        
+        viewController.isModalInPresentation = true
+
         do {
             let analytics: AnalyticsEventRecorderAPI = resolve()
             analytics.record(event: AnalyticsEvent.sbCurrencySelectScreen)
@@ -296,10 +294,8 @@ public final class Router: RouterAPI {
             interactor: interactor
         )
         let viewController = SelectionScreenViewController(presenter: presenter)
-        if #available(iOS 13.0, *) {
-            viewController.isModalInPresentation = true
-        }
-        
+        viewController.isModalInPresentation = true
+
         if navigationRouter.navigationControllerAPI == nil {
             navigationRouter.present(viewController: viewController)
         } else {

@@ -12,28 +12,21 @@ import RxSwift
 /// This is temporary as the `SendBitcoinViewController` will likely be deprecated soon.
 @objc
 final class ExchangeAddressViewModel: NSObject {
-    
-    // MARK: - Types
 
     // MARK: - Properties
     
-    @objc let asset: LegacyCryptoCurrency
+    let cryptoCurrency: CryptoCurrency
     @objc var isExchangeLinked = false
     @objc var isTwoFactorEnabled = false
     @objc var address: String?
     
     // MARK: - Setup
-    
-    @objc
-    init(legacyAssetType: LegacyAssetType) {
-        self.asset = AssetTypeLegacyHelper.convert(fromLegacy: legacyAssetType)
-    }
-    
-    init(assetType: CryptoCurrency) {
-        self.asset = LegacyCryptoCurrency(assetType)
+
+    init(cryptoCurrency: CryptoCurrency) {
+        self.cryptoCurrency = cryptoCurrency
     }
     
     @objc var legacyAssetType: LegacyAssetType {
-        asset.legacy
+        cryptoCurrency.legacy
     }
 }

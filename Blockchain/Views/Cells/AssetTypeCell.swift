@@ -19,13 +19,13 @@ import ToolKit
 @objc class AssetTypeCell: UITableViewCell {
 
     @objc var legacyAssetType: LegacyAssetType {
-        guard let asset = assetType else {
+        guard let asset = cryptoCurrency else {
             Logger.shared.error("Unknown asset type!")
             return LegacyAssetType(rawValue: -1)!
         }
         return asset.legacy
     }
-    private var assetType: CryptoCurrency?
+    private var cryptoCurrency: CryptoCurrency?
     
     @objc weak var delegate: AssetTypeCellDelegate?
     
@@ -40,13 +40,17 @@ import ToolKit
         chevronButton.accessibilityIdentifier = AccessibilityIdentifiers.AssetSelection.toggleButton
         contentView.backgroundColor = UIColor.NavigationBar.LightContent.background
     }
-    
-    @objc func configure(with assetType: LegacyCryptoCurrency, showChevronButton: Bool) {
-        self.assetType = assetType.value
-        assetImageView.image = self.assetType?.whiteImageSmall
-        label.text = assetType.name
+
+    @objc func configure(with assetType: LegacyAssetType, showChevronButton: Bool) {
+        configure(with: CryptoCurrency(legacyAssetType: assetType), showChevronButton: showChevronButton)
+    }
+
+    private func configure(with cryptoCurrency: CryptoCurrency, showChevronButton: Bool) {
+        self.cryptoCurrency = cryptoCurrency
+        assetImageView.image = cryptoCurrency.whiteImageSmall
+        label.text = cryptoCurrency.name
         chevronButton.isHidden = !showChevronButton
-        accessibilityIdentifier = "\(AccessibilityIdentifiers.AssetSelection.assetPrefix)\(assetType.displayCode)"
+        accessibilityIdentifier = "\(AccessibilityIdentifiers.AssetSelection.assetPrefix)\(cryptoCurrency.displayCode)"
     }
 
     @IBAction private func chevronButtonTapped(_ sender: UIButton) {
@@ -76,5 +80,27 @@ import ToolKit
                 self.chevronButton.transform = CGAffineTransform(rotationAngle: 0)
             }
         }
+    }
+}
+
+// AssetTypeCell is a legacy component that is only used with BTC/BCH/ETH, so these are the only coins with added images.
+fileprivate extension CryptoCurrency {
+    private var whiteImageName: String? {
+        switch self {
+        case .bitcoin:
+            return "white_btc_small"
+        case .bitcoinCash:
+            return "white_bch_small"
+        case .ethereum:
+            return "white_eth_small"
+        case .aave, .algorand, .pax, .stellar, .tether, .wDGLD, .yearnFinance, .polkadot:
+            return nil
+        }
+    }
+    var whiteImageSmall: UIImage? {
+        guard let whiteImageName = self.whiteImageName else {
+            return nil
+        }
+        return UIImage(named: whiteImageName)
     }
 }

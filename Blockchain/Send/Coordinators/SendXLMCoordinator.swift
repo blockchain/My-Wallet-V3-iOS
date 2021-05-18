@@ -27,7 +27,7 @@ class SendXLMCoordinator {
     
     /// Exchange address presenter
     private let exchangeAddressPresenter: SendExchangeAddressStatePresenter
-    private var exchangeAddressViewModel = ExchangeAddressViewModel(assetType: .stellar)
+    private var exchangeAddressViewModel = ExchangeAddressViewModel(cryptoCurrency: .stellar)
     
     /// The source of the address
     private var addressSource = SendAssetAddressSource.standard

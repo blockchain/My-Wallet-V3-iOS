@@ -24,6 +24,10 @@ class FiatAsset: Asset {
 
     // MARK: - Asset
 
+    func initialize() -> Completable {
+        .empty()
+    }
+
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup> {
         switch filter {
         case .all:

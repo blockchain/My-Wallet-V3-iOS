@@ -43,7 +43,7 @@ final class SendExchangeAddressStatePresenter: NSObject {
     // MARK: - Properties
     
     var viewModel: Single<ExchangeAddressViewModel> {
-        let model = ExchangeAddressViewModel(assetType: assetType)
+        let model = ExchangeAddressViewModel(cryptoCurrency: assetType)
         return Single
             .zip(destinationAddress, isExchangeLinked)
             .map { addressResult, isLinked in

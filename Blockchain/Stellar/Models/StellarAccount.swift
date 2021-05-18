@@ -34,7 +34,7 @@ extension StellarAccount {
             index: 0,
             address: assetAddress,
             balance: CryptoValue.stellarZero,
-            name: LocalizationConstants.Stellar.defaultLabelName
+            name: CryptoCurrency.stellar.defaultWalletName
         )
         return StellarAccount(
             identifier: accountId,

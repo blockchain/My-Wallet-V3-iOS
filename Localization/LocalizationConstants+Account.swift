@@ -12,25 +12,34 @@ import Foundation
 
 extension LocalizationConstants {
     public enum Account {
+
         public static let myWallet = NSLocalizedString(
-            "%@ Wallet",
-            comment: "Must contain %@. Used for naming wallets e.g. Ethereum Wallet"
+            "Private Key Wallet",
+            comment: "Used for naming non custodial wallets."
         )
 
         public static let myInterestWallet = NSLocalizedString(
-            "%@ Interest Wallet",
-            comment: "Must contain %@. Used for naming interest account e.g. Ethereum Interest Wallet"
+            "Interest Account",
+            comment: "Used for naming interest accounts."
         )
 
-        public static let myTradeAccount = NSLocalizedString(
-            "%@ Trade Wallet",
-            comment: "Must contain %@. Used for naming trading accounts e.g. Ethereum Trade Wallet"
+        public static let myTradingAccount = NSLocalizedString(
+            "Trading Account",
+            comment: "Used for naming trading accounts."
         )
         
         public static let myExchangeAccount = NSLocalizedString(
-            "%@ Exchange",
-            comment: "Must contain %@. Used for naming trading accounts e.g. Ethereum Trade Wallet"
+            "Exchange Account",
+            comment: "Used for naming exchange accounts."
         )
+
+        public static func fiatAccount(_ fiatName: String) -> String {
+            let format = NSLocalizedString(
+                "%@ Account",
+                comment: "Must contain %@. Used for naming fiat accounts. eg USD Account."
+            )
+            return String(format: format, fiatName)
+        }
 
         public static let lowFees = NSLocalizedString(
             "Low Fees",
@@ -40,6 +49,11 @@ extension LocalizationConstants {
         public static let faster = NSLocalizedString(
             "Faster",
             comment: "Faster"
+        )
+
+        public static let legacyMyBitcoinWallet = NSLocalizedString(
+            "My Bitcoin Wallet",
+            comment: "My Bitcoin Wallet"
         )
     }
 
@@ -51,12 +65,12 @@ extension LocalizationConstants {
 
         public static let myWallets = NSLocalizedString(
             "%@ Wallets",
-            comment: "Must contain %@. Used for naming accounts e.g. Ethereum Wallets"
+            comment: "Must contain %@. Used for naming account groups e.g. Ethereum Wallets"
         )
 
         public static let myCustodialWallets = NSLocalizedString(
             "%@ Custodial Accounts",
-            comment: "Must contain %@. Used for naming trading accounts e.g. Ethereum Custodial Wallets"
+            comment: "Must contain %@. Used for naming trading account groups e.g. Ethereum Custodial Wallets"
         )
     }
 }

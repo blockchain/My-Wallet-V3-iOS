@@ -43,7 +43,7 @@ extension Data {
     }
 }
 
-import Crypto
+import CryptoKit
 
 extension Data {
 
@@ -55,7 +55,7 @@ extension Data {
         Data(sha256Digest)
     }
     
-    private var sha256Digest: Crypto.SHA256.Digest {
-        Crypto.SHA256.hash(data: self)
+    private var sha256Digest: CryptoKit.SHA256.Digest {
+        CryptoKit.SHA256.hash(data: self)
     }
 }

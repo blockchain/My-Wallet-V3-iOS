@@ -6,7 +6,8 @@
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import PlatformKit
+import RxSwift
 
 final class OrderTransactionLegacy: NSObject {
     @objc let legacyAssetType: LegacyAssetType
@@ -35,6 +36,12 @@ final class OrderTransactionLegacy: NSObject {
 }
 
 protocol LegacyWalletAPI: AnyObject {
+
+    func updateAccountLabel(
+        _ cryptoCurrency: CryptoCurrency,
+        index: Int,
+        label: String
+    ) -> Completable
 
     func createOrderPayment(withOrderTransaction orderTransaction: OrderTransactionLegacy,
                             completion: @escaping () -> Void,

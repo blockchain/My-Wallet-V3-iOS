@@ -14,6 +14,7 @@ import DIKit
 import ERC20Kit
 import EthereumKit
 import PlatformKit
+import PolkadotKit
 import StellarKit
 
 extension DependencyContainer {
@@ -54,16 +55,11 @@ extension DependencyContainer {
             let gbpEventService = FiatEventService(fiat: DIKit.resolve(tag: FiatCurrency.GBP))
             let usdEventService = FiatEventService(fiat: DIKit.resolve(tag: FiatCurrency.USD))
             
-            let cryptos: [CryptoCurrency: CryptoItemEventServiceAPI] = [
-                .algorand: DIKit.resolve(tag: CryptoCurrency.algorand),
-                .bitcoin: DIKit.resolve(tag: CryptoCurrency.bitcoin),
-                .bitcoinCash: DIKit.resolve(tag: CryptoCurrency.bitcoinCash),
-                .tether: DIKit.resolve(tag: CryptoCurrency.tether),
-                .pax: DIKit.resolve(tag: CryptoCurrency.pax),
-                .ethereum: DIKit.resolve(tag: CryptoCurrency.ethereum),
-                .stellar: DIKit.resolve(tag: CryptoCurrency.stellar),
-                .wDGLD: DIKit.resolve(tag: CryptoCurrency.wDGLD)
-            ]
+            let cryptos = CryptoCurrency.allCases
+                .reduce(into: [CryptoCurrency: CryptoItemEventServiceAPI]()) { (result, cryptoCurrency) in
+                    let component: CryptoItemEventServiceAPI = DIKit.resolve(tag: cryptoCurrency)
+                    result[cryptoCurrency] = component
+                }
             
             return ActivityProvider(
                 fiats: [
@@ -78,9 +74,17 @@ extension DependencyContainer {
         factory { EmptyTransactionalActivityItemEventService() }
         
         factory { EmptySwapActivityItemEventService() }
-        
+
+        factory(tag: CryptoCurrency.aave) { () -> CryptoItemEventServiceAPI in
+            CryptoEventService.erc20(token: AaveToken.self)
+        }
+
         factory(tag: CryptoCurrency.algorand) { () -> CryptoItemEventServiceAPI in
             CryptoEventService.algorand()
+        }
+
+        factory(tag: CryptoCurrency.polkadot) { () -> CryptoItemEventServiceAPI in
+            CryptoEventService.polkadot()
         }
         
         factory(tag: CryptoCurrency.bitcoin) { () -> CryptoItemEventServiceAPI in
@@ -92,11 +96,11 @@ extension DependencyContainer {
         }
         
         factory(tag: CryptoCurrency.tether) { () -> CryptoItemEventServiceAPI in
-            CryptoEventService.tether()
+            CryptoEventService.erc20(token: TetherToken.self)
         }
         
         factory(tag: CryptoCurrency.pax) { () -> CryptoItemEventServiceAPI in
-            CryptoEventService.pax()
+            CryptoEventService.erc20(token: PaxToken.self)
         }
         
         factory(tag: CryptoCurrency.ethereum) { () -> CryptoItemEventServiceAPI in
@@ -108,132 +112,85 @@ extension DependencyContainer {
         }
 
         factory(tag: CryptoCurrency.wDGLD) { () -> CryptoItemEventServiceAPI in
-            CryptoEventService.wDGLD()
+            CryptoEventService.erc20(token: WDGLDToken.self)
+        }
+
+        factory(tag: CryptoCurrency.yearnFinance) { () -> CryptoItemEventServiceAPI in
+            CryptoEventService.erc20(token: YearnFinanceToken.self)
         }
     }
 }
 
 extension CryptoEventService {
-    fileprivate static func algorand(transactional: EmptyTransactionalActivityItemEventService = resolve(),
-                                     orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                     swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let fetcher = AlgorandSwapActivityItemEventsService(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        let buySell = BuySellActivityItemEventService(currency: .algorand, service: orderService)
-        return CryptoEventService(transactional: transactional,
-                                  buySell: buySell,
-                                  swap: swapService)
+    fileprivate static func algorand() -> CryptoItemEventServiceAPI {
+        custodial(currency: .algorand)
     }
     
-    fileprivate static func bitcoin(eventsService: BitcoinTransactionalActivityItemEventsService = resolve(),
-                                    orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                    swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let transactionalService = TransactionalActivityItemEventService(fetcher: eventsService)
-        let buySell = BuySellActivityItemEventService(currency: .bitcoin, service: orderService)
-        let fetcher = BitcoinSwapActivityItemEventsService(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
-        )
+    fileprivate static func bitcoin(eventsService: BitcoinTransactionalActivityItemEventsService = resolve()) -> CryptoItemEventServiceAPI {
+        custodialNonCustodial(currency: .bitcoin, eventsService: eventsService)
     }
     
-    fileprivate static func bitcoinCash(eventsService: BitcoinCashTransactionalActivityItemEventsService = resolve(),
-                                        orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                        swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let transactionalService = TransactionalActivityItemEventService(fetcher: eventsService)
-        let buySell = BuySellActivityItemEventService(currency: .bitcoinCash, service: orderService)
-        let fetcher = BitcoinCashSwapActivityItemEventsService(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
-        )
+    fileprivate static func bitcoinCash(eventsService: BitcoinCashTransactionalActivityItemEventsService = resolve()) -> CryptoItemEventServiceAPI {
+        custodialNonCustodial(currency: .bitcoinCash, eventsService: eventsService)
     }
     
-    fileprivate static func ethereum(eventsService: EthereumTransactionalActivityItemEventsService = resolve(),
-                                     orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                     swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        
-        let transactionalService = TransactionalActivityItemEventService(fetcher: eventsService)
-        let buySell = BuySellActivityItemEventService(currency: .ethereum, service: orderService)
-        let fetcher = EthereumSwapActivityItemEventsService(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
-        )
-        
-    }
-    
-    fileprivate static func stellar(eventsService: StellarTransactionalActivityItemEventsService = resolve(),
-                                    orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                    swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        
-        let transactionalService = TransactionalActivityItemEventService(fetcher: eventsService)
-        let buySell = BuySellActivityItemEventService(currency: .stellar, service: orderService)
-        let fetcher = StellarSwapActivityItemEventsService(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
-        )
-        
+    fileprivate static func ethereum(eventsService: EthereumTransactionalActivityItemEventsService = resolve()) -> CryptoItemEventServiceAPI {
+        custodialNonCustodial(currency: .ethereum, eventsService: eventsService)
     }
 
-    fileprivate static func tether(historalTransactionService: AnyERC20HistoricalTransactionService<TetherToken> = resolve(),
-                                   eventsService: BitcoinCashTransactionalActivityItemEventsService = resolve(),
-                                   orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                   swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let erc20EventsService = AnyERC20TransactionalActivityItemEventsService<TetherToken>(transactionsService: historalTransactionService)
-        
-        let transactionalService = TransactionalActivityItemEventService(fetcher: erc20EventsService)
-        let buySell = BuySellActivityItemEventService(currency: .tether, service: orderService)
-        
-        let fetcher = AnyERC20SwapActivityItemEventsService<TetherToken>(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
+    fileprivate static func polkadot() -> CryptoItemEventServiceAPI {
+        custodial(currency: .polkadot)
+    }
+
+    fileprivate static func stellar(eventsService: StellarTransactionalActivityItemEventsService = resolve()) -> CryptoItemEventServiceAPI {
+        custodialNonCustodial(currency: .stellar, eventsService: eventsService)
+    }
+
+    /// Returns a CryptoItemEventServiceAPI for any given ERC20 token.
+    fileprivate static func erc20<Token: ERC20Token>(
+        token: Token.Type,
+        historalTransactionService: AnyERC20HistoricalTransactionService<Token> = resolve()
+    ) -> CryptoItemEventServiceAPI {
+        let erc20EventsService = AnyERC20TransactionalActivityItemEventsService<Token>(
+            transactionsService: historalTransactionService
+        )
+        return custodialNonCustodial(currency: Token.assetType, eventsService: erc20EventsService)
+    }
+
+    /// Returns a CryptoItemEventServiceAPI for a custodial only currency.
+    private static func custodial(
+        currency: CryptoCurrency,
+        transactionalService: EmptyTransactionalActivityItemEventService = resolve()
+    ) -> CryptoItemEventServiceAPI {
+        buildCryptoItemEventService(
+            currency: currency,
+            eventsService: transactionalService
         )
     }
 
-    fileprivate static func wDGLD(historalTransactionService: AnyERC20HistoricalTransactionService<WDGLDToken> = resolve(),
-                                  eventsService: BitcoinCashTransactionalActivityItemEventsService = resolve(),
-                                  orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                  swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let erc20EventsService = AnyERC20TransactionalActivityItemEventsService<WDGLDToken>(transactionsService: historalTransactionService)
-
-        let transactionalService = TransactionalActivityItemEventService(fetcher: erc20EventsService)
-        let buySell = BuySellActivityItemEventService(currency: .wDGLD, service: orderService)
-
-        let fetcher = AnyERC20SwapActivityItemEventsService<WDGLDToken>(service: swapActivity)
-        let swapService = SwapActivityItemEventService(fetcher: fetcher)
-        return CryptoEventService(
-            transactional: transactionalService,
-            buySell: buySell,
-            swap: swapService
+    /// Returns a CryptoItemEventServiceAPI for a currency that has both custodial and non custodial support.
+    private static func custodialNonCustodial(
+        currency: CryptoCurrency,
+        eventsService: TransactionalActivityItemEventFetcherAPI
+    ) -> CryptoItemEventServiceAPI {
+        buildCryptoItemEventService(
+            currency: currency,
+            eventsService: TransactionalActivityItemEventService(fetcher: eventsService)
         )
     }
-    
-    fileprivate static func pax(historalTransactionService: AnyERC20HistoricalTransactionService<PaxToken> = resolve(),
-                                eventsService: BitcoinCashTransactionalActivityItemEventsService = resolve(),
-                                orderService: BuySellKit.OrdersServiceAPI = resolve(),
-                                swapActivity: SwapActivityServiceAPI = resolve()) -> CryptoEventService {
-        let erc20EventsService = AnyERC20TransactionalActivityItemEventsService<PaxToken>(transactionsService: historalTransactionService)
-        
-        let transactionalService = TransactionalActivityItemEventService(fetcher: erc20EventsService)
-        let buySell = BuySellActivityItemEventService(currency: .pax, service: orderService)
-        
-        let fetcher = AnyERC20SwapActivityItemEventsService<PaxToken>(service: swapActivity)
+
+    /// Builds a CryptoItemEventServiceAPI with the given dependencies.
+    private static func buildCryptoItemEventService(
+        currency: CryptoCurrency,
+        eventsService: TransactionalActivityItemEventServiceAPI,
+        orderService: BuySellKit.OrdersServiceAPI = resolve(),
+        swapActivity: SwapActivityServiceAPI = resolve()
+    ) -> CryptoItemEventServiceAPI {
+        let fetcher = SwapActivityItemEventsService(currency: currency, service: swapActivity)
         let swapService = SwapActivityItemEventService(fetcher: fetcher)
+        let buySell = BuySellActivityItemEventService(currency: currency, service: orderService)
         return CryptoEventService(
-            transactional: transactionalService,
+            transactional: eventsService,
             buySell: buySell,
             swap: swapService
         )

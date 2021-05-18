@@ -17,6 +17,10 @@ enum EthereumWalletBridgeMockError: Error {
 }
 
 class EthereumWalletBridgeMock: EthereumWalletBridgeAPI, EthereumWalletAccountBridgeAPI, MnemonicAccessAPI, PasswordAccessAPI {
+    func update(accountIndex: Int, label: String) -> Completable {
+        .empty()
+    }
+
     var balance: Single<CryptoValue> {
         balanceValue
     }
@@ -77,7 +81,7 @@ class EthereumWalletBridgeMock: EthereumWalletBridgeAPI, EthereumWalletAccountBr
 
     let balanceFetchTriggerRelay = PublishRelay<Void>()
 
-    var nameValue: Single<String> = Single.just("My Ether Wallet")
+    var nameValue: Single<String> = Single.just(CryptoCurrency.ethereum.defaultWalletName)
     var name: Single<String> {
         nameValue
     }
@@ -96,7 +100,7 @@ class EthereumWalletBridgeMock: EthereumWalletBridgeAPI, EthereumWalletAccountBr
         EthereumAssetAccount(
             walletIndex: 0,
             accountAddress: MockEthereumWalletTestData.account,
-            name: "My Ether Wallet"
+            name: CryptoCurrency.ethereum.defaultWalletName
         )
     )
     var account: Single<EthereumAssetAccount> {

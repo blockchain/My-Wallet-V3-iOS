@@ -18,7 +18,7 @@ class BitcoinCashAsset: CryptoAsset {
 
     var defaultAccount: Single<SingleAccount> {
         repository.defaultAccount
-            .map { BitcoinCashCryptoAccount(id: $0.publicKey, label: $0.label, isDefault: true) }
+            .map { BitcoinCashCryptoAccount(id: $0.publicKey, label: $0.label, isDefault: true, hdAccountIndex: $0.index) }
     }
 
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
@@ -37,6 +37,15 @@ class BitcoinCashAsset: CryptoAsset {
         self.exchangeAccountProvider = exchangeAccountProvider
         self.addressValidator = addressValidator
         self.internalFeatureFlag = internalFeatureFlag
+    }
+
+    func initialize() -> Completable {
+        // Run wallet renaming procedure on initialization.
+        nonCustodialGroup.map(\.accounts)
+            .flatMapCompletable(weak: self) { (self, accounts) -> Completable in
+                self.upgradeLegacyLabels(accounts: accounts)
+            }
+            .onErrorComplete()
     }
 
     func accountGroup(filter: AssetFilter) -> Single<AccountGroup> {
@@ -134,7 +143,8 @@ class BitcoinCashAsset: CryptoAsset {
                     BitcoinCashCryptoAccount(
                         id: $0.publicKey,
                         label: $0.label,
-                        isDefault: $0.publicKey == defaultAccount.publicKey
+                        isDefault: $0.publicKey == defaultAccount.publicKey,
+                        hdAccountIndex: $0.index
                     )
                 }
             }

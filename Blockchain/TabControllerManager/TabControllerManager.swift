@@ -318,7 +318,7 @@ extension TabControllerManager: WalletSettingsDelegate {
 
 extension TabControllerManager: TabViewControllerDelegate {
     func tabViewController(_ tabViewController: TabViewController, viewDidAppear animated: Bool) {
-        AppCoordinator.shared.showHdUpgradeViewIfNeeded()
+        // NOOP
     }
 
     // MARK: - View Life Cycle

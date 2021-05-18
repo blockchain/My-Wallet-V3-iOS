@@ -58,7 +58,7 @@ final class CloudBackupAnnouncement: OneTimeAnnouncement & ActionableAnnouncemen
         !isDismissed
     }
 
-    let type = AnnouncementType.algorand
+    let type = AnnouncementType.cloudBackup
     let analyticsRecorder: AnalyticsEventRecording
 
     let dismiss: CardAnnouncementAction

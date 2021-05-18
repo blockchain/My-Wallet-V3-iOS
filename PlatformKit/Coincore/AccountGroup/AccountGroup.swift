@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import ToolKit
 
 /// A `BlockchainAccount` that represents a collection of accounts, opposed to a single account.
 public protocol AccountGroup: BlockchainAccount {
@@ -40,6 +41,12 @@ extension AccountGroup {
             .map { actions -> AvailableActions in
                 actions.reduce(into: AvailableActions()) { $0.formUnion($1) }
             }
+    }
+
+    public func can(perform action: AssetAction) -> Single<Bool> {
+        Single
+            .just(accounts.map({ $0.can(perform: action) }))
+            .flatMapConcatFirst()
     }
 }
 

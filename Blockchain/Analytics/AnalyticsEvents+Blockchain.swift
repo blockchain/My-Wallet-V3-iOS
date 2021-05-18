@@ -93,7 +93,6 @@ extension AnalyticsEvents {
         case sideNavLogout
         case sideNavSettings
         case sideNavSupport
-        case sideNavUpgrade
         case sideNavWebLogin
         case sideNavSecureChannel
         case sideNavAirdropCenter
@@ -120,9 +119,6 @@ extension AnalyticsEvents {
             // Menu - support clicked
             case .sideNavSupport:
                 return "side_nav_support"
-            // Menu - upgrade clicked
-            case .sideNavUpgrade:
-                return "side_nav_upgrade"
             // Menu - web login clicked
             case .sideNavWebLogin:
                 return "side_nav_web_login"

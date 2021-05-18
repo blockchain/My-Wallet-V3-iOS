@@ -12,7 +12,7 @@ options:
   bundleIdPrefix: com.rainydayapps
   defaultConfig: Release
   deploymentTarget:
-    iOS: '12.0'
+    iOS: '13.0'
   groupSortPosition: top
   platform: iOS
 schemeTemplates:
@@ -43,6 +43,8 @@ schemeTemplates:
       - name: PlatformUIKitTests
         randomExecutionOrder: true
       - name: AlgorandKitTests
+        randomExecutionOrder: true
+      - name: PolkadotKitTests
         randomExecutionOrder: true
       - name: ActivityKitTests
         randomExecutionOrder: true
@@ -176,8 +178,11 @@ targets:
   ActivityKit:
     dependencies:
     - target: PlatformKit
+    - target: AlgorandKit
+    - target: PolkadotKit
     - target: BuySellKit
     - target: BitcoinKit
+    - target: BitcoinCashKit
     - target: EthereumKit
     - target: ERC20Kit
     - target: StellarKit
@@ -187,6 +192,9 @@ targets:
     - carthage: DIKit
     - carthage: RxRelay
     - carthage: RxSwift
+    scheme:
+      testTargets:
+      - ActivityKitTests
     templates:
     - Framework
   ActivityKitTests:
@@ -401,6 +409,7 @@ targets:
     - target: ToolKit
     - target: NetworkKit
     - target: AlgorandKit
+    - target: PolkadotKit
     - target: StellarKit
     - target: EthereumKit
     - target: ERC20Kit
@@ -639,10 +648,6 @@ targets:
     templates:
     - FrameworkTest
   CommonCryptoKit:
-    dependencies:
-    - carthage: Crypto
-    - carthage: CCryptoBoringSSL
-    - carthage: CCryptoBoringSSLShims
     scheme:
       testTargets:
       - CommonCryptoKitTests
@@ -873,6 +878,7 @@ targets:
       Release Internal: Config/NetworkKitConfig/NetworkKit-Production.xcconfig
     dependencies:
     - carthage: RxSwift
+    - carthage: RxCombine
     - carthage: DIKit
     - target: ToolKit
     info:
@@ -933,10 +939,8 @@ targets:
     - carthage: RxSwift
     - carthage: RxRelay
     - carthage: RxCocoa
+    - carthage: RxCombine
     - carthage: CryptoSwift
-    - carthage: Crypto
-    - carthage: CCryptoBoringSSL
-    - carthage: CCryptoBoringSSLShims
     - carthage: LibWally
     scheme:
       testTargets:
@@ -986,6 +990,33 @@ targets:
       path: TestKit/Mocks/PlatformKit
     - group: ${target_name}/TestKit
       path: TestKit/Mocks/PlatformUIKit
+    templates:
+    - FrameworkTest
+  PolkadotKit:
+    dependencies:
+    - target: Localization
+    - target: PlatformKit
+    - target: ToolKit
+    - target: NetworkKit
+    - carthage: BigInt
+    - carthage: DIKit
+    - carthage: RxRelay
+    - carthage: RxSwift
+    scheme:
+      testTargets:
+      - PolkadotKitTests
+    templates:
+    - Framework
+  PolkadotKitTests:
+    dependencies:
+    - target: PolkadotKit
+    sources:
+    - group: ${target_name}/TestKit
+      path: TestKit/Mocks/ToolKit
+    - group: ${target_name}/TestKit
+      path: TestKit/Mocks/PlatformKit
+    - group: ${target_name}/TestKit
+      path: TestKit/Mocks/NetworkKit
     templates:
     - FrameworkTest
   StellarKit:
@@ -1153,5 +1184,8 @@ targets:
   WalletPayloadKitTests:
     dependencies:
     - target: WalletPayloadKit
+    sources:
+    - group: ${target_name}/TestKit
+      path: TestKit/Mocks/ToolKit
     templates:
     - FrameworkTest

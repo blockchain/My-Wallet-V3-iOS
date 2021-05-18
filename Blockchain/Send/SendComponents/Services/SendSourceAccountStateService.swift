@@ -53,12 +53,19 @@ final class SendSourceAccountStateService: SendSourceAccountStateServicing {
     /// Recalculates the state of the source account
     func recalculateState() {
         switch asset {
-        case .algorand:
-            stateRelay.accept(.available)
-        case .ethereum, .pax, .tether, .wDGLD:
+        case .ethereum:
             recalculateStateForEtherBasedAssets()
-        case .bitcoin, .bitcoinCash, .stellar:
-            stateRelay.accept(.available)
+        case .aave,
+             .algorand,
+             .bitcoin,
+             .bitcoinCash,
+             .pax,
+             .polkadot,
+             .stellar,
+             .tether,
+             .wDGLD,
+             .yearnFinance:
+            fatalError("\(#function) is not implemented for \(asset)")
         }
     }
     

@@ -8,6 +8,7 @@
 
 import RxRelay
 import RxSwift
+import ToolKit
 
 /// Provider of balance services and total balance in `FiatValue`
 public protocol BalanceProviding: class {
@@ -41,55 +42,31 @@ public final class BalanceProvider: BalanceProviding {
             .map { $0.totalFiat }
             .share()
     }
-        
+
     /// Calculates all balances in `WalletBalance`
     public var fiatBalances: Observable<MoneyBalancePairsCalculationStates> {
-        let calculationStates = [
-            services[.crypto(.ethereum)]!.calculationState,
-            services[.crypto(.pax)]!.calculationState,
-            services[.crypto(.stellar)]!.calculationState,
-            services[.crypto(.bitcoin)]!.calculationState,
-            services[.crypto(.bitcoinCash)]!.calculationState,
-            services[.crypto(.algorand)]!.calculationState,
-            services[.crypto(.tether)]!.calculationState,
-            services[.crypto(.wDGLD)]!.calculationState,
-            services[.fiat(.GBP)]!.calculationState,
-            services[.fiat(.EUR)]!.calculationState,
-            services[.fiat(.USD)]!.calculationState
-        ]
-        return Observable
-            .combineLatest(calculationStates)
-            .map {
-                (
-                    ethereum: $0[0],
-                    pax: $0[1],
-                    stellar: $0[2],
-                    bitcoin: $0[3],
-                    bitcoinCash: $0[4],
-                    algorand: $0[5],
-                    tether: $0[6],
-                    wdgld: $0[7],
-                    gbp: $0[8],
-                    eur: $0[9],
-                    usd: $0[10]
-                )
+        // Array of `calculationState` observables from all currencies we want to fetch.
+        let observables = services
+            .reduce(into: [Observable<[CurrencyType : MoneyBalancePairsCalculationState]>]()) { (result, element) in
+                let observable = element.value.calculationState
+                    // Map the `MoneyBalancePairsCalculationState` so it remains attached to its currency.
+                    .map { calculationState -> [CurrencyType : MoneyBalancePairsCalculationState] in
+                        [element.key: calculationState]
+                    }
+                result.append(observable)
             }
-            .map { states in
+        return Observable
+            .combineLatest(observables)
+            .map { data -> [CurrencyType : MoneyBalancePairsCalculationState] in
+                // Reduce our `[Dictionary]` into a single `Dictionary`.
+                data.reduce(into: [CurrencyType : MoneyBalancePairsCalculationState]()) { (result, this) in
+                    result.merge(this)
+                }
+            }
+            .map { statePerCurrency in
                 MoneyBalancePairsCalculationStates(
                     identifier: "total-balance",
-                    statePerCurrency: [
-                        .crypto(.ethereum): states.ethereum,
-                        .crypto(.pax): states.pax,
-                        .crypto(.stellar): states.stellar,
-                        .crypto(.bitcoin): states.bitcoin,
-                        .crypto(.bitcoinCash): states.bitcoinCash,
-                        .crypto(.algorand): states.algorand,
-                        .crypto(.tether): states.tether,
-                        .crypto(.wDGLD): states.wdgld,
-                        .fiat(.GBP): states.gbp,
-                        .fiat(.EUR): states.eur,
-                        .fiat(.USD): states.usd
-                    ]
+                    statePerCurrency: statePerCurrency
                 )
             }
             .share()

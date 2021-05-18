@@ -14,6 +14,10 @@ import RxRelay
 import RxSwift
 
 class ERC20EthereumWalletBridgeMock: EthereumWalletBridgeAPI {
+    func update(accountIndex: Int, label: String) -> Completable {
+        .empty()
+    }
+
     func updateMemo(for transactionHash: String, memo: String?) -> Completable {
         .empty()
     }

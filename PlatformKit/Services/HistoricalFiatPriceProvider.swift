@@ -25,22 +25,30 @@ public final class HistoricalFiatPriceProvider: HistoricalFiatPriceProviding {
     
     // MARK: - Setup
     
-    public init(algorand: HistoricalFiatPriceServiceAPI,
-                ether: HistoricalFiatPriceServiceAPI,
-                pax: HistoricalFiatPriceServiceAPI,
-                stellar: HistoricalFiatPriceServiceAPI,
-                bitcoin: HistoricalFiatPriceServiceAPI,
-                bitcoinCash: HistoricalFiatPriceServiceAPI,
-                tether: HistoricalFiatPriceServiceAPI,
-                wDGLD: HistoricalFiatPriceServiceAPI) {
+    public init(
+        aave: HistoricalFiatPriceServiceAPI,
+        algorand: HistoricalFiatPriceServiceAPI,
+        bitcoin: HistoricalFiatPriceServiceAPI,
+        bitcoinCash: HistoricalFiatPriceServiceAPI,
+        ether: HistoricalFiatPriceServiceAPI,
+        pax: HistoricalFiatPriceServiceAPI,
+        polkadot: HistoricalFiatPriceServiceAPI,
+        stellar: HistoricalFiatPriceServiceAPI,
+        tether: HistoricalFiatPriceServiceAPI,
+        wDGLD: HistoricalFiatPriceServiceAPI,
+        yearnFinance: HistoricalFiatPriceServiceAPI
+    ) {
+        services[.aave] = aave
         services[.algorand] = algorand
-        services[.ethereum] = ether
-        services[.pax] = pax
-        services[.stellar] = stellar
         services[.bitcoin] = bitcoin
         services[.bitcoinCash] = bitcoinCash
+        services[.ethereum] = ether
+        services[.pax] = pax
+        services[.polkadot] = polkadot
+        services[.stellar] = stellar
         services[.tether] = tether
         services[.wDGLD] = wDGLD
+        services[.yearnFinance] = yearnFinance
         
         refresh()
     }

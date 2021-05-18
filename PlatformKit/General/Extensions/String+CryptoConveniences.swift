@@ -6,7 +6,7 @@
 //  Copyright © 2020 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Crypto
+import CryptoKit
 
 extension String {
 
@@ -18,7 +18,7 @@ extension String {
     }
     
     private func digestCryptoHex(input: Data) -> String {
-        let hash = Crypto.SHA256.hash(data: input)
+        let hash = CryptoKit.SHA256.hash(data: input)
         return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
 }

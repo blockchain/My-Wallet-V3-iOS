@@ -90,6 +90,10 @@ public class CryptoExchangeAccount: ExchangeAccount {
         /// Exchange API does not return a balance.
         .just(.zero(currency: fiatCurrency))
     }
+
+    public func can(perform action: AssetAction) -> Single<Bool> {
+        actions.map { $0.contains(action) }
+    }
     
     // MARK: - Private Properties
     
@@ -100,7 +104,7 @@ public class CryptoExchangeAccount: ExchangeAccount {
     
     init(response: CryptoExchangeAddressResponse,
          exchangeAccountProvider: ExchangeAccountsProviderAPI = resolve()) {
-        self.label = response.assetType.defaultExchangeName
+        self.label = response.assetType.defaultExchangeWalletName
         self.asset = response.assetType
         self.address = response.address
         self.state = .init(state: response.state)

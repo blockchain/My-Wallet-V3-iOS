@@ -310,7 +310,7 @@ extension AccountResponse {
             index: 0,
             address: assetAddress,
             balance: totalBalance,
-            name: LocalizationConstants.Stellar.defaultLabelName
+            name: CryptoCurrency.stellar.defaultWalletName
         )
         return StellarAccount(
             identifier: accountId,

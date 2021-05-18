@@ -21,5 +21,12 @@ extension DependencyContainer {
         factory { PayloadCrypto() as PayloadCryptoAPI }
         
         factory { AESCryptor() as AESCryptorAPI }
+
+        // MARK: Wallet Upgrade
+
+        factory { WalletUpgradeService() as WalletUpgradeServicing }
+
+        factory { WalletUpgradeJSService() as WalletUpgradeJSServicing }
+
     }
 }

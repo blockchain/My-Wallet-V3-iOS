@@ -86,7 +86,8 @@
 
 /// Forces the JS layer to load - should be used to reset the context and rebind the methods
 - (void)loadJS;
-
+/// Load the JS - but only if needed - and return it.
+- (JSContext *)loadContextIfNeeded;
 /// Load the JS - but only if needed
 - (void)loadJSIfNeeded;
 - (BOOL)isInitialized;
@@ -186,7 +187,6 @@
 - (id)getBalanceForAccount:(int)account assetType:(LegacyAssetType)assetType;
 
 - (NSString *)getLabelForAccount:(int)account assetType:(LegacyAssetType)assetType;
-- (void)setLabelForAccount:(int)account label:(NSString *)label assetType:(LegacyAssetType)assetType;
 
 - (void)createAccountWithLabel:(NSString *)label;
 - (void)generateNewKey;

@@ -14,6 +14,7 @@ import KYCUIKit
 import PlatformKit
 import PlatformUIKit
 import RxSwift
+import WalletPayloadKit
 
 /// TODO: This class should be refactored so any view would load
 /// as late as possible and also would be deallocated when is no longer in use
@@ -38,6 +39,7 @@ import RxSwift
     @Inject private var loadingViewPresenter: LoadingViewPresenting
     @LazyInject private var appFeatureConfigurator: AppFeatureConfigurator
     @LazyInject private var credentialsStore: CredentialsStoreAPI
+    @LazyInject private var walletUpgradeService: WalletUpgradeServicing
 
     @Inject var airdropRouter: AirdropRouterAPI
     private var settingsRouterAPI: SettingsRouterAPI?
@@ -72,13 +74,19 @@ import RxSwift
         observeSymbolChanges()
     }
 
-    // MARK: Public Methodsº
+    // MARK: Public Methods
 
-    func startAfterWalletCreation() {
-        window.rootViewController?.dismiss(animated: true, completion: nil)
-        setupMainFlow(forced: true)
-        window.rootViewController = slidingViewController
-        tabControllerManager?.showDashboard()
+    /// Should be called only by Authentication after wallet loads.
+    func startAfterWalletAuthentication() {
+        guard let dismissible = window.rootViewController else {
+            window.rootViewController = setupMainFlow()
+            return
+        }
+        dismissible.dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            // Sets view controller as rootViewController of the window
+            self.window.rootViewController = self.setupMainFlow()
+        }
     }
 
     func syncPinKeyWithICloud() {
@@ -132,46 +140,35 @@ import RxSwift
         }
     }
 
-    /// Shows an upgrade to HD wallet prompt if the user has a legacy wallet
-    @objc func showHdUpgradeViewIfNeeded() {
-        guard walletManager.wallet.isInitialized() else { return }
-        guard !walletManager.wallet.didUpgradeToHd() else { return }
-        showHdUpgradeView()
-    }
-
-    /// Shows the HD wallet upgrade view
-    func showHdUpgradeView() {
-        let storyboard = UIStoryboard(name: "Upgrade", bundle: nil)
-        let upgradeViewController = storyboard.instantiateViewController(withIdentifier: "UpgradeViewController")
-        upgradeViewController.modalPresentationStyle = .fullScreen
-        upgradeViewController.modalTransitionStyle = .coverVertical
-        UIApplication.shared.keyWindow?.rootViewController?.present(
-            upgradeViewController,
-            animated: true
-        )
-    }
-
     @discardableResult
-    func setupMainFlow(forced: Bool) -> UIViewController {
-        let setupAndReturnSideMenuController = { [unowned self] () -> UIViewController in
-            self.setupTabControllerManager()
-            self.setupSideMenuViewController()
-            let viewController = ECSlidingViewController()
-            viewController.underLeftViewController = self.sideMenuViewController
-            viewController.topViewController = self.tabControllerManager?.tabViewController
-            self.slidingViewController = viewController
-            self.tabControllerManager?.tabViewController.loadViewIfNeeded()
-            self.tabControllerManager?.showDashboard()
-            return viewController
-        }
-        
-        if forced {
-            return setupAndReturnSideMenuController()
-        } else if let slidingViewController = slidingViewController {
-            return slidingViewController
+    func setupMainFlow() -> UIViewController {
+        if walletUpgradeService.needsWalletUpgrade {
+            return setupWalletUpgrade(completion: { [weak self] in
+                guard let self = self else { return }
+                self.window.rootViewController = self.setupLoggedInFlow()
+            })
         } else {
-            return setupAndReturnSideMenuController()
+            return setupLoggedInFlow()
         }
+    }
+
+    private func setupWalletUpgrade(completion: @escaping () -> Void) -> UIViewController {
+        let interactor = WalletUpgradeInteractor(completion: completion)
+        let presenter = WalletUpgradePresenter(interactor: interactor)
+        let viewController = WalletUpgradeViewController(presenter: presenter)
+        return viewController
+    }
+
+    private func setupLoggedInFlow() -> UIViewController {
+        self.setupTabControllerManager()
+        self.setupSideMenuViewController()
+        let viewController = ECSlidingViewController()
+        viewController.underLeftViewController = self.sideMenuViewController
+        viewController.topViewController = self.tabControllerManager?.tabViewController
+        self.slidingViewController = viewController
+        self.tabControllerManager?.tabViewController.loadViewIfNeeded()
+        self.tabControllerManager?.showDashboard()
+        return viewController
     }
 
     private func setupSideMenuViewController() {
@@ -250,8 +247,6 @@ import RxSwift
 extension AppCoordinator: SideMenuViewControllerDelegate {
     func sideMenuViewController(_ viewController: SideMenuViewController, didTapOn item: SideMenuItem) {
         switch item {
-        case .upgrade:
-            handleUpgrade()
         case .backup:
             startBackupFlow()
         case .accountsAndAddresses:
@@ -285,10 +280,6 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     private func handleAirdrops() {
         airdropRouter.presentAirdropCenterScreen()
     }
-    
-    private func handleUpgrade() {
-        AppCoordinator.shared.showHdUpgradeView()
-    }
 
     private func handleSecureChannel() {
         // TODO: (paulo) Modern Wallet P3 - Show new QR code screen.
@@ -302,21 +293,28 @@ extension AppCoordinator: SideMenuViewControllerDelegate {
     private func handleAccountsAndAddresses() {
         UIApplication.shared.keyWindow?.rootViewController?.topMostViewController?.present(
             accountsAndAddressesNavigationController,
-            animated: true
-        ) { [weak self] in
-            guard let strongSelf = self else { return }
-
-            let wallet = strongSelf.walletManager.wallet
-
-            guard strongSelf.accountsAndAddressesNavigationController.viewControllers.count == 1 &&
-                wallet.didUpgradeToHd() &&
-                wallet.getTotalBalanceForSpendableActiveLegacyAddresses() >= wallet.dust() &&
-                strongSelf.accountsAndAddressesNavigationController.assetSelectorView().selectedAsset == .bitcoin else {
-                    return
+            animated: true,
+            completion: { [weak self] in
+                self?.didPresentAccountsAndAddressesNavigationController()
             }
+        )
+    }
 
-            strongSelf.accountsAndAddressesNavigationController.alertUserToTransferAllFunds()
+    private func didPresentAccountsAndAddressesNavigationController() {
+        let wallet = walletManager.wallet
+        guard wallet.didUpgradeToHd() else {
+            fatalError("Wallet upgrade is not optional.")
         }
+        guard accountsAndAddressesNavigationController.viewControllers.count == 1 else {
+            return
+        }
+        guard wallet.getTotalBalanceForSpendableActiveLegacyAddresses() >= wallet.dust() else {
+            return
+        }
+        guard accountsAndAddressesNavigationController.assetSelectorView().selectedAsset == .bitcoin else {
+            return
+        }
+        accountsAndAddressesNavigationController.alertUserToTransferAllFunds()
     }
 
     private func handleSettings() {

@@ -12,15 +12,23 @@ extension CryptoCurrency {
     private typealias LocalizedString = LocalizationConstants.Account
 
     public var defaultInterestWalletName: String {
-        String(format: LocalizedString.myInterestWallet, displayCode)
+        LocalizedString.myInterestWallet
     }
-    public var defaultTradeWalletName: String {
-        String(format: LocalizedString.myTradeAccount, displayCode)
+    public var defaultTradingWalletName: String {
+        LocalizedString.myTradingAccount
     }
     public var defaultWalletName: String {
-        String(format: LocalizedString.myWallet, displayCode)
+        LocalizedString.myWallet
     }
-    public var defaultExchangeName: String {
-        String(format: LocalizedString.myExchangeAccount, displayCode)
+    public var defaultExchangeWalletName: String {
+        LocalizedString.myExchangeAccount
+    }
+}
+
+extension FiatCurrency {
+    private typealias LocalizedString = LocalizationConstants.Account
+
+    public var defaultWalletName: String {
+        LocalizedString.fiatAccount(displayCode)
     }
 }

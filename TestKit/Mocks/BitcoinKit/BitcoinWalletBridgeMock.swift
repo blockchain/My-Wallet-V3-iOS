@@ -15,6 +15,10 @@ class BitcoinWalletBridgeMock: BitcoinWalletBridgeAPI {
     enum MockError: Error {
         case error
     }
+
+    func update(accountIndex: Int, label: String) -> Completable {
+        .empty()
+    }
     
     func walletIndex(for receiveAddress: String) -> Single<Int32> {
         .never()

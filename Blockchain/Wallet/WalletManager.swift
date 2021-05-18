@@ -13,6 +13,7 @@ import PlatformKit
 import RxCocoa
 import RxSwift
 import ToolKit
+import WalletPayloadKit
 
 /**
  Manager object for operations to the Blockchain Wallet.
@@ -48,7 +49,6 @@ class WalletManager: NSObject, TransactionObserving, JSContextProviderAPI, Walle
     @objc weak var sendEtherDelegate: WalletSendEtherDelegate?
     @objc weak var transactionDelegate: WalletTransactionDelegate?
     @objc weak var transferAllDelegate: WalletTransferAllDelegate?
-    @objc weak var upgradeWalletDelegate: WalletUpgradeDelegate?
     weak var swipeAddressDelegate: WalletSwipeAddressDelegate?
     weak var keyImportDelegate: WalletKeyImportDelegate?
     weak var secondPasswordDelegate: WalletSecondPasswordDelegate?
@@ -83,11 +83,7 @@ class WalletManager: NSObject, TransactionObserving, JSContextProviderAPI, Walle
     /// Returns the context. Should be invoked on the main queue always.
     /// If the context has not been generated,
     func fetchJSContext() -> JSContext {
-        if let context = wallet.context {
-            return context
-        }
-        wallet.loadJS()
-        return wallet.context
+        wallet.loadContextIfNeeded()
     }
     
     /// Performs closing operations on the wallet. This should be called on logout and
@@ -488,12 +484,10 @@ extension WalletManager: WalletDelegate {
             self.keyImportDelegate?.scanPrivateKeyForWatchOnlyAddress(address)
         }
     }
+}
 
-    // MARK: - Upgrade
-
-    func walletUpgraded(_ wallet: Wallet!) {
-        DispatchQueue.main.async {
-            self.upgradeWalletDelegate?.onWalletUpgraded()
-        }
+extension WalletManager: WalletUpgradingProvider {
+    var walletUpgrading: WalletUpgradingAPI {
+        wallet
     }
 }

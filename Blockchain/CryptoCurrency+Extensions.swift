@@ -14,6 +14,8 @@ extension CryptoCurrency {
     /// The legacy representation of `CryptoCurrency`
     var legacy: LegacyAssetType {
         switch self {
+        case .aave:
+            return .aave
         case .algorand:
             return .algorand
         case .bitcoin:
@@ -24,12 +26,16 @@ extension CryptoCurrency {
             return .ether
         case .pax:
             return .pax
+        case .polkadot:
+            return .polkadot
         case .stellar:
             return .stellar
         case .tether:
             return .tether
         case .wDGLD:
             return .WDGLD
+        case .yearnFinance:
+            return .yearnFinance
         }
     }
     
@@ -40,6 +46,8 @@ extension CryptoCurrency {
 
     init(legacyAssetType: LegacyAssetType) {
         switch legacyAssetType {
+        case .aave:
+            self = .aave
         case .algorand:
             self = .algorand
         case .bitcoin:
@@ -48,14 +56,18 @@ extension CryptoCurrency {
             self = .bitcoinCash
         case .ether:
             self = .ethereum
-        case .stellar:
-            self = .stellar
         case .pax:
             self = .pax
+        case .polkadot:
+            self = .polkadot
+        case .stellar:
+            self = .stellar
         case .tether:
             self = .tether
         case .WDGLD:
             self = .wDGLD
+        case .yearnFinance:
+            self = .yearnFinance
         }
     }
 }

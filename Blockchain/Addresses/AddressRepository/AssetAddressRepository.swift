@@ -107,8 +107,7 @@ enum AssetAddressType {
         }
 
         guard wallet.didUpgradeToHd() else {
-            Logger.shared.warning("Wallet has not yet been upgraded to HD.")
-            return
+            fatalError("Wallet upgrade is not optional.")
         }
 
         // Only one address for ethereum and stellar
@@ -163,6 +162,11 @@ enum AssetAddressType {
 
         // TODO: In `BlockchainSettings.App`, create a method that receives an enum and returns a swipe address
         switch asset {
+        case .aave:
+            guard let address = appSettings.swipeAddressForAave else {
+                return []
+            }
+            return [AnyERC20AssetAddress<AaveToken>(publicKey: address)]
         case .algorand:
             return []
         case .ethereum:
@@ -180,6 +184,8 @@ enum AssetAddressType {
                 return []
             }
             return [AnyERC20AssetAddress<PaxToken>(publicKey: address)]
+        case .polkadot:
+            return []
         case .tether:
             guard let address = appSettings.swipeAddressForTether else {
                 return []
@@ -190,6 +196,11 @@ enum AssetAddressType {
                 return []
             }
             return [AnyERC20AssetAddress<WDGLDToken>(publicKey: address)]
+        case .yearnFinance:
+            guard let address = appSettings.swipeAddressForYearnFinance else {
+                return []
+            }
+            return [AnyERC20AssetAddress<YearnFinanceToken>(publicKey: address)]
         case .bitcoinCash, .bitcoin:
             let swipeAddresses = KeychainItemWrapper.getSwipeAddresses(for: asset.legacy) as? [String] ?? []
             return AssetAddressFactory.create(fromAddressStringArray: swipeAddresses, assetType: asset)
@@ -222,14 +233,14 @@ enum AssetAddressType {
         KeychainItemWrapper.removeAllSwipeAddresses()
     }
 
-    /// removes all swipe addresses for the provided CryptoCurrency
+    /// Removes all swipe addresses for the provided CryptoCurrency
     ///
     /// - Parameter assetType: the CryptoCurrency
-    @objc func removeAllSwipeAddresses(for assetType: LegacyCryptoCurrency) {
-        KeychainItemWrapper.removeAllSwipeAddresses(for: assetType.legacy)
+    func removeAllSwipeAddresses(for cryptoCurrency: CryptoCurrency) {
+        removeAllSwipeAddresses(forAsset: cryptoCurrency.legacy)
     }
     
-    /// removes all swipe addresses for the provided CryptoCurrency
+    /// removes all swipe addresses for the provided LegacyAssetType
     ///
     /// - Parameter type: the LegacyAssetType
     @objc func removeAllSwipeAddresses(forAsset type: LegacyAssetType) {

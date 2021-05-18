@@ -40,7 +40,8 @@ public struct QRCode: QRCodeAPI {
 
     public var image: UIImage? {
         guard let ciImage = ciImage else { return nil }
-        let scale = CGAffineTransform(scaleX: 3, y: 3)
+        let scaleXY = UIScreen.main.bounds.width / ciImage.extent.size.width
+        let scale = CGAffineTransform(scaleX: scaleXY, y: scaleXY)
         return UIImage(ciImage: ciImage.transformed(by: scale))
     }
 

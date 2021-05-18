@@ -97,10 +97,13 @@ final class BuySellActivityDetailsPresenter: DetailsScreenPresenterAPI {
         totalPresenter = TransactionalLineItem.total(event.outputValue.displayString).defaultPresenter(
             accessibilityIdPrefix: AccessibilityId.lineItemPrefix
         )
-        let destination = String(
-            format: "\(LocalizedString.myWallet)",
-            event.outputValue.currencyType.code
-        )
+        let destination: String
+        switch event.outputValue.currencyType {
+        case .crypto:
+            destination = "" // NOOP: impossible because this is only used for `Sell`, where destination is Fiat.
+        case .fiat(let fiat):
+            destination = fiat.defaultWalletName
+        }
         sendingToPresenter = TransactionalLineItem.sendingTo(destination).defaultPresenter(
              accessibilityIdPrefix: AccessibilityId.lineItemPrefix
         )

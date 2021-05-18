@@ -40,6 +40,10 @@ class AlgorandCryptoAccount: CryptoNonCustodialAccount {
         self.exchangeService = exchangeProviding[.algorand]
     }
 
+    func can(perform action: AssetAction) -> Single<Bool> {
+        actions.map { $0.contains(action) }
+    }
+
     func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue> {
         Single
             .zip(

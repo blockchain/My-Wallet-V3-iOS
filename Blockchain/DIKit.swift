@@ -21,6 +21,7 @@ import StellarKit
 import ToolKit
 import TransactionKit
 import TransactionUIKit
+import WalletPayloadKit
 
 extension DependencyContainer {
     
@@ -223,10 +224,7 @@ extension DependencyContainer {
 
         // MARK: - Stellar Wallet
 
-        factory { () -> StellarWalletBridgeAPI in
-            let walletManager: WalletManager = DIKit.resolve()
-            return walletManager.wallet as StellarWalletBridgeAPI
-        }
+        factory { StellarWallet() as StellarWalletBridgeAPI }
         
         // MARK: - BitcoinCash Wallet
         
@@ -247,5 +245,9 @@ extension DependencyContainer {
         }
 
         single { BitcoinCashWallet() as BitcoinCashWalletBridgeAPI }
+
+        // MARK: Wallet Upgrade
+
+        factory { WalletManager.shared as WalletUpgradingProvider }
     }
 }

@@ -8,7 +8,6 @@
 
 import BitcoinChainKit
 import BitcoinKit
-import Foundation
 import JavaScriptCore
 import PlatformKit
 import RxSwift
@@ -209,6 +208,15 @@ extension BitcoinWallet: BitcoinChainSendBridgeAPI {
 }
 
 extension BitcoinWallet: BitcoinWalletBridgeAPI {
+
+    func update(accountIndex: Int, label: String) -> Completable {
+        Completable.deferred { [weak self] () -> Completable in
+            guard let wallet = self?.wallet else {
+                return .error(WalletError.notInitialized)
+            }
+            return wallet.updateAccountLabel(.bitcoin, index: accountIndex, label: label)
+        }
+    }
     
     func walletIndex(for receiveAddress: String) -> Single<Int32> {
         Single<Int32>.create(weak: self) { (self, observer) -> Disposable in

@@ -71,32 +71,3 @@ extension Wallet: MnemonicAccessAPI {
         .subscribeOn(MainScheduler.asyncInstance)
     }
 }
-
-/// `StellarWalletBridgeAPI` is part of the `bridge` that is used when injecting the `wallet` into
-/// a `WalletAccountRepository`. This is how we save the users `StellarKeyPair`
-extension Wallet: StellarWalletBridgeAPI {
-    public func save(keyPair: StellarKit.StellarKeyPair, label: String, completion: @escaping StellarWalletBridgeAPI.KeyPairSaveCompletion) {
-        self.saveXlmAccount(
-            keyPair.accountID,
-            label: label,
-            success: {
-                completion(nil)
-            },
-            error: { errorMessage in
-                completion(errorMessage)
-            }
-        )
-    }
-    
-    public func stellarWallets() -> [StellarKit.StellarWalletAccount] {
-        guard let xlmAccountsRaw = self.getXlmAccounts() else {
-            return []
-        }
-        
-        guard !xlmAccountsRaw.isEmpty else {
-            return []
-        }
-        
-        return xlmAccountsRaw.castJsonObjects(type: StellarWalletAccount.self)
-    }
-}

@@ -39,7 +39,7 @@ class SendPaxCoordinator {
     
     /// Exchange address presenter
     private let exchangeAddressPresenter: SendExchangeAddressStatePresenter
-    private var exchangeAddressViewModel = ExchangeAddressViewModel(assetType: .pax)
+    private var exchangeAddressViewModel = ExchangeAddressViewModel(cryptoCurrency: .pax)
 
     private var fees: Single<EthereumTransactionFee> {
         feeService.fees

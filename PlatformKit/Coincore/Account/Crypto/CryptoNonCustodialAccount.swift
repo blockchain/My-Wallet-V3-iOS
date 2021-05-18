@@ -8,7 +8,9 @@
 
 import RxSwift
 
-public protocol CryptoNonCustodialAccount: CryptoAccount, NonCustodialAccount { }
+public protocol CryptoNonCustodialAccount: CryptoAccount, NonCustodialAccount {
+    func updateLabel(_ newLabel: String) -> Completable
+}
 
 extension CryptoNonCustodialAccount {
 
@@ -24,5 +26,9 @@ extension CryptoNonCustodialAccount {
     public var isFunded: Single<Bool> {
         balance
             .map { $0.isPositive }
+    }
+
+    public func updateLabel(_ newLabel: String) -> Completable {
+        .error(PlatformKitError.illegalStateException(message: "Cannot update account label for \(asset.name) accounts"))
     }
 }

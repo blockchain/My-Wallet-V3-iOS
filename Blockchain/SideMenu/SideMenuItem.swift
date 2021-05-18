@@ -20,7 +20,6 @@ enum SideMenuItem {
     case airdrops
     case settings
     case support
-    case upgrade
     /// Legacy QR code connection flow
     case webLogin
     /// Secure Channel QR code connection flow
@@ -50,8 +49,6 @@ extension SideMenuItem {
             return .sideNavAirdropCenter
         case .support:
             return .sideNavSupport
-        case .upgrade:
-            return .sideNavUpgrade
         case .webLogin:
             return .sideNavWebLogin
         case .lockbox:
@@ -81,8 +78,6 @@ extension SideMenuItem {
             return LocalizationConstants.SideMenu.airdrops
         case .support:
             return LocalizationConstants.SideMenu.support
-        case .upgrade:
-            return LocalizationConstants.LegacyUpgrade.upgrade
         case .webLogin:
             return LocalizationConstants.SideMenu.loginToWebWallet
         case .lockbox:
@@ -112,8 +107,6 @@ extension SideMenuItem {
             return "menu-icon-settings"
         case .support:
             return "menu-icon-help"
-        case .upgrade:
-            return "menu-icon-upgrade"
         case .webLogin:
             return "menu-icon-pair-web-wallet"
         case .lockbox:
@@ -139,7 +132,6 @@ extension SideMenuItem {
              .settings,
              .support,
              .airdrops,
-             .upgrade,
              .lockbox,
              .webLogin,
              .secureChannel:

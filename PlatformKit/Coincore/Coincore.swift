@@ -53,6 +53,17 @@ public final class Coincore {
         self.reactiveWallet = reactiveWallet
     }
 
+    /// Gives a chance for all assets to initialize themselves.
+    public func initialize() -> Completable {
+        var completables = cryptoAssets
+            .values
+            .map { asset -> Completable in
+                asset.initialize()
+            }
+        completables.append(fiatAsset.initialize())
+        return Completable.concat(completables)
+    }
+
     public subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
         guard let asset = cryptoAssets[cryptoCurrency] else {
             fatalError("Unknown crypto currency.")

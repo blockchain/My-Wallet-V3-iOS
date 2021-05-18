@@ -14,8 +14,8 @@ github "ReactiveX/RxSwift" ~> 5.1
 github "paulo-bc/RIBs" "0dc79b23a3e79b99bc3caee65ee3125485b96954"
 github "RxSwiftCommunity/RxDataSources" ~> 4.0
 github "thisisalexmcgregor/stellar-ios-mac-sdk" "blockchain"
-github "jackpooleybc/swift-crypto" "3b5301cb0802184d6879e547c4f122a09f05960c"
 github "jackpooleybc/CryptoSwift" "jack/iso10126padding"
 github "jackpooleybc/DIKit" "safe-property-wrappers"
 github "SiftScience/sift-ios" "v2.0.1"
 github "paulo-bc/wallet-core-carthage" "7b5f9bcb8d2cbc8f43e260ef5e9eff0eae53bfea"
+github "jackpooleybc/RxCombine" "fix-carthage"

@@ -10,7 +10,7 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-public class TransactionalActivityItemEventService: TransactionalActivityItemEventServiceAPI {
+public final class TransactionalActivityItemEventService: TransactionalActivityItemEventServiceAPI {
     
     // MARK: - Public Properties
     

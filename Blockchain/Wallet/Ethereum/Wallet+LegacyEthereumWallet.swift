@@ -60,31 +60,7 @@ extension Wallet: LegacyEthereumWalletAPI {
         }
         context.evaluateScript(script)
     }
-    
-    public func saveEthereumAccount(with privateKey: String, label: String?, success: @escaping () -> Void, error: @escaping (String) -> Void) {
-        guard isInitialized() else {
-            error("Wallet is not yet initialized.")
-            return
-        }
-        ethereum.interopDispatcher.saveAccount.addObserver { result in
-            switch result {
-            case .success:
-                success()
-            case .failure(let errorMessage):
-                error(errorMessage.localizedDescription)
-            }
-        }
-        let escapedPrivateKey = privateKey.escapedForJS()
-        let function: String = "MyWalletPhone.saveEtherAccountAsync"
-        let script: String
-        if let escapedLabel = label?.escapedForJS() {
-            script = "\(function)(\(escapedPrivateKey), \(escapedLabel))"
-        } else {
-            script = "\(function)(\(escapedPrivateKey)))"
-        }
-        context.evaluateScript(script)
-    }
-    
+
     public func getLabelForEthereumAccount(with secondPassword: String?, success: @escaping (String) -> Void, error: @escaping (String) -> Void) {
         self.ethereumAccounts(with: secondPassword, success: { accounts in
             guard

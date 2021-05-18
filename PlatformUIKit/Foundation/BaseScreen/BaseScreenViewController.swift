@@ -176,7 +176,7 @@ open class BaseScreenViewController: UIViewController {
     // MARK: - Setup
     
     private func determineStatusBarStyle() -> UIStatusBarStyle {
-        if #available(iOS 13.0, *), isPresentedModally {
+        if isPresentedModally {
             return .lightContent
         }
         switch barStyle {

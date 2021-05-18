@@ -164,10 +164,6 @@ final class AnnouncementPresenter {
                 announcement = exchangeLinking(user: preliminaryData.user)
             case .bitpay:
                 announcement = bitpay
-            case .algorand:
-                announcement = algorand
-            case .tether:
-                announcement = tether
             case .resubmitDocuments:
                 announcement = resubmitDocuments(user: preliminaryData.user)
             case .simpleBuyPendingTransaction:
@@ -181,6 +177,8 @@ final class AnnouncementPresenter {
                 )
             case .newSwap:
                 announcement = newSwap(using: preliminaryData, reappearanceTimeInterval: metadata.interval)
+            case .aaveYfiDot:
+                announcement = aaveYfiDot
             }
             // Return the first different announcement that should show
             if announcement.shouldShow {
@@ -339,26 +337,14 @@ extension AnnouncementPresenter {
         )
     }
 
-    /// Computes Algorand card announcement
-    private var algorand: Announcement {
-        AlgorandAnnouncement(
+    /// Computes Aave Yfi Dot card announcement
+    private var aaveYfiDot: Announcement {
+        AaveYfiDotAnnouncement(
             dismiss: { [weak self] in
                 self?.hideAnnouncement()
             },
             action: { [weak appCoordinator] in
-                appCoordinator?.handleBuyCrypto(currency: .algorand)
-            }
-        )
-    }
-
-    /// Computes Tether card announcement
-    private var tether: Announcement {
-        TetherAnnouncement(
-            dismiss: { [weak self] in
-                self?.hideAnnouncement()
-            },
-            action: { [weak appCoordinator] in
-                appCoordinator?.handleBuyCrypto(currency: .tether)
+                appCoordinator?.handleBuyCrypto(currency: .aave)
             }
         )
     }

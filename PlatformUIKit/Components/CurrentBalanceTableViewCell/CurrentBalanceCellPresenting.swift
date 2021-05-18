@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 
 public protocol CurrentBalanceCellPresenting {
-    var iconImageViewContent: Driver<ImageViewContent> { get }
+    var iconImageViewContent: Driver<BadgeImageViewModel> { get }
 
     var badgeImageViewModel: Driver<BadgeImageViewModel> { get }
 

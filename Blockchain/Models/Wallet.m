@@ -11,6 +11,7 @@
 @import WalletPayloadKit;
 @import FirebaseAnalytics;
 @import NetworkKit;
+@import ToolKit;
 #import <CommonCrypto/CommonKeyDerivation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "Wallet.h"
@@ -178,6 +179,11 @@ NSString * const kLockboxInvitation = @"lockbox";
         [timer invalidate];
         [weakSelf.timers removeObjectForKey:identifier];
     };
+}
+
+- (JSContext *)loadContextIfNeeded {
+    [self loadJSIfNeeded];
+    return self.context;
 }
 
 - (void)loadJSIfNeeded {
@@ -549,10 +555,6 @@ NSString * const kLockboxInvitation = @"lockbox";
 
     self.context[@"objc_makeNotice_id_message"] = ^(NSString *type, NSString *_id, NSString *message) {
         [weakSelf makeNotice:type id:_id message:message];
-    };
-
-    self.context[@"objc_upgrade_success"] = ^() {
-        [weakSelf upgrade_success];
     };
 
 #pragma mark Recovery
@@ -1198,7 +1200,12 @@ NSString * const kLockboxInvitation = @"lockbox";
 
 - (void)newAccount:(NSString*)__password email:(NSString *)__email
 {
-    [self.context evaluateScriptCheckIsOnMainQueue:[NSString stringWithFormat:@"MyWalletPhone.newAccount(\"%@\", \"%@\", \"%@\")", [__password escapedForJS], [__email escapedForJS], BC_STRING_MY_BITCOIN_WALLET]];
+    NSString *walletName = [LocalizationConstantsObjcBridge myBitcoinWallet];
+    NSString *passwordEscaped = [__password escapedForJS];
+    NSString *emailEscaped = [__email escapedForJS];
+    NSString *scriptFormat = @"MyWalletPhone.newAccount(\"%@\", \"%@\", \"%@\")";
+    NSString *script = [NSString stringWithFormat:scriptFormat, passwordEscaped, emailEscaped, walletName];
+    [self.context evaluateScriptCheckIsOnMainQueue:script];
 }
 
 - (BOOL)needsSecondPassword
@@ -2282,13 +2289,6 @@ NSString * const kLockboxInvitation = @"lockbox";
     [LoadingViewPresenter.shared hide];
 }
 
-- (void)upgrade_success
-{
-    if ([delegate respondsToSelector:@selector(walletUpgraded:)]) {
-        [delegate walletUpgraded:self];
-    }
-}
-
 #pragma mark - Callbacks from JS to Obj-C
 
 - (void)log:(NSString*)message
@@ -3309,32 +3309,6 @@ NSString * const kLockboxInvitation = @"lockbox";
         return [[self.context evaluateScriptCheckIsOnMainQueue:@"MyWalletPhone.getLabelForEthAccount()"] toString];
     }
     return nil;
-}
-
-- (void)setLabelForAccount:(int)account label:(NSString *)label assetType:(LegacyAssetType)assetType
-{
-    if (!Reachability.hasInternetConnection) {
-        [AlertViewPresenter.shared internetConnection];
-        return;
-    }
-
-    if ([self isInitialized]) {
-        if (assetType == LegacyAssetTypeBitcoin) {
-            self.isSyncing = YES;
-            [self.context evaluateScriptCheckIsOnMainQueue:[NSString stringWithFormat:@"MyWalletPhone.setLabelForAccount(%d, \"%@\")", account, [label escapedForJS]]];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSetLabelForAccount) name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
-        } else if (assetType == LegacyAssetTypeBitcoinCash) {
-            [self.context evaluateScriptCheckIsOnMainQueue:[NSString stringWithFormat:@"MyWalletPhone.bch.setLabelForAccount(%d, \"%@\")", account, [label escapedForJS]]];
-            [self getHistory];
-        }
-    }
-}
-
-- (void)didSetLabelForAccount
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:[ConstantsObjcBridge notificationKeyBackupSuccess] object:nil];
-
-    [self getHistory];
 }
 
 - (void)createAccountWithLabel:(NSString *)label

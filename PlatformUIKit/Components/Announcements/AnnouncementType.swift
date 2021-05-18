@@ -20,14 +20,13 @@ public enum AnnouncementType: String, Codable {
     case verifyIdentity = "kyc_incomplete"
     case resubmitDocuments = "kyc_resubmit"
     case newSwap = "swap_v2"
-    case algorand = "algorand"
     case cloudBackup = "cloud_backup"
-    case tether = "tether"
     case bitpay = "bitpay"
     case kycAirdrop = "kyc_airdrop"
     case fiatFundsKYC = "fiat_funds_kyc"
     case fiatFundsNoKYC = "fiat_funds_no_kyc"
     case interestFunds = "interest_funds"
+    case aaveYfiDot = "aave_yfi_dot_available"
 
     /// The key indentifying the announcement in cache
     var key: AnnouncementRecord.Key {
@@ -54,10 +53,6 @@ public enum AnnouncementType: String, Codable {
             return .backupFunds
         case .verifyIdentity:
             return .identityVerification
-        case .algorand:
-            return .algorand
-        case .tether:
-            return .tether
         case .bitpay:
             return .bitpay
         case .resubmitDocuments:
@@ -72,6 +67,8 @@ public enum AnnouncementType: String, Codable {
             return .fiatFundsNoKYC
         case .interestFunds:
             return .interestFunds
+        case .aaveYfiDot:
+            return .aaveYfiDot
         }
     }
 }

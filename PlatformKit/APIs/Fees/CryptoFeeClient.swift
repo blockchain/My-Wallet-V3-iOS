@@ -15,8 +15,18 @@ final class CryptoFeeClient<FeeType: TransactionFee & Decodable> {
     // MARK: - Types
 
     private enum Endpoint {
-        static var fees: [String] {
-            ["mempool", "fees", FeeType.cryptoType.pathComponent]
+        enum Fees {
+            static var path: [String] {
+                ["mempool", "fees", FeeType.cryptoType.pathComponent]
+            }
+            static var parameters: [URLQueryItem]? {
+                guard let contractAddress = FeeType.contractAddress else {
+                    return nil
+                }
+                return [
+                    URLQueryItem(name: "contractAddress", value: contractAddress)
+                ]
+            }
         }
     }
 
@@ -26,7 +36,10 @@ final class CryptoFeeClient<FeeType: TransactionFee & Decodable> {
     private let communicator: NetworkCommunicatorAPI
 
     var fees: Single<FeeType> {
-        guard let request = requestBuilder.get(path: Endpoint.fees) else {
+        guard let request = requestBuilder.get(
+            path: Endpoint.Fees.path,
+            parameters: Endpoint.Fees.parameters
+        ) else {
             return .error(RequestBuilder.Error.buildingRequest)
         }
         return communicator.perform(request: request)

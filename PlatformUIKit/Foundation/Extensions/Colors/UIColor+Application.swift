@@ -104,17 +104,20 @@ public extension UIColor {
     static let iconWarning = orange600
     
     // Currency
-    
-    static let bitcoin = btc
-    static let ethereum = eth
-    static let bitcoinCash = bch
-    static let stellar = xlm
-    static let usdd = pax
+
+    static let aave = aaveColor
     static let algorand = algo
+    static let bitcoin = btc
+    static let bitcoinCash = bch
+    static let ethereum = eth
+    static let polkadot = dot
+    static let stellar = xlm
     static let tether = usdt
+    static let usdd = pax
     static let wdgld = wDGLD
+    static let yearnFinance = yfi
     static let fiat = green500
-    
+
     // Tiers
     
     static let silverTier = tiersSilver

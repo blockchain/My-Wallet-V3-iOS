@@ -49,8 +49,12 @@ public class FiatCustodialAccount: FiatAccount {
         self.balanceProviding = balanceProviding
         self.exchange = exchangeProviding[fiatCurrency]
         self.fiatCurrency = fiatCurrency
-        label = String(format: LocalizedString.myWallet, fiatCurrency.code)
+        label = fiatCurrency.defaultWalletName
         id = "FiatCustodialAccount." + fiatCurrency.code
+    }
+
+    public func can(perform action: AssetAction) -> Single<Bool> {
+        actions.map { $0.contains(action) }
     }
 
     public func fiatBalance(fiatCurrency: FiatCurrency) -> Single<MoneyValue> {

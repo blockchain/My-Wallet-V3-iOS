@@ -45,9 +45,9 @@ final class NonCustodialActionScreenPresenter: WalletActionScreenPresenting {
     init(using interactor: WalletActionScreenInteracting,
          stateService: NonCustodialActionStateServiceAPI) {
         self.interactor = interactor
-        
+        let currency = interactor.currency
         let descriptionValue: () -> Observable<String> = {
-            .just(LocalizationConstants.DashboardDetails.BalanceCell.Description.nonCustodial)
+            .just(currency.name)
         }
         
         assetBalanceViewPresenter = CurrentBalanceCellPresenter(

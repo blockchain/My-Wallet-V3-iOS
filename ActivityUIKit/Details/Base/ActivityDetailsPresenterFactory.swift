@@ -27,13 +27,13 @@ final class ActivityDetailsPresenterFactory {
             return SwapActivityDetailsPresenter(event: swap)
         case .transactional(let transactional):
             switch transactional.currency {
-            case .algorand:
-                fatalError("Activity Details not implemented for Algorand")
+            case .algorand, .polkadot:
+                fatalError("Activity Details not implemented for \(transactional.currency.name).")
             case .bitcoin:
                 return BitcoinActivityDetailsPresenter(event: transactional, router: router)
             case .bitcoinCash:
                 return BitcoinCashActivityDetailsPresenter(event: transactional, router: router)
-            case .pax, .tether, .wDGLD:
+            case .aave, .pax, .tether, .wDGLD, .yearnFinance:
                 let interactor = ERC20ActivityDetailsInteractor(cryptoCurrency: transactional.currency)
                 return ERC20ActivityDetailsPresenter(event: transactional, router: router, interactor: interactor)
             case .stellar:

@@ -70,30 +70,12 @@ class NumberFormatterTests: XCTestCase {
         guard
             let amount = Decimal(string: "2.532"),
             let rate = Decimal(string: "212.23")
-            else {
-                XCTFail("Could not initialize amount or rate")
-                return
+        else {
+            XCTFail("Could not initialize amount or rate")
+            return
         }
         let localCurrencyAmount = NumberFormatter.localCurrencyAmount(fromAmount: amount, fiatPerAmount: rate)
         XCTAssertEqual(localCurrencyAmount, "537\(Locale.current.safeDecimalSeparator)36",
-            "Formatted string should have two decimal places and round down when truncating")
-    }
-
-    func testAssetConversion() {
-        // $400.34
-        guard
-            let amount = Decimal(string: "400.34"),
-            let rate = Decimal(string: "212.23")
-            else {
-                XCTFail("Could not initialize amount or rate")
-                return
-        }
-        let assetTypeAmount = NumberFormatter.assetTypeAmount(
-            fromAmount: amount,
-            fiatPerAmount: rate,
-            assetType: .ethereum
-        )
-        XCTAssertEqual(assetTypeAmount, "1\(Locale.current.safeDecimalSeparator)88634971",
-            "Formatted string should have eight decimal places and round down when truncating")
+                       "Formatted string should have two decimal places and round down when truncating")
     }
 }

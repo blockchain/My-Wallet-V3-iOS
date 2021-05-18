@@ -18,9 +18,6 @@ public enum EthereumJSInteropDispatcherError: Error {
 @objc public protocol EthereumJSInteropDelegateAPI {
     func didGetAccounts(_ accounts: JSValue)
     func didFailToGetAccounts(errorMessage: JSValue)
-    
-    func didSaveAccount()
-    func didFailToSaveAccount(errorMessage: JSValue)
 
     func didGetAddress(_ address: JSValue)
     func didFailToGetAddress(errorMessage: JSValue)
@@ -37,8 +34,6 @@ public enum EthereumJSInteropDispatcherError: Error {
 
 public protocol EthereumJSInteropDispatcherAPI {
     var getAccounts: Dispatcher<[[String: Any]]> { get }
-    var saveAccount: Dispatcher<Void> { get }
-    
     var getAddress: Dispatcher<String> { get }
         
     var getERC20Tokens: Dispatcher<[String: [String: Any]]> { get }
@@ -52,7 +47,6 @@ public class EthereumJSInteropDispatcher: EthereumJSInteropDispatcherAPI {
     static let shared = EthereumJSInteropDispatcher()
     
     public let getAccounts = Dispatcher<[[String: Any]]>()
-    public let saveAccount = Dispatcher<Void>()
     
     public let recordLastTransaction = Dispatcher<Void>()
     public let getIsWaitingOnTransaction = Dispatcher<Bool>()
@@ -83,15 +77,7 @@ extension EthereumJSInteropDispatcher: EthereumJSInteropDelegateAPI {
     public func didFailToGetAccounts(errorMessage: JSValue) {
         sendFailure(dispatcher: getAccounts, errorMessage: errorMessage)
     }
-    
-    public func didSaveAccount() {
-        saveAccount.sendSuccess(with: ())
-    }
-    
-    public func didFailToSaveAccount(errorMessage: JSValue) {
-        sendFailure(dispatcher: saveAccount, errorMessage: errorMessage)
-    }
-    
+
     public func didGetAddress(_ address: JSValue) {
         guard let address = address.toString() else {
             getAddress.sendFailure(.unknown)

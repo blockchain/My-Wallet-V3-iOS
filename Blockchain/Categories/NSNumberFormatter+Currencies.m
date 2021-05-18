@@ -38,7 +38,7 @@
         NSDecimalNumber *satoshi = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI];
         NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:satoshi];
 
-        NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
+        NSString * string = [[NSNumberFormatter bitcoinFormatterWithGroupingSeparator] stringFromNumber:number];
         
         return [string stringByAppendingString:@" BTC"];
     }
@@ -51,7 +51,7 @@
     NSDecimalNumber *satoshi = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI];
     NSDecimalNumber * number = [(NSDecimalNumber*)[NSDecimalNumber numberWithLongLong:value] decimalNumberByDividingBy:satoshi];
     
-    NSString * string = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:number];
+    NSString * string = [[NSNumberFormatter bitcoinFormatterWithGroupingSeparator] stringFromNumber:number];
     
     return [string stringByAppendingString:@" BTC"];
 }
@@ -100,14 +100,9 @@
     return returnValue;
 }
 
-+ (NSString *)formatAmountFromUSLocale:(uint64_t)amount localCurrency:(BOOL)localCurrency
-{
-    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:[NSNumberFormatter assetFormatterWithUSLocale]];
-}
-
 + (NSString *)formatAmount:(uint64_t)amount localCurrency:(BOOL)localCurrency
 {
-    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:localCurrency ? [NSNumberFormatter localCurrencyFormatter] : [NSNumberFormatter assetFormatter]];
+    return [NSNumberFormatter internalFormatAmount:amount localCurrency:localCurrency localCurrencyFormatter:localCurrency ? [NSNumberFormatter localCurrencyFormatter] : [NSNumberFormatter bitcoinAssetFormatter]];
 }
 
 + (BOOL)stringHasBitcoinValue:(NSString *)string
@@ -280,7 +275,7 @@
             NSDecimalNumber *satoshi = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:SATOSHI];
             NSDecimalNumber *resultAmount = [amountDecimalNumber decimalNumberByDividingBy:satoshi];
 
-            returnValue = [[NSNumberFormatter assetFormatterWithGroupingSeparator] stringFromNumber:resultAmount];
+            returnValue = [[NSNumberFormatter bitcoinFormatterWithGroupingSeparator] stringFromNumber:resultAmount];
 
             if (includeSymbol) {
                 NSString *currencyCode = CURRENCY_SYMBOL_BCH;

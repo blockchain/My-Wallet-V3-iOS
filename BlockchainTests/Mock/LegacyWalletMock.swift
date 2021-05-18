@@ -6,7 +6,8 @@
 //  Copyright © 2019 Blockchain Luxembourg S.A. All rights reserved.
 //
 
-import Foundation
+import PlatformKit
+import RxSwift
 @testable import Blockchain
 
 class LegacyWalletMock: LegacyWalletAPI {
@@ -39,5 +40,9 @@ class LegacyWalletMock: LegacyWalletAPI {
     
     func getReceiveAddress(forAccount account: Int32, assetType: LegacyAssetType) -> String! {
         ""
+    }
+
+    func updateAccountLabel(_ cryptoCurrency: CryptoCurrency, index: Int, label: String) -> Completable {
+        .empty()
     }
 }
