@@ -179,7 +179,7 @@ public struct WelcomeView: View {
             Button(LocalizedString.Button.restoreWallet) {
                 viewStore.send(.navigate(to: .restoreWallet))
             }
-            .buttonStyle(ExpandedButtonStyle(EdgeInsets(top: 15, leading: 0, bottom: 20, trailing: 20)))
+            .buttonStyle(ExpandedButtonStyle(EdgeInsets(top: 25, leading: 0, bottom: 25, trailing: 25)))
             .font(Font(weight: .semibold, size: Layout.supplmentaryTextFontSize))
             .foregroundColor(.buttonLinkText)
             .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.restoreWalletButton)
