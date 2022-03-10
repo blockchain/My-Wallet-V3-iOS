@@ -179,6 +179,7 @@ public struct WelcomeView: View {
             Button(LocalizedString.Button.restoreWallet) {
                 viewStore.send(.navigate(to: .restoreWallet))
             }
+            .buttonStyle(ExpandedButtonStyle(EdgeInsets(top: 15, leading: 0, bottom: 20, trailing: 20)))
             .font(Font(weight: .semibold, size: Layout.supplmentaryTextFontSize))
             .foregroundColor(.buttonLinkText)
             .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.restoreWalletButton)
@@ -206,6 +207,22 @@ public struct WelcomeView: View {
             RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
                 .stroke(Color.borderPrimary)
         )
+    }
+}
+
+private struct ExpandedButtonStyle: ButtonStyle {
+    private let padding: EdgeInsets
+
+    init(_ padding: EdgeInsets) {
+        self.padding = padding
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .foregroundColor(configuration.isPressed ? .buttonLinkText.opacity(0.5) : .buttonLinkText)
+            .padding(padding)
+            .contentShape(Rectangle())
     }
 }
 
