@@ -5,7 +5,7 @@ import FeatureOnboardingUI
 import ToolKit
 import UIKit
 
-final class MockBuyCryptoRouter: OnboardingTransactionsRouterAPI {
+final class MockBuyCryptoRouter: TransactionsRouterAPI {
 
     struct RecordedInvocations {
         var presentBuyFlow: [UIViewController] = []

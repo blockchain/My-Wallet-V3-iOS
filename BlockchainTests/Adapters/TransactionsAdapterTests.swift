@@ -27,7 +27,7 @@ final class TransactionsAdapterTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    // MARK: - FeatureOnboardingUI.OnboardingTransactionsRouterAPI
+    // MARK: - FeatureOnboardingUI.TransactionsRouterAPI
 
     func test_routesTo_buyFlow_for_onboarding() throws {
         // WHEN: The adapter is asked to present the buy flow

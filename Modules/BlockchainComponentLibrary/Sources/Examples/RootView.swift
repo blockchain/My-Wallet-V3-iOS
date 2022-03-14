@@ -26,6 +26,7 @@ public struct RootView: View {
             NavigationLinkProvider(view: SegmentedControlExamples(), title: "🚥 SegmentedControl"),
             NavigationLinkProvider(view: InputExamples(), title: "⌨️ Input"),
             NavigationLinkProvider(view: PrimaryPickerExamples(), title: "⛏ Picker"),
+            NavigationLinkProvider(view: AlertExamples(), title: "⚠️ Alert"),
             NavigationLinkProvider(view: AlertToastExamples(), title: "🚨 AlertToast"),
             NavigationLinkProvider(view: PageControlExamples(), title: "📑 PageControl"),
             NavigationLinkProvider(view: PrimarySliderExamples(), title: "🎚 Slider"),

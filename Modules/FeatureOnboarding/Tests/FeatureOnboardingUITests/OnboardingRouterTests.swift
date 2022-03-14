@@ -25,8 +25,8 @@ final class OnboardingRouterTests: XCTestCase {
         mockFeatureFlagService = MockFeatureFlagsService()
         mockEmailVerificationRouter = MockOnboardingEmailVerificationRouter()
         router = OnboardingRouter(
+            kycRouter: mockEmailVerificationRouter,
             transactionsRouter: mockBuyCryptoRouter,
-            emailVerificationRouter: mockEmailVerificationRouter,
             featureFlagsService: mockFeatureFlagService,
             mainQueue: testMainQueue.eraseToAnyScheduler()
         )
@@ -48,7 +48,7 @@ final class OnboardingRouterTests: XCTestCase {
 
         // WHEN: The OnboardingRouter is asked to present onboarding
         let mockViewController = MockViewController()
-        let routingResultPublisher = router.presentOnboarding(from: mockViewController)
+        let routingResultPublisher = router.presentPostSignUpOnboarding(from: mockViewController)
         var result: OnboardingResult?
         let completionExpectation = expectation(description: "Onboarding Completes")
         let cancellable = routingResultPublisher.sink { publisherResult in
@@ -87,7 +87,7 @@ final class OnboardingRouterTests: XCTestCase {
 
         // WHEN: The OnboardingRouter is asked to present onboarding
         let mockViewController = MockViewController()
-        let routingResultPublisher = router.presentOnboarding(from: mockViewController)
+        let routingResultPublisher = router.presentPostSignUpOnboarding(from: mockViewController)
         var result: OnboardingResult?
         let completionExpectation = expectation(description: "Onboarding Completes")
         let cancellable = routingResultPublisher.sink { publisherResult in
@@ -131,7 +131,7 @@ final class OnboardingRouterTests: XCTestCase {
 
         // WHEN: The OnboardingRouter is asked to present onboarding
         let mockViewController = MockViewController()
-        let routingResultPublisher = router.presentOnboarding(from: mockViewController)
+        let routingResultPublisher = router.presentPostSignUpOnboarding(from: mockViewController)
         var result: OnboardingResult?
         let completionExpectation = expectation(description: "Onboarding Completes")
         let cancellable = routingResultPublisher.sink { publisherResult in
@@ -179,7 +179,7 @@ final class OnboardingRouterTests: XCTestCase {
 
         // WHEN: The OnboardingRouter is asked to present onboarding
         let mockViewController = MockViewController()
-        let routingResultPublisher = router.presentOnboarding(from: mockViewController)
+        let routingResultPublisher = router.presentPostSignUpOnboarding(from: mockViewController)
         var result: OnboardingResult?
         let completionExpectation = expectation(description: "Onboarding Completes")
         let cancellable = routingResultPublisher.sink { publisherResult in

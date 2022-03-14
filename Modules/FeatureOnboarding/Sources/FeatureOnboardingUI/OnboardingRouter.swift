@@ -7,11 +7,12 @@ import SwiftUI
 import ToolKit
 import UIKit
 
-public protocol EmailVerificationRouterAPI {
+public protocol KYCRouterAPI {
     func presentEmailVerification(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never>
+    func presentKYCUpgradePrompt(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never>
 }
 
-public protocol OnboardingTransactionsRouterAPI {
+public protocol TransactionsRouterAPI {
     func presentBuyFlow(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never>
     func navigateToBuyCryptoFlow(from presenter: UIViewController)
     func navigateToReceiveCryptoFlow(from presenter: UIViewController)
@@ -21,28 +22,28 @@ public final class OnboardingRouter: OnboardingRouterAPI {
 
     // MARK: - Properties
 
-    let transactionsRouter: OnboardingTransactionsRouterAPI
-    let emailVerificationRouter: EmailVerificationRouterAPI
+    let kycRouter: KYCRouterAPI
+    let transactionsRouter: TransactionsRouterAPI
     let featureFlagsService: FeatureFlagsServiceAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
 
     // MARK: - Init
 
     public init(
-        transactionsRouter: OnboardingTransactionsRouterAPI = resolve(),
-        emailVerificationRouter: EmailVerificationRouterAPI = resolve(),
+        kycRouter: KYCRouterAPI = resolve(),
+        transactionsRouter: TransactionsRouterAPI = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         mainQueue: AnySchedulerOf<DispatchQueue> = .main
     ) {
+        self.kycRouter = kycRouter
         self.transactionsRouter = transactionsRouter
-        self.emailVerificationRouter = emailVerificationRouter
         self.featureFlagsService = featureFlagsService
         self.mainQueue = mainQueue
     }
 
     // MARK: - Onboarding Routing
 
-    public func presentOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
+    public func presentPostSignUpOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         // Step 1: present email verification
         presentEmailVerification(from: presenter)
             .flatMap { [weak self] _ -> AnyPublisher<OnboardingResult, Never> in
@@ -53,6 +54,10 @@ public final class OnboardingRouter: OnboardingRouterAPI {
                 return self.presentUITour(from: presenter)
             }
             .eraseToAnyPublisher()
+    }
+
+    public func presentPostSignInOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
+        kycRouter.presentKYCUpgradePrompt(from: presenter)
     }
 
     public func presentRequiredCryptoBalanceView(
@@ -128,11 +133,11 @@ public final class OnboardingRouter: OnboardingRouterAPI {
     private func presentEmailVerification(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         featureFlagsService.isEnabled(.remote(.showEmailVerificationInOnboarding))
             .receive(on: mainQueue)
-            .flatMap { [emailVerificationRouter] shouldShowEmailVerification -> AnyPublisher<OnboardingResult, Never> in
+            .flatMap { [kycRouter] shouldShowEmailVerification -> AnyPublisher<OnboardingResult, Never> in
                 guard shouldShowEmailVerification else {
                     return .just(.completed)
                 }
-                return emailVerificationRouter.presentEmailVerification(from: presenter)
+                return kycRouter.presentEmailVerification(from: presenter)
             }
             .eraseToAnyPublisher()
     }

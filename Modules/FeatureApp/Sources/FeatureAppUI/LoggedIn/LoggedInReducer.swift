@@ -33,8 +33,11 @@ public enum LoggedIn {
         // wallet related actions
         case wallet(WalletAction)
         case handleNewWalletCreation
-        case showOnboarding
-        case showLegacyBuyFlow
+        case handleExistingWalletSignIn
+        case showPostSignUpOnboardingFlow
+        case didShowPostSignUpOnboardingFlow
+        case showPostSignInOnboardingFlow
+        case didShowPostSignInOnboardingFlow
         // symbol change actions, used by old address screen
         case symbolChanged
         case symbolChangedHandled
@@ -44,8 +47,8 @@ public enum LoggedIn {
         public var reloadAfterSymbolChanged: Bool = false
         public var reloadAfterMultiAddressResponse: Bool = false
         public var displaySendCryptoScreen: Bool = false
-        public var displayOnboardingFlow: Bool = false
-        public var displayLegacyBuyFlow: Bool = false
+        public var displayPostSignUpOnboardingFlow: Bool = false
+        public var displayPostSignInOnboardingFlow: Bool = false
         public var displayWalletAlertContent: AlertViewContent?
     }
 
@@ -151,15 +154,24 @@ let loggedInReducer = Reducer<
         state.displaySendCryptoScreen = false
         return .none
     case .handleNewWalletCreation:
-        return Effect(value: .showOnboarding)
-    case .showOnboarding:
+        return Effect(value: .showPostSignUpOnboardingFlow)
+    case .handleExistingWalletSignIn:
+        return Effect(value: .showPostSignInOnboardingFlow)
+    case .showPostSignUpOnboardingFlow:
         // display new onboarding flow
-        state.displayOnboardingFlow = true
+        state.displayPostSignUpOnboardingFlow = true
         return .none
-    case .showLegacyBuyFlow:
-        state.displayLegacyBuyFlow = true
+    case .didShowPostSignUpOnboardingFlow:
+        state.displayPostSignUpOnboardingFlow = false
+        return .none
+    case .showPostSignInOnboardingFlow:
+        state.displayPostSignInOnboardingFlow = true
+        return .none
+    case .didShowPostSignInOnboardingFlow:
+        state.displayPostSignInOnboardingFlow = false
         return .none
     case .logout:
+        state = LoggedIn.State()
         return .cancel(id: LoggedInIdentifier())
     case .stop:
         // We need to cancel any running operations if we require pin entry.
@@ -221,6 +233,6 @@ private func handleStartup(context: LoggedIn.Context) -> Effect<LoggedIn.Action,
     case .deeplink(let deeplinkContent):
         return Effect(value: .deeplink(deeplinkContent))
     case .none:
-        return .none
+        return Effect(value: .handleExistingWalletSignIn)
     }
 }

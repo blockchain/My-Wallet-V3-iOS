@@ -247,5 +247,23 @@ extension LocalizationConstants {
                 comment: "KYC Upgrade Prompt - Rewards Verified Benefit Info"
             )
         }
+
+        enum UnlockTradingAlert {
+
+            static let title = NSLocalizedString(
+                "Verify your account. Unlock full access.",
+                comment: "Title for alert shown to prompt Basic Tier users to upgrade"
+            )
+
+            static let message = NSLocalizedString(
+                "Complete ID verification to enable unlimited buying, selling, swapping, and more.",
+                comment: "Message for alert shown to prompt Basic Tier users to upgrade"
+            )
+
+            static let primaryCTA = NSLocalizedString(
+                "Verify Now",
+                comment: "Primary CTA for alert shown to prompt Basic Tier users to upgrade"
+            )
+        }
     }
 }

@@ -79,7 +79,7 @@ final class RootViewController: UIHostingController<RootView> {
     @LazyInject var kycRouter: PlatformUIKit.KYCRouting
     @LazyInject var onboardingRouter: FeatureOnboardingUI.OnboardingRouterAPI
     @LazyInject var tiersService: KYCTiersServiceAPI
-    @LazyInject var transactionsRouter: TransactionsRouterAPI
+    @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
     @LazyInject var userStateService: UserAdapterAPI
     @LazyInject var airdropRouter: AirdropRouterAPI
     @Inject var walletConnectService: WalletConnectServiceAPI
@@ -139,15 +139,23 @@ extension RootViewController {
             .store(in: &bag)
 
         viewStore.publisher
-            .displayOnboardingFlow
+            .displayPostSignUpOnboardingFlow
             .filter(\.self)
-            .sink(to: My.presentOnboarding, on: self)
+            .handleEvents(receiveOutput: { _ in
+                // reset onboarding state
+                viewStore.send(.didShowPostSignUpOnboardingFlow)
+            })
+            .sink(to: My.presentPostSignUpOnboarding, on: self)
             .store(in: &bag)
 
         viewStore.publisher
-            .displayLegacyBuyFlow
+            .displayPostSignInOnboardingFlow
             .filter(\.self)
-            .sink(to: My.handleBuyCrypto, on: self)
+            .handleEvents(receiveOutput: { _ in
+                // reset onboarding state
+                viewStore.send(.didShowPostSignInOnboardingFlow)
+            })
+            .sink(to: My.presentPostSignInOnboarding, on: self)
             .store(in: &bag)
     }
 }

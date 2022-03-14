@@ -115,15 +115,15 @@ final class LoggedInReducerTests: XCTestCase {
     func test_calling_start_on_reducer_should_post_login_notification() {
         let expectation = expectation(forNotification: .login, object: nil)
 
-        testStore.send(.start(.none))
+        performSignIn()
         mockMainQueue.advance()
 
         wait(for: [expectation], timeout: 2)
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_calling_start_calls_required_services() {
-        testStore.send(.start(.none))
+        performSignIn()
         mockMainQueue.advance()
 
         XCTAssertTrue(mockExchangeAccountRepository.syncDepositAddressesIfLinkedCalled)
@@ -132,10 +132,10 @@ final class LoggedInReducerTests: XCTestCase {
 
         XCTAssertTrue(mockRemoteNotificationAuthorizer.requestAuthorizationIfNeededPublisherCalled)
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
-    func test_reducer_handles_new_wallet_correctly_should_show_new_onboarding() {
+    func test_reducer_handles_new_wallet_correctly_should_show_postSignUp_onboarding() {
         // given
         let context = LoggedIn.Context.wallet(.new)
         testStore.send(.start(context))
@@ -144,11 +144,27 @@ final class LoggedInReducerTests: XCTestCase {
         // then
         testStore.receive(.handleNewWalletCreation)
 
-        testStore.receive(.showOnboarding) { state in
-            state.displayOnboardingFlow = true
+        testStore.receive(.showPostSignUpOnboardingFlow) { state in
+            state.displayPostSignUpOnboardingFlow = true
         }
 
-        testStore.send(.logout)
+        performSignOut()
+    }
+
+    func test_reducer_handles_plain_signins_correctly_should_show_postSignIn_onboarding() {
+        // given
+        let context = LoggedIn.Context.none
+        testStore.send(.start(context))
+        mockMainQueue.advance()
+
+        // then
+        testStore.receive(.handleExistingWalletSignIn)
+
+        testStore.receive(.showPostSignInOnboardingFlow) { state in
+            state.displayPostSignInOnboardingFlow = true
+        }
+
+        performSignOut()
     }
 
     func test_reducer_handles_deeplink_sendCrypto_correctly() {
@@ -166,7 +182,7 @@ final class LoggedInReducerTests: XCTestCase {
             state.displaySendCryptoScreen = false
         }
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_deeplink_executeDeeplinkRouting_correctly() {
@@ -180,11 +196,11 @@ final class LoggedInReducerTests: XCTestCase {
 
         XCTAssertTrue(mockDeepLinkRouter.routeIfNeededCalled)
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_verify_start_action_observers_symbol_changes() {
-        testStore.send(.start(.none))
+        performSignIn()
 
         mockSettingsApp.symbolLocal = false
         mockSettingsApp.symbolLocal = true
@@ -197,11 +213,11 @@ final class LoggedInReducerTests: XCTestCase {
             state.reloadAfterSymbolChanged = false
         }
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_verify_sending_wallet_accountInfoAndExchangeRates_updates_the_state() {
-        testStore.send(.start(.none))
+        performSignIn()
 
         testStore.send(.wallet(.accountInfoAndExchangeRates)) { state in
             state.reloadAfterMultiAddressResponse = true
@@ -210,21 +226,22 @@ final class LoggedInReducerTests: XCTestCase {
         testStore.receive(.wallet(.accountInfoAndExchangeRatesHandled)) { state in
             state.reloadAfterMultiAddressResponse = false
         }
-        testStore.send(.logout)
+
+        performSignOut()
     }
 
     func test_verify_sending_wallet_handleWalletBackup() {
-        testStore.send(.start(.none))
+        performSignIn()
 
         testStore.send(.wallet(.handleWalletBackup))
 
         XCTAssertTrue(mockWallet.getHistoryForAllAssetsCalled)
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_verify_sending_wallet_handleFailToLoadHistory() {
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when sending an non nil error
         testStore.send(.wallet(.handleFailToLoadHistory(nil))) { state in
@@ -243,12 +260,12 @@ final class LoggedInReducerTests: XCTestCase {
             )
         }
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_walletDidGetAccountInfoAndExchangeRates() {
         // given
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when
         mockWallet.delegate.walletDidGetAccountInfoAndExchangeRates?(mockWallet)
@@ -262,12 +279,12 @@ final class LoggedInReducerTests: XCTestCase {
             state.reloadAfterMultiAddressResponse = false
         }
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_walletBackupFailed() {
         // given
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when
         mockWallet.delegate?.didBackupWallet?()
@@ -277,12 +294,12 @@ final class LoggedInReducerTests: XCTestCase {
         XCTAssertTrue(mockWallet.getHistoryForAllAssetsCalled)
         testStore.receive(.wallet(.handleWalletBackup))
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_walletBackupSuccess() {
         // given
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when
         mockWallet.delegate?.didFailBackupWallet?()
@@ -292,12 +309,12 @@ final class LoggedInReducerTests: XCTestCase {
         XCTAssertTrue(mockWallet.getHistoryForAllAssetsCalled)
         testStore.receive(.wallet(.handleWalletBackup))
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_walletFailedToGetHistory_with_an_error_message() {
         // given
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when
         let errorMessage = "an error message"
@@ -313,12 +330,12 @@ final class LoggedInReducerTests: XCTestCase {
             )
         }
 
-        testStore.send(.logout)
+        performSignOut()
     }
 
     func test_reducer_handles_walletFailedToGetHistory_with_an_empty_error_message() {
         // given
-        testStore.send(.start(.none))
+        performSignIn()
 
         // when
         let emptyErrorMessage = ""
@@ -333,7 +350,23 @@ final class LoggedInReducerTests: XCTestCase {
             )
         }
 
-        testStore.send(.logout)
+        performSignOut()
+    }
+
+    // MARK: - Helpers
+
+    private func performSignIn(file: StaticString = #file, line: UInt = #line) {
+        testStore.send(.start(.none), file: file, line: line)
+        testStore.receive(.handleExistingWalletSignIn, file: file, line: line)
+        testStore.receive(.showPostSignInOnboardingFlow, file: file, line: line) {
+            $0.displayPostSignInOnboardingFlow = true
+        }
+    }
+
+    private func performSignOut(file: StaticString = #file, line: UInt = #line) {
+        testStore.send(.logout, file: file, line: line) {
+            $0 = LoggedIn.State()
+        }
     }
 }
 

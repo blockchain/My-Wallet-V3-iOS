@@ -6,7 +6,7 @@ import FeatureTransactionUI
 import MoneyKit
 import UIKit
 
-extension TransactionsAdapter: FeatureOnboardingUI.OnboardingTransactionsRouterAPI {
+extension TransactionsAdapter: FeatureOnboardingUI.TransactionsRouterAPI {
 
     func presentBuyFlow(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         presentTransactionFlow(toBuy: .bitcoin, from: presenter)

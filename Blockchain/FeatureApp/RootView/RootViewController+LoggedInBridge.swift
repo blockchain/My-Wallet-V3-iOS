@@ -16,13 +16,27 @@ extension RootViewController: LoggedInBridge {
         alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
     }
 
-    func presentOnboarding() {
-        onboardingRouter.presentOnboarding(from: self)
+    func presentPostSignUpOnboarding() {
+        onboardingRouter.presentPostSignUpOnboarding(from: self)
             .handleEvents(receiveOutput: { output in
                 "\(output)".peek("🏄")
             })
             .sink { [weak self] _ in
                 self?.dismiss(animated: true)
+            }
+            .store(in: &bag)
+    }
+
+    func presentPostSignInOnboarding() {
+        onboardingRouter.presentPostSignInOnboarding(from: self)
+            .handleEvents(receiveOutput: { output in
+                "\(output)".peek("🏄")
+            })
+            .sink { [weak self] _ in
+                guard let self = self, self.presentedViewController != nil else {
+                    return
+                }
+                self.dismiss(animated: true)
             }
             .store(in: &bag)
     }

@@ -132,7 +132,7 @@ final class KYCAdapterTests: XCTestCase {
         XCTAssertEqual(error, .kycStepFailed)
     }
 
-    // MARK: - FeatureOnboardingUI.EmailVerificationRouterAPI
+    // MARK: - FeatureOnboardingUI.KYCRouterAPI
 
     func test_maps_emailVerification_error_to_complete_for_onboarding() {
         // GIVEN: Email Verification fails

@@ -163,7 +163,7 @@ extension KYCAdapter: PlatformUIKit.KYCRouting {
     }
 }
 
-// MARK: - FeatureOnboardingUI.EmailVerificationRouterAPI
+// MARK: - FeatureOnboardingUI.KYCRouterAPI
 
 extension OnboardingResult {
 
@@ -177,10 +177,17 @@ extension OnboardingResult {
     }
 }
 
-extension KYCAdapter: FeatureOnboardingUI.EmailVerificationRouterAPI {
+extension KYCAdapter: FeatureOnboardingUI.KYCRouterAPI {
 
     func presentEmailVerification(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         router.presentEmailVerificationIfNeeded(from: presenter)
+            .map(OnboardingResult.init)
+            .replaceError(with: OnboardingResult.completed)
+            .eraseToAnyPublisher()
+    }
+
+    func presentKYCUpgradePrompt(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
+        router.presentNoticeToUnlockMoreTradingIfNeeded(from: presenter, requiredTier: .tier2)
             .map(OnboardingResult.init)
             .replaceError(with: OnboardingResult.completed)
             .eraseToAnyPublisher()
