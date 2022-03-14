@@ -30,15 +30,13 @@ public final class InteractiveFundsTransferDetailsInteractor: FundsTransferDetai
     private let paymentAccountRelay = BehaviorRelay<FundsTransferDetailsInteractionState>(value: .invalid(.empty))
     private let disposeBag = DisposeBag()
 
-    private lazy var setup: Void = {
-        paymentAccountService.paymentAccount(for: fiatCurrency)
-            .asObservable()
-            .map { .value($0) }
-            .startWith(.calculating)
-            .catchAndReturn(.invalid(.valueCouldNotBeCalculated))
-            .bindAndCatch(to: paymentAccountRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = paymentAccountService.paymentAccount(for: fiatCurrency)
+        .asObservable()
+        .map { .value($0) }
+        .startWith(.calculating)
+        .catchAndReturn(.invalid(.valueCouldNotBeCalculated))
+        .bindAndCatch(to: paymentAccountRelay)
+        .disposed(by: disposeBag)
 
     // MARK: - Setup
 

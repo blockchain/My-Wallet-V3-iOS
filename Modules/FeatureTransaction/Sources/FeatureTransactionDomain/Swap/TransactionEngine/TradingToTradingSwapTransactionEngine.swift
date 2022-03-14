@@ -43,17 +43,15 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
         precondition((target as! CryptoTradingAccount).asset != sourceAsset)
     }
 
-    lazy var quote: Observable<PricedQuote> = {
-        quotesEngine
-            .startPollingRate(
-                direction: orderDirection,
-                pair: .init(
-                    sourceCurrencyType: sourceAsset,
-                    destinationCurrencyType: target.currencyType
-                )
+    lazy var quote: Observable<PricedQuote> = quotesEngine
+        .startPollingRate(
+            direction: orderDirection,
+            pair: .init(
+                sourceCurrencyType: sourceAsset,
+                destinationCurrencyType: target.currencyType
             )
-            .asObservable()
-    }()
+        )
+        .asObservable()
 
     func initializeTransaction() -> Single<PendingTransaction> {
         Single

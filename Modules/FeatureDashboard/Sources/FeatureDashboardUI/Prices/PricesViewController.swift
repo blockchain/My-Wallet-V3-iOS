@@ -24,7 +24,7 @@ public final class PricesViewController: BaseScreenViewController {
     private let presenter: PricesScreenPresenter
     private let tableView = UITableView()
     private let searchBar = UISearchBar()
-    public typealias CustomSelectionActionClosure = ((CryptoCurrency) -> Void)
+    public typealias CustomSelectionActionClosure = (CryptoCurrency) -> Void
     private let customSelectionActionClosure: CustomSelectionActionClosure?
     private let featureFlagService: FeatureFlagsServiceAPI
     private let presentRedesignCoinView: ((UIViewController, CryptoCurrency) -> Void)?

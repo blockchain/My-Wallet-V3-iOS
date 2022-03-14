@@ -40,18 +40,16 @@ final class StellarAsset: CryptoAsset {
 
     // MARK: - Private properties
 
-    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = {
-        CryptoAssetRepository(
-            asset: asset,
-            errorRecorder: errorRecorder,
-            kycTiersService: kycTiersService,
-            defaultAccountProvider: { [defaultAccount] in
-                defaultAccount
-            },
-            exchangeAccountsProvider: exchangeAccountProvider,
-            addressFactory: addressFactory
-        )
-    }()
+    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = CryptoAssetRepository(
+        asset: asset,
+        errorRecorder: errorRecorder,
+        kycTiersService: kycTiersService,
+        defaultAccountProvider: { [defaultAccount] in
+            defaultAccount
+        },
+        exchangeAccountsProvider: exchangeAccountProvider,
+        addressFactory: addressFactory
+    )
 
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let accountRepository: StellarWalletAccountRepositoryAPI

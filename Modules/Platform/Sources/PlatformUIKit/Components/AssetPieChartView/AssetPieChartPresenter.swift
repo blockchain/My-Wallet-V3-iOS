@@ -22,12 +22,10 @@ public final class AssetPieChartPresenter {
             .observe(on: MainScheduler.instance)
     }
 
-    private lazy var setup: Void = {
-        interactor.state
-            .map { .init(with: $0) }
-            .bindAndCatch(to: stateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = interactor.state
+        .map { .init(with: $0) }
+        .bindAndCatch(to: stateRelay)
+        .disposed(by: disposeBag)
 
     private let edge: CGFloat
     private let interactor: AssetPieChartInteracting

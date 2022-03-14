@@ -20,17 +20,15 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     let orderCreationRepository: OrderCreationRepositoryAPI
     let orderDirection: OrderDirection = .internal
 
-    lazy var quote: Observable<PricedQuote> = {
-        quotesEngine
-            .startPollingRate(
-                direction: orderDirection,
-                pair: .init(
-                    sourceCurrencyType: sourceAsset,
-                    destinationCurrencyType: target.currencyType
-                )
+    lazy var quote: Observable<PricedQuote> = quotesEngine
+        .startPollingRate(
+            direction: orderDirection,
+            pair: .init(
+                sourceCurrencyType: sourceAsset,
+                destinationCurrencyType: target.currencyType
             )
-            .asObservable()
-    }()
+        )
+        .asObservable()
 
     init(
         quotesEngine: QuotesEngine,

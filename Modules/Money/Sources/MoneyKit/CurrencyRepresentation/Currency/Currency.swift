@@ -103,9 +103,7 @@ public enum CurrencyType: Hashable {
 
 extension CurrencyType: Currency {
 
-    public static let maxDisplayPrecision: Int = {
-        max(FiatCurrency.maxDisplayPrecision, CryptoCurrency.maxDisplayPrecision)
-    }()
+    public static let maxDisplayPrecision: Int = max(FiatCurrency.maxDisplayPrecision, CryptoCurrency.maxDisplayPrecision)
 
     public var name: String {
         switch self {

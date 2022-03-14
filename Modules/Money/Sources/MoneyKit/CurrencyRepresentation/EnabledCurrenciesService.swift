@@ -61,11 +61,9 @@ final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
             .compactMap(\.cryptoCurrency)
     }
 
-    private lazy var allEnabledCryptoCurrenciesLazy: [CryptoCurrency] = {
-        (nonCustodialCryptoCurrencies + custodialCurrencies + erc20Currencies)
-            .unique
-            .sorted()
-    }()
+    private lazy var allEnabledCryptoCurrenciesLazy: [CryptoCurrency] = (nonCustodialCryptoCurrencies + custodialCurrencies + erc20Currencies)
+        .unique
+        .sorted()
 
     private lazy var allEnabledCurrenciesLazy: [CurrencyType] = {
         let crypto: [CurrencyType] = allEnabledCryptoCurrencies

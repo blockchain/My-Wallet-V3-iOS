@@ -59,12 +59,12 @@ final class SwapRootInteractor: Interactor, SwapBootstrapListener, SwapRootListe
         router?.routeToSwap(with: pair)
     }
 
-    private lazy var routeViewDidAppear: Void = {
+    private func routeViewDidAppear() {
         router?.routeToSwapBootstrap()
-    }()
+    }
 
     func viewDidAppear() {
         // if first time, got to variant router
-        _ = routeViewDidAppear
+        routeViewDidAppear()
     }
 }

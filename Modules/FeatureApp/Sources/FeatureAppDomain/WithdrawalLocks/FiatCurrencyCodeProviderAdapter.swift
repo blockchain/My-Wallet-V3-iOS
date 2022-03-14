@@ -8,11 +8,9 @@ import PlatformKit
 
 final class FiatCurrencyCodeProviderAdapter: FiatCurrencyCodeProviderAPI {
 
-    lazy var defaultFiatCurrencyCode: AnyPublisher<String, Never> = {
-        fiatCurrencyPublisher.displayCurrencyPublisher
-            .map(\.code)
-            .eraseToAnyPublisher()
-    }()
+    lazy var defaultFiatCurrencyCode: AnyPublisher<String, Never> = fiatCurrencyPublisher.displayCurrencyPublisher
+        .map(\.code)
+        .eraseToAnyPublisher()
 
     private let fiatCurrencyPublisher: FiatCurrencyServiceAPI
 

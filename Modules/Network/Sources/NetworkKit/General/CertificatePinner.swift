@@ -18,9 +18,7 @@ final class CertificateProvider: CertificateProviderAPI {
     }
 
     /// Path to the local certificate file
-    private lazy var localCertificateURL: URL? = {
-        MainBundleProvider.mainBundle.url(forResource: "blockchain", withExtension: "der")
-    }()
+    private lazy var localCertificateURL: URL? = MainBundleProvider.mainBundle.url(forResource: "blockchain", withExtension: "der")
 }
 
 public protocol CertificatePinnerAPI: AnyObject {

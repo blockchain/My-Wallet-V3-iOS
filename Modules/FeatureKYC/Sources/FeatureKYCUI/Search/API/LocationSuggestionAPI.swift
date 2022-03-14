@@ -2,8 +2,8 @@
 
 import Foundation
 
-typealias LocationSuggestionCompletion = (([LocationSuggestion]?, Error?) -> Void)
-typealias PostalAddressCompletion = ((PostalAddress) -> Void)
+typealias LocationSuggestionCompletion = ([LocationSuggestion]?, Error?) -> Void
+typealias PostalAddressCompletion = (PostalAddress) -> Void
 
 protocol LocationSuggestionAPI {
     func search(for query: String, with completion: @escaping LocationSuggestionCompletion)

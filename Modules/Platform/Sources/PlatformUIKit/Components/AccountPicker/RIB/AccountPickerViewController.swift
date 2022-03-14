@@ -45,60 +45,58 @@ public final class AccountPickerViewController: BaseScreenViewController, Accoun
         return activityIndicatorView
     }()
 
-    private lazy var dataSource: RxDataSource = {
-        RxDataSource(configureCell: { [weak self] _, tableView, indexPath, item in
-            guard let self = self else { return UITableViewCell() }
-            if !self.activityIndicatorView.isHidden {
-                self.activityIndicatorView.isHidden = true
-                self.activityIndicatorView.stopAnimating()
-            }
-            let cell: UITableViewCell
-            switch item.presenter {
-            case .emptyState(let content):
-                cell = self.labelContentCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    content: content
-                )
-            case .button(let viewModel):
-                cell = self.buttonTableViewCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    viewModel: viewModel
-                )
-            case .linkedBankAccount(let presenter):
-                cell = self.linkedBankCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    presenter: presenter
-                )
-            case .paymentMethodAccount(let presenter):
-                cell = self.paymentMethodCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    presenter: presenter
-                )
-            case .accountGroup(let presenter):
-                cell = self.totalBalanceCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    presenter: presenter
-                )
-            case .singleAccount(let presenter):
-                cell = self.balanceCell(
-                    tableView: tableView,
-                    for: indexPath,
-                    presenter: presenter
-                )
-            case .withdrawalLocks:
-                cell = self.withdrawalLocksTableViewCell(
-                    for: indexPath
-                )
-            }
-            cell.selectionStyle = .none
-            return cell
-        })
-    }()
+    private lazy var dataSource: RxDataSource = RxDataSource(configureCell: { [weak self] _, tableView, indexPath, item in
+        guard let self = self else { return UITableViewCell() }
+        if !self.activityIndicatorView.isHidden {
+            self.activityIndicatorView.isHidden = true
+            self.activityIndicatorView.stopAnimating()
+        }
+        let cell: UITableViewCell
+        switch item.presenter {
+        case .emptyState(let content):
+            cell = self.labelContentCell(
+                tableView: tableView,
+                for: indexPath,
+                content: content
+            )
+        case .button(let viewModel):
+            cell = self.buttonTableViewCell(
+                tableView: tableView,
+                for: indexPath,
+                viewModel: viewModel
+            )
+        case .linkedBankAccount(let presenter):
+            cell = self.linkedBankCell(
+                tableView: tableView,
+                for: indexPath,
+                presenter: presenter
+            )
+        case .paymentMethodAccount(let presenter):
+            cell = self.paymentMethodCell(
+                tableView: tableView,
+                for: indexPath,
+                presenter: presenter
+            )
+        case .accountGroup(let presenter):
+            cell = self.totalBalanceCell(
+                tableView: tableView,
+                for: indexPath,
+                presenter: presenter
+            )
+        case .singleAccount(let presenter):
+            cell = self.balanceCell(
+                tableView: tableView,
+                for: indexPath,
+                presenter: presenter
+            )
+        case .withdrawalLocks:
+            cell = self.withdrawalLocksTableViewCell(
+                for: indexPath
+            )
+        }
+        cell.selectionStyle = .none
+        return cell
+    })
 
     private func setupTableView() {
         tableView.backgroundColor = .white

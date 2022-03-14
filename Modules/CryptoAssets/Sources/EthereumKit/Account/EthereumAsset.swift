@@ -23,18 +23,16 @@ final class EthereumAsset: CryptoAsset {
 
     // MARK: - Private properties
 
-    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = {
-        CryptoAssetRepository(
-            asset: asset,
-            errorRecorder: errorRecorder,
-            kycTiersService: kycTiersService,
-            defaultAccountProvider: { [repository, network] in
-                repository.defaultSingleAccount(network: network)
-            },
-            exchangeAccountsProvider: exchangeAccountProvider,
-            addressFactory: addressFactory
-        )
-    }()
+    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = CryptoAssetRepository(
+        asset: asset,
+        errorRecorder: errorRecorder,
+        kycTiersService: kycTiersService,
+        defaultAccountProvider: { [repository, network] in
+            repository.defaultSingleAccount(network: network)
+        },
+        exchangeAccountsProvider: exchangeAccountProvider,
+        addressFactory: addressFactory
+    )
 
     private let addressFactory: EthereumExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording

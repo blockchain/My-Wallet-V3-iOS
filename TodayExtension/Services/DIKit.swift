@@ -24,14 +24,12 @@ extension DependencyContainer {
         factory { ErrorRecorderMock() as ErrorRecording }
     }
 
-    static var setupDependencies: Void = {
-        DependencyContainer.defined(by: modules {
-            DependencyContainer.today
-            DependencyContainer.toolKit
-            DependencyContainer.networkKit
-            DependencyContainer.platformDataKit
-            DependencyContainer.platformKit
-            DependencyContainer.platformUIKit
-        })
-    }()
+    static var setupDependencies: Void = DependencyContainer.defined(by: modules {
+        DependencyContainer.today
+        DependencyContainer.toolKit
+        DependencyContainer.networkKit
+        DependencyContainer.platformDataKit
+        DependencyContainer.platformKit
+        DependencyContainer.platformUIKit
+    })
 }

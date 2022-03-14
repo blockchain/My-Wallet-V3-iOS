@@ -12,22 +12,20 @@ public struct CountryPickerView: View {
 
     static let restrictedCountryIdentifiers: Set<String> = ["CU", "IR", "KP", "SY"]
 
-    public static let countries: [SearchableItem<String>] = {
-        Locale.isoRegionCodes
-            .filter { !restrictedCountryIdentifiers.contains($0) }
-            .compactMap { code -> SearchableItem? in
-                guard let countryName = Locale.current.localizedString(forRegionCode: code) else {
-                    return nil
-                }
-                return SearchableItem(
-                    id: code,
-                    title: countryName
-                )
+    public static let countries: [SearchableItem<String>] = Locale.isoRegionCodes
+        .filter { !restrictedCountryIdentifiers.contains($0) }
+        .compactMap { code -> SearchableItem? in
+            guard let countryName = Locale.current.localizedString(forRegionCode: code) else {
+                return nil
             }
-            .sorted {
-                $0.title.localizedCompare($1.title) == .orderedAscending
-            }
-    }()
+            return SearchableItem(
+                id: code,
+                title: countryName
+            )
+        }
+        .sorted {
+            $0.title.localizedCompare($1.title) == .orderedAscending
+        }
 
     private let selectedItem: SearchableItem<String>?
     private let onSelection: (SearchableItem<String>) -> Void

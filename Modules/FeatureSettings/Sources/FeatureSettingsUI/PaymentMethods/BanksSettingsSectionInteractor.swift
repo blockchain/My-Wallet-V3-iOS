@@ -21,13 +21,11 @@ final class BanksSettingsSectionInteractor {
 
     let addPaymentMethodInteractors: [AddPaymentMethodInteractor]
 
-    private lazy var setup: Void = {
-        beneficiaries
-            .map { .value($0) }
-            .startWith(.calculating)
-            .bindAndCatch(to: stateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = beneficiaries
+        .map { .value($0) }
+        .startWith(.calculating)
+        .bindAndCatch(to: stateRelay)
+        .disposed(by: disposeBag)
 
     private let stateRelay = BehaviorRelay<State>(value: .invalid(.empty))
     private let disposeBag = DisposeBag()

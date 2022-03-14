@@ -45,30 +45,28 @@ public final class AccountAssetBalanceViewInteractor: AssetBalanceViewInteractin
         }
     }
 
-    private lazy var setup: Void = {
-        Observable
-            .combineLatest(
-                fiatCurrencyService.displayCurrencyPublisher.asObservable(),
-                refreshRelay.asObservable()
-            )
-            .map(\.0)
-            .flatMapLatest(weak: self) { (self, fiatCurrency) -> Observable<MoneyValuePair> in
-                self.balancePair(fiatCurrency: fiatCurrency).asObservable()
-            }
-            .map { moneyValuePair -> InteractionState in
-                InteractionState.loaded(
-                    next: AssetBalanceViewModel.Value.Interaction(
-                        primaryValue: moneyValuePair.base,
-                        secondaryValue: moneyValuePair.quote,
-                        pendingValue: nil
-                    )
+    private lazy var setup: Void = Observable
+        .combineLatest(
+            fiatCurrencyService.displayCurrencyPublisher.asObservable(),
+            refreshRelay.asObservable()
+        )
+        .map(\.0)
+        .flatMapLatest(weak: self) { (self, fiatCurrency) -> Observable<MoneyValuePair> in
+            self.balancePair(fiatCurrency: fiatCurrency).asObservable()
+        }
+        .map { moneyValuePair -> InteractionState in
+            InteractionState.loaded(
+                next: AssetBalanceViewModel.Value.Interaction(
+                    primaryValue: moneyValuePair.base,
+                    secondaryValue: moneyValuePair.quote,
+                    pendingValue: nil
                 )
-            }
-            .subscribe(onNext: { [weak self] state in
-                self?.stateRelay.accept(state)
-            })
-            .disposed(by: disposeBag)
-    }()
+            )
+        }
+        .subscribe(onNext: { [weak self] state in
+            self?.stateRelay.accept(state)
+        })
+        .disposed(by: disposeBag)
 
     public init(
         account: BlockchainAccount,

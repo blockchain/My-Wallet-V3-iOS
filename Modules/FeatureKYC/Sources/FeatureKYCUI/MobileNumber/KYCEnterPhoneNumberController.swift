@@ -35,9 +35,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
         KYCVerifyPhoneNumberPresenter(view: self)
     }()
 
-    private lazy var phoneNumberPartialFormatter: PartialFormatter = {
-        PartialFormatter()
-    }()
+    private lazy var phoneNumberPartialFormatter: PartialFormatter = PartialFormatter()
 
     // MARK: Factory
 

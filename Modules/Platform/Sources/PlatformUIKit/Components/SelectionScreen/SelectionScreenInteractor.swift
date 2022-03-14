@@ -37,20 +37,18 @@ public final class SelectionScreenInteractor {
 
     private let disposeBag = DisposeBag()
 
-    private lazy var setup: Void = {
-        service.dataSource
-            .map(weak: self) { (self, items) in
-                items
-                    .map { item in
-                        SelectionItemViewInteractor(
-                            item: item,
-                            service: self.service
-                        )
-                    }
-            }
-            .bindAndCatch(to: interactorsRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = service.dataSource
+        .map(weak: self) { (self, items) in
+            items
+                .map { item in
+                    SelectionItemViewInteractor(
+                        item: item,
+                        service: self.service
+                    )
+                }
+        }
+        .bindAndCatch(to: interactorsRelay)
+        .disposed(by: disposeBag)
 
     // MARK: - Setup
 

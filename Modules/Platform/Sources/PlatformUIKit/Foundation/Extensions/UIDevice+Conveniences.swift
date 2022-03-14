@@ -14,9 +14,7 @@ public enum DevicePresenter {
         }
     }
 
-    public static let type: DeviceType = {
-        UIDevice.current.type
-    }()
+    public static let type: DeviceType = UIDevice.current.type
 }
 
 extension UIDevice {

@@ -45,7 +45,6 @@
 --organizetypes class,enum,struct
 --patternlet inline
 --ranges spaced
---redundanttype inferred
 --self remove
 --selfrequired 
 --semicolons inline
@@ -67,3 +66,5 @@
 --wrapreturntype preserve
 --xcodeindentation disabled
 --yodaswap always
+--disable redundanttype
+--disable redundantvoidreturntype

@@ -27,13 +27,11 @@ public final class AssetLineChartInteractor: AssetLineChartInteracting {
 
     // MARK: - Private Accessors
 
-    private lazy var setup: Void = {
-        window
-            .emit(onNext: { [weak self] priceWindow in
-                self?.loadHistoricalPrices(within: priceWindow)
-            })
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = window
+        .emit(onNext: { [weak self] priceWindow in
+            self?.loadHistoricalPrices(within: priceWindow)
+        })
+        .disposed(by: disposeBag)
 
     private let stateRelay = BehaviorRelay<AssetLineChart.State.Interaction>(value: .loading)
     private let cryptoCurrency: CryptoCurrency

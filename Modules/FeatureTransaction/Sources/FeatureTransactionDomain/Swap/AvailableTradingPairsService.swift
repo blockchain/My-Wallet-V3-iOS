@@ -27,13 +27,11 @@ final class AvailableTradingPairsService: AvailableTradingPairsServiceAPI {
 
     // MARK: - CachedValue
 
-    private lazy var setup: Void = {
-        pairsCachedValue.setFetch(weak: self) { (self) in
-            self.repository.availableOrderPairs
-                .asObservable()
-                .asSingle()
-        }
-    }()
+    private lazy var setup: Void = pairsCachedValue.setFetch(weak: self) { (self) in
+        self.repository.availableOrderPairs
+            .asObservable()
+            .asSingle()
+    }
 
     // MARK: - Properties
 

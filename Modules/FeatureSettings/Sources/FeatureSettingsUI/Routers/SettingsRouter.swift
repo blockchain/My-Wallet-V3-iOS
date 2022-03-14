@@ -53,13 +53,9 @@ final class SettingsRouter: SettingsRouterAPI {
 
     // MARK: - Routers
 
-    private lazy var updateMobileRouter: UpdateMobileRouter = {
-        UpdateMobileRouter(navigationRouter: navigationRouter)
-    }()
+    private lazy var updateMobileRouter: UpdateMobileRouter = UpdateMobileRouter(navigationRouter: navigationRouter)
 
-    private lazy var backupRouterAPI: BackupFundsRouterAPI = {
-        BackupFundsRouter(entry: .settings, navigationRouter: navigationRouter)
-    }()
+    private lazy var backupRouterAPI: BackupFundsRouterAPI = BackupFundsRouter(entry: .settings, navigationRouter: navigationRouter)
 
     // MARK: - Private
 
@@ -400,7 +396,5 @@ final class SettingsRouter: SettingsRouterAPI {
             .disposed(by: disposeBag)
     }
 
-    private lazy var sheetPresenter: BottomSheetPresenting = {
-        BottomSheetPresenting()
-    }()
+    private lazy var sheetPresenter: BottomSheetPresenting = BottomSheetPresenting()
 }

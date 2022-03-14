@@ -17,17 +17,11 @@ class ExchangeEmailVerificationViewController: UIViewController, BottomButtonCon
 
     // MARK: Private Lazy Properties
 
-    private lazy var presenter: VerifyEmailPresenter = {
-        VerifyEmailPresenter(view: self)
-    }()
+    private lazy var presenter: VerifyEmailPresenter = VerifyEmailPresenter(view: self)
 
-    private lazy var primaryFont: UIFont = {
-        Font(.branded(.montserratMedium), size: .custom(14.0)).result
-    }()
+    private lazy var primaryFont: UIFont = Font(.branded(.montserratMedium), size: .custom(14.0)).result
 
-    private lazy var primaryFontColor: UIColor = {
-        #colorLiteral(red: 0.21, green: 0.25, blue: 0.32, alpha: 1)
-    }()
+    private lazy var primaryFontColor: UIColor = #colorLiteral(red: 0.21, green: 0.25, blue: 0.32, alpha: 1)
 
     private lazy var loadingAttributedText: NSAttributedString = {
         NSAttributedString(

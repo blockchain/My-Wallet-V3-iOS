@@ -82,22 +82,20 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, Progressa
     fileprivate var dataProvider: LocationDataProvider!
 
     private static let restrictedCountryIdentifiers: Set<String> = ["CU", "IR", "KP", "SY"]
-    private static let countries: [ValidationPickerField.PickerItem] = {
-        Locale.isoRegionCodes
-            .filter { !restrictedCountryIdentifiers.contains($0) }
-            .compactMap { code -> ValidationPickerField.PickerItem? in
-                guard let countryName = Locale.current.localizedString(forRegionCode: code) else {
-                    return nil
-                }
-                return ValidationPickerField.PickerItem(
-                    id: code,
-                    title: countryName
-                )
+    private static let countries: [ValidationPickerField.PickerItem] = Locale.isoRegionCodes
+        .filter { !restrictedCountryIdentifiers.contains($0) }
+        .compactMap { code -> ValidationPickerField.PickerItem? in
+            guard let countryName = Locale.current.localizedString(forRegionCode: code) else {
+                return nil
             }
-            .sorted {
-                $0.title.localizedCompare($1.title) == .orderedAscending
-            }
-    }()
+            return ValidationPickerField.PickerItem(
+                id: code,
+                title: countryName
+            )
+        }
+        .sorted {
+            $0.title.localizedCompare($1.title) == .orderedAscending
+        }
 
     // MARK: KYCRouterDelegate
 

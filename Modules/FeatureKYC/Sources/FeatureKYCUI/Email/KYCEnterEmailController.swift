@@ -31,9 +31,7 @@ class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView,
 
     // MARK: Private Properties
 
-    private lazy var presenter: VerifyEmailPresenter = {
-        VerifyEmailPresenter(view: self)
-    }()
+    private lazy var presenter: VerifyEmailPresenter = VerifyEmailPresenter(view: self)
 
     @Inject private var analyticsRecorder: AnalyticsEventRecorderAPI
 

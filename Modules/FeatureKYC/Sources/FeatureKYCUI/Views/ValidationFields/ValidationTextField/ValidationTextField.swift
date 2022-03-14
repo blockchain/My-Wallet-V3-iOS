@@ -30,7 +30,7 @@ extension ValidationResult {
     }
 }
 
-typealias ValidationBlock = ((String?) -> ValidationResult)
+typealias ValidationBlock = (String?) -> ValidationResult
 
 @IBDesignable
 class ValidationTextField: NibBasedView {

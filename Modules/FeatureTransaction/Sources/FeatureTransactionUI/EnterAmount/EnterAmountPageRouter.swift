@@ -58,7 +58,5 @@ final class EnterAmountPageRouter: ViewableRouter<EnterAmountPageInteractable, E
         viewController.uiviewController.dismiss(animated: true, completion: nil)
     }
 
-    private lazy var sheetPresenter: BottomSheetPresenting = {
-        BottomSheetPresenting(ignoresBackgroundTouches: true)
-    }()
+    private lazy var sheetPresenter: BottomSheetPresenting = BottomSheetPresenting(ignoresBackgroundTouches: true)
 }

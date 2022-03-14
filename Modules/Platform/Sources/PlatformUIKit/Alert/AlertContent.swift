@@ -4,7 +4,7 @@ import Foundation
 
 public struct AlertViewContent: Equatable {
 
-    public typealias Action = ((UIAlertAction) -> Void)
+    public typealias Action = (UIAlertAction) -> Void
 
     public let title: String
     public let message: String

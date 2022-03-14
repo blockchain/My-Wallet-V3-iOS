@@ -11,7 +11,7 @@ import UIKit
 final class KYCInformationController: KYCBaseViewController {
 
     /// typealias for an action to be taken when the primary button/CTA is tapped
-    typealias PrimaryButtonAction = ((KYCInformationController) -> Void)
+    typealias PrimaryButtonAction = (KYCInformationController) -> Void
 
     // MARK: - Properties
 

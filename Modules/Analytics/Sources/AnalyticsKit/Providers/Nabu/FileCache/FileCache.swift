@@ -19,11 +19,10 @@ final class FileCache: FileCacheAPI {
     private let fileManager: FileManager
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
-    private lazy var cacheDirectoryURLs: [URL] = { fileManager.urls(
+    private lazy var cacheDirectoryURLs: [URL] = fileManager.urls(
         for: .cachesDirectory,
         in: .userDomainMask
     )
-    }()
 
     init(
         fileManager: FileManager = .default,

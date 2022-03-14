@@ -30,9 +30,7 @@ class KYCConfirmEmailController: KYCBaseViewController, BottomButtonContainerVie
 
     // MARK: Private Properties
 
-    private lazy var presenter: VerifyEmailPresenter = {
-        VerifyEmailPresenter(view: self)
-    }()
+    private lazy var presenter: VerifyEmailPresenter = VerifyEmailPresenter(view: self)
 
     // MARK: Properties
 

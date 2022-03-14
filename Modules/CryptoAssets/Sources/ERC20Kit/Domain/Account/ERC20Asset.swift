@@ -26,18 +26,16 @@ final class ERC20Asset: CryptoAsset {
 
     // MARK: - Private properties
 
-    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = {
-        CryptoAssetRepository(
-            asset: asset,
-            errorRecorder: errorRecorder,
-            kycTiersService: kycTiersService,
-            defaultAccountProvider: { [walletAccountBridge, erc20Token] in
-                walletAccountBridge.defaultAccount(erc20Token: erc20Token)
-            },
-            exchangeAccountsProvider: exchangeAccountProvider,
-            addressFactory: addressFactory
-        )
-    }()
+    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = CryptoAssetRepository(
+        asset: asset,
+        errorRecorder: errorRecorder,
+        kycTiersService: kycTiersService,
+        defaultAccountProvider: { [walletAccountBridge, erc20Token] in
+            walletAccountBridge.defaultAccount(erc20Token: erc20Token)
+        },
+        exchangeAccountsProvider: exchangeAccountProvider,
+        addressFactory: addressFactory
+    )
 
     private let addressFactory: ExternalAssetAddressFactory
     private let erc20Token: AssetModel

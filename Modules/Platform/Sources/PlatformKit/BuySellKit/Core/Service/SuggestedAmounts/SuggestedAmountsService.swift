@@ -45,22 +45,20 @@ final class SuggestedAmountsService: SuggestedAmountsServiceAPI {
 
     // MARK: - Setup
 
-    private lazy var setup: Void = {
-        Observable
-            .combineLatest(
-                fiatCurrencySettingsService.displayCurrencyPublisher.asObservable(),
-                fetchTriggerRelay.asObservable(),
-                reactiveWallet.waitUntilInitialized
-            )
-            .map(\.0)
-            .flatMapLatest(weak: self) { (self, currency) -> Observable<[FiatValue]> in
-                self.fetchSuggestedAmounts(for: currency).asObservable()
-            }
-            .map { SuggestedAmountsCalculationState.value($0) }
-            .catchAndReturn(.invalid(.valueCouldNotBeCalculated))
-            .bindAndCatch(to: calculationStateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = Observable
+        .combineLatest(
+            fiatCurrencySettingsService.displayCurrencyPublisher.asObservable(),
+            fetchTriggerRelay.asObservable(),
+            reactiveWallet.waitUntilInitialized
+        )
+        .map(\.0)
+        .flatMapLatest(weak: self) { (self, currency) -> Observable<[FiatValue]> in
+            self.fetchSuggestedAmounts(for: currency).asObservable()
+        }
+        .map { SuggestedAmountsCalculationState.value($0) }
+        .catchAndReturn(.invalid(.valueCouldNotBeCalculated))
+        .bindAndCatch(to: calculationStateRelay)
+        .disposed(by: disposeBag)
 
     // MARK: - Setup
 

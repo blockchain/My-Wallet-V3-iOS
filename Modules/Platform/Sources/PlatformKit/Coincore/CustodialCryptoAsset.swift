@@ -18,18 +18,16 @@ final class CustodialCryptoAsset: CryptoAsset {
 
     // MARK: - Private properties
 
-    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = {
-        CryptoAssetRepository(
-            asset: asset,
-            errorRecorder: errorRecorder,
-            kycTiersService: kycTiersService,
-            defaultAccountProvider: { [defaultAccount] in
-                defaultAccount
-            },
-            exchangeAccountsProvider: exchangeAccountProvider,
-            addressFactory: addressFactory
-        )
-    }()
+    private lazy var cryptoAssetRepository: CryptoAssetRepositoryAPI = CryptoAssetRepository(
+        asset: asset,
+        errorRecorder: errorRecorder,
+        kycTiersService: kycTiersService,
+        defaultAccountProvider: { [defaultAccount] in
+            defaultAccount
+        },
+        exchangeAccountsProvider: exchangeAccountProvider,
+        addressFactory: addressFactory
+    )
 
     private let kycTiersService: KYCTiersServiceAPI
     private let errorRecorder: ErrorRecording

@@ -26,9 +26,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
 
     private var countriesMap = SearchableMap<CountryData>()
 
-    private lazy var presenter: KYCCountrySelectionPresenter = {
-        KYCCountrySelectionPresenter(view: self)
-    }()
+    private lazy var presenter: KYCCountrySelectionPresenter = KYCCountrySelectionPresenter(view: self)
 
     private let analyticsRecorder: AnalyticsEventRecorderAPI = resolve()
     private let generalInformationService: GeneralInformationServiceAPI = resolve()

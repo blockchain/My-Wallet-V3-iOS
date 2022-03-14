@@ -185,7 +185,5 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         UIApplication.shared.open(client.url)
     }
 
-    private lazy var sheetPresenter: BottomSheetPresenting = {
-        BottomSheetPresenting(ignoresBackgroundTouches: true)
-    }()
+    private lazy var sheetPresenter: BottomSheetPresenting = BottomSheetPresenting(ignoresBackgroundTouches: true)
 }

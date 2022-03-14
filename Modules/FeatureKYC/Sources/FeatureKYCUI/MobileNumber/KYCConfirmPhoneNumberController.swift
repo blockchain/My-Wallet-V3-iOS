@@ -34,9 +34,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
     @IBOutlet private var validationTextFieldConfirmationCode: ValidationTextField!
     @IBOutlet private var primaryButton: PrimaryButtonContainer!
 
-    private lazy var presenter: KYCVerifyPhoneNumberPresenter = {
-        KYCVerifyPhoneNumberPresenter(view: self)
-    }()
+    private lazy var presenter: KYCVerifyPhoneNumberPresenter = KYCVerifyPhoneNumberPresenter(view: self)
 
     deinit {
         cleanUp()

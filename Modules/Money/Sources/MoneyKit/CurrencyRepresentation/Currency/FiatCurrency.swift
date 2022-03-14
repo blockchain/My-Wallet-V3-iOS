@@ -953,9 +953,7 @@ extension FiatCurrency {
 
 extension FiatCurrency {
 
-    public static let maxDisplayPrecision: Int = {
-        allCases.map(\.displayPrecision).max() ?? 0
-    }()
+    public static let maxDisplayPrecision: Int = allCases.map(\.displayPrecision).max() ?? 0
 
     public var name: String {
         currentLocale.localizedString(forCurrencyCode: code) ?? ""

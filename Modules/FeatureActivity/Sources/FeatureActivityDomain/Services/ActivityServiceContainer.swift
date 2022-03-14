@@ -18,14 +18,12 @@ final class ActivityServiceContainer: ActivityServiceContaining {
     let exchangeProviding: ExchangeProviding
 
     private let disposeBag = DisposeBag()
-    private lazy var setup: Void = {
-        selectionService
-            .selectedData
-            .bind { [weak self] selection in
-                self?.selectionService.record(selection: selection)
-            }
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = selectionService
+        .selectedData
+        .bind { [weak self] selection in
+            self?.selectionService.record(selection: selection)
+        }
+        .disposed(by: disposeBag)
 
     init(
         fiatCurrency: FiatCurrencySettingsServiceAPI = resolve(),

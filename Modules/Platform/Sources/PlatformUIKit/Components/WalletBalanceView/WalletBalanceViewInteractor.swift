@@ -37,11 +37,9 @@ public final class WalletBalanceViewInteractor {
     private let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
     private let disposeBag = DisposeBag()
     private let stateObservableProvider: () -> Observable<InteractionState>
-    private lazy var setup: Void = {
-        stateObservableProvider()
-            .bindAndCatch(to: self.stateRelay)
-            .disposed(by: self.disposeBag)
-    }()
+    private lazy var setup: Void = stateObservableProvider()
+        .bindAndCatch(to: self.stateRelay)
+        .disposed(by: self.disposeBag)
 
     // MARK: - Setup
 

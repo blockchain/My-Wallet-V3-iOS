@@ -24,9 +24,7 @@ final class PulseContainerView: PassthroughView {
         return animationView
     }()
 
-    private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
-        UIImpactFeedbackGenerator(style: .light)
-    }()
+    private lazy var feedbackGenerator: UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     private lazy var button: UIButton = {
         let button = UIButton(frame: max)

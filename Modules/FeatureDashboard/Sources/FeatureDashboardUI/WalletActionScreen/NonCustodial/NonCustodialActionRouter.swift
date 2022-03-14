@@ -133,7 +133,5 @@ public final class NonCustodialActionRouter: NonCustodialActionRouterAPI {
             )
     }
 
-    private lazy var sheetPresenter: BottomSheetPresenting = {
-        BottomSheetPresenting(ignoresBackgroundTouches: false)
-    }()
+    private lazy var sheetPresenter: BottomSheetPresenting = BottomSheetPresenting(ignoresBackgroundTouches: false)
 }

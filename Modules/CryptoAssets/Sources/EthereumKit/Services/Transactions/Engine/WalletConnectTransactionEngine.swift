@@ -254,11 +254,9 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
         return .just(pendingTransaction)
     }
 
-    private lazy var rejectOnce: Void = {
-        walletConnectTarget.onTransactionRejected()
-            .subscribe()
-            .store(in: &self.cancellables)
-    }()
+    private lazy var rejectOnce: Void = walletConnectTarget.onTransactionRejected()
+        .subscribe()
+        .store(in: &self.cancellables)
 
     func stop(pendingTransaction: PendingTransaction) {
         if !didExecute {

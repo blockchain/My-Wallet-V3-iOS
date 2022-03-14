@@ -57,20 +57,18 @@ public class CachedValue<Value> {
         }
     }
 
-    private lazy var setup: Void = {
-        refreshControl.action
-            .do(onNext: { [weak self] action in
-                guard let self = self else { return }
-                switch action {
-                case .fetch:
-                    self.refresh()
-                case .flush:
-                    self.flush()
-                }
-            })
-            .subscribe()
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = refreshControl.action
+        .do(onNext: { [weak self] action in
+            guard let self = self else { return }
+            switch action {
+            case .fetch:
+                self.refresh()
+            case .flush:
+                self.flush()
+            }
+        })
+        .subscribe()
+        .disposed(by: disposeBag)
 
     private var fetchMethod: FetchMethod?
     private let atomicValue = Atomic<Value?>(nil)

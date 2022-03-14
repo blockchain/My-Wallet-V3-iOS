@@ -8,21 +8,19 @@ final class PortfolioSyncingService: BalanceSharingSettingsServiceAPI {
 
     // MARK: - Setup
 
-    private lazy var setup: Void = {
-        balanceSyncRelay
-            .flatMap(weak: self) { (self, _) -> Observable<Bool> in
-                self.isEnabled
-            }
-            .flatMap(weak: self) { (self, value) -> Observable<Portfolio?> in
-                guard value else { return .just(nil) }
-                return self.portfolioProviding
-                    .portfolio
-                    .optional()
-            }
-            .catchAndReturn(nil)
-            .bindAndCatch(to: container.portfolioRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = balanceSyncRelay
+        .flatMap(weak: self) { (self, _) -> Observable<Bool> in
+            self.isEnabled
+        }
+        .flatMap(weak: self) { (self, value) -> Observable<Portfolio?> in
+            guard value else { return .just(nil) }
+            return self.portfolioProviding
+                .portfolio
+                .optional()
+        }
+        .catchAndReturn(nil)
+        .bindAndCatch(to: container.portfolioRelay)
+        .disposed(by: disposeBag)
 
     // MARK: - Private Properties
 

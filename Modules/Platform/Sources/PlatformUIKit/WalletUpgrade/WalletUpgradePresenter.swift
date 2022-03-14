@@ -24,28 +24,26 @@ public final class WalletUpgradePresenter {
         self.interactor = interactor
     }
 
-    private lazy var viewDidAppearOnce: Void = {
-        interactor.upgradeWallet()
-            .subscribe(
-                onNext: { [weak self] version in
-                    self?.viewModelRelay.accept(.loading(version: version))
-                },
-                onError: { [weak self] error in
-                    let version: String
-                    switch error {
-                    case WalletUpgradeError.errorUpgrading(let errorVersion):
-                        version = errorVersion
-                    default:
-                        version = ""
-                    }
-                    self?.viewModelRelay.accept(.error(version: version))
-                },
-                onCompleted: { [weak self] in
-                    self?.viewModelRelay.accept(.success)
+    private lazy var viewDidAppearOnce: Void = interactor.upgradeWallet()
+        .subscribe(
+            onNext: { [weak self] version in
+                self?.viewModelRelay.accept(.loading(version: version))
+            },
+            onError: { [weak self] error in
+                let version: String
+                switch error {
+                case WalletUpgradeError.errorUpgrading(let errorVersion):
+                    version = errorVersion
+                default:
+                    version = ""
                 }
-            )
-            .disposed(by: disposeBag)
-    }()
+                self?.viewModelRelay.accept(.error(version: version))
+            },
+            onCompleted: { [weak self] in
+                self?.viewModelRelay.accept(.success)
+            }
+        )
+        .disposed(by: disposeBag)
 
     // MARK: Methods
 

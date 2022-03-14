@@ -324,7 +324,5 @@ public final class CustodyActionRouter: CustodyActionRouterAPI {
             )
     }
 
-    private lazy var sheetPresenter: BottomSheetPresenting = {
-        BottomSheetPresenting(ignoresBackgroundTouches: false)
-    }()
+    private lazy var sheetPresenter: BottomSheetPresenting = BottomSheetPresenting(ignoresBackgroundTouches: false)
 }

@@ -25,23 +25,17 @@ public final class DefaultLineItemCellPresenter: LineItemCellPresenting {
 
     public let identifier: String
 
-    public lazy var image: Driver<UIImage?> = {
-        imageRelay.asDriver()
-    }()
+    public lazy var image: Driver<UIImage?> = imageRelay.asDriver()
 
-    public lazy var imageWidth: Driver<CGFloat> = {
-        imageWidthRelay
-            .asDriver()
-    }()
+    public lazy var imageWidth: Driver<CGFloat> = imageWidthRelay
+        .asDriver()
 
     /// The image relay
     public let imageRelay = BehaviorRelay<UIImage?>(value: nil)
     /// The image width relay
     public let imageWidthRelay = BehaviorRelay<CGFloat>(value: 22)
 
-    public lazy var backgroundColor: Driver<UIColor> = {
-        backgroundColorRelay.asDriver()
-    }()
+    public lazy var backgroundColor: Driver<UIColor> = backgroundColorRelay.asDriver()
 
     /// Accepts tap from a view
     public let tapRelay: PublishRelay<Void> = .init()

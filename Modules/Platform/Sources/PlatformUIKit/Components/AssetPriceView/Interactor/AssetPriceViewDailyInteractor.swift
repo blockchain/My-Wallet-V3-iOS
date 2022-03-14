@@ -18,21 +18,19 @@ public final class AssetPriceViewDailyInteractor: AssetPriceViewInteracting {
 
     // MARK: - Private Accessors
 
-    private lazy var setup: Void = {
-        Observable
-            .combineLatest(
-                fiatCurrencyService.displayCurrencyPublisher.asObservable(),
-                refreshRelay.startWith(())
-            )
-            .map(\.0)
-            .flatMapLatest(weak: self) { (self, fiatCurrency) in
-                self.fetch(fiatCurrency: fiatCurrency).asObservable()
-            }
-            .map(DashboardAsset.State.AssetPrice.Interaction.loaded)
-            .catchAndReturn(.loading)
-            .bindAndCatch(to: stateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = Observable
+        .combineLatest(
+            fiatCurrencyService.displayCurrencyPublisher.asObservable(),
+            refreshRelay.startWith(())
+        )
+        .map(\.0)
+        .flatMapLatest(weak: self) { (self, fiatCurrency) in
+            self.fetch(fiatCurrency: fiatCurrency).asObservable()
+        }
+        .map(DashboardAsset.State.AssetPrice.Interaction.loaded)
+        .catchAndReturn(.loading)
+        .bindAndCatch(to: stateRelay)
+        .disposed(by: disposeBag)
 
     private let cryptoCurrency: CryptoCurrency
     private let priceService: PriceServiceAPI

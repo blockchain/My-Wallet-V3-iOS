@@ -179,13 +179,11 @@ final class InterestActivityDetailsPresenter: DetailsScreenPresenterAPI {
 final class AccountNameLabelContentInteractor: LabelContentInteracting {
     typealias InteractionState = LabelContent.State.Interaction
 
-    private lazy var setup: Void = {
-        fetchNameOfAccountWithReceiveAddress(address)
-            .asObservable()
-            .map { .loaded(next: .init(text: $0)) }
-            .bindAndCatch(to: stateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = fetchNameOfAccountWithReceiveAddress(address)
+        .asObservable()
+        .map { .loaded(next: .init(text: $0)) }
+        .bindAndCatch(to: stateRelay)
+        .disposed(by: disposeBag)
 
     let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
     var state: Observable<InteractionState> {

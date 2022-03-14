@@ -32,21 +32,19 @@ public final class ActivityItemBalanceFetcher: ActivityItemBalanceFetching {
     private let moneyValue: MoneyValue
     private let instant: Date
 
-    private lazy var setup: Void = {
-        pairExchangeService
-            .fiatPrice(at: .time(instant))
-            .map { [moneyValue] fiatPrice -> MoneyValuePair in
-                MoneyValuePair(
-                    base: moneyValue,
-                    exchangeRate: fiatPrice.moneyValue
-                )
-            }
-            .map(MoneyValuePairCalculationState.value)
-            .startWith(.calculating)
-            .catchAndReturn(.calculating)
-            .bindAndCatch(to: calculationStateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = pairExchangeService
+        .fiatPrice(at: .time(instant))
+        .map { [moneyValue] fiatPrice -> MoneyValuePair in
+            MoneyValuePair(
+                base: moneyValue,
+                exchangeRate: fiatPrice.moneyValue
+            )
+        }
+        .map(MoneyValuePairCalculationState.value)
+        .startWith(.calculating)
+        .catchAndReturn(.calculating)
+        .bindAndCatch(to: calculationStateRelay)
+        .disposed(by: disposeBag)
 
     // MARK: - Private Properties
 

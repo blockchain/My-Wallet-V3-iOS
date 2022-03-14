@@ -7,12 +7,10 @@ import ToolKit
 
 final class MviModel<State, Action: MviAction> where Action.State == State, State: Equatable {
 
-    lazy var state: Observable<State> = {
-        stateRelay
-            .distinctUntilChanged()
-            .asObservable()
-            .share(replay: 1, scope: .forever)
-    }()
+    lazy var state: Observable<State> = stateRelay
+        .distinctUntilChanged()
+        .asObservable()
+        .share(replay: 1, scope: .forever)
 
     let actions: ReplaySubject<Action> = ReplaySubject.create(bufferSize: 1)
 

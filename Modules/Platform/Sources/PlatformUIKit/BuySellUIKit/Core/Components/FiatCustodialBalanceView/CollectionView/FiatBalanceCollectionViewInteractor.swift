@@ -58,28 +58,26 @@ public final class FiatBalanceCollectionViewInteractor {
             }
     }
 
-    private lazy var setup: Void = {
-        Observable
-            .combineLatest(
-                fiatCurrencyService.displayCurrencyPublisher.asObservable(),
-                refreshRelay.asObservable()
-            ) { (fiatCurrency: $0, _: $1) }
-            .flatMapLatest(weak: self) { (self, data) in
-                self.fiatAccounts()
-                    .asObservable()
-                    .map { accounts in
-                        accounts
-                            .sorted { $0.currencyType.code < $1.currencyType.code }
-                            .sorted { lhs, _ -> Bool in lhs.currencyType.code == data.fiatCurrency.code }
-                            .map(FiatCustodialBalanceViewInteractor.init(account:))
-                    }
-            }
-            .map { .value($0) }
-            .startWith(.calculating)
-            .catchAndReturn(.invalid(.empty))
-            .bindAndCatch(to: interactorsStateRelay)
-            .disposed(by: disposeBag)
-    }()
+    private lazy var setup: Void = Observable
+        .combineLatest(
+            fiatCurrencyService.displayCurrencyPublisher.asObservable(),
+            refreshRelay.asObservable()
+        ) { (fiatCurrency: $0, _: $1) }
+        .flatMapLatest(weak: self) { (self, data) in
+            self.fiatAccounts()
+                .asObservable()
+                .map { accounts in
+                    accounts
+                        .sorted { $0.currencyType.code < $1.currencyType.code }
+                        .sorted { lhs, _ -> Bool in lhs.currencyType.code == data.fiatCurrency.code }
+                        .map(FiatCustodialBalanceViewInteractor.init(account:))
+                }
+        }
+        .map { .value($0) }
+        .startWith(.calculating)
+        .catchAndReturn(.invalid(.empty))
+        .bindAndCatch(to: interactorsStateRelay)
+        .disposed(by: disposeBag)
 
     public init(
         tiersService: KYCTiersServiceAPI = resolve(),

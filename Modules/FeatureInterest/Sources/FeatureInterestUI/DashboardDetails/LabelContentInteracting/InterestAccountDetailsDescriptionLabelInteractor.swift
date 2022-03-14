@@ -15,18 +15,16 @@ final class InterestAccountDetailsDescriptionLabelInteractor {
 
     final class TotalInterest: LabelContentInteracting {
 
-        private lazy var setup: Void = {
-            service
-                .fetchInterestAccountDetailsForCryptoCurrency(cryptoCurrency)
-                .asObservable()
-                .map(\.value)
-                .compactMap { $0?.totalInterest }
-                .compactMap { CryptoValue.create(minor: $0, currency: self.cryptoCurrency) }
-                .map(\.displayString)
-                .map { .loaded(next: .init(text: $0)) }
-                .bindAndCatch(to: stateRelay)
-                .disposed(by: disposeBag)
-        }()
+        private lazy var setup: Void = service
+            .fetchInterestAccountDetailsForCryptoCurrency(cryptoCurrency)
+            .asObservable()
+            .map(\.value)
+            .compactMap { $0?.totalInterest }
+            .compactMap { CryptoValue.create(minor: $0, currency: self.cryptoCurrency) }
+            .map(\.displayString)
+            .map { .loaded(next: .init(text: $0)) }
+            .bindAndCatch(to: stateRelay)
+            .disposed(by: disposeBag)
 
         let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
         var state: Observable<InteractionState> {
@@ -53,18 +51,16 @@ final class InterestAccountDetailsDescriptionLabelInteractor {
 
     final class PendingDeposit: LabelContentInteracting {
 
-        private lazy var setup: Void = {
-            service
-                .fetchInterestAccountDetailsForCryptoCurrency(cryptoCurrency)
-                .asObservable()
-                .map(\.value)
-                .compactMap { $0?.pendingInterest }
-                .compactMap { CryptoValue.create(minor: $0, currency: self.cryptoCurrency) }
-                .map(\.displayString)
-                .map { .loaded(next: .init(text: $0)) }
-                .bindAndCatch(to: stateRelay)
-                .disposed(by: disposeBag)
-        }()
+        private lazy var setup: Void = service
+            .fetchInterestAccountDetailsForCryptoCurrency(cryptoCurrency)
+            .asObservable()
+            .map(\.value)
+            .compactMap { $0?.pendingInterest }
+            .compactMap { CryptoValue.create(minor: $0, currency: self.cryptoCurrency) }
+            .map(\.displayString)
+            .map { .loaded(next: .init(text: $0)) }
+            .bindAndCatch(to: stateRelay)
+            .disposed(by: disposeBag)
 
         let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
         var state: Observable<InteractionState> {
@@ -91,16 +87,14 @@ final class InterestAccountDetailsDescriptionLabelInteractor {
 
     final class LockUpDuration: LabelContentInteracting {
 
-        private lazy var setup: Void = {
-            service
-                .fetchInterestAccountLimitsForCryptoCurrency(cryptoCurrency)
-                .asObservable()
-                .map(\.wrapped)
-                .compactMap { $0?.lockupDescription }
-                .map { .loaded(next: .init(text: $0)) }
-                .bindAndCatch(to: stateRelay)
-                .disposed(by: disposeBag)
-        }()
+        private lazy var setup: Void = service
+            .fetchInterestAccountLimitsForCryptoCurrency(cryptoCurrency)
+            .asObservable()
+            .map(\.wrapped)
+            .compactMap { $0?.lockupDescription }
+            .map { .loaded(next: .init(text: $0)) }
+            .bindAndCatch(to: stateRelay)
+            .disposed(by: disposeBag)
 
         let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
         var state: Observable<InteractionState> {
@@ -127,16 +121,14 @@ final class InterestAccountDetailsDescriptionLabelInteractor {
 
     final class Rates: LabelContentInteracting {
 
-        private lazy var setup: Void = {
-            service
-                .rate(for: cryptoCurrency)
-                .asObservable()
-                .compactMap { "\($0)% \(LocalizationId.annually)" }
-                .map { .loaded(next: .init(text: $0)) }
-                .catchAndReturn(.loading)
-                .bindAndCatch(to: stateRelay)
-                .disposed(by: disposeBag)
-        }()
+        private lazy var setup: Void = service
+            .rate(for: cryptoCurrency)
+            .asObservable()
+            .compactMap { "\($0)% \(LocalizationId.annually)" }
+            .map { .loaded(next: .init(text: $0)) }
+            .catchAndReturn(.loading)
+            .bindAndCatch(to: stateRelay)
+            .disposed(by: disposeBag)
 
         let stateRelay = BehaviorRelay<InteractionState>(value: .loading)
         var state: Observable<InteractionState> {

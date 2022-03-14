@@ -10,21 +10,12 @@ import ToolKit
 final class KYCClientMock: KYCClientAPI {
 
     struct StubbedResults {
-        var fetchUser: AnyPublisher<NabuUser, NabuNetworkError> = {
-            .failure(NabuNetworkError.mockError)
-        }()
-
-        var checkSimplifiedDueDiligenceEligibility: AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> = {
-            .failure(NabuNetworkError.mockError)
-        }()
-
-        var checkSimplifiedDueDiligenceVerification: AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> = {
-            .failure(NabuNetworkError.mockError)
-        }()
-
-        var fetchLimitsOverview: AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError> = {
-            .failure(NabuNetworkError.mockError)
-        }()
+        // swiftlint:disable line_length
+        var fetchUser: AnyPublisher<NabuUser, NabuNetworkError> = .failure(NabuNetworkError.mockError)
+        var checkSimplifiedDueDiligenceEligibility: AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> = .failure(NabuNetworkError.mockError)
+        var checkSimplifiedDueDiligenceVerification: AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> = .failure(NabuNetworkError.mockError)
+        var fetchLimitsOverview: AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError> = .failure(NabuNetworkError.mockError)
+        // swiftlint:enable line_length
     }
 
     var stubbedResults = StubbedResults()
@@ -57,9 +48,7 @@ final class KYCClientMock: KYCClientAPI {
         expectedListOfStates.publisher.eraseToAnyPublisher()
     }
 
-    var expectedSetInitialAddress: AnyPublisher<Void, NabuNetworkError> = {
-        .failure(NabuNetworkError.mockError)
-    }()
+    var expectedSetInitialAddress: AnyPublisher<Void, NabuNetworkError> = .failure(NabuNetworkError.mockError)
 
     func setInitialResidentialInfo(
         country: String,
